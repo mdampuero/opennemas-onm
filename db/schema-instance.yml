@@ -2,7 +2,7 @@ action_counters:
     columns:
         id:
             type: integer
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { unsigned: true, autoincrement: true }
         action_name:
             type: string
             options: { default: null, length: 255 }
@@ -29,7 +29,7 @@ advertisements:
     columns:
         pk_advertisement:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         type_advertisement:
             type: smallint
             options: { default: '1', notnull: false, unsigned: true }
@@ -96,7 +96,7 @@ albums:
     columns:
         pk_album:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         subtitle:
             type: string
             options: { default: null, notnull: false, length: 250 }
@@ -105,7 +105,7 @@ albums:
             options: { default: null, notnull: false, length: 250 }
         cover_id:
             type: bigint
-            options: { default: null, notnull: false }
+            options: { length: 20, unsigned: true, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -136,10 +136,10 @@ albums_photos:
     columns:
         pk_album:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true }
         pk_photo:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true }
         position:
             type: integer
             options: { default: '1', notnull: false }
@@ -182,25 +182,25 @@ articles:
     columns:
         pk_article:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         summary:
             type: text
             options: { default: null, length: 65532, notnull: false }
-        img1:
-            type: bigint
-            options: { default: null, notnull: false, unsigned: true }
         subtitle:
             type: string
             options: { default: null, notnull: false, length: 512 }
         pretitle:
             type: string
             options: { default: null, notnull: false, length: 512 }
+        img1:
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         img1_footer:
             type: string
             options: { default: null, notnull: false, length: 250 }
         img2:
             type: bigint
-            options: { default: null, notnull: false, unsigned: true }
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         img2_footer:
             type: string
             options: { default: null, notnull: false, length: 250 }
@@ -209,10 +209,10 @@ articles:
             options: { default: null, notnull: false, length: 100 }
         fk_video:
             type: bigint
-            options: { default: null, notnull: false, unsigned: true }
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         fk_video2:
             type: bigint
-            options: { default: null, notnull: false, unsigned: true, comment: 'video interior' }
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         footer_video2:
             type: text
             options: { default: null, length: 65532, notnull: false }
@@ -240,7 +240,7 @@ attachments:
     columns:
         pk_attachment:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         title:
             type: string
             options: { default: null, length: 200 }
@@ -268,7 +268,7 @@ books:
     columns:
         pk_book:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         author:
             type: string
             options: { default: null, notnull: false, length: 250 }
@@ -296,10 +296,10 @@ comments:
     columns:
         id:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { length: 20, unsigned: true, autoincrement: true }
         content_id:
             type: bigint
-            options: { length: 20, default: null, notnull: false, unsigned: true }
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         author:
             type: string
             options: { default: null, notnull: false, length: 200 }
@@ -329,7 +329,7 @@ comments:
             options: { default: '', length: 20 }
         parent_id:
             type: bigint
-            options: { default: null, unsigned: true, default: '0' }
+            options: { unsigned: true, default: null, default: '0' }
         user_id:
             type: integer
             options: { default: 0 }
@@ -366,7 +366,7 @@ commentsmeta:
     columns:
         fk_content:
             type: bigint
-            options: { default: null, unsigned: true }
+            options: { length: 20, unsigned: true }
         meta_name:
             type: string
             options: { default: null, length: 255 }
@@ -396,8 +396,8 @@ commentsmeta:
 content_categories:
     columns:
         pk_content_category:
-            type: integer
-            options: { default: null, unsigned: true, autoincrement: true }
+            type: bigint
+            options: { unsigned: true, autoincrement: true }
         title:
             type: string
             options: { default: null, length: 255 }
@@ -436,7 +436,7 @@ content_positions:
     columns:
         pk_fk_content:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true }
         fk_category:
             type: integer
             options: { default: null, unsigned: true}
@@ -482,7 +482,7 @@ contentmeta:
     columns:
         fk_content:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         meta_name:
             type: string
             options: { default: null, length: 255 }
@@ -513,7 +513,7 @@ contents:
     columns:
         pk_content:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         fk_content_type:
             type: integer
             options: { default: null, unsigned: true }
@@ -664,11 +664,11 @@ contents_categories:
     columns:
         pk_fk_content:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { unsigned: true }
         pk_fk_content_category:
-            type: integer
-            options: { default: null, notnull: false, unsigned: true }
-        catName:
+            type: bigint
+            options: { unsigned: true }
+        catName: # TODO: not sure if easy to but, should we remove this?
             type: string
             options: { default: null, notnull: false, length: 255 }
     index:
@@ -713,7 +713,7 @@ content_views:
     columns:
         pk_fk_content:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         views:
             type: integer
             options: { default: 0, unsigned: true }
@@ -735,16 +735,16 @@ frontpages:
     columns:
         pk_frontpage:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         date:
             type: integer
             options: { default: null}
         category:
-            type: integer
-            options: { default: null }
-        version:
             type: bigint
-            options: { default: null, notnull: false }
+            options: { length: 20, unsigned: true }
+        version:
+            type: integer
+            options: { unsigned: true, default: null, notnull: false }
         content_positions:
             type: text
             options: { default: null }
@@ -768,7 +768,7 @@ kioskos:
     columns:
         pk_kiosko:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         name:
             type: string
             options: { default: null, length: 100 }
@@ -802,7 +802,7 @@ letters:
     columns:
         pk_letter:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         author:
             type: string
             options: { default: null, notnull: false, length: 255 }
@@ -939,8 +939,8 @@ opinions:
     columns:
         pk_opinion:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         fk_content_categories:
+            options: { length: 20, unsigned: true, autoincrement: true }
             type: integer
             options: { default: '7', notnull: false, unsigned: true }
         fk_author:
@@ -982,13 +982,13 @@ orders:
     columns:
         id:
             type: bigint
-            options: { default: null, autoincrement: true }
+            options: { length: 20, unsigned: true, autoincrement: true }
         user_id:
             type: bigint
             options: { default: null }
         content_id:
             type: bigint
-            options: { default: null }
+            options: { length: 20, unsigned: true, default: null }
         created:
             type: datetime
             options: { default: CURRENT_TIMESTAMP }
@@ -1021,7 +1021,7 @@ pc_users:
     columns:
         pk_pc_user:
             type: integer
-            options: { default: null, autoincrement: true }
+            options: { unsigned: true, autoincrement: true }
         email:
             type: string
             options: { default: null, length: 255 }
@@ -1072,7 +1072,7 @@ photos:
     columns:
         pk_photo:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         name:
             type: string
             options: { default: null, notnull: false, length: 100 }
@@ -1152,7 +1152,7 @@ polls:
     columns:
         pk_poll:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         total_votes:
             type: integer
             options: { default: '0' }
@@ -1186,7 +1186,7 @@ ratings:
     columns:
         pk_rating:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         total_votes:
             type: smallint
             options: { default: '0', unsigned: true }
@@ -1207,10 +1207,10 @@ related_contents:
     columns:
         pk_content1:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true }
         pk_content2:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true }
         relationship:
             type: string
             options: { default: null, notnull: false, length: 50 }
@@ -1280,10 +1280,10 @@ special_contents:
     columns:
         fk_content:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true, default: null }
         fk_special:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true, default: null }
         name:
             type: string
             options: { default: null, notnull: false, length: 200 }
@@ -1332,7 +1332,7 @@ specials:
     columns:
         pk_special:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         subtitle:
             type: string
             options: { default: null, notnull: false, length: 512 }
@@ -1363,7 +1363,7 @@ static_pages:
     columns:
         pk_static_page:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
     index:
         -
             name: PRIMARY
@@ -1385,7 +1385,7 @@ translation_ids:
             options: { default: null }
         pk_content:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true, default: null }
         type:
             type: string
             options: { default: null, length: 100 }
@@ -1458,7 +1458,7 @@ usermeta:
     columns:
         user_id:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { unsigned: true, autoincrement: true }
         meta_key:
             type: string
             options: { default: '', length: 255 }
@@ -1495,7 +1495,7 @@ users:
     columns:
         id:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { unsigned: true, autoincrement: true }
         username:
             type: string
             options: { default: null, notnull: true, length: 100 }
@@ -1510,7 +1510,7 @@ users:
             options: { default: null, notnull: false, length: 65532 }
         avatar_img_id:
             type: bigint
-            options: { default: null, notnull: false, unsigned: true }
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         email:
             type: string
             options: { default: null, notnull: false, length: 255 }
@@ -1567,7 +1567,7 @@ videos:
     columns:
         pk_video:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         video_url:
             type: string
             options: { default: null, length: 255 }
@@ -1595,7 +1595,7 @@ votes:
     columns:
         pk_vote:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         value_pos:
             type: smallint
             options: { default: '0' }
@@ -1619,7 +1619,7 @@ widgets:
     columns:
         pk_widget:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         content:
             type: text
             options: { default: null, length: 65532 }
