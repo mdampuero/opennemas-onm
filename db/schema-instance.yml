@@ -113,18 +113,6 @@ albums:
             primary: true
             unique: true
             flags: {  }
-        -
-            name: pk_album
-            columns: [pk_album]
-            primary: false
-            unique: true
-            flags: {  }
-        -
-            name: pk_album_2
-            columns: [pk_album]
-            primary: false
-            unique: false
-            flags: {  }
     foreign_keys:
         -
             name: album_id_contents_id
