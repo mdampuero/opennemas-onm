@@ -62,7 +62,7 @@ advertisements:
             options: { length: 65532, default: null, notnull: false }
         overlap:
             type: boolean
-            options: { default: '0', comment: 'Flag esconder eventos flash' }
+            options: { default: false, comment: 'Hide Flash events' }
         timeout:
             type: integer
             options: { default: -1 }
