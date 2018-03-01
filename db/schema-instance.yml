@@ -145,7 +145,7 @@ albums_photos:
             options: { unsigned: true, default: 1, notnull: false }
         description:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
     index:
         -
             name: index_album_photo
@@ -185,7 +185,7 @@ articles:
             options: { length: 20, unsigned: true, autoincrement: true }
         summary:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
         subtitle:
             type: string
             options: { length: 512, default: null, notnull: false }
@@ -527,8 +527,8 @@ contents:
             type: text
             options: { length: 65532, default: null, notnull: false }
         body:
-            type: string
-            options: { default: null, length: 4294967295, notnull: false }
+            type: text
+            options: { length: 4294967295, default: null, notnull: false }
         metadata:
             type: string
             options: { length: 255, default: null, notnull: false }
@@ -579,7 +579,7 @@ contents:
             options: { unsigned: true, default: 1, notnull: false }
         params:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
         category_name:
             type: string
             options: { length: 255, default: null }
@@ -918,7 +918,7 @@ newsletter_archive:
             options: { length: 65532, default: null, notnull: false }
         html:
             type: text
-            options: { default: null, length: 4294967295, notnull: false }
+            options: { length: 4294967295, default: null, notnull: false }
         created:
             type: datetime
             options: { default: CURRENT_TIMESTAMP }
@@ -1009,7 +1009,7 @@ orders:
             options: { length: 50, default: null }
         params:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -1158,7 +1158,7 @@ polls:
             options: { unsigned: true, default: 0 }
         used_ips:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
         subtitle:
             type: string
             options: { length: 512, default: null, notnull: false }
@@ -1195,7 +1195,7 @@ ratings:
             options: { unsigned: true, default: 0 }
         ips_count_rating:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -1391,7 +1391,7 @@ translation_ids:
             options: { length: 100, default: null }
         slug:
             type: text
-            options: { default: '', notnull: false, length: 65535 }
+            options: { length: 65535, default: '', notnull: false }
         domain:
             type: string
             options: { length: 255, default: null, notnull: false }
@@ -1464,7 +1464,7 @@ usermeta:
             options: { length: 255 }
         meta_value:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -1498,7 +1498,7 @@ users:
             options: { unsigned: true, autoincrement: true }
         username:
             type: string
-            options: { default: null, notnull: true, length: 100 }
+            options: { length: 100, default: null, notnull: true }
         password:
             type: string
             options: { length: 50, default: null, notnull: false }
@@ -1573,7 +1573,7 @@ videos:
             options: { length: 255, default: null }
         information:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
         author_name:
             type: string
             options: { length: 200, default: null, notnull: false }
@@ -1604,7 +1604,7 @@ votes:
             options: { unsigned: true, default: 0 }
         ips_count_vote:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
         karma:
             type: integer
             options: { unsigned: true, default: 100, notnull: false }
@@ -1622,7 +1622,7 @@ widgets:
             options: { length: 20, unsigned: true, autoincrement: true }
         content:
             type: text
-            options: { default: null, length: 65532 }
+            options: { length: 65532, default: null }
         renderlet:
             type: string
             options: { length: 50, notnull: false, default: 'html' }
