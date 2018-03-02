@@ -652,7 +652,7 @@ contents_categories:
     columns:
         pk_fk_content:
             type: bigint
-            options: { unsigned: true }
+            options: { length: 20, unsigned: true }
         pk_fk_content_category:
             type: bigint
             options: { unsigned: true }
