@@ -557,8 +557,8 @@ contents:
             type: smallint
             options: { unsigned: true, default: 0, notnull: false }
         slug:
-            type: string
-            options: { length: 255, default: null, notnull: false }
+            type: text
+            options: { length: 65532, default: null, notnull: false }
         available:
             type: smallint
             options: { unsigned: true, default: 1, notnull: false }
