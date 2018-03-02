@@ -509,8 +509,8 @@ contents:
             type: string
             options: { length: 20, default: null }
         title:
-            type: string
-            options: { length: 255, default: null, notnull: false }
+            type: text
+            options: { length: 65532, default: null, notnull: false }
         description:
             type: text
             options: { length: 65532, default: null, notnull: false }
@@ -519,7 +519,7 @@ contents:
             options: { length: 4294967295, default: null, notnull: false }
         metadata:
             type: string
-            options: { length: 255, default: null, notnull: false }
+            options: { length: 512, default: null, notnull: false }
         starttime:
             type: datetime
             options: { default: CURRENT_TIMESTAMP, notnull: false }
