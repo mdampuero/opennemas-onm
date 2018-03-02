@@ -319,8 +319,8 @@ comments:
             type: bigint
             options: { unsigned: true, default: null, default: '0' }
         user_id:
-            type: integer
-            options: { default: 0 }
+            type: bigint
+            options: { length: 20, unsigned: true, default: 0 }
         content_type_referenced:
             type: string
             options: { length: 20, default: null }
@@ -536,14 +536,14 @@ contents:
             type: integer
             options: { unsigned: true, default: 0, notnull: false }
         fk_author:
-            type: integer
-            options: { unsigned: true, default: null, notnull: false }
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         fk_publisher:
-            type: integer
-            options: { unsigned: true, default: null, notnull: false }
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         fk_user_last_editor:
-            type: integer
-            options: { unsigned: true, default: null, notnull: false }
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         position:
             type: integer
             options: { default: 100, notnull: false, unsigned: true }
@@ -932,11 +932,11 @@ opinions:
             type: integer
             options: { unsigned: true, default: 7, notnull: false }
         fk_author:
-            type: integer
-            options: { default: null, notnull: false }
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         fk_author_img:
-            type: integer
-            options: { default: null, notnull: false }
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         type_opinion:
             type: string
             options: { length: 150, default: null, notnull: false }
@@ -972,8 +972,8 @@ orders:
             type: bigint
             options: { length: 20, unsigned: true, autoincrement: true }
         user_id:
-            type: integer
-            options: { unsigned: true, default: null }
+            type: bigint
+            options: { length: 20, unsigned: true, default: null }
         content_id:
             type: bigint
             options: { length: 20, unsigned: true, default: null }
@@ -1008,8 +1008,8 @@ orders:
 pc_users:
     columns:
         pk_pc_user:
-            type: integer
-            options: { unsigned: true, autoincrement: true }
+            type: bigint
+            options: { length: 20, unsigned: true, autoincrement: true }
         email:
             type: string
             options: { length: 255, default: null }
@@ -1533,8 +1533,8 @@ users:
 users_content_categories:
     columns:
         pk_fk_user:
-            type: integer
-            options: { unsigned: true, autoincrement: true }
+            type: bigint
+            options: { length: 20, unsigned: true, autoincrement: true }
         pk_fk_content_category:
             type: integer
             options: { unsigned: true, default: null }
