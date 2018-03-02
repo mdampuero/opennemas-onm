@@ -148,12 +148,12 @@
                 {/is_module_activated}
               </div>
               <div class="form-group">
-                <label class="form-label" for="subtitle">
+                <label class="form-label" for="pretitle">
                   {t}Pretitle{/t}
                 </label>
                 <div class="controls">
-                  <div class="input-group" id="subtitle">
-                    <input class="form-control" name="subtitle" ng-model="article.subtitle" ng-trim="false" placeholder="[% data.article.subtitle[data.extra.options.default] %]" tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.subtitle[data.extra.options.default] %]">
+                  <div class="input-group" id="pretitle">
+                    <input class="form-control" name="pretitle" ng-model="article.subtitle" ng-trim="false" placeholder="[% data.article.subtitle[data.extra.options.default] %]" tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.subtitle[data.extra.options.default] %]">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.subtitle.length >= 50 && article.subtitle.length < 100, 'text-danger': article.subtitle.length >= 100 }">
                         [% article.subtitle ? article.subtitle.length : 0 %]
