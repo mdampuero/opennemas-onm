@@ -1072,10 +1072,10 @@ photos:
             options: { scale: 2, default: null, notnull: false }
         width:
             type: integer
-            options: { default: null, notnull: false }
+            options: { unsigned: true, default: null, notnull: false }
         height:
             type: integer
-            options: { default: null, notnull: false }
+            options: { unsigned: true, default: null, notnull: false }
         nameCat: # TODO: remove?
             type: string
             options: { length: 250, default: '1', notnull: false }
@@ -1501,13 +1501,13 @@ users:
             options: { length: 100, default: null, notnull: false }
         type:
             type: integer
-            options: { default: 1, notnull: true, comment: '0 backend - 1 frontend' }
+            options: { unsigned: true, default: 1, notnull: true, comment: '0 backend - 1 frontend' }
         token:
             type: string
             options: { length: 50, default: null, notnull: false }
         activated:
             type: integer
-            options: { default: 0, notnull: true, comment: '1 activated - 0 deactivated' }
+            options: { unsigned: true, default: 0, notnull: true, comment: '1 activated - 0 deactivated' }
         fk_user_group:
             type: string
             options: { length: 100, default: null, notnull: false }
