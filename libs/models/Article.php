@@ -523,7 +523,7 @@ class Article extends Content
     {
         $keys = [
             'footer_video', 'footer_video2', 'img1_footer', 'img2_footer',
-            'subtitle', 'summary', 'title_int'
+            'pretitle', 'subtitle', 'summary', 'title_int'
         ];
 
         if ($exclusive) {
