@@ -385,7 +385,7 @@ content_categories:
     columns:
         pk_content_category:
             type: bigint
-            options: { unsigned: true, autoincrement: true }
+            options: { length: 20, unsigned: true, autoincrement: true }
         title:
             type: string
             options: { length: 255, default: null }
@@ -402,8 +402,8 @@ content_categories:
             type: smallint
             options: { length: 1, unsigned: true, default: 0, comment: 'Equal content_type & global=0 ' }
         fk_content_category:
-            type: integer
-            options: { unsigned: true, default: 0, notnull: false }
+            type: bigint
+            options: { length: 20, unsigned: true, default: 0, notnull: false }
         params:
             type: text
             options: { length: 65532, default: null, notnull: false }
@@ -426,8 +426,8 @@ content_positions:
             type: bigint
             options: { length: 20, unsigned: true }
         fk_category:
-            type: integer
-            options: { unsigned: true, default: null }
+            type: bigint
+            options: { length: 20, unsigned: true, default: null }
         position:
             type: integer
             options: { unsigned: true, default: 0 }
@@ -1536,8 +1536,8 @@ users_content_categories:
             type: bigint
             options: { length: 20, unsigned: true, autoincrement: true }
         pk_fk_content_category:
-            type: integer
-            options: { unsigned: true, default: null }
+            type: bigint
+            options: { length: 20, unsigned: true, default: null }
     index:
         -
             name: PRIMARY
