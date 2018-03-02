@@ -171,6 +171,9 @@ articles:
         pk_article:
             type: bigint
             options: { length: 20, unsigned: true, autoincrement: true }
+        title_int:
+            type: string
+            options: { length: 255, default: null, notnull: false }
         summary:
             type: text
             options: { length: 65532, default: null, notnull: false }
@@ -178,6 +181,9 @@ articles:
             type: string
             options: { length: 512, default: null, notnull: false }
         pretitle:
+            type: string
+            options: { length: 512, default: null, notnull: false }
+        agency:
             type: string
             options: { length: 512, default: null, notnull: false }
         img1:
@@ -192,9 +198,6 @@ articles:
         img2_footer:
             type: string
             options: { length: 512, default: null, notnull: false }
-        agency:
-            type: string
-            options: { length: 512, default: null, notnull: false }
         fk_video:
             type: bigint
             options: { length: 20, unsigned: true, default: null, notnull: false }
@@ -207,9 +210,6 @@ articles:
         footer_video1:
             type: text
             options: { length: 65532, default: null, notnull: false }
-        title_int:
-            type: string
-            options: { length: 255, default: null, notnull: false }
     index:
         -
             name: PRIMARY
