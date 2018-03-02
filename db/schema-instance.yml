@@ -190,24 +190,24 @@ articles:
             type: bigint
             options: { length: 20, unsigned: true, default: null, notnull: false }
         img1_footer:
-            type: string
-            options: {  length: 512, default: null, notnull: false }
+            type: text
+            options: { length: 65532, default: null, notnull: false }
         img2:
             type: bigint
             options: { length: 20, unsigned: true, default: null, notnull: false }
         img2_footer:
-            type: string
-            options: { length: 512, default: null, notnull: false }
+            type: text
+            options: { length: 65532, default: null, notnull: false }
         fk_video:
             type: bigint
             options: { length: 20, unsigned: true, default: null, notnull: false }
+        footer_video1:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
         fk_video2:
             type: bigint
             options: { length: 20, unsigned: true, default: null, notnull: false }
         footer_video2:
-            type: text
-            options: { length: 65532, default: null, notnull: false }
-        footer_video1:
             type: text
             options: { length: 65532, default: null, notnull: false }
     index:
