@@ -1063,7 +1063,7 @@ photos:
             options: { length: 20, unsigned: true, autoincrement: true }
         name:
             type: string
-            options: { length: 100, default: null, notnull: false }
+            options: { length: 255, default: null, notnull: false }
         path_file:
             type: string
             options: { length: 150, default: null }
