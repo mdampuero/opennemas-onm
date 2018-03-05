@@ -9,6 +9,7 @@ parameters:
     core.paths.cache.common: %kernel.root_dir%/../tmp/compiles
     core.paths.public: %kernel.root_dir%/../public
     core.paths.themes: %core.paths.public%/themes
+    core.paths.spool: %kernel.root_dir%/../tmp/spool
 
 framework:
     #esi:             ~
