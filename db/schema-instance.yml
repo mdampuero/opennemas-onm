@@ -1385,7 +1385,7 @@ translation_ids:
             options: { length: 255, default: null, notnull: false }
     index:
         -
-            name: slug
+            name: translation_ids_slug
             columns: [slug]
         -
             name: pk_content
