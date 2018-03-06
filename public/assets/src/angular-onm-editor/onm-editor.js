@@ -52,7 +52,8 @@
           ignoreEmptyParagraph: true,
           preset: 'standard',
           width: '100%',
-          format_tags: 'p;h1;h2;h3;h4;pre'
+          format_tags: 'p;h1;h2;h3;h4;pre',
+          entities: false
         };
 
         /**
