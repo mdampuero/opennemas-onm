@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
-  var $defer, loaded = false;
+  var $defer = null;
+  var loaded = false;
 
   /**
    * @ngdoc module
@@ -12,6 +13,7 @@
    *   initialize CKEditor components.
    */
   angular.module('onm.editor', [])
+
     /**
      * @ngdoc provider
      * @name  Editor
@@ -19,7 +21,8 @@
      * @description
      *   Provider to handle CKEditor instances.
      */
-    .provider('Editor', [ '$windowProvider',
+    .provider('Editor', [
+      '$windowProvider',
       function($windowProvider) {
         /**
          * @memberOf Editor
@@ -30,10 +33,10 @@
          * @type {Object}
          */
         this.defaults = {
-          plugins: 'a11yhelp,autogrow,autokeywords,autolink,basicstyles,blockquote,clipboard,contextmenu,elementspath'+
-            ',enterkey,entities,filebrowser,floatingspace,font,format,horizontalrule,htmlwriter,image,imageresize,'+
-            'indentblock,justify,link,list,magicline,maximize,pastefromword,pastespecial,pastetext,removeformat,resize,'+
-            'scayt,sourcearea,stylescombo,tab,table,tabletools,toolbar,undo,wordcount,wsc,wysiwygarea',
+          plugins: 'a11yhelp,autogrow,autokeywords,autolink,basicstyles,blockquote,clipboard,contextmenu,elementspath' +
+            ',enterkey,entities,filebrowser,floatingspace,font,format,horizontalrule,htmlwriter,image,imageresize,' +
+            'indentblock,justify,link,list,magicline,maximize,pastefromword,pastespecial,pastetext,removeformat,' +
+            'resize,scayt,sourcearea,stylescombo,tab,table,tabletools,toolbar,undo,wordcount,wsc,wysiwygarea',
           disableNativeSpellChecker: false,
           uiColor: '#ffffff',
           autoGrow_onStartup: true,
@@ -43,7 +46,6 @@
             showCharCount: false
           },
           allowedContent: true,
-          // language: settings.language,
           extraPlugins: 'magicline,font',
           magicline_color: 'blue',
           forcePasteAsPlainText: false,
@@ -67,26 +69,26 @@
             toolbarGroups: [
               {
                 name: 'basicstyles',
-                groups: ['basicstyles', 'cleanup']
+                groups: [ 'basicstyles', 'cleanup' ]
               }, {
                 name: 'align',
-                groups: ['align']
+                groups: [ 'align' ]
               }, {
                 name: 'editing',
-                groups: ['find', 'selection']
+                groups: [ 'find', 'selection' ]
               }, {
                 name: 'forms'
               }, {
                 name: 'styles'
               }, {
                 name: 'links'
-              },{
-                groups: ['list']
-              },{
+              }, {
+                groups: [ 'list' ]
+              }, {
                 name: 'others',
               }, {
                 name: 'document',
-                groups: ['mode', 'document', 'doctools']
+                groups: [ 'mode', 'document', 'doctools' ]
               }
             ],
             autoGrow_maxHeight: 200,
@@ -97,23 +99,23 @@
             toolbarGroups: [
               {
                 name: 'align',
-                groups: ['align']
+                groups: [ 'align' ]
               }, {
                 name: 'document',
-                groups: ['mode', 'document', 'doctools']
+                groups: [ 'mode', 'document', 'doctools' ]
               }, {
                 name: 'editing',
-                groups: ['find', 'selection']
+                groups: [ 'find', 'selection' ]
               }, {
                 name: 'forms'
               },
               '/',
               {
                 name: 'basicstyles',
-                groups: ['basicstyles', 'cleanup']
+                groups: [ 'basicstyles', 'cleanup' ]
               }, {
                 name: 'paragraph',
-                groups: ['list', 'indent', 'blocks', 'align']
+                groups: [ 'list', 'indent', 'blocks', 'align' ]
               }, {
                 name: 'links'
               }, {
@@ -125,7 +127,7 @@
                 name: 'tools'
               }, {
                 name: 'others',
-                groups: ['undo']
+                groups: [ 'undo' ]
               },
             ],
           },
@@ -139,27 +141,27 @@
               // { name: 'clipboard',   groups: [ 'clipboard' ] },
               {
                 name: 'editing',
-                groups: ['find', 'selection']
+                groups: [ 'find', 'selection' ]
               }, {
                 name: 'forms'
               }, {
                 name: 'others',
-                groups: ['undo']
+                groups: [ 'undo' ]
               }, {
                 name: 'tools'
               }, {
                 name: 'document',
-                groups: ['mode', 'document', 'doctools']
+                groups: [ 'mode', 'document', 'doctools' ]
               },
               '/', {
                 name: 'basicstyles',
-                groups: ['basicstyles', 'cleanup']
+                groups: [ 'basicstyles', 'cleanup' ]
               }, {
                 name: 'align',
-                groups: ['align']
+                groups: [ 'align' ]
               }, {
                 name: 'paragraph',
-                groups: ['list', 'indent', 'blocks']
+                groups: [ 'list', 'indent', 'blocks' ]
               }, {
                 name: 'links'
               }, {
@@ -282,7 +284,7 @@
          *
          * @return {Object} The current object.
          */
-        this.$get = function () {
+        this.$get = function() {
           return this;
         };
       }
@@ -307,15 +309,17 @@
      * <textarea onm-editor onm-editor-preset="simple" ng-model="description">
      * </textarea>
      */
-    .directive('onmEditor', ['Editor', '$q', '$timeout', '$window',
-      function (Editor, $q, $timeout, $window) {
+    .directive('onmEditor', [
+      'Editor', '$q', '$timeout', '$window',
+      function(Editor, $q, $timeout, $window) {
         return {
-          restrict: 'A', // E = Element, A = Attribute, C = Class, M = Comment
+          // E = Element, A = Attribute, C = Class, M = Comment
+          restrict: 'A',
           scope: {
-            'ngModel': '=',
+            ngModel: '=',
           },
-          require: ['ngModel', '^?form'],
-          link: function (scope, element, attrs, ctrls) {
+          require: [ 'ngModel', '^?form' ],
+          link: function(scope, element, attrs, ctrls) {
             var ngModel = ctrls[0];
             var form    = ctrls[1] || null;
 
@@ -325,12 +329,12 @@
             /**
              * Initializes the current CKEditor instance.
              */
-            var onLoad = function () {
+            var onLoad = function() {
               var options  = Editor.configure(attrs.onmEditorPreset);
               var instance = Editor.init(element[0], options);
 
               // Updates CKEditor when model changes
-              scope.$watch('ngModel', function(nv, ov) {
+              scope.$watch('ngModel', function(nv) {
                 // Prevent infinite loop when comparing '' and undefined
                 var value = angular.isUndefined(nv) ? '' : nv;
 
@@ -341,10 +345,6 @@
 
                 if (instance.getData() !== value) {
                   instance.setData(value, { internal: false });
-                }
-
-                if (nv === ov) {
-                  return;
                 }
               }, true);
 
@@ -367,7 +367,7 @@
                 var data = instance.getData();
 
                 if (data !== ngModel.$viewValue) {
-                  $timeout(function () {
+                  $timeout(function() {
                     stop = true;
                     scope.ngModel = data;
                   }, 0);
@@ -381,7 +381,7 @@
               instance.on('key', setModelData);
 
               // Initializes the CKEditor with data
-              instance.on('instanceReady', function () {
+              instance.on('instanceReady', function() {
                 // Data from HTML value
                 var data = element[0].innerText;
 
@@ -390,7 +390,7 @@
                   data = scope.ngModel;
                 }
 
-                scope.$apply(function () {
+                scope.$apply(function() {
                   stop = true;
 
                   instance.setData(data);
@@ -404,7 +404,7 @@
               });
 
               // Destroy CKEditor when element is destroyed
-              element.bind('$destroy', function () {
+              element.bind('$destroy', function() {
                 Editor.destroy(instance.name);
               });
             };
@@ -434,25 +434,30 @@
      * @description
      *   Initialize and check CKEditor on application run.
      */
-    .run(['$q', '$timeout', '$window', function ($q, $timeout, $window) {
-      $defer = $q.defer();
+    .run([
+      '$q', '$timeout', '$window', function($q, $timeout, $window) {
+        $defer = $q.defer();
 
-      if (angular.isUndefined($window.CKEDITOR)) {
-        throw new Error('CKEDITOR not found');
-      }
-
-      $window.CKEDITOR.disableAutoInline = true;
-
-      function checkLoaded() {
-        if ($window.CKEDITOR.status === 'loaded') {
-          loaded = true;
-          $defer.resolve();
-        } else {
-          checkLoaded();
+        if (angular.isUndefined($window.CKEDITOR)) {
+          throw new Error('CKEDITOR not found');
         }
-      }
 
-      $window.CKEDITOR.on('loaded', checkLoaded);
-      $timeout(checkLoaded, 0);
-    }]);
+        $window.CKEDITOR.disableAutoInline = true;
+
+        /**
+         *  Check if the ckeditor is loaded
+         */
+        function checkLoaded() {
+          if ($window.CKEDITOR.status === 'loaded') {
+            loaded = true;
+            $defer.resolve();
+          } else {
+            checkLoaded();
+          }
+        }
+
+        $window.CKEDITOR.on('loaded', checkLoaded);
+        $timeout(checkLoaded, 0);
+      }
+    ]);
 })();
