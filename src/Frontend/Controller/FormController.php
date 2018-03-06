@@ -119,22 +119,23 @@ class FormController extends Controller
                 ->setFrom([ $email => $name ])
                 ->setSender([ $settings['mail_sender'] => $settings['site_name'] ]);
 
+            $path = $this->getParameter('core.paths.spool');
             $file1 = $request->files->get('image1');
             if ($file1) {
-                $file1->move($this->getParameter('core.paths.spool'), $file1->getClientOriginalName());
+                $file1->move($path, $file1->getClientOriginalName());
 
                 $text->attach(\Swift_Attachment::fromPath(
-                    $this->getParameter('core.paths.spool') . '/' . $file1->getPathname(),
+                    $path . '/' . $file1->getClientOriginalName(),
                     $file1->getClientMimeType()
                 )->setFilename($file1->getClientOriginalName()));
             }
 
             $file2 = $request->files->get('image2');
             if ($file2) {
-                $file2->move($this->getParameter('core.paths.spool'), $file2->getClientOriginalName());
+                $file2->move($path, $file2->getClientOriginalName());
 
                 $text->attach(\Swift_Attachment::fromPath(
-                    $this->getParameter('core.paths.spool') . '/' . $file2->getPathname(),
+                    $path . '/' . $file2->getClientOriginalName(),
                     $file2->getClientMimeType()
                 )->setFilename($file2->getClientOriginalName()));
             }
