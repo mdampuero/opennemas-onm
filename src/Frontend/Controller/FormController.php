@@ -60,7 +60,7 @@ class FormController extends Controller
     public function sendAction(Request $request)
     {
         // Get request params
-        $verify = $request->request->filter('security_code', "", FILTER_SANITIZE_STRING);
+        $verify = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
 
         if ('POST' != $request->getMethod() || !empty($verify)) {
             return new RedirectResponse($this->generateUrl('frontend_participa_frontpage'));
@@ -90,7 +90,10 @@ class FormController extends Controller
         if (!empty($email) && $isValid) {
             // Check data form is correcty and serialize form
             $body       = '';
-            $notAllowed = [ 'subject', 'cx', 'security_code', 'submit', 'g-recapcha-response' ];
+            $notAllowed = [
+                'name', 'cx', 'g-recaptcha-response', 'recipient',
+                'security_code', 'subject',
+            ];
 
             foreach ($request->request as $key => $value) {
                 if (!in_array($key, $notAllowed)) {
@@ -119,8 +122,9 @@ class FormController extends Controller
                 ->setFrom([ $email => $name ])
                 ->setSender([ $settings['mail_sender'] => $settings['site_name'] ]);
 
-            $path = $this->getParameter('core.paths.spool');
+            $path  = $this->getParameter('core.paths.spool');
             $file1 = $request->files->get('image1');
+
             if ($file1) {
                 $file1->move($path, $file1->getClientOriginalName());
 
@@ -131,6 +135,7 @@ class FormController extends Controller
             }
 
             $file2 = $request->files->get('image2');
+
             if ($file2) {
                 $file2->move($path, $file2->getClientOriginalName());
 
