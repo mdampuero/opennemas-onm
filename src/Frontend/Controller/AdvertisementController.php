@@ -85,6 +85,29 @@ class AdvertisementController extends Controller
      */
     public function showAdsTxtAction()
     {
+        // Check ads module and show default ads.txt if deactivated
+        if (!$this->get('core.security')->hasExtension('ADS_MANAGER')) {
+            $instanceName = getService('core.instance')->internal_name;
+            $content = "google.com, pub-7694073983816204, DIRECT, f08c47fec0942fa0\n"
+                . "#SmartAdServer\n"
+                . "smartadserver.com,3035,DIRECT\n"
+                . "contextweb.com,560288,DIRECT,89ff185a4c4e857c\n"
+                . "pubmatic.com,156439,DIRECT\n"
+                . "pubmatic.com,154037,DIRECT\n"
+                . "rubiconproject.com,16114,DIRECT,0bfd66d529a55807\n"
+                . "openx.com,537149888,DIRECT,6a698e2ec38604c6\n"
+                . "sovrn.com,257611,DIRECT,fafdf38b16bf6b2b\n"
+                . "appnexus.com,3703,DIRECT,f5ab79cb980f11d1";
+
+            return new Response($content, 200, [
+                'Content-Type' => 'text/plain',
+                'x-cacheable'  => true,
+                'x-cache-for'  => '100d',
+                'x-tags'       => 'instance-' . $instanceName . ',ads,txt',
+                'x-instance'   => $instanceName,
+            ]);
+        }
+
         // Check for the module existence and if it is enabled
         if (!$this->get('core.security')->hasExtension('es.openhost.module.advancedAdvertisement')) {
             throw new ResourceNotFoundException();
