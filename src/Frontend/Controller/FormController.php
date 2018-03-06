@@ -124,7 +124,7 @@ class FormController extends Controller
                 $file1->move($this->getParameter('core.paths.spool'), $file1->getClientOriginalName());
 
                 $text->attach(\Swift_Attachment::fromPath(
-                    $file1->getPathname(),
+                    $this->getParameter('core.paths.spool') . '/' . $file1->getPathname(),
                     $file1->getClientMimeType()
                 )->setFilename($file1->getClientOriginalName()));
             }
@@ -134,7 +134,7 @@ class FormController extends Controller
                 $file2->move($this->getParameter('core.paths.spool'), $file2->getClientOriginalName());
 
                 $text->attach(\Swift_Attachment::fromPath(
-                    $file2->getPathname(),
+                    $this->getParameter('core.paths.spool') . '/' . $file2->getPathname(),
                     $file2->getClientMimeType()
                 )->setFilename($file2->getClientOriginalName()));
             }
