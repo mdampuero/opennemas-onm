@@ -597,7 +597,7 @@ class OpinionsController extends Controller
                     'blog_orderFrontpage'   => filter_var($configsRAW['blog_orderFrontpage'], FILTER_SANITIZE_STRING),
                     'blog_itemsFrontpage'   => filter_var($configsRAW['blog_itemsFrontpage'], FILTER_VALIDATE_INT),
                 ],
-                'extraInfoContents.OPINION_MANAGER' => json_decode($extra, true)
+                'extraInfoContents.OPINION_MANAGER' => json_decode($extra)
             ];
 
             foreach ($configs as $key => $value) {
