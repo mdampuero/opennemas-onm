@@ -26,11 +26,11 @@ class Article extends Content
     public $pk_article = null;
 
     /**
-     * The subtitle of the article
+     * The pretitle of the article
      *
      * @var string
      */
-    protected $subtitle = null;
+    protected $pretitle = null;
 
     /**
      * The agency that authored the article
@@ -136,9 +136,6 @@ class Article extends Content
             case 'author':
                 return $this->getAuthor();
 
-            case 'pretitle':
-                return parent::__get('subtitle');
-
             default:
                 return parent::__get($name);
         }
@@ -155,8 +152,8 @@ class Article extends Content
     {
         parent::load($data);
 
-        // Force pretitle to use __get until properties separated
-        unset($this->pretitle);
+        // Ignore subtitle property from database
+        unset($this->subtitle);
 
         return $this;
     }
@@ -251,8 +248,6 @@ class Article extends Content
                 ? null : $data['agency'],
                 'summary'   => (!array_key_exists('summary', $data) || empty($data['summary']))
                     ? null : $data['summary'],
-                'subtitle'   => (!array_key_exists('pretitle', $data) || empty($data['pretitle']))
-                    ? null : $data['pretitle'],
                 'pretitle'   => (!array_key_exists('pretitle', $data) || empty($data['pretitle']))
                     ? null : $data['pretitle'],
                 'title_int'   => (!array_key_exists('title_int', $data) || empty($data['title_int']))
@@ -328,8 +323,6 @@ class Article extends Content
             ? null : $data['agency'],
             'summary'   => (!array_key_exists('summary', $data) || empty($data['summary']))
                 ? null : $data['summary'],
-            'subtitle'   => (!array_key_exists('pretitle', $data) || empty($data['pretitle']))
-                ? null : $data['pretitle'],
             'pretitle'   => (!array_key_exists('pretitle', $data) || empty($data['pretitle']))
                 ? null : $data['pretitle'],
             'title_int'   => (!array_key_exists('title_int', $data) || empty($data['title_int']))
@@ -523,7 +516,7 @@ class Article extends Content
     {
         $keys = [
             'footer_video', 'footer_video2', 'img1_footer', 'img2_footer',
-            'pretitle', 'subtitle', 'summary', 'title_int'
+            'pretitle', 'summary', 'title_int'
         ];
 
         if ($exclusive) {
