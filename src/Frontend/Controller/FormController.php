@@ -122,7 +122,7 @@ class FormController extends Controller
                 ->setFrom([ $email => $name ])
                 ->setSender([ $settings['mail_sender'] => $settings['site_name'] ]);
 
-            $path  = $this->getParameter('core.paths.spool');
+            $path  = $this->getParameter('core.paths.spool.files');
             $file1 = $request->files->get('image1');
 
             if ($file1) {
