@@ -25,11 +25,11 @@ class Special extends Content
     public $pk_special = null;
 
     /**
-     * The subtitle for this album
+     * The pretitle for this album
      *
      * @var string
      */
-    public $subtitle = null;
+    public $pretitle = null;
 
     /**
      * Path for get a pdf file
@@ -98,9 +98,6 @@ class Special extends Content
 
                 return $returnValue;
 
-            case 'pretitle':
-                return $this->subtitle;
-
             default:
                 return parent::__get($name);
         }
@@ -152,12 +149,11 @@ class Special extends Content
 
         $this->id         = $properties['pk_special'];
         $this->pk_special = $properties['pk_special'];
-        $this->subtitle   = $properties['subtitle'];
         $this->img1       = $properties['img1'];
         $this->pdf_path   = $properties['pdf_path'];
 
-        // Force pretitle to use __get until properties separated
-        unset($this->pretitle);
+        // Ignore subtitle property from database
+        unset($this->subtitle);
     }
 
     /**
@@ -184,7 +180,6 @@ class Special extends Content
                 'specials',
                 [
                     'pk_special' => $this->id,
-                    'subtitle'   => $data['pretitle'],
                     'pretitle'   => $data['pretitle'],
                     'img1'       => (int) $data['img1'],
                     'pdf_path'   => $data['pdf_path']
@@ -222,7 +217,6 @@ class Special extends Content
             getService('dbal_connection')->update(
                 'specials',
                 [
-                    'subtitle' => $data['subtitle'],
                     'pretitle' => $data['pretitle'],
                     'img1'     => (int) $data['img1'],
                     'pdf_path' => $data['pdf_path'],

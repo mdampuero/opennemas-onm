@@ -84,10 +84,9 @@ class ArticleTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(empty($this->article->pretitle));
         $this->assertTrue(empty($this->article->subtitle));
 
-        $this->article->subtitle = 'gorp';
+        $this->article->pretitle = 'flob';
 
         $this->assertFalse(empty($this->article->pretitle));
-        $this->assertEquals('gorp', $this->article->subtitle);
-        $this->assertEquals('gorp', $this->article->pretitle);
+        $this->assertEquals('flob', $this->article->pretitle);
     }
 }

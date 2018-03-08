@@ -113,6 +113,13 @@ class UserController extends Controller
                 $errors[] = _('The email address is already in use.');
             }
 
+            // Fill username and name with email if empty
+            foreach ([ 'username', 'name' ] as $value) {
+                if (empty($data[$value])) {
+                    $data[$value] = $data['email'];
+                }
+            }
+
             // Check existing user name
             if ($user->checkIfExistsUserName($data['username'])) {
                 $errors[] = _('The user name is already in use.');
