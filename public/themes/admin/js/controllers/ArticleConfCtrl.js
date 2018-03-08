@@ -56,7 +56,7 @@
         $scope.saveConf = function($event) {
           $event.preventDefault();
 
-          var data = { extraFields: cleaner.clean($scope.extraFields) };
+          var data = { extraFields: JSON.stringify(cleaner.clean($scope.extraFields)) };
 
           $scope.saving = false;
           http.put('api_v1_backend_extra_fields_article_save', data)
