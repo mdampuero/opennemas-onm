@@ -82,7 +82,6 @@ class ArticleTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('article', $this->article->content_type_name);
         $this->assertEquals('wibble', $this->article->title);
         $this->assertTrue(empty($this->article->pretitle));
-        $this->assertTrue(empty($this->article->subtitle));
 
         $this->article->pretitle = 'flob';
 
