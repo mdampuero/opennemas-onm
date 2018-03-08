@@ -961,19 +961,19 @@ admin_menu_sidebar_get:
 
 # Routing refactoring starts here
 backend_authentication:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/authentication.yml'
 
 backend_author:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/author.yml'
 
 backend_account:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/account.yml'
 
 backend_category:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/category.yml'
 
 backend_domain:
@@ -981,25 +981,29 @@ backend_domain:
     resource: '@BackendBundle/Resources/config/routing/domain.yml'
 
 backend_news_agency_server:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/news_agency_server.yml'
 
 backend_notification:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/notification.yml'
 
 backend_purchase:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/purchase.yml'
 
 backend_static_pages:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/static_page.yml'
 
+backend_subscription:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/subscription.yml'
+
 backend_store:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/store.yml'
 
 backend_theme:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/theme.yml'
