@@ -765,7 +765,7 @@ kioskos:
             options: { lenght: 200, notnull: true }
         date:
             type: date
-            options: { default: null, notnull: false }
+            options: { default: null, notnull: true }
         type:
             type: boolean
             options: { default: 0, comment: '0 item - 1 subscription' }
@@ -1580,10 +1580,10 @@ votes:
             options: { length: 20, unsigned: true, autoincrement: true }
         value_pos:
             type: smallint
-            options: { unsigned: true, default: 0 }
+            options: { length: 5, unsigned: true, default: 0 }
         value_neg:
             type: smallint
-            options: { unsigned: true, default: 0 }
+            options: { length: 5, unsigned: true, default: 0 }
         ips_count_vote:
             type: text
             options: { length: 65532, default: null, notnull: false }
