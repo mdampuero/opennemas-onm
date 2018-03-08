@@ -80,6 +80,22 @@ INSERT INTO `advertisements` VALUES (128,2,NULL,'','http://www.opennemas.com',''
 UNLOCK TABLES;
 
 --
+-- Table structure for table `advertisements_positions`
+--
+
+DROP TABLE IF EXISTS `advertisements_positions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `advertisements_positions` (
+  `advertisement_id` bigint(20) UNSIGNED NOT NULL,
+  `position_id` INTEGER UNSIGNED NOT NULL,
+  PRIMARY KEY (`advertisement_id`,`position_id`),
+  KEY `advertisement_positions_advertisement_id` (`advertisement_id`),
+  CONSTRAINT `advertisements_positions_content_id` FOREIGN KEY (`advertisement_id`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `albums`
 --
 
