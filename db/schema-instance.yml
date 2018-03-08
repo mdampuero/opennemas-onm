@@ -108,7 +108,7 @@ advertisements_positions:
             unique: true
             flags: {  }
         -
-            name: advertisement_positions_advertisement_id
+            name: advertisements_positions_advertisement_id
             columns: [ advertisement_id ]
             primary: false
             unique: false

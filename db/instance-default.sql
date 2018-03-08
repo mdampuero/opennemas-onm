@@ -90,7 +90,7 @@ CREATE TABLE `advertisements_positions` (
   `advertisement_id` bigint(20) UNSIGNED NOT NULL,
   `position_id` INTEGER UNSIGNED NOT NULL,
   PRIMARY KEY (`advertisement_id`,`position_id`),
-  KEY `advertisement_positions_advertisement_id` (`advertisement_id`),
+  KEY `advertisements_positions_advertisement_id` (`advertisement_id`),
   CONSTRAINT `advertisements_positions_content_id` FOREIGN KEY (`advertisement_id`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
