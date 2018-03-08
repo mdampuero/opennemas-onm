@@ -83,8 +83,13 @@ class UserGroupService extends Service
         $em  = $this->container->get('orm.manager');
         $oql = sprintf('pk_user_group in [%s]', implode(',', $ids));
 
-        $userGroups = $em->getRepository('UserGroup', $this->origin)
-            ->findBy($oql);
+        try {
+            $userGroups = $em->getRepository('UserGroup', $this->origin)
+                ->findBy($oql);
+        } catch (\Exception $e) {
+            $this->container->get('error.log')->error($e->getMessage());
+            throw new DeleteListException();
+        }
 
         $deleted = 0;
         foreach ($userGroups as $userGroup) {
