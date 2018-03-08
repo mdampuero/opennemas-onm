@@ -1,0 +1,41 @@
+api_v1_backend_subscription_delete:
+    path:     /subscriptions/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Subscription:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_subscription_patch:
+    path:     /subscriptions/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Subscription:patch }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_subscription_show:
+    path:     /subscriptions/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Subscription:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_subscriptions_list:
+    path:     /subscriptions
+    defaults: { _controller: ApiBundle:V1/Backend/Subscription:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_subscriptions_patch:
+    path:     /subscriptions
+    defaults: { _controller: ApiBundle:V1/Backend/Subscription:patchSelected }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_subscriptions_delete:
+    path:     /subscriptions
+    defaults: { _controller: ApiBundle:V1/Backend/Subscription:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
