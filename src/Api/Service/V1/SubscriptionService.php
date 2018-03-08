@@ -10,6 +10,7 @@
 namespace Api\Service\V1;
 
 use Api\Exception\DeleteItemException;
+use Api\Exception\DeleteListException;
 use Api\Exception\GetItemException;
 use Api\Exception\PatchListException;
 use Api\Exception\UpdateItemException;
