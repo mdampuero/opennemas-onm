@@ -121,7 +121,7 @@ class SubscriptionController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('SUBSCRIPTION_LIST')")
+     * @Security("hasPermission('SUBSCRIPTION_CREATE')")
      */
     public function newAction()
     {
