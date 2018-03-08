@@ -5,6 +5,8 @@ orm:
             properties:
                 pk_user_group: integer
                 name:          string
+                subscription:  boolean
+                enabled:       boolean
                 privileges:    array
             converters:
                 default:
@@ -34,6 +36,12 @@ orm:
                         name:
                             type: string
                             options: { default: null, notnull: false, length: 50 }
+                        subscription:
+                            type:    boolean
+                            options: { default: 0, notnull: false }
+                        enabled:
+                            type:    boolean
+                            options: { default: 0, notnull: false }
                     index:
                         -
                             name:    PRIMARY
