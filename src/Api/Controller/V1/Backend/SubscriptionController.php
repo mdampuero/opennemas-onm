@@ -149,6 +149,43 @@ class SubscriptionController extends Controller
     }
 
     /**
+     * Updates some subscription properties.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('SUBSCRIPTION_UPDATE')")
+     */
+    public function patchSelectedAction(Request $request)
+    {
+        $params = $request->request->all();
+        $ids    = $params['ids'];
+        $msg    = $this->get('core.messenger');
+
+        unset($params['ids']);
+
+        $updated = $this->get('api.service.subscription')
+            ->patchList($ids, $params);
+
+        if ($updated > 0) {
+            $msg->add(
+                sprintf(_('%s subscriptions updated successfully'), $updated),
+                'success'
+            );
+        }
+
+        if ($updated !== count($ids)) {
+            $msg->add(sprintf(
+                _('%s subscriptions could not be updated successfully'),
+                count($ids) - $updated
+            ), 'error');
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
      * Returns an subscription.
      *
      * @param integer $id The group id.
