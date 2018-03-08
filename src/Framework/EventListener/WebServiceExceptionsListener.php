@@ -25,6 +25,13 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class WebServiceExceptionsListener implements EventSubscriberInterface
 {
     /**
+     * The service container.
+     *
+     * @var ServiceContainer
+     */
+    protected $container;
+
+    /**
      * List of exceptions that can't return the error message.
      *
      * @var array
@@ -52,9 +59,9 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
      *
      * @param Messenger $msg The messenger service.
      */
-    public function __construct(Messenger $msg)
+    public function __construct($container)
     {
-        $this->msg = $msg;
+        $this->container = $container;
 
         $this->messages = [
             400 => _('You are doing it wrong! Do it better.'),
@@ -72,33 +79,26 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
     {
         $exception = $event->getException();
         $uri       = $event->getRequest()->getRequestUri();
+        $msg       = $this->container->get('core.messenger');
 
         if (strpos($uri, '/managerws') === false
+            && strpos($uri, '/api') === false
             && strpos($uri, '/entityws') === false
         ) {
             return;
         }
 
-        $errorMessage = 'WS Error: "' . $exception->getMessage()
-            . '", File: "' . $exception->getFile() . ':' . $exception->getLine() . '"';
-
-        error_log($errorMessage);
+        $this->container->get('error.log')->error($exception->getMessage()
+            . ' (' . $exception->getFile() . ':' . $exception->getLine() . ')');
 
         if ($exception instanceof AuthenticationException) {
             $event->setResponse(new JsonResponse('', 401));
             return;
         }
 
-        $this->msg->add(
-            $this->getMessage($exception),
-            'error',
-            $exception->getCode()
-        );
+        $msg->add($this->getMessage($exception), 'error', $exception->getCode());
 
-        $event->setResponse(new JsonResponse(
-            $this->msg->getMessages(),
-            $this->msg->getCode()
-        ));
+        $event->setResponse(new JsonResponse($msg->getMessages(), $msg->getCode()));
     }
 
     /**
