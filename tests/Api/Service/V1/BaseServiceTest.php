@@ -9,13 +9,13 @@
  */
 namespace Tests\Api\Service\V1;
 
-use Api\Service\V1\UserGroupService;
-use Common\ORM\Entity\UserGroup;
+use Api\Service\V1\BaseService;
+use Common\ORM\Core\Entity;
 
 /**
- * Defines test cases for UserGroupService class.
+ * Defines test cases for BaseService class.
  */
-class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
+class BaseServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Configures the testing environment.
@@ -49,7 +49,7 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
         $this->em->expects($this->any())->method('getRepository')
             ->willReturn($this->repository);
 
-        $this->service = new UserGroupService($this->container);
+        $this->service = new BaseService($this->container, 'Common\ORM\Core\Entity');
     }
 
     public function serviceContainerCallback($name)
@@ -113,7 +113,7 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteItem()
     {
-        $userGroup = new UserGroup();
+        $userGroup = new Entity();
 
         $this->repository->expects($this->once())->method('find')
             ->willReturn($userGroup);
@@ -128,7 +128,7 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException Api\Exception\DeleteItemException
      */
-    public function testDeleteItemWhenNoUserGroup()
+    public function testDeleteItemWhenNoEntity()
     {
         $this->repository->expects($this->any())->method('find')
             ->will($this->throwException(new \Exception()));
@@ -144,7 +144,7 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteItemWhenErrorWhileRemoving()
     {
-        $userGroup = new UserGroup();
+        $userGroup = new Entity();
 
         $this->repository->expects($this->once())->method('find')
             ->willReturn($userGroup);
@@ -161,8 +161,8 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteList()
     {
-        $userGroupA = new UserGroup([ 'name' => 'wubble']);
-        $userGroupB = new UserGroup([ 'name' => 'xyzzy' ]);
+        $userGroupA = new Entity([ 'name' => 'wubble']);
+        $userGroupB = new Entity([ 'name' => 'xyzzy' ]);
 
         $this->repository->expects($this->once())->method('findBy')
             ->with('pk_user_group in [1,2]')
@@ -187,8 +187,8 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteListWhenOneErrorWhileRemoving()
     {
-        $userGroupA = new UserGroup([ 'name' => 'wubble']);
-        $userGroupB = new UserGroup([ 'name' => 'xyzzy' ]);
+        $userGroupA = new Entity([ 'name' => 'wubble']);
+        $userGroupB = new Entity([ 'name' => 'xyzzy' ]);
 
         $this->repository->expects($this->once())->method('findBy')
             ->with('pk_user_group in [1,2]')
@@ -223,7 +223,7 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItem()
     {
-        $userGroup = new UserGroup();
+        $userGroup = new Entity();
 
         $this->repository->expects($this->once())->method('find')
             ->with(1)->willReturn($userGroup);
@@ -252,8 +252,8 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $results = [
-            new UserGroup([ 'name' => 'wubble' ]),
-            new UserGroup([ 'name' => 'mumble' ])
+            new Entity([ 'name' => 'wubble' ]),
+            new Entity([ 'name' => 'mumble' ])
         ];
 
         $this->repository->expects($this->once())->method('countBy')
@@ -304,7 +304,7 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testPatchItem()
     {
-        $userGroup = new UserGroup([ 'name' => 'foobar' ]);
+        $userGroup = new Entity([ 'name' => 'foobar' ]);
         $data      = [ 'name' => 'mumble' ];
 
         $this->converter->expects($this->once())->method('objectify')
@@ -344,7 +344,7 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testPatchItemWhenErrorWhilePersisting()
     {
-        $userGroup = new UserGroup([ 'name' => 'foobar' ]);
+        $userGroup = new Entity([ 'name' => 'foobar' ]);
         $data      = [ 'name' => 'mumble' ];
 
         $this->converter->expects($this->once())->method('objectify')
@@ -363,8 +363,8 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testPatchList()
     {
-        $userGroupA = new UserGroup([ 'name' => 'wubble', 'enabled' => false ]);
-        $userGroupB = new UserGroup([ 'name' => 'xyzzy', 'enabled' => false  ]);
+        $userGroupA = new Entity([ 'name' => 'wubble', 'enabled' => false ]);
+        $userGroupB = new Entity([ 'name' => 'xyzzy', 'enabled' => false  ]);
 
         $data = [ 'enabled' => true ];
 
@@ -395,8 +395,8 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testPatchListWhenOneErrorWhileRemoving()
     {
-        $userGroupA = new UserGroup([ 'name' => 'wubble']);
-        $userGroupB = new UserGroup([ 'name' => 'xyzzy' ]);
+        $userGroupA = new Entity([ 'name' => 'wubble']);
+        $userGroupB = new Entity([ 'name' => 'xyzzy' ]);
 
         $data = [ 'enabled' => true ];
 
@@ -433,7 +433,7 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateItem()
     {
-        $userGroup = new UserGroup([ 'name' => 'foobar' ]);
+        $userGroup = new Entity([ 'name' => 'foobar' ]);
         $data      = [ 'name' => 'mumble' ];
 
         $this->converter->expects($this->once())->method('objectify')
@@ -473,7 +473,7 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateItemWhenErrorWhilePersisting()
     {
-        $userGroup = new UserGroup([ 'name' => 'foobar' ]);
+        $userGroup = new Entity([ 'name' => 'foobar' ]);
         $data      = [ 'name' => 'mumble' ];
 
         $this->converter->expects($this->once())->method('objectify')

@@ -9,7 +9,7 @@
  */
 namespace Api\Service;
 
-class Service
+abstract class Service
 {
     /**
      * The service container.
@@ -19,16 +19,7 @@ class Service
     protected $container;
 
     /**
-     * The name of the entities source.
-     *
-     * This is used in ORM manager and repositories.
-     *
-     * @var string
-     */
-    protected $origin = 'instance';
-
-    /**
-     * Initializes the UserGroupService.
+     * Initializes the Service.
      *
      * @param ServiceContainer $container The service container.
      */
@@ -38,30 +29,81 @@ class Service
     }
 
     /**
-     * Converts a user group or a list of user group to a structure
-     * returnable in a Response.
+     * Creates a new item.
      *
-     * @param mixed $item The user group or the list of user group.
+     * @param array $data The item data.
      *
-     * @return mixed The converted user group or list of user group.
+     * @return mixed The new item.
      */
-    public function responsify($item)
-    {
-        return $this->container->get('orm.manager')->getConverter('UserGroup')
-            ->responsify($item);
-    }
+    abstract public function createItem($data);
 
     /**
-     * Changes the name of the entities source.
+     * Deletes an item.
      *
-     * @param string $origin The name of the source.
+     * @param integer $id The item id.
      *
-     * @return UserGroupService The current service.
+     * @throws DeleteItemException If the item could not be deleted.
      */
-    public function setOrigin($origin)
-    {
-        $this->origin = $origin;
+    abstract public function deleteItem($ids);
 
-        return $this;
-    }
+    /**
+     * Deletes a list of item.
+     *
+     * @param array $ids The list of ids.
+     *
+     * @return integer The number of successfully deleted item.
+     */
+    abstract public function deleteList($item);
+
+    /**
+     * Returns an item.
+     *
+     * @param integer $id The item id.
+     *
+     * @return UserGroup The item.
+     *
+     * @throws GetItemException If the item was not found.
+     */
+    abstract public function getItem($item);
+
+    /**
+     * Returns a list of items basing on a criteria.
+     *
+     * @param string $oql The criteria.
+     *
+     * @return array The list of items.
+     *
+     * @throws GetListException If there was a problem to find items.
+     */
+    abstract public function getList($oql);
+
+    /**
+     * Updates some item properties.
+     *
+     * @param integer $id   The item id.
+     * @param array   $data The new item information.
+     *
+     * @throws PatchItemException If the item could not be patched.
+     */
+    abstract public function patchItem($id, $data);
+
+    /**
+     * Updates some properties for a list of items.
+     *
+     * @param array $ids  The list of ids.
+     * @param array $data The properties to update.
+     *
+     * @return integer The number of successfully updated items.
+     */
+    abstract public function patchList($ids, $data);
+
+    /**
+     * Updates an item.
+     *
+     * @param integer $id   The item id.
+     * @param array   $data The item information.
+     *
+     * @throws UpdateItemException If the item could not be updated.
+     */
+    abstract public function updateItem($id, $data);
 }

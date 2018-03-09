@@ -1,8 +1,8 @@
 services:
     api.service.subscription:
         class:     Api\Service\V1\SubscriptionService
-        arguments: [ @service_container ]
+        arguments: [ '@service_container', 'Common\ORM\Entity\UserGroup' ]
 
     api.service.user_group:
-        class:     Api\Service\V1\UserGroupService
-        arguments: [ @service_container ]
+        class:     Api\Service\V1\BaseService
+        arguments: [ '@service_container', 'Common\ORM\Entity\UserGroup' ]
