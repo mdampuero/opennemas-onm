@@ -50,7 +50,7 @@ class Advertisement extends Content
      *
      * @var int
      */
-    public $img  = null;
+    public $img = null;
 
     /**
      * The position of the advertisement
@@ -213,7 +213,7 @@ class Advertisement extends Content
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
-                .'LEFT JOIN advertisements ON pk_content = pk_advertisement WHERE pk_content=?',
+                . 'LEFT JOIN advertisements ON pk_content = pk_advertisement WHERE pk_content=?',
                 [ $id ]
             );
 
@@ -221,7 +221,7 @@ class Advertisement extends Content
                 return false;
             }
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
 
@@ -267,10 +267,10 @@ class Advertisement extends Content
         }
 
         $data['pk_advertisement'] = $data['id'] = $this->id;
-        $data['overlap'] = (isset($data['overlap']))? $data['overlap']: 0;
-        $data['timeout'] = (isset($data['timeout']))? $data['timeout']: null;
-        $data['type_medida'] =
-            (isset($data['type_medida']))? $data['type_medida']: 'NULL';
+        $data['overlap']          = (isset($data['overlap'])) ? $data['overlap'] : 0;
+        $data['timeout']          = (isset($data['timeout'])) ? $data['timeout'] : null;
+        $data['type_medida']      =
+            (!empty($data['type_medida'])) ? $data['type_medida'] : null;
 
         try {
             $rs = getService('dbal_connection')->insert(
@@ -296,7 +296,7 @@ class Advertisement extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
@@ -319,10 +319,11 @@ class Advertisement extends Content
             $data['script'] = base64_encode($data['script']);
         }
 
-        $data['overlap']     = (isset($data['overlap']))? $data['overlap']: 0;
-        $data['timeout']     = (isset($data['timeout']))? $data['timeout']: null;
-        $data['with_script'] = (isset($data['with_script']))? $data['with_script']: 0;
-        $data['type_medida'] = (isset($data['type_medida']))? $data['type_medida']: 'NULL';
+        $data['overlap']     = (isset($data['overlap'])) ? $data['overlap'] : 0;
+        $data['timeout']     = (isset($data['timeout'])) ? $data['timeout'] : null;
+        $data['with_script'] = (isset($data['with_script'])) ? $data['with_script'] : 0;
+        $data['type_medida'] = (!empty($data['type_medida'])) ? $data['type_medida'] : null;
+
 
         try {
             $rs = getService('dbal_connection')->update(
@@ -347,7 +348,7 @@ class Advertisement extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
@@ -376,7 +377,7 @@ class Advertisement extends Content
                 return false;
             }
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
 
@@ -414,7 +415,7 @@ class Advertisement extends Content
                 return null;
             }
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return null;
         }
 
@@ -423,7 +424,7 @@ class Advertisement extends Content
 
     /**
      * Function that retrieves the name of the placeholder given
-     * the type_advertisemnt
+     * the type_advertisement
      * For example type=503  => name=publi-gallery-inner
      *
      * @param  string $advType
@@ -513,7 +514,7 @@ class Advertisement extends Content
         for ($i = 0; $i < $total; $i++) {
             $size = [
                 'height' => $params['height'][$i],
-                'width' =>  $params['width'][$i]
+                'width'  => $params['width'][$i]
             ];
 
             if ($i < 3) {
@@ -554,11 +555,11 @@ class Advertisement extends Content
 
             // Clean entity repository cache
             $ad = new \Advertisement($id);
-            dispatchEventWithParams('content.update-set-num-views', array('content' => $ad));
+            dispatchEventWithParams('content.update-set-num-views', [ 'content' => $ad ]);
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
