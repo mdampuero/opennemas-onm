@@ -36,6 +36,10 @@ class AlbumsController extends Controller
         $this->categoryName = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
         $this->page         = $this->request->query->getDigits('page', 1);
 
+        if (empty($this->page)) {
+            $this->page = 1;
+        }
+
         if (!empty($this->categoryName) && $this->categoryName != 'home') {
             $category = $this->get('category_repository')->findBy(
                 [ 'name' => [[ 'value' => $this->categoryName ]] ],
