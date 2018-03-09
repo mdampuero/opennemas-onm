@@ -36,10 +36,6 @@ class AlbumsController extends Controller
         $this->categoryName = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
         $this->page         = $this->request->query->getDigits('page', 1);
 
-        if (empty($this->page)) {
-            $this->page = 1;
-        }
-
         if (!empty($this->categoryName) && $this->categoryName != 'home') {
             $category = $this->get('category_repository')->findBy(
                 [ 'name' => [[ 'value' => $this->categoryName ]] ],
@@ -82,6 +78,13 @@ class AlbumsController extends Controller
         // Setup templating cache layer
         $this->view->setConfig('gallery-frontpage');
         $cacheID = $this->view->getCacheId('frontpage', 'album', $this->categoryName, $this->page);
+
+        if (empty($this->page)) {
+            return new RedirectResponse($this->get('router')->generate(
+                'frontend_album_frontpage',
+                [ 'page' => 1 ]
+            ));
+        }
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('album/album_frontpage.tpl', $cacheID))
