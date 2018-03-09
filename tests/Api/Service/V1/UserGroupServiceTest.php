@@ -132,7 +132,7 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->repository->expects($this->any())->method('find')
             ->will($this->throwException(new \Exception()));
-        $this->logger->expects($this->once())->method('error');
+        $this->logger->expects($this->exactly(2))->method('error');
 
         $this->service->deleteItem(23);
     }
@@ -207,13 +207,13 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException Api\Exception\DeleteListException
      */
-    public function testDeleteWhenErrorWhileSearching()
+    public function testDeleteListWhenErrorWhileSearching()
     {
         $this->repository->expects($this->once())->method('findBy')
             ->with('pk_user_group in [1,2]')
             ->will($this->throwException(new \Exception()));
 
-        $this->logger->expects($this->once())->method('error');
+        $this->logger->expects($this->exactly(2))->method('error');
 
         $this->service->deleteList([ 1, 2 ]);
     }
@@ -332,7 +332,7 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
             ->with($data)->willReturn($data);
         $this->repository->expects($this->once())->method('find')
             ->will($this->throwException(new \Exception()));
-        $this->logger->expects($this->once())->method('error');
+        $this->logger->expects($this->exactly(2))->method('error');
 
         $this->service->patchItem(1, $data);
     }
@@ -423,7 +423,7 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
             ->with('pk_user_group in [1,2]')
             ->will($this->throwException(new \Exception()));
 
-        $this->logger->expects($this->once())->method('error');
+        $this->logger->expects($this->exactly(2))->method('error');
 
         $this->service->patchList([ 1, 2 ], [ 'enabled' => true ]);
     }
@@ -461,7 +461,7 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
             ->with($data)->willReturn($data);
         $this->repository->expects($this->once())->method('find')
             ->will($this->throwException(new \Exception()));
-        $this->logger->expects($this->once())->method('error');
+        $this->logger->expects($this->exactly(2))->method('error');
 
         $this->service->updateItem(1, $data);
     }

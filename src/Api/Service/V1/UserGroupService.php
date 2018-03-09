@@ -57,10 +57,10 @@ class UserGroupService extends Service
     public function deleteItem($id)
     {
         try {
-            $em        = $this->container->get('orm.manager');
-            $userGroup = $em->getRepository('UserGroup', $this->origin)->find($id);
+            $item = $this->getItem($id);
+            $em   = $this->container->get('orm.manager');
 
-            $em->remove($userGroup, $userGroup->getOrigin());
+            $em->remove($item, $item->getOrigin());
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new DeleteItemException();
@@ -80,21 +80,20 @@ class UserGroupService extends Service
             throw new DeleteListException('Invalid ids', 400);
         }
 
-        $em  = $this->container->get('orm.manager');
         $oql = sprintf('pk_user_group in [%s]', implode(',', $ids));
 
         try {
-            $userGroups = $em->getRepository('UserGroup', $this->origin)
-                ->findBy($oql);
+            $response = $this->getList($oql);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new DeleteListException();
         }
 
+        $em      = $this->container->get('orm.manager');
         $deleted = 0;
-        foreach ($userGroups as $userGroup) {
+        foreach ($response['results'] as $item) {
             try {
-                $em->remove($userGroup, $userGroup->getOrigin());
+                $em->remove($item, $item->getOrigin());
                 $deleted++;
             } catch (\Exception $e) {
                 $this->container->get('error.log')->error($e->getMessage());
@@ -167,7 +166,8 @@ class UserGroupService extends Service
             $data = $em->getConverter('UserGroup')
                 ->objectify($data);
 
-            $userGroup = $em->getRepository('UserGroup', $this->origin)->find($id);
+            $userGroup = $this->getItem($id);
+
             $userGroup->merge($data);
 
             $em->persist($userGroup);
@@ -196,15 +196,14 @@ class UserGroupService extends Service
         $oql  = sprintf('pk_user_group in [%s]', implode(',', $ids));
 
         try {
-            $userGroups = $em->getRepository('UserGroup', $this->origin)
-                ->findBy($oql);
+            $response = $this->getList($oql);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new PatchListException();
         }
 
         $updated = 0;
-        foreach ($userGroups as $userGroup) {
+        foreach ($response['results'] as $userGroup) {
             try {
                 $userGroup->merge($data);
                 $em->persist($userGroup);
@@ -233,7 +232,7 @@ class UserGroupService extends Service
             $data = $em->getConverter('UserGroup')
                 ->objectify($data);
 
-            $userGroup = $em->getRepository('UserGroup', $this->origin)->find($id);
+            $userGroup = $this->getItem($id);
             $userGroup->setData($data);
 
             $em->persist($userGroup, $userGroup->getOrigin());
