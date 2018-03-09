@@ -138,12 +138,9 @@ class UserGroupService extends Service
         try {
             $repository = $this->container->get('orm.manager')
                 ->getRepository('UserGroup', $this->origin);
-            $converter  = $this->container->get('orm.manager')
-                ->getConverter('UserGroup');
 
             $total      = $repository->countBy($oql);
             $userGroups = $repository->findBy($oql);
-            $userGroups = $converter->responsify($userGroups);
 
             return [
                 'results' => $userGroups,
@@ -198,8 +195,13 @@ class UserGroupService extends Service
         $data = $em->getConverter('UserGroup')->objectify($data);
         $oql  = sprintf('pk_user_group in [%s]', implode(',', $ids));
 
-        $userGroups = $em->getRepository('UserGroup', $this->origin)
-            ->findBy($oql);
+        try {
+            $userGroups = $em->getRepository('UserGroup', $this->origin)
+                ->findBy($oql);
+        } catch (\Exception $e) {
+            $this->container->get('error.log')->error($e->getMessage());
+            throw new PatchListException();
+        }
 
         $updated = 0;
         foreach ($userGroups as $userGroup) {
