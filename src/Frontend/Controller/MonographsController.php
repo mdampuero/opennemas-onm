@@ -109,8 +109,10 @@ class MonographsController extends Controller
             if (!empty($monographs)) {
                 foreach ($monographs as &$monograph) {
                     if (!empty($monograph->img1)) {
-                        $img = $this->get('entity_repository')->find('Photo', $monograph->img1);
-                        $monograph->img1_path = $img->path_file.$img->name;
+                        $img = $this->get('entity_repository')
+                            ->find('Photo', $monograph->img1);
+                        // Generate image path
+                        $monograph->img1_path = $img->path_file . $img->name;
                         $monograph->img       = $img;
                     }
                     $monograph->category_name  = $monograph->loadCategoryName($monograph->id);
@@ -156,13 +158,13 @@ class MonographsController extends Controller
             || (!$this->view->isCached('special/special.tpl', $cacheID))
         ) {
             $contents = $special->getContents($special->id);
-            $columns  = array();
+            $columns  = [];
 
             $er = $this->get('entity_repository');
             if (!empty($contents)) {
-                if ((count($contents) == 1)  &&
-                    (($contents[0]['type_content']=='Attachment')
-                    || ($contents[0]['type_content']=='3'))
+                if ((count($contents) == 1)
+                    && (($contents[0]['type_content'] == 'Attachment')
+                    || ($contents[0]['type_content'] == '3'))
                 ) {
                     $content = \Content::get($contents[0]['fk_content']);
 
@@ -172,13 +174,13 @@ class MonographsController extends Controller
                         $content = \Content::get($item['fk_content']);
 
                         if (!empty($content->img1)) {
-                            $photo = $er->find('Photo', $content->img1);
-                            $content->img1_path = $photo->path_file.$photo->name;
+                            $photo              = $er->find('Photo', $content->img1);
+                            $content->img1_path = $photo->path_file . $photo->name;
                             $content->img1      = $photo;
                         }
 
                         if (!empty($content->fk_video)) {
-                            $video = $er->find('Video', $content->fk_video);
+                            $video              = $er->find('Video', $content->fk_video);
                             $content->obj_video = $video;
                         }
 
@@ -193,7 +195,7 @@ class MonographsController extends Controller
 
                          // Load attached and related contents from array
                         $content->loadAttachedVideo()
-                                ->loadRelatedContents($this->categoryName);
+                            ->loadRelatedContents($this->categoryName);
 
                         $columns[] = $content;
                     }
@@ -201,8 +203,8 @@ class MonographsController extends Controller
             }
 
             if (!empty($special->img1)) {
-                $photo = $er->find('Photo', $special->img1);
-                $special->path_img = $photo->path_file.$photo->name;
+                $photo             = $er->find('Photo', $special->img1);
+                $special->path_img = $photo->path_file . $photo->name;
                 $special->img      = $photo;
             }
 
@@ -214,7 +216,7 @@ class MonographsController extends Controller
             'content'   => $special,
             'contentId' => $special->id,
             'cache_id'  => $cacheID,
-            'x-tags'      => 'monograph,'.$special->id,
+            'x-tags'      => 'monograph,' . $special->id,
             'x-cache-for' => '+1 day',
         ]);
     }
