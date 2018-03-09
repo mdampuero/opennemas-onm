@@ -32,6 +32,7 @@ class Advertisement extends Content
     public $pk_advertisement = null;
 
     /**
+     * TODO: To be replaced by the property 'positions'
      * The type of advertisement
      *
      * @var int
@@ -101,6 +102,13 @@ class Advertisement extends Content
      * @var boolean
      */
     public $overlap = null;
+
+    /**
+     * The list of positions this ad is assigned to
+     *
+     * @var array
+     */
+    public $positions = null;
 
     /**
      * The script content of this advertisement
@@ -193,6 +201,10 @@ class Advertisement extends Content
             $this->params['restriction_usergroups'] = [];
         }
 
+        if (empty($properties['positions'])) {
+            $this->positions = [ $this->type_advertisement ];
+        }
+
         return $this;
     }
 
@@ -214,6 +226,12 @@ class Advertisement extends Content
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
                 . 'LEFT JOIN advertisements ON pk_content = pk_advertisement WHERE pk_content=?',
+                [ $id ]
+            );
+
+            $rs['positions'] = getService('dbal_connection')->fetchAssoc(
+                'SELECT position_id FROM advertisements_positions '
+                . 'WHERE advertisement_id=?',
                 [ $id ]
             );
 
@@ -256,6 +274,9 @@ class Advertisement extends Content
      */
     public function create($data)
     {
+        $conn = getService('dbal_connection');
+        $conn->beginTransaction();
+
         parent::create($data);
 
         if (!empty($data['script'])) {
@@ -269,8 +290,7 @@ class Advertisement extends Content
         $data['pk_advertisement'] = $data['id'] = $this->id;
         $data['overlap']          = (isset($data['overlap'])) ? $data['overlap'] : 0;
         $data['timeout']          = (isset($data['timeout'])) ? $data['timeout'] : null;
-        $data['type_medida']      =
-            (!empty($data['type_medida'])) ? $data['type_medida'] : null;
+        $data['type_medida']      = (!empty($data['type_medida'])) ? $data['type_medida'] : null;
 
         try {
             $rs = getService('dbal_connection')->insert(
@@ -292,6 +312,16 @@ class Advertisement extends Content
                 ]
             );
 
+            $rs = getService('dbal_connection')->insert(
+                'advertisements_positions',
+                [
+                    'advertisement_id' => $data['pk_advertisement'],
+                    'position_id'      => (int) $data['type_advertisement'],
+                ]
+            );
+
+            $conn->commit();
+
             // $this->load($data);
 
             return $this;
@@ -310,6 +340,9 @@ class Advertisement extends Content
      */
     public function update($data)
     {
+        $conn = getService('dbal_connection');
+        $conn->beginTransaction();
+
         // TODO: Remove when dispatching events from custom contents
         $this->old_position = $this->type_advertisement;
 
@@ -323,7 +356,6 @@ class Advertisement extends Content
         $data['timeout']     = (isset($data['timeout'])) ? $data['timeout'] : null;
         $data['with_script'] = (isset($data['with_script'])) ? $data['with_script'] : 0;
         $data['type_medida'] = (!empty($data['type_medida'])) ? $data['type_medida'] : null;
-
 
         try {
             $rs = getService('dbal_connection')->update(
@@ -343,6 +375,21 @@ class Advertisement extends Content
                 ],
                 [ 'pk_advertisement' => (int) $data['id'] ]
             );
+
+            $rs = getService('dbal_connection')->delete(
+                'advertisements_positions',
+                [ 'advertisement_id' => $data['id'] ]
+            );
+
+            $rs = getService('dbal_connection')->insert(
+                'advertisements_positions',
+                [
+                    'advertisement_id' => $data['id'],
+                    'position_id'      => (int) $data['type_advertisement'],
+                ]
+            );
+
+            $conn->commit();
 
             $this->load($data);
 
