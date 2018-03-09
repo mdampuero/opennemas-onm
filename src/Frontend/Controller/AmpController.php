@@ -144,8 +144,6 @@ class AmpController extends Controller
             $patterns = [
                 '@(align|border|style|nowrap|onclick)=(\'|")[^\(\'|")]*(\'|")@',
                 '@<\/?font.*?>@',
-                '@<(table|tbody|th|tr|td|ul|li|ol|dl|p|strong|br|span|div|b|pre|hr|col|h1|h2|h3|h4|h5|h6)[^>]*?(\/?)>@',
-                '@<a\s+[^>]*href\s*=\s*"([^"]+)"[^>]*>@',
                 '@<img\s+[^>]*src\s*=\s*"([^"]+)"[^>]*@',
                 '@<video([^>]+>)(?s)(.*?)<\/video>@',
                 '@<iframe.*src="[http:|https:]*(.*?)".*><\/iframe>@',
@@ -155,14 +153,14 @@ class AmpController extends Controller
                 '@<blockquote.*?class="twitter-(video|tweet)"(?s).*?\/status\/(\d+)(?s).+?<\/blockquote>@',
                 '@<(script|embed|object|frameset|frame|iframe|style|form)[^>]*>(?s).*?<\/\1>@',
                 '@<(link|meta|input)[^>]+>@',
+                '@<a\s+[^>]*href\s*=\s*"([^"]+)"[^>]*>@',
+                '@<(table|tbody|th|tr|td|ul|li|ol|dl|p|strong|br|span|div|b|pre|hr|col|h1|h2|h3|h4|h5|h6)[^>]*?(\/?)>@',
                 '@target="(.*?)"@',
             ];
 
             $replacements = [
                 '',
                 '',
-                '<${1}${2}>',
-                '<a href="${1}">',
                 '<amp-img layout="responsive" width="518" height="291" src="${1}" </amp-img>',
                 '<amp-video layout="responsive" width="518" height="291" controls>
                     ${2}
@@ -193,6 +191,8 @@ class AmpController extends Controller
                 </amp-twitter>',
                 '',
                 '',
+                '<a href="${1}">',
+                '<${1}${2}>',
                 'target="_blank"',
             ];
 
