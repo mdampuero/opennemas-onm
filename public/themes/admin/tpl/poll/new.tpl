@@ -72,9 +72,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label" for="subtitle">{t}Subtitle{/t}</label>
+                <label class="form-label" for="pretitle">{t}Pretitle{/t}</label>
                 <div class="controls">
-                  <input class="form-control" id="subtitle" name="subtitle" type="text" required value="{$poll->subtitle|clearslash}"/>
+                  <input class="form-control" id="pretitle" name="pretitle" type="text" required value="{$poll->pretitle|clearslash}"/>
                 </div>
               </div>
               <div class="form-group">

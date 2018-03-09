@@ -72,9 +72,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="subtitle" class="form-label">{t}Subtitle{/t}</label>
+                <label for="pretitle" class="form-label">{t}Pretitle{/t}</label>
                 <div class="controls">
-                  <input type="text" id="subtitle" name="subtitle" class="form-control" value="{$special->subtitle|clearslash|escape:"html"}" />
+                  <input type="text" id="pretitle" name="pretitle" class="form-control" value="{$special->pretitle|clearslash|escape:"html"}" />
                 </div>
               </div>
               <div class="form-group">
