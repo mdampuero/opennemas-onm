@@ -161,7 +161,7 @@ class AmpController extends Controller
             $replacements = [
                 '',
                 '',
-                '<amp-img layout="responsive" width="518" height="291" src="${1}" </amp-img>',
+                '<amp-img layout="responsive" width="518" height="291" src="${1}"></amp-img>',
                 '<amp-video layout="responsive" width="518" height="291" controls>
                     ${2}
                     <div fallback>
