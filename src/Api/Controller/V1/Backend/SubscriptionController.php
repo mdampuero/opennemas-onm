@@ -111,9 +111,13 @@ class SubscriptionController extends Controller
      */
     public function listAction(Request $request)
     {
-        $oql = $request->query->get('oql', '');
+        $ss       = $this->get('api.service.subscription');
+        $oql      = $request->query->get('oql', '');
+        $response = $ss->getList($oql);
 
-        return new JsonResponse($this->get('api.service.subscription')->getList($oql));
+        $response['results'] = $ss->responsify($response['results']);
+
+        return new JsonResponse($response);
     }
 
     /**
