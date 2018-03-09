@@ -214,7 +214,8 @@ class ContentCategoryManager
      **/
     public function findById($categoryId)
     {
-        if (!is_array($this->categories)
+        if (empty($categoryId)
+            || !is_array($this->categories)
             || !array_key_exists($categoryId, $this->categories)
         ) {
             return null;
