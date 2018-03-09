@@ -31,7 +31,13 @@ class BaseServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->em = $this->getMockBuilder('EntityManager' . uniqid())
-            ->setMethods([ 'getConverter' ,'getRepository', 'persist', 'remove' ])
+            ->setMethods([
+                'getConverter' ,'getMetadata', 'getRepository', 'persist',
+                'remove'
+            ])->getMock();
+
+        $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
+            ->setMethods([ 'getIdKeys' ])
             ->getMock();
 
         $this->logger = $this->getMockBuilder('Logger' . uniqid())
@@ -46,8 +52,13 @@ class BaseServiceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
         $this->em->expects($this->any())->method('getConverter')
             ->willReturn($this->converter);
+        $this->em->expects($this->any())->method('getMetadata')
+            ->willReturn($this->metadata);
         $this->em->expects($this->any())->method('getRepository')
             ->willReturn($this->repository);
+
+        $this->metadata->expects($this->any())->method('getIdKeys')
+            ->willReturn([ 'id' ]);
 
         $this->service = new BaseService($this->container, 'Common\ORM\Core\Entity');
     }
@@ -113,18 +124,18 @@ class BaseServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteItem()
     {
-        $userGroup = new Entity();
+        $item = new Entity();
 
         $this->repository->expects($this->once())->method('find')
-            ->willReturn($userGroup);
+            ->willReturn($item);
         $this->em->expects($this->once())->method('remove')
-            ->with($userGroup);
+            ->with($item);
 
         $this->service->deleteItem(23);
     }
 
     /**
-     * Tests deleteItem when no user group found.
+     * Tests deleteItem when no item found.
      *
      * @expectedException Api\Exception\DeleteItemException
      */
@@ -144,12 +155,12 @@ class BaseServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteItemWhenErrorWhileRemoving()
     {
-        $userGroup = new Entity();
+        $item = new Entity();
 
         $this->repository->expects($this->once())->method('find')
-            ->willReturn($userGroup);
+            ->willReturn($item);
         $this->em->expects($this->once())->method('remove')
-            ->with($userGroup)->will($this->throwException(new \Exception()));
+            ->with($item)->will($this->throwException(new \Exception()));
 
         $this->logger->expects($this->once())->method('error');
 
@@ -161,12 +172,12 @@ class BaseServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteList()
     {
-        $userGroupA = new Entity([ 'name' => 'wubble']);
-        $userGroupB = new Entity([ 'name' => 'xyzzy' ]);
+        $itemA = new Entity([ 'name' => 'wubble']);
+        $itemB = new Entity([ 'name' => 'xyzzy' ]);
 
         $this->repository->expects($this->once())->method('findBy')
-            ->with('pk_user_group in [1,2]')
-            ->willReturn([ $userGroupA, $userGroupB ]);
+            ->with('id in [1,2]')
+            ->willReturn([ $itemA, $itemB ]);
         $this->em->expects($this->exactly(2))->method('remove');
 
         $this->assertEquals(2, $this->service->deleteList([ 1, 2 ]));
@@ -187,14 +198,14 @@ class BaseServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteListWhenOneErrorWhileRemoving()
     {
-        $userGroupA = new Entity([ 'name' => 'wubble']);
-        $userGroupB = new Entity([ 'name' => 'xyzzy' ]);
+        $itemA = new Entity([ 'name' => 'wubble']);
+        $itemB = new Entity([ 'name' => 'xyzzy' ]);
 
         $this->repository->expects($this->once())->method('findBy')
-            ->with('pk_user_group in [1,2]')
-            ->willReturn([ $userGroupA, $userGroupB ]);
-        $this->em->expects($this->at(1))->method('remove');
-        $this->em->expects($this->at(2))->method('remove')
+            ->with('id in [1,2]')
+            ->willReturn([ $itemA, $itemB ]);
+        $this->em->expects($this->at(2))->method('remove');
+        $this->em->expects($this->at(3))->method('remove')
             ->will($this->throwException(new \Exception()));
 
         $this->logger->expects($this->once())->method('error');
@@ -210,7 +221,7 @@ class BaseServiceTest extends \PHPUnit_Framework_TestCase
     public function testDeleteListWhenErrorWhileSearching()
     {
         $this->repository->expects($this->once())->method('findBy')
-            ->with('pk_user_group in [1,2]')
+            ->with('id in [1,2]')
             ->will($this->throwException(new \Exception()));
 
         $this->logger->expects($this->exactly(2))->method('error');
@@ -223,12 +234,12 @@ class BaseServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItem()
     {
-        $userGroup = new Entity();
+        $item = new Entity();
 
         $this->repository->expects($this->once())->method('find')
-            ->with(1)->willReturn($userGroup);
+            ->with(1)->willReturn($item);
 
-        $this->assertEquals($userGroup, $this->service->getItem(1));
+        $this->assertEquals($item, $this->service->getItem(1));
     }
 
     /**
@@ -304,19 +315,19 @@ class BaseServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testPatchItem()
     {
-        $userGroup = new Entity([ 'name' => 'foobar' ]);
-        $data      = [ 'name' => 'mumble' ];
+        $item = new Entity([ 'name' => 'foobar' ]);
+        $data = [ 'name' => 'mumble' ];
 
         $this->converter->expects($this->once())->method('objectify')
             ->with($data)->willReturn($data);
         $this->repository->expects($this->once())->method('find')
-            ->with(1)->willReturn($userGroup);
+            ->with(1)->willReturn($item);
         $this->em->expects($this->once())->method('persist')
-            ->with($userGroup);
+            ->with($item);
 
         $this->service->patchItem(1, $data);
 
-        $this->assertEquals('mumble', $userGroup->name);
+        $this->assertEquals('mumble', $item->name);
     }
 
     /**
@@ -344,13 +355,13 @@ class BaseServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testPatchItemWhenErrorWhilePersisting()
     {
-        $userGroup = new Entity([ 'name' => 'foobar' ]);
-        $data      = [ 'name' => 'mumble' ];
+        $item = new Entity([ 'name' => 'foobar' ]);
+        $data = [ 'name' => 'mumble' ];
 
         $this->converter->expects($this->once())->method('objectify')
             ->with($data)->willReturn($data);
         $this->repository->expects($this->once())->method('find')
-            ->willReturn($userGroup);
+            ->willReturn($item);
         $this->em->expects($this->once())->method('persist')
             ->will($this->throwException(new \Exception));
         $this->logger->expects($this->once())->method('error');
@@ -363,21 +374,20 @@ class BaseServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testPatchList()
     {
-        $userGroupA = new Entity([ 'name' => 'wubble', 'enabled' => false ]);
-        $userGroupB = new Entity([ 'name' => 'xyzzy', 'enabled' => false  ]);
-
-        $data = [ 'enabled' => true ];
+        $itemA = new Entity([ 'name' => 'wubble', 'enabled' => false ]);
+        $itemB = new Entity([ 'name' => 'xyzzy', 'enabled' => false  ]);
+        $data  = [ 'enabled' => true ];
 
         $this->repository->expects($this->once())->method('findBy')
-            ->with('pk_user_group in [1,2]')
-            ->willReturn([ $userGroupA, $userGroupB ]);
+            ->with('id in [1,2]')
+            ->willReturn([ $itemA, $itemB ]);
         $this->converter->expects($this->once())->method('objectify')
             ->with($data)->willReturn($data);
         $this->em->expects($this->exactly(2))->method('persist');
 
         $this->assertEquals(2, $this->service->patchList([ 1, 2 ], $data));
-        $this->assertTrue($userGroupA->enabled);
-        $this->assertTrue($userGroupB->enabled);
+        $this->assertTrue($itemA->enabled);
+        $this->assertTrue($itemB->enabled);
     }
 
     /**
@@ -391,20 +401,19 @@ class BaseServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests patchList when one error happens while removing.
+     * Tests patchList when one error happens while updating.
      */
-    public function testPatchListWhenOneErrorWhileRemoving()
+    public function testPatchListWhenOneErrorWhileUpdating()
     {
-        $userGroupA = new Entity([ 'name' => 'wubble']);
-        $userGroupB = new Entity([ 'name' => 'xyzzy' ]);
-
-        $data = [ 'enabled' => true ];
+        $itemA = new Entity([ 'name' => 'wubble']);
+        $itemB = new Entity([ 'name' => 'xyzzy' ]);
+        $data  = [ 'enabled' => true ];
 
         $this->repository->expects($this->once())->method('findBy')
-            ->with('pk_user_group in [1,2]')
-            ->willReturn([ $userGroupA, $userGroupB ]);
-        $this->em->expects($this->at(1))->method('persist');
-        $this->em->expects($this->at(2))->method('persist')
+            ->with('id in [1,2]')
+            ->willReturn([ $itemA, $itemB ]);
+        $this->em->expects($this->at(3))->method('persist');
+        $this->em->expects($this->at(4))->method('persist')
             ->will($this->throwException(new \Exception()));
 
         $this->logger->expects($this->once())->method('error');
@@ -417,10 +426,10 @@ class BaseServiceTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException Api\Exception\PatchListException
      */
-    public function testPatchWhenErrorWhileSearching()
+    public function testPatchListWhenErrorWhileSearching()
     {
         $this->repository->expects($this->once())->method('findBy')
-            ->with('pk_user_group in [1,2]')
+            ->with('id in [1,2]')
             ->will($this->throwException(new \Exception()));
 
         $this->logger->expects($this->exactly(2))->method('error');
@@ -429,23 +438,48 @@ class BaseServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests responsify.
+     */
+    public function testResponsify()
+    {
+        $this->converter->expects($this->once())->method('responsify');
+
+        $this->service->responsify('foo');
+    }
+
+    /**
+     * Tests setOrigin.
+     */
+    public function testSetOrigin()
+    {
+        $property = new \ReflectionProperty($this->service, 'origin');
+        $property->setAccessible(true);
+
+        $this->assertEquals('instance', $property->getValue($this->service));
+
+        $this->service->setOrigin('wobble');
+
+        $this->assertEquals('wobble', $property->getValue($this->service));
+    }
+
+    /**
      * Tests updateItem when no error.
      */
     public function testUpdateItem()
     {
-        $userGroup = new Entity([ 'name' => 'foobar' ]);
-        $data      = [ 'name' => 'mumble' ];
+        $item = new Entity([ 'name' => 'foobar' ]);
+        $data = [ 'name' => 'mumble' ];
 
         $this->converter->expects($this->once())->method('objectify')
             ->with($data)->willReturn($data);
         $this->repository->expects($this->once())->method('find')
-            ->with(1)->willReturn($userGroup);
+            ->with(1)->willReturn($item);
         $this->em->expects($this->once())->method('persist')
-            ->with($userGroup);
+            ->with($item);
 
         $this->service->updateItem(1, $data);
 
-        $this->assertEquals('mumble', $userGroup->name);
+        $this->assertEquals('mumble', $item->name);
     }
 
     /**
@@ -473,17 +507,31 @@ class BaseServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateItemWhenErrorWhilePersisting()
     {
-        $userGroup = new Entity([ 'name' => 'foobar' ]);
-        $data      = [ 'name' => 'mumble' ];
+        $item = new Entity([ 'name' => 'foobar' ]);
+        $data = [ 'name' => 'mumble' ];
 
         $this->converter->expects($this->once())->method('objectify')
             ->with($data)->willReturn($data);
         $this->repository->expects($this->once())->method('find')
-            ->willReturn($userGroup);
+            ->willReturn($item);
         $this->em->expects($this->once())->method('persist')
             ->will($this->throwException(new \Exception));
         $this->logger->expects($this->once())->method('error');
 
         $this->service->updateItem(1, $data);
+    }
+
+    /**
+     * Tests getOqlForList.
+     */
+    public function testGetOqlForList()
+    {
+        $method = new \ReflectionMethod($this->service, 'getOqlForList');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            'id in [1,3,5]',
+            $method->invokeArgs($this->service, [ [ 1, 3, 5 ] ])
+        );
     }
 }

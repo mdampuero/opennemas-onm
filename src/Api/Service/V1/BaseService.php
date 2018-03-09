@@ -52,7 +52,7 @@ class BaseService extends Service
     protected $origin = 'instance';
 
     /**
-     * Initializes the UserGroupService.
+     * Initializes the BaseService.
      *
      * @param ServiceContainer $container The service container.
      */
@@ -109,7 +109,7 @@ class BaseService extends Service
             throw new DeleteListException('Invalid ids', 400);
         }
 
-        $oql = sprintf('pk_user_group in [%s]', implode(',', $ids));
+        $oql = $this->getOqlForList($ids);
 
         try {
             $response = $this->getList($oql);
@@ -154,13 +154,10 @@ class BaseService extends Service
             $repository = $this->container->get('orm.manager')
                 ->getRepository($this->entity, $this->origin);
 
-            $total      = $repository->countBy($oql);
-            $userGroups = $repository->findBy($oql);
+            $total = $repository->countBy($oql);
+            $items = $repository->findBy($oql);
 
-            return [
-                'results' => $userGroups,
-                'total'   => $total,
-            ];
+            return [ 'results' => $items, 'total' => $total ];
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new GetListException();
@@ -176,11 +173,11 @@ class BaseService extends Service
             $data = $this->em->getConverter($this->entity)
                 ->objectify($data);
 
-            $userGroup = $this->getItem($id);
+            $item = $this->getItem($id);
 
-            $userGroup->merge($data);
+            $item->merge($data);
 
-            $this->em->persist($userGroup);
+            $this->em->persist($item);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new PatchItemException();
@@ -197,7 +194,7 @@ class BaseService extends Service
         }
 
         $data = $this->em->getConverter($this->entity)->objectify($data);
-        $oql  = sprintf('pk_user_group in [%s]', implode(',', $ids));
+        $oql  = $this->getOqlForList($ids);
 
         try {
             $response = $this->getList($oql);
@@ -207,10 +204,10 @@ class BaseService extends Service
         }
 
         $updated = 0;
-        foreach ($response['results'] as $userGroup) {
+        foreach ($response['results'] as $item) {
             try {
-                $userGroup->merge($data);
-                $this->em->persist($userGroup);
+                $item->merge($data);
+                $this->em->persist($item);
 
                 $updated++;
             } catch (\Exception $e) {
@@ -222,12 +219,12 @@ class BaseService extends Service
     }
 
     /**
-     * Converts a user group or a list of user group to a structure
-     * returnable in a Response.
+     * Converts an item or a list of items to a structure returnable in a
+     * Response.
      *
-     * @param mixed $item The user group or the list of user group.
+     * @param mixed $item The item or the list of items.
      *
-     * @return mixed The converted user group or list of user group.
+     * @return mixed The converted item or list of items.
      */
     public function responsify($item)
     {
@@ -239,7 +236,7 @@ class BaseService extends Service
      *
      * @param string $origin The name of the source.
      *
-     * @return UserGroupService The current service.
+     * @return BaseService The current service.
      */
     public function setOrigin($origin)
     {
@@ -257,13 +254,29 @@ class BaseService extends Service
             $data = $this->em->getConverter($this->entity)
                 ->objectify($data);
 
-            $userGroup = $this->getItem($id);
-            $userGroup->setData($data);
+            $item = $this->getItem($id);
+            $item->setData($data);
 
-            $this->em->persist($userGroup, $userGroup->getOrigin());
+            $this->em->persist($item, $item->getOrigin());
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new UpdateItemException();
         }
+    }
+
+    /**
+     * Returns the OQL statement to find all entities with id in the list of
+     * ids.
+     *
+     * @param array $ids The list of ids.
+     *
+     * @return string The OQL statement.
+     */
+    protected function getOqlForList($ids)
+    {
+        $keys = $this->em->getMetadata($this->entity)->getIdKeys();
+        $key  = array_pop($keys);
+
+        return sprintf('%s in [%s]', $key, implode(',', $ids));
     }
 }
