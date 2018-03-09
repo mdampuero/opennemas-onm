@@ -91,7 +91,7 @@ class Agency
         $er      = getService('entity_repository');
         $article = $er->find('Article', $id);
 
-        if (is_null($article->id)) {
+        if (empty($article) || is_null($article->id)) {
             throw new RestException(400, 'parameter is not valid');
         }
 
