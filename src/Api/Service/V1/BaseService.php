@@ -81,7 +81,7 @@ class BaseService extends Service
             return $item;
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
-            throw new CreateItemException();
+            throw new CreateItemException($e->getMessage());
         }
     }
 
@@ -96,7 +96,7 @@ class BaseService extends Service
             $this->em->remove($item, $item->getOrigin());
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
-            throw new DeleteItemException();
+            throw new DeleteItemException($e->getMessage());
         }
     }
 
@@ -115,7 +115,7 @@ class BaseService extends Service
             $response = $this->getList($oql);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
-            throw new DeleteListException();
+            throw new DeleteListException($e->getMessage());
         }
 
         $deleted = 0;
@@ -141,7 +141,7 @@ class BaseService extends Service
                 ->getRepository($this->entity, $this->origin)->find($id);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
-            throw new GetItemException();
+            throw new GetItemException($e->getMessage());
         }
     }
 
@@ -160,7 +160,7 @@ class BaseService extends Service
             return [ 'results' => $items, 'total' => $total ];
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
-            throw new GetListException();
+            throw new GetListException($e->getMessage());
         }
     }
 
@@ -180,7 +180,7 @@ class BaseService extends Service
             $this->em->persist($item);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
-            throw new PatchItemException();
+            throw new PatchItemException($e->getMessage());
         }
     }
 
@@ -200,7 +200,7 @@ class BaseService extends Service
             $response = $this->getList($oql);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
-            throw new PatchListException();
+            throw new PatchListException($e->getMessage());
         }
 
         $updated = 0;
@@ -260,7 +260,7 @@ class BaseService extends Service
             $this->em->persist($item, $item->getOrigin());
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
-            throw new UpdateItemException();
+            throw new UpdateItemException($e->getMessage());
         }
     }
 
