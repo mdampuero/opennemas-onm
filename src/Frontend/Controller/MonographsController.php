@@ -115,8 +115,6 @@ class MonographsController extends Controller
                         $monograph->img1_path = $img->path_file . $img->name;
                         $monograph->img       = $img;
                     }
-                    $monograph->category_name  = $monograph->loadCategoryName($monograph->id);
-                    $monograph->category_title = $monograph->loadCategoryTitle($monograph->id);
                 }
 
                 $this->view->assign(['specials' => $monographs]);
