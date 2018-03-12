@@ -144,7 +144,9 @@ class UserController extends Controller
                 if (!$user->create($data)) {
                     $errors[] = _('An error has occurred. Try to complete the form with valid data.');
                 } else {
-                    $user->setMeta($request->request->get('meta'));
+                    if (!empty($data['meta'])) {
+                        $user->setMeta($data['meta']);
+                    }
 
                     // Set registration date
                     $currentTime = new \DateTime();

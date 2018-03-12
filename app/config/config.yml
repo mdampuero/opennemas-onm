@@ -5,10 +5,12 @@ imports:
 
 parameters:
     cache_prefix: onm
-    core.paths.cache: %kernel.root_dir%/../tmp/instances
+    core.paths.cache:        %kernel.root_dir%/../tmp/instances
     core.paths.cache.common: %kernel.root_dir%/../tmp/compiles
-    core.paths.public: %kernel.root_dir%/../public
-    core.paths.themes: %core.paths.public%/themes
+    core.paths.public:       %kernel.root_dir%/../public
+    core.paths.themes:       %core.paths.public%/themes
+    core.paths.spool:        %kernel.root_dir%/../tmp/spool
+    core.paths.spool.files:  %core.paths.spool%/files
 
 framework:
     #esi:             ~
@@ -86,22 +88,14 @@ twig:
 # Swiftmailer Configuration
 swiftmailer:
     default_mailer: default
-    mailers:
-        default:
-            transport: %mailer_transport%
-            host:      %mailer_host%
-            username:  %mailer_user%
-            password:  %mailer_password%
-            spool:
-                type: file
-                path: '%kernel.root_dir%/../tmp/spool'
-            logging:  '%kernel.debug%'
-        direct:
-            transport: %mailer_transport%
-            host:      %mailer_host%
-            username:  %mailer_user%
-            password:  %mailer_password%
-            logging:  '%kernel.debug%'
+    transport: %mailer_transport%
+    host:      %mailer_host%
+    username:  %mailer_user%
+    password:  %mailer_password%
+    spool:
+        type: file
+        path: '%core.paths.spool%'
+    logging:  '%kernel.debug%'
 
 monolog:
     channels: ['main', 'applog', 'errorlog']
