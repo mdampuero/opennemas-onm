@@ -142,9 +142,6 @@ class Poll extends Content
     {
         parent::load($properties);
 
-        // Ignore subtitle property from database
-        unset($this->subtitle);
-
         $this->status = 'opened';
 
         if (is_string($this->params)) {

@@ -189,9 +189,6 @@ articles:
         img1:
             type: bigint
             options: { default: null, notnull: false, unsigned: true }
-        subtitle:
-            type: string
-            options: { default: null, notnull: false, length: 512 }
         pretitle:
             type: string
             options: { default: null, notnull: false, length: 512 }
@@ -1159,9 +1156,6 @@ polls:
         used_ips:
             type: text
             options: { default: null, length: 65532, notnull: false }
-        subtitle:
-            type: string
-            options: { default: null, notnull: false, length: 512 }
         pretitle:
             type: string
             options: { default: null, notnull: false, length: 512 }
@@ -1333,9 +1327,6 @@ specials:
         pk_special:
             type: bigint
             options: { default: null, unsigned: true, autoincrement: true, length: 20 }
-        subtitle:
-            type: string
-            options: { default: null, notnull: false, length: 512 }
         pretitle:
             type: string
             options: { default: null, notnull: false, length: 512 }
