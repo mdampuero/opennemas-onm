@@ -132,9 +132,6 @@
                     </div>
                   </th>
                   <th>{t}Name{/t}</th>
-                  {acl isAllowed=MASTER}
-                    <th class="hidden-xs" width="50">{t}Subscription{/t}</th>
-                  {/acl}
                   <th class="text-center" width="50">{t}Enabled{/t}</th>
                 </tr>
               </thead>
@@ -158,13 +155,6 @@
                       </button>
                     </div>
                   </td>
-                  {acl isAllowed=MASTER}
-                    <td class="text-center">
-                      <button class="btn btn-white" ng-click="patch(item, 'type', item.type != 1 ? 1 : 0)" type="button">
-                        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.typeLoading, 'fa-check text-success' : !item.typeLoading && item.type == '1', 'fa-times text-error': !item.typeLoading && item.type == '0' }"></i>
-                      </button>
-                    </td>
-                  {/acl}
                   <td class="text-center">
                     <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled != 1 ? 1 : 0)" type="button">
                       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.enabledLoading, 'fa-check text-success' : !item.enabledLoading && item.enabled == '1', 'fa-times text-error': !item.enabledLoading && item.enabled == '0' }"></i>
