@@ -1,0 +1,20 @@
+backend_subscriber_create:
+    path:     /subscribers/new
+    defaults: { _controller: BackendBundle:Subscriber:create }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+backend_subscribers_list:
+    path:     /subscribers
+    defaults: { _controller: BackendBundle:Subscriber:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+backend_subscriber_show:
+    path:     /subscribers/{id}
+    defaults: { _controller: BackendBundle:Subscriber:show }
+    methods:  [ GET ]
+    options:
+        expose: true

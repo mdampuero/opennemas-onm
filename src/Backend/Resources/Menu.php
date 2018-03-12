@@ -221,6 +221,14 @@ $menuXml = [
         'icon'        => 'fa fa-check-square-o',
         'submenu'     => [
             [
+                'id'          => 'subscriber',
+                'link'        => url('backend_subscribers_list'),
+                'title'       => _('Subscribers'),
+                'icon'        => 'fa fa-user',
+                'module_name' => 'CONTENT_SUBSCRIPTIONS',
+                'privilege'   => 'CONTENT_SUBSCRIPTIONS_LIST',
+            ],
+            [
                 'id'          => 'subscriptions',
                 'link'        => url('backend_subscriptions_list'),
                 'title'       => _('Subscriptions'),

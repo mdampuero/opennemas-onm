@@ -996,6 +996,10 @@ backend_static_pages:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/static_page.yml'
 
+backend_subscriber:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/subscriber.yml'
+
 backend_subscription:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/subscription.yml'
