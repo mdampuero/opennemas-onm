@@ -101,7 +101,7 @@ class SubscriptionServiceTest extends \PHPUnit_Framework_TestCase
         $data = [ 'name' => 'flob' ];
 
         $this->converter->expects($this->any())->method('objectify')
-            ->with(array_merge([ 'subscription' => true ], $data))
+            ->with(array_merge([ 'type' => 1 ], $data))
             ->willReturn($data);
         $this->em->expects($this->once())->method('persist');
 
@@ -115,7 +115,7 @@ class SubscriptionServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItem()
     {
-        $item = new Entity([ 'subscription' => true ]);
+        $item = new Entity([ 'type' => 1 ]);
 
         $this->repository->expects($this->once())->method('find')
             ->with(1)->willReturn($item);
@@ -151,12 +151,12 @@ class SubscriptionServiceTest extends \PHPUnit_Framework_TestCase
         $this->fixer->expects($this->once())->method('fix');
         $this->fixer->expects($this->once())->method('addCondition');
         $this->fixer->expects($this->once())->method('getOql')
-            ->willReturn('subscription = 1');
+            ->willReturn('type = 1');
 
         $this->repository->expects($this->once())->method('countBy')
-            ->with('subscription = 1')->willReturn(2);
+            ->with('type = 1')->willReturn(2);
         $this->repository->expects($this->once())->method('findBy')
-            ->with('subscription = 1')->willReturn($results);
+            ->with('type = 1')->willReturn($results);
 
         $response = $this->service->getList('order by title asc');
 
@@ -171,11 +171,11 @@ class SubscriptionServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testPatchItem()
     {
-        $item = new Entity([ 'name' => 'foobar', 'subscription' => true ]);
-        $data = [ 'name' => 'mumble', 'subscription' => false ];
+        $item = new Entity([ 'name' => 'foobar', 'type' => 1 ]);
+        $data = [ 'name' => 'mumble', 'type' => 0 ];
 
         $this->converter->expects($this->once())->method('objectify')
-            ->with(array_diff($data, [ 'subscription' => false ]))
+            ->with(array_diff($data, [ 'type' => 0 ]))
             ->willReturn([ 'name' => 'mumble' ]);
         $this->repository->expects($this->once())->method('find')
             ->with(1)->willReturn($item);
@@ -194,7 +194,7 @@ class SubscriptionServiceTest extends \PHPUnit_Framework_TestCase
     {
         $itemA = new Entity([ 'name' => 'wubble', 'enabled' => false ]);
         $itemB = new Entity([ 'name' => 'xyzzy', 'enabled' => false  ]);
-        $data  = [ 'enabled' => true, 'subscription' => true ];
+        $data  = [ 'enabled' => true, 'type' => 1 ];
 
         $this->repository->expects($this->once())->method('findBy')
             ->willReturn([ $itemA, $itemB ]);
@@ -213,12 +213,12 @@ class SubscriptionServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateItem()
     {
-        $item = new Entity([ 'name' => 'foobar', 'subscription' => true ]);
+        $item = new Entity([ 'name' => 'foobar', 'type' => 1 ]);
         $data = [ 'name' => 'mumble'];
 
         $this->converter->expects($this->once())->method('objectify')
-            ->with(array_merge($data, [ 'subscription' => true ]))
-            ->willReturn(array_merge($data, [ 'subscription' => true ]));
+            ->with(array_merge($data, [ 'type' => 1 ]))
+            ->willReturn(array_merge($data, [ 'type' => 1 ]));
         $this->repository->expects($this->once())->method('find')
             ->with(1)->willReturn($item);
         $this->em->expects($this->once())->method('persist')

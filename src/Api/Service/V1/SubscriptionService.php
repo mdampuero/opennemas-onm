@@ -22,8 +22,8 @@ class SubscriptionService extends BaseService
      */
     public function createItem($data)
     {
-        // Force subscription value
-        $data['subscription'] = true;
+        // Force type value
+        $data['type'] = 1;
 
         return parent::createItem($data);
     }
@@ -36,7 +36,7 @@ class SubscriptionService extends BaseService
         try {
             $item = parent::getItem($id);
 
-            if (!$item->subscription) {
+            if (!$item->type) {
                 throw new \Exception('Unable to find subscription');
             }
 
@@ -54,7 +54,7 @@ class SubscriptionService extends BaseService
     {
          // Force OQL to include the subscription flag enabled
         $oql = $this->container->get('orm.oql.fixer')->fix($oql)
-            ->addCondition('subscription = 1')
+            ->addCondition('type = 1')
             ->getOql();
 
         return parent::getList($oql);
@@ -65,11 +65,11 @@ class SubscriptionService extends BaseService
      */
     public function patchItem($id, $data)
     {
-        // Ignore subscription flag for non-MASTER users
-        if (array_key_exists('subscription', $data)
+        // Ignore type value for non-MASTER users
+        if (array_key_exists('type', $data)
             && !$this->container->get('core.security')->hasPermission('MASTER')
         ) {
-            unset($data['subscription']);
+            unset($data['type']);
         }
 
         parent::patchItem($id, $data);
@@ -80,11 +80,11 @@ class SubscriptionService extends BaseService
      */
     public function patchList($ids, $data)
     {
-        // Ignore subscription flag for non-MASTER users
-        if (array_key_exists('subscription', $data)
+        // Ignore type value for non-MASTER users
+        if (array_key_exists('type', $data)
             && !$this->container->get('core.security')->hasPermission('MASTER')
         ) {
-            unset($data['subscription']);
+            unset($data['type']);
         }
 
         return parent::patchList($ids, $data);
@@ -95,7 +95,7 @@ class SubscriptionService extends BaseService
      */
     public function updateItem($id, $data)
     {
-        $data['subscription'] = true;
+        $data['type'] = 1;
 
         parent::updateItem($id, $data);
     }
@@ -107,9 +107,9 @@ class SubscriptionService extends BaseService
     {
         $oql = parent::getOqlForList($ids);
 
-         // Force OQL to include the subscription flag enabled
+         // Force OQL to include the type value
         return $this->container->get('orm.oql.fixer')->fix($oql)
-            ->addCondition('subscription = 1')
+            ->addCondition('type = 1')
             ->getOql();
     }
 }
