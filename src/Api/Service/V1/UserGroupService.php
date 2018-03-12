@@ -36,7 +36,7 @@ class UserGroupService extends BaseService
         try {
             $item = parent::getItem($id);
 
-            if (is_null($item->type) || $item->type === 1) {
+            if ($item->type !== 0) {
                 throw new \Exception('Unable to find user group');
             }
 

@@ -36,7 +36,7 @@ class SubscriptionService extends BaseService
         try {
             $item = parent::getItem($id);
 
-            if (!$item->type) {
+            if ($item->type !== 1) {
                 throw new \Exception('Unable to find subscription');
             }
 
