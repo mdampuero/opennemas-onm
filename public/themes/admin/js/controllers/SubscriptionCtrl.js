@@ -18,8 +18,8 @@
      *   Provides actions to edit, save and update subscriptions.
      */
     .controller('SubscriptionCtrl', [
-      '$controller', '$scope', '$window', 'cleaner', 'http', 'messenger',
-      function($controller, $scope, $window, cleaner, http, messenger) {
+      '$controller', '$scope', '$window', 'cleaner', 'http', 'messenger', 'routing',
+      function($controller, $scope, $window, cleaner, http, messenger, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -54,7 +54,10 @@
 
           http.get(route).then(function(response) {
             $scope.data = response.data;
-            $scope.item = $scope.data.subscription;
+
+            if ($scope.data.subscription) {
+              $scope.item = $scope.data.subscription;
+            }
 
             $scope.disableFlags();
           }, $scope.errorCb);
@@ -99,7 +102,11 @@
             $scope.disableFlags();
 
             if (response.status === 201) {
-              $window.location.href = response.headers().location;
+              var id = response.headers().location
+                .substring(response.headers().location.lastIndexOf('/') + 1);
+
+              $window.location.href =
+                routing.generate('backend_subscription_show', { id: id });
             }
 
             messenger.post(response.data);
