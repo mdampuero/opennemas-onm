@@ -1085,7 +1085,7 @@ CREATE TABLE `user_groups` (
 
 LOCK TABLES `user_groups` WRITE;
 /*!40000 ALTER TABLE `user_groups` DISABLE KEYS */;
-INSERT INTO `user_groups` VALUES (3,'Autores',0,0),(4,'Masters',0,0),(5,'Administrador',0,0),(6,'Usuarios',0,0);
+INSERT INTO `user_groups` VALUES (3,'Autores',0,1),(4,'Masters',0,1),(5,'Administrador',0,1),(6,'Usuarios',0,1);
 /*!40000 ALTER TABLE `user_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1291,4 +1291,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-12  9:28:30
+-- Dump completed on 2018-03-12 12:06:47
