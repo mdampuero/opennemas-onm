@@ -109,7 +109,6 @@
                   </div>
                 </th>
                 <th>{t}Group name{/t}</th>
-                <th class="center" style="width:10px"></th>
               </tr>
             </thead>
             <tbody>
