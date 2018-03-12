@@ -157,9 +157,9 @@ class UserController extends Controller
                         $message = \Swift_Message::newInstance();
                         $message
                             ->setSubject($mailSubject)
-                            ->setBody($mailBody, 'text/plain')
+                            ->setBody($mailBody, 'text/html')
                             // And optionally an alternative body
-                            ->addPart($mailBody, 'text/html')
+                            ->addPart(strip_tags($mailBody), 'text/plain')
                             ->setTo($data['email'])
                             ->setFrom([
                                 'no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')
@@ -313,9 +313,9 @@ class UserController extends Controller
             $message = \Swift_Message::newInstance();
             $message
                 ->setSubject($mailSubject)
-                ->setBody($mailBody, 'text/plain')
+                ->setBody($mailBody, 'text/html')
                 // And optionally an alternative body
-                ->addPart($mailBody, 'text/html')
+                ->addPart(strip_tags($mailBody), 'text/plain')
                 ->setTo($user->email)
                 ->setFrom(['no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')]);
 
