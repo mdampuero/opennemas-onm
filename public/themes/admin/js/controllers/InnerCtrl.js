@@ -51,6 +51,10 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
      * @param {Object} data The data to configure the form.
      */
     $scope.configure = function(data) {
+      if (!data) {
+        return;
+      }
+
       // Configure the form
       if ($scope.config.multilanguage === null) {
         $scope.config.multilanguage = data.multilanguage;
