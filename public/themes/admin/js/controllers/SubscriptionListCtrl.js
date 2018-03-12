@@ -209,9 +209,8 @@
          * @description
          *   description
          *
-         * @param {type} name description
-         *
-         * @return {type} description
+         * @param {String}  property The property name.
+         * @param {Integer} value    The property value.
          */
         $scope.patchSelected = function(property, value) {
           for (var i = 0; i < $scope.items.length; i++) {
