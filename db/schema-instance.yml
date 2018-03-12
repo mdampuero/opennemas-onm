@@ -92,6 +92,34 @@ advertisements:
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+advertisements_positions:
+    columns:
+        advertisement_id:
+            type: bigint
+            options: { length: 20, unsigned: true }
+        position_id:
+            type: integer
+            options: { unsigned: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [advertisement_id, position_id]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: advertisements_positions_advertisement_id
+            columns: [ advertisement_id ]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: advertisements_positions_content_id
+            source_field: [ advertisement_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 albums:
     columns:
         pk_album:
@@ -177,9 +205,6 @@ articles:
         summary:
             type: text
             options: { length: 65532, default: null, notnull: false }
-        subtitle:
-            type: string
-            options: { length: 512, default: null, notnull: false }
         pretitle:
             type: string
             options: { length: 512, default: null, notnull: false }
@@ -1147,9 +1172,6 @@ polls:
         used_ips:
             type: text
             options: { length: 65532, default: null, notnull: false }
-        subtitle:
-            type: string
-            options: { length: 512, default: null, notnull: false }
         pretitle:
             type: string
             options: { length: 512, default: null, notnull: false }
@@ -1321,9 +1343,6 @@ specials:
         pk_special:
             type: bigint
             options: { length: 20, unsigned: true, autoincrement: true }
-        subtitle:
-            type: string
-            options: { length: 512, default: null, notnull: false }
         pretitle:
             type: string
             options: { length: 512, default: null, notnull: false }

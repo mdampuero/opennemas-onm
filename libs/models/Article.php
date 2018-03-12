@@ -152,9 +152,6 @@ class Article extends Content
     {
         parent::load($data);
 
-        // Ignore subtitle property from database
-        unset($this->subtitle);
-
         return $this;
     }
 
