@@ -213,16 +213,20 @@ $menuXml = [
     ],
 
     [
-        'id'      => 'subscription',
-        'link'    => '#',
-        'title'   => 'Subscription',
-        'icon'    => 'fa fa-check-square-o',
-        'submenu' => [
+        'id'          => 'subscription',
+        'link'        => '#',
+        'title'       => 'Subscription',
+        'module_name' => 'CONTENT_SUBSCRIPTIONS',
+        'privilege'   => 'MASTER',
+        'icon'        => 'fa fa-check-square-o',
+        'submenu'     => [
             [
-                'id'    => 'subscriptions',
-                "link"  => url('backend_subscriptions_list'),
-                'title' => _('Subscriptions'),
-                'icon'  => 'fa fa-check-square-o',
+                'id'          => 'subscriptions',
+                'link'        => url('backend_subscriptions_list'),
+                'title'       => _('Subscriptions'),
+                'icon'        => 'fa fa-check-square-o',
+                'module_name' => 'CONTENT_SUBSCRIPTIONS',
+                'privilege'   => 'CONTENT_SUBSCRIPTIONS_LIST',
             ]
         ]
     ],
