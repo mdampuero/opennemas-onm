@@ -25,12 +25,9 @@ class UserGroupsController extends Controller
      */
     public function deleteAction($id)
     {
-        $em  = $this->get('orm.manager');
         $msg = $this->get('core.messenger');
 
-        $userGroup = $em->getRepository('UserGroup')->find($id);
-
-        $em->remove($userGroup);
+        $this->get('api.service.user_group')->deleteItem($id);
         $msg->add(_('User group deleted successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -45,28 +42,9 @@ class UserGroupsController extends Controller
      */
     public function deleteSelectedAction(Request $request)
     {
-        $ids = $request->request->get('ids', []);
-        $msg = $this->get('core.messenger');
-
-        if (!is_array($ids) || empty($ids)) {
-            $msg->add(_('Bad request'), 'error', 400);
-            return new JsonResponse($msg->getMessages(), $msg->getCode());
-        }
-
-        $em  = $this->get('orm.manager');
-        $oql = sprintf('pk_user_group in [%s]', implode(',', $ids));
-
-        $userGroups = $em->getRepository('UserGroup')->findBy($oql);
-
-        $deleted = 0;
-        foreach ($userGroups as $userGroup) {
-            try {
-                $em->remove($userGroup);
-                $deleted++;
-            } catch (\Exception $e) {
-                $msg->add($e->getMessage(), 'error');
-            }
-        }
+        $ids     = $request->request->get('ids', []);
+        $msg     = $this->get('core.messenger');
+        $deleted = $this->get('api.service.user_group')->deleteList($ids);
 
         if ($deleted > 0) {
             $msg->add(
@@ -74,6 +52,14 @@ class UserGroupsController extends Controller
                 'success'
             );
         }
+
+        if ($deleted !== count($ids)) {
+            $msg->add(sprintf(
+                _('%s user groups could not be deleted successfully'),
+                count($ids) - $deleted
+            ), 'error');
+        }
+
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
@@ -87,26 +73,19 @@ class UserGroupsController extends Controller
      */
     public function listAction(Request $request)
     {
+        $ugs = $this->get('api.service.user_group');
         $oql = $request->query->get('oql', '');
 
         // TODO: Remove the pk_user_group condition when implementing ticket ONM-1660
         if (!$this->get('core.security')->hasRole('ROLE_MASTER')) {
-            $oql = $this->get('orm.oql.fixer')->fix($oql)->addCondition('pk_user_group != 4')->getOql();
+            $oql = $this->get('orm.oql.fixer')->fix($oql)
+                ->addCondition('pk_user_group != 4')->getOql();
         }
 
-        $repository = $this->get('orm.manager')->getRepository('UserGroup');
-        $converter  = $this->get('orm.manager')->getConverter('UserGroup');
+        $response = $ugs->getList($oql);
 
-        $total      = $repository->countBy($oql);
-        $userGroups = $repository->findBy($oql);
+        $response['results'] = $ugs->responsify($response['results']);
 
-        $userGroups = array_map(function ($a) use ($converter) {
-            return $converter->responsify($a->getData());
-        }, $userGroups);
-
-        return new JsonResponse([
-            'results' => $userGroups,
-            'total'   => $total,
-        ]);
+        return new JsonResponse($response);
     }
 }
