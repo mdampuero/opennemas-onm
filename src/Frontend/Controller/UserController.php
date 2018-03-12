@@ -158,6 +158,8 @@ class UserController extends Controller
                         $message
                             ->setSubject($mailSubject)
                             ->setBody($mailBody, 'text/plain')
+                            // And optionally an alternative body
+                            ->addPart($mailBody, 'text/html')
                             ->setTo($data['email'])
                             ->setFrom([
                                 'no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')
@@ -312,6 +314,8 @@ class UserController extends Controller
             $message
                 ->setSubject($mailSubject)
                 ->setBody($mailBody, 'text/plain')
+                // And optionally an alternative body
+                ->addPart($mailBody, 'text/html')
                 ->setTo($user->email)
                 ->setFrom(['no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')]);
 
