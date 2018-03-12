@@ -4,7 +4,6 @@ orm:
             name: User
             required:
                 - email
-                - name
                 - type
                 - username
             properties:
