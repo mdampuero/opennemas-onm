@@ -5,7 +5,7 @@ backend_subscription_create:
     options:
         expose: true
 
-backend_subscription_list:
+backend_subscriptions_list:
     path:     /subscriptions
     defaults: { _controller: BackendBundle:Subscription:list }
     methods:  [ GET ]

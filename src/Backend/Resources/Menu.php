@@ -220,7 +220,7 @@ $menuXml = [
         'submenu' => [
             [
                 'id'    => 'subscriptions',
-                "link"  => url('backend_subscription_list'),
+                "link"  => url('backend_subscriptions_list'),
                 'title' => _('Subscriptions'),
                 'icon'  => 'fa fa-check-square-o',
             ]
