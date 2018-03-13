@@ -229,15 +229,22 @@ class Advertisement extends Content
                 [ $id ]
             );
 
-            $rs['positions'] = getService('dbal_connection')->fetchAssoc(
+            if (!$rs) {
+                return false;
+            }
+
+            $positions = getService('dbal_connection')->fetchAssoc(
                 'SELECT position_id FROM advertisements_positions '
                 . 'WHERE advertisement_id=?',
                 [ $id ]
             );
 
-            if (!$rs) {
+
+            if ($positions === false) {
                 return false;
             }
+
+            $rs['positions'] = array_values($positions);
         } catch (\Exception $e) {
             getService('error.log')->error($e->getMessage());
             return false;
