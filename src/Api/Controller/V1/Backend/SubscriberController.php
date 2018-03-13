@@ -114,6 +114,7 @@ class SubscriberController extends Controller
         $oql      = $request->query->get('oql', '');
         $response = $ss->getList($oql);
 
+        $response['extra']   = $this->getExtraData();
         $response['results'] = $ss->responsify($response['results']);
 
         return new JsonResponse($response);
@@ -235,8 +236,14 @@ class SubscriberController extends Controller
      */
     private function getExtraData()
     {
-        $privilege = new \Privilege();
+        $ss            = $this->get('api.service.subscription');
+        $response      = $ss->getList();
+        $subscriptions = [];
 
-        return [ 'modules' => $privilege->getPrivilegesByModules() ];
+        foreach ($response['results'] as $item) {
+            $subscriptions[$item->pk_user_group] = $ss->responsify($item);
+        }
+
+        return [ 'subscriptions' => $subscriptions ];
     }
 }
