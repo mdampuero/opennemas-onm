@@ -81,7 +81,7 @@ EOF
         while ($page * $epp < $instanceCount) {
             $this->output->writeln("Iteration $page", OutputInterface::VERBOSITY_DEBUG);
 
-            $oql       = sprintf($oqlTemplate, $epp, $page);
+            $oql       = sprintf($oqlTemplate, $epp, $epp * $page);
             $instances = $this->getContainer()->get('orm.manager')
                 ->getRepository('Instance')->findBy($oql);
 
