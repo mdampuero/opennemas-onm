@@ -50,7 +50,11 @@
          *
          * @type {Object}
          */
-        $scope.criteria = { epp: 25, page: 1, orderBy: { name: 'asc' } };
+        $scope.criteria = {
+          epp: 25,
+          page: 1,
+          orderBy: { name: 'asc' }
+        };
 
         /**
          * @function delete
@@ -147,7 +151,7 @@
          *   Reloads the list.
          */
         $scope.list = function() {
-          $scope.loading = 1;
+          $scope.flags.loading = 1;
 
           oqlEncoder.configure({ placeholder: { name: '[key] ~ "[value]"' } });
 
@@ -160,10 +164,10 @@
           $location.search('oql', oql);
 
           return http.get(route).then(function(response) {
-            $scope.loading = 0;
-            $scope.items   = response.data.results;
-            $scope.total   = response.data.total;
-            $scope.extra   = response.data.extra;
+            $scope.data  = response.data;
+            $scope.items = response.data.results;
+
+            $scope.disableFlags();
 
             // Scroll top
             $('body').animate({ scrollTop: '0px' }, 1000);

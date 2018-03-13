@@ -8,7 +8,7 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-check-square-o fa-lg"></i>
+                <i class="fa fa-check-square-o"></i>
                 {t}Subscriptions{/t}
               </h4>
             </li>
@@ -17,7 +17,7 @@
             <ul class="nav quick-section">
               {acl isAllowed=SUBSCRIPTION_CREATE}
                 <li class="quicklinks">
-                  <a class="btn btn-primary" href="{url name=backend_subscription_show id=new}">
+                  <a class="btn btn-success text-uppercase" href="{url name=backend_subscription_show id=new}">
                     <i class="fa fa-plus"></i>
                     {t}Create{/t}
                   </a>
@@ -99,27 +99,27 @@
           </ul>
           <ul class="nav quick-section pull-right ng-cloak" ng-if="items.length > 0">
             <li class="quicklinks hidden-xs">
-              <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
+              <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
             </li>
           </ul>
         </div>
       </div>
     </div>
     <div class="content">
-      <div class="listing-no-contents" ng-hide="!loading">
+      <div class="listing-no-contents" ng-hide="!flags.loading">
         <div class="text-center p-b-15 p-t-15">
           <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
           <h3 class="spinner-text">{t}Loading{/t}...</h3>
         </div>
       </div>
-      <div class="listing-no-contents ng-cloak" ng-if="!loading && items.length == 0">
+      <div class="listing-no-contents ng-cloak" ng-if="!flags.loading && items.length == 0">
         <div class="text-center p-b-15 p-t-15">
           <i class="fa fa-4x fa-warning text-warning"></i>
           <h3>{t}Unable to find any subscription that matches your search.{/t}</h3>
           <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
         </div>
       </div>
-      <div class="grid simple ng-cloak" ng-if="!loading && items.length > 0">
+      <div class="grid simple ng-cloak" ng-if="!flags.loading && items.length > 0">
         <div class="grid-body no-padding">
           <div class="table-wrapper">
             <table class="table table-hover no-margin">
@@ -165,9 +165,9 @@
             </table>
           </div>
         </div>
-        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && items.length > 0">
+        <div class="grid-footer clearfix ng-cloak" ng-if="!flags.loading && items.length > 0">
           <div class="pull-right">
-            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>
         </div>
       </div>

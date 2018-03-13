@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp')
+
     /**
      * @ngdoc controller
      * @name  ListCtrl
@@ -32,6 +33,16 @@
           locale: null,
           multilanguage: null
         };
+
+        /**
+         * @memberOf ListCtrl
+         *
+         * @description
+         *  The list of flags
+         *
+         * @type {Object}
+         */
+        $scope.flags = {};
 
         /**
          * @memberOf ListCtrl
@@ -72,9 +83,22 @@
             $timeout.cancel($scope.tm);
           }
 
-          $scope.tm = $timeout(function () {
+          $scope.tm = $timeout(function() {
             $scope.config.columns.collapsed = true;
           }, 500);
+        };
+
+        /**
+         * @function disableFlags
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Disables all flags.
+         */
+        $scope.disableFlags = function() {
+          for (var key in $scope.flags) {
+            $scope.flags[key] = false;
+          }
         };
 
         /**
@@ -89,7 +113,7 @@
             $timeout.cancel($scope.tm);
           }
 
-          $scope.tm = $timeout(function () {
+          $scope.tm = $timeout(function() {
             $scope.config.columns.collapsed = false;
           }, 500);
         };

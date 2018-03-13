@@ -8,7 +8,7 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-user fa-lg"></i>
+                <i class="fa fa-user"></i>
                 {t}Subscribers{/t}
               </h4>
             </li>
@@ -17,7 +17,7 @@
             <ul class="nav quick-section">
               {acl isAllowed=SUBSCRIBER_CREATE}
                 <li class="quicklinks">
-                  <a class="btn btn-primary" href="{url name=backend_subscriber_show id=new}">
+                  <a class="btn btn-success text-uppercase" href="{url name=backend_subscriber_show id=new}">
                     <i class="fa fa-plus"></i>
                     {t}Create{/t}
                   </a>
@@ -49,12 +49,12 @@
           <ul class="nav quick-section pull-right">
             {acl isAllowed="SUBSCRIPTION_AVAILABLE"}
               <li class="quicklinks">
-                <button class="btn btn-link" ng-click="patchSelected('enabled', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+                <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
                   <i class="fa fa-times fa-lg"></i>
                 </button>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-link" ng-click="patchSelected('enabled', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+                <button class="btn btn-link" ng-click="patchSelected('activated', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
                   <i class="fa fa-check fa-lg"></i>
                 </button>
               </li>
@@ -99,27 +99,27 @@
           </ul>
           <ul class="nav quick-section pull-right ng-cloak" ng-if="items.length > 0">
             <li class="quicklinks hidden-xs">
-              <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
+              <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
             </li>
           </ul>
         </div>
       </div>
     </div>
     <div class="content">
-      <div class="listing-no-contents" ng-hide="!loading">
+      <div class="listing-no-contents" ng-hide="!flags.loading">
         <div class="text-center p-b-15 p-t-15">
           <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
           <h3 class="spinner-text">{t}Loading{/t}...</h3>
         </div>
       </div>
-      <div class="listing-no-contents ng-cloak" ng-if="!loading && items.length == 0">
+      <div class="listing-no-contents ng-cloak" ng-if="!flags.loading && items.length == 0">
         <div class="text-center p-b-15 p-t-15">
           <i class="fa fa-4x fa-warning text-warning"></i>
           <h3>{t}Unable to find any subscription that matches your search.{/t}</h3>
           <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
         </div>
       </div>
-      <div class="grid simple ng-cloak" ng-if="!loading && items.length > 0">
+      <div class="grid simple ng-cloak" ng-if="!flags.loading && items.length > 0">
         <div class="grid-body no-padding">
           <div class="table-wrapper">
             <table class="table table-hover no-margin">
@@ -147,7 +147,7 @@
                     </div>
                   </td>
                   <td class="text-center hidden-xs">
-                    <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="extra.photos[item.avatar_img_id].path_img" transform="thumbnail,50,50" ng-if="item.avatar_img_id"></dynamic-image>
+                    <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path_img" transform="thumbnail,50,50" ng-if="item.avatar_img_id"></dynamic-image>
                     <gravatar class="gravatar" ng-model="item.email" size="40" ng-if="!item.avatar_img_id || item.avatar_img_id == 0"></gravatar>
                   </td>
                   <td class="left">
@@ -165,13 +165,18 @@
                   </td>
                   <td>[% item.email %]</td>
                   <td>
-                    <ul>
-                      <li ng-repeat="group in item.fk_user_group">[% extra.groups[group].name %]</li>
+                    <ul class="no-style">
+                      <li ng-repeat="subscription in item.fk_user_group">
+                        <a class="badge text-uppercase m-b-5" ng-class="{ 'badge-danger': !data.extra.subscriptions[subscription].enabled, 'badge-success': data.extra.subscriptions[subscription].enabled }" href="[% routing.generate('backend_subscription_show', { id: subscription }) %]">
+                          <strong>[% data.extra.subscriptions[subscription].name %]</strong>
+                        </span>
+                        </a>
+                      </li>
                     </ul>
                   </td>
                   <td class="text-center">
-                    <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled != 1 ? 1 : 0)" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.enabledLoading, 'fa-check text-success' : !item.enabledLoading && item.enabled == '1', 'fa-times text-error': !item.enabledLoading && item.enabled == '0' }"></i>
+                    <button class="btn btn-white" ng-click="patch(item, 'activated', item.activated != 1 ? 1 : 0)" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading && item.activated == '1', 'fa-times text-error': !item.activatedLoading && item.activated == '0' }"></i>
                     </button>
                   </td>
                 </tr>
@@ -179,9 +184,9 @@
             </table>
           </div>
         </div>
-        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && items.length > 0">
+        <div class="grid-footer clearfix ng-cloak" ng-if="!flags.loading && items.length > 0">
           <div class="pull-right">
-            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>
         </div>
       </div>
