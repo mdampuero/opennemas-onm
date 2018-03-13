@@ -865,7 +865,7 @@ DROP TABLE IF EXISTS `polls`;
 CREATE TABLE `polls` (
   `pk_poll` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `total_votes` int(10) unsigned NOT NULL DEFAULT '0',
-  `used_ips` text,
+  `used_ips` longtext,
   `pretitle` varchar(512) DEFAULT NULL,
   `visualization` smallint(1) unsigned DEFAULT '0',
   PRIMARY KEY (`pk_poll`),

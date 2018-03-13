@@ -1171,7 +1171,7 @@ polls:
             options: { unsigned: true, default: 0 }
         used_ips:
             type: text
-            options: { length: 65532, default: null, notnull: false }
+            options: { length: 4294967295, default: null, notnull: false }
         pretitle:
             type: string
             options: { length: 512, default: null, notnull: false }
