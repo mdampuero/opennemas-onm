@@ -43,7 +43,7 @@
           <h3 class="spinner-text">{t}Loading{/t}...</h3>
         </div>
       </div>
-      <div class="ng-cloak" ng-if="!flags.loading">
+      <div class="ng-cloak" ng-show="!flags.loading">
         <div class="row">
           <div class="col-sm-7">
             <div class="grid simple">
