@@ -75,7 +75,7 @@ abstract class Service
      *
      * @throws GetListException If there was a problem to find items.
      */
-    abstract public function getList($oql);
+    abstract public function getList($oql = '');
 
     /**
      * Updates some item properties.

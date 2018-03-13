@@ -148,7 +148,7 @@ class BaseService extends Service
     /**
      * {@inheritdoc}
      */
-    public function getList($oql)
+    public function getList($oql = '')
     {
         try {
             $repository = $this->container->get('orm.manager')

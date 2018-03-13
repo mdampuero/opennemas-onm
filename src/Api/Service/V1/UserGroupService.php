@@ -50,7 +50,7 @@ class UserGroupService extends BaseService
     /**
      * {@inheritdoc}
      */
-    public function getList($oql)
+    public function getList($oql = '')
     {
          // Force OQL to include the subscription flag enabled
         $oql = $this->container->get('orm.oql.fixer')->fix($oql)
