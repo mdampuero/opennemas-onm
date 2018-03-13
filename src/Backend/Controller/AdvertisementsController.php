@@ -19,7 +19,7 @@ use Common\Core\Controller\Controller;
  *
  * @package Backend_Controllers
  */
-class AdsController extends Controller
+class AdvertisementsController extends Controller
 {
     /**
      * Common code for all the actions.
