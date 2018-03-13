@@ -26,7 +26,7 @@ class SubscriberController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('subscriber_CREATE')")
+     * @Security("hasPermission('SUBSCRIBER_CREATE')")
      */
     public function createAction(Request $request)
     {
@@ -55,7 +55,7 @@ class SubscriberController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('subscriber_DELETE')")
+     * @Security("hasPermission('SUBSCRIBER_DELETE')")
      */
     public function deleteAction($id)
     {
@@ -74,7 +74,7 @@ class SubscriberController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('subscriber_DELETE')")
+     * @Security("hasPermission('SUBSCRIBER_DELETE')")
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -106,7 +106,7 @@ class SubscriberController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('subscriber_LIST')")
+     * @Security("hasPermission('SUBSCRIBER_LIST')")
      */
     public function listAction(Request $request)
     {
@@ -124,7 +124,7 @@ class SubscriberController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('subscriber_CREATE')")
+     * @Security("hasPermission('SUBSCRIBER_CREATE')")
      */
     public function newAction()
     {
@@ -138,7 +138,7 @@ class SubscriberController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('subscriber_UPDATE')")
+     * @Security("hasPermission('SUBSCRIBER_UPDATE')")
      */
     public function patchAction(Request $request, $id)
     {
@@ -158,7 +158,7 @@ class SubscriberController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('subscriber_UPDATE')")
+     * @Security("hasPermission('SUBSCRIBER_UPDATE')")
      */
     public function patchSelectedAction(Request $request)
     {
@@ -195,7 +195,7 @@ class SubscriberController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('subscriber_UPDATE')")
+     * @Security("hasPermission('SUBSCRIBER_UPDATE')")
      */
     public function showAction($id)
     {
@@ -214,7 +214,7 @@ class SubscriberController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('subscriber_UPDATE')")
+     * @Security("hasPermission('SUBSCRIBER_UPDATE')")
      */
     public function updateAction(Request $request, $id)
     {
