@@ -290,12 +290,25 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateItem()
     {
-        $item = new Entity([ 'name' => 'foobar', 'type' => 1 ]);
-        $data = [ 'name' => 'mumble'];
+        $data = [ 'name' => 'mumble', 'email' => 'garply@glork.glorp' ];
+        $item = new Entity([
+            'name'  => 'foobar',
+            'email' => 'garply@glork.glorp',
+            'type'  => 1
+        ]);
+
+        $this->repository->expects($this->once())->method('findBy')
+            ->willReturn([]);
 
         $this->converter->expects($this->once())->method('objectify')
-            ->with(array_merge($data, [ 'type' => 1 ]))
-            ->willReturn(array_merge($data, [ 'type' => 1 ]));
+            ->with(array_merge($data, [
+                'type' => 1,
+                'username' => 'garply@glork.glorp'
+            ]))->willReturn(array_merge($data, [
+                'type' => 1,
+                'username' => 'garply@glork.glorp'
+            ]));
+
         $this->repository->expects($this->once())->method('find')
             ->with(1)->willReturn($item);
         $this->em->expects($this->once())->method('persist')
@@ -304,6 +317,38 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
         $this->service->updateItem(1, $data);
 
         $this->assertEquals('mumble', $item->name);
+    }
+
+    /**
+     * Tests updateItem when no email provided.
+     *
+     * @expectedException Api\Exception\UpdateItemException
+     */
+    public function testUpdateItemWhenEmailInUseForAnotherUser()
+    {
+        $data = [ 'name' => 'flob', 'email' => 'flob@garply.com' ];
+
+        $this->fixer->expects($this->once())->method('fix')
+            ->with('id != "1" and email = "flob@garply.com"');
+        $this->fixer->expects($this->once())->method('getOql')
+            ->willReturn('id != "1" and email = "flob@garply.com" and type = 1');
+        $this->repository->expects($this->once())->method('findBy')
+            ->with('id != "1" and email = "flob@garply.com" and type = 1')
+            ->willReturn([ new Entity([]) ]);
+
+        $this->service->updateItem(1, $data);
+    }
+
+    /**
+     * Tests createItem when no email provided.
+     *
+     * @expectedException Api\Exception\UpdateItemException
+     */
+    public function testUpdateItemWhenNoEmail()
+    {
+        $data = [ 'name' => 'flob' ];
+
+        $this->service->updateItem(1, $data);
     }
 
     /*

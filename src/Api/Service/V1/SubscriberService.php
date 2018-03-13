@@ -134,7 +134,24 @@ class SubscriberService extends BaseService
      */
     public function updateItem($id, $data)
     {
-        $data['type'] = 1;
+        try {
+            if (!array_key_exists('email', $data)) {
+                throw new \Exception('The email is required');
+            }
+
+            $oql   = sprintf('id != "%s" and email = "%s"', $id, $data['email']);
+            $items = $this->getList($oql);
+
+            if (!empty($items['results'])) {
+                throw new \Exception('The email is already in use');
+            }
+        } catch (\Exception $e) {
+            throw new UpdateItemException($e->getMessage());
+        }
+
+        // Force type value
+        $data['type']     = 1;
+        $data['username'] = $data['email'];
 
         parent::updateItem($id, $data);
     }
