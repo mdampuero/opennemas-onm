@@ -1,55 +1,49 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form method="post" name="subscriptionForm" ng-controller="SubscriptionCtrl" ng-init="init({$id})">
+  <form name="subscriptionForm" ng-controller="SubscriptionCtrl" ng-init="init({$id})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-check-square-o"></i>
-                {t}Subscriptions{/t}
+                <a class="no-padding" href="{url name="backend_subscriptions_list"}">
+                  <i class="fa fa-check-square-o"></i>
+                  {t}Subscriptions{/t}
+                </a>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flag.loading">
+            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading">
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading">
               <h5 class="ng-cloak">
-                [% item.pk_user_group ? '{t}Edit subscription{/t}' : '{t}Create subscription{/t}'  %]
+                [% item.pk_user_group ? '{t}Edit{/t}' : '{t}Create{/t}' %]
               </h5>
             </li>
           </ul>
-        </div>
-        <div class="all-actions pull-right">
-          <ul class="nav quick-section">
-            <li class="quicklinks">
-              <a class="btn btn-link" href="{url name="backend_subscriptions_list"}" title="{t}Go back{/t}">
-                <i class="fa fa-reply"></i>
-              </a>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
-            <li class="quicklinks">
-              <button class="btn btn-primary btn-loading" ng-click="save()">
-                <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
-                <span class="text">{t}Save{/t}</span>
-              </button>
-            </li>
-          </ul>
+          <div class="all-actions pull-right">
+            <ul class="nav quick-section">
+              <li class="quicklinks">
+                <button class="btn btn-loading btn-success text-uppercase" ng-click="save()">
+                  <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
+                  {t}Save{/t}
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
     <div class="content">
-      <div class="listing-no-contents" ng-hide="!loading">
+      <div class="listing-no-contents" ng-hide="!flags.loading">
         <div class="text-center p-b-15 p-t-15">
           <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
           <h3 class="spinner-text">{t}Loading{/t}...</h3>
         </div>
       </div>
-      <div class="ng-cloak" ng-if="!loading">
+      <div class="ng-cloak" ng-if="!flags.loading">
         <div class="row">
           <div class="col-md-8">
             <div class="grid simple">
@@ -123,6 +117,5 @@
         </div>
       </div>
     </div>
-    <input type="hidden" name="privileges" ng-value="permissions">
   </form>
 {/block}
