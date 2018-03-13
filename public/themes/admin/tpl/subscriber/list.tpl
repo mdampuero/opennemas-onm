@@ -135,6 +135,7 @@
                   <th>{t}Name{/t}</th>
                   <th width="250">{t}Email{/t}</th>
                   <th width="240">{t}Subscriptions{/t}</th>
+                  <th class="text-center" width="100">{t}Social{/t}</th>
                   <th class="text-center" width="50">{t}Enabled{/t}</th>
                 </tr>
               </thead>
@@ -171,6 +172,19 @@
                           <strong>[% data.extra.subscriptions[subscription].name %]</strong>
                         </span>
                         </a>
+                      </li>
+                    </ul>
+                  </td>
+                  <td class="text-center">
+                    <ul class="no-style">
+                      <li ng-show="item.facebook_id">
+                        <i class="fa fa-facebook-official fa-lg m-b-10 text-facebook"></i>
+                      </li>
+                      <li ng-show="item.google_id">
+                        <i class="fa fa-google-plus-official fa-lg m-b-10 text-google"></i>
+                      </li>
+                      <li ng-show="item.twitter_id">
+                        <i class="fa fa-twitter fa-lg m-b-5 text-twitter"></i>
                       </li>
                     </ul>
                   </td>
