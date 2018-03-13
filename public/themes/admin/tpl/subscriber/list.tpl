@@ -47,7 +47,7 @@
             </li>
           </ul>
           <ul class="nav quick-section pull-right">
-            {acl isAllowed="SUBSCRIPTION_AVAILABLE"}
+            {acl isAllowed="SUBSCRIBER_AVAILABLE"}
               <li class="quicklinks">
                 <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
                   <i class="fa fa-times fa-lg"></i>
@@ -59,7 +59,7 @@
                 </button>
               </li>
             {/acl}
-            {acl isAllowed="SUBSCRIPTION_DELETE"}
+            {acl isAllowed="SUBSCRIBER_DELETE"}
               <li class="quicklinks hidden-xs">
                 <span class="h-seperate"></span>
               </li>
@@ -115,7 +115,7 @@
       <div class="listing-no-contents ng-cloak" ng-if="!flags.loading && items.length == 0">
         <div class="text-center p-b-15 p-t-15">
           <i class="fa fa-4x fa-warning text-warning"></i>
-          <h3>{t}Unable to find any subscription that matches your search.{/t}</h3>
+          <h3>{t}Unable to find any subscriber that matches your search.{/t}</h3>
           <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
         </div>
       </div>
