@@ -121,7 +121,9 @@ class SpecialsController extends Controller
             'title'          => $request->request
                 ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'subtitle'       => $request->request
-                ->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'pretitle'       => $request->request
+                ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $request->request->get('description', ''),
             'metadata'       => \Onm\StringUtils::normalizeMetadata(
                 $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
@@ -238,7 +240,9 @@ class SpecialsController extends Controller
                 'title'          => $request->request
                     ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'subtitle'       => $request->request
-                    ->filter('subtitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                    ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'pretitle'       => $request->request
+                    ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'description'    => $request->request->get('description', ''),
                 'metadata'       => \Onm\StringUtils::normalizeMetadata(
                     $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)

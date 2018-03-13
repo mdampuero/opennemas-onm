@@ -457,7 +457,7 @@ class InstanceController extends Controller
             $this->get('core.instance.checker')->check($instance);
             $em->persist($instance);
 
-            if (empty($instance->getDatabaseName())) {
+            if ($instance->getDatabaseName() !== $instance->id) {
                 $instance->refresh();
                 $instance->settings['BD_DATABASE'] = $instance->id;
                 $em->persist($instance);
@@ -605,6 +605,10 @@ class InstanceController extends Controller
 
         if (!empty($owners)) {
             $cache->remove($owners);
+        }
+
+        if ($instance->getDatabaseName() !== $instance->id) {
+            $instance->settings['BD_DATABASE'] = $instance->id;
         }
 
         $em->persist($instance);

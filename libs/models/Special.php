@@ -25,11 +25,11 @@ class Special extends Content
     public $pk_special = null;
 
     /**
-     * The subtitle for this album
+     * The pretitle for this album
      *
      * @var string
      */
-    public $subtitle = null;
+    public $pretitle = null;
 
     /**
      * Path for get a pdf file
@@ -74,23 +74,18 @@ class Special extends Content
                     $this->category_name =
                         $this->loadCategoryName($this->pk_content);
                 }
-                $uri =  Uri::generate(
-                    'special',
-                    array(
-                        'id'       => sprintf('%06d', $this->id),
-                        'date'     => date('YmdHis', strtotime($this->created)),
-                        'category' => urlencode($this->category_name),
-                        'slug'     => urlencode($this->slug),
-                    )
-                );
+                $uri = Uri::generate('special', [
+                    'id'       => sprintf('%06d', $this->id),
+                    'date'     => date('YmdHis', strtotime($this->created)),
+                    'category' => urlencode($this->category_name),
+                    'slug'     => urlencode($this->slug),
+                ]);
 
                 return ($uri !== '') ? $uri : $this->permalink;
 
-                break;
             case 'slug':
                 return \Onm\StringUtils::getTitle($this->title);
 
-                break;
             case 'content_type_name':
                 $contentTypeName = \ContentManager::getContentTypeNameFromId($this->content_type);
 
@@ -103,10 +98,8 @@ class Special extends Content
 
                 return $returnValue;
 
-                break;
             default:
                 return parent::__get($name);
-                break;
         }
     }
 
@@ -120,14 +113,14 @@ class Special extends Content
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) {
+        if ((int) $id <= 0) {
             return;
         }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
-                .'LEFT JOIN specials ON pk_content = pk_special WHERE pk_content=?',
+                . 'LEFT JOIN specials ON pk_content = pk_special WHERE pk_content=?',
                 [ $id ]
             );
 
@@ -156,9 +149,11 @@ class Special extends Content
 
         $this->id         = $properties['pk_special'];
         $this->pk_special = $properties['pk_special'];
-        $this->subtitle   = $properties['subtitle'];
         $this->img1       = $properties['img1'];
         $this->pdf_path   = $properties['pdf_path'];
+
+        // Ignore subtitle property from database
+        unset($this->subtitle);
     }
 
     /**
@@ -185,7 +180,7 @@ class Special extends Content
                 'specials',
                 [
                     'pk_special' => $this->id,
-                    'subtitle'   => $data['subtitle'],
+                    'pretitle'   => $data['pretitle'],
                     'img1'       => (int) $data['img1'],
                     'pdf_path'   => $data['pdf_path']
                 ]
@@ -196,7 +191,7 @@ class Special extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error on Special::create: '.$e->getMessage());
+            error_log('Error on Special::create: ' . $e->getMessage());
             return false;
         }
     }
@@ -219,10 +214,10 @@ class Special extends Content
                 $data['pdf_path'] = '';
             }
 
-            $rs = getService('dbal_connection')->update(
+            getService('dbal_connection')->update(
                 'specials',
                 [
-                    'subtitle' => $data['subtitle'],
+                    'pretitle' => $data['pretitle'],
                     'img1'     => (int) $data['img1'],
                     'pdf_path' => $data['pdf_path'],
                 ],
@@ -233,7 +228,7 @@ class Special extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error on Special::update: '.$e->getMessage());
+            error_log('Error on Special::update: ' . $e->getMessage());
             return false;
         }
     }
@@ -247,7 +242,9 @@ class Special extends Content
      */
     public function remove($id)
     {
-        if ((int) $id <= 0) return false;
+        if ((int) $id <= 0) {
+            return false;
+        }
 
         try {
             if (!parent::remove($id)) {
@@ -273,7 +270,7 @@ class Special extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error on Special:'.$e->getMessage());
+            error_log('Error on Special:' . $e->getMessage());
             return false;
         }
     }
@@ -298,7 +295,7 @@ class Special extends Content
                     $this->setContents(
                         $this->id,
                         $content->id,
-                        ($content->position *2-1),
+                        ($content->position * 2 - 1),
                         "",
                         $content->content_type
                     );
@@ -313,14 +310,13 @@ class Special extends Content
                     $this->setContents(
                         $this->id,
                         $content->id,
-                        ($content->position *2),
+                        ($content->position * 2),
                         "",
                         $content->content_type
                     );
                 }
             }
         }
-
     }
 
     /**
@@ -332,7 +328,7 @@ class Special extends Content
      */
     public function getContents($id)
     {
-        $items = array();
+        $items = [];
 
         if ($id == null) {
             return $items;
@@ -344,13 +340,13 @@ class Special extends Content
             );
 
             foreach ($rs as $row) {
-                $items[] = array(
+                $items[] = [
                     'fk_content'   => $row['fk_content'],
                     'name'         => $row['name'],
                     'position'     => $row['position'],
                     'visible'      => $row['visible'],
                     'type_content' => $row['type_content'],
-                );
+                ];
             }
 
             return $items;
@@ -380,17 +376,14 @@ class Special extends Content
         }
 
         try {
-            $rs = getService('dbal_connection')->insert(
-                "special_contents",
-                [
-                    'fk_special'   => $id,
-                    'fk_content'   => $pkContent,
-                    'position'     => $position,
-                    'name'         => $name,
-                    'visible'      => 1,
-                    'type_content' => $typeContent
-                ]
-            );
+            getService('dbal_connection')->insert("special_contents", [
+                'fk_special'   => $id,
+                'fk_content'   => $pkContent,
+                'position'     => $position,
+                'name'         => $name,
+                'visible'      => 1,
+                'type_content' => $typeContent
+            ]);
 
             return true;
         } catch (\Exception $e) {

@@ -192,13 +192,20 @@ class ArticleController extends Controller
             return $a['from'] === $default;
         }));
 
+        $toList = [];
+
         $extra['options'] = [
             'default'     => $default,
             'available'   => $ls->getAvailableLocales('frontend'),
-            'translators' => array_unique(
-                array_filter($extra['translators'], function ($a) {
-                    return $a['to'];
-                })
+            'translators' => array_filter(
+                $extra['translators'],
+                function ($a) use (&$toList) {
+                    if (!empty($a['to']) && !in_array($a['to'], $toList)) {
+                        $toList[] = $a['to'];
+                        return true;
+                    }
+                    return false;
+                }
             )
         ];
 

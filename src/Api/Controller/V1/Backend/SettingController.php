@@ -294,6 +294,7 @@ class SettingController extends Controller
     {
         $msg      = $this->get('core.messenger');
         $settings = $request->get('extraFields');
+        $settings = json_decode($settings);
 
         $this->get('setting_repository')->set('extraInfoContents.ARTICLE_MANAGER', $settings);
 

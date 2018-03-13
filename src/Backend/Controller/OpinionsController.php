@@ -236,11 +236,19 @@ class OpinionsController extends Controller
             $this->view->assign('photo2', $photo2);
         }
 
+        $extraFields = null;
+
+        if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
+            $extraFields = $this->get('setting_repository')
+                ->get('extraInfoContents.OPINION_MANAGER');
+        }
+
         return $this->render('opinion/new.tpl', [
             'opinion'        => $opinion,
             'all_authors'    => $allAuthors,
             'author'         => $author,
             'commentsConfig' => s::get('comments_config'),
+            'extra_fields'   => $extraFields
         ]);
     }
 
@@ -262,9 +270,17 @@ class OpinionsController extends Controller
             // Fetch all authors
             $allAuthors = \User::getAllUsersAuthors();
 
+            $extraFields = null;
+
+            if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
+                $extraFields = $this->get('setting_repository')
+                    ->get('extraInfoContents.OPINION_MANAGER');
+            }
+
             return $this->render('opinion/new.tpl', [
                 'all_authors'    => $allAuthors,
                 'commentsConfig' => s::get('comments_config'),
+                'extra_fields'   => $extraFields
             ]);
         }
 
@@ -302,6 +318,8 @@ class OpinionsController extends Controller
                 'only_registered'  => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
             ]
         ];
+
+        $data = $this->loadMetaDataFields($data, $request->request);
 
         if ($opinion->create($data)) {
             $this->get('session')->getFlashBag()->add(
@@ -401,6 +419,8 @@ class OpinionsController extends Controller
                 'only_registered'  => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
             ],
         ];
+
+        $data = $this->loadMetaDataFields($data, $request->request);
 
         if ($opinion->update($data)) {
             $this->get('session')->getFlashBag()->add(
@@ -565,6 +585,7 @@ class OpinionsController extends Controller
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
+            $extra      = $request->request->get('extra-fields');
             $configsRAW = $request->request->get('opinion_settings');
 
             $configs = [
@@ -575,7 +596,8 @@ class OpinionsController extends Controller
                     'total_opinion_authors' => filter_var($configsRAW['total_opinion_authors'], FILTER_VALIDATE_INT),
                     'blog_orderFrontpage'   => filter_var($configsRAW['blog_orderFrontpage'], FILTER_SANITIZE_STRING),
                     'blog_itemsFrontpage'   => filter_var($configsRAW['blog_itemsFrontpage'], FILTER_VALIDATE_INT),
-                ]
+                ],
+                'extraInfoContents.OPINION_MANAGER' => json_decode($extra)
             ];
 
             foreach ($configs as $key => $value) {
@@ -592,7 +614,9 @@ class OpinionsController extends Controller
             $configurations = s::get([ 'opinion_settings' ]);
 
             return $this->render('opinion/config.tpl', [
-                'configs' => $configurations
+                'configs'      => $configurations,
+                'extra_fields' => $this->get('setting_repository')
+                    ->get('extraInfoContents.OPINION_MANAGER')
             ]);
         }
     }
@@ -743,5 +767,37 @@ class OpinionsController extends Controller
         $this->view->assign([
             'allcategorys' => $this->parentCategories,
         ]);
+    }
+
+    /**
+     * This method load from the request the metadata fields,
+     *
+     * @param mixed   $data Data where load the metadata fields.
+     * @param Request $jostReq Request where the metadata are.
+     */
+    private function loadMetaDataFields($data, $postReq)
+    {
+        if (!$this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
+            return $data;
+        }
+
+        // If I don't have the extension, I don't check the settings
+        $groups = $this->get('setting_repository')
+            ->get('extraInfoContents.OPINION_MANAGER');
+        if (!is_array($groups)) {
+            return $data;
+        }
+
+        foreach ($groups as $group) {
+            foreach ($group['fields'] as $field) {
+                if (empty($postReq->get($field['key']))) {
+                    continue;
+                }
+
+                $data[$field['key']] = $postReq->get($field['key']);
+            }
+        }
+
+        return $data;
     }
 }
