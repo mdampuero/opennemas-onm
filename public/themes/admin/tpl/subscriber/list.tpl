@@ -166,7 +166,7 @@
                   <td>[% item.email %]</td>
                   <td>
                     <ul class="no-style">
-                      <li ng-repeat="subscription in item.fk_user_group">
+                      <li ng-repeat="subscription in item.fk_user_group" ng-if="data.extra.subscriptions[subscription]">
                         <a class="badge text-uppercase m-b-5" ng-class="{ 'badge-danger': !data.extra.subscriptions[subscription].enabled, 'badge-success': data.extra.subscriptions[subscription].enabled }" href="[% routing.generate('backend_subscription_show', { id: subscription }) %]">
                           <strong>[% data.extra.subscriptions[subscription].name %]</strong>
                         </span>
