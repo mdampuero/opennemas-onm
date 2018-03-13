@@ -111,7 +111,7 @@
          */
         $scope.deleteSelected = function() {
           var modal = $uibModal.open({
-            templateUrl: 'modal-delete-selected',
+            templateUrl: 'modal-delete',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {

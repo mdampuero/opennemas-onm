@@ -192,13 +192,7 @@
       </div>
     </div>
     <script type="text/ng-template" id="modal-delete">
-      {include file="common/modals/_modalDelete.tpl"}
-    </script>
-    <script type="text/ng-template" id="modal-delete-selected">
-      {include file="common/modals/_modalBatchDelete.tpl"}
-    </script>
-    <script type="text/ng-template" id="modal-update-selected">
-      {include file="common/modals/_modalBatchUpdate.tpl"}
+      {include file="subscriber/modal.tpl"}
     </script>
   </form>
 {/block}
