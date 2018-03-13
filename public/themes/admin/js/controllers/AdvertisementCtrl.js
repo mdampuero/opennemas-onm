@@ -52,7 +52,12 @@
        *
        * @type {Object}
        */
-      $scope.selected = { all: { categories: false, user_groups: false } };
+      $scope.selected = {
+        all: {
+          categories: false,
+          user_groups: false
+        }
+      };
 
       /**
        * @memberOf AdvertisementCtrl
@@ -62,7 +67,21 @@
        *
        * @type {Object}
        */
-      $scope.ui = { categories: [], user_groups: [], categories_all: true };
+      $scope.ui = {
+        categories: [],
+        user_groups: [],
+        categories_all: true
+      };
+
+      /**
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *  Boolean that tells the UI if it is loading.
+       *
+       * @type {Object}
+       */
+      $scope.loading = true;
 
       /**
        * @function areAllCategoriesSelected
@@ -104,6 +123,26 @@
             return e.id;
           });
         }
+      };
+
+      /**
+       * @function countPositionsSelectedbyRange
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *   Returns the number of positions selected for provided range.
+       *
+       * @param {Integer} start the star of the range
+       * @param {Integer} end   the end of the range
+       */
+      $scope.countPositionsSelectedbyRange = function(start, finish) {
+        if ($scope.type_advertisement && $scope.type_advertisement.constructor !== Array) {
+          return 0;
+        }
+
+        return $scope.type_advertisement.filter(function(e) {
+          return start <= e && e <= finish;
+        }).length;
       };
 
       /**
@@ -181,7 +220,11 @@
 
         if (!$scope.params.devices ||
             !angular.isObject($scope.params.devices)) {
-          $scope.params.devices = { desktop: 1, tablet: 1, phone: 1 };
+          $scope.params.devices = {
+            desktop: 1,
+            tablet: 1,
+            phone: 1
+          };
         }
 
         if (!$scope.params.sizes) {
@@ -203,7 +246,7 @@
             $scope.ui.categories_all = false;
           }
 
-          $scope.ui.categories = categories.map(function (e) {
+          $scope.ui.categories = categories.map(function(e) {
             return parseInt(e);
           });
         }
@@ -254,6 +297,8 @@
             $scope.params.sizes.push(item);
           }
         }
+
+        $scope.loading = false;
       };
 
       /**
@@ -321,6 +366,28 @@
       };
 
       /**
+       * @function togglePosition
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *   Adds or removes a position from the type_advertisement list.
+       *
+       * @param {Integer} id the id to add or remove.
+       */
+      $scope.togglePosition = function(id) {
+        if (!angular.isArray($scope.type_advertisement)) {
+          $scope.type_advertisement = [];
+        }
+        if ($scope.type_advertisement.indexOf(id) < 0) {
+          $scope.type_advertisement.push(id);
+        } else {
+          var index = $scope.type_advertisement.indexOf(id);
+
+          $scope.type_advertisement.splice(index, 1);
+        }
+      };
+
+      /**
        * @function parseDevices
        * @memberOf AdvertisementCtrl
        *
@@ -330,7 +397,11 @@
        * @param {Object} devices The list of devices.
        */
       $scope.parseDevices = function(devices) {
-        var indexes = { desktop: 0, tablet: 1, phone: 2 };
+        var indexes = {
+          desktop: 0,
+          tablet: 1,
+          phone: 2
+        };
 
         for (var i in devices) {
           // Sizes for device
@@ -417,16 +488,6 @@
 
         $scope.user_groups = angular.toJson(nv);
       }, true);
-
-      // Track all radio buttons type_advertisement and update the model
-      var type_advertisement_el = $('input[name=type_advertisement]');
-      $scope.type_advertisement = parseInt(type_advertisement_el.val());
-      type_advertisement_el.on('change', function() {
-        var value = parseInt(this.value);
-        $scope.$apply(function(){
-          $scope.type_advertisement = value;
-        });
-      });
     }
   ]);
 })();

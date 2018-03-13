@@ -1,32 +1,32 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  {javascripts}
-    <script type="text/javascript">
-      jQuery(document).ready(function($) {
-        $('#formulario').on('change', '#title', function(e, ui) {
-          fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
-        });
+{javascripts}
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+  $('#formulario').on('change', '#title', function(e, ui) {
+    fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+  });
 
-        $('#starttime, #endtime').datetimepicker({
-          format: 'YYYY-MM-DD HH:mm:ss',
-          useCurrent: false,
-          minDate: '{$advertisement->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}'
-        });
+  $('#starttime, #endtime').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:ss',
+    useCurrent: false,
+    minDate: '{$advertisement->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}'
+  });
 
-        $("#starttime").on("dp.change",function (e) {
-          $('#endtime').data("DateTimePicker").minDate(e.date);
-        });
-        $("#endtime").on("dp.change",function (e) {
-          $('#starttime').data("DateTimePicker").maxDate(e.date);
-        });
-      });
-    </script>
-  {/javascripts}
+  $('#starttime').on('dp.change', function(e) {
+    $('#endtime').data('DateTimePicker').minDate(e.date);
+  });
+  $('#endtime').on('dp.change', function(e) {
+    $('#starttime').data('DateTimePicker').maxDate(e.date);
+  });
+});
+</script>
+{/javascripts}
 {/block}
 
 {block name="content"}
-<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" name="AdvertisementForm" ng-controller="AdvertisementCtrl" ng-init="init({json_encode($advertisement->params)|clear_json}, {json_encode($advertisement->fk_content_categories)|clear_json}); type_advertisement = '{$advertisement->type_advertisement}'; extra = { categories: {json_encode($categories)|clear_json}, user_groups: {json_encode($user_groups)|clear_json} }; with_script = {if empty($advertisement->with_script)}0{else}{{$advertisement->with_script}}{/if}">
+<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" name="AdvertisementForm" ng-controller="AdvertisementCtrl" ng-init="init({json_encode($advertisement->params)|clear_json}, {json_encode($advertisement->fk_content_categories)|clear_json}); type_advertisement = {json_encode($advertisement->type_advertisement)|clear_json}; extra = { categories: {json_encode($categories)|clear_json}, user_groups: {json_encode($user_groups)|clear_json} }; with_script = {if empty($advertisement->with_script)}0{else}{{$advertisement->with_script}}{/if}; ads_positions = {json_encode($ads_positions->getPositionNames())|clear_json}">
     <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -504,178 +504,200 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row advertisement-positions">
         <div class="col-md-12">
           <div class="grid simple">
-            <div class="grid-title">
-              <h4>{t}Where to show this ad{/t}</h4>
-            </div>
-            <div class="grid-body">
-              <div class="form-group">
-                <label class="form-label">{t}Pages of type{/t}</label>
-                <div class="controls">
-                  <select name="position" id="position" ng-model="position">
-                    <option value="publi-frontpage" {if $advertisement->type_advertisement < 100}selected{/if}>{t}Frontpage{/t}</option>
-                    <option value="publi-inner" {if $advertisement->type_advertisement > 100 && $advertisement->type_advertisement < 200}selected{/if}>{t}Article: inner{/t}</option>
-                    {is_module_activated name="ALBUM_MANAGER"}
-                    <option value="publi-gallery" {if $advertisement->type_advertisement > 400 && $advertisement->type_advertisement < 500}selected{/if}>{t}Gallery: frontpage{/t}</option>
-                    <option value="publi-gallery-inner" {if $advertisement->type_advertisement > 500 && $advertisement->type_advertisement < 600}selected{/if}>{t}Gallery: inner{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="OPINION_MANAGER"}
-                    <option value="publi-opinion" {if $advertisement->type_advertisement > 600 && $advertisement->type_advertisement < 700}selected{/if}>{t}Opinion: frontpage{/t}</option>
-                    <option value="publi-opinion-inner" {if $advertisement->type_advertisement > 700 && $advertisement->type_advertisement < 800}selected{/if}>{t}Opinion: inner{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="POLL_MANAGER"}
-                    <option value="publi-poll" {if $advertisement->type_advertisement > 800 && $advertisement->type_advertisement < 900}selected{/if}>{t}Poll: frontpage{/t}</option>
-                    <option value="publi-poll-inner" {if $advertisement->type_advertisement > 900 && $advertisement->type_advertisement < 1000}selected{/if}>{t}Poll: inner{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="NEWSLETTER_MANAGER"}
-                    <option value="publi-newsletter" {if $advertisement->type_advertisement > 1000 && $advertisement->type_advertisement < 1050}selected{/if}>{t}Newsletter{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="VIDEO_MANAGER"}
-                    <option value="publi-video" {if $advertisement->type_advertisement > 200 && $advertisement->type_advertisement < 300}selected{/if}>{t}Video: frontpage{/t}</option>
-                    <option value="publi-video-inner" {if $advertisement->type_advertisement > 300 && $advertisement->type_advertisement < 400}selected{/if}>{t}Video: inner{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="AMP_MODULE"}
-                    <option value="publi-amp" {if $advertisement->type_advertisement >= 1050 && $advertisement->type_advertisement < 1075}selected{/if}>{t}Google AMP{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="FIA_MODULE"}
-                    <option value="publi-fia" {if $advertisement->type_advertisement >= 1075 && $advertisement->type_advertisement < 1100}selected{/if}>{t}Facebook Instant Articles{/t}</option>
-                    {/is_module_activated}
-                    <option value="publi-others" {if $advertisement->type_advertisement > 1100}selected{/if}>{t}Others{/t}</option>
-                  </select>
-                </div>
+            {* spinner to show when the page is loading *}
+            <div class="grid-body" ng-if="loading">
+              <div class="spinner-wrapper">
+                <div class="loading-spinner"></div>
+                <div class="spinner-text">{t}Loading{/t}...</div>
               </div>
-              <div class="form-group">
-                <div class="controls">
-                  <div id="position-adv">
-                    <div class="ng-cloak" ng-show="position == 'publi-frontpage'">
+            </div>
+
+            {* contents only shown when page is already loaded *}
+            <div class="grid-title shaded" ng-if="!loading">
+              <div class="ng-cloak small m-b-5 num-pos"> {t}[% type_advertisement.length %] positions{/t}</div>
+              <div class="ng-cloak"><div ng-repeat="position in type_advertisement| orderBy:'position'" class="badge p-l-15 p-r-15 m-b-5 m-r-5" >[% ads_positions[position] %]</div></div>
+            </div>
+            <div class="grid-body ng-cloak" ng-if="!loading">
+              <uib-tabset>
+                <uib-tab>
+                  <uib-tab-heading>
+                    {t}Frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(0, 100) %]</span>
+                  </uib-tab-heading>
+                  <div class="tab-wrapper">
+                    <div class="row">
                       {include file="advertisement/partials/advertisement_positions.tpl"}
                     </div>
-                    <div class="ng-cloak" ng-show="position == 'publi-inner'">
+                  </div>
+                </uib-tab>
+
+                <uib-tab>
+                  <uib-tab-heading>
+                    {t}Article: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(100, 200) %]</span>
+                  </uib-tab-heading>
+                  <div class="tab-wrapper">
+                    <div class="row">
                       {include file="advertisement/partials/advertisement_positions_inner.tpl"}
                     </div>
-                    {is_module_activated name="VIDEO_MANAGER"}
-                    <div class="ng-cloak" ng-show="position == 'publi-video'">
-                      {include file="advertisement/partials/advertisement_positions_video.tpl"}
-                    </div>
-                    <div class="ng-cloak" ng-show="position == 'publi-video-inner'">
-                      {include file="advertisement/partials/advertisement_positions_video_inner.tpl"}
-                    </div>
-                    {/is_module_activated}
-                    {is_module_activated name="OPINION_MANAGER"}
-                    <div class="ng-cloak" ng-show="position == 'publi-opinion'">
-                      {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
-                    </div>
-                    <div class="ng-cloak" ng-show="position == 'publi-opinion-inner'">
-                      {include file="advertisement/partials/advertisement_positions_opinion_inner.tpl"}
-                    </div>
-                    {/is_module_activated}
-                    {is_module_activated name="ALBUM_MANAGER"}
-                    <div class="ng-cloak" ng-show="position == 'publi-gallery'">
+                  </div>
+                </uib-tab>
+
+                {is_module_activated name="ALBUM_MANAGER"}
+                <uib-tab>
+                  <uib-tab-heading>
+                    {t}Gallery: frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(400, 500) %]</span>
+                  </uib-tab-heading>
+                  <div class="tab-wrapper">
+                    <div class="row">
                       {include file="advertisement/partials/advertisement_positions_gallery.tpl"}
                     </div>
-                    <div class="ng-cloak" ng-show="position == 'publi-gallery-inner'">
+                  </div>
+                </uib-tab>
+
+                <uib-tab>
+                  <uib-tab-heading>{t}Gallery: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(500, 600) %]</uib-tab-heading></span>
+                  <div class="tab-wrapper">
+                    <div class="row">
                       {include file="advertisement/partials/advertisement_positions_gallery_inner.tpl"}
                     </div>
-                    {/is_module_activated}
-                    {is_module_activated name="POLL_MANAGER"}
-                    <div class="ng-cloak" ng-show="position == 'publi-poll'">
-                      {include file="advertisement/partials/advertisement_positions_poll.tpl"}
+                  </div>
+                </uib-tab>
+                {/is_module_activated}
+
+                {is_module_activated name="OPINION_MANAGER"}
+                <uib-tab>
+                  <uib-tab-heading>{t}Opinion: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(700, 800) %]</span></uib-tab-heading>
+                  <div class="tab-wrapper">
+                    <div class="row">
+                      {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
                     </div>
-                    <div class="ng-cloak" ng-show="position == 'publi-poll-inner'">
-                      {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
+                  </div>
+                </uib-tab>
+
+                <uib-tab>
+                  <uib-tab-heading>{t}Opinion: frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(600, 700) %]</span></uib-tab-heading>
+                  <div class="tab-wrapper">
+                    <div class="row">
+                      {include file="advertisement/partials/advertisement_positions_opinion_inner.tpl"}
                     </div>
-                    {/is_module_activated}
-                    {is_module_activated name="NEWSLETTER_MANAGER"}
-                    <div class="ng-cloak" ng-show="position == 'publi-newsletter'">
+                  </div>
+                </uib-tab>
+                {/is_module_activated}
+
+                {is_module_activated name="POLL_MANAGER"}
+                <uib-tab>
+                  <uib-tab-heading>{t}Poll: frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(800, 900) %]</span></uib-tab-heading>
+                  <div class="tab-wrapper">
+                    <div class="row">
+                      {include file="advertisement/partials/advertisement_positions_video.tpl"}
+                    </div>
+                  </div>
+                </uib-tab>
+
+                <uib-tab>
+                  <uib-tab-heading>{t}Poll: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(900, 1000) %]</span></uib-tab-heading>
+                  <div class="tab-wrapper">
+                    <div class="row">
+                      {include file="advertisement/partials/advertisement_positions_video_inner.tpl"}
+                    </div>
+                  </div>
+                </uib-tab>
+                {/is_module_activated}
+
+                {is_module_activated name="NEWSLETTER_MANAGER"}
+                <uib-tab>
+                  <uib-tab-heading>{t}Newsletter{/t} <span class="badge">[% countPositionsSelectedbyRange(1000, 1050) %]</span></uib-tab-heading>
+                  <div class="tab-wrapper">
+                    <div class="row">
                       {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
                     </div>
-                    {/is_module_activated}
-                    {is_module_activated name="AMP_MODULE"}
-                    <div class="ng-cloak" ng-show="position == 'publi-amp'">
-                      <div class="col-md-9">
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="radio">
-                              <input id="amp-inner-button1" name="type_advertisement" type="radio" value="1051" {if isset($advertisement) && $advertisement->type_advertisement == 1051}checked="checked" {/if}/>
-                              <label for="amp-inner-button1">
-                                {t}AMP inner article - Button 1{/t}
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="radio">
-                              <input id="amp-inner-button2" name="type_advertisement" type="radio" value="1052" {if isset($advertisement) && $advertisement->type_advertisement == 1052}checked="checked" {/if}/>
-                              <label for="amp-inner-button2">
-                                {t}AMP inner article - Button 2{/t}
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="radio">
-                              <input id="amp-inner-button3" name="type_advertisement" type="radio" value="1053" {if isset($advertisement) && $advertisement->type_advertisement == 1053}checked="checked" {/if}/>
-                              <label for="amp-inner-button3">
-                                {t}AMP inner article - Button 3{/t}
-                              </label>
-                            </div>
-                          </div>
-                        </div>
+                  </div>
+                </uib-tab>
+                {/is_module_activated}
+                {is_module_activated name="VIDEO_MANAGER"}
+                <uib-tab>
+                  <uib-tab-heading>{t}Video: frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(200, 300) %]</span></uib-tab-heading>
+                  <div class="tab-wrapper">
+                    <div class="row">
+                      {include file="advertisement/partials/advertisement_positions_video.tpl"}
+                    </div>
+                  </div>
+                </uib-tab>
+                <uib-tab>
+                  <uib-tab-heading>{t}Video: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(300, 400) %]</span></uib-tab-heading>
+                  <div class="tab-wrapper">
+                    <div class="row">
+                      {include file="advertisement/partials/advertisement_positions_video_inner.tpl"}
+                    </div>
+                  </div>
+                </uib-tab>
+                {/is_module_activated}
+                {is_module_activated name="AMP_MODULE"}
+                <uib-tab>
+                  <uib-tab-heading>{t}Google AMP{/t} <span class="badge">[% countPositionsSelectedbyRange(1050, 1075) %]</span></uib-tab-heading>
+                  <div class="tab-wrapper">
+                    <div class="row">
+                      <div class="col-md-12">
+                        {include file="advertisement/partials/ad_position_selector.tpl" position_id="1051" input_id="amp-inner-button1"}
+                      </div>
+                      <hr>
+                      <div class="col-md-12">
+                        {include file="advertisement/partials/ad_position_selector.tpl" position_id="1052" input_id="amp-inner-button2"}
+                      </div>
+                      <hr>
+                      <div class="col-md-12">
+                        {include file="advertisement/partials/ad_position_selector.tpl" position_id="1053" input_id="amp-inner-button3"}
                       </div>
                     </div>
-                    {/is_module_activated}
-                    {is_module_activated name="FIA_MODULE"}
-                    <div class="ng-cloak" ng-show="position == 'publi-fia'">
-                      <div class="col-md-9">
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="radio">
-                              <input id="fia-inner-button1" name="type_advertisement" type="radio" value="1075" {if isset($advertisement) && $advertisement->type_advertisement == 1075}checked="checked" {/if}/>
-                              <label for="fia-inner-button1">
-                                {t}Instant Articles inner article - Button 1{/t}
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="radio">
-                              <input id="fia-inner-button2" name="type_advertisement" type="radio" value="1076" {if isset($advertisement) && $advertisement->type_advertisement == 1076}checked="checked" {/if}/>
-                              <label for="fia-inner-button2">
-                                {t}Instant Articles inner article - Button 2{/t}
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="radio">
-                              <input id="fia-inner-button3" name="type_advertisement" type="radio" value="1077" {if isset($advertisement) && $advertisement->type_advertisement == 1077}checked="checked" {/if}/>
-                              <label for="fia-inner-button3">
-                                {t}Instant Articles inner article - Button 3{/t}
-                              </label>
-                            </div>
-                          </div>
-                        </div>
+                  </div>
+                </uib-tab>
+                {/is_module_activated}
+                {is_module_activated name="FIA_MODULE"}
+                <uib-tab>
+                  <uib-tab-heading>{t}Facebook Instant Articles{/t} <span class="badge">[% countPositionsSelectedbyRange(1075, 1100) %]</span></uib-tab-heading>
+                  <div class="tab-wrapper">
+                    <div class="row">
+                      <div class="col-md-12">
+                        {include file="advertisement/partials/ad_position_selector.tpl" position_id="1075" input_id="fia-inner-button1"}
                       </div>
                     </div>
-                    {/is_module_activated}
-                    <div class="ng-cloak" ng-show="position == 'publi-others'">
-                      {foreach $themeAds as $adId => $ad}
+                    <hr>
+                    <div class="row">
+                      <div class="col-md-12">
+                        {include file="advertisement/partials/ad_position_selector.tpl" position_id="1076" input_id="fia-inner-button2"}
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-md-12">
+                        {include file="advertisement/partials/ad_position_selector.tpl" position_id="1077" input_id="fia-inner-button3"}
+                      </div>
+                    </div>
+                  </div>
+                </uib-tab>
+                {/is_module_activated}
+
+                <uib-tab>
+                  <uib-tab-heading>{t}Others{/t} <span class="badge">[% countPositionsSelectedbyRange(1101, null) %]</span></uib-tab-heading>
+                  <div class="tab-wrapper">
+                    <div class="row">
+                      {foreach $themeAds as $ad_id => $ad}
                       {if $ad['theme'] == $app['theme']->uuid}
                       <div class="row">
                         <div class="col-md-12">
-                          <div class="radio">
-                            <input id="ad-{$adId}" type="radio" name="type_advertisement" value="{$adId}" {if isset($advertisement) && $advertisement->type_advertisement == $adId}checked="checked" {/if}/>
-                            <label for="ad-{$adId}">
-                              {$ad['name']}
-                            </label>
-                          </div>
+                          {capture name="inputId"}ad-{$adId}{/capture}
+                          {include file="advertisement/partials/ad_position_selector.tpl" position_id=$ad_id input_id=$inputId size=$ad['name']}
                         </div>
                       </div>
                       <hr>
                       {/if}
                       {/foreach}
                     </div>
-                  </div><!-- /position-adv -->
-                </div>
-              </div>
+                  </div>
+                </uib-tab>
+              </uib-tabset>
             </div>
           </div>
         </div>
