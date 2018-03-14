@@ -209,12 +209,13 @@ class AdvertisementManager extends EntityManager
      */
     protected function findAdvertisements($types, $category, $generics)
     {
-        $types = '((^|,)' . implode('(,|$))|((^|,)', $types) . '($|,))';
+        $types = implode(', ', $types);
 
-        $sql = 'SELECT pk_advertisement as id FROM advertisements'
-            . ' WHERE type_advertisement REGEXP "%s"'
-            . ' AND (fk_content_categories IS NULL OR %s)'
-            . ' ORDER BY id';
+        $sql = 'SELECT pk_advertisement as id FROM advertisements '
+            . 'WHERE pk_advertisement IN ('
+            . ' SELECT advertisement_id FROM advertisements_positions WHERE position_id IN (%s)'
+            . ') AND (fk_content_categories IS null or %s) '
+            . 'ORDER BY id';
 
         $categories = '';
 
