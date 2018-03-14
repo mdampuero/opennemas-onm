@@ -17,7 +17,7 @@
             <ul class="nav quick-section">
               {acl isAllowed="GROUP_CREATE"}
                 <li>
-                  <a class="btn btn-success text-uppercase" href="{url name=backend_user_group_create}">
+                  <a class="btn btn-success text-uppercase" href="[% routing.generate('backend_user_group_create') %]">
                     <i class="fa fa-plus"></i>
                     {t}Create{/t}
                   </a>
