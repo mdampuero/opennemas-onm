@@ -15,9 +15,9 @@ use Common\Core\Controller\Controller;
 class SubscriptionController extends Controller
 {
     /**
-     * Displays the list of subscriptions.
+     * Displays the form to create a new subscription.
      *
-     * @return Response The response object
+     * @return Response The response object.
      *
      * @Security("hasExtension('CONTENT_SUBSCRIPTIONS')
      *     and hasPermission('SUBSCRIPTION_CREATE')")
@@ -30,7 +30,7 @@ class SubscriptionController extends Controller
     /**
      * Displays the list of subscriptions.
      *
-     * @return Response The response object
+     * @return Response The response object.
      *
      * @Security("hasExtension('CONTENT_SUBSCRIPTIONS')
      *     and hasPermission('SUBSCRIPTION_LIST')")
@@ -41,9 +41,11 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * Displays the list of subscriptions.
+     * Displays the form to edit a subscription.
      *
-     * @return Response The response object
+     * @param integer $id The subscription id.
+     *
+     * @return Response The response object.
      *
      * @Security("hasExtension('CONTENT_SUBSCRIPTIONS')
      *     and hasPermission('SUBSCRIPTION_UPDATE')")
