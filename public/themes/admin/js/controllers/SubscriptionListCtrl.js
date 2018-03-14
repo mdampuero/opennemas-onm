@@ -229,17 +229,18 @@
 
           data[property] = value;
 
-          http.patch('api_v1_backend_subscriptions_patch', data).then(function(response) {
-            $scope.list().then(function() {
-              $scope.selected = { all: false, items: [] };
-              messenger.post(response.data);
+          http.patch('api_v1_backend_subscriptions_patch', data)
+            .then(function(response) {
+              $scope.list().then(function() {
+                $scope.selected = { all: false, items: [] };
+                messenger.post(response.data);
+              });
+            }, function(response) {
+              $scope.list().then(function() {
+                $scope.selected = { all: false, items: [] };
+                messenger.post(response.data);
+              });
             });
-          }, function(response) {
-            $scope.list().then(function() {
-              $scope.selected = { all: false, items: [] };
-              messenger.post(response.data);
-            });
-          });
         };
 
         /**
