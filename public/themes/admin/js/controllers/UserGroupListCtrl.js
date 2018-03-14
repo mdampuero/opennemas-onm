@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  UserGroupListCtrl
@@ -21,7 +22,7 @@
      */
     .controller('UserGroupListCtrl', [
       '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlEncoder', 'webStorage',
-      function ($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlEncoder, webStorage) {
+      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -49,7 +50,11 @@
          *
          * @type {Object}
          */
-        $scope.criteria = { epp: 25, page: 1, orderBy: { name: 'asc' } };
+        $scope.criteria = {
+          epp: 25,
+          page: 1,
+          orderBy: { name: 'asc' }
+        };
 
         /**
          * @function delete
@@ -67,8 +72,8 @@
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return { content: $scope.items.filter(function (e) {
-                  return e.pk_user_group == id;
+                return { content: $scope.items.filter(function(e) {
+                  return e.pk_user_group === id;
                 })[0] };
               },
               success: function() {
@@ -88,7 +93,7 @@
             }
           });
 
-          modal.result.then(function (response) {
+          modal.result.then(function(response) {
             messenger.post(response.data);
 
             if (response.success) {
@@ -99,7 +104,7 @@
 
         /**
          * @function deleteSelected
-         * @memberOf InstanceListCtrl
+         * @memberOf UserGroupListCtrl
          *
          * @description
          *   Confirm delete action.
@@ -115,7 +120,7 @@
               },
               success: function() {
                 return function(modalWindow) {
-                  var route = 'backend_ws_user_groups_delete';
+                  var route = 'api_v1_backend_user_groups_delete';
                   var data  = { ids: $scope.selected.items };
 
                   return http.delete(route, data).then(function(response) {
@@ -128,7 +133,7 @@
             }
           });
 
-          modal.result.then(function (response) {
+          modal.result.then(function(response) {
             messenger.post(response.data);
 
             if (response.success) {
@@ -145,24 +150,24 @@
          * @description
          *   Reloads the list.
          */
-        $scope.list = function () {
-          $scope.loading = 1;
+        $scope.list = function() {
+          $scope.flags.loading = 1;
 
           oqlEncoder.configure({ placeholder: { name: '[key] ~ "[value]"' } });
 
           var oql   = oqlEncoder.getOql($scope.criteria);
           var route = {
-            name: 'backend_ws_user_groups_list',
+            name: 'api_v1_backend_user_groups_list',
             params: { oql: oql }
           };
 
           $location.search('oql', oql);
 
-          http.get(route).then(function (response) {
-            $scope.loading = 0;
-            $scope.items   = response.data.results;
-            $scope.total   = response.data.total;
-            $scope.extra   = response.data.extra;
+          http.get(route).then(function(response) {
+            $scope.data  = response.data;
+            $scope.items = response.data.results;
+
+            $scope.disableFlags();
 
             // Scroll top
             $('body').animate({ scrollTop: '0px' }, 1000);
@@ -170,8 +175,77 @@
         };
 
         /**
+         * @function patch
+         * @memberOf SubscriptionListCtrl
+         *
+         * @description
+         *   Enables/disables a subscription.
+         *
+         * @param {String}  item     The subscription object.
+         * @param {String}  property The property name.
+         * @param {Boolean} value    The property value.
+         */
+        $scope.patch = function(item, property, value) {
+          var data = {};
+
+          item[property + 'Loading'] = 1;
+          data[property] = value;
+
+          var route = {
+            name:   'api_v1_backend_user_group_patch',
+            params: { id: item.pk_user_group }
+          };
+
+          http.patch(route, data).then(function(response) {
+            item[property + 'Loading'] = 0;
+            item[property] = value;
+            messenger.post(response.data);
+          }, function(response) {
+            item[property + 'Loading'] = 0;
+            messenger.post(response.data);
+          });
+        };
+
+        /**
+         * @function patchSelected
+         * @memberOf SubscriptionListCtrl
+         *
+         * @description
+         *   description
+         *
+         * @param {String}  property The property name.
+         * @param {Integer} value    The property value.
+         */
+        $scope.patchSelected = function(property, value) {
+          for (var i = 0; i < $scope.items.length; i++) {
+            var id = $scope.items[i].pk_user_group;
+
+            if ($scope.selected.items.indexOf(id) !== -1) {
+              $scope.items[i][property + 'Loading'] = 1;
+            }
+          }
+
+          var data = { ids: $scope.selected.items };
+
+          data[property] = value;
+
+          http.patch('api_v1_backend_user_groups_patch', data)
+            .then(function(response) {
+              $scope.list().then(function() {
+                $scope.selected = { all: false, items: [] };
+                messenger.post(response.data);
+              });
+            }, function(response) {
+              $scope.list().then(function() {
+                $scope.selected = { all: false, items: [] };
+                messenger.post(response.data);
+              });
+            });
+        };
+
+        /**
          * @function resetFilters
-         * @memberOf PurchaseListCtrl
+         * @memberOf UserGroupListCtrl
          *
          * @description
          *   Resets all filters to the initial value.
@@ -182,7 +256,7 @@
 
         /**
          * @function toggleAll
-         * @memberOf ListCtrl
+         * @memberOf UserGroupListCtrl
          *
          * @description
          *   Toggles all items selection.
