@@ -155,7 +155,8 @@
 
           oqlEncoder.configure({
             placeholder: {
-              name: 'name ~ "[value]" or email ~ "[value]"'
+              name: 'name ~ "[value]" or email ~ "[value]"',
+              fk_user_group: '[key] regexp "^[value],|^[value]$|,[value],|,[value]$"',
             }
           });
 

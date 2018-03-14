@@ -15,9 +15,30 @@
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
+              {acl isAllowed="USER_SETTINGS"}
+                {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
+                  <li class="quicklinks">
+                    <a class="btn btn-link" href="{url name=backend_acl_user_settings_show}" title="{t}Config users module{/t}">
+                      <i class="fa fa-cog fa-lg"></i>
+                    </a>
+                  </li>
+                  <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                  </li>
+                {/is_module_activated}
+              {/acl}
+              <li class="quicklinks">
+                <a class="btn btn-white" href="{url name=backend_ws_users_export}" id="download-button">
+                  <span class="fa fa-download"></span>
+                  {t}Download{/t}
+                </a>
+              </li>
+              <li class="quicklinks">
+                <span class="h-seperate"></span>
+              </li>
               {acl isAllowed=SUBSCRIBER_CREATE}
                 <li class="quicklinks">
-                  <a class="btn btn-success text-uppercase" href="{url name=backend_subscriber_show id=new}">
+                  <a class="btn btn-success text-uppercase" href="[% routing.generate('backend_subscriber_create') %]">
                     <i class="fa fa-plus"></i>
                     {t}Create{/t}
                   </a>
@@ -87,11 +108,31 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks hidden-xs ng-cloak">
+              <ui-select name="group" theme="select2" ng-model="criteria.fk_user_group">
+                <ui-select-match>
+                  <strong>{t}Subscription{/t}:</strong> [% $select.selected.name %]
+                </ui-select-match>
+                <ui-select-choices repeat="item.pk_user_group as item in toArray(addEmptyValue(data.extra.subscriptions, 'pk_user_group')) | filter: $select.search">
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </ui-select-choices>
+              </ui-select>
+            </li>
+            <li class="quicklinks hidden-xs ng-cloak" ng-init="activated = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
+              <ui-select name="activated" theme="select2" ng-model="criteria.activated">
+                <ui-select-match>
+                  <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
+                </ui-select-match>
+                <ui-select-choices repeat="item.value as item in activated  | filter: $select.search">
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </ui-select-choices>
+              </ui-select>
+            </li>
+            <li class="quicklinks hidden-xs ng-cloak">
               <ui-select name="view" theme="select2" ng-model="criteria.epp">
                 <ui-select-match>
                   <strong>{t}View{/t}:</strong> [% $select.selected %]
                 </ui-select-match>
-                <ui-select-choices repeat="item in views  | filter: $select.search">
+                <ui-select-choices repeat="item in views | filter: $select.search">
                   <div ng-bind-html="item | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
@@ -125,7 +166,7 @@
             <table class="table table-hover no-margin">
               <thead>
                 <tr>
-                  <th class="checkbox-cell" width="50">
+                  <th class="checkbox-cell">
                     <div class="checkbox checkbox-default">
                       <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
                       <label for="select-all"></label>
@@ -133,9 +174,9 @@
                   </th>
                   <th class="hidden-xs" width="50">{t}Avatar{/t}</th>
                   <th>{t}Name{/t}</th>
-                  <th width="250">{t}Email{/t}</th>
-                  <th width="240">{t}Subscriptions{/t}</th>
-                  <th class="text-center" width="100">{t}Social{/t}</th>
+                  <th class="hidden-xs" width="300">{t}Email{/t}</th>
+                  <th class="hidden-xs" width="240">{t}Subscriptions{/t}</th>
+                  <th class="hidden-sm hidden-xs text-center" width="100">{t}Social{/t}</th>
                   <th class="text-center" width="50">{t}Enabled{/t}</th>
                 </tr>
               </thead>
@@ -151,20 +192,30 @@
                     <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path_img" transform="thumbnail,50,50" ng-if="item.avatar_img_id"></dynamic-image>
                     <gravatar class="gravatar" ng-model="item.email" size="40" ng-if="!item.avatar_img_id || item.avatar_img_id == 0"></gravatar>
                   </td>
-                  <td class="left">
-                    <span ng-if="item.name">[% item.name %]</span>
+                  <td>
+                    <strong class="hidden-xs" ng-if="item.name">
+                      [% item.name %]
+                    </strong>
                     <i ng-if="!item.name">{t}Unknown{/t}</i>
+                    <span class="visible-xs" ng-if="item.name">
+                      <strong>{t}Name{/t}:</strong>
+                      [% item.name%]
+                    </span>
+                    <span class="visible-xs">
+                      <strong>{t}Email{/t}:</strong>
+                      [% item.email%]
+                    </span>
                     <div class="listing-inline-actions">
-                      <a class="link" href="[% routing.generate('backend_subscriber_show', { id: item.id }) %]" title="{t}Edit{/t}">
+                      <a class="link" href="[% routing.generate('backend_subscriber_show', { id: item.id }) %]">
                         <i class="fa fa-pencil"></i>{t}Edit{/t}
                       </a>
-                      <button class="link link-danger" ng-click="delete(item.id)" title="{t}Delete{/t}" type="button">
+                      <button class="link link-danger" ng-click="delete(item.id)" type="button">
                         <i class="fa fa-trash-o"></i>{t}Delete{/t}
                       </button>
                     </div>
                   </td>
-                  <td>[% item.email %]</td>
-                  <td>
+                  <td class="hidden-xs">[% item.email %]</td>
+                  <td class="hidden-xs">
                     <ul class="no-style">
                       <li ng-repeat="subscription in item.fk_user_group" ng-if="data.extra.subscriptions[subscription]">
                         <a class="badge text-uppercase m-b-5" ng-class="{ 'badge-danger': !data.extra.subscriptions[subscription].enabled, 'badge-success': data.extra.subscriptions[subscription].enabled }" href="[% routing.generate('backend_subscription_show', { id: subscription }) %]">
@@ -174,7 +225,7 @@
                       </li>
                     </ul>
                   </td>
-                  <td class="text-center">
+                  <td class="hidden-sm hidden-xs text-center">
                     <ul class="no-style">
                       <li ng-show="item.facebook_id">
                         <i class="fa fa-facebook-official fa-lg m-b-10 text-facebook"></i>
