@@ -4,7 +4,8 @@
         "jquery": true
     },
     "globals": {
-        "angular": true
+        "angular": true,
+        "_": true
     },
     "rules": {
         // Errors
