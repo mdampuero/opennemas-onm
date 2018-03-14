@@ -81,7 +81,7 @@ class BaseService extends Service
             return $item;
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
-            throw new CreateItemException($e->getMessage());
+            throw new CreateItemException($e->getMessage(), $e->getCode());
         }
     }
 
@@ -96,7 +96,7 @@ class BaseService extends Service
             $this->em->remove($item, $item->getOrigin());
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
-            throw new DeleteItemException($e->getMessage());
+            throw new DeleteItemException($e->getMessage(), $e->getCode());
         }
     }
 
@@ -115,7 +115,7 @@ class BaseService extends Service
             $response = $this->getList($oql);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
-            throw new DeleteListException($e->getMessage());
+            throw new DeleteListException($e->getMessage(), $e->getCode());
         }
 
         $deleted = 0;
@@ -141,7 +141,7 @@ class BaseService extends Service
                 ->getRepository($this->entity, $this->origin)->find($id);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
-            throw new GetItemException($e->getMessage());
+            throw new GetItemException($e->getMessage(), $e->getCode());
         }
     }
 
@@ -160,7 +160,7 @@ class BaseService extends Service
             return [ 'results' => $items, 'total' => $total ];
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
-            throw new GetListException($e->getMessage());
+            throw new GetListException($e->getMessage(), $e->getCode());
         }
     }
 
@@ -180,7 +180,7 @@ class BaseService extends Service
             $this->em->persist($item);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
-            throw new PatchItemException($e->getMessage());
+            throw new PatchItemException($e->getMessage(), $e->getCode());
         }
     }
 

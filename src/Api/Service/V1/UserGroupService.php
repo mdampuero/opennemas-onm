@@ -43,7 +43,7 @@ class UserGroupService extends BaseService
             return $item;
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
-            throw new GetItemException();
+            throw new GetItemException($e->getMessage(), $e->getCode());
         }
     }
 
