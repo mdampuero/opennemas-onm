@@ -882,29 +882,6 @@ admin_acl_user_toogle_enabled:
     path:     /acl/user/{id}/toggle-enabled
     defaults: { _controller  : BackendBundle:User:toogleEnabled }
 
-# User groups managerment routes
-admin_acl_usergroups:
-    path:     /acl/usergroups
-    defaults: { _controller  : BackendBundle:UserGroups:list }
-
-admin_acl_usergroup_show:
-    path:     /acl/usergroups/{id}/show
-    defaults: { _controller  : BackendBundle:UserGroups:show }
-    options:
-        expose: true
-
-admin_acl_usergroups_create:
-    path:     /acl/usergroups/create
-    defaults: { _controller  : BackendBundle:UserGroups:create }
-
-admin_acl_usergroups_save:
-    path:     /acl/usergroup/save
-    defaults: { _controller  : BackendBundle:UserGroups:save }
-
-admin_acl_usergroups_update:
-    path:     /acl/usergroup/{id}/update
-    defaults: { _controller  : BackendBundle:UserGroups:update }
-# System settings routes
 admin_system_settings:
     path:     /system/settings
     defaults: { _controller  : BackendBundle:SystemSettings:default }
@@ -1011,3 +988,7 @@ backend_store:
 backend_theme:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/theme.yml'
+
+backend_user_group:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/user_group.yml'

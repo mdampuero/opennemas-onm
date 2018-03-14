@@ -1,0 +1,17 @@
+backend_user_group_create:
+    path:     /user-groups/new
+    defaults: { _controller  : BackendBundle:UserGroup:create }
+    options:
+        expose: true
+
+backend_user_group_list:
+    path:     /user-groups
+    defaults: { _controller  : BackendBundle:UserGroup:list }
+    options:
+        expose: true
+
+backend_user_group_show:
+    path:     /user-groups/{id}
+    defaults: { _controller  : BackendBundle:UserGroup:show }
+    options:
+        expose: true

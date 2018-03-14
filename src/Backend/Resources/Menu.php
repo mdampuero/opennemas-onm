@@ -366,7 +366,7 @@ $menuXml = [
                         "id"          => "user_group_manager",
                         "title"       => _("User Groups"),
                         "icon"        => "fa fa-users",
-                        "link"        => url('admin_acl_usergroups'),
+                        "link"        => url('backend_user_group_list'),
                         "module_name" => "USER_GROUP_MANAGER",
                         "privilege"   => "USER_ADMIN",
                     ],
