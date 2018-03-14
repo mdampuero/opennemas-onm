@@ -33,12 +33,12 @@
                     {t}Save{/t}
                   </button>
                   {acl isAllowed=MASTER}
-                    <button class="btn btn-success dropdown-toggle" data-toggle="dropdown"  ng-disabled="flags.saving || subscriberForm.$invalid || (item.password && item.password !== rpassword)" type="button">
+                    <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" ng-disabled="flags.saving || subscriberForm.$invalid || (item.password && item.password !== rpassword)" ng-if="item.id" type="button">
                       <span class="caret"></span>
                     </button>
                   {/acl}
                   {acl isAllowed=MASTER}
-                    <ul class="dropdown-menu no-padding pull-right">
+                    <ul class="dropdown-menu no-padding pull-right" ng-if="item.id">
                       <li>
                         <a href="#" ng-click="convertTo('type', 2)">
                           <i class="fa fa-level-up"></i>
