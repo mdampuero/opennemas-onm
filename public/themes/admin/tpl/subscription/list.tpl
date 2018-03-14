@@ -17,7 +17,7 @@
             <ul class="nav quick-section">
               {acl isAllowed=SUBSCRIPTION_CREATE}
                 <li class="quicklinks">
-                  <a class="btn btn-success text-uppercase" href="{url name=backend_subscription_show id=new}">
+                  <a class="btn btn-success text-uppercase" href="[% routing.generate('backend_subscription_create') %]">
                     <i class="fa fa-plus"></i>
                     {t}Create{/t}
                   </a>
