@@ -178,7 +178,7 @@ class AdvertisementsController extends Controller
             'url'                => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'img'                => $request->request->filter('img', '', FILTER_SANITIZE_STRING),
             'script'             => $request->request->get('script', ''),
-            'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
+            'positions' => $request->request->get('positions', []),
             'fk_author'          => $this->getUser()->id,
             'fk_publisher'       => $this->getUser()->id,
             'params'             => [
@@ -269,17 +269,15 @@ class AdvertisementsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        $ah = $this->container->get('core.helper.advertisement');
-
         return $this->render('advertisement/new.tpl', [
             'ads_positions' => $adsPositions,
             'advertisement' => $ad,
             'categories'    => $this->getCategories(),
             'filter'        => $filter,
             'page'          => $page,
-            'safeFrame'     => $ah->isSafeFrameEnabled(),
+            'safeFrame'     => $adsPositions->isSafeFrameEnabled(),
             'server_url'    => $serverUrl,
-            'themeAds'      => $ah->getPositionsForTheme(),
+            'themeAds'      => $adsPositions->getPositionsForTheme(),
             'user_groups'   => $this->getUserGroups(),
         ]);
     }
@@ -348,7 +346,7 @@ class AdvertisementsController extends Controller
             'url'                => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'img'                => $request->request->filter('img', '', FILTER_SANITIZE_STRING),
             'script'             => $request->request->get('script', ''),
-            'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
+            'positions' => $request->request->get('positions', []),
             'fk_author'          => $this->getUser()->id,
             'fk_publisher'       => $this->getUser()->id,
             'params'             => [
