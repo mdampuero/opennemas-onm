@@ -8,36 +8,15 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-user fa-lg"></i>
+                <i class="fa fa-user"></i>
                 {t}Users{/t}
               </h4>
             </li>
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
-              {acl isAllowed="USER_SETTINGS"}
-                {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
-                  <li class="quicklinks">
-                    <a class="btn btn-link" href="{url name=admin_acl_user_settings_show}" title="{t}Config users module{/t}">
-                      <i class="fa fa-cog fa-lg"></i>
-                    </a>
-                  </li>
-                  <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                  </li>
-                {/is_module_activated}
-              {/acl}
               <li class="quicklinks">
-                <a class="btn btn-white" href="{url name=backend_ws_users_export}" id="download-button">
-                  <span class="fa fa-download"></span>
-                  {t}Download{/t}
-                </a>
-              </li>
-              <li class="quicklinks">
-                <span class="h-seperate"></span>
-              </li>
-              <li class="quicklinks">
-                <a class="btn btn-primary" href="{url name=admin_acl_user_create}" id="create-button">
+                <a class="btn btn-success text-uppercase" href="[% routing.generate('backend_user_create') %]">
                   <i class="fa fa-plus"></i>
                   {t}Create{/t}
                 </a>
@@ -67,26 +46,26 @@
           </ul>
           <ul class="nav quick-section pull-right">
             {acl isAllowed="USER_AVAILABLE"}
-            <li class="quicklinks">
-              <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
-                <i class="fa fa-times fa-lg"></i>
-              </button>
-            </li>
-            <li class="quicklinks">
-              <button class="btn btn-link" ng-click="patchSelected('activated', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
-                <i class="fa fa-check fa-lg"></i>
-              </button>
-            </li>
+              <li class="quicklinks">
+                <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+                  <i class="fa fa-times fa-lg"></i>
+                </button>
+              </li>
+              <li class="quicklinks">
+                <button class="btn btn-link" ng-click="patchSelected('activated', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+                  <i class="fa fa-check fa-lg"></i>
+                </button>
+              </li>
             {/acl}
             {acl isAllowed="USER_DELETE"}
-            <li class="quicklinks hidden-xs">
-              <span class="h-seperate"></span>
-            </li>
-            <li class="quicklinks">
-              <button class="btn btn-link" ng-click="deleteSelected('backend_ws_users_batch_delete')" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom">
-                <i class="fa fa-trash-o fa-lg"></i>
-              </button>
-            </li>
+              <li class="quicklinks hidden-xs">
+                <span class="h-seperate"></span>
+              </li>
+              <li class="quicklinks">
+                <button class="btn btn-link" ng-click="deleteSelected('backend_ws_users_batch_delete')" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom">
+                  <i class="fa fa-trash-o fa-lg"></i>
+                </button>
+              </li>
             {/acl}
           </ul>
         </div>
@@ -105,16 +84,6 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { name: '{t}All{/t}', value: null}, { name: '{t}Backend{/t}', value: 0}, { name: '{t}Frontend{/t}', value: 1 } ]">
-              <ui-select name="type" theme="select2" ng-model="criteria.type">
-                <ui-select-match>
-                  <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
-                </ui-select-match>
-                <ui-select-choices repeat="item.value as item in type  | filter: $select.search">
-                  <div ng-bind-html="item.name | highlight: $select.search"></div>
-                </ui-select-choices>
-              </ui-select>
-            </li>
             <li class="quicklinks hidden-xs ng-cloak">
               <ui-select name="group" theme="select2" ng-model="criteria.fk_user_group">
                 <ui-select-match>
@@ -125,7 +94,7 @@
                 </ui-select-choices>
               </ui-select>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-init="activated = [ { name: '{t}All{/t}', value: null}, { name: '{t}Activated{/t}', value: 1}, { name: '{t}Deactivated{/t}', value: 0 } ]">
+            <li class="quicklinks hidden-xs ng-cloak" ng-init="activated = [ { name: '{t}All{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
               <ui-select name="activated" theme="select2" ng-model="criteria.activated">
                 <ui-select-match>
                   <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
@@ -155,19 +124,22 @@
       </div>
     </div>
     <div class="content">
-      <div class="grid simple">
+      <div class="listing-no-contents" ng-hide="!flags.loading">
+        <div class="text-center p-b-15 p-t-15">
+          <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
+          <h3 class="spinner-text">{t}Loading{/t}...</h3>
+        </div>
+      </div>
+      <div class="listing-no-contents ng-cloak" ng-if="!flags.loading && items.length == 0">
+        <div class="text-center p-b-15 p-t-15">
+          <i class="fa fa-4x fa-warning text-warning"></i>
+          <h3>{t}Unable to find any user that matches your search.{/t}</h3>
+          <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
+        </div>
+      </div>
+      <div class="grid simple ng-cloak" ng-if="!flags.loading && items.length > 0">
         <div class="grid-body no-padding">
-          <div class="spinner-wrapper" ng-if="loading">
-            <div class="loading-spinner"></div>
-            <div class="spinner-text">{t}Loading{/t}...</div>
-          </div>
-          <div class="listing-no-contents ng-cloak" ng-if="!loading && items.length == 0">
-            <div class="text-center">
-              <h4>{t}Unable to find any user that matches your search.{/t}</h4>
-              <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
-            </div>
-          </div>
-          <div class="table-wrapper ng-cloak" ng-if="!loading && items.length > 0">
+          <div class="table-wrapper">
             <table class="table table-hover no-margin">
               <thead>
                 <tr>
@@ -177,13 +149,13 @@
                       <label for="select-all"></label>
                     </div>
                   </th>
-                  <th class=" hidden-xs" style="width:20px;">{t}Avatar{/t}</th>
-                  <th class="left">{t}Full name{/t}</th>
-                  <th class="text-center nowrap hidden-xs" style="width:110px">{t}Username{/t}</th>
-                  <th class="text-center hidden-xs hidden-sm" >{t}E-mail{/t}</th>
-                  <th class="text-center hidden-xs hidden-sm" >{t}Backend access{/t}</th>
-                  <th class="text-center hidden-xs" >{t}Group{/t}</th>
-                  <th class="text-center hidden-xs" >{t}Activated{/t}</th>
+                  <th class="hidden-xs" width="50">{t}Avatar{/t}</th>
+                  <th>{t}Name{/t}</th>
+                  <th class="hidden-sm hidden-xs" width="240">{t}Username{/t}</th>
+                  <th class="hidden-xs" width="300">{t}Email{/t}</th>
+                  <th class="hidden-xs" width="240">{t}User groups{/t}</th>
+                  <th class="hidden-sm hidden-xs text-center" width="100">{t}Social{/t}</th>
+                  <th class="text-center" width="50">{t}Enabled{/t}</th>
                 </tr>
               </thead>
               <tbody>
@@ -198,40 +170,54 @@
                     <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="extra.photos[item.avatar_img_id].path_img" transform="thumbnail,50,50" ng-if="item.avatar_img_id"></dynamic-image>
                     <gravatar class="gravatar" ng-model="item.email" size="40" ng-if="!item.avatar_img_id || item.avatar_img_id == 0"></gravatar>
                   </td>
-                  <td class="left">
-                    <strong>[% item.name %]</strong>
-                    <span class="visible-xs visible-sm">([% item.email %])</span>
-
-                    <div class="visible-xs">[% item.username %]</div>
-
-                    <span ng-repeat="group in item.fk_user_group" class="visible-xs">{t}Group{/t}: [% extra.groups[group].name %][% $last ? '' : ', ' %]</span>
-
+                  <td>
+                    <strong class="hidden-xs" ng-if="item.name">
+                      [% item.name %]
+                    </strong>
+                    <i ng-if="!item.name">{t}Unknown{/t}</i>
+                    <span class="visible-xs" ng-if="item.name">
+                      <strong>{t}Name{/t}:</strong>
+                      [% item.name%]
+                    </span>
+                    <span class="visible-xs">
+                      <strong>{t}Email{/t}:</strong>
+                      [% item.email%]
+                    </span>
                     <div class="listing-inline-actions">
-                      <a class="link" href="[% routing.generate('admin_acl_user_show', { id: item.id }) %]" title="{t}Edit user{/t}">
-                        <i class="fa fa-pencil"></i> {t}Edit{/t}
+                      <a class="link" href="[% routing.generate('backend_user_show', { id: item.id }) %]">
+                        <i class="fa fa-pencil"></i>{t}Edit{/t}
                       </a>
                       <button class="link link-danger" ng-click="delete(item.id)" type="button">
-                        <i class="fa fa-trash-o"></i>
-                        {t}Delete{/t}
+                        <i class="fa fa-trash-o"></i>{t}Delete{/t}
                       </button>
                     </div>
                   </td>
-                  <td class="text-center nowrap hidden-xs">
+                  <td class="hidden-sm hidden-xs">
                     [% item.username %]
                   </td>
-
-                  <td class="text-center hidden-xs hidden-sm">
+                  <td class="hidden-xs">
                     [% item.email %]
                   </td>
-                  <td class="text-center hidden-xs hidden-sm">
-                    <span ng-if="item.type == 0">{t}Yes{/t}</span>
-                    <span ng-if="item.type == 1">{t}No{/t}</span>
+                  <td class="hidden-xs">
+                    <ul class="no-style">
+                      <li ng-repeat="user_group in item.fk_user_group" ng-if="data.extra.user_groups[user_group]">
+                        <a class="badge text-uppercase m-b-5" ng-class="{ 'badge-danger': !data.extra.user_groups[user_group].enabled, 'badge-success': data.extra.user_groups[user_group].enabled }" href="[% routing.generate('backend_user_group_show', { id: user_group }) %]">
+                          <strong>[% data.extra.user_groups[user_group].name %]</strong>
+                        </span>
+                        </a>
+                      </li>
+                    </ul>
                   </td>
-                  <td class="text-center hidden-xs">
-                    <span ng-if="item.fk_user_group.length === 0">{t}Not assigned{/t}</span>
-                    <ul class="no-style" ng-if="item.fk_user_group.length > 0">
-                      <li ng-repeat="pk_user_group in item.fk_user_group">
-                        [% getUserGroup(pk_user_group) %]
+                  <td class="hidden-sm hidden-xs text-center">
+                    <ul class="no-style">
+                      <li ng-show="item.facebook_id">
+                        <i class="fa fa-facebook-official fa-lg m-b-10 text-facebook"></i>
+                      </li>
+                      <li ng-show="item.google_id">
+                        <i class="fa fa-google-plus-official fa-lg m-b-10 text-google"></i>
+                      </li>
+                      <li ng-show="item.twitter_id">
+                        <i class="fa fa-twitter fa-lg m-b-5 text-twitter"></i>
                       </li>
                     </ul>
                   </td>
@@ -253,7 +239,7 @@
       </div>
     </div>
     <script type="text/ng-template" id="modal-delete">
-      {include file="acl/user/modals/_modalDelete.tpl"}
+      {include file="user/modals/_modalDelete.tpl"}
     </script>
     <script type="text/ng-template" id="modal-delete-selected">
       {include file="common/modals/_modalBatchDelete.tpl"}
@@ -262,7 +248,7 @@
       {if $app.user->isMaster()}
         {include file="common/modals/_modalBatchUpdate.tpl"}
       {else}
-        {include file="acl/user/modals/_modalBatchUpdate.tpl"}
+        {include file="user/modals/_modalBatchUpdate.tpl"}
       {/if}
     </script>
   </form>
