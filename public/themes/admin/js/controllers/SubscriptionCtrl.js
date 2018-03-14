@@ -13,6 +13,7 @@
      * @requires cleaner
      * @requires http
      * @requires messenger
+     * @requires routing
      *
      * @description
      *   Provides actions to edit, save and update subscriptions.
