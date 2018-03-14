@@ -22,6 +22,10 @@ api_v1_backend_user:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/user.yml'
     prefix:   /backend
 
+api_v1_backend_user_group:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/user_group.yml'
+    prefix:   /backend
+
 api_v1_frontend_tool:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/tool.yml'
     prefix:   /
