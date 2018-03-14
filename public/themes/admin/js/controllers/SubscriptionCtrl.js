@@ -49,7 +49,7 @@
         $scope.getItem = function(id) {
           $scope.flags.loading = 1;
 
-          var route = !id ? 'api_v1_backend_subscription_create' :
+          var route = !id ? 'api_v1_backend_subscription_new' :
             { name: 'api_v1_backend_subscription_show', params: { id: id } };
 
           http.get(route).then(function(response) {

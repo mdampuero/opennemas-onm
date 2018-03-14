@@ -21,7 +21,7 @@ api_v1_backend_subscription_create:
 
 api_v1_backend_subscription_new:
     path:     /subscriptions/new
-    defaults: { _controller: ApiBundle:V1/Backend/subscription:new }
+    defaults: { _controller: ApiBundle:V1/Backend/Subscription:new }
     methods:  [ GET ]
     options:
         expose: true

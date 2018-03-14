@@ -156,7 +156,7 @@
         $scope.getItem = function(id) {
           $scope.flags.loading = 1;
 
-          var route = !id ? 'api_v1_backend_user_group_create' :
+          var route = !id ? 'api_v1_backend_user_group_new' :
             { name: 'api_v1_backend_user_group_show', params: { id: id } };
 
           http.get(route).then(function(response) {
