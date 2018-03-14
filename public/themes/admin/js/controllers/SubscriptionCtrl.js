@@ -20,7 +20,7 @@
     .controller('SubscriptionCtrl', [
       '$controller', '$scope', '$window', 'cleaner', 'http', 'messenger', 'routing',
       function($controller, $scope, $window, cleaner, http, messenger, routing) {
-        // Initialize the super class and extend it.
+        // Initialize the super class and extend it
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
         /**
@@ -32,9 +32,8 @@
          * @type {Object}
          */
         $scope.item = {
-          name: '',
-          type: 1,
-          privileges: []
+          privileges: [],
+          type: 1
         };
 
         /**
@@ -60,15 +59,19 @@
             }
 
             $scope.disableFlags();
-          }, $scope.errorCb);
+          }, function() {
+            $scope.item = null;
+
+            $scope.disableFlags();
+          });
         };
 
         /**
          * @function init
-         * @memberOf SubscriptionListCtrl
+         * @memberOf SubscriptionCtrl
          *
          * @description
-         *   Initializes services and list subscriptions.
+         *   Initializes the subscription.
          *
          * @param {Integer} id The subscription id when editing.
          */
