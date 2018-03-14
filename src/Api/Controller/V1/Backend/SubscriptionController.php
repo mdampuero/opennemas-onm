@@ -50,7 +50,7 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * Deletes an subscription.
+     * Deletes a subscription.
      *
      * @param integer $id The subscription id.
      *
@@ -190,7 +190,7 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * Returns an subscription.
+     * Returns a subscription.
      *
      * @param integer $id The group id.
      *
@@ -209,7 +209,8 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * Updates the subscription information given its id and the new information
+     * Updates the subscription information given its id and the new
+     * information.
      *
      * @param Request $request The request object.
      *
