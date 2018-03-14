@@ -68,8 +68,6 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->fixer);
         $this->fixer->expects($this->any())->method('addCondition')
             ->willReturn($this->fixer);
-        $this->security->expects($this->any())->method('hasPermission')
-            ->willReturn(false);
         $this->metadata->expects($this->any())->method('getIdKeys')
             ->willReturn([ 'id' ]);
 
@@ -209,6 +207,8 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
         $item = new Entity([ 'name' => 'foobar', 'type' => 1 ]);
         $data = [ 'name' => 'mumble', 'type' => 0 ];
 
+        $this->security->expects($this->once())->method('hasPermission')
+            ->with('MASTER')->willReturn(false);
         $this->converter->expects($this->once())->method('objectify')
             ->with(array_diff($data, [ 'type' => 0 ]))
             ->willReturn([ 'name' => 'mumble' ]);
@@ -231,6 +231,8 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
         $itemB = new Entity([ 'name' => 'xyzzy', 'activated' => false  ]);
         $data  = [ 'activated' => true, 'type' => 1 ];
 
+        $this->security->expects($this->once())->method('hasPermission')
+            ->with('MASTER')->willReturn(false);
         $this->repository->expects($this->once())->method('findBy')
             ->willReturn([ $itemA, $itemB ]);
         $this->converter->expects($this->once())->method('objectify')
@@ -299,7 +301,8 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->repository->expects($this->once())->method('findBy')
             ->willReturn([]);
-
+        $this->security->expects($this->any())->method('hasPermission')
+            ->with('MASTER')->willReturn(false);
         $this->converter->expects($this->once())->method('objectify')
             ->with(array_merge($data, [
                 'type' => 1,
@@ -337,6 +340,45 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
             ->willReturn([ new Entity([]) ]);
 
         $this->service->updateItem(1, $data);
+    }
+
+    /**
+     * Tests updateItem when a master user changes the type.
+     */
+    public function testUpdateItemWhenMasterChangesType()
+    {
+        $data = [
+            'name' => 'mumble',
+            'email' => 'garply@glork.glorp',
+            'type' => 2
+        ];
+        $item = new Entity([
+            'name'  => 'foobar',
+            'email' => 'garply@glork.glorp',
+            'type'  => 1
+        ]);
+
+        $this->repository->expects($this->once())->method('findBy')
+            ->willReturn([]);
+
+        $this->converter->expects($this->once())->method('objectify')
+            ->with(array_merge($data, [
+                'username' => 'garply@glork.glorp'
+            ]))->willReturn(array_merge($data, [
+                'username' => 'garply@glork.glorp'
+            ]));
+
+        $this->security->expects($this->once())->method('hasPermission')
+            ->with('MASTER')->willReturn(true);
+        $this->repository->expects($this->once())->method('find')
+            ->with(1)->willReturn($item);
+        $this->em->expects($this->once())->method('persist')
+            ->with($item);
+
+        $this->service->updateItem(1, $data);
+
+        $this->assertEquals('mumble', $item->name);
+        $this->assertEquals(2, $item->type);
     }
 
     /**

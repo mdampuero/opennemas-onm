@@ -25,17 +25,17 @@ class SubscriberService extends BaseService
     {
         try {
             if (!array_key_exists('email', $data)) {
-                throw new \Exception('The email is required');
+                throw new \Exception('The email is required', 400);
             }
 
             $oql   = sprintf('email = "%s"', $data['email']);
             $items = $this->getList($oql);
 
             if (!empty($items['results'])) {
-                throw new \Exception('The email is already in use');
+                throw new \Exception('The email is already in use', 409);
             }
         } catch (\Exception $e) {
-            throw new CreateItemException($e->getMessage());
+            throw new CreateItemException($e->getMessage(), $e->getCode());
         }
 
         // Force type value
@@ -54,14 +54,14 @@ class SubscriberService extends BaseService
         try {
             $item = parent::getItem($id);
 
-            if ($item->type !== 1) {
-                throw new \Exception('Unable to find subscriber');
+            if ($item->type !== 1 && $item->type !== 2) {
+                throw new \Exception('Unable to find subscriber', 404);
             }
 
             return $item;
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
-            throw new GetItemException($e->getMessage());
+            throw new GetItemException($e->getMessage(), $e->getCode());
         }
     }
 
@@ -136,21 +136,26 @@ class SubscriberService extends BaseService
     {
         try {
             if (!array_key_exists('email', $data)) {
-                throw new \Exception('The email is required');
+                throw new \Exception('The email is required', 400);
             }
 
             $oql   = sprintf('id != "%s" and email = "%s"', $id, $data['email']);
             $items = $this->getList($oql);
 
             if (!empty($items['results'])) {
-                throw new \Exception('The email is already in use');
+                throw new \Exception('The email is already in use', 409);
             }
         } catch (\Exception $e) {
-            throw new UpdateItemException($e->getMessage());
+            throw new UpdateItemException($e->getMessage(), $e->getCode());
         }
 
-        // Force type value
-        $data['type']     = 1;
+        // Force type value for non-MASTER users
+        if (!array_key_exists('type', $data)
+            || !$this->container->get('core.security')->hasPermission('MASTER')
+        ) {
+            $data['type'] = 1;
+        }
+
         $data['username'] = $data['email'];
 
         parent::updateItem($id, $data);
