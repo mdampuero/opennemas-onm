@@ -195,7 +195,10 @@ class AdvertisementController extends Controller
         ];
 
         $tags[] = 'content-' . $advertisement->id;
-        $tags[] = 'position-' . $advertisement->type_advertisement;
+
+        foreach ($advertisement->type_advertisement as $position) {
+            $tags[] = 'position-' . $position;
+        }
 
         return implode(',', $tags);
     }
