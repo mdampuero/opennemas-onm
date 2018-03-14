@@ -8,16 +8,16 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <a class="no-padding" href="{url name="backend_subscriptions_list"}">
+                <a class="no-padding" href="[% routing.generate('backend_subscriptions_list') %]">
                   <i class="fa fa-check-square-o"></i>
                   {t}Subscriptions{/t}
                 </a>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading">
+            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading && item">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading">
+            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading && item">
               <h5 class="ng-cloak">
                 [% item.pk_user_group ? '{t}Edit{/t}' : '{t}Create{/t}' %]
               </h5>
@@ -43,7 +43,16 @@
           <h3 class="spinner-text">{t}Loading{/t}...</h3>
         </div>
       </div>
-      <div class="ng-cloak" ng-show="!flags.loading">
+      <div class="listing-no-contents ng-cloak" ng-if="!flags.loading && item === null">
+        <div class="text-center p-b-15 p-t-15">
+          <a href="[% routing.generate('backend_subscribers_list') %]">
+            <i class="fa fa-4x fa-warning text-warning"></i>
+            <h3>{t 1=$id}Unable to find any subscription with id "%1".{/t}</h3>
+            <h4>{t}Click here to return to the list of subscriptions.{/t}</h4>
+          </a>
+        </div>
+      </div>
+      <div class="ng-cloak" ng-show="!flags.loading && item">
         <div class="row">
           <div class="col-md-8">
             <div class="grid simple">
