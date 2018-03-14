@@ -9,6 +9,7 @@
      *
      * @requires $controller
      * @requires $scope
+     * @requires $uibModal
      * @requires $window
      * @requires cleaner
      * @requires http
@@ -18,8 +19,8 @@
      *   Provides actions to edit, save and update subscribers.
      */
     .controller('SubscriberCtrl', [
-      '$controller', '$scope', '$window', 'cleaner', 'http', 'messenger', 'routing',
-      function($controller, $scope, $window, cleaner, http, messenger, routing) {
+      '$controller', '$scope', '$uibModal', '$window', 'cleaner', 'http', 'messenger', 'routing',
+      function($controller, $scope, $uibModal, $window, cleaner, http, messenger, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -35,6 +36,59 @@
           name: '',
           type: 1,
           privileges: []
+        };
+
+        /**
+         * @function convertTo
+         * @memberOf SubscriberListCtrl
+         *
+         * @description
+         *   Confirm delete action.
+         */
+        $scope.convertTo = function(property, value) {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-convert',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return { type: value };
+              },
+              success: function() {
+                return function() {
+                  var data  = angular.copy($scope.item);
+                  var route = {
+                    name: 'api_v1_backend_subscriber_update',
+                    params: { id: $scope.item.id }
+                  };
+
+                  data.type = value;
+
+                  if (value === 1) {
+                    // Remove all subscriptions
+                    data.fk_user_group = _.difference(
+                      data.fk_user_group,
+                      Object.keys($scope.data.extra.subscriptions));
+                  }
+
+                  data = cleaner.clean(data);
+
+                  return http.put(route, data);
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            messenger.post(response.data);
+
+            if (response.success) {
+              if (value === 0) {
+                $window.location.href = routing.generate('admin_acl_user_show',
+                  { id: $scope.item.id });
+              }
+            }
+          });
         };
 
         /**
@@ -60,7 +114,11 @@
             }
 
             $scope.disableFlags();
-          }, $scope.errorCb);
+          }, function() {
+            $scope.item = null;
+
+            $scope.disableFlags();
+          });
         };
 
         /**

@@ -156,11 +156,10 @@
                     <i ng-if="!item.name">{t}Unknown{/t}</i>
                     <div class="listing-inline-actions">
                       <a class="link" href="[% routing.generate('backend_subscriber_show', { id: item.id }) %]" title="{t}Edit{/t}">
-                        <i class="fa fa-pencil"></i> {t}Edit{/t}
+                        <i class="fa fa-pencil"></i>{t}Edit{/t}
                       </a>
                       <button class="link link-danger" ng-click="delete(item.id)" title="{t}Delete{/t}" type="button">
-                        <i class="fa fa-trash-o"></i>
-                        {t}Delete{/t}
+                        <i class="fa fa-trash-o"></i>{t}Delete{/t}
                       </button>
                     </div>
                   </td>
@@ -206,7 +205,7 @@
       </div>
     </div>
     <script type="text/ng-template" id="modal-delete">
-      {include file="subscriber/modal.tpl"}
+      {include file="subscriber/modal.delete.tpl"}
     </script>
   </form>
 {/block}

@@ -14,22 +14,47 @@
                 </a>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading">
+            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading && item">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading">
+            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading && item">
               <h5 class="ng-cloak">
-                [% item.id ? '{t}Edit{/t}' : '{t}Create{/t}' %]</span>
+                <span ng-if="item.id">{t}Edit{/t}</span>
+                <span ng-if="!item.id">{t}Create{/t}</span>
               </h5>
             </li>
           </ul>
-          <div class="all-actions pull-right">
+          <div class="all-actions pull-right ng-cloak" ng-if="!flags.loading && item">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-loading btn-success text-uppercase" ng-click="save();" ng-disabled="flags.saving || subscriberForm.$invalid || (item.password && item.password !== rpassword)">
-                  <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
-                  {t}Save{/t}
-                </button>
+                <div class="btn-group">
+                  <button class="btn btn-loading btn-success text-uppercase" ng-click="save();" ng-disabled="flags.saving || subscriberForm.$invalid || (item.password && item.password !== rpassword)" type="button">
+                    <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
+                    {t}Save{/t}
+                  </button>
+                  {acl isAllowed=MASTER}
+                    <button class="btn btn-success dropdown-toggle" data-toggle="dropdown"  ng-disabled="flags.saving || subscriberForm.$invalid || (item.password && item.password !== rpassword)" type="button">
+                      <span class="caret"></span>
+                    </button>
+                  {/acl}
+                  {acl isAllowed=MASTER}
+                    <ul class="dropdown-menu no-padding pull-right">
+                      <li>
+                        <a href="#" ng-click="convertTo('type', 2)">
+                          <i class="fa fa-level-up"></i>
+                          {t}Convert to user + subscriber{/t}
+                        </a>
+                      </li>
+                      <li class="divider"></li>
+                      <li>
+                        <a href="#" ng-click="convertTo('type', 0)">
+                          <i class="fa fa-retweet"></i>
+                          {t}Convert to user{/t}
+                        </a>
+                      </li>
+                    </ul>
+                  {/acl}
+                </div>
               </li>
             </ul>
           </div>
@@ -43,7 +68,16 @@
           <h3 class="spinner-text">{t}Loading{/t}...</h3>
         </div>
       </div>
-      <div class="ng-cloak" ng-show="!flags.loading">
+      <div class="listing-no-contents ng-cloak" ng-if="!flags.loading && item === null">
+        <div class="text-center p-b-15 p-t-15">
+          <a href="[% routing.generate('backend_subscribers_list') %]">
+            <i class="fa fa-4x fa-warning text-warning"></i>
+            <h3>{t 1=$id}Unable to find any subscriber with id "%1".{/t}</h3>
+            <h4>{t}Click here to return to the list of subscribers.{/t}</h4>
+          </a>
+        </div>
+      </div>
+      <div class="ng-cloak" ng-show="!flags.loading && item">
         <div class="row">
           <div class="col-sm-7">
             <div class="grid simple">
@@ -134,5 +168,8 @@
         </div>
       </div>
     </div>
+    <script type="text/ng-template" id="modal-convert">
+      {include file="subscriber/modal.convert.tpl"}
+    </script>
   </form>
 {/block}
