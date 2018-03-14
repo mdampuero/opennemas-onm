@@ -516,8 +516,8 @@ jQuery(document).ready(function($) {
             </div>
 
             {* contents only shown when page is already loaded *}
-            <div class="grid-title shaded" ng-if="!loading">
-              <div class="ng-cloak small m-b-5 num-pos"> {t}[% type_advertisement.length %] positions{/t}</div>
+            <div class="grid-title shaded ng-cloak" ng-if="!loading">
+              <div class="ng-cloak small m-b-5 positions-selected"> {t}[% type_advertisement.length %] positions{/t}</div>
               <div class="ng-cloak"><div ng-repeat="position in type_advertisement| orderBy:'position'" class="badge p-l-15 p-r-15 m-b-5 m-r-5" >[% ads_positions[position] %]</div></div>
             </div>
             <div class="grid-body ng-cloak" ng-if="!loading">

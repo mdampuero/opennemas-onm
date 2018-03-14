@@ -3,6 +3,17 @@
   overflow: auto;
 }
 
+.ads-listing {
+  .ad-position {
+    border: 1px solid @input-border-color;
+    border-radius:5px;
+    padding: 3px 8px;
+    font-size:.9em;
+    display:block;
+    margin-bottom:3px;
+  }
+}
+
 .advertisement-positions {
   .grid-title {
     .badge {
@@ -23,5 +34,13 @@
 
   .nav-tabs > .active > a, .nav-tabs > .active {
     border-radius: 0;
+  }
+
+  .nav-tabs > li > a {
+    padding:10px 15px !important;
+  }
+
+  .positions-selected {
+    color:@header-color;
   }
 }

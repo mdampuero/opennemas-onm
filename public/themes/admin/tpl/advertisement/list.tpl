@@ -170,7 +170,7 @@
             <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
           </div>
         </div>
-        <div class="table-wrapper ng-cloak" ng-if="!loading && contents.length > 0">
+        <div class="table-wrapper ng-cloak ads-listing" ng-if="!loading && contents.length > 0">
           <table class="table table-hover no-margin">
             <thead>
               <tr>
@@ -197,7 +197,7 @@
                     <label for="checkbox[%$index%]"></label>
                   </div>
                 </td>
-                <td>
+                <td style="max-width:50%">
                   <span class="visible-xs-inline-block visible-sm-inline-block">
                     <i class="fa fa-file-picture-o fa-lg m-r-5 text-success" ng-if="content.with_script == 0 && content.is_flash != 1" title="{t}Media element (jpg, png, gif){/t}"></i>
                     <i class="fa fa-file-video-o fa-lg m-r-5 text-danger" ng-if="content.with_script == 0 && content.is_flash == 1" title="{t}Media flash element (swf){/t}"></i>
@@ -219,12 +219,16 @@
                   <div class="small-text">
                     <span class="hidden-lg">
                       <strong>{t}Position{/t}:</strong>
-                      [% map[content.type_advertisement].name %]
+                      <span nf-if="content.type_advertisement.length > 2">{t 1="[% content.type_advertisement.length %]"}%1 positions selected{/t}</span>
+                      <span nf-if="content.type_advertisement.length <= 2">
+                        <span class="label m-l-5" ng-repeat="value in content.type_advertisement">[% map[value].name %]</span>
+                      </span>
+
                     </span>
                   </div>
-                  <div class="listing-inline-actions">
+                  <div class="listing-inline-actions" >
                     {acl isAllowed="ADVERTISEMENT_UPDATE"}
-                    <a class="link" href="[% edit(content.id, 'admin_advertisement_show') %]" title="{t}Edit{/t}">
+                    <a class="btn btn-primary btn-small" href="[% edit(content.id, 'admin_advertisement_show') %]" title="{t}Edit{/t}">
                       <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                     </a>
                     {/acl}
@@ -235,8 +239,9 @@
                     {/acl}
                   </div>
                 </td>
-                <td class="hidden-xs hidden-sm">
-                  [% map[content.type_advertisement].name %]
+                <td class="hidden-xs hidden-sm" style="max-width:33%">
+                  <span ng-repeat="value in content.positions | limitTo:2" class="ad-position">[% map[value].name %]</span>
+                  <span ng-if="content.positions.length > 2" class="small-text" uib-tooltip-html="[% tooltipPositionsForContent(content) %]">{t 1="[% content.positions.length - 2 %]"}And %1 more…{/t}</span>
                 </td>
                 <td class="hidden-xs text-center">
                   [% content.num_clic_count %]
