@@ -4,7 +4,7 @@ backend_user_group_create:
     options:
         expose: true
 
-backend_user_group_list:
+backend_user_groups_list:
     path:     /user-groups
     defaults: { _controller  : BackendBundle:UserGroup:list }
     options:
