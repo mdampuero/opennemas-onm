@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   /**
@@ -461,12 +461,12 @@
       });
 
       // Updates selected all flag when categories change
-      $scope.$watch('ui.categories_all', function () {
+      $scope.$watch('ui.categories_all', function() {
         $scope.categories = null;
       });
 
       // Updates selected all flag when categories change
-      $scope.$watch('ui.categories', function (nv) {
+      $scope.$watch('ui.categories', function(nv) {
         $scope.selected.all.categories = false;
 
         if (nv.length === $scope.extra.categories.length) {
@@ -479,7 +479,7 @@
       }, true);
 
       // Updates selected all flag when groups change
-      $scope.$watch('ui.user_groups', function (nv) {
+      $scope.$watch('ui.user_groups', function(nv) {
         $scope.selected.all.user_groups = false;
 
         if (nv.length === $scope.extra.user_groups.length) {
@@ -488,6 +488,9 @@
 
         $scope.user_groups = angular.toJson(nv);
       }, true);
+
+      $scope.tooltipPositionsForContent = function(content) {
+      };
     }
   ]);
 })();
