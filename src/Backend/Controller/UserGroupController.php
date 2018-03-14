@@ -24,7 +24,7 @@ class UserGroupController extends Controller
      */
     public function createAction()
     {
-        return $this->render('user-group/new.tpl');
+        return $this->render('user-group/item.tpl');
     }
 
     /**
@@ -52,6 +52,6 @@ class UserGroupController extends Controller
      */
     public function showAction($id)
     {
-        return $this->render('user-group/new.tpl', [ 'id' => $id ]);
+        return $this->render('user-group/item.tpl', [ 'id' => $id ]);
     }
 }

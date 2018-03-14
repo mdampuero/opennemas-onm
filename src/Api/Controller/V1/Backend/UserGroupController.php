@@ -35,7 +35,7 @@ class UserGroupController extends Controller
 
         $userGroup = $this->get('api.service.user_group')
             ->createItem($request->request->all());
-        $msg->add(_('UserGroup saved successfully'), 'success', 201);
+        $msg->add(_('User group saved successfully'), 'success', 201);
 
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());
         $response->headers->set(
@@ -63,7 +63,7 @@ class UserGroupController extends Controller
         $msg = $this->get('core.messenger');
 
         $this->get('api.service.user_group')->deleteItem($id);
-        $msg->add(_('UserGroup deleted successfully'), 'success');
+        $msg->add(_('User group deleted successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
@@ -147,7 +147,7 @@ class UserGroupController extends Controller
 
         $this->get('api.service.user_group')
             ->patchItem($id, $request->request->all());
-        $msg->add(_('UserGroup saved successfully'), 'success');
+        $msg->add(_('User group saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
@@ -224,7 +224,7 @@ class UserGroupController extends Controller
         $this->get('api.service.user_group')
             ->updateItem($id, $request->request->all());
 
-        $msg->add(_('UserGroup saved successfully'), 'success');
+        $msg->add(_('User group saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
