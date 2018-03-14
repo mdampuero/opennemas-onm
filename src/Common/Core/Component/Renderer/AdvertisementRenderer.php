@@ -302,7 +302,11 @@ class AdvertisementRenderer
         . '</div>';
 
         $interstitials = array_filter($ads, function ($a) {
-            return ($a->type_advertisement + 50) % 100 == 0;
+            $hasInterstitial = array_filter($a->type_advertisement, function ($pos) {
+                return ($pos + 50) % 100 == 0;
+            });
+
+            return $hasInterstitial;
         });
 
         if (empty($interstitials)) {

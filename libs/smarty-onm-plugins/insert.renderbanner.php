@@ -37,8 +37,7 @@ function smarty_insert_renderbanner($params, $smarty)
     }
 
     $ads = array_filter($ads, function ($ad) use ($type) {
-        return preg_match('/(^|,)' . $type . '($|,)/', $ad->type_advertisement)
-            && $ad->isInTime();
+        return in_array($type, $ad->positions) && $ad->isInTime();
     });
 
     if (empty($ads)) {
