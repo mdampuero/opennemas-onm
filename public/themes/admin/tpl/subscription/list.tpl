@@ -136,7 +136,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-if="items.length > 0" ng-repeat="item in items" ng-class="{ row_selected: isSelected(items.pk_user_group) }">
+                <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.pk_user_group) }">
                   <td class="checkbox-cell">
                     <div class="checkbox check-default">
                       <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.pk_user_group" type="checkbox">
@@ -146,10 +146,10 @@
                   <td class="left">
                     [% item.name %]
                     <div class="listing-inline-actions">
-                      <a class="link" href="[% routing.generate('backend_subscription_show', { id: item.pk_user_group }) %]" title="{t}Edit{/t}">
+                      <a class="link" href="[% routing.generate('backend_subscription_show', { id: item.pk_user_group }) %]">
                         <i class="fa fa-pencil"></i> {t}Edit{/t}
                       </a>
-                      <button class="link link-danger" ng-click="delete(item.pk_user_group)" title="{t}Delete{/t}" type="button">
+                      <button class="link link-danger" ng-click="delete(item.pk_user_group)" type="button">
                         <i class="fa fa-trash-o"></i>
                         {t}Delete{/t}
                       </button>
@@ -165,7 +165,7 @@
             </table>
           </div>
         </div>
-        <div class="grid-footer clearfix ng-cloak" ng-if="!flags.loading && items.length > 0">
+        <div class="grid-footer clearfix ng-cloak">
           <div class="pull-right">
             <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>
@@ -173,7 +173,7 @@
       </div>
     </div>
     <script type="text/ng-template" id="modal-delete">
-      {include file="subscription/modal.tpl"}
+      {include file="subscription/modal.delete.tpl"}
     </script>
   </form>
 {/block}
