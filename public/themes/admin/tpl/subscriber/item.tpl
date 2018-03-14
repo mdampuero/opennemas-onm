@@ -8,7 +8,7 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <a class="no-padding" href="{url name="backend_subscribers_list"}">
+                <a class="no-padding" href="[% routing.generate('backend_subscribers_list') %]">
                   <i class="fa fa-user"></i>
                   {t}Subscribers{/t}
                 </a>
