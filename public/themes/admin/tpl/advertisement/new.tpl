@@ -4,8 +4,8 @@
 {javascripts}
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-  $('#formulario').on('change', '#title', function(e, ui) {
-    fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+  $('#formulario').on('change', '#title', function() {
+    fill_tags(jQuery('#title').val(), '#metadata', '{url name=admin_utils_calculate_tags}');
   });
 
   $('#starttime, #endtime').datetimepicker({
@@ -26,7 +26,12 @@ jQuery(document).ready(function($) {
 {/block}
 
 {block name="content"}
-<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" name="AdvertisementForm" ng-controller="AdvertisementCtrl" ng-init="init({json_encode($advertisement->params)|clear_json}, {json_encode($advertisement->fk_content_categories)|clear_json}); type_advertisement = {json_encode($advertisement->type_advertisement)|clear_json}; extra = { categories: {json_encode($categories)|clear_json}, user_groups: {json_encode($user_groups)|clear_json} }; with_script = {if empty($advertisement->with_script)}0{else}{{$advertisement->with_script}}{/if}; ads_positions = {json_encode($ads_positions->getPositionNames())|clear_json}">
+<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" name="AdvertisementForm" ng-controller="AdvertisementCtrl" ng-init="init(
+    {json_encode($advertisement->params)|clear_json}, {json_encode($advertisement->fk_content_categories)|clear_json},
+    {json_encode($advertisement->positions)|clear_json}
+  );
+  with_script = {if empty($advertisement->with_script)}0{else}{{$advertisement->with_script}}{/if};
+  extra = {json_encode($extra)|clear_json}">
     <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -517,8 +522,8 @@ jQuery(document).ready(function($) {
 
             {* contents only shown when page is already loaded *}
             <div class="grid-title shaded ng-cloak" ng-if="!loading">
-              <div class="ng-cloak small m-b-5 positions-selected"> {t}[% type_advertisement.length %] positions{/t}</div>
-              <div class="ng-cloak"><div ng-repeat="position in type_advertisement| orderBy:'position'" class="badge p-l-15 p-r-15 m-b-5 m-r-5" >[% ads_positions[position] %]</div></div>
+              <div class="ng-cloak small m-b-5 positions-selected"> {t 1="[% positions.length %]"}%1 positions{/t}</div>
+              <div class="ng-cloak"><div ng-repeat="position in positions| orderBy:'position'" class="badge p-l-15 p-r-15 m-b-5 m-r-5" >[% extra['ads_positions'][position] %]</div></div>
             </div>
             <div class="grid-body ng-cloak" ng-if="!loading">
               <uib-tabset>

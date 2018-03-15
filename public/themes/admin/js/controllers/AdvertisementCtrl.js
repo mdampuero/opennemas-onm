@@ -28,11 +28,33 @@
        */
       $scope.params = {
         sizes: [
-          { device: 'desktop', height: null, width: null },
-          { device: 'tablet', height: null, width: null },
-          { device: 'phone', height: null, width: null },
+          {
+            device: 'desktop',
+            height: null,
+            width: null
+          },
+          {
+            device: 'tablet',
+            height: null,
+            width: null
+          },
+          {
+            device: 'phone',
+            height: null,
+            width: null
+          },
         ]
       };
+
+      /**
+       * @memberOf AdvertisementCtrl
+       *
+       * @description
+       *  List of positions assigned to the advertisement.
+       *
+       * @type {Object}
+       */
+      $scope.positions = [];
 
       /**
        * @memberOf AdvertisementCtrl
@@ -136,11 +158,12 @@
        * @param {Integer} end   the end of the range
        */
       $scope.countPositionsSelectedbyRange = function(start, finish) {
-        if ($scope.type_advertisement && $scope.type_advertisement.constructor !== Array) {
+        if ($scope.positions === null ||
+          !angular.isArray($scope.positions)) {
           return 0;
         }
 
-        return $scope.type_advertisement.filter(function(e) {
+        return $scope.positions.filter(function(e) {
           return start <= e && e <= finish;
         }).length;
       };
@@ -166,7 +189,7 @@
        * @param {String} str The string to check.
        */
       $scope.checkGoogleDFP = function(str) {
-        var pattern = /googletag\.defineSlot\('([^\']*)\',\s*\[(\d*),\s*(\d*)\]/;
+        var pattern = /googletag\.defineSlot\('([^']*)',\s*\[(\d*),\s*(\d*)\]/;
         var matches = str.match(pattern);
 
         if (pattern.test(str)) {
@@ -213,10 +236,12 @@
        *
        * @param Object params The advertisement params
        */
-      $scope.init = function(params, categories) {
+      $scope.init = function(params, categories, positions) {
         if (params) {
           $scope.params = params;
         }
+
+        $scope.positions = positions;
 
         if (!$scope.params.devices ||
             !angular.isObject($scope.params.devices)) {
@@ -350,12 +375,12 @@
        *                   otherwise
        */
       $scope.isInterstitial = function() {
-        if (!angular.isArray($scope.type_advertisement)) {
-          return (parseInt($scope.type_advertisement) + 50) % 100 === 0;
+        if (!angular.isArray($scope.positions)) {
+          return (parseInt($scope.positions) + 50) % 100 === 0;
         }
 
-        for (var i = 0; i < $scope.type_advertisement.length; i++) {
-          var position = parseInt($scope.type_advertisement[i]);
+        for (var i = 0; i < $scope.positions.length; i++) {
+          var position = parseInt($scope.positions[i]);
 
           if ((position + 50) % 100 === 0) {
             return true;
@@ -370,20 +395,21 @@
        * @memberOf AdvertisementCtrl
        *
        * @description
-       *   Adds or removes a position from the type_advertisement list.
+       *   Adds or removes a position from the positions list.
        *
        * @param {Integer} id the id to add or remove.
        */
       $scope.togglePosition = function(id) {
-        if (!angular.isArray($scope.type_advertisement)) {
-          $scope.type_advertisement = [];
+        if (!angular.isArray($scope.positions)) {
+          $scope.positions = [];
         }
-        if ($scope.type_advertisement.indexOf(id) < 0) {
-          $scope.type_advertisement.push(id);
-        } else {
-          var index = $scope.type_advertisement.indexOf(id);
 
-          $scope.type_advertisement.splice(index, 1);
+        if ($scope.positions.indexOf(id) < 0) {
+          $scope.positions.push(id);
+        } else {
+          var index = $scope.positions.indexOf(id);
+
+          $scope.positions.splice(index, 1);
         }
       };
 
@@ -410,8 +436,15 @@
           });
 
           if (devices[i] && sizes.length === 0) {
-            $scope.params.sizes.splice(indexes[i], 0,
-                { height: null, device: i, width: null });
+            $scope.params.sizes.splice(
+              indexes[i],
+              0,
+              {
+                height: null,
+                device: i,
+                width: null
+              }
+            );
           }
 
           if (!devices[i]) {
