@@ -1,7 +1,7 @@
 services:
     api.service.subscription:
         class:     Api\Service\V1\SubscriptionService
-        arguments: [ '@service_container', 'Common\ORM\Entity\UserGroup' ]
+        arguments: [ '@service_container', 'Common\ORM\Entity\UserGroup', '@api.validator.subscription' ]
 
     api.service.user_group:
         class:     Api\Service\V1\UserGroupService
