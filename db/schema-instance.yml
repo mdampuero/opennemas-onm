@@ -31,8 +31,8 @@ advertisements:
             type: bigint
             options: { default: null, unsigned: true, autoincrement: true, length: 20 }
         type_advertisement:
-            type: smallint
-            options: { default: '1', notnull: false, unsigned: true }
+            type: text
+            options: { default: '', length: 65532, notnull: false, unsigned: true }
         fk_content_categories:
             type: string
             options: { default: '', notnull: false, length: 255 }
