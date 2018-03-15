@@ -20,84 +20,18 @@ class UserGroupService extends OrmService
     /**
      * {@inheritdoc}
      */
-    public function createItem($data)
-    {
-        // Force type value
-        $data['type'] = 0;
-
-        return parent::createItem($data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getItem($id)
     {
         try {
-            $item = parent::getItem($id);
+            $oql = sprintf('pk_user_group = %s and type = 0', $id);
 
-            if ($item->type !== 0) {
-                throw new \Exception('Unable to find user group');
-            }
-
-            return $item;
+            return $this->container->get('orm.manager')
+                ->getRepository($this->entity, $this->origin)
+                ->findOneBy($oql);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new GetItemException();
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getList($oql)
-    {
-         // Force OQL to include the subscription flag enabled
-        $oql = $this->container->get('orm.oql.fixer')->fix($oql)
-            ->addCondition('type = 0')
-            ->getOql();
-
-        return parent::getList($oql);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function patchItem($id, $data)
-    {
-        // Ignore type value for non-MASTER users
-        if (array_key_exists('type', $data)
-            && !$this->container->get('core.security')->hasPermission('MASTER')
-        ) {
-            unset($data['type']);
-        }
-
-        parent::patchItem($id, $data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function patchList($ids, $data)
-    {
-        // Ignore type value for non-MASTER users
-        if (array_key_exists('type', $data)
-            && !$this->container->get('core.security')->hasPermission('MASTER')
-        ) {
-            unset($data['type']);
-        }
-
-        return parent::patchList($ids, $data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateItem($id, $data)
-    {
-        $data['type'] = 0;
-
-        parent::updateItem($id, $data);
     }
 
     /**
