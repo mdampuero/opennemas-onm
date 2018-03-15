@@ -49,7 +49,7 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'find', 'findBy'])
+            ->setMethods([ 'countBy', 'findBy', 'findOneBy'])
             ->getMock();
 
         $this->security = $this->getMockBuilder('Security' . uniqid())
@@ -94,31 +94,14 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests createItem when no error.
-     */
-    public function testCreateItem()
-    {
-        $data = [ 'name' => 'flob' ];
-
-        $this->converter->expects($this->any())->method('objectify')
-            ->with(array_merge([ 'type' => 0 ], $data))
-            ->willReturn($data);
-        $this->em->expects($this->once())->method('persist');
-
-        $item = $this->service->createItem($data);
-
-        $this->assertEquals('flob', $item->name);
-    }
-
-    /**
      * Tests getItem when no error.
      */
     public function testGetItem()
     {
         $item = new Entity([ 'type' => 0 ]);
 
-        $this->repository->expects($this->once())->method('find')
-            ->with(1)->willReturn($item);
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->with('pk_user_group = 1 and type = 0')->willReturn($item);
 
         $this->assertEquals($item, $this->service->getItem(1));
     }
@@ -130,103 +113,11 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItemWhenErrorWhenNoUserGroup()
     {
-        $item = new Entity();
-
-        $this->repository->expects($this->once())->method('find')
-            ->with(1)->willReturn($item);
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->with('pk_user_group = 1 and type = 0')
+            ->will($this->throwException(new \Exception));
 
         $this->service->getItem(1);
-    }
-
-    /**
-     * Tests getList when no error.
-     */
-    public function testGetList()
-    {
-        $results = [
-            new Entity([ 'name' => 'wubble' ]),
-            new Entity([ 'name' => 'mumble' ])
-        ];
-
-        $this->fixer->expects($this->once())->method('fix');
-        $this->fixer->expects($this->once())->method('addCondition');
-        $this->fixer->expects($this->once())->method('getOql')
-            ->willReturn('type = 0');
-
-        $this->repository->expects($this->once())->method('countBy')
-            ->with('type = 0')->willReturn(2);
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('type = 0')->willReturn($results);
-
-        $response = $this->service->getList('order by title asc');
-
-        $this->assertArrayHasKey('results', $response);
-        $this->assertArrayHasKey('total', $response);
-        $this->assertEquals($results, $response['results']);
-        $this->assertEquals(2, $response['total']);
-    }
-
-    /**
-     * Tests patchItem when no error for non master user.
-     */
-    public function testPatchItem()
-    {
-        $item = new Entity([ 'name' => 'foobar', 'type' => 0 ]);
-        $data = [ 'name' => 'mumble', 'type' => 1 ];
-
-        $this->converter->expects($this->once())->method('objectify')
-            ->with(array_diff($data, [ 'type' => 1 ]))
-            ->willReturn([ 'name' => 'mumble' ]);
-        $this->repository->expects($this->once())->method('find')
-            ->with(1)->willReturn($item);
-        $this->em->expects($this->once())->method('persist')
-            ->with($item);
-
-        $this->service->patchItem(1, $data);
-
-        $this->assertEquals('mumble', $item->name);
-    }
-
-    /**
-     * Tests patchList when no error.
-     */
-    public function testPatchList()
-    {
-        $itemA = new Entity([ 'name' => 'wubble', 'enabled' => false ]);
-        $itemB = new Entity([ 'name' => 'xyzzy', 'enabled' => false  ]);
-        $data  = [ 'enabled' => true, 'type' => 0 ];
-
-        $this->repository->expects($this->once())->method('findBy')
-            ->willReturn([ $itemA, $itemB ]);
-        $this->converter->expects($this->once())->method('objectify')
-            ->with([ 'enabled' => true ])
-            ->willReturn([ 'enabled' => true ]);
-        $this->em->expects($this->exactly(2))->method('persist');
-
-        $this->assertEquals(2, $this->service->patchList([ 1, 2 ], $data));
-        $this->assertTrue($itemA->enabled);
-        $this->assertTrue($itemB->enabled);
-    }
-
-    /**
-     * Tests updateItem when no error.
-     */
-    public function testUpdateItem()
-    {
-        $item = new Entity([ 'name' => 'foobar', 'type' => 0 ]);
-        $data = [ 'name' => 'mumble'];
-
-        $this->converter->expects($this->once())->method('objectify')
-            ->with(array_merge($data, [ 'type' => 0 ]))
-            ->willReturn(array_merge($data, [ 'type' => 0 ]));
-        $this->repository->expects($this->once())->method('find')
-            ->with(1)->willReturn($item);
-        $this->em->expects($this->once())->method('persist')
-            ->with($item);
-
-        $this->service->updateItem(1, $data);
-
-        $this->assertEquals('mumble', $item->name);
     }
 
     /*

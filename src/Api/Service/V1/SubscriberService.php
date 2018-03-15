@@ -16,7 +16,7 @@ use Api\Exception\GetItemException;
 use Api\Exception\PatchListException;
 use Api\Exception\UpdateItemException;
 
-class SubscriberService extends BaseService
+class SubscriberService extends OrmService
 {
     /**
      * {@inheritdoc}
