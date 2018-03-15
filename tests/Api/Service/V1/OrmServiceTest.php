@@ -48,6 +48,10 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'countBy', 'find', 'findBy'])
             ->getMock();
 
+        $this->validator = $this->getMockBuilder('Validator' . uniqid())
+            ->setMethods([ 'validate' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
         $this->em->expects($this->any())->method('getConverter')
@@ -60,7 +64,11 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $this->metadata->expects($this->any())->method('getIdKeys')
             ->willReturn([ 'id' ]);
 
-        $this->service = new OrmService($this->container, 'Common\ORM\Core\Entity');
+        $this->service = new OrmService(
+            $this->container,
+            'Common\ORM\Core\Entity',
+            $this->validator
+        );
     }
 
     public function serviceContainerCallback($name)
@@ -533,5 +541,31 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
             'id in [1,3,5]',
             $method->invokeArgs($this->service, [ [ 1, 3, 5 ] ])
         );
+    }
+
+    /**
+     * Tests validate.
+     */
+    public function testValidate()
+    {
+        $method = new \ReflectionMethod($this->service, 'validate');
+        $method->setAccessible(true);
+
+        $this->validator->expects($this->once())->method('validate');
+
+        $method->invokeArgs($this->service, [ new Entity() ]);
+    }
+
+    /**
+     * Tests validate when no validator
+     */
+    public function testValidateWhenNoValidator()
+    {
+        $service = new OrmService($this->container, 'Common\ORM\Core\Entity');
+
+        $method = new \ReflectionMethod($service, 'validate');
+        $method->setAccessible(true);
+
+        $method->invokeArgs($service, [ new Entity() ]);
     }
 }

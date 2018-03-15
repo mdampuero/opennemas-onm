@@ -56,12 +56,17 @@ class OrmService extends Service
      *
      * @param ServiceContainer $container The service container.
      * @param string           $entity    The entity fully qualified class name.
+     * @param string           $entity    The validator service name.
      */
-    public function __construct($container, $entity)
+    public function __construct($container, $entity, $validator = null)
     {
         $this->class  = $entity;
         $this->em     = $container->get('orm.manager');
         $this->entity = substr($entity, strrpos($entity, '\\') + 1);
+
+        if (!empty($validator)) {
+            $this->validator = $validator;
+        }
 
         parent::__construct($container);
     }
@@ -77,6 +82,7 @@ class OrmService extends Service
 
             $item = new $this->class($data);
 
+            $this->validate($item);
             $this->em->persist($item, $this->origin);
 
             return $item;
@@ -178,6 +184,7 @@ class OrmService extends Service
 
             $item->merge($data);
 
+            $this->validate($item);
             $this->em->persist($item);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
@@ -208,6 +215,7 @@ class OrmService extends Service
         foreach ($response['results'] as $item) {
             try {
                 $item->merge($data);
+                $this->validate($item);
                 $this->em->persist($item);
 
                 $updated++;
@@ -258,6 +266,7 @@ class OrmService extends Service
             $item = $this->getItem($id);
             $item->setData($data);
 
+            $this->validate($item);
             $this->em->persist($item, $item->getOrigin());
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
@@ -279,5 +288,21 @@ class OrmService extends Service
         $key  = array_pop($keys);
 
         return sprintf('%s in [%s]', $key, implode(',', $ids));
+    }
+
+    /**
+     * Validates an entity.
+     *
+     * @param Entity $item The item to validate.
+     *
+     * @throws InvalidArgumentException The the item has some invalid values.
+     */
+    protected function validate($item)
+    {
+        if (empty($this->validator)) {
+            return;
+        }
+
+        $this->validator->validate($item);
     }
 }
