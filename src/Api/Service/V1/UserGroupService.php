@@ -37,6 +37,18 @@ class UserGroupService extends OrmService
     /**
      * {@inheritdoc}
      */
+    public function getList($oql = '')
+    {
+        $oql = $this->container->get('orm.oql.fixer')->fix($oql)
+            ->addCondition('type = 0')
+            ->getOql();
+
+        return parent::getList($oql);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getOqlForList($ids)
     {
         $oql = parent::getOqlForList($ids);

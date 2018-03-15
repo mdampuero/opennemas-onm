@@ -120,6 +120,34 @@ class SubscriptionServiceTest extends \PHPUnit_Framework_TestCase
         $this->service->getItem(1);
     }
 
+    /**
+     * Tests getList when no error.
+     */
+    public function testGetList()
+    {
+        $results = [
+            new Entity([ 'name' => 'wubble' ]),
+            new Entity([ 'name' => 'mumble' ])
+        ];
+
+        $this->fixer->expects($this->once())->method('fix');
+        $this->fixer->expects($this->once())->method('addCondition');
+        $this->fixer->expects($this->once())->method('getOql')
+            ->willReturn('type = 1');
+
+        $this->repository->expects($this->once())->method('countBy')
+            ->with('type = 1')->willReturn(2);
+        $this->repository->expects($this->once())->method('findBy')
+            ->with('type = 1')->willReturn($results);
+
+        $response = $this->service->getList('order by title asc');
+
+        $this->assertArrayHasKey('results', $response);
+        $this->assertArrayHasKey('total', $response);
+        $this->assertEquals($results, $response['results']);
+        $this->assertEquals(2, $response['total']);
+    }
+
     /*
      * Tests getOqlForList.
      */
