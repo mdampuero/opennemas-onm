@@ -15,7 +15,7 @@ use Api\Exception\GetItemException;
 use Api\Exception\PatchListException;
 use Api\Exception\UpdateItemException;
 
-class UserGroupService extends BaseService
+class UserGroupService extends OrmService
 {
     /**
      * {@inheritdoc}

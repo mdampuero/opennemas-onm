@@ -9,13 +9,13 @@
  */
 namespace Tests\Api\Service\V1;
 
-use Api\Service\V1\BaseService;
+use Api\Service\V1\OrmService;
 use Common\ORM\Core\Entity;
 
 /**
- * Defines test cases for BaseService class.
+ * Defines test cases for OrmService class.
  */
-class BaseServiceTest extends \PHPUnit_Framework_TestCase
+class OrmServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Configures the testing environment.
@@ -60,7 +60,7 @@ class BaseServiceTest extends \PHPUnit_Framework_TestCase
         $this->metadata->expects($this->any())->method('getIdKeys')
             ->willReturn([ 'id' ]);
 
-        $this->service = new BaseService($this->container, 'Common\ORM\Core\Entity');
+        $this->service = new OrmService($this->container, 'Common\ORM\Core\Entity');
     }
 
     public function serviceContainerCallback($name)

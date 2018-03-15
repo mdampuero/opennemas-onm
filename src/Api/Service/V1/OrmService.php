@@ -19,7 +19,7 @@ use Api\Exception\PatchListException;
 use Api\Exception\UpdateItemException;
 use Api\Service\Service;
 
-class BaseService extends Service
+class OrmService extends Service
 {
     /**
      * The full class name.
@@ -55,6 +55,7 @@ class BaseService extends Service
      * Initializes the BaseService.
      *
      * @param ServiceContainer $container The service container.
+     * @param string           $entity    The entity fully qualified class name.
      */
     public function __construct($container, $entity)
     {
