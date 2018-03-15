@@ -6,3 +6,7 @@ services:
     api.service.user_group:
         class:     Api\Service\V1\UserGroupService
         arguments: [ '@service_container', 'Common\ORM\Entity\UserGroup' ]
+
+    api.validator.subscription:
+        class:     Api\Validator\V1\SubscriptionValidator
+        arguments: [ '@service_container' ]
