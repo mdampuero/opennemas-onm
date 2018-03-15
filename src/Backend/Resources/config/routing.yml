@@ -898,15 +898,6 @@ admin_utils_calculate_tags:
     options:
         expose: true
 
-# Auth system routes
-admin_acl_user_recover_pass:
-    path:     /login/user/recover-pass
-    defaults: { _controller  : BackendBundle:User:recoverPassword }
-
-admin_acl_user_reset_pass:
-    path:     /login/user/reset-pass/{token}
-    defaults: { _controller  : BackendBundle:User:regeneratePassword }
-
 # Getting started routes
 admin_getting_started:
     path:     /getting-started
@@ -964,6 +955,10 @@ backend_news_agency_server:
 backend_notification:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/notification.yml'
+
+backend_password:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/password.yml'
 
 backend_purchase:
     prefix:   /

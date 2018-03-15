@@ -77,7 +77,7 @@
                       </div>
                       {$recaptcha}
                       <div class="form-group text-right">
-                        <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass btn btn-link">{t domain=base}Forgot Password?{/t}</a>
+                        <a href="{url name=backend_password_reset}" class="recover_pass btn btn-link">{t domain=base}Forgot Password?{/t}</a>
                         <button class="btn btn-primary" id="login-button" tabindex="4" type="submit">{t}Log in{/t}</button>
                       </div>
                     </div>
