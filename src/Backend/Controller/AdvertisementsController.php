@@ -123,35 +123,15 @@ class AdvertisementsController extends Controller
      */
     public function createAction(Request $request)
     {
-        $page   = $request->request->getDigits('page', 1);
-        $filter = $request->query->get('filter');
-
+        // If the action is not to save the ad, just show the form
         if ('POST' !== $request->getMethod()) {
-            $adsPositions = $this->container->get('core.helper.advertisement');
-
-            $serverUrl = '';
-            if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
-                $serverUrl = $openXsettings['url'];
-            }
-
-            $advertisement = new \Advertisement();
-
-            $ads = $this->get('core.helper.advertisement')->getPositionsForTheme();
-
-            return $this->render('advertisement/new.tpl', [
-                'advertisement' => $advertisement,
-                'ads_positions' => $adsPositions,
-                'categories'    => $this->getCategories(),
-                'user_groups'   => $this->getUserGroups(),
-                'themeAds'      => $ads,
-                'filter'        => $filter,
-                'page'          => $page,
-                'server_url'    => $serverUrl,
-            ]);
+            return $this->render('advertisement/new.tpl', array_merge(
+                $this->getExtraParameters(),
+                [ 'advertisement' => new \Advertisement(), ]
+            ));
         }
 
-        $advertisement = new \Advertisement();
-        $categories    = json_decode($request->request->get('categories', ''), true);
+        $categories = json_decode($request->request->get('categories', ''), true);
 
         if (is_array($categories) && empty($categories)) {
             $categories = null;
@@ -198,6 +178,7 @@ class AdvertisementsController extends Controller
         $level   = 'error';
         $message = _('Unable to create the new advertisement.');
 
+        $advertisement = new \Advertisement();
         if ($advertisement->create($data)) {
             $level   = 'success';
             $message = _('Advertisement successfully created.');
@@ -205,14 +186,7 @@ class AdvertisementsController extends Controller
 
         $this->get('session')->getFlashBag()->add($level, $message);
         return $this->redirect(
-            $this->generateUrl(
-                'admin_ad_show',
-                [
-                    'id'     => $advertisement->id,
-                    'filter' => $filter,
-                    'page'   => $page
-                ]
-            )
+            $this->generateUrl('admin_ad_show', ['id' => $advertisement->id ])
         );
     }
 
@@ -228,18 +202,11 @@ class AdvertisementsController extends Controller
      */
     public function showAction(Request $request)
     {
-        $id     = $request->query->getDigits('id', null);
-        $filter = $request->query->get('filter');
-        $page   = $request->query->getDigits('page', 1);
+        $id = $request->query->getDigits('id', null);
 
-        $adsPositions = $this->container->get('core.helper.advertisement');
-        $serverUrl    = '';
-        if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
-            $serverUrl = $openXsettings['url'];
-        }
+        $advertisement = new \Advertisement($id);
 
-        $ad = new \Advertisement($id);
-        if (is_null($ad->id)) {
+        if (is_null($advertisement->id)) {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 sprintf(_('Unable to find the advertisement with the id "%d"'), $id)
@@ -248,7 +215,7 @@ class AdvertisementsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
 
-        if ($ad->fk_publisher != $this->getUser()->id
+        if ($advertisement->fk_publisher != $this->getUser()->id
             && (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE'))
         ) {
             $this->get('session')->getFlashBag()->add(
@@ -259,27 +226,20 @@ class AdvertisementsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
 
-        if (!is_array($ad->fk_content_categories) && !empty($ad->fk_content_categories)) {
-            $ad->fk_content_categories = explode(',', $ad->fk_content_categories);
+        if (!is_array($advertisement->fk_content_categories) && !empty($advertisement->fk_content_categories)) {
+            $advertisement->fk_content_categories = explode(',', $advertisement->fk_content_categories);
         }
 
-        if (!empty($ad->img)) {
+        if (!empty($advertisement->img)) {
             //Buscar foto where pk_foto=img1
-            $photo1 = new \Photo($ad->img);
+            $photo1 = new \Photo($advertisement->img);
             $this->view->assign('photo1', $photo1);
         }
 
-        return $this->render('advertisement/new.tpl', [
-            'ads_positions' => $adsPositions,
-            'advertisement' => $ad,
-            'categories'    => $this->getCategories(),
-            'filter'        => $filter,
-            'page'          => $page,
-            'safeFrame'     => $adsPositions->isSafeFrameEnabled(),
-            'server_url'    => $serverUrl,
-            'themeAds'      => $adsPositions->getPositionsForTheme(),
-            'user_groups'   => $this->getUserGroups(),
-        ]);
+        return $this->render('advertisement/new.tpl', array_merge(
+            $this->getExtraParameters(),
+            [ 'advertisement' => $advertisement ]
+        ));
     }
 
     /**
@@ -294,9 +254,7 @@ class AdvertisementsController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $id     = $request->query->getDigits('id');
-        $filter = $request->query->get('filter');
-        $page   = $request->query->getDigits('page', 1);
+        $id = $request->query->getDigits('id', null);
 
         $ad = new \Advertisement($id);
         if (is_null($ad->id)) {
@@ -376,9 +334,7 @@ class AdvertisementsController extends Controller
         }
 
         return $this->redirect($this->generateUrl('admin_ad_show', [
-            'id'     => $data['id'],
-            'filter' => $filter,
-            'page'   => $page
+            'id' => $data['id'],
         ]));
     }
 
@@ -418,13 +374,10 @@ class AdvertisementsController extends Controller
             ],
         ]);
 
-        return $this->render(
-            'advertisement/content-provider.tpl',
-            [
-                'ads'        => $ads,
-                'pagination' => $pagination,
-            ]
-        );
+        return $this->render('advertisement/content-provider.tpl', [
+            'ads'        => $ads,
+            'pagination' => $pagination,
+        ]);
     }
 
     /**
@@ -496,6 +449,33 @@ class AdvertisementsController extends Controller
     }
 
     /**
+     * Returns the list of extra parameters needed
+     * while showing the advertisement form
+     *
+     * @return array the list of extra parameters to use in the tempalte
+     **/
+    public function getExtraParameters()
+    {
+        $adsPositions = $this->container->get('core.helper.advertisement');
+        $serverUrl    = '';
+        if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
+            $serverUrl = $openXsettings['url'];
+        }
+
+        return [
+            'ads_positions_manager' => $adsPositions,
+            'extra'                 => [
+                'safeFrame'                 => $adsPositions->isSafeFrameEnabled(),
+                'aditional_theme_positions' => $adsPositions->getPositionsForTheme(),
+                'ads_positions'             => $adsPositions->getPositionNames(),
+                'categories'                => $this->getCategories(),
+                'server_url'                => $serverUrl,
+                'user_groups'               => $this->getUserGroups(),
+            ],
+        ];
+    }
+
+    /**
      * Returns the list of categories.
      *
      * @return array The list of categories.
@@ -508,8 +488,6 @@ class AdvertisementsController extends Controller
                 'internal_category in [1, 9, 7, 11]'
                 . ' order by internal_category asc, title asc'
             );
-
-        $fm = $this->get('data.manager.filter');
 
         $categories = array_map(function ($a) {
             // Sometimes category is array. When create & update advertisement
