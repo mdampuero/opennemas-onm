@@ -431,7 +431,7 @@
 
         for (var i in devices) {
           // Sizes for device
-          var sizes = $scope.params.sizes.filter(function(e) {
+          var sizes = $scope.params.sizes.filter(function(e) { // eslint-disable-line no-loop-func
             return e.device === i;
           });
 

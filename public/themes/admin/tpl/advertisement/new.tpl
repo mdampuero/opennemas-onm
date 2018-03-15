@@ -529,43 +529,68 @@ jQuery(document).ready(function($) {
               <uib-tabset>
                 <uib-tab>
                   <uib-tab-heading>
-                    {t}Frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(0, 100) %]</span>
+                    {t}Frontpages{/t} <span class="badge">[% countPositionsSelectedbyRange(0, 99) %]</span>
                   </uib-tab-heading>
                   <div class="tab-wrapper">
                     <div class="row">
-                      {include file="advertisement/partials/advertisement_positions.tpl"}
+                      {include file="advertisement/partials/advertisement_positions_frontpage.tpl"}
                     </div>
                   </div>
                 </uib-tab>
 
                 <uib-tab>
                   <uib-tab-heading>
-                    {t}Article: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(100, 200) %]</span>
+                    {t}Article: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(100, 199) %]</span>
                   </uib-tab-heading>
                   <div class="tab-wrapper">
                     <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_inner.tpl"}
+                      {include file="advertisement/partials/advertisement_positions_article_inner.tpl"}
                     </div>
                   </div>
                 </uib-tab>
+
+                {is_module_activated name="VIDEO_MANAGER"}
+                <uib-tab>
+                  <uib-tab-heading>
+                    {t}Video: frontpages{/t} <span class="badge">[% countPositionsSelectedbyRange(200, 199) %]</span>
+                  </uib-tab-heading>
+                  <div class="tab-wrapper">
+                    <div class="row">
+                      {include file="advertisement/partials/advertisement_positions_video_frontpage.tpl"}
+                    </div>
+                  </div>
+                </uib-tab>
+                <uib-tab>
+                  <uib-tab-heading>
+                    {t}Video: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(300, 399) %]</span>
+                  </uib-tab-heading>
+                  <div class="tab-wrapper">
+                    <div class="row">
+                      {include file="advertisement/partials/advertisement_positions_video_inner.tpl"}
+                    </div>
+                  </div>
+                </uib-tab>
+                {/is_module_activated}
 
                 {is_module_activated name="ALBUM_MANAGER"}
                 <uib-tab>
                   <uib-tab-heading>
-                    {t}Gallery: frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(400, 500) %]</span>
+                    {t}Album: frontpages{/t} <span class="badge">[% countPositionsSelectedbyRange(400, 499) %]</span>
                   </uib-tab-heading>
                   <div class="tab-wrapper">
                     <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_gallery.tpl"}
+                      {include file="advertisement/partials/advertisement_positions_album_frontpage.tpl"}
                     </div>
                   </div>
                 </uib-tab>
 
                 <uib-tab>
-                  <uib-tab-heading>{t}Gallery: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(500, 600) %]</uib-tab-heading></span>
+                  <uib-tab-heading>
+                    {t}Album: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(500, 599) %]</span>
+                  </uib-tab-heading>
                   <div class="tab-wrapper">
                     <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_gallery_inner.tpl"}
+                      {include file="advertisement/partials/advertisement_positions_album_inner.tpl"}
                     </div>
                   </div>
                 </uib-tab>
@@ -573,16 +598,20 @@ jQuery(document).ready(function($) {
 
                 {is_module_activated name="OPINION_MANAGER"}
                 <uib-tab>
-                  <uib-tab-heading>{t}Opinion: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(700, 800) %]</span></uib-tab-heading>
+                  <uib-tab-heading>
+                    {t}Opinion: frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(600, 699) %]</span>
+                  </uib-tab-heading>
                   <div class="tab-wrapper">
                     <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
+                      {include file="advertisement/partials/advertisement_positions_opinion_frontpage.tpl"}
                     </div>
                   </div>
                 </uib-tab>
 
                 <uib-tab>
-                  <uib-tab-heading>{t}Opinion: frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(600, 700) %]</span></uib-tab-heading>
+                  <uib-tab-heading>
+                    {t}Opinion: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(700, 799) %]</span>
+                  </uib-tab-heading>
                   <div class="tab-wrapper">
                     <div class="row">
                       {include file="advertisement/partials/advertisement_positions_opinion_inner.tpl"}
@@ -593,19 +622,23 @@ jQuery(document).ready(function($) {
 
                 {is_module_activated name="POLL_MANAGER"}
                 <uib-tab>
-                  <uib-tab-heading>{t}Poll: frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(800, 900) %]</span></uib-tab-heading>
+                  <uib-tab-heading>
+                    {t}Poll: frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(800, 899) %]</span>
+                  </uib-tab-heading>
                   <div class="tab-wrapper">
                     <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_video.tpl"}
+                      {include file="advertisement/partials/advertisement_positions_poll_frontpage.tpl"}
                     </div>
                   </div>
                 </uib-tab>
 
                 <uib-tab>
-                  <uib-tab-heading>{t}Poll: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(900, 1000) %]</span></uib-tab-heading>
+                  <uib-tab-heading>
+                    {t}Poll: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(900, 999) %]</span>
+                  </uib-tab-heading>
                   <div class="tab-wrapper">
                     <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_video_inner.tpl"}
+                      {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
                     </div>
                   </div>
                 </uib-tab>
@@ -613,7 +646,9 @@ jQuery(document).ready(function($) {
 
                 {is_module_activated name="NEWSLETTER_MANAGER"}
                 <uib-tab>
-                  <uib-tab-heading>{t}Newsletter{/t} <span class="badge">[% countPositionsSelectedbyRange(1000, 1050) %]</span></uib-tab-heading>
+                  <uib-tab-heading>
+                    {t}Newsletter{/t} <span class="badge">[% countPositionsSelectedbyRange(1000, 1049) %]</span>
+                  </uib-tab-heading>
                   <div class="tab-wrapper">
                     <div class="row">
                       {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
@@ -621,84 +656,38 @@ jQuery(document).ready(function($) {
                   </div>
                 </uib-tab>
                 {/is_module_activated}
-                {is_module_activated name="VIDEO_MANAGER"}
-                <uib-tab>
-                  <uib-tab-heading>{t}Video: frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(200, 300) %]</span></uib-tab-heading>
-                  <div class="tab-wrapper">
-                    <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_video.tpl"}
-                    </div>
-                  </div>
-                </uib-tab>
-                <uib-tab>
-                  <uib-tab-heading>{t}Video: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(300, 400) %]</span></uib-tab-heading>
-                  <div class="tab-wrapper">
-                    <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_video_inner.tpl"}
-                    </div>
-                  </div>
-                </uib-tab>
-                {/is_module_activated}
+
                 {is_module_activated name="AMP_MODULE"}
                 <uib-tab>
-                  <uib-tab-heading>{t}Google AMP{/t} <span class="badge">[% countPositionsSelectedbyRange(1050, 1075) %]</span></uib-tab-heading>
+                  <uib-tab-heading>
+                    {t}Google AMP{/t} <span class="badge">[% countPositionsSelectedbyRange(1050, 1074) %]</span>
+                  </uib-tab-heading>
                   <div class="tab-wrapper">
                     <div class="row">
-                      <div class="col-md-12">
-                        {include file="advertisement/partials/ad_position_selector.tpl" position_id="1051" input_id="amp-inner-button1"}
-                      </div>
-                      <hr>
-                      <div class="col-md-12">
-                        {include file="advertisement/partials/ad_position_selector.tpl" position_id="1052" input_id="amp-inner-button2"}
-                      </div>
-                      <hr>
-                      <div class="col-md-12">
-                        {include file="advertisement/partials/ad_position_selector.tpl" position_id="1053" input_id="amp-inner-button3"}
-                      </div>
-                    </div>
-                  </div>
-                </uib-tab>
-                {/is_module_activated}
-                {is_module_activated name="FIA_MODULE"}
-                <uib-tab>
-                  <uib-tab-heading>{t}Facebook Instant Articles{/t} <span class="badge">[% countPositionsSelectedbyRange(1075, 1100) %]</span></uib-tab-heading>
-                  <div class="tab-wrapper">
-                    <div class="row">
-                      <div class="col-md-12">
-                        {include file="advertisement/partials/ad_position_selector.tpl" position_id="1075" input_id="fia-inner-button1"}
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                      <div class="col-md-12">
-                        {include file="advertisement/partials/ad_position_selector.tpl" position_id="1076" input_id="fia-inner-button2"}
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                      <div class="col-md-12">
-                        {include file="advertisement/partials/ad_position_selector.tpl" position_id="1077" input_id="fia-inner-button3"}
-                      </div>
+                      {include file="advertisement/partials/advertisement_positions_amp.tpl"}
                     </div>
                   </div>
                 </uib-tab>
                 {/is_module_activated}
 
+                {is_module_activated name="FIA_MODULE"}
                 <uib-tab>
-                  <uib-tab-heading>{t}Others{/t} <span class="badge">[% countPositionsSelectedbyRange(1101, null) %]</span></uib-tab-heading>
+                  <uib-tab-heading>
+                    {t}Facebook Instant Articles{/t} <span class="badge">[% countPositionsSelectedbyRange(1075, 1099) %]</span>
+                  </uib-tab-heading>
+                  <div class="tab-wrapper">
+                    {include file="advertisement/partials/advertisement_positions_amp.tpl"}
+                  </div>
+                </uib-tab>
+                {/is_module_activated}
+
+                <uib-tab>
+                  <uib-tab-heading>
+                    {t}Others{/t} <span class="badge">[% countPositionsSelectedbyRange(1100, null) %]</span>
+                  </uib-tab-heading>
                   <div class="tab-wrapper">
                     <div class="row">
-                      {foreach $themeAds as $ad_id => $ad}
-                      {if $ad['theme'] == $app['theme']->uuid}
-                      <div class="row">
-                        <div class="col-md-12">
-                          {capture name="inputId"}ad-{$adId}{/capture}
-                          {include file="advertisement/partials/ad_position_selector.tpl" position_id=$ad_id input_id=$inputId size=$ad['name']}
-                        </div>
-                      </div>
-                      <hr>
-                      {/if}
-                      {/foreach}
+                      {include file="advertisement/partials/advertisement_positions_other.tpl"}
                     </div>
                   </div>
                 </uib-tab>
