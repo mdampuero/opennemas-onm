@@ -38,10 +38,10 @@ orm:
                             options: { default: null, notnull: false, length: 50 }
                         type:
                             type:    integer
-                            options: { default: 0, notnull: false }
+                            options: { default: 0, notnull: true }
                         enabled:
                             type:    boolean
-                            options: { default: 0, notnull: false }
+                            options: { default: 0, notnull: true }
                     index:
                         -
                             name:    PRIMARY
