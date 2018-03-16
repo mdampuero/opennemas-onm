@@ -87,14 +87,14 @@
             <li class="quicklinks hidden-xs ng-cloak">
               <ui-select name="group" theme="select2" ng-model="criteria.fk_user_group">
                 <ui-select-match>
-                  <strong>{t}Group{/t}:</strong> [% $select.selected.name %]
+                  <strong>{t}User Group{/t}:</strong> [% $select.selected.name %]
                 </ui-select-match>
-                <ui-select-choices repeat="item.pk_user_group as item in extra.user_groups  | filter: $select.search">
+                <ui-select-choices repeat="item.pk_user_group as item in toArray(addEmptyValue(data.extra.user_groups, 'pk_user_group'))  | filter: $select.search">
                   <div ng-bind-html="item.name | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-init="activated = [ { name: '{t}All{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
+            <li class="quicklinks hidden-xs ng-cloak" ng-init="activated = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
               <ui-select name="activated" theme="select2" ng-model="criteria.activated">
                 <ui-select-match>
                   <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
@@ -117,7 +117,7 @@
           </ul>
           <ul class="nav quick-section pull-right ng-cloak" ng-if="items.length > 0">
             <li class="quicklinks hidden-xs">
-              <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
+              <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
             </li>
           </ul>
         </div>
@@ -167,7 +167,7 @@
                     </div>
                   </td>
                   <td class="text-center hidden-xs">
-                    <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="extra.photos[item.avatar_img_id].path_img" transform="thumbnail,50,50" ng-if="item.avatar_img_id"></dynamic-image>
+                    <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path_img" transform="thumbnail,50,50" ng-if="item.avatar_img_id"></dynamic-image>
                     <gravatar class="gravatar" ng-model="item.email" size="40" ng-if="!item.avatar_img_id || item.avatar_img_id == 0"></gravatar>
                   </td>
                   <td>
@@ -233,7 +233,7 @@
         </div>
         <div class="grid-footer clearfix ng-cloak" ng-if="!loading && items.length > 0">
           <div class="pull-right">
-            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>
         </div>
       </div>
