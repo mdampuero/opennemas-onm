@@ -87,45 +87,6 @@ class UserController extends Controller
     }
 
     /**
-     * Returns a list of contents in JSON format.
-     *
-     * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
-     * @return JsonResponse              The response object.
-     *
-     * @Security("hasExtension('USER_MANAGER')
-     *     and hasPermission('USER_ADMIN')")
-     */
-    public function listAction(Request $request)
-    {
-        $oql = $request->query->get('oql', '');
-
-        $repository = $this->get('orm.manager')->getRepository('User');
-        $converter  = $this->get('orm.manager')->getConverter('User');
-
-        $total  = $repository->countBy($oql);
-        $users  = $repository->findBy($oql);
-        $groups = [];
-        $photos = [];
-
-        $users = array_map(function ($a) use ($converter, &$groups, &$photos) {
-            $groups   = array_merge($groups, $a->fk_user_group);
-            $photos[] = $a->avatar_img_id;
-
-            $data = $converter->responsify($a->getData());
-            unset($data['password']);
-
-            return $data;
-        }, $users);
-
-        return new JsonResponse([
-            'results' => $users,
-            'total'   => $total,
-            'extra'   => $this->getExtraData(array_unique($groups), array_unique($photos))
-        ]);
-    }
-
-    /**
      * Updated the users activation status.
      *
      * @param  Request      $request The request object.
@@ -200,67 +161,5 @@ class UserController extends Controller
         }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Returns a list of parameters for the template.
-     *
-     * @params array $groups The user group ids.
-     * @params array $photos The avatar ids.
-     *
-     * @return array Array of template parameters.
-     */
-    private function getExtraData($groups = [], $photos = [])
-    {
-        $em = $this->get('orm.manager');
-
-        $extra = [
-            'languages' => array_merge(
-                [ 'default' => _('Default system language') ],
-                $this->get('core.locale')->getAvailableLocales()
-            )
-        ];
-
-        $repository = $em->getRepository('UserGroup');
-        $converter  = $em->getConverter('UserGroup');
-
-        $oql = '';
-        if (!empty($groups)) {
-            $oql = sprintf('pk_user_group in [%s]', implode(',', $groups));
-        }
-
-        $userGroups = $repository->findBy($oql);
-
-        $extra['user_groups'] = $converter->responsify($userGroups);
-        $extra['user_groups'] = array_merge(
-            [
-                [ 'pk_user_group' => null, 'name' => _('All') ],
-                [ 'pk_user_group' => [], 'name' => _('Not assigned') ],
-            ],
-            $extra['user_groups']
-        );
-
-        if (!empty($photos)) {
-            $photos = $this->get('entity_repository')->findBy([
-                'content_type_name' => [ [ 'value' => 'photo' ] ],
-                'pk_content'        => [ [ 'value' => $photos, 'operator' => 'in' ] ]
-            ]);
-
-            foreach ($photos as $p) {
-                $extra['photos'][$p->pk_photo] = $p;
-            }
-        }
-
-        if (!empty($this->get('core.instance')->getClient())) {
-            $client = $em->getRepository('Client')
-                ->find($this->get('core.instance')->getClient());
-
-            $extra['client'] = $em->getConverter('Client')->responsify($client);
-        }
-
-        $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
-        $extra['taxes']     = $this->get('vat')->getTaxes();
-
-        return $extra;
     }
 }
