@@ -521,9 +521,18 @@ jQuery(document).ready(function($) {
             </div>
 
             {* contents only shown when page is already loaded *}
-            <div class="grid-title shaded ng-cloak" ng-if="!loading">
-              <div class="ng-cloak small m-b-5 positions-selected"> {t 1="[% positions.length %]"}%1 positions{/t}</div>
-              <div class="ng-cloak"><div ng-repeat="position in positions| orderBy:'position'" class="badge p-l-15 p-r-15 m-b-5 m-r-5" >[% extra['ads_positions'][position] %]</div></div>
+            <div class="grid-title shaded ng-cloak positions-selected" ng-show="!loading">
+              <div class="ng-cloak m-b-5 positions-selected-counter">
+                <span ng-if="positions.length == 0">{t}No positions selected, mark those you want on the form below.{/t}</span>
+                <span ng-if="positions.length > 0">{t 1="[% positions.length %]"}%1 positions{/t}</span>
+              </div>
+              <div class="ng-cloak positions-selected-list collapsed" ng-class="{ collapsed : collapsed }">
+                <div ng-repeat="position in positions| orderBy:'position'" class="position badge p-l-15 p-r-15 m-b-5 m-r-5" >[% extra['ads_positions'][position] %]</div>
+                <div class="position-selected-hidden-counter small-text btn btn-link" ng-click="collapsed = !collapsed" ng-show="hidden_selected_positions_counter > 0">
+                  <span ng-if="collapsed" {* uib-tooltip="{t}Show all positions{/t}" tooltip-placement="left" *}> {t 1="[% hidden_selected_positions_counter %]"}And %1 more…{/t}</span>
+                  <span ng-if="!collapsed"><span class="fa fa-chevron-up"></span> {t}Show less…{/t}</span>
+                </div>
+            </div>
             </div>
             <div class="grid-body ng-cloak" ng-if="!loading">
               <uib-tabset>

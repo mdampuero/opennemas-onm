@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('advertisement', 'backend_ws_contents_list')">
+<div ng-app="BackendApp" ng-controller="AdvertisementListCtrl" ng-init="init('advertisement', 'backend_ws_contents_list')">
   <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -17,26 +17,26 @@
             </h4>
           </li>
         </ul>
-      </div>
-      <div class="all-actions pull-right">
-        <ul class="nav quick-section">
-          {acl isAllowed="ADVERTISEMENT_SETTINGS"}
-          <li class="quicklinks">
-            <a class="btn btn-link" href="{url name=admin_ads_config}">
-              <i class="fa fa-cog fa-lg"></i>
-            </a>
-          </li>
-          <li class="quicklinks">
-            <span class="h-seperate"></span>
-          </li>
-          {/acl}
-          <li class="quicklinks">
-            <a href="{url name=admin_ad_create}" class="btn btn-primary" id="create-button">
-              <i class="fa fa-plus"></i>
-              {t}Create{/t}
-            </a>
-          </li>
-        </ul>
+        <div class="all-actions pull-right">
+          <ul class="nav quick-section">
+            {acl isAllowed="ADVERTISEMENT_SETTINGS"}
+            <li class="quicklinks">
+              <a class="btn btn-link" href="{url name=admin_ads_config}">
+                <i class="fa fa-cog fa-lg"></i>
+              </a>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+            {/acl}
+            <li class="quicklinks">
+              <a href="{url name=admin_ad_create}" class="btn btn-primary" id="create-button">
+                <i class="fa fa-plus"></i>
+                {t}Create{/t}
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -180,12 +180,12 @@
                     <label for="select-all"></label>
                   </div>
                 </th>
-                <th>{t}Title{/t}</th>
-                <th class="hidden-xs hidden-sm " width="100">{t}Position{/t}</th>
-                <th class="hidden-xs text-center" width="10"><i class="fa fa-mouse-pointer"></i></th>
-                <th class="hidden-xs hidden-sm text-center" width="50">{t}Type{/t}</th>
+                <th class="">{t}Title{/t}</th>
+                <th class="hidden-xs hidden-sm " style="width: 33%;">{t}Position{/t}</th>
+                <th class="hidden-xs text-center"><i class="fa fa-mouse-pointer"></i></th>
+                <th class="hidden-xs hidden-sm text-center">{t}Type{/t}</th>
                 {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
-                <th class="text-center" width="100">{t}Published{/t}</th>
+                <th class="text-center">{t}Published{/t}</th>
                 {/acl}
               </tr>
             </thead>
@@ -197,14 +197,13 @@
                     <label for="checkbox[%$index%]"></label>
                   </div>
                 </td>
-                <td style="max-width:50%">
-                  <span class="visible-xs-inline-block visible-sm-inline-block">
+                <td>
+                  <span class="small-text visible-xs-inline-block visible-sm-inline-block">
                     <i class="fa fa-file-picture-o fa-lg m-r-5 text-success" ng-if="content.with_script == 0 && content.is_flash != 1" title="{t}Media element (jpg, png, gif){/t}"></i>
                     <i class="fa fa-file-video-o fa-lg m-r-5 text-danger" ng-if="content.with_script == 0 && content.is_flash == 1" title="{t}Media flash element (swf){/t}"></i>
                     <i class="fa fa-file-code-o fa-lg m-r-5 text-info" ng-if="content.with_script == 1" title="Javascript"></i>
                     <i class="fa fa-gg fa-lg m-r-5 text-info" ng-if="content.with_script == 2" title="OpenX"></i>
                     <i class="fa fa-google fa-lg m-r-5 text-danger" ng-if="content.with_script == 3" title="Google DFP"></i>
-                    [% map[content.type_advertisement].name %]
                   </span>
                   [% content.title %]
                   <div class="small-text">
@@ -218,30 +217,29 @@
                   </div>
                   <div class="small-text">
                     <span class="hidden-lg">
-                      <strong>{t}Position{/t}:</strong>
-                      <span nf-if="content.type_advertisement.length > 2">{t 1="[% content.type_advertisement.length %]"}%1 positions selected{/t}</span>
-                      <span nf-if="content.type_advertisement.length <= 2">
-                        <span class="label m-l-5" ng-repeat="value in content.type_advertisement">[% map[value].name %]</span>
-                      </span>
-
+                      <span ng-show="content.positions.length > 1">{t 1="[% content.positions.length %]"}%1 positions{/t},</span>
+                      <span ng-show="content.positions.length == 1"><span ng-repeat="value in content.positions | limitTo:1">[% map[value].name %]</span>,</span>
+                      <span ng-show="content.positions.length == 0">{t}No positions assigned{/t},</span>
+                      <span ng-show="content.num_clic_count == 0">{t}No clicks{/t}</span>
+                      <span ng-show="content.num_clic_count > 0">{t 1="[% content.num_clic_count %]"}%1 clicks{/t}</span>
                     </span>
                   </div>
                   <div class="listing-inline-actions" >
                     {acl isAllowed="ADVERTISEMENT_UPDATE"}
-                    <a class="btn btn-primary btn-small" href="[% edit(content.id, 'admin_advertisement_show') %]" title="{t}Edit{/t}">
+                    <a class="btn btn-default btn-small" href="[% edit(content.id, 'admin_advertisement_show') %]" title="{t}Edit{/t}">
                       <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                     </a>
                     {/acl}
                     {acl isAllowed="ADVERTISEMENT_DELETE"}
-                    <button class="link link-danger" ng-click="sendToTrash(content)" type="button">
+                    <button class="btn btn-danger btn-small" ng-click="sendToTrash(content)" type="button">
                       <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                     </button>
                     {/acl}
                   </div>
                 </td>
-                <td class="hidden-xs hidden-sm" style="max-width:33%">
-                  <span ng-repeat="value in content.positions | limitTo:2" class="ad-position">[% map[value].name %]</span>
-                  <span ng-if="content.positions.length > 2" class="small-text" uib-tooltip-html="[% tooltipPositionsForContent(content) %]">{t 1="[% content.positions.length - 2 %]"}And %1 more…{/t}</span>
+                <td class="hidden-xs hidden-sm small-text">
+                  <span ng-repeat="value in content.positions | limitTo:3" class="ad-position">[% map[value].name %]</span>
+                  <span ng-show="content.positions.length > 2" tooltip-class="text-left" uib-tooltip-template="'ad_position_template'" tooltip-placement="bottom">{t 1="[% content.positions.length - 3 %]"}And %1 more…{/t}</span>
                 </td>
                 <td class="hidden-xs text-center">
                   [% content.num_clic_count %]
@@ -283,6 +281,9 @@
   </script>
   <script type="text/ng-template" id="modal-adblock">
     {include file="base/modals/modalAdblock.tpl"}
+  </script>
+  <script type="text/ng-template" id="ad_position_template">
+    <div ng-repeat="position in content.positions">[% map[position].name %]</div>
   </script>
 </div>
 {/block}

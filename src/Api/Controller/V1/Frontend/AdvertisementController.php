@@ -288,8 +288,8 @@ class AdvertisementController extends Controller
         }
 
         $object->id          = (int) $element->pk_content;
-        $object->position    = array_map('intval', explode(',', $element->type_advertisement));
         $object->type        = implode('+', $types); // Types: normal, interstitial, insterstitial+normal
+        $object->position    = $element->type_advertisement;
         $object->publicId    = date('YmdHis', strtotime($element->created)) .
             sprintf('%06d', $element->pk_advertisement);
         $object->timeout     = (int) $element->timeout;

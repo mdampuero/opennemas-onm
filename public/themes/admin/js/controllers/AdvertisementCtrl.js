@@ -13,8 +13,8 @@
    *   Handles actions for advertisement inner.
    */
   angular.module('BackendApp.controllers').controller('AdvertisementCtrl', [
-    '$controller', '$uibModal', '$scope',
-    function($controller, $uibModal, $scope) {
+    '$controller', '$uibModal', '$scope', '$timeout',
+    function($controller, $uibModal, $scope, $timeout) {
       // Initialize the super class and extend it.
       $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -168,6 +168,17 @@
         }).length;
       };
 
+      $scope.countHiddenSelectedPositions = function() {
+
+        var container_height = $('.positions-selected-list').height();
+
+        var hidden = $('.positions-selected-list .position').filter(function() {
+          return $(this).position().top + $(this).height() >= container_height;
+        });
+
+        $scope.hidden_selected_positions_counter = hidden.length;
+      };
+
       /**
        * @function addSize
        * @memberOf AdvertisementCtrl
@@ -239,6 +250,10 @@
       $scope.init = function(params, categories, positions) {
         if (params) {
           $scope.params = params;
+        }
+
+        if (!positions || positions.constructor !== Array) {
+          positions = [];
         }
 
         $scope.positions = positions;
@@ -324,6 +339,11 @@
         }
 
         $scope.loading = false;
+        $scope.collapsed = true;
+
+        $timeout(function() {
+          $scope.countHiddenSelectedPositions();
+        }, 2000);
       };
 
       /**
@@ -522,8 +542,10 @@
         $scope.user_groups = angular.toJson(nv);
       }, true);
 
-      $scope.tooltipPositionsForContent = function(content) {
-      };
+      // Updates hidden selected positions text message when some position changes
+      $scope.$watch('positions', function(nv) {
+        $scope.countHiddenSelectedPositions();
+      }, true);
     }
   ]);
 })();
