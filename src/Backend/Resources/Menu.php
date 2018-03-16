@@ -358,7 +358,7 @@ $menuXml = [
                         'id'          => 'user_manager',
                         'title'       => _('Users'),
                         'icon'        => 'fa fa-user',
-                        'link'        => url('admin_acl_user'),
+                        'link'        => url('backend_users_list'),
                         'module_name' => 'USER_MANAGER',
                         'privilege'   => 'USER_ADMIN',
                     ],

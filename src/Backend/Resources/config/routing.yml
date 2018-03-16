@@ -831,47 +831,6 @@ admin_cache_manager_clearrediscache:
     path:     /system/cachemanager/clear-redis-cache
     defaults: { _controller  : BackendBundle:CacheManager:clearRedisCacheForInstance }
 
-# User management routes
-admin_acl_user:
-    path:     /acl/users
-    defaults: { _controller  : BackendBundle:User:list }
-
-admin_acl_user_create:
-    path:     /acl/users/create
-    defaults: { _controller  : BackendBundle:User:create }
-
-admin_acl_user_save:
-    path:     /acl/users/save
-    defaults: { _controller  : BackendBundle:User:save }
-
-admin_acl_user_show:
-    path:     /acl/users/{id}/show
-    defaults: { _controller  : BackendBundle:User:show }
-    options:
-        expose: true
-
-admin_acl_user_social:
-    path:     /acl/user/{id}/{resource}
-    defaults: { _controller  : BackendBundle:User:social }
-    requirements:
-        resource: facebook|twitter
-
-admin_acl_user_social_disconnect:
-    path:     /acl/user/{id}/{resource}/disconnect
-    defaults: { _controller  : BackendBundle:User:disconnect }
-
-admin_acl_user_update:
-    path:     /acl/user/{id}/update
-    defaults: { _controller  : BackendBundle:User:update }
-
-admin_acl_user_set_meta:
-    path:     /acl/user/set-meta
-    defaults: { _controller  : BackendBundle:User:setMeta }
-
-admin_acl_user_toogle_enabled:
-    path:     /acl/user/{id}/toggle-enabled
-    defaults: { _controller  : BackendBundle:User:toogleEnabled }
-
 admin_system_settings:
     path:     /system/settings
     defaults: { _controller  : BackendBundle:SystemSettings:default }
@@ -973,6 +932,10 @@ backend_store:
 backend_theme:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/theme.yml'
+
+backend_user:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/user.yml'
 
 backend_user_group:
     prefix:   /
