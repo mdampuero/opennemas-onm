@@ -72,22 +72,19 @@ class UserController extends Controller
         $extra['settings']  = $em->getDataSet('Settings', 'instance')
             ->get('user_settings', []);
 
-        return $this->render(
-            'acl/user/new.tpl',
-            [
-                'extra'          => $extra,
-                'user_groups'    => $userGroups,
-                'languages'      => $languages,
-                'categories'     => $categories,
-                'min_pass_level' => $minPassLevel,
-                'gender_options' => [
-                    ''       => _('Undefined'),
-                    'male'   => _('Male'),
-                    'female' => _('Female'),
-                    'other'  => _('Other')
-                ],
-            ]
-        );
+        return $this->render('user/item.tpl', [
+            'extra'          => $extra,
+            'user_groups'    => $userGroups,
+            'languages'      => $languages,
+            'categories'     => $categories,
+            'min_pass_level' => $minPassLevel,
+            'gender_options' => [
+                ''       => _('Undefined'),
+                'male'   => _('Male'),
+                'female' => _('Female'),
+                'other'  => _('Other')
+            ],
+        ]);
     }
 
     /**
@@ -116,16 +113,11 @@ class UserController extends Controller
 
         $this->get('core.dispatcher')->dispatch('social.disconnect', ['user' => $user]);
 
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_acl_user_social',
-                [
-                    'id'       => $id,
-                    'resource' => $resource,
-                    'style'    => $request->get('style')
-                ]
-            )
-        );
+        return $this->redirect($this->generateUrl('admin_acl_user_social', [
+            'id'       => $id,
+            'resource' => $resource,
+            'style'    => $request->get('style')
+        ]));
     }
 
     /**
@@ -332,24 +324,21 @@ class UserController extends Controller
                 $user->terms_accepted->format('Y-m-d H:i:s');
         }
 
-        return $this->render(
-            'acl/user/new.tpl',
-            [
-                'extra'          => $extra,
-                'user'           => $converter->responsify($user),
-                'user_groups'    => $userGroups,
-                'languages'      => $languages,
-                'categories'     => $categories,
-                'selected'       => $selected,
-                'min_pass_level' => $minPassLevel,
-                'gender_options' => [
-                    ''       => _('Undefined'),
-                    'male'   => _('Male'),
-                    'female' => _('Female'),
-                    'other'  => _('Other')
-                ],
+        return $this->render('acl/user/new.tpl', [
+            'extra'          => $extra,
+            'user'           => $converter->responsify($user),
+            'user_groups'    => $userGroups,
+            'languages'      => $languages,
+            'categories'     => $categories,
+            'selected'       => $selected,
+            'min_pass_level' => $minPassLevel,
+            'gender_options' => [
+                ''       => _('Undefined'),
+                'male'   => _('Male'),
+                'female' => _('Female'),
+                'other'  => _('Other')
             ]
-        );
+        ]);
     }
 
     /**
