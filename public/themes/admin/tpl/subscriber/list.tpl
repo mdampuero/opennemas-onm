@@ -15,17 +15,12 @@
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
-              {acl isAllowed="USER_SETTINGS"}
-                {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
-                  <li class="quicklinks">
-                    <a class="btn btn-link" href="{url name=backend_acl_user_settings_show}" title="{t}Config users module{/t}">
-                      <i class="fa fa-cog fa-lg"></i>
-                    </a>
-                  </li>
-                  <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                  </li>
-                {/is_module_activated}
+              {acl isAllowed="SUBSCRIBER_SETTINGS"}
+                <li class="quicklinks">
+                  <a class="btn btn-link" href="[% routing.generate('backend_subscribers_settings') %]" title="{t}Config users module{/t}">
+                    <i class="fa fa-cog fa-lg"></i>
+                  </a>
+                </li>
               {/acl}
               <li class="quicklinks">
                 <a class="btn btn-white" href="[% routing.generate('api_v1_backend_subscribers_export') %]">

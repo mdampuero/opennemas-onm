@@ -183,6 +183,20 @@ class SubscriberController extends Controller
     }
 
     /**
+     * Returns the list of settings for CONTENT_SUBSCRIPTIONS extension.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function listSettingsAction()
+    {
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('user_settings', []);
+
+        return new JsonResponse([ 'settings' => $settings ]);
+    }
+
+    /**
      * Returns the data to create a new subscriber.
      *
      * @return JsonResponse The response object.
@@ -246,6 +260,30 @@ class SubscriberController extends Controller
                 _('%s subscribers could not be updated successfully'),
                 count($ids) - $updated
             ), 'error');
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Saves settings for CONTENT_SUBSCRIPTIONS extension.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResposne The response object.
+     */
+    public function saveSettingsAction(Request $request)
+    {
+        $msg      = $this->get('core.messenger');
+        $settings = $request->request->all();
+
+        try {
+            $this->get('orm.manager')->getDataSet('Settings', 'instance')
+                ->set('user_settings', $settings);
+
+            $msg->add(_('Settings saved successfully'), 'success');
+        } catch (\Exception $e) {
+            $msg->add(_('Unable to save settings'), 'error', 400);
         }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());

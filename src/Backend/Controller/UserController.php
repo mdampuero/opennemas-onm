@@ -138,7 +138,7 @@ class UserController extends Controller
      */
     public function listAction()
     {
-        return $this->render('acl/user/list.tpl');
+        return $this->render('user/list.tpl');
     }
 
     /**
@@ -350,11 +350,6 @@ class UserController extends Controller
                 ],
             ]
         );
-    }
-
-    public function showSettingsAction()
-    {
-        return $this->render('acl/user/settings.tpl');
     }
 
     /**

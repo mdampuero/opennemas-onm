@@ -15,9 +15,9 @@ use Common\Core\Controller\Controller;
 class SubscriberController extends Controller
 {
     /**
-     * Displays the list of subscriptions.
+     * Displays the form to create a subscriber.
      *
-     * @return Response The response object
+     * @return Response The response object.
      *
      * @Security("hasExtension('CONTENT_SUBSCRIPTIONS')
      *     and hasPermission('SUBSCRIBER_CREATE')")
@@ -28,9 +28,9 @@ class SubscriberController extends Controller
     }
 
     /**
-     * Displays the list of subscriptions.
+     * Displays the list of subscribers.
      *
-     * @return Response The response object
+     * @return Response The response object.
      *
      * @Security("hasExtension('CONTENT_SUBSCRIPTIONS')
      *     and hasPermission('SUBSCRIBER_LIST')")
@@ -41,9 +41,22 @@ class SubscriberController extends Controller
     }
 
     /**
-     * Displays the list of subscriptions.
+     * Displays the list of settings for subscribers.
      *
-     * @return Response The response object
+     * @return Response The response object.
+     *
+     * @Security("hasExtension('CONTENT_SUBSCRIPTIONS')
+     *     and hasPermission('SUBSCRIBER_SETTINGS')")
+     */
+    public function settingsAction()
+    {
+        return $this->render('subscriber/settings.tpl');
+    }
+
+    /**
+     * Displays the form to edit a subscriber.
+     *
+     * @return Response The response object.
      *
      * @Security("hasExtension('CONTENT_SUBSCRIPTIONS')
      *     and hasPermission('SUBSCRIBER_UPDATE')")

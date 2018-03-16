@@ -844,16 +844,6 @@ admin_acl_user_save:
     path:     /acl/users/save
     defaults: { _controller  : BackendBundle:User:save }
 
-admin_acl_user_settings_show:
-    path:     /acl/users/settings
-    defaults: { _controller  : BackendBundle:User:showSettings }
-    methods:  [ GET ]
-
-admin_acl_user_settings_save:
-    path:     /acl/users/settings
-    defaults: { _controller  : BackendBundle:User:saveSettings }
-    methods:  [ POST ]
-
 admin_acl_user_show:
     path:     /acl/users/{id}/show
     defaults: { _controller  : BackendBundle:User:show }

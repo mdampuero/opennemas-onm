@@ -1,15 +1,17 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form ng-controller="UserSettingsCtrl">
+  <form ng-controller="SubscriberSettingsCtrl">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-user"></i>
-                {t}Users{/t}
+                <a class="no-padding" href="[% routing.generate('backend_subscribers_list') %]">
+                  <i class="fa fa-user"></i>
+                  {t}Subscribers{/t}
+                </a>
               </h4>
             </li>
             <li class="quicklinks hidden-xs">
@@ -22,15 +24,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_acl_user}" title="{t}Go back to list{/t}">
-                  <i class="fa fa-reply"></i>
-                </a>
-              </li>
-              <li class="quicklinks">
-                <span class="h-seperate"></span>
-              </li>
-              <li class="quicklinks">
-                <button class="btn btn-loading btn-primary" ng-click="save()" type="button">
+                <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" type="button">
                   <span class="fa" ng-class="{ 'fa-save': !saving, 'fa-circle-o-notch fa-spin': saving }"></span>
                   <span class="text">{t}Save{/t}</span>
                 </button>
@@ -40,14 +34,20 @@
         </div>
       </div>
     </div>
-    <div class="content ng-cloak no-animate" ng-if="loading">
-      <div class="spinner-wrapper">
-        <div class="loading-spinner"></div>
-        <div class="spinner-text">{t}Loading{/t}...</div>
+    <div class="content">
+      <div class="listing-no-contents" ng-hide="!flags.loading">
+        <div class="text-center p-b-15 p-t-15">
+          <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
+          <h3 class="spinner-text">{t}Loading{/t}...</h3>
+        </div>
       </div>
-    </div>
-    <div class="content ng-cloak" ng-if="!loading">
-      <div class="grid simple ng-cloak">
+      <div class="listing-no-contents ng-cloak" ng-if="!flags.loading && items.length == 0">
+        <div class="text-center p-b-15 p-t-15">
+          <i class="fa fa-4x fa-warning text-warning"></i>
+          <h3>{t}Unable to find setting for subscribers.{/t}</h3>
+        </div>
+      </div>
+      <div class="grid simple ng-cloak" ng-if="!flags.loading && settings">
         <div class="grid-body">
           <h4 class="no-margin m-b-15">{t}Extra fields{/t}</h4>
           <p class="m-b-15">{t}This fields will be asked during registration and can be edited in the control panel.{/t}</p>
@@ -103,5 +103,6 @@
           </div>
         </div>
       </div>
+    </div>
   </form>
-  {/block}
+{/block}
