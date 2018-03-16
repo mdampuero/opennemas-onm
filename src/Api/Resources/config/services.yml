@@ -22,3 +22,7 @@ services:
     api.validator.user_group:
         class:     Api\Validator\V1\UserGroupValidator
         arguments: [ '@service_container' ]
+
+    api.validator.user:
+        class:     Api\Validator\V1\UserValidator
+        arguments: [ '@service_container' ]
