@@ -1,7 +1,7 @@
 services:
     api.service.subscriber:
         class:     Api\Service\V1\SubscriberService
-        arguments: [ '@service_container', 'Common\ORM\Entity\User' ]
+        arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.subscriber' ]
 
     api.service.subscription:
         class:     Api\Service\V1\SubscriptionService
@@ -10,6 +10,10 @@ services:
     api.service.user_group:
         class:     Api\Service\V1\UserGroupService
         arguments: [ '@service_container', 'Common\ORM\Entity\UserGroup', '@api.validator.user_group' ]
+
+    api.validator.subscriber:
+        class:     Api\Validator\V1\SubscriberValidator
+        arguments: [ '@service_container' ]
 
     api.validator.subscription:
         class:     Api\Validator\V1\SubscriptionValidator
