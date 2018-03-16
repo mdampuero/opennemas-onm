@@ -28,7 +28,7 @@
                 {/is_module_activated}
               {/acl}
               <li class="quicklinks">
-                <a class="btn btn-white" href="{url name=backend_ws_users_export}" id="download-button">
+                <a class="btn btn-white" href="[% routing.generate('api_v1_backend_subscribers_export') %]">
                   <span class="fa fa-download"></span>
                   {t}Download{/t}
                 </a>

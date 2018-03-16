@@ -12,6 +12,7 @@ namespace Api\Controller\V1\Backend;
 use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -97,6 +98,67 @@ class SubscriberController extends Controller
         }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Downloads the list of subscribers with metas.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function exportAction()
+    {
+        $items = $this->get('api.service.subscriber')->getList();
+
+        $csvHeaders = [
+            _('Name'), _('Username'), _('Activated'), _('Email'), _('Gender'),
+            _('Date Birth'),  _('Postal Code'),  _('Registration date'),
+        ];
+
+        $output = implode(",", $csvHeaders);
+
+        foreach ($items['results'] as &$item) {
+            switch ($item->gender) {
+                case 'male':
+                    $gender = _('Male');
+                    break;
+                case 'female':
+                    $gender = _('Female');
+                    break;
+
+                default:
+                    $gender = empty($item->gender) ? _('Not defined') : _('Other');
+                    break;
+            }
+
+            $row = [
+                $item->name,
+                $item->username,
+                $item->activated,
+                $item->email,
+                $gender,
+                !empty($item->birth_date) ? $item->birth_date : '',
+                !empty($item->postal_code) ? $item->postal_code : '',
+                !empty($item->register_date) ? $item->register_date : '',
+            ];
+
+            $output .= "\n" . implode(",", $row);
+        }
+
+        $response = new Response($output, 200);
+
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'Subscribers list Export');
+        $response->headers->set(
+            'Content-Disposition',
+            'attachment; filename=subscribers-' . date('Y-m-d') . '.csv'
+        );
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response;
     }
 
     /**
