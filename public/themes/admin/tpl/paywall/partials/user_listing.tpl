@@ -19,7 +19,7 @@
     {foreach from=$users item=user}
     <tr data-id="{$user->id}">
         <td class="left">
-            <a href="{url name=admin_acl_user_show id=$user->id}#paywall">{$user->username|clearslash}</a>
+            <a href="{url name=backend_user_show id=$user->id}#paywall">{$user->username|clearslash}</a>
         </td>
         <td class="left">
             <a href="mailto:{$user->email|clearslash}" >
@@ -54,7 +54,7 @@
             {/if}
         </td>
         <td class="right">
-            <a href="{url name=admin_acl_user_show id=$user->id}#paywall" class="btn btn-white" title="{t}Edit{/t}"><i class="fa fa-pencil"></i></a>
+            <a href="{url name=backend_user_show id=$user->id}#paywall" class="btn btn-white" title="{t}Edit{/t}"><i class="fa fa-pencil"></i></a>
         </td>
         {/if}
 

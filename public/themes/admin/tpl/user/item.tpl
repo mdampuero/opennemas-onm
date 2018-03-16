@@ -48,7 +48,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if isset($user['id'])}{url name=admin_acl_user_update id=$user['id']}{else}{url name=admin_acl_user_save}{/if}" method="POST" enctype="multipart/form-data" autocomplete="off" ng-controller="UserCtrl" ng-init="{if $user['id']}id = '{$user['id']}'; activated = '{$user['activated']}';type = {$user['type']}{else}type = 1{/if};extra = {json_encode($extra)|clear_json}">
+<form action="{if isset($user['id'])}{url name=backend_user_update id=$user['id']}{else}{url name=backend_user_save}{/if}" method="POST" enctype="multipart/form-data" autocomplete="off" ng-controller="UserCtrl" ng-init="{if $user['id']}id = '{$user['id']}'; activated = '{$user['activated']}';type = {$user['type']}{else}type = 1{/if};extra = {json_encode($extra)|clear_json}">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -310,13 +310,13 @@
                 <div class="form-group">
                   <label class="control-label" for="facebook_login">{t}Facebook{/t}</label>
                   <div class="controls">
-                    <iframe src="{url name=admin_acl_user_social id=$user['id'] resource='facebook'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
+                    <iframe src="{url name=backend_user_social id=$user['id'] resource='facebook'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="control-label" for="twitter_login">{t}Twitter{/t}</label>
                   <div class="controls">
-                    <iframe src="{url name=admin_acl_user_social id=$user['id'] resource='twitter'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
+                    <iframe src="{url name=backend_user_social id=$user['id'] resource='twitter'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
                   </div>
                 </div>
               </div>

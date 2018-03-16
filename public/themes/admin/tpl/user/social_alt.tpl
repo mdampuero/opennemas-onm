@@ -61,7 +61,7 @@
         {/if}
       </p>
       <p>
-        <a href="{url name=admin_acl_user_social_disconnect id=$user->id resource=$resource style='orb'}" title="{t}Disconnect from Facebook{/t}" class="btn btn-danger">{t}Disconnect{/t}</a>
+        <a href="{url name=backend_user_social_disconnect id=$user->id resource=$resource style='orb'}" title="{t}Disconnect from Facebook{/t}" class="btn btn-danger">{t}Disconnect{/t}</a>
       </p>
     {else}
       {if $current_user_id == $user->id}

@@ -84,7 +84,7 @@
 
             if (response.success) {
               if (value === 0) {
-                $window.location.href = routing.generate('admin_acl_user_show',
+                $window.location.href = routing.generate('backend_user_show',
                   { id: $scope.item.id });
               }
             }

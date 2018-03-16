@@ -56,7 +56,7 @@
         <p>
         {if $current_user_id == $user->id}
           {t 1=$resource_name}Your account is connected to %1.{/t}
-          <a href="{url name=admin_acl_user_social_disconnect id=$user->id resource=$resource}" title="{t}Disconnect from Facebook{/t}" class="disconnect">{t}Disconnect{/t}</a>
+          <a href="{url name=backend_user_social_disconnect id=$user->id resource=$resource}" title="{t}Disconnect from Facebook{/t}" class="disconnect">{t}Disconnect{/t}</a>
         {/if}
         </p>
         <ul class="social-connection clearfix">
