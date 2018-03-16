@@ -47,7 +47,7 @@ class SubscriberService extends OrmService
     public function getItem($id)
     {
         try {
-            $oql = sprintf('id = %s and type != 1', $id);
+            $oql = sprintf('id = %s and type != 0', $id);
 
             return $this->container->get('orm.manager')
                 ->getRepository($this->entity, $this->origin)
@@ -65,7 +65,7 @@ class SubscriberService extends OrmService
     {
          // Force OQL to include type
         $oql = $this->container->get('orm.oql.fixer')->fix($oql)
-            ->addCondition('type != 1')
+            ->addCondition('type != 0')
             ->getOql();
 
         return parent::getList($oql);
@@ -124,7 +124,7 @@ class SubscriberService extends OrmService
 
          // Force OQL to include the type value
         return $this->container->get('orm.oql.fixer')->fix($oql)
-            ->addCondition('type = 1')
+            ->addCondition('type != 0')
             ->getOql();
     }
 }

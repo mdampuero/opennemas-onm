@@ -112,9 +112,9 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
         $this->fixer->expects($this->once())->method('fix')
             ->with('email = "flob@garply.com"');
         $this->fixer->expects($this->once())->method('getOql')
-            ->willReturn('email = "flob@garply.com" and type = 1');
+            ->willReturn('email = "flob@garply.com" and type != 0');
         $this->repository->expects($this->once())->method('findBy')
-            ->with('email = "flob@garply.com" and type = 1')
+            ->with('email = "flob@garply.com" and type != 0')
             ->willReturn(new Entity([]));
 
         $this->service->createItem($data);
@@ -140,7 +140,7 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
         $item = new Entity([ 'type' => 2 ]);
 
         $this->repository->expects($this->once())->method('findOneBy')
-            ->with('id = 1 and type != 1')->willReturn($item);
+            ->with('id = 1 and type != 0')->willReturn($item);
 
         $this->assertEquals($item, $this->service->getItem(1));
     }
@@ -153,7 +153,7 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetItemWhenErrorWhenNoSubscriber()
     {
         $this->repository->expects($this->once())->method('findOneBy')
-            ->with('id = 1 and type != 1')
+            ->with('id = 1 and type != 0')
             ->will($this->throwException(new \Exception()));
 
         $this->service->getItem(1);
@@ -172,12 +172,12 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
         $this->fixer->expects($this->once())->method('fix');
         $this->fixer->expects($this->once())->method('addCondition');
         $this->fixer->expects($this->once())->method('getOql')
-            ->willReturn('type = 1');
+            ->willReturn('type != 0');
 
         $this->repository->expects($this->once())->method('countBy')
-            ->with('type = 1')->willReturn(2);
+            ->with('type != 0')->willReturn(2);
         $this->repository->expects($this->once())->method('findBy')
-            ->with('type = 1')->willReturn($results);
+            ->with('type != 0')->willReturn($results);
 
         $response = $this->service->getList('order by title asc');
 
@@ -247,7 +247,7 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
             ->with($data)->willReturn($data);
 
         $this->repository->expects($this->once())->method('findOneBy')
-            ->with('id = 1 and type != 1')->willReturn($item);
+            ->with('id = 1 and type != 0')->willReturn($item);
         $this->em->expects($this->once())->method('persist')
             ->with($item);
 
@@ -268,9 +268,9 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
         $this->fixer->expects($this->once())->method('fix')
             ->with('id != "1" and email = "flob@garply.com"');
         $this->fixer->expects($this->once())->method('getOql')
-            ->willReturn('id != "1" and email = "flob@garply.com" and type = 1');
+            ->willReturn('id != "1" and email = "flob@garply.com" and type != 0');
         $this->repository->expects($this->once())->method('findBy')
-            ->with('id != "1" and email = "flob@garply.com" and type = 1')
+            ->with('id != "1" and email = "flob@garply.com" and type != 0')
             ->willReturn([ new Entity([]) ]);
 
         $this->service->updateItem(1, $data);
@@ -299,7 +299,7 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
             ->with($data)->willReturn($data);
 
         $this->repository->expects($this->once())->method('findOneBy')
-            ->with('id = 1 and type != 1')->willReturn($item);
+            ->with('id = 1 and type != 0')->willReturn($item);
         $this->em->expects($this->once())->method('persist')
             ->with($item);
 
