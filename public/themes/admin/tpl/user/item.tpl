@@ -55,8 +55,10 @@
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-user"></i>
-              {t}Users{/t}
+              <a class="no-padding" href="{url name=backend_users_list}">
+                <i class="fa fa-user"></i>
+                {t}Users{/t}
+              </a>
             </h4>
           </li>
           <li class="quicklinks hidden-xs">
@@ -64,20 +66,12 @@
           </li>
           <li class="quicklinks hidden-xs">
             <h5>
-              {if isset($user->id)}{t}Editing user{/t}{else}{t}Creating user{/t}{/if}
+              {if isset($user->id)}{t}Edit{/t}{else}{t}Create{/t}{/if}
             </h5>
           </li>
         </ul>
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
-            <li class="quicklinks">
-              <a class="btn btn-link" href="{url name=admin_acl_user}">
-                <i class="fa fa-reply"></i>
-              </a>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
             <li class="quicklinks">
               <button class="btn btn-primary" data-text="{t}Saving{/t}..." name="action" ng-click="confirmUser({if $app.user->isMaster()}true{/if})" type="button" value="validate" id="save-button">
                 <i class="fa fa-save"></i>
@@ -366,7 +360,7 @@
     </div>
   </div>
   <script type="text/ng-template" id="modal-update-selected">
-    {include file="acl/user/modals/_modalBatchUpdate.tpl"}
+    {include file="user/modals/_modalBatchUpdate.tpl"}
   </script>
 </form>
 {/block}
