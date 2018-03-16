@@ -324,7 +324,7 @@ class UserController extends Controller
                 $user->terms_accepted->format('Y-m-d H:i:s');
         }
 
-        return $this->render('acl/user/new.tpl', [
+        return $this->render('user/item.tpl', [
             'extra'          => $extra,
             'user'           => $converter->responsify($user),
             'user_groups'    => $userGroups,
