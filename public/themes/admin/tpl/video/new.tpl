@@ -36,6 +36,14 @@
       $("#endtime").on("dp.change",function (e) {
         $('#starttime').data("DateTimePicker").maxDate(e.date);
       });
+
+      $(":submit").on("click", function (e) {
+        var tags = $('.bootstrap-tagsinput span').length;
+        if(tags === 0) {
+          $('.bootstrap-tagsinput input').attr("required", "true");
+        }
+        $('.bootstrap-tagsinput input').attr("required", "false");
+      });
     </script>
   {/javascripts}
 {/block}
