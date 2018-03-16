@@ -132,6 +132,30 @@
                 </div>
               </div>
             </div>
+            {acl isAllowed="USER_ADMIN"}
+              <div class="grid simple ng-cloak" ng-if="data.extra.settings && data.extra.settings.fields && data.extra.settings.fields.length > 0">
+                <div class="grid-title">
+                  <h4>{t}Additional data{/t}</h4>
+                </div>
+                <div class="grid-body">
+                  <div class="form-group" ng-repeat="field in data.extra.settings.fields">
+                    <label class="form-label" for="[% field.key %]">[% field.name %]</label>
+                    <div class="controls">
+                      <input class="form-control" id="[% field.key %]" name="[% field.key %]" ng-if="field.type === 'text'" ng-model="item[field.key]" type="text">
+                      <input class="form-control" datetime-picker id="[% field.key %]" name="[% field.key %]" ng-if="field.type === 'date'" ng-model="item[field.key]" type="text">
+                      <select class="form-control" id="[% field.key %]" name="[% field.key %]" ng-if="field.type === 'country'" ng-model="item[field.key]">
+                        <option value="">{t}Select a country{/t}...</option>
+                        <option value="[% key %]" ng-repeat="(key,value) in extra.countries" ng-selected="[% item[field.key] === value %]">[% value %]</option>
+                      </select>
+                      <div class="radio" ng-if="field.type === 'options'" ng-repeat="option in field.values">
+                        <input id="option-[% option.key %]" name="[% field.key %]" ng-model="item[field.key]" value="[% option.key %]" type="radio">
+                        <label for="option-[% option.key %]">[% option.value %]</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {/acl}
           </div>
           <div class="col-sm-5">
             <div class="grid simple">

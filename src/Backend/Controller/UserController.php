@@ -113,7 +113,7 @@ class UserController extends Controller
 
         $this->get('core.dispatcher')->dispatch('social.disconnect', ['user' => $user]);
 
-        return $this->redirect($this->generateUrl('backend_user_social', [
+        return $this->redirect($this->generateUrl('admin_acl_user_social', [
             'id'       => $id,
             'resource' => $resource,
             'style'    => $request->get('style')
@@ -194,14 +194,14 @@ class UserController extends Controller
                 _('User created successfully.')
             );
 
-            return $this->redirect($this->generateUrl('backend_user_show', [
+            return $this->redirect($this->generateUrl('admin_acl_user_show', [
                 'id' => $user->id
             ]));
         } catch (\Exception $e) {
             $request->getSession()->getFlashBag()->add('error', $e->getMessage());
         }
 
-        return $this->redirect($this->generateUrl('backend_user_create'));
+        return $this->redirect($this->generateUrl('admin_acl_user_create'));
     }
 
     /**
@@ -239,7 +239,7 @@ class UserController extends Controller
                 'error',
                 sprintf(_('Unable to find the user with the id "%d"'), $id)
             );
-            return $this->redirect($this->generateUrl('backend_user'));
+            return $this->redirect($this->generateUrl('admin_acl_user'));
         }
 
         if (!empty($user->paywall_time_limit)
@@ -309,8 +309,6 @@ class UserController extends Controller
 
         $extra['countries'] = Intl::getRegionBundle()->getCountryNames();
         $extra['taxes']     = $this->get('vat')->getTaxes();
-        $extra['settings']  = $em->getDataSet('Settings', 'instance')
-            ->get('user_settings', []);
 
         // TODO: Remove when using new ORM to responsify objects
         if (is_object($user->paywall_time_limit)) {
@@ -489,7 +487,7 @@ class UserController extends Controller
         }
 
         return $this->redirect(
-            $this->generateUrl('backend_user_show', ['id' => $user->id])
+            $this->generateUrl('admin_acl_user_show', ['id' => $user->id])
         );
     }
 

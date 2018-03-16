@@ -344,6 +344,12 @@ class SubscriberController extends Controller
             $subscriptions[$item->pk_user_group] = $ss->responsify($item);
         }
 
-        return [ 'subscriptions' => $subscriptions ];
+        $settings = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+            ->get('user_settings', []);
+
+        return [
+            'settings'      => $settings,
+            'subscriptions' => $subscriptions
+        ];
     }
 }
