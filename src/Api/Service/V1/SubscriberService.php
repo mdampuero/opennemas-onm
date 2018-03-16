@@ -38,11 +38,6 @@ class SubscriberService extends OrmService
             throw new CreateItemException($e->getMessage(), $e->getCode());
         }
 
-        // Force type value
-        $data['type']      = 1;
-        $data['activated'] = false;
-        $data['username']  = $data['email'];
-
         return parent::createItem($data);
     }
 
@@ -52,13 +47,11 @@ class SubscriberService extends OrmService
     public function getItem($id)
     {
         try {
-            $item = parent::getItem($id);
+            $oql = sprintf('id = %s and type != 1', $id);
 
-            if ($item->type !== 1 && $item->type !== 2) {
-                throw new \Exception('Unable to find subscriber', 404);
-            }
-
-            return $item;
+            return $this->container->get('orm.manager')
+                ->getRepository($this->entity, $this->origin)
+                ->findOneBy($oql);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new GetItemException($e->getMessage(), $e->getCode());
@@ -70,42 +63,12 @@ class SubscriberService extends OrmService
      */
     public function getList($oql = '')
     {
-         // Force OQL to include the subscription flag enabled
+         // Force OQL to include type
         $oql = $this->container->get('orm.oql.fixer')->fix($oql)
-            ->addCondition('type = 1')
+            ->addCondition('type != 1')
             ->getOql();
 
         return parent::getList($oql);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function patchItem($id, $data)
-    {
-        // Ignore type value for non-MASTER users
-        if (array_key_exists('type', $data)
-            && !$this->container->get('core.security')->hasPermission('MASTER')
-        ) {
-            unset($data['type']);
-        }
-
-        parent::patchItem($id, $data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function patchList($ids, $data)
-    {
-        // Ignore type value for non-MASTER users
-        if (array_key_exists('type', $data)
-            && !$this->container->get('core.security')->hasPermission('MASTER')
-        ) {
-            unset($data['type']);
-        }
-
-        return parent::patchList($ids, $data);
     }
 
     /**
@@ -148,15 +111,6 @@ class SubscriberService extends OrmService
         } catch (\Exception $e) {
             throw new UpdateItemException($e->getMessage(), $e->getCode());
         }
-
-        // Force type value for non-MASTER users
-        if (!array_key_exists('type', $data)
-            || !$this->container->get('core.security')->hasPermission('MASTER')
-        ) {
-            $data['type'] = 1;
-        }
-
-        $data['username'] = $data['email'];
 
         parent::updateItem($id, $data);
     }

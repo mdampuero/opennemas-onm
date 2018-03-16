@@ -49,11 +49,7 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'find', 'findBy'])
-            ->getMock();
-
-        $this->security = $this->getMockBuilder('Security' . uniqid())
-            ->setMethods([ 'hasPermission' ])
+            ->setMethods([ 'countBy', 'findBy', 'findOneBy'])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -77,9 +73,6 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'core.security':
-                return $this->security;
-
             case 'error.log':
                 return $this->logger;
 
@@ -96,14 +89,10 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateItem()
     {
-        $data = [ 'name' => 'flob', 'email' => 'flob@garply.com' ];
+        $data = [ 'name' => 'flob', 'email' => 'flob@garply.com', 'type' => 1 ];
 
         $this->converter->expects($this->any())->method('objectify')
-            ->with(array_merge([
-                'activated' => false,
-                'type'      => 1,
-                'username'  => 'flob@garply.com'
-            ], $data))->willReturn($data);
+            ->with($data)->willReturn($data);
         $this->em->expects($this->once())->method('persist');
 
         $item = $this->service->createItem($data);
@@ -148,10 +137,10 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItem()
     {
-        $item = new Entity([ 'type' => 1 ]);
+        $item = new Entity([ 'type' => 2 ]);
 
-        $this->repository->expects($this->once())->method('find')
-            ->with(1)->willReturn($item);
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->with('id = 1 and type != 1')->willReturn($item);
 
         $this->assertEquals($item, $this->service->getItem(1));
     }
@@ -163,10 +152,9 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItemWhenErrorWhenNoSubscriber()
     {
-        $item = new Entity();
-
-        $this->repository->expects($this->once())->method('find')
-            ->with(1)->willReturn($item);
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->with('id = 1 and type != 1')
+            ->will($this->throwException(new \Exception()));
 
         $this->service->getItem(1);
     }
@@ -197,52 +185,6 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('total', $response);
         $this->assertEquals($results, $response['results']);
         $this->assertEquals(2, $response['total']);
-    }
-
-    /**
-     * Tests patchItem when no error for non master user.
-     */
-    public function testPatchItem()
-    {
-        $item = new Entity([ 'name' => 'foobar', 'type' => 1 ]);
-        $data = [ 'name' => 'mumble', 'type' => 0 ];
-
-        $this->security->expects($this->once())->method('hasPermission')
-            ->with('MASTER')->willReturn(false);
-        $this->converter->expects($this->once())->method('objectify')
-            ->with(array_diff($data, [ 'type' => 0 ]))
-            ->willReturn([ 'name' => 'mumble' ]);
-        $this->repository->expects($this->once())->method('find')
-            ->with(1)->willReturn($item);
-        $this->em->expects($this->once())->method('persist')
-            ->with($item);
-
-        $this->service->patchItem(1, $data);
-
-        $this->assertEquals('mumble', $item->name);
-    }
-
-    /**
-     * Tests patchList when no error.
-     */
-    public function testPatchList()
-    {
-        $itemA = new Entity([ 'name' => 'wubble', 'activated' => false ]);
-        $itemB = new Entity([ 'name' => 'xyzzy', 'activated' => false  ]);
-        $data  = [ 'activated' => true, 'type' => 1 ];
-
-        $this->security->expects($this->once())->method('hasPermission')
-            ->with('MASTER')->willReturn(false);
-        $this->repository->expects($this->once())->method('findBy')
-            ->willReturn([ $itemA, $itemB ]);
-        $this->converter->expects($this->once())->method('objectify')
-            ->with([ 'activated' => true ])
-            ->willReturn([ 'activated' => true ]);
-        $this->em->expects($this->exactly(2))->method('persist');
-
-        $this->assertEquals(2, $this->service->patchList([ 1, 2 ], $data));
-        $this->assertTrue($itemA->activated);
-        $this->assertTrue($itemB->activated);
     }
 
     /**
@@ -301,19 +243,11 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->repository->expects($this->once())->method('findBy')
             ->willReturn([]);
-        $this->security->expects($this->any())->method('hasPermission')
-            ->with('MASTER')->willReturn(false);
         $this->converter->expects($this->once())->method('objectify')
-            ->with(array_merge($data, [
-                'type' => 1,
-                'username' => 'garply@glork.glorp'
-            ]))->willReturn(array_merge($data, [
-                'type' => 1,
-                'username' => 'garply@glork.glorp'
-            ]));
+            ->with($data)->willReturn($data);
 
-        $this->repository->expects($this->once())->method('find')
-            ->with(1)->willReturn($item);
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->with('id = 1 and type != 1')->willReturn($item);
         $this->em->expects($this->once())->method('persist')
             ->with($item);
 
@@ -348,9 +282,9 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
     public function testUpdateItemWhenMasterChangesType()
     {
         $data = [
-            'name' => 'mumble',
+            'name'  => 'mumble',
             'email' => 'garply@glork.glorp',
-            'type' => 2
+            'type'  => 2
         ];
         $item = new Entity([
             'name'  => 'foobar',
@@ -362,16 +296,10 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
             ->willReturn([]);
 
         $this->converter->expects($this->once())->method('objectify')
-            ->with(array_merge($data, [
-                'username' => 'garply@glork.glorp'
-            ]))->willReturn(array_merge($data, [
-                'username' => 'garply@glork.glorp'
-            ]));
+            ->with($data)->willReturn($data);
 
-        $this->security->expects($this->once())->method('hasPermission')
-            ->with('MASTER')->willReturn(true);
-        $this->repository->expects($this->once())->method('find')
-            ->with(1)->willReturn($item);
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->with('id = 1 and type != 1')->willReturn($item);
         $this->em->expects($this->once())->method('persist')
             ->with($item);
 
