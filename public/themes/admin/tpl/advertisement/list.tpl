@@ -217,7 +217,7 @@
                   </div>
                   <div class="small-text">
                     <span class="hidden-lg">
-                      <span ng-show="content.positions.length > 1">{t 1="[% content.positions.length %]"}%1 positions{/t},</span>
+                      <span ng-show="content.positions.length > 1" tooltip-class="text-left" uib-tooltip-template="'ad_position_template'" tooltip-placement="bottom-left">{t 1="[% content.positions.length %]"}%1 positions{/t},</span>
                       <span ng-show="content.positions.length == 1"><span ng-repeat="value in content.positions | limitTo:1">[% map[value].name %]</span>,</span>
                       <span ng-show="content.positions.length == 0">{t}No positions assigned{/t},</span>
                       <span ng-show="content.num_clic_count == 0">{t}No clicks{/t}</span>
@@ -239,7 +239,7 @@
                 </td>
                 <td class="hidden-xs hidden-sm small-text">
                   <span ng-repeat="value in content.positions | limitTo:3" class="ad-position">[% map[value].name %]</span>
-                  <span ng-show="content.positions.length > 2" tooltip-class="text-left" uib-tooltip-template="'ad_position_template'" tooltip-placement="bottom">{t 1="[% content.positions.length - 3 %]"}And %1 more…{/t}</span>
+                  <span ng-show="content.positions.length > 2" uib-tooltip-template="'ad_position_template'" tooltip-placement="bottom">{t 1="[% content.positions.length - 3 %]"}And %1 more…{/t}</span>
                 </td>
                 <td class="hidden-xs text-center">
                   [% content.num_clic_count %]
