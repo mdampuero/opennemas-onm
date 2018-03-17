@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="AdvertisementListCtrl" ng-init="init('advertisement', 'backend_ws_contents_list')">
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('advertisement', 'backend_ws_contents_list')">
   <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
