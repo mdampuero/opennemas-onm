@@ -1,9 +1,9 @@
-.checkbox-list {
-  max-height: 240px;
-  overflow: auto;
-}
-
 .ads-listing {
+  .checkbox-list {
+    max-height: 240px;
+    overflow: auto;
+  }
+
   .ad-position {
     border: 1px solid @input-border-color;
     border-radius:5px;
@@ -20,15 +20,10 @@
 }
 
 .advertisement-positions {
-  .grid-title {
-    .badge {
-      padding:4px 10px;
-    }
-  }
-
   .grid-body {
     .badge {
       padding:5px 10px;
+      min-width: 30px;
     }
   }
 
@@ -36,10 +31,8 @@
     padding:0 !important;
   }
 
-  .nav-tabs > .active > a, .nav-tabs > .active {
-    border-radius: 0;
-  }
-
+  // Partial that shows the number of positions selected, then the list
+  // and finally a button to show/collapse the list of positions
   .positions-selected {
     position:relative;
 
@@ -57,7 +50,7 @@
       bottom:0;
       right:0;
       display:block;
-      margin: 0 10px;
+      margin: 0;
       color: @header-color;
       text-align:right;
       background: -moz-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 1%, rgba(255,255,255,1) 29%) !important; /* FF3.6-15 */
@@ -65,5 +58,86 @@
       background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,0.03) 1%,rgba(255,255,255,1) 29%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
       filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 ) !important; /* IE6-9 */
     }
+  }
+
+  .ad-positions-tabs {
+    position:relative;
+
+    .ads-positions-tabs-list {
+      height: 39px;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      white-space:nowrap;
+      border-bottom: 1px solid @border-color;
+      position:relative;
+
+      .tab-changer {
+        cursor: move;
+        height: 38px;
+        display: inline-block  !important;
+        float: none !important;
+        padding: 6px 10px;
+        border-right: 1px solid @border-color;
+        background-color:#f8f8f8;
+
+        &:hover {
+          background-color:@background-color;
+        }
+        &:first-child {
+          margin-left:50px
+        }
+
+        &:last-child {
+          border-right:1px solid transparent;
+        }
+
+        &.active {
+          background-color:White;
+        }
+
+        .badge {
+          background: #999999;
+          color:White;
+        }
+      }
+    }
+
+    &::-webkit-scrollbar {
+      display:none
+    }
+
+    .ad-positions-tabs-scrollers {
+      width:100%;
+      position:absolute;
+      top:0;
+      left:0;
+      border:1px solid red;
+
+      .scroll-button {
+        height:100%;
+        width:30px;
+        padding:10px;
+        color:#999999;
+        top: 0;
+        background: -moz-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 1%, rgba(255,255,255,1) 29%) !important; /* FF3.6-15 */
+        background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0.03) 1%,rgba(255,255,255,1) 29%) !important; /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,0.03) 1%,rgba(255,255,255,1) 29%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 ) !important; /* IE6-9 */
+      }
+      .scroll-button.scroll-left {left: 0%}
+      .scroll-button.scroll-right {right: 0%;}
+    }
+
+  }
+
+  // Hack to hide the scrollbar in the tab selector
+  @-moz-document url-prefix() {
+    .ad-positions-tabs-list {
+      margin-bottom: -14px !important;
+    }
+  }
+
+  .ads_position_generated_tabs .nav-tabs {
+    display:none !important;
   }
 }
