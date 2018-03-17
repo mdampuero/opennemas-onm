@@ -449,7 +449,7 @@
   {block name="global-js"}
       <!-- @Common/components/modernizr/modernizr.js, -->
     {javascripts src="
-      @Common/components/jquery/jquery.min.js,
+      @Common/components/jquery2/dist/jquery.min.js,
       @Common/components/bootstrap/dist/js/bootstrap.min.js,
       @Common/components/breakpoints/breakpoints.js,
       @Common/components/moment/min/moment-with-locales.min.js,
