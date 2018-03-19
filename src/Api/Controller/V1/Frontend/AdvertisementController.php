@@ -196,7 +196,7 @@ class AdvertisementController extends Controller
 
         $tags[] = 'content-' . $advertisement->id;
 
-        foreach ($advertisement->type_advertisement as $position) {
+        foreach ($advertisement->positions as $position) {
             $tags[] = 'position-' . $position;
         }
 
@@ -265,7 +265,7 @@ class AdvertisementController extends Controller
         $object = new \stdClass();
 
         $hasInterstitial = array_filter(
-            $element->type_advertisement,
+            $element->positions,
             function ($position) {
                 return (($position + 50) % 100) === 0;
             }
@@ -277,7 +277,7 @@ class AdvertisementController extends Controller
         }
 
         $hasNormal = array_filter(
-            $element->type_advertisement,
+            $element->positions,
             function ($position) {
                 return (($position + 50) % 100) !== 0;
             }
@@ -289,7 +289,7 @@ class AdvertisementController extends Controller
 
         $object->id          = (int) $element->pk_content;
         $object->type        = implode('+', $types); // Types: normal, interstitial, insterstitial+normal
-        $object->position    = $element->type_advertisement;
+        $object->position    = $element->positions;
         $object->publicId    = date('YmdHis', strtotime($element->created)) .
             sprintf('%06d', $element->pk_advertisement);
         $object->timeout     = (int) $element->timeout;

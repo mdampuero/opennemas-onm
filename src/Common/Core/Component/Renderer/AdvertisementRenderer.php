@@ -261,7 +261,7 @@ class AdvertisementRenderer
      */
     public function renderInlineReviveSlot($ad)
     {
-        $iframe = in_array($ad->type_advertisement, [ 50, 150, 250, 350, 450, 550 ]);
+        $iframe = in_array($ad->positions, [ 50, 150, 250, 350, 450, 550 ]);
         $url    = $this->router->generate('frontend_ad_show', [
             'id' => $ad->pk_content
         ]);
@@ -302,7 +302,7 @@ class AdvertisementRenderer
         . '</div>';
 
         $interstitials = array_filter($ads, function ($a) {
-            $hasInterstitial = array_filter($a->type_advertisement, function ($pos) {
+            $hasInterstitial = array_filter($a->positions, function ($pos) {
                 return ($pos + 50) % 100 == 0;
             });
 
