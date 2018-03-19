@@ -162,6 +162,10 @@ class AdvertisementManager extends EntityManager
             $filterSQL = implode($fieldUnion, $filterSQL);
         }
 
+        $filterSQL = preg_replace('@position="(\d*)"@', 'pk_advertisement IN ('
+            . 'SELECT advertisement_id FROM advertisements_positions WHERE position_id IN ($1)'
+            . ')', $filterSQL);
+
         return $filterSQL;
     }
 
