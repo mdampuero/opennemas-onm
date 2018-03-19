@@ -645,6 +645,8 @@ class Advertisement extends Content
             return '';
         }
 
+        $params['floating'] = true;
+
         $adsRenderer = getService('core.renderer.advertisement');
 
         return $adsRenderer->render($this, $params);
