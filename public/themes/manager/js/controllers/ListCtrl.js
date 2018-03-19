@@ -278,7 +278,9 @@
             return;
           }
 
-          nv.page = 1;
+          if(nv.page && ov.page && nv.page === ov.page) {
+            nv.page = 1;
+          }
 
           // Remove empty values from criteria
           $scope.criteria = $scope.cleanCriteria(nv);
