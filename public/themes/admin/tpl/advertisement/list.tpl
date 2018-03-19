@@ -108,12 +108,12 @@
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="hidden-xs ng-cloak" ng-init="typeAdvertisement = {json_encode($typeAdvertisement)|clear_json}">
-            <ui-select name="type_advertisement" theme="select2" ng-model="criteria.type_advertisement">
+          <li class="hidden-xs ng-cloak" ng-init="advertisement_positions = {json_encode($advertisement_positions)|clear_json}">
+            <ui-select name="position" theme="select2" ng-model="criteria.position">
               <ui-select-match>
                 <strong>{t}Position{/t}:</strong> [% $select.selected.name %]
               </ui-select-match>
-              <ui-select-choices repeat="item.value as item in typeAdvertisement | filter: { name: $select.search }">
+              <ui-select-choices repeat="item.value as item in advertisement_positions | filter: { name: $select.search }">
                 <div ng-bind-html="item.name | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>

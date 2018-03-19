@@ -62,10 +62,10 @@ class AdvertisementsController extends Controller
         $map             = $positionManager->getPositions();
         $adsNames        = $positionManager->getPositionNames();
 
-        $typeAdvertisement = [ [ 'name' => _("All"), 'value' => null ] ];
+        $adsPositions = [ [ 'name' => _("All"), 'value' => null ] ];
 
         foreach ($adsNames as $key => $value) {
-            $typeAdvertisement[] = [ 'name' => $value, 'value' => $key];
+            $adsPositions[] = [ 'name' => $value, 'value' => $key];
         }
 
         $types = [
@@ -103,10 +103,10 @@ class AdvertisementsController extends Controller
         return $this->render(
             'advertisement/list.tpl',
             [
-                'categories'        => $categories,
-                'typeAdvertisement' => $typeAdvertisement,
-                'types'             => $types,
-                'map'               => json_encode($map)
+                'categories'              => $categories,
+                'advertisement_positions' => $adsPositions,
+                'types'                   => $types,
+                'map'                     => json_encode($map)
             ]
         );
     }
