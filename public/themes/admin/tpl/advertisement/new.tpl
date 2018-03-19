@@ -26,8 +26,9 @@ jQuery(document).ready(function($) {
 {/block}
 
 {block name="content"}
-  <form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" name="AdvertisementForm" ng-controller="AdvertisementCtrl" ng-init="init(
-    {json_encode($advertisement->params)|clear_json}, {json_encode($advertisement->fk_content_categories)|clear_json},
+<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" name="AdvertisementForm" ng-controller="AdvertisementCtrl" ng-init="init(
+    {json_encode($advertisement->params)|clear_json},
+    {json_encode($advertisement->fk_content_categories)|clear_json},
     {json_encode($advertisement->positions)|clear_json}
   );
   with_script = {if empty($advertisement->with_script)}0{else}{{$advertisement->with_script}}{/if};
