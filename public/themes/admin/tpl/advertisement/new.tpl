@@ -82,7 +82,7 @@ jQuery(document).ready(function($) {
       </div>
     </div>
 
-    <div class="content ng-cloak" ng-if="!loading">
+    <div class="content">
       <div class="row">
         <div class="col-md-8">
           <div class="grid simple">
