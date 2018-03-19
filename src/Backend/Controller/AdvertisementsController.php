@@ -348,26 +348,33 @@ class AdvertisementsController extends Controller
      */
     public function contentProviderAction(Request $request)
     {
-        $categoryId   = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = 8;
+        $categoryId = $request->query->getDigits('category', 1);
+        $page       = $request->query->getDigits('page', 1);
+        $epp        = 8;
 
-        $filters = [
-            'type_advertisement' => [[ 'value' => 37 ]],
-            'content_type_name'  => [[ 'value' => 'advertisement' ]],
-            'in_litter'          => [[ 'value' => 1, 'operator' => '!=' ]]
-        ];
+        $oql = sprintf(
+            'content_type_name="advertisement" and in_litter="0" '
+            . 'and position="37" order by created desc limit %s offset %s',
+            $epp,
+            ($page - 1) * $epp
+        );
 
-        $em       = $this->get('advertisement_repository');
-        $countAds = true;
-        $ads      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countAds);
+        $em  = $this->get('advertisement_repository');
+        $map = $this->container->get('core.helper.advertisement')
+            ->getPositions();
+
+        list($criteria, $order, $epp, $page) = $this->get('core.helper.oql')->getFiltersFromOql($oql);
+
+        $results = $em->findBy($criteria, $order, $epp, $page);
+        $results = \Onm\StringUtils::convertToUtf8($results);
+        $total   = $em->countBy($criteria);
 
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
             'directional' => true,
-            'epp'         => $itemsPerPage,
+            'epp'         => $epp,
             'page'        => $page,
-            'total'       => $countAds,
+            'total'       => $total,
             'route'       => [
                 'name'   => 'admin_ads_content_provider',
                 'params' => ['category' => $categoryId]
@@ -375,7 +382,7 @@ class AdvertisementsController extends Controller
         ]);
 
         return $this->render('advertisement/content-provider.tpl', [
-            'ads'        => $ads,
+            'ads'        => $results,
             'pagination' => $pagination,
         ]);
     }
