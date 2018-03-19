@@ -487,41 +487,6 @@ class Advertisement extends Content
     }
 
     /**
-     * Function that retrieves the name of the placeholder given
-     * the type_advertisement
-     * For example type=503  => name=publi-gallery-inner
-     *
-     * @param  string $advType
-     * @return string $name_advertisement
-     */
-    public function getNameOfAdvertisementPlaceholder($advType)
-    {
-        if ($advType > 0 && $advType < 100) {
-            return 'publi-portada';
-        } elseif ($advType > 100 && $advType < 200) {
-            return 'publi-interior';
-        } elseif ($advType > 200 && $advType < 300) {
-            return 'publi-video';
-        } elseif ($advType > 300 && $advType < 400) {
-            return 'publi-video-interior';
-        } elseif ($advType > 400 && $advType < 500) {
-            return 'publi-gallery';
-        } elseif ($advType > 500 && $advType < 600) {
-            return 'publi-gallery-inner';
-        } elseif ($advType > 600 && $advType < 700) {
-            return 'publi-opinion';
-        } elseif ($advType > 700 && $advType < 800) {
-            return 'publi-opinion-interior';
-        } elseif ($advType > 800 && $advType < 900) {
-            return 'publi-poll';
-        } elseif ($advType > 900 && $advType < 1000) {
-            return 'publi-poll-inner';
-        } elseif ($advType > 1000 && $advType < 1100) {
-            return 'publi-newsletter';
-        }
-    }
-
-    /**
      * Returns the list of sizes for Google DFP.
      *
      * @param array $sizes The list of sizes for the current add.
