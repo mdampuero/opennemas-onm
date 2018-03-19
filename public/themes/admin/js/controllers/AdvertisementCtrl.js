@@ -191,7 +191,7 @@
           }
 
           return $scope.positions.filter(function(e) {
-            return start <= e && e <= finish;
+            return start <= e && (!finish || e <= finish);
           }).length;
         };
 
