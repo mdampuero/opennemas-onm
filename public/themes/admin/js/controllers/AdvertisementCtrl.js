@@ -68,7 +68,9 @@
          *
          * @type {Object}
          */
-        $scope.expanded = {};
+        $scope.expanded = {
+          positions: false
+        };
 
         /**
          * @memberOf AdvertisementCtrl
@@ -97,7 +99,6 @@
           categories: [],
           user_groups: [],
           categories_all: true,
-          positions_collapsed: true,
           hidden_elements: 0,
         };
 

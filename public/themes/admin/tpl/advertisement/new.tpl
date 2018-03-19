@@ -526,11 +526,11 @@ jQuery(document).ready(function($) {
             <span ng-if="positions.length == 0">{t}No positions selected, mark those you want on the form below.{/t}</span>
             <span ng-if="positions.length > 0">{t 1="[% positions.length %]"}%1 positions{/t}</span>
           </div>
-          <div class="ng-cloak positions-selected-list collapsed" ng-class="{ collapsed : ui.positions_collapsed }">
+          <div class="ng-cloak positions-selected-list collapsed" ng-class="{ collapsed : !expanded.positions }">
             <div ng-repeat="position in positions| orderBy:'position'" class="position badge p-l-15 p-r-15 m-b-5 m-r-5" >[% extra['ads_positions'][position] %]</div>
-            <div class="position-selected-hidden-counter small-text btn btn-link" ng-click="ui.positions_collapsed = !ui.positions_collapsed">
-              <span ng-if="ui.positions_collapsed && ui.hidden_elements > 0" uib-tooltip="{t}Show all positions{/t}" toolti-placement="obttom-right"> {t 1="[% ui.hidden_elements %]"}And %1 more…{/t}</span>
-              <span ng-if="!ui.positions_collapsed"><span class="fa fa-chevron-up"></span> {t}Show less…{/t}</span>
+            <div class="position-selected-hidden-counter small-text btn btn-link" ng-click="expanded.positions = !expanded.positions">
+              <span ng-if="!expanded.positions && ui.hidden_elements > 0"> {t 1="[% ui.hidden_elements %]"}And %1 more…{/t}</span>
+              <span ng-if="expanded.positions"><span class="fa fa-chevron-up"></span> {t}Show less…{/t}</span>
             </div>
           </div>
         </div>
