@@ -629,8 +629,12 @@ class HooksSubscriber implements EventSubscriberInterface
         $ad = $event->getArgument('advertisement');
 
         $this->container->get('varnish_ban_message_exchanger')
-            ->addBanMessage(sprintf('obj.http.x-tags ~ .*ad-%s.*', $ad->id))
-            ->addBanMessage(sprintf('obj.http.x-tags ~ .*position-%s.*', $ad->type_advertisement));
+            ->addBanMessage(sprintf('obj.http.x-tags ~ .*ad-%s.*', $ad->id));
+
+        foreach ($ad->positions as $position) {
+            $this->container->get('varnish_ban_message_exchanger')
+                ->addBanMessage(sprintf('obj.http.x-tags ~ .*position-%s.*', $position));
+        }
 
         if (!empty($ad->old_position)) {
             $this->container->get('varnish_ban_message_exchanger')
