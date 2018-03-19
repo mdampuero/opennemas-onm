@@ -13,7 +13,7 @@
      * @requires timeout
      *
      * @description
-     *   Handles actions for advertisement inner.
+     *   Handles actions for advertisement creation and update actions.
      */
     .controller('AdvertisementCtrl', [
       '$controller', '$uibModal', '$scope', '$timeout',
@@ -178,11 +178,11 @@
           var containerHeight = $('.positions-selected-list').height();
           var positions = $('.positions-selected-list .position');
 
-          var hidden_elements = positions.filter(function() {
+          var hiddenElements = positions.filter(function() {
             return $(this).position().top > containerHeight + 41;
           }).length;
 
-          $scope.ui.hidden_elements = hidden_elements;
+          $scope.ui.hidden_elements = hiddenElements;
 
           return $scope.ui.hidden_elements;
         };
