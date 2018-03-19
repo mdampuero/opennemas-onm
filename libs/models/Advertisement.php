@@ -359,7 +359,7 @@ class Advertisement extends Content
         $conn->beginTransaction();
 
         // TODO: Remove when dispatching events from custom contents
-        $this->old_position = $this->type_advertisement;
+        $this->old_position = $this->positions;
 
         parent::update($data);
 
@@ -610,6 +610,8 @@ class Advertisement extends Content
             return '';
         }
 
+        // With multiple positions we cannot rely on the type_advertisement=37
+        // any more so I'm telling the renderer that this is a floating banner
         $params['floating'] = true;
 
         $adsRenderer = getService('core.renderer.advertisement');

@@ -367,7 +367,7 @@ class AdvertisementRenderer
         // Style for floating advertisements in frontpage manager
         if (array_key_exists('floating', $params) && $params['floating'] == true) {
             $type = 37;
-            $id   .= ' data-id="' . $ad->pk_content . '" ';
+            $id  .= ' data-id="' . $ad->pk_content . '" ';
         }
 
         return sprintf($html, $id, $type, $width);

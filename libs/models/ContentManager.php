@@ -177,10 +177,10 @@ class ContentManager
         try {
             $rs = getService('dbal_connection')->fetchAll(
                 'SELECT ' . $fields
-             . ' FROM `contents`, `' . $table . '`, `contents_categories` '
-             . ' WHERE ' . $where
-             . ' AND `contents`.`pk_content`= `' . $table . '` . `pk_' . $contentType . '` '
-             . ' AND `contents`.`pk_content`= `contents_categories`.`pk_fk_content` ' . $orderBy
+                . ' FROM `contents`, `' . $table . '`, `contents_categories` '
+                . ' WHERE ' . $where
+                . ' AND `contents`.`pk_content`= `' . $table . '` . `pk_' . $contentType . '` '
+                . ' AND `contents`.`pk_content`= `contents_categories`.`pk_fk_content` ' . $orderBy
             );
 
             return $this->loadObject($rs, $contentType);
