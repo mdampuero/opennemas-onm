@@ -35,6 +35,7 @@
     <div class="content ng-cloak" ng-if="!loading">
       <div class="grid simple settings">
         <div class="grid-body no-padding ng-cloak">
+          <scrollable-tabset show-drop-down="false" show-tooltip="false" scroll-by="150">
           <uib-tabset>
             <uib-tab>
               <uib-tab-heading>
@@ -1542,6 +1543,7 @@
               </uib-tab>
             {/if}
           </uib-tabset>
+          </scrollable-tabset>
         </div>
       </div>
     </div>
