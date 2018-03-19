@@ -230,8 +230,8 @@ class AdvertisementsController extends Controller
             $advertisement->fk_content_categories = explode(',', $advertisement->fk_content_categories);
         }
 
+        // If the advertisement has photo assigned retrieve it
         if (!empty($advertisement->img)) {
-            //Buscar foto where pk_foto=img1
             $photo1 = new \Photo($advertisement->img);
             $this->view->assign('photo1', $photo1);
         }

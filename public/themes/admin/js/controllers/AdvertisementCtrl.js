@@ -8,16 +8,17 @@
      * @name  AdvertisementCtrl
      *
      * @requires $controller
-     * @requires $uibModal
+     * @requires $rootScope
      * @requires $scope
+     * @requires $uibModal
      * @requires timeout
      *
      * @description
      *   Handles actions for advertisement creation and update actions.
      */
     .controller('AdvertisementCtrl', [
-      '$controller', '$uibModal', '$scope', '$timeout',
-      function($controller, $uibModal, $scope, $timeout) {
+      '$controller', '$rootScope', '$scope', '$uibModal', '$timeout',
+      function($controller, $rootScope, $scope, $uibModal, $timeout) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -153,6 +154,26 @@
         };
 
         /**
+         * @function countHiddenSelectedPositions
+         * @memberOf AdvertisementCtrl
+         *
+         * @description
+         *   Returns the number of positions hidden for provided range.
+         */
+        $scope.countHiddenSelectedPositions = function() {
+          var containerHeight = $('.positions-selected-list').height();
+          var positions = $('.positions-selected-list .position');
+
+          var hiddenElements = positions.filter(function() {
+            return $(this).position().top > containerHeight + 41;
+          }).length;
+
+          $scope.ui.hidden_elements = hiddenElements;
+
+          return $scope.ui.hidden_elements;
+        };
+
+        /**
          * @function countPositionsSelectedbyRange
          * @memberOf AdvertisementCtrl
          *
@@ -172,19 +193,6 @@
           return $scope.positions.filter(function(e) {
             return start <= e && e <= finish;
           }).length;
-        };
-
-        $scope.countHiddenSelectedPositions = function() {
-          var containerHeight = $('.positions-selected-list').height();
-          var positions = $('.positions-selected-list .position');
-
-          var hiddenElements = positions.filter(function() {
-            return $(this).position().top > containerHeight + 41;
-          }).length;
-
-          $scope.ui.hidden_elements = hiddenElements;
-
-          return $scope.ui.hidden_elements;
         };
 
         /**
@@ -244,6 +252,27 @@
               $scope.script = null;
             });
           }
+        };
+
+        /**
+         * @function countEmpty
+         * @memberOf AdvertisementCtrl
+         *
+         * @description
+         *   Counts how many sizes have zero or empty values.
+         *
+         * @return {Integer} The number of empty sizes.
+         */
+        $scope.countEmpty = function() {
+          var empty = 0;
+
+          for (var i = 0; i < $scope.params.sizes.length; i++) {
+            if (!$scope.params.sizes[i].width || !$scope.params.sizes[i].height) {
+              empty++;
+            }
+          }
+
+          return empty;
         };
 
         /**
@@ -353,48 +382,6 @@
           $timeout(function() {
             $scope.countHiddenSelectedPositions();
           }, 2000);
-
-          // $scope.show_scroll_button_left = true;
-          // $scope.show_scroll_button_right = true;
-          // $('.ad-positions-tabs').on('scroll', function() {
-          //   var scroll = $(this).scrollLeft();
-          //   var width = $(this).width();
-
-          //   $scope.show_scroll_button_left = true;
-          //   $scope.show_scroll_button_right = true;
-          // });
-
-          // $('.ad-positions-tabs .scroll-left').on('click', function() {
-          //   $('.ad-positions-tabs').animate({
-          //     scrollLeft: $('.ad-positions-tabs').scrollLeft() - $('.ad-positions-tabs').width() / 2
-          //   });
-          // });
-          // $('.ad-positions-tabs .scroll-right').on('click', function() {
-          //   $('.ad-positions-tabs').animate({
-          //     scrollLeft: $('.ad-positions-tabs').scrollLeft() + $('.ad-positions-tabs').width() / 2
-          //   });
-          // });
-        };
-
-        /**
-         * @function countEmpty
-         * @memberOf AdvertisementCtrl
-         *
-         * @description
-         *   Counts how many sizes have zero or empty values.
-         *
-         * @return {Integer} The number of empty sizes.
-         */
-        $scope.countEmpty = function() {
-          var empty = 0;
-
-          for (var i = 0; i < $scope.params.sizes.length; i++) {
-            if (!$scope.params.sizes[i].width || !$scope.params.sizes[i].height) {
-              empty++;
-            }
-          }
-
-          return empty;
         };
 
         /**
@@ -438,29 +425,6 @@
           }
 
           return false;
-        };
-
-        /**
-         * @function togglePosition
-         * @memberOf AdvertisementCtrl
-         *
-         * @description
-         *   Adds or removes a position from the positions list.
-         *
-         * @param {Integer} id the id to add or remove.
-         */
-        $scope.togglePosition = function(id) {
-          if (!angular.isArray($scope.positions)) {
-            $scope.positions = [];
-          }
-
-          if ($scope.positions.indexOf(id) < 0) {
-            $scope.positions.push(id);
-          } else {
-            var index = $scope.positions.indexOf(id);
-
-            $scope.positions.splice(index, 1);
-          }
         };
 
         /**
@@ -514,6 +478,29 @@
          */
         $scope.removeSize = function(index) {
           $scope.params.sizes.splice(index, 1);
+        };
+
+        /**
+         * @function togglePosition
+         * @memberOf AdvertisementCtrl
+         *
+         * @description
+         *   Adds or removes a position from the positions list.
+         *
+         * @param {Integer} id the id to add or remove.
+         */
+        $scope.togglePosition = function(id) {
+          if (!angular.isArray($scope.positions)) {
+            $scope.positions = [];
+          }
+
+          if ($scope.positions.indexOf(id) < 0) {
+            $scope.positions.push(id);
+          } else {
+            var index = $scope.positions.indexOf(id);
+
+            $scope.positions.splice(index, 1);
+          }
         };
 
         // Adds/removes sizes when devices changes

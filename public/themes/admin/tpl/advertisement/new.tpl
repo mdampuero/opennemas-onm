@@ -129,7 +129,7 @@ jQuery(document).ready(function($) {
                   {/if}
                   <div class="col-sm-3">
                     <div class="radio">
-                      <input id="dfp" name="with_script" ng-model="with_script"   {if $with_script == 3}checked{/if} type="radio" value="3">
+                      <input id="dfp" name="with_script" ng-model="with_script" {if $with_script == 3}checked{/if} type="radio" value="3">
                       <label for="dfp" title="{t}Google DFP{/t}">{t}Google DFP{/t}</label>
                     </div>
                   </div>
