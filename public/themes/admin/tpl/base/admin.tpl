@@ -31,6 +31,7 @@
       @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
       @Common/components/angular-ui-select/dist/select.min.css,
+      @Common/components/angular-ui-tab-scroll/angular-ui-tab-scroll.css,
       @Common/components/animate.css/animate.min.css,
       @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
       @Common/components/messenger/build/css/messenger-theme-flat.css,
@@ -52,7 +53,6 @@
     {/stylesheets}
     {stylesheets src="@Common/components/angular-bootstrap/ui-bootstrap-csp.css,
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.css,
-      @Common/components/angular-ui-tab-scroll/angular-ui-tab-scroll.css,
       @Common/components/bootstrap-tabdrop/build/css/tabdrop.css,
       @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css,
       @Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css,

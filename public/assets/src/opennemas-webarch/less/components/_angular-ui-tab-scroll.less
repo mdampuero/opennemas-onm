@@ -1,7 +1,7 @@
 .ui-tabs-scrollable {
   & > .spacer .nav-tabs > li > a {
-    height: 48px !important;
-    border-radius: 0 !important;
+    height: 50px !important;
+    border-radius: 0;
   }
 
   .nav.nav-tabs {
@@ -10,29 +10,28 @@
 
   & > .nav-button {
     border:0 none;
+    height:50px;
+    color:@header-color;
   }
 
   & > .nav-button.left-nav-button,
   & > .nav-button.right-nav-button {
-    border: 0 none !important;
+    border: 0 none;
+    background: white;
   }
 
-  // & > .nav-button[disabled] {
-  //   display:none
-  // }
-
-  & >.nav-button.left-nav-button:before{
-    font-family: 'FontAwesome' !important;
-    content: "\f104" !important;
+  & >.nav-button.left-nav-button:before {
+    font-family: 'FontAwesome';
+    content: "\f104";
   }
 
-  & >.nav-button.right-nav-button:before{
-    font-family: 'FontAwesome' !important;
-    content: "\f105" !important;
+  & >.nav-button.right-nav-button:before {
+    font-family: 'FontAwesome';
+    content: "\f105";
 }
 
   & > .nav-button.left-nav-button,
   & > .nav-button.right-nav-button {
-    border: 0 none !important;
+    border: 0 none;
   }
 }
