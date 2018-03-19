@@ -538,7 +538,7 @@ jQuery(document).ready(function($) {
             <uib-tabset>
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Frontpages{/t} <span class="badge">[% countPositionsSelectedbyRange(0, 99) %]</span>
+                  {t}Frontpages{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(0, 99) > 0">[% countPositionsSelectedbyRange(0, 99) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   <div class="row">
@@ -549,7 +549,7 @@ jQuery(document).ready(function($) {
 
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Article: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(100, 199) %]</span>
+                  {t}Article: inner{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(100, 199) > 0">[% countPositionsSelectedbyRange(100, 199) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   <div class="row">
@@ -561,7 +561,7 @@ jQuery(document).ready(function($) {
               {is_module_activated name="VIDEO_MANAGER"}
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Video: frontpages{/t} <span class="badge">[% countPositionsSelectedbyRange(200, 299) %]</span>
+                  {t}Video: frontpages{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(200, 299) > 0">[% countPositionsSelectedbyRange(200, 299) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   <div class="row">
@@ -571,7 +571,7 @@ jQuery(document).ready(function($) {
               </uib-tab>
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Video: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(300, 399) %]</span>
+                  {t}Video: inner{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(300, 399) > 0">[% countPositionsSelectedbyRange(300, 399) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   <div class="row">
@@ -584,7 +584,7 @@ jQuery(document).ready(function($) {
               {is_module_activated name="ALBUM_MANAGER"}
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Album: frontpages{/t} <span class="badge">[% countPositionsSelectedbyRange(400, 499) %]</span>
+                  {t}Album: frontpages{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(400, 499) > 0">[% countPositionsSelectedbyRange(400, 499) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   <div class="row">
@@ -595,7 +595,7 @@ jQuery(document).ready(function($) {
 
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Album: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(500, 599) %]</span>
+                  {t}Album: inner{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(500, 599) > 0">[% countPositionsSelectedbyRange(500, 599) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   <div class="row">
@@ -608,7 +608,7 @@ jQuery(document).ready(function($) {
               {is_module_activated name="OPINION_MANAGER"}
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Opinion: frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(600, 699) %]</span>
+                  {t}Opinion: frontpage{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(600, 699) > 0">[% countPositionsSelectedbyRange(600, 699) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   <div class="row">
@@ -619,7 +619,7 @@ jQuery(document).ready(function($) {
 
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Opinion: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(700, 799) %]</span>
+                  {t}Opinion: inner{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(700, 799) > 0">[% countPositionsSelectedbyRange(700, 799) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   <div class="row">
@@ -632,7 +632,7 @@ jQuery(document).ready(function($) {
               {is_module_activated name="POLL_MANAGER"}
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Poll: frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(800, 899) %]</span>
+                  {t}Poll: frontpage{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(800, 899) > 0">[% countPositionsSelectedbyRange(800, 899) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   <div class="row">
@@ -643,7 +643,7 @@ jQuery(document).ready(function($) {
 
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Poll: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(900, 999) %]</span>
+                  {t}Poll: inner{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(900, 999) > 0">[% countPositionsSelectedbyRange(900, 999) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   <div class="row">
@@ -656,7 +656,7 @@ jQuery(document).ready(function($) {
               {is_module_activated name="NEWSLETTER_MANAGER"}
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Newsletter{/t} <span class="badge">[% countPositionsSelectedbyRange(1000, 1049) %]</span>
+                  {t}Newsletter{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1000, 1049) > 0">[% countPositionsSelectedbyRange(1000, 1049) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   <div class="row">
@@ -669,7 +669,7 @@ jQuery(document).ready(function($) {
               {is_module_activated name="AMP_MODULE"}
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Google AMP{/t} <span class="badge">[% countPositionsSelectedbyRange(1050, 1074) %]</span>
+                  {t}Google AMP{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1050, 1074) > 0">[% countPositionsSelectedbyRange(1050, 1074) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   <div class="row">
@@ -682,7 +682,7 @@ jQuery(document).ready(function($) {
               {is_module_activated name="FIA_MODULE"}
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Facebook Instant Articles{/t} <span class="badge">[% countPositionsSelectedbyRange(1075, 1099) %]</span>
+                  {t}Facebook Instant Articles{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1075, 1099) > 0">[% countPositionsSelectedbyRange(1075, 1099) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   {include file="advertisement/partials/advertisement_positions_fia.tpl"}
@@ -692,7 +692,7 @@ jQuery(document).ready(function($) {
 
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Others{/t} <span class="badge">[% countPositionsSelectedbyRange(1100, null) %]</span>
+                  {t}Others{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1100, null) > 0">[% countPositionsSelectedbyRange(1100, null) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   <div class="row">
