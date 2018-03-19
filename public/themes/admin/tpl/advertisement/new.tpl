@@ -26,12 +26,12 @@ jQuery(document).ready(function($) {
 {/block}
 
 {block name="content"}
-<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" name="AdvertisementForm" ng-controller="AdvertisementCtrl" ng-init="init(
+  <form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" name="AdvertisementForm" ng-controller="AdvertisementCtrl" ng-init="init(
     {json_encode($advertisement->params)|clear_json}, {json_encode($advertisement->fk_content_categories)|clear_json},
     {json_encode($advertisement->positions)|clear_json}
   );
   with_script = {if empty($advertisement->with_script)}0{else}{{$advertisement->with_script}}{/if};
-  extra = {json_encode($extra)|clear_json}">
+  extra = {json_encode($extra)|clear_json};">
     <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -80,7 +80,8 @@ jQuery(document).ready(function($) {
         </div>
       </div>
     </div>
-    <div class="content">
+
+    <div class="content ng-cloak" ng-if="!loading">
       <div class="row">
         <div class="col-md-8">
           <div class="grid simple">
@@ -509,201 +510,198 @@ jQuery(document).ready(function($) {
           </div>
         </div>
       </div>
-      <div class="row advertisement-positions">
-        <div class="col-md-12">
-          <div class="grid simple">
-            {* spinner to show when the page is loading *}
-            <div class="grid-body" ng-if="loading">
-              <div class="spinner-wrapper">
-                <div class="loading-spinner"></div>
-                <div class="spinner-text">{t}Loading{/t}...</div>
-              </div>
-            </div>
+      <div class="grid simple advertisement-positions">
+        {* spinner to show when the page is loading *}
+        <div class="grid-body" ng-if="loading">
+          <div class="spinner-wrapper">
+            <div class="loading-spinner"></div>
+            <div class="spinner-text">{t}Loading{/t}...</div>
+          </div>
+        </div>
 
-            {* contents only shown when page is already loaded *}
-            <div class="grid-title shaded ng-cloak positions-selected">
-              <div class="ng-cloak m-b-5 positions-selected-counter">
-                <span ng-if="positions.length == 0">{t}No positions selected, mark those you want on the form below.{/t}</span>
-                <span ng-if="positions.length > 0">{t 1="[% positions.length %]"}%1 positions{/t}</span>
-              </div>
-              <div class="ng-cloak positions-selected-list collapsed" ng-class="{ collapsed : ui.positions_collapsed }">
-                <div ng-repeat="position in positions| orderBy:'position'" class="position badge p-l-15 p-r-15 m-b-5 m-r-5" >[% extra['ads_positions'][position] %]</div>
-                <div class="position-selected-hidden-counter small-text btn btn-link" ng-click="ui.positions_collapsed = !ui.positions_collapsed">
-                  <span ng-if="ui.positions_collapsed && ui.hidden_elements > 0" uib-tooltip="{t}Show all positions{/t}" toolti-placement="obttom-right"> {t 1="[% ui.hidden_elements %]"}And %1 more…{/t}</span>
-                  <span ng-if="!ui.positions_collapsed"><span class="fa fa-chevron-up"></span> {t}Show less…{/t}</span>
-                </div>
-              </div>
-            </div>
-            </div>
-            <div class="grid-body ng-cloak" ng-if="!loading">
-              <uib-tabset>
-                <uib-tab>
-                  <uib-tab-heading>
-                    {t}Frontpages{/t} <span class="badge">[% countPositionsSelectedbyRange(0, 99) %]</span>
-                  </uib-tab-heading>
-                  <div class="tab-wrapper">
-                    <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_frontpage.tpl"}
-                    </div>
-                  </div>
-                </uib-tab>
-
-                <uib-tab>
-                  <uib-tab-heading>
-                    {t}Article: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(100, 199) %]</span>
-                  </uib-tab-heading>
-                  <div class="tab-wrapper">
-                    <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_article_inner.tpl"}
-                    </div>
-                  </div>
-                </uib-tab>
-
-                {is_module_activated name="VIDEO_MANAGER"}
-                <uib-tab>
-                  <uib-tab-heading>
-                    {t}Video: frontpages{/t} <span class="badge">[% countPositionsSelectedbyRange(200, 199) %]</span>
-                  </uib-tab-heading>
-                  <div class="tab-wrapper">
-                    <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_video_frontpage.tpl"}
-                    </div>
-                  </div>
-                </uib-tab>
-                <uib-tab>
-                  <uib-tab-heading>
-                    {t}Video: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(300, 399) %]</span>
-                  </uib-tab-heading>
-                  <div class="tab-wrapper">
-                    <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_video_inner.tpl"}
-                    </div>
-                  </div>
-                </uib-tab>
-                {/is_module_activated}
-
-                {is_module_activated name="ALBUM_MANAGER"}
-                <uib-tab>
-                  <uib-tab-heading>
-                    {t}Album: frontpages{/t} <span class="badge">[% countPositionsSelectedbyRange(400, 499) %]</span>
-                  </uib-tab-heading>
-                  <div class="tab-wrapper">
-                    <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_album_frontpage.tpl"}
-                    </div>
-                  </div>
-                </uib-tab>
-
-                <uib-tab>
-                  <uib-tab-heading>
-                    {t}Album: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(500, 599) %]</span>
-                  </uib-tab-heading>
-                  <div class="tab-wrapper">
-                    <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_album_inner.tpl"}
-                    </div>
-                  </div>
-                </uib-tab>
-                {/is_module_activated}
-
-                {is_module_activated name="OPINION_MANAGER"}
-                <uib-tab>
-                  <uib-tab-heading>
-                    {t}Opinion: frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(600, 699) %]</span>
-                  </uib-tab-heading>
-                  <div class="tab-wrapper">
-                    <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_opinion_frontpage.tpl"}
-                    </div>
-                  </div>
-                </uib-tab>
-
-                <uib-tab>
-                  <uib-tab-heading>
-                    {t}Opinion: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(700, 799) %]</span>
-                  </uib-tab-heading>
-                  <div class="tab-wrapper">
-                    <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_opinion_inner.tpl"}
-                    </div>
-                  </div>
-                </uib-tab>
-                {/is_module_activated}
-
-                {is_module_activated name="POLL_MANAGER"}
-                <uib-tab>
-                  <uib-tab-heading>
-                    {t}Poll: frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(800, 899) %]</span>
-                  </uib-tab-heading>
-                  <div class="tab-wrapper">
-                    <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_poll_frontpage.tpl"}
-                    </div>
-                  </div>
-                </uib-tab>
-
-                <uib-tab>
-                  <uib-tab-heading>
-                    {t}Poll: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(900, 999) %]</span>
-                  </uib-tab-heading>
-                  <div class="tab-wrapper">
-                    <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
-                    </div>
-                  </div>
-                </uib-tab>
-                {/is_module_activated}
-
-                {is_module_activated name="NEWSLETTER_MANAGER"}
-                <uib-tab>
-                  <uib-tab-heading>
-                    {t}Newsletter{/t} <span class="badge">[% countPositionsSelectedbyRange(1000, 1049) %]</span>
-                  </uib-tab-heading>
-                  <div class="tab-wrapper">
-                    <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
-                    </div>
-                  </div>
-                </uib-tab>
-                {/is_module_activated}
-
-                {is_module_activated name="AMP_MODULE"}
-                <uib-tab>
-                  <uib-tab-heading>
-                    {t}Google AMP{/t} <span class="badge">[% countPositionsSelectedbyRange(1050, 1074) %]</span>
-                  </uib-tab-heading>
-                  <div class="tab-wrapper">
-                    <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_amp.tpl"}
-                    </div>
-                  </div>
-                </uib-tab>
-                {/is_module_activated}
-
-                {is_module_activated name="FIA_MODULE"}
-                <uib-tab>
-                  <uib-tab-heading>
-                    {t}Facebook Instant Articles{/t} <span class="badge">[% countPositionsSelectedbyRange(1075, 1099) %]</span>
-                  </uib-tab-heading>
-                  <div class="tab-wrapper">
-                    {include file="advertisement/partials/advertisement_positions_amp.tpl"}
-                  </div>
-                </uib-tab>
-                {/is_module_activated}
-
-                <uib-tab>
-                  <uib-tab-heading>
-                    {t}Others{/t} <span class="badge">[% countPositionsSelectedbyRange(1100, null) %]</span>
-                  </uib-tab-heading>
-                  <div class="tab-wrapper">
-                    <div class="row">
-                      {include file="advertisement/partials/advertisement_positions_other.tpl"}
-                    </div>
-                  </div>
-                </uib-tab>
-              </uib-tabset>
+        {* contents only shown when page is already loaded *}
+        <div class="grid-title shaded ng-cloak positions-selected">
+          <div class="ng-cloak m-b-5 positions-selected-counter">
+            <span ng-if="positions.length == 0">{t}No positions selected, mark those you want on the form below.{/t}</span>
+            <span ng-if="positions.length > 0">{t 1="[% positions.length %]"}%1 positions{/t}</span>
+          </div>
+          <div class="ng-cloak positions-selected-list collapsed" ng-class="{ collapsed : ui.positions_collapsed }">
+            <div ng-repeat="position in positions| orderBy:'position'" class="position badge p-l-15 p-r-15 m-b-5 m-r-5" >[% extra['ads_positions'][position] %]</div>
+            <div class="position-selected-hidden-counter small-text btn btn-link" ng-click="ui.positions_collapsed = !ui.positions_collapsed">
+              <span ng-if="ui.positions_collapsed && ui.hidden_elements > 0" uib-tooltip="{t}Show all positions{/t}" toolti-placement="obttom-right"> {t 1="[% ui.hidden_elements %]"}And %1 more…{/t}</span>
+              <span ng-if="!ui.positions_collapsed"><span class="fa fa-chevron-up"></span> {t}Show less…{/t}</span>
             </div>
           </div>
+        </div>
+        <div class="grid-body no-padding ng-cloak">
+          <scrollable-tabset show-drop-down="false" show-tooltips="false" scroll-by="200">
+            <uib-tabset>
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Frontpages{/t} <span class="badge">[% countPositionsSelectedbyRange(0, 99) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_frontpage.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Article: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(100, 199) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_article_inner.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+
+              {is_module_activated name="VIDEO_MANAGER"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Video: frontpages{/t} <span class="badge">[% countPositionsSelectedbyRange(200, 299) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_video_frontpage.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Video: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(300, 399) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_video_inner.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
+              {is_module_activated name="ALBUM_MANAGER"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Album: frontpages{/t} <span class="badge">[% countPositionsSelectedbyRange(400, 499) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_album_frontpage.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Album: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(500, 599) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_album_inner.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
+              {is_module_activated name="OPINION_MANAGER"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Opinion: frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(600, 699) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_opinion_frontpage.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Opinion: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(700, 799) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_opinion_inner.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
+              {is_module_activated name="POLL_MANAGER"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Poll: frontpage{/t} <span class="badge">[% countPositionsSelectedbyRange(800, 899) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_poll_frontpage.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Poll: inner{/t} <span class="badge">[% countPositionsSelectedbyRange(900, 999) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
+              {is_module_activated name="NEWSLETTER_MANAGER"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Newsletter{/t} <span class="badge">[% countPositionsSelectedbyRange(1000, 1049) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
+              {is_module_activated name="AMP_MODULE"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Google AMP{/t} <span class="badge">[% countPositionsSelectedbyRange(1050, 1074) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_amp.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
+              {is_module_activated name="FIA_MODULE"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Facebook Instant Articles{/t} <span class="badge">[% countPositionsSelectedbyRange(1075, 1099) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  {include file="advertisement/partials/advertisement_positions_fia.tpl"}
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Others{/t} <span class="badge">[% countPositionsSelectedbyRange(1100, null) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_other.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+            </uib-tabset>
+          </scrollable-tabset>
         </div>
       </div>
     </div>

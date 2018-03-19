@@ -41,6 +41,7 @@ angular.module(
     'sun.scrollable',
     'swfobject',
     'ui.bootstrap',
+    'ui.tab.scroll',
     'ui.sortable',
     'ui.select',
     'ui.tree',

@@ -52,6 +52,7 @@
     {/stylesheets}
     {stylesheets src="@Common/components/angular-bootstrap/ui-bootstrap-csp.css,
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.css,
+      @Common/components/angular-ui-tab-scroll/angular-ui-tab-scroll.css,
       @Common/components/bootstrap-tabdrop/build/css/tabdrop.css,
       @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css,
       @Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css,
@@ -529,6 +530,7 @@
       @Common/components/angular-file-model/angular-file-model.js,
       @Common/components/angular-ui-sortable/sortable.min.js,
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.js,
+      @Common/components/angular-ui-tab-scroll/angular-ui-tab-scroll.js,
       @Common/components/angulartics/dist/angulartics-ga.min.js,
       @Common/components/angulartics/dist/angulartics.min.js,
       @Common/components/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min.js,
