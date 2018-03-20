@@ -41,8 +41,9 @@
         var tags = $('.bootstrap-tagsinput span').length;
         if(tags === 0) {
           $('.bootstrap-tagsinput input').attr("required", "true");
+          return null;
         }
-        $('.bootstrap-tagsinput input').attr("required", "false");
+        $('.bootstrap-tagsinput input').removeAttr("required");
       });
     </script>
   {/javascripts}
