@@ -163,7 +163,7 @@
 
           $location.search('oql', oql);
 
-          http.get(route).then(function(response) {
+          return http.get(route).then(function(response) {
             $scope.data  = response.data;
             $scope.items = response.data.results;
 
