@@ -278,13 +278,12 @@
             return;
           }
 
-          // Remove empty values from criteria
-          $scope.criteria = $scope.cleanCriteria(nv);
-
-          // Reset page when epp changes
-          if (nv.epp !== ov.epp) {
+          if(nv.page && ov.page && nv.page === ov.page) {
             nv.page = 1;
           }
+
+          // Remove empty values from criteria
+          $scope.criteria = $scope.cleanCriteria(nv);
 
           $scope.searchTimeout = $timeout(function() {
             $scope.list();
