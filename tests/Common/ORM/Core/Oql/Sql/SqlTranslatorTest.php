@@ -26,8 +26,18 @@ class SqlTanslatorTest extends \PHPUnit_Framework_TestCase
                         'foo' => [],
                         'baz' => [],
                     ],
-                    'metas'   => [ 'table' => 'foobar_meta' ],
-                    'index'   => [ [ 'columns' => [ 'foo' ], 'primary' => true ] ]
+                    'metas'     => [ 'table' => 'foobar_meta' ],
+                    'relations' => [
+                        'norf' => [
+                            'table'      => 'foobar_norf',
+                            'ids'        => [ 'foo' => 'foo_id' ],
+                            'properties' => [
+                                'wibble' => 'string',
+                                'flob'   => 'integer'
+                            ]
+                        ]
+                    ],
+                    'index' => [ [ 'columns' => [ 'foo' ], 'primary' => true ] ]
                 ]
             ]
         ]);
@@ -37,13 +47,23 @@ class SqlTanslatorTest extends \PHPUnit_Framework_TestCase
 
     public function testTranslate()
     {
-        $oql = 'foo = "bar" and norf = "gorp" and (baz != "qux" or baz in [1,2]) order by foo asc limit 20';
+        $oql = 'foo = "bar" and norf = "gorp" and wibble = "fred" and (baz !='
+            . '"qux" or baz in [1,2]) order by foo asc limit 20';
 
         list($tables, $sql, $params, $types) = $this->translator->translate($oql);
-        $this->assertEquals([ 'foobar', 'foobar_meta' ], $tables);
-        $this->assertEquals('foo = ? and foo = foobar_foo and meta_key = ? and meta_value = ? and ( baz != ? or baz in ( ? , ? ) ) order by foo asc limit ?', $sql);
-        $this->assertEquals([ 'bar', 'norf', 'gorp', 'qux', '1' ,'2', '20' ], $params);
-        $this->assertEquals([ \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ], $types);
+        $this->assertEquals([ 'foobar', 'foobar_meta', 'foobar_norf' ], $tables);
+        $this->assertEquals(
+            'foo = ? and foobar.foo = foobar_meta.foobar_foo and meta_key = ?'
+            . ' and meta_value = ? and foobar.foo = foobar_norf.foo_id '
+            . 'and wibble = ? and ( baz != ? or baz in ( ? , ? ) ) order by'
+                . ' foo asc limit ?',
+            $sql
+        );
+        $this->assertEquals([ 'bar', 'norf', 'gorp', 'fred', 'qux', '1' ,'2', '20' ], $params);
+        $this->assertEquals([
+            \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_STR,
+            \PDO::PARAM_STR, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT
+        ], $types);
 
         list($tables, $sql, $params, $types) = $this->translator->translate();
         $this->assertEquals([ 'foobar' ], $tables);
@@ -89,10 +109,22 @@ class SqlTanslatorTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($this->translator, 'translateToken');
         $method->setAccessible(true);
 
-        $this->assertEquals([ '?', 'foo', \PDO::PARAM_STR ], $method->invokeArgs($this->translator, [ '"foo"', 'T_STRING', false ]));
-        $this->assertEquals([ '?', '%foo%', \PDO::PARAM_STR ], $method->invokeArgs($this->translator, [ '"foo"', 'T_STRING', true ]));
-        $this->assertEquals([ '?', $expected, \PDO::PARAM_STR ], $method->invokeArgs($this->translator, [ $current, 'T_DATETIME', false ]));
-        $this->assertEquals([ '!=', null, null ], $method->invokeArgs($this->translator, [ '!=', 'O_NOT_EQUALS', false ]));
+        $this->assertEquals(
+            [ '?', 'foo', \PDO::PARAM_STR ],
+            $method->invokeArgs($this->translator, [ '"foo"', 'T_STRING', false ])
+        );
+        $this->assertEquals(
+            [ '?', '%foo%', \PDO::PARAM_STR ],
+            $method->invokeArgs($this->translator, [ '"foo"', 'T_STRING', true ])
+        );
+        $this->assertEquals(
+            [ '?', $expected, \PDO::PARAM_STR ],
+            $method->invokeArgs($this->translator, [ $current, 'T_DATETIME', false ])
+        );
+        $this->assertEquals(
+            [ '!=', null, null ],
+            $method->invokeArgs($this->translator, [ '!=', 'O_NOT_EQUALS', false ])
+        );
     }
 
     /**
