@@ -29,9 +29,9 @@ class SqlTanslatorTest extends \PHPUnit_Framework_TestCase
                     'metas'     => [ 'table' => 'foobar_meta' ],
                     'relations' => [
                         'norf' => [
-                            'table'      => 'foobar_norf',
-                            'ids'        => [ 'foo' => 'foo_id' ],
-                            'properties' => [
+                            'table'   => 'foobar_norf',
+                            'ids'     => [ 'foo' => 'foo_id' ],
+                            'columns' => [
                                 'wibble' => 'string',
                                 'flob'   => 'integer'
                             ]
