@@ -317,6 +317,40 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests getRelationColumns when relations are missing and present in
+     * Metadata.
+     */
+    public function testGetRelationColumns()
+    {
+        $this->assertEmpty($this->metadata->getRelationColumns());
+
+        $this->metadata->mapping['database'] = [
+            'relations' => [
+                'glorp' => [
+                    'table'   => 'glorp_table',
+                    'ids'     => [ 'id' => 'foo_id' ],
+                    'columns' => [
+                        'flob' => [ 'type' => 'integer' ],
+                        'qux'  => [ 'type' => 'string' ]
+                    ]
+                ],
+                'wubble' => [
+                    'table'   => 'wubble_table',
+                    'ids'     => [ 'id' => 'foo_id' ],
+                    'columns' => [
+                        'grault' => [ 'type' => 'datetimez' ]
+                    ]
+                ]
+            ]
+        ];
+
+        $this->assertEquals(
+            [ 'flob', 'qux', 'grault' ],
+            $this->metadata->getRelationColumns()
+        );
+    }
+
+    /**
      * Tests getRelations when relations are missing and present in Metadata.
      */
     public function testGetRelations()
