@@ -91,7 +91,7 @@ class Agency
         $er      = getService('entity_repository');
         $article = $er->find('Article', $id);
 
-        if (is_null($article->id)) {
+        if (empty($article) || is_null($article->id)) {
             throw new RestException(400, 'parameter is not valid');
         }
 
@@ -170,8 +170,22 @@ class Agency
         XmlFormat::$rootName              = 'NewsML';
         XmlFormat::$importSettingsFromXml = true;
 
+        libxml_use_internal_errors(true);
+
         $output = simplexml_load_string($output);
-        $xml    = new XmlFormat();
+
+        if (!empty(libxml_get_errors())) {
+            getService('application.log')->warning(
+                'Unable to generate XML for content with id '
+                . $article->pk_article
+            );
+
+            libxml_clear_errors();
+
+            return;
+        }
+
+        $xml = new XmlFormat();
 
         return $xml->read($output);
     }

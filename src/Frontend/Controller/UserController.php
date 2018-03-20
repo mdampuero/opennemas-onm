@@ -144,7 +144,9 @@ class UserController extends Controller
                 if (!$user->create($data)) {
                     $errors[] = _('An error has occurred. Try to complete the form with valid data.');
                 } else {
-                    $user->setMeta($request->request->get('meta'));
+                    if (!empty($data['meta'])) {
+                        $user->setMeta($data['meta']);
+                    }
 
                     // Set registration date
                     $currentTime = new \DateTime();
@@ -157,7 +159,9 @@ class UserController extends Controller
                         $message = \Swift_Message::newInstance();
                         $message
                             ->setSubject($mailSubject)
-                            ->setBody($mailBody, 'text/plain')
+                            ->setBody($mailBody, 'text/html')
+                            // And optionally an alternative body
+                            ->addPart(strip_tags($mailBody), 'text/plain')
                             ->setTo($data['email'])
                             ->setFrom([
                                 'no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')
@@ -311,7 +315,9 @@ class UserController extends Controller
             $message = \Swift_Message::newInstance();
             $message
                 ->setSubject($mailSubject)
-                ->setBody($mailBody, 'text/plain')
+                ->setBody($mailBody, 'text/html')
+                // And optionally an alternative body
+                ->addPart(strip_tags($mailBody), 'text/plain')
                 ->setTo($user->email)
                 ->setFrom(['no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')]);
 

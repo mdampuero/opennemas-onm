@@ -73,6 +73,16 @@ class Instance extends Entity
     }
 
     /**
+     * Returns the relative path for the instance media files.
+     *
+     * @return string The relative path for the instance media files.
+     */
+    public function getSystemFilePath()
+    {
+        return MEDIA_PATH . DS . FILE_DIR;
+    }
+
+    /**
      * Checks if the current instance has multilanguage enabled.
      *
      * @return boolean True if the instance has multilanguage enabled. False

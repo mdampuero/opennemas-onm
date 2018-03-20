@@ -2,16 +2,16 @@ action_counters:
     columns:
         id:
             type: integer
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { unsigned: true, autoincrement: true }
         action_name:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255, default: null }
         date:
             type: datetime
             options: { default: CURRENT_TIMESTAMP }
         counter:
             type: integer
-            options: { default: null }
+            options: { unsigned: true, default: 0 }
     index:
         -
             name: PRIMARY
@@ -29,43 +29,43 @@ advertisements:
     columns:
         pk_advertisement:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         type_advertisement:
             type: text
             options: { default: '', length: 65532, notnull: false, unsigned: true }
         fk_content_categories:
             type: string
-            options: { default: '', notnull: false, length: 255 }
+            options: { length: 255, default: '', notnull: false }
         path:
             type: string
-            options: { default: null, notnull: false, length: 150 }
+            options: { length: 150, default: null, notnull: false }
         url:
             type: string
-            options: { default: null, notnull: false, length: 255 }
+            options: { length: 255, default: null, notnull: false }
         type_medida:
             type: string
-            options: { default: null, notnull: false, length: 50 }
+            options: { length: 50, default: null, notnull: false }
         num_clic:
             type: integer
-            options: { default: '0', notnull: false }
+            options: { unsigned: true, default: 0, notnull: false }
         num_clic_count:
             type: integer
-            options: { default: '0', notnull: false, unsigned: true }
+            options: { unsigned: true, default: 0, notnull: false }
         num_view:
             type: integer
-            options: { default: '0', notnull: false, unsigned: true }
+            options: { unsigned: true, default: 0, notnull: false }
         with_script:
             type: smallint
-            options: { default: '0', notnull: false }
+            options: { unsigned: true, default: 0, notnull: false }
         script:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
         overlap:
             type: boolean
-            options: { default: '0', comment: 'Flag esconder eventos flash' }
+            options: { default: false, comment: 'Hide Flash events' }
         timeout:
             type: integer
-            options: { default: '-1' }
+            options: { default: -1 }
     index:
         -
             name: PRIMARY
@@ -92,38 +92,54 @@ advertisements:
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+advertisements_positions:
+    columns:
+        advertisement_id:
+            type: bigint
+            options: { length: 20, unsigned: true }
+        position_id:
+            type: integer
+            options: { unsigned: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [advertisement_id, position_id]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: advertisements_positions_advertisement_id
+            columns: [ advertisement_id ]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: advertisements_positions_content_id
+            source_field: [ advertisement_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 albums:
     columns:
         pk_album:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         subtitle:
             type: string
-            options: { default: null, notnull: false, length: 250 }
+            options: { length: 250, default: null, notnull: false }
         agency:
             type: string
-            options: { default: null, notnull: false, length: 250 }
+            options: { length: 250, default: null, notnull: false }
         cover_id:
             type: bigint
-            options: { default: null, notnull: false }
+            options: { length: 20, unsigned: true, default: null, notnull: false }
     index:
         -
             name: PRIMARY
             columns: [pk_album]
             primary: true
             unique: true
-            flags: {  }
-        -
-            name: pk_album
-            columns: [pk_album]
-            primary: false
-            unique: true
-            flags: {  }
-        -
-            name: pk_album_2
-            columns: [pk_album]
-            primary: false
-            unique: false
             flags: {  }
     foreign_keys:
         -
@@ -136,16 +152,16 @@ albums_photos:
     columns:
         pk_album:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true }
         pk_photo:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true }
         position:
             type: integer
-            options: { default: '1', notnull: false }
+            options: { unsigned: true, default: 1, notnull: false }
         description:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
     index:
         -
             name: index_album_photo
@@ -182,46 +198,43 @@ articles:
     columns:
         pk_article:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
-        summary:
-            type: text
-            options: { default: null, length: 65532, notnull: false }
-        img1:
-            type: bigint
-            options: { default: null, notnull: false, unsigned: true }
-        subtitle:
-            type: string
-            options: { default: null, notnull: false, length: 512 }
-        pretitle:
-            type: string
-            options: { default: null, notnull: false, length: 512 }
-        img1_footer:
-            type: string
-            options: { default: null, notnull: false, length: 250 }
-        img2:
-            type: bigint
-            options: { default: null, notnull: false, unsigned: true }
-        img2_footer:
-            type: string
-            options: { default: null, notnull: false, length: 250 }
-        agency:
-            type: string
-            options: { default: null, notnull: false, length: 100 }
-        fk_video:
-            type: bigint
-            options: { default: null, notnull: false, unsigned: true }
-        fk_video2:
-            type: bigint
-            options: { default: null, notnull: false, unsigned: true, comment: 'video interior' }
-        footer_video2:
-            type: text
-            options: { default: null, length: 65532, notnull: false }
-        footer_video1:
-            type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 20, unsigned: true, autoincrement: true }
         title_int:
             type: string
-            options: { default: null, notnull: false, length: 255 }
+            options: { length: 255, default: null, notnull: false }
+        summary:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        pretitle:
+            type: string
+            options: { length: 512, default: null, notnull: false }
+        agency:
+            type: string
+            options: { length: 512, default: null, notnull: false }
+        img1:
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
+        img1_footer:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        img2:
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
+        img2_footer:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        fk_video:
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
+        footer_video1:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        fk_video2:
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
+        footer_video2:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -240,16 +253,16 @@ attachments:
     columns:
         pk_attachment:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         title:
             type: string
-            options: { default: null, length: 200 }
+            options: { length: 200, default: null }
         path:
             type: string
-            options: { default: null, length: 200 }
+            options: { length: 200, default: null }
         category:
             type: integer
-            options: { default: '1' }
+            options: { default: 1 }
     index:
         -
             name: PRIMARY
@@ -268,16 +281,16 @@ books:
     columns:
         pk_book:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         author:
             type: string
-            options: { default: null, notnull: false, length: 250 }
+            options: { length: 250, default: null, notnull: false }
         cover_id:
             type: bigint
             options: { default: null, notnull: false }
         editorial:
             type: string
-            options: { default: null, notnull: false, length: 250 }
+            options: { length: 250, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -296,46 +309,46 @@ comments:
     columns:
         id:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { length: 20, unsigned: true, autoincrement: true }
         content_id:
             type: bigint
-            options: { length: 20, default: null, notnull: false, unsigned: true }
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         author:
             type: string
-            options: { default: null, notnull: false, length: 200 }
+            options: { length: 200, default: null, notnull: false }
         author_email:
             type: string
-            options: { default: '', notnull: false, length: 200 }
+            options: { length: 200, default: '', notnull: false }
         author_url:
             type: string
-            options: { default: '', notnull: false, length: 200 }
+            options: { length: 200 , default: '', notnull: false}
         author_ip:
             type: string
-            options: { default: '', notnull: false, length: 100 }
+            options: { length: 100, default: '', notnull: false }
         date:
             type: datetime
             options: { default: CURRENT_TIMESTAMP, notnull: false }
         body:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
         status:
             type: string
-            options: { default: pending, length: 20 }
+            options: { length: 20, default: 'pending' }
         agent:
             type: string
-            options: { default: '', length: 255 }
+            options: { length: 255, default: '' }
         type:
             type: string
-            options: { default: '', length: 20 }
+            options: { length: 20, default: '' }
         parent_id:
             type: bigint
-            options: { default: null, unsigned: true, default: '0' }
+            options: { unsigned: true, default: null, default: 0 }
         user_id:
-            type: integer
-            options: { default: 0 }
+            type: bigint
+            options: { length: 20, unsigned: true, default: 0 }
         content_type_referenced:
             type: string
-            options: { default: null, length: 20 }
+            options: { length: 20, default: null }
     index:
         -
             name: PRIMARY
@@ -366,13 +379,13 @@ commentsmeta:
     columns:
         fk_content:
             type: bigint
-            options: { default: null, unsigned: true }
+            options: { length: 20, unsigned: true }
         meta_name:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255 }
         meta_value:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -396,35 +409,35 @@ commentsmeta:
 content_categories:
     columns:
         pk_content_category:
-            type: integer
-            options: { default: null, unsigned: true, autoincrement: true }
+            type: bigint
+            options: { length: 20, unsigned: true, autoincrement: true }
         title:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255, default: null }
         name:
             type: string
-            options: { default: null, notnull: false, length: 255 }
+            options: { length: 255, default: null, notnull: false }
         inmenu:
             type: integer
-            options: { default: '0', notnull: false }
+            options: { unsigned: true, default: 0, notnull: false }
         posmenu:
             type: integer
-            options: { default: '10', notnull: false }
+            options: { unsigned: true, default: 1, notnull: false }
         internal_category:
             type: smallint
-            options: { default: '0', comment: 'equal content_type & global=0 ' }
+            options: { length: 1, unsigned: true, default: 0, comment: 'Equal content_type & global=0 ' }
         fk_content_category:
-            type: integer
-            options: { default: '0', notnull: false }
+            type: bigint
+            options: { length: 20, unsigned: true, default: 0, notnull: false }
         params:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
         logo_path:
             type: string
-            options: { default: null, notnull: false, length: 200 }
+            options: { length: 200, default: null, notnull: false }
         color:
             type: string
-            options: { default: null, notnull: false, length: 10 }
+            options: { length: 10, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -436,22 +449,22 @@ content_positions:
     columns:
         pk_fk_content:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true }
         fk_category:
-            type: integer
-            options: { default: null, unsigned: true}
+            type: bigint
+            options: { length: 20, unsigned: true, default: null }
         position:
             type: integer
-            options: { default: 0, unsigned: true }
+            options: { unsigned: true, default: 0 }
         placeholder:
             type: string
-            options: { default: '', length: 45 }
+            options: { length: 45, default: '' }
         params:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65632, default: null, notnull: false }
         content_type:
             type: string
-            options: { default: null, notnull: false, length: 45 }
+            options: { length: 45, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -482,13 +495,13 @@ contentmeta:
     columns:
         fk_content:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         meta_name:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255 }
         meta_value:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -513,25 +526,25 @@ contents:
     columns:
         pk_content:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         fk_content_type:
             type: integer
-            options: { default: null, unsigned: true }
+            options: { unsigned: true, default: null }
         content_type_name:
             type: string
-            options: { default: null, length: 20 }
+            options: { length: 20, default: null }
         title:
-            type: string
-            options: { default: null, notnull: false, length: 255 }
+            type: text
+            options: { length: 65532, default: null, notnull: false }
         description:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
         body:
-            type: string
-            options: { default: null, length: 4294967295, notnull: false }
+            type: text
+            options: { length: 4294967295, default: null, notnull: false }
         metadata:
             type: string
-            options: { default: null, notnull: false, length: 255 }
+            options: { length: 512, default: null, notnull: false }
         starttime:
             type: datetime
             options: { default: CURRENT_TIMESTAMP, notnull: false }
@@ -546,16 +559,16 @@ contents:
             options: { default: CURRENT_TIMESTAMP, notnull: false, onUpdate: CURRENT_TIMESTAMP}
         content_status:
             type: integer
-            options: { default: 0, notnull: false, unsigned: true }
+            options: { unsigned: true, default: 0, notnull: false }
         fk_author:
-            type: integer
-            options: { default: null, notnull: false, unsigned: true }
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         fk_publisher:
-            type: integer
-            options: { default: null, notnull: false, unsigned: true }
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         fk_user_last_editor:
-            type: integer
-            options: { default: null, notnull: false, unsigned: true }
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         position:
             type: integer
             options: { default: 100, notnull: false, unsigned: true }
@@ -567,28 +580,28 @@ contents:
             options: { default: 0, notnull: false }
         in_home:
             type: smallint
-            options: { default: 0, notnull: false }
+            options: { unsigned: true, default: 0, notnull: false }
         slug:
-            type: string
-            options: { default: null, notnull: false, length: 255 }
+            type: text
+            options: { length: 65532, default: null, notnull: false }
         available:
             type: smallint
-            options: { default: '1', notnull: false }
+            options: { unsigned: true, default: 1, notnull: false }
         with_comment:
             type: smallint
-            options: { default: '1', notnull: false }
+            options: { unsigned: true, default: 1, notnull: false }
         params:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
         category_name:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255, default: null }
         favorite:
             type: boolean
             options: { default: null, notnull: false }
         urn_source:
             type: string
-            options: { default: null, notnull: false, length: 255 }
+            options: { length: 255, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -664,13 +677,13 @@ contents_categories:
     columns:
         pk_fk_content:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true }
         pk_fk_content_category:
-            type: integer
-            options: { default: null, notnull: false, unsigned: true }
-        catName:
+            type: bigint
+            options: { unsigned: true }
+        catName: # TODO: not sure if easy to but, should we remove this?
             type: string
-            options: { default: null, notnull: false, length: 255 }
+            options: { length: 255, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -713,10 +726,10 @@ content_views:
     columns:
         pk_fk_content:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         views:
             type: integer
-            options: { default: 0, unsigned: true }
+            options: { unsigned: true, default: 0 }
     index:
         -
             name: PRIMARY
@@ -735,16 +748,16 @@ frontpages:
     columns:
         pk_frontpage:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         date:
-            type: integer
+            type: integer # TODO: integer?
             options: { default: null}
         category:
-            type: integer
-            options: { default: null }
-        version:
             type: bigint
-            options: { default: null, notnull: false }
+            options: { length: 20, unsigned: true }
+        version:
+            type: integer
+            options: { unsigned: true, default: null, notnull: false }
         content_positions:
             type: text
             options: { default: null }
@@ -756,7 +769,7 @@ frontpages:
             options: { default: null, notnull: false }
         params:
             type: text
-            options: { default: null, comment: 'serialized params', length: 65532 }
+            options: { length: 65532, default: null, comment: 'serialized params' }
     index:
         -
             name: PRIMARY
@@ -768,22 +781,22 @@ kioskos:
     columns:
         pk_kiosko:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         name:
             type: string
-            options: { default: null, length: 100 }
+            options: { length: 100, notnull: true }
         path:
             type: string
-            options: { default: null, length: 200 }
+            options: { lenght: 200, notnull: true }
         date:
             type: date
-            options: { default: null }
+            options: { default: null, notnull: true }
         type:
             type: boolean
             options: { default: 0, comment: '0 item - 1 subscription' }
         price:
-            type: float
-            options: { default: 0 }
+            type: decimal
+            options: { scale: 2, unsigned: true, default: 0 }
     index:
         -
             name: PRIMARY
@@ -802,13 +815,13 @@ letters:
     columns:
         pk_letter:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         author:
             type: string
-            options: { default: null, notnull: false, length: 255 }
+            options: { length: 255, default: null, notnull: false }
         email:
             type: string
-            options: { default: null, notnull: false, length: 255 }
+            options: { length: 255, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -827,19 +840,19 @@ menu_items:
     columns:
         pk_item:
             type: integer
-            options: { default: null, unsigned: true }
+            options: { unsigned: true, default: null }
         pk_menu:
             type: integer
-            options: { default: null, length: 10, unsigned: true }
+            options: { unsigned: true, default: null }
         title:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255, default: null }
         link_name:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255, default: null }
         type:
             type: string
-            options: { default: null, length: 255, comment: '''category'',''external'',''static'', internal''' }
+            options: { length: 255, default: null, comment: '''category'',''external'',''static'', internal''' }
         position:
             type: integer
             options: { default: null }
@@ -873,19 +886,19 @@ menues:
     columns:
         pk_menu:
             type: integer
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { unsigned: true, autoincrement: true }
         name:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255, default: null }
         type:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255, default: null }
         position:
             type: string
-            options: { default: null, notnull: false, length: 50 }
+            options: { length: 50, default: null, notnull: false }
         params:
             type: string
-            options: { default: null, notnull: false, length: 255 }
+            options: { length: 255, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -909,16 +922,16 @@ newsletter_archive:
     columns:
         pk_newsletter:
             type: integer
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { unsigned: true, autoincrement: true }
         title:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255, default: null }
         data:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
         html:
             type: text
-            options: { default: null, length: 4294967295, notnull: false }
+            options: { length: 4294967295, default: null, notnull: false }
         created:
             type: datetime
             options: { default: CURRENT_TIMESTAMP }
@@ -927,7 +940,7 @@ newsletter_archive:
             options: { default: CURRENT_TIMESTAMP, onUpdate: CURRENT_TIMESTAMP }
         sent:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255, default: null }
     index:
         -
             name: PRIMARY
@@ -939,19 +952,19 @@ opinions:
     columns:
         pk_opinion:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
-        fk_content_categories:
+            options: { length: 20, unsigned: true, autoincrement: true }
+        fk_content_categories: # TODO: remove ??
             type: integer
-            options: { default: '7', notnull: false, unsigned: true }
+            options: { unsigned: true, default: 7, notnull: false }
         fk_author:
-            type: integer
-            options: { default: null, notnull: false }
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         fk_author_img:
-            type: integer
-            options: { default: null, notnull: false }
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         type_opinion:
             type: string
-            options: { default: null, notnull: false, length: 150 }
+            options: { length: 150, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -982,34 +995,34 @@ orders:
     columns:
         id:
             type: bigint
-            options: { default: null, autoincrement: true }
+            options: { length: 20, unsigned: true, autoincrement: true }
         user_id:
             type: bigint
-            options: { default: null }
+            options: { length: 20, unsigned: true, default: null }
         content_id:
             type: bigint
-            options: { default: null }
+            options: { length: 20, unsigned: true, default: null }
         created:
             type: datetime
             options: { default: CURRENT_TIMESTAMP }
         payment_id:
             type: string
-            options: { default: null, length: 50 }
+            options: { length: 50, default: null }
         payment_status:
             type: string
-            options: { default: null, length: 150 }
+            options: { length: 150, default: null }
         payment_amount:
             type: decimal
-            options: { default: null, scale: 2 }
+            options: { scale: 2, default: null }
         payment_method:
             type: string
-            options: { default: null, length: 200 }
+            options: { length: 200, default: null }
         type:
             type: string
-            options: { default: null, length: 50 }
+            options: { length: 50, default: null }
         params:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -1020,20 +1033,20 @@ orders:
 pc_users:
     columns:
         pk_pc_user:
-            type: integer
-            options: { default: null, autoincrement: true }
+            type: bigint
+            options: { length: 20, unsigned: true, autoincrement: true }
         email:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255, default: null }
         name:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255, default: null }
         firstname:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255, default: null }
         lastname:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255, default: null }
         status:
             type: integer
             options: { default: null }
@@ -1051,16 +1064,16 @@ pclave:
     columns:
         id:
             type: integer
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { unsigned: true, autoincrement: true }
         pclave:
             type: string
-            options: { default: null, length: 60 }
+            options: { length: 60, default: null }
         value:
             type: string
-            options: { default: null, notnull: false, length: 240 }
+            options: { length: 240, default: null, notnull: false }
         tipo:
             type: string
-            options: { default: intsearch, length: 20 }
+            options: { length: 20, default: 'intsearch' }
     index:
         -
             name: PRIMARY
@@ -1072,31 +1085,31 @@ photos:
     columns:
         pk_photo:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         name:
             type: string
-            options: { default: null, notnull: false, length: 100 }
+            options: { length: 255, default: null, notnull: false }
         path_file:
             type: string
-            options: { default: null, length: 150 }
+            options: { length: 150, default: null }
         size:
-            type: float
-            options: { default: null, notnull: false }
+            type: decimal
+            options: { scale: 2, default: null, notnull: false }
         width:
             type: integer
-            options: { default: null, notnull: false }
+            options: { unsigned: true, default: null, notnull: false }
         height:
             type: integer
-            options: { default: null, notnull: false }
-        nameCat:
+            options: { unsigned: true, default: null, notnull: false }
+        nameCat: # TODO: remove?
             type: string
-            options: { default: '1', notnull: false, length: 250 }
+            options: { length: 250, default: '1', notnull: false }
         author_name:
             type: string
-            options: { default: null, notnull: false, length: 200 }
+            options: { length: 200, default: null, notnull: false}
         address:
             type: string
-            options: { default: null, notnull: false, length: 255 }
+            options: { length: 255, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -1115,19 +1128,19 @@ poll_items:
     columns:
         pk_item:
             type: integer
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { unsigned: true, autoincrement: true }
         fk_pk_poll:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true, default: null }
         item:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255, default: null }
         metadata:
             type: string
-            options: { default: null, notnull: false, length: 250 }
+            options: { length: 250, default: null, notnull: false }
         votes:
             type: integer
-            options: { default: '0', notnull: false, unsigned: true }
+            options: { unsigned: true, default: 0, notnull: false }
     index:
         -
             name: PRIMARY
@@ -1152,22 +1165,19 @@ polls:
     columns:
         pk_poll:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         total_votes:
             type: integer
-            options: { default: '0' }
+            options: { unsigned: true, default: 0 }
         used_ips:
             type: text
-            options: { default: null, length: 65532, notnull: false }
-        subtitle:
-            type: string
-            options: { default: null, notnull: false, length: 512 }
+            options: { length: 4294967295, default: null, notnull: false }
         pretitle:
             type: string
-            options: { default: null, notnull: false, length: 512 }
+            options: { length: 512, default: null, notnull: false }
         visualization:
             type: smallint
-            options: { default: '0', notnull: false }
+            options: { length: 1, unsigned: true, default: 0, notnull: false }
     index:
         -
             name: PRIMARY
@@ -1186,16 +1196,16 @@ ratings:
     columns:
         pk_rating:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         total_votes:
             type: smallint
-            options: { default: '0', unsigned: true }
+            options: { unsigned: true, default: 0 }
         total_value:
             type: integer
-            options: { default: '0', unsigned: true }
+            options: { unsigned: true, default: 0 }
         ips_count_rating:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -1207,28 +1217,28 @@ related_contents:
     columns:
         pk_content1:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true }
         pk_content2:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true }
         relationship:
             type: string
-            options: { default: null, notnull: false, length: 50 }
+            options: { length: 50, default: null, notnull: false }
         text:
             type: string
-            options: { default: null, notnull: false, length: 50 }
+            options: { length: 50, default: null, notnull: false }
         position:
             type: integer
-            options: { default: '0' }
+            options: { default: 0 }
         posinterior:
             type: integer
-            options: { default: '0' }
+            options: { default: 0 }
         verportada:
             type: integer
-            options: { default: '0' }
+            options: { default: 0 }
         verinterior:
             type: integer
-            options: { default: '0' }
+            options: { default: 0 }
     index:
         -
             name: pk_content1
@@ -1265,10 +1275,10 @@ settings:
     columns:
         name:
             type: string
-            options: { default: '', length: 128 }
+            options: { length: 128 }
         value:
             type: text
-            options: { default: null, length: 65532 }
+            options: { length: 65532, default: null }
     index:
         -
             name: PRIMARY
@@ -1280,19 +1290,19 @@ special_contents:
     columns:
         fk_content:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true, default: null }
         fk_special:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true, default: null }
         name:
             type: string
             options: { default: null, notnull: false, length: 200 }
         position:
             type: integer
-            options: { default: '10', notnull: false }
+            options: { default: 10, notnull: false }
         visible:
             type: smallint
-            options: { default: '1', notnull: false }
+            options: { default: 1, notnull: false }
         type_content:
             type: string
             options: { default: null, length: 100 }
@@ -1332,19 +1342,16 @@ specials:
     columns:
         pk_special:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
-        subtitle:
-            type: string
-            options: { default: null, notnull: false, length: 512 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         pretitle:
             type: string
-            options: { default: null, notnull: false, length: 512 }
+            options: { length: 512, default: null, notnull: false }
         pdf_path:
             type: string
-            options: { default: '0', notnull: false, length: 250 }
+            options: { length: 250, default: '0', notnull: false }
         img1:
-            type: string
-            options: { default: null, notnull: false, length: 255 }
+            type: string # TODO: should be bigint 20 ??
+            options: { length: 255, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -1363,7 +1370,7 @@ static_pages:
     columns:
         pk_static_page:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
     index:
         -
             name: PRIMARY
@@ -1382,28 +1389,22 @@ translation_ids:
     columns:
         pk_content_old:
             type: string
-            options: { default: null }
+            options: { default: null, notnull: false }
         pk_content:
             type: bigint
-            options: { default: null, unsigned: true, length: 20 }
+            options: { length: 20, unsigned: true, default: null }
         type:
             type: string
-            options: { default: null, length: 100 }
+            options: { length: 100, default: null }
         slug:
             type: text
-            options: { default: '', notnull: false, length: 65535 }
+            options: { length: 65535, default: '', notnull: false }
         domain:
             type: string
-            options: { default: null, notnull: false, length: 255 }
+            options: { length: 255, default: null, notnull: false }
     index:
         -
-            name: PRIMARY
-            columns: [pk_content_old, pk_content, type]
-            primary: true
-            unique: true
-            flags: {  }
-        -
-            name: slug
+            name: translation_ids_slug
             columns: [slug]
         -
             name: pk_content
@@ -1415,10 +1416,10 @@ user_groups:
     columns:
         pk_user_group:
             type: integer
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { unsigned: true, autoincrement: true }
         name:
             type: string
-            options: { default: null, notnull: false, length: 50 }
+            options: { length: 50, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -1430,10 +1431,10 @@ user_groups_privileges:
     columns:
         pk_fk_user_group:
             type: integer
-            options: { default: null, unsigned: true }
+            options: { unsigned: true, default: null }
         pk_fk_privilege:
             type: integer
-            options: { default: null, unsigned: true }
+            options: { unsigned: true, default: null }
     index:
         -
             name: PRIMARY
@@ -1458,13 +1459,13 @@ usermeta:
     columns:
         user_id:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { length: 20, unsigned: true, autoincrement: true }
         meta_key:
             type: string
-            options: { default: '', length: 255 }
+            options: { length: 255 }
         meta_value:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -1495,40 +1496,40 @@ users:
     columns:
         id:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            options: { length: 20, unsigned: true, autoincrement: true }
         username:
             type: string
-            options: { default: null, notnull: true, length: 100 }
+            options: { length: 100, default: null, notnull: true }
         password:
             type: string
-            options: { default: null, notnull: false, length: 50 }
+            options: { length: 50, default: null, notnull: false }
         url:
             type: string
-            options: { default: null, notnull: false, length: 255 }
+            options: { length: 255, default: null, notnull: false }
         bio:
             type: text
-            options: { default: null, notnull: false, length: 65532 }
+            options: { length: 65532, default: null, notnull: false }
         avatar_img_id:
             type: bigint
-            options: { default: null, notnull: false, unsigned: true }
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         email:
             type: string
-            options: { default: null, notnull: false, length: 255 }
+            options: { length: 255, default: null, notnull: false }
         name:
             type: string
-            options: { default: null, notnull: false, length: 100 }
+            options: { length: 100, default: null, notnull: false }
         type:
             type: integer
-            options: { default: 1, notnull: true, comment: '0 backend - 1 frontend' }
+            options: { unsigned: true, default: 1, notnull: true, comment: '0 backend - 1 frontend' }
         token:
             type: string
-            options: { default: null, notnull: false, length: 50 }
+            options: { length: 50, default: null, notnull: false }
         activated:
             type: integer
-            options: { default: 0, notnull: true, comment: '1 activated - 0 deactivated' }
+            options: { unsigned: true, default: 0, notnull: true, comment: '1 activated - 0 deactivated' }
         fk_user_group:
             type: string
-            options: { default: null, notnull: false, length: 100 }
+            options: { length: 100, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -1551,11 +1552,11 @@ users:
 users_content_categories:
     columns:
         pk_fk_user:
-            type: integer
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            type: bigint
+            options: { length: 20, unsigned: true, autoincrement: true }
         pk_fk_content_category:
-            type: integer
-            options: { default: null, unsigned: true }
+            type: bigint
+            options: { length: 20, unsigned: true, default: null }
     index:
         -
             name: PRIMARY
@@ -1567,16 +1568,16 @@ videos:
     columns:
         pk_video:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         video_url:
             type: string
-            options: { default: null, length: 255 }
+            options: { length: 255, default: null }
         information:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
         author_name:
             type: string
-            options: { default: null, notnull: false, length: 200 }
+            options: { length: 200, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -1595,19 +1596,19 @@ votes:
     columns:
         pk_vote:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         value_pos:
             type: smallint
-            options: { default: '0' }
+            options: { length: 5, unsigned: true, default: 0 }
         value_neg:
             type: smallint
-            options: { default: '0' }
+            options: { length: 5, unsigned: true, default: 0 }
         ips_count_vote:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
         karma:
             type: integer
-            options: { default: '100', notnull: false, unsigned: true }
+            options: { unsigned: true, default: 100, notnull: false }
     index:
         -
             name: PRIMARY
@@ -1619,13 +1620,13 @@ widgets:
     columns:
         pk_widget:
             type: bigint
-            options: { default: null, unsigned: true, autoincrement: true, length: 20 }
+            options: { length: 20, unsigned: true, autoincrement: true }
         content:
             type: text
-            options: { default: null, length: 65532 }
+            options: { length: 65532, default: null }
         renderlet:
             type: string
-            options: { default: html, notnull: false, length: 50 }
+            options: { length: 50, notnull: false, default: 'html' }
     index:
         -
             name: PRIMARY

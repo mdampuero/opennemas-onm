@@ -76,8 +76,6 @@ class AuthorController extends Controller
                     $image = $this->get('entity_repository')->find('Photo', $item->cover_id);
                     $item->img1_path = $image->path_file.$image->name;
                     $item->img1 = $image;
-                    $item->summary = $item->subtitle;
-                    $item->subtitle= '';
                 }
 
                 if ($item->fk_content_type == 9) {

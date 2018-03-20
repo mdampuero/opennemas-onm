@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  WidgetCtrl
@@ -13,9 +14,9 @@
      * @requires $rootScope
      * @requires $scope
      */
-    .controller('WidgetCtrl', [ '$compile', '$controller', '$http', '$rootScope', '$sce', '$scope', 'routing',
+    .controller('WidgetCtrl', [
+      '$compile', '$controller', '$http', '$rootScope', '$sce', '$scope', 'routing',
       function($compile, $controller, $http, $rootScope, $sce, $scope, routing) {
-
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -28,7 +29,7 @@
          * @description
          *   Adds an empty parameter to the parameters list.
          */
-        $scope.addParameter = function () {
+        $scope.addParameter = function() {
           $scope.params.push({ name: '', value: '' });
         };
 
@@ -41,7 +42,7 @@
          *
          * @param {String} uuid The widget uuid.
          */
-        $scope.getForm = function (uuid) {
+        $scope.getForm = function(uuid) {
           $scope.formLoading = true;
 
           $('.widget-form').empty();
@@ -57,12 +58,12 @@
 
             // Add original parameters to form
             for (var i = 0; i < $scope.params.length; i++) {
-              var item = $scope.originalParams.filter(function (e) {
+              var item = $scope.originalParams.filter(function(e) {
                 return e.name === $scope.params[i].name;
               });
 
               if (item.length > 0) {
-                $scope.params[i] = angular.copy(item[0]);
+                $scope.params[i].value = item[0].value;
               }
             }
 
@@ -105,7 +106,7 @@
          *
          * @param {Integer} The parameter index in the list of parameters.
          */
-        $scope.removeParameter = function (index) {
+        $scope.removeParameter = function(index) {
           $scope.params.splice(index, 1);
         };
 
