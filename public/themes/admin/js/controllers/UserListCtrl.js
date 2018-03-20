@@ -285,22 +285,16 @@
 
                   data[property] = value;
 
-                  return http.patch('backend_ws_users_patch', data).then(function(response) {
-                    return $scope.list().then(function() {
-                      messenger.post(response.data);
-                      $scope.selected = { all: false, items: [] };
-                      modalWindow.close(true);
-                    });
-                  }, function(response) {
-                    return $scope.list().then(function() {
-                      messenger.post(response.data);
-                      $scope.selected = { all: false, items: [] };
-                      modalWindow.close(false);
-                    });
-                  });
+                  return http.patch('backend_ws_users_patch', data);
                 };
               }
             }
+          });
+
+          modal.result.then(function(response) {
+            $scope.selected = { all: false, items: [] };
+            messenger.post(response.data);
+            $scope.list();
           });
         };
 
