@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('orm');
+        $rootNode    = $treeBuilder->root('orm');
 
         $rootNode
             ->children()
@@ -112,6 +112,16 @@ class Configuration implements ConfigurationInterface
                                                         ->prototype('scalar')->end()
                                                     ->end()
                                                     ->scalarNode('key')->end()
+                                                ->end()
+                                            ->end()
+                                            ->arrayNode('relations')
+                                                ->prototype('array')
+                                                    ->children()
+                                                        ->scalarNode('table')->end()
+                                                        ->arrayNode('ids')
+                                                            ->prototype('scalar')->end()
+                                                        ->end()
+                                                    ->end()
                                                 ->end()
                                             ->end()
                                             ->arrayNode('columns')

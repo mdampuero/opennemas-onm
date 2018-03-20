@@ -201,7 +201,7 @@ class Metadata extends DataObject implements Validable
     /**
      * Returns the name of the table of metas.
      *
-     * @return string The name of the table of metas
+     * @return string The name of the table of metas.
      */
     public function getMetaTable()
     {
@@ -212,6 +212,20 @@ class Metadata extends DataObject implements Validable
         }
 
         return $this->getTable() . '_meta';
+    }
+
+    /**
+     * Returns the list of relations.
+     *
+     * @return array The list of relations.
+     */
+    public function getRelations()
+    {
+        if ($this->hasRelations()) {
+            return $this->mapping['database']['relations'];
+        }
+
+        return [];
     }
 
     /**
@@ -355,6 +369,19 @@ class Metadata extends DataObject implements Validable
         return array_key_exists('database', $this->mapping)
             && array_key_exists('metas', $this->mapping['database'])
             && !empty($this->mapping['database']['metas']);
+    }
+
+    /**
+     * Checks if the current entity has relations with other entities.
+     *
+     * @return boolean True if the current entity has metas. Otherwise, returns
+     *                 false.
+     */
+    public function hasRelations()
+    {
+        return array_key_exists('database', $this->mapping)
+            && array_key_exists('relations', $this->mapping['database'])
+            && !empty($this->mapping['database']['relations']);
     }
 
     /**

@@ -317,6 +317,27 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests getRelations when relations are missing and present in Metadata.
+     */
+    public function testGetRelations()
+    {
+        $this->assertEmpty($this->metadata->getRelations());
+
+        $this->metadata->mapping['database'] = [
+            'relations' => [
+                [ 'table' => 'glorp_table', 'ids' => [ 'id' => 'foo_id' ] ]
+            ]
+        ];
+
+        $this->assertEquals([
+            [
+                'table' => 'glorp_table',
+                'ids' => [ 'id' => 'foo_id' ]
+            ]
+        ], $this->metadata->getRelations());
+    }
+
+    /**
      * Tests getRepository with invalid name.
      *
      * @expectedException \Common\ORM\Core\Exception\InvalidRepositoryException
@@ -366,6 +387,22 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
 
         $this->metadata->mapping['database'] = [ 'metas' => ['table' => 'foo_table_meta' ] ];
         $this->assertTrue($this->metadata->hasMetas());
+    }
+
+    /**
+     * Tests hasRelations when relations are missing and present in Metadata.
+     */
+    public function testHasRelations()
+    {
+        $this->assertFalse($this->metadata->hasRelations());
+
+        $this->metadata->mapping['database'] = [
+            'relations' => [
+                [ 'table' => 'glorp_table', 'ids' => [ 'id' => 'foo_id' ] ]
+            ]
+        ];
+
+        $this->assertTrue($this->metadata->hasRelations());
     }
 
     /**
