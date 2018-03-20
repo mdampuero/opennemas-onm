@@ -36,6 +36,7 @@ class ValidatorTest extends KernelTestCase
                     'baz'    => [ 'string' ],
                     'garply' => 'enum',
                     'corge'  => 'entity::client',
+                    'wobble'  => 'array::key=>thud:integer',
                 ],
                 'enum' => [
                     'garply' => [ 'grault' ]
@@ -243,8 +244,18 @@ class ValidatorTest extends KernelTestCase
     public function testValidateProperty()
     {
         $this->assertFalse($this->methods['validateProperty']->invokeArgs($this->validator, [ 'client', 'foo', 1 ]));
-        $this->assertTrue($this->methods['validateProperty']->invokeArgs($this->validator, [ 'client', 'woomble', 'wumble' ]));
-        $this->assertFalse($this->methods['validateProperty']->invokeArgs($this->validator, [ 'client', 'foo', 1 ]));
+        $this->assertTrue($this->methods['validateProperty']->invokeArgs(
+            $this->validator,
+            [ 'client', 'woomble', 'wumble' ]
+        ));
+        $this->assertFalse($this->methods['validateProperty']->invokeArgs(
+            $this->validator,
+            [ 'client', 'foo', 1 ]
+        ));
+        $this->assertTrue($this->methods['validateProperty']->invokeArgs(
+            $this->validator,
+            [ 'client', 'wobble', [ 1 ] ]
+        ));
     }
 
     /**
