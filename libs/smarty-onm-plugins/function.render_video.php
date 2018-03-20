@@ -16,7 +16,6 @@ function smarty_function_render_video($params, &$smarty)
         $output = getVideoOutput($params, $video);
     }
 
-
     if ($params['amp']) {
         $output = getVideoWithAMPFormat($output);
     }
@@ -135,6 +134,7 @@ function getVideoWithAMPFormat($output)
     $patterns = [
         '@<video([^>]+>)(?s)(.*?)<\/video>@',
         '@<iframe.*src="[http:|https:]*(.*?)".*><\/iframe>@',
+        '@<object[^>]*>(?s).*?<\/object>@',
     ];
 
     $replacements = [
@@ -149,6 +149,7 @@ function getVideoWithAMPFormat($output)
             frameborder="0"
             src="https:${1}">
         </amp-iframe>',
+        '',
     ];
 
     return preg_replace($patterns, $replacements, $output);
