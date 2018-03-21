@@ -29,7 +29,7 @@ class BaseConverter extends Converter
     public function databasify($source)
     {
         if (empty($source)) {
-            return [ [], [], [] ];
+            return [ [], [], [], [] ];
         }
 
         if ($this->isArray($source)) {
@@ -125,6 +125,10 @@ class BaseConverter extends Converter
                 $to = \classify($mapping['columns'][$key]['type']);
             }
 
+            if (array_key_exists($key, $this->metadata->getRelations())) {
+                $to = 'array';
+            }
+
             $data[$key] = $this->convertTo($from, $to, $value, $params);
         }
 
@@ -145,10 +149,18 @@ class BaseConverter extends Converter
             }
         }
 
+        $relations = array_intersect_key(
+            $data,
+            $this->metadata->getRelations()
+        );
+
+        $data = array_diff_key($data, $this->metadata->getRelations());
+
         // Meta keys (unknown properties)
         $unknown = array_diff(
             array_keys($data),
-            array_keys($this->metadata->mapping['database']['columns'])
+            array_keys($this->metadata->mapping['database']['columns']),
+            array_keys($this->metadata->getRelations())
         );
 
         $metas = array_intersect_key($data, array_flip($unknown));
@@ -165,7 +177,7 @@ class BaseConverter extends Converter
             return \PDO::PARAM_STR;
         }, $data);
 
-        return [ $data, $metas, $types ];
+        return [ $data, $metas, $types, $relations ];
     }
 
     /**
