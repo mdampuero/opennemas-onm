@@ -405,6 +405,7 @@ class Advertisement extends Content
 
             return $this;
         } catch (\Exception $e) {
+            $conn->rollback();
             getService('error.log')->error($e->getMessage());
             return false;
         }
