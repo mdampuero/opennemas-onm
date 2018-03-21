@@ -102,8 +102,14 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
+            <li class="quicklinks text-left hidden-xs ng-cloak">
+              <div class="checkbox p-t-7">
+                <input id="status" ng-false-value="null" ng-model="criteria.status" ng-true-value="2" type="checkbox">
+                <label for="status"><strong>{t}Requests only{/t}</strong></label>
+              </div>
+            </li>
             <li class="quicklinks hidden-xs ng-cloak">
-              <ui-select name="group" theme="select2" ng-model="criteria.fk_user_group">
+              <ui-select name="group" theme="select2" ng-model="criteria.user_group_id">
                 <ui-select-match>
                   <strong>{t}Subscription{/t}:</strong> [% $select.selected.name %]
                 </ui-select-match>
@@ -212,9 +218,9 @@
                   <td class="hidden-xs">[% item.email %]</td>
                   <td class="hidden-xs">
                     <ul class="no-style">
-                      <li ng-repeat="subscription in item.user_groups" ng-if="data.extra.subscriptions[subscription]">
-                        <a class="badge text-uppercase m-b-5" ng-class="{ 'badge-danger': !data.extra.subscriptions[subscription].enabled, 'badge-success': data.extra.subscriptions[subscription].enabled }" href="[% routing.generate('backend_subscription_show', { id: subscription }) %]">
-                          <strong>[% data.extra.subscriptions[subscription].name %]</strong>
+                      <li class="m-r-10 pull-left" ng-repeat="(id, subscription) in item.user_groups" ng-if="subscription.status !== 0">
+                        <a class="badge text-uppercase m-b-5 no-animate" ng-class="{ 'badge-danger': subscription.status !== 2 && !data.extra.subscriptions[id].enabled, 'badge-success': subscription.status !== 2 && data.extra.subscriptions[id].enabled, 'badge-warning': subscription.status === 2 }" href="[% routing.generate('backend_subscription_show', { id: id }) %]">
+                          <strong>[% data.extra.subscriptions[id].name %]</strong>
                         </span>
                         </a>
                       </li>
