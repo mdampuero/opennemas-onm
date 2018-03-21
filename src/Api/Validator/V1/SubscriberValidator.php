@@ -23,11 +23,11 @@ class SubscriberValidator extends Validator
             && ($item->type !== 2
             || !$this->container->get('core.security')->hasPermission('MASTER'))
         ) {
-            throw new InvalidArgumentException('Invalid value for "type"', 401);
+            throw new InvalidArgumentException('Invalid value for "type"', 400);
         }
 
         if (!empty($item->email) && $item->username !== $item->email) {
-            throw new InvalidArgumentException('Invalid value for "username"', 401);
+            throw new InvalidArgumentException('Invalid value for "username"', 400);
         }
     }
 }
