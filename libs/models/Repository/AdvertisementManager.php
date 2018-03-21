@@ -274,7 +274,12 @@ class AdvertisementManager extends EntityManager
         $ads = include APP_PATH . 'config/ads/onm_default_ads.php';
 
         $ads = array_filter($ads, function ($a) use ($types, $category) {
-            return in_array($a->type_advertisement, $types)
+            $isOfType = false;
+            foreach ($types as $type) {
+                $isOfType |= in_array($type, $a->positions);
+            }
+
+            return $isOfType
                 && (is_null($a->fk_content_categories)
                     || in_array($category, $a->fk_content_categories)
                     || in_array(0, $a->fk_content_categories));
