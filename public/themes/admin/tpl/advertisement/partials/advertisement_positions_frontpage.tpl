@@ -7,10 +7,10 @@
   <hr>
   <div class="row">
     <div class="col-md-6">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="91" size="(160 x 600)"}
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="91" size="(160x600)"}
     </div>
     <div class="col-md-6">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="92" size="(160 x 600)"}
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="92" size="(160x600)"}
     </div>
   </div>
   <hr>
@@ -44,87 +44,87 @@
   <hr>
   <div class="row">
     <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="11" size="(300X*"}
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="11" size="(300x*)"}
     </div>
     <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="21" size="(300X*"}
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="21" size="(300x*)"}
     </div>
     <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="31" size="(300X*"}
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="31" size="(300x*)"}
     </div>
   </div>
   <div class="row">
     <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="12" size="(300X*"}
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="12" size="(300x*)"}
     </div>
     <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="22" size="(300X*"}
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="22" size="(300x*)"}
     </div>
     <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="32" size="(300X*"}
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="32" size="(300x*)"}
     </div>
   </div>
   <div class="row">
     <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="13" size="(300X*"}
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="13" size="(300x*)"}
     </div>
     <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="23" size="(300X*"}
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="23" size="(300x*)"}
     </div>
     <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="33" size="(300X*"}
-    </div>
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-md-6">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="3" size="(728X90"}
-    </div>
-    <div class="col-md-6">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="4" size="(234x90"}
-    </div>
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="14" size="(300X*"}
-    </div>
-    <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="24" size="(300X*"}
-    </div>
-    <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="34" size="(300X*"}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="15" size="(300X*"}
-    </div>
-    <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="25" size="(300X*"}
-    </div>
-    <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="35" size="(300X*"}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="16" size="(300X*"}
-    </div>
-    <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="26" size="(300X*"}
-    </div>
-    <div class="col-md-4">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="36" size="(300X*"}
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="33" size="(300x*)"}
     </div>
   </div>
   <hr>
   <div class="row">
     <div class="col-md-6">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="5" size="(728X90"}
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="3" size="(728X90)"}
     </div>
     <div class="col-md-6">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="6" size="(234X90"}
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="4" size="(234x90)"}
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-4">
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="14" size="(300x*)"}
+    </div>
+    <div class="col-md-4">
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="24" size="(300x*)"}
+    </div>
+    <div class="col-md-4">
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="34" size="(300x*)"}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="15" size="(300x*)"}
+    </div>
+    <div class="col-md-4">
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="25" size="(300x*)"}
+    </div>
+    <div class="col-md-4">
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="35" size="(300x*)"}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="16" size="(300x*)"}
+    </div>
+    <div class="col-md-4">
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="26" size="(300x*)"}
+    </div>
+    <div class="col-md-4">
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="36" size="(300x*)"}
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-6">
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="5" size="(728X90)"}
+    </div>
+    <div class="col-md-6">
+      {include file="advertisement/partials/ad_position_selector.tpl" position_id="6" size="(234X90)"}
     </div>
   </div>
 </div>

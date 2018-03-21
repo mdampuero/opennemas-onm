@@ -36,27 +36,27 @@
       <div class="col-md-6">
         <div class="row">
           <div class="col-md-12">
-            {include file="advertisement/partials/ad_position_selector.tpl" position_id="103" size="(300x*)    "}
+            {include file="advertisement/partials/ad_position_selector.tpl" position_id="103" size="(300x*)"}
           </div>
         </div>
         <div class="row">
           <div class="col-md-12">
-            {include file="advertisement/partials/ad_position_selector.tpl" position_id="105" size="(300x*)    "}
+            {include file="advertisement/partials/ad_position_selector.tpl" position_id="105" size="(300x*)"}
           </div>
         </div>
         <div class="row">
           <div class="col-md-12">
-            {include file="advertisement/partials/ad_position_selector.tpl" position_id="106" size="(300x*)    "}
+            {include file="advertisement/partials/ad_position_selector.tpl" position_id="106" size="(300x*)"}
           </div>
         </div>
         <div class="row">
           <div class="col-md-12">
-            {include file="advertisement/partials/ad_position_selector.tpl" position_id="107" size="(300x*)    "}
+            {include file="advertisement/partials/ad_position_selector.tpl" position_id="107" size="(300x*)"}
           </div>
         </div>
         <div class="row">
           <div class="col-md-12">
-            {include file="advertisement/partials/ad_position_selector.tpl" position_id="108" size="(300x*)    "}
+            {include file="advertisement/partials/ad_position_selector.tpl" position_id="108" size="(300x*)"}
           </div>
         </div>
       </div>
