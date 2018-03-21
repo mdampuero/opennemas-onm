@@ -164,11 +164,6 @@ class Advertisement extends Content
     {
         parent::load($properties);
 
-        // Initialize the categories array of this advertisement
-        if (!is_array($this->type_advertisement) && !is_null($this->type_advertisement)) {
-            $this->type_advertisement = array_map('intval', explode(',', $properties['type_advertisement']));
-        }
-
         // FIXME: review that this property is not used ->img
         $this->img = $this->path;
 
@@ -207,7 +202,7 @@ class Advertisement extends Content
         }
 
         if (empty($properties['positions'])) {
-            $this->positions = $this->type_advertisement;
+            $this->positions = [];
         }
 
         return $this;
@@ -309,7 +304,6 @@ class Advertisement extends Content
                 'advertisements',
                 [
                     'pk_advertisement'      => $data['pk_advertisement'],
-                    'type_advertisement'    => implode(',', $data['positions']),
                     'fk_content_categories' => $data['categories'],
                     'path'                  => $data['img'],
                     'url'                   => $data['url'],
@@ -376,7 +370,6 @@ class Advertisement extends Content
             $rs = getService('dbal_connection')->update(
                 'advertisements',
                 [
-                    'type_advertisement'    => implode(',', $data['positions']),
                     'fk_content_categories' => $data['categories'],
                     'path'                  => $data['img'],
                     'url'                   => $data['url'],
