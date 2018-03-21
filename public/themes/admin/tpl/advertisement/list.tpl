@@ -1,7 +1,10 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('advertisement', 'backend_ws_contents_list')">
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('advertisement', 'backend_ws_contents_list');
+categories = {json_encode($categories)|clear_json};
+advertisement_positions = {json_encode($advertisement_positions)|clear_json}; type = {json_encode($types)|clear_json};
+status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ];">
   <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -98,7 +101,7 @@
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|clear_json}">
+          <li class="quicklinks hidden-xs ng-cloak">
             <ui-select name="author" theme="select2" ng-model="criteria.fk_content_categories">
               <ui-select-match>
                 <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
@@ -108,7 +111,7 @@
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="hidden-xs ng-cloak" ng-init="advertisement_positions = {json_encode($advertisement_positions)|clear_json}">
+          <li class="hidden-xs ng-cloak">
             <ui-select name="position" theme="select2" ng-model="criteria.position">
               <ui-select-match>
                 <strong>{t}Position{/t}:</strong> [% $select.selected.name %]
@@ -118,7 +121,7 @@
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="hidden-xs hidden-sm ng-cloak" ng-init="type = {json_encode($types)|clear_json}">
+          <li class="hidden-xs hidden-sm ng-cloak">
             <ui-select name="type" theme="select2" ng-model="criteria.with_script">
               <ui-select-match>
                 <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
@@ -128,7 +131,7 @@
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="quicklinks ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
+          <li class="quicklinks ng-cloak">
             <ui-select name="status" theme="select2" ng-model="criteria.content_status">
               <ui-select-match>
                 <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
