@@ -286,18 +286,7 @@ class Advertisement extends Content
 
         parent::create($data);
 
-        if (!empty($data['script'])) {
-            $data['script'] = base64_encode($data['script']);
-        }
-
-        if (!isset($data['with_script'])) {
-            $data['with_script'] = 0;
-        }
-
         $data['pk_advertisement'] = $data['id'] = $this->id;
-        $data['overlap']          = (isset($data['overlap'])) ? $data['overlap'] : 0;
-        $data['timeout']          = (isset($data['timeout'])) ? $data['timeout'] : null;
-        $data['type_medida']      = (!empty($data['type_medida'])) ? $data['type_medida'] : null;
 
         try {
             $rs = getService('dbal_connection')->insert(
@@ -307,14 +296,15 @@ class Advertisement extends Content
                     'fk_content_categories' => $data['categories'],
                     'path'                  => $data['img'],
                     'url'                   => $data['url'],
-                    'type_medida'           => $data['type_medida'],
                     'num_clic'              => (int) $data['num_clic'],
                     'num_clic_count'        => 0, // num_clic_count
                     'num_view'              => (int) $data['num_view'],
-                    'with_script'           => (int) $data['with_script'],
-                    'script'                => $data['script'],
-                    'overlap'               => (int) $data['overlap'],
-                    'timeout'               => (int) $data['timeout'],
+                    'type_medida'           => (!empty($data['type_medida'])) ? $data['type_medida'] : null,
+                    'with_script'           => (isset($data['with_script'])) ? (int) $data['with_script'] : 0,
+                    'script'                => (!empty($data['script'])) ? base64_encode($data['script']) : '',
+                    'overlap'               => (isset($data['overlap'])) ? (int) $data['overlap'] : 0,
+                    'timeout'               => (isset($data['timeout'])) ? (int) $data['timeout'] : null,
+
                 ]
             );
 
@@ -357,15 +347,6 @@ class Advertisement extends Content
 
         parent::update($data);
 
-        if (!empty($data['script'])) {
-            $data['script'] = base64_encode($data['script']);
-        }
-
-        $data['overlap']     = (isset($data['overlap'])) ? $data['overlap'] : 0;
-        $data['timeout']     = (isset($data['timeout'])) ? $data['timeout'] : null;
-        $data['with_script'] = (isset($data['with_script'])) ? $data['with_script'] : 0;
-        $data['type_medida'] = (!empty($data['type_medida'])) ? $data['type_medida'] : null;
-
         try {
             $rs = getService('dbal_connection')->update(
                 'advertisements',
@@ -373,13 +354,13 @@ class Advertisement extends Content
                     'fk_content_categories' => $data['categories'],
                     'path'                  => $data['img'],
                     'url'                   => $data['url'],
-                    'type_medida'           => $data['type_medida'],
                     'num_clic'              => (int) $data['num_clic'],
                     'num_view'              => (int) $data['num_view'],
-                    'with_script'           => (int) $data['with_script'],
-                    'script'                => $data['script'],
-                    'overlap'               => (int) $data['overlap'],
-                    'timeout'               => (int) $data['timeout'],
+                    'type_medida'           => (!empty($data['type_medida'])) ? $data['type_medida'] : null,
+                    'with_script'           => (isset($data['with_script'])) ? (int) $data['with_script'] : 0,
+                    'script'                => (!empty($data['script'])) ? base64_encode($data['script']) : '',
+                    'overlap'               => (isset($data['overlap'])) ? (int) $data['overlap'] : 0,
+                    'timeout'               => (isset($data['timeout'])) ? (int) $data['timeout'] : null,
                 ],
                 [ 'pk_advertisement' => (int) $data['id'] ]
             );
