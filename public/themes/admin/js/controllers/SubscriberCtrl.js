@@ -151,6 +151,8 @@
 
           var data = cleaner.clean($scope.item);
 
+          data.username = data.email;
+
           /**
            * Callback executed when subscriber is saved/updated successfully.
            *

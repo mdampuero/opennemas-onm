@@ -22,7 +22,7 @@ class SubscriptionValidator extends Validator
         if ($item->type !== 1
             && !$this->container->get('core.security')->hasPermission('MASTER')
         ) {
-            throw new InvalidArgumentException('Invalid value for "type"', 401);
+            throw new InvalidArgumentException('Invalid value for "type"', 400);
         }
     }
 }
