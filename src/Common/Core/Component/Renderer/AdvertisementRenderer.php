@@ -336,7 +336,7 @@ class AdvertisementRenderer
             $orientation,
             $ad->pk_advertisement,
             empty($ad->timeout) ? 5 : $ad->timeout,
-            $ad->type_advertisement,
+            implode(',', $ad->positions),
             $this->renderInline($ad)
         );
     }
