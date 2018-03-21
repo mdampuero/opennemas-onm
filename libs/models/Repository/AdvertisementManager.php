@@ -162,8 +162,8 @@ class AdvertisementManager extends EntityManager
             $filterSQL = implode($fieldUnion, $filterSQL);
         }
 
-        $filterSQL = preg_replace('@position="(\d*)"@', 'pk_advertisement IN ('
-            . 'SELECT advertisement_id FROM advertisements_positions WHERE position_id IN ($1)'
+        $filterSQL = preg_replace('@position="(\d*)"@', ' EXISTS ('
+            . 'SELECT 1 FROM advertisements_positions WHERE position_id IN ($1) and advertisement_id = pk_advertisement'
             . ')', $filterSQL);
 
         return $filterSQL;
@@ -216,8 +216,8 @@ class AdvertisementManager extends EntityManager
         $types = implode(', ', $types);
 
         $sql = 'SELECT pk_advertisement as id FROM advertisements '
-            . 'WHERE pk_advertisement IN ('
-            . ' SELECT advertisement_id FROM advertisements_positions WHERE position_id IN (%s)'
+            . 'WHERE EXISTS('
+            . ' SELECT 1 FROM advertisements_positions WHERE position_id IN (%s) AND pk_advertisement=advertisement_id'
             . ') AND (fk_content_categories IS null or %s) '
             . 'ORDER BY id';
 
