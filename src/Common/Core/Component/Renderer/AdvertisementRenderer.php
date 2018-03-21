@@ -124,6 +124,10 @@ class AdvertisementRenderer
      */
     public function renderInlineDFPHeader($ads, $params)
     {
+        if (empty($ads)) {
+            return '';
+        }
+
         $ads = array_filter($ads, function ($a) {
             return $a->with_script == 3
                 && array_key_exists('googledfp_unit_id', $a->params)
@@ -224,6 +228,9 @@ class AdvertisementRenderer
      */
     public function renderInlineReviveHeader($ads)
     {
+        if (empty($ads)) {
+            return '';
+        }
         $ads = array_filter($ads, function ($a) {
             return $a->with_script == 2
                 && array_key_exists('openx_zone_id', $a->params)
@@ -283,6 +290,10 @@ class AdvertisementRenderer
      */
     public function renderInlineInterstitial($ads)
     {
+        if (empty($ads)) {
+            return '';
+        }
+
         $tpl = '<div class="interstitial">'
             . '<div class="interstitial-wrapper" style="width: %s;">'
                 . '<div class="interstitial-header">'
@@ -353,7 +364,7 @@ class AdvertisementRenderer
     {
         $html  = '<div class="ad-slot oat"%s data-type="%s"%s></div>';
         $id    = '';
-        $type  = $ad->type_advertisement;
+        $type  = $ad->positions;
         $width = '';
 
         // Style for advertisements via renderbanner
