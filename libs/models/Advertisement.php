@@ -308,15 +308,7 @@ class Advertisement extends Content
                 ]
             );
 
-            foreach (array_unique($data['positions']) as $position) {
-                $rs = getService('dbal_connection')->insert(
-                    'advertisements_positions',
-                    [
-                        'advertisement_id' => $data['id'],
-                        'position_id'      => (int) $position,
-                    ]
-                );
-            }
+            $this->savePositions($data['id'], $data['positions']);
 
             $conn->commit();
 
@@ -370,15 +362,7 @@ class Advertisement extends Content
                 [ 'advertisement_id' => $data['id'] ]
             );
 
-            foreach (array_unique($data['positions']) as $position) {
-                $rs = getService('dbal_connection')->insert(
-                    'advertisements_positions',
-                    [
-                        'advertisement_id' => $data['id'],
-                        'position_id'      => (int) $position,
-                    ]
-                );
-            }
+            $this->savePositions($data['id'], $data['positions']);
 
             $conn->commit();
 
@@ -592,5 +576,27 @@ class Advertisement extends Content
         $adsRenderer = getService('core.renderer.advertisement');
 
         return $adsRenderer->render($this, $params);
+    }
+
+    /**
+     * Saves the advertisement positions given the id and an array of positions
+     *
+     * @param int   $id                     The id of the advertisement
+     * @param array $advertisementPositions array of integers that depicts
+     *                                      the list of advertisement ids
+     *
+     * @return boolean true if the positions were saved
+     **/
+    private function savePositions($id, $advertisementPositions)
+    {
+        $positions = [];
+        foreach (array_unique($advertisementPositions) as $position) {
+            $positions[] = sprintf('(%s, %s)', $id, (int) $position);
+        }
+
+        $sql = 'INSERT INTO `advertisements_positions`(`advertisement_id`, `position_id`) VALUES %s';
+        $rs  = getService('dbal_connection')->executeUpdate(sprintf($sql, implode(', ', $positions)));
+
+        return true;
     }
 }
