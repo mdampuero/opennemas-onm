@@ -100,17 +100,8 @@
           user_groups: [],
           categories_all: true,
           hidden_elements: 0,
+          loading: true
         };
-
-        /**
-         * @memberOf AdvertisementCtrl
-         *
-         * @description
-         *  Boolean that tells the UI if it is loading.
-         *
-         * @type {Object}
-         */
-        $scope.loading = true;
 
         /**
          * @function areAllCategoriesSelected
@@ -377,7 +368,7 @@
             }
           }
 
-          $scope.loading = false;
+          $scope.ui.loading = false;
           $scope.collapsed = true;
 
           $timeout(function() {

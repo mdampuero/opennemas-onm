@@ -513,7 +513,7 @@ jQuery(document).ready(function($) {
       </div>
       <div class="grid simple advertisement-positions">
         {* spinner to show when the page is loading *}
-        <div class="grid-body" ng-if="loading">
+        <div class="grid-body" ng-if="ui.loading">
           <div class="spinner-wrapper">
             <div class="loading-spinner"></div>
             <div class="spinner-text">{t}Loading{/t}...</div>
