@@ -31,9 +31,11 @@
   // and finally a button to show/collapse the list of positions
   .positions-selected {
     position:relative;
+    background-color:#f8f8f8!important;
 
     .positions-selected-counter {
       color:@header-color;
+      font-size:12px;
     }
 
     .positions-selected-list.collapsed {
@@ -42,17 +44,18 @@
     }
 
     .position-selected-hidden-counter {
-      position:absolute;
-      bottom:0;
-      right:0;
-      display:block;
-      margin: 0;
+      bottom: 0;
+      background: -webkit-gradient(linear, left top, right top, from(rgba(248, 248, 248, 0)), color-stop(0.2, #f8f8f8))!important;
+      background: -webkit-linear-gradient(left, rgba(248, 248, 248, 0) 0%, #f8f8f8 20%)!important;
+      background: -o-linear-gradient(left, rgba(248, 248, 248, 0) 0%, #f8f8f8 20%)!important;
+      background: linear-gradient(to right, rgba(248, 248, 248, 0) 0%, #f8f8f8 20%)!important;
       color: @header-color;
-      text-align:right;
-      background: -moz-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 1%, rgba(255,255,255,1) 29%) !important; /* FF3.6-15 */
-      background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0.03) 1%,rgba(255,255,255,1) 29%) !important; /* Chrome10-25,Safari5.1-6 */
-      background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,0.03) 1%,rgba(255,255,255,1) 29%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 ) !important; /* IE6-9 */
+      display: block;
+      margin: 0;
+      padding-left: 25px;
+      position: absolute;
+      right: 0;
+      text-align: right;
     }
   }
 }
