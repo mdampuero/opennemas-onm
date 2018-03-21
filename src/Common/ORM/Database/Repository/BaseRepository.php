@@ -389,6 +389,12 @@ class BaseRepository extends Repository
 
         $values = [];
         foreach ($relations as $name => $relation) {
+            if (!empty($relation['repository'])
+                && $this->name !== $relation['repository']
+            ) {
+                continue;
+            }
+
             $table = $relation['table'];
             $rid   = $relation['ids'][$this->metadata->getIdKeys()[0]];
             $sql   = 'select * from ' . $table
@@ -397,10 +403,8 @@ class BaseRepository extends Repository
             $rs = $this->conn->fetchAll($sql);
 
             foreach ($rs as $value) {
-                $values[$value[$rid]][$name][] = array_diff_key(
-                    $value,
-                    array_flip([ $rid ])
-                );
+                $values[$value[$rid]][$name][$value[$relation['key']]] =
+                    array_diff_key($value, array_flip([ $rid ]));
             }
         }
 

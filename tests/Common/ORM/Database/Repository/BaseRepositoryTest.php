@@ -43,6 +43,7 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
                         'norf' => [
                             'table'   => 'extension_norf',
                             'ids'     => [ 'foo' => 'foo_id' ],
+                            'key'     => 'norf_id',
                             'columns' => [
                                 'extension_id' => [
                                     'type'    => 'integer',
