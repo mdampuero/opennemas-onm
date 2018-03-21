@@ -39,6 +39,23 @@
         };
 
         /**
+         * @function accept
+         * @memberOf SubscriberCtrl
+         *
+         * @description
+         *   Accepts a subscription.
+         *
+         * @param {Integer} id The subscription id.
+         */
+        $scope.accept = function(id) {
+          if (!$scope.item.user_groups[id]) {
+            $scope.item.user_groups[id] = { status: 0 };
+          }
+
+          $scope.item.user_groups[id].status = 1;
+        };
+
+        /**
          * @function convertTo
          * @memberOf SubscriberListCtrl
          *
@@ -113,6 +130,16 @@
               $scope.item = $scope.data.subscriber;
             }
 
+            if (!$scope.item.user_groups) {
+              $scope.item.user_groups = {};
+            }
+
+            for (var id in $scope.data.extra.subscriptions) {
+              if (!$scope.item.user_groups[id]) {
+                $scope.item.user_groups[id] = { user_group_id: id, status: 0 };
+              }
+            }
+
             $scope.disableFlags();
           }, function() {
             $scope.item = null;
@@ -132,6 +159,19 @@
          */
         $scope.init = function(id) {
           $scope.getItem(id);
+        };
+
+        /**
+         * @function reject
+         * @memberOf SubscriberCtrl
+         *
+         * @description
+         *   Rejects a subscription.
+         *
+         * @param {Integer} id The subscription id.
+         */
+        $scope.reject = function(id) {
+          delete $scope.item.user_groups[id];
         };
 
         /**

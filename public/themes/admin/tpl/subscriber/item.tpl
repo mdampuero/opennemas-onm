@@ -171,17 +171,40 @@
                     </label>
                   </div>
                 </div>
-                <div class="form-group">
+              </div>
+            </div>
+            <div class="grid simple">
+              <div class="grid-title">
+                {t}Subscriptions{/t}
+              </div>
+              <div class="grid-body no-padding">
+                <div class="p-l-15 p-t-15 p-b-15 p-r-15" ng-class="{ 'b-t': $index > 0 }" ng-repeat="subscription in data.extra.subscriptions">
                   <label class="form-label">
-                    {t}Subscriptions{/t}
+                    <span ng-class="{ 'text-danger': item.user_groups && item.user_groups[subscription.pk_user_group] && item.user_groups[subscription.pk_user_group].status === 2 }">
+                      [% subscription.name %]
+                      <span ng-if="item.user_groups && item.user_groups[subscription.pk_user_group] && item.user_groups[subscription.pk_user_group].status === 2">({t}Pending{/t})</span>
+                    </span>
                   </label>
-                  <div class="controls">
-                    <div ng-repeat="subscription in data.extra.subscriptions">
-                      <div class="checkbox">
-                        <input id="checkbox-[% $index %]" checklist-model="item.fk_user_group" checklist-value="subscription.pk_user_group.toString()" type="checkbox">
-                        <label class="form-label" for="checkbox-[% $index %]">
-                          [% subscription.name %]
-                        </label>
+                  <div class="checkbox" ng-if="!item.user_groups || !item.user_groups[subscription.pk_user_group] || item.user_groups[subscription.pk_user_group].status !== 2">
+                    <input id="checkbox-[% $index %]" ng-model="item.user_groups[subscription.pk_user_group].status" ng-true-value="1" type="checkbox">
+                    <label class="form-label" for="checkbox-[% $index %]">
+                      {t}Subscribed{/t}
+                    </label>
+                  </div>
+                  <div class="controls" ng-if="item.user_groups && item.user_groups[subscription.pk_user_group] && item.user_groups[subscription.pk_user_group].status === 2">
+                    <p>{t}The subscriber has requested this subscription{/t}</p>
+                    <div class="row">
+                      <div class="col-lg-4 col-xs-6">
+                        <button class="btn btn-block btn-success m-r-15" ng-click="accept(subscription.pk_user_group)">
+                          <i class="fa fa-thumbs-up"></i>
+                          {t}Accept{/t}
+                        </button>
+                      </div>
+                      <div class="col-lg-4 col-xs-6">
+                        <button class="btn btn-block btn-danger" ng-click="reject(subscription.pk_user_group)">
+                          <i class="fa fa-thumbs-down"></i>
+                          {t}Reject{/t}
+                        </button>
                       </div>
                     </div>
                   </div>
