@@ -5,7 +5,6 @@ orm:
             required:
                 - email
                 - type
-                - username
             properties:
                 activated:          boolean
                 avatar_img_id:      integer
