@@ -49,7 +49,7 @@
          */
         $scope.accept = function(id) {
           if (!$scope.item.user_groups[id]) {
-            $scope.item.user_groups[id] = { status: 0 };
+            $scope.item.user_groups[id] = { status: 0, expires: null };
           }
 
           $scope.item.user_groups[id].status = 1;
@@ -139,7 +139,11 @@
 
             for (var id in $scope.data.extra.subscriptions) {
               if (!$scope.item.user_groups[id]) {
-                $scope.item.user_groups[id] = { user_group_id: id, status: 0 };
+                $scope.item.user_groups[id] = {
+                  expires: null,
+                  status: 0,
+                  user_group_id: id
+                };
               }
             }
 
@@ -192,7 +196,13 @@
           $scope.subscriberForm.$setPristine(true);
           $scope.flags.saving = true;
 
-          var data = cleaner.clean($scope.item);
+          var data = cleaner.clean(angular.copy($scope.item));
+
+          for (var key in data.user_groups) {
+            if (data.user_groups[key].status === 0) {
+              delete data.user_groups[key];
+            }
+          }
 
           /**
            * Callback executed when subscriber is saved/updated successfully.

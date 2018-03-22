@@ -97,9 +97,9 @@ class InstanceUserPersisterTest extends \PHPUnit_Framework_TestCase
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
         $this->conn->expects($this->at(4))->method('executeQuery')->with(
-            'replace into user_user_group values (?,?,?)',
-            [ 1, 25, 0 ],
-            [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, ]
+            'replace into user_user_group values (?,?,?,?)',
+            [ 1, 25, 0, null ],
+            [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
         );
         $this->conn->expects($this->at(5))->method('executeQuery')->with(
             'delete from user_user_group where user_id = ? and user_group_id not in (?)',
@@ -140,9 +140,9 @@ class InstanceUserPersisterTest extends \PHPUnit_Framework_TestCase
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
         $this->conn->expects($this->at(3))->method('executeQuery')->with(
-            'replace into user_user_group values (?,?,?)',
-            [ 1, 24, 0 ],
-            [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, ]
+            'replace into user_user_group values (?,?,?,?)',
+            [ 1, 24, 0, null ],
+            [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
         );
         $this->conn->expects($this->at(4))->method('executeQuery')->with(
             'delete from user_user_group where user_id = ? and user_group_id not in (?)',

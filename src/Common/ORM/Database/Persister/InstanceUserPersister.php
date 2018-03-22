@@ -251,7 +251,7 @@ class InstanceUserPersister extends BasePersister
 
         $sql = "replace into user_user_group values "
             . str_repeat(
-                '(?,?,?),',
+                '(?,?,?,?),',
                 count($userGroups)
             );
 
@@ -261,15 +261,16 @@ class InstanceUserPersister extends BasePersister
         foreach ($userGroups as $value) {
             $params = array_merge(
                 $params,
-                array_merge(
-                    array_values($id),
-                    [ $value['user_group_id'], $value['status'] ]
-                )
+                array_merge(array_values($id), [
+                    $value['user_group_id'],
+                    $value['status'],
+                    empty($value['expires']) ? null : $value['expires']
+                ])
             );
 
             $types = array_merge(
                 $types,
-                [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
+                [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
             );
         }
 

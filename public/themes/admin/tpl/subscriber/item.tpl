@@ -188,7 +188,7 @@
                     </span>
                   </label>
                   <div class="checkbox" ng-if="!item.user_groups || !item.user_groups[subscription.pk_user_group] || item.user_groups[subscription.pk_user_group].status !== 2">
-                    <input id="checkbox-[% $index %]" ng-model="item.user_groups[subscription.pk_user_group].status" ng-true-value="1" type="checkbox">
+                    <input id="checkbox-[% $index %]" ng-false-value="0" ng-model="item.user_groups[subscription.pk_user_group].status" ng-true-value="1" type="checkbox">
                     <label class="form-label" for="checkbox-[% $index %]">
                       {t}Subscribed{/t}
                     </label>
