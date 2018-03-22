@@ -52,7 +52,10 @@
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return { type: value };
+                return {
+                  item: $scope.item,
+                  type: value
+                };
               },
               success: function() {
                 return function() {
@@ -150,8 +153,6 @@
           $scope.flags.saving = true;
 
           var data = cleaner.clean($scope.item);
-
-          data.username = data.email;
 
           /**
            * Callback executed when subscriber is saved/updated successfully.
