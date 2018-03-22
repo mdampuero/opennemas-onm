@@ -75,8 +75,6 @@ class MigrateUserGroupsCommand extends ContainerAwareCommand
             }
 
             $progress->advance();
-
-            sleep(2);
         }
 
         $progress->finish();
