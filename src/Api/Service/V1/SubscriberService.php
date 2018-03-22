@@ -40,6 +40,12 @@ class SubscriberService extends OrmService
 
         $data['username'] = $data['email'];
 
+        if (array_key_exists('password', $data) && !empty($data['password'])) {
+            $data['password'] = $this->container
+                ->get('core.security.encoder.password')
+                ->encodePassword($data['password'], null);
+        }
+
         return parent::createItem($data);
     }
 
@@ -116,6 +122,12 @@ class SubscriberService extends OrmService
 
         if (array_key_exists('type', $data) && $data['type'] === 1) {
             $data['username'] = $data['email'];
+        }
+
+        if (array_key_exists('password', $data) && !empty($data['password'])) {
+            $data['password'] = $this->container
+                ->get('core.security.encoder.password')
+                ->encodePassword($data['password'], null);
         }
 
         parent::updateItem($id, $data);

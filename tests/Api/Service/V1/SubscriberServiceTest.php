@@ -36,6 +36,10 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
                 'remove'
             ])->getMock();
 
+        $this->encoder = $this->getMockBuilder('Encoder' . uniqid())
+            ->setMethods([ 'encodePassword' ])
+            ->getMock();
+
         $this->fixer = $this->getMockBuilder('Fixer' . uniqid())
             ->setMethods([ 'addCondition', 'fix', 'getOql' ])
             ->getMock();
@@ -73,6 +77,9 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.security.encoder.password':
+                return $this->encoder;
+
             case 'error.log':
                 return $this->logger;
 
@@ -89,8 +96,15 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateItem()
     {
-        $data = [ 'name' => 'flob', 'email' => 'flob@garply.com', 'type' => 1 ];
+        $data = [
+            'email'    => 'flob@garply.com',
+            'name'     => 'flob',
+            'password' => 'quux',
+            'type'     => 1
+        ];
 
+        $this->encoder->expects($this->once())->method('encodePassword')
+            ->with('quux')->willReturn('quux');
         $this->converter->expects($this->any())->method('objectify')
             ->with(array_merge([ 'username' => 'flob@garply.com' ], $data))
             ->willReturn($data);
@@ -236,9 +250,10 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
     public function testUpdateItem()
     {
         $data = [
-            'name' => 'mumble',
-            'email' => 'garply@glork.glorp',
-            'type' => 1
+            'email'    => 'garply@glork.glorp',
+            'name'     => 'mumble',
+            'password' => 'quux',
+            'type'     => 1
         ];
         $item = new Entity([
             'name'  => 'foobar',
@@ -248,6 +263,8 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->repository->expects($this->once())->method('findBy')
             ->willReturn([]);
+        $this->encoder->expects($this->once())->method('encodePassword')
+            ->with('quux')->willReturn('quux');
         $this->converter->expects($this->once())->method('objectify')
             ->with(array_merge([ 'username' => 'garply@glork.glorp' ], $data))
             ->willReturn($data);
