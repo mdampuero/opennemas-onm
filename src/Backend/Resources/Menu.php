@@ -224,7 +224,7 @@ $menuXml = [
                 'id'          => 'subscriber',
                 'link'        => url('backend_subscribers_list'),
                 'title'       => _('Subscribers'),
-                'icon'        => 'fa fa-user',
+                'icon'        => 'fa fa-address-card',
                 'module_name' => 'CONTENT_SUBSCRIPTIONS',
                 'privilege'   => 'CONTENT_SUBSCRIPTIONS_LIST',
             ],

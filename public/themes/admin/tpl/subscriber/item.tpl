@@ -9,18 +9,20 @@
             <li class="quicklinks">
               <h4>
                 <a class="no-padding" href="[% routing.generate('backend_subscribers_list') %]">
-                  <i class="fa fa-user"></i>
+                  <i class="fa fa-address-card"></i>
                   {t}Subscribers{/t}
                 </a>
               </h4>
             </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading && item">
-              <span class="h-seperate"></span>
+              <div class="p-l-10 p-r-10 p-t-10">
+                <i class="fa fa-angle-right"></i>
+              </div>
             </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading && item">
               <h5 class="ng-cloak">
-                <span ng-if="item.id">{t}Edit{/t}</span>
-                <span ng-if="!item.id">{t}Create{/t}</span>
+                <strong ng-if="item.id">{t}Edit{/t}</strong>
+                <strong ng-if="!item.id">{t}Create{/t}</strong>
               </h5>
             </li>
           </ul>

@@ -15,11 +15,14 @@
               </h4>
             </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading && item">
-              <span class="h-seperate"></span>
+              <div class="p-l-10 p-r-10 p-t-10">
+                <i class="fa fa-angle-right"></i>
+              </div>
             </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading && item">
               <h5 class="ng-cloak">
-                [% item.pk_user_group ? '{t}Edit{/t}' : '{t}Create{/t}' %]
+                <strong ng-if="item.pk_user_group">{t}Edit{/t}</strong>
+                <strong ng-if="!item.pk_user_group">{t}Create{/t}</strong>
               </h5>
             </li>
           </ul>
