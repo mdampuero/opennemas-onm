@@ -92,7 +92,8 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
         $data = [ 'name' => 'flob', 'email' => 'flob@garply.com', 'type' => 1 ];
 
         $this->converter->expects($this->any())->method('objectify')
-            ->with($data)->willReturn($data);
+            ->with(array_merge([ 'username' => 'flob@garply.com' ], $data))
+            ->willReturn($data);
         $this->em->expects($this->once())->method('persist');
 
         $item = $this->service->createItem($data);
@@ -234,7 +235,11 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateItem()
     {
-        $data = [ 'name' => 'mumble', 'email' => 'garply@glork.glorp' ];
+        $data = [
+            'name' => 'mumble',
+            'email' => 'garply@glork.glorp',
+            'type' => 1
+        ];
         $item = new Entity([
             'name'  => 'foobar',
             'email' => 'garply@glork.glorp',
@@ -244,7 +249,8 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
         $this->repository->expects($this->once())->method('findBy')
             ->willReturn([]);
         $this->converter->expects($this->once())->method('objectify')
-            ->with($data)->willReturn($data);
+            ->with(array_merge([ 'username' => 'garply@glork.glorp' ], $data))
+            ->willReturn($data);
 
         $this->repository->expects($this->once())->method('findOneBy')
             ->with('id = 1 and type != 0')->willReturn($item);

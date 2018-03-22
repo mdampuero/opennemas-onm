@@ -58,7 +58,7 @@ class SubscriberValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->validator->validate(new Entity([
             'email'    => 'foobar@foo.fubar',
-            'type'     => 1,
+            'type'     => 2,
             'username' => 'foo'
         ]));
     }
