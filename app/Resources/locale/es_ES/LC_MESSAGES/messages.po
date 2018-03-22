@@ -1347,6 +1347,9 @@ msgstr "Hasta"
 msgid "Thumbnail details"
 msgstr "Detalles de la miniatura"
 
+msgid "Enhance"
+msgstr "Editar la imagen"
+
 msgid "Add files..."
 msgstr "Añadir archivos…"
 

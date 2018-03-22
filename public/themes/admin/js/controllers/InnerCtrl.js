@@ -2,8 +2,8 @@
  * Controller to use in inner sections.
  */
 angular.module('BackendApp.controllers').controller('InnerCtrl', [
-  '$rootScope', '$scope', '$timeout', 'Editor', 'http', 'messenger', 'Renderer',
-  function($rootScope, $scope, $timeout, Editor, http, messenger, Renderer) {
+  '$rootScope', '$scope', '$timeout', '$uibModal', 'Editor', 'http', 'messenger', 'Renderer',
+  function($rootScope, $scope, $timeout, $uibModal, Editor, http, messenger, Renderer) {
     'use strict';
 
     /**
@@ -165,6 +165,44 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
       }
 
       return false;
+    };
+
+    $scope.launchPhotoEditor = function() {
+      var modal = $uibModal.open({
+        template: '<div id="photoEditor"><div>',
+        backdrop: 'static',
+//        windowClass: 'modal-fullscreen',
+        controller: [
+          '$uibModalInstance', '$scope',
+          function ($uibModalInstance, $scope) {
+
+            /**
+             * Closes the current modal
+             */
+            $scope.close = function(response) {
+              $uibModalInstance.close(response);
+            };
+
+            /**
+             * Closes the modal without returning response.
+             */
+            $scope.dismiss = function() {
+              $uibModalInstance.dismiss();
+            };
+
+            /**
+             * Confirms and executes the confirmed action.
+             */
+            $scope.confirm = function() {
+
+            };
+          }
+        ]
+      });
+      modal.rendered.then(function(){
+        var photoEditor = angular.element( document.querySelector( '#photoEditor' ) );
+        photoEditor.context.innerHTML = 'Hola';
+      });
     };
 
     /**

@@ -131,6 +131,12 @@
                             '</strong>' +
                           '</a>' +
                         '</li>' +
+                        '<li>' +
+                          '<a class="btn btn-primary ng-isolate-scope" ng-click="enhanceAction()">' +
+                              '<i class="fa fa-sliders"></i>' +
+                              '[% picker.params.explore.enhance %]' +
+                          '</a>' +
+                        '</li>' +
                         '<li>[% selected.lastSelected.created | moment %]</li>' +
                         '<li>[% selected.lastSelected.size %] KB</li>' +
                         '<li>[% selected.lastSelected.width %] x [% selected.lastSelected.height %]</li>' +
@@ -226,16 +232,19 @@
                   '<div class="picker-close" ng-click="close()">' +
                     '<i class="fa fa-lg fa-times pull-right"></i>' +
                   '</div>' +
-                  '<div class="picker-loading" ng-if="loading">' +
+                  '<div class="picker-loading" ng-if="loading" ng-hide="enhance">' +
                     '<i class="fa fa-circle-o-notch fa-spin fa-4x"></i>' +
                   '</div>' +
-                  '<div class="picker-sidebar" ng-if="!loading">' +
+                  '<div class="picker-sidebar" ng-if="!loading" ng-hide="enhance">' +
                     '<ul>' +
                       '[sidebar]' +
                     '</ul>' +
                   '</div>' +
-                  '<div class="picker-content" ng-if="!loading">' +
+                  '<div class="picker-content" ng-if="!loading" ng-hide="enhance">' +
                     '[content]' +
+                  '</div>' +
+                  '<div class="picker-loading" ng-hide="!enhance">' +
+                    '<div id="photoEditor"></div>' +
                   '</div>' +
                 '</div>' +
               '</div>' +
@@ -277,11 +286,6 @@
                 enabled: attrs.mediaPickerSelection === 'true',
                 maxSize: attrs.mediaPickerMaxSize ?
                   parseInt(attrs.mediaPickerMaxSize) : 1
-              },
-              status: {
-                editing:   false,
-                loading:   false,
-                uploading: false
               },
               target: attrs.mediaPickerTarget,
               types: {
@@ -467,6 +471,7 @@
               $('body').addClass('picker-open');
 
               $scope.loading = true;
+              $scope.enhance = false;
 
               var url = routing.generate(
                 'backend_ws_picker_mode',
@@ -1010,6 +1015,10 @@
             $scope.selected.items.push(item);
           }
         };
+
+        $scope.enhanceAction = function () {
+          $scope.enhance = !$scope.enhance;
+        }
 
         /**
          * Refresh the list when the criteria changes.

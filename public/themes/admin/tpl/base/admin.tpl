@@ -504,6 +504,7 @@
       @Common/src/angular-messenger/messenger.js,
       @Common/src/angular-moment/moment.js,
       @Common/js/onm/md5.min.js,
+      @Common/js/onm/photoEditor.js,
       @FosJsRoutingBundle/js/router.js,
       @Common/js/routes.js,
       @Common/src/angular-cleaner/cleaner.js,

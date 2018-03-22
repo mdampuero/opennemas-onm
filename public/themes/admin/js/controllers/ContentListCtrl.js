@@ -2,9 +2,12 @@
  * Controller to handle list actions.
  */
 angular.module('BackendApp.controllers').controller('ContentListCtrl', [
-  '$http', '$location', '$uibModal', '$scope', '$timeout', '$window', 'http', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'localizer',
-  function($http, $location, $uibModal, $scope, $timeout, $window, http, routing, messenger, webStorage, oqlEncoder, localizer) {
+  '$controller', '$http', '$location', '$uibModal', '$scope', '$timeout', '$window', 'http', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'localizer',
+  function($controller, $http, $location, $uibModal, $scope, $timeout, $window, http, routing, messenger, webStorage, oqlEncoder, localizer) {
     'use strict';
+
+    // Initialize the super class and extend it.
+    $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
     /**
      * The criteria to search.

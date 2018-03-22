@@ -282,11 +282,15 @@
             <strong>[% selected.lastSelected.name %]</strong>
           </li>
           <li>
-            <a class="btn btn-default" ng-href="[% routing.generate('admin_photo_show', { id: selected.lastSelected.id}) %]">
-              <strong>
-                <i class="fa fa-edit"></i>
+            <a class="btn btn-primary ng-isolate-scope" ng-href="[% routing.generate('admin_photo_show', { id: selected.lastSelected.id}) %]">
+                <i class="fa fa-edit ng-isolate-scope"></i>
                 {t}Edit{/t}
-              </strong>
+            </a>
+          </li>
+          <li>
+            <a class="btn btn-primary ng-isolate-scope" ng-click="launchPhotoEditor()">
+                <i class="fa fa-sliders"></i>
+                {t}Enhance{/t}
             </a>
           </li>
           <li>[% selected.lastSelected.created | moment %]</li>

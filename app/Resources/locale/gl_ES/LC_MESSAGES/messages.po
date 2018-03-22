@@ -1336,6 +1336,9 @@ msgstr "Ate"
 msgid "Thumbnail details"
 msgstr "Detalles da miniatura"
 
+msgid "Enhance"
+msgstr "Editar a foto"
+
 msgid "Add files..."
 msgstr "Engadir ficheiros…"
 

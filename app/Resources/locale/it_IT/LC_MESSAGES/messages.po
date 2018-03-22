@@ -1380,6 +1380,9 @@ msgstr "A"
 msgid "Thumbnail details"
 msgstr "Dettagli della miniatura"
 
+msgid "Enhance"
+msgstr "Modifica immagine"
+
 msgid "Add files..."
 msgstr "Aggiungere files..."
 

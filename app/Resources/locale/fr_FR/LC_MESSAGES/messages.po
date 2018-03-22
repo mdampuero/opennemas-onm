@@ -1381,6 +1381,9 @@ msgstr "à"
 msgid "Thumbnail details"
 msgstr "détails de miniature"
 
+msgid "Enhance"
+msgstr "Modifier l'image"
+
 msgid "Add files..."
 msgstr "Ajouter des fichiers..."
 
