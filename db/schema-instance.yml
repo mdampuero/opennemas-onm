@@ -1554,6 +1554,40 @@ users:
             primary: false
             unique: false
             flags: {  }
+user_user_group:
+    columns:
+        user_id:
+            type: bigint
+            options: { default: null, unsigned: true }
+        user_group_id:
+            type: integer
+            options: { default: null, unsigned: true }
+        status:
+            type: integer
+            options: { default: 1, notnull: true, comment: '0 rejected - 1 accepted - 2 requested' }
+        expires:
+            type: datetime
+            options: { default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [ user_id, user_group_id ]
+            primary: true
+            unique: true
+            flags: {  }
+    foreign_keys:
+        -
+            name: user_id_id
+            source_field: [ user_id ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: user_group_id_pk_user_group
+            source_field: [ user_group_id ]
+            target_table: user_groups
+            target_field: [ pk_user_group ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 users_content_categories:
     columns:
         pk_fk_user:
