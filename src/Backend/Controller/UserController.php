@@ -29,7 +29,7 @@ class UserController extends Controller
     {
         $em = $this->get('orm.manager');
 
-        $userGroups = $em->getRepository('UserGroup')->findBy();
+        $userGroups = $em->getRepository('UserGroup')->findBy('type = 0');
         $categories = $this->get('category_repository')->findBy(
             'internal_category <> 0',
             'name ASC'
@@ -256,7 +256,7 @@ class UserController extends Controller
         }
 
         // TODO: Remove the pk_user_group condition when implementing ticket ONM-1660
-        $userGroups = $em->getRepository('UserGroup')->findBy('pk_user_group != 4');
+        $userGroups = $em->getRepository('UserGroup')->findBy('type = 0 and pk_user_group != 4');
         $categories = $this->get('category_repository')->findBy(
             'internal_category <> 0',
             'name ASC'

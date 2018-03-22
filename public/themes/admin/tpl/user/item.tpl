@@ -239,17 +239,14 @@
             <div class="grid-body">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label class="form-label" for="id_user_group">{t}User group{/t}</label>
-                  <div class="controls ng-cloak" ng-init="groups = {json_encode($extra['user_groups'])|clear_json};selectedGroups = {json_encode($selected['user_groups'])|clear_json}; user = {json_encode($user)|clear_json}">
+                  <label class="form-label" for="id_user_group">{t}User groups{/t}</label>
+                  <div class="ng-cloak" ng-init="groups = {json_encode($extra['user_groups'])|clear_json};selectedGroups = {json_encode($selected['user_groups'])|clear_json}; user = {json_encode($user)|clear_json}">
                     {acl isAllowed="USER_ADMIN"}
-                    <multiselect ng-model="selectedGroups" options="g.name for g in groups" ms-header="{t}Select{/t}" ms-selected="[% selectedGroups.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
+                      <div class="checkbox p-b-5" ng-repeat="g in groups">
+                        <input id="checkbox-[% $index %]" ng-model="selectedGroups" type="checkbox">
+                        <label for="checkbox-[% $index %]">[% g.name %]</label>
+                      </div>
                     {/acl}
-                  </div>
-                  <div class="m-t-10 m-b-10 ng-cloak">
-                    <span class="badge m-r-5" ng-repeat="group in selectedGroups">
-                      [% group.name %]
-                      <input type="hidden" name="fk_user_group[]" value="[% group.id %]">
-                    </span>
                   </div>
                 </div>
               </div>
