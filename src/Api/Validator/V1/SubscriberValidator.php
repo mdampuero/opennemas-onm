@@ -25,12 +25,5 @@ class SubscriberValidator extends Validator
         ) {
             throw new InvalidArgumentException('Invalid value for "type"', 400);
         }
-
-        if ($item->type === 2
-            && !empty($item->email)
-            && $item->username !== $item->email
-        ) {
-            throw new InvalidArgumentException('Invalid value for "username"', 400);
-        }
     }
 }

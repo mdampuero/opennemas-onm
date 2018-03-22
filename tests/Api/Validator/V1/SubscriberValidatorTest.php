@@ -43,23 +43,8 @@ class SubscriberValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->validator->validate(new Entity([ 'type' => 1 ]));
         $this->validator->validate(new Entity([
-            'type'     => 1,
-            'email'    => 'foobar@foo.fubar',
-            'username' => 'foobar@foo.fubar'
-        ]));
-    }
-
-    /**
-     * Tests validate when invalid email provided.
-     *
-     * @expectedException Api\Exception\InvalidArgumentException
-     */
-    public function testValidateWhenInvalidEmail()
-    {
-        $this->validator->validate(new Entity([
-            'email'    => 'foobar@foo.fubar',
-            'type'     => 2,
-            'username' => 'foo'
+            'type'  => 1,
+            'email' => 'foobar@foo.fubar',
         ]));
     }
 
