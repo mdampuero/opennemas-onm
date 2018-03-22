@@ -19,14 +19,17 @@ class SubscriberValidator extends Validator
      */
     public function validate($item)
     {
-        if ($item->type !== 1
-            && ($item->type !== 2
-            || !$this->container->get('core.security')->hasPermission('MASTER'))
+        if ($item->type > 2
+            || ($item->type === 2
+            && !$this->container->get('core.security')->hasPermission('MASTER'))
         ) {
             throw new InvalidArgumentException('Invalid value for "type"', 400);
         }
 
-        if (!empty($item->email) && $item->username !== $item->email) {
+        if ($item->type === 2
+            && !empty($item->email)
+            && $item->username !== $item->email
+        ) {
             throw new InvalidArgumentException('Invalid value for "username"', 400);
         }
     }

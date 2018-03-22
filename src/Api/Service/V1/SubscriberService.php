@@ -38,6 +38,8 @@ class SubscriberService extends OrmService
             throw new CreateItemException($e->getMessage(), $e->getCode());
         }
 
+        $data['username'] = $data['email'];
+
         return parent::createItem($data);
     }
 
@@ -110,6 +112,10 @@ class SubscriberService extends OrmService
             }
         } catch (\Exception $e) {
             throw new UpdateItemException($e->getMessage(), $e->getCode());
+        }
+
+        if (array_key_exists('type', $data) && $data['type'] === 1) {
+            $data['username'] = $data['email'];
         }
 
         parent::updateItem($id, $data);
