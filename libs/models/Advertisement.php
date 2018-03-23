@@ -589,6 +589,10 @@ class Advertisement extends Content
      **/
     private function savePositions($id, $advertisementPositions)
     {
+        if (empty($advertisementPositions)) {
+            return true;
+        }
+
         $positions = [];
         foreach (array_unique($advertisementPositions) as $position) {
             $positions[] = sprintf('(%s, %s)', $id, (int) $position);
