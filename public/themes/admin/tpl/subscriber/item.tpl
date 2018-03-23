@@ -221,52 +221,51 @@
           </div>
           <div class="col-sm-4">
             <div class="grid simple">
-              <div class="grid-title">
-                <h4>{t}Settings{/t}</h4>
-              </div>
-              <div class="grid-body">
-                <div class="form-group">
-                  <div class="checkbox">
-                    <input id="activated" name="activated" ng-model="item.activated" ng-true-value="1" type="checkbox">
-                    <label class="form-label" for="activated">
-                      {t}Enabled{/t}
-                    </label>
+              <div class="grid-body no-padding">
+                <div class="grid-collapse-title">
+                  <div class="form-group no-margin">
+                    <div class="checkbox">
+                      <input id="activated" name="activated" ng-model="item.activated" ng-true-value="1" type="checkbox">
+                      <label class="form-label" for="activated">
+                        {t}Enabled{/t}
+                      </label>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div class="grid simple">
-              <div class="grid-title">
-                {t}Subscriptions{/t}
-              </div>
-              <div class="grid-body no-padding">
-                <div class="p-l-15 p-t-15 p-b-15 p-r-15" ng-class="{ 'b-t': $index > 0 }" ng-repeat="subscription in data.extra.subscriptions">
-                  <label class="form-label">
-                    <span ng-class="{ 'text-danger': item.user_groups && item.user_groups[subscription.pk_user_group] && item.user_groups[subscription.pk_user_group].status === 2 }">
-                      [% subscription.name %]
-                      <span ng-if="item.user_groups && item.user_groups[subscription.pk_user_group] && item.user_groups[subscription.pk_user_group].status === 2">({t}Pending{/t})</span>
-                    </span>
-                  </label>
-                  <div class="checkbox" ng-if="!item.user_groups || !item.user_groups[subscription.pk_user_group] || item.user_groups[subscription.pk_user_group].status !== 2">
-                    <input id="checkbox-[% $index %]" ng-false-value="0" ng-model="item.user_groups[subscription.pk_user_group].status" ng-true-value="1" type="checkbox">
-                    <label class="form-label" for="checkbox-[% $index %]">
-                      {t}Subscribed{/t}
+                <div class="grid-collapse-title pointer" ng-class="{ 'open': expanded.mark }" ng-click="expanded.subscriptions = !expanded.subscriptions">
+                  <i class="fa fa-check-square-o m-r-5"></i>
+                  {t}Subscriptions{/t}
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.subscriptions }"></i>
+                </div>
+                <div class="grid-collapse-body no-padding ng-cloak" ng-class="{ 'expanded': expanded.subscriptions }">
+                  <div class="p-l-15 p-t-15 p-b-15 p-r-15 b-t" ng-repeat="subscription in data.extra.subscriptions">
+                    <label class="form-label">
+                      <span ng-class="{ 'text-danger': item.user_groups && item.user_groups[subscription.pk_user_group] && item.user_groups[subscription.pk_user_group].status === 2 }">
+                        [% subscription.name %]
+                        <span ng-if="item.user_groups && item.user_groups[subscription.pk_user_group] && item.user_groups[subscription.pk_user_group].status === 2">({t}Pending{/t})</span>
+                      </span>
                     </label>
-                  </div>
-                  <div class="controls" ng-if="item.user_groups && item.user_groups[subscription.pk_user_group] && item.user_groups[subscription.pk_user_group].status === 2">
-                    <p>{t}The subscriber has requested this subscription{/t}</p>
-                    <div class="row">
-                      <div class="col-lg-4 col-xs-6">
-                        <button class="btn btn-block btn-success m-r-15" ng-click="accept(subscription.pk_user_group)">
-                          <i class="fa fa-thumbs-up"></i>
-                          {t}Accept{/t}
-                        </button>
-                      </div>
-                      <div class="col-lg-4 col-xs-6">
-                        <button class="btn btn-block btn-danger" ng-click="reject(subscription.pk_user_group)">
-                          <i class="fa fa-thumbs-down"></i>
-                          {t}Reject{/t}
-                        </button>
+                    <div class="checkbox" ng-if="!item.user_groups || !item.user_groups[subscription.pk_user_group] || item.user_groups[subscription.pk_user_group].status !== 2">
+                      <input id="checkbox-[% $index %]" ng-false-value="0" ng-model="item.user_groups[subscription.pk_user_group].status" ng-true-value="1" type="checkbox">
+                      <label class="form-label" for="checkbox-[% $index %]">
+                        {t}Subscribed{/t}
+                      </label>
+                    </div>
+                    <div class="controls" ng-if="item.user_groups && item.user_groups[subscription.pk_user_group] && item.user_groups[subscription.pk_user_group].status === 2">
+                      <p>{t}The subscriber has requested this subscription{/t}</p>
+                      <div class="row">
+                        <div class="col-lg-4 col-xs-6">
+                          <button class="btn btn-block btn-success m-r-15" ng-click="accept(subscription.pk_user_group)">
+                            <i class="fa fa-thumbs-up"></i>
+                            {t}Accept{/t}
+                          </button>
+                        </div>
+                        <div class="col-lg-4 col-xs-6">
+                          <button class="btn btn-block btn-danger" ng-click="reject(subscription.pk_user_group)">
+                            <i class="fa fa-thumbs-down"></i>
+                            {t}Reject{/t}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
