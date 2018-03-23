@@ -7,12 +7,12 @@
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <h4>
+              <h5>
                 <a class="no-padding" href="[% routing.generate('backend_subscribers_list') %]">
-                  <i class="fa fa-address-card"></i>
+                  <i class="fa fa-address-card m-r-5"></i>
                   {t}Subscribers{/t}
                 </a>
-              </h4>
+              </h5>
             </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading && item">
               <div class="p-l-10 p-r-10 p-t-10">
@@ -81,59 +81,119 @@
       </div>
       <div class="ng-cloak" ng-show="!flags.loading && item">
         <div class="row">
-          <div class="col-sm-7">
+          <div class="col-sm-8">
             <div class="grid simple">
               <div class="grid-body">
-                <div class="form-group">
-                  <label class="control-label" for="name">{t}Name{/t}</label>
-                  <div class="controls input-with-icon right">
-                    <input class="form-control" id="name" name="name" ng-model="item.name" ng-maxlength="50" type="text"/>
-                    <span class="icon right ng-cloak" ng-if="!flags.loading">
-                      <span class="fa fa-check text-success" ng-if="subscriberForm.name.$dirty && subscriberForm.name.$valid"></span>
-                      <span class="fa fa-info-circle text-info" ng-if="!subscriberForm.name.$dirty && subscriberForm.name.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
-                      <span class="fa fa-times text-error" ng-if="subscriberForm.name.$dirty && subscriberForm.name.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
-                    </span>
-                  </div>
-                </div>
-                <div class="form-group" ng-class="{ 'has-error': subscriberForm.email.$dirty && subscriberForm.email.$invalid }">
-                  <label class="control-label" for="email">{t}Email{/t}</label>
-                  <div class="controls input-with-icon right">
-                    <span class="icon right" ng-if="!flags.loading">
-                      <span class="fa fa-check text-success" ng-if="subscriberForm.email.$dirty && subscriberForm.email.$valid"></span>
-                      <span class="fa fa-info-circle text-info" ng-if="!subscriberForm.email.$dirty && subscriberForm.email.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
-                      <span class="fa fa-times text-error" ng-if="subscriberForm.email.$dirty && subscriberForm.email.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
-                    </span>
-                    <input class="form-control" id="email" name="email" placeholder="johndoe@example.org"  ng-model="item.email" required type="email">
-                  </div>
-                </div>
-                <div class="form-group" ng-class="{ 'has-error': subscriberForm.password.$dirty && subscriberForm.password.$invalid }">
-                  <label class="control-label" for="password">{t}Password{/t}</label>
-                  <div class="controls">
-                    <div class="input-group">
-                      <span class="input-group-addon pointer" ng-click="passwordUnlocked = !passwordUnlocked">
-                        <i class="fa fa-lock" ng-class="{ 'fa-unlock-alt': passwordUnlocked }"></i>
-                      </span>
-                      <input class="form-control no-animate" id="password" name="password" ng-model="item.password" maxlength="20" type="[% !passwordUnlocked ? 'password' : 'text' %]">
+                <div class="thumbnail-wrapper">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo1 }"></div>
+                      <div class="thumbnail-placeholder thumbnail-placeholder-small m-b-15">
+                        <div class="img-thumbnail img-thumbnail-circle" ng-if="!item.avatar_img_id">
+                          <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="item.avatar_img_id" ng-click="subscriberForm.$setDirty(true)">
+                            <i class="fa fa-picture-o fa-3x"></i>
+                          </div>
+                        </div>
+                        <div class="dynamic-image-placeholder ng-cloak" ng-show="item.avatar_img_id">
+                          <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.avatar_img_id" only-image="true">
+                            <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="item.avatar_img_id" media-picker-type="photo" ng-click="subscriberForm.$setDirty(true)"></div>
+                          </dynamic-image>
+                        </div>
+                      </div>
+                      <div class="row text-center">
+                        <div class="col-lg-8 col-lg-offset-2 col-md-12 col-md-offset-0 col-xs-8 col-xs-offset-2">
+                          <button class="btn btn-block btn-white m-b-15" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="item.avatar_img_id" media-picker-type="photo">
+                            <i class="fa fa-picture-o"></i>
+                            {t}Change{/t}
+                          </button>
+                        </div>
+                        <div class="col-lg-8 col-lg-offset-2 col-md-12 col-md-offset-0 col-xs-8 col-xs-offset-2" ng-click="item.avatar_img_id = null">
+                          <button class="btn btn-block btn-danger m-b-15">
+                            <i class="fa fa-trash-o"></i>
+                            {t}Remove{/t}
+                          </button>
+                        </div>
+                      </div>
+                      <div ng-if="item.facebook_id || item.twitter_id || item.google_id">
+                        <h4 class="text-center">
+                          {t}Connections{/t}
+                        </h4>
+                        <div class="row">
+                          <div class="col-lg-8 col-lg-offset-2 col-md-12 col-md-offset-0 col-xs-9 col-xs-offset-2" ng-if="item.facebook_id">
+                            <button class="btn btn-block btn-facebook m-b-15">
+                              <i class="fa fa-facebook"></i>
+                              {t}Disconnect{/t}
+                            </button>
+                          </div>
+                          <div class="col-lg-8 col-lg-offset-2 col-md-12 col-md-offset-0 col-xs-9 col-xs-offset-2" ng-if="item.twitter_id">
+                            <button class="btn btn-block btn-twitter m-b-15">
+                              <i class="fa fa-twitter"></i>
+                              {t}Disconnect{/t}
+                            </button>
+                          </div>
+                          <div class="col-lg-8 col-lg-offset-2 col-md-12 col-md-offset-0 col-xs-9 col-xs-offset-2" ng-if="item.google_id">
+                            <button class="btn btn-block btn-google m-b-15">
+                              <i class="fa fa-google-plus"></i>
+                              {t}Disconnect{/t}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div class="form-group" ng-class="{ 'has-error': subscriberForm.password.$valid && item.password && item.password !== rpassword }">
-                  <label class="control-label" for="rpassword">{t}Confirm password{/t}</label>
-                  <div class="controls">
-                    <div class="input-group">
-                      <span class="input-group-addon pointer" ng-click="rpasswordUnlocked = !rpasswordUnlocked">
-                        <i class="fa fa-lock" ng-class="{ 'fa-unlock-alt': rpasswordUnlocked }"></i>
-                      </span>
-                      <input class="form-control" id="rpassword" id="rpassword" maxlength="20" ng-model="rpassword" maxlength="20" type="[% !rpasswordUnlocked ? 'password' : 'text' %]">
+                    <div class="col-md-8">
+                      <div class="form-group">
+                        <label class="control-label" for="name">{t}Name{/t}</label>
+                          <div class="controls input-with-icon right">
+                            <input class="form-control" id="name" name="name" ng-model="item.name" ng-maxlength="50" type="text"/>
+                            <span class="icon right ng-cloak" ng-if="!flags.loading">
+                              <span class="fa fa-check text-success" ng-if="subscriberForm.name.$dirty && subscriberForm.name.$valid"></span>
+                              <span class="fa fa-info-circle text-info" ng-if="!subscriberForm.name.$dirty && subscriberForm.name.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                              <span class="fa fa-times text-error" ng-if="subscriberForm.name.$dirty && subscriberForm.name.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
+                            </span>
+                          </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': subscriberForm.email.$dirty && subscriberForm.email.$invalid }">
+                          <label class="control-label" for="email">{t}Email{/t}</label>
+                          <div class="controls input-with-icon right">
+                            <span class="icon right" ng-if="!flags.loading">
+                              <span class="fa fa-check text-success" ng-if="subscriberForm.email.$dirty && subscriberForm.email.$valid"></span>
+                              <span class="fa fa-info-circle text-info" ng-if="!subscriberForm.email.$dirty && subscriberForm.email.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                              <span class="fa fa-times text-error" ng-if="subscriberForm.email.$dirty && subscriberForm.email.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
+                            </span>
+                            <input class="form-control" id="email" name="email" placeholder="johndoe@example.org"  ng-model="item.email" required type="email">
+                          </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': subscriberForm.password.$dirty && subscriberForm.password.$invalid }">
+                          <label class="control-label" for="password">{t}Password{/t}</label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <span class="input-group-addon pointer" ng-click="passwordUnlocked = !passwordUnlocked">
+                                <i class="fa fa-lock" ng-class="{ 'fa-unlock-alt': passwordUnlocked }"></i>
+                              </span>
+                              <input class="form-control no-animate" id="password" name="password" ng-model="item.password" maxlength="20" type="[% !passwordUnlocked ? 'password' : 'text' %]">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': subscriberForm.password.$valid && item.password && item.password !== rpassword }">
+                          <label class="control-label" for="rpassword">{t}Confirm password{/t}</label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <span class="input-group-addon pointer" ng-click="rpasswordUnlocked = !rpasswordUnlocked">
+                                <i class="fa fa-lock" ng-class="{ 'fa-unlock-alt': rpasswordUnlocked }"></i>
+                              </span>
+                              <input class="form-control" id="rpassword" id="rpassword" maxlength="20" ng-model="rpassword" maxlength="20" type="[% !rpasswordUnlocked ? 'password' : 'text' %]">
+                            </div>
+                            <span class="input-group-status">
+                              <span class="fa fa-check text-success" ng-if="subscriberForm.password.$dirty && item.password === rpassword"></span>
+                              <span class="fa fa-times text-error" ng-if="subscriberForm.password.$valid && item.password && item.password !== rpassword" uib-tooltip="{t}The passwords don't match{/t}"></span>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <span class="input-group-status">
-                      <span class="fa fa-check text-success" ng-if="subscriberForm.password.$dirty && item.password === rpassword"></span>
-                      <span class="fa fa-times text-error" ng-if="subscriberForm.password.$valid && item.password && item.password !== rpassword" uib-tooltip="{t}The passwords don't match{/t}"></span>
-                    </span>
                   </div>
                 </div>
               </div>
-            </div>
             {acl isAllowed="USER_ADMIN"}
               <div class="grid simple ng-cloak" ng-if="data.extra.settings && data.extra.settings.fields && data.extra.settings.fields.length > 0">
                 <div class="grid-title">
@@ -159,7 +219,7 @@
               </div>
             {/acl}
           </div>
-          <div class="col-sm-5">
+          <div class="col-sm-4">
             <div class="grid simple">
               <div class="grid-title">
                 <h4>{t}Settings{/t}</h4>

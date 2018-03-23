@@ -147,6 +147,12 @@
               }
             }
 
+            if ($scope.data.extra.photos &&
+                $scope.data.extra.photos[$scope.item.avatar_img_id]) {
+              $scope.item.avatar_img_id =
+                $scope.data.extra.photos[$scope.item.avatar_img_id];
+            }
+
             $scope.disableFlags();
           }, function() {
             $scope.item = null;
@@ -197,6 +203,11 @@
           $scope.flags.saving = true;
 
           var data = cleaner.clean(angular.copy($scope.item));
+
+          // angular.copy does not copy files
+          if (data.avatar_img_id instanceof Object) {
+            data['avatar_img_id'] = data.avatar_img_id.pk_photo;
+          }
 
           for (var key in data.user_groups) {
             if (data.user_groups[key].status === 0) {

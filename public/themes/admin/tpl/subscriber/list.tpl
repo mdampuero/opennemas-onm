@@ -173,7 +173,7 @@
                       <label for="select-all"></label>
                     </div>
                   </th>
-                  <th class="hidden-xs" width="50">{t}Avatar{/t}</th>
+                  <th class="hidden-xs" width="60">{t}Avatar{/t}</th>
                   <th>{t}Name{/t}</th>
                   <th class="hidden-xs" width="300">{t}Email{/t}</th>
                   <th class="hidden-xs" width="240">{t}Subscriptions{/t}</th>
@@ -190,8 +190,8 @@
                     </div>
                   </td>
                   <td class="text-center hidden-xs">
-                    <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path_img" transform="thumbnail,50,50" ng-if="item.avatar_img_id"></dynamic-image>
-                    <gravatar class="gravatar" ng-model="item.email" size="40" ng-if="!item.avatar_img_id || item.avatar_img_id == 0"></gravatar>
+                    <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id]" ng-if="item.avatar_img_id"></dynamic-image>
+                    <gravatar class="gravatar img-thumbnail img-thumbnail-circle" ng-model="item.email" size="60" ng-if="!item.avatar_img_id || item.avatar_img_id == 0"></gravatar>
                   </td>
                   <td>
                     <strong class="hidden-xs" ng-if="item.name">

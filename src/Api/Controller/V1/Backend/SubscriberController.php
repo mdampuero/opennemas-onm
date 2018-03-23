@@ -176,7 +176,7 @@ class SubscriberController extends Controller
         $oql      = $request->query->get('oql', '');
         $response = $ss->getList($oql);
 
-        $response['extra']   = $this->getExtraData();
+        $response['extra']   = $this->getExtraData($response['results']);
         $response['results'] = $ss->responsify($response['results']);
 
         return new JsonResponse($response);
@@ -300,11 +300,12 @@ class SubscriberController extends Controller
      */
     public function showAction($id)
     {
-        $ss = $this->get('api.service.subscriber');
+        $ss   = $this->get('api.service.subscriber');
+        $item = $ss->getItem($id);
 
         return new JsonResponse([
-            'subscriber' => $ss->responsify($ss->getItem($id)),
-            'extra'      => $this->getExtraData()
+            'subscriber' => $ss->responsify($item),
+            'extra'      => $this->getExtraData([ $item ])
         ]);
     }
 
@@ -332,24 +333,45 @@ class SubscriberController extends Controller
     /**
      * Returns a list of extra data.
      *
+     * @param array $item The list of items.
+     *
      * @return array The extra data.
      */
-    private function getExtraData()
+    private function getExtraData($items = null)
     {
-        $ss            = $this->get('api.service.subscription');
-        $response      = $ss->getList();
-        $subscriptions = [];
+        $ss       = $this->get('api.service.subscription');
+        $photos   = [];
+        $response = $ss->getList();
 
-        foreach ($response['results'] as $item) {
-            $subscriptions[$item->pk_user_group] = $ss->responsify($item);
-        }
+        $subscriptions = $this->get('data.manager.filter')
+            ->set($response['results'])
+            ->filter('mapify', [ 'key' => 'pk_user_group' ])
+            ->get();
 
-        $settings = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
             ->get('user_settings', []);
 
+        if (!empty($items)) {
+            $ids = array_map(function ($a) {
+                return $a->avatar_img_id;
+            }, $items);
+
+            $photos = $this->get('entity_repository')->findBy([
+                'content_type_name' => [ [ 'value' => 'photo' ] ],
+                'pk_content'        => [ [ 'value' => $ids, 'operator' => 'in' ] ]
+            ]);
+
+            $photos = $this->get('data.manager.filter')
+                ->set($photos)
+                ->filter('mapify', [ 'key' => 'pk_photo' ])
+                ->get();
+        }
+
         return [
+            'photos'        => $photos,
             'settings'      => $settings,
-            'subscriptions' => $subscriptions
+            'subscriptions' => $ss->responsify($subscriptions)
         ];
     }
 }
