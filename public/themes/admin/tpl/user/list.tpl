@@ -149,7 +149,7 @@
                       <label for="select-all"></label>
                     </div>
                   </th>
-                  <th class="hidden-xs" width="50">{t}Avatar{/t}</th>
+                  <th class="hidden-xs text-center" width="80"><i class="fa fa-picture-o"></i></th>
                   <th>{t}Name{/t}</th>
                   <th class="hidden-sm hidden-xs" width="240">{t}Username{/t}</th>
                   <th class="hidden-xs" width="300">{t}Email{/t}</th>
@@ -167,8 +167,8 @@
                     </div>
                   </td>
                   <td class="text-center hidden-xs">
-                    <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path_img" transform="thumbnail,50,50" ng-if="item.avatar_img_id"></dynamic-image>
-                    <gravatar class="gravatar" ng-model="item.email" size="40" ng-if="!item.avatar_img_id || item.avatar_img_id == 0"></gravatar>
+                    <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path_img" ng-if="item.avatar_img_id"></dynamic-image>
+                    <gravatar class="gravatar img-thumbnail img-thumbnail-circle" ng-model="item.email" size="60" ng-if="!item.avatar_img_id || item.avatar_img_id == 0"></gravatar>
                   </td>
                   <td>
                     <strong class="hidden-xs" ng-if="item.name">
@@ -200,8 +200,8 @@
                   </td>
                   <td class="hidden-xs">
                     <ul class="no-style">
-                      <li ng-repeat="user_group in item.fk_user_group" ng-if="data.extra.user_groups[user_group]">
-                        <a class="badge text-uppercase m-b-5" ng-class="{ 'badge-danger': !data.extra.user_groups[user_group].enabled, 'badge-success': data.extra.user_groups[user_group].enabled }" href="[% routing.generate('backend_user_group_show', { id: user_group }) %]">
+                      <li class="pull-left m-b-5 m-r-5" ng-repeat="user_group in item.fk_user_group" ng-if="data.extra.user_groups[user_group]">
+                        <a class="label text-uppercase" ng-class="{ 'label-danger': !data.extra.user_groups[user_group].enabled, 'label-default': data.extra.user_groups[user_group].enabled }" href="[% routing.generate('backend_user_group_show', { id: user_group }) %]">
                           <strong>[% data.extra.user_groups[user_group].name %]</strong>
                         </span>
                         </a>

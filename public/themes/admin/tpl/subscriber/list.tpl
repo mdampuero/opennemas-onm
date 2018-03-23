@@ -173,7 +173,7 @@
                       <label for="select-all"></label>
                     </div>
                   </th>
-                  <th class="hidden-xs" width="60">{t}Avatar{/t}</th>
+                  <th class="hidden-xs text-center" width="80"><i class="fa fa-picture-o"></i></th>
                   <th>{t}Name{/t}</th>
                   <th class="hidden-xs" width="300">{t}Email{/t}</th>
                   <th class="hidden-xs" width="240">{t}Subscriptions{/t}</th>
@@ -218,8 +218,8 @@
                   <td class="hidden-xs">[% item.email %]</td>
                   <td class="hidden-xs">
                     <ul class="no-style">
-                      <li class="m-r-10 pull-left" ng-repeat="(id, subscription) in item.user_groups" ng-if="subscription.status !== 0">
-                        <a class="badge text-uppercase m-b-5 no-animate" ng-class="{ 'badge-danger': subscription.status !== 2 && !data.extra.subscriptions[id].enabled, 'badge-success': subscription.status !== 2 && data.extra.subscriptions[id].enabled, 'badge-warning': subscription.status === 2 }" href="[% routing.generate('backend_subscription_show', { id: id }) %]">
+                      <li class="m-b-5 m-r-5 pull-left" ng-repeat="(id, subscription) in item.user_groups" ng-if="subscription.status !== 0" uib-tooltip="[% subscription.status === 2 ? '{t}Subscription requested{/t}' : 'Subscription disabled' %]" tooltip-enable="subscription.status === 2 || data.extra.subscriptions[id].enabled === 0">
+                        <a class="label text-uppercase no-animate" ng-class="{ 'label-danger': subscription.status !== 2 && !data.extra.subscriptions[id].enabled, 'label-default': subscription.status !== 2 && data.extra.subscriptions[id].enabled, 'label-warning': subscription.status === 2 }" href="[% routing.generate('backend_subscription_show', { id: id }) %]">
                           <strong>[% data.extra.subscriptions[id].name %]</strong>
                         </span>
                         </a>

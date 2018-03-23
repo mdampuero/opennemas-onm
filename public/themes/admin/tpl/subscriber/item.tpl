@@ -7,12 +7,12 @@
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <h5>
+              <h4>
                 <a class="no-padding" href="[% routing.generate('backend_subscribers_list') %]">
-                  <i class="fa fa-address-card m-r-5"></i>
+                  <i class="fa fa-address-card"></i>
                   {t}Subscribers{/t}
                 </a>
-              </h5>
+              </h4>
             </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading && item">
               <div class="p-l-10 p-r-10 p-t-10">
