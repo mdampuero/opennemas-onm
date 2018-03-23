@@ -200,8 +200,8 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
         ]
       });
       modal.rendered.then(function(){
-        var photoEditor = angular.element( document.querySelector( '#photoEditor' ) );
-        photoEditor.context.innerHTML = 'Hola';
+        var photoEditor = new window.OnmPhotoEditor({container: 'photoEditor'});
+        photoEditor.init();
       });
     };
 

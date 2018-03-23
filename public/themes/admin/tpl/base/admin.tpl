@@ -48,6 +48,7 @@
       @Common/src/angular-onm-pagination/less/main.less,
       @Common/src/sidebar/less/main.less,
       @Common/src/opennemas-webarch/css/layout/*,
+      @Common/src/photo-editor/css/photo-editor.css,
       @Common/src/opennemas-webarch/less/main.less" filters="cssrewrite,less" output="common"}
     {/stylesheets}
     {stylesheets src="@Common/components/angular-bootstrap/ui-bootstrap-csp.css,
@@ -504,7 +505,6 @@
       @Common/src/angular-messenger/messenger.js,
       @Common/src/angular-moment/moment.js,
       @Common/js/onm/md5.min.js,
-      @Common/js/onm/photoEditor.js,
       @FosJsRoutingBundle/js/router.js,
       @Common/js/routes.js,
       @Common/src/angular-cleaner/cleaner.js,
@@ -522,6 +522,7 @@
       @Common/src/angular-security/security.js,
       @Common/src/angular-serializer/serializer.js,
       @Common/src/opennemas-webarch/js/core.js,
+      @Common/src/photo-editor/js/photo-editor.js,
       @Common/src/sidebar/js/sidebar.js" filters="uglifyjs" output="common"}
     {/javascripts}
     {javascripts src="
