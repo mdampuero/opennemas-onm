@@ -55,7 +55,7 @@
 
         /**
          * @function getItemId
-         * @memberOf RestInnerCtrl
+         * @memberOf SubscriptionCtrl
          *
          * @description
          *   Returns the item id.
@@ -68,7 +68,7 @@
 
         /**
          * @function itemHasId
-         * @memberOf RestInnerCtrl
+         * @memberOf SubscriptionCtrl
          *
          * @description
          *   Checks if the current item has an id.
@@ -81,13 +81,13 @@
         };
 
         /**
-         * @function getItem
+         * @function parseItem
          * @memberOf SubscriptionCtrl
          *
          * @description
-         *   Gets the subscription to show.
+         *   Gets the subscription from the data in reponse.
          *
-         * @param {Integer} id The subscription id.
+         * @param {Object} data The data in the response.
          */
         $scope.parseItem = function(data) {
           if (data.subscription) {
