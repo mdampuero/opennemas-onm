@@ -142,6 +142,43 @@ class Controller extends SymfonyController
     }
 
     /**
+     * Returns the list of categories.
+     *
+     * @return array The list of categories.
+     */
+    protected function getCategories()
+    {
+        $categories = $this->get('orm.manager')
+            ->getRepository('Category')
+            ->findBy(
+                'internal_category in [1, 9, 7, 11]'
+                . ' order by internal_category asc, title asc'
+            );
+
+        $categories = array_map(function ($a) {
+            // Sometimes category is array. When create & update advertisement
+            $a = $this->get('data.manager.filter')->set($a)->filter('localize', [
+                'keys' => \ContentCategory::getL10nKeys(),
+                'locale' => $this->getLocaleData('frontend')['default']
+            ])->get();
+
+            return [
+                'id'     => (int) $a->pk_content_category,
+                'name'   => $a->title,
+                'type'   => $a->internal_category,
+                'parent' => (int) $a->fk_content_category
+            ];
+        }, $categories);
+
+        array_unshift(
+            $categories,
+            [ 'id' => 0, 'name' => _('Home'), 'type' => 0, 'parent' => 0 ]
+        );
+
+        return array_values($categories);
+    }
+
+    /**
      * Get the locale info needed for multiLanguage.
      *
      * @param String    $context    Locale context
