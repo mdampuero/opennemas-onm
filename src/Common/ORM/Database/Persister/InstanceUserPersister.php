@@ -22,6 +22,7 @@ class InstanceUserPersister extends BasePersister
     public function create(Entity &$entity)
     {
         $categories = [];
+        $userGroups = [];
 
         if (!empty($entity->categories)) {
             $categories = $entity->categories;
