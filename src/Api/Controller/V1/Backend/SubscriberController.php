@@ -21,32 +21,15 @@ use Symfony\Component\HttpFoundation\Request;
 class SubscriberController extends Controller
 {
     /**
-     * Saves a new subscriber.
-     *
-     * @param Request $request The request object.
+     * Returns the data to create a new subscriber.
      *
      * @return JsonResponse The response object.
      *
      * @Security("hasPermission('SUBSCRIBER_CREATE')")
      */
-    public function createAction(Request $request)
+    public function createAction()
     {
-        $msg = $this->get('core.messenger');
-
-        $user = $this->get('api.service.subscriber')
-            ->createItem($request->request->all());
-        $msg->add(_('Subscriber saved successfully'), 'success', 201);
-
-        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
-        $response->headers->set(
-            'Location',
-            $this->generateUrl(
-                'api_v1_backend_subscriber_show',
-                [ 'id' => $user->id ]
-            )
-        );
-
-        return $response;
+        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
     }
 
     /**
@@ -197,18 +180,6 @@ class SubscriberController extends Controller
     }
 
     /**
-     * Returns the data to create a new subscriber.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIBER_CREATE')")
-     */
-    public function newAction()
-    {
-        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
-    }
-
-    /**
      * Updates some instance properties.
      *
      * @param Request $request The request object.
@@ -287,6 +258,35 @@ class SubscriberController extends Controller
         }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Saves a new subscriber.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('SUBSCRIBER_CREATE')")
+     */
+    public function saveAction(Request $request)
+    {
+        $msg = $this->get('core.messenger');
+
+        $user = $this->get('api.service.subscriber')
+            ->createItem($request->request->all());
+        $msg->add(_('Subscriber saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+        $response->headers->set(
+            'Location',
+            $this->generateUrl(
+                'api_v1_backend_subscriber_show',
+                [ 'id' => $user->id ]
+            )
+        );
+
+        return $response;
     }
 
     /**

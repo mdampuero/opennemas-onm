@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form name="subscriptionForm" ng-controller="SubscriptionCtrl" ng-init="init({$id})">
+  <form name="form" ng-controller="SubscriptionCtrl" ng-init="getItem({$id})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">

@@ -53,12 +53,13 @@
          *
          * @param {Integer} id The subscriber id.
          */
-        $scope.getItem = function(route, id) {
+        $scope.getItem = function(id) {
           $scope.flags.http.loading = true;
 
-          var route = { name: route };
+          var route = { name: $scope.routes.create };
 
           if (id) {
+            route.name   = $scope.routes.show;
             route.params = { id: id };
           }
 
@@ -119,7 +120,7 @@
          * @memberOf RestInnerCtrl
          *
          * @description
-         *   Saves a new subscriber.
+         *   Saves a new item.
          */
         $scope.save = function() {
           if ($scope.form.$invalid) {
@@ -140,12 +141,12 @@
           var successCb = function(response) {
             $scope.disableFlags('http');
 
-            if ($scope.routes.show && response.status === 201) {
+            if ($scope.routes.redirect && response.status === 201) {
               var id = response.headers().location
                 .substring(response.headers().location.lastIndexOf('/') + 1);
 
               $window.location.href =
-                routing.generate($scope.routes.show, { id: id });
+                routing.generate($scope.routes.redirect, { id: id });
             }
 
             messenger.post(response.data);

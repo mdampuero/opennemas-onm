@@ -1,3 +1,10 @@
+api_v1_backend_subscriber_create:
+    path:     /subscribers/new
+    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:create }
+    methods:  [ GET ]
+    options:
+        expose: true
+
 api_v1_backend_subscriber_delete:
     path:     /subscribers/{id}
     defaults: { _controller: ApiBundle:V1/Backend/Subscriber:delete }
@@ -16,17 +23,10 @@ api_v1_backend_subscriber_patch:
     requirements:
         id: \d+
 
-api_v1_backend_subscriber_create:
+api_v1_backend_subscriber_save:
     path:     /subscribers
-    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:create }
+    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:save }
     methods:  [ POST ]
-    options:
-        expose: true
-
-api_v1_backend_subscriber_new:
-    path:     /subscribers/new
-    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:new }
-    methods:  [ GET ]
     options:
         expose: true
 

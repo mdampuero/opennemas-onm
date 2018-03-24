@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form name="form" ng-controller="SubscriberCtrl" ng-init="getItem({if empty($id)}'api_v1_backend_subscriber_new'{else}'api_v1_backend_subscriber_show', {$id}{/if})">
+  <form name="form" ng-controller="SubscriberCtrl" ng-init="getItem({$id})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">

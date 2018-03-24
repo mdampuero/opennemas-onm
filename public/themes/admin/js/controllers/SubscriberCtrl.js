@@ -47,9 +47,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          show:   'backend_subscriber_show',
-          save:   'api_v1_backend_subscriber_create',
-          update: 'api_v1_backend_subscriber_update'
+          create:   'api_v1_backend_subscriber_create',
+          redirect: 'backend_subscriber_show',
+          save:     'api_v1_backend_subscriber_save',
+          show:     'api_v1_backend_subscriber_show',
+          update:   'api_v1_backend_subscriber_update'
         };
 
         /**
@@ -126,7 +128,7 @@
         };
 
         /**
-         * @function getItem
+         * @function parseItem
          * @memberOf SubscriberCtrl
          *
          * @description

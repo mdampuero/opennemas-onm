@@ -21,32 +21,15 @@ use Symfony\Component\HttpFoundation\Request;
 class SubscriptionController extends Controller
 {
     /**
-     * Saves a new subscription.
-     *
-     * @param Request $request The request object.
+     * Returns the data to create a new subscription.
      *
      * @return JsonResponse The response object.
      *
      * @Security("hasPermission('SUBSCRIPTION_CREATE')")
      */
-    public function createAction(Request $request)
+    public function createAction()
     {
-        $msg = $this->get('core.messenger');
-
-        $userGroup = $this->get('api.service.subscription')
-            ->createItem($request->request->all());
-        $msg->add(_('Subscription saved successfully'), 'success', 201);
-
-        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
-        $response->headers->set(
-            'Location',
-            $this->generateUrl(
-                'api_v1_backend_subscription_show',
-                [ 'id' => $userGroup->pk_user_group ]
-            )
-        );
-
-        return $response;
+        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
     }
 
     /**
@@ -121,18 +104,6 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * Returns the data to create a new subscription.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIPTION_CREATE')")
-     */
-    public function newAction()
-    {
-        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
-    }
-
-    /**
      * Updates some instance properties.
      *
      * @param Request $request The request object.
@@ -187,6 +158,35 @@ class SubscriptionController extends Controller
         }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Saves a new subscription.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('SUBSCRIPTION_CREATE')")
+     */
+    public function saveAction(Request $request)
+    {
+        $msg = $this->get('core.messenger');
+
+        $userGroup = $this->get('api.service.subscription')
+            ->createItem($request->request->all());
+        $msg->add(_('Subscription saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+        $response->headers->set(
+            'Location',
+            $this->generateUrl(
+                'api_v1_backend_subscription_show',
+                [ 'id' => $userGroup->pk_user_group ]
+            )
+        );
+
+        return $response;
     }
 
     /**
