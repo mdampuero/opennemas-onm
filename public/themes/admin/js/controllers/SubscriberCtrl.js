@@ -22,7 +22,7 @@
       '$controller', '$scope', '$uibModal', '$window', 'cleaner', 'http', 'messenger', 'routing',
       function($controller, $scope, $uibModal, $window, cleaner, http, messenger, routing) {
         // Initialize the super class and extend it.
-        $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+        $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
          * @memberOf SubscriberCtrl
@@ -34,8 +34,22 @@
          */
         $scope.item = {
           name: '',
-          type: 1,
-          privileges: []
+          privileges: [],
+          type: 1
+        };
+
+        /**
+         * @memberOf SubscriberCtrl
+         *
+         * @description
+         *  The list of routes for the controller.
+         *
+         * @type {Object}
+         */
+        $scope.routes = {
+          show:   'backend_subscriber_show',
+          save:   'api_v1_backend_subscriber_create',
+          update: 'api_v1_backend_subscriber_update'
         };
 
         /**
@@ -120,58 +134,30 @@
          *
          * @param {Integer} id The subscriber id.
          */
-        $scope.getItem = function(id) {
-          $scope.flags.loading = 1;
+        $scope.parseItem = function(data) {
+          if (data.subscriber) {
+            $scope.item = data.subscriber;
+          }
 
-          var route = !id ? 'api_v1_backend_subscriber_new' :
-            { name: 'api_v1_backend_subscriber_show', params: { id: id } };
+          if (!$scope.item.user_groups) {
+            $scope.item.user_groups = {};
+          }
 
-          http.get(route).then(function(response) {
-            $scope.data = response.data;
-
-            if ($scope.data.subscriber) {
-              $scope.item = $scope.data.subscriber;
+          for (var id in data.extra.subscriptions) {
+            if (!$scope.item.user_groups[id]) {
+              $scope.item.user_groups[id] = {
+                expires: null,
+                status: 0,
+                user_group_id: id
+              };
             }
+          }
 
-            if (!$scope.item.user_groups) {
-              $scope.item.user_groups = {};
-            }
-
-            for (var id in $scope.data.extra.subscriptions) {
-              if (!$scope.item.user_groups[id]) {
-                $scope.item.user_groups[id] = {
-                  expires: null,
-                  status: 0,
-                  user_group_id: id
-                };
-              }
-            }
-
-            if ($scope.data.extra.photos &&
-                $scope.data.extra.photos[$scope.item.avatar_img_id]) {
-              $scope.item.avatar_img_id =
-                $scope.data.extra.photos[$scope.item.avatar_img_id];
-            }
-
-            $scope.disableFlags();
-          }, function() {
-            $scope.item = null;
-
-            $scope.disableFlags();
-          });
-        };
-
-        /**
-         * @function init
-         * @memberOf SubscriberListCtrl
-         *
-         * @description
-         *   Initializes services and list subscribers.
-         *
-         * @param {Integer} id The subscriber id when editing.
-         */
-        $scope.init = function(id) {
-          $scope.getItem(id);
+          if (data.extra.photos &&
+              data.extra.photos[$scope.item.avatar_img_id]) {
+            $scope.item.avatar_img_id =
+              data.extra.photos[$scope.item.avatar_img_id];
+          }
         };
 
         /**
@@ -188,25 +174,18 @@
         };
 
         /**
-         * @function save
+         * @function getData
          * @memberOf SubscriberCtrl
          *
          * @description
-         *   Saves a new subscriber.
+         *   Returns the data to send when saving/updating a subscriber.
          */
-        $scope.save = function() {
-          if ($scope.subscriberForm.$invalid) {
-            return;
-          }
-
-          $scope.subscriberForm.$setPristine(true);
-          $scope.flags.saving = true;
-
+        $scope.getData = function() {
           var data = cleaner.clean(angular.copy($scope.item));
 
-          // angular.copy does not copy files
+          // The call to angular.copy does not copy files
           if (data.avatar_img_id instanceof Object) {
-            data['avatar_img_id'] = data.avatar_img_id.pk_photo;
+            data.avatar_img_id = data.avatar_img_id.pk_photo;
           }
 
           for (var key in data.user_groups) {
@@ -215,36 +194,7 @@
             }
           }
 
-          /**
-           * Callback executed when subscriber is saved/updated successfully.
-           *
-           * @param {Object} response The response object.
-           */
-          var successCb = function(response) {
-            $scope.disableFlags();
-
-            if (response.status === 201) {
-              var id = response.headers().location
-                .substring(response.headers().location.lastIndexOf('/') + 1);
-
-              $window.location.href =
-                routing.generate('backend_subscriber_show', { id: id });
-            }
-
-            messenger.post(response.data);
-          };
-
-          if (!$scope.item.id) {
-            var route = { name: 'api_v1_backend_subscriber_create' };
-
-            http.post(route, data).then(successCb, $scope.errorCb);
-            return;
-          }
-
-          http.put({
-            name: 'api_v1_backend_subscriber_update',
-            params: { id: $scope.item.id }
-          }, data).then(successCb, $scope.errorCb);
+          return data;
         };
       }
     ]);
