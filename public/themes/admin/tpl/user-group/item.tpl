@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form name="userGroupForm" ng-controller="UserGroupCtrl" ng-init="init({$id})">
+  <form name="form" ng-controller="UserGroupCtrl" ng-init="getItem({$id})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -14,12 +14,12 @@
                 </a>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading && item">
+            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.http.loading && item">
               <div class="p-l-10 p-r-10 p-t-10">
                 <i class="fa fa-angle-right"></i>
               </div>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.loading && item">
+            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.http.loading && item">
               <h5 class="ng-cloak">
                 <strong ng-if="item.pk_user_group">{t}Edit{/t}</strong>
                 <strong ng-if="!item.pk_user_group">{t}Create{/t}</strong>
@@ -30,7 +30,7 @@
             <ul class="nav quick-section">
               <li class="quicklinks">
                 <button class="btn btn-loading btn-success text-uppercase" ng-click="save()">
-                  <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
+                  <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                   {t}Save{/t}
                 </button>
               </li>
@@ -40,13 +40,13 @@
       </div>
     </div>
     <div class="content">
-      <div class="listing-no-contents" ng-hide="!flags.loading">
+      <div class="listing-no-contents" ng-hide="!flags.http.loading">
         <div class="text-center p-b-15 p-t-15">
           <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
           <h3 class="spinner-text">{t}Loading{/t}...</h3>
         </div>
       </div>
-      <div class="listing-no-contents ng-cloak" ng-if="!flags.loading && item === null">
+      <div class="listing-no-contents ng-cloak" ng-if="!flags.http.loading && item === null">
         <div class="text-center p-b-15 p-t-15">
           <a href="[% routing.generate('backend_user_groups_list') %]">
             <i class="fa fa-4x fa-warning text-warning"></i>
@@ -55,7 +55,7 @@
           </a>
         </div>
       </div>
-      <div class="ng-cloak" ng-show="!flags.loading && item">
+      <div class="ng-cloak" ng-show="!flags.http.loading && item">
         <div class="row">
           <div class="col-md-8">
             <div class="grid simple">

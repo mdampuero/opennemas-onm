@@ -22,7 +22,7 @@
       '$controller', '$scope', '$window', 'cleaner', 'http', 'messenger', 'routing',
       function($controller, $scope, $window, cleaner, http, messenger, routing) {
         // Initialize the super class and extend it
-        $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+        $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
          * @memberOf UserGroupCtrl
@@ -56,6 +56,22 @@
          * @type {Array}
          */
         $scope.privileges = [];
+
+        /**
+         * @memberOf SubscriptionCtrl
+         *
+         * @description
+         *  The list of routes for the controller.
+         *
+         * @type {Object}
+         */
+        $scope.routes = {
+          create:   'api_v1_backend_user_group_create',
+          redirect: 'backend_user_group_show',
+          save:     'api_v1_backend_user_group_save',
+          show:     'api_v1_backend_user_group_show',
+          update:   'api_v1_backend_user_group_update'
+        };
 
         /**
          * @memberOf UserGroupCtrl
@@ -145,46 +161,30 @@
         };
 
         /**
-         * @function getItem
+         * @function getItemId
          * @memberOf UserGroupCtrl
          *
          * @description
-         *   Gets the subscription to show.
+         *   Returns the item id.
          *
-         * @param {Integer} id The subscription id.
+         * @return {Integer} The item id.
          */
-        $scope.getItem = function(id) {
-          $scope.flags.loading = 1;
-
-          var route = !id ? 'api_v1_backend_user_group_new' :
-            { name: 'api_v1_backend_user_group_show', params: { id: id } };
-
-          http.get(route).then(function(response) {
-            $scope.data = response.data;
-
-            if ($scope.data.user_group) {
-              $scope.item = $scope.data.user_group;
-            }
-
-            $scope.disableFlags();
-          }, function() {
-            $scope.item = null;
-
-            $scope.disableFlags();
-          });
+        $scope.getItemId = function() {
+          return $scope.item.pk_user_group;
         };
 
         /**
-         * @function init
+         * @function itemHasId
          * @memberOf UserGroupCtrl
          *
          * @description
-         *   Initializes the user group.
+         *   Checks if the current item has an id.
          *
-         * @param {Integer} id The user group id when editing.
+         * @return {Boolean} description
          */
-        $scope.init = function(id) {
-          $scope.getItem(id);
+        $scope.itemHasId = function() {
+          return $scope.item.pk_user_group &&
+            $scope.item.pk_user_group !== null;
         };
 
         /**
@@ -217,52 +217,18 @@
         };
 
         /**
-         * @function save
+         * @function parseItem
          * @memberOf UserGroupCtrl
          *
          * @description
-         *   Saves a new user group.
+         *   Gets the user group from the data in reponse.
+         *
+         * @param {Object} data The data in the response.
          */
-        $scope.save = function() {
-          if ($scope.userGroupForm.$invalid) {
-            return;
+        $scope.parseItem = function(data) {
+          if (data.user_group) {
+            $scope.item = data.user_group;
           }
-
-          $scope.userGroupForm.$setPristine(true);
-          $scope.flags.saving = 1;
-
-          var data = cleaner.clean($scope.item);
-
-          /**
-           * Callback executed when subscription is saved/updated successfully.
-           *
-           * @param {Object} response The response object.
-           */
-          var successCb = function(response) {
-            $scope.disableFlags();
-
-            if (response.status === 201) {
-              var id = response.headers().location
-                .substring(response.headers().location.lastIndexOf('/') + 1);
-
-              $window.location.href =
-                routing.generate('backend_user_group_show', { id: id });
-            }
-
-            messenger.post(response.data);
-          };
-
-          if (!$scope.item.pk_user_group) {
-            var route = { name: 'api_v1_backend_user_group_create' };
-
-            http.post(route, data).then(successCb, $scope.errorCb);
-            return;
-          }
-
-          http.put({
-            name: 'api_v1_backend_user_group_update',
-            params: { id: $scope.item.pk_user_group }
-          }, data).then(successCb, $scope.errorCb);
         };
 
         /**
