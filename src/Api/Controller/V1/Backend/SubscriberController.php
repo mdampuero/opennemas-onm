@@ -33,7 +33,7 @@ class SubscriberController extends Controller
     }
 
     /**
-     * Deletes an subscriber.
+     * Deletes a subscriber.
      *
      * @param integer $id The subscriber id.
      *
@@ -180,7 +180,7 @@ class SubscriberController extends Controller
     }
 
     /**
-     * Updates some instance properties.
+     * Updates some properties for a subscriber.
      *
      * @param Request $request The request object.
      *
@@ -200,7 +200,7 @@ class SubscriberController extends Controller
     }
 
     /**
-     * Updates some subscriber properties.
+     * Updates some properties for a list of subscribers.
      *
      * @param Request $request The request object.
      *

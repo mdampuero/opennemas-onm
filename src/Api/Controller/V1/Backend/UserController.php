@@ -21,6 +21,69 @@ use Symfony\Component\Intl\Intl;
 class UserController extends Controller
 {
     /**
+     * Returns the data to create a new user.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('USER_CREATE')")
+     */
+    public function createAction()
+    {
+        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
+    }
+
+    /**
+     * Deletes an user.
+     *
+     * @param integer $id The subscriber id.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('USER_DELETE')")
+     */
+    public function deleteAction($id)
+    {
+        $msg = $this->get('core.messenger');
+
+        $this->get('api.service.user')->deleteItem($id);
+        $msg->add(_('Item deleted successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Deletes the selected users.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('USER_DELETE')")
+     */
+    public function deleteSelectedAction(Request $request)
+    {
+        $ids     = $request->request->get('ids', []);
+        $msg     = $this->get('core.messenger');
+        $deleted = $this->get('api.service.user')->deleteList($ids);
+
+        if ($deleted > 0) {
+            $msg->add(
+                sprintf(_('%s items deleted successfully'), $deleted),
+                'success'
+            );
+        }
+
+        if ($deleted !== count($ids)) {
+            $msg->add(sprintf(
+                _('%s items could not be deleted successfully'),
+                count($ids) - $deleted
+            ), 'error');
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
      * Returns a list of contents in JSON format.
      *
      * @param  Request      $request     The request object.
@@ -37,66 +100,202 @@ class UserController extends Controller
 
         $response = $us->getList($oql);
 
-        $photos = array_unique(array_map(function ($a) {
-            return $a->avatar_img_id;
-        }, $response['results']));
-
         return new JsonResponse([
-            'results' => $us->responsify($response['results']),
+            'items' => $us->responsify($response['items']),
             'total'   => $response['total'],
-            'extra'   => $this->getExtraData($photos)
+            'extra'   => $this->getExtraData($response['items'])
         ]);
     }
 
     /**
-     * Returns a list of parameters for the template.
+     * Updates some properties for an user.
      *
-     * @params array $groups The user group ids.
-     * @params array $photos The avatar ids.
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('USER_UPDATE')")
+     */
+    public function patchAction(Request $request, $id)
+    {
+        $msg = $this->get('core.messenger');
+
+        $this->get('api.service.user')
+            ->patchItem($id, $request->request->all());
+        $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Updates some properties for a list of users.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('SUBSCRIBER_UPDATE')")
+     */
+    public function patchSelectedAction(Request $request)
+    {
+        $params = $request->request->all();
+        $ids    = $params['ids'];
+        $msg    = $this->get('core.messenger');
+
+        unset($params['ids']);
+
+        $updated = $this->get('api.service.user')
+            ->patchList($ids, $params);
+
+        if ($updated > 0) {
+            $msg->add(
+                sprintf(_('%s items updated successfully'), $updated),
+                'success'
+            );
+        }
+
+        if ($updated !== count($ids)) {
+            $msg->add(sprintf(
+                _('%s items could not be updated successfully'),
+                count($ids) - $updated
+            ), 'error');
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Saves a new user.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('SUBSCRIBER_CREATE')")
+     */
+    public function saveAction(Request $request)
+    {
+        $msg = $this->get('core.messenger');
+
+        $user = $this->get('api.service.user')
+            ->createItem($request->request->all());
+        $msg->add(_('Item saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+        $response->headers->set(
+            'Location',
+            $this->generateUrl(
+                'api_v1_backend_user_show',
+                [ 'id' => $user->id ]
+            )
+        );
+
+        return $response;
+    }
+
+    /**
+     * Returns an user.
+     *
+     * @param integer $id The group id.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('USER_UPDATE')")
+     */
+    public function showAction($id)
+    {
+        $ss   = $this->get('api.service.user');
+        $item = $ss->getItem($id);
+
+        return new JsonResponse([
+            'item'  => $ss->responsify($item),
+            'extra' => $this->getExtraData([ $item ])
+        ]);
+    }
+
+    /**
+     * Updates the user information given its id and the new information.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('USER_UPDATE')")
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $msg = $this->get('core.messenger');
+
+        $this->get('api.service.user')
+            ->updateItem($id, $request->request->all());
+
+        $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Returns a list of extra data.
+     *
+     * @param array $item The list of items.
      *
      * @return array Array of template parameters.
      */
-    private function getExtraData($photos = [])
+    private function getExtraData($items = null)
     {
         $languages = array_merge(
             [ 'default' => _('Default system language') ],
             $this->get('core.locale')->getAvailableLocales()
         );
 
+        $client     = null;
+        $photos     = [];
         $ugs        = $this->get('api.service.user_group');
         $response   = $ugs->getList();
         $userGroups = $ugs->responsify($this->get('data.manager.filter')
-            ->set($response['results'])
+            ->set($response['items'])
             ->filter('mapify', [ 'key' => 'pk_user_group'])
             ->get());
 
-        $extra = [
-            'countries'   => Intl::getRegionBundle()->getCountryNames(),
-            'languages'   => $languages,
-            'taxes'       => $this->get('vat')->getTaxes(),
-            'user_groups' => $userGroups
-        ];
+        // Remove home pseudo-category
+        $categories = $this->getCategories();
+        array_slice($categories, 0, 1);
 
-        $em = $this->get('orm.manager');
-        if (!empty($photos)) {
+        if (!empty($items)) {
+            $ids = array_filter(array_map(function ($a) {
+                return $a->avatar_img_id;
+            }, $items), function ($a) {
+                return !empty($a);
+            });
+
             $photos = $this->get('entity_repository')->findBy([
                 'content_type_name' => [ [ 'value' => 'photo' ] ],
-                'pk_content'        => [ [ 'value' => $photos, 'operator' => 'in' ] ]
+                'pk_content'        => [ [ 'value' => $ids, 'operator' => 'in' ] ]
             ]);
 
-            $extra['photos'] = $this->get('data.manager.filter')
+            $photos = $this->get('data.manager.filter')
                 ->set($photos)
                 ->filter('mapify', [ 'key' => 'pk_photo' ])
                 ->get();
         }
 
+        $em = $this->get('orm.manager');
+
         if (!empty($this->get('core.instance')->getClient())) {
             $client = $em->getRepository('Client')
                 ->find($this->get('core.instance')->getClient());
 
-            $extra['client'] = $em->getConverter('Client')->responsify($client);
+            $client = $em->getConverter('Client')->responsify($client);
         }
 
-        return $extra;
+        return [
+            'categories'  => $categories,
+            'client'      => $client,
+            'countries'   => Intl::getRegionBundle()->getCountryNames(),
+            'languages'   => $languages,
+            'photos'      => $photos,
+            'taxes'       => $this->get('vat')->getTaxes(),
+            'user_groups' => $userGroups
+        ];
     }
 }
