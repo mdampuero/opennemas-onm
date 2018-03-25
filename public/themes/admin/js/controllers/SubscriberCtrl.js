@@ -128,6 +128,30 @@
         };
 
         /**
+         * @function getData
+         * @memberOf SubscriberCtrl
+         *
+         * @description
+         *   Returns the data to send when saving/updating a subscriber.
+         */
+        $scope.getData = function() {
+          var data = cleaner.clean(angular.copy($scope.item));
+
+          // The call to angular.copy does not copy files
+          if (data.avatar_img_id instanceof Object) {
+            data.avatar_img_id = data.avatar_img_id.pk_photo;
+          }
+
+          for (var key in data.user_groups) {
+            if (data.user_groups[key].status === 0) {
+              delete data.user_groups[key];
+            }
+          }
+
+          return data;
+        };
+
+        /**
          * @function parseItem
          * @memberOf SubscriberCtrl
          *
@@ -138,7 +162,7 @@
          */
         $scope.parseItem = function(data) {
           if (data.item) {
-            $scope.item = data.item;
+            $scope.item = angular.extend($scope.item, data.item);
           }
 
           if (!$scope.item.user_groups) {
@@ -173,30 +197,6 @@
          */
         $scope.reject = function(id) {
           delete $scope.item.user_groups[id];
-        };
-
-        /**
-         * @function getData
-         * @memberOf SubscriberCtrl
-         *
-         * @description
-         *   Returns the data to send when saving/updating a subscriber.
-         */
-        $scope.getData = function() {
-          var data = cleaner.clean(angular.copy($scope.item));
-
-          // The call to angular.copy does not copy files
-          if (data.avatar_img_id instanceof Object) {
-            data.avatar_img_id = data.avatar_img_id.pk_photo;
-          }
-
-          for (var key in data.user_groups) {
-            if (data.user_groups[key].status === 0) {
-              delete data.user_groups[key];
-            }
-          }
-
-          return data;
         };
       }
     ]);
