@@ -27,6 +27,16 @@
          * @memberOf RestInnerCtrl
          *
          * @description
+         *  An object to backup properties before edition.
+         *
+         * @type {Object}
+         */
+        $scope.backup = {};
+
+        /**
+         * @memberOf RestInnerCtrl
+         *
+         * @description
          *  The item object.
          *
          * @type {Object}
@@ -111,7 +121,7 @@
          */
         $scope.parseItem = function(data) {
           if (data.item) {
-            $scope.item = data.item;
+            $scope.item = angular.extend($scope.item, data.item);
           }
         };
 
