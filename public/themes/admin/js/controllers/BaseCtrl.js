@@ -30,6 +30,10 @@
          * @type {Object}
          */
         $scope.config = {
+          columns: {
+            collapsed: true,
+            selected: []
+          },
           linkers: {},
           locale: null,
           multilanguage: null,

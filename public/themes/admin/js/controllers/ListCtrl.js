@@ -7,6 +7,7 @@
      * @ngdoc controller
      * @name  ListCtrl
      *
+     * @requires $controller
      * @requires $scope
      * @requires $timeout
      *
@@ -14,35 +15,9 @@
      *   Generic controller for lists.
      */
     .controller('ListCtrl', [
-      '$scope', '$timeout',
-      function($scope, $timeout) {
-        /**
-         * @memberOf ListCtrl
-         *
-         * @description
-         *  The list configuration.
-         *
-         * @type {Object}
-         */
-        $scope.config = {
-          columns: {
-            collapsed: true,
-            selected: []
-          },
-          linkers: {},
-          locale: null,
-          multilanguage: null
-        };
-
-        /**
-         * @memberOf ListCtrl
-         *
-         * @description
-         *  The list of flags
-         *
-         * @type {Object}
-         */
-        $scope.flags = {};
+      '$controller', '$scope', '$timeout',
+      function($controller, $scope, $timeout) {
+        $.extend(this, $controller('BaseCtrl', { $scope: $scope, }));
 
         /**
          * @memberOf ListCtrl
@@ -86,19 +61,6 @@
           $scope.tm = $timeout(function() {
             $scope.config.columns.collapsed = true;
           }, 500);
-        };
-
-        /**
-         * @function disableFlags
-         * @memberOf ListCtrl
-         *
-         * @description
-         *   Disables all flags.
-         */
-        $scope.disableFlags = function() {
-          for (var key in $scope.flags) {
-            $scope.flags[key] = false;
-          }
         };
 
         /**
@@ -187,8 +149,8 @@
          */
         $scope.searchByKeypress = function(event) {
           if (event.keyCode === 13) {
-            if ($scope.pagination.page !== 1) {
-              $scope.pagination.page = 1;
+            if ($scope.criteria.page !== 1) {
+              $scope.criteria.page = 1;
               return;
             }
 
