@@ -10,7 +10,6 @@
      * @requires $controller
      * @requires $location
      * @requires $scope
-     * @requires $timeout
      * @requires $uibModal
      * @requires http
      * @requires messenger
@@ -21,26 +20,10 @@
      *   Handles all actions in users listing.
      */
     .controller('UserListCtrl', [
-      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlEncoder', 'webStorage',
-      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlEncoder, webStorage) {
+      '$controller', '$location', '$scope', '$uibModal', 'http', 'messenger', 'oqlEncoder', 'webStorage',
+      function($controller, $location, $scope, $uibModal, http, messenger, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
-        $.extend(this, $controller('ListCtrl', {
-          $scope:   $scope,
-          $timeout: $timeout
-        }));
-
-        /**
-         * @memberOf UserListCtrl
-         *
-         * @description
-         *   The visible table columns.
-         *
-         * @type {Object}
-         */
-        $scope.columns = {
-          collapsed: 1,
-          selected:  [ 'name', 'username', 'usergroups', 'enabled' ]
-        };
+        $.extend(this, $controller('ListCtrl', { $scope: $scope }));
 
         /**
          * @memberOf UserListCtrl
@@ -50,7 +33,60 @@
          *
          * @type {Object}
          */
-        $scope.criteria = { epp: 25, page: 1 };
+        $scope.criteria = {
+          epp: 25,
+          page: 1,
+          orderBy: { name: 'asc' }
+        };
+
+        /**
+         * @function confirmUser
+         * @memberOf UserCtrl
+         *
+         * @description
+         *   Shows a modal to confirm user update.
+         */
+        $scope.confirm = function(property, value, item) {
+          if ($scope.master || !value) {
+            if (item) {
+              $scope.patch(item, property, value);
+              return;
+            }
+
+            $scope.patchSelected(property, value);
+            return;
+          }
+
+          var modal = $uibModal.open({
+            templateUrl: 'modal-confirm',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  name: $scope.id ? 'update' : 'create',
+                  backend_access: true,
+                  value: 1,
+                  extra: $scope.data.extra,
+                };
+              },
+              success: function() {
+                return null;
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response) {
+              if (item) {
+                $scope.patch(item, property, value);
+                return;
+              }
+
+              $scope.patchSelected(property, value);
+            }
+          });
+        };
 
         /**
          * @memberOf UserListCtrl
@@ -74,13 +110,17 @@
                 };
               },
               success: function() {
-                return function() {
+                return function(modalWindow) {
                   var route = {
-                    name: 'backend_ws_user_delete',
+                    name: 'api_v1_backend_user_delete',
                     params: { id: id }
                   };
 
-                  return http.delete(route);
+                  return http.delete(route).then(function(response) {
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    modalWindow.close({ data: response.data, success: false });
+                  });
                 };
               }
             }
@@ -97,14 +137,14 @@
 
         /**
          * @function deleteSelected
-         * @memberOf InstanceListCtrl
+         * @memberOf UserListCtrl
          *
          * @description
          *   Confirm delete action.
          */
         $scope.deleteSelected = function() {
           var modal = $uibModal.open({
-            templateUrl: 'modal-delete-selected',
+            templateUrl: 'modal-delete',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
@@ -112,11 +152,15 @@
                 return { selected: $scope.selected.items.length };
               },
               success: function() {
-                return function() {
-                  var route = 'backend_ws_users_delete';
+                return function(modalWindow) {
+                  var route = 'api_v1_backend_users_delete';
                   var data  = { ids: $scope.selected.items };
 
-                  return http.delete(route, data);
+                  return http.delete(route, data).then(function(response) {
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    modalWindow.close({ data: response.data, success: false });
+                  });
                 };
               }
             }
@@ -133,38 +177,19 @@
         };
 
         /**
-         * @function getUserGroup
-         * @memberOf UserListCtrl
-         *
-         * @description
-         *   Returns the user group name given its id.
-         *
-         * @param {Integer} id The user group id.
-         *
-         * @return {String} The user group name.
-         */
-        $scope.getUserGroup = function(id) {
-          for (var i = 0; i < $scope.extra.user_groups.length; i++) {
-            if ($scope.extra.user_groups[i].pk_user_group === parseInt(id)) {
-              return $scope.extra.user_groups[i].name;
-            }
-          }
-        };
-
-        /**
          * @function list
-         * @memberOf InstanceListCtrl
+         * @memberOf UserListCtrl
          *
          * @description
          *   Reloads the list.
          */
         $scope.list = function() {
-          $scope.flags.loading = 1;
+          $scope.flags.http.loading = 1;
 
           oqlEncoder.configure({
             placeholder: {
               name: 'name ~ "[value]" or username ~ "[value]"',
-              fk_user_group: '[key] regexp "^[value],|^[value]$|,[value],|,[value]$"'
+              user_group_id: '([key] = "[value]" and status != 0)',
             }
           });
 
@@ -180,7 +205,7 @@
             $scope.data  = response.data;
             $scope.items = response.data.items;
 
-            $scope.disableFlags();
+            $scope.disableFlags('http');
 
             // Scroll top
             $('body').animate({ scrollTop: '0px' }, 1000);
@@ -188,22 +213,11 @@
         };
 
         /**
-         * @function resetFilters
-         * @memberOf PurchaseListCtrl
-         *
-         * @description
-         *   Resets all filters to the initial value.
-         */
-        $scope.resetFilters = function() {
-          $scope.criteria = { epp: 25, page: 1 };
-        };
-
-        /**
          * @function patch
          * @memberOf UserListCtrl
          *
          * @description
-         *   Enables/disables an user.
+         *   Changes a property for an user.
          *
          * @param {String}  item     The user object.
          * @param {String}  property The property name.
@@ -216,7 +230,7 @@
           data[property] = value;
 
           var route = {
-            name: 'backend_ws_user_patch',
+            name: 'api_v1_backend_user_patch',
             params: { id: item.id }
           };
 
@@ -235,67 +249,50 @@
          * @memberOf UserListCtrl
          *
          * @description
-         *   Enables/disables the selected users.
+         *   Changes a property for a list of users.
          *
          * @param {String}  property The property name.
          * @param {Boolean} value    The property value.
          */
         $scope.patchSelected = function(property, value) {
-          // Calculate backend access
-          var backend_access = false;
-          var selected = $scope.items.filter(function(e) {
-            return $scope.selected.items.indexOf(e.id) !== -1;
-          });
+          for (var i = 0; i < $scope.items.length; i++) {
+            var id = $scope.items[i].id;
 
-          var i = 0;
-
-          while (i < selected.length && !backend_access) {
-            if (selected[i++].type === 0 && value === 1) {
-              backend_access = true;
+            if ($scope.selected.items.indexOf(id) !== -1) {
+              $scope.items[i][property + 'Loading'] = 1;
             }
           }
 
-          var modal = $uibModal.open({
-            templateUrl: 'modal-update-selected',
-            backdrop: 'static',
-            controller: 'modalCtrl',
-            resolve: {
-              template: function() {
-                return {
-                  checkPhone:  $scope.checkPhone,
-                  checkVat:    $scope.checkVat,
-                  extra:       $scope.extra,
-                  name:        property,
-                  selected:    $scope.selected,
-                  value:       value,
-                  backend_access: backend_access
-                };
-              },
-              success: function() {
-                return function(modalWindow) {
-                  for (var i = 0; i < $scope.items.length; i++) {
-                    var id = $scope.items[i].id;
+          var data = { ids: $scope.selected.items };
 
-                    if ($scope.selected.items.indexOf(id) !== -1) {
-                      $scope.items[i][property + 'Loading'] = 1;
-                    }
-                  }
+          data[property] = value;
 
-                  var data = { ids: $scope.selected.items };
-
-                  data[property] = value;
-
-                  return http.patch('backend_ws_users_patch', data);
-                };
-              }
-            }
+          http.patch('api_v1_backend_users_patch', data).then(function(response) {
+            $scope.list().then(function() {
+              $scope.selected = { all: false, items: [] };
+              messenger.post(response.data);
+            });
+          }, function(response) {
+            $scope.list().then(function() {
+              $scope.selected = { all: false, items: [] };
+              messenger.post(response.data);
+            });
           });
+        };
 
-          modal.result.then(function(response) {
-            $scope.selected = { all: false, items: [] };
-            messenger.post(response.data);
-            $scope.list();
-          });
+        /**
+         * @function resetFilters
+         * @memberOf UserListCtrl
+         *
+         * @description
+         *   Resets all filters to the initial value.
+         */
+        $scope.resetFilters = function() {
+          $scope.criteria = {
+            epp: 25,
+            page: 1,
+            orderBy: { name: 'asc' }
+          };
         };
 
         // Updates the columns stored in localStorage.

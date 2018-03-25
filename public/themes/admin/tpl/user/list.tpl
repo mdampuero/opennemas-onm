@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div ng-app="BackendApp" ng-controller="UserListCtrl" ng-init="list()">
+  <div ng-app="BackendApp" ng-controller="UserListCtrl" ng-init="list();master = {if $app.user->isMaster()}true{else} false{/if}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -47,12 +47,12 @@
           <ul class="nav quick-section pull-right">
             {acl isAllowed="USER_AVAILABLE"}
               <li class="quicklinks">
-                <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+                <button class="btn btn-link" ng-click="confirm('activated', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
                   <i class="fa fa-times fa-lg"></i>
                 </button>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-link" ng-click="patchSelected('activated', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+                <button class="btn btn-link" ng-click="confirm('activated', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
                   <i class="fa fa-check fa-lg"></i>
                 </button>
               </li>
@@ -85,7 +85,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks hidden-xs ng-cloak">
-              <ui-select name="group" theme="select2" ng-model="criteria.fk_user_group">
+              <ui-select name="group" theme="select2" ng-model="criteria.user_group_id">
                 <ui-select-match>
                   <strong>{t}User Group{/t}:</strong> [% $select.selected.name %]
                 </ui-select-match>
@@ -124,20 +124,20 @@
       </div>
     </div>
     <div class="content">
-      <div class="listing-no-contents" ng-hide="!flags.loading">
+      <div class="listing-no-contents" ng-hide="!flags.http.loading">
         <div class="text-center p-b-15 p-t-15">
           <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
           <h3 class="spinner-text">{t}Loading{/t}...</h3>
         </div>
       </div>
-      <div class="listing-no-contents ng-cloak" ng-if="!flags.loading && items.length == 0">
+      <div class="listing-no-contents ng-cloak" ng-if="!flags.http.loading && items.length == 0">
         <div class="text-center p-b-15 p-t-15">
           <i class="fa fa-4x fa-warning text-warning"></i>
           <h3>{t}Unable to find any user that matches your search.{/t}</h3>
           <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
         </div>
       </div>
-      <div class="grid simple ng-cloak" ng-if="!flags.loading && items.length > 0">
+      <div class="grid simple ng-cloak" ng-if="!flags.http.loading && items.length > 0">
         <div class="grid-body no-padding">
           <div class="table-wrapper">
             <table class="table table-hover no-margin">
@@ -222,7 +222,7 @@
                     </ul>
                   </td>
                   <td class="text-center">
-                    <button class="btn btn-white" ng-click="selected.items = [ item.id ]; patchSelected('activated', item.activated != 1 ? 1 : 0, 'loading')" type="button">
+                    <button class="btn btn-white" ng-click="confirm('activated', item.activated != 1 ? 1 : 0, item)" type="button">
                       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading && item.activated == '1', 'fa-times text-error': !item.activatedLoading && item.activated == '0' }"></i>
                     </button>
                   </td>
@@ -239,9 +239,9 @@
       </div>
     </div>
     <script type="text/ng-template" id="modal-delete">
-      {include file="user/modal.confirm.tpl"}
+      {include file="user/modal.delete.tpl"}
     </script>
-    <script type="text/ng-template" id="modal-update-selected">
+    <script type="text/ng-template" id="modal-confirm">
       {include file="user/modal.confirm.tpl"}
     </script>
   </form>

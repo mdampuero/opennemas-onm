@@ -10,7 +10,6 @@
      * @requires $controller
      * @requires $location
      * @requires $scope
-     * @requires $timeout
      * @requires $uibModal
      * @requires http
      * @requires messenger
@@ -21,13 +20,10 @@
      *   Handles all actions in subscribers list.
      */
     .controller('SubscriberListCtrl', [
-      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlEncoder', 'webStorage',
-      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlEncoder, webStorage) {
+      '$controller', '$location', '$scope', '$uibModal', 'http', 'messenger', 'oqlEncoder', 'webStorage',
+      function($controller, $location, $scope, $uibModal, http, messenger, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
-        $.extend(this, $controller('ListCtrl', {
-          $scope:   $scope,
-          $timeout: $timeout
-        }));
+        $.extend(this, $controller('ListCtrl', { $scope: $scope, }));
 
         /**
          * @memberOf SubscriberListCtrl
@@ -151,7 +147,7 @@
          *   Reloads the list.
          */
         $scope.list = function() {
-          $scope.flags.loading = 1;
+          $scope.flags.http.loading = 1;
 
           oqlEncoder.configure({
             placeholder: {
@@ -172,7 +168,7 @@
             $scope.data  = response.data;
             $scope.items = response.data.items;
 
-            $scope.disableFlags();
+            $scope.disableFlags('http');
 
             // Scroll top
             $('body').animate({ scrollTop: '0px' }, 1000);
@@ -184,7 +180,7 @@
          * @memberOf SubscriberListCtrl
          *
          * @description
-         *   Enables/disables a subscriber.
+         *   Changes a property for a subscriber.
          *
          * @param {String}  item     The subscriber object.
          * @param {String}  property The property name.
@@ -216,7 +212,7 @@
          * @memberOf SubscriberListCtrl
          *
          * @description
-         *   description
+         *   Changes a property for a list of subscribers.
          *
          * @param {String}  property The property name.
          * @param {Integer} value    The property value.
@@ -255,7 +251,11 @@
          *   Resets all filters to the initial value.
          */
         $scope.resetFilters = function() {
-          $scope.criteria = { epp: 25, page: 1 };
+          $scope.criteria = {
+            epp: 25,
+            page: 1,
+            orderBy: { name: 'asc' }
+          };
         };
 
         /**
