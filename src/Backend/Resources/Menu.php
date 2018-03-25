@@ -68,6 +68,14 @@ $menuXml = [
                 'module_name' => 'MENU_MANAGER',
                 'privilege'   => 'MENU_ADMIN',
             ],
+            [
+                'id'          => 'authors',
+                'title'       => _('Authors'),
+                'link'        => url('backend_authors_list'),
+                'icon'        => 'fa fa-edit',
+                'module_name' => 'OPINION_MANAGER',
+                'privilege'   => 'AUTHOR_ADMIN',
+            ],
         ],
     ],
 
@@ -331,57 +339,33 @@ $menuXml = [
         ],
     ],
 
-    // Settings menu
     [
-        'id'      => 'system',
-        'link'    => '#',
-        'title'   => _('System'),
-        'icon'    => 'fa fa-cogs',
-        'submenu' => [
+        'id'          => 'acl_manager',
+        'title'       => _('Users & Groups'),
+        'link'        => '#',
+        'icon'        => 'fa fa-users',
+        'module_name' => 'USER_MANAGER || USER_GROUP_MANAGER',
+        'privilege'   => 'USER_ADMIN',
+        'submenu'     => [
             [
-                'id'          => 'settings_manager',
-                'title'       => _('Configuration'),
-                'icon'        => 'fa fa-wrench',
-                'link'        => url('admin_system_settings'),
-                'module_name' => 'SETTINGS_MANAGER',
-                'privilege'   => 'ONM_SETTINGS',
-            ],
-            [
-                'id'          => 'acl_manager',
-                'title'       => _('Users & Groups'),
-                'link'        => '#',
-                'icon'        => 'fa fa-users',
-                'module_name' => 'USER_MANAGER || USER_GROUP_MANAGER',
-                'privilege'   => 'USER_ADMIN',
-                'submenu'     => [
-                    [
-                        'id'          => 'user_manager',
-                        'title'       => _('Users'),
-                        'icon'        => 'fa fa-user',
-                        'link'        => url('backend_users_list'),
-                        'module_name' => 'USER_MANAGER',
-                        'privilege'   => 'USER_ADMIN',
-                    ],
-                    [
-                        'id'          => 'user_group_manager',
-                        'title'       => _('User groups'),
-                        'icon'        => 'fa fa-users',
-                        'link'        => url('backend_user_groups_list'),
-                        'module_name' => 'USER_GROUP_MANAGER',
-                        'privilege'   => 'USER_ADMIN',
-                    ],
-                ],
-            ],
-            [
-                'id'          => 'authors',
-                'title'       => _('Authors'),
-                'link'        => url('backend_authors_list'),
+                'id'          => 'user_manager',
+                'title'       => _('Users'),
                 'icon'        => 'fa fa-user',
-                'module_name' => 'OPINION_MANAGER',
-                'privilege'   => 'AUTHOR_ADMIN',
+                'link'        => url('backend_users_list'),
+                'module_name' => 'USER_MANAGER',
+                'privilege'   => 'USER_ADMIN',
+            ],
+            [
+                'id'          => 'user_group_manager',
+                'title'       => _('User groups'),
+                'icon'        => 'fa fa-users',
+                'link'        => url('backend_user_groups_list'),
+                'module_name' => 'USER_GROUP_MANAGER',
+                'privilege'   => 'USER_ADMIN',
             ],
         ],
     ],
+
     [
         'id'    => 'store',
         'title' => _('Store'),
@@ -429,6 +413,15 @@ $menuXml = [
                 'link'        => 'javascript:UserVoice.showPopupWidget();',
             ],
         ]
+    ],
+
+    [
+        'id'          => 'settings_manager',
+        'title'       => _('System'),
+        'icon'        => 'fa fa-cogs',
+        'link'        => url('admin_system_settings'),
+        'module_name' => 'SETTINGS_MANAGER',
+        'privilege'   => 'ONM_SETTINGS',
     ]
 ];
 
