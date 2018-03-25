@@ -178,7 +178,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetList()
     {
-        $results = [
+        $items = [
             new Entity([ 'name' => 'wubble' ]),
             new Entity([ 'name' => 'mumble' ])
         ];
@@ -191,13 +191,13 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $this->repository->expects($this->once())->method('countBy')
             ->with('type != 1')->willReturn(2);
         $this->repository->expects($this->once())->method('findBy')
-            ->with('type != 1')->willReturn($results);
+            ->with('type != 1')->willReturn($items);
 
         $response = $this->service->getList('order by title asc');
 
-        $this->assertArrayHasKey('results', $response);
+        $this->assertArrayHasKey('items', $response);
         $this->assertArrayHasKey('total', $response);
-        $this->assertEquals($results, $response['results']);
+        $this->assertEquals($items, $response['items']);
         $this->assertEquals(2, $response['total']);
     }
 

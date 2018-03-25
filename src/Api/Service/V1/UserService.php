@@ -31,7 +31,7 @@ class UserService extends OrmService
             $oql   = sprintf('email = "%s"', $data['email']);
             $items = $this->getList($oql);
 
-            if (!empty($items['results'])) {
+            if (!empty($items['items'])) {
                 throw new \Exception('The email is already in use', 409);
             }
         } catch (\Exception $e) {
@@ -98,7 +98,7 @@ class UserService extends OrmService
             $oql   = sprintf('id != "%s" and email = "%s"', $id, $data['email']);
             $items = $this->getList($oql);
 
-            if (!empty($items['results'])) {
+            if (!empty($items['items'])) {
                 throw new \Exception('The email is already in use', 409);
             }
         } catch (\Exception $e) {

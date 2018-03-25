@@ -270,7 +270,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetList()
     {
-        $results = [
+        $items = [
             new Entity([ 'name' => 'wubble' ]),
             new Entity([ 'name' => 'mumble' ])
         ];
@@ -278,13 +278,13 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $this->repository->expects($this->once())->method('countBy')
             ->with('order by title asc')->willReturn(2);
         $this->repository->expects($this->once())->method('findBy')
-            ->with('order by title asc')->willReturn($results);
+            ->with('order by title asc')->willReturn($items);
 
         $response = $this->service->getList('order by title asc');
 
-        $this->assertArrayHasKey('results', $response);
+        $this->assertArrayHasKey('items', $response);
         $this->assertArrayHasKey('total', $response);
-        $this->assertEquals($results, $response['results']);
+        $this->assertEquals($items, $response['items']);
         $this->assertEquals(2, $response['total']);
     }
 

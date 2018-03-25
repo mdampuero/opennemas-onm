@@ -60,7 +60,7 @@ class SubscriberService extends UserService
         }
 
         $deleted = 0;
-        foreach ($response['results'] as $item) {
+        foreach ($response['items'] as $item) {
             try {
                 // Convert to user if subscriber + user
                 if ($item->type === 2) {

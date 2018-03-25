@@ -126,7 +126,7 @@ class OrmService extends Service
         }
 
         $deleted = 0;
-        foreach ($response['results'] as $item) {
+        foreach ($response['items'] as $item) {
             try {
                 $this->em->remove($item, $item->getOrigin());
                 $deleted++;
@@ -166,7 +166,7 @@ class OrmService extends Service
             $total = $repository->countBy($oql);
             $items = $repository->findBy($oql);
 
-            return [ 'results' => $items, 'total' => $total ];
+            return [ 'items' => $items, 'total' => $total ];
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new GetListException($e->getMessage(), $e->getCode());
@@ -214,7 +214,7 @@ class OrmService extends Service
         }
 
         $updated = 0;
-        foreach ($response['results'] as $item) {
+        foreach ($response['items'] as $item) {
             try {
                 $item->merge($data);
                 $this->validate($item);
