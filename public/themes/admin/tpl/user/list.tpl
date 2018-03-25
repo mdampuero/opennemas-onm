@@ -200,9 +200,9 @@
                   </td>
                   <td class="hidden-xs">
                     <ul class="no-style">
-                      <li class="pull-left m-b-5 m-r-5" ng-repeat="user_group in item.fk_user_group" ng-if="data.extra.user_groups[user_group]">
-                        <a class="label text-uppercase" ng-class="{ 'label-danger': !data.extra.user_groups[user_group].enabled, 'label-default': data.extra.user_groups[user_group].enabled }" href="[% routing.generate('backend_user_group_show', { id: user_group }) %]">
-                          <strong>[% data.extra.user_groups[user_group].name %]</strong>
+                      <li class="m-b-5 m-r-5 pull-left" ng-repeat="(id, user_group) in item.user_groups" ng-if="data.extra.user_groups[id] && user_group.status !== 0" uib-tooltip="{t}User group disabled{/t}" tooltip-enable="data.extra.user_groups[id].enabled === 0">
+                        <a class="label text-uppercase" ng-class="{ 'label-danger': !data.extra.user_groups[id].enabled, 'label-default': data.extra.user_groups[id].enabled }" href="[% routing.generate('backend_user_group_show', { id: user_group }) %]">
+                          <strong>[% data.extra.user_groups[id].name %]</strong>
                         </span>
                         </a>
                       </li>
@@ -239,17 +239,10 @@
       </div>
     </div>
     <script type="text/ng-template" id="modal-delete">
-      {include file="user/modals/_modalDelete.tpl"}
-    </script>
-    <script type="text/ng-template" id="modal-delete-selected">
-      {include file="common/modals/_modalBatchDelete.tpl"}
+      {include file="user/modal.confirm.tpl"}
     </script>
     <script type="text/ng-template" id="modal-update-selected">
-      {if $app.user->isMaster()}
-        {include file="common/modals/_modalBatchUpdate.tpl"}
-      {else}
-        {include file="user/modals/_modalBatchUpdate.tpl"}
-      {/if}
+      {include file="user/modal.confirm.tpl"}
     </script>
   </form>
 {/block}
