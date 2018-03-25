@@ -216,14 +216,22 @@ class UserController extends Controller
     /**
      * Updates the user information given its id and the new information.
      *
+     * This action is not mapped with Security annotation because it's
+     * used in edit profile action that should be available to all users with
+     * or without having users module activated.
+
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('USER_UPDATE')")
      */
     public function updateAction(Request $request, $id)
     {
+        if ($id != $this->getUser()->id
+            && !$this->get('core.security')->hasPermission('USER_UPDATE')
+        ) {
+            throw new AccessDeniedException();
+        }
+
         $msg = $this->get('core.messenger');
 
         $this->get('api.service.user')
