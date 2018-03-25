@@ -26,15 +26,8 @@ class SubscriptionServiceTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->converter = $this->getMockBuilder('Converter' . uniqid())
-            ->setMethods([ 'objectify', 'responsify' ])
-            ->getMock();
-
         $this->em = $this->getMockBuilder('EntityManager' . uniqid())
-            ->setMethods([
-                'getConverter' ,'getMetadata', 'getRepository', 'persist',
-                'remove'
-            ])->getMock();
+            ->setMethods([ 'getMetadata', 'getRepository' ])->getMock();
 
         $this->fixer = $this->getMockBuilder('Fixer' . uniqid())
             ->setMethods([ 'addCondition', 'fix', 'getOql' ])
@@ -52,14 +45,8 @@ class SubscriptionServiceTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'countBy', 'findBy', 'findOneBy'])
             ->getMock();
 
-        $this->security = $this->getMockBuilder('Security' . uniqid())
-            ->setMethods([ 'hasPermission' ])
-            ->getMock();
-
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
-        $this->em->expects($this->any())->method('getConverter')
-            ->willReturn($this->converter);
         $this->em->expects($this->any())->method('getMetadata')
             ->willReturn($this->metadata);
         $this->em->expects($this->any())->method('getRepository')
@@ -68,8 +55,6 @@ class SubscriptionServiceTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->fixer);
         $this->fixer->expects($this->any())->method('addCondition')
             ->willReturn($this->fixer);
-        $this->security->expects($this->any())->method('hasPermission')
-            ->willReturn(false);
         $this->metadata->expects($this->any())->method('getIdKeys')
             ->willReturn([ 'id' ]);
 
@@ -79,9 +64,6 @@ class SubscriptionServiceTest extends \PHPUnit_Framework_TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'core.security':
-                return $this->security;
-
             case 'error.log':
                 return $this->logger;
 
@@ -116,36 +98,9 @@ class SubscriptionServiceTest extends \PHPUnit_Framework_TestCase
         $this->repository->expects($this->once())->method('findOneBy')
             ->with('pk_user_group = 1 and type = 1')
             ->will($this->throwException(new \Exception()));
+        $this->logger->expects($this->once())->method('error');
 
         $this->service->getItem(1);
-    }
-
-    /**
-     * Tests getList when no error.
-     */
-    public function testGetList()
-    {
-        $results = [
-            new Entity([ 'name' => 'wubble' ]),
-            new Entity([ 'name' => 'mumble' ])
-        ];
-
-        $this->fixer->expects($this->once())->method('fix');
-        $this->fixer->expects($this->once())->method('addCondition');
-        $this->fixer->expects($this->once())->method('getOql')
-            ->willReturn('type = 1');
-
-        $this->repository->expects($this->once())->method('countBy')
-            ->with('type = 1')->willReturn(2);
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('type = 1')->willReturn($results);
-
-        $response = $this->service->getList('order by title asc');
-
-        $this->assertArrayHasKey('results', $response);
-        $this->assertArrayHasKey('total', $response);
-        $this->assertEquals($results, $response['results']);
-        $this->assertEquals(2, $response['total']);
     }
 
     /*
@@ -162,6 +117,6 @@ class SubscriptionServiceTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->fixer);
         $this->fixer->expects($this->once())->method('getOql');
 
-        $method->invokeArgs($this->service, [ [ 1, 3, 5 ] ]);
+        $method->invokeArgs($this->service, [ 'fubar = "qux"' ]);
     }
 }

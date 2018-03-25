@@ -16,39 +16,8 @@ use Api\Exception\GetItemException;
 use Api\Exception\PatchListException;
 use Api\Exception\UpdateItemException;
 
-class SubscriberService extends OrmService
+class SubscriberService extends UserService
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function createItem($data)
-    {
-        try {
-            if (!array_key_exists('email', $data)) {
-                throw new \Exception('The email is required', 400);
-            }
-
-            $oql   = sprintf('email = "%s"', $data['email']);
-            $items = $this->getList($oql);
-
-            if (!empty($items['results'])) {
-                throw new \Exception('The email is already in use', 409);
-            }
-        } catch (\Exception $e) {
-            throw new CreateItemException($e->getMessage(), $e->getCode());
-        }
-
-        $data['username'] = $data['email'];
-
-        if (array_key_exists('password', $data) && !empty($data['password'])) {
-            $data['password'] = $this->container
-                ->get('core.security.encoder.password')
-                ->encodePassword($data['password'], null);
-        }
-
-        return parent::createItem($data);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -81,7 +50,7 @@ class SubscriberService extends OrmService
             throw new DeleteListException('Invalid ids', 400);
         }
 
-        $oql = $this->getOqlForList($ids);
+        $oql = $this->getOqlForIds($ids);
 
         try {
             $response = parent::getList($oql);
@@ -132,78 +101,9 @@ class SubscriberService extends OrmService
     /**
      * {@inheritdoc}
      */
-    public function getList($oql = '')
+    protected function getOqlForList($oql)
     {
          // Force OQL to include type
-        $oql = $this->container->get('orm.oql.fixer')->fix($oql)
-            ->addCondition('type != 0')
-            ->getOql();
-
-        return parent::getList($oql);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function responsify($item)
-    {
-        if (is_array($item)) {
-            foreach ($item as &$i) {
-                $i = $this->responsify($i);
-            }
-
-            return $item;
-        }
-
-        if ($item instanceof $this->class) {
-            $item->eraseCredentials();
-            return parent::responsify($item);
-        }
-
-        return $item;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateItem($id, $data)
-    {
-        try {
-            if (!array_key_exists('email', $data)) {
-                throw new \Exception('The email is required', 400);
-            }
-
-            $oql   = sprintf('id != "%s" and email = "%s"', $id, $data['email']);
-            $items = $this->getList($oql);
-
-            if (!empty($items['results'])) {
-                throw new \Exception('The email is already in use', 409);
-            }
-        } catch (\Exception $e) {
-            throw new UpdateItemException($e->getMessage(), $e->getCode());
-        }
-
-        if (array_key_exists('type', $data) && $data['type'] === 1) {
-            $data['username'] = $data['email'];
-        }
-
-        if (array_key_exists('password', $data) && !empty($data['password'])) {
-            $data['password'] = $this->container
-                ->get('core.security.encoder.password')
-                ->encodePassword($data['password'], null);
-        }
-
-        parent::updateItem($id, $data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getOqlForList($ids)
-    {
-        $oql = parent::getOqlForList($ids);
-
-         // Force OQL to include the type value
         return $this->container->get('orm.oql.fixer')->fix($oql)
             ->addCondition('type != 0')
             ->getOql();

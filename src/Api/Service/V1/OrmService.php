@@ -116,7 +116,7 @@ class OrmService extends Service
             throw new DeleteListException('Invalid ids', 400);
         }
 
-        $oql = $this->getOqlForList($ids);
+        $oql = $this->getOqlForIds($ids);
 
         try {
             $response = $this->getList($oql);
@@ -158,6 +158,8 @@ class OrmService extends Service
     public function getList($oql = '')
     {
         try {
+            $oql = $this->getOqlForList($oql);
+
             $repository = $this->container->get('orm.manager')
                 ->getRepository($this->entity, $this->origin);
 
@@ -202,7 +204,7 @@ class OrmService extends Service
         }
 
         $data = $this->em->getConverter($this->entity)->objectify($data);
-        $oql  = $this->getOqlForList($ids);
+        $oql  = $this->getOqlForIds($ids);
 
         try {
             $response = $this->getList($oql);
@@ -282,12 +284,27 @@ class OrmService extends Service
      *
      * @return string The OQL statement.
      */
-    protected function getOqlForList($ids)
+    protected function getOqlForIds($ids)
     {
         $keys = $this->em->getMetadata($this->entity)->getIdKeys();
         $key  = array_pop($keys);
 
         return sprintf('%s in [%s]', $key, implode(',', $ids));
+    }
+
+    /**
+     * Returns the OQL statement to find all entities basing on a OQL filter.
+     *
+     * This function will be overloaded in childs to fix the original OQL
+     * statement.
+     *
+     * @param string $oql The OQL statement.
+     *
+     * @return string The OQL statement.
+     */
+    protected function getOqlForList($oql)
+    {
+        return $oql;
     }
 
     /**

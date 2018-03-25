@@ -33,23 +33,9 @@ class SubscriptionService extends OrmService
     /**
      * {@inheritdoc}
      */
-    public function getList($oql = '')
+    protected function getOqlForList($oql)
     {
-        $oql = $this->container->get('orm.oql.fixer')->fix($oql)
-            ->addCondition('type = 1')
-            ->getOql();
-
-        return parent::getList($oql);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getOqlForList($ids)
-    {
-        $oql = parent::getOqlForList($ids);
-
-         // Force OQL to include the type value
+         // Force OQL to include type
         return $this->container->get('orm.oql.fixer')->fix($oql)
             ->addCondition('type = 1')
             ->getOql();

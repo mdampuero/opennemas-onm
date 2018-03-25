@@ -530,17 +530,30 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests getOqlForList.
+     * Tests getOqlForIds
      */
-    public function testGetOqlForList()
+    public function testGetOqlForIds()
     {
-        $method = new \ReflectionMethod($this->service, 'getOqlForList');
+        $method = new \ReflectionMethod($this->service, 'getOqlForIds');
         $method->setAccessible(true);
 
         $this->assertEquals(
             'id in [1,3,5]',
             $method->invokeArgs($this->service, [ [ 1, 3, 5 ] ])
         );
+    }
+
+    /**
+     * Tests getOqlForList.
+     */
+    public function testGetOqlForList()
+    {
+        $oql = 'glork = "gorp"';
+
+        $method = new \ReflectionMethod($this->service, 'getOqlForList');
+        $method->setAccessible(true);
+
+        $this->assertEquals($oql, $method->invokeArgs($this->service, [ $oql ]));
     }
 
     /**

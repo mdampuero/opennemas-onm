@@ -38,6 +38,12 @@ class UserService extends OrmService
             throw new CreateItemException($e->getMessage(), $e->getCode());
         }
 
+        if (array_key_exists('password', $data) && !empty($data['password'])) {
+            $data['password'] = $this->container
+                ->get('core.security.encoder.password')
+                ->encodePassword($data['password'], null);
+        }
+
         return parent::createItem($data);
     }
 
@@ -56,19 +62,6 @@ class UserService extends OrmService
             $this->container->get('error.log')->error($e->getMessage());
             throw new GetItemException($e->getMessage(), $e->getCode());
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getList($oql = '')
-    {
-         // Force OQL to include the type
-        $oql = $this->container->get('orm.oql.fixer')->fix($oql)
-            ->addCondition('type != 1')
-            ->getOql();
-
-        return parent::getList($oql);
     }
 
     /**
@@ -112,19 +105,23 @@ class UserService extends OrmService
             throw new UpdateItemException($e->getMessage(), $e->getCode());
         }
 
+        if (array_key_exists('password', $data) && !empty($data['password'])) {
+            $data['password'] = $this->container
+                ->get('core.security.encoder.password')
+                ->encodePassword($data['password'], null);
+        }
+
         parent::updateItem($id, $data);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getOqlForList($ids)
+    protected function getOqlForList($oql)
     {
-        $oql = parent::getOqlForList($ids);
-
-         // Force OQL to include the type value
+         // Force OQL to include type
         return $this->container->get('orm.oql.fixer')->fix($oql)
-            ->addCondition('type = 1')
+            ->addCondition('type != 1')
             ->getOql();
     }
 }
