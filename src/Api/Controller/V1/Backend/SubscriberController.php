@@ -290,9 +290,9 @@ class SubscriberController extends Controller
     }
 
     /**
-     * Returns an subscriber.
+     * Returns a subscriber.
      *
-     * @param integer $id The group id.
+     * @param integer $id The subscriber id.
      *
      * @return JsonResponse The response object.
      *
@@ -310,7 +310,7 @@ class SubscriberController extends Controller
     }
 
     /**
-     * Updates the subscriber information given its id and the new information
+     * Updates the subscriber information given its id and the new information.
      *
      * @param Request $request The request object.
      *
@@ -353,9 +353,11 @@ class SubscriberController extends Controller
             ->get('user_settings', []);
 
         if (!empty($items)) {
-            $ids = array_map(function ($a) {
+            $ids = array_filter(array_map(function ($a) {
                 return $a->avatar_img_id;
-            }, $items);
+            }, $items), function ($a) {
+                return !empty($a);
+            });
 
             $photos = $this->get('entity_repository')->findBy([
                 'content_type_name' => [ [ 'value' => 'photo' ] ],
