@@ -46,7 +46,7 @@ class SubscriptionController extends Controller
         $msg = $this->get('core.messenger');
 
         $this->get('api.service.subscription')->deleteItem($id);
-        $msg->add(_('Subscription deleted successfully'), 'success');
+        $msg->add(_('Item deleted successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
@@ -68,14 +68,14 @@ class SubscriptionController extends Controller
 
         if ($deleted > 0) {
             $msg->add(
-                sprintf(_('%s subscriptions deleted successfully'), $deleted),
+                sprintf(_('%s items deleted successfully'), $deleted),
                 'success'
             );
         }
 
         if ($deleted !== count($ids)) {
             $msg->add(sprintf(
-                _('%s subscriptions could not be deleted successfully'),
+                _('%s items could not be deleted successfully'),
                 count($ids) - $deleted
             ), 'error');
         }
@@ -98,7 +98,7 @@ class SubscriptionController extends Controller
         $oql      = $request->query->get('oql', '');
         $response = $ss->getList($oql);
 
-        $response['results'] = $ss->responsify($response['results']);
+        $response['items'] = $ss->responsify($response['items']);
 
         return new JsonResponse($response);
     }
@@ -118,7 +118,7 @@ class SubscriptionController extends Controller
 
         $this->get('api.service.subscription')
             ->patchItem($id, $request->request->all());
-        $msg->add(_('Subscription saved successfully'), 'success');
+        $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
@@ -145,14 +145,14 @@ class SubscriptionController extends Controller
 
         if ($updated > 0) {
             $msg->add(
-                sprintf(_('%s subscriptions updated successfully'), $updated),
+                sprintf(_('%s items updated successfully'), $updated),
                 'success'
             );
         }
 
         if ($updated !== count($ids)) {
             $msg->add(sprintf(
-                _('%s subscriptions could not be updated successfully'),
+                _('%s items could not be updated successfully'),
                 count($ids) - $updated
             ), 'error');
         }
@@ -175,7 +175,7 @@ class SubscriptionController extends Controller
 
         $userGroup = $this->get('api.service.subscription')
             ->createItem($request->request->all());
-        $msg->add(_('Subscription saved successfully'), 'success', 201);
+        $msg->add(_('Item saved successfully'), 'success', 201);
 
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());
         $response->headers->set(
@@ -203,8 +203,8 @@ class SubscriptionController extends Controller
         $ss = $this->get('api.service.subscription');
 
         return new JsonResponse([
-            'subscription' => $ss->responsify($ss->getItem($id)),
-            'extra'        => $this->getExtraData()
+            'item'  => $ss->responsify($ss->getItem($id)),
+            'extra' => $this->getExtraData()
         ]);
     }
 
@@ -225,7 +225,7 @@ class SubscriptionController extends Controller
         $this->get('api.service.subscription')
             ->updateItem($id, $request->request->all());
 
-        $msg->add(_('Subscription saved successfully'), 'success');
+        $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }

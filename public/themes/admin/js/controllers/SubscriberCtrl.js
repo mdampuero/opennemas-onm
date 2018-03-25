@@ -137,8 +137,8 @@
          * @param {Integer} id The subscriber id.
          */
         $scope.parseItem = function(data) {
-          if (data.subscriber) {
-            $scope.item = data.subscriber;
+          if (data.item) {
+            $scope.item = data.item;
           }
 
           if (!$scope.item.user_groups) {

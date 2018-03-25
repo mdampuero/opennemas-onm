@@ -79,21 +79,6 @@
           return $scope.item.pk_user_group &&
             $scope.item.pk_user_group !== null;
         };
-
-        /**
-         * @function parseItem
-         * @memberOf SubscriptionCtrl
-         *
-         * @description
-         *   Gets the subscription from the data in reponse.
-         *
-         * @param {Object} data The data in the response.
-         */
-        $scope.parseItem = function(data) {
-          if (data.subscription) {
-            $scope.item = data.subscription;
-          }
-        };
       }
     ]);
 })();

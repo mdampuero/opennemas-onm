@@ -170,7 +170,7 @@
 
           return http.get(route).then(function(response) {
             $scope.data  = response.data;
-            $scope.items = response.data.results;
+            $scope.items = response.data.items;
 
             $scope.disableFlags();
 

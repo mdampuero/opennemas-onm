@@ -46,7 +46,7 @@ class SubscriberController extends Controller
         $msg = $this->get('core.messenger');
 
         $this->get('api.service.subscriber')->deleteItem($id);
-        $msg->add(_('Subscriber deleted successfully'), 'success');
+        $msg->add(_('Item deleted successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
@@ -68,14 +68,14 @@ class SubscriberController extends Controller
 
         if ($deleted > 0) {
             $msg->add(
-                sprintf(_('%s subscribers deleted successfully'), $deleted),
+                sprintf(_('%s items deleted successfully'), $deleted),
                 'success'
             );
         }
 
         if ($deleted !== count($ids)) {
             $msg->add(sprintf(
-                _('%s subscribers could not be deleted successfully'),
+                _('%s items could not be deleted successfully'),
                 count($ids) - $deleted
             ), 'error');
         }
@@ -101,7 +101,7 @@ class SubscriberController extends Controller
 
         $output = implode(",", $csvHeaders);
 
-        foreach ($items['results'] as &$item) {
+        foreach ($items['items'] as &$item) {
             switch ($item->gender) {
                 case 'male':
                     $gender = _('Male');
@@ -159,8 +159,8 @@ class SubscriberController extends Controller
         $oql      = $request->query->get('oql', '');
         $response = $ss->getList($oql);
 
-        $response['extra']   = $this->getExtraData($response['results']);
-        $response['results'] = $ss->responsify($response['results']);
+        $response['extra'] = $this->getExtraData($response['items']);
+        $response['items'] = $ss->responsify($response['items']);
 
         return new JsonResponse($response);
     }
@@ -194,7 +194,7 @@ class SubscriberController extends Controller
 
         $this->get('api.service.subscriber')
             ->patchItem($id, $request->request->all());
-        $msg->add(_('Subscriber saved successfully'), 'success');
+        $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
@@ -221,14 +221,14 @@ class SubscriberController extends Controller
 
         if ($updated > 0) {
             $msg->add(
-                sprintf(_('%s subscribers updated successfully'), $updated),
+                sprintf(_('%s items updated successfully'), $updated),
                 'success'
             );
         }
 
         if ($updated !== count($ids)) {
             $msg->add(sprintf(
-                _('%s subscribers could not be updated successfully'),
+                _('%s items could not be updated successfully'),
                 count($ids) - $updated
             ), 'error');
         }
@@ -275,7 +275,7 @@ class SubscriberController extends Controller
 
         $user = $this->get('api.service.subscriber')
             ->createItem($request->request->all());
-        $msg->add(_('Subscriber saved successfully'), 'success', 201);
+        $msg->add(_('Item saved successfully'), 'success', 201);
 
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());
         $response->headers->set(
@@ -304,8 +304,8 @@ class SubscriberController extends Controller
         $item = $ss->getItem($id);
 
         return new JsonResponse([
-            'subscriber' => $ss->responsify($item),
-            'extra'      => $this->getExtraData([ $item ])
+            'item'  => $ss->responsify($item),
+            'extra' => $this->getExtraData([ $item ])
         ]);
     }
 
@@ -325,7 +325,7 @@ class SubscriberController extends Controller
         $this->get('api.service.subscriber')
             ->updateItem($id, $request->request->all());
 
-        $msg->add(_('Subscriber saved successfully'), 'success');
+        $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
@@ -344,7 +344,7 @@ class SubscriberController extends Controller
         $response = $ss->getList();
 
         $subscriptions = $this->get('data.manager.filter')
-            ->set($response['results'])
+            ->set($response['items'])
             ->filter('mapify', [ 'key' => 'pk_user_group' ])
             ->get();
 

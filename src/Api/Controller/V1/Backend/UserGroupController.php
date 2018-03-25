@@ -46,7 +46,7 @@ class UserGroupController extends Controller
         $msg = $this->get('core.messenger');
 
         $this->get('api.service.user_group')->deleteItem($id);
-        $msg->add(_('User group deleted successfully'), 'success');
+        $msg->add(_('Item deleted successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
@@ -68,14 +68,14 @@ class UserGroupController extends Controller
 
         if ($deleted > 0) {
             $msg->add(
-                sprintf(_('%s user groups deleted successfully'), $deleted),
+                sprintf(_('%s items deleted successfully'), $deleted),
                 'success'
             );
         }
 
         if ($deleted !== count($ids)) {
             $msg->add(sprintf(
-                _('%s user groups could not be deleted successfully'),
+                _('%s items could not be deleted successfully'),
                 count($ids) - $deleted
             ), 'error');
         }
@@ -98,7 +98,7 @@ class UserGroupController extends Controller
         $oql      = $request->query->get('oql', '');
         $response = $ss->getList($oql);
 
-        $response['results'] = $ss->responsify($response['results']);
+        $response['items'] = $ss->responsify($response['items']);
 
         return new JsonResponse($response);
     }
@@ -118,7 +118,7 @@ class UserGroupController extends Controller
 
         $this->get('api.service.user_group')
             ->patchItem($id, $request->request->all());
-        $msg->add(_('User group saved successfully'), 'success');
+        $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
@@ -145,14 +145,14 @@ class UserGroupController extends Controller
 
         if ($updated > 0) {
             $msg->add(
-                sprintf(_('%s user groups updated successfully'), $updated),
+                sprintf(_('%s items updated successfully'), $updated),
                 'success'
             );
         }
 
         if ($updated !== count($ids)) {
             $msg->add(sprintf(
-                _('%s user groups could not be updated successfully'),
+                _('%s items could not be updated successfully'),
                 count($ids) - $updated
             ), 'error');
         }
@@ -161,7 +161,7 @@ class UserGroupController extends Controller
     }
 
     /**
-     * Saves a new user groups.
+     * Saves a new user group.
      *
      * @param Request $request The request object.
      *
@@ -175,7 +175,7 @@ class UserGroupController extends Controller
 
         $userGroup = $this->get('api.service.user_group')
             ->createItem($request->request->all());
-        $msg->add(_('User group saved successfully'), 'success', 201);
+        $msg->add(_('Item saved successfully'), 'success', 201);
 
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());
         $response->headers->set(
@@ -203,8 +203,8 @@ class UserGroupController extends Controller
         $ss = $this->get('api.service.user_group');
 
         return new JsonResponse([
-            'user_group' => $ss->responsify($ss->getItem($id)),
-            'extra'      => $this->getExtraData()
+            'item'  => $ss->responsify($ss->getItem($id)),
+            'extra' => $this->getExtraData()
         ]);
     }
 
@@ -224,7 +224,7 @@ class UserGroupController extends Controller
         $this->get('api.service.user_group')
             ->updateItem($id, $request->request->all());
 
-        $msg->add(_('User group saved successfully'), 'success');
+        $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
