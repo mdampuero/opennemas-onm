@@ -77,6 +77,48 @@
         };
 
         /**
+         * @function confirmUser
+         * @memberOf UserCtrl
+         *
+         * @description
+         *   Shows a modal to confirm user update.
+         */
+        $scope.confirm = function() {
+          if ($scope.master || !$scope.item.activated ||
+              $scope.item.activated === $scope.backup.activated) {
+            $scope.save();
+            $scope.backup.activated = $scope.item.activated;
+            return;
+          }
+
+          var modal = $uibModal.open({
+            templateUrl: 'modal-confirm',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  name: $scope.id ? 'update' : 'create',
+                  backend_access: true,
+                  value: 1,
+                  extra: $scope.data.extra,
+                };
+              },
+              success: function() {
+                return null;
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response) {
+              $scope.save();
+              $scope.backup.activated = $scope.item.activated;
+            }
+          });
+        };
+
+        /**
          * @function getData
          * @memberOf SubscriberCtrl
          *
@@ -141,48 +183,6 @@
             $scope.item.avatar_img_id =
               data.extra.photos[$scope.item.avatar_img_id];
           }
-        };
-
-        /**
-         * @function confirmUser
-         * @memberOf UserCtrl
-         *
-         * @description
-         *   Shows a modal to confirm user update.
-         */
-        $scope.confirm = function() {
-          if ($scope.master || !$scope.item.activated ||
-              $scope.item.activated === $scope.backup.activated) {
-            $scope.save();
-            $scope.backup.activated = $scope.item.activated;
-            return;
-          }
-
-          var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
-            backdrop: 'static',
-            controller: 'modalCtrl',
-            resolve: {
-              template: function() {
-                return {
-                  name: $scope.id ? 'update' : 'create',
-                  backend_access: true,
-                  value: 1,
-                  extra: $scope.data.extra,
-                };
-              },
-              success: function() {
-                return null;
-              }
-            }
-          });
-
-          modal.result.then(function(response) {
-            if (response) {
-              $scope.save();
-              $scope.backup.activated = $scope.item.activated;
-            }
-          });
         };
 
         // Removes categories from item when flag changes
