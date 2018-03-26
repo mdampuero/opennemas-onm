@@ -47,8 +47,8 @@ class MigrateUserGroupsCommand extends ContainerAwareCommand
 
         $conn->selectDatabase($database);
 
-        $select   = "select id, fk_user_group from users where fk_user_group like '%,%'";
-        $count    = "select count(*) as total from users where fk_user_group like '%,%'";
+        $select   = "select id, fk_user_group from users where fk_user_group is not null";
+        $count    = "select count(*) as total from users where fk_user_group is not null";
         $total    = $conn->fetchAssoc($count);
         $items    = $conn->fetchAll($select);
         $errors   = 0;
