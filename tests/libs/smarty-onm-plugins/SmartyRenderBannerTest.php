@@ -135,7 +135,8 @@ class SmartyRenderBannerTest extends \PHPUnit_Framework_TestCase
         $ads    = new \StdClass();
         $ad     = new \Advertisement();
 
-        $ad->type_advertisement = 123;
+        $ad->positions          = [ 123 ];
+        $ad->type_advertisement = [ 123 ];
         $ad->starttime          = '2000-01-01 00:00:00';
         $ad->endtime            = null;
         $ad->params             = [ 'orientation' => 'left' ];

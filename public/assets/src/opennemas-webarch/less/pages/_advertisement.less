@@ -1,4 +1,61 @@
-.checkbox-list {
-  max-height: 240px;
-  overflow: auto;
+.ads-listing {
+  .checkbox-list {
+    max-height: 240px;
+    overflow: auto;
+  }
+
+  .ad-position {
+    border: 1px solid @input-border-color;
+    border-radius:5px;
+    padding: 3px 8px;
+    display:inline-block;
+    margin-bottom:3px;
+    margin-right:5px
+  }
+
+  td {
+    white-space:normal;
+    word-break:normal;
+  }
+}
+
+.advertisement-positions {
+  .grid-body {
+    .badge {
+      padding:5px 10px;
+      min-width: 30px;
+    }
+  }
+
+  // Partial that shows the number of positions selected, then the list
+  // and finally a button to show/collapse the list of positions
+  .positions-selected {
+    position:relative;
+    background-color:#f8f8f8!important;
+
+    .positions-selected-counter {
+      color:@header-color;
+      font-size:12px;
+    }
+
+    .positions-selected-list.collapsed {
+      max-height:45px;
+      overflow:hidden;
+    }
+
+    .position-selected-hidden-counter {
+      bottom: 0;
+      background: -webkit-gradient(linear, left top, right top, from(rgba(248, 248, 248, 0)), color-stop(0.2, #f8f8f8))!important;
+      background: -webkit-linear-gradient(left, rgba(248, 248, 248, 0) 0%, #f8f8f8 20%)!important;
+      background: -o-linear-gradient(left, rgba(248, 248, 248, 0) 0%, #f8f8f8 20%)!important;
+      background: linear-gradient(to right, rgba(248, 248, 248, 0) 0%, #f8f8f8 20%)!important;
+      color: @header-color;
+      display: block;
+      margin: 0;
+      padding-left: 25px;
+      position: absolute;
+      right: 0;
+      text-align: right;
+    }
+  }
 }

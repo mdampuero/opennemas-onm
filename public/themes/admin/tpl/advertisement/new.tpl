@@ -1,32 +1,38 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  {javascripts}
-    <script type="text/javascript">
-      jQuery(document).ready(function($) {
-        $('#formulario').on('change', '#title', function(e, ui) {
-          fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
-        });
+{javascripts}
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+  $('#formulario').on('change', '#title', function() {
+    fill_tags(jQuery('#title').val(), '#metadata', '{url name=admin_utils_calculate_tags}');
+  });
 
-        $('#starttime, #endtime').datetimepicker({
-          format: 'YYYY-MM-DD HH:mm:ss',
-          useCurrent: false,
-          minDate: '{$advertisement->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}'
-        });
+  $('#starttime, #endtime').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:ss',
+    useCurrent: false,
+    minDate: '{$advertisement->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}'
+  });
 
-        $("#starttime").on("dp.change",function (e) {
-          $('#endtime').data("DateTimePicker").minDate(e.date);
-        });
-        $("#endtime").on("dp.change",function (e) {
-          $('#starttime').data("DateTimePicker").maxDate(e.date);
-        });
-      });
-    </script>
-  {/javascripts}
+  $('#starttime').on('dp.change', function(e) {
+    $('#endtime').data('DateTimePicker').minDate(e.date);
+  });
+  $('#endtime').on('dp.change', function(e) {
+    $('#starttime').data('DateTimePicker').maxDate(e.date);
+  });
+});
+</script>
+{/javascripts}
 {/block}
 
 {block name="content"}
-<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" name="AdvertisementForm" ng-controller="AdvertisementCtrl" ng-init="init({json_encode($advertisement->params)|clear_json}, {json_encode($advertisement->fk_content_categories)|clear_json}); type_advertisement = '{$advertisement->type_advertisement}'; extra = { categories: {json_encode($categories)|clear_json}, user_groups: {json_encode($user_groups)|clear_json} }; with_script = {if empty($advertisement->with_script)}0{else}{{$advertisement->with_script}}{/if}">
+<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario" name="AdvertisementForm" ng-controller="AdvertisementCtrl" ng-init="init(
+    {json_encode($advertisement->params)|clear_json},
+    {json_encode($advertisement->fk_content_categories)|clear_json},
+    {json_encode($advertisement->positions)|clear_json}
+  );
+  with_script = {if empty($advertisement->with_script)}0{else}{{$advertisement->with_script}}{/if};
+  extra = {json_encode($extra)|clear_json};">
     <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -75,6 +81,7 @@
         </div>
       </div>
     </div>
+
     <div class="content">
       <div class="row">
         <div class="col-md-8">
@@ -123,7 +130,7 @@
                   {/if}
                   <div class="col-sm-3">
                     <div class="radio">
-                      <input id="dfp" name="with_script" ng-model="with_script"   {if $with_script == 3}checked{/if} type="radio" value="3">
+                      <input id="dfp" name="with_script" ng-model="with_script" {if $with_script == 3}checked{/if} type="radio" value="3">
                       <label for="dfp" title="{t}Google DFP{/t}">{t}Google DFP{/t}</label>
                     </div>
                   </div>
@@ -504,180 +511,198 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="grid simple">
-            <div class="grid-title">
-              <h4>{t}Where to show this ad{/t}</h4>
-            </div>
-            <div class="grid-body">
-              <div class="form-group">
-                <label class="form-label">{t}Pages of type{/t}</label>
-                <div class="controls">
-                  <select name="position" id="position" ng-model="position">
-                    <option value="publi-frontpage" {if $advertisement->type_advertisement < 100}selected{/if}>{t}Frontpage{/t}</option>
-                    <option value="publi-inner" {if $advertisement->type_advertisement > 100 && $advertisement->type_advertisement < 200}selected{/if}>{t}Article: inner{/t}</option>
-                    {is_module_activated name="ALBUM_MANAGER"}
-                    <option value="publi-gallery" {if $advertisement->type_advertisement > 400 && $advertisement->type_advertisement < 500}selected{/if}>{t}Gallery: frontpage{/t}</option>
-                    <option value="publi-gallery-inner" {if $advertisement->type_advertisement > 500 && $advertisement->type_advertisement < 600}selected{/if}>{t}Gallery: inner{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="OPINION_MANAGER"}
-                    <option value="publi-opinion" {if $advertisement->type_advertisement > 600 && $advertisement->type_advertisement < 700}selected{/if}>{t}Opinion: frontpage{/t}</option>
-                    <option value="publi-opinion-inner" {if $advertisement->type_advertisement > 700 && $advertisement->type_advertisement < 800}selected{/if}>{t}Opinion: inner{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="POLL_MANAGER"}
-                    <option value="publi-poll" {if $advertisement->type_advertisement > 800 && $advertisement->type_advertisement < 900}selected{/if}>{t}Poll: frontpage{/t}</option>
-                    <option value="publi-poll-inner" {if $advertisement->type_advertisement > 900 && $advertisement->type_advertisement < 1000}selected{/if}>{t}Poll: inner{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="NEWSLETTER_MANAGER"}
-                    <option value="publi-newsletter" {if $advertisement->type_advertisement > 1000 && $advertisement->type_advertisement < 1050}selected{/if}>{t}Newsletter{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="VIDEO_MANAGER"}
-                    <option value="publi-video" {if $advertisement->type_advertisement > 200 && $advertisement->type_advertisement < 300}selected{/if}>{t}Video: frontpage{/t}</option>
-                    <option value="publi-video-inner" {if $advertisement->type_advertisement > 300 && $advertisement->type_advertisement < 400}selected{/if}>{t}Video: inner{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="AMP_MODULE"}
-                    <option value="publi-amp" {if $advertisement->type_advertisement >= 1050 && $advertisement->type_advertisement < 1075}selected{/if}>{t}Google AMP{/t}</option>
-                    {/is_module_activated}
-                    {is_module_activated name="FIA_MODULE"}
-                    <option value="publi-fia" {if $advertisement->type_advertisement >= 1075 && $advertisement->type_advertisement < 1100}selected{/if}>{t}Facebook Instant Articles{/t}</option>
-                    {/is_module_activated}
-                    <option value="publi-others" {if $advertisement->type_advertisement > 1100}selected{/if}>{t}Others{/t}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="controls">
-                  <div id="position-adv">
-                    <div class="ng-cloak" ng-show="position == 'publi-frontpage'">
-                      {include file="advertisement/partials/advertisement_positions.tpl"}
-                    </div>
-                    <div class="ng-cloak" ng-show="position == 'publi-inner'">
-                      {include file="advertisement/partials/advertisement_positions_inner.tpl"}
-                    </div>
-                    {is_module_activated name="VIDEO_MANAGER"}
-                    <div class="ng-cloak" ng-show="position == 'publi-video'">
-                      {include file="advertisement/partials/advertisement_positions_video.tpl"}
-                    </div>
-                    <div class="ng-cloak" ng-show="position == 'publi-video-inner'">
-                      {include file="advertisement/partials/advertisement_positions_video_inner.tpl"}
-                    </div>
-                    {/is_module_activated}
-                    {is_module_activated name="OPINION_MANAGER"}
-                    <div class="ng-cloak" ng-show="position == 'publi-opinion'">
-                      {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
-                    </div>
-                    <div class="ng-cloak" ng-show="position == 'publi-opinion-inner'">
-                      {include file="advertisement/partials/advertisement_positions_opinion_inner.tpl"}
-                    </div>
-                    {/is_module_activated}
-                    {is_module_activated name="ALBUM_MANAGER"}
-                    <div class="ng-cloak" ng-show="position == 'publi-gallery'">
-                      {include file="advertisement/partials/advertisement_positions_gallery.tpl"}
-                    </div>
-                    <div class="ng-cloak" ng-show="position == 'publi-gallery-inner'">
-                      {include file="advertisement/partials/advertisement_positions_gallery_inner.tpl"}
-                    </div>
-                    {/is_module_activated}
-                    {is_module_activated name="POLL_MANAGER"}
-                    <div class="ng-cloak" ng-show="position == 'publi-poll'">
-                      {include file="advertisement/partials/advertisement_positions_poll.tpl"}
-                    </div>
-                    <div class="ng-cloak" ng-show="position == 'publi-poll-inner'">
-                      {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
-                    </div>
-                    {/is_module_activated}
-                    {is_module_activated name="NEWSLETTER_MANAGER"}
-                    <div class="ng-cloak" ng-show="position == 'publi-newsletter'">
-                      {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
-                    </div>
-                    {/is_module_activated}
-                    {is_module_activated name="AMP_MODULE"}
-                    <div class="ng-cloak" ng-show="position == 'publi-amp'">
-                      <div class="col-md-9">
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="radio">
-                              <input id="amp-inner-button1" name="type_advertisement" type="radio" value="1051" {if isset($advertisement) && $advertisement->type_advertisement == 1051}checked="checked" {/if}/>
-                              <label for="amp-inner-button1">
-                                {t}AMP inner article - Button 1{/t}
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="radio">
-                              <input id="amp-inner-button2" name="type_advertisement" type="radio" value="1052" {if isset($advertisement) && $advertisement->type_advertisement == 1052}checked="checked" {/if}/>
-                              <label for="amp-inner-button2">
-                                {t}AMP inner article - Button 2{/t}
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="radio">
-                              <input id="amp-inner-button3" name="type_advertisement" type="radio" value="1053" {if isset($advertisement) && $advertisement->type_advertisement == 1053}checked="checked" {/if}/>
-                              <label for="amp-inner-button3">
-                                {t}AMP inner article - Button 3{/t}
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {/is_module_activated}
-                    {is_module_activated name="FIA_MODULE"}
-                    <div class="ng-cloak" ng-show="position == 'publi-fia'">
-                      <div class="col-md-9">
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="radio">
-                              <input id="fia-inner-button1" name="type_advertisement" type="radio" value="1075" {if isset($advertisement) && $advertisement->type_advertisement == 1075}checked="checked" {/if}/>
-                              <label for="fia-inner-button1">
-                                {t}Instant Articles inner article - Button 1{/t}
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="radio">
-                              <input id="fia-inner-button2" name="type_advertisement" type="radio" value="1076" {if isset($advertisement) && $advertisement->type_advertisement == 1076}checked="checked" {/if}/>
-                              <label for="fia-inner-button2">
-                                {t}Instant Articles inner article - Button 2{/t}
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="radio">
-                              <input id="fia-inner-button3" name="type_advertisement" type="radio" value="1077" {if isset($advertisement) && $advertisement->type_advertisement == 1077}checked="checked" {/if}/>
-                              <label for="fia-inner-button3">
-                                {t}Instant Articles inner article - Button 3{/t}
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {/is_module_activated}
-                    <div class="ng-cloak" ng-show="position == 'publi-others'">
-                      {foreach $themeAds as $adId => $ad}
-                      {if $ad['theme'] == $app['theme']->uuid}
-                      <div class="row">
-                        <div class="col-md-12">
-                          <div class="radio">
-                            <input id="ad-{$adId}" type="radio" name="type_advertisement" value="{$adId}" {if isset($advertisement) && $advertisement->type_advertisement == $adId}checked="checked" {/if}/>
-                            <label for="ad-{$adId}">
-                              {$ad['name']}
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                      <hr>
-                      {/if}
-                      {/foreach}
-                    </div>
-                  </div><!-- /position-adv -->
-                </div>
-              </div>
+      <div class="grid simple advertisement-positions">
+        {* spinner to show when the page is loading *}
+        <div class="grid-body" ng-if="ui.loading">
+          <div class="spinner-wrapper">
+            <div class="loading-spinner"></div>
+            <div class="spinner-text">{t}Loading{/t}...</div>
+          </div>
+        </div>
+
+        {* contents only shown when page is already loaded *}
+        <div class="grid-title shaded ng-cloak positions-selected">
+          <div class="ng-cloak m-b-5 positions-selected-counter">
+            <span ng-if="positions.length == 0">{t}No positions selected, mark those you want on the form below.{/t}</span>
+            <span ng-if="positions.length > 0">{t 1="[% positions.length %]"}%1 positions{/t}</span>
+          </div>
+          <div class="ng-cloak positions-selected-list collapsed" ng-class="{ collapsed : !expanded.positions }">
+            <div ng-repeat="position in positions| orderBy:'position'" class="position badge p-l-15 p-r-15 m-b-5 m-r-5" >[% extra['ads_positions'][position] %]</div>
+            <div class="position-selected-hidden-counter small-text btn btn-link" ng-click="expanded.positions = !expanded.positions">
+              <span ng-if="!expanded.positions && ui.hidden_elements > 0"> {t 1="[% ui.hidden_elements %]"}And %1 more…{/t}</span>
+              <span ng-if="expanded.positions"><span class="fa fa-chevron-up"></span> {t}Show less…{/t}</span>
             </div>
           </div>
+        </div>
+        <div class="grid-body no-padding ng-cloak">
+          <scrollable-tabset show-drop-down="false" show-tooltips="false" scroll-by="200">
+            <uib-tabset>
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Frontpages{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(0, 99) > 0">[% countPositionsSelectedbyRange(0, 99) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_frontpage.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Article: inner{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(100, 199) > 0">[% countPositionsSelectedbyRange(100, 199) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_article_inner.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+
+              {is_module_activated name="VIDEO_MANAGER"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Video: frontpages{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(200, 299) > 0">[% countPositionsSelectedbyRange(200, 299) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_video_frontpage.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Video: inner{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(300, 399) > 0">[% countPositionsSelectedbyRange(300, 399) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_video_inner.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
+              {is_module_activated name="ALBUM_MANAGER"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Album: frontpages{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(400, 499) > 0">[% countPositionsSelectedbyRange(400, 499) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_album_frontpage.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Album: inner{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(500, 599) > 0">[% countPositionsSelectedbyRange(500, 599) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_album_inner.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
+              {is_module_activated name="OPINION_MANAGER"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Opinion: frontpage{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(600, 699) > 0">[% countPositionsSelectedbyRange(600, 699) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_opinion_frontpage.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Opinion: inner{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(700, 799) > 0">[% countPositionsSelectedbyRange(700, 799) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_opinion_inner.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
+              {is_module_activated name="POLL_MANAGER"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Poll: frontpage{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(800, 899) > 0">[% countPositionsSelectedbyRange(800, 899) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_poll_frontpage.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Poll: inner{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(900, 999) > 0">[% countPositionsSelectedbyRange(900, 999) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
+              {is_module_activated name="NEWSLETTER_MANAGER"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Newsletter{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1000, 1049) > 0">[% countPositionsSelectedbyRange(1000, 1049) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
+              {is_module_activated name="AMP_MODULE"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Google AMP{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1050, 1074) > 0">[% countPositionsSelectedbyRange(1050, 1074) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_amp.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
+              {is_module_activated name="FIA_MODULE"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Facebook Instant Articles{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1075, 1099) > 0">[% countPositionsSelectedbyRange(1075, 1099) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  {include file="advertisement/partials/advertisement_positions_fia.tpl"}
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Others{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1100, null) > 0">[% countPositionsSelectedbyRange(1100, null) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_other.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+            </uib-tabset>
+          </scrollable-tabset>
         </div>
       </div>
     </div>

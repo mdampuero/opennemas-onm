@@ -1,7 +1,3 @@
-.table th,
-.table td {
-  white-space: nowrap;
-}
 .table thead tr .tooltip {
   margin-top: 15px;
 }
@@ -46,39 +42,47 @@ tr:hover .listing-inline-actions {
 .listing-inline-actions {
   margin-top: 5px;
   clear: both;
-}
 
-.listing-inline-actions .link:first-child {
-  margin-left:-5px;
-}
+  .btn-small {
+    padding: 1px 9px;
+  }
+  .btn-danger {
+    background-color: #f78a8b;
+    border-color: #f78a8b;
+  }
 
-.listing-inline-actions .link {
-  color:#576475;
-  padding: 3px;
-  margin: 0 5px;
-}
+  .link:first-child {
+    margin-left:-5px;
+  }
 
-.listing-inline-actions .link:hover {
-  text-decoration: underline;
-}
+  .link {
+    color:#576475;
+    padding: 3px;
+    margin: 0 5px;
+  }
 
-.listing-inline-actions .link-danger {
-  color: #d9534f;
-  border: 0;
-  background: none;
-}
+  .link:hover {
+    text-decoration: underline;
+  }
 
-.listing-inline-actions .link i {
-  margin-right: 4px;
-}
+  .link-danger {
+    color: #d9534f;
+    border: 0;
+    background: none;
+  }
 
-.listing-inline-actions button.link-danger {
-  margin-left: 0px;
-  padding-left: 0px;
-}
+  .link i {
+    margin-right: 4px;
+  }
 
-.listing-inline-actions > *{
-  display: inline-block;
+  button.link-danger {
+    margin-left: 0px;
+    padding-left: 0px;
+  }
+
+  & > *{
+    display: inline-block;
+  }
 }
 
 .pagination-info {
@@ -94,6 +98,7 @@ tr:hover .listing-inline-actions {
     width: 80%;
   }
 }
+
 @media (max-width: 767px) {
   .table > thead > tr > th,
   .table > tbody > tr > td {
@@ -105,17 +110,20 @@ tr:hover .listing-inline-actions {
     padding-left: 25px !important;
   }
 
-  .grid-footer .pagination-info {
-    margin: 0 auto;
-    text-align: center;
-    display: block;
-    text-align: center;
-    width: 100%;
-  }
-  .grid-footer .pagination-wrapper {
-    text-align:center;
-    width:100%;
-    display:block;
-    float:none !important;
+  .grid-footer {
+    .pagination-info {
+      margin: 0 auto;
+      text-align: center;
+      display: block;
+      text-align: center;
+      width: 100%;
+    }
+
+    .pagination-wrapper {
+      text-align:center;
+      width:100%;
+      display:block;
+      float:none !important;
+    }
   }
 }

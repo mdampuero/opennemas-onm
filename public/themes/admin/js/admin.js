@@ -87,7 +87,7 @@ $(document).ready(function() {
       e.preventDefault();
     });
 
-    $('.nav-pills, .nav-tabs').tabdrop();
+    $('.nav-tabs-tabdrop .nav-pills, .nav-tabs-tabdrop .nav-tabs').tabdrop();
 
     $('#formulario').on('submit', function() {
       var btn = $('.btn.btn-primary');

@@ -31,6 +31,7 @@
       @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
       @Common/components/angular-loading-bar/build/loading-bar.min.css,
       @Common/components/angular-ui-select/dist/select.min.css,
+      @Common/components/angular-ui-tab-scroll/angular-ui-tab-scroll.css,
       @Common/components/animate.css/animate.min.css,
       @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
       @Common/components/messenger/build/css/messenger-theme-flat.css,
@@ -449,7 +450,7 @@
   {block name="global-js"}
       <!-- @Common/components/modernizr/modernizr.js, -->
     {javascripts src="
-      @Common/components/jquery/jquery.min.js,
+      @Common/components/jquery2/dist/jquery.min.js,
       @Common/components/bootstrap/dist/js/bootstrap.min.js,
       @Common/components/breakpoints/breakpoints.js,
       @Common/components/moment/min/moment-with-locales.min.js,
@@ -529,6 +530,7 @@
       @Common/components/angular-file-model/angular-file-model.js,
       @Common/components/angular-ui-sortable/sortable.min.js,
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.js,
+      @Common/components/angular-ui-tab-scroll/angular-ui-tab-scroll.js,
       @Common/components/angulartics/dist/angulartics-ga.min.js,
       @Common/components/angulartics/dist/angulartics.min.js,
       @Common/components/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min.js,

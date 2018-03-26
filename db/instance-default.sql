@@ -96,6 +96,16 @@ CREATE TABLE `advertisements_positions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `advertisements_positions`
+--
+
+LOCK TABLES `advertisements_positions` WRITE;
+/*!40000 ALTER TABLE `advertisements_positions` DISABLE KEYS */;
+INSERT INTO `advertisements_positions` VALUES (128,2),(130,5),(131,6),(133,3),(134,110),(135,3),(136,31),(137,101),(139,104),(141,601),(143,602),(144,603),(145,609),(148,701),(149,605),(157,1),(159,703),(224,105),(238,705),(239,193),(507,109),(508,103),(510,11),(615,1),(616,21),(617,101),(618,2202),(619,601),(620,701),(621,704),(622,709),(623,710),(624,793),(625,3202);
+/*!40000 ALTER TABLE `advertisements_positions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `albums`
 --
 

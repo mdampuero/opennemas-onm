@@ -195,7 +195,10 @@ class AdvertisementController extends Controller
         ];
 
         $tags[] = 'content-' . $advertisement->id;
-        $tags[] = 'position-' . $advertisement->type_advertisement;
+
+        foreach ($advertisement->positions as $position) {
+            $tags[] = 'position-' . $position;
+        }
 
         return implode(',', $tags);
     }
@@ -253,7 +256,7 @@ class AdvertisementController extends Controller
             $element->params['user_groups'] = [];
         }
 
-        // Convert endtime to UTC
+        // Convert starttime to UTC
         $element->starttime = $this->setTimeZoneToUTC($element->starttime);
 
         // Convert endtime to UTC
@@ -261,10 +264,32 @@ class AdvertisementController extends Controller
 
         $object = new \stdClass();
 
+        $hasInterstitial = array_filter(
+            $element->positions,
+            function ($position) {
+                return (($position + 50) % 100) === 0;
+            }
+        );
+
+        $types = [];
+        if (count($hasInterstitial) > 0) {
+            $types[] = 'interstitial';
+        }
+
+        $hasNormal = array_filter(
+            $element->positions,
+            function ($position) {
+                return (($position + 50) % 100) !== 0;
+            }
+        );
+
+        if (count($hasNormal) > 0) {
+            $types[] = 'normal';
+        }
+
         $object->id          = (int) $element->pk_content;
-        $object->type        = ((($element->type_advertisement + 50) % 100) == 0) ?
-            'interstitial' : 'normal'; // Types: normal, interstitial
-        $object->position    = array_map('intval', explode(',', $element->type_advertisement));
+        $object->type        = implode('+', $types); // Types: normal, interstitial, insterstitial+normal
+        $object->position    = $element->positions;
         $object->publicId    = date('YmdHis', strtotime($element->created)) .
             sprintf('%06d', $element->pk_advertisement);
         $object->timeout     = (int) $element->timeout;

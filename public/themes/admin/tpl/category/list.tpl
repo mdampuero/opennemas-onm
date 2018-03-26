@@ -35,7 +35,7 @@
   </div>
   <div class="content">
     <div class="grid simple ng-cloak">
-      <div class="grid-body no-padding">
+      <div class="grid-body no-padding nav-tabs-tabdrop">
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation" class="active"><a href="#article" aria-controls="article" role="tab" data-toggle="tab">{t}For articles{/t}</a></li>
           {is_module_activated name="ALBUM_MANAGER"}

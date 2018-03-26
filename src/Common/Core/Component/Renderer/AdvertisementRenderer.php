@@ -124,6 +124,10 @@ class AdvertisementRenderer
      */
     public function renderInlineDFPHeader($ads, $params)
     {
+        if (empty($ads)) {
+            return '';
+        }
+
         $ads = array_filter($ads, function ($a) {
             return $a->with_script == 3
                 && array_key_exists('googledfp_unit_id', $a->params)
@@ -224,6 +228,9 @@ class AdvertisementRenderer
      */
     public function renderInlineReviveHeader($ads)
     {
+        if (empty($ads)) {
+            return '';
+        }
         $ads = array_filter($ads, function ($a) {
             return $a->with_script == 2
                 && array_key_exists('openx_zone_id', $a->params)
@@ -261,7 +268,7 @@ class AdvertisementRenderer
      */
     public function renderInlineReviveSlot($ad)
     {
-        $iframe = in_array($ad->type_advertisement, [ 50, 150, 250, 350, 450, 550 ]);
+        $iframe = in_array($ad->positions, [ 50, 150, 250, 350, 450, 550 ]);
         $url    = $this->router->generate('frontend_ad_show', [
             'id' => $ad->pk_content
         ]);
@@ -283,6 +290,10 @@ class AdvertisementRenderer
      */
     public function renderInlineInterstitial($ads)
     {
+        if (empty($ads)) {
+            return '';
+        }
+
         $tpl = '<div class="interstitial">'
             . '<div class="interstitial-wrapper" style="width: %s;">'
                 . '<div class="interstitial-header">'
@@ -302,7 +313,11 @@ class AdvertisementRenderer
         . '</div>';
 
         $interstitials = array_filter($ads, function ($a) {
-            return ($a->type_advertisement + 50) % 100 == 0;
+            $hasInterstitial = array_filter($a->positions, function ($pos) {
+                return ($pos + 50) % 100 == 0;
+            });
+
+            return $hasInterstitial;
         });
 
         if (empty($interstitials)) {
@@ -332,7 +347,7 @@ class AdvertisementRenderer
             $orientation,
             $ad->pk_advertisement,
             empty($ad->timeout) ? 5 : $ad->timeout,
-            $ad->type_advertisement,
+            implode(',', $ad->positions),
             $this->renderInline($ad)
         );
     }
@@ -349,7 +364,7 @@ class AdvertisementRenderer
     {
         $html  = '<div class="ad-slot oat"%s data-type="%s"%s></div>';
         $id    = '';
-        $type  = $ad->type_advertisement;
+        $type  = $ad->positions;
         $width = '';
 
         // Style for advertisements via renderbanner
@@ -361,8 +376,9 @@ class AdvertisementRenderer
         }
 
         // Style for floating advertisements in frontpage manager
-        if ($ad->type_advertisement == 37) {
-            $id .= ' data-id="' . $ad->pk_content . '" ';
+        if (array_key_exists('floating', $params) && $params['floating'] == true) {
+            $type = 37;
+            $id  .= ' data-id="' . $ad->pk_content . '" ';
         }
 
         return sprintf($html, $id, $type, $width);

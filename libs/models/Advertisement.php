@@ -202,7 +202,7 @@ class Advertisement extends Content
         }
 
         if (empty($properties['positions'])) {
-            $this->positions = [ $this->type_advertisement ];
+            $this->positions = [];
         }
 
         return $this;
@@ -229,15 +229,22 @@ class Advertisement extends Content
                 [ $id ]
             );
 
-            $rs['positions'] = getService('dbal_connection')->fetchAssoc(
+            if (!$rs) {
+                return false;
+            }
+
+            $positions = getService('dbal_connection')->fetchAll(
                 'SELECT position_id FROM advertisements_positions '
                 . 'WHERE advertisement_id=?',
                 [ $id ]
             );
-
-            if (!$rs) {
+            if ($positions === false) {
                 return false;
             }
+
+            $rs['positions'] = array_map(function ($el) {
+                return $el['position_id'];
+            }, $positions);
         } catch (\Exception $e) {
             getService('error.log')->error($e->getMessage());
             return false;
@@ -279,46 +286,29 @@ class Advertisement extends Content
 
         parent::create($data);
 
-        if (!empty($data['script'])) {
-            $data['script'] = base64_encode($data['script']);
-        }
-
-        if (!isset($data['with_script'])) {
-            $data['with_script'] = 0;
-        }
-
         $data['pk_advertisement'] = $data['id'] = $this->id;
-        $data['overlap']          = (isset($data['overlap'])) ? $data['overlap'] : 0;
-        $data['timeout']          = (isset($data['timeout'])) ? $data['timeout'] : null;
-        $data['type_medida']      = (!empty($data['type_medida'])) ? $data['type_medida'] : null;
 
         try {
             $rs = getService('dbal_connection')->insert(
                 'advertisements',
                 [
                     'pk_advertisement'      => $data['pk_advertisement'],
-                    'type_advertisement'    => (int) $data['type_advertisement'],
                     'fk_content_categories' => $data['categories'],
                     'path'                  => $data['img'],
                     'url'                   => $data['url'],
-                    'type_medida'           => $data['type_medida'],
                     'num_clic'              => (int) $data['num_clic'],
                     'num_clic_count'        => 0, // num_clic_count
                     'num_view'              => (int) $data['num_view'],
-                    'with_script'           => (int) $data['with_script'],
-                    'script'                => $data['script'],
-                    'overlap'               => (int) $data['overlap'],
-                    'timeout'               => (int) $data['timeout'],
+                    'type_medida'           => (!empty($data['type_medida'])) ? $data['type_medida'] : null,
+                    'with_script'           => (isset($data['with_script'])) ? (int) $data['with_script'] : 0,
+                    'script'                => (!empty($data['script'])) ? base64_encode($data['script']) : '',
+                    'overlap'               => (isset($data['overlap'])) ? (int) $data['overlap'] : 0,
+                    'timeout'               => (isset($data['timeout'])) ? (int) $data['timeout'] : null,
+
                 ]
             );
 
-            $rs = getService('dbal_connection')->insert(
-                'advertisements_positions',
-                [
-                    'advertisement_id' => $data['pk_advertisement'],
-                    'position_id'      => (int) $data['type_advertisement'],
-                ]
-            );
+            $this->savePositions($data['id'], $data['positions']);
 
             $conn->commit();
 
@@ -326,6 +316,7 @@ class Advertisement extends Content
 
             return $this;
         } catch (\Exception $e) {
+            $conn->rollback();
             getService('error.log')->error($e->getMessage());
             return false;
         }
@@ -344,34 +335,24 @@ class Advertisement extends Content
         $conn->beginTransaction();
 
         // TODO: Remove when dispatching events from custom contents
-        $this->old_position = $this->type_advertisement;
+        $this->old_position = $this->positions;
 
         parent::update($data);
-
-        if (!empty($data['script'])) {
-            $data['script'] = base64_encode($data['script']);
-        }
-
-        $data['overlap']     = (isset($data['overlap'])) ? $data['overlap'] : 0;
-        $data['timeout']     = (isset($data['timeout'])) ? $data['timeout'] : null;
-        $data['with_script'] = (isset($data['with_script'])) ? $data['with_script'] : 0;
-        $data['type_medida'] = (!empty($data['type_medida'])) ? $data['type_medida'] : null;
 
         try {
             $rs = getService('dbal_connection')->update(
                 'advertisements',
                 [
-                    'type_advertisement'    => (int) $data['type_advertisement'],
                     'fk_content_categories' => $data['categories'],
                     'path'                  => $data['img'],
                     'url'                   => $data['url'],
-                    'type_medida'           => $data['type_medida'],
                     'num_clic'              => (int) $data['num_clic'],
                     'num_view'              => (int) $data['num_view'],
-                    'with_script'           => (int) $data['with_script'],
-                    'script'                => $data['script'],
-                    'overlap'               => (int) $data['overlap'],
-                    'timeout'               => (int) $data['timeout'],
+                    'type_medida'           => (!empty($data['type_medida'])) ? $data['type_medida'] : null,
+                    'with_script'           => (isset($data['with_script'])) ? (int) $data['with_script'] : 0,
+                    'script'                => (!empty($data['script'])) ? base64_encode($data['script']) : '',
+                    'overlap'               => (isset($data['overlap'])) ? (int) $data['overlap'] : 0,
+                    'timeout'               => (isset($data['timeout'])) ? (int) $data['timeout'] : null,
                 ],
                 [ 'pk_advertisement' => (int) $data['id'] ]
             );
@@ -381,13 +362,7 @@ class Advertisement extends Content
                 [ 'advertisement_id' => $data['id'] ]
             );
 
-            $rs = getService('dbal_connection')->insert(
-                'advertisements_positions',
-                [
-                    'advertisement_id' => $data['id'],
-                    'position_id'      => (int) $data['type_advertisement'],
-                ]
-            );
+            $this->savePositions($data['id'], $data['positions']);
 
             $conn->commit();
 
@@ -395,6 +370,7 @@ class Advertisement extends Content
 
             return $this;
         } catch (\Exception $e) {
+            $conn->rollback();
             getService('error.log')->error($e->getMessage());
             return false;
         }
@@ -467,41 +443,6 @@ class Advertisement extends Content
         }
 
         return $rs['url'];
-    }
-
-    /**
-     * Function that retrieves the name of the placeholder given
-     * the type_advertisement
-     * For example type=503  => name=publi-gallery-inner
-     *
-     * @param  string $advType
-     * @return string $name_advertisement
-     */
-    public function getNameOfAdvertisementPlaceholder($advType)
-    {
-        if ($advType > 0 && $advType < 100) {
-            return 'publi-portada';
-        } elseif ($advType > 100 && $advType < 200) {
-            return 'publi-interior';
-        } elseif ($advType > 200 && $advType < 300) {
-            return 'publi-video';
-        } elseif ($advType > 300 && $advType < 400) {
-            return 'publi-video-interior';
-        } elseif ($advType > 400 && $advType < 500) {
-            return 'publi-gallery';
-        } elseif ($advType > 500 && $advType < 600) {
-            return 'publi-gallery-inner';
-        } elseif ($advType > 600 && $advType < 700) {
-            return 'publi-opinion';
-        } elseif ($advType > 700 && $advType < 800) {
-            return 'publi-opinion-interior';
-        } elseif ($advType > 800 && $advType < 900) {
-            return 'publi-poll';
-        } elseif ($advType > 900 && $advType < 1000) {
-            return 'publi-poll-inner';
-        } elseif ($advType > 1000 && $advType < 1100) {
-            return 'publi-newsletter';
-        }
     }
 
     /**
@@ -628,8 +569,38 @@ class Advertisement extends Content
             return '';
         }
 
+        // With multiple positions we cannot rely on the type_advertisement=37
+        // any more so I'm telling the renderer that this is a floating banner
+        $params['floating'] = true;
+
         $adsRenderer = getService('core.renderer.advertisement');
 
         return $adsRenderer->render($this, $params);
+    }
+
+    /**
+     * Saves the advertisement positions given the id and an array of positions
+     *
+     * @param int   $id                     The id of the advertisement
+     * @param array $advertisementPositions array of integers that depicts
+     *                                      the list of advertisement ids
+     *
+     * @return boolean true if the positions were saved
+     **/
+    private function savePositions($id, $advertisementPositions)
+    {
+        if (empty($advertisementPositions)) {
+            return true;
+        }
+
+        $positions = [];
+        foreach (array_unique($advertisementPositions) as $position) {
+            $positions[] = sprintf('(%s, %s)', $id, (int) $position);
+        }
+
+        $sql = 'INSERT INTO `advertisements_positions`(`advertisement_id`, `position_id`) VALUES %s';
+        $rs  = getService('dbal_connection')->executeUpdate(sprintf($sql, implode(', ', $positions)));
+
+        return true;
     }
 }

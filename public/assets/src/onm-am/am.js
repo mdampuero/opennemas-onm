@@ -219,7 +219,7 @@
 
     // Display an interstitial if present
     var interstitials = ads.filter(function(e) {
-      return e.type === 'interstitial' && self.isVisible(e);
+      return e.type.indexOf('interstitial') !== -1 && self.isVisible(e);
     });
 
     if (interstitials.length === 0) {
