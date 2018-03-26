@@ -1,3 +1,7 @@
+api_v1_backend_author:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/author.yml'
+    prefix:   /backend
+
 api_v1_backend_article:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/article.yml'
     prefix:   /backend
