@@ -18,7 +18,6 @@
     .controller('UserCtrl', [
       '$controller', '$http', '$scope', '$uibModal', 'cleaner',
       function($controller, $http, $scope, $uibModal, cleaner) {
-        // Initialize the super class and extend it.
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**

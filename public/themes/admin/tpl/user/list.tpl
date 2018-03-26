@@ -150,10 +150,10 @@
                     </div>
                   </th>
                   <th class="hidden-xs text-center" width="80"><i class="fa fa-picture-o"></i></th>
-                  <th>{t}Name{/t}</th>
+                  <th width="400">{t}Name{/t}</th>
+                  <th class="hidden-xs" width="400">{t}Email{/t}</th>
                   <th class="hidden-sm hidden-xs" width="240">{t}Username{/t}</th>
-                  <th class="hidden-xs" width="300">{t}Email{/t}</th>
-                  <th class="hidden-xs" width="240">{t}User groups{/t}</th>
+                  <th class="hidden-sm hidden-xs">{t}User groups{/t}</th>
                   <th class="hidden-sm hidden-xs text-center" width="100">{t}Social{/t}</th>
                   <th class="text-center" width="50">{t}Enabled{/t}</th>
                 </tr>
@@ -192,13 +192,13 @@
                       </button>
                     </div>
                   </td>
-                  <td class="hidden-sm hidden-xs">
-                    [% item.username %]
-                  </td>
                   <td class="hidden-xs">
                     [% item.email %]
                   </td>
-                  <td class="hidden-xs">
+                  <td class="hidden-sm hidden-xs">
+                    [% item.username %]
+                  </td>
+                  <td class="hidden-sm hidden-xs">
                     <ul class="no-style">
                       <li class="m-b-5 m-r-5 pull-left" ng-repeat="(id, user_group) in item.user_groups" ng-if="data.extra.user_groups[id] && user_group.status !== 0" uib-tooltip="{t}User group disabled{/t}" tooltip-enable="data.extra.user_groups[id].enabled === 0">
                         <a class="label text-uppercase" ng-class="{ 'label-danger': !data.extra.user_groups[id].enabled, 'label-default': data.extra.user_groups[id].enabled }" href="[% routing.generate('backend_user_group_show', { id: id }) %]">

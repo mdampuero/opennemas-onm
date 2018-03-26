@@ -102,8 +102,8 @@ class UserController extends Controller
 
         return new JsonResponse([
             'items' => $us->responsify($response['items']),
-            'total'   => $response['total'],
-            'extra'   => $this->getExtraData($response['items'])
+            'total' => $response['total'],
+            'extra' => $this->getExtraData($response['items'])
         ]);
     }
 

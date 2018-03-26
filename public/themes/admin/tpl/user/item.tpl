@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form name="form" ng-controller="UserCtrl" ng-init="getItem({$id});master = {if $app.user->isMaster()}true{else} false{/if}">
+  <form name="form" ng-controller="UserCtrl" ng-init="getItem({$id});master = {if $app.user->isMaster()}true{else}false{/if}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -141,7 +141,7 @@
                       </div>
                     </div>
                     <div class="form-group" ng-class="{ 'has-error': form.email.$dirty && form.email.$invalid }">
-                      <label class="control-label" for="email">{t}Email{/t}</label>
+                      <label class="form-label" for="email">{t}Email{/t}</label>
                       <div class="controls input-with-icon right">
                         <span class="icon right" ng-if="!flags.http.loading">
                           <span class="fa fa-check text-success" ng-if="form.email.$dirty && form.email.$valid"></span>
@@ -152,7 +152,7 @@
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="form-label" for="url">{t}Blog Url{/t}</label>
+                      <label class="form-label" for="url">{t}Blog URL{/t}</label>
                       <div class="controls">
                         <input class="form-control" id="url" name="url" ng-model="item.url" placeholder="http://" type="text">
                       </div>
@@ -170,7 +170,7 @@
                       </div>
                     </div>
                     <div class="form-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$invalid }">
-                      <label class="control-label" for="password">{t}Password{/t}</label>
+                      <label class="form-label" for="password">{t}Password{/t}</label>
                       <div class="controls">
                         <div class="input-group">
                           <span class="input-group-addon pointer" ng-click="passwordUnlocked = !passwordUnlocked">
@@ -181,7 +181,7 @@
                       </div>
                     </div>
                     <div class="form-group" ng-class="{ 'has-error': form.password.$valid && item.password && item.password !== rpassword }">
-                      <label class="control-label" for="rpassword">{t}Confirm password{/t}</label>
+                      <label class="form-label" for="rpassword">{t}Confirm password{/t}</label>
                       <div class="controls">
                         <div class="input-group">
                           <span class="input-group-addon pointer" ng-click="rpasswordUnlocked = !rpasswordUnlocked">
@@ -332,13 +332,13 @@
                   </div>
                   <div class="grid-body">
                     <div class="form-group">
-                      <label class="control-label" for="facebook_login">{t}Facebook{/t}</label>
+                      <label class="form-label" for="facebook_login">{t}Facebook{/t}</label>
                       <div class="controls">
                         <iframe src="{url name=backend_user_social id=$user['id'] resource='facebook'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="control-label" for="twitter_login">{t}Twitter{/t}</label>
+                      <label class="form-label" for="twitter_login">{t}Twitter{/t}</label>
                       <div class="controls">
                         <iframe src="{url name=backend_user_social id=$user['id'] resource='twitter'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
                       </div>
