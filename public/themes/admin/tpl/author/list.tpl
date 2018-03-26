@@ -122,9 +122,11 @@
                       <label for="select-all"></label>
                     </div>
                   </th>
-                  <th class="center" width="80"><i class="fa fa-picture-o"></i></th>
+                  <th class="hidden-xs text-center" width="80"><i class="fa fa-picture-o"></i></th>
                   <th width="400">{t}Name{/t}</th>
-                  <th class="hidden-xs" >{t}Biography{/t}</th>
+                  <th class="hidden-xs" width="400">{t}Email{/t}</th>
+                  <th class="text-center" width="100">{t}Blog{/t}</th>
+                  <th class="hidden-sm hidden-xs">{t}Biography{/t}</th>
                 </tr>
               </thead>
               <tbody>
@@ -135,12 +137,22 @@
                       <label for="checkbox[%$index%]"></label>
                     </div>
                   </td>
-                  <td class="center">
+                  <td class="text-center hidden-xs">
                     <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="extra.photos[item.avatar_img_id].path_img" transform="thumbnail,50,50" ng-if="item.avatar_img_id && item.avatar_img_id != 0"></dynamic-image>
                     <gravatar class="gravatar img-thumbnail img-thumbnail-circle" ng-model="item.email" size="60" ng-if="!item.avatar_img_id || item.avatar_img_id == 0"></gravatar>
                   </td>
                   <td class="left">
-                    [% item.name %]
+                    <strong class="hidden-xs" ng-if="item.name">
+                      [% item.name %]
+                    </strong>
+                    <span class="visible-xs" ng-if="item.name">
+                      <strong>{t}Name{/t}:</strong>
+                      [% item.name%]
+                    </span>
+                    <span class="visible-xs">
+                      <strong>{t}Email{/t}:</strong>
+                      [% item.email%]
+                    </span>
                     <div class="listing-inline-actions">
                       {acl isAllowed="AUTHOR_UPDATE"}
                       <a class="link" href="[% routing.generate('backend_author_show', { id:  item.id }) %]" title="{t}Edit{/t}">
@@ -155,12 +167,18 @@
                       {/acl}
                     </div>
                   </td>
-                  <td class="left hidden-xs">
+                  <td class="hidden-xs">
+                    [% item.email%]
+                  </td>
+                  <td class="text-center">
+                    <i class="fa" ng-class="{ 'fa-check text-success': item.is_blog == 1, 'fa-times text-danger': !item.is_blog || item.is_blog == 0 }"></i>
+                  </td>
+                  <td class="hidden-sm hidden-xs">
                     <span ng-if="item.is_blog == 1">
                       <strong>Blog </strong>:
                     </span>
-                    <span ng-if="item.bio != ''">[% item.bio %]</span>
-                    <span ng-if="item.bio == ''">{t}No biography set{/t}</span>
+                    <span ng-if="item.bio">[% item.bio %]</span>
+                    <span ng-if="!item.bio"><i>{t}No biography set{/t}</i></span>
                   </td>
                 </tr>
               </tbody>
