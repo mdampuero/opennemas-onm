@@ -25,6 +25,16 @@
          * @memberOf BaseCtrl
          *
          * @description
+         *  An object to backup properties.
+         *
+         * @type {Object}
+         */
+        $scope.backup = {};
+
+        /**
+         * @memberOf BaseCtrl
+         *
+         * @description
          *  The list configuration.
          *
          * @type {Object}

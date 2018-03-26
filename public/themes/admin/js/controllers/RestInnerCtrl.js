@@ -27,16 +27,6 @@
          * @memberOf RestInnerCtrl
          *
          * @description
-         *  An object to backup properties before edition.
-         *
-         * @type {Object}
-         */
-        $scope.backup = {};
-
-        /**
-         * @memberOf RestInnerCtrl
-         *
-         * @description
          *  The item object.
          *
          * @type {Object}

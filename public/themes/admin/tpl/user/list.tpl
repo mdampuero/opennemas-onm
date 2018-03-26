@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div ng-app="BackendApp" ng-controller="UserListCtrl" ng-init="list();master = {if $app.user->isMaster()}true{else} false{/if}">
+  <div ng-app="BackendApp" ng-controller="UserListCtrl" ng-init="init();master = {if $app.user->isMaster()}true{else} false{/if}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -159,7 +159,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-if="items.length > 0" ng-repeat="item in items" ng-class="{ row_selected: isSelected(items.id) }">
+                <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(items.id) }">
                   <td class="checkbox-cell">
                     <div class="checkbox check-default">
                       <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
@@ -231,7 +231,7 @@
             </table>
           </div>
         </div>
-        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && items.length > 0">
+        <div class="grid-footer clearfix ng-cloak">
           <div class="pull-right">
             <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>
@@ -244,5 +244,5 @@
     <script type="text/ng-template" id="modal-confirm">
       {include file="user/modal.confirm.tpl"}
     </script>
-  </form>
+  </div>
 {/block}

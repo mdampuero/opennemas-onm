@@ -217,21 +217,6 @@
         };
 
         /**
-         * @function parseItem
-         * @memberOf UserGroupCtrl
-         *
-         * @description
-         *   Gets the user group from the data in reponse.
-         *
-         * @param {Object} data The data in the response.
-         */
-        $scope.parseItem = function(data) {
-          if (data.user_group) {
-            $scope.item = data.user_group;
-          }
-        };
-
-        /**
          * @function selectAll
          * @memberOf UserGroupCtrl
          *

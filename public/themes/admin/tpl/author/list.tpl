@@ -1,6 +1,7 @@
 {extends file="base/admin.tpl"}
+
 {block name="content"}
-  <div ng-app="BackendApp" ng-controller="AuthorListCtrl" ng-init="list()">
+  <div ng-app="BackendApp" ng-controller="AuthorListCtrl" ng-init="init()">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -23,7 +24,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <a class="btn btn-success text-uppercase" href="{url name=backend_author_create}" title="{t}Create new author{/t}" accesskey="c" id="create-button">
+                <a class="btn btn-success text-uppercase" href="[% routing.generate('backend_author_create') %]">
                   <i class="fa fa-plus"></i>
                   {t}Create{/t}
                 </a>
@@ -63,7 +64,6 @@
         </div>
       </div>
     </div>
-
     <div class="page-navbar filters-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -90,29 +90,29 @@
           </ul>
           <ul class="nav quick-section pull-right ng-cloak" ng-if="items.length > 0">
             <li class="quicklinks hidden-xs">
-              <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
+              <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
             </li>
           </ul>
         </div>
       </div>
     </div>
-
     <div class="content">
-      <div class="grid simple">
+      <div class="listing-no-contents" ng-hide="!flags.http.loading">
+        <div class="text-center p-b-15 p-t-15">
+          <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
+          <h3 class="spinner-text">{t}Loading{/t}...</h3>
+        </div>
+      </div>
+      <div class="listing-no-contents ng-cloak" ng-if="!flags.http.loading && items.length == 0">
+        <div class="text-center p-b-15 p-t-15">
+          <i class="fa fa-4x fa-warning text-warning"></i>
+          <h3>{t}Unable to find any author that matches your search.{/t}</h3>
+          <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
+        </div>
+      </div>
+      <div class="grid simple ng-cloak" ng-if="!flags.http.loading && items.length > 0">
         <div class="grid-body no-padding">
-          <div class="spinner-wrapper" ng-if="loading">
-            <div class="loading-spinner"></div>
-            <div class="spinner-text">{t}Loading{/t}...</div>
-          </div>
-
-          <div class="listing-no-contents ng-cloak" ng-if="!loading && items.length == 0">
-            <div class="center">
-            <h4>{t}Unable to find any author that matches your search.{/t}</h4>
-              <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
-            </div>
-          </div>
-
-          <div class="table-wrapper ng-cloak" ng-if="!loading && items.length > 0">
+          <div class="table-wrapper">
             <table class="table table-hover no-margin">
               <thead>
                 <tr>
@@ -138,10 +138,10 @@
                     </div>
                   </td>
                   <td class="text-center hidden-xs">
-                    <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="extra.photos[item.avatar_img_id].path_img" transform="thumbnail,50,50" ng-if="item.avatar_img_id && item.avatar_img_id != 0"></dynamic-image>
+                    <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path_img" transform="thumbnail,50,50" ng-if="item.avatar_img_id && item.avatar_img_id != 0"></dynamic-image>
                     <gravatar class="gravatar img-thumbnail img-thumbnail-circle" ng-model="item.email" size="60" ng-if="!item.avatar_img_id || item.avatar_img_id == 0"></gravatar>
                   </td>
-                  <td class="left">
+                  <td>
                     <strong class="hidden-xs" ng-if="item.name">
                       [% item.name %]
                     </strong>
@@ -156,13 +156,12 @@
                     <div class="listing-inline-actions">
                       {acl isAllowed="AUTHOR_UPDATE"}
                       <a class="link" href="[% routing.generate('backend_author_show', { id:  item.id }) %]" title="{t}Edit{/t}">
-                        <i class="fa fa-pencil"></i> {t}Edit{/t}
+                        <i class="fa fa-pencil"></i>{t}Edit{/t}
                       </a>
                       {/acl}
                       {acl isAllowed="AUTHOR_DELETE"}
                       <button class="link link-danger" ng-click="delete(item.id)" type="button">
-                        <i class="fa fa-trash-o"></i>
-                        {t}Delete{/t}
+                        <i class="fa fa-trash-o"></i>{t}Delete{/t}
                       </button>
                       {/acl}
                     </div>
@@ -175,7 +174,7 @@
                   </td>
                   <td class="hidden-sm hidden-xs">
                     <span ng-if="item.is_blog == 1">
-                      <strong>Blog </strong>:
+                      <strong>Blog:</strong>:
                     </span>
                     <span ng-if="item.bio">[% item.bio %]</span>
                     <span ng-if="!item.bio"><i>{t}No biography set{/t}</i></span>
@@ -185,18 +184,15 @@
             </table>
           </div>
         </div>
-        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && items.length > 0">
+        <div class="grid-footer clearfix ng-cloak">
           <div class="pull-right">
-            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>
         </div>
       </div>
     </div>
     <script type="text/ng-template" id="modal-delete">
       {include file="user/modal.delete.tpl"}
-    </script>
-    <script type="text/ng-template" id="modal-delete-selected">
-      {include file="common/modals/_modalBatchDelete.tpl"}
     </script>
   </div>
 {/block}
