@@ -29,33 +29,33 @@
               <h5>{if !isset($special->id)}{t}Creating special{/t}{else}{t}Editing special{/t}{/if}</h5>
             </li>
           </ul>
-        </div>
-        <div class="all-actions pull-right">
-          <ul class="nav quick-section">
-            <li>
-              <a class="btn btn-link" href="{url name=admin_specials}">
-                <span class="fa fa-reply"></span>
-              </a>
-            </li>
-            <li class="quicklinks"><span class="h-seperate"></span></li>
-            <li class="quicklinks">
-              {if !is_null($special->id)}
-                {acl isAllowed="SPECIAL_UPDATE"}
-                  <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit" id="update-button">
-                    <i class="fa fa-save"></i>
-                    <span class="text">{t}Update{/t}</span>
-                  </button>
-                {/acl}
-              {else}
-                {acl isAllowed="SPECIAL_CREATE"}
-                  <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
-                    <i class="fa fa-save"></i>
-                    <span class="text">{t}Save{/t}</span>
-                  </button>
-                {/acl}
-              {/if}
-            </li>
-          </ul>
+          <div class="all-actions pull-right">
+            <ul class="nav quick-section">
+              <li>
+                <a class="btn btn-link" href="{url name=admin_specials}">
+                  <span class="fa fa-reply"></span>
+                </a>
+              </li>
+              <li class="quicklinks"><span class="h-seperate"></span></li>
+              <li class="quicklinks">
+                {if !is_null($special->id)}
+                  {acl isAllowed="SPECIAL_UPDATE"}
+                    <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit" id="update-button">
+                      <i class="fa fa-save"></i>
+                      <span class="text">{t}Update{/t}</span>
+                    </button>
+                  {/acl}
+                {else}
+                  {acl isAllowed="SPECIAL_CREATE"}
+                    <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
+                      <i class="fa fa-save"></i>
+                      <span class="text">{t}Save{/t}</span>
+                    </button>
+                  {/acl}
+                {/if}
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

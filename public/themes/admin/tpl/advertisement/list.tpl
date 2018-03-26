@@ -17,26 +17,26 @@
             </h4>
           </li>
         </ul>
-      </div>
-      <div class="all-actions pull-right">
-        <ul class="nav quick-section">
-          {acl isAllowed="ADVERTISEMENT_SETTINGS"}
-          <li class="quicklinks">
-            <a class="btn btn-link" href="{url name=admin_ads_config}">
-              <i class="fa fa-cog fa-lg"></i>
-            </a>
-          </li>
-          <li class="quicklinks">
-            <span class="h-seperate"></span>
-          </li>
-          {/acl}
-          <li class="quicklinks">
-            <a href="{url name=admin_ad_create}" class="btn btn-primary" id="create-button">
-              <i class="fa fa-plus"></i>
-              {t}Create{/t}
-            </a>
-          </li>
-        </ul>
+        <div class="all-actions pull-right">
+          <ul class="nav quick-section">
+            {acl isAllowed="ADVERTISEMENT_SETTINGS"}
+            <li class="quicklinks">
+              <a class="btn btn-link" href="{url name=admin_ads_config}">
+                <i class="fa fa-cog fa-lg"></i>
+              </a>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+            {/acl}
+            <li class="quicklinks">
+              <a href="{url name=admin_ad_create}" class="btn btn-primary" id="create-button">
+                <i class="fa fa-plus"></i>
+                {t}Create{/t}
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
