@@ -16,8 +16,8 @@
      *   Check billing information when saving author.
      */
     .controller('AuthorCtrl', [
-      '$controller', '$http', '$scope', '$uibModal', 'cleaner',
-      function($controller, $http, $scope, $uibModal, cleaner) {
+      '$controller', '$http', '$scope', '$timeout', '$uibModal', 'cleaner',
+      function($controller, $http, $scope, $timeout, $uibModal, cleaner) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -29,7 +29,7 @@
          * @type {Object}
          */
         $scope.item = {
-          name: '',
+          name: null,
           type: 0,
           user_groups: {
             3: {
@@ -114,6 +114,26 @@
               data.extra.photos[$scope.item.avatar_img_id];
           }
         };
+
+        // Generates an username when name changes
+        $scope.$watch('item.name', function(nv, ov) {
+          if (!ov || !nv || nv === ov) {
+            return;
+          }
+
+          $scope.flags.http.slug = 1;
+
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+          }
+
+          $scope.tm = $timeout(function() {
+            $scope.getSlug(nv, function(response) {
+              $scope.item.username = response.data.slug;
+              $scope.form.username.$setDirty(true);
+            });
+          }, 500);
+        });
       }
     ]);
 })();

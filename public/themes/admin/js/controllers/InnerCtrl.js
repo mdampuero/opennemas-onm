@@ -76,23 +76,6 @@
           $scope.overlay[name] = !$scope.overlay[name];
         };
 
-        /**
-         * @function getSlug
-         * @memberOf InnerCtrl
-         *
-         * @description
-         *   Request a slug to the server.
-         *
-         * @param {String}   slug     The value to calculate slug from.
-         * @param {Function} callback The callback to execute on success.
-         */
-        $scope.getSlug = function(slug, callback) {
-          http.get({
-            name: 'api_v1_backend_tools_slug',
-            params: { slug: slug }
-          }).then(callback);
-        };
-
         // Updates linkers when locale changes
         $scope.$watch('config.locale', function(nv, ov) {
           if (nv === ov) {

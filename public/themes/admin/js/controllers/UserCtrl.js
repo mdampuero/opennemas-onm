@@ -16,8 +16,8 @@
      *   Check billing information when saving user.
      */
     .controller('UserCtrl', [
-      '$controller', '$http', '$scope', '$uibModal', 'cleaner',
-      function($controller, $http, $scope, $uibModal, cleaner) {
+      '$controller', '$http', '$scope', '$timeout', '$uibModal', 'cleaner',
+      function($controller, $http, $scope, $timeout, $uibModal, cleaner) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -30,7 +30,7 @@
          */
         $scope.item = {
           categories: [],
-          name: '',
+          name: null,
           type: 0,
           user_groups: [],
           user_language: 'default'
@@ -207,6 +207,26 @@
             $scope.flags.categories.all = true;
           }
         }, true);
+
+        // Generates an username when name changes
+        $scope.$watch('item.name', function(nv, ov) {
+          if (!ov || !nv || nv === ov) {
+            return;
+          }
+
+          $scope.flags.http.slug = 1;
+
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+          }
+
+          $scope.tm = $timeout(function() {
+            $scope.getSlug(nv, function(response) {
+              $scope.item.username = response.data.slug;
+              $scope.form.username.$setDirty(true);
+            });
+          }, 500);
+        });
       }
     ]);
 })();

@@ -19,8 +19,8 @@
      *   and inners will need. All controllers should extend this.
      */
     .controller('BaseCtrl', [
-      '$rootScope', '$scope', '$timeout', 'Editor', 'messenger', 'Renderer',
-      function($rootScope, $scope, $timeout, Editor, messenger, Renderer) {
+      '$rootScope', '$scope', '$timeout', 'Editor', 'http', 'messenger', 'Renderer',
+      function($rootScope, $scope, $timeout, Editor, http, messenger, Renderer) {
         /**
          * @memberOf BaseCtrl
          *
@@ -129,6 +129,36 @@
           if (response && response.data) {
             messenger.post(response.data);
           }
+        };
+
+        /**
+         * @function getSlug
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Request a slug to the server.
+         *
+         * @param {String}   slug     The value to calculate slug from.
+         * @param {Function} callback The callback to execute on success.
+         */
+        $scope.getSlug = function(slug, callback) {
+          $scope.flags.http.slug = 1;
+
+          http.get({
+            name: 'api_v1_backend_tools_slug',
+            params: { slug: slug }
+          }).then(function(response) {
+            $scope.disableFlags('http');
+
+            var getType = {};
+
+            if (callback &&
+                getType.toString.call(callback) === '[object Function]') {
+              callback(response);
+            }
+          }, function() {
+            $scope.disableFlags('http');
+          });
         };
 
         /**

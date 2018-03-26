@@ -33,7 +33,7 @@
          * @type {Object}
          */
         $scope.item = {
-          name: '',
+          name: null,
           privileges: [],
           type: 1
         };

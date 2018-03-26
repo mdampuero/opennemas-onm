@@ -126,15 +126,33 @@
                     </div>
                   </div>
                   <div class="col-md-8">
-                    <div class="form-group" ng-class="{ 'has-error': form.name.$dirty && form.name.$invalid }">
-                      <label class="form-label" for="name">{t}Name{/t}</label>
-                      <div class="controls input-with-icon right">
-                          <input class="form-control" id="name" name="name" ng-model="item.name" ng-maxlength="50" type="text"/>
-                        <span class="icon right ng-cloak" ng-if="!flags.http.loading">
-                          <span class="fa fa-check text-success" ng-if="form.name.$dirty && form.name.$valid"></span>
-                          <span class="fa fa-info-circle text-info" ng-if="!form.name.$dirty && form.name.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
-                          <span class="fa fa-times text-error" ng-if="form.name.$dirty && form.name.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
-                        </span>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group" ng-class="{ 'has-error': form.name.$dirty && form.name.$invalid }">
+                          <label class="form-label" for="name">{t}Name{/t}</label>
+                          <div class="controls input-with-icon right">
+                            <input class="form-control" id="name" name="name" ng-model="item.name" ng-maxlength="50" type="text"/>
+                            <span class="icon right ng-cloak" ng-if="!flags.http.loading">
+                              <span class="fa fa-check text-success" ng-if="form.name.$dirty && form.name.$valid"></span>
+                              <span class="fa fa-info-circle text-info" ng-if="!form.name.$dirty && form.name.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                              <span class="fa fa-times text-error" ng-if="form.name.$dirty && form.name.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group" ng-class="{ 'has-error': form.name.$dirty && form.name.$invalid }">
+                          <label class="form-label" for="username">{t}Username{/t}</label>
+                          <div class="controls input-with-icon right">
+                            <input class="form-control" id="username" name="username" ng-disabled="flags.http.slug" ng-model="item.username" ng-maxlength="50" {if !$app.user->isMaster()}readonly{/if} type="text"/>
+                            <span class="icon right ng-cloak" ng-if="!flags.http.loading">
+                              <span class="fa fa-circle-o-notch fa-spin" ng-if="flags.http.slug"></span>
+                              <span class="fa fa-check text-success" ng-if="!flags.http.slug && form.username.$dirty && form.username.$valid"></span>
+                              <span class="fa fa-info-circle text-info" ng-if="!flags.http.slug && !form.username.$dirty && form.username.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                              <span class="fa fa-times text-error" ng-if="!flags.http.slug && form.username.$dirty && form.username.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div class="form-group" ng-class="{ 'has-error': form.email.$dirty && form.email.$invalid }">
