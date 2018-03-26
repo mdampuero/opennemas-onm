@@ -221,6 +221,15 @@ $menuXml = [
         ],
     ],
 
+    [
+        "id"          => "newsletter_manager",
+        "title"       => _("Newsletters"),
+        "icon"        => "fa fa-envelope",
+        "link"        => url('admin_newsletters'),
+        "module_name" => "NEWSLETTER_MANAGER",
+        "privilege"   => "NEWSLETTER_ADMIN",
+    ],
+
     // Utils menu
     [
         'id'      => 'util',
@@ -243,14 +252,6 @@ $menuXml = [
                 "link"        => url('admin_trash'),
                 "module_name" => "TRASH_MANAGER",
                 "privilege"   => "TRASH_ADMIN",
-            ],
-            [
-                "id"          => "newsletter_manager",
-                "title"       => _("Newsletters"),
-                "icon"        => "fa fa-envelope",
-                "link"        => url('admin_newsletters'),
-                "module_name" => "NEWSLETTER_MANAGER",
-                "privilege"   => "NEWSLETTER_ADMIN",
             ],
             [
                 "id"          => "keyword_manager",
