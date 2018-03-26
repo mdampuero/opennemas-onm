@@ -92,7 +92,7 @@
               },
               success: function() {
                 return function() {
-                  var data  = angular.copy($scope.item);
+                  var data  = $scope.getData();
                   var route = {
                     name: 'api_v1_backend_subscriber_update',
                     params: { id: $scope.item.id }
@@ -106,8 +106,6 @@
                       data.fk_user_group,
                       Object.keys($scope.data.extra.subscriptions));
                   }
-
-                  data = cleaner.clean(data);
 
                   return http.put(route, data);
                 };
