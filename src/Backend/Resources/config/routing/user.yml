@@ -4,16 +4,6 @@ backend_user_create:
     options:
         expose: true
 
-backend_users_list:
-    path:     /users
-    defaults: { _controller  : BackendBundle:User:list }
-    options:
-        expose: true
-
-backend_user_save:
-    path:     /users/save
-    defaults: { _controller  : BackendBundle:User:save }
-
 backend_user_show:
     path:     /users/{id}/show
     defaults: { _controller  : BackendBundle:User:show }
@@ -30,6 +20,8 @@ backend_user_social_disconnect:
     path:     /user/{id}/{resource}/disconnect
     defaults: { _controller  : BackendBundle:User:disconnect }
 
-backend_user_update:
-    path:     /user/{id}/update
-    defaults: { _controller  : BackendBundle:User:update }
+backend_users_list:
+    path:     /users
+    defaults: { _controller  : BackendBundle:User:list }
+    options:
+        expose: true
