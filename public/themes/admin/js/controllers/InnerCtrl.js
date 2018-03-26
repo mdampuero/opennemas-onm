@@ -169,7 +169,7 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
 
     $scope.launchPhotoEditor = function() {
       var modal = $uibModal.open({
-        template: '<div id="photoEditor"><div>',
+        template: '<div id="photoEditor" class="photoEditor"><div>',
         backdrop: 'static',
         controller: [
           '$uibModalInstance', '$scope',
