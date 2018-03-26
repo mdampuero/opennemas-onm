@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('ManagerApp')
+
     /**
      * @ngdoc controller
      * @name  ListCtrl
@@ -50,8 +51,8 @@
           var cleaned = {};
 
           for (var name in criteria) {
-            if (criteria[name] !== null &&
-                criteria[name] !== undefined &&
+            if (criteria[name] &&
+                criteria[name] !== null &&
                 criteria[name] !== '') {
               cleaned[name] = criteria[name];
             }
@@ -85,7 +86,7 @@
             $timeout.cancel($scope.tm);
           }
 
-          $scope.tm = $timeout(function () {
+          $scope.tm = $timeout(function() {
             $scope.open = false;
           }, 500);
         };
@@ -102,7 +103,7 @@
             $timeout.cancel($scope.tm);
           }
 
-          $scope.tm = $timeout(function () {
+          $scope.tm = $timeout(function() {
             $scope.open = true;
           }, 500);
         };
@@ -278,7 +279,7 @@
             return;
           }
 
-          if(nv.page && ov.page && nv.page === ov.page) {
+          if (nv.page && ov.page && nv.page === ov.page) {
             nv.page = 1;
           }
 
