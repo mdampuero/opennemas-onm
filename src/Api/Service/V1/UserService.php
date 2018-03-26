@@ -10,10 +10,7 @@
 namespace Api\Service\V1;
 
 use Api\Exception\CreateItemException;
-use Api\Exception\DeleteItemException;
-use Api\Exception\DeleteListException;
 use Api\Exception\GetItemException;
-use Api\Exception\PatchListException;
 use Api\Exception\UpdateItemException;
 
 class UserService extends OrmService
