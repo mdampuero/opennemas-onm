@@ -174,9 +174,9 @@
                     </div>
                   </th>
                   <th class="hidden-xs text-center" width="80"><i class="fa fa-picture-o"></i></th>
-                  <th>{t}Name{/t}</th>
-                  <th class="hidden-xs" width="300">{t}Email{/t}</th>
-                  <th class="hidden-xs" width="240">{t}Subscriptions{/t}</th>
+                  <th width="400">{t}Name{/t}</th>
+                  <th class="hidden-xs" width="400">{t}Email{/t}</th>
+                  <th class="hidden-sm">{t}Subscriptions{/t}</th>
                   <th class="hidden-sm hidden-xs text-center" width="100">{t}Social{/t}</th>
                   <th class="text-center" width="50">{t}Enabled{/t}</th>
                 </tr>
@@ -216,7 +216,7 @@
                     </div>
                   </td>
                   <td class="hidden-xs">[% item.email %]</td>
-                  <td class="hidden-xs">
+                  <td class="hidden-sm hidden-xs">
                     <ul class="no-style">
                       <li class="m-b-5 m-r-5 pull-left" ng-repeat="(id, subscription) in item.user_groups" ng-if="subscription.status !== 0" uib-tooltip="[% subscription.status === 2 ? '{t}Subscription requested{/t}' : '{t}Subscription disabled{/t}' %]" tooltip-enable="subscription.status === 2 || data.extra.subscriptions[id].enabled === 0">
                         <a class="label text-uppercase no-animate" ng-class="{ 'label-danger': subscription.status !== 2 && !data.extra.subscriptions[id].enabled, 'label-default': subscription.status !== 2 && data.extra.subscriptions[id].enabled, 'label-warning': subscription.status === 2 }" href="[% routing.generate('backend_subscription_show', { id: id }) %]">
