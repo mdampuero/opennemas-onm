@@ -171,11 +171,9 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
       var modal = $uibModal.open({
         template: '<div id="photoEditor"><div>',
         backdrop: 'static',
-//        windowClass: 'modal-fullscreen',
         controller: [
           '$uibModalInstance', '$scope',
-          function ($uibModalInstance, $scope) {
-
+          function($uibModalInstance, $scope) {
             /**
              * Closes the current modal
              */
@@ -194,13 +192,15 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
              * Confirms and executes the confirmed action.
              */
             $scope.confirm = function() {
-
+              return null;
             };
           }
         ]
       });
-      modal.rendered.then(function(){
-        var photoEditor = new window.OnmPhotoEditor({container: 'photoEditor'});
+
+      modal.rendered.then(function() {
+        var photoEditor = new window.OnmPhotoEditor({ container: 'photoEditor' });
+
         photoEditor.init();
       });
     };
@@ -256,7 +256,7 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
      * @param {Function} callback The callback to execute on success.
      */
     $scope.getSlug = function(slug, callback) {
-      var config = {name: 'api_v1_backend_tools_slug', params: { slug: slug }};
+      var config = { name: 'api_v1_backend_tools_slug', params: { slug: slug } };
 
       http.get(config).then(callback);
     };
@@ -270,28 +270,29 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
      */
     $scope.validateGroupExtraFields = function(group) {
       var errors = [];
+      var field = null;
 
       if (!group.group || group.group === '') {
         errors[errors.length] = 'Exist a group without internal name';
         return errors;
       }
 
-      if (!fields || typeof fields === 'object') {
+      if (!group.fields || typeof group.fields === 'object') {
         errors[errors.length] = 'The fields for the group ' + group + ' are incorrectly formatted';
       }
 
       var emptyFields = function(fields) {
-        for (field in group.fields) {
+        for (field in fields) {
           return false;
         }
         return true;
-      };
+      }(group.fields);
 
       if (emptyFields) {
         errors[errors.length] = 'The group ' + group.group + ' don\'t have any field';
       }
 
-      for (field in fields) {
+      for (field in group.fields) {
         errors.concat($scope.validateField(group.group, group.field));
       }
       return errors;
@@ -340,7 +341,8 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
      * @return {array} List of errors found in the field.
      */
     $scope.validationExtraFields = function(groups) {
-      var errors    = [];
+      var errors = [];
+      var group  = null;
 
       for (group in groups) {
         errors.concat($scope.validateGroup(group));
