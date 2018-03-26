@@ -35,7 +35,7 @@ class UserController extends Controller
     /**
      * Deletes an user.
      *
-     * @param integer $id The subscriber id.
+     * @param integer $id The user id.
      *
      * @return JsonResponse The response object.
      *
@@ -134,7 +134,7 @@ class UserController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('SUBSCRIBER_UPDATE')")
+     * @Security("hasPermission('USER_UPDATE')")
      */
     public function patchSelectedAction(Request $request)
     {
@@ -171,7 +171,7 @@ class UserController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('SUBSCRIBER_CREATE')")
+     * @Security("hasPermission('USER_CREATE')")
      */
     public function saveAction(Request $request)
     {
