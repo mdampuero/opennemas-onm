@@ -173,7 +173,7 @@
       </div>
     </div>
     <script type="text/ng-template" id="modal-delete">
-      {include file="user-group/modal.delete.tpl"}
+      {include file="base/modal/modal.delete.tpl"}
     </script>
   </div>
 {/block}
