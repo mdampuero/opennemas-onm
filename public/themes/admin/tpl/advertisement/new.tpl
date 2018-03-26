@@ -686,6 +686,6 @@
     </script>
   </form>
   <script type="text/ng-template" id="modal-adblock">
-    {include file="base/modals/modalAdblock.tpl"}
+    {include file="base/modal/modal.adblock.tpl"}
   </script>
 {/block}

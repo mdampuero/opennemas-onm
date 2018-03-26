@@ -277,7 +277,7 @@
     {include file="common/modals/_modalBatchUpdate.tpl"}
   </script>
   <script type="text/ng-template" id="modal-adblock">
-    {include file="base/modals/modalAdblock.tpl"}
+    {include file="base/modal/modal.adblock.tpl"}
   </script>
 </div>
 {/block}
