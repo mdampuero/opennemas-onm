@@ -200,7 +200,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="grid simple">
               <div class="grid-body no-padding">
                 {acl isAllowed="USER_ADMIN"}
