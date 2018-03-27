@@ -65,7 +65,41 @@
       </div>
       <div class="ng-cloak" ng-show="!flags.http.loading && item">
         <div class="row">
-          <div class="col-sm-8">
+          <div class="col-md-4 col-md-push-8">
+            <div class="grid simple">
+              <div class="grid-body no-padding">
+                <div class="grid-collapse-title">
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <input id="inrss" name="inrss" ng-false-value="'0'" ng-model="item.inrss" ng-true-value="'1'" type="checkbox">
+                      <label class="form-label" for="inrss">
+                        {t}Show in RSS{/t}
+                      </label>
+                      <div class="help m-t-5">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}If this option is activated this author will be showed in rss{/t}
+                      </div>
+                    </div>
+                  </div>
+                  {is_module_activated name="BLOG_MANAGER"}
+                    <div class="form-group no-margin">
+                      <div class="checkbox">
+                        <input name="is_blog" id="is_blog" ng-false-value="'0'" ng-model="item.is_blog" ng-true-value="'1'" type="checkbox">
+                        <label class="form-label" for="is_blog">
+                          {t}View as Blog{/t}
+                        </label>
+                      </div>
+                      <div class="help m-t-5">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}If this option is activated page author will be showed as blog{/t}
+                      </div>
+                    </div>
+                  {/is_module_activated}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-8 col-md-pull-4">
             <div class="grid simple">
               <div class="grid-body">
                 <div class="row">
@@ -223,40 +257,6 @@
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="grid simple">
-              <div class="grid-body no-padding">
-                <div class="grid-collapse-title">
-                  <div class="form-group">
-                    <div class="checkbox">
-                      <input id="inrss" name="inrss" ng-false-value="'0'" ng-model="item.inrss" ng-true-value="'1'" type="checkbox">
-                      <label class="form-label" for="inrss">
-                        {t}Show in RSS{/t}
-                      </label>
-                      <div class="help m-t-5">
-                        <i class="fa fa-info-circle m-r-5 text-info"></i>
-                        {t}If this option is activated this author will be showed in rss{/t}
-                      </div>
-                    </div>
-                  </div>
-                  {is_module_activated name="BLOG_MANAGER"}
-                    <div class="form-group no-margin">
-                      <div class="checkbox">
-                        <input name="is_blog" id="is_blog" ng-false-value="'0'" ng-model="item.is_blog" ng-true-value="'1'" type="checkbox">
-                        <label class="form-label" for="is_blog">
-                          {t}View as Blog{/t}
-                        </label>
-                      </div>
-                      <div class="help m-t-5">
-                        <i class="fa fa-info-circle m-r-5 text-info"></i>
-                        {t}If this option is activated page author will be showed as blog{/t}
-                      </div>
-                    </div>
-                  {/is_module_activated}
                 </div>
               </div>
             </div>

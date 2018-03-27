@@ -57,25 +57,10 @@
       </div>
       <div class="ng-cloak" ng-show="!flags.http.loading && item">
         <div class="row">
-          <div class="col-md-8">
+          <div class="col-md-4 col-md-push-8">
             <div class="grid simple">
-              <div class="grid-body">
-                <div class="form-group">
-                  <label for="name" class="form-label">{t}Name{/t}</label>
-                  <div class="controls">
-                    <input class="form-control" id="name" name="name" ng-model="item.name" required type="text">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="grid simple">
-              <div class="grid-title">
-                {t}Settings{/t}
-              </div>
-              <div class="grid-body">
-                <div class="form-group">
+              <div class="grid-body no-padding">
+                <div class="grid-collapse-title">
                   <div class="checkbox">
                     <input class="form-control" id="enabled" name="enabled" ng-model="item.enabled" ng-true-value="1" ng-false-value="0" type="checkbox">
                     <label for="enabled" class="form-label">
@@ -83,6 +68,18 @@
                     </label>
                   </div>
                   <div class="controls">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8 col-md-pull-4">
+            <div class="grid simple">
+              <div class="grid-body">
+                <div class="form-group">
+                  <label for="name" class="form-label">{t}Name{/t}</label>
+                  <div class="controls">
+                    <input class="form-control" id="name" name="name" ng-model="item.name" required type="text">
                   </div>
                 </div>
               </div>

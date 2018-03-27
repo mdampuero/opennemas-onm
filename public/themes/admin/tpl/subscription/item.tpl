@@ -57,7 +57,67 @@
       </div>
       <div class="ng-cloak" ng-show="!flags.http.loading && item">
         <div class="row">
-          <div class="col-md-8">
+          <div class="col-md-4 col-md-push-8">
+            <div class="grid simple">
+              <div class="grid-body no-padding">
+                <div class="grid-collapse-title">
+                  <div class="checkbox">
+                    <input class="form-control" id="enabled" name="enabled" ng-false-value="0" ng-model="item.enabled" ng-true-value="1" type="checkbox">
+                    <label for="enabled" class="form-label">
+                      {t}Enabled{/t}
+                    </label>
+                  </div>
+                </div>
+                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.visibility }" ng-click="expanded.visibility = !expanded.visibility">
+                  <i class="fa fa-eye m-r-5"></i>
+                  {t}Visibility{/t}
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.visibility }"></i>
+                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.visibility">
+                    <span ng-show="item.private">{t}Private{/t}</span>
+                    <span ng-show="!item.private">{t}Public{/t}</span>
+                  </span>
+                </div>
+                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.visibility }">
+                  <div class="form-group no-margin">
+                    <div class="checkbox">
+                      <input class="form-control" id="private" name="private" ng-false-value="0" ng-model="item.private" ng-true-value="1" type="checkbox">
+                      <label for="private" class="form-label">
+                        {t}Private{/t}
+                      </label>
+                    </div>
+                    <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                      <i class="fa fa-info-circle m-r-5 text-info"></i>
+                      {t}If enabled, subscribers will not see this subscription while registering or editing profile{/t}
+                    </span>
+                  </div>
+                </div>
+                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.request }" ng-click="expanded.request = !expanded.request">
+                  <i class="fa fa-inbox m-r-5"></i>
+                  {t}Requests{/t}
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.request }"></i>
+                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.request">
+                    <span ng-show="item.request">{t}Manual{/t}</span>
+                    <span ng-show="!item.request">{t}Automatic{/t}</span>
+                  </span>
+                </div>
+                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.request }">
+                  <div class="form-group no-margin">
+                    <div class="checkbox">
+                      <input class="form-control" id="request" name="request" ng-false-value="0" ng-model="item.auto" ng-true-value="1" type="checkbox">
+                      <label for="request" class="form-label">
+                        {t}Accept requests manually{/t}
+                      </label>
+                    </div>
+                    <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                      <i class="fa fa-info-circle m-r-5 text-info"></i>
+                      {t}If enabled, an administrator will have to accept new members manually one by one{/t}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8 col-md-pull-4">
             <div class="grid simple">
               <div class="grid-body">
                 <div class="form-group">
@@ -68,59 +128,168 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="col-md-4">
             <div class="grid simple">
               <div class="grid-title">
-                {t}Settings{/t}
+                <h4>{t}Features for members{/t}</h4>
               </div>
               <div class="grid-body">
-                <div class="form-group">
-                  <div class="checkbox">
-                    <input class="form-control" id="enabled" name="enabled" ng-model="item.enabled" ng-true-value="1" ng-false-value="0" type="checkbox">
-                    <label for="enabled" class="form-label">
-                      {t}Enabled{/t}
+                <div class="col-sm-6">
+                  <div class="form-group no-margin">
+                    <label class="form-label">{t}Newsletter{/t}</label>
+                    <label class="pointer" for="newsletter">
+                      <div class="checkbox">
+                        <input id="newsletter" name="newsletter" type="checkbox">
+                        <label for="newsletter">{t}Send newsletter{/t}</label>
+                      </div>
+                      <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}If enabled, this subscription will be selectable when creating newsletters{/t}
+                      </span>
                     </label>
                   </div>
-                  <div class="controls">
+                  <div class="form-group no-margin">
+                    <label class="form-label m-t-15">{t}Advertisement{/t}</label>
+                    <label class="pointer" for="advertisement">
+                      <div class="checkbox">
+                        <input id="advertisement" name="advertisement" type="checkbox">
+                        <label for="advertisement">{t}Hide advertisements{/t}</label>
+                      </div>
+                      <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}If enabled, advertisements will be disabled when using safeframe{/t}
+                      </span>
+                    </label>
+                  </div>
+                  <div class="form-group no-margin">
+                    <label class="form-label m-t-15">{t}Payment{/t}</label>
+                    <label class="pointer" for="payment">
+                      <div class="checkbox">
+                        <input id="payment" name="payment" type="checkbox">
+                        <label for="payment">{t}Requires payment{/t}</label>
+                      </div>
+                      <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}If enabled, this subscription will require a payment to become a member{/t}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group no-margin">
+                    <label class="form-label">{t}Restrictions{/t}</label>
+                    <label class="pointer" for="print">
+                      <div class="checkbox">
+                        <input id="print" name="print" type="checkbox">
+                        <label for="print">{t}Hide print button{/t}</label>
+                      </div>
+                      <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}If enabled, button to print contents will be hidden{/t}
+                      </span>
+                    </label>
+                  </div>
+                  <div class="form-group no-margin">
+                    <label class="form-label m-t-15">&nbsp</label>
+                    <label class="pointer" for="social">
+                      <div class="checkbox">
+                        <input id="social" name="social" type="checkbox">
+                        <label for="social">{t}Hide social buttons{/t}</label>
+                      </div>
+                      <span class="help m-l-3 m-t-6" ng-show="isHelpEnabled()">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}If enabled, button to share contents in social networks will be hidden{/t}
+                      </span>
+                    </label>
+                  </div>
+                  <div class="form-group no-margin">
+                    <label class="form-label m-t-15">&nbsp</label>
+                    <label class="pointer" for="edit">
+                      <div class="checkbox">
+                        <input id="edit" name="edit" type="checkbox">
+                        <label for="edit">{t}Block browser actions (cut, copy,...){/t}</label>
+                      </div>
+                      <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}If enabled, some browser actions (e.g. cut, copy,...) will be blocked{/t}
+                      </span>
+                    </label>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="grid simple">
-          <div class="grid-title">
-            <h4>{t}Privileges{/t}</h4>
-          </div>
-          <div class="grid-body" id="privileges">
-            <div class="checkbox check-default check-title">
-              <input id="checkbox-all" ng-change="selectAll()" ng-checked="areAllSelected()" ng-model="selected.allSelected" type="checkbox">
-              <label for="checkbox-all">
-                <h5>{t}Toggle all privileges{/t}</h5>
-              </label>
-            </div>
-            <div class="ng-cloak">
-              <div ng-repeat="section in sections">
-                <h5>{t}[% section.title %]{/t}</h5>
-                <div class="row" ng-repeat="columns in section.rows">
-                  <div class="col-sm-3" ng-repeat="name in columns">
-                    <div class="col-sm-12 m-b-10">
-                      <div class="checkbox check-default check-title">
-                        <input id="checkbox-[% name %]" ng-change="selectModule(name)" ng-checked="isModuleSelected(name)" ng-model="selected.all[name]" type="checkbox">
-                        <label for="checkbox-[% name %]">
-                          <h5>[% name %]</h5>
-                        </label>
+            <div class="grid simple">
+              <div class="grid-title">
+                <h4>{t}Restrictions for non members{/t}</h4>
+              </div>
+              <div class="grid-body">
+                <div class="form-group">
+                  <label class="form-label">{t}Redirection{/t}</label>
+                  <label class="pointer" for="redirection">
+                    <div class="checkbox">
+                      <input id="redirection" name="redirection" ng-model="redirection" type="checkbox">
+                      <label for="redirection">{t}Redirect to frontpage{/t}</label>
+                    </div>
+                    <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                      <i class="fa fa-info-circle m-r-5 text-info"></i>
+                      {t}If enabled, non-members will be redirect to frontpage when accessing contents in this subscription{/t}
+                    </span>
+                  </label>
+                </div>
+                <label class="form-label">{t}Hide information{/t}</label>
+                <div class="form-group no-margin">
+                  <div class="row">
+                    <div class="col-xs-4">
+                      <div class="checkbox p-b-10">
+                        <input id="title" name="title" ng-disabled="redirection" type="checkbox">
+                        <label for="title">{t}Hide title{/t}</label>
+                      </div>
+                      <div class="checkbox p-b-10">
+                        <input id="summmary" name="summmary" ng-disabled="redirection" type="checkbox">
+                        <label for="summmary">{t}Hide summary{/t}</label>
+                      </div>
+                      <div class="checkbox p-b-10">
+                        <input id="body" name="body" ng-disabled="redirection" type="checkbox">
+                        <label for="body">{t}Hide body{/t}</label>
+                      </div>
+                      <div class="checkbox p-b-10">
+                        <input id="title" name="title" ng-disabled="redirection" type="checkbox">
+                        <label for="title">{t}Hide pretitle{/t}</label>
+                      </div>
+                      <div class="checkbox p-b-10">
+                        <input id="summmary" name="summmary" ng-disabled="redirection" type="checkbox">
+                        <label for="summmary">{t}Hide media{/t}</label>
+                      </div>
+                      <div class="checkbox p-b-10">
+                        <input id="body" name="body" ng-disabled="redirection" type="checkbox">
+                        <label for="body">{t}Hide related contents{/t}</label>
                       </div>
                     </div>
-                    <div class="col-sm-12 m-b-5" ng-repeat="privilege in extra.modules[name]">
-                      <div class="checkbox check-default">
-                        <input id="checkbox-[% name + '-' + $index %]" checklist-model="user_group.privileges" checklist-value="privilege.id" type="checkbox">
-                        <label for="checkbox-[% name + '-' + $index %]">
-                          [% privilege.description %]
-                        </label>
+                    <div class="col-xs-4">
+                      <div class="checkbox p-b-10">
+                        <input id="summmary" name="summmary" ng-disabled="redirection" type="checkbox">
+                        <label for="summmary">{t}Hide content information{/t}</label>
+                      </div>
+                      <div class="checkbox p-b-10">
+                        <input id="body" name="body" ng-disabled="redirection" type="checkbox">
+                        <label for="body">{t}Hide tags{/t}</label>
+                      </div>
+                      <div class="checkbox p-b-10">
+                        <input id="print" name="print" ng-disabled="redirection" type="checkbox">
+                        <label for="print">{t}Hide print button{/t}</label>
+                      </div>
+                      <div class="checkbox p-b-10">
+                        <input id="social" name="social" ng-disabled="redirection" type="checkbox">
+                        <label for="social">{t}Hide social buttons{/t}</label>
+                      </div>
+                      <div class="checkbox p-b-10">
+                        <input id="edit" name="edit" ng-disabled="redirection" type="checkbox">
+                        <label for="edit">{t}Block browser actions (cut, copy,...){/t}</label>
                       </div>
                     </div>
+                  </div>
+                  <div class="help m-l-3" ng-show="isHelpEnabled()">
+                    <i class="fa fa-info-circle m-r-5 text-info"></i>
+                    {t}Some information will be hidden for non-members  when accessing contents in this subscription{/t}
                   </div>
                 </div>
               </div>
