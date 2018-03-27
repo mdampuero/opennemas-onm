@@ -103,7 +103,7 @@
                 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.request }">
                   <div class="form-group no-margin">
                     <div class="checkbox">
-                      <input class="form-control" id="request" name="request" ng-false-value="0" ng-model="item.auto" ng-true-value="1" type="checkbox">
+                      <input class="form-control" id="request" name="request" ng-false-value="0" ng-model="item.request" ng-true-value="1" type="checkbox">
                       <label for="request" class="form-label">
                         {t}Accept requests manually{/t}
                       </label>
