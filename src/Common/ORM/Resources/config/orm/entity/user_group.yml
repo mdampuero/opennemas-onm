@@ -3,11 +3,13 @@ orm:
         -
             name: UserGroup
             properties:
-                pk_user_group: integer
-                name:          string
-                type:          integer
                 enabled:       boolean
+                name:          string
+                pk_user_group: integer
+                private:       boolean
                 privileges:    array
+                request:       boolean
+                type:          integer
             converters:
                 default:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter
@@ -38,6 +40,12 @@ orm:
                             options: { default: null, notnull: false, length: 50 }
                         type:
                             type:    integer
+                            options: { default: 0, notnull: true }
+                        private:
+                            type:    boolean
+                            options: { default: 0, notnull: true }
+                        request:
+                            type:    boolean
                             options: { default: 0, notnull: true }
                         enabled:
                             type:    boolean
