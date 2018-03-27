@@ -17,7 +17,7 @@
     .controller('ListCtrl', [
       '$controller', '$scope', '$timeout',
       function($controller, $scope, $timeout) {
-        $.extend(this, $controller('BaseCtrl', { $scope: $scope, }));
+        $.extend(this, $controller('BaseCtrl', { $scope: $scope }));
 
         /**
          * @memberOf ListCtrl

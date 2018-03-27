@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  SettingsCtrl
@@ -13,7 +14,8 @@
      * @description
      *   Handles actions for paywall settings configuration form.
      */
-    .controller('SettingsCtrl', ['$controller', '$rootScope', '$scope', 'http', 'cleaner', 'messenger',
+    .controller('SettingsCtrl', [
+      '$controller', '$rootScope', '$scope', 'http', 'cleaner', 'messenger',
       function($controller, $rootScope, $scope, http, cleaner, messenger) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
@@ -48,7 +50,11 @@
          */
         $scope.settings = {
           google_analytics: [
-            { api_key: '', base_domain: '', custom_var: '' }
+            {
+              api_key: '',
+              base_domain: '',
+              custom_var: ''
+            }
           ],
           locale: {
             backend: {
@@ -56,7 +62,11 @@
               timezone: 'UTC'
             },
             frontend: {
-              language: { available: [], selected: null, slug: {} },
+              language: {
+                available: [],
+                selected: null,
+                slug: {}
+              },
               timezone: 'UTC'
             }
           },
@@ -86,7 +96,11 @@
          */
         $scope.addGanalytics = function() {
           $scope.settings.google_analytics
-            .push({ api_key: '', base_domain: '', custom_var: '' });
+            .push({
+              api_key: '',
+              base_domain: '',
+              custom_var: ''
+            });
         };
 
         /**
@@ -100,8 +114,11 @@
          */
         $scope.addLocale = function(item) {
           if (!$scope.settings.locale.frontend.language) {
-            $scope.settings.locale.frontend.language =
-              { available: [], selected: null, slug: {} };
+            $scope.settings.locale.frontend.language = {
+              available: [],
+              selected: null,
+              slug: {}
+            };
           }
 
           var frontend = $scope.settings.locale.frontend.language;
@@ -111,7 +128,7 @@
             frontend.selected = item.code;
           }
 
-          var codes = frontend.available.map(function (e) {
+          var codes = frontend.available.map(function(e) {
             return e.code;
           });
 
@@ -134,15 +151,15 @@
          *
          * @param {Integer } element to filter
          */
-        $scope.filterFromLanguages = function(index)  {
-          if(!$scope.settings.translators[index].from) {
+        $scope.filterFromLanguages = function(index) {
+          if (!$scope.settings.translators[index].from) {
             return [];
           }
 
           var from = $scope.settings.translators[index].from;
 
           return $scope.settings.locale.frontend.language.available
-            .filter(function (e)  {
+            .filter(function(e) {
               return e.code !== from;
             });
         };
@@ -156,14 +173,14 @@
          *
          * @param {Integer} index The index of the translation service
          */
-        $scope.getParameters = function(index)  {
-          if(!$scope.extra.translation_services)  {
+        $scope.getParameters = function(index) {
+          if (!$scope.extra.translation_services) {
             return [];
           }
 
           var translator = $scope.settings.translators[index].translator;
           var translators = $scope.extra.translation_services
-            .filter(function (e) {
+            .filter(function(e) {
               return e.translator === translator;
             });
 
@@ -186,7 +203,7 @@
         $scope.getFiles = function(query) {
           var route = {
             name: 'api_v1_backend_files_autocomplete',
-            params: { query: query}
+            params: { query: query }
           };
 
           $scope.searching = true;
@@ -195,7 +212,7 @@
             $scope.searching = false;
 
             return response.data.results;
-          }, function () {
+          }, function() {
             $scope.searching = false;
           });
         };
@@ -215,8 +232,8 @@
           $scope.searching = true;
 
           var route = {
-              name: 'api_v1_backend_settings_locale_list',
-              params: { q: query }
+            name: 'api_v1_backend_settings_locale_list',
+            params: { q: query }
           };
 
           return http.get(route).then(function(response) {
@@ -284,7 +301,7 @@
          *
          * @param {Integer} index The index of the file to remove.
          */
-        $scope.removeRTBFile = function (index) {
+        $scope.removeRTBFile = function(index) {
           $scope.settings.rtb_files.splice(index, 1);
         };
 
@@ -459,11 +476,10 @@
           }
 
           // Change value to string for old numeric timezones
-          if (!isNaN(+$scope.settings.locale.backend.timezone) &&
-              angular.isNumber(+$scope.settings.locale.backend.timezone)) {
+          if (!isNaN(Number($scope.settings.locale.backend.timezone)) &&
+              angular.isNumber(Number($scope.settings.locale.backend.timezone))) {
             $scope.settings.locale.backend.timezone = $scope.extra
-              .timezones[+$scope.settings.locale.backend.timezone
-            ];
+              .timezones[Number($scope.settings.locale.backend.timezone)];
           }
 
           if (!angular.isArray($scope.settings.locale.frontend.language.available)) {
@@ -485,7 +501,11 @@
          */
         $scope.addTranslator = function() {
           $scope.settings.translators
-            .push({ from: '', to: '', translator: '' });
+            .push({
+              from: '',
+              to: '',
+              translator: ''
+            });
         };
 
         /**

@@ -29,11 +29,11 @@ class AmpController extends Controller
         }
 
         // RenderColorMenu
-        $siteColor = '#005689';
+        $siteColor   = '#005689';
         $configColor = getService('setting_repository')->get('site_color');
         if (!empty($configColor)) {
             if (!preg_match('@^#@', $configColor)) {
-                $siteColor = '#'.$configColor;
+                $siteColor = '#' . $configColor;
             } else {
                 $siteColor = $configColor;
             }
@@ -52,7 +52,7 @@ class AmpController extends Controller
      */
     public function showAction(Request $request)
     {
-        $this->ccm  = \ContentCategoryManager::get_instance();
+        $this->ccm = \ContentCategoryManager::get_instance();
 
         $dirtyID          = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
         $categoryName     = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
@@ -79,7 +79,7 @@ class AmpController extends Controller
         }
 
         $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
-        $cacheable = $subscriptionFilter->subscriptionHook($article);
+        $cacheable          = $subscriptionFilter->subscriptionHook($article);
 
         // Setup templating cache layer
         $this->view->setConfig('articles');
@@ -121,7 +121,7 @@ class AmpController extends Controller
             }
 
             // Related contents code ---------------------------------------
-            $relatedContents  = [];
+            $relatedContents = [];
             $relations       = $this->get('related_contents')->getRelations($article->id, 'inner');
             if (count($relations) > 0) {
                 $contentObjects = $this->get('entity_repository')->findMulti($relations);
@@ -142,21 +142,33 @@ class AmpController extends Controller
             $this->view->assign('relationed', $relatedContents);
 
             $patterns = [
-                '@(align|border|style|nowrap|onclick)="[^\"]*\"@',
-                '@<font.*?>((?s).*)<\/font>@',
-                '@<img([^>]+>)@',
+                '@(align|border|style|nowrap|onclick)=(\'|").*?(\'|")@',
+                '@<\/?font.*?>@',
+                '@<img\s+[^>]*src\s*=\s*"([^"]+)"[^>]*>@',
+                '@<video([^>]+>)(?s)(.*?)<\/video>@',
                 '@<iframe.*src="[http:|https:]*(.*?)".*><\/iframe>@',
                 '@<div.*?class="fb-(post|video)".*?data-href="([^"]+)".*?>(?s).*?<\/div>@',
-                '@<blockquote.*?class="instagram-media"(?s).*?href=".*?(\.com|\.am)\/p\/(.*?)\/"[^>]+>(?s).*?<\/blockquote>@',
+                '@<blockquote.*?class="instagram-media"(?s).*?href=".*?'
+                    . '(\.com|\.am)\/p\/(.*?)\/"[^>]+>(?s).*?<\/blockquote>@',
                 '@<blockquote.*?class="twitter-(video|tweet)"(?s).*?\/status\/(\d+)(?s).+?<\/blockquote>@',
                 '@<(script|embed|object|frameset|frame|iframe|style|form)[^>]*>(?s).*?<\/\1>@',
                 '@<(link|meta|input)[^>]+>@',
+                '@<a\s+[^>]*href\s*=\s*"([^"]+)"[^>]*>@',
+                '@<(table|tbody|th|tr|td|ul|li|ol|dl|p|strong|br|span|div|b|pre|hr|col|h1|h2|h3|h4|h5|h6)[^>]*?(\/?)>@',
+                '@target="(.*?)"@',
             ];
-            $replacements  = [
+
+            $replacements = [
                 '',
-                '${1}',
-                '<amp-img layout="responsive" width="518" height="291" ${1} </amp-img>',
-                '<amp-iframe width=300 height=300
+                '',
+                '<amp-img layout="responsive" width="518" height="291" src="${1}"></amp-img>',
+                '<amp-video layout="responsive" width="518" height="291" controls>
+                    ${2}
+                    <div fallback>
+                        <p>This browser does not support the video element.</p>
+                    </div>
+                </amp-video>',
+                '<amp-iframe width=518 height=291
                     sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"
                     layout="responsive"
                     frameborder="0"
@@ -178,16 +190,20 @@ class AmpController extends Controller
                     data-tweetid="${2}">
                 </amp-twitter>',
                 '',
-                ''
+                '',
+                '<a href="${1}">',
+                '<${1}${2}>',
+                'target="_blank"',
             ];
-            $article->body = preg_replace($patterns, $replacements, $article->body);
+
+            $article->body    = preg_replace($patterns, $replacements, $article->body);
             $article->summary = preg_replace($patterns, $replacements, $article->summary);
         } // end if $this->view->is_cached
 
         // Get instance logo size
         $logo = getService('setting_repository')->get('site_logo');
         if (!empty($logo)) {
-            $logoUrl = SITE_URL.MEDIA_DIR_URL.'sections/'.rawurlencode($logo);
+            $logoUrl  = SITE_URL . MEDIA_DIR_URL . 'sections/' . rawurlencode($logo);
             $logoSize = @getimagesize($logoUrl);
             if (is_array($logoSize)) {
                 $this->view->assign([
@@ -209,7 +225,7 @@ class AmpController extends Controller
             'time'            => '12345',
             'render_params'   => ['ads-format' => 'amp'],
             'cache_id'        => $cacheID,
-            'x-tags'          => 'article-amp,article,'.$article->id,
+            'x-tags'          => 'article-amp,article,' . $article->id,
             'x-cache-for'     => '+1 day',
             'x-cacheable'     => $cacheable
         ]);
@@ -224,7 +240,7 @@ class AmpController extends Controller
      */
     public static function getAds($category = 'home')
     {
-        $category = (!isset($category) || ($category == 'home'))? 0: $category;
+        $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
 
         $positions = getService('core.helper.advertisement')
             ->getPositionsForGroup('amp_inner', [1051, 1052, 1053]);

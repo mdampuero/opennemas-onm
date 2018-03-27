@@ -165,33 +165,33 @@ admin_polls_content_provider_related:
 # Ads manager routes
 admin_ads:
     path:     /ads
-    defaults: { _controller  : BackendBundle:Ads:list }
+    defaults: { _controller  : BackendBundle:Advertisements:list }
 
 admin_ad_create:
     path:     /ads/create
-    defaults: { _controller  : BackendBundle:Ads:create }
+    defaults: { _controller  : BackendBundle:Advertisements:create }
 
 admin_ad_show:
     path:     /ads/{id}/show
-    defaults: { _controller  : BackendBundle:Ads:show }
+    defaults: { _controller  : BackendBundle:Advertisements:show }
 
 admin_advertisement_show:
     path:     /ads/{id}/show
-    defaults: { _controller  : BackendBundle:Ads:show }
+    defaults: { _controller  : BackendBundle:Advertisements:show }
     options:
         expose: true
 
 admin_ad_update:
     path:     /ad/{id}/update
-    defaults: { _controller  : BackendBundle:Ads:update }
+    defaults: { _controller  : BackendBundle:Advertisements:update }
 
 admin_ads_content_provider:
     path:     /ads/content-provider
-    defaults: { _controller  : BackendBundle:Ads:contentProvider }
+    defaults: { _controller  : BackendBundle:Advertisements:contentProvider }
 
 admin_ads_config:
     path:     /ads/config
-    defaults: { _controller  : BackendBundle:Ads:config }
+    defaults: { _controller  : BackendBundle:Advertisements:config }
 
 # Special manager routes
 admin_specials:

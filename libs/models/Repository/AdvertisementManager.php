@@ -162,6 +162,10 @@ class AdvertisementManager extends EntityManager
             $filterSQL = implode($fieldUnion, $filterSQL);
         }
 
+        $filterSQL = preg_replace('@position="(\d*)"@', ' EXISTS ('
+            . 'SELECT 1 FROM advertisements_positions WHERE position_id IN ($1) and advertisement_id = pk_advertisement'
+            . ')', $filterSQL);
+
         return $filterSQL;
     }
 
@@ -209,10 +213,13 @@ class AdvertisementManager extends EntityManager
      */
     protected function findAdvertisements($types, $category, $generics)
     {
-        $sql = 'SELECT pk_advertisement as id FROM advertisements'
-            . ' WHERE type_advertisement IN (%s)'
-            . ' AND (fk_content_categories IS NULL OR %s)'
-            . ' ORDER BY id';
+        $types = implode(', ', $types);
+
+        $sql = 'SELECT pk_advertisement as id FROM advertisements '
+            . 'WHERE EXISTS('
+            . ' SELECT 1 FROM advertisements_positions WHERE position_id IN (%s) AND pk_advertisement=advertisement_id'
+            . ') AND (fk_content_categories IS null or %s) '
+            . 'ORDER BY id';
 
         $categories = '';
 
@@ -228,7 +235,7 @@ class AdvertisementManager extends EntityManager
             $category
         );
 
-        $sql = sprintf($sql, implode(',', $types), $categories);
+        $sql = sprintf($sql, $types, $categories);
 
         try {
             $result = $this->dbConn->fetchAll($sql);
@@ -267,7 +274,12 @@ class AdvertisementManager extends EntityManager
         $ads = include APP_PATH . 'config/ads/onm_default_ads.php';
 
         $ads = array_filter($ads, function ($a) use ($types, $category) {
-            return in_array($a->type_advertisement, $types)
+            $isOfType = false;
+            foreach ($types as $type) {
+                $isOfType |= in_array($type, $a->positions);
+            }
+
+            return $isOfType
                 && (is_null($a->fk_content_categories)
                     || in_array($category, $a->fk_content_categories)
                     || in_array(0, $a->fk_content_categories));

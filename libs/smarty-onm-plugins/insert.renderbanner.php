@@ -37,7 +37,9 @@ function smarty_insert_renderbanner($params, $smarty)
     }
 
     $ads = array_filter($ads, function ($ad) use ($type) {
-        return $ad->type_advertisement == $type && $ad->isInTime();
+        return is_array($ad->positions)
+            && in_array($type, $ad->positions)
+            && $ad->isInTime();
     });
 
     if (empty($ads)) {

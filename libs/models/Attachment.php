@@ -63,7 +63,6 @@ class Attachment extends Content
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('File');
-        $this->file_path              = MEDIA_PATH . DIRECTORY_SEPARATOR . FILE_DIR;
 
         parent::__construct($id);
     }
@@ -88,6 +87,10 @@ class Attachment extends Content
                 return ($uri !== '') ? $uri : $this->permalink;
             case 'slug':
                 return \Onm\StringUtils::generateSlug($this->title);
+            case 'file_path':
+                $instance = getService('core.instance');
+                return $instance->getSystemFilePath();
+            case '':
             default:
                 return parent::__get($name);
                 break;
@@ -328,5 +331,13 @@ class Attachment extends Content
         }
 
         return $html;
+    }
+
+    /**
+     *  This method return the path of the file system for this file
+     */
+    public function getFileSystemPath()
+    {
+        return $this->file_path . DS . $this->path;
     }
 }

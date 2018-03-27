@@ -58,8 +58,8 @@ return array_map(function ($ad) use (&$i, $default) {
     return $adObject;
 }, [
     1 => [
-        'type_advertisement' => '1',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 1 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64035"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -91,8 +91,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     3 => [
-        'type_advertisement' => '3',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 3 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64119"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -124,8 +124,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     5 => [
-        'type_advertisement' => '5',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 5 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64112"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -157,8 +157,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     11 => [
-        'type_advertisement' => '11',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 11 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64438"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -190,8 +190,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     12 => [
-        'type_advertisement' => '12',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 12 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64439"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -218,8 +218,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     21 => [
-        'type_advertisement' => '21',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 21 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64442"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -246,8 +246,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     22 => [
-        'type_advertisement' => '22',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 22 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64443"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -279,8 +279,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     31 => [
-        'type_advertisement' => '31',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 31 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64036"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -312,8 +312,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     32 => [
-        'type_advertisement' => '32',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 32 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64113"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -345,8 +345,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     33 => [
-        'type_advertisement' => '33',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 33 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64114"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -378,8 +378,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     34 => [
-        'type_advertisement' => '34',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 34 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64115"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -411,8 +411,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     35 => [
-        'type_advertisement' => '35',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 35 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64116"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -444,8 +444,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     91 => [
-        'type_advertisement' => '91',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 91 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64109"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -472,8 +472,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     92 => [
-        'type_advertisement' => '92',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 92 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64108"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -500,8 +500,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     101 => [
-        'type_advertisement' => '101',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 101 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64035"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -533,8 +533,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     103 => [
-        'type_advertisement' => '103',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 103 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64036"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -566,8 +566,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     104 => [
-        'type_advertisement' => '104',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 104 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64572"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -599,8 +599,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     105 => [
-        'type_advertisement' => '105',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 105 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64113"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -632,8 +632,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     106 => [
-        'type_advertisement' => '106',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 106 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64114"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -665,8 +665,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     107 => [
-        'type_advertisement' => '107',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 107 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64115"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -698,8 +698,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     108 => [
-        'type_advertisement' => '108',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 108 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64116"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -731,8 +731,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     109 => [
-        'type_advertisement' => '109',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 109 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64112"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -764,8 +764,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     191 => [
-        'type_advertisement' => '191',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 191 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64109"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -792,8 +792,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     192 => [
-        'type_advertisement' => '192',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 192 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64108"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -820,8 +820,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     193 => [
-        'type_advertisement' => '193',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 193 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64110"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -853,8 +853,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     601 => [
-        'type_advertisement' => '601',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 601 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64035"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -886,8 +886,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     603 => [
-        'type_advertisement' => '603',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 603 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64036"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -919,8 +919,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     605 => [
-        'type_advertisement' => '605',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 605 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64113"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -952,8 +952,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     609 => [
-        'type_advertisement' => '609',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 609 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64112"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -985,8 +985,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     701 => [
-        'type_advertisement' => '701',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 701 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64035"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -1018,8 +1018,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     703 => [
-        'type_advertisement' => '703',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 703 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64036"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -1051,8 +1051,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     704 => [
-        'type_advertisement' => '704',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 704 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64572"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -1084,8 +1084,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     705 => [
-        'type_advertisement' => '705',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 705 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64113"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -1117,8 +1117,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     709 => [
-        'type_advertisement' => '709',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 709 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64112"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -1150,8 +1150,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     791 => [
-        'type_advertisement' => '791',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 791 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64109"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -1178,8 +1178,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     792 => [
-        'type_advertisement' => '792',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 792 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64108"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -1206,8 +1206,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     793 => [
-        'type_advertisement' => '793',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 793 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64110"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -1239,8 +1239,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     1211 => [
-        'type_advertisement' => '1211',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 1211 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64435"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -1272,8 +1272,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     1212 => [
-        'type_advertisement' => '1212',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 1212 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64436"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -1305,8 +1305,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     1213 => [
-        'type_advertisement' => '1213',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 1213 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64437"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -1338,8 +1338,8 @@ return array_map(function ($ad) use (&$i, $default) {
         ],
     ],
     2201 => [
-        'type_advertisement' => '2201',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 2201 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64120"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -1352,8 +1352,8 @@ return array_map(function ($ad) use (&$i, $default) {
             </script>',
     ],
     3201 => [
-        'type_advertisement' => '3201',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 3201 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64120"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -1366,8 +1366,8 @@ return array_map(function ($ad) use (&$i, $default) {
             </script>',
     ],
     2203 => [
-        'type_advertisement' => '2203',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 2203 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64457"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -1380,8 +1380,8 @@ return array_map(function ($ad) use (&$i, $default) {
             </script>',
     ],
     3203 => [
-        'type_advertisement' => '3203',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 3203 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64457"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -1394,8 +1394,8 @@ return array_map(function ($ad) use (&$i, $default) {
             </script>',
     ],
     2205 => [
-        'type_advertisement' => '2205',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 2205 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64121"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -1408,8 +1408,8 @@ return array_map(function ($ad) use (&$i, $default) {
             </script>',
     ],
     3205 => [
-        'type_advertisement' => '3205',
-        'fk_content_categories' => [ '0' ],
+        'positions' => [ 3205 ],
+        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64121"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {

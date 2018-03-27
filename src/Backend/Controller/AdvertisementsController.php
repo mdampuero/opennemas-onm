@@ -19,7 +19,7 @@ use Common\Core\Controller\Controller;
  *
  * @package Backend_Controllers
  */
-class AdsController extends Controller
+class AdvertisementsController extends Controller
 {
     /**
      * Common code for all the actions.
@@ -62,10 +62,10 @@ class AdsController extends Controller
         $map             = $positionManager->getPositions();
         $adsNames        = $positionManager->getPositionNames();
 
-        $typeAdvertisement = [ [ 'name' => _("All"), 'value' => null ] ];
+        $adsPositions = [ [ 'name' => _("All"), 'value' => null ] ];
 
         foreach ($adsNames as $key => $value) {
-            $typeAdvertisement[] = [ 'name' => $value, 'value' => $key];
+            $adsPositions[] = [ 'name' => $value, 'value' => $key];
         }
 
         $types = [
@@ -100,15 +100,12 @@ class AdsController extends Controller
             }
         }
 
-        return $this->render(
-            'advertisement/list.tpl',
-            [
-                'categories'        => $categories,
-                'typeAdvertisement' => $typeAdvertisement,
-                'types'             => $types,
-                'map'               => json_encode($map)
-            ]
-        );
+        return $this->render('advertisement/list.tpl', [
+            'categories'              => $categories,
+            'advertisement_positions' => $adsPositions,
+            'types'                   => $types,
+            'map'                     => json_encode($map)
+        ]);
     }
 
     /**
@@ -123,35 +120,15 @@ class AdsController extends Controller
      */
     public function createAction(Request $request)
     {
-        $page   = $request->request->getDigits('page', 1);
-        $filter = $request->query->get('filter');
-
+        // If the action is not to save the ad, just show the form
         if ('POST' !== $request->getMethod()) {
-            $adsPositions = $this->container->get('core.helper.advertisement');
-
-            $serverUrl = '';
-            if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
-                $serverUrl = $openXsettings['url'];
-            }
-
-            $advertisement = new \Advertisement();
-
-            $ads = $this->get('core.helper.advertisement')->getPositionsForTheme();
-
-            return $this->render('advertisement/new.tpl', [
-                'advertisement' => $advertisement,
-                'ads_positions' => $adsPositions,
-                'categories'    => $this->getCategories(),
-                'user_groups'   => $this->getUserGroups(),
-                'themeAds'      => $ads,
-                'filter'        => $filter,
-                'page'          => $page,
-                'server_url'    => $serverUrl,
-            ]);
+            return $this->render('advertisement/new.tpl', array_merge(
+                $this->getExtraParameters(),
+                [ 'advertisement' => new \Advertisement(), ]
+            ));
         }
 
-        $advertisement = new \Advertisement();
-        $categories    = json_decode($request->request->get('categories', ''), true);
+        $categories = json_decode($request->request->get('categories', ''), true);
 
         if (is_array($categories) && empty($categories)) {
             $categories = null;
@@ -162,7 +139,7 @@ class AdsController extends Controller
                 $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'           =>
                 \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
-            'category'           => !empty($categories) ? $categories[0] : 0,
+            'category'           => 0,
             'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -178,7 +155,7 @@ class AdsController extends Controller
             'url'                => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'img'                => $request->request->filter('img', '', FILTER_SANITIZE_STRING),
             'script'             => $request->request->get('script', ''),
-            'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
+            'positions'          => $request->request->get('positions', []),
             'fk_author'          => $this->getUser()->id,
             'fk_publisher'       => $this->getUser()->id,
             'params'             => [
@@ -198,6 +175,7 @@ class AdsController extends Controller
         $level   = 'error';
         $message = _('Unable to create the new advertisement.');
 
+        $advertisement = new \Advertisement();
         if ($advertisement->create($data)) {
             $level   = 'success';
             $message = _('Advertisement successfully created.');
@@ -205,14 +183,7 @@ class AdsController extends Controller
 
         $this->get('session')->getFlashBag()->add($level, $message);
         return $this->redirect(
-            $this->generateUrl(
-                'admin_ad_show',
-                [
-                    'id'     => $advertisement->id,
-                    'filter' => $filter,
-                    'page'   => $page
-                ]
-            )
+            $this->generateUrl('admin_ad_show', [ 'id' => $advertisement->id ])
         );
     }
 
@@ -228,18 +199,11 @@ class AdsController extends Controller
      */
     public function showAction(Request $request)
     {
-        $id     = $request->query->getDigits('id', null);
-        $filter = $request->query->get('filter');
-        $page   = $request->query->getDigits('page', 1);
+        $id = $request->query->getDigits('id', null);
 
-        $adsPositions = $this->container->get('core.helper.advertisement');
-        $serverUrl    = '';
-        if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
-            $serverUrl = $openXsettings['url'];
-        }
+        $advertisement = new \Advertisement($id);
 
-        $ad = new \Advertisement($id);
-        if (is_null($ad->id)) {
+        if (is_null($advertisement->id)) {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 sprintf(_('Unable to find the advertisement with the id "%d"'), $id)
@@ -248,7 +212,7 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
 
-        if ($ad->fk_publisher != $this->getUser()->id
+        if ($advertisement->fk_publisher != $this->getUser()->id
             && (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE'))
         ) {
             $this->get('session')->getFlashBag()->add(
@@ -259,29 +223,20 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
 
-        if (!is_array($ad->fk_content_categories) && !empty($ad->fk_content_categories)) {
-            $ad->fk_content_categories = explode(',', $ad->fk_content_categories);
+        if (!is_array($advertisement->fk_content_categories) && !empty($advertisement->fk_content_categories)) {
+            $advertisement->fk_content_categories = explode(',', $advertisement->fk_content_categories);
         }
 
-        if (!empty($ad->img)) {
-            //Buscar foto where pk_foto=img1
-            $photo1 = new \Photo($ad->img);
+        // If the advertisement has photo assigned retrieve it
+        if (!empty($advertisement->img)) {
+            $photo1 = new \Photo($advertisement->img);
             $this->view->assign('photo1', $photo1);
         }
 
-        $ah = $this->container->get('core.helper.advertisement');
-
-        return $this->render('advertisement/new.tpl', [
-            'ads_positions' => $adsPositions,
-            'advertisement' => $ad,
-            'categories'    => $this->getCategories(),
-            'filter'        => $filter,
-            'page'          => $page,
-            'safeFrame'     => $ah->isSafeFrameEnabled(),
-            'server_url'    => $serverUrl,
-            'themeAds'      => $ah->getPositionsForTheme(),
-            'user_groups'   => $this->getUserGroups(),
-        ]);
+        return $this->render('advertisement/new.tpl', array_merge(
+            $this->getExtraParameters(),
+            [ 'advertisement' => $advertisement ]
+        ));
     }
 
     /**
@@ -296,9 +251,7 @@ class AdsController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $id     = $request->query->getDigits('id');
-        $filter = $request->query->get('filter');
-        $page   = $request->query->getDigits('page', 1);
+        $id = $request->query->getDigits('id', null);
 
         $ad = new \Advertisement($id);
         if (is_null($ad->id)) {
@@ -333,7 +286,7 @@ class AdsController extends Controller
                 $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'metadata'           =>
                 \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
-            'category'           => !empty($categories) ? $categories[0] : 0,
+            'category'           => 0,
             'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -348,7 +301,7 @@ class AdsController extends Controller
             'url'                => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'img'                => $request->request->filter('img', '', FILTER_SANITIZE_STRING),
             'script'             => $request->request->get('script', ''),
-            'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
+            'positions'          => $request->request->get('positions', []),
             'fk_author'          => $this->getUser()->id,
             'fk_publisher'       => $this->getUser()->id,
             'params'             => [
@@ -378,9 +331,7 @@ class AdsController extends Controller
         }
 
         return $this->redirect($this->generateUrl('admin_ad_show', [
-            'id'     => $data['id'],
-            'filter' => $filter,
-            'page'   => $page
+            'id' => $data['id'],
         ]));
     }
 
@@ -394,39 +345,43 @@ class AdsController extends Controller
      */
     public function contentProviderAction(Request $request)
     {
-        $categoryId   = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = 8;
+        $categoryId = $request->query->getDigits('category', 1);
+        $page       = $request->query->getDigits('page', 1);
+        $epp        = 8;
 
-        $filters = [
-            'type_advertisement' => [[ 'value' => 37 ]],
-            'content_type_name'  => [[ 'value' => 'advertisement' ]],
-            'in_litter'          => [[ 'value' => 1, 'operator' => '!=' ]]
-        ];
+        $oql = sprintf(
+            'content_type_name="advertisement" and in_litter="0" '
+            . 'and position="37" order by created desc limit %s offset %s',
+            $epp,
+            ($page - 1) * $epp
+        );
 
-        $em       = $this->get('advertisement_repository');
-        $countAds = true;
-        $ads      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countAds);
+        $em  = $this->get('advertisement_repository');
+        $map = $this->container->get('core.helper.advertisement')
+            ->getPositions();
+
+        list($criteria, $order, $epp, $page) = $this->get('core.helper.oql')->getFiltersFromOql($oql);
+
+        $results = $em->findBy($criteria, $order, $epp, $page);
+        $results = \Onm\StringUtils::convertToUtf8($results);
+        $total   = $em->countBy($criteria);
 
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
             'directional' => true,
-            'epp'         => $itemsPerPage,
+            'epp'         => $epp,
             'page'        => $page,
-            'total'       => $countAds,
+            'total'       => $total,
             'route'       => [
                 'name'   => 'admin_ads_content_provider',
                 'params' => ['category' => $categoryId]
             ],
         ]);
 
-        return $this->render(
-            'advertisement/content-provider.tpl',
-            [
-                'ads'        => $ads,
-                'pagination' => $pagination,
-            ]
-        );
+        return $this->render('advertisement/content-provider.tpl', [
+            'ads'        => $results,
+            'pagination' => $pagination,
+        ]);
     }
 
     /**
@@ -495,6 +450,33 @@ class AdsController extends Controller
                 [ 'configs' => $configurations ]
             );
         }
+    }
+
+    /**
+     * Returns the list of extra parameters needed
+     * while showing the advertisement form
+     *
+     * @return array the list of extra parameters to use in the tempalte
+     **/
+    public function getExtraParameters()
+    {
+        $adsPositions = $this->container->get('core.helper.advertisement');
+        $serverUrl    = '';
+        if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
+            $serverUrl = $openXsettings['url'];
+        }
+
+        return [
+            'ads_positions_manager' => $adsPositions,
+            'extra'                 => [
+                'safeFrame'                 => $adsPositions->isSafeFrameEnabled(),
+                'aditional_theme_positions' => $adsPositions->getPositionsForTheme(),
+                'ads_positions'             => $adsPositions->getPositionNames(),
+                'categories'                => $this->getCategories(),
+                'server_url'                => $serverUrl,
+                'user_groups'               => $this->getUserGroups(),
+            ],
+        ];
     }
 
     /**

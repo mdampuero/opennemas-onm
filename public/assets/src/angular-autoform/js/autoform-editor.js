@@ -199,9 +199,13 @@
 
               var fieldKey = underscore($scope.fieldKeys[group]);
 
-              if (!(group in $scope.ngModel) || fieldKey in $scope.ngModel[group].fields) {
+              if (!(group in $scope.ngModel) || $scope.ngModel[group].fields !== '' && fieldKey in $scope.ngModel[group].fields) {
                 $scope.addFieldErrors[group] = 'The identifier for the field \'' + $scope.fieldKeys[group] + '\' already exists in the group ' + group;
                 return;
+              }
+
+              if ($scope.ngModel[group].fields === '') {
+                $scope.ngModel[group].fields = {};
               }
 
               $scope.ngModel[group].fields[fieldKey] = {

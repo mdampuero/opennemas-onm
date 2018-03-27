@@ -121,8 +121,6 @@ class PollsController extends Controller
             $data = [
                 'title'          => $request->request
                     ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'subtitle'       => $request->request
-                    ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'pretitle'       => $request->request
                     ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'description'    => $request->request
@@ -236,8 +234,6 @@ class PollsController extends Controller
             'id'             => $id,
             'title'          => $request->request
                 ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'subtitle'       => $request->request
-                ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'pretitle'       => $request->request
                 ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $request->request

@@ -60,17 +60,17 @@ class FormController extends Controller
     public function sendAction(Request $request)
     {
         // Get request params
-        $verify = $request->request->filter('security_code', "", FILTER_SANITIZE_STRING);
+        $verify = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
 
         if ('POST' != $request->getMethod() || !empty($verify)) {
             return new RedirectResponse($this->generateUrl('frontend_participa_frontpage'));
         }
 
-        $email     = trim($request->request->filter('email', null, FILTER_SANITIZE_STRING));
-        $response  = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
-        $formType  = $request->request->filter('form_type', '', FILTER_SANITIZE_STRING);
-        $message   = '';
-        $class     = 'error';
+        $email    = trim($request->request->filter('email', null, FILTER_SANITIZE_STRING));
+        $response = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
+        $formType = $request->request->filter('form_type', '', FILTER_SANITIZE_STRING);
+        $message  = '';
+        $class    = 'error';
 
         // Check current recaptcha
         $isValid = $this->get('core.recaptcha')
@@ -90,11 +90,14 @@ class FormController extends Controller
         if (!empty($email) && $isValid) {
             // Check data form is correcty and serialize form
             $body       = '';
-            $notAllowed = [ 'subject', 'cx', 'security_code', 'submit', 'g-recapcha-response' ];
+            $notAllowed = [
+                'name', 'cx', 'g-recaptcha-response', 'recipient',
+                'security_code', 'subject',
+            ];
 
             foreach ($request->request as $key => $value) {
                 if (!in_array($key, $notAllowed)) {
-                    $body .= "<p><strong>".ucfirst($key)."</strong>: $value </p> \n";
+                    $body .= "<p><strong>" . ucfirst($key) . "</strong>: $value </p> \n";
                 }
             }
 
@@ -115,32 +118,39 @@ class FormController extends Controller
             $text
                 ->setSubject($subject)
                 ->setBody($body, 'text/html')
-                ->setTo([$recipient => $recipient])
-                ->setFrom([$email => $name])
-                ->setSender([$settings['mail_sender'] => $settings['site_name']]);
+                ->setTo([ $recipient => $recipient ])
+                ->setFrom([ $email => $name ])
+                ->setSender([ $settings['mail_sender'] => $settings['site_name'] ]);
 
+            $path  = $this->getParameter('core.paths.spool.files');
             $file1 = $request->files->get('image1');
+
             if ($file1) {
+                $file1->move($path, $file1->getClientOriginalName());
+
                 $text->attach(\Swift_Attachment::fromPath(
-                    $file1->getPathname(),
+                    $path . '/' . $file1->getClientOriginalName(),
                     $file1->getClientMimeType()
                 )->setFilename($file1->getClientOriginalName()));
             }
 
             $file2 = $request->files->get('image2');
+
             if ($file2) {
+                $file2->move($path, $file2->getClientOriginalName());
+
                 $text->attach(\Swift_Attachment::fromPath(
-                    $file2->getPathname(),
+                    $path . '/' . $file2->getClientOriginalName(),
                     $file2->getClientMimeType()
                 )->setFilename($file2->getClientOriginalName()));
             }
 
             try {
-                $mailer = $this->get('swiftmailer.mailer.direct');
+                $mailer = $this->get('mailer');
                 $mailer->send($text);
 
                 $this->get('application.log')->notice(
-                    "Email sent. Frontend form (sender:".$email.", to: ".$recipient.")"
+                    "Email sent. Frontend form (sender: $email, to: $recipient)"
                 );
 
                 $action = new \Action();
@@ -172,7 +182,7 @@ class FormController extends Controller
     {
         // Get letter positions
         $positionManager = $this->get('core.helper.advertisement');
-        $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ]);
         $advertisements  = $this->get('advertisement_repository')
             ->findByPositionsAndCategory($positions, 0);
 
