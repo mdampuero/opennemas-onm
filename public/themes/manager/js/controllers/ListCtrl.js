@@ -278,7 +278,7 @@
             return;
           }
 
-          if(nv.page && ov.page && nv.page === ov.page) {
+          if (nv.page && ov.page && nv.page === ov.page) {
             nv.page = 1;
           }
 
