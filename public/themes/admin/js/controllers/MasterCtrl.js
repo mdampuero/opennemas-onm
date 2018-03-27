@@ -28,6 +28,16 @@
         'use strict';
 
         /**
+         * @memberOf MasterCtrl
+         *
+         * @description
+         *  Application configuration options.
+         *
+         * @type {Object}
+         */
+        $scope.app = { help: true };
+
+        /**
          * Flag to enable/disable forced notifications.
          *
          * @type {Boolean}
@@ -35,7 +45,7 @@
         $scope.force = true;
 
         /**
-         * Array of forced notifications
+         * Array of forced notifications.
          *
          * @type {Array}
          */
@@ -114,8 +124,12 @@
          */
         $scope.init = function(language, any) {
           $scope.lang = language;
-          $scope.any = any;
+          $scope.any  = any;
           $translate.use(language);
+
+          if (webStorage.has('app')) {
+            $scope.app = webStorage.get('app');
+          }
 
           if ($('body').hasClass('unpinned-on-server')) {
             $scope.sidebar.pinned    = false;
@@ -124,18 +138,27 @@
         };
 
         /**
-         * Updates the content margin-top basing on the filters-navbar height.
+         * @function isHelpEnabled
+         * @memberOf MasterCtrl
+         *
+         * @description
+         *   Checks if flag for inline help is enabled.
+         *
+         * @return {Boolean} True if the flag is enabled. False otherwise.
          */
-        $scope.checkFiltersBar = function() {
-          $timeout(function() {
-            if ($('.view:not(.ng-leave-active) .filters-navbar').length !== 1) {
-              return;
-            }
+        $scope.isHelpEnabled = function() {
+          return $scope.app.help;
+        };
 
-            var margin = 50 + $('.filters-navbar').height() - 15;
-
-            $('.content').css('margin-top', margin + 'px');
-          }, 1000);
+        /**
+         * @function toggleHelp
+         * @memberOf MasterCtrl
+         *
+         * @description
+         *   Enables/disables the flags for inline help.
+         */
+        $scope.toggleHelp = function() {
+          $scope.app.help = !$scope.app.help;
         };
 
         /**
@@ -470,6 +493,13 @@
 
           return arr;
         };
+
+        // Saves app configuration in local storage when configuration changes
+        $scope.$watch('app', function(nv) {
+          if (nv) {
+            webStorage.set('app', nv);
+          }
+        }, true);
 
         /**
          * Sends a request to update the sidebar pinned status in server.

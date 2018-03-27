@@ -404,6 +404,13 @@
                     </li>
                     <li class="divider"></li>
                     <li>
+                      <a href="#" ng-click="toggleHelp()">
+                        <i class="fa" ng-class="{ 'fa-toggle-on': isHelpEnabled(), 'fa-toggle-off': !isHelpEnabled() }"></i>
+                        {t}Show help{/t}
+                      </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
                       <a role="menuitem" tabindex="-1" href="{url name=core_authentication_logout}">
                         <i class="fa fa-power-off m-r-10"></i>
                         {t}Log out{/t}
