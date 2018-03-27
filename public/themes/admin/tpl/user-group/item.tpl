@@ -67,9 +67,31 @@
                       {t}Enabled{/t}
                     </label>
                   </div>
-                  <div class="controls">
+                </div>
+                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.visibility }" ng-click="expanded.visibility = !expanded.visibility">
+                  <i class="fa fa-eye m-r-5"></i>
+                  {t}Visibility{/t}
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.visibility }"></i>
+                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.visibility">
+                    <span ng-show="item.private">{t}Private{/t}</span>
+                    <span ng-show="!item.private">{t}Public{/t}</span>
+                  </span>
+                </div>
+                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.visibility }">
+                  <div class="form-group no-margin">
+                    <div class="checkbox">
+                      <input class="form-control" id="private" name="private" ng-false-value="0" ng-model="item.private" ng-true-value="1" type="checkbox">
+                      <label for="private" class="form-label">
+                        {t}Private{/t}
+                      </label>
+                    </div>
+                    <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                      <i class="fa fa-info-circle m-r-5 text-info"></i>
+                      {t}If enabled, subscribers will not see this subscription while registering or editing profile{/t}
+                    </span>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
@@ -84,38 +106,38 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="grid simple">
-          <div class="grid-title">
-            <h4>{t}Privileges{/t}</h4>
-          </div>
-          <div class="grid-body" id="privileges">
-            <div class="checkbox check-default check-title">
-              <input id="checkbox-all" ng-change="selectAll()" ng-checked="areAllSelected()" ng-model="selected.allSelected" type="checkbox">
-              <label for="checkbox-all">
-                <h5>{t}Toggle all privileges{/t}</h5>
-              </label>
-            </div>
-            <div class="ng-cloak">
-              <div ng-repeat="section in sections">
-                <h5>{t}[% section.title %]{/t}</h5>
-                <div class="row" ng-repeat="columns in section.rows">
-                  <div class="col-sm-3" ng-repeat="name in columns">
-                    <div class="col-sm-12 m-b-10">
-                      <div class="checkbox check-default check-title">
-                        <input id="checkbox-[% name %]" ng-change="selectModule(name)" ng-checked="isModuleSelected(name)" ng-model="selected.all[name]" type="checkbox">
-                        <label for="checkbox-[% name %]">
-                          <h5>[% name %]</h5>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 m-b-5" ng-repeat="privilege in data.extra.modules[name]">
-                      <div class="checkbox check-default">
-                        <input id="checkbox-[% name + '-' + $index %]" checklist-model="item.privileges" checklist-value="privilege.id" type="checkbox">
-                        <label for="checkbox-[% name + '-' + $index %]">
-                          [% privilege.description %]
-                        </label>
+            <div class="grid simple">
+              <div class="grid-title">
+                <h4>{t}Privileges{/t}</h4>
+              </div>
+              <div class="grid-body" id="privileges">
+                <div class="checkbox check-default check-title">
+                  <input id="checkbox-all" ng-change="selectAll()" ng-checked="areAllSelected()" ng-model="selected.allSelected" type="checkbox">
+                  <label for="checkbox-all">
+                    <h5>{t}Toggle all privileges{/t}</h5>
+                  </label>
+                </div>
+                <div class="ng-cloak">
+                  <div ng-repeat="section in sections">
+                    <h5>{t}[% section.title %]{/t}</h5>
+                    <div class="row" ng-repeat="columns in section.rows">
+                      <div class="col-sm-3" ng-repeat="name in columns">
+                        <div class="col-sm-12 m-b-10">
+                          <div class="checkbox check-default check-title">
+                            <input id="checkbox-[% name %]" ng-change="selectModule(name)" ng-checked="isModuleSelected(name)" ng-model="selected.all[name]" type="checkbox">
+                            <label for="checkbox-[% name %]">
+                              <h5>[% name %]</h5>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 m-b-5" ng-repeat="privilege in data.extra.modules[name]">
+                          <div class="checkbox check-default">
+                            <input id="checkbox-[% name + '-' + $index %]" checklist-model="item.privileges" checklist-value="privilege.id" type="checkbox">
+                            <label for="checkbox-[% name + '-' + $index %]">
+                              [% privilege.description %]
+                            </label>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

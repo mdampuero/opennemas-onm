@@ -33,7 +33,7 @@
         <div class="navbar-inner">
           <ul class="nav quick-section pull-left">
             <li class="quicklinks">
-              <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button">
+              <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button">
                 <i class="fa fa-arrow-left fa-lg"></i>
               </button>
             </li>
@@ -86,6 +86,36 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
+            <li class="quicklinks hidden-xs ng-cloak" ng-init="enabled = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
+              <ui-select name="enabled" theme="select2" ng-model="criteria.enabled">
+                <ui-select-match>
+                  <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
+                </ui-select-match>
+                <ui-select-choices repeat="item.value as item in enabled | filter: $select.search">
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </ui-select-choices>
+              </ui-select>
+            </li>
+            <li class="quicklinks hidden-xs ng-cloak" ng-init="private = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Private{/t}', value: 1}, { name: '{t}Public{/t}', value: 0 } ]">
+              <ui-select name="private" theme="select2" ng-model="criteria.private">
+                <ui-select-match>
+                  <strong>{t}Visibility{/t}:</strong> [% $select.selected.name %]
+                </ui-select-match>
+                <ui-select-choices repeat="item.value as item in private | filter: $select.search">
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </ui-select-choices>
+              </ui-select>
+            </li>
+            <li class="quicklinks hidden-xs ng-cloak" ng-init="request = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Manual{/t}', value: 1}, { name: '{t}Automatic{/t}', value: 0 } ]">
+              <ui-select name="request" theme="select2" ng-model="criteria.request">
+                <ui-select-match>
+                  <strong>{t}Requests{/t}:</strong> [% $select.selected.name %]
+                </ui-select-match>
+                <ui-select-choices repeat="item.value as item in request | filter: $select.search">
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </ui-select-choices>
+              </ui-select>
+            </li>
             <li class="quicklinks hidden-xs ng-cloak">
               <ui-select name="view" theme="select2" ng-model="criteria.epp">
                 <ui-select-match>
@@ -132,7 +162,18 @@
                     </div>
                   </th>
                   <th>{t}Name{/t}</th>
-                  <th class="text-center" width="50">{t}Enabled{/t}</th>
+                  <th class="text-center" width="150">
+                    <i class="fa fa-inbox" uib-tooltip="{t}Requests{/t}" tooltip-placement="left"></i>
+                    <span ng-if="isHelpEnabled()">{t}Request{/t}</span>
+                  </th>
+                  <th class="text-center" width="150">
+                    <i class="fa fa-eye" uib-tooltip="{t}Visibility{/t}" tooltip-placement="left"></i>
+                    <span ng-if="isHelpEnabled()">{t}Visibility{/t}</span>
+                  </th>
+                  <th class="text-center" width="150">
+                    <i class="fa fa-check" uib-tooltip="{t}Enabled{/t}" tooltip-placement="left"></i>
+                    <span ng-if="isHelpEnabled()">{t}Enabled{/t}</span>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -146,18 +187,28 @@
                   <td class="left">
                     [% item.name %]
                     <div class="listing-inline-actions">
-                      <a class="link" href="[% routing.generate('backend_subscription_show', { id: item.pk_user_group }) %]">
+                      <a class="btn btn-default btn-small" href="[% routing.generate('backend_subscription_show', { id: item.pk_user_group }) %]">
                         <i class="fa fa-pencil"></i> {t}Edit{/t}
                       </a>
-                      <button class="link link-danger" ng-click="delete(item.pk_user_group)" type="button">
+                      <button class="btn btn-danger btn-small" ng-click="delete(item.pk_user_group)" type="button">
                         <i class="fa fa-trash-o"></i>
                         {t}Delete{/t}
                       </button>
                     </div>
                   </td>
                   <td class="text-center">
+                    <button class="btn btn-white" ng-click="patch(item, 'request', item.request != 1 ? 1 : 0)" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.requestLoading, 'fa-thumbs-down text-error' : !item.requestLoading && item.request == 1, 'fa-thumbs-up text-success': !item.requestLoading && item.request == 0 }"></i>
+                    </button>
+                  </td>
+                  <td class="text-center">
+                    <button class="btn btn-white" ng-click="patch(item, 'private', item.private != 1 ? 1 : 0)" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.privateLoading, 'fa-eye-slash text-error' : !item.privateLoading && item.private == 1, 'fa-eye text-success': !item.privateLoading && item.private == 0 }"></i>
+                    </button>
+                  </td>
+                  <td class="text-center">
                     <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled != 1 ? 1 : 0)" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.enabledLoading, 'fa-check text-success' : !item.enabledLoading && item.enabled == '1', 'fa-times text-error': !item.enabledLoading && item.enabled == '0' }"></i>
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.enabledLoading, 'fa-check text-success' : !item.enabledLoading && item.enabled == 1, 'fa-times text-error': !item.enabledLoading && item.enabled == 0 }"></i>
                     </button>
                   </td>
                 </tr>

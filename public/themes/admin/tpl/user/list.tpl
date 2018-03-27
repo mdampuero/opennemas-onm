@@ -159,7 +159,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(items.id) }">
+                <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
                   <td class="checkbox-cell">
                     <div class="checkbox check-default">
                       <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
@@ -184,10 +184,10 @@
                       [% item.email%]
                     </span>
                     <div class="listing-inline-actions">
-                      <a class="link" href="[% routing.generate('backend_user_show', { id: item.id }) %]">
+                      <a class="btn btn-default btn-small" href="[% routing.generate('backend_user_show', { id: item.id }) %]">
                         <i class="fa fa-pencil"></i>{t}Edit{/t}
                       </a>
-                      <button class="link link-danger" ng-click="delete(item.id)" type="button">
+                      <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
                         <i class="fa fa-trash-o"></i>{t}Delete{/t}
                       </button>
                     </div>

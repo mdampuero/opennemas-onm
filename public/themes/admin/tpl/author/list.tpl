@@ -155,12 +155,12 @@
                     </span>
                     <div class="listing-inline-actions">
                       {acl isAllowed="AUTHOR_UPDATE"}
-                      <a class="link" href="[% routing.generate('backend_author_show', { id:  item.id }) %]" title="{t}Edit{/t}">
+                      <a class="btn btn-default btn-small" href="[% routing.generate('backend_author_show', { id:  item.id }) %]" title="{t}Edit{/t}">
                         <i class="fa fa-pencil"></i>{t}Edit{/t}
                       </a>
                       {/acl}
                       {acl isAllowed="AUTHOR_DELETE"}
-                      <button class="link link-danger" ng-click="delete(item.id)" type="button">
+                      <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
                         <i class="fa fa-trash-o"></i>{t}Delete{/t}
                       </button>
                       {/acl}
