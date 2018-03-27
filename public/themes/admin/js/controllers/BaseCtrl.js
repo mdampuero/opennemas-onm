@@ -61,16 +61,6 @@
         $scope.flags = { http: {} };
 
         /**
-         * @memberOf BaseCtrl
-         *
-         * @description
-         *  The list of overlays.
-         *
-         * @type {Object}
-         */
-        $scope.overlay = {};
-
-        /**
          * @function configure
          * @memberOf BaseCtrl
          *

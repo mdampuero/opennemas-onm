@@ -21,6 +21,16 @@
         $.extend(this, $controller('BaseCtrl', { $scope: $scope }));
 
         /**
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *  The list of overlays.
+         *
+         * @type {Object}
+         */
+        $scope.overlay = {};
+
+        /**
          * @function removeImage
          * @memberOf InnerCtrl
          *
@@ -68,29 +78,13 @@
          * @memberOf InnerCtrl
          *
          * @description
-         *   Insert the selected items in media picker in the target element.
+         *   Enables/disables an overlay by name.
          *
-         * @param String name The overlay name.
+         * @param {String} name The overlay name.
          */
         $scope.toggleOverlay = function(name) {
           $scope.overlay[name] = !$scope.overlay[name];
         };
-
-        // Updates linkers when locale changes
-        $scope.$watch('config.locale', function(nv, ov) {
-          if (nv === ov) {
-            return;
-          }
-
-          if (!$scope.config.multilanguage || !$scope.config.locale) {
-            return;
-          }
-
-          for (var key in $scope.config.linkers) {
-            $scope.config.linkers[key].setKey(nv);
-            $scope.config.linkers[key].update();
-          }
-        });
 
         // Initialize the scope with the input/select values.
         $('input, select, textarea').each(function(index, element) {
