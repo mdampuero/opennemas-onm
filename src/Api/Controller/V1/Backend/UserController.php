@@ -271,16 +271,12 @@ class UserController extends Controller
 
         if (!empty($items)) {
             $ids = array_filter(array_map(function ($a) {
-                return $a->avatar_img_id;
+                return [ 'photo', $a->avatar_img_id ];
             }, $items), function ($a) {
-                return !empty($a);
+                return !empty($a[1]);
             });
 
-            $photos = $this->get('entity_repository')->findBy([
-                'content_type_name' => [ [ 'value' => 'photo' ] ],
-                'pk_content'        => [ [ 'value' => $ids, 'operator' => 'in' ] ]
-            ]);
-
+            $photos = $this->get('entity_repository')->findMulti($ids);
             $photos = $this->get('data.manager.filter')
                 ->set($photos)
                 ->filter('mapify', [ 'key' => 'pk_photo' ])
