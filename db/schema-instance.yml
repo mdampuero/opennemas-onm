@@ -1511,7 +1511,7 @@ users:
             options: { length: 20, unsigned: true, autoincrement: true }
         username:
             type: string
-            options: { length: 100, default: null, notnull: true }
+            options: { length: 100, default: null, notnull: false }
         password:
             type: string
             options: { length: 50, default: null, notnull: false }
