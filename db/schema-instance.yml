@@ -1422,7 +1422,7 @@ user_groups:
             options: { length: 50, default: null, notnull: false }
         type:
             type:    integer
-            options: { default: 0, notnull: false }
+            options: { default: 0, notnull: true }
         private:
             type:    boolean
             options: { default: 0, notnull: true }
