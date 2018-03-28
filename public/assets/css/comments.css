@@ -242,7 +242,7 @@ button.alert{
     border-top-color:#fff;border-bottom-color:#fff;filter:alpha(opacity=75);-khtml-opacity:.75;-moz-opacity:.75;opacity:.75
 }
 @font-face{
-    font-family:'embed-icons';src:url("//mediacdn.disqus.com/1357153026/fonts/next/embed-icons.eot");src:url("//mediacdn.disqus.com/1357153026/fonts/next/embed-icons.eot?#iefix") format('embedded-opentype'),url("//mediacdn.disqus.com/1357153026/fonts/next/embed-icons.svg#IcoMoon") format('svg'),url("//mediacdn.disqus.com/1357153026/fonts/next/embed-icons.woff") format('woff'),url("//mediacdn.disqus.com/1357153026/fonts/next/embed-icons.ttf") format('truetype');font-weight:normal;font-style:normal
+    font-family:'embed-icons';src:url("https://a.disquscdn.com/1357153026/fonts/next/embed-icons.eot");src:url("https://a.disquscdn.com/1357153026/fonts/next/embed-icons.eot?#iefix") format('embedded-opentype'),url("https://a.disquscdn.com/1357153026/fonts/next/embed-icons.svg#IcoMoon") format('svg'),url("https://a.disquscdn.com/1357153026/fonts/next/embed-icons.woff") format('woff'),url("https://a.disquscdn.com/1357153026/fonts/next/embed-icons.ttf") format('truetype');font-weight:normal;font-style:normal
 }
 [data-icon]:before{
     font-family:'embed-icons';content:attr(data-icon);speak:none;font-weight:normal;-webkit-font-smoothing:antialiased
@@ -407,7 +407,7 @@ h6{
     padding-top:18px
 }
 .btn{
-    background:#e3e3e3 url("//mediacdn.disqus.com/1357153026/img/next/next-sprite.png") 0 0 repeat-x;display:inline-block;padding:9px 16px;color:#555;line-height:1.1;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;border:1px solid #a9b3c0;border:1px solid rgba(75,83,94,0.45);font-weight:700;-webkit-box-shadow:0 1px 2px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 6px rgba(255,255,255,.55);-moz-box-shadow:0 1px 2px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 6px rgba(255,255,255,.55);box-shadow:0 1px 2px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 6px rgba(255,255,255,.55);text-shadow:0 1px 0 rgba(255,255,255,0.6)
+    background:#e3e3e3 url("https://a.disquscdn.com/1357153026/img/next/next-sprite.png") 0 0 repeat-x;display:inline-block;padding:9px 16px;color:#555;line-height:1.1;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;border:1px solid #a9b3c0;border:1px solid rgba(75,83,94,0.45);font-weight:700;-webkit-box-shadow:0 1px 2px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 6px rgba(255,255,255,.55);-moz-box-shadow:0 1px 2px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 6px rgba(255,255,255,.55);box-shadow:0 1px 2px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 6px rgba(255,255,255,.55);text-shadow:0 1px 0 rgba(255,255,255,0.6)
 }
 .btn:hover{
     background-position:0 -40px;background-color:#f1f1f1
@@ -446,7 +446,7 @@ h6{
     font-size:13px;font-weight:500;display:block;text-align:center;padding:8px 14px
 }
 .loading{
-    background:;background:url("//mediacdn.disqus.com/1357153026/img/next/loader.gif") no-repeat center center;min-height:100px
+    background:;background:url("https://a.disquscdn.com/1357153026/img/next/loader.gif") no-repeat center center;min-height:100px
 }
 .avatar{
     position:absolute;top:16px;left:0;-webkit-transition:left .2s linear;-moz-transition:left .2s linear;-ms-transition:left .2s linear;-o-transition:left .2s linear;transition:left .2s linear
@@ -458,7 +458,7 @@ h6{
     -webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;display:block;height:36px;width:36px
 }
 .avatar .service{
-    height:16px;width:16px;background:url("//mediacdn.disqus.com/1357153026/img/next/reaction-twitter.png");position:absolute;z-index:100;bottom:-3px;right:-3px
+    height:16px;width:16px;background:url("https://a.disquscdn.com/1357153026/img/next/reaction-twitter.png");position:absolute;z-index:100;bottom:-3px;right:-3px
 }
 .guest .input-wrapper {
     margin-right:120px !important;
@@ -575,7 +575,7 @@ h6{
     display:block;height:30px;width:34px;position:relative
 }
 .postbox .post-actions .wysiwyg li a span{
-    -webkit-transition:opacity .1s linear;-moz-transition:opacity .1s linear;-ms-transition:opacity .1s linear;-o-transition:opacity .1s linear;transition:opacity .1s linear;display:block;height:14px;width:14px;position:absolute;top:9px;left:10px;background:url("//mediacdn.disqus.com/1357153026/img/next/wysiwyg.png");text-indent:-9999em;filter:alpha(opacity=65);-khtml-opacity:.65;-moz-opacity:.65;opacity:.65
+    -webkit-transition:opacity .1s linear;-moz-transition:opacity .1s linear;-ms-transition:opacity .1s linear;-o-transition:opacity .1s linear;transition:opacity .1s linear;display:block;height:14px;width:14px;position:absolute;top:9px;left:10px;background:url("https://a.disquscdn.com/1357153026/img/next/wysiwyg.png");text-indent:-9999em;filter:alpha(opacity=65);-khtml-opacity:.65;-moz-opacity:.65;opacity:.65
 }
 .postbox .post-actions .wysiwyg li a.attach span{
     background-position:0 -14px
@@ -632,7 +632,7 @@ h6{
     display:block;font-size:11px;line-height:1.2!important;color:#a9adb3;margin:4px 0 0 16px
 }
 .postbox section .what-is-disqus{
-    cursor:pointer;display:inline-block;height:16px;width:16px;background:url("//mediacdn.disqus.com/1357153026/img/next/question-mark.png");text-indent:-9999em;position:absolute;top:107px;left:153px
+    cursor:pointer;display:inline-block;height:16px;width:16px;background:url("https://a.disquscdn.com/1357153026/img/next/question-mark.png");text-indent:-9999em;position:absolute;top:107px;left:153px
 }
 .postbox section .what-is-disqus:hover #rules{
     filter:alpha(opacity=100);-khtml-opacity:1;-moz-opacity:1;opacity:1;visibility:visible!important
@@ -641,7 +641,7 @@ h6{
     filter:alpha(opacity=0);-khtml-opacity:0;-moz-opacity:0;opacity:0;visibility:hidden;-webkit-transition:all linear .2s;-moz-transition:all linear .2s;-ms-transition:all linear .2s;-o-transition:all linear .2s;transition:all linear .2s;text-indent:0;z-index:1000;position:absolute;width:340px;left:8px;bottom:30px;margin-left:-170px;padding:10px 12px 2px
 }
 .postbox section #rules:after{
-    display:block;content:"";width:30px;height:14px;background:url("//mediacdn.disqus.com/1357153026/img/next/tooltip-notch.png") bottom center;bottom:-14px;position:absolute;left:50%;margin-left:-15px
+    display:block;content:"";width:30px;height:14px;background:url("https://a.disquscdn.com/1357153026/img/next/tooltip-notch.png") bottom center;bottom:-14px;position:absolute;left:50%;margin-left:-15px
 }
 .postbox section #rules h3{
     color:#6f7e8b;border-bottom:2px solid #edeff2;padding:0 4px 11px;margin:0 0 10px;font-weight:600
@@ -743,7 +743,7 @@ h6{
     -webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none
 }
 .auth-section .connect .services li.sso a.no-image{
-    text-align:center;background:#e3e3e3 url("//mediacdn.disqus.com/1357153026/img/next/next-sprite.png") 0 0 repeat-x;display:inline-block;padding:9px 16px;color:#555;line-height:1.1;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;border:1px solid #a9b3c0;border:1px solid rgba(75,83,94,0.45);font-weight:700;-webkit-box-shadow:0 1px 2px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 6px rgba(255,255,255,.55);-moz-box-shadow:0 1px 2px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 6px rgba(255,255,255,.55);box-shadow:0 1px 2px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 6px rgba(255,255,255,.55);text-shadow:0 1px 0 rgba(255,255,255,0.6);display:block;width:143px;clear:both
+    text-align:center;background:#e3e3e3 url("https://a.disquscdn.com/1357153026/img/next/next-sprite.png") 0 0 repeat-x;display:inline-block;padding:9px 16px;color:#555;line-height:1.1;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;border:1px solid #a9b3c0;border:1px solid rgba(75,83,94,0.45);font-weight:700;-webkit-box-shadow:0 1px 2px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 6px rgba(255,255,255,.55);-moz-box-shadow:0 1px 2px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 6px rgba(255,255,255,.55);box-shadow:0 1px 2px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -2px 6px rgba(255,255,255,.55);text-shadow:0 1px 0 rgba(255,255,255,0.6);display:block;width:143px;clear:both
 }
 .auth-section .connect .services li.sso a.no-image:hover{
     background-position:0 -40px;background-color:#f1f1f1
@@ -776,16 +776,16 @@ h6{
     font-weight:normal;width:100%;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;padding:0 10px;background:rgba(0,0,0,0.03);border:1px solid rgba(0,0,0,0.1);height:24px;line-height:24px;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px
 }
 .auth-section .connect .services li.auth-twitter a{
-    background:url("//mediacdn.disqus.com/1357153026/img/next/social-icons.png")
+    background:url("https://a.disquscdn.com/1357153026/img/next/social-icons.png")
 }
 .auth-section .connect .services li.auth-facebook a{
-    background:url("//mediacdn.disqus.com/1357153026/img/next/social-icons.png") -32px 0
+    background:url("https://a.disquscdn.com/1357153026/img/next/social-icons.png") -32px 0
 }
 .auth-section .connect .services li.auth-google a{
-    background:url("//mediacdn.disqus.com/1357153026/img/next/social-icons.png") -64px 0
+    background:url("https://a.disquscdn.com/1357153026/img/next/social-icons.png") -64px 0
 }
 .auth-section .connect .services li.auth-disqus a{
-    background:url("//mediacdn.disqus.com/1357153026/img/next/social-icons.png") -96px 0
+    background:url("https://a.disquscdn.com/1357153026/img/next/social-icons.png") -96px 0
 }
 .auth-section .audiencesync{
     margin-bottom:.5em;overflow:hidden
@@ -884,7 +884,7 @@ h6{
     background:#BDC5C9;background:rgba(34,59,74,0.3)
 }
 #realtime-toggle .btn span{
-    display:block;position:absolute;top:2px;left:5px;width:18px;height:19px;background-image:url("//mediacdn.disqus.com/1357153026/img/next/realtime-toggle.png")
+    display:block;position:absolute;top:2px;left:5px;width:18px;height:19px;background-image:url("https://a.disquscdn.com/1357153026/img/next/realtime-toggle.png")
 }
 #realtime-toggle .btn.play span{
     background-position:0 0
@@ -974,10 +974,10 @@ h6{
     position:relative
 }
 .nav .dropdown-menu li.selected a:after{
-    content:"";position:absolute;right:10px;top:8px;display:block;width:10px;height:8px;background:url("//mediacdn.disqus.com/1357153026/img/next/checkmark.png")
+    content:"";position:absolute;right:10px;top:8px;display:block;width:10px;height:8px;background:url("https://a.disquscdn.com/1357153026/img/next/checkmark.png")
 }
 .nav .dropdown-menu li.selected a:hover:after{
-    background:url("//mediacdn.disqus.com/1357153026/img/next/checkmark.png") 0 -8px
+    background:url("https://a.disquscdn.com/1357153026/img/next/checkmark.png") 0 -8px
 }
 .nav .dropdown-toggle{
     background:transparent!important;color:#777!important
@@ -1331,7 +1331,7 @@ h6{
     clear:both
 }
 .post-content .post-message.loading{
-    background:url("//mediacdn.disqus.com/1357153026/img/next/waiting.gif") center left no-repeat;min-height:22px
+    background:url("https://a.disquscdn.com/1357153026/img/next/waiting.gif") center left no-repeat;min-height:22px
 }
 .post-content .post-message p{
     line-height:22px;margin:0 0 9px
@@ -1502,13 +1502,13 @@ h6{
     margin:0;padding:0;border:0;font-weight:normal;font-size:11px;line-height:11px;color:#999;text-shadow:0 1px 0 #fff
 }
 .share .twitter a{
-    background:url("//mediacdn.disqus.com/1357153026/img/next/share.png") 0 0
+    background:url("https://a.disquscdn.com/1357153026/img/next/share.png") 0 0
 }
 .share .facebook a{
-    background:url("//mediacdn.disqus.com/1357153026/img/next/share.png") -18px 0
+    background:url("https://a.disquscdn.com/1357153026/img/next/share.png") -18px 0
 }
 .share .link a{
-    background:url("//mediacdn.disqus.com/1357153026/img/next/share.png") -54px 0
+    background:url("https://a.disquscdn.com/1357153026/img/next/share.png") -54px 0
 }
 .share>* a{
     display:inline-block;width:18px!important;height:18px!important;filter:alpha(opacity=60);-khtml-opacity:.6;-moz-opacity:.6;opacity:.6;text-indent:-9999em;overflow:hidden;padding:0;-webkit-transition:opacity .2s linear;-moz-transition:opacity .2s linear;-ms-transition:opacity .2s linear;-o-transition:opacity .2s linear;transition:opacity .2s linear
@@ -1541,7 +1541,7 @@ h6{
     clear:both
 }
 .moderate.loading{
-    background:url("//mediacdn.disqus.com/1357153026/img/next/waiting.gif") center center no-repeat;min-height:22px
+    background:url("https://a.disquscdn.com/1357153026/img/next/waiting.gif") center center no-repeat;min-height:22px
 }
 .moderate.loading *{
     display:none
@@ -1626,13 +1626,13 @@ h6{
     display:block;height:16px;width:16px;text-indent:-9999em
 }
 .user-info .services li.facebook a{
-    background:url("//mediacdn.disqus.com/1357153026/img/next/social-icons-sm.png")
+    background:url("https://a.disquscdn.com/1357153026/img/next/social-icons-sm.png")
 }
 .user-info .services li.twitter a{
-    background:url("//mediacdn.disqus.com/1357153026/img/next/social-icons-sm.png") -16px 0
+    background:url("https://a.disquscdn.com/1357153026/img/next/social-icons-sm.png") -16px 0
 }
 .user-info .services li.google a{
-    background:url("//mediacdn.disqus.com/1357153026/img/next/social-icons-sm.png") -32px 0
+    background:url("https://a.disquscdn.com/1357153026/img/next/social-icons-sm.png") -32px 0
 }
 .user-info p{
     margin:4px 0;line-height:1.4
@@ -1680,10 +1680,10 @@ h6{
     padding-left:8px;padding-right:8px
 }
 .user-stats .mute span{
-    display:block;text-indent:-9999em;height:12px;width:12px;background:url("//mediacdn.disqus.com/1357153026/img/next/mute.png")
+    display:block;text-indent:-9999em;height:12px;width:12px;background:url("https://a.disquscdn.com/1357153026/img/next/mute.png")
 }
 .user-stats .mute:hover span{
-    background:url("//mediacdn.disqus.com/1357153026/img/next/mute.png") 0 -12px
+    background:url("https://a.disquscdn.com/1357153026/img/next/mute.png") 0 -12px
 }
 .tooltip-outer{
     padding:0 0 0 12px;z-index:2000;position:absolute;top:-20px;left:0;left:36px
@@ -1692,10 +1692,10 @@ h6{
     position:relative;background:#fff;background:rgba(255,255,255,0.94);-webkit-transition:opacity .25s linear;-moz-transition:opacity .25s linear;-ms-transition:opacity .25s linear;-o-transition:opacity .25s linear;transition:opacity .25s linear;width:290px;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;-webkit-box-shadow:0 1px 6px rgba(0,0,0,0.28);-moz-box-shadow:0 1px 6px rgba(0,0,0,0.28);box-shadow:0 1px 6px rgba(0,0,0,0.28);border:1px solid #959da4;border:1px solid #97a4b3;padding:8px 8px 0;color:#7f8d99
 }
 .tooltip .jump{
-    padding:0 14px 0 0;background:url("//mediacdn.disqus.com/1357153026/img/next/proceed.png") center right no-repeat
+    padding:0 14px 0 0;background:url("https://a.disquscdn.com/1357153026/img/next/proceed.png") center right no-repeat
 }
 .tooltip .notch{
-    width:14px;height:30px;background:url("//mediacdn.disqus.com/1357153026/img/next/tooltip-notch.png") left center;position:absolute;top:16px;left:-14px
+    width:14px;height:30px;background:url("https://a.disquscdn.com/1357153026/img/next/tooltip-notch.png") left center;position:absolute;top:16px;left:-14px
 }
 .tooltip .avatar{
     top:8px!important;left:8px
@@ -1734,13 +1734,13 @@ h6{
     font-size:12px;padding:0;padding:4px 6px;line-height:1
 }
 .tooltip footer .full-profile{
-    color:#7f8d99;font-weight:700;float:right!important;font-size:12px;line-height:1.9;padding:0 13px 0 0;background:url("//mediacdn.disqus.com/1357153026/img/next/proceed.png") center right no-repeat
+    color:#7f8d99;font-weight:700;float:right!important;font-size:12px;line-height:1.9;padding:0 13px 0 0;background:url("https://a.disquscdn.com/1357153026/img/next/proceed.png") center right no-repeat
 }
 .tooltip footer .mute span{
-    display:block;text-indent:-9999em;height:12px;width:12px;background:url("//mediacdn.disqus.com/1357153026/img/next/mute.png")
+    display:block;text-indent:-9999em;height:12px;width:12px;background:url("https://a.disquscdn.com/1357153026/img/next/mute.png")
 }
 .tooltip footer .mute:hover span{
-    background:url("//mediacdn.disqus.com/1357153026/img/next/mute.png") 0 -12px
+    background:url("https://a.disquscdn.com/1357153026/img/next/mute.png") 0 -12px
 }
 .user-activity .avatar{
     top:0
@@ -2233,7 +2233,7 @@ body.dark #footer .logo a{
 }
 #footer .logo a{
     display:block;float:right;text-indent:-9999em;
-    /*background-image:url("//mediacdn.disqus.com/1357153026/img/next/powered-by.png");*/
+    /*background-image:url("https://a.disquscdn.com/1357153026/img/next/powered-by.png");*/
     background-position:right top;background-repeat:no-repeat;height:16px;width:86px;padding:0
 }
 #footer .rss a,#footer .email a{
