@@ -50,8 +50,8 @@
         <div class="text-center p-b-15 p-t-15">
           <a href="[% routing.generate('backend_users_list') %]">
             <i class="fa fa-4x fa-warning text-warning"></i>
-            <h3>{t 1=$id}Unable to find any user with id "%1".{/t}</h3>
-            <h4>{t}Click here to return to the list of users.{/t}</h4>
+            <h3>{t}Unable to find the item{/t}</h3>
+            <h4>{t}Click here to return to the list{/t}</h4>
           </a>
         </div>
       </div>
@@ -61,149 +61,148 @@
             <div class="grid simple">
               <div class="grid-body no-padding">
                 {acl isAllowed="USER_ADMIN"}
-                  <div class="grid-collapse-title">
-                    <div class="form-group no-margin">
-                      <div class="checkbox">
-                        <input id="activated" name="activated" ng-false-value="0" ng-model="item.activated" ng-true-value="1" type="checkbox">
-                        <label class="form-label" for="activated">
-                          {t}Enabled{/t}
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.user_groups }" ng-click="expanded.user_groups = !expanded.user_groups">
-                    <i class="fa fa-users m-r-5"></i>
-                    {t}User Groups{/t}
-                    <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.user_groups }"></i>
-                    <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.user_groups && (toArray(item.user_groups) | filter: { status: 1 }).length > 0">
-                      <span ng-show="(toArray(item.user_groups) | filter: { status: 1 }).length === toArray(data.extra.user_groups).length">{t}All{/t}</span>
-                      <span ng-show="(toArray(item.user_groups) | filter: { status: 1 }).length !== toArray(data.extra.user_groups).length">
-                        <strong>[% (toArray(item.user_groups) | filter: { status: 1 }).length %]</strong> {t}selected{/t}
-                      </span>
-                    </span>
-                  </div>
-                  <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.user_groups }">
-                    {acl isAllowed="USER_ADMIN"}
-                      <div class="checkbox p-b-5" ng-repeat="user_group in data.extra.user_groups">
-                        <input id="checkbox-[% $index %]" ng-false-value="0" ng-model="item.user_groups[user_group.pk_user_group].status" ng-true-value="1" type="checkbox">
-                        <label for="checkbox-[% $index %]">[% user_group.name %]</label>
-                      </div>
-                    {/acl}
-                  </div>
-                  <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.category = !expanded.category">
-                    <input name="categories" ng-value="categories" type="hidden">
-                    <i class="fa fa-bookmark m-r-5"></i>
-                    {t}Categories{/t}
-                    <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
-                    <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.category">
-                      <span ng-show="item.categories.length === 0 || flags.categories.none">{t}All{/t}</span>
-                      <span ng-show="item.categories.length != 0 && !flags.categories.none">
-                        <strong>[% item.categories.length %]</strong> {t}selected{/t}
-                      </span>
-                    </span>
-                  </div>
-                  <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.category, 'no-animate': flags.categories.none }">
+                <div class="grid-collapse-title">
+                  <div class="form-group no-margin">
                     <div class="checkbox">
-                      <input id="category-all" name="category-all" ng-model="flags.categories.none" ng-true-value="true" ng-false-value="false" type="checkbox">
-                      <label class="form-label" for="category-all">
-                        {t}Access to all categories{/t}
+                      <input id="activated" name="activated" ng-false-value="0" ng-model="item.activated" ng-true-value="1" type="checkbox">
+                      <label class="form-label" for="activated">
+                        {t}Enabled{/t}
                       </label>
                     </div>
-                    <div class="m-t-10" ng-show="!flags.categories.none">
-                      <div class="m-b-10">
-                        <small class="help">
-                          <i class="fa fa-info-circle m-r-5 text-info"></i>
-                          {t}The user can assign contents to the selected categories only{/t}
-                        </small>
-                      </div>
-                      <div class="checkbox p-b-5">
-                        <input id="toggle-categories" name="toggle-categories" ng-change="areAllCategoriesSelected()" ng-model="flags.categories.all" type="checkbox">
-                        <label class="form-label" for="toggle-categories">
-                          {t}Select/deselect all{/t}
-                        </label>
-                      </div>
-                      <div class="checkbox-list checkbox-list-user-groups">
-                        <div class="checkbox p-b-5" ng-repeat="category in (filteredCategories = (data.extra.categories | filter : { parent: 0 }))" ng-if="category.id != 0">
-                          <div class="m-t-15" ng-if="$index > 0 && category.type != filteredCategories[$index - 1].type">
-                            <h5 ng-if="category.type == 1"><i class="fa fa-sticky-note m-r-5"></i>{t}Contents{/t}</h5>
-                            <h5 ng-if="category.type == 7"><i class="fa fa-camera m-r-5"></i>{t}Albums{/t}</h5>
-                            <h5 ng-if="category.type == 9"><i class="fa fa-play-circle-o m-r-5"></i>{t}Videos{/t}</h5>
-                            <h5 ng-if="category.type == 11"><i class="fa fa-pie-chart m-r-5"></i>{t}Polls{/t}</h5>
-                          </div>
-                          <div ng-if="category.parent == 0">
-                            <input id="category-[% category.id %]" name="category-[% category.id %]" checklist-model="item.categories" checklist-value="category.id" type="checkbox">
-                            <label class="form-label" for="category-[% category.id %]">
-                              [% category.name %]
+                  </div>
+                </div>
+                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.user_groups }" ng-click="expanded.user_groups = !expanded.user_groups">
+                  <i class="fa fa-users m-r-5"></i>
+                  {t}User Groups{/t}
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.user_groups }"></i>
+                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.user_groups && (toArray(item.user_groups) | filter: { status: 1 }).length > 0">
+                    <span ng-show="(toArray(item.user_groups) | filter: { status: 1 }).length === toArray(data.extra.user_groups).length">{t}All{/t}</span>
+                    <span ng-show="(toArray(item.user_groups) | filter: { status: 1 }).length !== toArray(data.extra.user_groups).length">
+                      <strong>[% (toArray(item.user_groups) | filter: { status: 1 }).length %]</strong> {t}selected{/t}
+                    </span>
+                  </span>
+                </div>
+                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.user_groups }">
+                  {acl isAllowed="USER_ADMIN"}
+                  <div class="checkbox p-b-5" ng-repeat="user_group in data.extra.user_groups">
+                    <input id="checkbox-[% $index %]" ng-false-value="0" ng-model="item.user_groups[user_group.pk_user_group].status" ng-true-value="1" type="checkbox">
+                    <label for="checkbox-[% $index %]">[% user_group.name %]</label>
+                  </div>
+                  {/acl}
+                </div>
+                <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.category = !expanded.category">
+                  <input name="categories" ng-value="categories" type="hidden">
+                  <i class="fa fa-bookmark m-r-5"></i>
+                  {t}Categories{/t}
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
+                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.category">
+                    <span ng-show="item.categories.length === 0 || flags.categories.none">{t}All{/t}</span>
+                    <span ng-show="item.categories.length != 0 && !flags.categories.none">
+                      <strong>[% item.categories.length %]</strong> {t}selected{/t}
+                    </span>
+                  </span>
+                </div>
+                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.category, 'no-animate': flags.categories.none }">
+                  <div class="checkbox">
+                    <input id="category-all" name="category-all" ng-model="flags.categories.none" ng-true-value="true" ng-false-value="false" type="checkbox">
+                    <label class="form-label" for="category-all">
+                      {t}Access to all categories{/t}
+                    </label>
+                  </div>
+                  <div class="m-t-10" ng-show="!flags.categories.none">
+                    <div class="m-b-10" ng-show="isHelpEnabled()">
+                      <small class="help m-l-3">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}The user can assign contents to the selected categories only{/t}
+                      </small>
+                    </div>
+                    <div class="checkbox p-b-5">
+                      <input id="toggle-categories" name="toggle-categories" ng-change="areAllCategoriesSelected()" ng-model="flags.categories.all" type="checkbox">
+                      <label class="form-label" for="toggle-categories">
+                        {t}Select/deselect all{/t}
+                      </label>
+                    </div>
+                    <div class="checkbox-list checkbox-list-user-groups">
+                      <div class="checkbox p-b-5" ng-repeat="category in (filteredCategories = (data.extra.categories | filter : { parent: 0 }))" ng-if="category.id != 0">
+                        <div class="m-t-15" ng-if="$index > 0 && category.type != filteredCategories[$index - 1].type">
+                          <h5 ng-if="category.type == 1"><i class="fa fa-sticky-note m-r-5"></i>{t}Contents{/t}</h5>
+                          <h5 ng-if="category.type == 7"><i class="fa fa-camera m-r-5"></i>{t}Albums{/t}</h5>
+                          <h5 ng-if="category.type == 9"><i class="fa fa-play-circle-o m-r-5"></i>{t}Videos{/t}</h5>
+                          <h5 ng-if="category.type == 11"><i class="fa fa-pie-chart m-r-5"></i>{t}Polls{/t}</h5>
+                        </div>
+                        <div ng-if="category.parent == 0">
+                          <input id="category-[% category.id %]" name="category-[% category.id %]" checklist-model="item.categories" checklist-value="category.id" type="checkbox">
+                          <label class="form-label" for="category-[% category.id %]">
+                            [% category.name %]
+                          </label>
+                        </div>
+                        <div ng-if="category.id != 0">
+                          <div ng-repeat="subcategory in extra.categories | filter : { parent: category.id }">
+                            <input id="category-[% subcategory.id %]" name="category-[% subcategory.id %]" checklist-model="item.categories" checklist-value="subcategory.id" type="checkbox">
+                            <label class="form-label" for="category-[% subcategory.id %]">
+                              &rarr; [% subcategory.name %]
                             </label>
-                          </div>
-                          <div ng-if="category.id != 0">
-                            <div ng-repeat="subcategory in extra.categories | filter : { parent: category.id }">
-                              <input id="category-[% subcategory.id %]" name="category-[% subcategory.id %]" checklist-model="item.categories" checklist-value="subcategory.id" type="checkbox">
-                              <label class="form-label" for="category-[% subcategory.id %]">
-                                &rarr; [% subcategory.name %]
-                              </label>
-                            </div>
                           </div>
                         </div>
                       </div>
-                    <div class="m-t-5" ng-if="flags.categories.all">
-                      <small class="help">
+                    </div>
+                    <div class="m-t-5" ng-if="flags.categories.all" ng-show="isHelpEnabled()">
+                      <small class="help m-l-3">
                         <i class="fa fa-exclamation-triangle m-r-5 text-warning"></i>
-                        {t}We recomend you to use the "Access to all categories" mark to avoid unchecked future created categories{/t}
+                        {t}We recommend you to use the "Access to all categories" mark to avoid unchecked future created categories{/t}
                       </small>
                     </div>
-                    </div>
                   </div>
-                  <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.settings }" ng-click="expanded.language = !expanded.language">
-                    <i class="fa fa-globe m-r-5"></i>
-                    {t}Language & time{/t}
-                    <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.language }"></i>
+                </div>
+                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.settings }" ng-click="expanded.language = !expanded.language">
+                  <i class="fa fa-globe m-r-5"></i>
+                  {t}Language & time{/t}
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.language }"></i>
+                </div>
+                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.language }">
+                  <label class="form-label" for="language">
+                    {t}Language{/t}
+                  </label>
+                  <div class="controls">
+                    <select id="language" name="language" ng-model="item.user_language">
+                      <option value="[% key %]" ng-repeat="(key, value) in data.extra.languages">[% value %]</option>
+                    </select>
+                    <div class="m-t-10" ng-show="isHelpEnabled()">
+                      <small class="help m-l-3">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}Used for interface, messages and units in the control panel{/t}</div>
+                      </small>
                   </div>
-                  <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.language }">
-                    <label class="form-label" for="language">
-                      {t}Language{/t}
-                    </label>
-                    <div class="controls">
-                      <select id="language" name="language" ng-model="item.user_language">
-                        <option value="[% key %]" ng-repeat="(key, value) in data.extra.languages">[% value %]</option>
-                      </select>
-                      <div class="m-t-10">
-                        <small class="help">
-                          <i class="fa fa-info-circle m-r-5 text-info"></i>
-                          {t}Used for interface, messages and units in the control panel{/t}</div>
-                        </small>
-                      </div>
-                    </div>
-                  </div>
+                </div>
                 {/acl}
               </div>
             </div>
-            {if isset($user['id']) && ($user['id'] == $app.user->id)}
-            <div class="row">
-              <div class="col-md-12">
-                <div class="grid simple">
-                  <div class="grid-title">
-                    <h4>{t}Social Networks{/t}</h4>
-                  </div>
-                  <div class="grid-body">
-                    <div class="form-group">
-                      <label class="form-label" for="facebook_login">{t}Facebook{/t}</label>
-                      <div class="controls">
-                        <iframe src="{url name=backend_user_social id=$user['id'] resource='facebook'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
-                      </div>
+          </div>
+          {if isset($user['id']) && ($user['id'] == $app.user->id)}
+          <div class="row">
+            <div class="col-md-12">
+              <div class="grid simple">
+                <div class="grid-title">
+                  <h4>{t}Social Networks{/t}</h4>
+                </div>
+                <div class="grid-body">
+                  <div class="form-group">
+                    <label class="form-label" for="facebook_login">{t}Facebook{/t}</label>
+                    <div class="controls">
+                      <iframe src="{url name=backend_user_social id=$user['id'] resource='facebook'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
                     </div>
-                    <div class="form-group">
-                      <label class="form-label" for="twitter_login">{t}Twitter{/t}</label>
-                      <div class="controls">
-                        <iframe src="{url name=backend_user_social id=$user['id'] resource='twitter'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
-                      </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="twitter_login">{t}Twitter{/t}</label>
+                    <div class="controls">
+                      <iframe src="{url name=backend_user_social id=$user['id'] resource='twitter'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            {/if}
           </div>
+          {/if}
           <div class="col-md-8 col-md-pull-4">
             <div class="grid simple">
               <div class="grid-body">

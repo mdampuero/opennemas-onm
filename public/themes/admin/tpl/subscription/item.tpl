@@ -50,8 +50,8 @@
         <div class="text-center p-b-15 p-t-15">
           <a href="[% routing.generate('backend_subscribers_list') %]">
             <i class="fa fa-4x fa-warning text-warning"></i>
-            <h3>{t 1=$id}Unable to find any subscription with id "%1".{/t}</h3>
-            <h4>{t}Click here to return to the list of subscriptions.{/t}</h4>
+            <h3>{t}Unable to find the item{/t}</h3>
+            <h4>{t}Click here to return to the list{/t}</h4>
           </a>
         </div>
       </div>
@@ -219,7 +219,7 @@
             </div>
             <div class="grid simple">
               <div class="grid-title">
-                <h4>{t}Restrictions for non members{/t}</h4>
+                <h4>{t}Restrictions for non-members{/t}</h4>
               </div>
               <div class="grid-body">
                 <div class="form-group">
@@ -289,7 +289,7 @@
                   </div>
                   <div class="help m-l-3" ng-show="isHelpEnabled()">
                     <i class="fa fa-info-circle m-r-5 text-info"></i>
-                    {t}Some information will be hidden for non-members  when accessing contents in this subscription{/t}
+                    {t}Some information will be hidden for non-members when accessing contents in this subscription{/t}
                   </div>
                 </div>
               </div>

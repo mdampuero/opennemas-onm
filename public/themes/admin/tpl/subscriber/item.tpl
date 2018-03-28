@@ -44,7 +44,7 @@
                       <li>
                         <a href="#" ng-click="convertTo('type', 2)" ng-if="item.type !== 2">
                           <i class="fa fa-level-up"></i>
-                          {t}Convert to user + subscriber{/t}
+                          {t}Convert to subscriber + user{/t}
                         </a>
                       </li>
                       <li class="divider" ng-if="item.type !== 2"></li>
@@ -74,8 +74,8 @@
         <div class="text-center p-b-15 p-t-15">
           <a href="[% routing.generate('backend_subscribers_list') %]">
             <i class="fa fa-4x fa-warning text-warning"></i>
-            <h3>{t 1=$id}Unable to find any subscriber with id "%1".{/t}</h3>
-            <h4>{t}Click here to return to the list of subscribers.{/t}</h4>
+            <h3>{t}Unable to find the item{/t}</h3>
+            <h4>{t}Click here to return to the list{/t}</h4>
           </a>
         </div>
       </div>

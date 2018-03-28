@@ -50,8 +50,8 @@
         <div class="text-center p-b-15 p-t-15">
           <a href="[% routing.generate('backend_user_groups_list') %]">
             <i class="fa fa-4x fa-warning text-warning"></i>
-            <h3>{t 1=$id}Unable to find any user group with id "%1".{/t}</h3>
-            <h4>{t}Click here to return to the list of user groups.{/t}</h4>
+            <h3>{t}Unable to find the item{/t}</h3>
+            <h4>{t}Click here to return to the list{/t}</h4>
           </a>
         </div>
       </div>
@@ -119,7 +119,7 @@
                 </div>
                 <div class="ng-cloak">
                   <div ng-repeat="section in sections">
-                    <h5>{t}[% section.title %]{/t}</h5>
+                    <h5>[% section.title %]</h5>
                     <div class="row" ng-repeat="columns in section.rows">
                       <div class="col-sm-3" ng-repeat="name in columns">
                         <div class="col-sm-12 m-b-10">

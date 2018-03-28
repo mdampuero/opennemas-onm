@@ -58,8 +58,8 @@
         <div class="text-center p-b-15 p-t-15">
           <a href="[% routing.generate('backend_users_list') %]">
             <i class="fa fa-4x fa-warning text-warning"></i>
-            <h3>{t 1=$id}Unable to find any user with id "%1".{/t}</h3>
-            <h4>{t}Click here to return to the list of users.{/t}</h4>
+            <h3>{t}Unable to find the item{/t}</h3>
+            <h4>{t}Click here to return to the list{/t}</h4>
           </a>
         </div>
       </div>
@@ -75,7 +75,7 @@
                       <label class="form-label" for="inrss">
                         {t}Show in RSS{/t}
                       </label>
-                      <div class="help m-t-5">
+                      <div class="help m-t-5" ng-show="isHelpEnabled()">
                         <i class="fa fa-info-circle m-r-5 text-info"></i>
                         {t}If this option is activated this author will be showed in rss{/t}
                       </div>
@@ -89,7 +89,7 @@
                           {t}View as Blog{/t}
                         </label>
                       </div>
-                      <div class="help m-t-5">
+                      <div class="help m-t-5" ng-show="isHelpEnabled()">
                         <i class="fa fa-info-circle m-r-5 text-info"></i>
                         {t}If this option is activated page author will be showed as blog{/t}
                       </div>

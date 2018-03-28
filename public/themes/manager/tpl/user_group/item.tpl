@@ -72,7 +72,7 @@
         </div>
         <div>
           <div ng-repeat="section in sections">
-            <h5 class="m-t-30 semi-bold">{t}[% section.title %]{/t}</h5>
+            <h5 class="m-t-30 semi-bold">[% section.title %]</h5>
             <div class="row" ng-repeat="columns in section.rows">
               <div class="col-sm-3" ng-repeat="name in columns">
                 <div class="col-sm-12 m-b-10">
