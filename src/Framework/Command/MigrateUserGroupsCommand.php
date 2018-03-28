@@ -58,7 +58,12 @@ class MigrateUserGroupsCommand extends ContainerAwareCommand
 
         foreach ($items as $item) {
             $userId = $item['id'];
-            $groups = explode(',', $item['fk_user_group']);
+            $groups = array_filter(
+                explode(',', $item['fk_user_group']),
+                function ($a) {
+                    return !empty($a);
+                }
+            );
 
             foreach ($groups as $group) {
                 try {
