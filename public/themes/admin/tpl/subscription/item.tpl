@@ -138,7 +138,7 @@
                     <label class="form-label">{t}Newsletter{/t}</label>
                     <label class="pointer" for="member-newsletter">
                       <div class="checkbox">
-                        <input id="member-newsletter" type="checkbox">
+                        <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_SEND_NEWSLETTER')" id="member-newsletter" type="checkbox">
                         <label for="member-newsletter">{t}Send newsletter{/t}</label>
                       </div>
                       <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
@@ -151,7 +151,7 @@
                     <label class="form-label m-t-15">{t}Advertisement{/t}</label>
                     <label class="pointer" for="member-advertisement">
                       <div class="checkbox">
-                        <input id="member-advertisement" type="checkbox">
+                        <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_HIDE_ADVERTISEMENTS')"id="member-advertisement" type="checkbox">
                         <label for="member-advertisement">{t}Hide advertisements{/t}</label>
                       </div>
                       <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
@@ -164,7 +164,7 @@
                     <label class="form-label m-t-15">{t}Payment{/t}</label>
                     <label class="pointer" for="member-payment">
                       <div class="checkbox">
-                        <input id="member-payment" type="checkbox">
+                        <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_REQUIRES_PAYMENT')"id="member-payment" type="checkbox">
                         <label for="member-payment">{t}Requires payment{/t}</label>
                       </div>
                       <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
@@ -179,7 +179,7 @@
                     <label class="form-label">{t}Restrictions{/t}</label>
                     <label class="pointer" for="member-print">
                       <div class="checkbox">
-                        <input id="member-print" type="checkbox">
+                        <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_HIDE_PRINT')" id="member-print" type="checkbox">
                         <label for="member-print">{t}Hide print button{/t}</label>
                       </div>
                       <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
@@ -192,8 +192,8 @@
                     <label class="form-label m-t-15">&nbsp</label>
                     <label class="pointer" for="member-social">
                       <div class="checkbox">
-                        <input id="member-social" type="checkbox">
-                        <label for="member-social">{t}Hide social buttons{/t}</label>
+                        <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_HIDE_SOCIAL')" id="member-social" type="checkbox">
+                        <label for="member-social">{t}Hide social networks buttons{/t}</label>
                       </div>
                       <span class="help m-l-3 m-t-6" ng-show="isHelpEnabled()">
                         <i class="fa fa-info-circle m-r-5 text-info"></i>
@@ -205,7 +205,7 @@
                     <label class="form-label m-t-15">&nbsp</label>
                     <label class="pointer" for="member-edit">
                       <div class="checkbox">
-                        <input id="member-edit" type="checkbox">
+                        <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_BLOCK_BROWSER')" id="member-edit" type="checkbox">
                         <label for="member-edit">{t}Block browser actions (cut, copy,...){/t}</label>
                       </div>
                       <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
@@ -226,70 +226,41 @@
                   <label class="form-label">{t}Redirection{/t}</label>
                   <label class="pointer" for="redirection">
                     <div class="checkbox">
-                      <input id="redirection" name="redirection" ng-model="redirection" type="checkbox">
+                      <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_REDIRECT')" id="redirection" type="checkbox">
                       <label for="redirection">{t}Redirect to frontpage{/t}</label>
                     </div>
-                    <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                    <span class="help m-l-3" ng-show="isHelpEnabled()">
                       <i class="fa fa-info-circle m-r-5 text-info"></i>
                       {t}If enabled, non-members will be redirect to frontpage when accessing contents in this subscription{/t}
                     </span>
                   </label>
                 </div>
-                <label class="form-label">{t}Hide information{/t}</label>
-                <div class="form-group no-margin">
-                  <div class="row">
-                    <div class="col-xs-6">
-                      <div class="checkbox p-b-10">
-                        <input id="non-member-title" ng-disabled="redirection" type="checkbox">
-                        <label for="non-member-title">{t}Hide title{/t}</label>
+                <div class="row">
+                  <div class="col-xs-6">
+                    <label class="form-label">{t}Hide information{/t}</label>
+                    <div class="form-group no-margin">
+                      <div class="checkbox m-b-5" ng-repeat="permission in data.extra.modules.FRONTEND | filter: { name: 'NON_MEMBER_HIDE' }">
+                        <input checklist-model="item.privileges" checklist-value="permission.pk_privilege" id="non-member-[% $index %]" ng-disabled="item.privileges.indexOf(getPermissionId('NON_MEMBER_REDIRECT')) !== -1" type="checkbox">
+                        <label for="non-member-[% $index %]">[% permission.description %]</label>
                       </div>
-                      <div class="checkbox p-b-10">
-                        <input id="non-member-summary" ng-disabled="redirection" type="checkbox">
-                        <label for="non-member-summary">{t}Hide summary{/t}</label>
-                      </div>
-                      <div class="checkbox p-b-10">
-                        <input id="non-member-body" ng-disabled="redirection" type="checkbox">
-                        <label for="non-member-body">{t}Hide body{/t}</label>
-                      </div>
-                      <div class="checkbox p-b-10">
-                        <input id="non-member-pretitle" ng-disabled="redirection" type="checkbox">
-                        <label for="non-member-pretitle">{t}Hide prepretitle{/t}</label>
-                      </div>
-                      <div class="checkbox p-b-10">
-                        <input id="non-member-media" ng-disabled="redirection" type="checkbox">
-                        <label for="non-member-media">{t}Hide media{/t}</label>
-                      </div>
-                      <div class="checkbox p-b-10">
-                        <input id="non-member-related" ng-disabled="redirection" type="checkbox">
-                        <label for="non-member-related">{t}Hide related contents{/t}</label>
-                      </div>
-                    </div>
-                    <div class="col-xs-6">
-                      <div class="checkbox p-b-10">
-                        <input id="non-member-info" ng-disabled="redirection" type="checkbox">
-                        <label for="non-member-info">{t}Hide content information{/t}</label>
-                      </div>
-                      <div class="checkbox p-b-10">
-                        <input id="non-member-tags" ng-disabled="redirection" type="checkbox">
-                        <label for="non-member-tags">{t}Hide tags{/t}</label>
-                      </div>
-                      <div class="checkbox p-b-10">
-                        <input id="non-member-print" ng-disabled="redirection" type="checkbox">
-                        <label for="non-member-print">{t}Hide print button{/t}</label>
-                      </div>
-                      <div class="checkbox p-b-10">
-                        <input id="non-member-social" ng-disabled="redirection" type="checkbox">
-                        <label for="non-member-social">{t}Hide social buttons{/t}</label>
-                      </div>
-                      <div class="checkbox p-b-10">
-                        <input id="non-member-edit" ng-disabled="redirection" type="checkbox">
-                        <label for="non-member-edit">{t}Block browser actions (cut, copy,...){/t}</label>
+                      <div class="help m-l-3" ng-show="isHelpEnabled()">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}Some information will be hidden for non-members when accessing contents in this subscription{/t}
                       </div>
                     </div>
                   </div>
-                  <div class="help m-l-3" ng-show="isHelpEnabled()">
-                    <i class="fa fa-info-circle m-r-5 text-info"></i>
-                    {t}Some information will be hidden for non-members when accessing contents in this subscription{/t}
+                  <div class="col-xs-6">
+                    <div class="form-group no-margin">
+                      <label class="form-label">{t}Block actions{/t}</label>
+                      <div class="checkbox p-b-10">
+                        <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_BLOCK_BROWSER')" id="non-member-block" ng-disabled="item.privileges.indexOf(getPermissionId('NON_MEMBER_REDIRECT')) !== -1" type="checkbox">
+                        <label for="non-member-block">{t}Block browser actions (cut, copy,...){/t}</label>
+                      </div>
+                      <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}If enabled, subscribers will not see this subscription while registering or editing profile{/t}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
