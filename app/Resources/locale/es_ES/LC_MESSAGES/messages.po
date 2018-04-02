@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-02 08:35+0000\n"
+"POT-Creation-Date: 2018-04-02 08:37+0000\n"
 "PO-Revision-Date: 2018-03-28 17:44+0200\n"
 "Last-Translator: Fran Dieguez <fran@openhost.es>\n"
 "Language-Team: Galician\n"
@@ -900,6 +900,9 @@ msgstr "Álbumes"
 
 msgid "Books"
 msgstr "Libros"
+
+msgid "Subscription"
+msgstr "Suscripción"
 
 msgid "Subscribers"
 msgstr "Suscriptores"
@@ -3847,9 +3850,6 @@ msgstr "Configurar el módulo usuarios"
 
 msgid "Requests only"
 msgstr "Solo solicitudes"
-
-msgid "Subscription"
-msgstr "Suscripción"
 
 msgid "Any"
 msgstr "Cualquiera"

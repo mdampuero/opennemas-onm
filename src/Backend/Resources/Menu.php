@@ -223,7 +223,7 @@ $menuXml = [
     [
         'id'          => 'subscription',
         'link'        => '#',
-        'title'       => 'Subscription',
+        'title'       => _('Subscription'),
         'module_name' => 'CONTENT_SUBSCRIPTIONS',
         'privilege'   => 'CONTENT_SUBSCRIPTIONS_LIST',
         'icon'        => 'fa fa-check-square-o',
