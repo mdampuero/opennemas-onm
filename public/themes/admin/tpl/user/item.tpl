@@ -76,9 +76,9 @@
                   {t}User Groups{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.user_groups }"></i>
                   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.user_groups && (toArray(item.user_groups) | filter: { status: 1 }).length > 0">
-                    <span ng-show="(toArray(item.user_groups) | filter: { status: 1 }).length === toArray(data.extra.user_groups).length">{t}All{/t}</span>
-                    <span ng-show="(toArray(item.user_groups) | filter: { status: 1 }).length !== toArray(data.extra.user_groups).length">
-                      <strong>[% (toArray(item.user_groups) | filter: { status: 1 }).length %]</strong> {t}selected{/t}
+                    <span ng-show="countUserGroups(item) === toArray(data.extra.user_groups).length">{t}All{/t}</span>
+                    <span ng-show="countUserGroups(item) !== toArray(data.extra.user_groups).length">
+                      <strong>[% countUserGroups(item) %]</strong> {t}selected{/t}
                     </span>
                   </span>
                 </div>

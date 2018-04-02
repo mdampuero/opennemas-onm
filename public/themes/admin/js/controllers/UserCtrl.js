@@ -118,6 +118,36 @@
         };
 
         /**
+         * @function countUserGroups
+         * @memberOf UserCtrl
+         *
+         * @description
+         *   Counts the number of user groups for the item ignoring the
+         *   subscriptions.
+         *
+         * @param {Object} item The item.
+         *
+         * @return {Integer} The number of user groups.
+         */
+        $scope.countUserGroups = function(item) {
+          if (!$scope.data || !$scope.data.extra.user_groups) {
+            return 0;
+          }
+
+          var keys = Object.keys($scope.data.extra.user_groups)
+            .map(function(e) {
+              return parseInt(e);
+            });
+
+          var ids  = $scope.toArray(item.user_groups).filter(function(e) {
+            return e.status === 1 &&
+              keys.indexOf(parseInt(e.user_group_id)) !== -1;
+          });
+
+          return ids.length;
+        };
+
+        /**
          * @function getData
          * @memberOf SubscriberCtrl
          *
