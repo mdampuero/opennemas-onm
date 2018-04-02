@@ -1493,7 +1493,7 @@ class Privilege
 
             230 => [
                 'pk_privilege' => '230',
-                'name'         => 'NON_MEMBER_REDIRECTION',
+                'name'         => 'NON_MEMBER_REDIRECT',
                 'description'  => _('Redirect to frontpage'),
                 'module'       => 'FRONTEND',
             ],
@@ -1508,7 +1508,7 @@ class Privilege
             232 => [
                 'pk_privilege' => '232',
                 'name'         => 'NON_MEMBER_HIDE_SUMMARY',
-                'description'  => _('Hide body'),
+                'description'  => _('Hide summary'),
                 'module'       => 'FRONTEND',
             ],
 
