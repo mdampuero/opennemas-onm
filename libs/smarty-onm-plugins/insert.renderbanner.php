@@ -14,6 +14,12 @@ function smarty_insert_renderbanner($params, $smarty)
     $class  = '" data-type="' . $params['type'];
     $format = 'safeframe';
 
+    // Filter advertisement by type/position
+    if (array_key_exists('ads_positions', $smarty->tpl_vars)
+        && !in_array($params['type'], $smarty->tpl_vars['ads_positions']->value)) {
+        return '';
+    }
+
     if (array_key_exists('render_params', $smarty->tpl_vars)
         && array_key_exists('ads-format', $smarty->tpl_vars['render_params']->value)
         && !empty($smarty->tpl_vars['render_params']->value['ads-format'])
