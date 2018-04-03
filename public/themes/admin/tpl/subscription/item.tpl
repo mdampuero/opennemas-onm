@@ -9,8 +9,8 @@
             <li class="quicklinks">
               <h4>
                 <a class="no-padding" href="[% routing.generate('backend_subscriptions_list') %]">
-                  <i class="fa fa-check-square-o"></i>
-                  {t}Subscriptions{/t}
+                  <i class="fa fa-list"></i>
+                  {t}Lists{/t}
                 </a>
               </h4>
             </li>
@@ -253,7 +253,7 @@
                       </div>
                       <div class="checkbox p-b-10">
                         <input id="non-member-pretitle" ng-disabled="redirection" type="checkbox">
-                        <label for="non-member-pretitle">{t}Hide prepretitle{/t}</label>
+                        <label for="non-member-pretitle">{t}Hide pretitle{/t}</label>
                       </div>
                       <div class="checkbox p-b-10">
                         <input id="non-member-media" ng-disabled="redirection" type="checkbox">

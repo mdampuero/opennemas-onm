@@ -8,8 +8,8 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-check-square-o"></i>
-                {t}Subscriptions{/t}
+                <i class="fa fa-list"></i>
+                {t}Lists{/t}
               </h4>
             </li>
           </ul>

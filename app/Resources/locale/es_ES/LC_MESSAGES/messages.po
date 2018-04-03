@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-02 08:37+0000\n"
-"PO-Revision-Date: 2018-03-28 17:44+0200\n"
+"POT-Creation-Date: 2018-04-03 10:42+0000\n"
+"PO-Revision-Date: 2018-04-03 12:42+0200\n"
 "Last-Translator: Fran Dieguez <fran@openhost.es>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -901,14 +901,17 @@ msgstr "Álbumes"
 msgid "Books"
 msgstr "Libros"
 
-msgid "Subscription"
-msgstr "Suscripción"
+msgid "Subscriptions"
+msgstr "Suscripciones"
 
 msgid "Subscribers"
 msgstr "Suscriptores"
 
-msgid "Subscriptions"
-msgstr "Suscripciones"
+msgid "Lists"
+msgstr "Listas"
+
+msgid "Newsletters"
+msgstr "Boletín de noticias"
 
 msgid "Utilities"
 msgstr "Utilidades"
@@ -918,9 +921,6 @@ msgstr "Búsqueda global"
 
 msgid "Trash"
 msgstr "Papelera"
-
-msgid "Newsletters"
-msgstr "Boletín de noticias"
 
 msgid "Keywords"
 msgstr "Palabras clave"
@@ -3850,6 +3850,9 @@ msgstr "Configurar el módulo usuarios"
 
 msgid "Requests only"
 msgstr "Solo solicitudes"
+
+msgid "Subscription"
+msgstr "Suscripción"
 
 msgid "Any"
 msgstr "Cualquiera"
@@ -6848,7 +6851,6 @@ msgstr "Mostrar la publicidad solo en las categorías seleccionadas"
 msgid "Select/deselect all"
 msgstr "Seleccionar/deseleccionar todo"
 
-#, fuzzy
 msgid ""
 "We recommend you to use the \"Show in all categories\" mark to avoid "
 "unchecked future created categories"

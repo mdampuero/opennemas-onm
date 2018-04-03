@@ -214,16 +214,13 @@ $menuXml = [
                 'module_name' => 'BOOK_MANAGER',
                 'privilege'   => 'BOOK_ADMIN',
             ],
-
-
-
         ],
     ],
 
     [
         'id'          => 'subscription',
         'link'        => '#',
-        'title'       => _('Subscription'),
+        'title'       => _('Subscriptions'),
         'module_name' => 'CONTENT_SUBSCRIPTIONS',
         'privilege'   => 'CONTENT_SUBSCRIPTIONS_LIST',
         'icon'        => 'fa fa-check-square-o',
@@ -237,10 +234,10 @@ $menuXml = [
                 'privilege'   => 'CONTENT_SUBSCRIPTIONS_LIST',
             ],
             [
-                'id'          => 'subscriptions',
+                'id'          => 'lists',
                 'link'        => url('backend_subscriptions_list'),
-                'title'       => _('Subscriptions'),
-                'icon'        => 'fa fa-check-square-o',
+                'title'       => _('Lists'),
+                'icon'        => 'fa fa-list',
                 'module_name' => 'CONTENT_SUBSCRIPTIONS',
                 'privilege'   => 'CONTENT_SUBSCRIPTIONS_LIST',
             ]
