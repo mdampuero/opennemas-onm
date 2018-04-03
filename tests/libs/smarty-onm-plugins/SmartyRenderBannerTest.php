@@ -65,6 +65,24 @@ class SmartyRenderBannerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests smarty_insert_renderbanner when type is not in ads_position.
+     */
+    public function testRenderBannerWhenTypeIsNotInAdsPosition()
+    {
+        $params = new \StdClass();
+
+        $params->value = [ 111, 222, 333 ];
+
+        $this->smarty->tpl_vars = [
+            'ads_positions'  => $params
+        ];
+
+        $this->assertEmpty(
+            smarty_insert_renderbanner([ 'type' => 123 ], $this->smarty)
+        );
+    }
+
+    /**
      * Tests smarty_insert_renderbanner when safeframe is enabled.
      */
     public function testRenderBannerWhenSafeFrameInSettings()
