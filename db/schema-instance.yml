@@ -30,9 +30,6 @@ advertisements:
         pk_advertisement:
             type: bigint
             options: { length: 20, unsigned: true, autoincrement: true }
-        type_advertisement:
-            type: integer
-            options: { unsigned: true, default: null, notnull: false }
         fk_content_categories:
             type: string
             options: { length: 255, default: '', notnull: false }
@@ -72,12 +69,6 @@ advertisements:
             columns: [pk_advertisement]
             primary: true
             unique: true
-            flags: {  }
-        -
-            name: type_advertisement
-            columns: [type_advertisement]
-            primary: false
-            unique: false
             flags: {  }
         -
             name: fk_content_categories
