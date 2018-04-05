@@ -313,6 +313,7 @@ class AdvertisementsController extends Controller
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
                 'user_groups'       => json_decode($request->request->get('user_groups', ''), true),
                 'orientation'       => $request->request->get('orientation', 'horizontal'),
+                'mark_text'         => $request->request->filter('mark_text', '', FILTER_SANITIZE_STRING),
                 'devices'           => [
                     'desktop' => (int) $request->request->get('restriction_devices_desktop', 0),
                     'tablet'  => (int) $request->request->get('restriction_devices_tablet', 0),
