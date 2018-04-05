@@ -242,7 +242,7 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
                 </td>
                 <td class="hidden-xs hidden-sm small-text">
                   <span ng-repeat="value in content.positions | limitTo:3" class="ad-position">[% map[value].name %]</span>
-                  <span ng-show="content.positions.length > 2" {* uib-tooltip-template="'ad_position_template'" tooltip-placement="bottom" *}>{t 1="[% content.positions.length - 3 %]"}And %1 more…{/t}</span>
+                  <span ng-show="content.positions.length > 3" {* uib-tooltip-template="'ad_position_template'" tooltip-placement="bottom" *}>{t 1="[% content.positions.length - 3 %]"}And %1 more…{/t}</span>
                 </td>
                 <td class="hidden-xs text-center">
                   [% content.num_clic_count %]
