@@ -86,17 +86,15 @@
 
 .oat:before {
   color: #838383;
-  content: '{t}Advertisement{/t}';
+  content: attr(data-mark);
   display: block;
   font-size: 10px;
-  left: 50%;
   line-height: 15px;
-  margin-left: -40px;
-  margin-top: 0;
+  margin: 0 auto;
   position: absolute;
   text-align: center;
   text-transform: uppercase;
-  width: 80px;
+  width: 100%;
 }
 
 .oat > *:not(script) {

@@ -279,6 +279,7 @@
       div.className  += 'oat-container';
       slot.className += ' oat-visible oat-' + type;
       slot.id         = 'oat-index-' + i;
+      slot.setAttribute('data-mark', ad.mark);
 
       div.style.width    = size.width + 'px';
       div.style.height   = size.height + (size.height === 'auto' ? '' : 'px');
