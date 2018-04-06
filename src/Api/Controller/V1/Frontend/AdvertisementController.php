@@ -303,6 +303,8 @@ class AdvertisementController extends Controller
         $object->orientation = array_key_exists('orientation', $element->params) ?
             $element->params['orientation'] : 'top';
 
+        $object->mark = $this->get('core.renderer.advertisement')->getMark($element);
+
         $object->target_url = ($object->format == 'image') ? $element->url : '';
 
         return $object;
