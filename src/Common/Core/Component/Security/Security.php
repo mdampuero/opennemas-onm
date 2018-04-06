@@ -129,10 +129,6 @@ class Security
      */
     public function hasExtension($uuid)
     {
-        if (!empty($this->user) && $this->hasPermission('MASTER')) {
-            return true;
-        }
-
         return in_array($uuid, $this->instance->activated_modules);
     }
 
