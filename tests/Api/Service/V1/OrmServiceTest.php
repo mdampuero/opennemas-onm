@@ -319,6 +319,44 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests getListByIds when no error.
+     */
+    public function testGetListByIds()
+    {
+        $items = [
+            new Entity([ 'name' => 'wubble' ]),
+            new Entity([ 'name' => 'mumble' ])
+        ];
+
+        $this->em->expects($this->once())->method('getMetadata')
+            ->willReturn($this->metadata);
+        $this->metadata->expects($this->once())->method('getIdKeys')
+            ->willReturn([ 'id' ]);
+
+        $this->repository->expects($this->once())->method('countBy')
+            ->with('id in [1,2]')->willReturn(2);
+        $this->repository->expects($this->once())->method('findBy')
+            ->with('id in [1,2]')->willReturn($items);
+
+        $response = $this->service->getListByIds([ 1, 2 ]);
+
+        $this->assertArrayHasKey('items', $response);
+        $this->assertArrayHasKey('total', $response);
+        $this->assertEquals($items, $response['items']);
+        $this->assertEquals(2, $response['total']);
+    }
+
+    /**
+     * Tests getListByIds when invalid list of ids provided .
+     *
+     * @expectedException Api\Exception\GetListException
+     */
+    public function testGetListByIdsWhenInvalidIds()
+    {
+        $this->service->getListByIds([]);
+    }
+
+    /**
      * Tests patchItem when no error.
      */
     public function testPatchItem()

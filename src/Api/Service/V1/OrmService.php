@@ -176,6 +176,20 @@ class OrmService extends Service
     /**
      * {@inheritdoc}
      */
+    public function getListByIds($ids)
+    {
+        if (!is_array($ids) || empty($ids)) {
+            throw new GetListException('Invalid ids', 400);
+        }
+
+        $oql = $this->getOqlForIds($ids);
+
+        return $this->getList($oql);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function patchItem($id, $data)
     {
         try {
