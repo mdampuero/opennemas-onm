@@ -17,6 +17,7 @@
 .ad-mark {
   display: inline-block;
   padding-left: 25px;
+  min-width: 130px;
   min-height: 110px;
   cursor: pointer;
 
@@ -48,14 +49,17 @@
     width: 60px;
     height:10px;
     display:block;
-    margin:0 auto;
+    margin-left:15px;
   }
 
   &.ad-mark-top .ad-mark-text {
     margin-bottom:5px;
   }
+  &.ad-mark-bottom .ad-mark-text {
+    margin-top:5px;
+  }
   &.ad-mark-top .ad-mark-block,
-  &.ad-mark-top .ad-mark-block {
+  &.ad-mark-bottom .ad-mark-block {
     height:75px;
   }
 
