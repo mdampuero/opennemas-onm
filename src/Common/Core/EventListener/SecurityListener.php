@@ -164,21 +164,7 @@ class SecurityListener implements EventSubscriberInterface
             $permissions = array_merge($permissions, $userGroup->privileges);
         }
 
-        $p           = new \Privilege();
-        $permissions = array_filter(
-            $p::$privileges,
-            function ($a) use ($permissions) {
-                if (in_array($a['pk_privilege'], $permissions)) {
-                    return true;
-                }
-
-                return false;
-            }
-        );
-
-        return array_map(function ($a) {
-            return $a['name'];
-        }, $permissions);
+        return \Privilege::getNames($permissions);
     }
 
     /**

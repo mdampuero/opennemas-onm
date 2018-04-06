@@ -1,48 +1,14 @@
 <?php
-/*
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-/**
- * Class Privilege
- *
- * Class to manage privileges
- *
- * @package    Onm
- */
 class Privilege
 {
-    /**
-     * The privilege id
-     *
-     * @var int
-     */
-    public $pk_privilege = null;
-
-    /**
-     * The privilege description
-     *
-     * @var string
-     */
-    public $description = null;
-
-    /**
-     * The privilege name
-     *
-     * @var string
-     */
-    public $name = null;
-
-    /**
-     * The privilege module name
-     *
-     * @var string
-     */
-    public $module = null;
-
     /**
      * the list of available privileges
      *
@@ -51,183 +17,53 @@ class Privilege
     public static $privileges = null;
 
     /**
-     * Initializes the object isntance
+     * Returns the list of privilege names basing on the list of privileges ids.
      *
-     * @param int $id Privilege Id
+     * @param array The list of privilege ids.
      *
-     * @return Privilege the object instance
-    */
-    public function __construct($id = null)
-    {
-        self::loadPrivileges();
-
-        if (!is_null($id)) {
-            $this->read($id);
-        }
-    }
-
-    /**
-     * Reads a privilege information given the id
-     *
-     * @param int $id Privilege Id
-     *
-     * @return Privilege the privilege object
+     * @return array The list of privilege names.
      */
-    public function read($id)
+    public static function getNames($ids)
     {
-        foreach (self::$privileges as $privilege) {
-            if ($privilege['pk_privilege'] == $id) {
-                $this->load($privilege);
+        $privileges = self::loadPrivileges();
+        $names      = [];
 
-                return $this;
+        foreach ($ids as $id) {
+            if (array_key_exists($id, $privileges)) {
+                $names[$id] = $privileges[$id]['name'];
             }
         }
+
+        return $names;
     }
 
     /**
-     * Load properties in this instance
+     * Returns a list of privileges groupd by module name.
      *
-     * @param  array|stdClass $data
-     *
-     * @return Privilege      Return this instance to chaining of methods
-     */
-    public function load($data)
-    {
-        $properties = $data;
-        if (!is_array($data)) {
-            $properties = get_object_vars($data);
-        }
-
-        foreach ($properties as $k => $v) {
-            $this->{$k} = $v;
-        }
-
-        $this->pk_privilege = (int) $this->pk_privilege;
-
-        // Lazy setting
-        $this->id = $this->pk_privilege;
-
-        return $this; // chaining methods
-    }
-
-    /**
-     * Get privileges of system
-     *
-     * @param array Array of Privileges
-     *
-     * @return array the list of Privileges objects
-     */
-    public function find()
-    {
-        foreach (self::$privileges as $privilegeData) {
-            $privilege = new Privilege();
-            $privilege->load($privilegeData);
-
-            $privileges[] = $privilege;
-        }
-
-        return $privileges;
-    }
-
-    /**
-     * Get modules name
-     *
-     * @return array Array of string
-     */
-    public function getModuleNames()
-    {
-        $modules = [];
-        foreach (self::$privileges as $privilege) {
-            $modules[] = $privilege['module'];
-        }
-
-        $modules = array_unique($modules);
-        asort($modules);
-
-        return array_values($modules);
-    }
-
-    /**
-     * Returns all the privileges names
-     *
-     * @return array the list of privilege names
-     */
-    public static function getPrivilegeNames()
-    {
-        $privileges     = self::loadPrivileges();
-        $privilegeNames = [];
-        foreach ($privileges as $value) {
-            $privilegeNames[] = $value['name'];
-        }
-
-        return $privilegeNames;
-    }
-
-    /**
-     * Get privileges group by modules
-     *
-     * @param string $filter where condition for check.
-     *
-     * @return array modules with each privileges
-     *
+     * @return array The list of privileges groupd by module name.
      */
     public function getPrivilegesByModules()
     {
-        $groupedPrivileges = [];
-        foreach (self::$privileges as $privilegeData) {
-            $privilege = new Privilege();
-            $privilege->load($privilegeData);
+        $privileges = self::loadPrivileges();
+        $grouped    = [];
 
-            if (!array_key_exists($privilegeData['module'], $groupedPrivileges)) {
-                $groupedPrivileges[$privilegeData['module']] = [];
+        foreach ($privileges as $privilege) {
+            if (!array_key_exists($privilege['module'], $grouped)) {
+                $grouped[$privilege['module']] = [];
             }
-            $groupedPrivileges[$privilegeData['module']][] = $privilege;
+
+            $grouped[$privilege['module']][] = $privilege;
         }
 
-        ksort($groupedPrivileges);
+        ksort($grouped);
 
-        return $groupedPrivileges;
+        return $grouped;
     }
 
     /**
-     * Get privileges for a given user group id
+     * Initializes the list of privileges.
      *
-     * @param int $userGroupId the id of the user group
-     *
-     * @return array the list of privilege names
-     *
-     */
-    public static function getPrivilegesForUserGroup($userGroupId)
-    {
-        self::loadPrivileges();
-
-        $privileges = [];
-        try {
-            $rs = getServicE('dbal_connection')->fetchAll(
-                'SELECT pk_fk_privilege FROM user_groups_privileges '
-                . 'WHERE pk_fk_user_group = ? ORDER BY pk_fk_privilege',
-                [ intval($userGroupId) ]
-            );
-
-            foreach ($rs as $privilegeDB) {
-                if (array_key_exists($privilegeDB['pk_fk_privilege'], self::$privileges)) {
-                    $privilege = self::$privileges[$privilegeDB['pk_fk_privilege']];
-
-                    $privileges[$privilege['pk_privilege']] = $privilege['name'];
-                }
-            }
-
-            return $privileges;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Initializes the internal array of privileges
-     *
-     * @return void
+     * @return array The list of privileges.
      */
     private static function loadPrivileges()
     {
@@ -1535,7 +1371,7 @@ class Privilege
 
             236 => [
                 'pk_privilege' => '236',
-                'name'         => 'NON_MEMBER_RELATED_CONTENTS',
+                'name'         => 'NON_MEMBER_HIDE_RELATED_CONTENTS',
                 'description'  => _('Hide related contents'),
                 'module'       => 'FRONTEND',
             ],

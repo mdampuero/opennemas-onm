@@ -214,8 +214,6 @@ class UserGroupController extends Controller
      */
     private function getExtraData()
     {
-        $privilege = new \Privilege();
-
-        return [ 'modules' => $privilege->getPrivilegesByModules() ];
+        return [ 'modules' => \Privilege::getPrivilegesByModules() ];
     }
 }
