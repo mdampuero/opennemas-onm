@@ -180,9 +180,9 @@
          * @description
          *   Enables/disables an item.
          *
-         * @param {String}  item     The item.
-         * @param {String}  property The property name.
-         * @param {Boolean} value    The property value.
+         * @param {String} item     The item.
+         * @param {String} property The property name.
+         * @param {Mixed} value     The property value.
          */
         $scope.patch = function(item, property, value) {
           var data = {};
