@@ -58,7 +58,8 @@ class SubscriptionHelper
     /**
      * Initializes the SubscriptionHelper.
      *
-     * @param Security $security The Security service.
+     * @param Security            $security The Security service.
+     * @param SubscriptionService $ss       The subscription API service.
      */
     public function __construct($security, $ss)
     {
