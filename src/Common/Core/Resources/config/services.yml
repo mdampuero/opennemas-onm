@@ -80,6 +80,10 @@ services:
         class:     Common\Core\Component\Helper\StructuredData
         arguments: [ '@setting_repository' ]
 
+    core.helper.subscription:
+        class:     Common\Core\Component\Helper\SubscriptionHelper
+        arguments: [ '@core.security', '@api.service.subscription' ]
+
     core.helper.url:
         class:     Common\Core\Component\Helper\UrlHelper
 
