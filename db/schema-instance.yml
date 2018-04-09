@@ -796,7 +796,7 @@ kioskos:
             options: { default: 0, comment: '0 item - 1 subscription' }
         price:
             type: decimal
-            options: { scale: 2, unsigned: true, default: 0 }
+            options: { scale: 2, default: 0 }
     index:
         -
             name: PRIMARY
