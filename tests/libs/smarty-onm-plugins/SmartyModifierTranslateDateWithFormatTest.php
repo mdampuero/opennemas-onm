@@ -56,6 +56,14 @@ class SmartyModifierTranslateDateWithFormatTest extends \PHPUnit_Framework_TestC
     }
 
     /**
+     * Tests smarty_modifier_translate_date_with_format when invalid string.
+     */
+    public function testTranslateDateWithFormatWhenInvalidString()
+    {
+        $this->assertEmpty(smarty_modifier_translate_date_with_format('wobble'));
+    }
+
+    /**
      * Tests smarty_modifier_translate_date_with_format when date is null
      */
     public function testTranslateDateWithFormatNull()
