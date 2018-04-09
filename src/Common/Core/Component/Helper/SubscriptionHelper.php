@@ -74,13 +74,13 @@ class SubscriptionHelper
      *
      * @return strign The subscription token.
      */
-    public function getSubscriptionToken($content)
+    public function getToken($content)
     {
         if ($this->isSubscribed($content)) {
-            return $this->getToken($content, $this->subscribedPermissions);
+            return $this->generateToken($content, $this->subscribedPermissions);
         }
 
-        return $this->getToken($content, $this->notSubscribedPermissions);
+        return $this->generateToken($content, $this->notSubscribedPermissions);
     }
 
     /**
@@ -123,6 +123,32 @@ class SubscriptionHelper
     }
 
     /**
+     * Generates a token for a content basing on the permissions for the content
+     * and the list of permissions used to generate the token.
+     *
+     * @param Content $content            The content.
+     * @param array   $permissionsInToken The list of permissions to generate
+     *                                    the token.
+     *
+     * @return string The generated token.
+     */
+    protected function generateToken($content, $permissionsInToken)
+    {
+        if (empty($content->subscriptions)) {
+            return '';
+        }
+
+        $token       = '';
+        $permissions = $this->getPermissions($content);
+
+        foreach ($permissionsInToken as $permission) {
+            $token .= in_array($permission, $permissions) ? '1' : '0';
+        }
+
+        return $token;
+    }
+
+    /**
      * Returns the list of permissions for a content basing on the selected
      * subscriptions.
      *
@@ -143,31 +169,5 @@ class SubscriptionHelper
         }
 
         return array_unique($permissions);
-    }
-
-    /**
-     * Generates a token for a content basing on the permissions for the content
-     * and the list of permissions used to generate the token.
-     *
-     * @param Content $content            The content.
-     * @param array   $permissionsInToken The list of permissions to generate
-     *                                    the token.
-     *
-     * @return string The generated token.
-     */
-    protected function getToken($content, $permissionsInToken)
-    {
-        if (empty($content->subscriptions)) {
-            return '';
-        }
-
-        $token       = '';
-        $permissions = $this->getPermissions($content);
-
-        foreach ($permissionsInToken as $permission) {
-            $token .= in_array($permission, $permissions) ? '1' : '0';
-        }
-
-        return $token;
     }
 }

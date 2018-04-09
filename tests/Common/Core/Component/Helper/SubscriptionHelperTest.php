@@ -38,17 +38,17 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests getNotSubscribedToken when content has no subscriptions.
+     * Tests getToken when content has no subscriptions.
      */
-    public function testGetSubscriptionTokenWhenNoSubscriptions()
+    public function testGetTokenWhenNoSubscriptions()
     {
-        $this->assertEmpty($this->helper->getSubscriptionToken($this->content));
+        $this->assertEmpty($this->helper->getToken($this->content));
     }
 
     /**
-     * Tests getNotSubscribedToken for multiple values.
+     * Tests getToken when user is not subscribed.
      */
-    public function testGetSubscriptionTokenWhenNotSubscribed()
+    public function testGetTokenWhenNotSubscribed()
     {
         $subscriptions = [
             new UserGroup([
@@ -68,13 +68,13 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
         $this->ss->expects($this->at(0))->method('getListbyIds')
             ->willReturn([ 'items' => [ $subscriptions[1] ], 'total' => 1 ]);
 
-        $this->assertEquals('00010010000', $this->helper->getSubscriptionToken($this->content));
+        $this->assertEquals('00010010000', $this->helper->getToken($this->content));
 
         $this->content->subscriptions = [ 2 ];
         $this->ss->expects($this->at(0))->method('getListbyIds')
             ->willReturn([ 'items' => [ $subscriptions[2] ], 'total' => 1 ]);
 
-        $this->assertEquals('01000100000', $this->helper->getSubscriptionToken($this->content));
+        $this->assertEquals('01000100000', $this->helper->getToken($this->content));
 
         $this->content->subscriptions = [ 1, 2 ];
         $this->ss->expects($this->at(0))->method('getListbyIds')->willReturn([
@@ -82,13 +82,13 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
             'total' => 2
         ]);
 
-        $this->assertEquals('01010110000', $this->helper->getSubscriptionToken($this->content));
+        $this->assertEquals('01010110000', $this->helper->getToken($this->content));
     }
 
     /**
-     * Tests getSubscriptionToken when user is subscribed to the content.
+     * Tests getToken when user is subscribed to the content.
      */
-    public function testGetSubscriptionTokenWhenSubscribed()
+    public function testGetTokenWhenSubscribed()
     {
         $this->user->user_groups = [ 1, 2, 3 ];
 
@@ -113,13 +113,13 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
         $this->ss->expects($this->at(0))->method('getListbyIds')
             ->willReturn([ 'items' => [ $subscriptions[1] ], 'total' => 1 ]);
 
-        $this->assertEquals('100', $this->helper->getSubscriptionToken($this->content));
+        $this->assertEquals('100', $this->helper->getToken($this->content));
 
         $this->content->subscriptions = [ 2 ];
         $this->ss->expects($this->at(0))->method('getListbyIds')
             ->willReturn([ 'items' => [ $subscriptions[2] ], 'total' => 1 ]);
 
-        $this->assertEquals('011', $this->helper->getSubscriptionToken($this->content));
+        $this->assertEquals('011', $this->helper->getToken($this->content));
 
         $this->content->subscriptions = [ 1, 2 ];
         $this->ss->expects($this->at(0))->method('getListbyIds')->willReturn([
@@ -127,7 +127,7 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
             'total' => 2
         ]);
 
-        $this->assertEquals('111', $this->helper->getSubscriptionToken($this->content));
+        $this->assertEquals('111', $this->helper->getToken($this->content));
     }
 
     /**
