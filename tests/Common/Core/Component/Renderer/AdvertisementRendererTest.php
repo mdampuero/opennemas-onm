@@ -144,78 +144,6 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::render
-     * @todo   Implement testRender().
-     */
-    public function testRender()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::renderInline
-     * @todo   Implement testRenderInline().
-     */
-    public function testRenderInline()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineDFPHeader
-     * @todo   Implement testRenderInlineDFPHeader().
-     */
-    public function testRenderInlineDFPHeader()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineDFPSlot
-     * @todo   Implement testRenderInlineDFPSlot().
-     */
-    public function testRenderInlineDFPSlot()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineImage
-     * @todo   Implement testRenderInlineImage().
-     */
-    public function testRenderInlineImage()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineReviveHeader
-     * @todo   Implement testRenderInlineReviveHeader().
-     */
-    public function testRenderInlineReviveHeader()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-
-    /**
      * @covers Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineReviveSlot
      */
     public function testRenderInlineReviveSlot()
@@ -337,17 +265,5 @@ class AdvertisementRendererTest extends TestCase
         $returnValue = '<div class="ad-slot oat" data-type="1" data-width="620"></div>';
 
         $this->assertEquals($returnValue, $this->renderer->renderSafeFrameSlot($ad, $params));
-    }
-
-    /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::renderSafeFrame
-     * @todo   Implement testRenderSafeFrame().
-     */
-    public function testRenderSafeFrame()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
     }
 }
