@@ -5,62 +5,54 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="author"    content="OpenHost,SL">
+  <meta name="author" content="OpenHost,SL">
   <meta name="generator" content="OpenNemas - News Management System">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#22262e">
-  <link rel="manifest" href="manager_manifest.json">
-  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="icon" href="/assets/images/favicon.png">
-  <link rel="icon" sizes="192x192" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <meta name="mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="/assets/images/launcher-icons/IOS-60@2x.png">
-  <link rel="apple-touch-icon" sizes="76x76" href="/assets/images/launcher-icons/IOS-60@2x.png">
   <link rel="apple-touch-icon" sizes="120x120" href="/assets/images/launcher-icons/IOS-60@2x.png">
   <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/launcher-icons/IOS-60@2x.png">
-
-  {block name="meta"}
-    <title>opennemas - Manager</title>
-  {/block}
-
-  {block name="header-css"}
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="/assets/components/font-awesome/css/font-awesome.min.css">
-    {stylesheets src="@Common/components/bootstrap/dist/css/bootstrap.min.css,
-      @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
-      @Common/components/angular-loading-bar/build/loading-bar.min.css,
-      @Common/components/angular-ui-select/dist/select.min.css,
-      @Common/components/animate.css/animate.min.css,
-      @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
-      @Common/components/messenger/build/css/messenger-theme-flat.css,
-      @Common/components/messenger/build/css/messenger.css,
-      @Common/components/nanoscroller/bin/css/nanoscroller.css,
-      @Common/components/ng-tags-input/ng-tags-input.min.css,
-      @Common/components/pace/themes/blue/pace-theme-minimal.css,
-      @Common/components/select2/select2.css,
-      @Common/components/spinkit/css/spinkit.css,
-      @Common/src/webarch/css/style.css,
-      @Common/src/webarch/css/responsive.css,
-      @Common/src/webarch/css/custom-icon-set.css,
-      @Common/src/webarch/css/magic_space.css,
-      @Common/src/angular-dynamic-image/less/main.less,
-      @Common/src/angular-onm-pagination/less/main.less,
-      @Common/src/sidebar/less/main.less,
-      @Common/src/opennemas-webarch/css/layout/*,
-      @Common/src/opennemas-webarch/less/main.less" filters="cssrewrite,less" output="common"}
-    {/stylesheets}
-    {stylesheets src="@Common/components/flag-sprites/dist/css/flag-sprites.min.css,
-      @ManagerTheme/less/main.less" filters="cssrewrite,less" output="manager"}
-    {/stylesheets}
-  {/block}
-  {block name="header-js"}
-    <script>
-      var appVersion = '{$smarty.const.DEPLOYED_AT}';
-      var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
-    </script>
-  {/block}
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <link rel="icon" href="/assets/images/favicon.png">
+  <link rel="icon" sizes="192x192" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <link rel="manifest" href="manager_manifest.json">
+  <title>opennemas - Manager</title>
+  <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="/assets/components/font-awesome/css/font-awesome.min.css">
+  {stylesheets src="@Common/components/bootstrap/dist/css/bootstrap.min.css,
+    @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
+    @Common/components/angular-loading-bar/build/loading-bar.min.css,
+    @Common/components/angular-ui-select/dist/select.min.css,
+    @Common/components/animate.css/animate.min.css,
+    @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
+    @Common/components/messenger/build/css/messenger-theme-flat.css,
+    @Common/components/messenger/build/css/messenger.css,
+    @Common/components/nanoscroller/bin/css/nanoscroller.css,
+    @Common/components/ng-tags-input/ng-tags-input.min.css,
+    @Common/components/pace/themes/blue/pace-theme-minimal.css,
+    @Common/components/select2/select2.css,
+    @Common/components/spinkit/css/spinkit.css,
+    @Common/src/webarch/css/style.css,
+    @Common/src/webarch/css/responsive.css,
+    @Common/src/webarch/css/custom-icon-set.css,
+    @Common/src/webarch/css/magic_space.css,
+    @Common/src/angular-dynamic-image/less/main.less,
+    @Common/src/angular-onm-pagination/less/main.less,
+    @Common/src/sidebar/less/main.less,
+    @Common/src/opennemas-webarch/css/layout/*,
+    @Common/src/opennemas-webarch/less/main.less" filters="cssrewrite,less" output="common"}
+  {/stylesheets}
+  {stylesheets src="@Common/components/flag-sprites/dist/css/flag-sprites.min.css,
+    @ManagerTheme/less/main.less" filters="cssrewrite,less" output="manager"}
+  {/stylesheets}
+  <script>
+    var appVersion = '{$smarty.const.DEPLOYED_AT}';
+    var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
+  </script>
 </head>
-<body id="manager" ng-class="{ 'collapsed': sidebar.isCollapsed(), 'login-body': !auth.status, 'pinned': sidebar.isPinned(), 'unauthorized': !auth.status }" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}', '{t}Any{/t}')" resizable ng-class="{ 'collapsed': sidebar.isCollapsed() }">
+<body id="manager" ng-class="{ 'collapsed': sidebar.isCollapsed(), 'login-body': !app.auth.status, 'pinned': sidebar.isPinned(), 'unauthorized': !app.auth.status }" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}', '{t}Any{/t}')" resizable ng-class="{ 'collapsed': sidebar.isCollapsed() }">
   <div class="application-loading" ng-hide="loaded">
     <div class="loading-message">
       <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
@@ -68,7 +60,7 @@
       <h5>{$loading_message}</h5>
     </div>
   </div>
-  <form action="/managerws/template/login:blank.tpl" class="login-form" method="post" name="loginForm" ng-class="{ 'hidden': auth.status }" ng-submit="login()" novalidate form-autofill-fix>
+  <form action="/managerws/template/login:blank.tpl" class="login-form" method="post" name="loginForm" ng-class="{ 'hidden': app.auth.status }" ng-submit="login()" novalidate form-autofill-fix>
     <div class="container">
       <div class="row login-container animated fadeInUp">
         <div class="col-md-6 col-md-offset-3 tiles white no-padding">
@@ -137,7 +129,7 @@
       <p>To use Opennemas, please enable JavaScript.</p>
     </noscript>
   </div>
-  <header class="header navbar navbar-inverse" ng-class="{ 'hidden': !auth.status }">
+  <header class="header navbar navbar-inverse" ng-class="{ 'hidden': !app.auth.status }">
     <div class="navbar-inner">
       <div class="header-seperation">
         <a class="header-logo pull-left" href="{url name=manager_welcome}">
@@ -240,16 +232,14 @@
       </div>
     </div>
   </header>
-  <sidebar class="sidebar" ng-class="{ 'hidden': !$parent.auth.status }" footer="true" id="sidebar" ng-model="sidebar" position="left" src="manager_ws_sidebar_list" swipeable="true" pinnable="true"></sidebar>
-  <div class="page-container row-fluid ng-cloak" ng-class="{ 'hidden': !auth.status }">
-    <!-- BEGIN PAGE CONTAINER-->
+  <sidebar class="sidebar" ng-class="{ 'hidden': !$parent.app.auth.status }" footer="true" id="sidebar" ng-model="sidebar" position="left" src="manager_ws_sidebar_list" swipeable="true" pinnable="true"></sidebar>
+  <div class="page-container row-fluid ng-cloak" ng-class="{ 'hidden': !app.auth.status }">
     <div class="page-content">
       <div class="sidebar-toggler ng-cloak" ng-click="sidebar.toggle()">
         <span class="fa fa-bars fa-lg"></span>
       </div>
       <div class="view" id="view" ng-view autoscroll="true"></div>
     </div>
-    <!-- END PAGE CONTAINER -->
   </div>
   <script type="text/ng-template" id="modal-login">
     {include file="login/modal_login.tpl"}
@@ -266,102 +256,94 @@
   <script type="text/ng-template" id="404">
     {include file="error/404.tpl"}
   </script>
-  <!--[if lt IE 7 ]>
-      <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
-      <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
-      <![endif]-->
-
-  {block name="footer-js"}
-    <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
-    {javascripts src="
-      @Common/components/jquery2/dist/jquery.min.js,
-      @Common/components/bootstrap/dist/js/bootstrap.min.js,
-      @Common/components/breakpoints/breakpoints.js,
-      @Common/components/moment/min/moment-with-locales.min.js,
-      @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
-      @Common/components/angular/angular.min.js,
-      @Common/components/ckeditor/ckeditor.js,
-      @Common/components/ckeditor/config.js,
-      @Common/components/ckeditor/lang/en.js,
-      @Common/components/ckeditor/styles.js,
-      @Common/components/ckeditor/plugins/autogrow/plugin.js,
-      @Common/components/ckeditor/plugins/autolink/plugin.js,
-      @Common/components/ckeditor/plugins/notification/plugin.js,
-      @Common/components/ckeditor/plugins/notification/lang/en.js,
-      @Common/components/ckeditor/plugins/justify/plugin.js,
-      @Common/components/ckeditor/plugins/justify/lang/en.js,
-      @Common/components/ckeditor/plugins/justify/lang/es.js,
-      @Common/components/ckeditor/plugins/font/plugin.js,
-      @Common/components/ckeditor/plugins/font/lang/en.js,
-      @Common/components/ckeditor/plugins/font/lang/es.js,
-      @Common/components/imageresize/plugin.js,
-      @Common/src/ckeditor-autokeywords/plugin.js,
-      @Common/src/ckeditor-autokeywords/lang/en.js,
-      @Common/src/ckeditor-autokeywords/lang/es.js,
-      @Common/src/ckeditor-wordcount/wordcount/plugin.js,
-      @Common/src/ckeditor-wordcount/wordcount/lang/en.js,
-      @Common/src/ckeditor-wordcount/wordcount/lang/es.js,
-      @Common/src/ckeditor-pastespecial/plugin.js,
-      @Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
-      @Common/components/fastclick/lib/fastclick.js,
-      @Common/components/lodash/dist/lodash.min.js,
-      @Common/components/messenger/build/js/messenger.min.js,
-      @Common/components/messenger/build/js/messenger-theme-flat.js,
-      @Common/components/nanoscroller/bin/javascripts/jquery.nanoscroller.min.js,
-      @Common/components/ng-tags-input/ng-tags-input.min.js,
-      @Common/components/select2/select2.min.js,
-      @Common/components/swfobject/swfobject/swfobject.js,
-
-      @Common/components/angular-animate/angular-animate.min.js,
-      @Common/components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js,
-      @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
-      @Common/components/angular-checklist-model/checklist-model.js,
-      @Common/components/angular-loading-bar/build/loading-bar.min.js,
-      @Common/components/angular-nanoscroller/scrollable.js,
-      @Common/components/angular-recaptcha/release/angular-recaptcha.min.js,
-      @Common/components/angular-route/angular-route.min.js,
-      @Common/components/angular-sanitize/angular-sanitize.min.js,
-      @Common/components/angular-swfobject/angular-swfobject.js,
-      @Common/components/angular-touch/angular-touch.min.js,
-      @Common/components/angular-translate/angular-translate.min.js,
-      @Common/components/angular-ui-select/dist/select.min.js,
-      @Common/components/angular-webstorage/angular-webstorage.min.js,
-      @Common/src/angular-messenger/messenger.js,
-      @Common/src/angular-moment/moment.js,
-      @Common/js/onm/md5.min.js,
-      @FosJsRoutingBundle/js/router.js,
-      @Common/js/routes.js,
-      @Common/src/angular-cleaner/cleaner.js,
-      @Common/src/angular-datetimepicker/datetimepicker.js,
-      @Common/src/angular-dynamic-image/js/dynamic-image.js,
-      @Common/src/angular-gravatar/gravatar.js,
-      @Common/src/angular-history/history.js,
-      @Common/src/angular-http/http.js,
-      @Common/src/angular-item-service/itemService.js,
-      @Common/src/angular-onm-editor/onm-editor.js,
-      @Common/src/angular-onm-pagination/js/onm-pagination.js,
-      @Common/src/angular-oql/oql.js,
-      @Common/src/angular-resizable/resizable.js,
-      @Common/src/angular-routing/routing.js,
-      @Common/src/angular-security/security.js,
-      @Common/src/angular-serializer/serializer.js,
-      @Common/src/opennemas-webarch/js/core.js,
-      @Common/src/sidebar/js/sidebar.js" filters="uglifyjs" output="common"}
-    {/javascripts}
-    {javascripts src="
-      @Common/components/angular-file-model/angular-file-model.js,
-      @Common/components/angular-google-chart/ng-google-chart.js,
-      @Common/components/angular-jwt/dist/angular-jwt.js,
-      @Common/src/angular-authentication/authService.js,
-      @Common/src/angular-form-autofill/formAutoFill.js,
-      @Common/src/angular-http-interceptor/http-interceptor.js,
-      @Common/src/angular-image-preview/js/image-preview.js,
-      @ManagerTheme/js/app.js,
-      @ManagerTheme/js/config.js,
-      @ManagerTheme/js/controllers/*,
-      @ManagerTheme/js/module/*,
-      @ManagerTheme/js/routing.js" filters="uglifyjs" output="manager"}
-    {/javascripts}
-  {/block}
+  <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+  {javascripts src="
+    @Common/components/jquery2/dist/jquery.min.js,
+    @Common/components/bootstrap/dist/js/bootstrap.min.js,
+    @Common/components/breakpoints/breakpoints.js,
+    @Common/components/moment/min/moment-with-locales.min.js,
+    @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
+    @Common/components/angular/angular.min.js,
+    @Common/components/ckeditor/ckeditor.js,
+    @Common/components/ckeditor/config.js,
+    @Common/components/ckeditor/lang/en.js,
+    @Common/components/ckeditor/styles.js,
+    @Common/components/ckeditor/plugins/autogrow/plugin.js,
+    @Common/components/ckeditor/plugins/autolink/plugin.js,
+    @Common/components/ckeditor/plugins/notification/plugin.js,
+    @Common/components/ckeditor/plugins/notification/lang/en.js,
+    @Common/components/ckeditor/plugins/justify/plugin.js,
+    @Common/components/ckeditor/plugins/justify/lang/en.js,
+    @Common/components/ckeditor/plugins/justify/lang/es.js,
+    @Common/components/ckeditor/plugins/font/plugin.js,
+    @Common/components/ckeditor/plugins/font/lang/en.js,
+    @Common/components/ckeditor/plugins/font/lang/es.js,
+    @Common/components/imageresize/plugin.js,
+    @Common/src/ckeditor-autokeywords/plugin.js,
+    @Common/src/ckeditor-autokeywords/lang/en.js,
+    @Common/src/ckeditor-autokeywords/lang/es.js,
+    @Common/src/ckeditor-wordcount/wordcount/plugin.js,
+    @Common/src/ckeditor-wordcount/wordcount/lang/en.js,
+    @Common/src/ckeditor-wordcount/wordcount/lang/es.js,
+    @Common/src/ckeditor-pastespecial/plugin.js,
+    @Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
+    @Common/components/fastclick/lib/fastclick.js,
+    @Common/components/lodash/dist/lodash.min.js,
+    @Common/components/messenger/build/js/messenger.min.js,
+    @Common/components/messenger/build/js/messenger-theme-flat.js,
+    @Common/components/nanoscroller/bin/javascripts/jquery.nanoscroller.min.js,
+    @Common/components/ng-tags-input/ng-tags-input.min.js,
+    @Common/components/select2/select2.min.js,
+    @Common/components/swfobject/swfobject/swfobject.js,
+    @Common/components/angular-animate/angular-animate.min.js,
+    @Common/components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js,
+    @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
+    @Common/components/angular-checklist-model/checklist-model.js,
+    @Common/components/angular-loading-bar/build/loading-bar.min.js,
+    @Common/components/angular-nanoscroller/scrollable.js,
+    @Common/components/angular-recaptcha/release/angular-recaptcha.min.js,
+    @Common/components/angular-route/angular-route.min.js,
+    @Common/components/angular-sanitize/angular-sanitize.min.js,
+    @Common/components/angular-swfobject/angular-swfobject.js,
+    @Common/components/angular-touch/angular-touch.min.js,
+    @Common/components/angular-translate/angular-translate.min.js,
+    @Common/components/angular-ui-select/dist/select.min.js,
+    @Common/components/angular-webstorage/angular-webstorage.min.js,
+    @Common/src/angular-messenger/messenger.js,
+    @Common/src/angular-moment/moment.js,
+    @Common/js/onm/md5.min.js,
+    @FosJsRoutingBundle/js/router.js,
+    @Common/js/routes.js,
+    @Common/src/angular-cleaner/cleaner.js,
+    @Common/src/angular-datetimepicker/datetimepicker.js,
+    @Common/src/angular-dynamic-image/js/dynamic-image.js,
+    @Common/src/angular-gravatar/gravatar.js,
+    @Common/src/angular-history/history.js,
+    @Common/src/angular-http/http.js,
+    @Common/src/angular-item-service/itemService.js,
+    @Common/src/angular-onm-editor/onm-editor.js,
+    @Common/src/angular-onm-pagination/js/onm-pagination.js,
+    @Common/src/angular-oql/oql.js,
+    @Common/src/angular-resizable/resizable.js,
+    @Common/src/angular-routing/routing.js,
+    @Common/src/angular-security/security.js,
+    @Common/src/angular-serializer/serializer.js,
+    @Common/src/opennemas-webarch/js/core.js,
+    @Common/src/sidebar/js/sidebar.js" filters="uglifyjs" output="common"}
+  {/javascripts}
+  {javascripts src="
+    @Common/components/angular-file-model/angular-file-model.js,
+    @Common/components/angular-google-chart/ng-google-chart.js,
+    @Common/components/angular-jwt/dist/angular-jwt.js,
+    @Common/src/angular-authentication/authService.js,
+    @Common/src/angular-form-autofill/formAutoFill.js,
+    @Common/src/angular-http-interceptor/http-interceptor.js,
+    @Common/src/angular-image-preview/js/image-preview.js,
+    @ManagerTheme/js/app.js,
+    @ManagerTheme/js/config.js,
+    @ManagerTheme/js/controllers/*,
+    @ManagerTheme/js/module/*,
+    @ManagerTheme/js/routing.js" filters="uglifyjs" output="manager"}
+  {/javascripts}
 </body>
 </html>
