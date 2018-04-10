@@ -87,23 +87,23 @@ class InstanceUserPersisterTest extends \PHPUnit_Framework_TestCase
             [ 'id' => \PDO::PARAM_STR, 'name' => \PDO::PARAM_STR ]
         );
         $this->conn->expects($this->at(2))->method('executeQuery')->with(
-            'replace into users_content_categories values (?,?),(?,?)',
-            [ 1, 1, 1, 2 ],
-            [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
-        );
-        $this->conn->expects($this->at(3))->method('executeQuery')->with(
-            'delete from users_content_categories where pk_fk_user = ? and pk_fk_content_category not in (?)',
-            [ 1, [ 1, 2 ] ],
-            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
-        );
-        $this->conn->expects($this->at(4))->method('executeQuery')->with(
             'replace into user_user_group values (?,?,?,?)',
             [ 1, 25, 0, null ],
             [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
         );
-        $this->conn->expects($this->at(5))->method('executeQuery')->with(
+        $this->conn->expects($this->at(3))->method('executeQuery')->with(
             'delete from user_user_group where user_id = ? and user_group_id not in (?)',
             [ 1, [ 25 ] ],
+            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+        $this->conn->expects($this->at(4))->method('executeQuery')->with(
+            'replace into users_content_categories values (?,?),(?,?)',
+            [ 1, 1, 1, 2 ],
+            [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
+        );
+        $this->conn->expects($this->at(5))->method('executeQuery')->with(
+            'delete from users_content_categories where pk_fk_user = ? and pk_fk_content_category not in (?)',
+            [ 1, [ 1, 2 ] ],
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
 
@@ -130,27 +130,27 @@ class InstanceUserPersisterTest extends \PHPUnit_Framework_TestCase
             [ 'name' => \PDO::PARAM_STR ]
         );
         $this->conn->expects($this->at(1))->method('executeQuery')->with(
-            'replace into users_content_categories values (?,?)',
-            [ 1, 1 ],
-            [ \PDO::PARAM_INT, \PDO::PARAM_INT ]
-        );
-        $this->conn->expects($this->at(2))->method('executeQuery')->with(
-            'delete from users_content_categories where pk_fk_user = ? and pk_fk_content_category not in (?)',
-            [ 1, [ 1 ] ],
-            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
-        );
-        $this->conn->expects($this->at(3))->method('executeQuery')->with(
             'replace into user_user_group values (?,?,?,?)',
             [ 1, 24, 0, null ],
             [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
         );
-        $this->conn->expects($this->at(4))->method('executeQuery')->with(
+        $this->conn->expects($this->at(2))->method('executeQuery')->with(
             'delete from user_user_group where user_id = ? and user_group_id not in (?)',
             [ 1, [ 24 ] ],
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
 
-        $this->cache->expects($this->exactly(2))->method('remove');
+        $this->conn->expects($this->at(3))->method('executeQuery')->with(
+            'replace into users_content_categories values (?,?)',
+            [ 1, 1 ],
+            [ \PDO::PARAM_INT, \PDO::PARAM_INT ]
+        );
+        $this->conn->expects($this->at(4))->method('executeQuery')->with(
+            'delete from users_content_categories where pk_fk_user = ? and pk_fk_content_category not in (?)',
+            [ 1, [ 1 ] ],
+            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+        $this->cache->expects($this->exactly(3))->method('remove');
         $this->persister->update($entity);
     }
 

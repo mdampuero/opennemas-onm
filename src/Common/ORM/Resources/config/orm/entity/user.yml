@@ -53,7 +53,6 @@ orm:
                     relations:
                         user_groups:
                             table: user_user_group
-                            repository: instance
                             ids:
                                 id: user_id
                             key: user_group_id
