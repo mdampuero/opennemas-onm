@@ -2,13 +2,14 @@
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # ONM Developers <developers@opennemas.com>, 2017.
+# Fran Dieguez <frandieguez@gnome.org>, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-19 22:34+0000\n"
-"PO-Revision-Date: 2018-03-19 23:44+0100\n"
-"Last-Translator: Fran Dieguez <fran@openhost.es>\n"
+"POT-Creation-Date: 2018-04-10 15:30+0000\n"
+"PO-Revision-Date: 2018-04-10 17:31+0200\n"
+"Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -949,6 +950,9 @@ msgstr "Álbumes"
 msgid "Books"
 msgstr "Libros"
 
+msgid "Newsletters"
+msgstr "Boletín de noticias"
+
 msgid "Utilities"
 msgstr "Utilidades"
 
@@ -957,9 +961,6 @@ msgstr "Búsqueda global"
 
 msgid "Trash"
 msgstr "Papelera"
-
-msgid "Newsletters"
-msgstr "Boletín de noticias"
 
 msgid "Keywords"
 msgstr "Palabras clave"
@@ -2337,6 +2338,9 @@ msgstr "El nombre de tu periódico contiene palabras no permitidas."
 msgid "The url that you entered is already in use"
 msgstr "La URL que escribiste ya está en uso"
 
+msgid "Advertisement"
+msgstr "Publicidad"
+
 msgid "Entering on the requested page"
 msgstr "Entrando en la página solicitada"
 
@@ -2603,9 +2607,6 @@ msgstr "Llave de la API"
 
 msgid "Translator"
 msgstr "Traductor"
-
-msgid "Advertisement"
-msgstr "Publicidad"
 
 msgid "Album not available"
 msgstr "Álbum no disponible"
@@ -7442,6 +7443,9 @@ msgstr "Debajo"
 msgid "Left"
 msgstr "Izquierda"
 
+msgid "Write here your custom mark. Default is \"%1\""
+msgstr "Escribe aquí tu marca personalizada. Por omisión es «%1»"
+
 msgid ""
 "Defines the orientation for the word that marks the advertisement position"
 msgstr "Define la orientación de la palabra que marca el espacio de publicidad"
@@ -7614,6 +7618,16 @@ msgstr ""
 msgid "(in minutes)"
 msgstr "(en minutos)"
 
+msgid "Default mark shown indicating an advertisement"
+msgstr "Marca por omisión mostrada para indicr una publicidad"
+
+msgid ""
+"This is the text shown near advertisements. If you don't fill this field, "
+"the default value \"%1\" will be shown."
+msgstr ""
+"Este es el texto que se muestra al lado de las publicidades. Si no completa "
+"este campo, se mostrará el valor por omisión «%1»."
+
 msgid "Allow generic advertisement"
 msgstr "Permitir publicidad genérica"
 
@@ -7632,7 +7646,7 @@ msgid ""
 "This feature displays advertisements inside iframes. It improves the user "
 "experience and has a better performance."
 msgstr ""
-"Esta característica mustra las publicidades dentro de «iframes». Mejora la "
+"Esta característica muestra las publicidades dentro de «iframes». Mejora la "
 "experiencia de usuario y tiene mejor rendimiento."
 
 msgid "AdSense integration"
