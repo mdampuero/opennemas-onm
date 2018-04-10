@@ -133,10 +133,9 @@
               <label class="form-label">
                 {t}User groups{/t}
               </label>
-              <div class="controls">
-                <tags-input add-from-autocomplete-only="true" display-property="name" ng-model="user.fk_user_group">
-                  <auto-complete source="getGroups($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
-                </tags-input>
+              <div class="checkbox p-b-5" ng-repeat="user_group in extra.user_groups">
+                <input id="checkbox-[% $index %]" ng-false-value="0" ng-model="user.user_groups[user_group.pk_user_group].status" ng-true-value="1" type="checkbox">
+                <label for="checkbox-[% $index %]">[% user_group.name %]</label>
               </div>
             </div>
             <div class="form-group" ng-if="security.hasPermission('MASTER')">

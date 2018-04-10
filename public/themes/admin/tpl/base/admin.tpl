@@ -367,20 +367,19 @@
                     </span>
                   </span>
                   <ul class="dropdown-menu dropdown-menu-auto dropdown-menu-right no-padding" role="menu">
-                    {if is_object($app.user) && $app.user->isMaster()}
-                      <li class="text-danger">
-                        <span class="fake-a fake-a-static text-danger">
-                          {t}You are a master{/t}
-                        </span>
-                      </li>
-                      <li class="divider"></li>
-                    {/if}
                     <li>
                       <a href="/" target="_blank">
                         <i class="fa fa-globe"></i>
                         {t}Go to newspaper{/t}
                       </a>
                     </li>
+                    <li>
+                      <a href="{url name=admin_getting_started}">
+                        <i class="fa fa-rocket"></i>
+                        {t}Getting started{/t}
+                      </a>
+                    </li>
+                    <li class="divider"></li>
                     <li>
                       {if is_object($app.user) && $app.user->isMaster()}
                         <a ng-href="{get_parameter name=manager_url}manager#/users/{$app.user->id}" target="_blank">
@@ -395,12 +394,6 @@
                         </a>
                         {/acl}
                       {/if}
-                    </li>
-                    <li>
-                      <a href="{url name=admin_getting_started}">
-                        <i class="fa fa-rocket"></i>
-                        {t}Getting started{/t}
-                      </a>
                     </li>
                     <li class="divider"></li>
                     <li>

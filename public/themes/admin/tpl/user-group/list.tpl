@@ -174,12 +174,10 @@
                     [% item.name %]
                     <div class="listing-inline-actions">
                       <a class="btn btn-default btn-small" href="[% routing.generate('backend_user_group_show', { id: item.pk_user_group }) %]">
-                        <i class="fa fa-pencil"></i> {t}Edit{/t}
+                        <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
                       <button class="btn btn-danger btn-small" ng-click="delete(item.pk_user_group)" type="button">
-                        <i class="fa fa-trash-o"></i>
-                        {t}Delete{/t}
-                      </button>
+                        <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}</button>
                     </div>
                   </td>
                   <td class="text-center">

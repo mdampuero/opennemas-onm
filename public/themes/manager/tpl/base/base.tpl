@@ -206,16 +206,17 @@
                 </div>
               </span>
               <ul class="dropdown-menu dropdown-menu-right no-padding">
-                <li class="text-danger">
-                    <span class="fake-a fake-a-static text-danger">
-                    {t}You are a master{/t}
-                  </span>
-                </li>
-                <li class="divider" ng-if="security.hasPermission('USER_EDIT_OWN_PROFILE')"></li>
                 <li ng-if="security.hasPermission('USER_EDIT_OWN_PROFILE')">
                   <a ng-href="[% routing.ngGenerate('manager_user_show', { id: security.user.id }) %]">
                     <i class="fa fa-user"></i>
                     {t}Profile{/t}
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                  <a href="#" ng-click="toggleHelp()">
+                    <i class="fa" ng-class="{ 'fa-toggle-on': isHelpEnabled(), 'fa-toggle-off': !isHelpEnabled() }"></i>
+                    {t}Show help{/t}
                   </a>
                 </li>
                 <li class="divider"></li>
