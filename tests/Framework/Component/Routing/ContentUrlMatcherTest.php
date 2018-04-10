@@ -16,6 +16,10 @@ class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        $this->cache = $this->getMockBuilder('Cache')
+            ->setMethods([ 'fetch' ])
+            ->getMock();
+
         $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'get', 'hasParameter' ])
             ->getMock();
@@ -35,6 +39,8 @@ class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'getContainer' ])
             ->getMock();
 
+        $this->cache->expects($this->any())->method('fetch')
+            ->willReturn([]);
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
         $this->kernel->expects($this->any())->method('getContainer')
@@ -60,6 +66,10 @@ class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
 
     public function serviceContainerCallback($name)
     {
+        if ($name === 'cache') {
+            return $this->cache;
+        }
+
         if ($name === 'data.manager.filter') {
             return $this->fm;
         }

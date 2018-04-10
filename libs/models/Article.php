@@ -152,6 +152,8 @@ class Article extends Content
     {
         parent::load($data);
 
+        $this->loadAllContentProperties();
+
         return $this;
     }
 
@@ -286,11 +288,11 @@ class Article extends Content
 
             return $this->id;
         } catch (\Exception $e) {
-            $conn->rollback();
             getService('error.log')->error(
                 'Error creating article (ID:' . $this->id . '): ' . $e->getMessage() .
                 ' Stack Trace: ' . $e->getTraceAsString()
             );
+            $conn->rollback();
             return false;
         }
     }
@@ -390,11 +392,11 @@ class Article extends Content
 
             return true;
         } catch (\Exception $e) {
-            $conn->rollback();
             getService('error.log')->error(
                 'Error updating article (ID:' . $this->id . '): ' . $e->getMessage() .
                 ' Stack Trace: ' . $e->getTraceAsString()
             );
+            $conn->rollback();
             return false;
         }
     }
@@ -491,7 +493,7 @@ class Article extends Content
      *
      * @return array the author data
      */
-    public function getAuthor()
+    private function getAuthor()
     {
         if (empty($this->author)) {
             $this->author = getService('user_repository')->find($this->fk_author);
@@ -530,17 +532,31 @@ class Article extends Content
      */
     public function saveMetadataFields($data)
     {
+        if (array_key_exists('subscriptions', $data)
+            && !empty($data['subscriptions'])
+        ) {
+            parent::setMetadata('subscriptions', $data['subscriptions']);
+        } else {
+            parent::removeMetadata('subscriptions');
+        }
+
         if (!getService('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
             return;
         }
 
-        $metaDataFields = getService('setting_repository')->get('extraInfoContents.ARTICLE_MANAGER');
-        if (!is_array($metaDataFields)) {
+        $settings = getService('setting_repository')
+            ->get('extraInfoContents.ARTICLE_MANAGER');
+
+        $groups = get_object_vars($settings);
+
+        if (!is_array($groups)) {
             return;
         }
 
-        foreach ($metaDataFields as $metaDataField) {
-            foreach ($metaDataField['fields'] as $field) {
+        foreach ($groups as $group) {
+            $fields = get_object_vars($group);
+
+            foreach ($fields as $field) {
                 if (array_key_exists($field['key'], $data) && !empty($data[$field['key']])) {
                     parent::setMetadata($field['key'], $data[$field['key']]);
                 }

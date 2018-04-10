@@ -29,13 +29,6 @@ class Content implements \JsonSerializable
     const POSTPONED     = 'postponed';
 
     /**
-     * Not documented
-     *
-     * @var
-     */
-    public $archive = null;
-
-    /**
      * Whether if this content is available
      *
      * @var int 0|1
@@ -150,7 +143,7 @@ class Content implements \JsonSerializable
     /**
      * The content id
      *
-     * @var ont
+     * @var int
      */
     public $id = null;
 
@@ -174,14 +167,6 @@ class Content implements \JsonSerializable
      * @var string
      */
     public $metadata = '';
-
-    /**
-     * Map of metadata which contains information that doesn't fit on normal vars.
-     * Stored in a separated table contentmeta. These values are not serialized.
-     *
-     * @var array
-     */
-    public $metas = [];
 
     /**
      * An array for misc information of this content
@@ -280,10 +265,6 @@ class Content implements \JsonSerializable
                 return $this->getUri();
 
             default:
-                if (array_key_exists($name, $this->metas)) {
-                    return $this->metas[$name];
-                }
-
                 if ($name === 'slug' && empty($this->slug)) {
                     $this->slug = \Onm\StringUtils::generateSlug($this->title);
                 }
@@ -375,6 +356,10 @@ class Content implements \JsonSerializable
      */
     public function load($properties)
     {
+        if (array_key_exists('catName', $properties)) {
+            unset($properties['catName']);
+        }
+
         if (is_array($properties)) {
             foreach ($properties as $propertyName => $propertyValue) {
                 $this->{$propertyName} = $this->parseProperty($propertyValue);
@@ -1939,28 +1924,7 @@ class Content implements \JsonSerializable
      */
     public function getMetadata($metaName)
     {
-        if ($this->id == null) {
-            return false;
-        }
-
-        if (array_key_exists($metaName, $this->metas)) {
-            return $this->metas[$metaName];
-        }
-
-        try {
-            $metaValue = getService('dbal_connection')->fetchColumn(
-                'SELECT `meta_value` FROM `contentmeta` WHERE fk_content=? AND `meta_name`=?',
-                [ $this->id, $metaName ]
-            );
-
-            $this->metas[$metaName] = $metaValue;
-            // TODO: I have to maintain this for backward compatibility
-            $this->$metaName = $metaValue;
-
-            return $metaValue;
-        } catch (\Exception $e) {
-            return false;
-        }
+        return $this->{$metaName};
     }
 
     /**
@@ -1975,6 +1939,10 @@ class Content implements \JsonSerializable
     {
         if ($this->id == null || empty($property)) {
             return false;
+        }
+
+        if (is_array($value)) {
+            $value = serialize($value);
         }
 
         try {
@@ -2047,7 +2015,8 @@ class Content implements \JsonSerializable
 
                 if (!is_null($properties) && is_array($properties)) {
                     foreach ($properties as $property) {
-                        $contentProperties[$property['meta_name']] = $property['meta_value'];
+                        $contentProperties[$property['meta_name']] =
+                            $this->parseProperty($property['meta_value']);
                     }
                 }
             } catch (\Exception $e) {
@@ -2060,8 +2029,6 @@ class Content implements \JsonSerializable
         foreach ($contentProperties as $key => $value) {
             $this->{$key} = $value;
         }
-
-        $this->metas = $contentProperties;
 
         return $this;
     }
