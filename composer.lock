@@ -1129,16 +1129,16 @@
         },
         {
             "name": "frandieguez/panorama-php",
-            "version": "1.0.10",
+            "version": "1.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/frandieguez/panorama-php.git",
-                "reference": "13944ff2bb6e5e0d497275ab6702c2e9a5e35875"
+                "reference": "d274a1c14d13522d458ccde8b12886534d70c080"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/13944ff2bb6e5e0d497275ab6702c2e9a5e35875",
-                "reference": "13944ff2bb6e5e0d497275ab6702c2e9a5e35875",
+                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/d274a1c14d13522d458ccde8b12886534d70c080",
+                "reference": "d274a1c14d13522d458ccde8b12886534d70c080",
                 "shasum": ""
             },
             "require": {
@@ -1146,12 +1146,13 @@
             },
             "require-dev": {
                 "behat/behat": "2.5.*",
+                "phpdocumentor/phpdocumentor": "2.*",
                 "phpunit/phpunit": "*"
             },
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "Panorama": "lib/"
+                    "Panorama": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1169,7 +1170,7 @@
             "keywords": [
                 "library"
             ],
-            "time": "2015-05-21T14:45:26+00:00"
+            "time": "2018-04-03T08:42:05+00:00"
         },
         {
             "name": "friendsofsymfony/jsrouting-bundle",
@@ -1216,7 +1217,7 @@
                     "homepage": "https://github.com/friendsofsymfony/FOSJsRoutingBundle/contributors"
                 },
                 {
-                    "name": "William Durand",
+                    "name": "William DURAND",
                     "email": "william.durand1@gmail.com"
                 }
             ],
@@ -2238,12 +2239,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Luracast/Restler.git",
-                "reference": "cd0c21b4f7c0a99261ad618e90a5263483e78007"
+                "reference": "581d8d6dc5d37f439765f89725a92f85e98f1826"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Luracast/Restler/zipball/cd0c21b4f7c0a99261ad618e90a5263483e78007",
-                "reference": "cd0c21b4f7c0a99261ad618e90a5263483e78007",
+                "url": "https://api.github.com/repos/Luracast/Restler/zipball/581d8d6dc5d37f439765f89725a92f85e98f1826",
+                "reference": "581d8d6dc5d37f439765f89725a92f85e98f1826",
                 "shasum": ""
             },
             "require": {
@@ -2309,7 +2310,7 @@
                 "rest",
                 "server"
             ],
-            "time": "2017-11-16T13:57:30+00:00"
+            "time": "2015-06-12T07:33:40+00:00"
         },
         {
             "name": "monolog/monolog",
