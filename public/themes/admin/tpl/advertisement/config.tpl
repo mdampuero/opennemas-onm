@@ -53,8 +53,9 @@
             {t}Default mark shown indicating an advertisement{/t}
           </label>
           <div class="controls">
-            <input type="text" class="form-control" name="ads_settings_mark_default" id="ads_settings_mark_default" value="{$configs['ads_settings']['default_mark']}" placeholder="{t}Advertisement{/t}" required/>
-            <span class="help">{t 1="{t}Advertisement{/t}"}This is the text shown alongside an advertisement. If you don't fill this, there will be show the default value "%1"{/t}</span>
+            <input type="text" class="form-control" name="ads_settings_mark_default" id="ads_settings_mark_default" value="{$configs['ads_settings']['default_mark']}" placeholder="{t}Advertisement{/t}"/>
+            {capture name=default_mark}{t}Advertisement{/t}{/capture}
+            <span class="help">{t 1=$smarty.capture.default_mark}This is the text shown near advertisements. If you don't fill this field, the default value "%1" will be shown.{/t}</span>
           </div>
         </div>
         <div class="form-group">

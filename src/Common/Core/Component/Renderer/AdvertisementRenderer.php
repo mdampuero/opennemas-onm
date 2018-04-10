@@ -43,10 +43,10 @@ class AdvertisementRenderer
      *
      * @return string The default mark for the advertisements
      */
-    public function getMark(\Advertisement $ad)
+    public function getMark(\Advertisement $ad = null)
     {
         // If the mark for the advertisement is not empty then return it
-        if (array_key_exists('mark_text', $ad->params) && !empty($ad->params['mark_text'])) {
+        if (is_object($ad) && array_key_exists('mark_text', $ad->params) && !empty($ad->params['mark_text'])) {
             return $ad->params['mark_text'];
         }
 

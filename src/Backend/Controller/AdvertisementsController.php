@@ -466,6 +466,7 @@ class AdvertisementsController extends Controller
     public function getExtraParameters()
     {
         $adsPositions = $this->container->get('core.helper.advertisement');
+        $renderer     = $this->container->get('core.renderer.advertisement');
         $serverUrl    = '';
         if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
             $serverUrl = $openXsettings['url'];
@@ -480,6 +481,7 @@ class AdvertisementsController extends Controller
                 'categories'                => $this->getCategories(),
                 'server_url'                => $serverUrl,
                 'user_groups'               => $this->getUserGroups(),
+                'default_mark'              => $renderer->getMark(),
             ],
         ];
     }

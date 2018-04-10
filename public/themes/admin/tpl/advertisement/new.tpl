@@ -191,7 +191,7 @@ jQuery(document).ready(function($) {
               <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.mark }">
                 <div class="form-group">
                   <div class="controls">
-                    <input id="mark-text" name="mark_text" ng-model="params.mark_text" type="text" class="form-control" placeholder="{t 1=""}Write here your custom mark. Default is "Advertisement"{/t}">
+                    <input id="mark-text" name="mark_text" ng-model="params.mark_text" type="text" class="form-control" placeholder="{t 1=$extra.default_mark}Write here your custom mark. Default is "%1"{/t}">
                   </div>
                 </div>
                 <div class="row">
