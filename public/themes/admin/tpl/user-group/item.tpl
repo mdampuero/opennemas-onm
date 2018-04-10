@@ -114,19 +114,19 @@
                 <div class="checkbox check-default check-title">
                   <input id="checkbox-all" ng-change="selectAll()" ng-checked="areAllSelected()" ng-model="selected.allSelected" type="checkbox">
                   <label for="checkbox-all">
-                    <h5>{t}Toggle all privileges{/t}</h5>
+                    <h5 class="semi-bold text-uppercase">{t}Toggle all privileges{/t}</h5>
                   </label>
                 </div>
                 <div class="ng-cloak">
                   <div ng-repeat="section in sections">
-                    <h5>[% section.title %]</h5>
+                    <h5 class="m-t-30 semi-bold text-uppercase">[% section.title %]</h5>
                     <div class="row" ng-repeat="columns in section.rows">
                       <div class="col-sm-3" ng-repeat="name in columns">
                         <div class="col-sm-12 m-b-10">
                           <div class="checkbox check-default check-title">
                             <input id="checkbox-[% name %]" ng-change="selectModule(name)" ng-checked="isModuleSelected(name)" ng-model="selected.all[name]" type="checkbox">
                             <label for="checkbox-[% name %]">
-                              <h5>[% name %]</h5>
+                              <h5 class="semi-bold">[% name %]</h5>
                             </label>
                           </div>
                         </div>

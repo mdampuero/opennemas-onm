@@ -8,8 +8,8 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-check-square-o"></i>
-                {t}Subscriptions{/t}
+                <i class="fa fa-list"></i>
+                {t}Lists{/t}
               </h4>
             </li>
           </ul>
@@ -164,7 +164,7 @@
                   <th>{t}Name{/t}</th>
                   <th class="text-center" width="150">
                     <i class="fa fa-inbox" uib-tooltip="{t}Requests{/t}" tooltip-placement="left"></i>
-                    <span ng-if="isHelpEnabled()">{t}Request{/t}</span>
+                    <span ng-if="isHelpEnabled()">{t}Requests{/t}</span>
                   </th>
                   <th class="text-center" width="150">
                     <i class="fa fa-eye" uib-tooltip="{t}Visibility{/t}" tooltip-placement="left"></i>
@@ -188,26 +188,25 @@
                     [% item.name %]
                     <div class="listing-inline-actions">
                       <a class="btn btn-default btn-small" href="[% routing.generate('backend_subscription_show', { id: item.pk_user_group }) %]">
-                        <i class="fa fa-pencil"></i> {t}Edit{/t}
+                        <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
                       <button class="btn btn-danger btn-small" ng-click="delete(item.pk_user_group)" type="button">
-                        <i class="fa fa-trash-o"></i>
-                        {t}Delete{/t}
+                        <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                       </button>
                     </div>
                   </td>
                   <td class="text-center">
-                    <button class="btn btn-white" ng-click="patch(item, 'request', item.request != 1 ? 1 : 0)" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.requestLoading, 'fa-thumbs-down text-error' : !item.requestLoading && item.request == 1, 'fa-thumbs-up text-success': !item.requestLoading && item.request == 0 }"></i>
+                    <button class="btn btn-white" ng-click="patch(item, 'request', item.request != 1 ? 1 : 0)"type="button" uib-tooltip="[% !item.request ? '{t}Automatic{/t}' : '{t}Manual{/t}' %]">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.requestLoading, 'fa-hand-paper-o text-error' : !item.requestLoading && item.request == 1, 'fa-bolt text-success': !item.requestLoading && item.request == 0 }"></i>
                     </button>
                   </td>
                   <td class="text-center">
-                    <button class="btn btn-white" ng-click="patch(item, 'private', item.private != 1 ? 1 : 0)" type="button">
+                    <button class="btn btn-white" ng-click="patch(item, 'private', item.private != 1 ? 1 : 0)" type="button" uib-tooltip="[% !item.private ? '{t}Public{/t}' : '{t}Private{/t}' %]">
                       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.privateLoading, 'fa-eye-slash text-error' : !item.privateLoading && item.private == 1, 'fa-eye text-success': !item.privateLoading && item.private == 0 }"></i>
                     </button>
                   </td>
                   <td class="text-center">
-                    <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled != 1 ? 1 : 0)" type="button">
+                    <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled != 1 ? 1 : 0)" type="button" uib-tooltip="[% !item.enabled ? '{t}Disabled{/t}' : '{t}Enabled{/t}' %]">
                       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.enabledLoading, 'fa-check text-success' : !item.enabledLoading && item.enabled == 1, 'fa-times text-error': !item.enabledLoading && item.enabled == 0 }"></i>
                     </button>
                   </td>

@@ -84,10 +84,10 @@
                 </div>
                 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.user_groups }">
                   {acl isAllowed="USER_ADMIN"}
-                  <div class="checkbox p-b-5" ng-repeat="user_group in data.extra.user_groups">
-                    <input id="checkbox-[% $index %]" ng-false-value="0" ng-model="item.user_groups[user_group.pk_user_group].status" ng-true-value="1" type="checkbox">
-                    <label for="checkbox-[% $index %]">[% user_group.name %]</label>
-                  </div>
+                    <div class="checkbox p-b-5" ng-repeat="user_group in data.extra.user_groups">
+                      <input id="checkbox-[% $index %]" ng-false-value="0" ng-model="item.user_groups[user_group.pk_user_group].status" ng-true-value="1" type="checkbox">
+                      <label for="checkbox-[% $index %]">[% user_group.name %]</label>
+                    </div>
                   {/acl}
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.category = !expanded.category">

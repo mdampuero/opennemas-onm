@@ -389,7 +389,8 @@ class BaseRepository extends Repository
 
         $values = [];
         foreach ($relations as $name => $relation) {
-            if (!empty($relation['repository'])
+            if (array_key_exists('repository', $relation)
+                && !empty($relation['repository'])
                 && $this->name !== $relation['repository']
             ) {
                 continue;

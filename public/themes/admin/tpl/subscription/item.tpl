@@ -9,8 +9,8 @@
             <li class="quicklinks">
               <h4>
                 <a class="no-padding" href="[% routing.generate('backend_subscriptions_list') %]">
-                  <i class="fa fa-check-square-o"></i>
-                  {t}Subscriptions{/t}
+                  <i class="fa fa-list"></i>
+                  {t}Lists{/t}
                 </a>
               </h4>
             </li>
@@ -164,7 +164,7 @@
                     <label class="form-label m-t-15">{t}Payment{/t}</label>
                     <label class="pointer" for="member-payment">
                       <div class="checkbox">
-                        <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_REQUIRES_PAYMENT')"id="member-payment" type="checkbox">
+                        <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_REQUIRES_PAYMENT')" id="member-payment" type="checkbox">
                         <label for="member-payment">{t}Requires payment{/t}</label>
                       </div>
                       <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">

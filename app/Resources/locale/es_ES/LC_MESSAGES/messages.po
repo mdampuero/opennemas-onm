@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-02 08:37+0000\n"
-"PO-Revision-Date: 2018-03-28 17:44+0200\n"
+"POT-Creation-Date: 2018-04-03 10:42+0000\n"
+"PO-Revision-Date: 2018-04-04 17:18+0200\n"
 "Last-Translator: Fran Dieguez <fran@openhost.es>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -901,14 +901,17 @@ msgstr "Álbumes"
 msgid "Books"
 msgstr "Libros"
 
-msgid "Subscription"
-msgstr "Suscripción"
+msgid "Subscriptions"
+msgstr "Suscripciones"
 
 msgid "Subscribers"
 msgstr "Suscriptores"
 
-msgid "Subscriptions"
-msgstr "Suscripciones"
+msgid "Lists"
+msgstr "Listas"
+
+msgid "Newsletters"
+msgstr "Boletín de noticias"
 
 msgid "Utilities"
 msgstr "Utilidades"
@@ -918,9 +921,6 @@ msgstr "Búsqueda global"
 
 msgid "Trash"
 msgstr "Papelera"
-
-msgid "Newsletters"
-msgstr "Boletín de noticias"
 
 msgid "Keywords"
 msgstr "Palabras clave"
@@ -3851,6 +3851,9 @@ msgstr "Configurar el módulo usuarios"
 msgid "Requests only"
 msgstr "Solo solicitudes"
 
+msgid "Subscription"
+msgstr "Suscripción"
+
 msgid "Any"
 msgstr "Cualquiera"
 
@@ -3858,7 +3861,7 @@ msgid "Enabled"
 msgstr "Activado"
 
 msgid "Disabled"
-msgstr "Desactivada"
+msgstr "Desactivado"
 
 msgid "Unable to find any item that matches your search."
 msgstr "No se han encontrado elementos que coincidan con tu búsqueda."
@@ -6848,7 +6851,6 @@ msgstr "Mostrar la publicidad solo en las categorías seleccionadas"
 msgid "Select/deselect all"
 msgstr "Seleccionar/deseleccionar todo"
 
-#, fuzzy
 msgid ""
 "We recommend you to use the \"Show in all categories\" mark to avoid "
 "unchecked future created categories"
@@ -7915,7 +7917,7 @@ msgstr "Pago requerido"
 msgid "If enabled, this subscription will require a payment to become a member"
 msgstr ""
 "Si está activado, esta suscripción requerirá un pago para convertirse "
-"enmiembro"
+"en miembro"
 
 msgid "Restrictions"
 msgstr "Restricciones"

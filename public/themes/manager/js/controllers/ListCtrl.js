@@ -37,6 +37,13 @@
         $scope.tm = null;
 
         /**
+         * The available elements per page
+         *
+         * @type {Array}
+         */
+        $scope.views = [ 10, 25, 50, 100 ];
+
+        /**
          * @function cleanCriteria
          * @memberOf ListCtrl
          *
@@ -248,12 +255,10 @@
 
         // Marks variables to delete for garbage collector
         $scope.$on('$destroy', function() {
-          $scope.criteria   = null;
-          $scope.columns    = null;
-          $scope.pagination = null;
-          $scope.items      = null;
-          $scope.selected   = null;
-          $scope.orderBy    = null;
+          $scope.criteria = null;
+          $scope.columns  = null;
+          $scope.items    = null;
+          $scope.selected = null;
         });
 
         // Update criteria when route changes
@@ -279,12 +284,12 @@
             return;
           }
 
-          if (nv.page && ov.page && nv.page === ov.page) {
+          // Reset page when criteria changes
+          if (nv.page === ov.page) {
             nv.page = 1;
           }
 
-          // Remove empty values from criteria
-          $scope.criteria = $scope.cleanCriteria(nv);
+          $scope.criteria = $scope.cleanCriteria($scope.criteria);
 
           $scope.searchTimeout = $timeout(function() {
             $scope.list();

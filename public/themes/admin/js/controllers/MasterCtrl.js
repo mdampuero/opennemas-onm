@@ -25,8 +25,6 @@
       function($compile, $filter, $http, $location, $uibModal, $rootScope,
           $scope, $translate, $timeout, $window, anTinycon, messenger, routing,
           Sidebar, webStorage) {
-        'use strict';
-
         /**
          * @memberOf MasterCtrl
          *
