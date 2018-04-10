@@ -60,7 +60,7 @@
     </script>
   {/block}
 </head>
-<body id="manager" ng-class="{ 'collapsed': sidebar.isCollapsed(), 'login-body': !auth.status, 'pinned': sidebar.isPinned(), 'unauthorized': !auth.status }" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable ng-class="{ 'collapsed': sidebar.isCollapsed() }">
+<body id="manager" ng-class="{ 'collapsed': sidebar.isCollapsed(), 'login-body': !auth.status, 'pinned': sidebar.isPinned(), 'unauthorized': !auth.status }" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}', '{t}Any{/t}')" resizable ng-class="{ 'collapsed': sidebar.isCollapsed() }">
   <div class="application-loading" ng-hide="loaded">
     <div class="loading-message">
       <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
