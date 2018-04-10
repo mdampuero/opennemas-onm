@@ -83,7 +83,7 @@
         <li class="quicklinks">
           <span class="h-seperate"></span>
         </li>
-        <li class="quicklinks">
+        <li class="quicklinks hidden-xs ng-cloak">
           <ui-select ng-model="criteria.user_group_id" theme="select2">
             <ui-select-match>
               <strong>{t}User Group{/t}:</strong> [% $select.selected.name %]
@@ -153,6 +153,12 @@
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
+            <input id="checkbox-username" checklist-model="columns.selected" checklist-value="'email'" type="checkbox">
+            <label for="checkbox-username">
+              {t}Email{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
             <input id="checkbox-username" checklist-model="columns.selected" checklist-value="'username'" type="checkbox">
             <label for="checkbox-username">
               {t}Username{/t}
@@ -190,14 +196,18 @@
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc'}"></i>
               </th>
               <th class="pointer" ng-click="sort('name')" ng-if="isColumnEnabled('name')">
-                {t}Full name{/t}
+                {t}Name{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
               </th>
-              <th class="pointer" ng-click="sort('username')" ng-if="isColumnEnabled('username')" width="300">
+              <th class="hidden-xs pointer" ng-click="sort('email')" ng-if="isColumnEnabled('email')">
+                {t}Email{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('email') == 'asc', 'fa fa-caret-down': isOrderedBy('email') == 'desc'}"></i>
+              </th>
+              <th class="hidden-sm hidden-xs pointer" ng-click="sort('username')" ng-if="isColumnEnabled('username')" width="300">
                 {t}Username{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('username') == 'asc', 'fa fa-caret-down': isOrderedBy('username') == 'desc'}"></i>
               </th>
-              <th ng-if="isColumnEnabled('usergroups')" width="250">{t}Group{/t}</th>
+              <th class="hidden-sm hidden-xs" ng-if="isColumnEnabled('usergroups')" width="250">{t}User groups{/t}</th>
               <th class="text-center pointer" width="10" ng-click="sort('enabled')" ng-if="isColumnEnabled('enabled')">{t}Enabled{/t}</th>
             </tr>
           </thead>
@@ -213,7 +223,17 @@
                 [% item.id %]
               </td>
               <td ng-if="isColumnEnabled('name')">
-                [% item.name %]
+                <strong class="hidden-xs">
+                  [% item.name %]
+                </strong>
+                <span class="visible-xs" ng-if="item.name">
+                  <strong>{t}Name{/t}:</strong>
+                  [% item.name%]
+                </span>
+                <span class="visible-xs">
+                  <strong>{t}Email{/t}:</strong>
+                  [% item.email%]
+                </span>
                 <div class="listing-inline-actions">
                   <a class="btn btn-default btn-small" ng-href="[% routing.ngGenerate('manager_user_show', { id: item.id }); %]" ng-if="security.hasPermission('USER_UPDATE')">
                     <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
@@ -223,7 +243,10 @@
                   </button>
                 </div>
               </td>
-              <td ng-if="isColumnEnabled('username')">
+              <td class="hidden-xs" ng-if="isColumnEnabled('email')">
+                [% item.email %]
+              </td>
+              <td class="hidden-sm hidden-xs" ng-if="isColumnEnabled('username')">
                 [% item.username %]
               </td>
               <td ng-if="isColumnEnabled('usergroups')">
