@@ -50,41 +50,41 @@ class AuthorController extends Controller
 
             $user->photo = $this->get('entity_repository')->find('Photo', $user->avatar_img_id);
 
-            $criteria = array(
+            $criteria = [
                 'fk_author'       => [[ 'value' => $user->id ]],
                 'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
                 'content_status'  => [[ 'value' => 1 ]],
                 'in_litter'       => [[ 'value' => 0 ]],
-            );
+            ];
 
-            $er = $this->get('entity_repository');
-            $contentsCount  = $er->countBy($criteria);
-            $contents = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
+            $er            = $this->get('entity_repository');
+            $contentsCount = $er->countBy($criteria);
+            $contents      = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
 
             foreach ($contents as &$item) {
-                $item = $item->get($item->id);
+                $item         = $item->get($item->id);
                 $item->author = $user;
                 if (isset($item->img1) && ($item->img1 > 0)) {
-                    $image = $this->get('entity_repository')->find('Photo', $item->img1);
+                    $image = $er->find('Photo', $item->img1);
                     if (is_object($image) && !is_null($image->id)) {
-                        $item->img1_path = $image->path_file.$image->name;
-                        $item->img1 = $image;
+                        $item->img1_path = $image->path_file . $image->name;
+                        $item->img1      = $image;
                     }
                 }
 
                 if ($item->fk_content_type == 7) {
-                    $image = $this->get('entity_repository')->find('Photo', $item->cover_id);
-                    $item->img1_path = $image->path_file.$image->name;
-                    $item->img1 = $image;
+                    $image           = $er->find('Photo', $item->cover_id);
+                    $item->img1_path = $image->path_file . $image->name;
+                    $item->img1      = $image;
                 }
 
                 if ($item->fk_content_type == 9) {
                     $item->obj_video = $item;
-                    $item->summary = $item->description;
+                    $item->summary   = $item->description;
                 }
 
                 if (isset($item->fk_video) && ($item->fk_video > 0)) {
-                    $item->video = $this->get('entity_repository')->find('Video', $item->fk_video2);
+                    $item->video = $er->find('Video', $item->fk_video2);
                 }
             }
             // Build the pagination
@@ -112,7 +112,7 @@ class AuthorController extends Controller
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
             'cache_id'       => $cacheID,
-            'x-tags'         => 'author-user-frontpage,'.$slug.','.$page,
+            'x-tags'         => 'author-user-frontpage,' . $slug . ',' . $page,
             'x-cache-for'    => '+1 day'
         ]);
     }
@@ -127,7 +127,7 @@ class AuthorController extends Controller
     public function extAuthorFrontpageAction(Request $request)
     {
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
-        $slug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Get sync params
         $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
@@ -139,7 +139,7 @@ class AuthorController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
-        return $this->redirect($wsUrl.'/author/'.$slug);
+        return $this->redirect($wsUrl . '/author/' . $slug);
     }
 
     /**
@@ -162,9 +162,9 @@ class AuthorController extends Controller
            || !$this->view->isCached('user/frontpage_author.tpl', $cacheID)
         ) {
             $sql = "SELECT count(pk_content) as total_contents, users.id FROM contents, users "
-                ." WHERE users.fk_user_group  LIKE '%3%' "
-                ." AND contents.fk_author = users.id  AND fk_content_type IN (1, 4, 7, 9) "
-                ." AND available = 1 AND in_litter!= 1 GROUP BY users.id ORDER BY total_contents DESC";
+                . " WHERE users.fk_user_group  LIKE '%3%' "
+                . " AND contents.fk_author = users.id  AND fk_content_type IN (1, 4, 7, 9) "
+                . " AND available = 1 AND in_litter!= 1 GROUP BY users.id ORDER BY total_contents DESC";
 
             $authors = $this->get('dbal_connection')->fetchAll($sql);
 
