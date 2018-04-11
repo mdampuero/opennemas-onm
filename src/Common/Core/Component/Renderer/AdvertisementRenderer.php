@@ -52,7 +52,11 @@ class AdvertisementRenderer
 
         // If the mark is not valid then use the default one.
         $settings    = $this->container->get('setting_repository')->get('ads_settings');
-        $defaultMark = (array_key_exists('default_mark', $settings) && !empty($settings['default_mark']))
+        $defaultMark = (
+                is_array($settings)
+                && array_key_exists('default_mark', $settings)
+                && !empty($settings['default_mark'])
+            )
             ? $settings['default_mark']
             : _('Advertisement');
 
