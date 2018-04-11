@@ -215,8 +215,8 @@ jQuery(document).ready(function($) {
                       </label>
                     </div>
                     <label class="ad-mark ad-mark-right" for="mark-right">
-                      <span class="ad-mark-text">&nbsp;</span>
                       <div class="img-thumbnail"><div class="ad-mark-block">AD</div></div>
+                      <span class="ad-mark-text">&nbsp;</span>
                     </label>
                   </div>
                   <div class="col-xs-6 form-group">
