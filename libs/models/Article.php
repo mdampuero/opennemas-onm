@@ -423,12 +423,14 @@ class Article extends Content
                 [ 'pk_article' => $id ]
             );
 
-            // Delete related
-            getService('related_contents')->delete($id);
-
             // Delete comments
             getService('comment_repository')->deleteFromFilter(['content_id' => $id]);
             $conn->commit();
+
+            // Delete related
+            // Moved out of transaction due to problems with foreign key
+            // If db has fk on related relation is deleted on cascade
+            getService('related_contents')->delete($id);
 
             return true;
         } catch (\Exception $e) {
