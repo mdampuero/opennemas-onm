@@ -60,8 +60,11 @@ function smarty_insert_renderbanner($params, $smarty)
 
     $content = $renderer->renderInline($ad, $format);
 
-    $class = ' oat-visible oat-' . $orientation . ' '
-        . $renderer->getDeviceCssClasses($ad);
+    $class = ' oat-visible oat-' . $orientation . ' ' . $renderer->getDeviceCssClasses($ad);
+    $mark  = $renderer->getMark($ad);
+    if (!empty($mark)) {
+        $class .= '" data-mark="' . $mark . '';
+    }
 
     return sprintf($tpl, $class, $content);
 }
