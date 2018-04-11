@@ -55,6 +55,18 @@ class AuthorController extends Controller
                 'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
                 'content_status'  => [[ 'value' => 1 ]],
                 'in_litter'       => [[ 'value' => 0 ]],
+                'starttime'       => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'         => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ]
             ];
 
             $er            = $this->get('entity_repository');
