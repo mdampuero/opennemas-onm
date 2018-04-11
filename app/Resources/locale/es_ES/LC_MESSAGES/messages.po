@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-03 10:42+0000\n"
-"PO-Revision-Date: 2018-04-04 17:18+0200\n"
+"POT-Creation-Date: 2018-04-11 15:03+0000\n"
+"PO-Revision-Date: 2018-04-11 17:05+0200\n"
 "Last-Translator: Fran Dieguez <fran@openhost.es>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -2183,6 +2183,10 @@ msgstr "%s grupos de usuario eliminados correctamente"
 
 msgid "User group saved successfully"
 msgstr "Grupo de usuario actualizado correctamente"
+
+#, php-format
+msgid "%s user groups saved successfully"
+msgstr "Grupo de usuarios actualizado correctamente"
 
 msgid "A new opennemas instance has been created"
 msgstr "Se ha creado una nueva instancia de OpenNemas"
@@ -5200,9 +5204,6 @@ msgstr "Videotutoriales"
 msgid "Use videos to get walkthrough guides"
 msgstr "Use vídeos para obtener guías paso a paso"
 
-msgid "You are a master"
-msgstr "Eres un master"
-
 msgid "Go to newspaper"
 msgstr "Ir a mi periódico"
 
@@ -6532,12 +6533,10 @@ msgstr "Pública"
 msgid "Visibility"
 msgstr "Visibilidad"
 
-msgid ""
-"If enabled, subscribers will not see this subscription while registering or "
-"editing profile"
+msgid "If enabled, this user group will not be visible in some circunstances"
 msgstr ""
-"Si está activado, los suscriptores no podrán ver esta suscripción mientras "
-"se registran o editan su perfil"
+"Si está activado, este grupo de usuarios no será visible en algunas "
+"circunstancias"
 
 msgid "Privileges"
 msgstr "Privilegios"
@@ -7315,7 +7314,7 @@ msgstr ""
 "boletines"
 
 msgid "Subscriber"
-msgstr "Suscribiptor"
+msgstr "Suscriptor"
 
 msgid "Search by subject"
 msgstr "Buscar por asunto"
@@ -7879,8 +7878,12 @@ msgstr "Automática"
 msgid "Requests"
 msgstr "Solicitudes"
 
-msgid "Request"
-msgstr "Solicitud"
+msgid ""
+"If enabled, subscribers will not see this subscription while registering or "
+"editing profile"
+msgstr ""
+"Si está activado, los suscriptores no podrán ver esta suscripción mientras "
+"se registran o editan su perfil"
 
 msgid "Accept requests manually"
 msgstr "Aceptar solicitudes manualmente"
@@ -7916,8 +7919,8 @@ msgstr "Pago requerido"
 
 msgid "If enabled, this subscription will require a payment to become a member"
 msgstr ""
-"Si está activado, esta suscripción requerirá un pago para convertirse "
-"en miembro"
+"Si está activado, esta suscripción requerirá un pago para convertirse en "
+"miembro"
 
 msgid "Restrictions"
 msgstr "Restricciones"
@@ -8350,21 +8353,12 @@ msgstr "Columnas"
 msgid "Group name"
 msgstr "Nombre del grupo"
 
-msgid "Edit group"
-msgstr "Editar grupo"
-
 msgid "Do you want to delete the user group?"
 msgstr "¿Estás seguro de que quieres eliminar el grupo de usuarios?"
 
 msgid "Do you want to delete the selected user groups?"
 msgstr ""
 "¿Estás seguro que quieres eliminar los grupos de usuarios seleccionados?"
-
-msgid "New user group"
-msgstr "Nuevo grupo de usuarios"
-
-msgid "Edit user group"
-msgstr "Editar grupo de usuario"
 
 msgid "Unfixed"
 msgstr "No fija"
@@ -9056,9 +9050,6 @@ msgstr "¿Estás seguro de que quieres eliminar el usuario?"
 msgid "Do you want to delete the selected users?"
 msgstr "¿Estás seguro de que quieres eliminar los usuarios seleccionados?"
 
-msgid "New user"
-msgstr "Nuevo usuario"
-
 msgid "Display name"
 msgstr "Nombre en pantalla"
 
@@ -9091,6 +9082,24 @@ msgstr "Bienvenido al Gestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Usa la barra lateral derecha para explorar la información disponible."
+
+#~ msgid "You are a master"
+#~ msgstr "Eres un master"
+
+#~ msgid "Request"
+#~ msgstr "Solicitud"
+
+#~ msgid "Edit group"
+#~ msgstr "Editar grupo"
+
+#~ msgid "New user group"
+#~ msgstr "Nuevo grupo de usuarios"
+
+#~ msgid "Edit user group"
+#~ msgstr "Editar grupo de usuario"
+
+#~ msgid "New user"
+#~ msgstr "Nuevo usuario"
 
 #, fuzzy
 #~ msgid "Unable to find any subscriber with id \"%1\"."
