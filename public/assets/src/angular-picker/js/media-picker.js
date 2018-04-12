@@ -1024,7 +1024,8 @@
           var photoEditor = new window.OnmPhotoEditor({
             container: 'photoEditor',
             image: '/media/opennemas/images/' + $scope.selected.lastSelected.path_img,
-            closeCallBack: $scope.uploadMediaImg
+            closeCallBack: $scope.uploadMediaImg,
+            maximunSize: {width: 800, height: 600}
           });
 
           $('.picker-dialog').addClass('picker-photo-editor');
