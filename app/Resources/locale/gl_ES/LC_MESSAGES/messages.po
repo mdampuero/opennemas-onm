@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-11 15:03+0000\n"
-"PO-Revision-Date: 2018-04-11 17:06+0200\n"
+"POT-Creation-Date: 2018-04-12 10:26+0000\n"
+"PO-Revision-Date: 2018-04-12 12:34+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -2288,6 +2288,9 @@ msgstr "O nome do periódico contén palabras non permitidas."
 msgid "The url that you entered is already in use"
 msgstr "A url xa está en uso"
 
+msgid "Advertisement"
+msgstr "Publicidade"
+
 msgid "Entering on the requested page"
 msgstr "Entrando na páxina solicitada"
 
@@ -2556,9 +2559,6 @@ msgstr "Chave da API"
 
 msgid "Translator"
 msgstr "Tradutor"
-
-msgid "Advertisement"
-msgstr "Publicidade"
 
 msgid "Album not available"
 msgstr "Álbum non dispoñíbel"
@@ -3424,7 +3424,7 @@ msgid "More"
 msgstr "Máis"
 
 msgid "Edit '%1'"
-msgstr "Editar «%1»"
+msgstr "Editar '%1'"
 
 msgid "Remove from this frontpage"
 msgstr "Eliminar desta portada"
@@ -4698,7 +4698,7 @@ msgid "Style"
 msgstr "Estilo"
 
 msgid "Default skin"
-msgstr "Skin por omisión"
+msgstr "Skin por defecto"
 
 msgid ""
 "Your theme offers multiple skins to slightly change your theme. Select which "
@@ -5078,7 +5078,7 @@ msgid "Only available for registered users"
 msgstr "Só dispoñíbel para usuarios rexistrados"
 
 msgid "'%1' not activated - Opennemas"
-msgstr "«%1» non activada - Opennemas"
+msgstr "'%1' non activada - Opennemas"
 
 msgid "%1 temporary deactivated."
 msgstr "%1 está temporalmente desactivado."
@@ -6525,6 +6525,16 @@ msgstr ""
 msgid "(in minutes)"
 msgstr "(en minutos)"
 
+msgid "Default mark shown indicating an advertisement"
+msgstr "Marca por defecto que se mostra para indicar unha publicidade"
+
+msgid ""
+"This is the text shown near advertisements. If you don't fill this field, "
+"the default value \"%1\" will be shown."
+msgstr ""
+"Este é o texto que se mostra ao carón das publicidades. Se non completa este "
+"campo, mostrarase o valor por defecto \"%1\"."
+
 msgid "Allow generic advertisement"
 msgstr "Permitir publicidade xenérica"
 
@@ -6732,6 +6742,9 @@ msgstr "Debaixo"
 
 msgid "Left"
 msgstr "Esquerda"
+
+msgid "Write here your custom mark. Default is \"%1\""
+msgstr "Escriba aquí a marca personalizada. Por defecto é \"%1\""
 
 msgid ""
 "Defines the orientation for the word that marks the advertisement position"

@@ -89,11 +89,7 @@ $maxAllowedFileSize = min($maxUpload, $maxPost, $memoryLimit) * pow(1024, 2);
 define('MAX_UPLOAD_FILE', $maxAllowedFileSize);
 
 $commonCachepath = APPLICATION_PATH . '/tmp/compiles';
-if (!file_exists($commonCachepath)) {
-    mkdir($commonCachepath, 0755, true);
-}
-
-define('COMMON_CACHE_PATH', realpath($commonCachepath));
+define('COMMON_CACHE_PATH', $commonCachepath);
 
 mb_internal_encoding('UTF-8');
 

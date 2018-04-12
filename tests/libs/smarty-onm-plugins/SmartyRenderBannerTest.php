@@ -26,7 +26,7 @@ class SmartyRenderBannerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
-            ->setMethods([ 'getDeviceCssClasses', 'renderInline' ])
+            ->setMethods([ 'getDeviceCssClasses', 'renderInline', 'getMark' ])
             ->getMock();
 
         $this->sm = $this->getMockBuilder('DataSet')
@@ -62,6 +62,24 @@ class SmartyRenderBannerTest extends \PHPUnit_Framework_TestCase
         }
 
         return null;
+    }
+
+    /**
+     * Tests smarty_insert_renderbanner when type is not in ads_position.
+     */
+    public function testRenderBannerWhenTypeIsNotInAdsPosition()
+    {
+        $params = new \StdClass();
+
+        $params->value = [ 111, 222, 333 ];
+
+        $this->smarty->tpl_vars = [
+            'ads_positions'  => $params
+        ];
+
+        $this->assertEmpty(
+            smarty_insert_renderbanner([ 'type' => 123 ], $this->smarty)
+        );
     }
 
     /**
@@ -153,11 +171,52 @@ class SmartyRenderBannerTest extends \PHPUnit_Framework_TestCase
             ->with($ad)->willReturn('foo garply');
         $this->renderer->expects($this->once())->method('getDeviceCSSClasses')
             ->with($ad)->willReturn('corge');
+        $this->renderer->expects($this->once())->method('getMarK')
+            ->with($ad)->willReturn('Advertisement');
         $this->sm->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 1 ]);
 
         $this->assertEquals(
-            '<div class="ad-slot oat oat-visible oat-left corge">foo garply</div>',
+            '<div class="ad-slot oat oat-visible oat-left corge" data-mark="Advertisement">foo garply</div>',
+            smarty_insert_renderbanner([ 'format' => 'inline', 'type' => 123 ], $this->smarty)
+        );
+    }
+
+    /**
+     * Tests smarty_insert_renderbanner when safeframe is enabled but inline is
+     * forced in template and enabled advertisements in list.
+     */
+    public function testRenderBannerWhenInlineForcedWithCustomMark()
+    {
+        $params = new \StdClass();
+        $ads    = new \StdClass();
+        $ad     = new \Advertisement();
+
+        $ad->positions          = [ 123 ];
+        $ad->type_advertisement = [ 123 ];
+        $ad->starttime          = '2000-01-01 00:00:00';
+        $ad->endtime            = null;
+        $ad->params             = [ 'orientation' => 'left' ];
+
+        $params->value = ['mark_text' => 'Sponsor'];
+        $ads->value    = [ $ad ];
+
+        $this->smarty->tpl_vars = [
+            'render_params'  => $params,
+            'advertisements' => $ads
+        ];
+
+        $this->renderer->expects($this->once())->method('renderInline')
+            ->with($ad)->willReturn('foo garply');
+        $this->renderer->expects($this->once())->method('getDeviceCSSClasses')
+            ->with($ad)->willReturn('corge');
+        $this->renderer->expects($this->once())->method('getMarK')
+            ->with($ad)->willReturn('Sponsor');
+        $this->sm->expects($this->once())->method('get')->with('ads_settings')
+            ->willReturn([ 'safe_frame' => 1 ]);
+
+        $this->assertEquals(
+            '<div class="ad-slot oat oat-visible oat-left corge" data-mark="Sponsor">foo garply</div>',
             smarty_insert_renderbanner([ 'format' => 'inline', 'type' => 123 ], $this->smarty)
         );
     }

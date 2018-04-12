@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-11 15:03+0000\n"
-"PO-Revision-Date: 2018-04-11 17:05+0200\n"
+"POT-Creation-Date: 2018-04-12 10:26+0000\n"
+"PO-Revision-Date: 2018-04-12 12:35+0200\n"
 "Last-Translator: Fran Dieguez <fran@openhost.es>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -2320,6 +2320,9 @@ msgstr "El nombre de tu periódico contiene palabras no permitidas."
 msgid "The url that you entered is already in use"
 msgstr "La URL que escribiste ya está en uso"
 
+msgid "Advertisement"
+msgstr "Publicidad"
+
 msgid "Entering on the requested page"
 msgstr "Entrando en la página solicitada"
 
@@ -2586,9 +2589,6 @@ msgstr "Llave de la API"
 
 msgid "Translator"
 msgstr "Traductor"
-
-msgid "Advertisement"
-msgstr "Publicidad"
 
 msgid "Album not available"
 msgstr "Álbum no disponible"
@@ -4737,7 +4737,7 @@ msgid "Style"
 msgstr "Estilo"
 
 msgid "Default skin"
-msgstr "Skin por omisión"
+msgstr "Skin por defecto"
 
 msgid ""
 "Your theme offers multiple skins to slightly change your theme. Select which "
@@ -5121,7 +5121,7 @@ msgid "Only available for registered users"
 msgstr "Solo disponible para usuarios registrados"
 
 msgid "'%1' not activated - Opennemas"
-msgstr "«%1» no activado - Opennemas"
+msgstr "'%1' no activado - Opennemas"
 
 msgid "%1 temporary deactivated."
 msgstr "%1 está temporalmente desactivado."
@@ -6583,6 +6583,16 @@ msgstr ""
 msgid "(in minutes)"
 msgstr "(en minutos)"
 
+msgid "Default mark shown indicating an advertisement"
+msgstr "Marca por defecto mostrada para indicar una publicidad"
+
+msgid ""
+"This is the text shown near advertisements. If you don't fill this field, "
+"the default value \"%1\" will be shown."
+msgstr ""
+"Este es el texto que se muestra al lado de las publicidades. Si no completa "
+"este campo, se mostrará el valor por defecto \"%1\"."
+
 msgid "Allow generic advertisement"
 msgstr "Permitir publicidad genérica"
 
@@ -6790,6 +6800,9 @@ msgstr "Debajo"
 
 msgid "Left"
 msgstr "Izquierda"
+
+msgid "Write here your custom mark. Default is \"%1\""
+msgstr "Escribe aquí tu marca personalizada. Por defecto es \"%1\""
 
 msgid ""
 "Defines the orientation for the word that marks the advertisement position"

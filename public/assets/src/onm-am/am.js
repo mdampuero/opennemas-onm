@@ -53,7 +53,7 @@
    */
   OAM.prototype.addEventListener = function(name, callback) {
     // Initialize the advertisement manager on load
-    if (window.addEventListener !== undefined) {
+    if (typeof window.addEventListener !== 'undefined') {
       window.addEventListener(name, callback, false);
     } else {
       window.attachEvent(name, callback);
@@ -118,7 +118,7 @@
           '<a class="interstitial-close-button" href="#" title="' + this.config.strings.skip + '">' +
             '<span>' + this.config.strings.skip + '</span>' +
           '</a>' +
-        '</div>'+
+        '</div>' +
         '<div class="interstitial-content">' +
           '<div class="ad-slot oat oat-visible oat-' + ad.orientation + '" data-id="' + ad.id + '">' +
           '</div>' +
@@ -139,7 +139,7 @@
     // Hide interstitial after X seconds
     if (ad.timeout > 0) {
       iframe.onload = function() {
-        window.setTimeout(function () {
+        window.setTimeout(function() {
           self.close(div);
         }, ad.timeout * 1000);
       };
@@ -180,8 +180,8 @@
       '&contentId=' + this.config.contentId;
 
     // Dispatch event when iframe loaded
-    item.onload = function () {
-      if (index !== undefined) {
+    item.onload = function() {
+      if (typeof index !== 'undefined') {
         var event   = document.createEvent('Event');
         var content = item.contentWindow.document.body
           .getElementsByClassName('content')[0];
@@ -197,6 +197,7 @@
 
       if (position) {
         var event = document.createEvent('Event');
+
         event.initEvent('oat-' + position + '-loaded', true, true);
         window.dispatchEvent(event);
       }
@@ -214,7 +215,7 @@
    *
    * @param {Array} ads The list of advertisements to display.
    */
-  OAM.prototype.displayInterstitial = function (ads) {
+  OAM.prototype.displayInterstitial = function(ads) {
     var self = this;
 
     // Display an interstitial if present
@@ -259,7 +260,7 @@
       var type = parseInt(slot.getAttribute('data-type'));
       var id   = parseInt(slot.getAttribute('data-id'));
 
-      var available = ads.filter(function(e) {
+      var available = ads.filter(function(e) { // eslint-disable-line no-loop-func
         return self.isVisible(e, type, id);
       });
 
@@ -279,6 +280,7 @@
       div.className  += 'oat-container';
       slot.className += ' oat-visible oat-' + type;
       slot.id         = 'oat-index-' + i;
+      slot.setAttribute('data-mark', ad.mark);
 
       div.style.width    = size.width + 'px';
       div.style.height   = size.height + (size.height === 'auto' ? '' : 'px');
@@ -295,7 +297,7 @@
       var item = self.createNormal(ad, type, i);
 
       // Resize container when content loaded
-      var resize = function(e) {
+      var resize = function(e) { // eslint-disable-line no-loop-func
         var s = window.document.getElementById(e.type.replace('-loaded', ''));
 
         if (!s) {
@@ -311,7 +313,7 @@
       };
 
       // Remove slot when no height
-      var remove = function(e) {
+      var remove = function(e) { // eslint-disable-line no-loop-func
         if (e.args.height === 0) {
           var s = window.document.getElementById(e.type.replace('-loaded', ''));
 
@@ -487,14 +489,14 @@
           .getAttribute('data-timeout');
 
         interstitial.getElementsByClassName('interstitial-close-button')[0]
-          .onclick = function(e) {
+          .onclick = function(e) { // eslint-disable-line no-loop-func
             self.close(interstitial, e);
           };
 
         interstitial.className = interstitial.className +
           ' interstitial-visible';
 
-        window.setTimeout(function () {
+        window.setTimeout(function() { // eslint-disable-line no-loop-func
           self.close(interstitial);
         }, timeout * 1000);
       }
@@ -543,9 +545,11 @@
       return false;
     }
 
-    // Change date format to work with all browsers (UTC timezone from server)
-    // Before: 2017-08-23 13:38:00
-    // After:  2017-08-23T13:38:00Z
+    /**
+     * Change date format to work with all browsers (UTC timezone from server)
+     * Before: 2017-08-23 13:38:00
+     * After:  2017-08-23T13:38:00Z
+     */
     if (ad.starttime) {
       ad.starttime = ad.starttime.replace(/\s+/g, 'T').concat('Z');
     }
@@ -559,7 +563,7 @@
     var endtime   = new Date(ad.endtime);
     var starttime = new Date(ad.starttime);
 
-    if (now < starttime || (ad.endtime && now >= endtime)) {
+    if (now < starttime || ad.endtime && now >= endtime) {
       return false;
     }
 
@@ -588,7 +592,7 @@
     url += '?';
 
     if (parseInt(location.search.split('webview=').splice(1).join('')
-          .split('&')[0]) === 1) {
+      .split('&')[0]) === 1) {
       url += 'webview=1&';
     }
 
@@ -621,8 +625,6 @@
         }
       }
     }
-
-    return false;
   };
 
   window.am = new OAM();
