@@ -23,28 +23,28 @@
               </h5>
             </li>
           </ul>
-        </div>
-        <div class="all-actions pull-right">
-          <ul class="nav quick-section">
-            {acl isAllowed="IMPORT_NEWS_AGENCY_CONFIG"}
-              <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=backend_news_agency_servers_list}">
-                  <i class="fa fa-cog fa-lg"></i>
-                </a>
-              </li>
-            {/acl}
-            {acl isAllowed="MASTER"}
-              <li class="quicklinks">
-                <span class="h-seperate"></span>
-              </li>
-              <li class="quicklinks">
-                <a class="btn btn-primary" href="{url name=admin_news_agency_sync}" id="sync-button">
-                  <i class="fa fa-retweet"></i>
-                  <span class="hidden-xs">{t}Sync{/t}</span>
-                </a>
-              </li>
-            {/acl}
-          </ul>
+          <div class="all-actions pull-right">
+            <ul class="nav quick-section">
+              {acl isAllowed="IMPORT_NEWS_AGENCY_CONFIG"}
+                <li class="quicklinks">
+                  <a class="btn btn-link" href="{url name=backend_news_agency_servers_list}">
+                    <i class="fa fa-cog fa-lg"></i>
+                  </a>
+                </li>
+              {/acl}
+              {acl isAllowed="MASTER"}
+                <li class="quicklinks">
+                  <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                  <a class="btn btn-primary" href="{url name=admin_news_agency_sync}" id="sync-button">
+                    <i class="fa fa-retweet"></i>
+                    <span class="hidden-xs">{t}Sync{/t}</span>
+                  </a>
+                </li>
+              {/acl}
+            </ul>
+          </div>
         </div>
       </div>
     </div>

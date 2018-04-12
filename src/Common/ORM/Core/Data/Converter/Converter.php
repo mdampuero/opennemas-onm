@@ -184,7 +184,8 @@ class Converter
      */
     protected function sObjectify($source)
     {
-        if (empty($this->metadata->mapping)
+        if (!is_array($source)
+            || empty($this->metadata->mapping)
             || !array_key_exists('database', $this->metadata->mapping)
             || !array_key_exists('columns', $this->metadata->mapping['database'])
         ) {

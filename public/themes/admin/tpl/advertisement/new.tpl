@@ -508,7 +508,7 @@ jQuery(document).ready(function($) {
                   <div class="m-t-5" ng-if="selected.all.categories">
                     <small class="help">
                       <i class="fa fa-exclamation-triangle m-r-5 text-warning"></i>
-                      {t}We recomend you to use the "Show in all categories" mark to avoid unchecked future created categories.{/t}
+                      {t}We recommend you to use the "Show in all categories" mark to avoid unchecked future created categories{/t}
                     </small>
                   </div>
                 </div>
@@ -717,6 +717,6 @@ jQuery(document).ready(function($) {
     </script>
   </form>
   <script type="text/ng-template" id="modal-adblock">
-    {include file="base/modals/modalAdblock.tpl"}
+    {include file="base/modal/modal.adblock.tpl"}
   </script>
 {/block}

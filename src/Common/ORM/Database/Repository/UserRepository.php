@@ -41,7 +41,7 @@ class UserRepository extends BaseRepository
      */
     protected function getCategories($ids)
     {
-        $filters  = [];
+        $filters = [];
 
         foreach ($ids as $id) {
             $filters[] = 'pk_fk_user=' . $id['id'];

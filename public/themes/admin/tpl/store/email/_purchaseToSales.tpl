@@ -1,4 +1,4 @@
-{capture name=user_url}{url name="admin_acl_user_show" id=$user->id absolute=true}{/capture}
+{capture name=user_url}{url name="backend_user_show" id=$user->id absolute=true}{/capture}
 <p>{t 1=$instance->name 2=$user->name 3=$smarty.capture.user_url 4=$user->email escape="off"} <a href="%3">%2</a> with email <a href="mailto:%4">%4</a> from instance <a href="http://{$instance->getMainDomain()}">"%1" ({$instance->getMainDomain()})</a> has requested a purchase:{/t}</p>
 <br>
 <h4>{t}Purchased items{/t}</h4>

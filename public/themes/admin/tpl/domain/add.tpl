@@ -26,7 +26,7 @@
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-indent fa-server"></i>
+              <i class="fa fa-indent fa-at"></i>
               {t}Domain Mapping{/t}
             </h4>
           </li>

@@ -5,20 +5,19 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="author"    content="OpenHost,SL">
+  <meta name="author" content="OpenHost,SL">
   <meta name="generator" content="OpenNemas - News Management System">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#22262e">
-  <link rel="manifest" href="/backend_manifest.json">
-  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes">
-
-  <link href="/assets/images/favicon.png" rel="icon">
-  <link rel="icon" sizes="192x192" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <meta name="mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="/assets/images/launcher-icons/IOS-60@2x.png">
-  <link rel="apple-touch-icon" sizes="76x76" href="/assets/images/launcher-icons/IOS-60@2x.png">
   <link rel="apple-touch-icon" sizes="120x120" href="/assets/images/launcher-icons/IOS-60@2x.png">
   <link rel="apple-touch-icon" sizes="152x152" href="/assets/launcher-icons/IOS-60@2x.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <link rel="icon" href="/assets/images/favicon.png">
+  <link rel="icon" sizes="192x192" href="/assets/images/launcher-icons/IOS-60@2x.png">
+  <link rel="manifest" href="/backend_manifest.json">
 
   {block name="meta"}
     <title>{setting name=site_name} - {t}OpenNeMaS administration{/t}</title>
@@ -71,7 +70,7 @@
     </script>
   {/block}
 </head>
-<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session._sf2_attributes.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}')" >
+<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session._sf2_attributes.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}', '{t}Any{/t}')" >
   {block name="body"}
     <div class="overlay"></div>
     {block name="header"}
@@ -368,20 +367,19 @@
                     </span>
                   </span>
                   <ul class="dropdown-menu dropdown-menu-auto dropdown-menu-right no-padding" role="menu">
-                    {if is_object($app.user) && $app.user->isMaster()}
-                      <li class="text-danger">
-                        <span class="fake-a fake-a-static text-danger">
-                          {t}You are a master{/t}
-                        </span>
-                      </li>
-                      <li class="divider"></li>
-                    {/if}
                     <li>
                       <a href="/" target="_blank">
                         <i class="fa fa-globe"></i>
                         {t}Go to newspaper{/t}
                       </a>
                     </li>
+                    <li>
+                      <a href="{url name=admin_getting_started}">
+                        <i class="fa fa-rocket"></i>
+                        {t}Getting started{/t}
+                      </a>
+                    </li>
+                    <li class="divider"></li>
                     <li>
                       {if is_object($app.user) && $app.user->isMaster()}
                         <a ng-href="{get_parameter name=manager_url}manager#/users/{$app.user->id}" target="_blank">
@@ -390,17 +388,18 @@
                         </a>
                       {else}
                         {acl isAllowed="USER_EDIT_OWN_PROFILE"}
-                        <a href="{url name=admin_acl_user_show id=$app->getUser()->id}">
+                        <a href="{url name=backend_user_show id=$app->getUser()->id}">
                           <i class="fa fa-user"></i>
                           {t}Profile{/t}
                         </a>
                         {/acl}
                       {/if}
                     </li>
+                    <li class="divider"></li>
                     <li>
-                      <a href="{url name=admin_getting_started}">
-                        <i class="fa fa-rocket"></i>
-                        {t}Getting started{/t}
+                      <a href="#" ng-click="toggleHelp()">
+                        <i class="fa" ng-class="{ 'fa-toggle-on': isHelpEnabled(), 'fa-toggle-off': !isHelpEnabled() }"></i>
+                        {t}Show help{/t}
                       </a>
                     </li>
                     <li class="divider"></li>
@@ -487,7 +486,6 @@
       @Common/components/ng-tags-input/ng-tags-input.min.js,
       @Common/components/select2/select2.min.js,
       @Common/components/swfobject/swfobject/swfobject.js,
-
       @Common/components/angular-animate/angular-animate.min.js,
       @Common/components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js,
       @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,

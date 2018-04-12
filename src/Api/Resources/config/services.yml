@@ -1,0 +1,36 @@
+services:
+    api.service.author:
+        class:     Api\Service\V1\AuthorService
+        arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
+
+    api.service.subscriber:
+        class:     Api\Service\V1\SubscriberService
+        arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.subscriber' ]
+
+    api.service.subscription:
+        class:     Api\Service\V1\SubscriptionService
+        arguments: [ '@service_container', 'Common\ORM\Entity\UserGroup', '@api.validator.subscription' ]
+
+    api.service.user:
+        class:     Api\Service\V1\UserService
+        arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
+
+    api.service.user_group:
+        class:     Api\Service\V1\UserGroupService
+        arguments: [ '@service_container', 'Common\ORM\Entity\UserGroup', '@api.validator.user_group' ]
+
+    api.validator.subscriber:
+        class:     Api\Validator\V1\SubscriberValidator
+        arguments: [ '@service_container' ]
+
+    api.validator.subscription:
+        class:     Api\Validator\V1\SubscriptionValidator
+        arguments: [ '@service_container' ]
+
+    api.validator.user_group:
+        class:     Api\Validator\V1\UserGroupValidator
+        arguments: [ '@service_container' ]
+
+    api.validator.user:
+        class:     Api\Validator\V1\UserValidator
+        arguments: [ '@service_container' ]

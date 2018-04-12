@@ -45,6 +45,12 @@ class ManagerUserPersisterTest extends \PHPUnit_Framework_TestCase
                             'options' => [ 'default' => null, 'length' => 60 ]
                         ]
                     ],
+                    'relations' => [
+                        'groups' => [
+                            'table' => 'user_groups',
+                            'ids'   => [ 'id' => 'user_id' ]
+                        ]
+                    ],
                     'index' => [
                         [
                             'primary' => true,
@@ -68,13 +74,27 @@ class ManagerUserPersisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $entity = new User([ 'name' => 'xyzzy', 'instances' => [ 'bar' ] ]);
+        $entity = new User([
+            'name'        => 'xyzzy',
+            'instances'   => [ 'bar' ],
+            'user_groups' => [ [ 'user_group_id' => 25, 'status' => 0 ] ]
+        ]);
 
         $this->conn->expects($this->once())->method('lastInsertId')->willReturn(1);
         $this->conn->expects($this->once())->method('insert')->with(
             'users',
             [ 'id' => null, 'name' => 'xyzzy' ],
-            [ 'id' => \PDO::PARAM_STR, 'name' =>\PDO::PARAM_STR ]
+            [ 'id' => \PDO::PARAM_STR, 'name' => \PDO::PARAM_STR ]
+        );
+        $this->conn->expects($this->at(2))->method('executeQuery')->with(
+            'replace into user_user_group values (?,?,?,?)',
+            [ 1, 25, 0, null ],
+            [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
+        );
+        $this->conn->expects($this->at(3))->method('executeQuery')->with(
+            'delete from user_user_group where user_id = ? and user_group_id not in (?)',
+            [ 1, [ 25 ] ],
+            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
 
         $this->persister->create($entity);
@@ -82,14 +102,15 @@ class ManagerUserPersisterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests update for an user group with categories.
+     * Tests update for an user with instances and user groups.
      */
     public function testUpdate()
     {
         $entity = new User([
-            'id'         => 1,
-            'name'       => 'garply',
-            'instances'  => [ 'grault' ]
+            'id'          => 1,
+            'name'        => 'garply',
+            'instances'   => [ 'grault' ],
+            'user_groups' => [ [ 'user_group_id' => 24, 'status' => 0 ] ]
         ]);
 
         $this->conn->expects($this->once())->method('update')->with(
@@ -99,7 +120,49 @@ class ManagerUserPersisterTest extends \PHPUnit_Framework_TestCase
             [ 'name' => \PDO::PARAM_STR ]
         );
 
-        $this->cache->expects($this->once())->method('delete');
+        $this->cache->expects($this->exactly(2))->method('delete');
+        $this->conn->expects($this->at(1))->method('executeQuery')->with(
+            'replace into user_user_group values (?,?,?,?)',
+            [ 1, 24, 0, null ],
+            [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
+        );
+        $this->conn->expects($this->at(2))->method('executeQuery')->with(
+            'delete from user_user_group where user_id = ? and user_group_id not in (?)',
+            [ 1, [ 24 ] ],
+            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+
+        $this->persister->update($entity);
+    }
+
+    /**
+     * Tests update for an user with categories but no user groups.
+     */
+    public function testUpdateWhenNoUserGroups()
+    {
+        $entity = new User([
+            'id'          => 1,
+            'name'        => 'garply',
+            'instances'   => [ 'grault' ],
+            'user_groups' => []
+        ]);
+
+        $this->conn->expects($this->once())->method('update')->with(
+            'users',
+            [ 'name' => 'garply' ],
+            [ 'id' => 1 ],
+            [ 'name' => \PDO::PARAM_STR ]
+        );
+
+        $this->cache->expects($this->exactly(2))->method('delete');
+        $this->conn->expects($this->at(1))->method('executeQuery')->with(
+            'delete from user_user_group where user_id = ?',
+            [ 1 ],
+            [ \PDO::PARAM_INT ]
+        );
+
+
         $this->persister->update($entity);
     }
 }

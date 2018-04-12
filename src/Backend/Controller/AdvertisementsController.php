@@ -100,15 +100,12 @@ class AdvertisementsController extends Controller
             }
         }
 
-        return $this->render(
-            'advertisement/list.tpl',
-            [
-                'categories'              => $categories,
-                'advertisement_positions' => $adsPositions,
-                'types'                   => $types,
-                'map'                     => json_encode($map)
-            ]
-        );
+        return $this->render('advertisement/list.tpl', [
+            'categories'              => $categories,
+            'advertisement_positions' => $adsPositions,
+            'types'                   => $types,
+            'map'                     => json_encode($map)
+        ]);
     }
 
     /**
@@ -158,7 +155,7 @@ class AdvertisementsController extends Controller
             'url'                => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'img'                => $request->request->filter('img', '', FILTER_SANITIZE_STRING),
             'script'             => $request->request->get('script', ''),
-            'positions' => $request->request->get('positions', []),
+            'positions'          => $request->request->get('positions', []),
             'fk_author'          => $this->getUser()->id,
             'fk_publisher'       => $this->getUser()->id,
             'params'             => [
@@ -186,7 +183,7 @@ class AdvertisementsController extends Controller
 
         $this->get('session')->getFlashBag()->add($level, $message);
         return $this->redirect(
-            $this->generateUrl('admin_ad_show', ['id' => $advertisement->id ])
+            $this->generateUrl('admin_ad_show', [ 'id' => $advertisement->id ])
         );
     }
 
@@ -304,7 +301,7 @@ class AdvertisementsController extends Controller
             'url'                => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'img'                => $request->request->filter('img', '', FILTER_SANITIZE_STRING),
             'script'             => $request->request->get('script', ''),
-            'positions' => $request->request->get('positions', []),
+            'positions'          => $request->request->get('positions', []),
             'fk_author'          => $this->getUser()->id,
             'fk_publisher'       => $this->getUser()->id,
             'params'             => [
@@ -484,43 +481,6 @@ class AdvertisementsController extends Controller
                 'default_mark'              => $renderer->getMark(),
             ],
         ];
-    }
-
-    /**
-     * Returns the list of categories.
-     *
-     * @return array The list of categories.
-     */
-    protected function getCategories()
-    {
-        $categories = $this->get('orm.manager')
-            ->getRepository('Category')
-            ->findBy(
-                'internal_category in [1, 9, 7, 11]'
-                . ' order by internal_category asc, title asc'
-            );
-
-        $categories = array_map(function ($a) {
-            // Sometimes category is array. When create & update advertisement
-            $a = $this->get('data.manager.filter')->set($a)->filter('localize', [
-                'keys' => \ContentCategory::getL10nKeys(),
-                'locale' => $this->getLocaleData('frontend')['default']
-            ])->get();
-
-            return [
-                'id'     => (int) $a->pk_content_category,
-                'name'   => $a->title,
-                'type'   => $a->internal_category,
-                'parent' => (int) $a->fk_content_category
-            ];
-        }, $categories);
-
-        array_unshift(
-            $categories,
-            [ 'id' => 0, 'name' => _('Home'), 'type' => 0, 'parent' => 0 ]
-        );
-
-        return array_values($categories);
     }
 
     /**

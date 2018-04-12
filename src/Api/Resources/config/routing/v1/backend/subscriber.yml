@@ -1,0 +1,91 @@
+api_v1_backend_subscriber_create:
+    path:     /subscribers/new
+    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:create }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_subscriber_delete:
+    path:     /subscribers/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_subscriber_patch:
+    path:     /subscribers/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:patch }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_subscriber_save:
+    path:     /subscribers
+    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_subscriber_show:
+    path:     /subscribers/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_subscriber_update:
+    path:     /subscribers/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:update }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_subscribers_delete:
+    path:     /subscribers
+    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_subscribers_export:
+    path:     /users.csv
+    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:export }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_subscribers_list:
+    path:     /subscribers
+    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_subscribers_patch:
+    path:     /subscribers
+    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:patchSelected }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_subscribers_settings_list:
+    path:     /subscribers/settings
+    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:listSettings }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_subscribers_settings_save:
+    path:     /subscribers/settings
+    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:saveSettings }
+    methods:  [ PUT ]
+    options:
+        expose: true

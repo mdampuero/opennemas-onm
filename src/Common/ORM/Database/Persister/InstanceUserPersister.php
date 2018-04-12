@@ -14,7 +14,7 @@ use Common\ORM\Core\Entity;
 /**
  * The InstanceUserPersister class defines actions to persist Users.
  */
-class InstanceUserPersister extends BasePersister
+class InstanceUserPersister extends ManagerUserPersister
 {
     /**
      * {@inheritdoc}
@@ -33,6 +33,7 @@ class InstanceUserPersister extends BasePersister
         $id = $this->metadata->getId($entity);
 
         $this->persistCategories($id, $categories);
+
         $entity->categories = $categories;
 
         $entity->refresh();
@@ -44,7 +45,7 @@ class InstanceUserPersister extends BasePersister
     public function update(Entity $entity)
     {
         $changes    = $entity->getChanges();
-        $categories = [];
+        $categories = $entity->categories;
 
         // Categories change
         if (array_key_exists('categories', $changes)) {
@@ -61,11 +62,12 @@ class InstanceUserPersister extends BasePersister
 
         if (array_key_exists('categories', $changes)) {
             $this->persistCategories($id, $categories);
-            $entity->categories = $categories;
+        }
 
-            if ($this->hasCache()) {
-                $this->cache->remove($this->metadata->getPrefixedId($entity));
-            }
+        $entity->categories = $categories;
+
+        if ($this->hasCache()) {
+            $this->cache->remove($this->metadata->getPrefixedId($entity));
         }
     }
 
@@ -86,10 +88,10 @@ class InstanceUserPersister extends BasePersister
     }
 
     /**
-     * Persits the user group categories.
+     * Persits the user categories.
      *
      * @param integer $id         The entity id.
-     * @param array   $categories The user group categories.
+     * @param array   $categories The list of category ids.
      */
     protected function persistCategories($id, $categories)
     {
@@ -110,8 +112,8 @@ class InstanceUserPersister extends BasePersister
     /**
      * Deletes old categories.
      *
-     * @param array $id         The entity id.
-     * @param array $categories The categories keys to keep.
+     * @param array $id   The entity id.
+     * @param array $keep The list of category ids to keep.
      */
     protected function removeCategories($id, $keep = [])
     {
@@ -122,6 +124,7 @@ class InstanceUserPersister extends BasePersister
 
         if (!empty($keep)) {
             $sql .= " and pk_fk_content_category not in (?)";
+
             $params[] = $keep;
             $types[]  = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
         }
@@ -133,7 +136,7 @@ class InstanceUserPersister extends BasePersister
      * Saves new categories.
      *
      * @param array $id         The entity id.
-     * @param array $categories The categories to save.
+     * @param array $categories The list of category ids to save.
      */
     protected function saveCategories($id, $categories)
     {

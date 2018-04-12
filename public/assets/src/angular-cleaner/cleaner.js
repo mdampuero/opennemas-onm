@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   /**
@@ -10,6 +10,7 @@
    *   objects by some components.
    */
   angular.module('onm.cleaner', [])
+
     /**
      * @ngdoc service
      * @name  cleaner
@@ -39,9 +40,9 @@
 
           for (var key in obj) {
             // Clean empty objects and arrays
-            if (empty && ((angular.isArray(obj[key]) &&
-                  obj[key].length === 0) ||
-                (angular.isObject(obj[key]) &&
+            if (empty && (angular.isArray(obj[key]) &&
+                  obj[key].length === 0 ||
+                angular.isObject(obj[key] &&
                   Object.keys(obj[key]).length === 0))) {
               delete obj[key];
 
@@ -49,7 +50,7 @@
             }
 
             // Skip file object handling
-            if (obj instanceof File) {
+            if (obj[key] instanceof File) {
               continue;
             }
 

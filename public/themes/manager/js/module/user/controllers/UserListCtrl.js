@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('ManagerApp.controllers')
+
     /**
      * @ngdoc controller
      * @name UserListCtrl
@@ -21,7 +22,7 @@
      */
     .controller('UserListCtrl', [
       '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
-      function ($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
+      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope:   $scope,
@@ -125,7 +126,7 @@
             }
           });
 
-          modal.result.then(function (response) {
+          modal.result.then(function(response) {
             messenger.post(response.data);
 
             if (response.success) {
@@ -146,12 +147,14 @@
          *
          * @return {String} The user group name.
          */
-        $scope.getUserGroup = function (id) {
+        $scope.getUserGroup = function(id) {
           for (var i = 0; i < $scope.extra.user_groups.length; i++) {
             if ($scope.extra.user_groups[i].pk_user_group === parseInt(id)) {
               return $scope.extra.user_groups[i].name;
             }
           }
+
+          return '';
         };
 
         /**
@@ -161,13 +164,13 @@
          * @description
          *   Reloads the list.
          */
-        $scope.list = function () {
+        $scope.list = function() {
           $scope.loading = 1;
 
           oqlEncoder.configure({
             placeholder: {
               name: 'name ~ "[value]" or username ~ "[value]"',
-              fk_user_group: '[key] in [[value]]'
+              user_group_id: '([key] = "[value]" and status != 0)'
             }
           });
 
@@ -179,7 +182,7 @@
 
           $location.search('oql', oql);
 
-          return http.get(route).then(function (response) {
+          return http.get(route).then(function(response) {
             $scope.loading = 0;
             $scope.extra   = response.data.extra;
             $scope.items   = response.data.results;
@@ -246,12 +249,14 @@
         $scope.patchSelected = function(property, value) {
           for (var i = 0; i < $scope.items.length; i++) {
             var id = $scope.items[i].id;
+
             if ($scope.selected.items.indexOf(id) !== -1) {
               $scope.items[i][property + 'Loading'] = 1;
             }
           }
 
           var data = { ids: $scope.selected.items };
+
           data[property] = value;
 
           http.patch('manager_ws_users_patch', data).then(function(response) {
@@ -279,7 +284,7 @@
           $scope.columns = webStorage.local.get('users-columns');
         }
 
-        oqlDecoder.configure({ ignore: [ 'username' ] });
+        oqlDecoder.configure({ ignore: [ 'status', 'username' ] });
 
         if ($location.search().oql) {
           $scope.criteria = oqlDecoder.decode($location.search().oql);

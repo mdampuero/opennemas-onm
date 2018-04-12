@@ -30,6 +30,31 @@ class ArrayDataMapper
     }
 
     /**
+     * Converts an array to another array basing on a format.
+     *
+     * @param array $value  The array to convert.
+     * @param array $params The format for the items in the array.
+     *
+     * @return array The converted array.
+     */
+    public function fromArray($value, $params = null)
+    {
+        if (empty($params) || !is_string($params[0])) {
+            return $value;
+        }
+
+        $map = explode('=>', $params[0]);
+        $key = $map[0];
+
+        $values = [];
+        foreach ($value as $v) {
+            $values[$v[$key]] = $v;
+        }
+
+        return $values;
+    }
+
+    /**
      * Returns an array from a JSON string.
      *
      * @param string $value The array as JSON string.

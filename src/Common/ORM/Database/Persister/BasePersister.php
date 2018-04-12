@@ -69,7 +69,7 @@ class BasePersister extends Persister
      */
     public function create(Entity &$entity)
     {
-        list($data, $metas, $types) = $this->converter->databasify($entity->getData());
+        list($data, $metas, $types) = $this->converter->databasify($entity);
 
         $types = $types;
         $keys  = $this->metadata->getIdKeys();

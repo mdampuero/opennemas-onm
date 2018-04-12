@@ -83,12 +83,22 @@
         <li class="quicklinks">
           <span class="h-seperate"></span>
         </li>
-        <li class="quicklinks">
-          <ui-select ng-model="criteria.fk_user_group" theme="select2" >
+        <li class="quicklinks hidden-xs ng-cloak">
+          <ui-select ng-model="criteria.user_group_id" theme="select2">
             <ui-select-match>
-              <strong>{t}Group{/t}:</strong> [% $select.selected.name %]
+              <strong>{t}User Group{/t}:</strong> [% $select.selected.name %]
             </ui-select-match>
-            <ui-select-choices repeat="item.pk_user_group as item in extra.user_groups">
+            <ui-select-choices repeat="item.pk_user_group as item in toArray(addEmptyValue(extra.user_groups, 'pk_user_group'))">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+        </li>
+        <li class="quicklinks hidden-xs ng-cloak" ng-init="activated = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
+          <ui-select name="activated" theme="select2" ng-model="criteria.activated">
+            <ui-select-match>
+              <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
+            </ui-select-match>
+            <ui-select-choices repeat="item.value as item in activated  | filter: $select.search">
               <div ng-bind-html="item.name | highlight: $select.search"></div>
             </ui-select-choices>
           </ui-select>
@@ -143,6 +153,12 @@
             </label>
           </div>
           <div class="checkbox check-default p-b-5">
+            <input id="checkbox-username" checklist-model="columns.selected" checklist-value="'email'" type="checkbox">
+            <label for="checkbox-username">
+              {t}Email{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
             <input id="checkbox-username" checklist-model="columns.selected" checklist-value="'username'" type="checkbox">
             <label for="checkbox-username">
               {t}Username{/t}
@@ -180,14 +196,18 @@
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc'}"></i>
               </th>
               <th class="pointer" ng-click="sort('name')" ng-if="isColumnEnabled('name')">
-                {t}Full name{/t}
+                {t}Name{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
               </th>
-              <th class="pointer" ng-click="sort('username')" ng-if="isColumnEnabled('username')" width="300">
+              <th class="hidden-xs pointer" ng-click="sort('email')" ng-if="isColumnEnabled('email')">
+                {t}Email{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('email') == 'asc', 'fa fa-caret-down': isOrderedBy('email') == 'desc'}"></i>
+              </th>
+              <th class="hidden-sm hidden-xs pointer" ng-click="sort('username')" ng-if="isColumnEnabled('username')" width="300">
                 {t}Username{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('username') == 'asc', 'fa fa-caret-down': isOrderedBy('username') == 'desc'}"></i>
               </th>
-              <th ng-if="isColumnEnabled('usergroups')" width="250">{t}Group{/t}</th>
+              <th class="hidden-sm hidden-xs" ng-if="isColumnEnabled('usergroups')" width="250">{t}User groups{/t}</th>
               <th class="text-center pointer" width="10" ng-click="sort('enabled')" ng-if="isColumnEnabled('enabled')">{t}Enabled{/t}</th>
             </tr>
           </thead>
@@ -203,23 +223,39 @@
                 [% item.id %]
               </td>
               <td ng-if="isColumnEnabled('name')">
-                [% item.name %]
+                <strong class="hidden-xs">
+                  [% item.name %]
+                </strong>
+                <span class="visible-xs" ng-if="item.name">
+                  <strong>{t}Name{/t}:</strong>
+                  [% item.name%]
+                </span>
+                <span class="visible-xs">
+                  <strong>{t}Email{/t}:</strong>
+                  [% item.email%]
+                </span>
                 <div class="listing-inline-actions">
-                  <a class="link" ng-href="[% routing.ngGenerate('manager_user_show', { id: item.id }); %]" ng-if="security.hasPermission('USER_UPDATE')">
-                    <i class="fa fa-pencil"></i>{t}Edit{/t}
+                  <a class="btn btn-default btn-small" ng-href="[% routing.ngGenerate('manager_user_show', { id: item.id }); %]" ng-if="security.hasPermission('USER_UPDATE')">
+                    <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
-                  <button class="link link-danger" ng-click="delete(item.id)" ng-if="security.hasPermission('USER_DELETE')" type="button">
-                    <i class="fa fa-trash"></i>{t}Delete{/t}
+                  <button class="btn btn-danger btn-small" ng-click="delete(item.id)" ng-if="security.hasPermission('USER_DELETE')" type="button">
+                    <i class="fa fa-trash m-r-5"></i>{t}Delete{/t}
                   </button>
                 </div>
               </td>
-              <td ng-if="isColumnEnabled('username')">
+              <td class="hidden-xs" ng-if="isColumnEnabled('email')">
+                [% item.email %]
+              </td>
+              <td class="hidden-sm hidden-xs" ng-if="isColumnEnabled('username')">
                 [% item.username %]
               </td>
               <td ng-if="isColumnEnabled('usergroups')">
                 <ul class="no-style">
-                  <li ng-repeat="id in item.fk_user_group">
-                    [% getUserGroup(id) %]
+                  <li class="m-b-5 m-r-5 pull-left" ng-repeat="(id, user_group) in item.user_groups" ng-if="extra.user_groups[id] && user_group.status !== 0" uib-tooltip="{t}User group disabled{/t}" tooltip-enable="extra.user_groups[id].enabled === 0">
+                    <a class="label text-uppercase" ng-class="{ 'label-danger': !extra.user_groups[id].enabled, 'label-default': extra.user_groups[id].enabled }" href="[% routing.generate('backend_user_group_show', { id: id }) %]">
+                      <strong>[% extra.user_groups[id].name %]</strong>
+                    </span>
+                    </a>
                   </li>
                 </ul>
               </td>

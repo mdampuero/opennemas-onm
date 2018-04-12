@@ -321,11 +321,16 @@ class BaseRepository extends Repository
                 return $a[$key];
             }, $values);
 
-            $metas = $this->getMetas($ids);
+            $metas     = $this->getMetas($ids);
+            $relations = $this->getRelations($ids);
 
             // Merge values and metas
             foreach ($metas as $id => $meta) {
                 $values[$id] = array_merge($values[$id], $meta);
+            }
+
+            foreach ($relations as $id => $relation) {
+                $values[$id] = array_merge($values[$id], $relation);
             }
         }
 
@@ -369,6 +374,42 @@ class BaseRepository extends Repository
         }
 
         return $metas;
+    }
+
+    /**
+     * Returns an array of data for all relations by entity id.
+     *
+     * @param array $ids The entity ids.
+     *
+     * @return type Description
+     */
+    protected function getRelations($ids)
+    {
+        $relations = $this->metadata->getRelations();
+
+        $values = [];
+        foreach ($relations as $name => $relation) {
+            if (array_key_exists('repository', $relation)
+                && !empty($relation['repository'])
+                && $this->name !== $relation['repository']
+            ) {
+                continue;
+            }
+
+            $table = $relation['table'];
+            $rid   = $relation['ids'][$this->metadata->getIdKeys()[0]];
+            $sql   = 'select * from ' . $table
+                . ' where ' . $rid . ' in (' . implode(',', $ids) . ')';
+
+            $rs = $this->conn->fetchAll($sql);
+
+            foreach ($rs as $value) {
+                $values[$value[$rid]][$name][$value[$relation['key']]] =
+                    array_diff_key($value, array_flip([ $rid ]));
+            }
+        }
+
+        return $values;
     }
 
     /**

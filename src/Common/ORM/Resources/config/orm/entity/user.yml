@@ -4,9 +4,7 @@ orm:
             name: User
             required:
                 - email
-                - name
                 - type
-                - username
             properties:
                 activated:          boolean
                 avatar_img_id:      integer
@@ -26,6 +24,7 @@ orm:
                 url:                string
                 user_language:      string
                 username:           string
+                user_groups:        array
             converters:
                 default:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter
@@ -51,6 +50,21 @@ orm:
                         table: usermeta
                         ids:
                             id: user_id
+                    relations:
+                        user_groups:
+                            table: user_user_group
+                            ids:
+                                id: user_id
+                            key: user_group_id
+                            columns:
+                                user_id:
+                                    type: integer
+                                user_group_id:
+                                    type: integer
+                                status:
+                                    type: boolean
+                                expires:
+                                    type: datetime
                     columns:
                         id:
                             type: integer

@@ -1,11 +1,13 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp')
+
     /**
      * @ngdoc controller
      * @name  ListCtrl
      *
+     * @requires $controller
      * @requires $scope
      * @requires $timeout
      *
@@ -13,25 +15,9 @@
      *   Generic controller for lists.
      */
     .controller('ListCtrl', [
-      '$scope', '$timeout',
-      function($scope, $timeout) {
-        /**
-         * @memberOf ListCtrl
-         *
-         * @description
-         *  The list configuration.
-         *
-         * @type {Object}
-         */
-        $scope.config = {
-          columns: {
-            collapsed: true,
-            selected: []
-          },
-          linkers: {},
-          locale: null,
-          multilanguage: null
-        };
+      '$controller', '$scope', '$timeout',
+      function($controller, $scope, $timeout) {
+        $.extend(this, $controller('BaseCtrl', { $scope: $scope }));
 
         /**
          * @memberOf ListCtrl
@@ -72,7 +58,7 @@
             $timeout.cancel($scope.tm);
           }
 
-          $scope.tm = $timeout(function () {
+          $scope.tm = $timeout(function() {
             $scope.config.columns.collapsed = true;
           }, 500);
         };
@@ -89,7 +75,7 @@
             $timeout.cancel($scope.tm);
           }
 
-          $scope.tm = $timeout(function () {
+          $scope.tm = $timeout(function() {
             $scope.config.columns.collapsed = false;
           }, 500);
         };
@@ -163,8 +149,8 @@
          */
         $scope.searchByKeypress = function(event) {
           if (event.keyCode === 13) {
-            if ($scope.pagination.page !== 1) {
-              $scope.pagination.page = 1;
+            if ($scope.criteria.page !== 1) {
+              $scope.criteria.page = 1;
               return;
             }
 

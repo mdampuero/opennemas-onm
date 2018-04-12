@@ -43,6 +43,16 @@
         </li>
       </ul>
       <ul class="nav quick-section pull-right">
+        <li class="quicklinks" ng-if="security.hasPermission('GROUP_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('enabled', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-times fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('GROUP_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('enabled', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-check fa-lg"></i>
+          </button>
+        </li>
         <li class="quicklinks" ng-if="security.hasPermission('GROUP_DELETE')">
           <button class="btn btn-link" ng-click="deleteSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
             <i class="fa fa-trash-o fa-lg"></i>
@@ -142,6 +152,14 @@
                 {t}Group name{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
               </th>
+              <th class="text-center" width="150">
+                <i class="fa fa-eye" uib-tooltip="{t}Visibility{/t}" tooltip-placement="left"></i>
+                <span ng-if="isHelpEnabled()">{t}Visibility{/t}</span>
+              </th>
+              <th class="text-center" width="150">
+                <i class="fa fa-check" uib-tooltip="{t}Enabled{/t}" tooltip-placement="left"></i>
+                <span ng-if="isHelpEnabled()">{t}Enabled{/t}</span>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -158,13 +176,23 @@
               <td ng-if="isColumnEnabled('name')">
                 [% item.name %]
                 <div class="listing-inline-actions">
-                  <a class="link" ng-href="[% routing.ngGenerate('manager_user_group_show', { id: item.pk_user_group }); %]" ng-if="security.hasPermission('GROUP_UPDATE')" title="{t}Edit group{/t}">
-                    <i class="fa fa-pencil"></i>{t}Edit{/t}
+                  <a class="btn btn-default btn-small" ng-href="[% routing.ngGenerate('manager_user_group_show', { id: item.pk_user_group }); %]" ng-if="security.hasPermission('GROUP_UPDATE')">
+                    <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
-                  <button class="link link-danger" ng-click="delete(item.pk_user_group)" ng-if="security.hasPermission('GROUP_DELETE')" type="button">
-                    <i class="fa fa-trash-o"></i>{t}Delete{/t}
+                  <button class="btn btn-danger btn-small" ng-click="delete(item.pk_user_group)" ng-if="security.hasPermission('GROUP_DELETE')" type="button">
+                    <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                   </button>
                 </div>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-white" ng-click="patch(item, 'private', item.private != 1 ? 1 : 0)" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.privateLoading, 'fa-eye-slash text-error' : !item.privateLoading && item.private == 1, 'fa-eye text-success': !item.privateLoading && item.private == 0 }"></i>
+                </button>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled != 1 ? 1 : 0)" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.enabledLoading, 'fa-check text-success' : !item.enabledLoading && item.enabled == 1, 'fa-times text-error': !item.enabledLoading && item.enabled == 0 }"></i>
+                </button>
               </td>
             </tr>
           </tbody>

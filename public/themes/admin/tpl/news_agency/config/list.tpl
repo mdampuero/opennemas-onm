@@ -22,24 +22,24 @@
               <h5>{t}Configuration{/t}</h5>
             </li>
           </ul>
-        </div>
-        <div class="all-actions pull-right">
-          <ul class="nav quick-section">
-            <li class="quicklinks">
-              <a class="btn btn-link" href="{url name=admin_news_agency}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
-                <span class="fa fa-reply"></span>
-              </a>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
-            <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=backend_news_agency_server_new}" id="add-server-button">
-                <i class="fa fa-plus"></i>
-                {t}Add server{/t}
-              </a>
-            </li>
-          </ul>
+          <div class="all-actions pull-right">
+            <ul class="nav quick-section">
+              <li class="quicklinks">
+                <a class="btn btn-link" href="{url name=admin_news_agency}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
+                  <span class="fa fa-reply"></span>
+                </a>
+              </li>
+              <li class="quicklinks">
+                <span class="h-seperate"></span>
+              </li>
+              <li class="quicklinks">
+                <a class="btn btn-primary" href="{url name=backend_news_agency_server_new}" id="add-server-button">
+                  <i class="fa fa-plus"></i>
+                  {t}Add server{/t}
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
