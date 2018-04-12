@@ -148,7 +148,7 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
 
     /**
      * @function isTranslated
-     * @memberOf ArticleCtrl
+     * @memberOf InnerCtrl
      *
      * @description
      *   Checks if the article is translated to the locale.
@@ -167,42 +167,57 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
       return false;
     };
 
-    $scope.launchPhotoEditor = function() {
+    /**
+     * @function launchPhotoEditor
+     * @memberOf InnerCtrl
+     *
+     * @description
+     *   launch the photo editor.
+     *
+     * @param {String} locale The locale to check.
+     *
+     * @return {Boolean} True if the article is translated. False otherwise.
+     */
+    $scope.launchPhotoEditor = function(imgData) {
       var modal = $uibModal.open({
         template: '<div id="photoEditor" class="photoEditor"><div>',
         backdrop: 'static',
-        controller: [
-          '$uibModalInstance', '$scope',
-          function($uibModalInstance, $scope) {
-            /**
-             * Closes the current modal
-             */
-            $scope.close = function(response) {
-              $uibModalInstance.close(response);
-            };
-
-            /**
-             * Closes the modal without returning response.
-             */
-            $scope.dismiss = function() {
-              $uibModalInstance.dismiss();
-            };
-
-            /**
-             * Confirms and executes the confirmed action.
-             */
-            $scope.confirm = function() {
-              return null;
-            };
-          }
-        ]
+        windowClass: 'modal-photo-editor'
       });
 
       modal.rendered.then(function() {
-        var photoEditor = new window.OnmPhotoEditor({ container: 'photoEditor' });
+        var photoEditor = new window.OnmPhotoEditor({
+          container: 'photoEditor',
+          image: '/media/opennemas/images/' + imgData.path_img,
+          closeCallBack: modal.close
+        });
 
         photoEditor.init();
       });
+
+      modal.result.then(function(image) {
+        $scope.uploadMediaImg(image, imgData);
+      });
+    };
+
+    $scope.uploadMediaImg = function(image, imgData) {
+      if (image === null) {
+        return null;
+      }
+
+      var blob = $scope.dataURItoBlob(image.toDataURL());
+      var body = { file: new File([ blob ], imgData.name) };
+
+      var route = { name: 'admin_image_create' };
+
+      http.post(route, body).success(function() {
+        if (typeof $scope.list === 'function') {
+          $scope.list($scope.route, true);
+        }
+      }).error(function() {
+        return null;
+      });
+      return null;
     };
 
     /**
@@ -351,6 +366,27 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
       return errors;
     };
 
+    $scope.dataURItoBlob = function(dataURI) {
+      // Convert base64 to raw binary data held in a string
+      var byteString = atob(dataURI.split(',')[1]);
+
+      // Separate out the mime component
+      var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+      // Write the bytes of the string to an ArrayBuffer
+      var arrayBuffer = new ArrayBuffer(byteString.length);
+      var ia = new Uint8Array(arrayBuffer);
+
+      for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+
+      var dataView = new DataView(arrayBuffer);
+      var blob = new Blob([ dataView ], { type: mimeString });
+
+      return blob;
+    };
+
     /**
      * Insert the selected items in media picker in the target element.
      *
@@ -365,6 +401,7 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
       }
 
       $scope.insertInModel(args.target, args.items);
+      return null;
     });
 
     /**
@@ -381,6 +418,7 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
       }
 
       $scope.insertInModel(args.target, args.items);
+      return null;
     });
 
     // Updates linkers when locale changes

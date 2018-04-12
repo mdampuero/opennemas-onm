@@ -229,7 +229,10 @@
             var pickerTpl = '<div class="picker">' +
               '<div class="picker-backdrop"></div>' +
               '<div class="picker-dialog">' +
-                  '<div class="picker-close" ng-click="close()">' +
+                  '<div ng-hide="!enhance">' +
+                    '<div id="photoEditor" class="photoEditor"></div>' +
+                  '</div>' +
+                  '<div class="picker-close" ng-click="close()" ng-hide="enhance">' +
                     '<i class="fa fa-lg fa-times pull-right"></i>' +
                   '</div>' +
                   '<div class="picker-loading" ng-if="loading" ng-hide="enhance">' +
@@ -1016,9 +1019,37 @@
           }
         };
 
-        $scope.enhanceAction = function () {
+        $scope.enhanceAction = function() {
           $scope.enhance = !$scope.enhance;
-        }
+          var photoEditor = new window.OnmPhotoEditor({
+            container: 'photoEditor',
+            image: '/media/opennemas/images/' + $scope.selected.lastSelected.path_img,
+            closeCallBack: $scope.uploadMediaImg
+          });
+
+          photoEditor.init();
+        };
+
+        $scope.uploadMediaImg = function(image) {
+          $scope.enhance = false;
+          if (image === null) {
+            $scope.$apply();
+            return true;
+          }
+          var blob = $scope.dataURItoBlob(image.toDataURL());
+          var body = { file: new File([ blob ], $scope.selected.lastSelected.name) };
+
+          var route = { name: 'admin_image_create' };
+
+          $http.post(route, body).success(function() {
+            if (typeof $scope.list === 'function') {
+              $scope.list($scope.route, true);
+            }
+          }).error(function() {
+            return null;
+          });
+          return null;
+        };
 
         /**
          * Refresh the list when the criteria changes.

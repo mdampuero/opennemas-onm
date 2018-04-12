@@ -288,7 +288,7 @@
             </a>
           </li>
           <li>
-            <a class="btn btn-primary ng-isolate-scope" ng-click="launchPhotoEditor()">
+            <a class="btn btn-primary ng-isolate-scope" ng-click="launchPhotoEditor(selected.lastSelected)">
                 <i class="fa fa-sliders"></i>
                 {t}Enhance{/t}
             </a>
