@@ -1027,11 +1027,13 @@
             closeCallBack: $scope.uploadMediaImg
           });
 
+          $('.picker-dialog').addClass('picker-photo-editor');
           photoEditor.init();
         };
 
         $scope.uploadMediaImg = function(image) {
           $scope.enhance = false;
+          $('.picker-dialog').removeClass('picker-photo-editor');
           if (image === null) {
             $scope.$apply();
             return true;
