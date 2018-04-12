@@ -12,6 +12,14 @@
   }
 }
 
+.img-thumbnail-circle {
+  border-radius: 100%;
+
+  * {
+    border-radius: 100%;
+  }
+}
+
 .thumbnail-actions {
   bottom: 0;
   opacity: 0;
@@ -71,6 +79,19 @@
       padding-top: 100px;
       text-align: center;
       width: 100%;
+    }
+  }
+}
+
+.thumbnail-placeholder-small {
+  height: 150px;
+  margin: 0 auto;
+  max-width: 100%;
+  width: 150px;
+
+  .img-thumbnail {
+    .thumbnail-empty {
+      padding-top: 50px;
     }
   }
 }

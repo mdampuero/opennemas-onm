@@ -79,6 +79,13 @@ class AlbumsController extends Controller
         $this->view->setConfig('gallery-frontpage');
         $cacheID = $this->view->getCacheId('frontpage', 'album', $this->categoryName, $this->page);
 
+        if (empty($this->page)) {
+            return new RedirectResponse($this->get('router')->generate(
+                'frontend_album_frontpage',
+                [ 'page' => 1 ]
+            ));
+        }
+
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('album/album_frontpage.tpl', $cacheID))
         ) {

@@ -28,24 +28,24 @@
             </h5>
           </li>
         </ul>
-      </div>
-      <div class="all-actions pull-right">
-        <ul class="nav quick-section">
-          <li class="quicklinks">
-            <a class="btn btn-link" href="{url name=backend_news_agency_servers_list}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
-              <span class="fa fa-reply"></span>
-            </a>
-          </li>
-          <li class="quicklinks">
-            <span class="h-seperate"></span>
-          </li>
-          <li class="quicklinks">
-            <button class="btn btn-primary" data-text="{t}Saving{/t}..." id="save-button" type="submit">
-              <span class="fa fa-save"></span>
-              <span class="text">{t}Save{/t}</span>
-            </button>
-          </li>
-        </ul>
+        <div class="all-actions pull-right">
+          <ul class="nav quick-section">
+            <li class="quicklinks">
+              <a class="btn btn-link" href="{url name=backend_news_agency_servers_list}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
+                <span class="fa fa-reply"></span>
+              </a>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks">
+              <button class="btn btn-primary" data-text="{t}Saving{/t}..." id="save-button" type="submit">
+                <span class="fa fa-save"></span>
+                <span class="text">{t}Save{/t}</span>
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

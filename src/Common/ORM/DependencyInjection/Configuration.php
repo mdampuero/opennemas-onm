@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('orm');
+        $rootNode    = $treeBuilder->root('orm');
 
         $rootNode
             ->children()
@@ -40,7 +40,7 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                             ->arrayNode('properties')
-                                ->prototype('scalar')->end()
+                                ->prototype('variable')->end()
                             ->end()
                             ->arrayNode('required')
                                 ->prototype('scalar')->end()
@@ -112,6 +112,28 @@ class Configuration implements ConfigurationInterface
                                                         ->prototype('scalar')->end()
                                                     ->end()
                                                     ->scalarNode('key')->end()
+                                                ->end()
+                                            ->end()
+                                            ->arrayNode('relations')
+                                                ->prototype('array')
+                                                    ->children()
+                                                        ->scalarNode('table')->end()
+                                                        ->arrayNode('ids')
+                                                            ->prototype('scalar')->end()
+                                                        ->end()
+                                                        ->scalarNode('repository')->end()
+                                                        ->scalarNode('key')->end()
+                                                        ->arrayNode('columns')
+                                                            ->prototype('array')
+                                                                ->children()
+                                                                    ->scalarNode('type')->end()
+                                                                    ->arrayNode('options')
+                                                                        ->prototype('scalar')->end()
+                                                                    ->end()
+                                                                ->end()
+                                                            ->end()
+                                                        ->end()
+                                                    ->end()
                                                 ->end()
                                             ->end()
                                             ->arrayNode('columns')

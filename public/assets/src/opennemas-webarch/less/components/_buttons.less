@@ -7,10 +7,6 @@
   }
 }
 
-.btn > i:first-child {
-  margin-right: 5px;
-}
-
 .btn > i.fa-caret-down:last-child,
 .btn > i.fa-angle-down:last-child {
   margin-left: 5px;
@@ -73,6 +69,33 @@
   color: @error-color;
 }
 
+.btn-facebook,
+.btn-facebook:active,
+.btn-facebook:focus,
+.btn-facebook:hover {
+  background: @facebook-color;
+  border-color: @facebook-color;
+  color: #fff;
+}
+
+.btn-google,
+.btn-google:active,
+.btn-google:focus,
+.btn-google:hover {
+  background: @google-color;
+  border-color: @google-color;
+  color: #fff;
+}
+
+.btn-twitter,
+.btn-twitter:active,
+.btn-twitter:focus,
+.btn-twitter:hover {
+  background: @twitter-color;
+  border-color: @twitter-color;
+  color: #fff;
+}
+
 .btn-loading {
   position: relative;
 
@@ -80,7 +103,6 @@
     height: 15px;
     left: 0;
     text-align: center;
-    margin-top: 3px;
     width: 15px;
   }
 
@@ -104,10 +126,16 @@
   }
 
   &.btn-danger,
+  &.btn-info,
+  &.btn-primary,
   &.btn-success {
     .fa-circle-o-notch.fa-spin {
       border-color: #fff;
       border-top-color: transparent;
     }
   }
+}
+
+.btn-group > .btn + .dropdown-toggle {
+  border-left: 1px solid rgba(255, 255, 255, .5) !important;
 }

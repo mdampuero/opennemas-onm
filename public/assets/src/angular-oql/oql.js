@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   /**
@@ -9,6 +9,7 @@
    *   The `onm.oql` module provider OQL-related services.
    */
   angular.module('onm.oql', [])
+
     /**
      * @ngdoc service
      * @name  oqlEncoder
@@ -90,6 +91,7 @@
        */
       this.getConditions = function(criteria) {
         var conditions = {};
+
         for (var key in criteria) {
           // Only for conditions
           if (key !== 'page' && key !== 'epp' && key !== 'orderBy' &&
@@ -117,6 +119,7 @@
 
         if (this.config.placeholder.filter) {
           var filter = this.config.placeholder.filter;
+
           for (var key in conditions) {
             filter = filter.split('[' + key + ']').join(conditions[key]);
           }
@@ -125,6 +128,7 @@
         }
 
         var filter = [];
+
         for (var key in conditions) {
           filter.push(conditions[key]);
         }
@@ -214,7 +218,8 @@
         }
 
         var order = 'order by ';
-        for(var key in criteria.orderBy) {
+
+        for (var key in criteria.orderBy) {
           order += key + ' ' + criteria.orderBy[key] + ', ';
         }
 
@@ -315,7 +320,7 @@
        * @return {Object} The filtering conditions.
        */
       this.decodeCriteria = function() {
-        this.oql = this.oql.replace(/^\s+|\s+$/, '');
+        this.oql = this.oql.replace(/^\s+|\s+$|\(|\)/g, '');
 
         if (this.oql === '') {
           return {};
@@ -337,6 +342,10 @@
             if (this.config.match[field] &&
                 value.match(this.config.match[field])) {
               value = value.match(this.config.match[field])[1];
+            }
+
+            if (parseInt(value) > 0) {
+              value  = parseInt(value);
             }
 
             criteria[field] = value;
@@ -363,6 +372,7 @@
         }
 
         var epp  = this.oql.match(pattern)[0];
+
         this.oql = this.oql.replace(pattern, '');
 
         return parseInt(epp.replace(/limit\s+/, ''));
@@ -387,9 +397,10 @@
         }
 
         var page = this.oql.match(pattern)[0];
+
         this.oql = this.oql.replace(pattern, '');
 
-        return Math.ceil(parseInt(page.replace(/offset\s+/, ''))/epp) + 1;
+        return Math.ceil(parseInt(page.replace(/offset\s+/, '')) / epp) + 1;
       };
 
       /**
@@ -410,11 +421,13 @@
         }
 
         var conditions = this.oql.match(pattern)[0];
-        conditions     = conditions.replace(/order by\s+/, '').split(/\s*,\s*/);
         var orderBy    = {};
+
+        conditions = conditions.replace(/order by\s+/, '').split(/\s*,\s*/);
 
         for (var i = 0; i < conditions.length; i++) {
           var condition = conditions[i].split(/\s+/);
+
           orderBy[condition[0]] = condition[1];
         }
 

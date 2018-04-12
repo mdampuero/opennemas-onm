@@ -31,6 +31,7 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                 'norf'   => 'boolean',
                 'wobble' => 'string',
                 'quux'   => 'integer',
+                'glorp'  => 'array::a=>b:integer',
             ],
             'mapping' => [
                 'database' => [
@@ -41,7 +42,13 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                         'norf' => [ 'type' => 'boolean' ],
                         'quux' => [ 'type' => 'integer', 'options' => [ 'default' => null ] ],
                     ],
-                    'hasMetas' => true
+                    'hasMetas' => true,
+                    'relations' => [
+                        'glorp' => [
+                            'table' => 'glorp_table',
+                            'ids'   => [ 'foo' => 'foo_id' ]
+                        ]
+                    ]
                 ]
             ],
         ]);
@@ -54,7 +61,7 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testDatabasifyEmpty()
     {
-        $this->assertEquals([ [], [], [] ], $this->converter->databasify([]));
+        $this->assertEquals([ [], [], [], [] ], $this->converter->databasify([]));
     }
     /**
      * Tests databasify when empty metadata provided.
@@ -88,14 +95,20 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                     'baz'  => \PDO::PARAM_STR,
                     'norf' => \PDO::PARAM_BOOL,
                     'quux' => \PDO::PARAM_STR,
+                ],
+                [
+                    'glorp' => [
+                        [ 'a' => 1 ]
+                    ]
                 ]
             ],
             $this->converter->databasify([
-                'foo' => 'foobar',
-                'bar' => 1,
-                'baz' => [ 'garply', 'gorp' ],
-                'norf' => false,
-                'wobble' => 'wubble'
+                'foo'    => 'foobar',
+                'bar'    => 1,
+                'baz'    => [ 'garply', 'gorp' ],
+                'norf'   => false,
+                'wobble' => 'wubble',
+                'glorp'  => [ [ 'a' => 1 ] ]
             ])
         );
     }
@@ -122,6 +135,11 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                         'baz'  => \PDO::PARAM_STR,
                         'norf' => \PDO::PARAM_STR,
                         'quux' => \PDO::PARAM_STR,
+                    ],
+                    [
+                        'glorp' => [
+                            [ 'a' => 1 ]
+                        ]
                     ]
                 ],
                 [
@@ -139,12 +157,17 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                         'baz'  => \PDO::PARAM_STR,
                         'norf' => \PDO::PARAM_STR,
                         'quux' => \PDO::PARAM_STR,
+                    ],
+                    [
+                        'glorp' => [
+                            [ 'a' => 2 ]
+                        ]
                     ]
-                ]
+                ],
             ],
             $this->converter->databasify([
-                [ 'foo' => 'foobar' ],
-                [ 'bar' => 1 ],
+                [ 'foo' => 'foobar', 'glorp' => [ [ 'a' => 1 ] ] ],
+                [ 'bar' => 1, 'glorp' => [ [ 'a' => 2 ] ] ],
             ])
         );
     }
@@ -185,5 +208,22 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                 [ 'bar' => 1 ],
             ], true)
         );
+    }
+
+    /**
+     * Tests objectify when no mapping information.
+     */
+    public function testObjectifyStrictWhenNoMapping()
+    {
+        $data = [
+            'foo' => 'foobar',
+            'bar' => 1,
+            'baz' => '["garply","gorp"]',
+            'norf' => 0
+        ];
+
+        $this->metadata->mapping = null;
+
+        $this->assertEquals($data, $this->converter->objectifyStrict($data, true));
     }
 }

@@ -50,7 +50,7 @@
       <span class="item-author" ng-if="item.type_opinion == 1">{t}Editorial{/t}</span>
       <span class="item-author" ng-if="item.type_opinion == 2">{t}Director{/t}</span>
       <span class="item-author" ng-if="item.type_opinion == 0">
-        <a data-nodrag ng-href="[% edit(item.author.id, 'admin_acl_user_show') %]">
+        <a data-nodrag ng-href="[% edit(item.author.id, 'backend_user_show') %]">
           [% item.author.name %]
         </a>
       </span>

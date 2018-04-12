@@ -6,10 +6,6 @@ backend_ws_article:
     resource: '@BackendWebServiceBundle/Resources/config/routing/article.yml'
     prefix:   /
 
-backend_ws_author:
-    resource: '@BackendWebServiceBundle/Resources/config/routing/author.yml'
-    prefix:   /
-
 backend_ws_client:
     resource: '@BackendWebServiceBundle/Resources/config/routing/client.yml'
     prefix:   /

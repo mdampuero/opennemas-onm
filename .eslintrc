@@ -4,7 +4,8 @@
         "jquery": true
     },
     "globals": {
-        "angular": true
+        "angular": true,
+        "_": true
     },
     "rules": {
         // Errors
@@ -145,7 +146,7 @@
         "no-use-before-define":       [ "error" ],
 
         // Node.js and CommonJS
-        "callback-return":       [ "error" ],
+        "callback-return":       [ "warn" ],
         "global-require":        [ "error" ],
         "handle-callback-err":   [ "error" ],
         "no-buffer-constructor": [ "error" ],

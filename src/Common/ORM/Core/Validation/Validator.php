@@ -307,6 +307,10 @@ class Validator
                 $type = 'entity';
             }
 
+            if (preg_match_all('/array\:\:.+/', $type)) {
+                $type = 'array';
+            }
+
             $checkType = 'is' . ucfirst($type);
 
             if (method_exists($this, $checkType)

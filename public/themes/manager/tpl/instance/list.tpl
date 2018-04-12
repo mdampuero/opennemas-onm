@@ -90,7 +90,7 @@
             <span class="input-group-addon">
               <i class="fa fa-search fa-lg"></i>
             </span>
-            <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.name }" ng-keyup="searchByKeypress($event)" ng-model="criteria.name" placeholder="{t}Search{/t}" type="text">
+            <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.name }" ng-model="criteria.name" placeholder="{t}Search{/t}" type="text">
             <span class="input-group-addon input-group-addon-inside pointer no-animate" ng-click="clear('name')" ng-show="criteria.name">
               <i class="fa fa-times"></i>
             </span>

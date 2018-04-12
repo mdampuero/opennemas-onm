@@ -165,33 +165,33 @@ admin_polls_content_provider_related:
 # Ads manager routes
 admin_ads:
     path:     /ads
-    defaults: { _controller  : BackendBundle:Ads:list }
+    defaults: { _controller  : BackendBundle:Advertisements:list }
 
 admin_ad_create:
     path:     /ads/create
-    defaults: { _controller  : BackendBundle:Ads:create }
+    defaults: { _controller  : BackendBundle:Advertisements:create }
 
 admin_ad_show:
     path:     /ads/{id}/show
-    defaults: { _controller  : BackendBundle:Ads:show }
+    defaults: { _controller  : BackendBundle:Advertisements:show }
 
 admin_advertisement_show:
     path:     /ads/{id}/show
-    defaults: { _controller  : BackendBundle:Ads:show }
+    defaults: { _controller  : BackendBundle:Advertisements:show }
     options:
         expose: true
 
 admin_ad_update:
     path:     /ad/{id}/update
-    defaults: { _controller  : BackendBundle:Ads:update }
+    defaults: { _controller  : BackendBundle:Advertisements:update }
 
 admin_ads_content_provider:
     path:     /ads/content-provider
-    defaults: { _controller  : BackendBundle:Ads:contentProvider }
+    defaults: { _controller  : BackendBundle:Advertisements:contentProvider }
 
 admin_ads_config:
     path:     /ads/config
-    defaults: { _controller  : BackendBundle:Ads:config }
+    defaults: { _controller  : BackendBundle:Advertisements:config }
 
 # Special manager routes
 admin_specials:
@@ -831,80 +831,6 @@ admin_cache_manager_clearrediscache:
     path:     /system/cachemanager/clear-redis-cache
     defaults: { _controller  : BackendBundle:CacheManager:clearRedisCacheForInstance }
 
-# User management routes
-admin_acl_user:
-    path:     /acl/users
-    defaults: { _controller  : BackendBundle:User:list }
-
-admin_acl_user_create:
-    path:     /acl/users/create
-    defaults: { _controller  : BackendBundle:User:create }
-
-admin_acl_user_save:
-    path:     /acl/users/save
-    defaults: { _controller  : BackendBundle:User:save }
-
-admin_acl_user_settings_show:
-    path:     /acl/users/settings
-    defaults: { _controller  : BackendBundle:User:showSettings }
-    methods:  [ GET ]
-
-admin_acl_user_settings_save:
-    path:     /acl/users/settings
-    defaults: { _controller  : BackendBundle:User:saveSettings }
-    methods:  [ POST ]
-
-admin_acl_user_show:
-    path:     /acl/users/{id}/show
-    defaults: { _controller  : BackendBundle:User:show }
-    options:
-        expose: true
-
-admin_acl_user_social:
-    path:     /acl/user/{id}/{resource}
-    defaults: { _controller  : BackendBundle:User:social }
-    requirements:
-        resource: facebook|twitter
-
-admin_acl_user_social_disconnect:
-    path:     /acl/user/{id}/{resource}/disconnect
-    defaults: { _controller  : BackendBundle:User:disconnect }
-
-admin_acl_user_update:
-    path:     /acl/user/{id}/update
-    defaults: { _controller  : BackendBundle:User:update }
-
-admin_acl_user_set_meta:
-    path:     /acl/user/set-meta
-    defaults: { _controller  : BackendBundle:User:setMeta }
-
-admin_acl_user_toogle_enabled:
-    path:     /acl/user/{id}/toggle-enabled
-    defaults: { _controller  : BackendBundle:User:toogleEnabled }
-
-# User groups managerment routes
-admin_acl_usergroups:
-    path:     /acl/usergroups
-    defaults: { _controller  : BackendBundle:UserGroups:list }
-
-admin_acl_usergroup_show:
-    path:     /acl/usergroups/{id}/show
-    defaults: { _controller  : BackendBundle:UserGroups:show }
-    options:
-        expose: true
-
-admin_acl_usergroups_create:
-    path:     /acl/usergroups/create
-    defaults: { _controller  : BackendBundle:UserGroups:create }
-
-admin_acl_usergroups_save:
-    path:     /acl/usergroup/save
-    defaults: { _controller  : BackendBundle:UserGroups:save }
-
-admin_acl_usergroups_update:
-    path:     /acl/usergroup/{id}/update
-    defaults: { _controller  : BackendBundle:UserGroups:update }
-# System settings routes
 admin_system_settings:
     path:     /system/settings
     defaults: { _controller  : BackendBundle:SystemSettings:default }
@@ -920,15 +846,6 @@ admin_utils_calculate_tags:
     defaults: { _controller  : BackendBundle:Utils:calculateTags }
     options:
         expose: true
-
-# Auth system routes
-admin_acl_user_recover_pass:
-    path:     /login/user/recover-pass
-    defaults: { _controller  : BackendBundle:User:recoverPassword }
-
-admin_acl_user_reset_pass:
-    path:     /login/user/reset-pass/{token}
-    defaults: { _controller  : BackendBundle:User:regeneratePassword }
 
 # Getting started routes
 admin_getting_started:
@@ -961,19 +878,19 @@ admin_menu_sidebar_get:
 
 # Routing refactoring starts here
 backend_authentication:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/authentication.yml'
 
 backend_author:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/author.yml'
 
 backend_account:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/account.yml'
 
 backend_category:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/category.yml'
 
 backend_domain:
@@ -981,25 +898,45 @@ backend_domain:
     resource: '@BackendBundle/Resources/config/routing/domain.yml'
 
 backend_news_agency_server:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/news_agency_server.yml'
 
 backend_notification:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/notification.yml'
 
+backend_password:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/password.yml'
+
 backend_purchase:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/purchase.yml'
 
 backend_static_pages:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/static_page.yml'
 
+backend_subscriber:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/subscriber.yml'
+
+backend_subscription:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/subscription.yml'
+
 backend_store:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/store.yml'
 
 backend_theme:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/theme.yml'
+
+backend_user:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/user.yml'
+
+backend_user_group:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/user_group.yml'

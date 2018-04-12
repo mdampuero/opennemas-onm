@@ -77,7 +77,7 @@
                       </div>
                       {$recaptcha}
                       <div class="form-group text-right">
-                        <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass btn btn-link">{t domain=base}Forgot Password?{/t}</a>
+                        <a href="{url name=backend_password_reset}" class="recover_pass btn btn-link">{t domain=base}Forgot Password?{/t}</a>
                         <button class="btn btn-primary" id="login-button" tabindex="4" type="submit">{t}Log in{/t}</button>
                       </div>
                     </div>
@@ -117,7 +117,7 @@
     </footer>
   </div>
   {block name="footer-js"}
-    {javascripts src="@Common/components/jquery/jquery.min.js,
+    {javascripts src="@Common/components/jquery2/dist/jquery.min.js,
         @Common/components/bootstrap/dist/js/bootstrap.min.js,
         @Common/components/modernizr/modernizr.js,
         @Common/js/onm/md5.min.js" output="login"}

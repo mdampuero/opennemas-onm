@@ -1,13 +1,70 @@
-backend_ws_users_settings_list:
-    path:     /users/settings
-    defaults: { _controller  : ApiBundle:V1/Backend/User:listSettings }
+api_v1_backend_user_create:
+    path:     /users/new
+    defaults: { _controller  : ApiBundle:V1/Backend/User:create }
     methods:  [ GET ]
     options:
         expose: true
 
-backend_ws_users_settings_save:
-    path:     /users/settings
-    defaults: { _controller  : ApiBundle:V1/Backend/User:saveSettings }
+api_v1_backend_user_delete:
+    path:     /users/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/User:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_user_patch:
+    path:     /users/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/User:patch }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_user_save:
+    path:     /users
+    defaults: { _controller  : ApiBundle:V1/Backend/User:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_user_show:
+    path:     /users/{id}
+    defaults: { _controller  : ApiBundle:V1/Backend/User:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_user_update:
+    path:     /users/{id}
+    defaults: { _controller  : ApiBundle:V1/Backend/User:update }
     methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_users_delete:
+    path:     /users
+    defaults: { _controller: ApiBundle:V1/Backend/User:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_users_list:
+    path:     /users
+    defaults: { _controller  : ApiBundle:V1/Backend/User:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_users_patch:
+    path:     /users
+    defaults: { _controller: ApiBundle:V1/Backend/User:patchSelected }
+    methods:  [ PATCH ]
     options:
         expose: true

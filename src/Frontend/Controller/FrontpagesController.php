@@ -302,7 +302,9 @@ class FrontpagesController extends Controller
         // Get all the ads and add them to the advertisements list
         if (is_array($contents)) {
             foreach ($contents as $content) {
-                if ($content->content_type_name == 'advertisement') {
+                if ($content->content_type_name == 'advertisement'
+                    && $content->content_status == 1
+                ) {
                     $advertisements[] = $content;
                 }
             }
