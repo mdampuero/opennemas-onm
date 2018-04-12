@@ -283,8 +283,7 @@ window.OnmPhotoEditor.prototype.init = function() {
     return null;
   }
 
-  this.container   = document.getElementById(this.conf.container);
-  this.maximunSize = this.getMaxSize();
+  this.container = document.getElementById(this.conf.container);
 
   if (!this.container || this.container === null) {
     return null;
@@ -303,6 +302,7 @@ window.OnmPhotoEditor.prototype.init = function() {
   this.actionList = this.getActionList(status);
 
   this.drawPhotoEditor(status);
+  this.maximunSize = this.getMaxSize();
   this.loadImage(this.conf.image);
   return null;
 };
@@ -1106,6 +1106,7 @@ window.OnmPhotoEditor.prototype.capitalizeFirstLetter = function(string) {
  */
 window.OnmPhotoEditor.prototype.getAdaptCanvasSize = function(element) {
   var sizeElement = this.getElementSize(element);
+
   var sizeContainer = {
     height: this.maximunSize.height -
       this.divMenu.getBoundingClientRect().height -
@@ -1136,7 +1137,11 @@ window.OnmPhotoEditor.prototype.getAdaptCanvasSize = function(element) {
 };
 
 window.OnmPhotoEditor.prototype.getMaxSize = function() {
-  var maxSize = this.maximunSize;
+  var maxSize = this.conf.maximunSize ? this.conf.maximunSize : this.maximunSize;
+
+  if (maxSize.width && maxSize.width > 0 && maxSize.height && maxSize.height > 0) {
+    return maxSize;
+  }
   var containerSize = this.getElementSize(this.container);
 
   if (this.container.offsetWidth !== '') {
