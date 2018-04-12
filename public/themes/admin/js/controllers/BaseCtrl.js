@@ -19,8 +19,8 @@
      *   and inners will need. All controllers should extend this.
      */
     .controller('BaseCtrl', [
-      '$rootScope', '$scope', '$timeout', 'Editor', 'http', 'messenger', 'Renderer',
-      function($rootScope, $scope, $timeout, Editor, http, messenger, Renderer) {
+      '$rootScope', '$scope', '$timeout', '$uibModal', 'Editor', 'http', 'messenger', 'Renderer',
+      function($rootScope, $scope, $timeout, $uibModal, Editor, http, messenger, Renderer) {
         /**
          * @memberOf BaseCtrl
          *
