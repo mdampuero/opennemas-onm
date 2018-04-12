@@ -85,8 +85,8 @@ DROP TABLE IF EXISTS `advertisements_positions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `advertisements_positions` (
-  `advertisement_id` bigint(20) UNSIGNED NOT NULL,
-  `position_id` INTEGER UNSIGNED NOT NULL,
+  `advertisement_id` bigint(20) unsigned NOT NULL,
+  `position_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`advertisement_id`,`position_id`),
   KEY `advertisements_positions_advertisement_id` (`advertisement_id`),
   CONSTRAINT `advertisements_positions_content_id` FOREIGN KEY (`advertisement_id`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -1091,6 +1091,10 @@ DROP TABLE IF EXISTS `user_groups`;
 CREATE TABLE `user_groups` (
   `pk_user_group` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
+  `type` int(11) NOT NULL DEFAULT '0',
+  `private` tinyint(1) NOT NULL DEFAULT '0',
+  `request` tinyint(1) NOT NULL DEFAULT '0',
+  `enabled` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`pk_user_group`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1101,7 +1105,7 @@ CREATE TABLE `user_groups` (
 
 LOCK TABLES `user_groups` WRITE;
 /*!40000 ALTER TABLE `user_groups` DISABLE KEYS */;
-INSERT INTO `user_groups` VALUES (3,'Autores'),(4,'Masters'),(5,'Administrador'),(6,'Usuarios');
+INSERT INTO `user_groups` VALUES (3,'Autores',0,0,0,1),(5,'Administrador',0,0,0,1),(6,'Usuarios',0,0,0,1);
 /*!40000 ALTER TABLE `user_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1129,6 +1133,36 @@ LOCK TABLES `user_groups_privileges` WRITE;
 /*!40000 ALTER TABLE `user_groups_privileges` DISABLE KEYS */;
 INSERT INTO `user_groups_privileges` VALUES (6,1),(6,2),(6,3),(6,4),(6,5),(6,6),(6,7),(6,8),(6,9),(6,10),(6,11),(6,12),(6,13),(6,15),(6,16),(6,17),(6,26),(6,27),(6,28),(6,29),(6,30),(6,31),(6,32),(6,33),(6,34),(6,35),(6,36),(6,37),(6,38),(6,39),(6,40),(6,41),(6,60),(6,61),(6,62),(6,63),(6,64),(6,65),(6,66),(6,67),(6,68),(6,69),(6,70),(6,82),(6,83),(6,84),(6,85),(6,104),(6,105),(6,106),(6,107),(6,108),(6,109),(6,114),(6,115),(6,116),(6,117),(6,118),(6,122),(6,123),(6,124),(6,132),(6,133),(6,134),(6,161),(6,162),(6,164);
 /*!40000 ALTER TABLE `user_groups_privileges` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_user_group`
+--
+
+DROP TABLE IF EXISTS `user_user_group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_user_group` (
+  `user_id` bigint(20) unsigned NOT NULL,
+  `user_group_id` int(10) unsigned NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '0 rejected - 1 accepted - 2 requested',
+  `expires` datetime DEFAULT NULL,
+  PRIMARY KEY (`user_id`,`user_group_id`),
+  KEY `IDX_28657971A76ED395` (`user_id`),
+  KEY `IDX_286579711ED93D47` (`user_group_id`),
+  CONSTRAINT `user_group_id_pk_user_group` FOREIGN KEY (`user_group_id`) REFERENCES `user_groups` (`pk_user_group`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_id_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_user_group`
+--
+
+LOCK TABLES `user_user_group` WRITE;
+/*!40000 ALTER TABLE `user_user_group` DISABLE KEYS */;
+INSERT INTO `user_user_group` VALUES (1,3,1,NULL),(2,3,1,NULL),(8,3,1,NULL),(9,3,1,NULL),(10,3,1,NULL),(11,3,1,NULL);
+/*!40000 ALTER TABLE `user_user_group` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1307,4 +1341,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-08 14:16:52
+-- Dump completed on 2018-03-28  8:53:05
