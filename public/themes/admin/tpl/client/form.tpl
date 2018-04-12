@@ -10,7 +10,7 @@
       </div>
     </div>
   </div>
-  <div class="ng-cloak p-b-30" ng-show="client.country">
+  <div class="ng-cloak" ng-show="client.country">
     <h5 class="m-t-20">{t}Contact information{/t}</h5>
     <div class="row">
       <div class="form-group col-sm-4" ng-class="{ 'has-error': clientForm.first_name.$dirty && clientForm.first_name.$invalid, 'has-success': clientForm.first_name.$dirty && clientForm.first_name.$valid }">
@@ -129,11 +129,15 @@
         </div>
       </div>
     {else}
-      <div class="text-right">
-        <button class="btn btn-primary" ng-click="confirm()" ng-disabled="clientForm.$invalid || !validVatNumber || loading">
-          <i class="fa fa-circle-o-notch fa-spin" ng-if="loading"></i>
-          {t}Next{/t}
-        </button>
+      <div class="row">
+        <div class="col-xs-6 col-xs-offset-6">
+          <button class="btn btn-block btn-loading btn-success" ng-click="confirm()" ng-disabled="clientForm.$invalid || !validVatNumber || loading">
+            <h4 class="bold text-uppercase text-white">
+              <i class="fa fa-circle-o-notch fa-spin" ng-if="loading"></i>
+              {t}Next{/t}
+            </h4>
+          </button>
+        </div>
       </div>
     {/if}
   </div>

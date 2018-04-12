@@ -128,6 +128,81 @@ class UserGroupController extends Controller
     }
 
     /**
+     * Updated some user properties.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('GROUP_UPDATE')")
+     */
+    public function patchAction(Request $request, $id)
+    {
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
+        $data = $em->getConverter('UserGroup')
+            ->objectify($request->request->all());
+
+        $user = $em->getRepository('UserGroup', 'manager')->find($id);
+        $user->merge($data);
+
+        $em->persist($user, 'manager');
+
+        $msg->add(_('User group saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Set the activated flag for users in batch.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('USER_UPDATE')")
+     */
+    public function patchSelectedAction(Request $request)
+    {
+        $params = $request->request->all();
+        $ids    = $params['ids'];
+        $msg    = $this->get('core.messenger');
+
+        unset($params['ids']);
+
+        if (!is_array($ids) || count($ids) === 0) {
+            $msg->add(_('Bad request'), 'error', 400);
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
+        }
+
+        $em   = $this->get('orm.manager');
+        $oql  = sprintf('pk_user_group in [%s]', implode(',', $ids));
+        $data = $em->getConverter('UserGroup')->objectify($params);
+
+        $users = $em->getRepository('UserGroup', 'manager')->findBy($oql);
+
+        $updated = 0;
+        foreach ($users as $user) {
+            try {
+                $user->merge($data);
+                $em->persist($user, 'manager');
+                $updated++;
+            } catch (\Exception $e) {
+                $msg->add($e->getMessage(), 'error', 409);
+            }
+        }
+
+        if ($updated > 0) {
+            $msg->add(
+                sprintf(_('%s user groups saved successfully'), $updated),
+                'success'
+            );
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
      * Saves a new user group.
      *
      * @param Request $request The request object.

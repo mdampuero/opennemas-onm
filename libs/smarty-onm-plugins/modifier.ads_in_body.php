@@ -25,9 +25,12 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
     $ads = getService('core.template')->getSmarty()
         ->tpl_vars['advertisements']->value;
 
-    $slots = array_map(function ($a) {
-        return (int) $a->type_advertisement;
-    }, $ads);
+
+    $slots = [];
+    foreach ($ads as $ad) {
+        $slots = array_merge($slots, $ad->positions);
+    }
+
 
     $slots = array_unique(array_filter($slots, function ($a) use ($id) {
         return $a > $id && $a < $id + 100;
@@ -45,7 +48,7 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
 
         if (!$safeFrame) {
             $adsForPosition = array_filter($ads, function ($a) use ($slotId) {
-                return (int) $a->type_advertisement == $slotId;
+                return in_array($slotId, $a->positions);
             });
 
             if (count($adsForPosition) < 1) {

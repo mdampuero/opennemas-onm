@@ -1,25 +1,51 @@
 // Auxiliar functions for login backend actions
+
+/**
+ * Method to retrieve tags from url and add this tags to a import field
+ *
+ * @param {String} raw_info   data of the retrieve request
+ * @param {Object} tags_input object where load the recover tags
+ * @param {String} url        url from where recover the tags
+ */
 function fill_tags_improved(raw_info, tags_input, url) {
     jQuery.ajax({
         url: url + '?data=' + raw_info,
         async: false,
-        success: function(data){
+        success: function(data) {
             tags_input.importTags(data);
         }
     });
 }
 
+/**
+ * Method to retrieve tags from url and add this tags to a import field
+ *
+ * @param {String} raw_info   data of the retrieve request
+ * @param {Object} tags_input object where load the recover tags
+ * @param {String} url        url from where recover the tags
+ */
 function fill_tags(raw_info, target_element, url) {
     jQuery.ajax({
         url: url + '?data=' + raw_info
     }).done(function(data) {
         var tags = data.split(',');
+
+        if (Array.isArray(tags) && tags.length === 1 && tags[0] === 'undefined') {
+          return null;
+        }
+
         for (var i = 0; i < tags.length; i++) {
           jQuery(target_element).tagsinput('add', tags[i]);
         }
     });
 }
 
+/**
+ * Method to retrieve tags from url and add this tags to a import field
+ *
+ * @param {Object} container  element where load all external information
+ * @param {String} raw_info   data of the retrieve request
+ */
 function load_ajax_in_container(url, container) {
     jQuery.ajax({
         url: url,
@@ -34,7 +60,7 @@ function load_ajax_in_container(url, container) {
 }
 
 $(document).ready(function() {
-    $('.sidebar li > a').on('click', function (e) {
+    $('.sidebar li > a').on('click', function(e) {
       var item = $(this).parent();
       var visible = item.hasClass('open');
       var submenu = $(this).next();
@@ -61,41 +87,46 @@ $(document).ready(function() {
       e.preventDefault();
     });
 
-    $('.nav-pills, .nav-tabs').tabdrop();
+    $('.nav-tabs-tabdrop .nav-pills, .nav-tabs-tabdrop .nav-tabs').tabdrop();
 
-    $('#formulario').on('submit', function(){
+    $('#formulario').on('submit', function() {
       var btn = $('.btn.btn-primary');
+
       btn.attr('disabled', true);
       $('.btn.btn-primary .text').html(btn.data('text'));
     });
 
     var unsaved = false;
+
     if ($('#formulario').length > 0) {
       unsaved = true;
       // Get form values and set unsaved
       var ov = $('#formulario').serialize();
+      var f = function() {
+        ov = null;
+      };
+
       // Check for CKEditor changes
       for (var i in CKEDITOR.instances) {
-        CKEDITOR.instances[i].on('key', function() {
-          ov = null;
-        });
+        CKEDITOR.instances[i].on('key', f);
       }
       // Bind the event
       $(window).bind('beforeunload', function(e) {
         var nv = $('#formulario').serialize();
-        if((ov != nv) && unsaved){
+
+        if (ov != nv && unsaved) {
             return leaveMessage;
         }
       });
       // Allow to save changes
-      $('#formulario').on('submit', function(){
+      $('#formulario').on('submit', function() {
         unsaved = false;
       });
     }
 
     // Hide alerts after 5 seconds
     window.setInterval(function() {
-      $('.messages .alert').slideDown(2000, function(){
+      $('.messages .alert').slideDown(2000, function() {
         $(this).remove();
       });
     }, 5000);

@@ -1,3 +1,7 @@
+api_v1_backend_author:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/author.yml'
+    prefix:   /backend
+
 api_v1_backend_article:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/article.yml'
     prefix:   /backend
@@ -10,8 +14,20 @@ api_v1_backend_setting:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/setting.yml'
     prefix:   /backend
 
+api_v1_backend_subscriber:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/subscriber.yml'
+    prefix:   /backend
+
+api_v1_backend_subscription:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/subscription.yml'
+    prefix:   /backend
+
 api_v1_backend_user:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/user.yml'
+    prefix:   /backend
+
+api_v1_backend_user_group:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/user_group.yml'
     prefix:   /backend
 
 api_v1_frontend_tool:

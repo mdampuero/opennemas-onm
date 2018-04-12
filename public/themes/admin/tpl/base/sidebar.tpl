@@ -54,7 +54,7 @@
           </a>
         {else}
           {acl isAllowed="USER_EDIT_OWN_PROFILE"}
-          <a href="{url name=admin_acl_user_show id=me}">
+          <a href="{url name=backend_user_show id=me}">
             <i class="fa fa-user"></i>
             <span class="title">{t}Profile{/t}</span>
           </a>

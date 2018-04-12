@@ -220,27 +220,76 @@ class SqlTranslator
         // Recognized columns
         $columns = array_keys($this->metadata->mapping['database']['columns']);
 
-        // Seach by meta_key
-        if (!in_array($str, $columns)) {
-            if ($this->metadata->hasMetas()) {
-                $this->tables[] = $this->metadata->getMetaTable();
+        if (in_array($str, $columns)) {
+            return [ $str, null, null ];
+        }
 
-                // Push join condition
-                $keys = $this->metadata->getMetaKeys();
-                foreach ($keys as $tableId => $metaId) {
-                    $this->sqls[] = $tableId . ' = '. $metaId;
-                }
-
-                // Push meta-based filters
-                $this->sqls[] = "and meta_key = ? and meta_value";
-                $this->params[] = $str;
-                $this->types[] = \PDO::PARAM_STR;
-            }
-
+        // Search by field in relations table
+        if ($this->metadata->hasRelations()
+            && in_array($str, $this->metadata->getRelationColumns())
+        ) {
+            $this->translateFieldInRelation($str);
             return;
         }
 
-        return [ $str, null, null ];
+        // Search by field in meta table
+        if ($this->metadata->hasMetas()) {
+            $this->translateFieldInMeta($str);
+        }
+    }
+
+    /**
+     * Translates a field when it refers to a meta key.
+     *
+     * @param string $str The field name.
+     */
+    protected function translateFieldInMeta($str)
+    {
+        // Seach by meta_key
+        $this->tables[] = $this->metadata->getMetaTable();
+
+        // Push join condition
+        $keys = $this->metadata->getMetaKeys();
+        foreach ($keys as $tableId => $metaId) {
+            $this->sqls[] = sprintf(
+                '%s.%s = %s.%s',
+                $this->metadata->mapping['database']['table'],
+                $tableId,
+                $this->metadata->getMetaTable(),
+                $metaId
+            );
+        }
+
+        // Push meta-based filters
+        $this->sqls[]   = "and meta_key = ? and meta_value";
+        $this->params[] = $str;
+        $this->types[]  = \PDO::PARAM_STR;
+    }
+
+    /**
+     * Translates a field when it refers to a column in a relation table.
+     *
+     * @param string $str The field name.
+     */
+    protected function translateFieldInRelation($str)
+    {
+        $relations = $this->metadata->getRelations();
+        foreach ($relations as $relation) {
+            $this->tables[] = $relation['table'];
+
+            foreach ($relation['ids'] as $tableId => $relationId) {
+                $this->sqls[] = sprintf(
+                    "%s.%s = %s.%s",
+                    $this->metadata->mapping['database']['table'],
+                    $tableId,
+                    $relation['table'],
+                    $relationId
+                );
+            }
+        }
+
+        // Push meta-based filters
+        $this->sqls[] = "and $str";
     }
 
     /**

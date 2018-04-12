@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('ManagerApp')
+
     /**
      * @ngdoc controller
      * @name  ListCtrl
@@ -36,6 +37,13 @@
         $scope.tm = null;
 
         /**
+         * The available elements per page
+         *
+         * @type {Array}
+         */
+        $scope.views = [ 10, 25, 50, 100 ];
+
+        /**
          * @function cleanCriteria
          * @memberOf ListCtrl
          *
@@ -50,8 +58,8 @@
           var cleaned = {};
 
           for (var name in criteria) {
-            if (criteria[name] !== null &&
-                criteria[name] !== undefined &&
+            if (criteria[name] &&
+                criteria[name] !== null &&
                 criteria[name] !== '') {
               cleaned[name] = criteria[name];
             }
@@ -85,7 +93,7 @@
             $timeout.cancel($scope.tm);
           }
 
-          $scope.tm = $timeout(function () {
+          $scope.tm = $timeout(function() {
             $scope.open = false;
           }, 500);
         };
@@ -102,7 +110,7 @@
             $timeout.cancel($scope.tm);
           }
 
-          $scope.tm = $timeout(function () {
+          $scope.tm = $timeout(function() {
             $scope.open = true;
           }, 500);
         };
@@ -247,12 +255,10 @@
 
         // Marks variables to delete for garbage collector
         $scope.$on('$destroy', function() {
-          $scope.criteria   = null;
-          $scope.columns    = null;
-          $scope.pagination = null;
-          $scope.items      = null;
-          $scope.selected   = null;
-          $scope.orderBy    = null;
+          $scope.criteria = null;
+          $scope.columns  = null;
+          $scope.items    = null;
+          $scope.selected = null;
         });
 
         // Update criteria when route changes
@@ -278,13 +284,12 @@
             return;
           }
 
-          // Remove empty values from criteria
-          $scope.criteria = $scope.cleanCriteria(nv);
-
-          // Reset page when epp changes
-          if (nv.epp !== ov.epp) {
+          // Reset page when criteria changes
+          if (nv.page === ov.page) {
             nv.page = 1;
           }
+
+          $scope.criteria = $scope.cleanCriteria($scope.criteria);
 
           $scope.searchTimeout = $timeout(function() {
             $scope.list();

@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   /**
@@ -13,6 +13,7 @@
    *   images dynamically.
    */
   angular.module('onm.dynamicImage', ['swfobject', 'onm.routing'])
+
     /**
      * @ngdoc provider
      * @name  DynamicImage
@@ -30,7 +31,6 @@
          *
          * @type {String}
          */
-          //'<img ng-class="{ loading: loading }" ng-src="[% src %]" ng-show="!loading" [attributes] [autoscale]/>' +
         var dynamicImageTpl = '<div class="dynamic-image-wrapper"[autoscale]>' +
           '<div [attributes][autoscale]>' +
             '<div class="dynamic-image-thumbnail[autoscaleClass]" ng-style="{ \'background-image\': \'url(\' + bg + \')\' }"></div>' +
@@ -121,7 +121,7 @@
 
           if (!/^http/.test(image) && !raw) {
             if (!instanceMedia) {
-              throw 'Invalid instance media folder path';
+              throw new Error('Invalid instance media folder path');
             }
 
             prefix = instanceMedia + this.imageFolder;
@@ -135,13 +135,10 @@
             return prefix + image;
           }
 
-          return routingProvider.generate(
-            'asset_image',
-            {
-              'real_path':  prefix + image,
-              'parameters': encodeURIComponent(transform),
-            }
-          );
+          return routingProvider.generate('asset_image', {
+            real_path:  prefix + image,
+            parameters: encodeURIComponent(transform),
+          });
         };
 
         /**
@@ -169,20 +166,20 @@
          * @description
          *   Returns the height and width basing on the available space.
          *
-         * @param {integer} height    The image original height.
-         * @param {integer} width     The image original width.
-         * @param {integer} maxHeight The available height.
-         * @param {integer} maxWidth  The available width.
+         * @param {Integer} height    The image original height.
+         * @param {Integer} width     The image original width.
+         * @param {Integer} maxHeight The available height.
+         * @param {Integer} maxWidth  The available width.
          *
          * @return {Object} The height and width for the available space.
          */
         this.getSettings = function(height, width, maxHeight, maxWidth) {
           var h = maxHeight;
-          var w = (width * maxHeight) / height;
+          var w = width * maxHeight / height;
 
           if (w > maxWidth) {
             w = maxWidth;
-            h = (height * maxWidth) / width;
+            h = height * maxWidth / width;
           }
 
           return { height: h, width: w };
@@ -233,6 +230,7 @@
           }
 
           var attributes = [];
+
           for (var i = 0; i < this.allowedAttributes.length; i++) {
             var name = this.allowedAttributes[i];
             var value = '';
@@ -248,12 +246,14 @@
 
           var autoscale = '';
           var autoscaleClass = '';
+
           if (options.ngModel && options.autoscale && options.autoscale === 'true') {
             autoscale      = 'ng-style="{ \'height\': + settings.height, \'width\': + settings.width }"';
             autoscaleClass = ' autoscale';
           }
 
           var dimensions = '';
+
           if (options.ngModel && options.dimensions && options.dimensions === 'true') {
             dimensions = '<div class="dynamic-image-dimensions-overlay" ng-if="!loading">' +
               '<span class="dynamic-image-dimensions-label">' +
@@ -292,7 +292,7 @@
          *
          * @return object The current service.
          */
-        this.$get = function () {
+        this.$get = function() {
           return this;
         };
       }
@@ -325,22 +325,23 @@
      * <dynamic-image ng-model="http://www.example.com/sample-image.jpg" dimensions="true">
      * </dynamic-image>
      */
-    .directive('dynamicImage', ['$compile', 'DynamicImage',
-      function ($compile, DynamicImage) {
+    .directive('dynamicImage', [
+      '$compile', 'DynamicImage',
+      function($compile, DynamicImage) {
         return {
           restrict: 'AE',
           scope: {
-            'ngModel': '='
+            ngModel: '='
           },
-          link: function ($scope, element, attrs) {
+          link: function($scope, element, attrs) {
             var children  = element.children();
             var html      = DynamicImage.render(attrs, $scope.ngModel);
 
             var defaults = DynamicImage.getDefaultSize(element);
 
             $scope.onlyImage = attrs.onlyImage === 'true';
-            $scope.height = defaults.height;
-            $scope.width = defaults.width;
+            $scope.height    = defaults.height;
+            $scope.width     = defaults.width;
 
             var maxHeight = element.height();
             var maxWidth  = element.width();
@@ -354,7 +355,6 @@
               // Try to calculate height and width before compiling for flash
               if ($scope.ngModel && $scope.ngModel.height &&
                   $scope.ngModel.width) {
-
                 var settings = DynamicImage.getSettings($scope.ngModel.height,
                   $scope.ngModel.width, maxHeight, maxWidth);
 
@@ -379,12 +379,13 @@
                 $scope.loading = true;
 
                 var img = new Image();
+
                 img.onload = function() {
                   $scope.bg = nv;
                   $scope.loading = false;
 
                   $scope.settings = DynamicImage.getSettings(img.height,
-                      img.width, maxHeight, maxWidth);
+                    img.width, maxHeight, maxWidth);
 
                   $scope.$apply();
                 };
@@ -401,5 +402,4 @@
         };
       }
     ]);
-
 })();

@@ -142,9 +142,9 @@ class AmpController extends Controller
             $this->view->assign('relationed', $relatedContents);
 
             $patterns = [
-                '@(align|border|style|nowrap|onclick)=(\'|")[^\(\'|")]*(\'|")@',
+                '@(align|border|style|nowrap|onclick)=(\'|").*?(\'|")@',
                 '@<\/?font.*?>@',
-                '@<img\s+[^>]*src\s*=\s*"([^"]+)"[^>]*@',
+                '@<img\s+[^>]*src\s*=\s*"([^"]+)"[^>]*>@',
                 '@<video([^>]+>)(?s)(.*?)<\/video>@',
                 '@<iframe.*src="[http:|https:]*(.*?)".*><\/iframe>@',
                 '@<div.*?class="fb-(post|video)".*?data-href="([^"]+)".*?>(?s).*?<\/div>@',

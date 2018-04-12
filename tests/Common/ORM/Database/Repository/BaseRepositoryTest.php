@@ -30,6 +30,7 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
                 'foo'    => 'integer',
                 'bar'    => 'string',
                 'wibble' => 'string',
+                'norf'   => 'array::norf_id=>extension_id:integer;norf_id:integer'
             ],
             'mapping' => [
                 'database' => [
@@ -37,6 +38,23 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
                     'id'    => 'foo',
                     'metas' => [
                         'foo' => 'flob'
+                    ],
+                    'relations' => [
+                        'norf' => [
+                            'table'   => 'extension_norf',
+                            'ids'     => [ 'foo' => 'foo_id' ],
+                            'key'     => 'norf_id',
+                            'columns' => [
+                                'extension_id' => [
+                                    'type'    => 'integer',
+                                    'options' => [ 'default' => null, 'unsigned' => true ]
+                                ],
+                                'norf_id' => [
+                                    'type'    => 'integer',
+                                    'options' => [ 'default' => null, 'unsigned' => true ]
+                                ]
+                            ]
+                        ]
                     ],
                     'columns' => [
                         'foo' => [
@@ -127,11 +145,21 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->conn->expects($this->at(1))->method('fetchAll')->willReturn([
             [ 'foobar_foo' => 1, 'meta_key' => 'wibble', 'meta_value' => 'qux' ]
         ]);
+        $this->conn->expects($this->at(2))->method('fetchAll')
+            ->with('select * from extension_norf where foo_id in (1)')
+            ->willReturn([
+                [ 'foo_id' => 1, 'norf_id' => 3 ],
+            ]);
 
         $entity = $this->repository->find(1);
 
         $this->assertNotEmpty($entity);
-        $this->assertEquals([ 'foo' => 1, 'bar' => 'glork', 'wibble' => 'qux' ], $entity->getData());
+        $this->assertEquals([
+            'foo'    => 1,
+            'bar'    => 'glork',
+            'wibble' => 'qux',
+            'norf'   => [ 3 => [ 'norf_id' => 3 ] ]
+        ], $entity->getData());
     }
 
     /**
@@ -156,11 +184,32 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
                 [ 'foobar_foo' => 1, 'meta_key' => 'wibble', 'meta_value' => 'qux' ],
                 [ 'foobar_foo' => 2, 'meta_key' => 'wibble', 'meta_value' => 'glork' ]
             ]);
+        $this->conn->expects($this->at(3))->method('fetchAll')
+            ->with('select * from extension_norf where foo_id in (1,2)')
+            ->willReturn([
+                [ 'foo_id' => 1, 'norf_id' => 3 ],
+                [ 'foo_id' => 2, 'norf_id' => 5 ]
+            ]);
 
         $entities = $this->repository->findBy('foo in [1,2] limit 10');
 
-        $this->assertEquals([ 'foo' => 1, 'bar' => 'glork', 'wibble' => 'qux' ], $entities[0]->getData());
-        $this->assertEquals([ 'foo' => 2, 'bar' => 'thud', 'wibble' => 'glork' ], $entities[1]->getData());
+        $this->assertEquals([
+            'foo'    => 1,
+            'bar'    => 'glork',
+            'wibble' => 'qux',
+            'norf'   => [
+                3 => [ 'norf_id' => 3 ],
+            ]
+        ], $entities[0]->getData());
+
+        $this->assertEquals([
+            'foo'    => 2,
+            'bar'    => 'thud',
+            'wibble' => 'glork',
+            'norf'   => [
+                5 => [ 'norf_id' => 5 ],
+            ]
+        ], $entities[1]->getData());
     }
 
     /**
@@ -185,11 +234,32 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
             [ 'foobar_foo' => 1, 'meta_key' => 'wibble', 'meta_value' => 'qux' ],
             [ 'foobar_foo' => 2, 'meta_key' => 'wibble', 'meta_value' => 'glork' ]
         ]);
+        $this->conn->expects($this->at(3))->method('fetchAll')
+            ->with('select * from extension_norf where foo_id in (1,2)')
+            ->willReturn([
+                [ 'foo_id' => 1, 'norf_id' => 3 ],
+                [ 'foo_id' => 2, 'norf_id' => 5 ]
+            ]);
 
         $entities = $this->repository->findBySql('select foo from corge limit 10');
 
-        $this->assertEquals([ 'foo' => 1, 'bar' => 'glork', 'wibble' => 'qux' ], $entities[0]->getData());
-        $this->assertEquals([ 'foo' => 2, 'bar' => 'thud', 'wibble' => 'glork' ], $entities[1]->getData());
+        $this->assertEquals([
+            'foo'    => 1,
+            'bar'    => 'glork',
+            'wibble' => 'qux',
+            'norf'   => [
+                3 => [ 'norf_id' => 3 ],
+            ]
+        ], $entities[0]->getData());
+
+        $this->assertEquals([
+            'foo'    => 2,
+            'bar'    => 'thud',
+            'wibble' => 'glork',
+            'norf'   => [
+                5 => [ 'norf_id' => 5 ],
+            ]
+        ], $entities[1]->getData());
     }
 
     /**
@@ -222,6 +292,10 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->conn->expects($this->at(2))->method('fetchAll')->willReturn([
             [ 'foobar_foo' => 1, 'meta_key' => 'wibble', 'meta_value' => 'qux' ],
         ]);
+        $this->conn->expects($this->at(3))->method('fetchAll')
+            ->with('select * from extension_norf where foo_id in (1)')
+            ->willReturn([ [ 'foo_id' => 1, 'norf_id' => 3 ] ]);
+
         $this->cache->expects($this->once())->method('get')->willReturn([]);
         $this->cache->expects($this->any())->method('set');
         $this->conn->expects($this->at(0))->method('fetchAll')->willReturn([]);

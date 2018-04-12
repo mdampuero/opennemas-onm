@@ -185,8 +185,6 @@ class UserController extends Controller
     {
         $extra = $this->getExtraData();
 
-        array_shift($extra['user_groups']);
-
         return new JsonResponse([ 'extra' => $extra ]);
     }
 
@@ -330,8 +328,6 @@ class UserController extends Controller
 
         $extra = $this->getExtraData();
 
-        array_shift($extra['user_groups']);
-
         return new JsonResponse([
             'extra' => $extra,
             'user'  => $converter->responsify($user)
@@ -398,19 +394,15 @@ class UserController extends Controller
             )
         ];
 
-        $repository = $this->get('orm.manager')->getRepository('UserGroup');
-        $converter  = $this->get('orm.manager')->getConverter('UserGroup');
+        $ugs      = $this->get('api.service.user_group')->setOrigin('manager');
+        $response = $ugs->getList();
 
-        $userGroups = $repository->findBy();
+        $userGroups = $ugs->responsify($this->get('data.manager.filter')
+            ->set($response['items'])
+            ->filter('mapify', [ 'key' => 'pk_user_group'])
+            ->get());
 
-        $extra['user_groups'] = array_map(function ($a) use ($converter) {
-            return $converter->responsify($a->getData());
-        }, $userGroups);
-
-        $extra['user_groups'] = array_merge(
-            [[ 'pk_user_group' => null, 'name' => _('All') ]],
-            $extra['user_groups']
-        );
+        $extra['user_groups'] = $userGroups;
 
         return $extra;
     }

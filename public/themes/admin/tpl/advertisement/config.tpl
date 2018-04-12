@@ -49,6 +49,16 @@
           </div>
         </div>
         <div class="form-group">
+          <label for="ads_settings_mark_default" class="form-label">
+            {t}Default mark shown indicating an advertisement{/t}
+          </label>
+          <div class="controls">
+            <input type="text" class="form-control" name="ads_settings_mark_default" id="ads_settings_mark_default" value="{$configs['ads_settings']['default_mark']}" placeholder="{t}Advertisement{/t}"/>
+            {capture name=default_mark}{t}Advertisement{/t}{/capture}
+            <span class="help">{t 1=$smarty.capture.default_mark}This is the text shown near advertisements. If you don't fill this field, the default value "%1" will be shown.{/t}</span>
+          </div>
+        </div>
+        <div class="form-group">
           <div class="checkbox">
             <input{if $configs['ads_settings']['no_generics'] eq "0"} checked{/if} id="ads_settings_no_generics" name="ads_settings_no_generics" type="checkbox" value="0">
             <label for="ads_settings_no_generics" class="form-label">{t}Allow generic advertisement{/t}</label>

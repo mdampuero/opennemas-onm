@@ -15,7 +15,7 @@ jQuery(document).ready(function($) {
     });
     jQuery("#modal-logged-users").bind('show', function (){
         jQuery.get(
-            '{url name=admin_acl_user_connected_users}',
+            '{url name=backend_user_connected_users}',
             function (data) {
                 jQuery("#modal-logged-users div.modal-body").html(
                     data

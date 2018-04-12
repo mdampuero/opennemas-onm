@@ -10,26 +10,20 @@
             </a>
           </h4>
         </li>
-        <li class="quicklinks seperate">
-          <span class="h-seperate"></span>
+        <li class="quicklinks hidden-xs ng-cloak" ng-if="!loading && user">
+          <div class="p-l-10 p-r-10 p-t-10">
+            <i class="fa fa-angle-right"></i>
+          </div>
         </li>
-        <li class="quicklinks">
-          <h5>
-            <span ng-if="!user.id">{t}New user{/t}</span>
-            <span ng-if="user.id">{t}Edit user{/t}</span>
+        <li class="quicklinks hidden-xs ng-cloak" ng-if="!loading && user">
+          <h5 class="ng-cloak">
+            <strong ng-if="user.id">{t}Edit{/t}</strong>
+            <strong ng-if="!user.id">{t}Create{/t}</strong>
           </h5>
         </li>
       </ul>
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
-          <li class="quicklinks">
-            <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_users_list') %]">
-              <i class="fa fa-reply"></i>
-            </a>
-          </li>
-          <li class="quicklinks">
-            <span class="h-seperate"></span>
-          </li>
           <li class="quicklinks">
             <button class="btn btn-loading btn-success text-uppercase" ng-click="save();" ng-disabled="saving || userForm.$invalid || (user.password && user.password !== rpassword)" ng-if="!user.id">
               <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
@@ -133,10 +127,9 @@
               <label class="form-label">
                 {t}User groups{/t}
               </label>
-              <div class="controls">
-                <tags-input add-from-autocomplete-only="true" display-property="name" ng-model="user.fk_user_group">
-                  <auto-complete source="getGroups($query)" min-length="0" load-on-focus="true" load-on-empty="true"></auto-complete>
-                </tags-input>
+              <div class="checkbox p-b-5" ng-repeat="user_group in extra.user_groups">
+                <input id="checkbox-[% $index %]" ng-false-value="0" ng-model="user.user_groups[user_group.pk_user_group].status" ng-true-value="1" type="checkbox">
+                <label for="checkbox-[% $index %]">[% user_group.name %]</label>
               </div>
             </div>
             <div class="form-group" ng-if="security.hasPermission('MASTER')">

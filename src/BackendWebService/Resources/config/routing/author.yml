@@ -1,6 +1,0 @@
-backend_ws_authors_list:
-    path:     /authors
-    defaults: { _controller: BackendWebServiceBundle:Author:list }
-    methods:  [ GET ]
-    options:
-        expose: true

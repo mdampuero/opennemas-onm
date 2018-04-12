@@ -36,6 +36,10 @@ class BlogsController extends Controller
      */
     public function frontpageAction(Request $request)
     {
+        if (!$this->get('core.security')->hasExtension('BLOG_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $page = $request->query->getDigits('page', 1);
 
         // Setup templating cache layer
@@ -138,6 +142,10 @@ class BlogsController extends Controller
      */
     public function frontpageAuthorAction(Request $request)
     {
+        if (!$this->get('core.security')->hasExtension('BLOG_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $page = $request->query->getDigits('page', 1);
         $slug = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
 
@@ -243,6 +251,10 @@ class BlogsController extends Controller
      */
     public function showAction(Request $request)
     {
+        if (!$this->get('core.security')->hasExtension('BLOG_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $dirtyID = $request->query->getDigits('blog_id');
         $urlSlug = $request->query->filter('blog_title', '', FILTER_SANITIZE_STRING);
 

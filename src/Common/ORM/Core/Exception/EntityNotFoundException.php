@@ -42,6 +42,6 @@ class EntityNotFoundException extends \Exception
             $message .= ' (' . $error . ')';
         }
 
-        parent::__construct(sprintf($message, $entity, $id));
+        parent::__construct(sprintf($message, $entity, $id), 404);
     }
 }

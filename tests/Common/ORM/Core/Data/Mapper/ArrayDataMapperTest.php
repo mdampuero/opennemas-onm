@@ -17,6 +17,18 @@ class ArrayDataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([ 'foo', 'bar' ], $this->mapper->fromArray([ 'foo', 'bar' ]));
     }
 
+    public function testFromArray()
+    {
+        $data = [ [ 'qux' => 1, 'grault' => 'wibble' ] ];
+
+        $this->assertEquals($data, $this->mapper->fromArray($data));
+
+        $this->assertEquals(
+            [ 1 => [ 'qux' => 1, 'grault' => 'wibble'  ] ],
+            $this->mapper->fromArray($data, [ 'qux=>grault:string' ])
+        );
+    }
+
     public function testFromArrayJson()
     {
         $this->assertEquals(

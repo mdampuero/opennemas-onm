@@ -578,8 +578,8 @@ class Content implements \JsonSerializable
             'frontpage'           => (!isset($data['frontpage'])
                 || empty($data['frontpage'])) ? 0 : intval($data['frontpage']),
             'fk_author'           => (!array_key_exists('fk_author', $data)) ? 0 : (int) $data['fk_author'],
-            'fk_publisher'        => (int) getService('core.user')->id,
-            'fk_user_last_editor' => (int) getService('core.user')->id,
+            'fk_publisher'        => empty(getService('core.user')) ? 0 : (int) getService('core.user')->id,
+            'fk_user_last_editor' => empty(getService('core.user')) ? 0 : (int) getService('core.user')->id,
             'in_home'             => (empty($data['in_home'])) ? 0 : intval($data['in_home']),
             'favorite'            => (empty($data['favorite'])) ? 0 : intval($data['favorite']),
             'available'           => (int) $data['content_status'],

@@ -37,6 +37,33 @@ class AdvertisementRenderer
     }
 
     /**
+     * Returns the string that depicts the default mark shown alongside ads
+     *
+     * @param Advertisement $ad the advertisement object where to search for the mark
+     *
+     * @return string The default mark for the advertisements
+     */
+    public function getMark(\Advertisement $ad = null)
+    {
+        // If the mark for the advertisement is not empty then return it
+        if (is_object($ad) && array_key_exists('mark_text', $ad->params) && !empty($ad->params['mark_text'])) {
+            return $ad->params['mark_text'];
+        }
+
+        // If the mark is not valid then use the default one.
+        $settings    = $this->container->get('setting_repository')->get('ads_settings');
+        $defaultMark = (
+                is_array($settings)
+                && array_key_exists('default_mark', $settings)
+                && !empty($settings['default_mark'])
+            )
+            ? $settings['default_mark']
+            : _('Advertisement');
+
+        return $defaultMark;
+    }
+
+    /**
      * Returns the list of CSS classes according to device restrictions for an Ad
      *
      * @param Advertisement $ad the advertisement to get restrictions from
@@ -78,12 +105,13 @@ class AdvertisementRenderer
 
         $deviceClasses = $this->getDeviceCSSClasses($ad);
 
-        $tpl         = '<div class="ad-slot oat oat-visible oat-%s %s">%s</div>';
+        $tpl         = '<div class="ad-slot oat oat-visible oat-%s %s" data-mark="%s">%s</div>';
         $content     = $this->renderInline($ad, $params);
+        $mark        = $this->getMark($ad);
         $orientation = empty($ad->params['orientation']) ?
             'top' : $ad->params['orientation'];
 
-        return sprintf($tpl, $orientation, $deviceClasses, $content);
+        return sprintf($tpl, $orientation, $deviceClasses, $mark, $content);
     }
 
     /**
@@ -124,6 +152,10 @@ class AdvertisementRenderer
      */
     public function renderInlineDFPHeader($ads, $params)
     {
+        if (empty($ads)) {
+            return '';
+        }
+
         $ads = array_filter($ads, function ($a) {
             return $a->with_script == 3
                 && array_key_exists('googledfp_unit_id', $a->params)
@@ -224,6 +256,9 @@ class AdvertisementRenderer
      */
     public function renderInlineReviveHeader($ads)
     {
+        if (empty($ads)) {
+            return '';
+        }
         $ads = array_filter($ads, function ($a) {
             return $a->with_script == 2
                 && array_key_exists('openx_zone_id', $a->params)
@@ -261,7 +296,7 @@ class AdvertisementRenderer
      */
     public function renderInlineReviveSlot($ad)
     {
-        $iframe = in_array($ad->type_advertisement, [ 50, 150, 250, 350, 450, 550 ]);
+        $iframe = in_array($ad->positions, [ 50, 150, 250, 350, 450, 550 ]);
         $url    = $this->router->generate('frontend_ad_show', [
             'id' => $ad->pk_content
         ]);
@@ -283,6 +318,10 @@ class AdvertisementRenderer
      */
     public function renderInlineInterstitial($ads)
     {
+        if (empty($ads)) {
+            return '';
+        }
+
         $tpl = '<div class="interstitial">'
             . '<div class="interstitial-wrapper" style="width: %s;">'
                 . '<div class="interstitial-header">'
@@ -302,7 +341,11 @@ class AdvertisementRenderer
         . '</div>';
 
         $interstitials = array_filter($ads, function ($a) {
-            return ($a->type_advertisement + 50) % 100 == 0;
+            $hasInterstitial = array_filter($a->positions, function ($pos) {
+                return ($pos + 50) % 100 == 0;
+            });
+
+            return $hasInterstitial;
         });
 
         if (empty($interstitials)) {
@@ -332,7 +375,7 @@ class AdvertisementRenderer
             $orientation,
             $ad->pk_advertisement,
             empty($ad->timeout) ? 5 : $ad->timeout,
-            $ad->type_advertisement,
+            implode(',', $ad->positions),
             $this->renderInline($ad)
         );
     }
@@ -349,7 +392,7 @@ class AdvertisementRenderer
     {
         $html  = '<div class="ad-slot oat"%s data-type="%s"%s></div>';
         $id    = '';
-        $type  = $ad->type_advertisement;
+        $type  = $ad->positions;
         $width = '';
 
         // Style for advertisements via renderbanner
@@ -361,8 +404,9 @@ class AdvertisementRenderer
         }
 
         // Style for floating advertisements in frontpage manager
-        if ($ad->type_advertisement == 37) {
-            $id .= ' data-id="' . $ad->pk_content . '" ';
+        if (array_key_exists('floating', $params) && $params['floating'] == true) {
+            $type = 37;
+            $id  .= ' data-id="' . $ad->pk_content . '" ';
         }
 
         return sprintf($html, $id, $type, $width);

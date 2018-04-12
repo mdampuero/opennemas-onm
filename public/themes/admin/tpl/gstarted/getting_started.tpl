@@ -144,10 +144,10 @@
           </p>
           <div class="social-items-wrapper clearfix">
             <div class="social-item">
-              <iframe src="{url name=admin_acl_user_social id=$user->id resource='facebook' style='orb'}" allowtransparency="true" frameborder="0"></iframe>
+              <iframe src="{url name=backend_user_social id=$user->id resource='facebook' style='orb'}" allowtransparency="true" frameborder="0"></iframe>
             </div>
             <div class="social-item">
-              <iframe src="{url name=admin_acl_user_social id=$user->id resource='twitter' style='orb'}" allowtransparency="true" frameborder="0"></iframe>
+              <iframe src="{url name=backend_user_social id=$user->id resource='twitter' style='orb'}" allowtransparency="true" frameborder="0"></iframe>
             </div>
           </div>
         {/if}

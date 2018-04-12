@@ -31,7 +31,7 @@
                         <span class="h-seperate"></span>
                     </li>
                     <li class="quicklinks">
-                        <a class="btn btn-primary" href="{url name=admin_acl_user_create}" title="{t}Create new user{/t}">
+                        <a class="btn btn-primary" href="{url name=backend_user_create}" title="{t}Create new user{/t}">
                             {t}Create{/t}
                         </a>
                     </li>

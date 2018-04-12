@@ -1,7 +1,7 @@
 
 angular.module('BackendApp.controllers').controller('modalCtrl', [
   '$uibModalInstance', '$scope', 'template', 'success',
-  function ($uibModalInstance, $scope, template, success) {
+  function($uibModalInstance, $scope, template, success) {
     'use strict';
 
     $scope.template = template;
@@ -26,30 +26,31 @@ angular.module('BackendApp.controllers').controller('modalCtrl', [
      * Confirms and executes the confirmed action.
      */
     $scope.confirm = function() {
-        $scope.loading = 1;
+      $scope.loading = 1;
 
-        var getType = {};
-        if (success && getType.toString.call(success) === '[object Function]') {
-            success($uibModalInstance, $scope.template).then(function(response) {
-              $scope.loading = 0;
-              $uibModalInstance.close({ data: response.data, success: true });
-            }, function(response) {
-              $uibModalInstance.close({ data: response.data, success: false });
-            });
-        } else {
-            $uibModalInstance.close(true);
-        }
+      var getType = {};
+
+      if (success && getType.toString.call(success) === '[object Function]') {
+        success($uibModalInstance, $scope.template).then(function(response) {
+          $scope.loading = 0;
+          $uibModalInstance.close({ data: response.data, success: true });
+        }, function(response) {
+          $uibModalInstance.close({ data: response.data, success: false });
+        });
+      } else {
+        $uibModalInstance.close(true);
+      }
     };
 
     // Changes step on client saved
-    $scope.$on('client-saved', function (event, args) {
+    $scope.$on('client-saved', function(event, args) {
       $scope.client = args;
       $scope.template.step = 2;
     });
 
     // Frees up memory before controller destroy event
     $scope.$on('$destroy', function() {
-        $scope.template = null;
+      $scope.template = null;
     });
   }
 ]);

@@ -68,7 +68,7 @@ class MenusController extends Controller
 
         $menu->items = $menu->unlocalize($menu->getRawItems());
 
-        $categories = $this->getCategories();
+        $categories = $this->getCategoriesByType();
 
         return $this->render('menues/new.tpl', [
             'categories'       => $categories['categories'],
@@ -130,7 +130,7 @@ class MenusController extends Controller
             ]));
         }
 
-        $params = $this->getCategories();
+        $params = $this->getCategoriesByType();
 
         return $this->render('menues/new.tpl', [
             'menu'             => new \Menu(),
@@ -212,7 +212,7 @@ class MenusController extends Controller
      *
      * @return array the list of category listings
      **/
-    private function getCategories()
+    private function getCategoriesByType()
     {
         $ccm = \ContentCategoryManager::get_instance();
 

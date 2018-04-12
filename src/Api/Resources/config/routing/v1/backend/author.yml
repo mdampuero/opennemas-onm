@@ -1,0 +1,70 @@
+api_v1_backend_author_create:
+    path:     /authors/new
+    defaults: { _controller  : ApiBundle:V1/Backend/Author:create }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_author_delete:
+    path:     /authors/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Author:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_author_patch:
+    path:     /authors/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Author:patch }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_author_save:
+    path:     /authors
+    defaults: { _controller  : ApiBundle:V1/Backend/Author:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_author_show:
+    path:     /authors/{id}
+    defaults: { _controller  : ApiBundle:V1/Backend/Author:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_author_update:
+    path:     /authors/{id}
+    defaults: { _controller  : ApiBundle:V1/Backend/Author:update }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_authors_delete:
+    path:     /authors
+    defaults: { _controller: ApiBundle:V1/Backend/Author:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_authors_list:
+    path:     /authors
+    defaults: { _controller  : ApiBundle:V1/Backend/Author:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_authors_patch:
+    path:     /authors
+    defaults: { _controller: ApiBundle:V1/Backend/Author:patchSelected }
+    methods:  [ PATCH ]
+    options:
+        expose: true

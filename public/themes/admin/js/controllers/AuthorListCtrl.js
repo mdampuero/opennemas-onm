@@ -1,64 +1,56 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name AuthorListCtrl
      *
      * @requires $controller
-     * @requires $location
      * @requires $scope
-     * @requires $timeout
-     * @requires $uibModal
-     * @requires http
-     * @requires messenger
      * @requires oqlEncoder
-     * @requires webStorage
      *
      * @description
-     *   Handles all actions in users listing.
+     *   Handles all actions in authors list.
      */
     .controller('AuthorListCtrl', [
-      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlEncoder', 'webStorage',
-      function ($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlEncoder, webStorage) {
-        // Initialize the super class and extend it.
-        $.extend(this, $controller('UserListCtrl', {
-          $scope:   $scope,
-          $timeout: $timeout
-        }));
+      '$controller', '$scope', 'oqlEncoder',
+      function($controller, $scope, oqlEncoder) {
+        $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
-         * @function list
          * @memberOf AuthorListCtrl
          *
          * @description
-         *   Reloads the list.
+         *  The list of routes for the controller.
+         *
+         * @type {Object}
          */
-        $scope.list = function () {
-          $scope.loading = 1;
+        $scope.routes = {
+          delete:         'api_v1_backend_author_delete',
+          deleteSelected: 'api_v1_backend_authors_delete',
+          list:           'api_v1_backend_authors_list',
+          patch:          'api_v1_backend_author_patch',
+          patchSelected:  'api_v1_backend_authors_patch'
+        };
+
+        /**
+         * @function init
+         * @memberOf AuthorListCtrl
+         *
+         * @description
+         *   Configures the controller.
+         */
+        $scope.init = function() {
+          $scope.columns.key     = 'author-columns';
+          $scope.backup.criteria = $scope.criteria;
 
           oqlEncoder.configure({
-            placeholder: {name: 'name ~ "[value]" or username ~ "[value]"'}
+            placeholder: { name: 'name ~ "[value]" or username ~ "[value]"' }
           });
 
-          var oql   = oqlEncoder.getOql($scope.criteria);
-          var route = {
-            name: 'backend_ws_authors_list',
-            params: { oql: oql }
-          };
-
-          $location.search('oql', oql);
-
-          return http.get(route).then(function (response) {
-            $scope.loading = 0;
-            $scope.extra   = response.data.extra;
-            $scope.items   = response.data.results;
-            $scope.total   = response.data.total;
-
-            // Scroll top
-            $('body').animate({ scrollTop: '0px' }, 1000);
-          });
+          $scope.list();
         };
       }
     ]);
