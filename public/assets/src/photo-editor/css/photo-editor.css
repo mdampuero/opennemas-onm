@@ -56,9 +56,9 @@
   bottom: 100%;
   box-shadow: 0 6px 12px rgba(0,0,0,.175);
   display:none;
-	left:0;
+  left:0;
   margin-bottom: -2px;
-	padding:0;
+  padding:0;
   position:absolute;
   top: auto;
 }
@@ -68,7 +68,7 @@
 }
 
 .photoEditor .menu ul li:hover ul, .photoEditor .menu ul .subSelected ul {
-	display: block;
+  display: block;
 }
 
 .photoEditor .divCanvasCenter {
