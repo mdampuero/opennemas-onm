@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-19 22:34+0000\n"
-"PO-Revision-Date: 2018-03-19 23:53+0200\n"
+"POT-Creation-Date: 2018-04-10 15:30+0000\n"
+"PO-Revision-Date: 2018-04-10 17:33+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -939,6 +939,9 @@ msgstr "Álbumes"
 msgid "Books"
 msgstr "Libros"
 
+msgid "Newsletters"
+msgstr "Boletins de novas"
+
 msgid "Utilities"
 msgstr "Utilidades"
 
@@ -947,9 +950,6 @@ msgstr "Busca global"
 
 msgid "Trash"
 msgstr "Lixo"
-
-msgid "Newsletters"
-msgstr "Boletins de novas"
 
 msgid "Keywords"
 msgstr "Palabras chave"
@@ -2305,6 +2305,9 @@ msgstr "O nome do periódico contén palabras non permitidas."
 msgid "The url that you entered is already in use"
 msgstr "A url xa está en uso"
 
+msgid "Advertisement"
+msgstr "Publicidade"
+
 msgid "Entering on the requested page"
 msgstr "Entrando na páxina solicitada"
 
@@ -2573,9 +2576,6 @@ msgstr "Chave da API"
 
 msgid "Translator"
 msgstr "Tradutor"
-
-msgid "Advertisement"
-msgstr "Publicidade"
 
 msgid "Album not available"
 msgstr "Álbum non dispoñíbel"
@@ -7370,6 +7370,9 @@ msgstr "Debaixo"
 msgid "Left"
 msgstr "Esquerda"
 
+msgid "Write here your custom mark. Default is \"%1\""
+msgstr "Escriba aquí a marca personalizada. Por omisión é «%1»"
+
 msgid ""
 "Defines the orientation for the word that marks the advertisement position"
 msgstr "Define a orientación da palabra que marca o espazo de publicidade"
@@ -7540,6 +7543,16 @@ msgstr ""
 
 msgid "(in minutes)"
 msgstr "(en minutos)"
+
+msgid "Default mark shown indicating an advertisement"
+msgstr "Marca por omisión que se mostra para indicar unha publicidade"
+
+msgid ""
+"This is the text shown near advertisements. If you don't fill this field, "
+"the default value \"%1\" will be shown."
+msgstr ""
+"Este é o texto que se mostra ao carón das publicidades. Se non completa este "
+"campo, mostrarase o valor por omisión «%1»."
 
 msgid "Allow generic advertisement"
 msgstr "Permitir publicidade xenérica"

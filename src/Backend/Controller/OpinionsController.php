@@ -699,7 +699,7 @@ class OpinionsController extends Controller
             $where         = ' opinions.type_opinion = 2';
             $opinion->name = 'Director';
         } else {
-            $where = ' opinions.fk_author=' . ($opinion->fk_author);
+            $where = ' opinions.fk_author=' . (int) $opinion->fk_author;
         }
 
         $otherOpinions = $cm->find(

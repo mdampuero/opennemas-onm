@@ -313,6 +313,7 @@ class AdvertisementsController extends Controller
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
                 'user_groups'       => json_decode($request->request->get('user_groups', ''), true),
                 'orientation'       => $request->request->get('orientation', 'horizontal'),
+                'mark_text'         => $request->request->filter('mark_text', '', FILTER_SANITIZE_STRING),
                 'devices'           => [
                     'desktop' => (int) $request->request->get('restriction_devices_desktop', 0),
                     'tablet'  => (int) $request->request->get('restriction_devices_tablet', 0),
@@ -405,7 +406,8 @@ class AdvertisementsController extends Controller
                 'ads_settings' => [
                     'lifetime_cookie' => $formValues->getDigits('ads_settings_lifetime_cookie'),
                     'no_generics'     => is_null($formValues->get('ads_settings_no_generics')) ? 1 : 0,
-                    'safe_frame'      => empty($formValues->get('safe_frame')) ? 0 : 1
+                    'safe_frame'      => empty($formValues->get('safe_frame')) ? 0 : 1,
+                    'default_mark'    => $formValues->filter('ads_settings_mark_default', '', FILTER_SANITIZE_STRING),
                 ],
                 'revive_ad_server' => [
                     'url'     => $formValues->filter('revive_ad_server_url', '', FILTER_SANITIZE_STRING),
@@ -464,6 +466,7 @@ class AdvertisementsController extends Controller
     public function getExtraParameters()
     {
         $adsPositions = $this->container->get('core.helper.advertisement');
+        $renderer     = $this->container->get('core.renderer.advertisement');
         $serverUrl    = '';
         if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
             $serverUrl = $openXsettings['url'];
@@ -478,6 +481,7 @@ class AdvertisementsController extends Controller
                 'categories'                => $this->getCategories(),
                 'server_url'                => $serverUrl,
                 'user_groups'               => $this->getUserGroups(),
+                'default_mark'              => $renderer->getMark(),
             ],
         ];
     }

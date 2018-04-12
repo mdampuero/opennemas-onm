@@ -332,8 +332,7 @@ class Template extends \Smarty
         $this->error_reporting = E_ALL & ~E_NOTICE;
 
         if (!empty($this->theme)) {
-            $this->image_dir = preg_replace('/https?:/', '', SITE_URL)
-                . $this->theme->path . 'images/';
+            $this->image_dir = substr(SITE_URL, 0, -1) . $this->theme->path . 'images/';
         }
 
         $this->assign([
