@@ -8,22 +8,25 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
+                <i class="fa fa-list m-r-10"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
                 <a class="no-padding" href="[% routing.generate('backend_subscriptions_list') %]">
-                  <i class="fa fa-list"></i>
                   {t}Lists{/t}
                 </a>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.http.loading && item">
-              <div class="p-l-10 p-r-10 p-t-10">
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
                 <i class="fa fa-angle-right"></i>
-              </div>
+              </h4>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.http.loading && item">
-              <h5 class="ng-cloak">
-                <strong ng-if="item.pk_user_group">{t}Edit{/t}</strong>
-                <strong ng-if="!item.pk_user_group">{t}Create{/t}</strong>
-              </h5>
+            <li class="quicklinks hidden-xs">
+              <h4>
+                {if empty($id)}{t}Create{/t}{else}{t}Edit{/t}{/if}
+              </h4>
             </li>
           </ul>
           <div class="all-actions pull-right">

@@ -8,7 +8,11 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-address-card"></i>
+                <i class="fa fa-address-card m-r-10"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
                 {t}Subscribers{/t}
               </h4>
             </li>

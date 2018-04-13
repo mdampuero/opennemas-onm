@@ -8,7 +8,11 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-user"></i>
+                <i class="fa fa-user m-r-10"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
                 {t}Users{/t}
               </h4>
             </li>

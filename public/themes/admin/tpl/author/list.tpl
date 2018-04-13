@@ -8,11 +8,15 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-edit"></i>
-                {t}Authors{/t}
+                <i class="fa fa-edit m-r-10"></i>
                 <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/566184-opennemas-gesti%C3%B3n-de-autores" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                   <i class="fa fa-question"></i>
                 </a>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
+                {t}Authors{/t}
               </h4>
             </li>
             <li class="quicklinks visible-xs">
