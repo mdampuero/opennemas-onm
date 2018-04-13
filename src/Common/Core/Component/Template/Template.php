@@ -183,9 +183,11 @@ class Template extends \Smarty
             }
         );
 
-        $cacheID = implode('|', $params);
+        if (!empty($params)) {
+            $params[] = $this->container->get('core.locale')->getRequestLocale();
+        }
 
-        return $cacheID;
+        return implode('|', $params);
     }
 
     /**
