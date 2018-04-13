@@ -167,6 +167,12 @@ class UserController extends Controller
                                 'no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')
                             ]);
 
+                        $headers = $message->getHeaders();
+                        $headers->addParameterizedHeader(
+                            'ACUMBAMAIL-SMTPAPI',
+                            $this->get('core.instance')->internal_name . ' - User register'
+                        );
+
                         $mailer = $this->get('mailer');
                         $mailer->send($message);
 
@@ -321,6 +327,12 @@ class UserController extends Controller
                 ->setTo($user->email)
                 ->setFrom(['no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')]);
 
+            $headers = $message->getHeaders();
+            $headers->addParameterizedHeader(
+                'ACUMBAMAIL-SMTPAPI',
+                $this->get('core.instance')->internal_name . ' - User activation'
+            );
+
             try {
                 $mailer = $this->get('mailer');
                 $mailer->send($message);
@@ -397,6 +409,12 @@ class UserController extends Controller
                 ->setBody($mailBody, 'text/plain')
                 ->setTo($user->email)
                 ->setFrom(['no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')]);
+
+            $headers = $message->getHeaders();
+            $headers->addParameterizedHeader(
+                'ACUMBAMAIL-SMTPAPI',
+                $this->get('core.instance')->internal_name . ' - Frontend Recover Password'
+            );
 
             try {
                 $mailer = $this->get('mailer');
