@@ -103,6 +103,10 @@
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.subscriptions }"></i>
                 </div>
                 <div class="grid-collapse-body no-padding ng-cloak" ng-class="{ 'expanded': expanded.subscriptions }">
+                  <div class="p-l-15 p-t-15 p-b-15 p-r-15 b-t" ng-show="!data.extra.subscriptions || data.extra.subscriptions.length === 0">
+                    <i class="fa fa-warning m-r-5 text-warning"></i>
+                    {t escape=off}There are no <a href="[% routing.generate('backend_subscriptions_list') %]">subscriptions</a>{/t}
+                  </div>
                   <div class="p-l-15 p-t-15 p-b-15 p-r-15 b-t" ng-repeat="subscription in data.extra.subscriptions">
                     <label class="form-label">
                       <span ng-class="{ 'text-danger': item.user_groups && item.user_groups[subscription.pk_user_group] && item.user_groups[subscription.pk_user_group].status === 2 }">
