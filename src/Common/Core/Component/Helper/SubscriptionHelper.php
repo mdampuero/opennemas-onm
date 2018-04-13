@@ -97,9 +97,12 @@ class SubscriptionHelper
             return false;
         }
 
-        $subscriptions = array_intersect(
-            $content->subscriptions,
-            $this->security->getUser()->user_groups
+        $subscriptions = array_filter(
+            $this->security->getUser()->user_groups,
+            function ($a) use ($content) {
+                return in_array($a['user_group_id'], $content->subscriptions)
+                    && $a['status'] === 1;
+            }
         );
 
         return count($subscriptions) > 0;

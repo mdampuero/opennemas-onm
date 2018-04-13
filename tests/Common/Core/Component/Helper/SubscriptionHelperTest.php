@@ -90,7 +90,11 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTokenWhenSubscribed()
     {
-        $this->user->user_groups = [ 1, 2, 3 ];
+        $this->user->user_groups = [
+            1 => [ 'user_group_id' => 1, 'expires' => null, 'status' => 1 ],
+            2 => [ 'user_group_id' => 2, 'expires' => null, 'status' => 1 ],
+            3 => [ 'user_group_id' => 3, 'expires' => null, 'status' => 1 ]
+        ];
 
         $this->security->expects($this->any())->method('getUser')
             ->willReturn($this->user);
@@ -142,15 +146,24 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->helper->isSubscribed($this->content));
 
-        $this->user->user_groups = [ 1 ];
+        $this->user->user_groups = [
+            1 => [ 'user_group_id' => 1, 'expires' => null, 'status' => 1 ],
+        ];
+
+
         $this->assertTrue($this->helper->isSubscribed($this->content));
 
         $this->content->subscriptions = [ 1, 2 ];
-        $this->user->user_groups      = [ 3 ];
+        $this->user->user_groups      = [
+            3 => [ 'user_group_id' => 3, 'expires' => null, 'status' => 1 ],
+        ];
         $this->assertFalse($this->helper->isSubscribed($this->content));
 
         $this->content->subscriptions = [ 1, 2, 3 ];
-        $this->user->user_groups      = [ 1, 2 ];
+        $this->user->user_groups      = [
+            1 => [ 'user_group_id' => 1, 'expires' => null, 'status' => 1 ],
+            2 => [ 'user_group_id' => 2, 'expires' => null, 'status' => 1 ],
+        ];
         $this->assertTrue($this->helper->isSubscribed($this->content));
     }
 
