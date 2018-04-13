@@ -1019,19 +1019,36 @@
           }
         };
 
+        /**
+         * @function enhanceAction
+         * @memberof MediaPickerCtrl
+         *
+         * @description
+         *   Open the photo editor for enhance the image
+         *
+         */
         $scope.enhanceAction = function() {
           $scope.enhance = !$scope.enhance;
           var photoEditor = new window.OnmPhotoEditor({
             container: 'photoEditor',
             image: '/media/opennemas/images/' + $scope.selected.lastSelected.path_img,
             closeCallBack: $scope.uploadMediaImg,
-            maximunSize: {width: 800, height: 600}
+            maximunSize: { width: 800, height: 600 }
           });
 
           $('.picker-dialog').addClass('picker-photo-editor');
           photoEditor.init();
         };
 
+        /**
+         * @function uploadMediaImg
+         * @memberof MediaPickerCtrl
+         *
+         * @description
+         *   Close the photo editor and if it is needed upload the edited image
+         *
+         * @param {Object} image  The canvas image update in the photo editor
+         */
         $scope.uploadMediaImg = function(image) {
           $scope.enhance = false;
           $('.picker-dialog').removeClass('picker-photo-editor');
@@ -1040,18 +1057,52 @@
             return true;
           }
           var blob = $scope.dataURItoBlob(image.toDataURL());
-          var body = { file: new File([ blob ], $scope.selected.lastSelected.name) };
+          var body = new FormData();
 
-          var route = { name: 'admin_image_create' };
+          body.append('file', new File([ blob ], $scope.selected.lastSelected.name));
+          var url = routing.generate('admin_image_create');
 
-          $http.post(route, body).success(function() {
-            if (typeof $scope.list === 'function') {
-              $scope.list($scope.route, true);
-            }
+          $http.post(url, body, {
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined } // eslint-disable-line no-undefined
+          }).success(function() {
+            $scope.list(true);
           }).error(function() {
             return null;
           });
           return null;
+        };
+
+        /**
+         * @function dataURItoBlob
+         * @memberOf MediaPickerCtrl
+         *
+         * @description
+         *   Converts datauri type to blob.
+         *
+         * @param {Object}   dataUri     The data tu convert to blob.
+         *
+         * @return {blob} The same data but in blob format
+         */
+        $scope.dataURItoBlob = function(dataURI) {
+          // Convert base64 to raw binary data held in a string
+          var byteString = atob(dataURI.split(',')[1]);
+
+          // Separate out the mime component
+          var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+          // Write the bytes of the string to an ArrayBuffer
+          var arrayBuffer = new ArrayBuffer(byteString.length);
+          var ia = new Uint8Array(arrayBuffer);
+
+          for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+          }
+
+          var dataView = new DataView(arrayBuffer);
+          var blob = new Blob([ dataView ], { type: mimeString });
+
+          return blob;
         };
 
         /**
