@@ -87,11 +87,10 @@
                     </div>
                     <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
                       <i class="fa fa-info-circle m-r-5 text-info"></i>
-                      {t}If enabled, subscribers will not see this subscription while registering or editing profile{/t}
+                      {t}If enabled, this user group will not be visible in some circunstances{/t}
                     </span>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>

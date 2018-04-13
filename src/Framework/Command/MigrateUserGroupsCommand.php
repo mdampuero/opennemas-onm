@@ -47,20 +47,35 @@ class MigrateUserGroupsCommand extends ContainerAwareCommand
 
         $conn->selectDatabase($database);
 
-        $select   = "select id, fk_user_group from users where fk_user_group is not null";
-        $count    = "select count(*) as total from users where fk_user_group is not null";
-        $total    = $conn->fetchAssoc($count);
-        $items    = $conn->fetchAll($select);
-        $errors   = 0;
-        $progress = new ProgressBar($output, $total);
+        $fix         = "select pk_user_group from user_groups";
+        $select      = "select id, fk_user_group from users where fk_user_group is not null";
+        $count       = "select count(*) as total from users where fk_user_group is not null";
+        $validGroups = $conn->fetchAll($fix);
+        $total       = $conn->fetchAssoc($count);
+        $items       = $conn->fetchAll($select);
+        $errors      = 0;
+        $progress    = new ProgressBar($output, $total);
+
+        $validGroups = array_map(function ($a) {
+            return $a['pk_user_group'];
+        }, $validGroups);
 
         $output->writeln("<options=bold>Items to migrate: {$total['total']}</>");
 
         foreach ($items as $item) {
             $userId = $item['id'];
-            $groups = explode(',', $item['fk_user_group']);
+            $groups = array_filter(
+                explode(',', $item['fk_user_group']),
+                function ($a) {
+                    return !empty($a);
+                }
+            );
 
             foreach ($groups as $group) {
+                if (!in_array($group, $validGroups)) {
+                    continue;
+                }
+
                 try {
                     $conn->insert('user_user_group', [
                         'user_id'       => $userId,

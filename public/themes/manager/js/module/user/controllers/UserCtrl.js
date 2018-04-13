@@ -31,7 +31,7 @@
           activated: true,
           password: null,
           type: 0,
-          user_groups: [],
+          user_groups: {},
           user_language: 'default',
         };
 

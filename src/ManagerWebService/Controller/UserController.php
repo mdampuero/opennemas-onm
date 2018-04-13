@@ -185,8 +185,6 @@ class UserController extends Controller
     {
         $extra = $this->getExtraData();
 
-        array_shift($extra['user_groups']);
-
         return new JsonResponse([ 'extra' => $extra ]);
     }
 

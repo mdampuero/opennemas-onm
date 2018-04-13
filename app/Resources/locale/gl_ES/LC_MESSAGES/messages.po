@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-03 10:42+0000\n"
-"PO-Revision-Date: 2018-04-03 12:42+0200\n"
+"POT-Creation-Date: 2018-04-12 10:26+0000\n"
+"PO-Revision-Date: 2018-04-12 12:34+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -2154,6 +2154,10 @@ msgstr "%s grupos de usuarios eliminados correctamente"
 msgid "User group saved successfully"
 msgstr "Grupo de usuario gardado correctamente"
 
+#, php-format
+msgid "%s user groups saved successfully"
+msgstr "Grupo de usuarios gardado correctamente"
+
 msgid "A new opennemas instance has been created"
 msgstr "Creouse unha nova instancia de Opennemas"
 
@@ -2283,6 +2287,9 @@ msgstr "O nome do periódico contén palabras non permitidas."
 
 msgid "The url that you entered is already in use"
 msgstr "A url xa está en uso"
+
+msgid "Advertisement"
+msgstr "Publicidade"
 
 msgid "Entering on the requested page"
 msgstr "Entrando na páxina solicitada"
@@ -2552,9 +2559,6 @@ msgstr "Chave da API"
 
 msgid "Translator"
 msgstr "Tradutor"
-
-msgid "Advertisement"
-msgstr "Publicidade"
 
 msgid "Album not available"
 msgstr "Álbum non dispoñíbel"
@@ -3420,7 +3424,7 @@ msgid "More"
 msgstr "Máis"
 
 msgid "Edit '%1'"
-msgstr "Editar «%1»"
+msgstr "Editar '%1'"
 
 msgid "Remove from this frontpage"
 msgstr "Eliminar desta portada"
@@ -4694,7 +4698,7 @@ msgid "Style"
 msgstr "Estilo"
 
 msgid "Default skin"
-msgstr "Skin por omisión"
+msgstr "Skin por defecto"
 
 msgid ""
 "Your theme offers multiple skins to slightly change your theme. Select which "
@@ -5074,7 +5078,7 @@ msgid "Only available for registered users"
 msgstr "Só dispoñíbel para usuarios rexistrados"
 
 msgid "'%1' not activated - Opennemas"
-msgstr "«%1» non activada - Opennemas"
+msgstr "'%1' non activada - Opennemas"
 
 msgid "%1 temporary deactivated."
 msgstr "%1 está temporalmente desactivado."
@@ -5155,9 +5159,6 @@ msgstr "Videotitoriais"
 
 msgid "Use videos to get walkthrough guides"
 msgstr "Use os vídeos para obter guías paso a paso"
-
-msgid "You are a master"
-msgstr "Eres un master"
 
 msgid "Go to newspaper"
 msgstr "Ir ao meu periódico"
@@ -6474,12 +6475,10 @@ msgstr "Pública"
 msgid "Visibility"
 msgstr "Visibilidade"
 
-msgid ""
-"If enabled, subscribers will not see this subscription while registering or "
-"editing profile"
+msgid "If enabled, this user group will not be visible in some circunstances"
 msgstr ""
-"Se está activado, os subscritores no poderán ver esta subscrición mentras se "
-"rexistran ou editan ou seu perfil"
+"Se está activado, este grupo de usuarios non será visible nalgunhas "
+"circunstancias"
 
 msgid "Privileges"
 msgstr "Privilexios"
@@ -6525,6 +6524,16 @@ msgstr ""
 
 msgid "(in minutes)"
 msgstr "(en minutos)"
+
+msgid "Default mark shown indicating an advertisement"
+msgstr "Marca por defecto que se mostra para indicar unha publicidade"
+
+msgid ""
+"This is the text shown near advertisements. If you don't fill this field, "
+"the default value \"%1\" will be shown."
+msgstr ""
+"Este é o texto que se mostra ao carón das publicidades. Se non completa este "
+"campo, mostrarase o valor por defecto \"%1\"."
 
 msgid "Allow generic advertisement"
 msgstr "Permitir publicidade xenérica"
@@ -6733,6 +6742,9 @@ msgstr "Debaixo"
 
 msgid "Left"
 msgstr "Esquerda"
+
+msgid "Write here your custom mark. Default is \"%1\""
+msgstr "Escriba aquí a marca personalizada. Por defecto é \"%1\""
 
 msgid ""
 "Defines the orientation for the word that marks the advertisement position"
@@ -7808,8 +7820,12 @@ msgstr "Automática"
 msgid "Requests"
 msgstr "Solicitudes"
 
-msgid "Request"
-msgstr "Solicitude"
+msgid ""
+"If enabled, subscribers will not see this subscription while registering or "
+"editing profile"
+msgstr ""
+"Se está activado, os subscritores no poderán ver esta subscrición mentras se "
+"rexistran ou editan ou seu perfil"
 
 msgid "Accept requests manually"
 msgstr "Aceptar solicitudes manualmente"
@@ -8275,20 +8291,11 @@ msgstr "Columnas"
 msgid "Group name"
 msgstr "Nome do grupo"
 
-msgid "Edit group"
-msgstr "Editar grupo"
-
 msgid "Do you want to delete the user group?"
 msgstr "Tes certeza que queres eliminar o grupo de usuarios?"
 
 msgid "Do you want to delete the selected user groups?"
 msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
-
-msgid "New user group"
-msgstr "Nuevo grupo de usuario"
-
-msgid "Edit user group"
-msgstr "Editar grupo de usuarios"
 
 msgid "Unfixed"
 msgstr "Non fixa"
@@ -8970,9 +8977,6 @@ msgstr "Tes certeza que queres eliminar o usuario?"
 msgid "Do you want to delete the selected users?"
 msgstr "Tes certeza que queres eliminar os usuarios seleccionados?"
 
-msgid "New user"
-msgstr "Novo usuario"
-
 msgid "Display name"
 msgstr "Nome en pantalla"
 
@@ -9005,6 +9009,24 @@ msgstr "Benvido ao Xestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
+
+#~ msgid "You are a master"
+#~ msgstr "Eres un master"
+
+#~ msgid "Request"
+#~ msgstr "Solicitude"
+
+#~ msgid "Edit group"
+#~ msgstr "Editar grupo"
+
+#~ msgid "New user group"
+#~ msgstr "Nuevo grupo de usuario"
+
+#~ msgid "Edit user group"
+#~ msgstr "Editar grupo de usuarios"
+
+#~ msgid "New user"
+#~ msgstr "Novo usuario"
 
 #, fuzzy
 #~ msgid "Unable to find any subscriber with id \"%1\"."

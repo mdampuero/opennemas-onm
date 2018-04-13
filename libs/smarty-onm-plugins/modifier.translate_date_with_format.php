@@ -10,6 +10,12 @@ function smarty_modifier_translate_date_with_format($date, $format = "l, j \d\\e
         return '';
     }
 
+    try {
+        $date = new DateTime($date);
+    } catch (Exception $e) {
+        return '';
+    }
+
     $namesEN = [
         "/January/", "/February/", "/March/", "/April/", "/May/", "/June/",
         "/July/", "/August/", "/September/", "/October/", "/November/", "/December/",
@@ -37,7 +43,6 @@ function smarty_modifier_translate_date_with_format($date, $format = "l, j \d\\e
         "Dom", "Lun", "Mar", "Mer", "Xov", "Ver", "Sab"
     ];
 
-    $date   = new DateTime($date);
     $str    = $date->format($format);
     $locale = getService('core.locale')->getLocale();
 

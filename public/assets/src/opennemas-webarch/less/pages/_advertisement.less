@@ -14,6 +14,57 @@
   }
 }
 
+.ad-mark {
+  display: inline-block;
+  padding-left: 25px;
+  min-width: 130px;
+  min-height: 110px;
+  cursor: pointer;
+
+  .ad-mark-text {
+    border-radius: 3px;
+    background:#c4c6c8;
+    display:inline-block;
+    vertical-align: top;
+  }
+
+  .ad-mark-block {
+    height: 80px;
+    width: 80px;
+    background:#efefef;
+    text-align: center;
+    padding-top: 36%;
+    color:#bbb;
+  }
+
+  &.ad-mark-left .ad-mark-text,
+  &.ad-mark-right .ad-mark-text {
+    height:60px;
+    width: 10px;
+    margin-top: 15px;
+  }
+
+  &.ad-mark-top .ad-mark-text,
+  &.ad-mark-bottom .ad-mark-text {
+    width: 60px;
+    height:10px;
+    display:block;
+    margin-left:15px;
+  }
+
+  &.ad-mark-top .ad-mark-text {
+    margin-bottom:5px;
+  }
+  &.ad-mark-bottom .ad-mark-text {
+    margin-top:5px;
+  }
+  &.ad-mark-top .ad-mark-block,
+  &.ad-mark-bottom .ad-mark-block {
+    height:75px;
+  }
+
+}
+
 .advertisement-positions {
   .grid-body {
     .badge {

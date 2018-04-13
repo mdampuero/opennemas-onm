@@ -37,6 +37,33 @@ class AdvertisementRenderer
     }
 
     /**
+     * Returns the string that depicts the default mark shown alongside ads
+     *
+     * @param Advertisement $ad the advertisement object where to search for the mark
+     *
+     * @return string The default mark for the advertisements
+     */
+    public function getMark(\Advertisement $ad = null)
+    {
+        // If the mark for the advertisement is not empty then return it
+        if (is_object($ad) && array_key_exists('mark_text', $ad->params) && !empty($ad->params['mark_text'])) {
+            return $ad->params['mark_text'];
+        }
+
+        // If the mark is not valid then use the default one.
+        $settings    = $this->container->get('setting_repository')->get('ads_settings');
+        $defaultMark = (
+                is_array($settings)
+                && array_key_exists('default_mark', $settings)
+                && !empty($settings['default_mark'])
+            )
+            ? $settings['default_mark']
+            : _('Advertisement');
+
+        return $defaultMark;
+    }
+
+    /**
      * Returns the list of CSS classes according to device restrictions for an Ad
      *
      * @param Advertisement $ad the advertisement to get restrictions from
@@ -78,12 +105,13 @@ class AdvertisementRenderer
 
         $deviceClasses = $this->getDeviceCSSClasses($ad);
 
-        $tpl         = '<div class="ad-slot oat oat-visible oat-%s %s">%s</div>';
+        $tpl         = '<div class="ad-slot oat oat-visible oat-%s %s" data-mark="%s">%s</div>';
         $content     = $this->renderInline($ad, $params);
+        $mark        = $this->getMark($ad);
         $orientation = empty($ad->params['orientation']) ?
             'top' : $ad->params['orientation'];
 
-        return sprintf($tpl, $orientation, $deviceClasses, $content);
+        return sprintf($tpl, $orientation, $deviceClasses, $mark, $content);
     }
 
     /**

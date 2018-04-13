@@ -22,6 +22,7 @@ class ManagerUserPersister extends BasePersister
     public function create(Entity &$entity)
     {
         $instances  = [];
+        $userGroups = [];
 
         if (!empty($entity->instances)) {
             $instances = $entity->instances;
