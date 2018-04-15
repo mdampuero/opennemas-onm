@@ -129,3 +129,14 @@
   top: 50%;
   width: 65px;
 }
+
+.photoEditor .divCanvas .canvasForm .formContainer {
+    bottom: 10px;
+    margin: auto;
+    position: absolute;
+    width: 100%;
+}
+
+.photoEditor .divCanvas .canvasForm .formContainer input {
+    border: 0;
+}

@@ -251,6 +251,11 @@ window.OnmPhotoEditor.prototype.divTopMenuTitle = null;
 window.OnmPhotoEditor.prototype.displayElements = [];
 
 /**
+ *  Elements custom for the actual action
+ */
+window.OnmPhotoEditor.prototype.actionElements = [];
+
+/**
  * This property have all icons for the different actions of the photo editor
  *
  * @property {object.<string, string>} ACTION_ICONS - List of all actions we can do with the photo editor. The key is
@@ -359,6 +364,7 @@ window.OnmPhotoEditor.prototype.updateStatusPhotoEditor = function(status) {
       this[initDisplay]();
     }
   }
+
   this.status = status;
   return null;
 };
@@ -712,6 +718,34 @@ window.OnmPhotoEditor.prototype.initTransform = function() {
   this.resizeCropDiv(this.status);
 };
 
+window.OnmPhotoEditor.prototype.createFormHtml = function(inputs) {
+  var formDiv       = document.createElement('div');
+  var formContainer = document.createElement('div');
+  var inputAux      = null;
+  var inputVals     = null;
+
+  formContainer.setAttribute('class', 'formContainer');
+  for (var inputIndex in inputs) {
+    inputVals = inputs[inputIndex];
+    inputAux = document.createElement('input');
+    for (var key in inputVals.attributes) {
+      inputAux[key] = inputVals.attributes[key];
+    }
+    for (var key in inputVals.events) {
+      inputAux.addEventListener(key, inputVals.events[key]);
+    }
+    formContainer.appendChild(inputAux);
+  }
+
+  formDiv.setAttribute('class', 'canvasForm');
+  formDiv.style.width  = this.canvas.width + 'px';
+  formDiv.style.height = this.canvas.height + 'px';
+  formDiv.appendChild(formContainer);
+
+  this.divCanvas.appendChild(formDiv);
+  this.actionElements.push(formDiv);
+};
+
 // ACTIONS
 
 // TOP MENU ACTIONS
@@ -751,6 +785,20 @@ window.OnmPhotoEditor.prototype.callAction = function(e) {
 
   var newStatus = JSON.parse(JSON.stringify(this.status));
 
+  newStatus.action = action;
+
+  // If we change the action we clean the other action elements
+  if (status.action !== this.status.action) {
+    if (this.actionElements.length > 0) {
+      this.actionElements.forEach(function(element) {
+        if (element.parentElement !== null) {
+          element.parentElement.removeChild(element);
+        }
+      });
+      this.actionElements = [];
+    }
+  }
+
   if (hashVal.length > 1) {
     // The format for the link hash is '''#ratio,value'''. We need the link value
     newStatus.multiSelect[action] = hashVal[1];
@@ -765,7 +813,22 @@ window.OnmPhotoEditor.prototype.callAction = function(e) {
 };
 
 window.OnmPhotoEditor.prototype.callBrightness = function() {
-  return false;
+  var brightnessForm = {
+    attributes: {
+      type: 'range',
+      min: 0,
+      max: 100,
+      step: 1,
+    },
+    events: {
+      input: function(e) {
+        return null;
+      }
+    }
+  };
+
+  this.createFormHtml([ brightnessForm ]);
+  return null;
 };
 
 window.OnmPhotoEditor.prototype.callRatio = function(e, newStatus) {
