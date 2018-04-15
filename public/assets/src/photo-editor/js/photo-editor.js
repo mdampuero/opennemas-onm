@@ -123,7 +123,7 @@ window.OnmPhotoEditor.prototype.TEMPLATE_BASIC     = {
     {
       action: 'mirror',
       icon:   'mirrorv',
-      value:  'horizontal'
+      value:  'vertical'
     }
   ],
   filter: 'initFilterMenu'
@@ -861,52 +861,21 @@ window.OnmPhotoEditor.prototype.callCropImg = function(e) {
   return null;
 };
 
-window.OnmPhotoEditor.prototype.rotateAndCropWithDiv = function(degrees, mainEle, cropDiv, cropContainer) {
-  var cropPosition = {};
-  var cropContRotateSize = {};
+window.OnmPhotoEditor.prototype.callMirror = function(e, newStatus) {
+  var divCrop        = document.querySelector('.photoEditor .divCanvas .photoEditorCrop');
+  var horizontal     = newStatus.multiSelect.mirror === 'horizontal';
 
-  if (degrees % 180 === 0) {
-    cropPosition.width  = cropDiv.width;
-    cropPosition.height = cropDiv.height;
-    cropContRotateSize.width  = cropContainer.width;
-    cropContRotateSize.height = cropContainer.height;
+  newStatus.multiSelect.mirror = '';
 
-    if (degrees === 0) {
-      cropPosition.marginTop  = cropDiv.top - cropContainer.top;
-      cropPosition.marginLeft = cropDiv.left - cropContainer.left;
-    } else {
-      cropPosition.marginTop  = cropContainer.bottom - cropDiv.bottom;
-      cropPosition.marginLeft = cropContainer.right - cropDiv.right;
-    }
-  } else {
-    cropPosition.width  = cropDiv.height;
-    cropPosition.height = cropDiv.width;
-    cropContRotateSize.width  = cropContainer.height;
-    cropContRotateSize.height = cropContainer.width;
+  this.mirror(horizontal, this.statusImage);
 
-    var degreesConversion = degrees;
-
-    if (Math.abs(degrees) > 180) {
-      degreesConversion = -1 * degrees - degrees > 0 ? -180 : 180;
-    }
-
-    if (degreesConversion === 90) {
-      cropPosition.marginTop  = cropContainer.right - cropDiv.right;
-      cropPosition.marginLeft = cropContainer.top - cropDiv.top;
-    } else {
-      cropPosition.marginTop  = cropContainer.left - cropDiv.left;
-      cropPosition.marginLeft = cropContainer.bottom - cropDiv.bottom;
-    }
+  if (horizontal) {
+    divCrop.style.marginLeft = divCrop.getBoundingClientRect().right - this.canvas.getBoundingClientRect().right;
+    return newStatus;
   }
 
-  var resizeRatio = this.getEleResizeRatio(cropContRotateSize, this.getElementSize(mainEle));
-
-  cropPosition.width  = cropPosition.width * resizeRatio.widthRatio;
-  cropPosition.height = cropPosition.height * resizeRatio.heightRatio;
-  cropPosition.marginTop = cropPosition.marginTop * resizeRatio.heightRatio;
-  cropPosition.marginLeft = cropPosition.marginLeft * resizeRatio.widthRatio;
-
-  return cropPosition;
+  divCrop.style.marginTop  = this.canvas.getBoundingClientRect().bottom - divCrop.getBoundingClientRect().bottom;
+  return newStatus;
 };
 
 // CANVAS ACTIONS
@@ -1043,6 +1012,33 @@ window.OnmPhotoEditor.prototype.rotate = function(degrees) {
   this.canvas.height = sizeRotate.height;
   this.ctx.drawImage(canvas, 0, 0, sizeRotate.width, sizeRotate.height);
   this.divCanvas.style.width = sizeRotate.width + 'px';
+};
+
+window.OnmPhotoEditor.prototype.mirror = function(horizontal, statusImage) {
+  var canvasOriginal = statusImage.canvasOriginal;
+  var mirrorCanvas = document.createElement('canvas');
+
+  mirrorCanvas.width  = canvasOriginal.width;
+  mirrorCanvas.height = canvasOriginal.height;
+
+  var ctx = mirrorCanvas.getContext('2d');
+  var scale = horizontal ? 1 : -1;
+
+  ctx.save();
+  ctx.translate(horizontal ? mirrorCanvas.width : 0, horizontal ? 0 : mirrorCanvas.height);
+  ctx.scale(-scale, scale);
+
+  ctx.drawImage(
+    canvasOriginal,
+    0,
+    0,
+    canvasOriginal.width,
+    canvasOriginal.height
+  );
+  ctx.restore();
+
+  statusImage.canvasOriginal = mirrorCanvas;
+  this.rotate(statusImage.rotation);
 };
 
 // UTILS
@@ -1517,4 +1513,52 @@ window.OnmPhotoEditor.prototype.resizeCropDiv = function(status) {
   minSize.width  = minSize.width + 5;
 
   this.resizeMovingCorner({ x: resizeVP.right, y: resizeVP.bottom }, this.canvas, resizeEle, limits, false, ratio);
+};
+
+window.OnmPhotoEditor.prototype.rotateAndCropWithDiv = function(degrees, mainEle, cropDiv, cropContainer) {
+  var cropPosition = {};
+  var cropContRotateSize = {};
+
+  if (degrees % 180 === 0) {
+    cropPosition.width  = cropDiv.width;
+    cropPosition.height = cropDiv.height;
+    cropContRotateSize.width  = cropContainer.width;
+    cropContRotateSize.height = cropContainer.height;
+
+    if (degrees === 0) {
+      cropPosition.marginTop  = cropDiv.top - cropContainer.top;
+      cropPosition.marginLeft = cropDiv.left - cropContainer.left;
+    } else {
+      cropPosition.marginTop  = cropContainer.bottom - cropDiv.bottom;
+      cropPosition.marginLeft = cropContainer.right - cropDiv.right;
+    }
+  } else {
+    cropPosition.width  = cropDiv.height;
+    cropPosition.height = cropDiv.width;
+    cropContRotateSize.width  = cropContainer.height;
+    cropContRotateSize.height = cropContainer.width;
+
+    var degreesConversion = degrees;
+
+    if (Math.abs(degrees) > 180) {
+      degreesConversion = -1 * degrees - degrees > 0 ? -180 : 180;
+    }
+
+    if (degreesConversion === 90) {
+      cropPosition.marginTop  = cropContainer.right - cropDiv.right;
+      cropPosition.marginLeft = cropContainer.top - cropDiv.top;
+    } else {
+      cropPosition.marginTop  = cropContainer.left - cropDiv.left;
+      cropPosition.marginLeft = cropContainer.bottom - cropDiv.bottom;
+    }
+  }
+
+  var resizeRatio = this.getEleResizeRatio(cropContRotateSize, this.getElementSize(mainEle));
+
+  cropPosition.width  = cropPosition.width * resizeRatio.widthRatio;
+  cropPosition.height = cropPosition.height * resizeRatio.heightRatio;
+  cropPosition.marginTop = cropPosition.marginTop * resizeRatio.heightRatio;
+  cropPosition.marginLeft = cropPosition.marginLeft * resizeRatio.widthRatio;
+
+  return cropPosition;
 };
