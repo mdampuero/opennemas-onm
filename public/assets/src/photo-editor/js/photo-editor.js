@@ -820,13 +820,21 @@ window.OnmPhotoEditor.prototype.callRotation = function(e, newStatus) {
   return newStatus;
 };
 
-window.OnmPhotoEditor.prototype.callCropImg = function() {
+window.OnmPhotoEditor.prototype.callCropImg = function(e) {
+  e.preventDefault();
   var canvasOriginal = this.statusImage.canvasOriginal;
-  var cropDiv        = document.querySelector('.photoEditor .divCanvas .photoEditorCrop');
+  var divCrop        = document.querySelector('.photoEditor .divCanvas .photoEditorCrop');
 
-  var cropValues = this.rotateAndCropWithDiv(this.statusImage.rotation, canvasOriginal, cropDiv, this.canvas);
-
+  var cropValues = this.rotateAndCropWithDiv(
+    this.statusImage.rotation,
+    canvasOriginal,
+    divCrop.getBoundingClientRect(),
+    this.canvas.getBoundingClientRect()
+  );
   var cropCanvas = document.createElement('canvas');
+
+  cropCanvas.width  = cropValues.width;
+  cropCanvas.height = cropValues.height;
 
   var ctx = cropCanvas.getContext('2d');
 
@@ -834,28 +842,34 @@ window.OnmPhotoEditor.prototype.callCropImg = function() {
     canvasOriginal,
     cropValues.marginLeft,
     cropValues.marginTop,
-    canvasOriginal.width,
-    canvasOriginal.height,
+    cropValues.width,
+    cropValues.height,
     0,
     0,
-    cropValues.width, cropValues.height);
+    cropValues.width,
+    cropValues.height
+  );
 
   this.statusImage.canvasOriginal = cropCanvas;
   this.statusImage.ctxOriginal    = ctx;
   this.rotate(this.statusImage.rotation);
+  divCrop.style.width  = this.canvas.width + 'px';
+  divCrop.style.height = this.canvas.height + 'px';
+  divCrop.style.marginTop  = 0;
+  divCrop.style.marginLeft = 0;
   this.statusImage.rotation = 0;
   return null;
 };
 
 window.OnmPhotoEditor.prototype.rotateAndCropWithDiv = function(degrees, mainEle, cropDiv, cropContainer) {
   var cropPosition = {};
-  var cropContainerRotateSize = {};
+  var cropContRotateSize = {};
 
   if (degrees % 180 === 0) {
     cropPosition.width  = cropDiv.width;
     cropPosition.height = cropDiv.height;
-    cropContainerRotateSize.width  = cropContainer.width;
-    cropContainerRotateSize.height = cropContainer.height;
+    cropContRotateSize.width  = cropContainer.width;
+    cropContRotateSize.height = cropContainer.height;
 
     if (degrees === 0) {
       cropPosition.marginTop  = cropDiv.top - cropContainer.top;
@@ -867,8 +881,8 @@ window.OnmPhotoEditor.prototype.rotateAndCropWithDiv = function(degrees, mainEle
   } else {
     cropPosition.width  = cropDiv.height;
     cropPosition.height = cropDiv.width;
-    cropContainerRotateSize.width  = cropContainer.height;
-    cropContainerRotateSize.height = cropContainer.width;
+    cropContRotateSize.width  = cropContainer.height;
+    cropContRotateSize.height = cropContainer.width;
 
     var degreesConversion = degrees;
 
@@ -877,20 +891,20 @@ window.OnmPhotoEditor.prototype.rotateAndCropWithDiv = function(degrees, mainEle
     }
 
     if (degreesConversion === 90) {
-      cropPosition.marginTop  = cropContainer.bottom - cropDiv.bottom;
-      cropPosition.marginLeft = cropContainer.left - cropDiv.left;
+      cropPosition.marginTop  = cropContainer.right - cropDiv.right;
+      cropPosition.marginLeft = cropContainer.top - cropDiv.top;
     } else {
-      cropPosition.marginTop  = cropContainer.top - cropDiv.top;
-      cropPosition.marginLeft = cropContainer.right - cropDiv.right;
+      cropPosition.marginTop  = cropContainer.left - cropDiv.left;
+      cropPosition.marginLeft = cropContainer.bottom - cropDiv.bottom;
     }
   }
 
-  var resizeRatio = this.getEleResizeRatio(cropContainerRotateSize, this.getElementSize(mainEle));
+  var resizeRatio = this.getEleResizeRatio(cropContRotateSize, this.getElementSize(mainEle));
 
   cropPosition.width  = cropPosition.width * resizeRatio.widthRatio;
   cropPosition.height = cropPosition.height * resizeRatio.heightRatio;
-  cropPosition.marginTop = cropPosition.marginTop * resizeRatio.height;
-  cropPosition.marginLeft = cropPosition.marginLeft * resizeRatio.width;
+  cropPosition.marginTop = cropPosition.marginTop * resizeRatio.heightRatio;
+  cropPosition.marginLeft = cropPosition.marginLeft * resizeRatio.widthRatio;
 
   return cropPosition;
 };
