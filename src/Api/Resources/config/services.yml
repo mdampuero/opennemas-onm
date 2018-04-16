@@ -1,7 +1,7 @@
 services:
     api.service.author:
         class:     Api\Service\V1\AuthorService
-        arguments: [ '@service_container', 'Common\ORM\Entity\User' ]
+        arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
 
     api.service.subscriber:
         class:     Api\Service\V1\SubscriberService
