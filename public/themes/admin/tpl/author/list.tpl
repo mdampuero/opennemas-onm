@@ -176,8 +176,8 @@
                     <span ng-if="item.is_blog == 1">
                       <strong>Blog:</strong>:
                     </span>
-                    <span ng-if="item.bio">[% item.bio %]</span>
-                    <span ng-if="!item.bio"><i>{t}No biography set{/t}</i></span>
+                    <span class="item-biography" ng-if="item.bio" title="[% item.bio %]">[% item.bio %]</span>
+                    <span class="item-biography" ng-if="!item.bio" title="[% item.bio %]"><i>{t}No biography set{/t}</i></span>
                   </td>
                 </tr>
               </tbody>
