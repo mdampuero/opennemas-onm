@@ -2000,15 +2000,32 @@ class Content implements \JsonSerializable
      */
     public function removeMetadata($property)
     {
-        if ($this->id == null) {
+        if ($this->id === null) {
             return false;
         }
 
         try {
-            getService('dbal_connection')->delete('contentmeta', [
-                'fk_content' => $this->id,
-                'meta_name' => $property
-            ]);
+            $propertyFilter = ' = ?';
+            $parameters = [$this->id];
+            if (is_array($property)) {
+                if (count($property) === 0) {
+                    return false;
+                }
+                $propertyFilter = ' IN (';
+
+                foreach ($property as $value) {
+                    $propertyFilter .= '?, ';
+                }
+                $propertyFilter = rtrim($propertyFilter, ', ') . ')';
+                $parameters = array_merge($parameters, $property);
+            } else {
+                $parameters[] = $property;
+            }
+
+
+            $sql = 'DELETE FROM contentmeta WHERE fk_content = ? AND meta_name ';
+            $sql .= is_array($property) ? $propertyFilter : ' = ?';
+            $value = getService('dbal_connection')->executeUpdate($sql, $parameters);
 
             return true;
         } catch (\Exception $e) {
@@ -2118,19 +2135,17 @@ class Content implements \JsonSerializable
             return;
         }
 
+        $emptyKeys = [];
         foreach ($metaDataFields as $metaDataField) {
             foreach ($metaDataField['fields'] as $field) {
-                if (!array_key_exists($field['key'], $data)) {
+                if (array_key_exists($field['key'], $data) && !empty($data[$field['key']])) {
+                    $this->setMetadata($field['key'], $data[$field['key']]);
                     continue;
                 }
 
-                if(!empty($data[$field['key']])) {
-                    parent::removeMetadata($field['key']);
-                    continue;
-                }
-
-                parent::setMetadata($field['key'], $data[$field['key']]);
+                $emptyKeys[] = $field['key'];
             }
         }
+        $this->removeMetadata($emptyKeys);
     }
 }
