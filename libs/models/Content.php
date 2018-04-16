@@ -2100,4 +2100,37 @@ class Content implements \JsonSerializable
     {
         return [ 'body', 'description', 'slug', 'title' ];
     }
+
+    /**
+     * Method for set in the object the metadatas values
+     *
+     *  @param mixed  $data the data to load in the object
+     *  @param string $type type of the extra field
+     */
+    public function saveMetadataFields($data, $type)
+    {
+        if (!getService('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
+            return;
+        }
+
+        $metaDataFields = getService('setting_repository')->get($type);
+        if (!is_array($metaDataFields)) {
+            return;
+        }
+
+        foreach ($metaDataFields as $metaDataField) {
+            foreach ($metaDataField['fields'] as $field) {
+                if (!array_key_exists($field['key'], $data)) {
+                    continue;
+                }
+
+                if(!empty($data[$field['key']])) {
+                    parent::removeMetadata($field['key']);
+                    continue;
+                }
+
+                parent::setMetadata($field['key'], $data[$field['key']]);
+            }
+        }
+    }
 }

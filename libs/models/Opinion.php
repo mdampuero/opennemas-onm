@@ -17,6 +17,9 @@
  */
 class Opinion extends Content
 {
+
+    const EXTRA_INFO_TYPE = 'extraInfoContents.OPINION_MANAGER';
+
     /**
      * The opinion id
      *
@@ -192,7 +195,7 @@ class Opinion extends Content
                 parent::setMetadata('img2_footer', $data['img2_footer']);
             }
 
-            $this->saveMetadataFields($data);
+            $this->saveMetadataFields($data, Opinion::EXTRA_INFO_TYPE);
 
             return $this->id;
         } catch (\Exception $e) {
@@ -303,7 +306,7 @@ class Opinion extends Content
                 parent::removeMetadata('img2_footer');
             }
 
-            $this->saveMetadataFields($data);
+            $this->saveMetadataFields($data, Opinion::EXTRA_INFO_TYPE);
 
             return $this;
         } catch (\Exception $e) {
@@ -523,30 +526,5 @@ class Opinion extends Content
         }
 
         return $contents;
-    }
-
-    /**
-     * Method for set in the object the metadatas values
-     *
-     *  @param mixed $data the data to load in the object
-     */
-    public function saveMetadataFields($data)
-    {
-        if (!getService('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
-            return;
-        }
-
-        $metaDataFields = getService('setting_repository')->get('extraInfoContents.OPINION_MANAGER');
-        if (!is_array($metaDataFields)) {
-            return;
-        }
-
-        foreach ($metaDataFields as $metaDataField) {
-            foreach ($metaDataField['fields'] as $field) {
-                if (array_key_exists($field['key'], $data) && !empty($data[$field['key']])) {
-                    parent::setMetadata($field['key'], $data[$field['key']]);
-                }
-            }
-        }
     }
 }
