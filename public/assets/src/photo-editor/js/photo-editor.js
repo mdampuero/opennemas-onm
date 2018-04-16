@@ -167,9 +167,7 @@ window.OnmPhotoEditor.prototype.status = {
  * @property {status} statusImage of the photo what determine how we see the image
  */
 window.OnmPhotoEditor.prototype.statusImage = {
-  size:         { height: 0, width: 0 },
-  ratio:        null,
-  actionStatus: {}
+  brightness: 0
 };
 
 /**
@@ -813,15 +811,26 @@ window.OnmPhotoEditor.prototype.callAction = function(e) {
 };
 
 window.OnmPhotoEditor.prototype.callBrightness = function() {
+  var that = this;
   var brightnessForm = {
     attributes: {
       type: 'range',
-      min: 0,
+      min: -100,
       max: 100,
       step: 1,
+      value: that.statusImage.brightness
     },
     events: {
       input: function(e) {
+        e.preventDefault();
+        that.brightness(that.canvas, that.ctx, e.currentTarget.value - Math.abs(that.statusImage.brightness));
+        this.statusImage.brightness = e.currentTarget.value;
+        return null;
+      },
+      change: function(e) {
+        e.preventDefault();
+        that.brightness(that.canvas, that.ctx, e.currentTarget.value - Math.abs(that.statusImage.brightness));
+        this.statusImage.brightness = e.currentTarget.value;
         return null;
       }
     }
@@ -1041,10 +1050,6 @@ window.OnmPhotoEditor.prototype.loadImageInCanvas = function(self, img) {
   return null;
 };
 
-window.OnmPhotoEditor.prototype.updateBrightness = function() {
-  return null;
-};
-
 window.OnmPhotoEditor.prototype.rotate = function(degrees) {
   var canvasOriginal = this.statusImage.canvasOriginal;
   // Check the canvas orientation for change width for height of the original
@@ -1102,6 +1107,19 @@ window.OnmPhotoEditor.prototype.mirror = function(horizontal, statusImage) {
 
   statusImage.canvasOriginal = mirrorCanvas;
   this.rotate(statusImage.rotation);
+};
+
+window.OnmPhotoEditor.prototype.brightness = function(canvas, canvasCtx, brightnessAdj) {
+  var adjust = brightnessAdj / 100;
+  var pixels = canvasCtx.getImageData(0, 0, canvas.width, canvas.height);
+  var pixelsData = pixels.data;
+
+  for (var i = 0; i < pixelsData.length; i += 4) {
+    pixelsData[i] += adjust;
+    pixelsData[i + 1] += adjust;
+    pixelsData[i + 2] += adjust;
+  }
+  canvasCtx.putImageData(pixels, 0, 0);
 };
 
 // UTILS
