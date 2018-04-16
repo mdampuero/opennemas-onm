@@ -126,7 +126,7 @@
                   <th width="400">{t}Name{/t}</th>
                   <th class="hidden-xs" width="400">{t}Email{/t}</th>
                   <th class="text-center" width="100">{t}Blog{/t}</th>
-                  <th class="hidden-sm hidden-xs">{t}Biography{/t}</th>
+                  <th class="hidden-sm hidden-xs" width="400">{t}Biography{/t}</th>
                 </tr>
               </thead>
               <tbody>
