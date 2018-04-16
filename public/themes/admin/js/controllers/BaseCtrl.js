@@ -110,7 +110,7 @@
           }
 
           for (var key in flags) {
-            flags[key] = false;
+            flags[key] = angular.isObject(flags[key]) ? {} : false;
           }
         };
 
