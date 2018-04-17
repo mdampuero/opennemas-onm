@@ -129,7 +129,7 @@ CREATE TABLE `instance_meta` (
   KEY `instance_id` (`instance_id`),
   KEY `meta_key` (`meta_key`),
   CONSTRAINT `instancemeta_id_instances_id` FOREIGN KEY (`instance_id`) REFERENCES `instances` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -185,7 +185,7 @@ CREATE TABLE `instances` (
   KEY `owner_id` (`owner_id`),
   FULLTEXT KEY `domain_name` (`domains`),
   CONSTRAINT `instances_ownerid_users_id` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -194,7 +194,7 @@ CREATE TABLE `instances` (
 
 LOCK TABLES `instances` WRITE;
 /*!40000 ALTER TABLE `instances` DISABLE KEYS */;
-INSERT INTO `instances` VALUES (1,'opennemas','Opennemas Default instance','opennemas.opennemas.localhost,opennemas.opennemas.dev','','a:7:{s:13:\"TEMPLATE_USER\";s:23:\"es.openhost.theme.basic\";s:9:\"MEDIA_URL\";s:7:\"/media/\";s:7:\"BD_TYPE\";s:6:\"mysqli\";s:7:\"BD_HOST\";s:9:\"localhost\";s:11:\"BD_DATABASE\";s:9:\"c-default\";s:7:\"BD_USER\";s:4:\"root\";s:7:\"BD_PASS\";s:4:\"root\";}',1,'devs@opennemas.com',NULL,'2016-09-04 16:00:00',NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'a:18:{i:0;s:12:\"SUPPORT_NONE\";i:1;s:15:\"ADVANCED_SEARCH\";i:2;s:15:\"ARTICLE_MANAGER\";i:3;s:16:\"CATEGORY_MANAGER\";i:4;s:15:\"COMMENT_MANAGER\";i:5;s:12:\"FILE_MANAGER\";i:6;s:17:\"FRONTPAGE_MANAGER\";i:7;s:13:\"IMAGE_MANAGER\";i:8;s:15:\"KEYWORD_MANAGER\";i:9;s:12:\"MENU_MANAGER\";i:10;s:15:\"OPINION_MANAGER\";i:11;s:16:\"SETTINGS_MANAGER\";i:12;s:20:\"STATIC_PAGES_MANAGER\";i:13;s:13:\"TRASH_MANAGER\";i:14;s:17:\"USERVOICE_SUPPORT\";i:15;s:14:\"WIDGET_MANAGER\";i:16;s:11:\"ADS_MANAGER\";i:17;s:32:\"es.openhost.module.multilanguage\";}','ES',NULL);
+INSERT INTO `instances` VALUES (1,'opennemas','Opennemas Default instance','opennemas.dev.opennemas.com','','a:7:{s:13:\"TEMPLATE_USER\";s:23:\"es.openhost.theme.basic\";s:9:\"MEDIA_URL\";s:7:\"/media/\";s:7:\"BD_TYPE\";s:6:\"mysqli\";s:7:\"BD_HOST\";s:9:\"localhost\";s:11:\"BD_DATABASE\";i:1;s:7:\"BD_USER\";s:4:\"root\";s:7:\"BD_PASS\";s:4:\"root\";}',1,'devs@opennemas.com',NULL,'2016-09-05 18:00:00',NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'a:18:{i:0;s:12:\"SUPPORT_NONE\";i:1;s:15:\"ADVANCED_SEARCH\";i:2;s:15:\"ARTICLE_MANAGER\";i:3;s:16:\"CATEGORY_MANAGER\";i:4;s:15:\"COMMENT_MANAGER\";i:5;s:12:\"FILE_MANAGER\";i:6;s:17:\"FRONTPAGE_MANAGER\";i:7;s:13:\"IMAGE_MANAGER\";i:8;s:15:\"KEYWORD_MANAGER\";i:9;s:12:\"MENU_MANAGER\";i:10;s:15:\"OPINION_MANAGER\";i:11;s:16:\"SETTINGS_MANAGER\";i:12;s:20:\"STATIC_PAGES_MANAGER\";i:13;s:13:\"TRASH_MANAGER\";i:14;s:17:\"USERVOICE_SUPPORT\";i:15;s:14:\"WIDGET_MANAGER\";i:16;s:11:\"ADS_MANAGER\";i:17;s:32:\"es.openhost.module.multilanguage\";}','ES',NULL);
 /*!40000 ALTER TABLE `instances` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -219,7 +219,7 @@ CREATE TABLE `notification` (
   `forced` tinyint(1) NOT NULL DEFAULT '0',
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -228,7 +228,6 @@ CREATE TABLE `notification` (
 
 LOCK TABLES `notification` WRITE;
 /*!40000 ALTER TABLE `notification` DISABLE KEYS */;
-INSERT INTO `notification` VALUES (1,'a:3:{s:2:\"en\";s:12:\"<p>asdf</p>\n\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}','a:3:{s:2:\"en\";s:12:\"<p>asdf</p>\n\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}','a:1:{i:0;s:8:\"exallple\";}','0','2017-12-12 01:00:00',NULL,NULL,'a:3:{s:4:\"icon\";s:7:\"comment\";s:16:\"background_color\";s:7:\"#0090d9\";s:10:\"font_color\";s:7:\"#e5e9ec\";}',1,1,1);
 /*!40000 ALTER TABLE `notification` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -405,7 +404,7 @@ CREATE TABLE `user_user_group` (
 
 LOCK TABLES `user_user_group` WRITE;
 /*!40000 ALTER TABLE `user_user_group` DISABLE KEYS */;
-INSERT INTO `user_user_group` VALUES (5,4,1,NULL);
+INSERT INTO `user_user_group` VALUES (1,4,1,NULL);
 /*!40000 ALTER TABLE `user_user_group` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -458,7 +457,7 @@ CREATE TABLE `users` (
   `activated` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 activated - 0 deactivated',
   `fk_user_group` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -467,7 +466,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (5,'admin','b7592fd66feb65282791ab64685e4af4','',NULL,NULL,'support@opennemas.com','Administrator',0,NULL,1,'4');
+INSERT INTO `users` VALUES (1,'admin','b7592fd66feb65282791ab64685e4af4','',NULL,NULL,'support@opennemas.com','Administrator',0,NULL,1,'4');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -480,4 +479,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-17 17:12:03
+-- Dump completed on 2018-04-17 17:29:00
