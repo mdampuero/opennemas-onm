@@ -194,7 +194,7 @@ CREATE TABLE `instances` (
 
 LOCK TABLES `instances` WRITE;
 /*!40000 ALTER TABLE `instances` DISABLE KEYS */;
-INSERT INTO `instances` VALUES (1,'opennemas','Opennemas Default instance','opennemas.dev.opennemas.com','','a:7:{s:13:\"TEMPLATE_USER\";s:23:\"es.openhost.theme.basic\";s:9:\"MEDIA_URL\";s:7:\"/media/\";s:7:\"BD_TYPE\";s:6:\"mysqli\";s:7:\"BD_HOST\";s:9:\"localhost\";s:11:\"BD_DATABASE\";i:1;s:7:\"BD_USER\";s:4:\"root\";s:7:\"BD_PASS\";s:4:\"root\";}',1,'devs@opennemas.com',NULL,'2016-09-05 18:00:00',NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'a:18:{i:0;s:12:\"SUPPORT_NONE\";i:1;s:15:\"ADVANCED_SEARCH\";i:2;s:15:\"ARTICLE_MANAGER\";i:3;s:16:\"CATEGORY_MANAGER\";i:4;s:15:\"COMMENT_MANAGER\";i:5;s:12:\"FILE_MANAGER\";i:6;s:17:\"FRONTPAGE_MANAGER\";i:7;s:13:\"IMAGE_MANAGER\";i:8;s:15:\"KEYWORD_MANAGER\";i:9;s:12:\"MENU_MANAGER\";i:10;s:15:\"OPINION_MANAGER\";i:11;s:16:\"SETTINGS_MANAGER\";i:12;s:20:\"STATIC_PAGES_MANAGER\";i:13;s:13:\"TRASH_MANAGER\";i:14;s:17:\"USERVOICE_SUPPORT\";i:15;s:14:\"WIDGET_MANAGER\";i:16;s:11:\"ADS_MANAGER\";i:17;s:32:\"es.openhost.module.multilanguage\";}','ES',NULL);
+INSERT INTO `instances` VALUES (1,'opennemas','Opennemas Default instance','opennemas.dev.opennemas.com','','a:7:{s:13:\"TEMPLATE_USER\";s:23:\"es.openhost.theme.basic\";s:9:\"MEDIA_URL\";s:7:\"/media/\";s:7:\"BD_TYPE\";s:6:\"mysqli\";s:7:\"BD_HOST\";s:9:\"localhost\";s:11:\"BD_DATABASE\";i:1;s:7:\"BD_USER\";s:4:\"root\";s:7:\"BD_PASS\";s:4:\"root\";}',1,'devs@opennemas.com',NULL,'2016-09-06 07:00:00',NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'a:18:{i:0;s:12:\"SUPPORT_NONE\";i:1;s:15:\"ADVANCED_SEARCH\";i:2;s:15:\"ARTICLE_MANAGER\";i:3;s:16:\"CATEGORY_MANAGER\";i:4;s:15:\"COMMENT_MANAGER\";i:5;s:12:\"FILE_MANAGER\";i:6;s:17:\"FRONTPAGE_MANAGER\";i:7;s:13:\"IMAGE_MANAGER\";i:8;s:15:\"KEYWORD_MANAGER\";i:9;s:12:\"MENU_MANAGER\";i:10;s:15:\"OPINION_MANAGER\";i:11;s:16:\"SETTINGS_MANAGER\";i:12;s:20:\"STATIC_PAGES_MANAGER\";i:13;s:13:\"TRASH_MANAGER\";i:14;s:17:\"USERVOICE_SUPPORT\";i:15;s:14:\"WIDGET_MANAGER\";i:16;s:12:\"USER_MANAGER\";i:17;s:18:\"USER_GROUP_MANAGER\";}','ES',NULL);
 /*!40000 ALTER TABLE `instances` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -479,4 +479,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-17 17:29:00
+-- Dump completed on 2018-04-17 17:39:08
