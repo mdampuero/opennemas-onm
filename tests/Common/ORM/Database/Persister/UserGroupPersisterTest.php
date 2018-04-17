@@ -11,6 +11,7 @@ namespace tests\Common\ORM\Database\Persister;
 
 use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\UserGroup;
+use Common\ORM\Entity\Instance;
 use Common\ORM\Database\Persister\UserGroupPersister;
 
 class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
@@ -24,6 +25,8 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([ 'delete', 'executeQuery', 'insert', 'lastInsertId', 'update' ])
             ->getMock();
+
+        $this->instance = new Instance([ 'internal_name' => 'glorp' ]);
 
         $this->metadata = new Metadata([
             'name' => 'UserGroup',
@@ -60,7 +63,7 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'remove', 'removeByPattern' ])
             ->getMock();
 
-        $this->persister = new UserGroupPersister($this->conn, $this->metadata, $this->cache);
+        $this->persister = new UserGroupPersister($this->conn, $this->metadata, $this->cache, $this->instance);
     }
 
     /**
@@ -147,7 +150,8 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->cache->expects($this->exactly(2))->method('remove');
-        $this->cache->expects($this->exactly(1))->method('removeByPattern');
+        $this->cache->expects($this->exactly(1))->method('removeByPattern')
+            ->with('*glorp_user-*');
 
         $this->persister->remove($entity);
     }
