@@ -26,7 +26,7 @@
           },
           template: function(elem, attrs) {
             if (attrs.link) {
-              return '<div class=\"translator btn-group btn-group-xs\" ng-if=\"collapsed || size > max\">' +
+              return '<div class=\"translator btn-group btn-group-sm\" ng-if=\"collapsed || size > max\">' +
                 '<button class=\"form-control btn btn-default dropdown-toggle\" data-toggle=\"dropdown\" type=\"button\">' +
                   '<i class=\"fa fa-pencil\"></i>' +
                   '{{text}}' +
@@ -41,7 +41,7 @@
                   '</li>' +
                 '</ul>' +
               '</div>' +
-              '<div class="translator btn-group btn-group-xs" role="group" ng-if=\"!collapsed && size <= max\">' +
+              '<div class="translator btn-group btn-group-sm" role="group" ng-if=\"!collapsed && size <= max\">' +
                 '<a class=\"btn btn-{{language.class}} btn-{{language.translated ? \'solid\' : \'transparent\' }}\"' +
                     ' href="{{link + \'?locale=\' + language.value}}" ng-repeat=\"language in languages\">' +
                   '<i class=\"fa {{language.icon}}\" ng-show=\"language.icon\"></i>{{language.name}}' +
