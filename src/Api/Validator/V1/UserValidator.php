@@ -19,6 +19,10 @@ class UserValidator extends Validator
      */
     public function validate($item)
     {
+        if (!array_key_exists('type', $item->getChanges())) {
+            return;
+        }
+
         if ($item->type !== 0
             && ($item->type !== 2
             || !$this->container->get('core.security')->hasPermission('MASTER'))

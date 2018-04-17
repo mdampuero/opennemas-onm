@@ -126,7 +126,7 @@
                   <th width="400">{t}Name{/t}</th>
                   <th class="hidden-xs" width="400">{t}Email{/t}</th>
                   <th class="text-center" width="100">{t}Blog{/t}</th>
-                  <th class="hidden-sm hidden-xs">{t}Biography{/t}</th>
+                  <th class="hidden-sm hidden-xs" width="400">{t}Biography{/t}</th>
                 </tr>
               </thead>
               <tbody>
@@ -176,8 +176,8 @@
                     <span ng-if="item.is_blog == 1">
                       <strong>Blog:</strong>:
                     </span>
-                    <span ng-if="item.bio">[% item.bio %]</span>
-                    <span ng-if="!item.bio"><i>{t}No biography set{/t}</i></span>
+                    <span class="item-biography" ng-if="item.bio" title="[% item.bio %]">[% item.bio %]</span>
+                    <span class="item-biography" ng-if="!item.bio" title="[% item.bio %]"><i>{t}No biography set{/t}</i></span>
                   </td>
                 </tr>
               </tbody>

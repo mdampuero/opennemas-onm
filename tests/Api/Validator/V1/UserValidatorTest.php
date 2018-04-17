@@ -37,11 +37,22 @@ class UserValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests validate when valid type provided.
+     * Tests validate when type changed and valid type provided.
      */
-    public function testValidate()
+    public function testValidateWhenChanges()
     {
         $this->validator->validate(new Entity([ 'type' => 0 ]));
+    }
+
+    /**
+     * Tests validate when there are no changes in type.
+     */
+    public function testValidateWhenNoChanges()
+    {
+        $item = new Entity([ 'type' => 0 ]);
+        $item->refresh();
+
+        $this->validator->validate($item);
     }
 
     /**
