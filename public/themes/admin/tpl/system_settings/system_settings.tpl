@@ -557,8 +557,8 @@
                               <strong class="small" ng-show="settings.translators[$index].default == true">({t}Default{/t})</strong>
                               </h4>
 
-                              <button class="btn btn-danger pull-right" ng-click="removeTranslator($index)" type="button">
-                                <i class="fa fa-times"></i>
+                              <button class="btn btn-white pull-right" ng-click="removeTranslator($index)" type="button">
+                                <i class="fa fa-times text-danger"></i>
                               </button>
                               <hr>
                             </div>
@@ -625,11 +625,11 @@
                               </div>
                             </div>
                           </div>
-                          <div class="row">
+                          <div class="row" ng-show="settings.translators[$index].from.length > 0 && settings.translators[$index].to.length > 0">
                             <div class="p-t-10 radio">
                               <input id="translator-default-[% $index %]" ng-model="settings.translators[$index].default" ng-value="true" type="radio" ng-click="toggleDefaultTranslator($index)">
                               <label for="translator-default-[% $index %]">
-                                {t}Default translator{/t}
+                                {t 1="[% settings.translators[\$index].from %]-[% settings.translators[\$index].to %]"}Default translator for "%1"{/t}
                               </label>
                             </div>
                           </div>
