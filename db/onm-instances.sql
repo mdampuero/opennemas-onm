@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.7.20, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.21, for Linux (x86_64)
 --
 -- Host: mysql    Database: onm-instances
 -- ------------------------------------------------------
@@ -71,6 +71,7 @@ CREATE TABLE `extension` (
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
   `url` varchar(140) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uuid` (`uuid`),
   KEY `type` (`type`)
 ) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -302,6 +303,10 @@ DROP TABLE IF EXISTS `user_groups`;
 CREATE TABLE `user_groups` (
   `pk_user_group` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
+  `type` int(11) NOT NULL DEFAULT '0',
+  `private` tinyint(1) NOT NULL DEFAULT '0',
+  `request` tinyint(1) NOT NULL DEFAULT '0',
+  `enabled` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`pk_user_group`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -312,7 +317,7 @@ CREATE TABLE `user_groups` (
 
 LOCK TABLES `user_groups` WRITE;
 /*!40000 ALTER TABLE `user_groups` DISABLE KEYS */;
-INSERT INTO `user_groups` VALUES (4,'Masters');
+INSERT INTO `user_groups` VALUES (4,'Masters',0,0,0,0);
 /*!40000 ALTER TABLE `user_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -375,6 +380,36 @@ INSERT INTO `user_notification` VALUES (1,1,5,'a:2:{s:8:\"username\";s:5:\"admin
 UNLOCK TABLES;
 
 --
+-- Table structure for table `user_user_group`
+--
+
+DROP TABLE IF EXISTS `user_user_group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_user_group` (
+  `user_id` bigint(20) unsigned NOT NULL,
+  `user_group_id` int(10) unsigned NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '0 rejected - 1 accepted - 2 requested',
+  `expires` datetime DEFAULT NULL,
+  PRIMARY KEY (`user_id`,`user_group_id`),
+  KEY `IDX_28657971A76ED395` (`user_id`),
+  KEY `IDX_286579711ED93D47` (`user_group_id`),
+  CONSTRAINT `user_group_id_pk_user_group` FOREIGN KEY (`user_group_id`) REFERENCES `user_groups` (`pk_user_group`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_id_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_user_group`
+--
+
+LOCK TABLES `user_user_group` WRITE;
+/*!40000 ALTER TABLE `user_user_group` DISABLE KEYS */;
+INSERT INTO `user_user_group` VALUES (5,4,1,NULL);
+/*!40000 ALTER TABLE `user_user_group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `usermeta`
 --
 
@@ -422,8 +457,6 @@ CREATE TABLE `users` (
   `token` varchar(50) DEFAULT NULL,
   `activated` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 activated - 0 deactivated',
   `fk_user_group` varchar(100) DEFAULT NULL,
-  `sessionexpire` tinyint(1) NOT NULL DEFAULT '15',
-  `deposit` decimal(10,0) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -434,7 +467,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (5,'admin','b7592fd66feb65282791ab64685e4af4','',NULL,NULL,'support@opennemas.com','Administrator',0,NULL,1,'4',15,0);
+INSERT INTO `users` VALUES (5,'admin','b7592fd66feb65282791ab64685e4af4','',NULL,NULL,'support@opennemas.com','Administrator',0,NULL,1,'4');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -447,4 +480,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-12-19 10:31:51
+-- Dump completed on 2018-04-17 17:10:21
