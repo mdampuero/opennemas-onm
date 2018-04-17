@@ -11,3 +11,11 @@ api_v1_backend_tools_translate_string:
     methods:  [ POST ]
     options:
         expose: true
+
+api_v1_backend_tools_translate_contents:
+    path:     /tools/translate-contents
+    defaults: { _controller  : ApiBundle:V1/Backend/Tool:translateContents }
+    methods:  [ POST ]
+    options:
+        expose: true
+

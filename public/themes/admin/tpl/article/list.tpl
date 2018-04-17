@@ -285,5 +285,8 @@
   <script type="text/ng-template" id="modal-update-selected">
     {include file="common/modals/_modalBatchUpdate.tpl"}
   </script>
+  <script type="text/ng-template" id="modal-translate-selected">
+    {include file="common/modals/_translate_selected.tpl"}
+  </script>
 </div>
 {/block}
