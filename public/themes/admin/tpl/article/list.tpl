@@ -278,7 +278,7 @@
     </div>
   </div>
   <script type="text/ng-template" id="modal-delete">
-    {include file="common/modals/_modalDelete.tpl"}
+    {include file="base/modal/modal.delete.tpl"}
   </script>
   <script type="text/ng-template" id="modal-delete-selected">
     {include file="common/modals/_modalBatchDelete.tpl"}
