@@ -41,39 +41,36 @@ class ToolController extends Controller
      *
      * @return JsonResponse The response object.
      */
-    public function translateAction(Request $request)
+    public function translateStringAction(Request $request)
     {
         $from       = $request->get('from');
         $to         = $request->get('to');
         $translator = $request->get('translator');
         $data       = $request->get('data');
 
-        if (empty($from) || empty($to) || empty($translator) || empty($data)) {
+        if (empty($from) || empty($to) || is_null($translator) || empty($data)) {
             return new JsonResponse('Invalid request', 400);
         }
+
+        $translator = (int) $translator;
 
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('translators');
 
-        $translator = array_filter(
-            $settings,
-            function ($a) use ($from, $to, $translator) {
-                return $a['from'] === $from
-                    && $a['to'] === $to
-                    && $a['translator'] === $translator;
-            }
-        );
+        if (is_array($settings) && array_key_exists($translator, $settings)) {
+            $translator = $settings[(int) $translator];
+        }
 
-        if (empty($translator)) {
+        if (!is_array($translator)) {
             return new JsonResponse('No translators', 404);
         }
 
         $translator = $this->get('core.factory.translator')->get(
-            $translator[0]['translator'],
-            $translator[0]['from'],
-            $translator[0]['to'],
-            $translator[0]['config']
+            $translator['translator'],
+            $translator['from'],
+            $translator['to'],
+            $translator['config']
         );
 
         $data = array_map(function ($a) use ($translator) {
