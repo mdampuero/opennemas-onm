@@ -30,15 +30,15 @@
           template: function(elem, attrs) {
             if (attrs.link) {
               return '<div class="translator btn-group btn-group-sm" ng-if="collapsed || size > max">' +
-                '<button class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">' +
-                  '<i class="fa fa-pencil"></i>' +
+                '<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">' +
+                  '<i class="fa fa-pencil m-r-5"></i>' +
                   '{{text}}' +
                   '<i class="fa fa-angle-down"></i>' +
                 '</button>' +
                 '<ul class="dropdown-menu" role="menu" style="padding:0">' +
                   '<li ng-repeat="language in languages" ng-if="language.value != ngModel">' +
                     '<a href="{{link + \'?locale=\' + language.value}}">' +
-                      '<i class="fa {{language.icon}}" ng-show="language.icon"></i>' +
+                      '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>' +
                       '{{language.name}}' +
                     '</a>' +
                   '</li>' +
@@ -47,21 +47,21 @@
               '<div class="translator btn-group btn-group-sm" role="group" ng-if="!collapsed && size <= max">' +
                 '<a class="btn btn-{{language.class}} btn-{{language.translated ? \'solid\' : \'transparent\' }}"' +
                     ' href="{{link + \'?locale=\' + language.value}}" ng-repeat="language in languages">' +
-                  '<i class="fa {{language.icon}}" ng-show="language.icon"></i>{{language.name}}' +
+                  '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>{{language.name}}' +
                 '</a>' +
               '</div>';
             }
 
             return '<div class="translator btn-group">' +
               '<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">' +
-                '<i class="fa {{languages[ngModel].icon}}" ng-show="languages[ngModel].icon"></i>' +
+                '<i class="fa {{languages[ngModel].icon}} m-r-5" ng-show="languages[ngModel].icon"></i>' +
                 '{{languages[ngModel].name}}' +
                 '<i class="fa fa-angle-down"></i>' +
               '</button>' +
               '<ul class="dropdown-menu" role="menu" style="padding:0">' +
                 '<li ng-repeat="language in languages" ng-if="language.value != ngModel">' +
                   '<a href="#" ng-click="changeSelected(language.value)">' +
-                    '<i class="fa {{language.icon}}" ng-show="language.icon"></i>' +
+                    '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>' +
                     '{{language.name}}' +
                   '</a>' +
                 '</li>' +
