@@ -9,7 +9,7 @@
   <div ng-show="template.translating">
     <div class="spinner-wrapper">
       <div class="loading-spinner"></div>
-      <div class="spinner-text">{t 1="[% template.config.locales[template.config.translateTo] %]"}Translating selected contents into "%1"{/t}</div>
+      <div class="spinner-text">{t 1="[% template.config.locales[template.config.translateTo] %]"}Translating content to "%1"{/t}</div>
     </div>
   </div>
 </div>
