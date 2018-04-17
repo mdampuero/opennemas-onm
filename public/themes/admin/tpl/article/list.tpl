@@ -179,9 +179,10 @@
           <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
         <div class="listing-no-contents ng-cloak" ng-if="!loading && items.length == 0">
-          <div class="center">
-            <h4>{t}Unable to find any article that matches your search.{/t}</h4>
-            <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
+          <div class="text-center p-b-15 p-t-15">
+            <i class="fa fa-4x fa-warning text-warning"></i>
+            <h3>{t}Unable to find any item that matches your search.{/t}</h3>
+            <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
           </div>
         </div>
         <div class="table-wrapper ng-cloak" ng-if="!loading && items.length > 0">
@@ -227,13 +228,13 @@
                   </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="ARTICLE_UPDATE"}
-                      <translator class="m-r-10" item="data.results[$index]" keys="data.extra.keys" link="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="config.multilanguage" options="data.extra.options" text="{t}Edit{/t}"></translator>
-                      <a class="link" href="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="!config.multilanguage">
+                      <translator class="m-r-5" item="data.results[$index]" keys="data.extra.keys" link="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="config.multilanguage" options="data.extra.options" text="{t}Edit{/t}"></translator>
+                      <a class="btn btn-default btn-small" href="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="!config.multilanguage">
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
                     {/acl}
                     {acl isAllowed="ARTICLE_DELETE"}
-                      <button class="link link-danger" ng-click="sendToTrash(content)" type="button">
+                      <button class="btn btn-danger btn-small" ng-click="sendToTrash(content)" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                       </button>
                     {/acl}
