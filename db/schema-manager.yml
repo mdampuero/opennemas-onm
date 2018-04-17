@@ -422,7 +422,7 @@ users:
             options: { default: null, length: 65532, notnull: false }
         avatar_img_id:
             type: bigint
-            options: { default: '0', unsigned: true }
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         email:
             type: string
             options: { default: null, notnull: false, length: 255 }
