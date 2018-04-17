@@ -92,6 +92,7 @@ class UserGroupPersister extends BasePersister
 
         if ($this->hasCache()) {
             $this->cache->remove($this->metadata->getPrefixedId($entity));
+            $this->cache->removeByPattern('*user*');
         }
     }
 
@@ -131,7 +132,7 @@ class UserGroupPersister extends BasePersister
             \PDO::PARAM_STR : \PDO::PARAM_INT;
 
         if (!empty($keep)) {
-            $sql .= " and pk_fk_privilege not in (?)";
+            $sql     .= " and pk_fk_privilege not in (?)";
             $params[] = $keep;
             $types[]  = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
         }

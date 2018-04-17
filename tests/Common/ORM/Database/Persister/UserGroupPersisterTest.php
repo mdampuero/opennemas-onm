@@ -57,7 +57,7 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
 
         $this->cache = $this->getMockBuilder('Common\Cache\Redis\Redis')
             ->disableOriginalConstructor()
-            ->setMethods([ 'remove' ])
+            ->setMethods([ 'remove', 'removeByPattern' ])
             ->getMock();
 
         $this->persister = new UserGroupPersister($this->conn, $this->metadata, $this->cache);
@@ -147,6 +147,7 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->cache->expects($this->exactly(2))->method('remove');
+        $this->cache->expects($this->exactly(1))->method('removeByPattern');
 
         $this->persister->remove($entity);
     }
