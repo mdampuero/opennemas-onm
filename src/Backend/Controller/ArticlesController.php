@@ -189,8 +189,9 @@ class ArticlesController extends Controller
      */
     public function contentProviderCategoryAction(Request $request)
     {
-        $categoryId = $request->query->getDigits('category', 0);
-        $page       = $request->query->getDigits('page', 1);
+        $categoryId     = $request->query->getDigits('category', 0);
+        $page           = $request->query->getDigits('page', 1);
+        $filterCategory = $request->query->getDigits('filter_by_category', 1);
 
         $em       = $this->get('entity_repository');
         $ids      = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory($categoryId);
@@ -203,7 +204,7 @@ class ArticlesController extends Controller
             'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ],
         ];
 
-        if ($categoryId != 0) {
+        if ($categoryId != 0 && $filterCategory) {
             $filters['category_name'] = [ [ 'value' => $category->name ] ];
         }
 
@@ -221,7 +222,10 @@ class ArticlesController extends Controller
             'total'       => $countArticles,
             'route'       => [
                 'name'   => 'admin_articles_content_provider_category',
-                'params' => ['category' => $categoryId]
+                'params' => [
+                    'category'           => $categoryId,
+                    'filter_by_category' => $filterCategory,
+                ]
             ],
         ]);
 
