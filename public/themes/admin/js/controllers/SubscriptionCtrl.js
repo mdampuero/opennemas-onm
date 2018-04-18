@@ -82,10 +82,10 @@
             return null;
           }
 
-          return $scope.data.extra.modules.FRONTEND
+          return parseInt($scope.data.extra.modules.FRONTEND
             .filter(function(e) {
               return e.name === name;
-            })[0].pk_privilege;
+            })[0].pk_privilege);
         };
 
         /**
