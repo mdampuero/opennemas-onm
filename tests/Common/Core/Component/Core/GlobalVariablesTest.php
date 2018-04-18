@@ -71,6 +71,17 @@ class GlobalVariablesTest extends KernelTestCase
     }
 
     /**
+     * Tests getSubscription.
+     */
+    public function testGetSubscription()
+    {
+        $this->container->expects($this->once())->method('get')
+            ->with('core.helper.subscription')->willReturn('waldo');
+
+        $this->assertEquals('waldo', $this->globals->getSubscription());
+    }
+
+    /**
      * Tests getTheme.
      */
     public function testGetTheme()

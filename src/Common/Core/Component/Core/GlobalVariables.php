@@ -137,6 +137,16 @@ class GlobalVariables implements \ArrayAccess
     }
 
     /**
+     * Returns the subscriptions helper.
+     *
+     * @return SubscriptionHelper The subscription helper.
+     */
+    public function getSubscription()
+    {
+        return $this->container->get('core.helper.subscription');
+    }
+
+    /**
      * Returns the theme service.
      *
      * @return Locale The theme service.
