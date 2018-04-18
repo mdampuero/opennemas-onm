@@ -187,6 +187,12 @@ class Template extends \Smarty
             $params[] = $this->container->get('core.locale')->getRequestLocale();
         }
 
+        if (!empty($this->getTemplateVars())
+            && array_key_exists('token', $this->getTemplateVars())
+        ) {
+            $params[] = $this->getTemplateVars()['token'];
+        }
+
         return implode('|', $params);
     }
 

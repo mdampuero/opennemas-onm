@@ -128,6 +128,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             'frontend|categoryname|en',
             $template->getCacheId('frontend', 'category-name')
         );
+
+        $template->assign('token', 12345);
+
+        $this->assertEquals(
+            'frontend|categoryname|en|12345',
+            $template->getCacheId('frontend', 'category-name')
+        );
     }
 
     /**
