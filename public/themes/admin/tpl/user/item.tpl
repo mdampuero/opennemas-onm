@@ -137,7 +137,7 @@
                           </label>
                         </div>
                         <div ng-if="category.id != 0">
-                          <div ng-repeat="subcategory in extra.categories | filter : { parent: category.id }">
+                          <div ng-repeat="subcategory in data.extra.categories | filter : { parent: category.id }">
                             <input id="category-[% subcategory.id %]" name="category-[% subcategory.id %]" checklist-model="item.categories" checklist-value="subcategory.id" type="checkbox">
                             <label class="form-label" for="category-[% subcategory.id %]">
                               &rarr; [% subcategory.name %]
