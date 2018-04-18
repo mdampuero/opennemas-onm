@@ -307,8 +307,7 @@
                   <div class="grid simple">
                     <div class="grid-title">
                       <h4>
-                        <i class="fa fa-clock-o"></i>
-                        {t}Schedule{/t}
+                        <i class="fa fa-clock-o m-r-10"></i>{t}Schedule{/t}
                       </h4>
                     </div>
                     <div class="grid-body">
@@ -353,8 +352,9 @@
                 <div class="grid simple">
                   <div class="grid-title">
                     <h4>
-                      <i class="fa fa-check-square-o"></i>
-                      {t}Subscriptions{/t}
+                      <a href="[% routing.generate('backend_subscriptions_list') %]">
+                        <i class="fa fa-check-square-o m-r-10"></i>{t}Subscriptions{/t}
+                      </a>
                     </h4>
                   </div>
                   <div class="grid-body">
