@@ -31,6 +31,7 @@ class SubscriptionHelper
      * @var array
      */
     protected $notSubscribedPermissions = [
+        'NON_MEMBER_REDIRECT',
         'NON_MEMBER_HIDE_TITLE',
         'NON_MEMBER_HIDE_SUMMARY',
         'NON_MEMBER_HIDE_BODY',
@@ -110,6 +111,20 @@ class SubscriptionHelper
     }
 
     /**
+     * Checks if the content has to be redirected to frontpage basing on the
+     * token value.
+     *
+     * @param string $token The subscription token.
+     *
+     * @return boolean True if the content has to be redirected to frontpage.
+     *                      False otherwise.
+     */
+    public function isRedirected($token)
+    {
+        return $this->checkToken($token, 'REDIRECT');
+    }
+
+    /**
      * Checks if the current user is subscribed to the content.
      *
      * @param Content $content The content.
@@ -164,7 +179,7 @@ class SubscriptionHelper
      *
      * @return boolean True if the action has to be executed. False otherwise.
      */
-    protected function checkToken($token, $action, $name)
+    protected function checkToken($token, $action, $name = '')
     {
         if (empty($token)) {
             return false;
@@ -172,11 +187,13 @@ class SubscriptionHelper
 
         $member      = strlen($token) === 3;
         $prefix      = $member ? 'MEMBER' : 'NON_MEMBER';
+        $permission  = $prefix . '_' . strtoupper($action);
         $permissions = $member ? $this->subscribedPermissions
             : $this->notSubscribedPermissions;
 
-        $permission = $prefix . '_' . strtoupper($action) . '_'
-            . strtoupper($name);
+        if (!empty($name)) {
+            $permission .= '_' . strtoupper($name);
+        }
 
         $index = array_search($permission, $permissions);
 
