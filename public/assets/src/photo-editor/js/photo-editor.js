@@ -17,6 +17,7 @@ window.OnmPhotoEditor = function(conf) {
   this.conf = conf;
   this.statusImage = {
     brightness: 0,
+    contrast: 0,
     rotation: 0,
     cropSizes: null,
     mirror: { v: 1, h: 1 }
@@ -71,7 +72,7 @@ window.OnmPhotoEditor.prototype.TEMPLATE_BASIC     = {
     'light',
     'filter'
   ],
-  light: [ 'brightness' ],
+  light: [ 'brightness', 'contrast' ],
   transform: [
     [
       {
@@ -274,7 +275,8 @@ window.OnmPhotoEditor.prototype.ACTION_ICONS = {
   undo:       'undo',
   repeat:     'repeat',
   mirror:     'exchange',
-  mirrorv:    'exchange fa-rotate-90'
+  mirrorv:    'exchange fa-rotate-90',
+  contrast:   'adjust'
 };
 
 /**
@@ -821,6 +823,10 @@ window.OnmPhotoEditor.prototype.callAction = function(e) {
 
 window.OnmPhotoEditor.prototype.callBrightness = function() {
   var that = this;
+  var newStatusImage = this.copyStatusImage(this.statusImage);
+
+  newStatusImage.brightness = 0;
+  var canvas2Show    = this.getCanvas2Show(this.statusImage.canvasOriginal, newStatusImage);
   var brightnessForm = {
     attributes: {
       type: 'range',
@@ -832,20 +838,52 @@ window.OnmPhotoEditor.prototype.callBrightness = function() {
     events: {
       input: function(e) {
         e.preventDefault();
-        that.brightness(that.canvas, that.ctx, e.currentTarget.value - Math.abs(that.statusImage.brightness));
-        this.statusImage.brightness = e.currentTarget.value;
+        that.brightness(canvas2Show, that.ctx, e.currentTarget.value);
         return null;
       },
       change: function(e) {
         e.preventDefault();
-        that.brightness(that.canvas, that.ctx, e.currentTarget.value - Math.abs(that.statusImage.brightness));
-        this.statusImage.brightness = e.currentTarget.value;
+        that.brightness(canvas2Show, that.ctx, e.currentTarget.value);
+        that.statusImage.brightness = e.currentTarget.value;
         return null;
       }
     }
   };
 
   this.createFormHtml([ brightnessForm ]);
+  return null;
+};
+
+window.OnmPhotoEditor.prototype.callContrast = function() {
+  var that = this;
+  var newStatusImage = this.copyStatusImage(this.statusImage);
+
+  newStatusImage.contrast = 0;
+  var canvas2Show    = this.getCanvas2Show(this.statusImage.canvasOriginal, newStatusImage);
+  var contrastForm = {
+    attributes: {
+      type: 'range',
+      min: -100,
+      max: 100,
+      step: 1,
+      value: that.statusImage.contrast
+    },
+    events: {
+      input: function(e) {
+        e.preventDefault();
+        that.contrast(canvas2Show, that.ctx, e.currentTarget.value);
+        return null;
+      },
+      change: function(e) {
+        e.preventDefault();
+        that.contrast(canvas2Show, that.ctx, e.currentTarget.value);
+        that.statusImage.contrast = e.currentTarget.value;
+        return null;
+      }
+    }
+  };
+
+  this.createFormHtml([ contrastForm ]);
   return null;
 };
 
@@ -1047,9 +1085,9 @@ window.OnmPhotoEditor.prototype.loadImageInCanvas = function(self, img) {
   return null;
 };
 
-window.OnmPhotoEditor.prototype.brightness = function(canvas, canvasCtx, brightnessAdj) {
-  var adjust = brightnessAdj / 100;
-  var pixels = canvasCtx.getImageData(0, 0, canvas.width, canvas.height);
+window.OnmPhotoEditor.prototype.brightness = function(canvasOriginal, canvasDest, brightnessAdj) {
+  var adjust     = brightnessAdj / 1.001;
+  var pixels     = canvasOriginal.ctx.getImageData(0, 0, canvasOriginal.canvas.width, canvasOriginal.canvas.height);
   var pixelsData = pixels.data;
 
   for (var i = 0; i < pixelsData.length; i += 4) {
@@ -1057,7 +1095,30 @@ window.OnmPhotoEditor.prototype.brightness = function(canvas, canvasCtx, brightn
     pixelsData[i + 1] += adjust;
     pixelsData[i + 2] += adjust;
   }
-  canvasCtx.putImageData(pixels, 0, 0);
+  canvasDest.putImageData(pixels, 0, 0);
+};
+
+window.OnmPhotoEditor.prototype.contrast = function(canvasOriginal, canvasDest, contrastAdj) {
+  var adjust     = contrastAdj / 255;
+  var pixels     = canvasOriginal.ctx.getImageData(0, 0, canvasOriginal.canvas.width, canvasOriginal.canvas.height);
+  var pixelsData = pixels.data;
+
+  if (adjust > 0) {
+    for (var i = 0; i < pixelsData.length; i += 4) {
+      // R G B values. 0-255
+      pixelsData[i]     += pixelsData[i] * adjust;
+      pixelsData[i + 1] += pixelsData[i + 1] * adjust;
+      pixelsData[i + 2] += pixelsData[i + 2] * adjust;
+    }
+  } else {
+    for (var i = 0; i < pixelsData.length; i += 4) {
+      // R G B values. 0-255
+      pixelsData[i]     += (255 - pixelsData[i]) * adjust;
+      pixelsData[i + 1] += (255 - pixelsData[i + 1]) * adjust;
+      pixelsData[i + 2] += (255 - pixelsData[i + 2]) * adjust;
+    }
+  }
+  canvasDest.putImageData(pixels, 0, 0);
 };
 
 window.OnmPhotoEditor.prototype.getCanvas2Show = function(canvasOriginal, statusImage) {
@@ -1065,6 +1126,7 @@ window.OnmPhotoEditor.prototype.getCanvas2Show = function(canvasOriginal, status
 
   canvasAux = this.mirror(canvasAux.canvas, statusImage);
   canvasAux = this.rotate(canvasAux.canvas, statusImage);
+  this.brightness(canvasAux, canvasAux.ctx, statusImage.brightness);
 
   var sizeRotate  = this.getAdaptCanvasSize(canvasAux.canvas);
   var canvas2Show = { canvas: document.createElement('canvas') };
@@ -1708,7 +1770,7 @@ window.OnmPhotoEditor.prototype.copyStatusImage = function(statusImage) {
       newStatus[property] = statusImage[property];
     }
   }
-  newStatus = JSON.parse(JSON.stringify(this.status));
+  newStatus = JSON.parse(JSON.stringify(newStatus));
 
   return newStatus;
 };
