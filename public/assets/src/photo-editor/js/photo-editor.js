@@ -15,6 +15,12 @@
  */
 window.OnmPhotoEditor = function(conf) {
   this.conf = conf;
+  this.statusImage = {
+    brightness: 0,
+    rotation: 0,
+    cropSizes: null,
+    mirror: { v: 1, h: 1 }
+  };
 };
 
 /*
@@ -118,12 +124,12 @@ window.OnmPhotoEditor.prototype.TEMPLATE_BASIC     = {
     {
       action: 'mirror',
       icon:   'mirror',
-      value:  'horizontal'
+      value:  'vertical'
     },
     {
       action: 'mirror',
       icon:   'mirrorv',
-      value:  'vertical'
+      value:  'horizontal'
     }
   ],
   filter: 'initFilterMenu'
@@ -166,9 +172,7 @@ window.OnmPhotoEditor.prototype.status = {
  *
  * @property {status} statusImage of the photo what determine how we see the image
  */
-window.OnmPhotoEditor.prototype.statusImage = {
-  brightness: 0
-};
+window.OnmPhotoEditor.prototype.statusImage = null;
 
 /**
  * List of displays and respective actions for the photo editor
@@ -695,8 +699,8 @@ window.OnmPhotoEditor.prototype.initTransform = function() {
   bottomCircle.addEventListener('mousedown', this.initResize.bind(this));
 
   applyBtn.innerHTML = '<i class="fa fa-crop" aria-hidden="true"></i> apply';
-  applyBtn.addEventListener('click', this.callCropImg.bind(this));
-  applyBtn.href = 'applyCrop';
+  applyBtn.href = '#crop';
+  applyBtn.addEventListener('click', this.callAction.bind(this));
 
   applyDivBtn.setAttribute('class', 'buttonApply');
 
@@ -744,6 +748,13 @@ window.OnmPhotoEditor.prototype.createFormHtml = function(inputs) {
   this.actionElements.push(formDiv);
 };
 
+window.OnmPhotoEditor.prototype.showCanvas = function(canvas) {
+  this.canvas.width  = canvas.canvas.width;
+  this.canvas.height = canvas.canvas.height;
+  this.ctx.drawImage(canvas.canvas, 0, 0, this.canvas.width, this.canvas.height);
+  this.divCanvas.style.width = this.canvas.width + 'px';
+};
+
 // ACTIONS
 
 // TOP MENU ACTIONS
@@ -780,8 +791,6 @@ window.OnmPhotoEditor.prototype.callAction = function(e) {
     this.updateStatusPhotoEditor(newStatus);
     return false;
   }
-
-  var newStatus = JSON.parse(JSON.stringify(this.status));
 
   newStatus.action = action;
 
@@ -877,7 +886,9 @@ window.OnmPhotoEditor.prototype.callRotation = function(e, newStatus) {
   leftMargin = Math.abs(leftMargin);
   topMargin  = Math.abs(topMargin);
 
-  this.rotate(parseInt(this.statusImage.rotation), this.statusImage.rotation);
+  var canvas2Show = this.getCanvas2Show(this.statusImage.canvasOriginal, this.statusImage);
+
+  this.showCanvas(canvas2Show);
 
   var widthRatio  =  this.canvas.width / oldCanvasSize.width;
   var heightRatio = this.canvas.height / oldCanvasSize.height;
@@ -892,61 +903,47 @@ window.OnmPhotoEditor.prototype.callRotation = function(e, newStatus) {
   return newStatus;
 };
 
-window.OnmPhotoEditor.prototype.callCropImg = function(e) {
-  e.preventDefault();
-  var canvasOriginal = this.statusImage.canvasOriginal;
+window.OnmPhotoEditor.prototype.callCrop = function(e, newStatus) {
   var divCrop        = document.querySelector('.photoEditor .divCanvas .photoEditorCrop');
 
-  var cropValues = this.rotateAndCropWithDiv(
-    this.statusImage.rotation,
-    canvasOriginal,
+  this.statusImage.cropSizes = this.rotateAndCropWithDiv(
+    this.statusImage,
     divCrop.getBoundingClientRect(),
     this.canvas.getBoundingClientRect()
   );
-  var cropCanvas = document.createElement('canvas');
 
-  cropCanvas.width  = cropValues.width;
-  cropCanvas.height = cropValues.height;
+  var canvas2Show = this.getCanvas2Show(this.statusImage.canvasOriginal, this.statusImage);
 
-  var ctx = cropCanvas.getContext('2d');
+  this.showCanvas(canvas2Show);
 
-  ctx.drawImage(
-    canvasOriginal,
-    cropValues.marginLeft,
-    cropValues.marginTop,
-    cropValues.width,
-    cropValues.height,
-    0,
-    0,
-    cropValues.width,
-    cropValues.height
-  );
-
-  this.statusImage.canvasOriginal = cropCanvas;
-  this.statusImage.ctxOriginal    = ctx;
-  this.rotate(this.statusImage.rotation);
   divCrop.style.width  = this.canvas.width + 'px';
   divCrop.style.height = this.canvas.height + 'px';
   divCrop.style.marginTop  = 0;
   divCrop.style.marginLeft = 0;
-  this.statusImage.rotation = 0;
-  return null;
+
+  return newStatus;
 };
 
 window.OnmPhotoEditor.prototype.callMirror = function(e, newStatus) {
   var divCrop        = document.querySelector('.photoEditor .divCanvas .photoEditorCrop');
   var horizontal     = newStatus.multiSelect.mirror === 'horizontal';
 
+  if (horizontal === (this.statusImage.rotation % 180 === 0)) {
+    this.statusImage.mirror.v *= -1;
+  } else {
+    this.statusImage.mirror.h *= -1;
+  }
   newStatus.multiSelect.mirror = '';
+  var canvas2Show              = this.getCanvas2Show(this.statusImage.canvasOriginal, this.statusImage);
 
-  this.mirror(horizontal, this.statusImage);
+  this.showCanvas(canvas2Show);
 
-  if (horizontal) {
-    divCrop.style.marginLeft = divCrop.getBoundingClientRect().right - this.canvas.getBoundingClientRect().right;
+  if (!horizontal) {
+    divCrop.style.marginLeft = this.canvas.getBoundingClientRect().right - divCrop.getBoundingClientRect().right + 'px';
     return newStatus;
   }
 
-  divCrop.style.marginTop  = this.canvas.getBoundingClientRect().bottom - divCrop.getBoundingClientRect().bottom;
+  divCrop.style.marginTop  = this.canvas.getBoundingClientRect().bottom - divCrop.getBoundingClientRect().bottom + 'px';
   return newStatus;
 };
 
@@ -1050,65 +1047,6 @@ window.OnmPhotoEditor.prototype.loadImageInCanvas = function(self, img) {
   return null;
 };
 
-window.OnmPhotoEditor.prototype.rotate = function(degrees) {
-  var canvasOriginal = this.statusImage.canvasOriginal;
-  // Check the canvas orientation for change width for height of the original
-  var sizeRotate     = degrees % 180 === 0 ?
-    { width: canvasOriginal.width, height: canvasOriginal.height } :
-    { width: canvasOriginal.height, height: canvasOriginal.width };
-
-  var canvas    = document.createElement('canvas');
-
-  canvas.width  = sizeRotate.width;
-  canvas.height = sizeRotate.height;
-  var ctx       = canvas.getContext('2d');
-
-  ctx.save();
-  ctx.translate(sizeRotate.width / 2, sizeRotate.height / 2);
-  ctx.rotate(degrees * Math.PI / 180);
-  ctx.drawImage(
-    canvasOriginal,
-    -canvasOriginal.width / 2,
-    -canvasOriginal.height / 2,
-    canvasOriginal.width,
-    canvasOriginal.height
-  );
-  ctx.restore();
-
-  sizeRotate = this.getAdaptCanvasSize(canvas);
-  this.canvas.width  = sizeRotate.width;
-  this.canvas.height = sizeRotate.height;
-  this.ctx.drawImage(canvas, 0, 0, sizeRotate.width, sizeRotate.height);
-  this.divCanvas.style.width = sizeRotate.width + 'px';
-};
-
-window.OnmPhotoEditor.prototype.mirror = function(horizontal, statusImage) {
-  var canvasOriginal = statusImage.canvasOriginal;
-  var mirrorCanvas = document.createElement('canvas');
-
-  mirrorCanvas.width  = canvasOriginal.width;
-  mirrorCanvas.height = canvasOriginal.height;
-
-  var ctx = mirrorCanvas.getContext('2d');
-  var scale = horizontal ? 1 : -1;
-
-  ctx.save();
-  ctx.translate(horizontal ? mirrorCanvas.width : 0, horizontal ? 0 : mirrorCanvas.height);
-  ctx.scale(-scale, scale);
-
-  ctx.drawImage(
-    canvasOriginal,
-    0,
-    0,
-    canvasOriginal.width,
-    canvasOriginal.height
-  );
-  ctx.restore();
-
-  statusImage.canvasOriginal = mirrorCanvas;
-  this.rotate(statusImage.rotation);
-};
-
 window.OnmPhotoEditor.prototype.brightness = function(canvas, canvasCtx, brightnessAdj) {
   var adjust = brightnessAdj / 100;
   var pixels = canvasCtx.getImageData(0, 0, canvas.width, canvas.height);
@@ -1120,6 +1058,105 @@ window.OnmPhotoEditor.prototype.brightness = function(canvas, canvasCtx, brightn
     pixelsData[i + 2] += adjust;
   }
   canvasCtx.putImageData(pixels, 0, 0);
+};
+
+window.OnmPhotoEditor.prototype.getCanvas2Show = function(canvasOriginal, statusImage) {
+  var canvasAux = this.crop(canvasOriginal, statusImage);
+
+  canvasAux = this.mirror(canvasAux.canvas, statusImage);
+  canvasAux = this.rotate(canvasAux.canvas, statusImage);
+
+  var sizeRotate  = this.getAdaptCanvasSize(canvasAux.canvas);
+  var canvas2Show = { canvas: document.createElement('canvas') };
+
+  canvas2Show.canvas.width  = sizeRotate.width;
+  canvas2Show.canvas.height = sizeRotate.height;
+  canvas2Show.ctx = canvas2Show.canvas.getContext('2d');
+  canvas2Show.ctx.drawImage(canvasAux.canvas, 0, 0, sizeRotate.width, sizeRotate.height);
+
+  return canvas2Show;
+};
+
+window.OnmPhotoEditor.prototype.rotate = function(canvasOriginal, statusImage) {
+  // Check the canvas orientation for change width for height of the original
+  var sizeRotate     = statusImage.rotation % 180 === 0 ?
+    { width: canvasOriginal.width, height: canvasOriginal.height } :
+    { width: canvasOriginal.height, height: canvasOriginal.width };
+
+  var canvasAux    = document.createElement('canvas');
+
+  canvasAux.width  = sizeRotate.width;
+  canvasAux.height = sizeRotate.height;
+  var ctxAux       = canvasAux.getContext('2d');
+
+  ctxAux.save();
+  ctxAux.translate(sizeRotate.width / 2, sizeRotate.height / 2);
+  ctxAux.rotate(statusImage.rotation * Math.PI / 180);
+  ctxAux.drawImage(
+    canvasOriginal,
+    -canvasOriginal.width / 2,
+    -canvasOriginal.height / 2,
+    canvasOriginal.width,
+    canvasOriginal.height
+  );
+  ctxAux.restore();
+
+  return { canvas: canvasAux, ctx: ctxAux };
+};
+
+window.OnmPhotoEditor.prototype.mirror = function(canvasOriginal, statusImage) {
+  var mirrorCanvas = document.createElement('canvas');
+
+  mirrorCanvas.width  = canvasOriginal.width;
+  mirrorCanvas.height = canvasOriginal.height;
+
+  var ctxAux = mirrorCanvas.getContext('2d');
+
+  ctxAux.save();
+  ctxAux.translate(
+    statusImage.mirror.h === -1 ? mirrorCanvas.width : 0,
+    statusImage.mirror.v === -1 ? mirrorCanvas.height : 0
+  );
+  ctxAux.scale(statusImage.mirror.h, statusImage.mirror.v);
+
+  ctxAux.drawImage(
+    canvasOriginal,
+    0,
+    0,
+    canvasOriginal.width,
+    canvasOriginal.height
+  );
+  ctxAux.restore();
+
+  return { canvas: mirrorCanvas, ctx: ctxAux };
+};
+
+window.OnmPhotoEditor.prototype.crop = function(canvasOriginal, statusImage) {
+  if (!statusImage.cropSizes || statusImage.cropSizes === null) {
+    return { canvas: canvasOriginal, ctx: canvasOriginal.getContext('2d') };
+  }
+
+  var cropSizes = statusImage.cropSizes;
+  var cropCanvas = document.createElement('canvas');
+
+  cropCanvas.width  = cropSizes.width;
+  cropCanvas.height = cropSizes.height;
+
+  var ctxAux = cropCanvas.getContext('2d');
+
+  ctxAux.drawImage(
+    canvasOriginal,
+    cropSizes.marginLeft,
+    cropSizes.marginTop,
+    cropSizes.width,
+    cropSizes.height,
+    0,
+    0,
+    cropSizes.width,
+    cropSizes.height
+  );
+
+  return { canvas: cropCanvas, ctx: ctxAux };
 };
 
 // UTILS
@@ -1196,7 +1233,13 @@ window.OnmPhotoEditor.prototype.capitalizeFirstLetter = function(string) {
  * @return {object} resize element
  */
 window.OnmPhotoEditor.prototype.getAdaptCanvasSize = function(element) {
-  var sizeElement = this.getElementSize(element);
+  var sizeElement = null;
+
+  if (!element.tagName) {
+    sizeElement = element;
+  } else {
+    sizeElement = this.getElementSize(element);
+  }
 
   var sizeContainer = {
     height: this.maximunSize.height -
@@ -1596,17 +1639,19 @@ window.OnmPhotoEditor.prototype.resizeCropDiv = function(status) {
   this.resizeMovingCorner({ x: resizeVP.right, y: resizeVP.bottom }, this.canvas, resizeEle, limits, false, ratio);
 };
 
-window.OnmPhotoEditor.prototype.rotateAndCropWithDiv = function(degrees, mainEle, cropDiv, cropContainer) {
+window.OnmPhotoEditor.prototype.rotateAndCropWithDiv = function(statusImage, cropDiv, cropContainer) {
   var cropPosition = {};
   var cropContRotateSize = {};
 
-  if (degrees % 180 === 0) {
+  if (statusImage.rotation % 180 === 0) {
     cropPosition.width  = cropDiv.width;
     cropPosition.height = cropDiv.height;
     cropContRotateSize.width  = cropContainer.width;
     cropContRotateSize.height = cropContainer.height;
 
-    if (degrees === 0) {
+    if (statusImage.rotation === 0 && statusImage.mirror.h === 1 ||
+      statusImage.rotation !== 0 && statusImage.mirror.h !== 1
+    ) {
       cropPosition.marginTop  = cropDiv.top - cropContainer.top;
       cropPosition.marginLeft = cropDiv.left - cropContainer.left;
     } else {
@@ -1619,27 +1664,51 @@ window.OnmPhotoEditor.prototype.rotateAndCropWithDiv = function(degrees, mainEle
     cropContRotateSize.width  = cropContainer.height;
     cropContRotateSize.height = cropContainer.width;
 
-    var degreesConversion = degrees;
+    var degreesConversion = statusImage.rotation;
 
-    if (Math.abs(degrees) > 180) {
-      degreesConversion = -1 * degrees - degrees > 0 ? -180 : 180;
+    if (Math.abs(statusImage.rotation) > 180) {
+      degreesConversion = -1 * statusImage.rotation - (statusImage.rotation > 0 ? -180 : 180);
     }
 
-    if (degreesConversion === 90) {
+    if (
+      degreesConversion === 90 && statusImage.mirror.h === 1 ||
+      degreesConversion !== 90 && statusImage.mirror.h !== 1
+    ) {
       cropPosition.marginTop  = cropContainer.right - cropDiv.right;
-      cropPosition.marginLeft = cropContainer.top - cropDiv.top;
+      cropPosition.marginLeft = cropDiv.top - cropContainer.top;
     } else {
-      cropPosition.marginTop  = cropContainer.left - cropDiv.left;
+      cropPosition.marginTop  = cropDiv.left - cropContainer.left;
       cropPosition.marginLeft = cropContainer.bottom - cropDiv.bottom;
     }
   }
 
-  var resizeRatio = this.getEleResizeRatio(cropContRotateSize, this.getElementSize(mainEle));
+  var referenceElement = statusImage.cropSizes && statusImage.cropSizes !== null ?
+    statusImage.cropSizes :
+    this.getElementSize(statusImage.canvasOriginal);
+  var resizeRatio = this.getEleResizeRatio(cropContRotateSize, referenceElement);
 
-  cropPosition.width  = cropPosition.width * resizeRatio.widthRatio;
-  cropPosition.height = cropPosition.height * resizeRatio.heightRatio;
-  cropPosition.marginTop = cropPosition.marginTop * resizeRatio.heightRatio;
+  cropPosition.width      = cropPosition.width * resizeRatio.widthRatio;
+  cropPosition.height     = cropPosition.height * resizeRatio.heightRatio;
+  cropPosition.marginTop  = cropPosition.marginTop * resizeRatio.heightRatio;
   cropPosition.marginLeft = cropPosition.marginLeft * resizeRatio.widthRatio;
 
+  if (statusImage.cropSizes && statusImage.cropSizes !== null) {
+    cropPosition.marginTop  += statusImage.cropSizes.marginTop;
+    cropPosition.marginLeft += statusImage.cropSizes.marginLeft;
+  }
+
   return cropPosition;
+};
+
+window.OnmPhotoEditor.prototype.copyStatusImage = function(statusImage) {
+  var newStatus = {};
+
+  for (var property in statusImage) {
+    if (property !== 'canvasOriginal' && property !== 'ctxOriginal') {
+      newStatus[property] = statusImage[property];
+    }
+  }
+  newStatus = JSON.parse(JSON.stringify(this.status));
+
+  return newStatus;
 };
