@@ -93,14 +93,17 @@ class SubscriptionHelper
      */
     public function isSubscribed($content)
     {
-        if (empty($this->security->getUser())) {
+        if (empty($this->security->getUser())
+            || empty($this->security->getUser()->user_groups)
+        ) {
             return false;
         }
 
         $subscriptions = array_filter(
             $this->security->getUser()->user_groups,
             function ($a) use ($content) {
-                return in_array($a['user_group_id'], $content->subscriptions)
+                return !empty($content->subscriptions)
+                    && in_array($a['user_group_id'], $content->subscriptions)
                     && $a['status'] === 1;
             }
         );
