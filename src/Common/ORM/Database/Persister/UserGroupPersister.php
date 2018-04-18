@@ -9,13 +9,32 @@
  */
 namespace Common\ORM\Database\Persister;
 
+use Common\Cache\Core\Cache;
+use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
+use Common\ORM\Entity\Instance;
+use Common\ORM\Core\Metadata;
 
 /**
  * The UserGroupPersister class defines actions to persist UserGroups.
  */
 class UserGroupPersister extends BasePersister
 {
+    /**
+     * Initializes a new UserGroupPersister.
+     *
+     * @param Connection $conn     The database connection.
+     * @param Metadata   $metadata The entity metadata.
+     * @param Cache      $cache    The cache service.
+     * @param Instance   $instance The current instance.
+     */
+    public function __construct(Connection $conn, Metadata $metadata, Cache $cache = null, Instance $instance)
+    {
+        parent::__construct($conn, $metadata, $cache);
+
+        $this->instance = $instance;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -92,6 +111,10 @@ class UserGroupPersister extends BasePersister
 
         if ($this->hasCache()) {
             $this->cache->remove($this->metadata->getPrefixedId($entity));
+
+            $this->cache->removeByPattern(
+                "*{$this->instance->internal_name}_user-*"
+            );
         }
     }
 
@@ -131,7 +154,7 @@ class UserGroupPersister extends BasePersister
             \PDO::PARAM_STR : \PDO::PARAM_INT;
 
         if (!empty($keep)) {
-            $sql .= " and pk_fk_privilege not in (?)";
+            $sql     .= " and pk_fk_privilege not in (?)";
             $params[] = $keep;
             $types[]  = \Doctrine\DBAL\Connection::PARAM_STR_ARRAY;
         }

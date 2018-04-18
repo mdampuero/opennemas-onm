@@ -122,6 +122,12 @@ class FormController extends Controller
                 ->setFrom([ $email => $name ])
                 ->setSender([ $settings['mail_sender'] => $settings['site_name'] ]);
 
+            $headers = $text->getHeaders();
+            $headers->addParameterizedHeader(
+                'ACUMBAMAIL-SMTPAPI',
+                $this->get('core.instance')->internal_name . ' - Form'
+            );
+
             $path  = $this->getParameter('core.paths.spool.files');
             $file1 = $request->files->get('image1');
 

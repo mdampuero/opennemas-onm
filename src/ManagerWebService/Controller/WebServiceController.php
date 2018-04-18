@@ -247,11 +247,18 @@ class WebServiceController extends Controller
                 )
             );
 
+        $headers = $message->getHeaders();
+        $headers->addParameterizedHeader(
+            'ACUMBAMAIL-SMTPAPI',
+            'New instance mail to company'
+        );
+
         // Send message
         $this->get('mailer')->send($message);
         $this->get('application.log')->notice(
             "Sending mail to company {$companyMail['info_mail']} - new instance "
-            . " - {$data['name']}");
+            . " - {$data['name']}"
+        );
     }
 
     private function sendMailToUser($data, $companyMail, $domain)
@@ -277,6 +284,12 @@ class WebServiceController extends Controller
                 'text/html'
             );
 
+        $headers = $message->getHeaders();
+        $headers->addParameterizedHeader(
+            'ACUMBAMAIL-SMTPAPI',
+            'New instance mail to user'
+        );
+
         // Send message
         $this->get('mailer')->send($message);
         $this->get('application.log')->notice("Sending mail to user - new instance - {$data['name']}");
@@ -300,6 +313,12 @@ class WebServiceController extends Controller
                 ),
                 'text/html'
             );
+
+        $headers = $message->getHeaders();
+        $headers->addParameterizedHeader(
+            'ACUMBAMAIL-SMTPAPI',
+            'New instance creation error'
+        );
 
         // Send message
         $this->get('mailer')->send($message);

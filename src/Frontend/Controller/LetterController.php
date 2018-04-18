@@ -47,12 +47,12 @@ class LetterController extends Controller
         ) {
             $itemsPerPage = 12;
 
-            $order   = array('created' => 'DESC');
-            $filters = array(
-                'content_type_name' => array(array('value' => 'letter')),
-                'content_status'    => array(array('value' => 1)),
-                'in_litter'         => array(array('value' => 0)),
-            );
+            $order   = [ 'created' => 'DESC' ];
+            $filters = [
+                'content_type_name' => [[ 'value' => 'letter' ]],
+                'content_status'    => [[ 'value' => 1 ]],
+                'in_litter'         => [[ 'value' => 0 ]],
+            ];
 
             $em           = $this->get('entity_repository');
             $letters      = $em->findBy($filters, $order, $itemsPerPage, $page);
@@ -122,7 +122,7 @@ class LetterController extends Controller
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('letter/letter.tpl', $cacheID)
         ) {
-            $cm = new \ContentManager();
+            $cm           = new \ContentManager();
             $otherLetters = $cm->find(
                 'Letter',
                 'content_status=1 ',
@@ -141,7 +141,7 @@ class LetterController extends Controller
             'content'        => $letter,
             'contentId'      => $letter->id,
             'letter'         => $letter,
-            'x-tags'         => 'letter,'.$letter->id,
+            'x-tags'         => 'letter,' . $letter->id,
             'x-cache-for'    => '+1 day',
         ]);
     }
@@ -180,8 +180,8 @@ class LetterController extends Controller
 
         // What happens when the CAPTCHA was entered incorrectly
         if (!$isValid) {
-            $msg = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
-            $response = new RedirectResponse($this->generateUrl('frontend_letter_frontpage').'?msg="'.$msg.'"');
+            $msg      = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
+            $response = new RedirectResponse($this->generateUrl('frontend_letter_frontpage') . '?msg="' . $msg . '"');
 
             return $response;
         }
@@ -191,7 +191,7 @@ class LetterController extends Controller
         $msg           = _('Unable to save the letter.');
 
         if (!empty($security_code)) {
-            return new RedirectResponse($this->generateUrl('frontend_letter_frontpage').'?msg="'.$msg.'"');
+            return new RedirectResponse($this->generateUrl('frontend_letter_frontpage') . '?msg="' . $msg . '"');
         }
 
         $params  = [];
@@ -202,12 +202,12 @@ class LetterController extends Controller
         $url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
         $items   = $request->request->get('items');
 
-        $moreData = _("Name")." {$name} \n "._("Email"). "{$email} \n ";
+        $moreData = _("Name") . " {$name} \n " . _("Email") . "{$email} \n ";
         if (!empty($items)) {
             foreach ($items as $key => $value) {
                 if (!empty($key) && !empty($value)) {
                     $params[$key] = $request->request->filter("items[{$key}]", '', FILTER_SANITIZE_STRING);
-                    $moreData .= " {$key}: {$value}\n ";
+                    $moreData    .= " {$key}: {$value}\n ";
                 }
             }
         }
@@ -223,8 +223,8 @@ class LetterController extends Controller
         ];
 
         // Prevent XSS attack
-        $data = array_map('strip_tags', $data);
-        $data['body'] = nl2br($moreData.$data['body']);
+        $data         = array_map('strip_tags', $data);
+        $data['body'] = nl2br($moreData . $data['body']);
 
         $data['params'] = [
             'ip' => getUserRealIP(),
@@ -234,7 +234,7 @@ class LetterController extends Controller
         if ($letter->hasBadWords($data)) {
             $msg = "Su carta fue rechazada debido al uso de palabras malsonantes.";
 
-            return new RedirectResponse($this->generateUrl('frontend_letter_frontpage').'?msg="'.$msg.'"');
+            return new RedirectResponse($this->generateUrl('frontend_letter_frontpage') . '?msg="' . $msg . '"');
         }
 
         if ($letter->create($data)) {
@@ -254,21 +254,32 @@ class LetterController extends Controller
                     ->setTo([ $recipient => $recipient ])
                     ->setFrom([ $email => $name ])
                     ->setSender([ $mailSender => s::get('site_name') ]);
+
+                $headers = $text->getHeaders();
+                $headers->addParameterizedHeader(
+                    'ACUMBAMAIL-SMTPAPI',
+                    $this->get('core.instance')->internal_name . ' - Letter'
+                );
+
                 try {
                     $this->get('mailer')->send($text);
 
                     $this->get('application.log')->notice(
-                        "Email sent. Frontend letter (sender:".$email.", to: ".$recipient.")"
+                        "Email sent. Frontend letter (sender:" . $email . ", to: " . $recipient . ")"
                     );
                 } catch (\Swift_SwiftException $e) {
+                    $this->get('application.log')->notice(
+                        "Email NOT sent. Frontend letter (sender:" . $email . ", to: " . $recipient . "):"
+                        . $e->getMessage()
+                    );
                 }
             }
         } else {
             $msg = "Su carta no ha sido guardada.\nAsegúrese de cumplimentar "
-                ."correctamente todos los campos.";
+                . "correctamente todos los campos.";
         }
 
-        return new RedirectResponse($this->generateUrl('frontend_letter_frontpage').'?msg="'.$msg.'"');
+        return new RedirectResponse($this->generateUrl('frontend_letter_frontpage') . '?msg="' . $msg . '"');
     }
 
     /**
@@ -284,8 +295,7 @@ class LetterController extends Controller
         $category      = 1;
         $category_name = 'fotos';
 
-        $upload        = isset($_FILES['image']) ? $_FILES['image'] : null;
-        $info          = [];
+        $upload = isset($_FILES['image']) ? $_FILES['image'] : null;
 
         // Return if no
         if (!$upload) {
@@ -309,7 +319,7 @@ class LetterController extends Controller
 
             return $photo->id;
         } catch (\Exception $e) {
-            error_log('Unable to save letter image: '.$e->getMessage());
+            error_log('Unable to save letter image: ' . $e->getMessage());
 
             return null;
         }

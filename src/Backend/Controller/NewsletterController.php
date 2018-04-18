@@ -404,6 +404,12 @@ class NewsletterController extends Controller
                             ->setSender($newsletterSender)
                             ->setTo([$mailbox->email => $mailbox->name]);
 
+                        $headers = $message->getHeaders();
+                        $headers->addParameterizedHeader(
+                            'ACUMBAMAIL-SMTPAPI',
+                            $this->get('core.instance')->internal_name . ' - Newsletter'
+                        );
+
                         // Send it
                         $properlySent = $this->get('mailer')->send($message);
 

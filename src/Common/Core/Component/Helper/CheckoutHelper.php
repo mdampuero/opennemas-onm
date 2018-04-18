@@ -62,8 +62,10 @@ class CheckoutHelper
 
         $this->instance->domains =
             array_unique(array_merge($this->instance->domains, $domains));
+
         $this->instance->activated_modules =
             array_unique(array_merge($this->instance->activated_modules, $extensions));
+
         $this->instance->purchased =
             array_unique(array_merge($this->instance->purchased, $themes));
 
@@ -101,7 +103,7 @@ class CheckoutHelper
         $this->purchase->updated     = $date;
 
         if (!empty($this->client)) {
-            $this->purchase->client = $this->client;
+            $this->purchase->client    = $this->client;
             $this->purchase->client_id = $this->client->id;
         }
 
@@ -138,6 +140,7 @@ class CheckoutHelper
         $items  = $em->getRepository('Extension')->findBy($oql);
         $themes = $em->getRepository('Theme')->findBy($oql);
         $items  = array_merge($items, $themes);
+
         $this->purchase->details = [];
 
         if (!empty($this->client)) {
@@ -145,16 +148,15 @@ class CheckoutHelper
                 ->getVatFromCode($this->client->country, $this->client->state);
         }
 
-        $terms  = '';
-        $notes  = '';
-
+        $terms = '';
+        $notes = '';
         foreach ($items as $item) {
-            $terms       .= $item->getTerms($lang) . "\n";
-            $notes       .= $item->getNotes($lang) . "\n";
-            $uuid         = $item->uuid;
-            $description  = $item->getName($lang);
-            $price        = $item->getPrice($ids[$item->uuid]);
-            $subtotal    += $price;
+            $terms      .= $item->getTerms($lang) . "\n";
+            $notes      .= $item->getNotes($lang) . "\n";
+            $uuid        = $item->uuid;
+            $description = $item->getName($lang);
+            $price       = $item->getPrice($ids[$item->uuid]);
+            $subtotal   += $price;
 
             $line = [
                 'uuid'         => $uuid,
@@ -173,7 +175,7 @@ class CheckoutHelper
                 $subtotal += $price * (count($params[$uuid]) - 1);
 
                 for ($i = 0; $i < count($params[$uuid]); $i++) {
-                    $this->purchase->details[$i] = $line;
+                    $this->purchase->details[$i]                 = $line;
                     $this->purchase->details[$i]['description'] .= ': '
                         . $params[$uuid][$i];
                 }
@@ -199,7 +201,7 @@ class CheckoutHelper
             'tax1_percent' => $vatTax
         ];
 
-        $vat = round(($vatTax/100) * $subtotal, 2);
+        $vat = round(($vatTax / 100) * $subtotal, 2);
 
         $this->purchase->total = round($subtotal + $vat, 2);
 
@@ -305,6 +307,13 @@ class CheckoutHelper
                 'text/html'
             );
 
+        $headers = $message->getHeaders();
+        $headers->addParameterizedHeader(
+            'ACUMBAMAIL-SMTPAPI',
+            $this->container->get('core.instance')->internal_name
+                . ' - Purchase mail to client'
+        );
+
         if ($this->instance->contact_mail !== $this->client->email) {
             $message->setBcc($this->instance->contact_mail);
         }
@@ -342,6 +351,13 @@ class CheckoutHelper
                 ),
                 'text/html'
             );
+
+        $headers = $message->getHeaders();
+        $headers->addParameterizedHeader(
+            'ACUMBAMAIL-SMTPAPI',
+            $this->container->get('core.instance')->internal_name
+                . ' - Purchase mail to sales'
+        );
 
         $this->container->get('mailer')->send($message);
     }

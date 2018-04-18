@@ -24,10 +24,10 @@ orm:
             persisters:
                 instance:
                     class:     Common\ORM\Database\Persister\UserGroupPersister
-                    arguments: [ '@orm.connection.instance', '@orm.metadata.user_group', '@cache.connection.instance' ]
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.user_group', '@cache.connection.instance', '@core.instance' ]
                 manager:
                     class:     Common\ORM\Database\Persister\UserGroupPersister
-                    arguments: [ '@orm.connection.manager', '@orm.metadata.user_group', '@cache.connection.manager' ]
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.user_group', '@cache.connection.manager', '@core.instance' ]
             mapping:
                 database:
                     table: user_groups
