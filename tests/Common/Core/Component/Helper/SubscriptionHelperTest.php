@@ -135,6 +135,44 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests isBlocked for subscribed and non-subscribed users with valid and
+     * invalid actions.
+     */
+    public function testIsBlocked()
+    {
+        $this->assertFalse($this->helper->isBlocked(null, 'wibble'));
+        $this->assertFalse($this->helper->isBlocked(0, 'wibble'));
+
+        $this->assertFalse($this->helper->isBlocked('000', 'wibble'));
+        $this->assertFalse($this->helper->isBlocked('000', 'browser'));
+        $this->assertTrue($this->helper->isBlocked('001', 'browser'));
+        $this->assertTrue($this->helper->isBlocked('111', 'browser'));
+
+        $this->assertFalse($this->helper->isBlocked('00000000000', 'wibble'));
+        $this->assertFalse($this->helper->isBlocked('00000000000', 'browser'));
+        $this->assertTrue($this->helper->isBlocked('00000000001', 'browser'));
+        $this->assertTrue($this->helper->isBlocked('01001001001', 'browser'));
+    }
+
+    /**
+     * Tests isHidden for subscribed and non-subscribed users with valid and
+     * invalid actions.
+     */
+    public function testIsHidden()
+    {
+        $this->assertFalse($this->helper->isHidden(null, 'wibble'));
+        $this->assertFalse($this->helper->isHidden(0, 'wibble'));
+
+        $this->assertFalse($this->helper->isHidden('000', 'wibble'));
+        $this->assertFalse($this->helper->isHidden('000', 'print'));
+        $this->assertTrue($this->helper->isHidden('101', 'print'));
+
+        $this->assertFalse($this->helper->isHidden('00000000000', 'wibble'));
+        $this->assertTrue($this->helper->isHidden('00001000001', 'media'));
+        $this->assertTrue($this->helper->isHidden('00000001001', 'tags'));
+    }
+
+    /**
      * Test isSubscribed when an user is logged in the system.
      */
     public function testIsSubscribed()

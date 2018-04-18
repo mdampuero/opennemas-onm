@@ -84,6 +84,32 @@ class SubscriptionHelper
     }
 
     /**
+     * Checks if the item is blocked basing on the token value.
+     *
+     * @param string $token The subscription token.
+     * @param string $item  The item name.
+     *
+     * @return boolean True if the item is blocked. False otherwise.
+     */
+    public function isBlocked($token, $item)
+    {
+        return $this->checkToken($token, 'BLOCK', $item);
+    }
+
+    /**
+     * Checks if the item is hidden basing on the token value.
+     *
+     * @param string $token The subscription token.
+     * @param string $item  The item name.
+     *
+     * @return boolean True if the item is hidden. False otherwise.
+     */
+    public function isHidden($token, $item)
+    {
+        return $this->checkToken($token, 'HIDE', $item);
+    }
+
+    /**
      * Checks if the current user is subscribed to the content.
      *
      * @param Content $content The content.
@@ -126,6 +152,39 @@ class SubscriptionHelper
         }
 
         return !empty($content->subscription);
+    }
+
+    /**
+     * Checks if an action has to be executed for an item basing on a token
+     * value.
+     *
+     * @param string $token  The subscription token.
+     * @param string $action The action name.
+     * @param string $item   The item name.
+     *
+     * @return boolean True if the action has to be executed. False otherwise.
+     */
+    protected function checkToken($token, $action, $name)
+    {
+        if (empty($token)) {
+            return false;
+        }
+
+        $member      = strlen($token) === 3;
+        $prefix      = $member ? 'MEMBER' : 'NON_MEMBER';
+        $permissions = $member ? $this->subscribedPermissions
+            : $this->notSubscribedPermissions;
+
+        $permission = $prefix . '_' . strtoupper($action) . '_'
+            . strtoupper($name);
+
+        $index = array_search($permission, $permissions);
+
+        if ($index === false || $index >= count($permissions)) {
+            return false;
+        }
+
+        return $token[$index] === '1';
     }
 
     /**
