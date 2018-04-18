@@ -2006,25 +2006,27 @@ class Content implements \JsonSerializable
 
         try {
             $propertyFilter = ' = ?';
-            $parameters = [$this->id];
+            $parameters     = [ $this->id ];
+
             if (is_array($property)) {
-                if (count($property) === 0) {
+                if (empty($property)) {
                     return false;
                 }
+
                 $propertyFilter = ' IN (';
 
                 foreach ($property as $value) {
                     $propertyFilter .= '?, ';
                 }
+
                 $propertyFilter = rtrim($propertyFilter, ', ') . ')';
-                $parameters = array_merge($parameters, $property);
+                $parameters[]   = $property;
             } else {
                 $parameters[] = $property;
             }
 
-
-            $sql = 'DELETE FROM contentmeta WHERE fk_content = ? AND meta_name ';
-            $sql .= is_array($property) ? $propertyFilter : ' = ?';
+            $sql   = 'DELETE FROM contentmeta WHERE fk_content = ? AND meta_name '
+                     . is_array($property) ? $propertyFilter : ' = ?';
             $value = getService('dbal_connection')->executeUpdate($sql, $parameters);
 
             return true;
