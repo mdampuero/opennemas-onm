@@ -16,9 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
- * Defines the frontend controller for the articles content type
- *
- * @package Frontend_Controllers
+ * Defines the frontend controller for the articles.
  */
 class ArticlesController extends Controller
 {
@@ -72,13 +70,11 @@ class ArticlesController extends Controller
         list($positions, $advertisements) =
             $this->getAds($category->pk_content_category);
 
-        // Fetch general layout
         $layout = $this->get('setting_repository')->get(
             'frontpage_layout_' . $category->pk_content_category,
             'default'
         );
 
-        // Setup templating cache layer
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('content', $article->id);
 
@@ -116,10 +112,10 @@ class ArticlesController extends Controller
             'content'               => $article,
             'contentId'             => $article->id,
             'time'                  => '12345',
-            'token'               => $token,
+            'token'                 => $token,
             'x-cache-for'           => '+1 day',
             'x-cacheable'           => empty($token),
-            'x-tags'                => 'article,' . $article->id,
+            'x-tags'                => 'article,' . $article->id
         ]);
     }
 
@@ -203,9 +199,9 @@ class ArticlesController extends Controller
         $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
 
         // TODO: Use $this->get when the function changes to non-static
-        $positionManager = getService('core.helper.advertisement');
-        $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7 ]);
-        $advertisements  = getService('advertisement_repository')
+        $positions      = getService('core.helper.advertisement')
+            ->getPositionsForGroup('article_inner', [ 7 ]);
+        $advertisements = getService('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
 
         return [ $positions, $advertisements ];
