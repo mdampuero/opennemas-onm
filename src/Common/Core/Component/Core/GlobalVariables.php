@@ -67,6 +67,16 @@ class GlobalVariables implements \ArrayAccess
     }
 
     /**
+     * Returns the service container.
+     *
+     * @return ServiceContainer The service container.
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
      * Returns the endpoint name where the current request has been handled.
      *
      * @return string The endpoint name.

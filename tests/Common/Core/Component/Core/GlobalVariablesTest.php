@@ -30,6 +30,14 @@ class GlobalVariablesTest extends KernelTestCase
     }
 
     /**
+     * Tests getContainer.
+     */
+    public function testGetContainer()
+    {
+        $this->assertEquals($this->container, $this->globals->getContainer());
+    }
+
+    /**
      * Tests getEnvironment.
      */
     public function testGetEnvironment()
