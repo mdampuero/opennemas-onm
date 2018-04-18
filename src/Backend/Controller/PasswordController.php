@@ -117,6 +117,12 @@ class PasswordController extends Controller
                     $this->get('setting_repository')->get('site_name')
             ]);
 
+        $headers = $message->getHeaders();
+        $headers->addParameterizedHeader(
+            'ACUMBAMAIL-SMTPAPI',
+            $this->get('core.instance')->internal_name . ' - Backend Recover Password'
+        );
+
         try {
             $mailer = $this->get('mailer');
             $mailer->send($message);
