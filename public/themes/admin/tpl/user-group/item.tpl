@@ -72,8 +72,7 @@
                   </div>
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.visibility }" ng-click="expanded.visibility = !expanded.visibility">
-                  <i class="fa fa-eye m-r-5"></i>
-                  {t}Visibility{/t}
+                  <i class="fa fa-eye m-r-10"></i>{t}Visibility{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.visibility }"></i>
                   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.visibility">
                     <span ng-show="item.private">{t}Private{/t}</span>

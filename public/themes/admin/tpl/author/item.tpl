@@ -72,7 +72,7 @@
             <div class="grid simple">
               <div class="grid-body no-padding">
                 <div class="grid-collapse-title">
-                  <div class="form-group">
+                  <div class="form-group no-margin">
                     <div class="checkbox">
                       <input id="inrss" name="inrss" ng-false-value="'0'" ng-model="item.inrss" ng-true-value="'1'" type="checkbox">
                       <label class="form-label" for="inrss">
@@ -85,7 +85,7 @@
                     </div>
                   </div>
                   {is_module_activated name="BLOG_MANAGER"}
-                    <div class="form-group no-margin">
+                    <div class="form-group no-margin m-t-15">
                       <div class="checkbox">
                         <input name="is_blog" id="is_blog" ng-false-value="'0'" ng-model="item.is_blog" ng-true-value="'1'" type="checkbox">
                         <label class="form-label" for="is_blog">

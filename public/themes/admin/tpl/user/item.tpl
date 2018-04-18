@@ -75,8 +75,7 @@
                   </div>
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.user_groups }" ng-click="expanded.user_groups = !expanded.user_groups">
-                  <i class="fa fa-users m-r-5"></i>
-                  {t}User Groups{/t}
+                  <i class="fa fa-users m-r-10"></i>{t}User Groups{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.user_groups }"></i>
                   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.user_groups && (toArray(item.user_groups) | filter: { status: 1 }).length > 0">
                     <span ng-show="countUserGroups(item) === toArray(data.extra.user_groups).length">{t}All{/t}</span>
@@ -95,8 +94,7 @@
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.category = !expanded.category">
                   <input name="categories" ng-value="categories" type="hidden">
-                  <i class="fa fa-bookmark m-r-5"></i>
-                  {t}Categories{/t}
+                  <i class="fa fa-bookmark m-r-10"></i>{t}Categories{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
                   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.category">
                     <span ng-show="item.categories.length === 0 || flags.categories.none">{t}All{/t}</span>
@@ -158,8 +156,7 @@
                   </div>
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.settings }" ng-click="expanded.language = !expanded.language">
-                  <i class="fa fa-globe m-r-5"></i>
-                  {t}Language & time{/t}
+                  <i class="fa fa-globe m-r-10"></i>{t}Language & time{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.language }"></i>
                 </div>
                 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.language }">
