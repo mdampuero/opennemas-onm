@@ -1,25 +1,19 @@
 <?php
 /**
- * Defines the frontend controller for the article content type
- *
- * @package Frontend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace Frontend\Controller;
 
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\StringUtils;
-use Onm\Settings as s;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Defines the frontend controller for the articles content type
@@ -61,8 +55,16 @@ class ArticlesController extends Controller
             );
         }
 
-        $token = $this->get('core.helper.subscription')->getToken($article);
+        $sh = $this->get('core.helper.subscription');
+
+        $token = $sh->getToken($article);
         $this->view->assign('token', $token);
+
+        if ($sh->isRedirected($token)) {
+            return new RedirectResponse($this->get('router')->generate(
+                'frontend_frontpage'
+            ), 302);
+        }
 
         $category = $this->get('orm.manager')->getRepository('Category')
             ->findOneBy(sprintf('name = "%s"', $categoryName));
