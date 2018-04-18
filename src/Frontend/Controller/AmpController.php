@@ -9,10 +9,11 @@
  */
 namespace Frontend\Controller;
 
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Defines the frontend controller for Amp HTML content
@@ -43,21 +44,17 @@ class AmpController extends Controller
     }
 
     /**
-     * Displays the article given its id
+     * Displays the article given its id.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     *
+     * @return Response The response object.
      */
     public function showAction(Request $request)
     {
-        $this->ccm = \ContentCategoryManager::get_instance();
-
-        $dirtyID          = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
-        $categoryName     = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $urlSlug          = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
-        $actualCategoryId = $this->ccm->get_id($categoryName);
+        $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         $article = $this->get('content_url_matcher')
             ->matchContentUrl('article', $dirtyID, $urlSlug, $categoryName);
@@ -66,11 +63,17 @@ class AmpController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        // If external link is set, redirect
-        if (isset($article->params['bodyLink']) && !empty($article->params['bodyLink'])) {
-            return $this->forward('FrontendBundle:Redirectors:externalLink', [
-                'to'  => $article->params['bodyLink'],
-            ]);
+        // Redirect if external link is set
+        if (isset($article->params['bodyLink'])
+            && !empty($article->params['bodyLink'])
+        ) {
+            // TODO: Remove when target="_blank"' not included in URI for external
+            $url = str_replace('" target="_blank', '', $article->params['bodyLink']);
+
+            return $this->forward(
+                'FrontendBundle:Redirectors:externalLink',
+                [ 'to'  => $url ]
+            );
         }
 
         // Avoid NewRelic js script
@@ -78,68 +81,39 @@ class AmpController extends Controller
             newrelic_disable_autorum();
         }
 
-        $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->getUser());
-        $cacheable          = $subscriptionFilter->subscriptionHook($article);
+        $sh = $this->get('core.helper.subscription');
 
-        // Setup templating cache layer
+        $token = $sh->getToken($article);
+        $this->view->assign('token', $token);
+
+        if ($sh->isRedirected($token)) {
+            return new RedirectResponse($this->get('router')->generate(
+                'frontend_frontpage'
+            ), 302);
+        }
+
+        $category = $this->get('orm.manager')->getRepository('Category')
+            ->findOneBy(sprintf('name = "%s"', $categoryName));
+
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('content', $article->id, 'amp');
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached("amp/article.tpl", $cacheID)
         ) {
-            // Categories code -------------------------------------------
-            // TODO: Seems that this is rubbish, evaluate its removal
-            $actualCategoryTitle = $this->ccm->getTitle($categoryName);
-            $categoryData        = null;
-            if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $this->ccm->categories)) {
-                $categoryData = $this->ccm->categories[$actualCategoryId];
-            }
+            $em = $this->get('entity_repository');
 
-            $this->view->assign([
-                'category_name'         => $categoryName,
-                'actual_category_title' => $actualCategoryTitle,
-                'actual_category_id'    => $actualCategoryId,
-                'category_data'         => $categoryData,
-            ]);
-
-            // Associated media code --------------------------------------
-            $er = $this->get('entity_repository');
             if (isset($article->img2) && ($article->img2 > 0)) {
-                $photoInt = $er->find('Photo', $article->img2);
+                $photoInt = $em->find('Photo', $article->img2);
                 $this->view->assign('photoInt', $photoInt);
             }
 
             if (isset($article->fk_video2) && ($article->fk_video2 > 0)) {
-                $videoInt = $er->find('Video', $article->fk_video2);
+                $videoInt = $em->find('Video', $article->fk_video2);
                 $this->view->assign('videoInt', $videoInt);
             }
 
-            $article->media_url = '';
-            if (is_object($article->author)) {
-                $article->author->getPhoto();
-            }
-
-            // Related contents code ---------------------------------------
-            $relatedContents = [];
-            $relations       = $this->get('related_contents')->getRelations($article->id, 'inner');
-            if (count($relations) > 0) {
-                $contentObjects = $this->get('entity_repository')->findMulti($relations);
-
-                // Filter out not ready for publish contents.
-                foreach ($contentObjects as $content) {
-                    if ($content->isReadyForPublish()) {
-                        $content->category_name = $this->ccm->getName($content->category);
-                        if ($content->content_type == 1 && !empty($content->img1)) {
-                            $content->photo = $er->find('Photo', $content->img1);
-                        } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
-                            $content->video = $er->find('Video', $content->fk_video);
-                        }
-                        $relatedContents[] = $content;
-                    }
-                }
-            }
-            $this->view->assign('relationed', $relatedContents);
+            $this->view->assign('relationed', $this->getRelated($article));
 
             $patterns = [
                 '@(align|border|style|nowrap|onclick)=(\'|").*?(\'|")@',
@@ -213,21 +187,24 @@ class AmpController extends Controller
             }
         }
 
-        $advertisements = $this->getAds($actualCategoryId);
+        $advertisements = $this->getAds($category->pk_content_category);
 
-        return $this->render("amp/article.tpl", [
-            'advertisements'  => $advertisements,
-            'contentId'       => $article->id,
-            'category_name'   => $categoryName,
-            'article'         => $article,
-            'content'         => $article,
-            'actual_category' => $categoryName,
-            'time'            => '12345',
-            'render_params'   => ['ads-format' => 'amp'],
-            'cache_id'        => $cacheID,
-            'x-tags'          => 'article-amp,article,' . $article->id,
-            'x-cache-for'     => '+1 day',
-            'x-cacheable'     => $cacheable
+        return $this->render('amp/article.tpl', [
+            'actual_category'       => $category->name,
+            'actual_category_id'    => $category->pk_content_category,
+            'actual_category_title' => $category->title,
+            'advertisements'        => $advertisements,
+            'article'               => $article,
+            'cache_id'              => $cacheID,
+            'category_data'         => $category,
+            'category_name'         => $category->name,
+            'content'               => $article,
+            'contentId'             => $article->id,
+            'render_params'         => ['ads-format' => 'amp'],
+            'time'                  => '12345',
+            'x-cache-for'           => '+1 day',
+            'x-cacheable'           => empty($token),
+            'x-tags'                => 'article-amp,article,' . $article->id
         ]);
     }
 
@@ -247,5 +224,44 @@ class AmpController extends Controller
 
         return getService('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
+    }
+
+    /**
+     * Returns the list of related contents for an article.
+     *
+     * @param Article $article The article object.
+     *
+     * @return array The list of rellated contents.
+     */
+    private function getRelated($article)
+    {
+        $relations = $this->get('related_contents')
+            ->getRelations($article->id, 'inner');
+
+        if (empty($relations)) {
+            return [];
+        }
+
+        $em = $this->get('entity_repository');
+
+        $related  = [];
+        $contents = $em->findMulti($relations);
+
+        // Filter out not ready for publish contents.
+        foreach ($contents as $content) {
+            if (!$content->isReadyForPublish()) {
+                continue;
+            }
+
+            if ($content->content_type == 1 && !empty($content->img1)) {
+                $content->photo = $em->find('Photo', $content->img1);
+            } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
+                $content->video = $em->find('Video', $content->fk_video);
+            }
+
+            $related[] = $content;
+        }
+
+        return $related;
     }
 }
