@@ -19,8 +19,8 @@
      *   and inners will need. All controllers should extend this.
      */
     .controller('BaseCtrl', [
-      '$rootScope', '$scope', '$timeout', '$uibModal', 'Editor', 'http', 'messenger', 'Renderer',
-      function($rootScope, $scope, $timeout, $uibModal, Editor, http, messenger, Renderer) {
+      '$rootScope', '$scope', '$timeout', '$uibModal', '$window', 'Editor', 'http', 'messenger', 'Renderer',
+      function($rootScope, $scope, $timeout, $uibModal, $window, Editor, http, messenger, Renderer) {
         /**
          * @memberOf BaseCtrl
          *
@@ -257,7 +257,7 @@
           modal.rendered.then(function() {
             var photoEditor = new window.OnmPhotoEditor({
               container: 'photoEditor',
-              image: '/media/opennemas/images/' + imgData.path_img,
+              image: $window.instanceMedia + '/images' + imgData.path_img,
               closeCallBack: modal.close
             });
 

@@ -513,8 +513,8 @@
      * @requires routing
      */
     .controller('MediaPickerCtrl', [
-      '$http', '$rootScope', '$scope', '$timeout', 'FileUploader', 'DynamicImage', 'itemService', 'routing',
-      function($http, $rootScope, $scope, $timeout, FileUploader, DynamicImage, itemService, routing) {
+      '$http', '$rootScope', '$scope', '$timeout', '$window', 'FileUploader', 'DynamicImage', 'itemService', 'routing',
+      function($http, $rootScope, $scope, $timeout, $window, FileUploader, DynamicImage, itemService, routing) {
         /**
          * The array of contents.
          *
@@ -1031,7 +1031,7 @@
           $scope.enhance = !$scope.enhance;
           var photoEditor = new window.OnmPhotoEditor({
             container: 'photoEditor',
-            image: '/media/opennemas/images/' + $scope.selected.lastSelected.path_img,
+            image: $window.instanceMedia + '/images' + $scope.selected.lastSelected.path_img,
             closeCallBack: $scope.uploadMediaImg,
             maximunSize: { width: 800, height: 600 }
           });
