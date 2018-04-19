@@ -64,6 +64,18 @@
         };
 
         /**
+         * @function list
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Just a dummy actions that forces the developer
+         *   to overwrite this method on child classes.
+         */
+        $scope.list = function() {
+          throw Error('Method not implemented');
+        };
+
+        /**
          * @function openColumns
          * @memberOf ClientListCtrl
          *
