@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div ng-app="BackendApp" ng-controller="AuthorListCtrl" ng-init="init()">
+  <div ng-app="BackendApp" ng-controller="AuthorListCtrl" ng-init="init();backup.master = {if $app.user->isMaster()}true{else} false{/if};backup.id = {$app.user->id}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -136,7 +136,7 @@
               <tbody>
                 <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
                   <td class="checkbox-cell">
-                    <div class="checkbox check-default">
+                    <div class="checkbox check-default" ng-if="isSelectable(item)">
                       <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
                       <label for="checkbox[%$index%]"></label>
                     </div>
@@ -164,7 +164,7 @@
                       </a>
                       {/acl}
                       {acl isAllowed="AUTHOR_DELETE"}
-                      <button class="btn btn-danger btn-small" ng-click="delete(item.id)" ng-if="{if $app.container->get('core.security')->hasPermission('MASTER')}true{else}false{/if} || item.id != {$app.user->id}" type="button">
+                      <button class="btn btn-danger btn-small" ng-click="delete(item.id)" ng-if="backup.master || item.id != backup.id" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                       </button>
                       {/acl}
