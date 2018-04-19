@@ -2020,13 +2020,14 @@ class Content implements \JsonSerializable
                 }
 
                 $propertyFilter = rtrim($propertyFilter, ', ') . ')';
-                $parameters[]   = $property;
+                $parameters     = array_merge($parameters, $property);
             } else {
                 $parameters[] = $property;
             }
 
             $sql   = 'DELETE FROM contentmeta WHERE fk_content = ? AND meta_name '
-                     . is_array($property) ? $propertyFilter : ' = ?';
+                     . (is_array($property) ? $propertyFilter : ' = ?');
+
             $value = getService('dbal_connection')->executeUpdate($sql, $parameters);
 
             return true;
