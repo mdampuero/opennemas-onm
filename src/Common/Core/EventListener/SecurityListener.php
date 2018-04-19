@@ -205,7 +205,7 @@ class SecurityListener implements EventSubscriberInterface
         return ($this->security->hasPermission('MASTER')
             || ($this->security->hasPermission('PARTNER')
                 && $this->security->hasInstance($instance->internal_name))
-            || ($user->type === 0 && empty($instance->blocked))
+            || ($user->type !== 1 && empty($instance->blocked))
         );
     }
 
