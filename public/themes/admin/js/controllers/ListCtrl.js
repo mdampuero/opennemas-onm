@@ -15,8 +15,8 @@
      *   Generic controller for lists.
      */
     .controller('ListCtrl', [
-      '$controller', '$scope', '$timeout',
-      function($controller, $scope, $timeout) {
+      '$controller', '$scope', '$uibModal', 'http', 'messenger', '$timeout',
+      function($controller, $scope, $uibModal, http, messenger, $timeout) {
         $.extend(this, $controller('BaseCtrl', { $scope: $scope }));
 
         /**
@@ -228,6 +228,94 @@
           if (!$scope.config.columns.collapsed) {
             $scope.scrollTop();
           }
+        };
+
+        /**
+         * Translates contents
+         *
+         * @param mixed content The content to send to trash.
+         */
+        $scope.translateSelected = function(translateToParam) {
+          var config = {
+            translateFrom:  $scope.data.extra.locale,
+            translateTo: translateToParam,
+            locales: $scope.data.extra.options.available,
+            translators: $scope.data.extra.translators,
+            translatorSelected: 0,
+          };
+
+          config.translators.forEach(function(el, index) {
+            if (el.from === config.translateFrom &&
+              el.to === config.translateTo &&
+              el.default === true || el.default === 'true') {
+              config.translatorSelected = index;
+            }
+          });
+
+          config.translators = config.translators.filter(function(el) {
+            return el.from === config.translateFrom && el.to === config.translateTo;
+          });
+
+          var topScope = $scope;
+
+          // Raise a modal indicating that we are translating in background
+          $uibModal.open({
+            backdrop:    true,
+            backdropClass: 'modal-backdrop-transparent',
+            controller:  'BackgroundTaskModalCtrl',
+            openedClass: 'modal-relative-open',
+            templateUrl: 'modal-translate-selected',
+            keyboard: false,
+            resolve: {
+              template: function() {
+                return {
+                  selected: $scope.selected.items,
+                  config: config,
+                  translating: false,
+                };
+              },
+              callback: function() {
+                return function(modal, template) {
+                  var translateParams = {
+                    ids: $scope.selected.items,
+                    from: config.translateFrom,
+                    to: config.translateTo,
+                    translator: config.translatorSelected,
+                  };
+
+                  if (template.config.translators.length < 1) {
+                    topScope.selected = { all: false, items: [] };
+                    return;
+                  }
+
+                  template.translating = true;
+
+                  http.post({
+                    name: 'api_v1_backend_tools_translate_contents', params: { }
+                  }, translateParams)
+                    .then(function(response) {
+                      var message = {
+                        id: new Date().getTime(),
+                        message: 'Unable to translate contents. Please check your configuration.',
+                        type: 'error'
+                      };
+
+                      if (response) {
+                        if (response.data) {
+                          topScope.selected = { all: false, items: [] };
+                          message = response.data.message;
+
+                          $scope.list();
+                        }
+                      }
+
+                      modal.close({ response: true, success: true });
+                      messenger.post(message);
+                    });
+                };
+              }
+            }
+          });
         };
 
         // Marks variables to delete for garbage collector
