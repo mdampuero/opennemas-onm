@@ -128,7 +128,7 @@
                   </th>
                   <th class="hidden-xs text-center" width="80"><i class="fa fa-picture-o"></i></th>
                   <th width="400">{t}Name{/t}</th>
-                  <th class="hidden-xs" width="400">{t}Email{/t}</th>
+                  <th class="hidden-xs">{t}Email{/t}</th>
                   <th class="text-center" width="100">{t}Blog{/t}</th>
                   <th class="hidden-sm hidden-xs" width="400">{t}Biography{/t}</th>
                 </tr>
@@ -164,7 +164,7 @@
                       </a>
                       {/acl}
                       {acl isAllowed="AUTHOR_DELETE"}
-                      <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
+                      <button class="btn btn-danger btn-small" ng-click="delete(item.id)" ng-if="{if $app.container->get('core.security')->hasPermission('MASTER')}true{else}false{/if} || item.id != {$app.user->id}" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                       </button>
                       {/acl}

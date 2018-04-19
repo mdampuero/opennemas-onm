@@ -57,7 +57,7 @@
         };
 
         /**
-         * @function generateSlug
+         * @function getUsername
          * @memberOf AuthorCtrl
          *
          * @description

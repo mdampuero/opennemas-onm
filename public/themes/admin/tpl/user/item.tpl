@@ -376,6 +376,9 @@
         </div>
       </div>
     </div>
+    <script type="text/ng-template" id="modal-convert">
+      {include file="subscriber/modal.convert.tpl"}
+    </script>
     <script type="text/ng-template" id="modal-confirm">
       {include file="user/modal.confirm.tpl"}
     </script>

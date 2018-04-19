@@ -1,21 +1,20 @@
-<div class="modal-body">
+<div class="modal-body" ng-init="strings = [ '{t}user{/t}', '{t}subscriber{/t}', '{t}subscriber{/t} + {t}user{/t}' ]; source = strings[template.item.type] ; target= strings[template.type]">
   <button class="close" data-dismiss="modal" aria-hidden="true" ng-click="dismiss();" type="button">
     <i class="fa fa-times"></i>
   </button>
   <h3 class="p-b-30 p-t-30 text-center">{t}Are you sure?{/t}</h3>
-  <h4 class="p-b-30 text-center" ng-if="template.type === 0">{t escape=off}Do you want to convert the <strong>subscriber<span ng-if="template.item.type === 2"> + user</span></strong> to <strong>user</strong>?{/t}</h4>
-  <h4 class="p-b-30 text-center" ng-if="template.type === 2">{t escape=off}Do you want to convert the <strong>subscriber</strong> to <strong>subscriber + user</strong>?{/t}</h4>
+  <h4 class="p-b-30 text-center">{t escape=off}Do you want to convert the <strong>[% source %]</strong> to <strong>[% target %]</strong>?{/t}</h4>
   <p class="text-center" ng-if="template.type === 0">
-    {t}This means the subscriber will not be a subscriber anymore. The user will only appear in the list of users and the subscriptions will be removed too.{/t}
+    {t escape=off}This means the item will not be a [% source %] anymore. It will only appear in the list of users and the subscriptions will be removed too.{/t}
   </p>
-  <p class="text-center" ng-if="template.type === 0">
-    {t}You will be able to convert the user to subscriber again.{/t}
+  <p class="text-center" ng-if="template.type === 1">
+    {t escape=off}This means the item will not be a [% source %] anymore. It will only appear in the list of subscribers and the user groups will be removed too.{/t}
   </p>
   <p class="text-center" ng-if="template.type === 2">
-    {t}This means the subscriber will be a subscriber and a user in the system. It will appear in both list of users and list of subscribers. The subscriptions will not be modified.{/t}
+    {t}This means the [% source %] will be a subscriber and a user in the system. It will appear in both list of users and list of subscribers. The subscriptions will not be modified.{/t}
   </p>
-  <p class="text-center" ng-if="template.type === 2">
-    {t}You will be able to convert the subscriber + user to only user or only subscriber again.{/t}
+  <p class="text-center">
+    {t}You will be able to convert the item again in the future.{/t}
   </p>
 </div>
 <div class="modal-footer row">

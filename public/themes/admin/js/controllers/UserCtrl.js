@@ -8,17 +8,20 @@
      * @name  UserCtrl
      *
      * @requires $controller
-     * @requires $http
-     * @requires $uibModal
      * @requires $scope
+     * @requires $uibModal
+     * @requires $window
+     * @requires cleaner
+     * @requires http
+     * @requires messenger
      *
      * @description
      *   Check billing information when saving user.
      */
     .controller('UserCtrl', [
-      '$controller', '$http', '$scope', '$timeout', '$uibModal', 'cleaner',
-      function($controller, $http, $scope, $timeout, $uibModal, cleaner) {
-        $.extend(this, $controller('AuthorCtrl', { $scope: $scope }));
+      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'messenger', 'routing',
+      function($controller, $scope, $timeout, $uibModal, $window, cleaner, http, messenger, routing) {
+        $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
          * @memberOf UserCtrl
@@ -118,6 +121,60 @@
         };
 
         /**
+         * @function convertTo
+         * @memberOf UserCtrl
+         *
+         * @description
+         *   Opens a modal to confirm user conversion.
+         */
+        $scope.convertTo = function(property, value) {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-convert',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  item: $scope.item,
+                  type: value
+                };
+              },
+              success: function() {
+                return function() {
+                  var data  = $scope.getData();
+                  var route = {
+                    name: 'api_v1_backend_user_update',
+                    params: { id: $scope.item.id }
+                  };
+
+                  data.type = value;
+
+                  if (value === 1) {
+                    // Remove all subscriptions
+                    data.fk_user_group = _.difference(
+                      data.fk_user_group,
+                      Object.keys($scope.data.extra.subscriptions));
+                  }
+
+                  return http.put(route, data);
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            messenger.post(response.data);
+
+            if (response.success) {
+              if (value === 0) {
+                $window.location.href = routing.generate('backend_user_show',
+                  { id: $scope.item.id });
+              }
+            }
+          });
+        };
+
+        /**
          * @function countUserGroups
          * @memberOf UserCtrl
          *
@@ -173,6 +230,32 @@
           }
 
           return data;
+        };
+
+        /**
+         * @function getUsername
+         * @memberOf UserCtrl
+         *
+         * @description
+         *   Generates an username basing on the name.
+         */
+        $scope.getUsername = function() {
+          if ($scope.item.username) {
+            return;
+          }
+
+          $scope.flags.http.slug = 1;
+
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+          }
+
+          $scope.tm = $timeout(function() {
+            $scope.getSlug($scope.item.name, function(response) {
+              $scope.item.username = response.data.slug;
+              $scope.form.username.$setDirty(true);
+            });
+          }, 500);
         };
 
         /**
