@@ -29,13 +29,32 @@
               </h4>
             </li>
           </ul>
-          <div class="all-actions pull-right">
+          <div class="all-actions pull-right ng-cloak" ng-if="!flags.http.loading && item">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-loading btn-success text-uppercase" ng-click="confirm()" type="button">
-                  <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
-                  <span class="text">{t}Save{/t}</span>
-                </button>
+                <div class="btn-group">
+                  <button class="btn btn-loading btn-success text-uppercase" ng-click="confirm()" type="button">
+                    <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i><span class="text">{t}Save{/t}</span>
+                  </button>
+                  <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" ng-disabled="flags.http.saving || form.$invalid || (item.password && item.password !== rpassword)" ng-if="item.id" type="button">
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu no-padding pull-right" ng-if="item.id">
+                    <li>
+                      <a href="#" ng-click="convertTo('type', 2)" ng-if="item.type !== 2">
+                        <i class="fa fa-level-up"></i>
+                        {t}Convert to subscriber + user{/t}
+                      </a>
+                    </li>
+                    <li class="divider" ng-if="item.type !== 2"></li>
+                    <li>
+                      <a href="#" ng-click="convertTo('type', 1)">
+                        <i class="fa fa-retweet"></i>
+                        {t}Convert to subscriber{/t}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </li>
             </ul>
           </div>

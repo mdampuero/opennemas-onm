@@ -34,31 +34,26 @@
               <li class="quicklinks">
                 <div class="btn-group">
                   <button class="btn btn-loading btn-success text-uppercase" ng-click="save();" ng-disabled="flags.http.saving || form.$invalid || (item.password && item.password !== rpassword)" type="button">
-                    <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
-                    {t}Save{/t}
+                    <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>{t}Save{/t}
                   </button>
-                  {acl isAllowed=MASTER}
-                    <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" ng-disabled="flags.http.saving || form.$invalid || (item.password && item.password !== rpassword)" ng-if="item.id" type="button">
-                      <span class="caret"></span>
-                    </button>
-                  {/acl}
-                  {acl isAllowed=MASTER}
-                    <ul class="dropdown-menu no-padding pull-right" ng-if="item.id">
-                      <li>
-                        <a href="#" ng-click="convertTo('type', 2)" ng-if="item.type !== 2">
-                          <i class="fa fa-level-up"></i>
-                          {t}Convert to subscriber + user{/t}
-                        </a>
-                      </li>
-                      <li class="divider" ng-if="item.type !== 2"></li>
-                      <li>
-                        <a href="#" ng-click="convertTo('type', 0)">
-                          <i class="fa fa-retweet"></i>
-                          {t}Convert to user{/t}
-                        </a>
-                      </li>
-                    </ul>
-                  {/acl}
+                  <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" ng-disabled="flags.http.saving || form.$invalid || (item.password && item.password !== rpassword)" ng-if="item.id" type="button">
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu no-padding pull-right" ng-if="item.id">
+                    <li>
+                      <a href="#" ng-click="convertTo('type', 2)" ng-if="item.type !== 2">
+                        <i class="fa fa-level-up"></i>
+                        {t}Convert to subscriber + user{/t}
+                      </a>
+                    </li>
+                    <li class="divider" ng-if="item.type !== 2"></li>
+                    <li>
+                      <a href="#" ng-click="convertTo('type', 0)">
+                        <i class="fa fa-retweet"></i>
+                        {t}Convert to user{/t}
+                      </a>
+                    </li>
+                  </ul>
                 </div>
               </li>
             </ul>
