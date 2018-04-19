@@ -170,6 +170,8 @@ class ToolController extends Controller
      **/
     private function saveContent($content, $propertiesToUpdate)
     {
+        $relatedSrv = $this->get('related_contents');
+
         $data = [
             'agency'         => $content->agency,
             'category'       => $content->category,
@@ -186,9 +188,15 @@ class ToolController extends Controller
             'img1'           => $content->img1,
             'img2'           => $content->img2,
             'metadata'       => $content->metadata,
-            'relatedFront'   => $content->relatedFront,
-            'relatedHome'    => $content->relatedHome,
-            'relatedInner'   => $content->relatedInner,
+            'relatedFront'   => array_map(function ($el) {
+                return $el[1];
+            }, $relatedSrv->getRelations($content->id, 'frontpage')),
+            'relatedHome'    => array_map(function ($el) {
+                return $el[1];
+            }, $relatedSrv->getRelations($content->id, 'home')),
+            'relatedInner'   => array_map(function ($el) {
+                return $el[1];
+            }, $relatedSrv->getRelations($content->id, 'inner')),
             'slug'           => $content->slug,
             'starttime'      => $content->starttime,
             'with_comment'   => $content->with_comment,
