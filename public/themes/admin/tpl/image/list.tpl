@@ -243,6 +243,9 @@
                   <a class="thumbnail-action" href="[% edit(content.id, 'admin_photo_show') %]" ng-click="$event.stopPropagation()">
                     <i class="fa fa-pencil fa-2x"></i>
                   </a>
+                  <a class="thumbnail-action" ng-click="launchPhotoEditor(content)" >
+                    <i class="fa fa-sliders fa-2x"></i>
+                  </a>
                 {/acl}
               </div>
             </dynamic-image>
