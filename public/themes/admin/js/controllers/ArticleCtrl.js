@@ -453,6 +453,16 @@
             $scope.backup.content_status = $scope.article.content_status;
           };
 
+          /**
+           * Callback executed when article is saved/updated fails.
+           *
+           * @param {Object} response The response object.
+           */
+          var saveErrorCb = function(response) {
+            $scope.disableFlags();
+            $scope.errorCb(response);
+          };
+
           if (!$scope.article.pk_article) {
             var route = { name: 'backend_ws_article_save' };
 
@@ -460,14 +470,14 @@
               route.params = { locale: $scope.config.locale };
             }
 
-            http.post(route, data).then(successCb, $scope.errorCb);
+            http.post(route, data).then(successCb, saveErrorCb);
             return;
           }
 
           http.put({
             name: 'backend_ws_article_update',
             params: { id: $scope.article.pk_article }
-          }, data).then(successCb, $scope.errorCb);
+          }, data).then(successCb, saveErrorCb);
         };
 
         /**
