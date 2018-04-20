@@ -85,6 +85,17 @@ class SubscriptionHelper
     }
 
     /**
+     * Checks if the current user has should not see advertisements.
+     *
+     * @return boolean True if the current user should see adveritsement. False
+     *                 otherwise.
+     */
+    public function hasAdvertisements()
+    {
+        return !$this->security->hasPermission('MEMBER_HIDE_ADVERTISEMENTS');
+    }
+
+    /**
      * Checks if the item is blocked basing on the token value.
      *
      * @param string $token The subscription token.
