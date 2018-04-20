@@ -48,6 +48,14 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'countBy', 'findBy', 'findOneBy'])
             ->getMock();
 
+        $this->user = new Entity([
+            'email'    => 'flob@garply.com',
+            'id'       => 1,
+            'name'     => 'flob',
+            'password' => 'quux',
+            'type'     => 1
+        ]);
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
         $this->em->expects($this->any())->method('getMetadata')
@@ -63,6 +71,9 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.user':
+                return $this->user;
+
             case 'error.log':
                 return $this->logger;
 
@@ -72,6 +83,70 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
             case 'orm.oql.fixer':
                 return $this->fixer;
         }
+    }
+
+    /**
+     * Tests deleteItem when no error.
+     */
+    public function testDeleteItem()
+    {
+        $item = new Entity([
+            'fk_user_group' => [ 3 ],
+            'user_groups'   => [ 3 => [ 'status' => 1 ] ]
+        ]);
+
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->willReturn($item);
+        $this->em->expects($this->once())->method('persist')
+            ->with($item);
+
+        $this->service->deleteItem(23);
+    }
+
+    /**
+     * Tests deleteItem when the item to delete is the current user.
+     *
+     * @expectedException Api\Exception\DeleteItemException
+     */
+    public function testDeleteItemWhenEqualsToCurrentUser()
+    {
+        $this->service->deleteItem(1);
+    }
+
+    /**
+     * Tests deleteItem when no item found.
+     *
+     * @expectedException Api\Exception\DeleteItemException
+     */
+    public function testDeleteItemWhenNoEntity()
+    {
+        $this->repository->expects($this->any())->method('findOneBy')
+            ->will($this->throwException(new \Exception()));
+        $this->logger->expects($this->exactly(2))->method('error');
+
+        $this->service->deleteItem(23);
+    }
+
+    /**
+     * Tests deleteItem when an error happens while removing object.
+     *
+     * @expectedException Api\Exception\DeleteItemException
+     */
+    public function testDeleteItemWhenErrorWhileRemoving()
+    {
+        $item = new Entity([
+            'fk_user_group' => [ 3 ],
+            'user_groups'   => [ 3 => [ 'status' => 1 ] ]
+        ]);
+
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->willReturn($item);
+        $this->em->expects($this->once())->method('persist')
+            ->with($item)->will($this->throwException(new \Exception()));
+
+        $this->logger->expects($this->once())->method('error');
+
+        $this->service->deleteItem(23);
     }
 
     /**
