@@ -20,7 +20,7 @@ class AuthorService extends UserService
     public function getItem($id)
     {
         try {
-            $oql = sprintf('id = %s and user_group_id = 3', $id);
+            $oql = sprintf('id = %s and type != 1 and user_group_id = 3', $id);
 
             return $this->container->get('orm.manager')
                 ->getRepository($this->entity, $this->origin)
@@ -60,7 +60,7 @@ class AuthorService extends UserService
     {
          // Force OQL to include type
         return $this->container->get('orm.oql.fixer')->fix($oql)
-            ->addCondition('user_group_id = 3')
+            ->addCondition('type != 1 and user_group_id = 3')
             ->getOql();
     }
 }

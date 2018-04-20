@@ -157,7 +157,7 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
         $item = new Entity([ 'type' => 2 ]);
 
         $this->repository->expects($this->once())->method('findOneBy')
-            ->with('id = 1 and user_group_id = 3')->willReturn($item);
+            ->with('id = 1 and type != 1 and user_group_id = 3')->willReturn($item);
 
         $this->assertEquals($item, $this->service->getItem(1));
     }
@@ -170,7 +170,7 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetItemWhenErrorWhenNoAuthor()
     {
         $this->repository->expects($this->once())->method('findOneBy')
-            ->with('id = 1 and user_group_id = 3')
+            ->with('id = 1 and type != 1 and user_group_id = 3')
             ->will($this->throwException(new \Exception()));
         $this->logger->expects($this->once())->method('error');
 
@@ -188,7 +188,7 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
         $this->fixer->expects($this->once())->method('fix')
             ->willReturn($this->fixer);
         $this->fixer->expects($this->once())->method('addCondition')
-            ->with('user_group_id = 3')->willReturn($this->fixer);
+            ->with('type != 1 and user_group_id = 3')->willReturn($this->fixer);
         $this->fixer->expects($this->once())->method('getOql');
 
         $method->invokeArgs($this->service, [ [ 1, 3, 5 ] ]);
