@@ -70,6 +70,7 @@
         </ul>
         <ul class="nav quick-section pull-right">
           <li class="quicklinks" ng-if="config.multilanguage">
+            {acl isAllowed="ARTICLE_UPDATE"}
             <div class="dropdown">
               <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" uib-tooltip="{t}Translate selected{/t}" tooltip-placement="bottom">
                 <i class="fa fa-globe fa-lg"></i>
@@ -79,7 +80,7 @@
                 <a href="#" ng-repeat="(locale_key, locale_name) in data.extra.options.available" ng-show="locale_key != data.extra.locale" ng-click="translateSelected(locale_key)" class="dropdown-item">{t 1="[% locale_name %]"}Translate into %1{/t}</a>
               </div>
             </div>
-
+            {/acl}
           </li>
           <li class="quicklinks hidden-xs" ng-if="config.multilanguage">
             <span class="h-seperate"></span>
