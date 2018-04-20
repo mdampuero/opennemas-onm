@@ -186,7 +186,7 @@ class UserService extends OrmService
      *
      * @param Entity $item The item to convert.
      */
-    private function convert($item)
+    protected function convert($item)
     {
         $item->type = 1;
         $this->em->persist($item, $item->getOrigin());
