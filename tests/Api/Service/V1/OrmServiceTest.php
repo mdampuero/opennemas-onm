@@ -289,12 +289,34 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests getList when no count required.
+     */
+    public function testGetListWhenNoCount()
+    {
+        $items = [
+            new Entity([ 'name' => 'wubble' ]),
+            new Entity([ 'name' => 'mumble' ])
+        ];
+
+        $this->repository->expects($this->once())->method('findBy')
+            ->with('order by title asc')->willReturn($items);
+
+        $response = $this->service->setCount(false)
+            ->getList('order by title asc');
+
+        $this->assertArrayHasKey('items', $response);
+        $this->assertArrayNotHasKey('total', $response);
+    }
+
+    /**
      * Tests getList when there is an error while counting contents.
      *
      * @expectedException Api\Exception\GetListException
      */
     public function testGetListWhenErrorWhileCounting()
     {
+        $this->repository->expects($this->once())->method('findBy')
+            ->willReturn([]);
         $this->repository->expects($this->once())->method('countBy')
             ->will($this->throwException(new \Exception()));
         $this->logger->expects($this->once())->method('error');
@@ -309,8 +331,6 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetListWhenErrorWhileSearching()
     {
-        $this->repository->expects($this->once())->method('countBy')
-            ->willReturn(2);
         $this->repository->expects($this->once())->method('findBy')
             ->will($this->throwException(new \Exception()));
         $this->logger->expects($this->once())->method('error');
@@ -494,6 +514,21 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests setCount.
+     */
+    public function testSetCount()
+    {
+        $property = new \ReflectionProperty($this->service, 'count');
+        $property->setAccessible(true);
+
+        $this->assertEquals($this->service, $this->service->setCount(true));
+        $this->assertTrue($property->getValue($this->service));
+
+        $this->service->setCount(false);
+        $this->assertFalse($property->getValue($this->service));
+    }
+
+    /**
      * Tests setOrigin.
      */
     public function testSetOrigin()
@@ -502,9 +537,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $property->setAccessible(true);
 
         $this->assertEquals('instance', $property->getValue($this->service));
-
-        $this->service->setOrigin('wobble');
-
+        $this->assertEquals($this->service, $this->service->setOrigin('wobble'));
         $this->assertEquals('wobble', $property->getValue($this->service));
     }
 
