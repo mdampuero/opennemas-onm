@@ -23,10 +23,7 @@ class UserValidator extends Validator
             return;
         }
 
-        if ($item->type !== 0
-            && ($item->type !== 2
-            || !$this->container->get('core.security')->hasPermission('MASTER'))
-        ) {
+        if ($item->type !== 0 && $item->type !== 2) {
             throw new InvalidArgumentException('Invalid value for "type"', 401);
         }
     }
