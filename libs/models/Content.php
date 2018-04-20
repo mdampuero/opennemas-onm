@@ -1439,11 +1439,9 @@ class Content implements \JsonSerializable
      *
      * Loads the category name for a given content id
      *
-     * @param int $pk_content the content id
-     *
      * @return string the category name
      */
-    public function loadCategoryName($pkContent = null)
+    public function loadCategoryName()
     {
         $category = ContentCategoryManager::get_instance()
              ->findById($this->category);
@@ -1463,11 +1461,9 @@ class Content implements \JsonSerializable
      *
      * Loads the category title for a given content id
      *
-     * @param int $pk_content the content id
-     *
      * @return string the category title
      */
-    public function loadCategoryTitle($pkContent = null)
+    public function loadCategoryTitle()
     {
         $category = ContentCategoryManager::get_instance()
              ->findById($this->category);
@@ -1968,15 +1964,35 @@ class Content implements \JsonSerializable
      */
     public function removeMetadata($property)
     {
-        if ($this->id == null) {
+        if ($this->id === null) {
             return false;
         }
 
         try {
-            getService('dbal_connection')->delete('contentmeta', [
-                'fk_content' => $this->id,
-                'meta_name' => $property
-            ]);
+            $propertyFilter = ' = ?';
+            $parameters     = [ $this->id ];
+
+            if (is_array($property)) {
+                if (empty($property)) {
+                    return false;
+                }
+
+                $propertyFilter = ' IN (';
+
+                foreach ($property as $value) {
+                    $propertyFilter .= '?, ';
+                }
+
+                $propertyFilter = rtrim($propertyFilter, ', ') . ')';
+                $parameters     = array_merge($parameters, $property);
+            } else {
+                $parameters[] = $property;
+            }
+
+            $sql = 'DELETE FROM contentmeta WHERE fk_content = ? AND meta_name '
+                . (is_array($property) ? $propertyFilter : ' = ?');
+
+            $value = getService('dbal_connection')->executeUpdate($sql, $parameters);
 
             return true;
         } catch (\Exception $e) {
@@ -2066,5 +2082,36 @@ class Content implements \JsonSerializable
     public static function getL10nKeys()
     {
         return [ 'body', 'description', 'slug', 'title' ];
+    }
+
+    /**
+     * Method for set in the object the metadatas values
+     *
+     *  @param mixed  $data the data to load in the object
+     *  @param string $type type of the extra field
+     */
+    public function saveMetadataFields($data, $type)
+    {
+        if (!getService('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
+            return;
+        }
+
+        $metaDataFields = getService('setting_repository')->get($type);
+        if (!is_array($metaDataFields)) {
+            return;
+        }
+
+        $emptyKeys = [];
+        foreach ($metaDataFields as $metaDataField) {
+            foreach ($metaDataField['fields'] as $field) {
+                if (array_key_exists($field['key'], $data) && !empty($data[$field['key']])) {
+                    $this->setMetadata($field['key'], $data[$field['key']]);
+                    continue;
+                }
+
+                $emptyKeys[] = $field['key'];
+            }
+        }
+        $this->removeMetadata($emptyKeys);
     }
 }

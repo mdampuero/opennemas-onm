@@ -48,7 +48,7 @@ class ArticleController extends Controller
 
         $data['category'] = $data['pk_fk_content_category'];
 
-        $msg  = $this->get('core.messenger');
+        $msg = $this->get('core.messenger');
 
         if (!$article->create($data)) {
             $msg->add(_('Unable to create the new article.'), 'error', 400);
@@ -144,43 +144,5 @@ class ArticleController extends Controller
 
         $msg->add(_('Article successfully updated.'), 'success');
         return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * This method load from the request the metadata fields,
-     *
-     * @param mixed   $data Data where load the metadata fields.
-     * @param Request $postReq Request where the metadata are.
-     *
-     * @return array The data with extra fields.
-     */
-    private function loadMetaDataFields($data, $postReq)
-    {
-        if (!empty($postReq->get('subscriptions'))) {
-            $data['subscriptions'] = $postReq->get('subscriptions');
-        }
-
-        if (!$this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
-            return $data;
-        }
-
-        // If I don't have the extension, I don't check the settings
-        $groups = $this->get('setting_repository')
-            ->get('extraInfoContents.ARTICLE_MANAGER');
-        if (!is_array($groups)) {
-            return $data;
-        }
-
-        foreach ($groups as $group) {
-            foreach ($group['fields'] as $field) {
-                if (empty($postReq->get($field['key']))) {
-                    continue;
-                }
-
-                $data[$field['key']] = $postReq->get($field['key']);
-            }
-        }
-
-        return $data;
     }
 }
