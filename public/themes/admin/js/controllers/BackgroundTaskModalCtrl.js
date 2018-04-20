@@ -20,7 +20,7 @@
       '$uibModalInstance', '$scope', 'template', 'callback',
       function($uibModalInstance, $scope, template, callback) {
         /**
-         * @memberOf YesNoModalCtrl
+         * @memberOf BackgroundTaskModalCtrl
          *
          * @description
          *   The template parameters.
@@ -33,7 +33,7 @@
 
         /**
          * @function dismiss
-         * @memberOf YesNoModalCtrl
+         * @memberOf BackgroundTaskModalCtrl
          *
          * @description
          *   Close the modal without executing any action.
