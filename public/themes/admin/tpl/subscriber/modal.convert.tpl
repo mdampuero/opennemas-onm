@@ -5,13 +5,13 @@
   <h3 class="p-b-30 p-t-30 text-center">{t}Are you sure?{/t}</h3>
   <h4 class="p-b-30 text-center">{t escape=off}Do you want to convert the <strong>[% source %]</strong> to <strong>[% target %]</strong>?{/t}</h4>
   <p class="text-center" ng-if="template.type === 0">
-    {t escape=off}This means the item will not be a [% source %] anymore. It will only appear in the list of users and the subscriptions will be removed too.{/t}
+    {t}This means the item will not be a [% source %] anymore. It will only appear in the list of users and the subscriptions will be removed too.{/t}
   </p>
   <p class="text-center" ng-if="template.type === 1">
-    {t escape=off}This means the item will not be a [% source %] anymore. It will only appear in the list of subscribers and the user groups will be removed too.{/t}
+    {t}This means the item will not be a [% source %] anymore. It will only appear in the list of subscribers and the user groups will be removed too.{/t}
   </p>
   <p class="text-center" ng-if="template.type === 2">
-    {t}This means the [% source %] will be a subscriber and a user in the system. It will appear in both list of users and list of subscribers. The subscriptions will not be modified.{/t}
+    {t}This means the item will be a subscriber and a user in the system. It will appear in the list of users and the list of subscribers.{/t}
   </p>
   <p class="text-center">
     {t}You will be able to convert the item again in the future.{/t}

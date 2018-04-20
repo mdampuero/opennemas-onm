@@ -44,14 +44,14 @@
                     <li>
                       <a href="#" ng-click="convertTo('type', 2)" ng-if="item.type !== 2">
                         <i class="fa fa-level-up"></i>
-                        {t}Convert to subscriber + user{/t}
+                        {t}Convert to{/t} {t}subscriber{/t} + {t}user{/t}
                       </a>
                     </li>
                     <li class="divider" ng-if="item.type !== 2"></li>
                     <li>
                       <a href="#" ng-click="convertTo('type', 0)">
                         <i class="fa fa-retweet"></i>
-                        {t}Convert to user{/t}
+                        {t}Convert to{/t} {t}user{/t}
                       </a>
                     </li>
                   </ul>

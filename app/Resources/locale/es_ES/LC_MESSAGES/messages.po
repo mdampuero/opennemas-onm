@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-12 10:26+0000\n"
-"PO-Revision-Date: 2018-04-12 12:35+0200\n"
+"POT-Creation-Date: 2018-04-20 13:25+0000\n"
+"PO-Revision-Date: 2018-04-20 15:28+0200\n"
 "Last-Translator: Fran Dieguez <fran@openhost.es>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -2871,6 +2871,51 @@ msgstr "Ejecutar"
 msgid "Marks this group as public"
 msgstr "Marca este grupo como público"
 
+msgid "Send newsletter"
+msgstr "Enviar boletín de noticias"
+
+msgid "Hide advertisements"
+msgstr "Ocultar publicidad"
+
+msgid "Requires payment"
+msgstr "Pago requerido"
+
+msgid "Hide print button"
+msgstr "Ocultar botón de imprimir"
+
+msgid "Hide social networks buttons"
+msgstr "Ocultar botones de redes sociales"
+
+msgid "Block browser actions (cut, copy,...)"
+msgstr "Bloquear acciones del navegador (cortar, copiar,...)"
+
+msgid "Redirect to frontpage"
+msgstr "Redirigir a portada"
+
+msgid "Hide title"
+msgstr "Ocultar título"
+
+msgid "Hide summary"
+msgstr "Ocultar entradilla"
+
+msgid "Hide body"
+msgstr "Ocultar cuerpo"
+
+msgid "Hide pretitle"
+msgstr "Ocultar antetítulo"
+
+msgid "Hide media"
+msgstr "Ocultar media"
+
+msgid "Hide related contents"
+msgstr "Ocultar contenidos relacionados"
+
+msgid "Hide content information"
+msgstr "Ocultar información del contenido"
+
+msgid "Hide tags"
+msgstr "Ocultar etiquetas"
+
 msgid "Static Page"
 msgstr "Página estática"
 
@@ -3805,49 +3850,46 @@ msgstr "Términos y condiciones"
 msgid "Ready!"
 msgstr "Listo!"
 
+msgid "user"
+msgstr "usuario"
+
+msgid "subscriber"
+msgstr "suscriptor"
+
 msgid "Are you sure?"
-msgstr "¿Estas seguro?"
+msgstr "¿Estás seguro?"
 
 msgid ""
-"Do you want to convert the <strong>subscriber<span ng-if=\"template.item."
-"type === 2\"> + user</span></strong> to <strong>user</strong>?"
+"Do you want to convert the <strong>[% source %]</strong> to <strong>[% "
+"target %]</strong>?"
 msgstr ""
-"¿Quieres convertir el <strong>suscriptor<span ng-if=\"template.item.type === "
-"2\"> + usuario</span></strong> a <strong>usuario</strong>?"
+"¿Quieres convertir el <strong>[% source %]</strong> a <strong>[% target %]</"
+"strong>?"
 
 msgid ""
-"Do you want to convert the <strong>subscriber</strong> to <strong>subscriber "
-"+ user</strong>?"
+"This means the item will not be a [% source %] anymore. It will only appear "
+"in the list of users and the subscriptions will be removed too."
 msgstr ""
-"¿Quieres convertir el <strong>suscriptor</strong> a <strong>suscriptor + "
-"usuario</strong>?"
+"Esto significa que el elemento dejará de ser un [% source %]. Solo aparecerá "
+"en el listado de usuarios y se le eliminarán las suscripciones asociadas."
 
 msgid ""
-"This means the subscriber will not be a subscriber anymore. The user will "
-"only appear in the list of users and the subscriptions will be removed too."
+"This means the item will not be a [% source %] anymore. It will only appear "
+"in the list of subscribers and the user groups will be removed too."
 msgstr ""
-"Esto significa que el suscriptor dejará de ser suscriptor. El usuario solo "
-"aparecerá en el listado de usuarios y se le eliminarán las suscripciones "
-"asociadas."
-
-msgid "You will be able to convert the user to subscriber again."
-msgstr "Podrás convertir el usuario en subscriptor de nuevo."
+"Esto significa que el elemento dejará de ser un [% source %]. Solo aparecerá "
+"en el listado de suscriptores y se le eliminarán los grupos de usuario "
+"asociados."
 
 msgid ""
-"This means the subscriber will be a subscriber and a user in the system. It "
-"will appear in both list of users and list of subscribers. The subscriptions "
-"will not be modified."
+"This means the item will be a subscriber and a user in the system. "
+"It will appear in the list of users and the list of subscribers."
 msgstr ""
-"Esto significa que el suscriptor será un suscriptor y un usuario del "
-"sistema. Aparecerá en los listados de usuarios y suscriptores. Las "
-"suscripciones no serán modificadas."
+"Esto significa que el elemento será un suscriptor y un usuario del "
+"sistema. Aparecerá en los listados de usuarios y suscriptores."
 
-msgid ""
-"You will be able to convert the subscriber + user to only user or only "
-"subscriber again."
-msgstr ""
-"Podrás convertir el suscriptor + usuario a solo usuario o solosuscriptor de "
-"nuevo."
+msgid "You will be able to convert the item again in the future."
+msgstr "Podrás convertir el elemento de nuevo en el futuro."
 
 msgid "Config users module"
 msgstr "Configurar el módulo usuarios"
@@ -3909,17 +3951,21 @@ msgstr ""
 "Lista de claves y valores separadas por comas (clave1:valor1, clave2:"
 "valor2,...)"
 
-msgid "Convert to subscriber + user"
-msgstr "Convertir a suscriptor + usuario"
-
-msgid "Convert to user"
-msgstr "Convertir a usuario"
+msgid "Convert to"
+msgstr "Convertir a"
 
 msgid "Unable to find the item"
 msgstr "No se ha encontrado el elemento"
 
 msgid "Click here to return to the list"
 msgstr "Pincha aquí para volver al listado"
+
+msgid ""
+"There are no <a href=\"[% routing.generate('backend_subscriptions_list') "
+"%]\">subscriptions</a>"
+msgstr ""
+"No hay <a href=\"[% routing.generate('backend_subscriptions_list') "
+"%]\">suscripciones</a>"
 
 msgid "Subscribed"
 msgstr "Suscrito"
@@ -5898,8 +5944,19 @@ msgstr "Firma"
 msgid "Suggested for frontpage"
 msgstr "Sugerir en portada principal"
 
-msgid "Only available for subscribers"
-msgstr "Solo disponible para subscriptores"
+msgid ""
+"There are no enabled <a href=\"[% routing."
+"generate('backend_subscriptions_list') %]\">subscriptions</a>"
+msgstr ""
+"No hay <a href=\"[% routing.generate('backend_subscriptions_list') "
+"%]\">suscripciones</a> activadas"
+
+msgid ""
+"The content will be fully available only for subscribers in the selected "
+"subscriptions"
+msgstr ""
+"El contenido estará completamente disponible solo para suscriptores de las "
+"suscripciones seleccionadas"
 
 msgid "Your invoice is currently unavailable."
 msgstr "Tu factura no está disponible actualmente."
@@ -7911,24 +7968,15 @@ msgstr ""
 msgid "Features for members"
 msgstr "Características para miembros"
 
-msgid "Send newsletter"
-msgstr "Enviar boletín de noticias"
-
 msgid ""
 "If enabled, this subscription will be selectable when creating newsletters"
 msgstr ""
 "Si está activado, esta suscripción será seleccionable cuando se creen "
 "boletines de noticias"
 
-msgid "Hide advertisements"
-msgstr "Ocultar publicidad"
-
 msgid "If enabled, advertisements will be disabled when using safeframe"
 msgstr ""
 "Si está activado, la publicidad se deshabilitará cuando se use safeframe"
-
-msgid "Requires payment"
-msgstr "Pago requerido"
 
 msgid "If enabled, this subscription will require a payment to become a member"
 msgstr ""
@@ -7938,21 +7986,12 @@ msgstr ""
 msgid "Restrictions"
 msgstr "Restricciones"
 
-msgid "Hide print button"
-msgstr "Ocultar botón de imprimir"
-
 msgid "If enabled, button to print contents will be hidden"
 msgstr "Si está activado, se ocultará el botón de imprimir contenidos"
-
-msgid "Hide social buttons"
-msgstr "Ocultar botones de redes sociales"
 
 msgid "If enabled, button to share contents in social networks will be hidden"
 msgstr ""
 "Si está activado, se ocultarán los botones para compartir en redes sociais"
-
-msgid "Block browser actions (cut, copy,...)"
-msgstr "Bloquear acciones del navegador (cortar, copiar,...)"
 
 msgid "If enabled, some browser actions (e.g. cut, copy,...) will be blocked"
 msgstr ""
@@ -7961,9 +8000,6 @@ msgstr ""
 
 msgid "Restrictions for non-members"
 msgstr "Restricciones para no-miembros"
-
-msgid "Redirect to frontpage"
-msgstr "Redirigir a portada"
 
 msgid ""
 "If enabled, non-members will be redirect to frontpage when accessing "
@@ -7975,36 +8011,15 @@ msgstr ""
 msgid "Hide information"
 msgstr "Ocultar información"
 
-msgid "Hide title"
-msgstr "Ocultar título"
-
-msgid "Hide summary"
-msgstr "Ocultar entradilla"
-
-msgid "Hide body"
-msgstr "Ocultar cuerpo"
-
-msgid "Hide pretitle"
-msgstr "Ocultar antetítulo"
-
-msgid "Hide media"
-msgstr "Ocultar media"
-
-msgid "Hide related contents"
-msgstr "Ocultar contenidos relacionados"
-
-msgid "Hide content information"
-msgstr "Ocultar información del contenido"
-
-msgid "Hide tags"
-msgstr "Ocultar etiquetas"
-
 msgid ""
 "Some information will be hidden for non-members when accessing contents in "
 "this subscription"
 msgstr ""
 "Alguna información será ocultada para no-miembros cuando accedan a "
 "contenidos en esta suscripción"
+
+msgid "Block actions"
+msgstr "Bloquear acciones"
 
 msgid "Add new item"
 msgstr "Añadir nuevo elemento"
@@ -9095,6 +9110,29 @@ msgstr "Bienvenido al Gestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Usa la barra lateral derecha para explorar la información disponible."
+
+#~ msgid "Convert to subscriber + user"
+#~ msgstr "Convertir a suscriptor + usuario"
+
+#~ msgid "Convert to subscriber"
+#~ msgstr "Convertir a suscriptor"
+
+#~ msgid ""
+#~ "Do you want to convert the <strong>subscriber<span ng-if=\"template.item."
+#~ "type === 2\"> + user</span></strong> to <strong>user</strong>?"
+#~ msgstr ""
+#~ "¿Quieres convertir el <strong>suscriptor<span ng-if=\"template.item.type "
+#~ "=== 2\"> + usuario</span></strong> a <strong>usuario</strong>?"
+
+#~ msgid ""
+#~ "You will be able to convert the subscriber + user to only user or only "
+#~ "subscriber again."
+#~ msgstr ""
+#~ "Podrás convertir el suscriptor + usuario a solo usuario o solosuscriptor "
+#~ "de nuevo."
+
+#~ msgid "Only available for subscribers"
+#~ msgstr "Solo disponible para subscriptores"
 
 #~ msgid "You are a master"
 #~ msgstr "Eres un master"
