@@ -12,6 +12,7 @@ namespace Api\Controller\V1\Backend;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Common\Core\Controller\Controller;
+use Common\Core\Annotation\Security;
 
 /**
  * The ToolController provides common actions to parse and transform values
@@ -88,6 +89,9 @@ class ToolController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasExtension('es.openhost.module.multilanguage')
+     *          and hasExtension('es.openhost.module.translation")
      */
     public function translateContentsAction(Request $request)
     {
