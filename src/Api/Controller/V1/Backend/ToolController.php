@@ -41,6 +41,9 @@ class ToolController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasExtension('es.openhost.module.multilanguage')
+     *          and hasExtension('es.openhost.module.translation')")
      */
     public function translateStringAction(Request $request)
     {
@@ -91,7 +94,7 @@ class ToolController extends Controller
      * @return JsonResponse The response object.
      *
      * @Security("hasExtension('es.openhost.module.multilanguage')
-     *          and hasExtension('es.openhost.module.translation")
+     *          and hasExtension('es.openhost.module.translation')")
      */
     public function translateContentsAction(Request $request)
     {

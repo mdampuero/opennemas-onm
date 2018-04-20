@@ -551,6 +551,15 @@
                       }
 
                       modal.close({ response: true, success: true });
+                    }, function(response) {
+                      var message = {
+                        id: new Date().getTime(),
+                        message: 'Unable to translate contents. Please check your configuration.',
+                        type: 'error'
+                      };
+
+                      modal.close({ response: true, success: true });
+                      messenger.post(message);
                     });
                 };
               }
