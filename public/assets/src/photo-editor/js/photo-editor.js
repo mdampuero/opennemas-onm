@@ -1484,25 +1484,6 @@ window.OnmPhotoEditor.prototype.resizeMovingCorner = function(cornerPoint, conta
   resizeEle.style.height = newSize.height + 'px';
 };
 
-window.OnmPhotoEditor.prototype.moveCropDiv = function(point, refPoint, maxX, maxY, resizeEle) {
-  var dist = { x: point.x - refPoint.x, y: point.y - refPoint.y };
-
-  dist = this.checkLimits(dist, limits, null);
-
-  resizeEle.style.marginTop  = dist.y + 'px';
-  resizeEle.style.marginLeft = dist.x + 'px';
-};
-
-window.OnmPhotoEditor.prototype.getInitPoint = function(containerEle, resizeEle, initPoint) {
-  var containerVP = containerEle.getBoundingClientRect();
-  var resizeEleVP = resizeEle.getBoundingClientRect();
-  var marginTop   = resizeEleVP.top - containerVP.top;
-  var marginLeft  =  resizeEleVP.left - containerVP.left;
-  var initPoint   = { x: initPoint.x - marginLeft, y: initPoint.y - marginTop };
-
-  return initPoint;
-};
-
 window.OnmPhotoEditor.prototype.initMoveCropSel = function(e) {
   if (e.target.className.indexOf('photoEditorCrop') === -1) {
     return null;
@@ -1533,6 +1514,25 @@ window.OnmPhotoEditor.prototype.initMoveCropSel = function(e) {
   window.addEventListener('mousemove', move, false);
   window.addEventListener('mouseup', stopMove, false);
   return null;
+};
+
+window.OnmPhotoEditor.prototype.getInitPoint = function(containerEle, resizeEle, initPoint) {
+  var containerVP = containerEle.getBoundingClientRect();
+  var resizeEleVP = resizeEle.getBoundingClientRect();
+  var marginTop   = resizeEleVP.top - containerVP.top;
+  var marginLeft  =  resizeEleVP.left - containerVP.left;
+  var initPoint   = { x: initPoint.x - marginLeft, y: initPoint.y - marginTop };
+
+  return initPoint;
+};
+
+window.OnmPhotoEditor.prototype.moveCropDiv = function(point, refPoint, limits, resizeEle) {
+  var dist = { x: point.x - refPoint.x, y: point.y - refPoint.y };
+
+  dist = this.checkLimits(dist, limits, null);
+
+  resizeEle.style.marginTop  = dist.y + 'px';
+  resizeEle.style.marginLeft = dist.x + 'px';
 };
 
 window.OnmPhotoEditor.prototype.getSizeValues = function(cornerPos, resizeEle, isTopCorner) {
