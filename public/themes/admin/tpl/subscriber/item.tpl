@@ -43,14 +43,14 @@
                   <ul class="dropdown-menu no-padding pull-right" ng-if="item.id">
                     <li>
                       <a href="#" ng-click="convertTo('type', 2)" ng-if="item.type !== 2">
-                        <i class="fa fa-level-up"></i>
+                        <i class="fa fa-user-plus"></i>
                         {t}Convert to{/t} {t}subscriber{/t} + {t}user{/t}
                       </a>
                     </li>
                     <li class="divider" ng-if="item.type !== 2"></li>
                     <li>
                       <a href="#" ng-click="convertTo('type', 0)">
-                        <i class="fa fa-retweet"></i>
+                        <i class="fa fa-user"></i>
                         {t}Convert to{/t} {t}user{/t}
                       </a>
                     </li>
