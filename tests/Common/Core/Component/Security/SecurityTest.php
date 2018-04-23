@@ -130,19 +130,4 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         $this->security->setPermissions([ 'ROLE_BACKEND' ]);
         $this->assertTrue($this->security->hasPermission('ROLE_BACKEND'));
     }
-
-    /**
-     * Tests hasRole for normal, admin and master users.
-     */
-    public function testHasRole()
-    {
-        $this->user->type = 0;
-        $this->assertTrue($this->security->hasRole('ROLE_BACKEND'));
-
-        $this->user->type = 1;
-        $this->assertTrue($this->security->hasRole('ROLE_FRONTEND'));
-
-        $security = new Security();
-        $this->assertFalse($security->hasRole('fubar'));
-    }
 }
