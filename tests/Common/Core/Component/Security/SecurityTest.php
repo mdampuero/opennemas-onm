@@ -73,7 +73,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         $this->security->setPermissions([ 'MASTER' ]);
         $this->assertTrue($this->security->hasCategory('wobble'));
 
-        $this->security->setPermissions([ 'ROLE_BACKEND' ]);
+        $this->security->setPermissions([ 'ADMIN' ]);
         $this->assertFalse($this->security->hasCategory('wobble'));
 
         $this->assertTrue($this->security->hasCategory('frog'));
@@ -94,7 +94,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         $this->security->setPermissions([ 'MASTER' ]);
         $this->assertFalse($this->security->hasExtension('wobble'));
 
-        $this->security->setPermissions([ 'ROLE_BACKEND' ]);
+        $this->security->setPermissions([ 'ADMIN' ]);
         $this->assertFalse($this->security->hasExtension('wobble'));
         $this->assertTrue($this->security->hasExtension('norf'));
     }
@@ -127,7 +127,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         $this->security->setInstances([ 'garply' ]);
         $this->assertTrue($this->security->hasPermission('wubble'));
 
-        $this->security->setPermissions([ 'ROLE_BACKEND' ]);
-        $this->assertTrue($this->security->hasPermission('ROLE_BACKEND'));
+        $this->security->setPermissions([ 'ADMIN' ]);
+        $this->assertTrue($this->security->hasPermission('ADMIN'));
     }
 }
