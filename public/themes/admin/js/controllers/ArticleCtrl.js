@@ -524,6 +524,7 @@
                   }
 
                   template.translating = true;
+                  template.translation_done = false;
 
                   var params = {
                     data: {},
@@ -542,6 +543,9 @@
                     }
                   }
 
+                  template.translating = true;
+                  template.translation_done = false;
+
                   http.post('api_v1_backend_tools_translate_string', params)
                     .then(function(response) {
                       for (var i = 0; i < $scope.data.extra.keys.length; i++) {
@@ -550,7 +554,8 @@
                         $scope.article[key] = response.data[key];
                       }
 
-                      modal.close({ response: true, success: true });
+                      template.translating = false;
+                      template.translation_done = true;
                     }, function(response) {
                       var message = {
                         id: new Date().getTime(),
@@ -558,8 +563,7 @@
                         type: 'error'
                       };
 
-                      modal.close({ response: true, success: true });
-                      messenger.post(message);
+                      modal.close({ response: true, error: true });
                     });
                 };
               }

@@ -75,8 +75,7 @@
               <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" uib-tooltip="{t}Translate selected{/t}" tooltip-placement="bottom">
                 <i class="fa fa-globe fa-lg"></i>
               </button>
-              </button>
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+              <div class="dropdown-menu dropdown-menu-right no-padding" aria-labelledby="dropdownMenuButton">
                 <a href="#" ng-repeat="(locale_key, locale_name) in data.extra.options.available" ng-show="locale_key != data.extra.locale" ng-click="translateSelected(locale_key)" class="dropdown-item">{t 1="[% locale_name %]"}Translate into %1{/t}</a>
               </div>
             </div>

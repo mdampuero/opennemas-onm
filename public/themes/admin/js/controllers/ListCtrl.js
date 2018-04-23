@@ -289,6 +289,7 @@
                   }
 
                   template.translating = true;
+                  template.translation_done = false;
 
                   http.post({
                     name: 'api_v1_backend_tools_translate_contents', params: { }
@@ -305,12 +306,12 @@
                           topScope.selected = { all: false, items: [] };
                           message = response.data.message;
 
+                          template.translating = false;
+                          template.translation_done = true;
+
                           $scope.list();
                         }
                       }
-
-                      modal.close({ response: true, success: true });
-                      messenger.post(message);
                     }, function(response) {
                       var message = {
                         id: new Date().getTime(),
