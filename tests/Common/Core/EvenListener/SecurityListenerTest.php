@@ -301,8 +301,8 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
             ->with('pk_user_group in [1, 2, 34]')
             ->willReturn([ json_decode(json_encode([ 'privileges' => [ 6 ] ])) ]);
 
-        $this->assertEquals(
-            [ 6 => 'ARTICLE_ADMIN' ],
+        $this->assertContains(
+            'ARTICLE_ADMIN',
             $method->invokeArgs($listener, [ $this->user ])
         );
     }
