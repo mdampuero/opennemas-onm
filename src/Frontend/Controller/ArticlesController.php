@@ -56,7 +56,6 @@ class ArticlesController extends Controller
         $sh = $this->get('core.helper.subscription');
 
         $token = $sh->getToken($article);
-        $this->view->assign('token', $token);
 
         if ($sh->isRedirected($token)) {
             return new RedirectResponse($this->get('router')->generate(
@@ -112,7 +111,7 @@ class ArticlesController extends Controller
             'content'               => $article,
             'contentId'             => $article->id,
             'time'                  => '12345',
-            'token'                 => $token,
+            'o-token'               => $token,
             'x-cache-for'           => '+1 day',
             'x-cacheable'           => empty($token),
             'x-tags'                => 'article,' . $article->id
