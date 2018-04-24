@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-18 09:25+0000\n"
-"PO-Revision-Date: 2018-04-18 12:24+0200\n"
+"POT-Creation-Date: 2018-04-24 13:34+0000\n"
+"PO-Revision-Date: 2018-04-24 15:36+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -3326,6 +3326,12 @@ msgstr "Non hai ningún tradutor para «%1&rarr;%2»"
 msgid "Translating selected contents into \"%1\""
 msgstr "Traducindo os contidos seleccionados a «%1»"
 
+msgid "%1 contents propertly translated into \"%1\"."
+msgstr "%1 contidos traducidos correctamente ao «%s»."
+
+msgid "Ok"
+msgstr "Aceptar"
+
 msgid "Arquive these elements"
 msgstr "Arquivar estes elementos"
 
@@ -3432,8 +3438,11 @@ msgstr "Debes seleccionar algún elemento."
 msgid "Accept"
 msgstr "Aceptar"
 
-msgid "Translating content to \"%1\""
-msgstr "Traducindo contido a «%1»"
+msgid "Translating content into \"%1\""
+msgstr "Traducindo o contido a «%1»"
+
+msgid "Content translated properly into \"%1\"."
+msgstr "Contido traducido con éxito ao «%1»."
 
 msgid "- Select a category -"
 msgstr "- Seleccione categoría -"
