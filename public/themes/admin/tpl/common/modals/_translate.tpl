@@ -16,7 +16,7 @@
   <div ng-show="template.translation_done">
       <div class="text-center m-t-50 p-t-30">
         <i class="fa fa-4x fa-globe"></i>
-        <h4>{t 1="[% template.selected.length %]"}%1 contents propertly translated into "%1".{/t}</h4>
+        <h4>{t 1="[% template.config.locales[template.config.translateTo] %]"}Content translated properly into "%1".{/t}</h4>
       </div>
       <button class="btn btn-success btn-block m-t-50" data-dismiss="modal" aria-hidden="true" ng-click="dismiss();" type="button">
         <h4 class="text-uppercase text-white">
