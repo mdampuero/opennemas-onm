@@ -1410,6 +1410,13 @@ class Privilege
                 'description'  => _('Block browser actions (cut, copy,...)'),
                 'module'       => 'FRONTEND',
             ],
+
+            242 => [
+                'pk_privilege' => '242',
+                'name'         => 'NON_MEMBER_NO_INDEX',
+                'description'  => _('Prevent search engine indexation'),
+                'module'       => 'FRONTEND',
+            ],
         ];
 
         return self::$privileges;

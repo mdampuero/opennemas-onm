@@ -223,18 +223,37 @@
                 <h4>{t}Restrictions for non-members{/t}</h4>
               </div>
               <div class="grid-body">
-                <div class="form-group">
-                  <label class="form-label">{t}Redirection{/t}</label>
-                  <label class="pointer" for="redirection">
-                    <div class="checkbox">
-                      <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_REDIRECT')" id="redirection" type="checkbox">
-                      <label for="redirection">{t}Redirect to frontpage{/t}</label>
+                <div class="row">
+                  <div class="col-xs-6">
+                    <div class="form-group">
+                      <label class="form-label">{t}Redirection{/t}</label>
+                      <label class="pointer" for="non-member-redirection">
+                        <div class="checkbox">
+                          <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_REDIRECT')" id="non-member-redirection" type="checkbox">
+                          <label for="non-member-redirection">{t}Redirect to frontpage{/t}</label>
+                        </div>
+                        <span class="help m-l-3" ng-show="isHelpEnabled()">
+                          <i class="fa fa-info-circle m-r-5 text-info"></i>
+                          {t}If enabled, non-members will be redirect to frontpage when accessing contents in this subscription{/t}
+                        </span>
+                      </label>
                     </div>
-                    <span class="help m-l-3" ng-show="isHelpEnabled()">
-                      <i class="fa fa-info-circle m-r-5 text-info"></i>
-                      {t}If enabled, non-members will be redirect to frontpage when accessing contents in this subscription{/t}
-                    </span>
-                  </label>
+                  </div>
+                  <div class="col-xs-6">
+                    <div class="form-group no-margin">
+                      <label class="form-label">{t}Indexation{/t}</label>
+                      <label class="pointer" for="non-member-no-index">
+                        <div class="checkbox">
+                          <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_NO_INDEX')" id="non-member-no-index" type="checkbox">
+                          <label for="non-member-no-index">{t}Prevent search engine indexation{/t}</label>
+                        </div>
+                        <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                          <i class="fa fa-info-circle m-r-5 text-info"></i>
+                          {t}If enabled, the noindex directive will be added to the HTML{/t}
+                        </span>
+                      </label>
+                    </div>
+                  </div>
                 </div>
                 <div class="row">
                   <div class="col-xs-6">
@@ -251,16 +270,18 @@
                     </div>
                   </div>
                   <div class="col-xs-6">
-                    <div class="form-group no-margin">
+                    <div class="form-group">
                       <label class="form-label">{t}Block actions{/t}</label>
-                      <div class="checkbox p-b-10">
-                        <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_BLOCK_BROWSER')" id="non-member-block" ng-disabled="item.privileges.indexOf(getPermissionId('NON_MEMBER_REDIRECT')) !== -1" type="checkbox">
-                        <label for="non-member-block">{t}Block browser actions (cut, copy,...){/t}</label>
-                      </div>
-                      <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
-                        <i class="fa fa-info-circle m-r-5 text-info"></i>
-                        {t}If enabled, subscribers will not see this subscription while registering or editing profile{/t}
-                      </span>
+                      <label class="pointer" for="non-member-block">
+                        <div class="checkbox">
+                          <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_BLOCK_BROWSER')" id="non-member-block" ng-disabled="item.privileges.indexOf(getPermissionId('NON_MEMBER_REDIRECT')) !== -1" type="checkbox">
+                          <label for="non-member-block">{t}Block browser actions (cut, copy,...){/t}</label>
+                        </div>
+                        <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                          <i class="fa fa-info-circle m-r-5 text-info"></i>
+                          {t}If enabled, subscribers will not see this subscription while registering or editing profile{/t}
+                        </span>
+                      </label>
                     </div>
                   </div>
                 </div>
