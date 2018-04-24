@@ -235,6 +235,27 @@
          *
          * @param mixed content The content to send to trash.
          */
+        $scope.selectedItemsAreTranslatedTo = function(translateToParam) {
+          var anyTranslated = false;
+
+          $scope.selected.items.forEach(function(selectedId) {
+            $scope.data.results.forEach(function(el) {
+              if (el.id === selectedId) {
+                if (el.title[translateToParam] && el.title[translateToParam].length > 0) {
+                  anyTranslated = anyTranslated || true;
+                }
+              }
+            });
+          });
+
+          return anyTranslated;
+        };
+
+        /**
+         * Translates contents
+         *
+         * @param mixed content The content to send to trash.
+         */
         $scope.translateSelected = function(translateToParam) {
           var config = {
             translateFrom:  $scope.data.extra.locale,

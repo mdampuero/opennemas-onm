@@ -76,7 +76,7 @@
                 <i class="fa fa-globe fa-lg"></i>
               </button>
               <div class="dropdown-menu dropdown-menu-right no-padding" aria-labelledby="dropdownMenuButton">
-                <a href="#" ng-repeat="(locale_key, locale_name) in data.extra.options.available" ng-show="locale_key != data.extra.locale" ng-click="translateSelected(locale_key)" class="dropdown-item">{t 1="[% locale_name %]"}Translate into %1{/t}</a>
+                <a href="#" ng-repeat="(locale_key, locale_name) in data.extra.options.available" ng-show="locale_key != data.extra.locale" ng-click="!selectedItemsAreTranslatedTo(locale_key) && translateSelected(locale_key)" class="dropdown-item" ng-class="{ 'disabled' : itemsSelectedTranslated(locale_key) }">{t 1="[% locale_name %]"}Translate into %1{/t}</a>
               </div>
             </div>
             {/acl}
