@@ -2,40 +2,34 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace Framework\Monolog;
 
-use Symfony\Component\HttpFoundation\RequestStack;
-
 class OnmFormatter
 {
     /**
-     * The current request stack
+     * The service container.
      *
-     * @var RequestStack
+     * @var ServiceContainer
      */
-    private $requestStack;
+    protected $container;
 
     /**
      * Initializes the OnmFormatter.
      *
-     * @param RequestStack $requestStack The current request stack.
-     * @param Loader       $loader       The core loader service.
+     * @param ServiceCotnainer $container The service container.
      */
-    public function __construct(RequestStack $requestStack, $loader)
+    public function __construct($container)
     {
-        $this->requestStack = $requestStack;
-        $this->loader       = $loader;
-        $this->instance     = $this->loader->getInstance();
+        $this->container = $container;
     }
 
     /*
-     * Adds extra info to the monolog processor. With this we can enrich our
-     * logs.
+     * Adds extra info to the monolog processor.
      *
      * @param array $record The current log record.
      *
@@ -45,11 +39,12 @@ class OnmFormatter
     {
         $record['extra']['instance'] = 'unknown';
 
-        if (!empty($this->instance)) {
-            $record['extra']['instance'] = $this->instance->internal_name;
+        if (!empty($this->container->get('core.instance'))) {
+            $record['extra']['instance'] = $this->container
+                ->get('core.instance')->internal_name;
         }
 
-        $request = $this->requestStack->getCurrentRequest();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
 
         // Ensure we have a request (maybe we're in a console command)
         if (empty($request)) {
@@ -57,7 +52,7 @@ class OnmFormatter
         }
 
         $record['extra']['client_ip']  = $request->getClientIp();
-        $record['extra']['user-agent'] = $request->headers->get('User-Agent');
+        $record['extra']['user_agent'] = $request->headers->get('User-Agent');
         $record['extra']['url']        = $request->getUri();
 
         return $record;
