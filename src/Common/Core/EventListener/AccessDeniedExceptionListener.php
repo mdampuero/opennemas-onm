@@ -54,18 +54,25 @@ class AccessDeniedExceptionListener implements EventSubscriberInterface
             return;
         }
 
+        $this->container->get('application.log')
+            ->info($exception->getMessage());
+
         $request = $event->getRequest();
+        $referer = $request->getRequestUri();
 
         // Redirect to login when no user
         if (empty($this->container->get('core.user'))) {
+            $url = $this->container->get('router')
+                ->generate('backend_authentication_login');
+
+            if (!preg_match('/admin/', $referer)) {
+                $url = $this->container->get('router')
+                    ->generate('frontend_authentication_login');
+            }
+
             $request->getSession()->set('_target', $request->getRequestUri());
 
-            $event->setResponse(
-                new RedirectResponse(
-                    $this->container->get('router')
-                        ->generate('backend_authentication_login')
-                )
-            );
+            $event->setResponse(new RedirectResponse($url));
             return;
         }
 
