@@ -167,9 +167,27 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->helper->isHidden('000', 'print'));
         $this->assertTrue($this->helper->isHidden('101', 'print'));
 
-        $this->assertFalse($this->helper->isHidden('000000000000', 'wibble'));
-        $this->assertTrue($this->helper->isHidden('000001000001', 'media'));
-        $this->assertTrue($this->helper->isHidden('000000001001', 'tags'));
+        $this->assertFalse($this->helper->isHidden('0000000000000', 'wibble'));
+        $this->assertTrue($this->helper->isHidden('0000010000010', 'media'));
+        $this->assertTrue($this->helper->isHidden('0000000010010', 'tags'));
+    }
+
+    /**
+     * Tests isIndexed for subscribed and non-subscribed users.
+     */
+    public function testIsIndexed()
+    {
+        $this->assertTrue($this->helper->isIndexed(null));
+        $this->assertTrue($this->helper->isIndexed(0));
+        $this->assertTrue($this->helper->isIndexed('000'));
+        $this->assertTrue($this->helper->isIndexed('000'));
+        $this->assertTrue($this->helper->isIndexed('001'));
+        $this->assertTrue($this->helper->isIndexed('111'));
+
+        $this->assertTrue($this->helper->isIndexed('0000000000000'));
+        $this->assertTrue($this->helper->isIndexed('0000000000000'));
+        $this->assertFalse($this->helper->isIndexed('0000000000011'));
+        $this->assertFalse($this->helper->isIndexed('0010010010011'));
     }
 
     /**
@@ -185,9 +203,9 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->helper->isRedirected('000'));
         $this->assertFalse($this->helper->isRedirected('101'));
 
-        $this->assertFalse($this->helper->isRedirected('000000000000'));
-        $this->assertTrue($this->helper->isRedirected('100001000001'));
-        $this->assertTrue($this->helper->isRedirected('100000001002'));
+        $this->assertFalse($this->helper->isRedirected('0000000000000'));
+        $this->assertTrue($this->helper->isRedirected('1000010000010'));
+        $this->assertTrue($this->helper->isRedirected('1000000010010'));
     }
 
     /**

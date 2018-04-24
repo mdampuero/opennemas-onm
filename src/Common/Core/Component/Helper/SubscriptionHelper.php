@@ -112,6 +112,20 @@ class SubscriptionHelper
     }
 
     /**
+     * Checks if the item can or cannot be indexed by search engines basing on
+     * the token value.
+     *
+     * @param string $token The subscription token.
+     *
+     * @return boolean True if the can be indexed by search engines. False
+     *                  otherwise.
+     */
+    public function isIndexed($token)
+    {
+        return !$this->checkToken($token, 'NO_INDEX');
+    }
+
+    /**
      * Checks if the content has to be redirected to frontpage basing on the
      * token value.
      *
