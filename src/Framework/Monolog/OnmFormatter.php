@@ -37,12 +37,8 @@ class OnmFormatter
      */
     public function processRecord(array $record)
     {
-        $record['extra']['instance'] = 'unknown';
-
-        if (!empty($this->container->get('core.instance'))) {
-            $record['extra']['instance'] = $this->container
-                ->get('core.instance')->internal_name;
-        }
+        $record['extra']['instance'] = $this->getInstance();
+        $record['extra']['user']     = $this->getUser();
 
         $request = $this->container->get('request_stack')->getCurrentRequest();
 
@@ -56,5 +52,38 @@ class OnmFormatter
         $record['extra']['url']        = $request->getUri();
 
         return $record;
+    }
+
+    /**
+     * Returns the instance to include in the record.
+     *
+     * @return string The instance to include in the record.
+     */
+    protected function getInstance()
+    {
+        if (!empty($this->container->get('core.instance'))) {
+            return $this->container->get('core.instance')->internal_name;
+        }
+
+        return 'unknown';
+    }
+
+    /**
+     * Returns the user to include in the record.
+     *
+     * @return string The user to include in the record.
+     */
+    protected function getUser()
+    {
+        $ts = $this->container->get('security.token_storage');
+
+        if (empty($ts->getToken())
+            || empty($ts->getToken()->getUser())
+            || empty($ts->getToken()->getUser() !== 'anon.')
+        ) {
+            return 'anon.';
+        }
+
+        return $ts->getToken()->getUser()->email;
     }
 }

@@ -8,7 +8,7 @@ services:
     monolog.formatter.standard:
         class: Monolog\Formatter\LineFormatter
         arguments:
-            format: "%%datetime%% | %%level_name%% | %%extra.user_agent%% | %%extra.client_ip%% | %%extra.url%% | %%extra.instance%%: %%message%% %%context%%\n"
+            format: "%%datetime%% | %%level_name%% | %%extra.user_agent%% | %%extra.client_ip%% | %%extra.url%% | %%extra.instance%% | %%extra.user%% | %%message%% %%context%%\n"
 
     monolog.processor.onm:
         class: Framework\Monolog\OnmFormatter
