@@ -14,8 +14,13 @@ function smarty_function_gravatar($params, &$smarty)
             $atts['height'] = $size;
             $atts['width']  = $size;
         }
+
         if (array_key_exists('image', $params)) {
             $img = $params['image'];
+        }
+
+        if (array_key_exists('class', $params)) {
+            $atts['class'] = $params['class'];
         }
 
         $url = '//www.gravatar.com/avatar/';
