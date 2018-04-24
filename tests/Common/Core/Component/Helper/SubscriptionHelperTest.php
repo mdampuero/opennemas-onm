@@ -68,13 +68,13 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
         $this->ss->expects($this->at(0))->method('getListbyIds')
             ->willReturn([ 'items' => [ $subscriptions[1] ], 'total' => 1 ]);
 
-        $this->assertEquals('000010010000', $this->helper->getToken($this->content));
+        $this->assertEquals('0000100100000', $this->helper->getToken($this->content));
 
         $this->content->subscriptions = [ 2 ];
         $this->ss->expects($this->at(0))->method('getListbyIds')
             ->willReturn([ 'items' => [ $subscriptions[2] ], 'total' => 1 ]);
 
-        $this->assertEquals('001000100000', $this->helper->getToken($this->content));
+        $this->assertEquals('0010001000000', $this->helper->getToken($this->content));
 
         $this->content->subscriptions = [ 1, 2 ];
         $this->ss->expects($this->at(0))->method('getListbyIds')->willReturn([
@@ -82,7 +82,7 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
             'total' => 2
         ]);
 
-        $this->assertEquals('001010110000', $this->helper->getToken($this->content));
+        $this->assertEquals('0010101100000', $this->helper->getToken($this->content));
     }
 
     /**
@@ -148,10 +148,10 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->helper->isBlocked('001', 'browser'));
         $this->assertTrue($this->helper->isBlocked('111', 'browser'));
 
-        $this->assertFalse($this->helper->isBlocked('000000000000', 'wibble'));
-        $this->assertFalse($this->helper->isBlocked('000000000000', 'browser'));
-        $this->assertTrue($this->helper->isBlocked('000000000001', 'browser'));
-        $this->assertTrue($this->helper->isBlocked('001001001001', 'browser'));
+        $this->assertFalse($this->helper->isBlocked('0000000000000', 'wibble'));
+        $this->assertFalse($this->helper->isBlocked('0000000000000', 'browser'));
+        $this->assertTrue($this->helper->isBlocked('0000000000010', 'browser'));
+        $this->assertTrue($this->helper->isBlocked('0010010010010', 'browser'));
     }
 
     /**

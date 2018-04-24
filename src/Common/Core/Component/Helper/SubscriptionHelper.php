@@ -42,7 +42,8 @@ class SubscriptionHelper
         'NON_MEMBER_HIDE_TAGS',
         'NON_MEMBER_HIDE_PRINT',
         'NON_MEMBER_HIDE_SOCIAL',
-        'NON_MEMBER_BLOCK_BROWSER'
+        'NON_MEMBER_BLOCK_BROWSER',
+        'NON_MEMBER_NO_INDEX'
     ];
 
     /**
