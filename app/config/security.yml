@@ -7,8 +7,8 @@ security:
             id: core.security.encoder.password
 
     role_hierarchy:
-        MASTER: [ ADMIN, ROLE_ALLOWED_TO_SWITCH ]
-        ADMIN:  []
+        ROLE_MASTER: [ ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH ]
+        ROLE_ADMIN:  []
 
     providers:
         chain_provider:
@@ -119,9 +119,9 @@ security:
 
     access_control:
         - { path: ^/(admin|auth)/(login$|connect), roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
-        - { path: ^/admin/*,                       roles: [ ADMIN ] }
-        - { path: ^/api/v1/backend/*,              roles: [ ADMIN ] }
+        - { path: ^/admin/*,                       roles: [ ROLE_ADMIN ] }
+        - { path: ^/api/v1/backend/*,              roles: [ ROLE_ADMIN ] }
         - { path: ^/managerws/(login|check),       roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
-        - { path: ^/managerws,                     roles: [ MASTER ] }
+        - { path: ^/managerws,                     roles: [ ROLE_MASTER ] }
         - { path: ^/user/me,                       roles: [ IS_AUTHENTICATED_FULLY ] }
         - { path: ^/*,                             roles: [ IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY ] }

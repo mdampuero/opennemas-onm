@@ -71,10 +71,12 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
         $roles = [];
 
         if ($this->getOrigin() === 'manager') {
+            $roles[] = 'ROLE_MASTER';
             $roles[] = 'MASTER';
         }
 
         if ($this->type !== 1) {
+            $roles[] = 'ROLE_ADMIN';
             $roles[] = 'ADMIN';
         }
 
