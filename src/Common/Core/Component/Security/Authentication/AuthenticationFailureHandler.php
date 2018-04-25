@@ -64,7 +64,7 @@ class AuthenticationFailureHandler implements AuthenticationFailureHandlerInterf
 
         $this->auth->addError($exception);
         $this->auth->failure();
-        $this->logger->info($this->auth->getErrorMessage());
+        $this->logger->info($this->auth->getInternalErrorMessage());
 
         if ($request->isXmlHttpRequest()) {
             return new RedirectResponse(

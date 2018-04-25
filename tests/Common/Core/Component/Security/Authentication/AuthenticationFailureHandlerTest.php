@@ -23,7 +23,7 @@ class AuthenticationFailureHandlerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->auth = $this->getMockBuilder('Authentication')
-            ->setMethods([ 'addError', 'failure', 'getErrorMessage' ])
+            ->setMethods([ 'addError', 'failure', 'getInternalErrorMessage' ])
             ->getMock();
 
         $this->exception = new AuthenticationException();
@@ -60,6 +60,7 @@ class AuthenticationFailureHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->headers->expects($this->once())->method('get')
             ->with('referer')->willReturn('/admin/login');
+        $this->auth->expects($this->once())->method('getInternalErrorMessage');
         $this->logger->expects($this->once())->method('info');
         $this->router->expects($this->once())->method('generate')
             ->with('backend_authentication_login')->willReturn('wubble/foo');
@@ -84,6 +85,7 @@ class AuthenticationFailureHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->headers->expects($this->once())->method('get')
             ->with('referer')->willReturn('/fred');
+        $this->auth->expects($this->once())->method('getInternalErrorMessage');
         $this->logger->expects($this->once())->method('info');
         $this->router->expects($this->once())->method('generate')
             ->with('frontend_authentication_login')->willReturn('wubble/foo');
@@ -108,6 +110,7 @@ class AuthenticationFailureHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->headers->expects($this->once())->method('get')
             ->with('referer')->willReturn('/admin/login');
+        $this->auth->expects($this->once())->method('getInternalErrorMessage');
         $this->logger->expects($this->once())->method('info');
         $this->router->expects($this->once())->method('generate')
             ->with('core_authentication_authenticated')->willReturn('wubble/foo');

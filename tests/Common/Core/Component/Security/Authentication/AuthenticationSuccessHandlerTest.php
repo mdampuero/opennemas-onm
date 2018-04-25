@@ -24,7 +24,7 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->auth = $this->getMockBuilder('Authentication')
             ->setMethods([
-                'checkCsrfToken', 'checkRecaptcha', 'getErrorMessage',
+                'checkCsrfToken', 'checkRecaptcha', 'getInternalErrorMessage',
                 'hasError', 'success'
             ])->getMock();
 
@@ -84,7 +84,7 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->auth->expects($this->once())->method('hasError')
             ->willReturn(true);
-        $this->auth->expects($this->once())->method('getErrorMessage')
+        $this->auth->expects($this->once())->method('getInternalErrorMessage')
             ->willReturn('corge');
         $this->logger->expects($this->once())->method('info');
 

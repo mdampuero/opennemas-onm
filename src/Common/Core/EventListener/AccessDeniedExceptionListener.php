@@ -54,30 +54,25 @@ class AccessDeniedExceptionListener implements EventSubscriberInterface
             return;
         }
 
-        $this->container->get('application.log')
-            ->info($exception->getMessage());
-
         $request = $event->getRequest();
-        $referer = $request->getRequestUri();
+        $uri     = $request->getRequestUri();
 
         // Redirect to login when no user
         if (empty($this->container->get('core.user'))) {
-            $url = $this->container->get('router')
-                ->generate('backend_authentication_login');
-
-            if (!preg_match('/admin/', $referer)) {
-                $url = $this->container->get('router')
-                    ->generate('frontend_authentication_login');
-            }
-
-            $request->getSession()->set('_target', $request->getRequestUri());
-
-            $event->setResponse(new RedirectResponse($url));
+            $this->redirectToLogin($event, $request);
             return;
         }
 
+        if (strpos($uri, '/admin') === 0) {
+            $controller = 'BackendBundle:Error:default';
+        } elseif (strpos($uri, '/manager') === 0) {
+            $controller = 'ManagerBundle:Error:default';
+        } else {
+            $controller = 'FrontendBundle:Error:default';
+        }
+
         $request = $request->duplicate(null, null, [
-            '_controller' => 'BackendBundle:Error:default',
+            '_controller' => $controller,
             'exception'   => FlattenException::create($exception),
         ]);
 
@@ -100,5 +95,31 @@ class AccessDeniedExceptionListener implements EventSubscriberInterface
         return [
             KernelEvents::EXCEPTION => [ 'onKernelException', 100 ],
         ];
+    }
+
+    /**
+     * Redirects to login page.
+     *
+     * @param GetResponseForExceptionEvent $event   The event object.
+     * @param Request                      $request The request object.
+     */
+    protected function redirectToLogin($event, $request)
+    {
+        $this->container->get('application.log')
+            ->info('security.authentication.required');
+
+        $referer = $request->getRequestUri();
+
+        $url = $this->container->get('router')
+            ->generate('backend_authentication_login');
+
+        if (!preg_match('/admin/', $referer)) {
+            $url = $this->container->get('router')
+                ->generate('frontend_authentication_login');
+        }
+
+        $request->getSession()->set('_target', $referer);
+
+        $event->setResponse(new RedirectResponse($url));
     }
 }

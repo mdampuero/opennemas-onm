@@ -98,7 +98,7 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
         }
 
         if ($this->auth->hasError()) {
-            $this->logger->info($this->auth->getErrorMessage());
+            $this->logger->info($this->auth->getInternalErrorMessage());
             $this->ts->setToken(null);
 
             if (!$request->isXmlHttpRequest()) {
@@ -109,7 +109,7 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
         }
 
         $this->auth->success();
-        $this->logger->info('authentication.sucess');
+        $this->logger->info('security.authentication.success');
 
         return new RedirectResponse($target);
     }
