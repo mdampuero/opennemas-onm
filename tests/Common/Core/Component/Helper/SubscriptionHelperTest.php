@@ -191,24 +191,6 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests isRedirected for subscribed and non-subscribed users with valid and
-     * invalid actions.
-     */
-    public function testIsRedirected()
-    {
-        $this->assertFalse($this->helper->isRedirected(null, 'wibble'));
-        $this->assertFalse($this->helper->isRedirected(0, 'wibble'));
-
-        $this->assertFalse($this->helper->isRedirected('000'));
-        $this->assertFalse($this->helper->isRedirected('000'));
-        $this->assertFalse($this->helper->isRedirected('101'));
-
-        $this->assertFalse($this->helper->isRedirected('0000000000000'));
-        $this->assertTrue($this->helper->isRedirected('1000010000010'));
-        $this->assertTrue($this->helper->isRedirected('1000000010010'));
-    }
-
-    /**
      * Test isSubscribed when an user is logged in the system.
      */
     public function testIsSubscribed()
@@ -223,7 +205,6 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
         $this->user->user_groups = [
             1 => [ 'user_group_id' => 1, 'expires' => null, 'status' => 1 ],
         ];
-
 
         $this->assertTrue($this->helper->isSubscribed($this->content));
 

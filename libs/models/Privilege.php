@@ -1329,8 +1329,8 @@ class Privilege
 
             230 => [
                 'pk_privilege' => '230',
-                'name'         => 'NON_MEMBER_REDIRECT',
-                'description'  => _('Redirect to frontpage'),
+                'name'         => 'NON_MEMBER_BLOCK_ACCESS',
+                'description'  => _('Block access to content'),
                 'module'       => 'FRONTEND',
             ],
 

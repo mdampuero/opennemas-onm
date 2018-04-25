@@ -31,7 +31,7 @@ class SubscriptionHelper
      * @var array
      */
     protected $notSubscribedPermissions = [
-        'NON_MEMBER_REDIRECT',
+        'NON_MEMBER_BLOCK_ACCESS',
         'NON_MEMBER_HIDE_TITLE',
         'NON_MEMBER_HIDE_SUMMARY',
         'NON_MEMBER_HIDE_BODY',
@@ -123,20 +123,6 @@ class SubscriptionHelper
     public function isIndexed($token)
     {
         return !$this->checkToken($token, 'NO_INDEX');
-    }
-
-    /**
-     * Checks if the content has to be redirected to frontpage basing on the
-     * token value.
-     *
-     * @param string $token The subscription token.
-     *
-     * @return boolean True if the content has to be redirected to frontpage.
-     *                      False otherwise.
-     */
-    public function isRedirected($token)
-    {
-        return $this->checkToken($token, 'REDIRECT');
     }
 
     /**

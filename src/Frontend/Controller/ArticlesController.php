@@ -58,7 +58,7 @@ class ArticlesController extends Controller
 
         $token = $sh->getToken($article);
 
-        if ($sh->isRedirected($token)) {
+        if ($sh->isBlocked($token, 'access')) {
             throw new AccessDeniedException();
         }
 

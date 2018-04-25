@@ -226,15 +226,15 @@
                 <div class="row">
                   <div class="col-xs-6">
                     <div class="form-group">
-                      <label class="form-label">{t}Redirection{/t}</label>
-                      <label class="pointer" for="non-member-redirection">
+                      <label class="form-label">{t}Access{/t}</label>
+                      <label class="pointer" for="non-member-block-access">
                         <div class="checkbox">
-                          <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_REDIRECT')" id="non-member-redirection" type="checkbox">
-                          <label for="non-member-redirection">{t}Redirect to frontpage{/t}</label>
+                          <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_BLOCK_ACCESS')" id="non-member-block-access" type="checkbox">
+                          <label for="non-member-block-access">{t}Block access to content{/t}</label>
                         </div>
                         <span class="help m-l-3" ng-show="isHelpEnabled()">
                           <i class="fa fa-info-circle m-r-5 text-info"></i>
-                          {t}If enabled, non-members will be redirect to frontpage when accessing contents in this subscription{/t}
+                          {t}If enabled, non-members will not be able to access to contents in this subscription{/t}
                         </span>
                       </label>
                     </div>
