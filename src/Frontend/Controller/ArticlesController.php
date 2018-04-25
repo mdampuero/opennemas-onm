@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Defines the frontend controller for the articles.
@@ -21,11 +22,11 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class ArticlesController extends Controller
 {
     /**
-     * Displays the article given its id
+     * Displays the article given its id.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
+     * @return Response The response object.
      */
     public function showAction(Request $request)
     {
@@ -56,12 +57,9 @@ class ArticlesController extends Controller
         $sh = $this->get('core.helper.subscription');
 
         $token = $sh->getToken($article);
-        $this->view->assign('token', $token);
 
-        if ($sh->isRedirected($token)) {
-            return new RedirectResponse($this->get('router')->generate(
-                'frontend_frontpage'
-            ), 302);
+        if ($sh->isBlocked($token, 'access')) {
+            throw new AccessDeniedException();
         }
 
         $category = $this->get('orm.manager')->getRepository('Category')
@@ -112,7 +110,7 @@ class ArticlesController extends Controller
             'content'               => $article,
             'contentId'             => $article->id,
             'time'                  => '12345',
-            'token'                 => $token,
+            'o-token'               => $token,
             'x-cache-for'           => '+1 day',
             'x-cacheable'           => empty($token),
             'x-tags'                => 'article,' . $article->id

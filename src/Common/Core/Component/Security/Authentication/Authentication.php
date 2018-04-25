@@ -181,6 +181,34 @@ class Authentication
     }
 
     /**
+     * Returns the error message basing on the current error.
+     *
+     * @return string The error message.
+     */
+    public function getInternalErrorMessage()
+    {
+        if (!$this->hasError()) {
+            return '';
+        }
+
+        $error = $this->getError();
+
+        if ($error instanceof BadCredentialsException) {
+            return 'security.authentication.failure.credentials';
+        }
+
+        if ($error instanceof InvalidCsrfTokenException) {
+            return 'security.authentication.failure.csrf';
+        }
+
+        if ($error instanceof InvalidRecaptchaException) {
+            return 'security.authentication.failure.recaptcha';
+        }
+
+        return $error->getMessage();
+    }
+
+    /**
      * Returns the HTML for a recaptcha configured from parameters.
      *
      * @return string The HTML for a recaptcha configured from parameters.
