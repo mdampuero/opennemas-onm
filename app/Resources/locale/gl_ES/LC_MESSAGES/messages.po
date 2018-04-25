@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-20 13:25+0000\n"
-"PO-Revision-Date: 2018-04-20 15:28+0200\n"
+"POT-Creation-Date: 2018-04-25 14:32+0000\n"
+"PO-Revision-Date: 2018-04-25 16:37+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1796,9 +1796,6 @@ msgstr "Artigo enviado correctamente."
 msgid "Unable to send the email. Please try to send it later."
 msgstr "Non se puido enviar o correo electrónico. Téntao máis tarde"
 
-msgid "Unable to find the page you are looking for."
-msgstr "Non se puido atopar o ficheiro co identificador «%d»."
-
 msgid "Email is required but it will not be published"
 msgstr "O campo de correo-e é obrigatorio porén non será publicado"
 
@@ -2857,8 +2854,8 @@ msgstr "Ocultar botóns de redes sociais"
 msgid "Block browser actions (cut, copy,...)"
 msgstr "Bloquear accións do navegador (cortar, copiar,...)"
 
-msgid "Redirect to frontpage"
-msgstr "Redirixir a portada"
+msgid "Block access to content"
+msgstr "Bloquear acceso ao contido"
 
 msgid "Hide title"
 msgstr "Ocultar título"
@@ -2883,6 +2880,9 @@ msgstr "Ocultar información do contido"
 
 msgid "Hide tags"
 msgstr "Ocultar etiquetas"
+
+msgid "Prevent search engine indexation"
+msgstr "Evitar indexación en buscadores"
 
 msgid "Static Page"
 msgstr "Páxina estática"
@@ -3842,11 +3842,11 @@ msgstr ""
 "listado de usuarios e tamén se lle eliminarán os grupos de usuario asociados."
 
 msgid ""
-"This means the item will be a subscriber and a user in the system. "
-"It will appear in the list of users and the list of subscribers."
+"This means the item will be a subscriber and a user in the system. It will "
+"appear in the list of users and the list of subscribers."
 msgstr ""
-"Esto significa que o elemento será un subscritor e un usuario do "
-"sistema. Aparecerá nos listados de usuarios e subscritores."
+"Esto significa que o elemento será un subscritor e un usuario do sistema. "
+"Aparecerá nos listados de usuarios e subscritores."
 
 msgid "You will be able to convert the item again in the future."
 msgstr "Poderás converter o elemento de novo no futuro."
@@ -7928,12 +7928,21 @@ msgstr ""
 msgid "Restrictions for non-members"
 msgstr "Restricións para non-membros"
 
+msgid "Access"
+msgstr "Acceso"
+
 msgid ""
-"If enabled, non-members will be redirect to frontpage when accessing "
-"contents in this subscription"
+"If enabled, non-members will not be able to access to contents in this "
+"subscription"
 msgstr ""
-"Se está activado, os non-membros serán redirixidos a portada cando accedan a "
-"contidos desta subscrición"
+"Se está activado, os non-membros non poderán acceder a contidos desta "
+"subscrición"
+
+msgid "Indexation"
+msgstr "Indexación"
+
+msgid "If enabled, the noindex directive will be added to the HTML"
+msgstr "Se está activado, a directiva noindex incluirase no HTML"
 
 msgid "Hide information"
 msgstr "Ocultar información"
@@ -9023,6 +9032,12 @@ msgstr "Benvido ao Xestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
+
+#~ msgid "Unable to find the page you are looking for."
+#~ msgstr "Non se puido atopar o ficheiro co identificador «%d»."
+
+#~ msgid "Redirect to frontpage"
+#~ msgstr "Redirixir a portada"
 
 #~ msgid "Convert to subscriber + user"
 #~ msgstr "Converter a subscritor + usuario"
