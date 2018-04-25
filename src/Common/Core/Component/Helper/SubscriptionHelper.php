@@ -31,7 +31,7 @@ class SubscriptionHelper
      * @var array
      */
     protected $notSubscribedPermissions = [
-        'NON_MEMBER_REDIRECT',
+        'NON_MEMBER_BLOCK_ACCESS',
         'NON_MEMBER_HIDE_TITLE',
         'NON_MEMBER_HIDE_SUMMARY',
         'NON_MEMBER_HIDE_BODY',
@@ -42,7 +42,8 @@ class SubscriptionHelper
         'NON_MEMBER_HIDE_TAGS',
         'NON_MEMBER_HIDE_PRINT',
         'NON_MEMBER_HIDE_SOCIAL',
-        'NON_MEMBER_BLOCK_BROWSER'
+        'NON_MEMBER_BLOCK_BROWSER',
+        'NON_MEMBER_NO_INDEX'
     ];
 
     /**
@@ -111,17 +112,17 @@ class SubscriptionHelper
     }
 
     /**
-     * Checks if the content has to be redirected to frontpage basing on the
-     * token value.
+     * Checks if the item can or cannot be indexed by search engines basing on
+     * the token value.
      *
      * @param string $token The subscription token.
      *
-     * @return boolean True if the content has to be redirected to frontpage.
-     *                      False otherwise.
+     * @return boolean True if the can be indexed by search engines. False
+     *                  otherwise.
      */
-    public function isRedirected($token)
+    public function isIndexed($token)
     {
-        return $this->checkToken($token, 'REDIRECT');
+        return !$this->checkToken($token, 'NO_INDEX');
     }
 
     /**

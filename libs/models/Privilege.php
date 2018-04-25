@@ -1329,8 +1329,8 @@ class Privilege
 
             230 => [
                 'pk_privilege' => '230',
-                'name'         => 'NON_MEMBER_REDIRECT',
-                'description'  => _('Redirect to frontpage'),
+                'name'         => 'NON_MEMBER_BLOCK_ACCESS',
+                'description'  => _('Block access to content'),
                 'module'       => 'FRONTEND',
             ],
 
@@ -1408,6 +1408,13 @@ class Privilege
                 'pk_privilege' => '241',
                 'name'         => 'NON_MEMBER_BLOCK_BROWSER',
                 'description'  => _('Block browser actions (cut, copy,...)'),
+                'module'       => 'FRONTEND',
+            ],
+
+            242 => [
+                'pk_privilege' => '242',
+                'name'         => 'NON_MEMBER_NO_INDEX',
+                'description'  => _('Prevent search engine indexation'),
                 'module'       => 'FRONTEND',
             ],
         ];
