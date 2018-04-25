@@ -502,8 +502,9 @@
 
           // Raise a modal to indicate that background translation is being executed
           $uibModal.open({
-            backdrop:    true,
-            backdropClass: 'modal-backdrop-transparent',
+            backdrop: 'static',
+            keyboard: false,
+            backdropClass: 'modal-backdrop-dark',
             controller:  'BackgroundTaskModalCtrl',
             openedClass: 'modal-relative-open',
             templateUrl: 'modal-translate',
