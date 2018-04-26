@@ -2092,6 +2092,14 @@ class Content implements \JsonSerializable
      */
     public function saveMetadataFields($data, $type)
     {
+        if (array_key_exists('subscriptions', $data)) {
+            if (!empty($data['subscriptions'])) {
+                $this->setMetadata('subscriptions', $data['subscriptions']);
+            } else {
+                $this->removeMetadata('subscriptions');
+            }
+        }
+
         if (!getService('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
             return;
         }
