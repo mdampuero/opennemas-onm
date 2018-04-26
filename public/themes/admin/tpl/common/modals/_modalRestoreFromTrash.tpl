@@ -6,7 +6,7 @@
   </h4>
 </div>
 <div class="modal-body">
-    <p>{t escape=off}Are you sure that do you want restore from trash "[% template.content.title %]"?{/t}</p>
+    <p>{t escape=off 1="[% template.content.title %]"}Are you sure that do you want restore from trash "%1"?{/t}</p>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" ng-click="yes()" ng-disabled="yesLoading" type="button">

@@ -6,7 +6,7 @@
   </h4>
 </div>
 <div class="modal-body">
-    <p>{t escape=off}Are you sure you want to delete [% template.selected %] item(s)?{/t}</p>
+    <p>{t escape=off 1="[% template.selected %]"}Are you sure you want to delete %1 item(s)?{/t}</p>
 </div>
 <div class="modal-footer">
     <span class="loading" ng-if="deleting == 1"></span>

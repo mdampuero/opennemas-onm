@@ -5,9 +5,17 @@ api_v1_backend_tools_slug:
     options:
         expose: true
 
-api_v1_backend_tools_translate:
-    path:     /tools/translate
-    defaults: { _controller  : ApiBundle:V1/Backend/Tool:translate }
+api_v1_backend_tools_translate_string:
+    path:     /tools/translate-string
+    defaults: { _controller  : ApiBundle:V1/Backend/Tool:translateString }
     methods:  [ POST ]
     options:
         expose: true
+
+api_v1_backend_tools_translate_contents:
+    path:     /tools/translate-contents
+    defaults: { _controller  : ApiBundle:V1/Backend/Tool:translateContents }
+    methods:  [ POST ]
+    options:
+        expose: true
+

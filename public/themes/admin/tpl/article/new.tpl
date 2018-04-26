@@ -360,7 +360,7 @@
                   <div class="grid-body">
                     <div ng-show="!data.extra.subscriptions || data.extra.subscriptions.length === 0">
                       <i class="fa fa-warning m-r-5 text-warning"></i>
-                      {t escape=off}There are no enabled <a href="[% routing.generate('backend_subscriptions_list') %]">subscriptions</a>{/t}
+                      {t escape=off 1="[% routing.generate('backend_subscriptions_list') %]"}There are no enabled <a href="%1">subscriptions</a>{/t}
                     </div>
                     <div class="form-group no-margin" ng-show="data.extra.subscriptions && data.extra.subscriptions.length > 0">
                       <div class="checkbox m-b-5" ng-repeat="subscription in data.extra.subscriptions">

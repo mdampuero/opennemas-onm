@@ -187,21 +187,21 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests isIndexed for subscribed and non-subscribed users.
+     * Tests isIndexable for subscribed and non-subscribed users.
      */
-    public function testIsIndexed()
+    public function testIsIndexable()
     {
-        $this->assertTrue($this->helper->isIndexed(null));
-        $this->assertTrue($this->helper->isIndexed(0));
-        $this->assertTrue($this->helper->isIndexed('000'));
-        $this->assertTrue($this->helper->isIndexed('000'));
-        $this->assertTrue($this->helper->isIndexed('001'));
-        $this->assertTrue($this->helper->isIndexed('111'));
+        $this->assertTrue($this->helper->isIndexable(null));
+        $this->assertTrue($this->helper->isIndexable(0));
+        $this->assertTrue($this->helper->isIndexable('000'));
+        $this->assertTrue($this->helper->isIndexable('000'));
+        $this->assertTrue($this->helper->isIndexable('001'));
+        $this->assertTrue($this->helper->isIndexable('111'));
 
-        $this->assertTrue($this->helper->isIndexed('0000000000000'));
-        $this->assertTrue($this->helper->isIndexed('0000000000000'));
-        $this->assertFalse($this->helper->isIndexed('0000000000011'));
-        $this->assertFalse($this->helper->isIndexed('0010010010011'));
+        $this->assertTrue($this->helper->isIndexable('0000000000000'));
+        $this->assertTrue($this->helper->isIndexable('0000000000000'));
+        $this->assertFalse($this->helper->isIndexable('0000000000011'));
+        $this->assertFalse($this->helper->isIndexable('0010010010011'));
     }
 
     /**

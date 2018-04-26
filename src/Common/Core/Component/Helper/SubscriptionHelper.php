@@ -131,7 +131,7 @@ class SubscriptionHelper
      * @return boolean True if the can be indexed by search engines. False
      *                  otherwise.
      */
-    public function isIndexed($token)
+    public function isIndexable($token)
     {
         return !$this->checkToken($token, 'NO_INDEX');
     }

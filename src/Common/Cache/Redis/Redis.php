@@ -60,8 +60,8 @@ class Redis extends Cache
      */
     protected function deleteByPattern($pattern)
     {
-        $this->getRedis()->eval(
-            'redis.call("del", unpack(redis.call("keys", ARGV[1])))',
+        return $this->getRedis()->eval(
+            'for i, name in ipairs(redis.call(\'KEYS\', ARGV[1])) do redis.call(\'DEL\', name); end',
             [ $pattern ]
         );
     }

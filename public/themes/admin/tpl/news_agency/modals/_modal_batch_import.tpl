@@ -3,7 +3,7 @@
   <h4 class="modal-title">{t}Import items{/t}</h4>
 </div>
 <div class="modal-body" ng-if="!loading && !imported" ng-init="init()">
-  <p>{t escape=off}Are you sure you want to import [% template.contents.length %] elements?{/t}</p>
+  <p>{t escape=off 1="[% template.contents.length %]"}Are you sure you want to import %1 elements?{/t}</p>
   <ul class="no-style p-l-7">
     <li ng-repeat="content in template.contents track by $index">
       <i class="fa m-r-5" ng-class="{ 'fa-file-text-o': content.type === 'text', 'fa-picture-o': content.type === 'photo', 'fa-film': content.type === 'video' }"></i>
