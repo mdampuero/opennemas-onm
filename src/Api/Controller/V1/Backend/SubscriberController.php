@@ -123,7 +123,8 @@ class SubscriberController extends Controller
                 $gender,
                 !empty($item->birth_date) ? $item->birth_date : '',
                 !empty($item->postal_code) ? $item->postal_code : '',
-                !empty($item->register_date) ? $item->register_date : '',
+                !empty($item->register_date) ?
+                    $item->register_date->format('Y-m-d H:i:s') : '',
             ];
 
             $output .= "\n" . implode(",", $row);
