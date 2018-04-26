@@ -379,6 +379,25 @@
         };
 
         /**
+         * @function save
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Saves settings.
+         */
+        $scope.toggleDefaultTranslator = function(index) {
+          var current = $scope.settings.translators[index];
+
+          current.default = true;
+
+          angular.forEach($scope.settings.translators, function(translator, key) {
+            if (key !== index && translator.to === current.to && translator.from === current.from) {
+              delete translator.default;
+            }
+          });
+        };
+
+        /**
          * @function post
          * @memberOf SettingsCtrl
          *
@@ -490,6 +509,10 @@
             $scope.settings.locale.frontend.language.available.map(function(e) {
               return { code: e, name: $scope.extra.locales.frontend[e] };
             });
+
+          angular.forEach($scope.settings.translators, function(value) {
+            value.default = value.default === 'true';
+          });
         };
 
         /**
