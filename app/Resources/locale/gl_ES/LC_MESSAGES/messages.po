@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-26 10:54+0000\n"
-"PO-Revision-Date: 2018-04-26 13:10+0200\n"
+"PO-Revision-Date: 2018-04-26 15:17+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -4369,6 +4369,8 @@ msgid ""
 "There are no enabled <a href=\"[% routing."
 "generate('backend_subscriptions_list') %]\">subscriptions</a>"
 msgstr ""
+"Non hai <a href=\"[% routing.generate('backend_subscriptions_list') %]\""
+">subscricións</a> activas"
 
 msgid ""
 "The content will be fully available only for subscribers in the selected "
@@ -5499,6 +5501,8 @@ msgid ""
 "There are no <a href=\"[% routing.generate('backend_subscriptions_list') "
 "%]\">subscriptions</a>"
 msgstr ""
+"Non hai <a href=\"[% routing.generate('backend_subscriptions_list') %]\""
+">subscricións</a>"
 
 msgid "Subscribed"
 msgstr "Subscrito"
@@ -5515,44 +5519,36 @@ msgstr "Os contrasinais non coinciden"
 msgid "Select a country"
 msgstr "Seleccione un país"
 
-#, fuzzy
 msgid ""
 "Do you want to convert the <strong>[% source %]</strong> to <strong>[% "
 "target %]</strong>?"
 msgstr ""
-"¿Queres converter o <strong>subscritor</strong> a <strong>subscritor + "
-"usuario</strong>?"
+"Quere converter o <strong>[% source %]</strong> en <strong>[% target "
+"%]</strong>?"
 
-#, fuzzy
 msgid ""
 "This means the item will not be a [% source %] anymore. It will only appear "
 "in the list of users and the subscriptions will be removed too."
 msgstr ""
-"Esto significa que o subscritor deixará de ser subscritor. O usuario só "
-"aparecerá no listado de usuarios e tamén se lle eliminarán as subscricións "
-"asociadas."
+"Esto significa que o elemento deixará de ser [% source %]. E só aparecerá no "
+"listado de usuarios e eliminaránselle as subscricións asociadas."
 
-#, fuzzy
 msgid ""
 "This means the item will not be a [% source %] anymore. It will only appear "
 "in the list of subscribers and the user groups will be removed too."
 msgstr ""
-"Esto significa que o subscritor deixará de ser subscritor. O usuario só "
-"aparecerá no listado de usuarios e tamén se lle eliminarán as subscricións "
-"asociadas."
+"Esto significa que o elemento deixará de ser [% source %]. Só aparecerá no "
+"listado de usuarios e retirarase dos grupos de usuarios aos que pertence."
 
-#, fuzzy
 msgid ""
 "This means the item will be a subscriber and a user in the system. It will "
 "appear in the list of users and the list of subscribers."
 msgstr ""
-"Esto significa que o subscritor será un subscritor e un usuario do sistema. "
-"Aparecerá nos listados de usuarios e subscritores. As subscricións non serán "
-"modificadas."
+"Esto significa que o elemento será un subscritor e un usuario do sistema. "
+"Aparecerá nos listados de usuarios e subscritores."
 
-#, fuzzy
 msgid "You will be able to convert the item again in the future."
-msgstr "Poderás convertir o usuario en subscritor de novo."
+msgstr "Poderá convertelo de novo no futuro."
 
 msgid "Config users module"
 msgstr "Configuración do módulo «usuarios»"
@@ -8301,25 +8297,21 @@ msgstr ""
 msgid "Restrictions for non-members"
 msgstr "Restricións para non-membros"
 
-#, fuzzy
 msgid "Access"
-msgstr "Aceptar"
+msgstr "Acceso"
 
-#, fuzzy
 msgid ""
 "If enabled, non-members will not be able to access to contents in this "
 "subscription"
 msgstr ""
-"Se está activado, os non-membros serán redirixidos a portada cando accedan a "
-"contidos desta subscrición"
+"Se está activado, os non-membros non poderán acceder aos contidos nesta "
+"subscrición"
 
-#, fuzzy
 msgid "Indexation"
-msgstr "Información"
+msgstr "Indexado"
 
-#, fuzzy
 msgid "If enabled, the noindex directive will be added to the HTML"
-msgstr "Se está activado, ocultarase o botón de imprimir contidos"
+msgstr "Se está activado, engadirase a directiva noindex ao HTML"
 
 msgid "Hide information"
 msgstr "Ocultar información"
@@ -8331,9 +8323,8 @@ msgstr ""
 "Algunha información será ocultada para non-membros cando accedan a contidos  "
 "nesta subscrición"
 
-#, fuzzy
 msgid "Block actions"
-msgstr "Localización"
+msgstr "Bloquear accións"
 
 msgid "Group name"
 msgstr "Nome do grupo"
