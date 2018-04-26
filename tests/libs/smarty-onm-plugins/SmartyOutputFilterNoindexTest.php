@@ -30,7 +30,7 @@ class SmartyOutputFilterNoindex extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->subscription = $this->getMockBuilder('SubscriptionHelper')
-            ->setMethods([ 'isIndexed' ])
+            ->setMethods([ 'isIndexable' ])
             ->getMock();
 
         $this->smarty->expects($this->any())->method('getContainer')
@@ -63,7 +63,7 @@ class SmartyOutputFilterNoindex extends \PHPUnit_Framework_TestCase
         $this->smarty->expects($this->any())->method('getTemplateVars')
             ->willReturn([ 'o-token' => '0000000000000' ]);
 
-        $this->subscription->expects($this->once())->method('isIndexed')
+        $this->subscription->expects($this->once())->method('isIndexable')
             ->with('0000000000000')->willReturn(true);
 
         $output = '<html><head></head><body>Hello World!</body></html>';
@@ -80,7 +80,7 @@ class SmartyOutputFilterNoindex extends \PHPUnit_Framework_TestCase
         $this->smarty->expects($this->any())->method('getTemplateVars')
             ->willReturn([ 'o-token' => '0000000000000' ]);
 
-        $this->subscription->expects($this->once())->method('isIndexed')
+        $this->subscription->expects($this->once())->method('isIndexable')
             ->with('0000000000000')->willReturn(false);
 
         $output = '<html><head></head><body>Hello World!</body></html>';
