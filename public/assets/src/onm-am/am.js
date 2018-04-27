@@ -515,8 +515,7 @@
   OAM.prototype.init = function() {
     this.user = this.getUser();
 
-    if (this.user !== null &&
-      !this.user.advertisements) {
+    if (this.user && !this.user.advertisements) {
       return;
     }
 
