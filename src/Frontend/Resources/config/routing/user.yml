@@ -6,17 +6,9 @@ frontend_user_menu:
     path: /user/get/menu
     defaults: { _controller: FrontendBundle:User:getUserMenu }
 
-frontend_user_recoverpass:
-    path: /user/recover-pass
-    defaults: { _controller: FrontendBundle:User:recoverPassword }
-
 frontend_user_register:
     path: /user/register
     defaults: { _controller: FrontendBundle:User:register }
-
-frontend_user_resetpass:
-    path: /user/reset-pass/{token}
-    defaults: { _controller: FrontendBundle:User:regeneratePassword }
 
 frontend_user_show:
     path: /user/me
