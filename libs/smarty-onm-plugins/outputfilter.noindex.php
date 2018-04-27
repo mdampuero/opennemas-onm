@@ -12,7 +12,7 @@ function smarty_outputfilter_noindex($output, $smarty)
 {
     if (!array_key_exists('o-token', $smarty->getTemplateVars())
         || $smarty->getContainer()->get('core.helper.subscription')
-            ->isIndexed($smarty->getTemplateVars()['o-token'])
+            ->isIndexable($smarty->getTemplateVars()['o-token'])
     ) {
         return $output;
     }

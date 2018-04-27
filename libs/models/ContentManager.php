@@ -107,6 +107,29 @@ class ContentManager
     }
 
     /**
+     * Filters and removes blocked contents from the list of contents.
+     *
+     * @param array $contents The list of contents.
+     */
+    public function filterBlocked($contents)
+    {
+        $subscriptions = getService('api.service.subscription')
+            ->setCount(false)
+            ->getList('enabled = 1');
+
+        $ids = array_map(function ($a) {
+            return $a->pk_user_group;
+        }, array_filter($subscriptions['items'], function ($a) {
+            return in_array(230, $a->privileges);
+        }));
+
+        return array_filter($contents, function ($a) use ($ids) {
+            return empty($a->subscriptions)
+                || empty(array_intersect($ids, $a->subscriptions));
+        });
+    }
+
+    /**
      * Searches contents in the database given son search params
      *
      * @param string $contentType the content type to search for

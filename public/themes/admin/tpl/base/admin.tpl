@@ -229,7 +229,7 @@
                   </li>
                 {/block}
                 {block name="master_actions_block"}
-                {acl isAllowed="MASTER"}
+                {acl isAllowed="MASTER" hasExtension="CACHE_MANAGER"}
                   <li class="quicklinks">
                     <span class="h-seperate"></span>
                   </li>

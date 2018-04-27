@@ -15,6 +15,10 @@ function smarty_block_acl($params, $content, Smarty_Internal_Template $smarty, $
         $security = getService('core.security');
         $check    = true;
 
+        if (isset($params['hasExtension'])) {
+            $check = $check && $security->hasExtension($params['hasExtension']);
+        }
+
         if (isset($params['isAllowed'])) {
             $check = $check && $security->hasPermission($params['isAllowed']);
         }

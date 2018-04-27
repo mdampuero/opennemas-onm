@@ -3,12 +3,12 @@
     <i class="fa fa-times"></i>
   </button>
   <h3 class="p-b-30 p-t-30 text-center">{t}Are you sure?{/t}</h3>
-  <h4 class="p-b-30 text-center">{t escape=off}Do you want to convert the <strong>[% source %]</strong> to <strong>[% target %]</strong>?{/t}</h4>
+  <h4 class="p-b-30 text-center">{t escape=off 1="[% source %]" 2="[% target %]"}Do you want to convert the <strong>%1</strong> to <strong>%2</strong>?{/t}</h4>
   <p class="text-center" ng-if="template.type === 0">
-    {t}This means the item will not be a [% source %] anymore. It will only appear in the list of users and the subscriptions will be removed too.{/t}
+    {t 1="[% source %]"}This means the item will not be a %1 anymore. It will only appear in the list of users and the subscriptions will be removed too.{/t}
   </p>
   <p class="text-center" ng-if="template.type === 1">
-    {t}This means the item will not be a [% source %] anymore. It will only appear in the list of subscribers and the user groups will be removed too.{/t}
+    {t 1="[% source %]"}This means the item will not be a  anymore. It will only appear in the list of subscribers and the user groups will be removed too.{/t}
   </p>
   <p class="text-center" ng-if="template.type === 2">
     {t}This means the item will be a subscriber and a user in the system. It will appear in the list of users and the list of subscribers.{/t}

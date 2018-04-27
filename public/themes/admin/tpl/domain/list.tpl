@@ -122,7 +122,7 @@
                       <div>
                         <pre style="font-size:1.05em; padding:15px; display:block; width:90%; margin:20px auto;">www     IN     CNAME     [% domain.name.replace('www.', '') %].opennemas.net.</pre>
                       </div>
-                      <h4 class="m-t-30">{t}Redirect traffic from [% domain.name.replace('www.', '') %] to  www.[% domain.name.replace('www.', '') %]{/t}</h4>
+                      <h4 class="m-t-30">{t 1="[% domain.name.replace('www.', '') %]" 2="[% domain.name.replace('www.', '') %]"}Redirect traffic from %1 to  www.%2{/t}</h4>
                       <p>{t}Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done by the hosting provider for your domain){/t}</p>
                       <p>
                         <span class="semi-bold">{t}NOTE{/t}:</span>
