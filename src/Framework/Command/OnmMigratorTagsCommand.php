@@ -1,0 +1,244 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Framework\Command;
+
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Yaml\Parser;
+use Common\ORM\Entity\Tag;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+
+class OnmMigratorTagsCommand extends ContainerAwareCommand
+{
+
+    /**
+     * Provider to use during migration
+     *
+     * @var MigrationProvider
+     */
+    protected $provider;
+
+    /**
+     * Configures the current command.
+     */
+    protected function configure()
+    {
+        $this
+            ->setName('migrate:Tags')
+            ->setDescription('Migrate tags from content table to tags table')
+            ->setHelp(
+                "Migrates the content tags from the contents table to the tags table."
+            )
+            ->addArgument(
+                'instance',
+                InputArgument::REQUIRED,
+                'The names of the instances to migrate or none for all'
+            );
+    }
+
+
+    /**
+     * Executes the current command for the migration of the tags. This command
+     * transform all the metadata from the content table and put them in the
+     * tables contents_tags and tags
+     *
+     * @param InputInterface  $input  An InputInterface instance
+     * @param OutputInterface $output An OutputInterface instance
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $start        = time();
+        $instanceName = $input->getArgument('instance');
+
+        if (empty($instanceName)) {
+            return null;
+        }
+        $conn   = $this->getContainer()->get('dbal_connection');
+        $logger = $this->getContainer()->get('error.log');
+
+        $output->writeln(
+            '<fg=yellow>*** Starting ONM Tags Migrator for instance ' . $instanceName . ' ***</fg=yellow>'
+        );
+
+        $instance = $this->getContainer()->get('core.loader')
+            ->loadInstanceFromInternalName($instanceName);
+
+        $conn->selectDatabase($instance->getDatabaseName());
+        $locale = $this->getContainer()->get('core.locale')
+            ->getLocale('frontend');
+
+        $epp        = 500;
+        $page       = 0;
+        $tagService = $this->getContainer()->get('api.service.tag');
+        $contents   = $conn->fetchAll(
+            'SELECT pk_content, metadata FROM contents ORDER BY pk_content limit ? offset ?;',
+            [$epp, $epp * $page]
+        );
+        $tags       = $this->getTags($conn, $locale);
+        while (!empty($contents)) {
+            $newTagsInBatch = [];
+            $contentTagRel  = [];
+            foreach ($contents as $content) {
+                if (empty($content['metadata'])) {
+                    continue;
+                }
+                list($contentTagRel, $newTagsInBatch) = $this->getContentTags(
+                    $content,
+                    $tags,
+                    $newTagsInBatch,
+                    $contentTagRel,
+                    $tagService
+                );
+            }
+            $tags  = $this->insertData($newTagsInBatch, $contentTagRel, $locale, $tags);
+            $page += 1;
+            unset($contents);
+            $contents = $conn->fetchAll(
+                'SELECT pk_content, metadata FROM contents ORDER BY pk_content limit ? offset ?;',
+                [$epp, $epp * $page]
+            );
+            unset($newTagsInBatch);
+        }
+
+        $end = time();
+
+        $output->writeln(
+            '<fg=yellow>*** Finished ONM Tags Migrator for instance ' .
+            $instanceName .
+            ' in ' .
+            ($start - $end) .
+            ' ***</fg=yellow>'
+        );
+
+    }
+
+    /**
+     *  Method to get all tags for the contents
+     *
+     * @param Object $content        The content from where retrieve the tags
+     * @param Array  $tags           List with all created tags
+     * @param mixed  $newTagsInBatch List of new tags in the last batch and his contents
+     * @param Array  $contentTagRel  List with the relations of between contents and tags
+     * @param Object $tagService     Service for the tags operations
+     */
+    private function getContentTags($content, $tags, $newTagsInBatch, $contentTagRel, $tagService)
+    {
+        $contentTags = array_map(
+            function ($tagAux) {
+                return strtolower(trim($tagAux));
+            },
+            explode(',', $content['metadata'])
+        );
+        $contentTags = array_unique($contentTags);
+        if (!empty($contentTags)) {
+            foreach ($contentTags as $tag) {
+                if (strlen($tag) > 60) {
+                    continue;
+                }
+
+                $searcheableWord = $tagService->createSearchableWord($tag);
+
+                if (array_key_exists($tag, $tags)) {
+                    $contentTagRel[] = [ 'pk_content' => $content['pk_content'], 'pk_tag' => $tags[$tag]];
+                    continue;
+                }
+
+                if (!array_key_exists($tag, $newTagsInBatch)) {
+                    $newTagsInBatch[$tag] = ['slug' => $searcheableWord, 'contents' => []];
+                } elseif (in_array($content['pk_content'], $newTagsInBatch[$tag]['contents'])) {
+                    continue;
+                }
+
+                $newTagsInBatch[$tag]['contents'][] = $content['pk_content'];
+            }
+        }
+        return [$contentTagRel, $newTagsInBatch];
+    }
+
+    /**
+     * Retrieve the list of the tags from the database
+     *
+     * @param Object $conn   Database connection
+     * @param String $locale The locale for the tag search
+     */
+    private function getTags($conn, $locale)
+    {
+        $tagList = $conn->fetchAll('SELECT pk_tag, name FROM tags WHERE pk_language = ?;', [$locale]);
+        $tagsMap = [];
+        foreach ($tagList as $tag) {
+            $tagsMap[$tag['name']] = $tag['pk_tag'];
+        }
+        return $tagsMap;
+    }
+
+    /**
+     * Insert new tags and content tag relations
+     *
+     * @param mixed  $newTagsInBatch List of new tags in the last batch and his contents
+     * @param Array  $contentTagRel  List with the relations of between contents and tags
+     * @param String $locale         Default language for the instance
+     * @param Array  $tags           List with all created tags
+     */
+    private function insertData($newTagsInBatch, $contentTagRel, $locale, $tags)
+    {
+        foreach ($newTagsInBatch as $word => $value) {
+            $tag         = [
+                $word,
+                $locale,
+                $value['slug']
+            ];
+            $tagId       = $this->insertTags($tag);
+            $tags[$word] = $tagId;
+            foreach ($value['contents'] as $contentId) {
+                $contentTagRel[] = [ 'pk_content' => $contentId, 'pk_tag' => $tagId];
+            }
+        }
+        try {
+            \Content::saveTags($contentTagRel);
+        } catch (UniqueConstraintViolationException $e) {
+            /*
+            * The error message is "Duplicate entry 'tag-content' for key 'PRIMARY'". We need recover the tag and
+            * content.
+            */
+            $prevEx = $e->getPrevious();
+            if (!is_null($prevEx)) {
+                $errorMessage = $prevEx->getMessage();
+                $errorMessage = substr($errorMessage, strpos($errorMessage, '\'') + 1);
+                $errorMessage = substr($errorMessage, 0, strpos($errorMessage, '\''));
+                $pkContent    = substr($errorMessage, 0, strpos($errorMessage, '-'));
+                \Content::deleteTags($pkContent);
+                $this->insertData($newTagsInBatch, $contentTagRel, $locale, $tags);
+            }
+        }
+        return $tags;
+    }
+
+    /**
+     * Insert a new tag in the database
+     *
+     * @param Array @tag List with all values for a tag
+     */
+    private function insertTags($tag)
+    {
+        if (empty($tag)) {
+            return null;
+        }
+        $sql  = 'INSERT INTO tags (name, pk_language, slug) VALUES (?, ?, ?)';
+        $conn = getService('dbal_connection');
+        $conn->executeUpdate(
+            $sql,
+            $tag
+        );
+        return $conn->lastInsertId();
+    }
+}
