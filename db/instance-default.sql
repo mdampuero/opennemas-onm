@@ -506,6 +506,13 @@ CREATE TABLE `contents_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+DROP TABLE IF EXISTS `contents_tags`;
+
+CREATE TABLE `contents_tags` (
+  `pk_content` bigint(20) UNSIGNED NOT NULL,
+  `pk_tag` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Dumping data for table `contents_categories`
 --
@@ -1044,6 +1051,16 @@ CREATE TABLE `static_pages` (
 ) ENGINE=InnoDB AUTO_INCREMENT=575 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+DROP TABLE IF EXISTS `tags`;
+
+CREATE TABLE `tags` (
+  `pk_tag` int(10) UNSIGNED NOT NULL,
+  `name` varchar(60) NOT NULL,
+  `pk_language` varchar(5) NOT NULL,
+  `slug` varchar(60) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 --
 -- Dumping data for table `static_pages`
 --
@@ -1332,6 +1349,19 @@ INSERT INTO `widgets` VALUES (186,'AllHeadlines','intelligentwidget'),(202,'Opin
 /*!40000 ALTER TABLE `widgets` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+
+ALTER TABLE `tags`
+  ADD PRIMARY KEY (`pk_tag`),
+  MODIFY `pk_tag` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  ADD INDEX `pk_language` (`pk_language`);
+--  ADD UNIQUE KEY `name` (`name`);
+
+ALTER TABLE `contents_tags`
+  ADD PRIMARY KEY (`pk_tag`,`pk_content`),
+  ADD CONSTRAINT `tag_id_tag_id` FOREIGN KEY (`pk_tag`) REFERENCES `tags` (`pk_tag`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `content_id_content_id` FOREIGN KEY (`pk_content`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
