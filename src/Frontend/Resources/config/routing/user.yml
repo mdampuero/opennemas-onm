@@ -1,19 +1,29 @@
 frontend_user_activate:
     path: /user/activate/{token}
     defaults: { _controller: FrontendBundle:User:activate }
+    methods: [ GET ]
 
 frontend_user_menu:
-    path: /user/get/menu
+    path: /user/menu
     defaults: { _controller: FrontendBundle:User:getUserMenu }
+    methods: [ GET ]
 
 frontend_user_register:
     path: /user/register
     defaults: { _controller: FrontendBundle:User:register }
+    methods: [ GET ]
+
+frontend_user_save:
+    path: /user/register
+    defaults: { _controller: FrontendBundle:User:save }
+    methods: [ POST ]
 
 frontend_user_show:
-    path: /user/me
+    path:     /user/me
     defaults: { _controller: FrontendBundle:User:show }
+    methods:  [ GET ]
 
 frontend_user_update:
-    path: /user/update
+    path:     /user/me
     defaults: { _controller: FrontendBundle:User:update }
+    methods:  [ POST ]
