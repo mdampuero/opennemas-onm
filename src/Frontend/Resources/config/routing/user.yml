@@ -1,5 +1,5 @@
 frontend_user_activate:
-    path: /user/activate/{token}
+    path: /user/activate
     defaults: { _controller: FrontendBundle:User:activate }
     methods: [ GET ]
 
