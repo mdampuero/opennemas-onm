@@ -1,0 +1,1 @@
+SELECT tags.name, tags.pk_tag, tags.slug, tags.pk_language, contents_tags.pk_content FROM `tags` inner join contents_tags on tags.pk_tag = contents_tags.pk_tag WHERE 1 = 1

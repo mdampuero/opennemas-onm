@@ -713,6 +713,47 @@ contents_categories:
         #     target_table: content_categories
         #     target_field: [ pk_content_category ]
         #     restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+contents_tags:
+    columns:
+        pk_fk_content:
+            type: bigint
+            options: { length: 20, unsigned: true }
+        pk_fk_tag:
+            type: int
+            options: { unsigned: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_content, pk_tag]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: content_id_content_id
+            columns: [pk_content]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: tag_id_tag_id
+            columns: [pk_tag]
+            primary: false
+            unique: false
+            flags: {  }
+
+    foreign_keys:
+        -
+            name: content_id_content_id
+            source_field: [ pk_content ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: tag_id_tag_id
+            source_field: [ pk_tag ]
+            target_table: tags
+            target_field: [ pk_tag ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 content_views:
     columns:
         pk_fk_content:
@@ -1376,6 +1417,33 @@ static_pages:
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+tags:
+    columns:
+        pk_tag:
+            type: int
+            options: { unsigned: true, autoincrement: true }
+        name:
+            type: string
+            options: { length: 60, notnull: true }
+        pk_language:
+            type: string
+            options: { length: 5, notnull: true }
+        slug:
+            type: string
+            options: { length: 60, notnull: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_tag]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: pk_language
+            columns: [user_id]
+            primary: false
+            unique: false
+            flags: {  }
 translation_ids:
     columns:
         pk_content_old:
