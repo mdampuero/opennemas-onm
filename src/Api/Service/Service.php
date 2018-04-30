@@ -60,11 +60,11 @@ abstract class Service
      *
      * @param integer $id The item id.
      *
-     * @return UserGroup The item.
+     * @return mixed The item.
      *
      * @throws GetItemException If the item was not found.
      */
-    abstract public function getItem($item);
+    abstract public function getItem($id);
 
     /**
      * Returns a list of items basing on a criteria.
