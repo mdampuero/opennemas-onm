@@ -10,166 +10,19 @@
 namespace Frontend\Controller;
 
 use Api\Exception\CreateItemException;
-use Common\Core\Annotation\Security;
+use Api\Exception\GetItemException;
+use Api\Exception\GetListException;
+use Api\Exception\UpdateItemException;
 use Common\Core\Controller\Controller;
-use Common\ORM\Core\Exception\EntityNotFoundException;
-use Common\ORM\Entity\User;
 use Onm\Settings as s;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Handles the actions for the user profile.
  */
 class UserController extends Controller
 {
-    /**
-     * Shows the user information.
-     *
-     * @return Response The response object.
-     */
-    public function showAction()
-    {
-        $photo = null;
-
-        if (!empty($this->get('core.user')->avatar_img_id)) {
-            $photo = $this->get('entity_repository')
-                ->find('Photo', $this->get('core.user')->avatar_img_id);
-        }
-
-        return $this->render('user/show.tpl', [
-            'countries'     => $this->get('core.geo')->getCountries(),
-            'photo'         => $photo,
-            'settings'      => $this->getSettings(),
-            'subscriptions' => $this->getSubscriptions(),
-            'user'          => $this->get('core.user'),
-        ]);
-    }
-
-    /**
-     * Handles the registration of a new user in frontend.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     */
-    public function registerAction(Request $request)
-    {
-        if ('POST' === $request->getMethod()
-            && $this->checkRecaptcha($request)
-        ) {
-            $data = $request->request->all();
-            unset($data['g-recaptcha-response']);
-
-            if (array_key_exists('user_groups', $data)) {
-                $data['user_groups'] =
-                    $this->parseSubscriptions($data['user_groups']);
-            }
-
-            $data['type']          = 1;
-            $data['token']         = md5(uniqid(mt_rand(), true));
-            $data['register_date'] = new \DateTime();
-
-            try {
-                $this->get('api.service.subscriber')->createItem($data);
-                $this->get('application.log')
-                    ->info('subscriber.create.success');
-
-                $this->sendCreateEmail($data);
-                $this->get('application.log')
-                    ->info('subscriber.create.email.success');
-                $this->view->assign([
-                    'mailSent' => true,
-                    'email' => $data['email']
-                ]);
-            } catch (CreateItemException $e) {
-                $this->get('application.log')->error(
-                    'subscriber.create.failure: ' . $e->getMessage(),
-                    $e->getTrace()
-                );
-            } catch (\Exception $e) {
-                $this->get('application.log')->error(
-                    'subscriber.create.email.failure: ' . $e->getMessage(),
-                    $e->getTrace()
-                );
-
-                $request->getSession()->getFlashBag()->add(
-                    'error',
-                    _('Unable to send your registration email. Please try it later.')
-                );
-            }
-
-            $this->view->assign('success', true);
-        }
-
-        return $this->render('authentication/register.tpl', [
-            'countries'     => $this->get('core.geo')->getCountries(),
-            'recaptcha'     => $this->get('core.recaptcha')
-                ->configureFromSettings()
-                ->getHtml(),
-            'settings'      => $this->getSettings(),
-            'subscriptions' => $this->getSubscriptions(),
-        ]);
-    }
-
-    /**
-     * Updates the user data.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     */
-    public function updateAction(Request $request)
-    {
-        if (empty($this->get('core.user'))) {
-            throw new AccessDeniedException();
-        }
-
-        $data = $request->request->all();
-
-        if (array_key_exists('user_groups', $data)) {
-            $data['user_groups'] =
-                $this->parseSubscriptions($data['user_groups']);
-        }
-
-        // Remove to prevent password changes when empty
-        if (empty($data['password'])) {
-            unset($data['password']);
-        }
-
-
-        unset($data['password-verify']);
-
-        $em        = $this->get('orm.manager');
-        $converter = $em->getConverter('User');
-
-        try {
-            $user = $em->getRepository('User')->find($this->getUser()->id);
-
-            if (!empty($data['password'])) {
-                $encoder = $this->get('security.password_encoder');
-
-                $data['password'] = $encoder->encodePassword($user, $data['password']);
-            }
-
-            $user->merge($converter->objectify($data));
-            $em->persist($user);
-
-            $this->get('session')->getFlashBag()->add('success', _('Data updated successfully'));
-            $this->get('core.dispatcher')->dispatch('author.update', [ 'id' => $user->id ]);
-        } catch (EntityNotFoundException $e) {
-            $this->get('session')->getFlashBag()->add('error', _('The user does not exists.'));
-        } catch (\Exception $e) {
-            $this->get('error.log')
-                ->error('frontend.subscriber.update: ' . $e->getMessage());
-            $this->get('session')->getFlashBag()->add('error', _('Unable to update the user.'));
-        }
-
-        return $this->redirect($this->generateUrl('frontend_user_show'));
-    }
-
     /**
      * Activates an user account given an token.
      *
@@ -179,88 +32,55 @@ class UserController extends Controller
      */
     public function activateAction(Request $request)
     {
-        // When user confirms registration from email
         $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
-        $em    = $this->get('orm.manager');
-        $oql   = sprintf('token = "%s"', $token);
 
         try {
-            $user = $em->getRepository('User')->findOneBy($oql);
+            $ss   = $this->get('api.service.subscriber');
+            $user = $ss->getItemBy(sprintf('token = "%s" limit 1', $token));
 
-            $user->activated  = true;
-            $user->last_login = new \DateTime('now');
-            $user->token      = null;
+            $ss->patchItem($user->id, [ 'activated' => true, 'token' => null ]);
 
-            $em->persist($user);
+            $this->get('core.security.authentication')->authenticate($user);
+            $this->get('application.log')->info('subscriber.activate.success');
 
-            $request->getSession()->migrate();
+            $this->sendActivateEmail($user);
+            $this->get('application.log')->info('subscriber.activate.email.success');
 
-            $token   = new UsernamePasswordToken($user, null, 'frontend', $user->getRoles());
-            $session = $request->getSession();
+            $this->get('session')->getFlashBag()
+                ->add('success', _('Your account is now activated'));
 
-            $securityContext = $this->get('security.token_storage');
-            $securityContext->setToken($token);
-            $session->set('user', $user);
-            $session->set('_security_frontend', serialize($token));
-
-            $session->getFlashBag()->add('success', _('Log in succesful.'));
-
-            // Send welcome mail with link to subscribe action
-            $url = $this->generateUrl('frontend_paywall_showcase', [], true);
-
-            $mailSubject = sprintf(_('Welcome to %s'), $this->get('setting_repository')->get('site_name'));
-            $mailBody    = $this->renderView(
-                'user/emails/welcome.tpl',
-                [
-                    'name' => $user->name,
-                    'url'  => $url,
-                ]
+            return $this->redirect($this->generateUrl('frontend_user_show'));
+        } catch (GetItemException $e) {
+            $this->get('application.log')->error(
+                'subscriber.activate.failure: ' . $token,
+                $e->getTrace()
             );
 
-            // Build the message
-            $message = \Swift_Message::newInstance();
-            $message
-                ->setSubject($mailSubject)
-                ->setBody($mailBody, 'text/html')
-                // And optionally an alternative body
-                ->addPart(strip_tags($mailBody), 'text/plain')
-                ->setTo($user->email)
-                ->setFrom(['no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')]);
+            $this->get('session')->getFlashBag()
+                ->add('error', _('Unable to find your account'));
 
-            $headers = $message->getHeaders();
-            $headers->addParameterizedHeader(
-                'ACUMBAMAIL-SMTPAPI',
-                $this->get('core.instance')->internal_name . ' - User activation'
+            return $this->redirect($this->generateUrl('core_authentication_logout'));
+        } catch (UpdateItemException $e) {
+            $this->get('application.log')->error(
+                'subscriber.activate.failure: ' . $token,
+                $e->getTrace()
             );
 
-            try {
-                $mailer = $this->get('mailer');
-                $mailer->send($message);
+            $this->get('session')->getFlashBag()
+                ->add('error', _('Unable to activate your account'));
 
-                $this->get('application.log')->notice(
-                    "Email sent. Frontend activate user (to: " . $user->email . ")"
-                );
-
-                $this->view->assign('mailSent', true);
-            } catch (\Exception $e) {
-                // Log this error
-                $this->get('application.log')->notice(
-                    "Unable to send the user welcome email for the "
-                    . "user {$user->id}: " . $e->getMessage()
-                );
-
-                $this->get('session')->getFlashBag()->add('error', _('Unable to send your welcome email.'));
-            }
+            return $this->redirect($this->generateUrl('core_authentication_logout'));
         } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('There was an error while creating your user account.')
+            $this->get('application.log')->error(
+                'subscriber.activate.email.failure: ' . $token,
+                $e->getTrace()
             );
 
-            return $this->redirect($this->generateUrl('frontend_user_register'));
-        }
+            $this->get('session')->getFlashBag()
+                ->add('error', _('Unable to activate your account'));
 
-        return $this->redirect($this->generateUrl('frontend_frontpage'));
+            return $this->redirect($this->generateUrl('core_authentication_logout'));
+        }
     }
 
     /**
@@ -278,6 +98,166 @@ class UserController extends Controller
         }
 
         return $this->render('user/menu.tpl', [ 'photo' => $photo ]);
+    }
+
+    /**
+     * Shows the user information.
+     *
+     * @return Response The response object.
+     */
+    public function showAction()
+    {
+        $photo     = null;
+        $countries = array_merge(
+            [ '' => _('Select a country') . '...' ],
+            $this->get('core.geo')->getCountries()
+        );
+
+        if (!empty($this->get('core.user')->avatar_img_id)) {
+            $photo = $this->get('entity_repository')
+                ->find('Photo', $this->get('core.user')->avatar_img_id);
+        }
+
+        return $this->render('user/show.tpl', [
+            'countries'     => $countries,
+            'photo'         => $photo,
+            'settings'      => $this->getSettings(),
+            'subscriptions' => $this->getSubscriptions(),
+            'user'          => $this->get('core.user'),
+        ]);
+    }
+
+    /**
+     * Displays a form to create a new user.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function registerAction()
+    {
+        $countries = array_merge(
+            [ '' => _('Select a country') . '...' ],
+            $this->get('core.geo')->getCountries()
+        );
+
+        return $this->render('user/register.tpl', [
+            'countries'     => $countries,
+            'recaptcha'     => $this->get('core.recaptcha')
+                ->configureFromSettings()
+                ->getHtml(),
+            'settings'      => $this->getSettings(),
+            'subscriptions' => $this->getSubscriptions(),
+        ]);
+    }
+
+    /**
+     * Handles the registration of a new user in frontend.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function saveAction(Request $request)
+    {
+        if (!$this->checkRecaptcha($request)) {
+            return $this->redirect($this->generateUrl('frontend_user_register'));
+        }
+
+        $data = $request->request->all();
+        unset($data['g-recaptcha-response']);
+
+        if (array_key_exists('user_groups', $data)) {
+            $data['user_groups'] =
+                $this->parseSubscriptions($data['user_groups']);
+        }
+
+        $data['type']          = 1;
+        $data['token']         = md5(uniqid(mt_rand(), true));
+        $data['register_date'] = new \DateTime();
+
+        try {
+            $this->get('api.service.subscriber')->createItem($data);
+            $this->get('application.log')
+                ->info('subscriber.create.success');
+
+            $this->sendCreateEmail($data);
+            $this->get('application.log')
+                ->info('subscriber.create.email.success');
+        } catch (CreateItemException $e) {
+            $this->get('application.log')->error(
+                'subscriber.create.failure: ' . $e->getMessage(),
+                $e->getTrace()
+            );
+
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                _('Unable to create your user account. Please try it later.')
+            );
+
+            return $this->redirect($this->generateUrl('frontend_user_register'));
+        } catch (\Exception $e) {
+            $this->get('application.log')->error(
+                'subscriber.create.email.failure: ' . $e->getMessage(),
+                $e->getTrace()
+            );
+
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                _('Unable to send your registration email. Please try it later.')
+            );
+
+            return $this->redirect($this->generateUrl('frontend_user_register'));
+        }
+
+        return $this->render('user/complete.tpl', [
+            'countries'     => $this->get('core.geo')->getCountries(),
+            'email'         => $data['email'],
+            'recaptcha'     => $this->get('core.recaptcha')
+                ->configureFromSettings()
+                ->getHtml(),
+            'settings'      => $this->getSettings(),
+            'subscriptions' => $this->getSubscriptions(),
+        ]);
+    }
+
+    /**
+     * Updates the user data.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function updateAction(Request $request)
+    {
+        $data = $request->request->all();
+
+        if (array_key_exists('user_groups', $data)) {
+            $data['user_groups'] =
+                $this->parseSubscriptions($data['user_groups']);
+        }
+
+        // Remove to prevent password changes when empty
+        if (empty($data['password'])) {
+            unset($data['password']);
+        }
+
+        unset($data['password-verify']);
+
+        try {
+            $this->get('api.service.subscriber')
+                ->updateItem($this->getUser()->id, $data);
+
+            $this->get('session')->getFlashBag()
+                ->add('success', _('Item updated successfully'));
+        } catch (\Exception $e) {
+            $this->get('error.log')
+                ->error('frontend.subscriber.update: ' . $e->getMessage());
+            $this->get('session')->getFlashBag()
+                ->add('error', _('Unable to update the user.'));
+        }
+
+        return $this->redirect($this->generateUrl('frontend_user_show'));
     }
 
     /**
@@ -403,7 +383,6 @@ class UserController extends Controller
             ], true),
         ]);
 
-        // Build the message
         $message = \Swift_Message::newInstance();
         $message
             ->setSubject($subject)
@@ -417,6 +396,39 @@ class UserController extends Controller
         $message->getHeaders()->addParameterizedHeader(
             'ACUMBAMAIL-SMTPAPI',
             $this->get('core.instance')->internal_name . ' - User register'
+        );
+
+        $this->get('mailer')->send($message);
+    }
+
+    /**
+     * Sends the email after account is activated.
+     *
+     * @param array $data The user.
+     */
+    protected function sendActivateEmail($user)
+    {
+        $ds = $this->get('orm.manager')->getDataSet('Settings');
+
+        $subject = sprintf(_('Welcome to %s'), $ds->get('site_name'));
+        $body    = $this->renderView('user/emails/welcome.tpl', [
+            'name' => $user->name,
+            'url'  => $this->generateUrl('frontend_paywall_showcase', [], true),
+        ]);
+
+        $message = \Swift_Message::newInstance();
+        $message
+            ->setSubject($subject)
+            ->setBody($body, 'text/html')
+            ->addPart(strip_tags($body), 'text/plain')
+            ->setTo($user->email)
+            ->setFrom([
+                'no-reply@postman.opennemas.com' => $ds->get('site_name')
+            ]);
+
+        $message->getHeaders()->addParameterizedHeader(
+            'ACUMBAMAIL-SMTPAPI',
+            $this->get('core.instance')->internal_name . ' - User activation'
         );
 
         $this->get('mailer')->send($message);
