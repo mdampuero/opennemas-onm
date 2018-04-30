@@ -52,12 +52,12 @@ security:
             pattern:  ^/login$
             security: false
 
-        backend_recover:
-            pattern:  ^/admin/password/*
+        backend_password:
+            pattern:  ^/(admin/)?password/*
             security: false
 
-        frontend_recover:
-            pattern:  ^/user/(recover*|register|(activate/*))
+        frontend_user_activate:
+            pattern:  ^/user/activate/*
             security: false
 
         framework:
@@ -123,5 +123,5 @@ security:
         - { path: ^/api/v1/backend/*,              roles: [ ROLE_ADMIN ] }
         - { path: ^/managerws/(login|check),       roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
         - { path: ^/managerws,                     roles: [ ROLE_MASTER ] }
-        - { path: ^/user/me,                       roles: [ IS_AUTHENTICATED_FULLY ] }
+        - { path: ^/user/me$,                      roles: [ IS_AUTHENTICATED_FULLY ] }
         - { path: ^/*,                             roles: [ IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY ] }
