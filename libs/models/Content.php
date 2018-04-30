@@ -2151,4 +2151,49 @@ class Content implements \JsonSerializable
         }
         $this->removeMetadata($emptyKeys);
     }
+
+    public static function saveTags($tagsList, $pkContent = null)
+    {
+        if (empty($tagsList)) {
+            return null;
+        }
+
+        $tagsListAux = $tagsList;
+        if (!is_array($tagsList)) {
+            $tagsListAux = [$tagsList];
+        }
+
+        $sql = 'INSERT INTO contents_tags (pk_content, pk_tag) VALUES ';
+        $inputVal = [];
+        foreach ($tagsListAux as $tag) {
+            $sql .= '(?, ?), ';
+            $inputVal[] = $pkContent == null ? $tag['pk_content'] : $pkContent;
+            $inputVal[] = $pkContent == null ? $tag['pk_tag'] : $tag;
+        }
+        $sql = substr($sql, 0, -2) . ';';
+
+        getService('dbal_connection')->executeUpdate(
+            $sql,
+            $inputVal
+        );
+    }
+
+    public static function deleteTags($pkContent = null)
+    {
+        if (empty($pkContent)) {
+            return null;
+        }
+
+        $sqlContentId = is_array($pkContentList) ?
+            ' IN (' . substr(str_repeat(', ?', count($pkContent)), 2) . ')' :
+            ' = ?';
+
+        $sql = 'DELETE FROM contents_tags WHERE pk_content IN ' . $sqlContentId;
+
+        $conn = getService('dbal_connection');
+        getService('dbal_connection')->executeUpdate(
+            $sql,
+            $pkContent
+        );
+    }
 }

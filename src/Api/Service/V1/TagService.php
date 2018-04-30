@@ -9,15 +9,14 @@
  */
 namespace Api\Service\V1;
 
-
 class TagService extends OrmService
 {
 
     /**
      * Method to simplificate the tag word for enable a search system
      */
-    public function createSearchableWord($word) {
+    public function createSearchableWord($word)
+    {
         return \Onm\StringUtils::generateSlug($word, false);
     }
-
 }
