@@ -91,6 +91,7 @@ class RssController extends Controller
 
             $contents = $cm->getContentsForHomepageOfCategory($id);
             $contents = $cm->getInTime($contents);
+            $contents = $cm->filterBlocked($contents);
 
             // Remove advertisements and widgets
             $contents = array_filter($contents, function ($a) {
@@ -385,6 +386,9 @@ class RssController extends Controller
         }
 
         $contents = $em->findBy($filters, $order, $total, 1);
+
+        $cm       = new \ContentManager();
+        $contents = $cm->filterBlocked($contents);
 
         return $contents;
     }
