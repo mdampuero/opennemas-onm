@@ -97,6 +97,13 @@ class CommentsController extends Controller
                 return $this->redirect($this->generateUrl('admin_comments_config'));
 
             case 'disqus':
+                $this->sm->set('comment_system', 'disqus');
+
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _("Now you are using the Facebook comment system.")
+                );
+
                 return $this->redirect($this->generateUrl('admin_comments_disqus_config'));
 
             case 'facebook':
@@ -161,35 +168,33 @@ class CommentsController extends Controller
     public function configDisqusAction(Request $request)
     {
         if ($request->getMethod() != 'POST') {
-            $disqusShortName = $this->sm->get('disqus_shortname');
-            $disqusSecretKey = $this->sm->get('disqus_secret_key');
-
             return $this->render('comment/disqus/config.tpl', [
-                'shortname' => $disqusShortName,
-                'secretKey' => $disqusSecretKey,
-                'configs'   => $this->sm->get('comments_config'),
+                'configs'        => $this->sm->get('comments_config'),
+                'comment_system' => $this->sm->get('comment_system'),
+                'shortname'      => $this->sm->get('disqus_shortname'),
+                'secretKey'      => $this->sm->get('disqus_secret_key'),
             ]);
-        } else {
-            $shortname = $request->request->filter('shortname', null, FILTER_SANITIZE_STRING);
-            $secretKey = $request->request->filter('secret_key', null, FILTER_SANITIZE_STRING);
-            $configs   = $request->request->filter('configs', [], FILTER_SANITIZE_STRING);
-
-            if ($this->sm->set('disqus_shortname', $shortname)
-                && $this->sm->set('disqus_secret_key', $secretKey)
-                && $this->sm->set('comments_config', $configs)
-            ) {
-                $this->sm->set('comment_system', 'disqus');
-
-                return $this->redirect($this->generateUrl('admin_comments_disqus'));
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _('There was an error while saving the Disqus module configuration')
-                );
-            }
-
-            return $this->redirect($this->generateUrl('admin_comments_disqus_config'));
         }
+
+        $shortname = $request->request->filter('shortname', null, FILTER_SANITIZE_STRING);
+        $secretKey = $request->request->filter('secret_key', null, FILTER_SANITIZE_STRING);
+        $configs   = $request->request->filter('configs', [], FILTER_SANITIZE_STRING);
+
+        if ($this->sm->set('disqus_shortname', $shortname)
+            && $this->sm->set('disqus_secret_key', $secretKey)
+            && $this->sm->set('comments_config', $configs)
+        ) {
+            $this->sm->set('comment_system', 'disqus');
+
+            return $this->redirect($this->generateUrl('admin_comments_disqus'));
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('There was an error while saving the Disqus module configuration')
+            );
+        }
+
+        return $this->redirect($this->generateUrl('admin_comments_disqus_config'));
     }
 
 
@@ -233,31 +238,32 @@ class CommentsController extends Controller
                 [
                     'fb_app_id' => $fbAppId,
                     'configs'   => $this->sm->get('comments_config'),
+                    'comment_system' => $this->sm->get('comment_system'),
                 ]
             );
-        } else {
-            $fbAppId    = $request->request->filter('facebook', null, FILTER_SANITIZE_STRING);
-            $configs    = $request->request->filter('configs', [], FILTER_SANITIZE_STRING);
-            $fbSettings = array_merge($fbSettings, $fbAppId);
+        }
 
-            if ($this->sm->set('facebook', $fbSettings)
-                && $this->sm->set('comments_config', $configs)
-            ) {
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    _('Facebook configuration saved successfully')
-                );
+        $fbAppId    = $request->request->filter('facebook', null, FILTER_SANITIZE_STRING);
+        $configs    = $request->request->filter('configs', [], FILTER_SANITIZE_STRING);
+        $fbSettings = array_merge($fbSettings, $fbAppId);
 
-                return $this->redirect($this->generateUrl('admin_comments_facebook'));
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _('There was an error while saving the Facebook comments module configuration')
-                );
-            }
+        if ($this->sm->set('facebook', $fbSettings)
+            && $this->sm->set('comments_config', $configs)
+        ) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Facebook configuration saved successfully')
+            );
 
             return $this->redirect($this->generateUrl('admin_comments_facebook_config'));
         }
+
+        $this->get('session')->getFlashBag()->add(
+            'error',
+            _('There was an error while saving the Facebook comments module configuration')
+        );
+
+        return $this->redirect($this->generateUrl('admin_comments_facebook_config'));
     }
 
     /**
@@ -388,34 +394,42 @@ class CommentsController extends Controller
      */
     public function configAction(Request $request)
     {
-        if ('POST' == $request->getMethod()) {
-            $configs = $request->request->filter('configs', [], FILTER_SANITIZE_STRING);
+        $defaultConfigs = [
+            'disable_comments'      => false,
+            'with_comments'         => true,
+            'number_elements'       => 10,
+            'moderation_manual'     => true,
+            'moderation_autoreject' => false,
+            'moderation_autoaccept' => false,
+            'moderation_blacklist'  => "whore\nshit\nbitch",
+        ];
 
-            $defaultConfigs = [
-                'moderation'      => false,
-                'with_comments'   => false,
-                'number_elements' => 10,
-            ];
+        if ('POST' !== $request->getMethod()) {
+            $configs         = $this->sm->get('comments_config');
+            $commentsHandler = $this->sm->get('comment_system');
 
             $configs = array_merge($defaultConfigs, $configs);
 
-            if ($this->sm->set('comments_config', $configs)) {
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    _('Settings saved.')
-                );
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _('There was an error while saving the settings')
-                );
-            }
-
-            return $this->redirect($this->generateUrl('admin_comments_config'));
-        } else {
-            $configs = $this->sm->get('comments_config');
-
-            return $this->render('comment/config.tpl', [ 'configs' => $configs ]);
+            return $this->render('comment/config.tpl', [
+                'configs'        => $configs,
+                'comment_system' => $commentsHandler
+            ]);
         }
+
+        $configs = $request->request->get('configs', []);
+
+        $configs = array_merge($defaultConfigs, $configs);
+
+        $result = ['success', _('Settings saved.')];
+        if (!$this->sm->set('comments_config', $configs)) {
+            $result = [
+                'error',
+                _('There was an error while saving the settings')
+            ];
+        }
+        list($type, $message) = $result;
+        $this->get('session')->getFlashBag()->add($type, $message);
+
+        return $this->redirect($this->generateUrl('admin_comments_config'));
     }
 }

@@ -22,7 +22,7 @@
         </div>
         <div class="row clearfix comment-system-element">
           <a href="{url name=admin_comments_select type=disqus}" class="col-md-2">
-            <img src="{$_template->getImageDir()}/disqus-icon.png" alt="Disqus" width="100%"/>
+            <img src="{$_template->getImageDir()}/disqus-icon.png" alt="Disqus" style="max-with:50px"/>
           </a>
           <div class="col-md-10">
             <a href="{url name=admin_comments_select type=disqus}">
