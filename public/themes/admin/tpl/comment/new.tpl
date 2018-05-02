@@ -1,13 +1,13 @@
 {extends file="base/admin.tpl"}
 {block name="content"}
-  <form action="{url name=admin_comments_update id=$comment->id}" method="POST" name="formulario" id="formulario">
+  <form action="{url name=backend_comments_update id=$comment->id}" method="POST" name="formulario" id="formulario">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <a class="no-padding" href="{url name=admin_comments}" title="{t}Go back to list{/t}">
+                <a class="no-padding" href="{url name=backend_comments}" title="{t}Go back to list{/t}">
                   <i class="fa fa-comment"></i>
                   {t}Comments{/t}
                 </a>

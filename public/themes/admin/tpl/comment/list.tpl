@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div action="{url name=admin_comments_list}" ng-app="BackendApp" ng-controller="CommentListCtrl" ng-init="init(null, 'backend_ws_contents_list')" class="comments-listing">
+  <div action="{url name=backend_comments_list}" ng-app="BackendApp" ng-controller="CommentListCtrl" ng-init="init(null, 'backend_ws_contents_list')" class="comments-listing">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -16,7 +16,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_comments_config}" title="{t}Config comments module{/t}">
+                <a class="btn btn-link" href="{url name=backend_comments_config}" title="{t}Config comments module{/t}">
                   <i class="fa fa-gear fa-lg"></i>
                 </a>
               </li>
