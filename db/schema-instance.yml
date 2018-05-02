@@ -728,19 +728,6 @@ contents_tags:
             primary: true
             unique: true
             flags: {  }
-        -
-            name: content_id_content_id
-            columns: [pk_content]
-            primary: false
-            unique: false
-            flags: {  }
-        -
-            name: tag_id_tag_id
-            columns: [pk_tag]
-            primary: false
-            unique: false
-            flags: {  }
-
     foreign_keys:
         -
             name: content_id_content_id
@@ -1440,7 +1427,13 @@ tags:
             flags: {  }
         -
             name: pk_language
-            columns: [user_id]
+            columns: [pk_language]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: slug
+            columns: [slug]
             primary: false
             unique: false
             flags: {  }
