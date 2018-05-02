@@ -269,7 +269,7 @@ window.OnmPhotoEditor.prototype.ACTION_ICONS = {
   light:      'adjust',
   filter:     'magic',
   brightness: 'sun-o',
-  back:       'chevron-left',
+  back:       'angle-left',
   landscape:  'file-o fa-rotate-90',
   portrait:   'file-o',
   undo:       'undo',
@@ -476,7 +476,7 @@ window.OnmPhotoEditor.prototype.getTopMenuElements = function(status) {
     'cancel' :
     { action: 'cancel', icon: 'back' };
 
-  var defaultTitle = '<h4>edit Image</h4>';
+  var defaultTitle = '<h4>edit image</h4>';
 
   if (status.display !== this.DISPLAY_INIT) {
     return {
@@ -540,10 +540,10 @@ window.OnmPhotoEditor.prototype.getMenu = function(status) {
   var leftMenu  = null;
   var rightMenu = null;
 
-  if (this.DISPLAY_TRANSFORM === this.status.display) {
-    this.getPosition('div', 'leftMenu', { action: 'reset', text: 'reset' });
-    this.getPosition('div', 'rightMenu', { action: 'back', text: 'ok' });
-  }
+  // if (this.DISPLAY_TRANSFORM === this.status.display) {
+  //   this.getPosition('div', 'leftMenu', { action: 'reset', text: 'Reset' });
+  //   this.getPosition('div', 'rightMenu', { action: 'back', text: 'OK' });
+  // }
 
   this.divMenu.innerHTML = '';
   this.divMenu.appendChild(mainMenu);
@@ -591,7 +591,7 @@ window.OnmPhotoEditor.prototype.getMainMenu = function(status) {
 window.OnmPhotoEditor.prototype.getSubMenu = function(mainOptions, pos, status) {
   var subOptions  = [];
   var options     = mainOptions[pos];
-  var smallScreen = this.container.clientWidth < 900;
+  var smallScreen = this.container.clientWidth < 600;
   var selected    = null;
   var liAux       = null;
 
@@ -705,13 +705,11 @@ window.OnmPhotoEditor.prototype.initTransform = function() {
   applyBtn.addEventListener('click', this.callAction.bind(this));
 
   applyDivBtn.setAttribute('class', 'buttonApply');
+  applyDivBtn.appendChild(applyBtn);
 
   divCrop.setAttribute('class', 'photoEditorCrop');
   divCrop.style.width  = this.canvas.width + 'px';
   divCrop.style.height = this.canvas.height + 'px';
-
-  applyDivBtn.appendChild(applyBtn);
-
   divCrop.appendChild(topCircle);
   divCrop.appendChild(bottomCircle);
   divCrop.appendChild(applyDivBtn);
@@ -755,6 +753,7 @@ window.OnmPhotoEditor.prototype.showCanvas = function(canvas) {
   this.canvas.height = canvas.canvas.height;
   this.ctx.drawImage(canvas.canvas, 0, 0, this.canvas.width, this.canvas.height);
   this.divCanvas.style.width = this.canvas.width + 'px';
+  this.divCanvas.style.height = this.canvas.height + 'px';
 };
 
 // ACTIONS
@@ -1082,6 +1081,7 @@ window.OnmPhotoEditor.prototype.loadImageInCanvas = function(self, img) {
   self.divCanvas.innerHTML = '';
   self.divCanvas.appendChild(self.canvas);
   self.divCanvas.style.width = imgSize.width + 'px';
+  self.divCanvas.style.height = imgSize.height + 'px';
   return null;
 };
 
@@ -1099,24 +1099,16 @@ window.OnmPhotoEditor.prototype.brightness = function(canvasOriginal, canvasDest
 };
 
 window.OnmPhotoEditor.prototype.contrast = function(canvasOriginal, canvasDest, contrastAdj) {
-  var adjust     = contrastAdj / 255;
+  var adjust     = contrastAdj * 2.55;
+  var factor = (255 + adjust) / (255.01 - adjust);
   var pixels     = canvasOriginal.ctx.getImageData(0, 0, canvasOriginal.canvas.width, canvasOriginal.canvas.height);
   var pixelsData = pixels.data;
 
-  if (adjust > 0) {
-    for (var i = 0; i < pixelsData.length; i += 4) {
-      // R G B values. 0-255
-      pixelsData[i]     += pixelsData[i] * adjust;
-      pixelsData[i + 1] += pixelsData[i + 1] * adjust;
-      pixelsData[i + 2] += pixelsData[i + 2] * adjust;
-    }
-  } else {
-    for (var i = 0; i < pixelsData.length; i += 4) {
-      // R G B values. 0-255
-      pixelsData[i]     += (255 - pixelsData[i]) * adjust;
-      pixelsData[i + 1] += (255 - pixelsData[i + 1]) * adjust;
-      pixelsData[i + 2] += (255 - pixelsData[i + 2]) * adjust;
-    }
+  for (var i = 0; i < pixelsData.length; i += 4) {
+    // R G B values. 0-255
+    pixelsData[i]     = factor * (pixelsData[i] - 128) + 128;
+    pixelsData[i + 1] = factor * (pixelsData[i + 1] - 128) + 128;
+    pixelsData[i + 2] = factor * (pixelsData[i + 2] - 128) + 128;
   }
   canvasDest.putImageData(pixels, 0, 0);
 };
@@ -1385,6 +1377,10 @@ window.OnmPhotoEditor.prototype.getPosition = function(tagName, classVal, option
 
   // Content info of the element
   var content = '';
+
+  if (!option.icon) {
+    classVal = classVal !== null ? classVal + ' noicon' : 'noicon';
+  }
 
   if (classVal !== null) {
     position.setAttribute('class', classVal);
