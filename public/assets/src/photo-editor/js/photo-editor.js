@@ -540,10 +540,10 @@ window.OnmPhotoEditor.prototype.getMenu = function(status) {
   var leftMenu  = null;
   var rightMenu = null;
 
-  // if (this.DISPLAY_TRANSFORM === this.status.display) {
-  //   this.getPosition('div', 'leftMenu', { action: 'reset', text: 'Reset' });
-  //   this.getPosition('div', 'rightMenu', { action: 'back', text: 'OK' });
-  // }
+  if (this.DISPLAY_INIT !== this.status.display) {
+    leftMenu  = this.getPosition('div', 'leftMenu', { action: 'reset', text: 'Reset' });
+    rightMenu = this.getPosition('div', 'rightMenu', { action: 'back', text: 'OK' });
+  }
 
   this.divMenu.innerHTML = '';
   this.divMenu.appendChild(mainMenu);
