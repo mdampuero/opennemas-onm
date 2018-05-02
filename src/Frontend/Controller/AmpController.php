@@ -86,10 +86,8 @@ class AmpController extends Controller
         $token = $sh->getToken($article);
         $this->view->assign('token', $token);
 
-        if ($sh->isRedirected($token)) {
-            return new RedirectResponse($this->get('router')->generate(
-                'frontend_frontpage'
-            ), 302);
+        if ($sh->isBlocked($token, 'access')) {
+            throw new AccessDeniedException();
         }
 
         $category = $this->get('orm.manager')->getRepository('Category')
