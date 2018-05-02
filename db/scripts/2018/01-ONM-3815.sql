@@ -14,7 +14,8 @@ CREATE TABLE `contents_tags` (
 ALTER TABLE `tags`
   ADD PRIMARY KEY (`pk_tag`),
   MODIFY `pk_tag` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  ADD INDEX `pk_language` (`pk_language`);
+  ADD INDEX `pk_language` (`pk_language`),
+  ADD INDEX `slug` (`slug`);
 --  ADD UNIQUE KEY `name` (`name`);
 
 ALTER TABLE `contents_tags`
