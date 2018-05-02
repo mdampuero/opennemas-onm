@@ -11,7 +11,7 @@
 
         <div class="comment-system col-sm-4">
           <div>
-            <a ng-click="changeHandler('{t}Built-in system{/t}', '{url name=backend_comments_select type=onm}')"  class="comment-system-block btn btn-block {if $extra['handler'] == 'onm'}btn-success{/if}" uib-tooltip="{t}Use the built-in comment system{/t}">
+            <a ng-click="changeHandler('{t}Built-in system{/t}', '{url name=backend_comments_select type=onm}')" class="m-b-5 comment-system-block btn btn-block {if $extra['handler'] == 'onm'}btn-success{/if}" uib-tooltip="{t}Use the built-in comment system{/t}">
               <i class="fa fa-comment"></i>
               <i>{t}Built-in system{/t}</i>
             </a>
@@ -22,7 +22,7 @@
         </div>
         <div class="comment-system col-sm-4 " >
           <div>
-            <a ng-click="changeHandler('Facebook', '{url name=backend_comments_select type=facebook}')" class="comment-system-block btn btn-block {if $extra['handler'] == 'facebook'}btn-success{/if}" uib-tooltip="{t}Use the Facebook comment system{/t}">
+            <a ng-click="changeHandler('Facebook', '{url name=backend_comments_select type=facebook}')" class="m-b-5 comment-system-block btn btn-block {if $extra['handler'] == 'facebook'}btn-success{/if}" uib-tooltip="{t}Use the Facebook comment system{/t}">
               <i class="fa fa-facebook"></i>
               Facebook
             </a>
@@ -33,7 +33,7 @@
         </div>
         <div class="comment-system col-sm-4">
           <div>
-            <a  ng-click="changeHandler('Disqus', '{url name=backend_comments_select type=disqus}')"  class="comment-system-block btn btn-block {if $extra['handler'] == 'disqus'}btn-success{/if}" uib-tooltip="{t}Use the Disqus comment system{/t}">
+            <a  ng-click="changeHandler('Disqus', '{url name=backend_comments_select type=disqus}')"  class="m-b-5 comment-system-block btn btn-block {if $extra['handler'] == 'disqus'}btn-success{/if}" uib-tooltip="{t}Use the Disqus comment system{/t}">
               <i class="fa fa-comment"></i>
               Disqus
             </a>
