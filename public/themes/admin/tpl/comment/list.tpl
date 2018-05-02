@@ -14,6 +14,9 @@
     width:100%;
     clear:both;
   }
+  .gravatar.img-thumbnail {
+    min-width: 40px;
+  }
 </style>
   <div action="{url name=admin_comments_list}" ng-app="BackendApp" ng-controller="CommentListCtrl" ng-init="init(null, 'backend_ws_contents_list')">
     <div class="page-navbar actions-navbar">
@@ -131,7 +134,8 @@
             <div class="spinner-text">{t}Loading{/t}...</div>
           </div>
           <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
-            <div class="center">
+            <div class="text-center p-b-15 p-t-15">
+              <i class="fa fa-4x fa-warning text-warning"></i>
               <h4>{t}Unable to find any comment that matches your search.{/t}</h4>
               <h6>{t}Maybe changing any filter could help.{/t}</h6>
             </div>
@@ -146,7 +150,8 @@
                       <label for="select-all"></label>
                     </div>
                   </th>
-                  <th><span class="col-md-offset-1">{t}Comment{/t}</span></th>
+                  <th class="hidden-xs text-center" width="40"><i class="fa fa-picture-o"></i></th>
+                  <th>{t}Comment{/t}</th>
                   <th class="text-right" width="10px">{t}Published{/t}</th>
                 </tr>
               </thead>
@@ -158,12 +163,12 @@
                       <label for="checkbox[%$index%]"></label>
                     </div>
                   </td>
+                  <td class="text-center hidden-xs">
+                    <gravatar class="gravatar img-thumbnail img-thumbnail-circle" ng-model="content.author_email" size="40"></gravatar>
+                  </td>
                   <td>
                     <div class="comment-author-info row">
-                      <span class="col-xs-1">
-                        <gravatar class="gravatar thumbnail" ng-model="content.author_email" size="40"></gravatar>
-                      </span>
-                      <small class="gravatar col-xs-11">
+                      <small class="gravatar">
                         <div class="submitted-on">
                           <strong>{t}Author:{/t}</strong> [% content.author %] <span ng-if="content.author_email">([% content.author_email %])</span>
                           - <span class="hidden-xs">[% content.author_ip %]</span>
@@ -173,15 +178,15 @@
                       </small>
                     </div>
                     <div class="comment-body-block row">
-                      <div ng-bind-html="content.body" class=" col-md-offset-1"></div>
-                      <div class="listing-inline-actions col-md-offset-1">
+                      <div ng-bind-html="content.body"></div>
+                      <div class="listing-inline-actions">
                         {acl isAllowed="COMMENT_UPDATE"}
-                        <a class="link" href="[% edit(content.id, 'admin_comment_show') %]" title="{t}Edit{/t}">
+                        <a class="btn btn-defauilt btn-small" href="[% edit(content.id, 'admin_comment_show') %]" title="{t}Edit{/t}">
                           <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                         </a>
                         {/acl}
                         {acl isAllowed="COMMENT_DELETE"}
-                        <button class="link link-danger" ng-click="delete(content, 'backend_ws_comment_delete')" type="button">
+                        <button class="btn btn-danger btn-small" ng-click="delete(content, 'backend_ws_comment_delete')" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                         </button>
                         {/acl}
