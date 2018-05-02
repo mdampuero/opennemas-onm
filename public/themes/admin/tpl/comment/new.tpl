@@ -7,23 +7,23 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-comment"></i>
-                {t}Comments{/t}
+                <a class="no-padding" href="{url name=admin_comments}" title="{t}Go back to list{/t}">
+                  <i class="fa fa-comment"></i>
+                  {t}Comments{/t}
+                </a>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks hidden-xs">
-              <h5>{t}Editing comment{/t}</h5>
+              <div class="p-l-10 p-r-10 p-t-10">
+                <i class="fa fa-angle-right"></i>
+              </div>
+            </li>
+            <li class="quicklinks hidden-xs">
+              <h5><strong>{t}Edit{/t}</strong></h5>
             </li>
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
-              <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_comments}" value="{t}Go back{/t}" title="{t}Go back{/t}">
-                  <span class="fa fa-reply"></span>
-                </a>
-              </li>
-              <li class="quicklinks"><span class="h-seperate"></span></li>
               <li class="quicklinks">
                 <button type="submit" id="save-exit" title="{t}Update{/t}" data-text="{t}Updating{/t}..." class="btn btn-primary" id="update-button">
                   <span class="fa fa-save"></span>
@@ -36,54 +36,70 @@
       </div>
     </div>
     <div class="content">
-      <div class="grid simple">
-        <div class="grid-body">
-          <div class="form-group">
-            <label class="form-label" for="title">{t}Author{/t}</label>
-            <div class="controls">
-              <table>
-                <tr>
-                  <th>{t}Nickname{/t}</th>
-                  <td>{$comment->author|clearslash}</td>
-                </tr>
-                <tr>
-                  <th>{t}Email{/t}</th>
-                  <td>{$comment->author_email|clearslash}</td>
-                </tr>
-                <tr>
-                  <th>{t}Submitted on{/t}</th>
-                  <td>{date_format date=$comment->date}</td>
-                </tr>
-                <tr>
-                  <th>{t}Sent from IP address{/t}</th>
-                  <td>{$comment->author_ip}</td>
-                </tr>
-              </table>
+      <div class="row">
+        <div class="col-md-4 col-md-push-8">
+          <div class="grid simple">
+            {acl isAllowed="COMMENT_AVAILABLE"}
+            <div class="form-group">
+              <div class="grid-collapse-title">
+                <i class="fa fa-eye m-r-5"></i>
+                {t}Status{/t}
+              </div>
+              <div class="grid-body">
+                <div class="controls">
+                  {foreach $statuses as $item}
+                  {if $item['value'] neq -1}
+                  <div>
+                    <input type="radio" name="status" value="{$item['value']}" id="content_status_{$item['value']}" {if $comment->status == {$item['value']}}checked{/if}>
+                    <label for="content_status_{$item['value']}" class="form-label">{$item['title']}</label>
+                  </div>
+                  {/if}
+                  {/foreach}
+                </div>
+              </div>
             </div>
+            {/acl}
           </div>
-          <div class="form-group">
-            <label class="form-label" for="title">{t}Commented on{/t}</label>
-            <div class="controls">
-              <strong>{t}{$comment->content->content_type_name|capitalize}{/t}</strong> - {localize_filter field=$comment->content->title|clearslash params=$language_data}
-            </div>
-          </div>
-          {acl isAllowed="COMMENT_AVAILABLE"}
-          <div class="form-group">
-            <label class="form-label" for="content_status">{t}Status{/t}</label>
-            <div class="controls">
-              {foreach $statuses as $item}
-              {if $item['value'] neq -1}
-              <input type="radio" name="status" value="{$item['value']}" {if $comment->status == {$item['value']}}checked{/if}> {$item['title']}
-              <br>
-              {/if}
-              {/foreach}
-            </div>
-          </div>
-          {/acl}
-          <div class="form-group">
-            <label class="form-label" for="body">{t}Body{/t}</label>
-            <div class="controls">
-              <textarea onm-editor onm-editor-preset="simple" name="body" id="body" ng-model="body" class="form-control">{$comment->body|clearslash}</textarea>
+        </div>
+        <div class="col-md-8 col-md-pull-4">
+          <div class="grid simple">
+            <div class="grid-body">
+              <div class="form-group">
+                <label class="form-label" for="title"><i class="fa fa-user m-r-5"></i> {t}Author{/t}</label>
+                <div class="controls m-l-20">
+                  <table>
+                    <tr>
+                      <th class="p-r-15">{t}Nickname{/t}</th>
+                      <td>{$comment->author|clearslash}</td>
+                    </tr>
+                    <tr>
+                      <th class="p-r-15">{t}Email{/t}</th>
+                      <td>{$comment->author_email|clearslash}</td>
+                    </tr>
+                    <tr>
+                      <th class="p-r-15">{t}Submitted on{/t}</th>
+                      <td>{date_format date=$comment->date}</td>
+                    </tr>
+                    <tr>
+                      <th class="p-r-15">{t}Sender IP{/t}</th>
+                      <td>{$comment->author_ip}</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="title"><i class="fa fa-archive"></i>  {t}Commented on{/t}</label>
+                <div class="controls m-l-20">
+                  <strong>{t}{$comment->content->content_type_l10n_name}{/t}</strong>:
+                  <a href="/content/{$comment->content->id}">{localize_filter field=$comment->content->title|clearslash params=$language_data}</a>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="body"><i class="fa fa-comment m-r-5"></i> {t}Body{/t}</label>
+                <div class="controls">
+                  <textarea onm-editor onm-editor-preset="simple" name="body" id="body" ng-model="body" class="form-control">{$comment->body|clearslash}</textarea>
+                </div>
+              </div>
             </div>
           </div>
         </div>
