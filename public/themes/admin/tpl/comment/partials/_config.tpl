@@ -1,33 +1,3 @@
-<style>
-  .checkbox-title {
-    font-family: 'Open Sans';
-    font-weight: 300;
-    color: #505458;
-    font-size: 1.12em;
-  }
-
-  .comment-system .comment-system-block {
-    border:1px solid #ccc;
-    border-radius:3px;
-    padding:10px ;
-    cursor:pointer;
-    width:100%;
-    display:block;
-    text-align:center;
-  }
-  .comment-system .comment-system-block:hover {
-    background:#eee;
-  }
-  .comment-system.active .comment-system-block {
-    background-color: #0aa699 !important;
-    border: 1px solid #0aa699 !important;
-    color: White;
-  }
-  .comment-system.active .comment-system-block .help {
-    color:White;
-  }
-</style>
-
 <div class="grid simple">
   <div class="grid-body">
     <div class="form-group">

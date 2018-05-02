@@ -1,24 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<style>
-  .table-wrapper {
-    white-space: normal !important;
-  }
-  .table td {
-    white-space: normal;
-  }
-
-  .comment-author-info, .comment-body-block {
-    display:block;
-    width:100%;
-    clear:both;
-  }
-  .gravatar.img-thumbnail {
-    min-width: 40px;
-  }
-</style>
-  <div action="{url name=admin_comments_list}" ng-app="BackendApp" ng-controller="CommentListCtrl" ng-init="init(null, 'backend_ws_contents_list')">
+  <div action="{url name=admin_comments_list}" ng-app="BackendApp" ng-controller="CommentListCtrl" ng-init="init(null, 'backend_ws_contents_list')" class="comments-listing">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
