@@ -715,31 +715,31 @@ contents_categories:
         #     restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 contents_tags:
     columns:
-        pk_fk_content:
+        content_id:
             type: bigint
             options: { length: 20, unsigned: true }
-        pk_fk_tag:
+        tag_id:
             type: int
             options: { unsigned: true }
     index:
         -
             name: PRIMARY
-            columns: [pk_content, pk_tag]
+            columns: [content_id, tag_id]
             primary: true
             unique: true
             flags: {  }
     foreign_keys:
         -
-            name: content_id_content_id
-            source_field: [ pk_content ]
+            name: content_tags_content_id
+            source_field: [ content_id ]
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
         -
-            name: tag_id_tag_id
-            source_field: [ pk_tag ]
+            name: contents_tags_tag_id
+            source_field: [ tag_id ]
             target_table: tags
-            target_field: [ pk_tag ]
+            target_field: [ id ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 content_views:
     columns:
@@ -1406,13 +1406,13 @@ static_pages:
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 tags:
     columns:
-        pk_tag:
+        id:
             type: int
             options: { unsigned: true, autoincrement: true }
         name:
             type: string
             options: { length: 60, notnull: true }
-        pk_language:
+        language_id:
             type: string
             options: { length: 5, notnull: true }
         slug:
@@ -1421,13 +1421,13 @@ tags:
     index:
         -
             name: PRIMARY
-            columns: [pk_tag]
+            columns: [id]
             primary: true
             unique: true
             flags: {  }
         -
-            name: pk_language
-            columns: [pk_language]
+            name: language_id
+            columns: [language_id]
             primary: false
             unique: false
             flags: {  }
