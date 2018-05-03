@@ -193,6 +193,11 @@
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
                       {/acl}
+                      {acl isAllowed="PHOTO_CREATE"}
+                      <a class="btn btn-link" ng-click="launchPhotoEditor(content)" type="button">
+                          <i class="fa fa-sliders m-r-5"></i>{t}Enhance{/t}
+                      </a>
+                      {/acl}
                       {acl isAllowed="PHOTO_DELETE"}
                       <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
