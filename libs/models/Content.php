@@ -2152,7 +2152,7 @@ class Content implements \JsonSerializable
         $this->removeMetadata($emptyKeys);
     }
 
-    public static function saveTags($tagsList, $pkContent = null)
+    public static function saveTags($tagsList, $contentId = null)
     {
         if (empty($tagsList)) {
             return null;
@@ -2163,12 +2163,12 @@ class Content implements \JsonSerializable
             $tagsListAux = [$tagsList];
         }
 
-        $sql = 'INSERT INTO contents_tags (pk_content, pk_tag) VALUES ';
+        $sql = 'INSERT INTO contents_tags (content_id, tag_id) VALUES ';
         $inputVal = [];
         foreach ($tagsListAux as $tag) {
             $sql .= '(?, ?), ';
-            $inputVal[] = $pkContent == null ? $tag['pk_content'] : $pkContent;
-            $inputVal[] = $pkContent == null ? $tag['pk_tag'] : $tag;
+            $inputVal[] = $contentId == null ? $tag['content_id'] : $contentId;
+            $inputVal[] = $contentId == null ? $tag['tag_id'] : $tag;
         }
         $sql = substr($sql, 0, -2) . ';';
 
@@ -2178,22 +2178,22 @@ class Content implements \JsonSerializable
         );
     }
 
-    public static function deleteTags($pkContent = null)
+    public static function deleteTags($contentId = null)
     {
-        if (empty($pkContent)) {
+        if (empty($contentId)) {
             return null;
         }
 
-        $sqlContentId = is_array($pkContentList) ?
-            ' IN (' . substr(str_repeat(', ?', count($pkContent)), 2) . ')' :
+        $sqlContentId = is_array($contentId) ?
+            ' IN (' . substr(str_repeat(', ?', count($contentId)), 2) . ')' :
             ' = ?';
 
-        $sql = 'DELETE FROM contents_tags WHERE pk_content IN ' . $sqlContentId;
+        $sql = 'DELETE FROM contents_tags WHERE content_id ' . $sqlContentId;
 
         $conn = getService('dbal_connection');
         getService('dbal_connection')->executeUpdate(
             $sql,
-            $pkContent
+            $contentId
         );
     }
 }

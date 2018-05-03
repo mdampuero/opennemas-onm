@@ -26,10 +26,10 @@ orm:
                         name:
                             type: string
                             options: { default: null, length: 50 }
-                        pk_language:
+                        language_id:
                             type: string
                             options: { default: null, notnull: true, length: 5  }
-                        pk_tag:
+                        id:
                             type: integer
                             options: { default: 0}
                         slug:
@@ -38,7 +38,7 @@ orm:
                     index:
                         -
                             name:    PRIMARY
-                            columns: [ pk_tag ]
+                            columns: [ id ]
                             primary: true
                             unique:  true
                             flags:   {}
