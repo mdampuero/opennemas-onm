@@ -13,15 +13,10 @@
  * @param {integer} conf.maxSize.width  - Maximun width
  * @param {integer} conf.maxSize.height - Maximun height
  */
-window.OnmPhotoEditor = function(conf) {
-  this.conf = conf;
-  this.statusImage = {
-    brightness: 0,
-    contrast: 0,
-    rotation: 0,
-    cropSizes: null,
-    mirror: { v: 1, h: 1 }
-  };
+window.OnmPhotoEditor = function(conf, translations) {
+  this.conf         = conf;
+  this.statusImage  = JSON.parse(JSON.stringify(this.DEFAULT_IMAGE_STATUS));
+  this.translations = translations;
 };
 
 /*
@@ -67,73 +62,77 @@ window.OnmPhotoEditor.prototype.ACTIONS_BRIGHTNESS = 'brightness';
  *           availables for this template and the values are the list of actions or displays for the display
  */
 window.OnmPhotoEditor.prototype.TEMPLATE_BASIC     = {
-  init: [
-    'transform',
-    'light',
-    'filter'
-  ],
-  light: [ 'brightness', 'contrast' ],
-  transform: [
-    [
-      {
-        action: 'orientation',
-        icon:   'landscape',
-        text:   'landscape',
-        value:  'landscape',
-        default: 1
-      },
-      {
-        action: 'orientation',
-        icon:   'portrait',
-        text:   'portrait',
-        value:  'portrait'
-      },
+  displays: {
+    init: [
+      'transform',
+      'light'
     ],
-    [
+    light: [ 'brightness', 'contrast' ],
+    transform: [
+      [
+        {
+          action: 'orientation',
+          icon:   'landscape',
+          text:   'landscape',
+          value:  'landscape',
+          default: 1
+        },
+        {
+          action: 'orientation',
+          icon:   'portrait',
+          text:   'portrait',
+          value:  'portrait'
+        },
+      ],
+      [
+        {
+          action: 'ratio',
+          text:   'free',
+          value:  'free'
+        },
+        {
+          action: 'ratio',
+          text:   '1:1',
+          value:  '1:1'
+        },
+        {
+          action: 'ratio',
+          text:   '4:3',
+          value:  '4:3'
+        },
+        {
+          action:  'ratio',
+          text:    '16:9',
+          value:   '16:9',
+          default: 1
+        }
+      ],
       {
-        action: 'ratio',
-        text:   'free',
-        value:  'free'
+        action: 'rotation',
+        icon:   'undo',
+        value:  '-90'
       },
       {
-        action: 'ratio',
-        text:   '1:1',
-        value:  '1:1'
+        action: 'rotation',
+        icon:   'repeat',
+        value:  '90'
       },
       {
-        action: 'ratio',
-        text:   '4:3',
-        value:  '4:3'
+        action: 'mirror',
+        icon:   'mirror',
+        value:  'vertical'
       },
       {
-        action:  'ratio',
-        text:    '16:9',
-        value:   '16:9',
-        default: 1
+        action: 'mirror',
+        icon:   'mirrorv',
+        value:  'horizontal'
       }
     ],
-    {
-      action: 'rotation',
-      icon:   'undo',
-      value:  '-90'
-    },
-    {
-      action: 'rotation',
-      icon:   'repeat',
-      value:  '90'
-    },
-    {
-      action: 'mirror',
-      icon:   'mirror',
-      value:  'vertical'
-    },
-    {
-      action: 'mirror',
-      icon:   'mirrorv',
-      value:  'horizontal'
-    }
-  ],
-  filter: 'initFilterMenu'
+  },
+  actionsByDisplay: {
+    transform : ['rotation', 'cropSizes', 'mirror'],
+    light: ['brightness', 'contrast']
+  }
 };
 
 /**
@@ -169,9 +168,19 @@ window.OnmPhotoEditor.prototype.status = {
 };
 
 /**
- * Canvas status of the image
+ * @description
+ *     statusImage for the photo editor. how we see the image
  *
- * @property {status} statusImage of the photo what determine how we see the image
+ * @typedef  {object}  statusImage
+ * @property {integer} status.brightness     - brightness value
+ * @property {integer} status.contrats       - contrast value
+ * @property {integer} status.rotation       - degrees of rotation
+ * @property {integer} status.rotation       - degrees of rotation
+ * @property {canvas}  status.canvasOriginal - original canvas to show
+ * @property {context} status.ctxOriginal    - canvas context for original photo
+ * @property {object}  mirror                - mirrors are apply in the canvas
+ * @property {integer} mirror.v              - vertical mirror
+ * @property {integer} mirror.h              - horizontal mirror
  */
 window.OnmPhotoEditor.prototype.statusImage = null;
 
@@ -202,14 +211,14 @@ window.OnmPhotoEditor.prototype.divMenu     = null;
  *
  * @property {element} canvas - Html element for the photo
  */
-window.OnmPhotoEditor.prototype.canvas               = null;
+window.OnmPhotoEditor.prototype.canvas      = null;
 
 /**
  * Canvas context
  *
  * @property {element} ctx - Context of the photo to edit
  */
-window.OnmPhotoEditor.prototype.ctx = null;
+window.OnmPhotoEditor.prototype.ctx         = null;
 
 /**
  * Maximun size of the photo editor
@@ -279,6 +288,14 @@ window.OnmPhotoEditor.prototype.ACTION_ICONS = {
   contrast:   'adjust'
 };
 
+window.OnmPhotoEditor.prototype.DEFAULT_IMAGE_STATUS = {
+  brightness: 0,
+  contrast: 0,
+  rotation: 0,
+  cropSizes: null,
+  mirror: { v: 1, h: 1 },
+}
+
 /**
  * @function init
  * @memberof OnmPhotoEditor
@@ -342,10 +359,14 @@ window.OnmPhotoEditor.prototype.drawPhotoEditor = function(status) {
  * @description
  *   Method for update the status of the photo editor.
  *
- * @param {object} status - status of the photo editor what determine what are showing
+ * @param {object}  status       - status of the photo editor what determine what are showing
+ * @param {boolean} existChanges - Check if the display changes
  */
-window.OnmPhotoEditor.prototype.updateStatusPhotoEditor = function(status) {
-  if (JSON.stringify(status) === JSON.stringify(this.status)) {
+window.OnmPhotoEditor.prototype.updateStatusPhotoEditor = function(status, existChange) {
+  if(typeof existChange === 'undefined') {
+    existChange = false;
+  }
+  if (JSON.stringify(status) === JSON.stringify(this.status) && !existChange) {
     return false;
   }
   this.getTopMenu(status);
@@ -353,20 +374,7 @@ window.OnmPhotoEditor.prototype.updateStatusPhotoEditor = function(status) {
 
   // If we have a init method we lunch this method
   if (status.display !== this.status.display) {
-    if (this.displayElements.length > 0) {
-      this.displayElements.forEach(function(element) {
-        if (element.parentElement !== null) {
-          element.parentElement.removeChild(element);
-        }
-      });
-      this.displayElements = [];
-    }
-
-    var initDisplay = 'init' + this.capitalizeFirstLetter(status.display);
-
-    if (typeof this[initDisplay] === 'function') {
-      this[initDisplay]();
-    }
+    this.launchInitDisplay(status.display);
   }
 
   this.status = status;
@@ -476,7 +484,7 @@ window.OnmPhotoEditor.prototype.getTopMenuElements = function(status) {
     'cancel' :
     { action: 'cancel', icon: 'back' };
 
-  var defaultTitle = '<h4>edit image</h4>';
+  var defaultTitle = '<h4>' + this.translate('editImage') + '</h4>';
 
   if (status.display !== this.DISPLAY_INIT) {
     return {
@@ -500,7 +508,7 @@ window.OnmPhotoEditor.prototype.getTopMenuElements = function(status) {
 window.OnmPhotoEditor.prototype.getCanvas = function() {
   this.divCanvas = document.createElement('div');
   this.divCanvas.setAttribute('class', 'divCanvas');
-  this.divCanvas.innerHTML = '<i class="fa fa-spinner" aria-hidden="true"></i>';
+  this.divCanvas.innerHTML = '<i class="fa fa-circle-o-notch fa-spin fa-2x" aria-hidden="true"></i>';
 
   var divCenter = document.createElement('div');
 
@@ -519,13 +527,13 @@ window.OnmPhotoEditor.prototype.getCanvas = function() {
  *
  * @param {status} status - status of the photo editor what determine what are showing
  *
- * @return {string} html of the menu
+ * @return {element} html of the menu
  */
 window.OnmPhotoEditor.prototype.getMenu = function(status) {
   if (!this.actionList ||
-    !(status.display in this.actionList) ||
-    !Array.isArray(this.actionList[status.display]) ||
-    this.actionList[status.display].length === 0
+    !(status.display in this.actionList.displays) ||
+    !Array.isArray(this.actionList.displays[status.display]) ||
+    this.actionList.displays[status.display].length === 0
   ) {
     return null;
   }
@@ -540,9 +548,14 @@ window.OnmPhotoEditor.prototype.getMenu = function(status) {
   var leftMenu  = null;
   var rightMenu = null;
 
-  if (this.DISPLAY_INIT !== this.status.display) {
-    leftMenu  = this.getPosition('div', 'leftMenu', { action: 'reset', text: 'Reset' });
-    rightMenu = this.getPosition('div', 'rightMenu', { action: 'back', text: 'OK' });
+  if (this.DISPLAY_INIT !== status.display && null !== status.display) {
+    var option = { text: this.translate('reset') };
+    var existChanges = this.existChanges(status);
+    if(existChanges) {
+      option.action = 'reset';
+    }
+    leftMenu  = this.getPosition('div', 'leftMenu' + (existChanges ? '' : ' disable'), option);
+    rightMenu = this.getPosition('div', 'rightMenu', { action: 'cancel', text: 'OK' });
   }
 
   this.divMenu.innerHTML = '';
@@ -558,9 +571,20 @@ window.OnmPhotoEditor.prototype.getMenu = function(status) {
   return this.divMenu;
 };
 
+/**
+ * @function getMenu
+ * @memberof OnmPhotoEditor
+ *
+ * @description
+ *   Method for get the menu in the main menu
+ *
+ * @param {status} status Actual status for the photoeditor
+ *
+ * @return {element} html element of the main menu
+ */
 window.OnmPhotoEditor.prototype.getMainMenu = function(status) {
   var menuElements = [];
-  var options      = this.actionList[status.display];
+  var options      = this.actionList.displays[status.display];
   var elementAux   = null;
 
   for (var i = 0; i < options.length; i++) {
@@ -588,6 +612,19 @@ window.OnmPhotoEditor.prototype.getMainMenu = function(status) {
   return ulEle;
 };
 
+/**
+ * @function getSubMenu
+ * @memberof OnmPhotoEditor
+ *
+ * @description
+ *   Method for get one submenu from the main menu
+ *
+ * @param {Array} options for the main menu
+ * @param {integer} position of the actual submenu in the main menu
+ * @param {status} status Actual status for the photoeditor
+ *
+ * @return {element} html of the submenu
+ */
 window.OnmPhotoEditor.prototype.getSubMenu = function(mainOptions, pos, status) {
   var subOptions  = [];
   var options     = mainOptions[pos];
@@ -635,6 +672,18 @@ window.OnmPhotoEditor.prototype.getSubMenu = function(mainOptions, pos, status) 
   return subOptions;
 };
 
+/**
+ * @function getDropDown
+ * @memberof OnmPhotoEditor
+ *
+ * @description
+ *   Method for get a drop down for the menu
+ *
+ * @param {Array} suboptions not selected for the dropdown
+ * @param {object} selected option
+ *
+ * @return {element} drop down element
+ */
 window.OnmPhotoEditor.prototype.getDropDown = function(subOptions, selected) {
   var submenuOption = { action: 'showSubmenu' };
 
@@ -687,7 +736,14 @@ window.OnmPhotoEditor.prototype.getActionButton = function(actionVal, status) {
   return this.getPosition('li', classAttr, option);
 };
 
-window.OnmPhotoEditor.prototype.initTransform = function() {
+/**
+ * @function initTransform
+ * @memberof OnmPhotoEditor
+ *
+ * @description
+ *   method to start the transformation display
+ */
+window.OnmPhotoEditor.prototype.initTransform = function(status) {
   var topCircle    = document.createElement('div');
   var bottomCircle = document.createElement('div');
   var applyBtn     = document.createElement('a');
@@ -700,7 +756,7 @@ window.OnmPhotoEditor.prototype.initTransform = function() {
   bottomCircle.setAttribute('class', 'photoEditorCircle bottomCircle');
   bottomCircle.addEventListener('mousedown', this.initResize.bind(this));
 
-  applyBtn.innerHTML = '<i class="fa fa-crop" aria-hidden="true"></i> apply';
+  applyBtn.innerHTML = '<i class="fa fa-crop" aria-hidden="true"></i> ' + this.translate('apply');
   applyBtn.href = '#crop';
   applyBtn.addEventListener('click', this.callAction.bind(this));
 
@@ -717,9 +773,18 @@ window.OnmPhotoEditor.prototype.initTransform = function() {
   this.displayElements.push(divCrop);
 
   this.divCanvas.appendChild(divCrop);
-  this.resizeCropDiv(this.status);
+  this.resizeCropDiv(status);
 };
 
+/**
+ * @function createFormHtml
+ * @memberof OnmPhotoEditor
+ *
+ * @description
+ *   Create the form fields needed for the photoeditor
+ *
+ * @param {array} inputs all inputs for the form
+ */
 window.OnmPhotoEditor.prototype.createFormHtml = function(inputs) {
   var formDiv       = document.createElement('div');
   var formContainer = document.createElement('div');
@@ -748,20 +813,38 @@ window.OnmPhotoEditor.prototype.createFormHtml = function(inputs) {
   this.actionElements.push(formDiv);
 };
 
+/**
+ * @function showCanvas
+ * @memberof OnmPhotoEditor
+ *
+ * @description
+ *   Method to show the some canvas in the visual canvas
+ *
+ * @param {canvas} canvas element to show in the visual canvas
+ */
 window.OnmPhotoEditor.prototype.showCanvas = function(canvas) {
   this.canvas.width  = canvas.canvas.width;
   this.canvas.height = canvas.canvas.height;
   this.ctx.drawImage(canvas.canvas, 0, 0, this.canvas.width, this.canvas.height);
-  this.divCanvas.style.width = this.canvas.width + 'px';
+  this.divCanvas.style.width  = this.canvas.width + 'px';
   this.divCanvas.style.height = this.canvas.height + 'px';
 };
 
 // ACTIONS
 
-// TOP MENU ACTIONS
+// Navigation ACTIONS
 
 /**
+ * @function callCancel
+ * @memberof OnmPhotoEditor
  *
+ * @description
+ *   Method to cancel the actual display or close the photoeditor
+ *
+ * @param {event}  e         - the javascript event that triggered the action
+ * @param {status} newStatus - the new action create for this action
+ *
+ * @return {mixed} - the new status with the display changed or false for close the photoeditor
  */
 window.OnmPhotoEditor.prototype.callCancel = function(e, newStatus) {
   if (this.status.display === this.DISPLAY_INIT) {
@@ -775,11 +858,35 @@ window.OnmPhotoEditor.prototype.callCancel = function(e, newStatus) {
 };
 
 /**
+ * @function callCancel
+ * @memberof OnmPhotoEditor
  *
+ * @description
+ *   Method to close the photoeditor and return the new canvas to save it
  */
 window.OnmPhotoEditor.prototype.callSave = function() {
   this.conf.closeCallBack(this.canvas);
 };
+
+/**
+ * @function callReset
+ * @memberof OnmPhotoEditor
+ *
+ * @description
+ *   Method to reset the actual display options
+ */
+window.OnmPhotoEditor.prototype.callReset = function(e, newStatus) {
+  this.resetChanges();
+  var canvas2Show = this.getCanvas2Show(this.statusImage.canvasOriginal, this.statusImage);
+  this.showCanvas(canvas2Show);
+  this.resetMultiSelected(this.actionList, newStatus);
+  this.launchInitDisplay(newStatus.display, newStatus);
+  return newStatus;
+};
+
+
+
+// Menu actions
 
 window.OnmPhotoEditor.prototype.callAction = function(e) {
   e.preventDefault();
@@ -787,7 +894,7 @@ window.OnmPhotoEditor.prototype.callAction = function(e) {
   var action    = hashVal[0];
   var newStatus = JSON.parse(JSON.stringify(this.status));
 
-  if (action in this.actionList) {
+  if (action in this.actionList.displays) {
     newStatus.display = action;
     this.updateStatusPhotoEditor(newStatus);
     return false;
@@ -806,7 +913,6 @@ window.OnmPhotoEditor.prototype.callAction = function(e) {
       this.actionElements = [];
     }
   }
-
   if (hashVal.length > 1) {
     // The format for the link hash is '''#ratio,value'''. We need the link value
     newStatus.multiSelect[action] = hashVal[1];
@@ -816,6 +922,7 @@ window.OnmPhotoEditor.prototype.callAction = function(e) {
   if (newReturnStatus && typeof newReturnStatus === 'object') {
     newStatus = newReturnStatus;
   }
+
   this.updateStatusPhotoEditor(newStatus);
   return newStatus;
 };
@@ -844,6 +951,7 @@ window.OnmPhotoEditor.prototype.callBrightness = function() {
         e.preventDefault();
         that.brightness(canvas2Show, that.ctx, e.currentTarget.value);
         that.statusImage.brightness = e.currentTarget.value;
+        that.updateStatusPhotoEditor(that.status, true);
         return null;
       }
     }
@@ -877,6 +985,7 @@ window.OnmPhotoEditor.prototype.callContrast = function() {
         e.preventDefault();
         that.contrast(canvas2Show, that.ctx, e.currentTarget.value);
         that.statusImage.contrast = e.currentTarget.value;
+        that.updateStatusPhotoEditor(that.status, true);
         return null;
       }
     }
@@ -937,6 +1046,8 @@ window.OnmPhotoEditor.prototype.callRotation = function(e, newStatus) {
   resizeEle.style.height = width * heightRatio + 'px';
 
   newStatus.multiSelect.orientation = newStatus.multiSelect.orientation === 'portrait' ? 'landscape' : 'portrait';
+  newStatus.action = null;
+  delete newStatus.multiSelect.rotation;
   return newStatus;
 };
 
@@ -1082,6 +1193,10 @@ window.OnmPhotoEditor.prototype.loadImageInCanvas = function(self, img) {
   self.divCanvas.appendChild(self.canvas);
   self.divCanvas.style.width = imgSize.width + 'px';
   self.divCanvas.style.height = imgSize.height + 'px';
+  var divCanvasCenter         = document.querySelector('.photoEditor .divCanvasCenter');
+
+  divCanvasCenter.style.height = imgSize.height + 'px';
+
   return null;
 };
 
@@ -1119,6 +1234,7 @@ window.OnmPhotoEditor.prototype.getCanvas2Show = function(canvasOriginal, status
   canvasAux = this.mirror(canvasAux.canvas, statusImage);
   canvasAux = this.rotate(canvasAux.canvas, statusImage);
   this.brightness(canvasAux, canvasAux.ctx, statusImage.brightness);
+  this.contrast(canvasAux, canvasAux.ctx, statusImage.contrast);
 
   var sizeRotate  = this.getAdaptCanvasSize(canvasAux.canvas);
   var canvas2Show = { canvas: document.createElement('canvas') };
@@ -1238,10 +1354,10 @@ window.OnmPhotoEditor.prototype.getActionList = function(status) {
 };
 
 window.OnmPhotoEditor.prototype.getMultiSelectValues = function(status, actionList) {
-  for (var action in actionList) {
-    for (var i = actionList[action].length - 1; i !== -1; i--) {
-      if (Array.isArray(actionList[action][i])) {
-        this.loadMultiSelected(actionList[action][i], status);
+  for (var action in actionList.displays) {
+    for (var i = actionList.displays[action].length - 1; i !== -1; i--) {
+      if (Array.isArray(actionList.displays[action][i])) {
+        this.loadMultiSelected(actionList.displays[action][i], status);
       }
     }
   }
@@ -1252,6 +1368,24 @@ window.OnmPhotoEditor.prototype.loadMultiSelected = function(actionElement, stat
     if ('default' in actionElement[j]) {
       status.multiSelect[actionElement[j].action] = actionElement[j].value;
       break;
+    }
+  }
+};
+
+/**
+ * @function resetMultiSelected
+ * @memberof OnmPhotoEditor
+ *
+ * @description
+ *   Method to put the multifield in the default values
+ *
+ * @return {object.<string, mixed>} actionList - List of all actions we can do. The key is the displays
+ *           availables for this template and the values are the list of actions or displays for the display
+ */
+window.OnmPhotoEditor.prototype.resetMultiSelected = function(actionList, status) {
+  for (var i = actionList.displays[status.display].length - 1; i !== -1; i--) {
+    if (Array.isArray(actionList.displays[status.display][i])) {
+      this.loadMultiSelected(actionList.displays[status.display][i], status);
     }
   }
 };
@@ -1391,12 +1525,12 @@ window.OnmPhotoEditor.prototype.getPosition = function(tagName, classVal, option
   }
 
   if (option.text) {
-    content += option.text;
+    content += this.translate(option.text);
   }
 
   var actionMethodName = 'call' + this.capitalizeFirstLetter(option.action);
 
-  if (option.action in this.actionList || typeof this[actionMethodName] === 'function') {
+  if (option.action in this.actionList.displays || typeof this[actionMethodName] === 'function') {
     var a = document.createElement('a');
 
     a.innerHTML = content;
@@ -1769,4 +1903,86 @@ window.OnmPhotoEditor.prototype.copyStatusImage = function(statusImage) {
   newStatus = JSON.parse(JSON.stringify(newStatus));
 
   return newStatus;
+};
+
+/**
+ * @function existChanges
+ * @memberof OnmPhotoEditor
+ *
+ * @description
+ *   Calculates the size of the image to fit into the div
+ *
+ * @param {status} status - actual photoeditor status
+ *
+ * @return {boolean} if exist changes or not
+ */
+window.OnmPhotoEditor.prototype.existChanges = function(status) {
+  /*
+   * TODO For now we will have to define here the changes per display. The idea is to protect the modifications of the
+   * image and to register the changes by display and thus to be able to reset
+   */
+
+  var parameter     = null;
+  var defaultValues = this.DEFAULT_IMAGE_STATUS;
+  for (var i = 0; i < this.actionList.actionsByDisplay[status.display].length; i++) {
+    parameter = this.actionList.actionsByDisplay[status.display][i];
+    if (JSON.stringify(defaultValues[parameter]) !== JSON.stringify(this.statusImage[parameter])) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * @function resetChanges
+ * @memberof OnmPhotoEditor
+ *
+ * @description
+ *   Reset all changes in the actual display
+ *
+ * @param {status} status - actual photoeditor status
+ *
+ * @return {boolean} if exist changes or not
+ */
+window.OnmPhotoEditor.prototype.resetChanges = function() {
+  var parameter     = null;
+  var defaultValues = this.DEFAULT_IMAGE_STATUS;
+  for (var i = 0; i < this.actionList.actionsByDisplay[this.status.display].length; i++) {
+    parameter = this.actionList.actionsByDisplay[this.status.display][i];
+    this.statusImage[parameter] = JSON.parse(JSON.stringify(defaultValues[parameter]));
+  }
+}
+
+/**
+ * @function launchInitDisplay
+ * @memberof OnmPhotoEditor
+ *
+ * @description
+ *   Launch the function for init the display
+ *
+ * @param {string} display - display to init
+ */
+window.OnmPhotoEditor.prototype.launchInitDisplay = function(display, status) {
+  if (this.displayElements.length > 0) {
+    this.displayElements.forEach(function(element) {
+      if (element.parentElement !== null) {
+        element.parentElement.removeChild(element);
+      }
+    });
+    this.displayElements = [];
+  }
+  var initDisplay = 'init' + this.capitalizeFirstLetter(display);
+
+  if (typeof this[initDisplay] === 'function') {
+    var statusAux = status ? status : this.status;
+    this[initDisplay](statusAux);
+  }
+  return null;
+};
+
+window.OnmPhotoEditor.prototype.translate = function(text) {
+  if(text in this.translations) {
+    return this.translations[text];
+  }
+  return text;
 };

@@ -44,28 +44,20 @@
   font-family: Helvetica, Arial, sans-serif;
 }
 
+.photoEditor .menu .disable {
+  opacity: 0.3;
+}
+
 .photoEditor .menu .leftMenu,
 .photoEditor .menu .rightMenu {
   position: absolute;
   top: 50%;
-  padding-right: 15px;
-  padding-left: 15px;
-  min-width: 48px;
-  border: none;
-  border-radius: 4px;
   text-align: center;
-  line-height: 40px;
+  min-width: 55px;
   -webkit-transform: translateY(-50%);
      -moz-transform: translateY(-50%);
       -ms-transform: translateY(-50%);
           transform: translateY(-50%);
-}
-
-.photoEditor .menu .leftMenu:hover,
-.photoEditor .menu .rightMenu:hover {
-  background-color: rgba(0, 0, 0, 0.07);
-  color: #357ae8;
-  cursor: pointer;
 }
 
 .photoEditor .menu .leftMenu {
@@ -74,6 +66,20 @@
 
 .photoEditor .menu .rightMenu {
   right: 5px;
+}
+
+.photoEditor .menu .leftMenu a,
+.photoEditor .menu .rightMenu a {
+  line-height: 40px;
+  padding: 10px 5px;
+  border: none;
+  border-radius: 4px;
+}
+
+.photoEditor .menu .leftMenu:hover a,
+.photoEditor .menu .rightMenu:hover a {
+  background-color: rgba(0, 0, 0, 0.07);
+  color: #357ae8;
 }
 
 .photoEditor .menu a {
@@ -172,7 +178,7 @@
 
 .photoEditor .divCanvas {
   position: absolute;
-  top: 50%;
+  top: 48%;
   left: 50%;
   z-index: 1;
   margin: 0 auto;
