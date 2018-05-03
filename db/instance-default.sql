@@ -509,8 +509,8 @@ CREATE TABLE `contents_categories` (
 DROP TABLE IF EXISTS `contents_tags`;
 
 CREATE TABLE `contents_tags` (
-  `pk_content` bigint(20) UNSIGNED NOT NULL,
-  `pk_tag` int(10) UNSIGNED NOT NULL
+  `content_id` bigint(20) UNSIGNED NOT NULL,
+  `tag_id` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1054,9 +1054,9 @@ CREATE TABLE `static_pages` (
 DROP TABLE IF EXISTS `tags`;
 
 CREATE TABLE `tags` (
-  `pk_tag` int(10) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(60) NOT NULL,
-  `pk_language` varchar(5) NOT NULL,
+  `language_id` varchar(5) NOT NULL,
   `slug` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1352,15 +1352,15 @@ UNLOCK TABLES;
 
 
 ALTER TABLE `tags`
-  ADD PRIMARY KEY (`pk_tag`),
-  MODIFY `pk_tag` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  ADD INDEX `pk_language` (`pk_language`);
+  ADD PRIMARY KEY (`id`),
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  ADD INDEX `language_id` (`language_id`);
 --  ADD UNIQUE KEY `name` (`name`);
 
 ALTER TABLE `contents_tags`
-  ADD PRIMARY KEY (`pk_tag`,`pk_content`),
-  ADD CONSTRAINT `tag_id_tag_id` FOREIGN KEY (`pk_tag`) REFERENCES `tags` (`pk_tag`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `content_id_content_id` FOREIGN KEY (`pk_content`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD PRIMARY KEY (`tag_id`,`content_id`),
+  ADD CONSTRAINT `contents_tags_tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `content_tags_content_id` FOREIGN KEY (`content_id`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
