@@ -88,6 +88,7 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
         while (!empty($contents)) {
             $newTagsInBatch = [];
             $contentTagRel  = [];
+            $contentsId     = [];
             foreach ($contents as $content) {
                 if (empty($content['metadata'])) {
                     continue;
@@ -99,8 +100,9 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
                     $contentTagRel,
                     $tagService
                 );
+                $contentsId[] = $content['pk_content'];
             }
-            $tags  = $this->insertData($newTagsInBatch, $contentTagRel, $locale, $tags);
+            $tags  = $this->insertData($newTagsInBatch, $contentTagRel, $locale, $tags, $contentsId);
             $page += 1;
             unset($contents);
             $contents = $conn->fetchAll(
@@ -108,6 +110,7 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
                 [$epp, $epp * $page]
             );
             unset($newTagsInBatch);
+            unset($contentsId);
         }
 
         $end = time();
@@ -116,7 +119,7 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
             '<fg=yellow>*** Finished ONM Tags Migrator for instance ' .
             $instanceName .
             ' in ' .
-            ($start - $end) .
+            ($end - $start) .
             ' ***</fg=yellow>'
         );
 
@@ -149,7 +152,7 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
                 $searcheableWord = $tagService->createSearchableWord($tag);
 
                 if (array_key_exists($tag, $tags)) {
-                    $contentTagRel[] = [ 'pk_content' => $content['pk_content'], 'pk_tag' => $tags[$tag]];
+                    $contentTagRel[] = [ 'content_id' => $content['pk_content'], 'tag_id' => $tags[$tag]];
                     continue;
                 }
 
@@ -173,10 +176,10 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
      */
     private function getTags($conn, $locale)
     {
-        $tagList = $conn->fetchAll('SELECT pk_tag, name FROM tags WHERE pk_language = ?;', [$locale]);
+        $tagList = $conn->fetchAll('SELECT id, name FROM tags WHERE language_id = ?;', [$locale]);
         $tagsMap = [];
         foreach ($tagList as $tag) {
-            $tagsMap[$tag['name']] = $tag['pk_tag'];
+            $tagsMap[$tag['name']] = $tag['id'];
         }
         return $tagsMap;
     }
@@ -188,9 +191,11 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
      * @param Array  $contentTagRel  List with the relations of between contents and tags
      * @param String $locale         Default language for the instance
      * @param Array  $tags           List with all created tags
+     * @param Array  $contentsId     List of all contents to insert
      */
-    private function insertData($newTagsInBatch, $contentTagRel, $locale, $tags)
+    private function insertData($newTagsInBatch, $contentTagRel, $locale, $tags, $contentsId)
     {
+        \Content::deleteTags($contentsId);
         foreach ($newTagsInBatch as $word => $value) {
             $tag         = [
                 $word,
@@ -200,7 +205,7 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
             $tagId       = $this->insertTags($tag);
             $tags[$word] = $tagId;
             foreach ($value['contents'] as $contentId) {
-                $contentTagRel[] = [ 'pk_content' => $contentId, 'pk_tag' => $tagId];
+                $contentTagRel[] = [ 'content_id' => $contentId, 'tag_id' => $tagId];
             }
         }
         try {
@@ -216,8 +221,8 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
                 $errorMessage = substr($errorMessage, strpos($errorMessage, '\'') + 1);
                 $errorMessage = substr($errorMessage, 0, strpos($errorMessage, '\''));
                 $pkContent    = substr($errorMessage, 0, strpos($errorMessage, '-'));
-                \Content::deleteTags($pkContent);
-                $this->insertData($newTagsInBatch, $contentTagRel, $locale, $tags);
+
+                $this->insertData($newTagsInBatch, $contentTagRel, $locale, $tags, []);
             }
         }
         return $tags;
@@ -233,7 +238,7 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
         if (empty($tag)) {
             return null;
         }
-        $sql  = 'INSERT INTO tags (name, pk_language, slug) VALUES (?, ?, ?)';
+        $sql  = 'INSERT INTO tags (name, language_id, slug) VALUES (?, ?, ?)';
         $conn = getService('dbal_connection');
         $conn->executeUpdate(
             $sql,
