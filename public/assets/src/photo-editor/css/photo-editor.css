@@ -42,6 +42,7 @@
   height: 84px;
   background-color: #ffffff;
   font-family: Helvetica, Arial, sans-serif;
+  text-transform: capitalize;
 }
 
 .photoEditor .menu .disable {
@@ -70,10 +71,13 @@
 
 .photoEditor .menu .leftMenu a,
 .photoEditor .menu .rightMenu a {
+  color: #333843;
   line-height: 40px;
   padding: 10px 5px;
   border: none;
   border-radius: 4px;
+  min-width: 55px;
+  display: block;
 }
 
 .photoEditor .menu .leftMenu:hover a,
@@ -215,6 +219,7 @@
   color: #282323;
   font: 16px Helvetica, "Open Sans", Arial, sans-serif;
   font-weight: 300;
+  text-transform: capitalize;
 }
 
 .photoEditor .topMenu h4,
