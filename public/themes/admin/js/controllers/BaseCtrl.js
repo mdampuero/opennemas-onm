@@ -256,10 +256,12 @@
 
           modal.rendered.then(function() {
             var photoEditor = new window.OnmPhotoEditor({
-              container: 'photoEditor',
-              image: $window.instanceMedia + '/images' + imgData.path_img,
-              closeCallBack: modal.close
-            });
+                container: 'photoEditor',
+                image: $window.instanceMedia + '/images' + imgData.path_img,
+                closeCallBack: modal.close,
+              },
+              photoEditorTranslations
+            );
 
             photoEditor.init();
           });

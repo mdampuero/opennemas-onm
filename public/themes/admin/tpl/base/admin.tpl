@@ -68,6 +68,20 @@
       var instanceMedia = '{$smarty.const.INSTANCE_MEDIA}';
       var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
       var leaveMessage = '{t}You are leaving the current page.{/t}';
+      var photoEditorTranslations = {
+        transform: '{t}transform{/t}',
+        light: '{t}light{/t}',
+        landscape: '{t}landscape{/t}',
+        portrait: '{t}portrait{/t}',
+        free: '{t}free{/t}',
+        brightness: '{t}brightness{/t}',
+        contrast: '{t}contrast{/t}',
+        cancel: '{t}cancel{/t}',
+        editImage: '{t}edit image{/t}',
+        save: '{t}save{/t}',
+        reset: '{t}reset{/t}',
+        apply: '{t}apply{/t}'
+      };
     </script>
   {/block}
 </head>

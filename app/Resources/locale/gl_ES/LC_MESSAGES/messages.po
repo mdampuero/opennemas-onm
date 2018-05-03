@@ -9013,6 +9013,42 @@ msgstr "Benvido ao Xestor de Opennemas"
 msgid "Use the right sidebar to explore the available information."
 msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
 
+msgid "transform"
+msgstr "transformar"
+
+msgid "light"
+msgstr "luz"
+
+msgid "landscape"
+msgstr "apaisado"
+
+msgid "portrait"
+msgstr "retrato"
+
+msgid "free"
+msgstr "libre"
+
+msgid "brightness"
+msgstr "brillo"
+
+msgid "contrast"
+msgstr "contraste"
+
+msgid "cancel"
+msgstr "cancelar"
+
+msgid "edit image"
+msgstr "editar imaxe"
+
+msgid "save"
+msgstr "gardar"
+
+msgid "reset"
+msgstr "reiniciar"
+
+msgid "apply"
+msgstr "aplicar"
+
 #~ msgid "You are a master"
 #~ msgstr "Eres un master"
 

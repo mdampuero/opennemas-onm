@@ -9154,6 +9154,42 @@ msgstr ""
 "font-size: 14px; line-height: normal;\" target=\"_blank\">Opennemas</a> "
 "<span style=\"color:#000000\">Équipe</span>"
 
+msgid "transform"
+msgstr "transformer"
+
+msgid "light"
+msgstr "lumière"
+
+msgid "landscape"
+msgstr "paysage"
+
+msgid "portrait"
+msgstr "portrait"
+
+msgid "free"
+msgstr "libre"
+
+msgid "brightness"
+msgstr "luminosité"
+
+msgid "contrast"
+msgstr "contraste"
+
+msgid "cancel"
+msgstr "Annuler"
+
+msgid "edit image"
+msgstr "éditer l'image"
+
+msgid "save"
+msgstr "enregistrer"
+
+msgid "reset"
+msgstr "réinitialiser"
+
+msgid "apply"
+msgstr "appliquer"
+
 #~ msgid "Site logo"
 #~ msgstr "Logo du site"
 

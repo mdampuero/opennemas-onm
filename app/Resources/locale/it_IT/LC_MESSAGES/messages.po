@@ -9015,6 +9015,42 @@ msgstr "(anche disponibile dal menu del Pannello di Amministrazione);"
 msgid "Regards,"
 msgstr "Attentamente,"
 
+msgid "transform"
+msgstr "trasformare"
+
+msgid "light"
+msgstr "leggero"
+
+msgid "landscape"
+msgstr "paesaggio"
+
+msgid "portrait"
+msgstr "ritratto"
+
+msgid "free"
+msgstr "libero"
+
+msgid "brightness"
+msgstr "luminosità"
+
+msgid "contrast"
+msgstr "contrasto"
+
+msgid "cancel"
+msgstr "Annulla"
+
+msgid "edit image"
+msgstr "modifica immagine"
+
+msgid "save"
+msgstr "salvare"
+
+msgid "reset"
+msgstr "reset"
+
+msgid "apply"
+msgstr "applicare"
+
 msgid ""
 "<a href=\"http://www.opennemas.com/\" style=\"font-family: 'trebuchet ms', "
 "'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif; "
