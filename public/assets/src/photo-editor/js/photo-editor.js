@@ -130,8 +130,8 @@ window.OnmPhotoEditor.prototype.TEMPLATE_BASIC     = {
     ],
   },
   actionsByDisplay: {
-    transform : ['rotation', 'cropSizes', 'mirror'],
-    light: ['brightness', 'contrast']
+    transform: [ 'rotation', 'cropSizes', 'mirror' ],
+    light: [ 'brightness', 'contrast' ]
   }
 };
 
@@ -294,7 +294,7 @@ window.OnmPhotoEditor.prototype.DEFAULT_IMAGE_STATUS = {
   rotation: 0,
   cropSizes: null,
   mirror: { v: 1, h: 1 },
-}
+};
 
 /**
  * @function init
@@ -363,7 +363,7 @@ window.OnmPhotoEditor.prototype.drawPhotoEditor = function(status) {
  * @param {boolean} existChanges - Check if the display changes
  */
 window.OnmPhotoEditor.prototype.updateStatusPhotoEditor = function(status, existChange) {
-  if(typeof existChange === 'undefined') {
+  if (typeof existChange === 'undefined') {
     existChange = false;
   }
   if (JSON.stringify(status) === JSON.stringify(this.status) && !existChange) {
@@ -548,10 +548,11 @@ window.OnmPhotoEditor.prototype.getMenu = function(status) {
   var leftMenu  = null;
   var rightMenu = null;
 
-  if (this.DISPLAY_INIT !== status.display && null !== status.display) {
+  if (status.display !== this.DISPLAY_INIT && status.display !== null) {
     var option = { text: this.translate('reset') };
     var existChanges = this.existChanges(status);
-    if(existChanges) {
+
+    if (existChanges) {
       option.action = 'reset';
     }
     leftMenu  = this.getPosition('div', 'leftMenu' + (existChanges ? '' : ' disable'), option);
@@ -878,13 +879,12 @@ window.OnmPhotoEditor.prototype.callSave = function() {
 window.OnmPhotoEditor.prototype.callReset = function(e, newStatus) {
   this.resetChanges();
   var canvas2Show = this.getCanvas2Show(this.statusImage.canvasOriginal, this.statusImage);
+
   this.showCanvas(canvas2Show);
   this.resetMultiSelected(this.actionList, newStatus);
   this.launchInitDisplay(newStatus.display, newStatus);
   return newStatus;
 };
-
-
 
 // Menu actions
 
@@ -1924,6 +1924,7 @@ window.OnmPhotoEditor.prototype.existChanges = function(status) {
 
   var parameter     = null;
   var defaultValues = this.DEFAULT_IMAGE_STATUS;
+
   for (var i = 0; i < this.actionList.actionsByDisplay[status.display].length; i++) {
     parameter = this.actionList.actionsByDisplay[status.display][i];
     if (JSON.stringify(defaultValues[parameter]) !== JSON.stringify(this.statusImage[parameter])) {
@@ -1931,7 +1932,7 @@ window.OnmPhotoEditor.prototype.existChanges = function(status) {
     }
   }
   return false;
-}
+};
 
 /**
  * @function resetChanges
@@ -1947,11 +1948,12 @@ window.OnmPhotoEditor.prototype.existChanges = function(status) {
 window.OnmPhotoEditor.prototype.resetChanges = function() {
   var parameter     = null;
   var defaultValues = this.DEFAULT_IMAGE_STATUS;
+
   for (var i = 0; i < this.actionList.actionsByDisplay[this.status.display].length; i++) {
     parameter = this.actionList.actionsByDisplay[this.status.display][i];
     this.statusImage[parameter] = JSON.parse(JSON.stringify(defaultValues[parameter]));
   }
-}
+};
 
 /**
  * @function launchInitDisplay
@@ -1975,13 +1977,23 @@ window.OnmPhotoEditor.prototype.launchInitDisplay = function(display, status) {
 
   if (typeof this[initDisplay] === 'function') {
     var statusAux = status ? status : this.status;
+
     this[initDisplay](statusAux);
   }
   return null;
 };
 
+/**
+ * @function translate
+ * @memberof OnmPhotoEditor
+ *
+ * @description
+ *   Method for translate words
+ *
+ * @param {string} text - text to translate
+ */
 window.OnmPhotoEditor.prototype.translate = function(text) {
-  if(text in this.translations) {
+  if (text in this.translations) {
     return this.translations[text];
   }
   return text;
