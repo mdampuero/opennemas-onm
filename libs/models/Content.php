@@ -2163,10 +2163,10 @@ class Content implements \JsonSerializable
             $tagsListAux = [$tagsList];
         }
 
-        $sql = 'INSERT INTO contents_tags (content_id, tag_id) VALUES ';
+        $sql      = 'INSERT INTO contents_tags (content_id, tag_id) VALUES ';
         $inputVal = [];
         foreach ($tagsListAux as $tag) {
-            $sql .= '(?, ?), ';
+            $sql       .= '(?, ?), ';
             $inputVal[] = $contentId == null ? $tag['content_id'] : $contentId;
             $inputVal[] = $contentId == null ? $tag['tag_id'] : $tag;
         }
