@@ -260,7 +260,7 @@ class UserController extends Controller
             $em->persist($user);
 
             $this->get('session')->getFlashBag()->add('success', _('Data updated successfully'));
-            $this->get('core.dispatcher')->dispatch('author.update', [ 'id' => $user->id ]);
+            $this->get('core.dispatcher')->dispatch('user.update', [ 'user' => $user ]);
         } catch (EntityNotFoundException $e) {
             $this->get('session')->getFlashBag()->add('error', _('The user does not exists.'));
         } catch (\Exception $e) {

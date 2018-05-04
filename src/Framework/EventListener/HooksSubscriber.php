@@ -53,7 +53,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['mockHookAction', 0],
             ],
             'author.update' => [
-                ['removeObjectCacheMultiCacheAllAuthors', 5],
+                ['mockHookAction', 0],
             ],
             'author.delete' => [
                 ['mockHookAction', 0],
@@ -181,10 +181,12 @@ class HooksSubscriber implements EventSubscriberInterface
             'user.update' => [
                 ['removeObjectCacheUser', 10],
                 ['removeSmartyCacheAuthor', 5],
+                ['removeObjectCacheMultiCacheAllAuthors', 5],
             ],
             'user.delete' => [
-                ['mockHookAction', 0],
+                ['removeObjectCacheUser', 10],
                 ['removeSmartyCacheAuthor', 5],
+                ['removeObjectCacheMultiCacheAllAuthors', 5],
             ],
             'user.social.connect' => [
                 ['mockHookAction', 0],
@@ -369,7 +371,19 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeObjectCacheUser(Event $event)
     {
-        $user = $event->getArgument('user');
+        try {
+            if ($event->hasArgument('user')) {
+                $user = $event->getArgument('user');
+            } elseif ($event->hasArgument('id')) {
+                $user = $this->container->get('orm.manager')
+                    ->getRepository('User')
+                    ->find($event->getArgument('id'));
+            } else {
+                return;
+            }
+        } catch (\Exception $e) {
+            return;
+        }
 
         // TODO: Remove when using only new orm for users
         $this->container->get('cache.manager')->getConnection('instance')
@@ -419,11 +433,19 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheAuthor(Event $event)
     {
-        if (!$event->hasArgument('user')) {
+        try {
+            if ($event->hasArgument('user')) {
+                $user = $event->getArgument('user');
+            } elseif ($event->hasArgument('id')) {
+                $user = $this->container->get('orm.manager')
+                    ->getRepository('User')
+                    ->find($event->getArgument('id'));
+            } else {
+                return;
+            }
+        } catch (\Exception $e) {
             return;
         }
-
-        $user = $event->getArgument('user');
 
         $this->initializeSmartyCacheHandler();
 
