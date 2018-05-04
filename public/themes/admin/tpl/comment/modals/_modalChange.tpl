@@ -1,7 +1,7 @@
 <div class="modal-body text-center">
-  <i class="fa fa-4x fa-warning text-warning m-b-10 m-t-40"></i>
-  <h4 class="modal-title m-b-10">{t}Change comment manager{/t}</h4>
-  <p >{t 1="[% template.handler %]"}Are you sure you want to change your comment system handler to "%1".{/t}</p>
+  <i class="fa fa-4x m-b-10 m-t-40" ng-class="template.iconName"></i>
+  <h4 class="modal-title m-b-10">{t escape=off 1="[% template.handler %]"}Change comment manager to "<strong>%1</strong>"{/t}</h4>
+  <p >{t 1="[% template.handler %]"}Are you sure you want to change your comment system handler?{/t}</p>
 </div>
 
 <div class="modal-footer row">

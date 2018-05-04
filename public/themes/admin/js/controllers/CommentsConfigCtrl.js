@@ -24,7 +24,7 @@
           $scope.extra = extra;
         };
 
-        $scope.changeHandler = function(name, url) {
+        $scope.changeHandler = function(name, icon, url) {
           $uibModal.open({
             backdrop:    true,
             backdropClass: 'modal-backdrop-dark',
@@ -35,6 +35,7 @@
               template: function() {
                 return {
                   handler: name,
+                  iconName: icon,
                 };
               },
               yes: function() {

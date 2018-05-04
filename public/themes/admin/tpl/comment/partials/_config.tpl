@@ -1,6 +1,22 @@
 <div class="grid simple">
   <div class="grid-body">
     <div class="form-group">
+
+      <div class="form-group">
+        <div class="checkbox">
+          <input id="disable_comments" name="configs[disable_comments]" type="checkbox"  ng-model="configs.disable_comments" value=1>
+          <label class="form-label" for="disable_comments">
+            <span class="checkbox-title">{t}Disallow comments on site{/t}</span>
+            <div class="help">
+              {t}If set, users will not be able to comment on the site and comments already approved will not be displayed{/t}
+            </div>
+          </label>
+        </div>
+        <div class="alert alert-primary ng-cloak m-l-20 m-t-15" role="alert" ng-show="configs.disable_comments">
+          {t}Note: your site will not show any kind of comment and users will not be allowed to send more comments. Registered comments are not removed.{/t}
+        </div>
+      </div>
+
       <h5>
         <i class="fa fa-bars m-r-5"></i>
         {t}Comment handler{/t}
@@ -11,8 +27,8 @@
 
         <div class="comment-system col-sm-4">
           <div>
-            <a ng-click="changeHandler('{t}Built-in system{/t}', '{url name=backend_comments_select type=onm}')" class="m-b-5 comment-system-block btn btn-block {if $extra['handler'] == 'onm'}btn-success{/if}" uib-tooltip="{t}Use the built-in comment system{/t}">
-              <i class="fa fa-comment"></i>
+            <a ng-click="changeHandler('{t}Built-in system{/t}', 'fa-comments', '{url name=backend_comments_select type=onm}')" class="m-b-5 comment-system-block btn btn-block {if $extra['handler'] == 'onm'}btn-success{/if}" uib-tooltip="{t}Use the built-in comment system{/t}">
+              <i class="fa fa-comments"></i>
               <i>{t}Built-in system{/t}</i>
             </a>
             <div class="help">
@@ -22,7 +38,7 @@
         </div>
         <div class="comment-system col-sm-4 " >
           <div>
-            <a ng-click="changeHandler('Facebook', '{url name=backend_comments_select type=facebook}')" class="m-b-5 comment-system-block btn btn-block {if $extra['handler'] == 'facebook'}btn-success{/if}" uib-tooltip="{t}Use the Facebook comment system{/t}">
+            <a ng-click="changeHandler('Facebook', 'fa-facebook', '{url name=backend_comments_select type=facebook}')" class="m-b-5 comment-system-block btn btn-block {if $extra['handler'] == 'facebook'}btn-success{/if}" uib-tooltip="{t}Use the Facebook comment system{/t}">
               <i class="fa fa-facebook"></i>
               Facebook
             </a>
@@ -33,7 +49,7 @@
         </div>
         <div class="comment-system col-sm-4">
           <div>
-            <a  ng-click="changeHandler('Disqus', '{url name=backend_comments_select type=disqus}')"  class="m-b-5 comment-system-block btn btn-block {if $extra['handler'] == 'disqus'}btn-success{/if}" uib-tooltip="{t}Use the Disqus comment system{/t}">
+            <a  ng-click="changeHandler('Disqus', 'fa-comment', '{url name=backend_comments_select type=disqus}')"  class="m-b-5 comment-system-block btn btn-block {if $extra['handler'] == 'disqus'}btn-success{/if}" uib-tooltip="{t}Use the Disqus comment system{/t}">
               <i class="fa fa-comment"></i>
               Disqus
             </a>
@@ -42,21 +58,6 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="checkbox">
-        <input id="disable_comments" name="configs[disable_comments]" type="checkbox"  ng-model="configs.disable_comments" value=1>
-        <label class="form-label" for="disable_comments">
-          <span class="checkbox-title">{t}Disallow comments on site{/t}</span>
-          <div class="help">
-            {t}If set, users will not be able to comment on the site and comments already approved will not be displayed{/t}
-          </div>
-        </label>
-      </div>
-      <div class="alert alert-primary ng-cloak m-l-20 m-t-15" role="alert" ng-show="configs.disable_comments">
-        {t}Note: your instance will not show any kind of comment, nor will allow users to send more comments. Registered comments are not removed.{/t}
       </div>
     </div>
 
