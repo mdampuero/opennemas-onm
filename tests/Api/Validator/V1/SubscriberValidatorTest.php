@@ -37,15 +37,26 @@ class SubscriberValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests validate when valid type provided.
+     * Tests validate when type changes and valid type provided.
      */
-    public function testValidate()
+    public function testValidateChanges()
     {
         $this->validator->validate(new Entity([ 'type' => 1 ]));
         $this->validator->validate(new Entity([
             'type'  => 1,
             'email' => 'foobar@foo.fubar',
         ]));
+    }
+
+    /**
+     * Tests validate when there are no changes in type.
+     */
+    public function testValidateWhenNoChanges()
+    {
+        $item = new Entity([ 'type' => 0 ]);
+        $item->refresh();
+
+        $this->validator->validate($item);
     }
 
     /**

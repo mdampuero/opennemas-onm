@@ -77,7 +77,10 @@ class AdvertisementController extends Controller
         $ad = $this->getAdvertisement($id);
 
         if (empty($ad) || empty($ad->content_status)) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException(
+                sprintf('Advertisement with id "%s" doesnt exists', $id),
+                404
+            );
         }
 
         $instance = $this->get('core.instance');

@@ -59,15 +59,13 @@ class SubscribersController extends Controller
         }
 
         // Get request params
-        $verify = $request->request->filter('verify', '', FILTER_SANITIZE_STRING);
-        $action = $request->request->filter('action', '', FILTER_SANITIZE_STRING);
-        $data = [
+        $action   = $request->request->filter('action', '', FILTER_SANITIZE_STRING);
+        $response = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
+        $data     = [
             'email'        => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
             'name'         => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
             'subscription' => $request->request->filter('subscription', '', FILTER_SANITIZE_STRING),
         ];
-
-        $response  = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
 
         // Check current recaptcha
         $isValid = $this->get('core.recaptcha')
@@ -126,16 +124,16 @@ class SubscribersController extends Controller
         $data['subscritorCommunity'] = $request->request->filter('community', '', FILTER_SANITIZE_STRING);
 
         // Build mail body
-        $text = "Nombre y Apellidos: ". $data['name']." \r\n".
-            "Email: ".$data['email']." \r\n";
+        $text = "Nombre y Apellidos: " . $data['name'] . " \r\n"
+            . "Email: " . $data['email'] . " \r\n";
         if (!empty($data['subscritorEntity'])) {
-            $text.= "Entidad: ".$data['subscritorEntity']." \n";
+            $text .= "Entidad: " . $data['subscritorEntity'] . " \n";
         }
         if (!empty($data['subscritorCountry'])) {
-            $text.= "País: ".$data['subscritorCountry']." \n";
+            $text .= "País: " . $data['subscritorCountry'] . " \n";
         }
         if (!empty($data['subscritorCommunity'])) {
-            $text.= "Provincia de Origen: ".$data['subscritorCommunity']." \n";
+            $text .= "Provincia de Origen: " . $data['subscritorCommunity'] . " \n";
         }
 
         // Get configuration params
@@ -145,17 +143,17 @@ class SubscribersController extends Controller
         ]);
 
         $configSiteName = $settings['site_name'];
-        $configMailTo = $settings['newsletter_maillist'];
+        $configMailTo   = $settings['newsletter_maillist'];
 
         // Checking the type of action to do (alta/baja)
         if ($data['subscription'] == 'alta') {
-            $subject = utf8_decode("Solicitud de ALTA - Boletín ".$configSiteName);
-            $body    =  "Solicitud de Alta en el boletín de: \r\n". $text;
+            $subject = utf8_decode("Solicitud de ALTA - Boletín " . $configSiteName);
+            $body    = "Solicitud de Alta en el boletín de: \r\n" . $text;
 
             $message = _("You have been subscribed to the newsletter.");
         } else {
-            $subject = utf8_decode("Solicitud de BAJA - Boletín ".$configSiteName);
-            $body    =  "Solicitud de Baja en el boletín de: \r\n". $text;
+            $subject = utf8_decode("Solicitud de BAJA - Boletín " . $configSiteName);
+            $body    = "Solicitud de Baja en el boletín de: \r\n" . $text;
             $message = _("You have been unsusbscribed from the newsletter.");
         }
 
@@ -165,11 +163,17 @@ class SubscribersController extends Controller
             ->setSubject($subject)
             ->setBody(utf8_decode($body), 'text/html')
             ->setBody(strip_tags(utf8_decode($body)), 'text/plain')
-            ->setTo(array($configMailTo['subscription'] => _('Subscription form')))
-            ->setFrom(array($data['email'] => $data['name']))
+            ->setTo([ $configMailTo['subscription'] => _('Subscription form') ])
+            ->setFrom([ $data['email'] => $data['name'] ])
             ->setSender([
                 'no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')
             ]);
+
+        $headers = $mail->getHeaders();
+        $headers->addParameterizedHeader(
+            'ACUMBAMAIL-SMTPAPI',
+            $this->get('core.instance')->internal_name . ' - Newsletter subscription'
+        );
 
         try {
             $mailer = $this->get('mailer');
@@ -179,13 +183,13 @@ class SubscribersController extends Controller
             } else {
                 $message = _("You have been unsubscribed from our newsletter.");
             }
-            $class   = 'success';
+            $class = 'success';
         } catch (\Swift_SwiftException $e) {
             $message = _(
                 "Sorry, we were unable to complete your request.\n"
-                ."Check the form and try again"
+                . "Check the form and try again"
             );
-            $class = 'error';
+            $class   = 'error';
         }
 
         return [
@@ -207,57 +211,57 @@ class SubscribersController extends Controller
         if ($data['subscription'] == 'alta') {
             if ($user->existsEmail($data['email'])) {
                 $data['subscription'] = 1;
-                $data['status'] = 2;
+                $data['status']       = 2;
 
-                $user = $user->getUserByEmail($data['email']);
+                $user       = $user->getUserByEmail($data['email']);
                 $data['id'] = $user->id;
 
                 if ($user->update($data)) {
                     $message = _("You have been subscribed to our newsletter.");
-                    $class = 'success';
+                    $class   = 'success';
                 } else {
                     $message = _(
                         "Sorry, we were unable to complete your request.\n"
-                        ."Check the form and try again"
+                        . "Check the form and try again"
                     );
-                    $class = 'error';
+                    $class   = 'error';
                 }
             } else {
                 $data['subscription'] = 1;
-                $data['status'] = 2;
+                $data['status']       = 2;
 
                 if ($user->create($data)) {
                     $message = _("You have been subscribed to our newsletter.");
-                    $class = 'success';
+                    $class   = 'success';
                 } else {
                     $message = _(
                         "Sorry, we were unable to complete your request.\n"
-                        ."Check the form and try again"
+                        . "Check the form and try again"
                     );
-                    $class = 'error';
+                    $class   = 'error';
                 }
             }
         } else {
             if ($user->existsEmail($data['email'])) {
                 $data['subscription'] = 0;
-                $data['status'] = 3;
+                $data['status']       = 3;
 
-                $user = $user->getUserByEmail($data['email']);
+                $user       = $user->getUserByEmail($data['email']);
                 $data['id'] = $user->id;
 
                 if ($user->update($data)) {
                     $message = _("You have been unsubscribed from our newsletter");
-                    $class = 'success';
+                    $class   = 'success';
                 } else {
                     $message = _(
                         "Sorry, we were unable to complete your request.\n"
-                        ."Check the form and try again"
+                        . "Check the form and try again"
                     );
-                    $class = 'error';
+                    $class   = 'error';
                 }
             } else {
                 $message = _("Sorry, that email is not in our database");
-                $class = 'error';
+                $class   = 'error';
             }
         }
 
@@ -276,7 +280,7 @@ class SubscribersController extends Controller
     {
         // Get letter positions
         $positionManager = $this->get('core.helper.advertisement');
-        $positions       = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ]);
         $advertisements  = $this->get('advertisement_repository')
             ->findByPositionsAndCategory($positions, 0);
 

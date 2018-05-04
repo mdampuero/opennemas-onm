@@ -453,6 +453,16 @@
             $scope.backup.content_status = $scope.article.content_status;
           };
 
+          /**
+           * Callback executed when article is saved/updated fails.
+           *
+           * @param {Object} response The response object.
+           */
+          var saveErrorCb = function(response) {
+            $scope.disableFlags();
+            $scope.errorCb(response);
+          };
+
           if (!$scope.article.pk_article) {
             var route = { name: 'backend_ws_article_save' };
 
@@ -460,14 +470,14 @@
               route.params = { locale: $scope.config.locale };
             }
 
-            http.post(route, data).then(successCb, $scope.errorCb);
+            http.post(route, data).then(successCb, saveErrorCb);
             return;
           }
 
           http.put({
             name: 'backend_ws_article_update',
             params: { id: $scope.article.pk_article }
-          }, data).then(successCb, $scope.errorCb);
+          }, data).then(successCb, saveErrorCb);
         };
 
         /**
@@ -482,24 +492,56 @@
          *
          * @return {type} description
          */
-        $scope.translate = function(to, config) {
+        $scope.translate = function(to, configParam) {
+          var config = {
+            translateFrom:  $scope.data.extra.locale,
+            translateTo: to,
+            locales: configParam.locales,
+            translators: configParam.translators,
+            translatorSelected: 0,
+          };
+
+          // Pick the default translator
+          config.translators.forEach(function(el, index) {
+            if (el.from === config.translateFrom &&
+              el.to === config.translateTo &&
+              el.default === true || el.default === 'true') {
+              config.translatorSelected = index;
+            }
+          });
+
+          // Raise a modal to indicate that background translation is being executed
           $uibModal.open({
-            backdrop:    true,
-            backdropClass: 'modal-backdrop-transparent',
-            controller:  'modalCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            backdropClass: 'modal-backdrop-dark',
+            controller:  'BackgroundTaskModalCtrl',
             openedClass: 'modal-relative-open',
             templateUrl: 'modal-translate',
             resolve: {
               template: function() {
-                return { config: config, to: to };
+                return {
+                  config: config,
+                  translating: false,
+                };
               },
-              success: function() {
-                return function(modalWindow, template) {
+              callback: function() {
+                return function(modal, template) {
+                  var translator = config.translators[config.translatorSelected];
+
+                  // If no default translator dont call the server
+                  if (!translator) {
+                    return;
+                  }
+
+                  template.translating = true;
+                  template.translation_done = false;
+
                   var params = {
                     data: {},
-                    from: template.translator.from,
-                    to: template.translator.to,
-                    translator: template.translator.translator
+                    from: translator.from,
+                    to: translator.to,
+                    translator: config.translatorSelected,
                   };
 
                   for (var i = 0; i < $scope.data.extra.keys.length; i++) {
@@ -512,7 +554,10 @@
                     }
                   }
 
-                  return http.post('api_v1_backend_tools_translate', params)
+                  template.translating = true;
+                  template.translation_done = false;
+
+                  http.post('api_v1_backend_tools_translate_string', params)
                     .then(function(response) {
                       for (var i = 0; i < $scope.data.extra.keys.length; i++) {
                         var key = $scope.data.extra.keys[i];
@@ -520,7 +565,16 @@
                         $scope.article[key] = response.data[key];
                       }
 
-                      modalWindow.close({ response: true, success: true });
+                      template.translating = false;
+                      template.translation_done = true;
+                    }, function(response) {
+                      var message = {
+                        id: new Date().getTime(),
+                        message: 'Unable to translate contents. Please check your configuration.',
+                        type: 'error'
+                      };
+
+                      modal.close({ response: true, error: true });
                     });
                 };
               }

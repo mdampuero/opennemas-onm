@@ -135,8 +135,8 @@ class ContentsController extends Controller
     public function shareByEmailAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $valid  = false;
-            $errors = [];
+            $isValid = false;
+            $errors  = [];
 
             $response = $request->request->filter('g-recaptcha-response', '', FILTER_SANITIZE_STRING);
             $isValid  = $this->get('core.recaptcha')
@@ -228,6 +228,12 @@ class ContentsController extends Controller
                 ->setFrom([$senderEmail => $senderName])
                 ->setSender(['no-reply@postman.opennemas.com' => s::get('site_name')])
                 ->setBcc($recipients);
+
+            $headers = $message->getHeaders();
+            $headers->addParameterizedHeader(
+                'ACUMBAMAIL-SMTPAPI',
+                $this->get('core.instance')->internal_name . ' - Share by email'
+            );
 
             try {
                 $mailer = $this->get('mailer');

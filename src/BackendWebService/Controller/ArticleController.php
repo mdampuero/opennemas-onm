@@ -16,6 +16,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ArticleController extends Controller
 {
+
+    const EXTRA_INFO_TYPE = 'extraInfoContents.ARTICLE_MANAGER';
+
     /**
      * Saves a new article.
      *
@@ -94,7 +97,7 @@ class ArticleController extends Controller
         ];
 
         $msg  = $this->get('core.messenger');
-        $data = $this->loadMetaDataFields($data, $postReq);
+        $data = $this->loadMetaDataFields($data, $postReq, ArticleController::EXTRA_INFO_TYPE);
 
         if (!$article->create($data)) {
             $msg->add(_('Unable to create the new article.'), 'error', 400);
@@ -231,7 +234,7 @@ class ArticleController extends Controller
             ],
         ];
 
-        $data = $this->loadMetaDataFields($data, $postReq);
+        $data = $this->loadMetaDataFields($data, $postReq, ArticleController::EXTRA_INFO_TYPE);
 
         if (!$article->update($data)) {
             $msg->add(_('Unable to update the article.'), 'error');
@@ -244,36 +247,5 @@ class ArticleController extends Controller
 
         $msg->add(_('Article successfully updated.'), 'success');
         return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * This method load from the request the metadata fields,
-     *
-     * @param mixed   $data Data where load the metadata fields.
-     * @param Request $postReq Request where the metadata are.
-     */
-    private function loadMetaDataFields($data, $postReq)
-    {
-        if (!$this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
-            return $data;
-        }
-
-        // If I don't have the extension, I don't check the settings
-        $groups = $this->get('setting_repository')
-            ->get('extraInfoContents.ARTICLE_MANAGER');
-        if (!is_array($groups)) {
-            return $data;
-        }
-
-        foreach ($groups as $group) {
-            foreach ($group['fields'] as $field) {
-                if (empty($postReq->get($field['key']))) {
-                    continue;
-                }
-
-                $data[$field['key']] = $postReq->get($field['key']);
-            }
-        }
-        return $data;
     }
 }

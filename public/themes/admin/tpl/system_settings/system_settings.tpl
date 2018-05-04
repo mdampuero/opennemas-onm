@@ -548,8 +548,23 @@
                           {t}Services to translate your contents to a especific language.{/t}
                         </span>
                         <div ng-repeat="code in settings.translators track by $index">
+                          <div class="row">
+                            <div class="col-xs-12">
+                              <h4 class="pull-left">
+                              [% (settings.translators[$index].from != undefined) ? extra.locales.frontend[settings.translators[$index].from] : '{t}Not defined{/t}' %]
+                              &rarr;
+                              [% (settings.translators[$index].to != undefined) ? extra.locales.frontend[settings.translators[$index].to] : '{t}Not defined{/t}' %]
+                              <strong class="small" ng-show="settings.translators[$index].default == true">({t}Default{/t})</strong>
+                              </h4>
+
+                              <button class="btn btn-white pull-right" ng-click="removeTranslator($index)" type="button">
+                                <i class="fa fa-times text-danger"></i>
+                              </button>
+                              <hr>
+                            </div>
+                          </div>
                           <div class="row" >
-                            <div class="col-md-6">
+                            <div class="col-sm-6 col-md-6">
                               <div class="form-group">
                                 <label class="form-label">
                                   {t}Translate from{/t}
@@ -562,7 +577,7 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-sm-6 col-md-6">
                               <div class="form-group">
                                 <label class="form-label">
                                   {t}Translate to{/t}
@@ -610,20 +625,20 @@
                               </div>
                             </div>
                           </div>
-                          <div class="row">
-                            <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 m-b-15 text-center">
-                              <button class="btn btn-block btn-danger" ng-click="removeTranslator($index)" type="button">
-                                <i class="fa fa-trash-o"></i>
-                                {t}Delete{/t}
-                              </button>
+                          <div class="row" ng-show="settings.translators[$index].from.length > 0 && settings.translators[$index].to.length > 0">
+                            <div class="p-t-10 radio">
+                              <input id="translator-default-[% $index %]" ng-model="settings.translators[$index].default" ng-value="true" type="radio" ng-click="toggleDefaultTranslator($index)">
+                              <label for="translator-default-[% $index %]">
+                                {t 1="[% settings.translators[\$index].from %]-[% settings.translators[\$index].to %]"}Default translator for "%1"{/t}
+                              </label>
                             </div>
                           </div>
                         </div>
                         <div class="row p-t-30 text-center">
-                          <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4" ng-show="settings.locale.frontend && settings.locale.frontend.language.available.length > 1" type="button">
+                          <div class="col-xs-12" ng-show="settings.locale.frontend && settings.locale.frontend.language.available.length > 1" type="button">
                             <button class="btn btn-block btn-white" ng-click="addTranslator()">
                               <i class="fa fa-plus"></i>
-                              {t}Add{/t}
+                              {t}Add new translator{/t}
                             </button>
                           </div>
                           <div class="col-md-12" ng-show="settings.locale.frontend && settings.locale.frontend.language.available.length == 1">

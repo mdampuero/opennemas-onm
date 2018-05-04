@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  ArticleListCtrl
@@ -20,7 +21,7 @@
      *   Provides actions to list articles.
      */
     .controller('ArticleListCtrl', [
-      '$controller', '$location', '$scope', '$timeout','$uibModal', 'http', 'messenger', 'linker', 'localizer', 'oqlEncoder',
+      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'linker', 'localizer', 'oqlEncoder',
       function($controller, $location, $scope, $timeout, $uibModal, http, messenger, linker, localizer, oqlEncoder) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
@@ -315,7 +316,7 @@
         /**
          * Sends a list of selected contents to trash by using a confirmation dialog
          */
-        $scope.sendToTrashSelected = function () {
+        $scope.sendToTrashSelected = function() {
           // Enable spinner
           $scope.deleting = 1;
           var selected = {
@@ -338,7 +339,7 @@
                   return http.post({
                     name: 'backend_ws_contents_batch_send_to_trash',
                     params: { contentType: $scope.criteria.content_type_name }
-                  }, {ids: $scope.selected.items} );
+                  }, { ids: $scope.selected.items });
                 };
               }
             }

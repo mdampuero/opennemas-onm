@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,21 +15,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
-/**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
 class CacheManagerController extends Controller
 {
-
     /**
-     * undocumented function
+     * Displays the list of actions to execute.
      *
-     * @return void
-     * @author
+     * @return Response The response object.
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         $hasRedis = method_exists($this->get('cache'), 'getRedis');
 
@@ -42,11 +30,11 @@ class CacheManagerController extends Controller
     }
 
     /**
-     * Show the configuration form and stores its information
+     * Show the configuration form and stores its information.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return string the string response
+     * @return Response The response object.
      *
      * @Security("hasExtension('CACHE_MANAGER')
      *     and hasPermission('CACHE_TPL_ADMIN')")
@@ -61,19 +49,19 @@ class CacheManagerController extends Controller
 
         // If the request is post then save the configuration with the data provided
         if ($this->request->getMethod() == 'POST') {
-            $config = array();
+            $config              = [];
             $cacheGroups         = $request->request->get('groups');
             $cacheGroupsEnabled  = $request->request->get('enabled');
             $cacheGroupsLifeTime = $request->request->get('lifetime');
 
             foreach ($cacheGroups as $section) {
-                $caching  = (isset($cacheGroupsEnabled[$section]))? 1: 0;
+                $caching  = isset($cacheGroupsEnabled[$section]) ? 1 : 0;
                 $lifetime = intval($cacheGroupsLifeTime[$section]);
 
-                $config[$section] = array(
+                $config[$section] = [
                     'caching'        => $caching,
                     'cache_lifetime' => $lifetime,
-                );
+                ];
             }
 
             // Save changes on file
@@ -99,10 +87,9 @@ class CacheManagerController extends Controller
     }
 
     /**
-     * undocumented function
+     * Clears all caches.
      *
-     * @return void
-     * @author
+     * @return Response The response object.
      */
     public function clearAllCacheAction()
     {
@@ -118,10 +105,11 @@ class CacheManagerController extends Controller
     }
 
     /**
-     * Deletes all the frontend cache files
-     * DANGER: this action is really CPU expensive
+     * Deletes all the frontend cache files.
      *
-     * @return string the result string
+     * DANGER: this action is really CPU expensive.
+     *
+     * @return Response The response object.
      *
      * @Security("hasExtension('CACHE_MANAGER')
      *     and hasPermission('CACHE_TPL_ADMIN')")
@@ -140,7 +128,7 @@ class CacheManagerController extends Controller
      * Deletes all the frontend cache files
      * DANGER: this action is really CPU expensive
      *
-     * @return string the result string
+     * @return Response The response object.
      *
      * @Security("hasExtension('CACHE_MANAGER')
      *     and hasPermission('CACHE_TPL_ADMIN')")
@@ -158,7 +146,7 @@ class CacheManagerController extends Controller
     /**
      * Deletes all varnish cache
      *
-     * @return string the result string
+     * @return Response The response object.
      *
      * @Security("hasExtension('CACHE_MANAGER')
      *     and hasPermission('CACHE_TPL_ADMIN')")
@@ -179,10 +167,9 @@ class CacheManagerController extends Controller
     }
 
     /**
-     * undocumented function
+     * Deletes the redis cache for the current instance.
      *
-     * @return void
-     * @author
+     * @return Response The response object.
      */
     public function clearRedisCacheForInstanceAction()
     {
@@ -194,25 +181,17 @@ class CacheManagerController extends Controller
     }
 
     /**
-     * Removes the redis cache for the current instance
-     *
-     * @return void
+     * Removes the redis cache for the current instance.
      */
     private function clearRedis()
     {
-        $cache = $this->get('cache');
-
-        if (method_exists($cache, 'getRedis')) {
-            $redis = $cache->getRedis();
-            $instanceName = $this->get('core.instance')->internal_name;
-            $redis->eval("redis.call('del', unpack(redis.call('keys', ARGV[1])))", [$instanceName."*"]);
-        }
+        return $this->get('cache.manager')->getConnection('instance')->removeByPattern(
+            '*' . $this->get('core.instance')->internal_name . '*'
+        );
     }
 
     /**
-     * Sends a BAN to varnish to purge all the cache for the current instance
-     *
-     * @return void
+     * Sends a BAN to varnish to purge all the cache for the current instance.
      */
     private function clearVarnishCache()
     {
@@ -223,9 +202,7 @@ class CacheManagerController extends Controller
     }
 
     /**
-     * Removes all the smarty cache for the current instance
-     *
-     * @return void
+     * Removes all the smarty cache for the current instance.
      */
     public function clearSmartyCache()
     {
@@ -234,9 +211,7 @@ class CacheManagerController extends Controller
     }
 
     /**
-     * Removes all the smarty compiles for the current instance
-     *
-     * @return void
+     * Removes all the smarty compiles for the current instance.
      */
     public function clearSmartyCompiles()
     {

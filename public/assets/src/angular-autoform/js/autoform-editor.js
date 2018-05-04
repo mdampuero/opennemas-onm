@@ -23,7 +23,7 @@
           '<p class="m-b-15">' +
             '<span ng-repeat="error in autoformEditorErrors">[% error %]</span>' +
           '</p>' +
-          '<div ng-repeat="group in ngModel track by group.group">' +
+          '<div ng-repeat="(groupIndex, group) in ngModel">' +
             '<div class="row">' +
               '<div class="form-group col-md-3">' +
                 '<label class="form-label" for="label-[% group.group %]-name">Group internal name</label>' +
@@ -36,23 +36,23 @@
                 '</div>' +
               '</div>' +
             '</div>' +
-            '<div class="row" ng-repeat="field in group.fields track by field.key">' +
+            '<div class="row" ng-repeat="field in group.fields">' +
               '<div class="form-group col-md-3">' +
-                '<label class="form-label p-l-15" for="label-[% $index %]-name">Internal name</label>' +
+                '<label class="form-label p-l-15" for="label-[% field.key %]-name">Internal name</label>' +
                 '<div class="controls p-l-15">' +
                   '[% field.key %]' +
                 '</div>' +
               '</div>' +
               '<div class="form-group col-md-4">' +
-                '<label class="form-label" for="label-[% $index %]-title">Name</label>' +
+                '<label class="form-label" for="label-[% field.key %]-title">Name</label>' +
                 '<div class="controls">' +
                   '<input class="form-control" ng-model="field.title" type="text">' +
                 '</div>' +
               '</div>' +
               '<div class="form-group col-md-4">' +
-                '<label class="form-label" for="type-[% $index %]">Type</label>' +
+                '<label class="form-label" for="type-[% field.key %]">Type</label>' +
                 '<div class="controls">' +
-                  '<select class="form-control" id="type-[% $index %]" ng-model="field.type">' +
+                  '<select class="form-control" id="type-[% field.key %]" ng-model="field.type">' +
                     '<option value="text">Text</option>' +
                     '<option value="date">Date</option>' +
                     '<option value="country">Country</option>' +
@@ -62,7 +62,7 @@
                     '<label class="form-label">Options</label>' +
                     '<span class="help m-l-5">Comma separated list of keys and value (key1:value1, key2:value2,...)</span>' +
                     '<div class="controls">' +
-                      '<input class="form-control" id="options-[% index %]" ng-model="field.values" type="text">' +
+                      '<input class="form-control" id="options-[% field.key %]" ng-model="field.values" type="text">' +
                     '</div>' +
                   '</div>' +
                 '</div>' +
@@ -136,7 +136,7 @@
               return str.split(' ').join('_').toLowerCase();
             };
 
-            if (!$scope.ngModel) {
+            if (!$scope.ngModel || Array.isArray($scope.ngModel) && $scope.ngModel.length === 0) {
               $scope.ngModel = {};
             }
 
@@ -168,6 +168,7 @@
               $scope.groupKey                 = '';
               $scope.fieldKeys[groupKey]      = '';
               $scope.addFieldErrors[groupKey] = '';
+              $scope.addGroupError            = '';
             };
 
             /**
@@ -199,12 +200,21 @@
 
               var fieldKey = underscore($scope.fieldKeys[group]);
 
-              if (!(group in $scope.ngModel) || $scope.ngModel[group].fields !== '' && fieldKey in $scope.ngModel[group].fields) {
-                $scope.addFieldErrors[group] = 'The identifier for the field \'' + $scope.fieldKeys[group] + '\' already exists in the group ' + group;
+              if (!(group in $scope.ngModel) ||
+                $scope.ngModel[group].fields !== '' &&
+                fieldKey in $scope.ngModel[group].fields
+              ) {
+                $scope.addFieldErrors[group] =
+                  'The identifier for the field \'' +
+                  $scope.fieldKeys[group] +
+                  '\' already exists in the group ' + group;
                 return;
               }
 
-              if ($scope.ngModel[group].fields === '') {
+              if ($scope.ngModel[group].fields === '' ||
+                Array.isArray($scope.ngModel[group].fields) &&
+                $scope.ngModel[group].fields.length === 0
+              ) {
                 $scope.ngModel[group].fields = {};
               }
 

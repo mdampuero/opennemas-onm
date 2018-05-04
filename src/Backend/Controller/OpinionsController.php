@@ -27,6 +27,9 @@ use Onm\Settings as s;
  */
 class OpinionsController extends Controller
 {
+
+    const EXTRA_INFO_TYPE = 'extraInfoContents.OPINION_MANAGER';
+
     /**
      * Lists all the opinions.
      *
@@ -240,7 +243,7 @@ class OpinionsController extends Controller
 
         if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
             $extraFields = $this->get('setting_repository')
-                ->get('extraInfoContents.OPINION_MANAGER');
+                ->get(OpinionsController::EXTRA_INFO_TYPE);
         }
 
         return $this->render('opinion/new.tpl', [
@@ -319,7 +322,7 @@ class OpinionsController extends Controller
             ]
         ];
 
-        $data = $this->loadMetaDataFields($data, $request->request);
+        $data = $this->loadMetaDataFields($data, $request->request, OpinionsController::EXTRA_INFO_TYPE);
 
         if ($opinion->create($data)) {
             $this->get('session')->getFlashBag()->add(
@@ -420,7 +423,7 @@ class OpinionsController extends Controller
             ],
         ];
 
-        $data = $this->loadMetaDataFields($data, $request->request);
+        $data = $this->loadMetaDataFields($data, $request->request, OpinionsController::EXTRA_INFO_TYPE);
 
         if ($opinion->update($data)) {
             $this->get('session')->getFlashBag()->add(
@@ -597,7 +600,7 @@ class OpinionsController extends Controller
                     'blog_orderFrontpage'   => filter_var($configsRAW['blog_orderFrontpage'], FILTER_SANITIZE_STRING),
                     'blog_itemsFrontpage'   => filter_var($configsRAW['blog_itemsFrontpage'], FILTER_VALIDATE_INT),
                 ],
-                'extraInfoContents.OPINION_MANAGER' => json_decode($extra)
+                'extraInfoContents.OPINION_MANAGER' => json_decode($extra, true)
             ];
 
             foreach ($configs as $key => $value) {
@@ -616,7 +619,7 @@ class OpinionsController extends Controller
             return $this->render('opinion/config.tpl', [
                 'configs'      => $configurations,
                 'extra_fields' => $this->get('setting_repository')
-                    ->get('extraInfoContents.OPINION_MANAGER')
+                    ->get(OpinionsController::EXTRA_INFO_TYPE)
             ]);
         }
     }
@@ -767,37 +770,5 @@ class OpinionsController extends Controller
         $this->view->assign([
             'allcategorys' => $this->parentCategories,
         ]);
-    }
-
-    /**
-     * This method load from the request the metadata fields,
-     *
-     * @param mixed   $data Data where load the metadata fields.
-     * @param Request $jostReq Request where the metadata are.
-     */
-    private function loadMetaDataFields($data, $postReq)
-    {
-        if (!$this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
-            return $data;
-        }
-
-        // If I don't have the extension, I don't check the settings
-        $groups = $this->get('setting_repository')
-            ->get('extraInfoContents.OPINION_MANAGER');
-        if (!is_array($groups)) {
-            return $data;
-        }
-
-        foreach ($groups as $group) {
-            foreach ($group['fields'] as $field) {
-                if (empty($postReq->get($field['key']))) {
-                    continue;
-                }
-
-                $data[$field['key']] = $postReq->get($field['key']);
-            }
-        }
-
-        return $data;
     }
 }

@@ -196,8 +196,8 @@
           </li>
           {/if}
           {/is_module_activated}
-          <li>
-            <a href="{url name=admin_articles_content_provider_category}">{t}Latest articles{/t}</a>
+          <li> {* filter_by_category param is to avoid category filter on latest articles provider *}
+            <a href="{url name=admin_articles_content_provider_category category=$category_id filter_by_category=0}">{t}Latest articles{/t}</a>
           </li>
 
           {is_module_activated name="WIDGET_MANAGER"}

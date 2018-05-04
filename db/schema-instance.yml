@@ -1406,10 +1406,10 @@ translation_ids:
 user_groups:
     columns:
         pk_user_group:
-            type: integer
+            type:    integer
             options: { unsigned: true, autoincrement: true }
         name:
-            type: string
+            type:    string
             options: { length: 50, default: null, notnull: false }
         type:
             type:    integer
