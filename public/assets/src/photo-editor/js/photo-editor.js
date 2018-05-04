@@ -859,7 +859,7 @@ window.OnmPhotoEditor.prototype.callCancel = function(e, newStatus) {
 };
 
 /**
- * @function callCancel
+ * @function callSave
  * @memberof OnmPhotoEditor
  *
  * @description
