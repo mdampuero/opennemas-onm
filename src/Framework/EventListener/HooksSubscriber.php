@@ -48,16 +48,6 @@ class HooksSubscriber implements EventSubscriberInterface
             'advertisement.delete' => [
                 [ 'removeVarnishCacheForAdvertisement', 5 ],
             ],
-            // Author hooks
-            'author.create' => [
-                ['mockHookAction', 0],
-            ],
-            'author.update' => [
-                ['mockHookAction', 0],
-            ],
-            'author.delete' => [
-                ['mockHookAction', 0],
-            ],
             // Category hooks
             'category.create' => [
                 ['removeSmartyCacheGlobalCss', 5],
@@ -371,26 +361,18 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeObjectCacheUser(Event $event)
     {
-        try {
-            if ($event->hasArgument('user')) {
-                $user = $event->getArgument('user');
-            } elseif ($event->hasArgument('id')) {
-                $user = $this->container->get('orm.manager')
-                    ->getRepository('User')
-                    ->find($event->getArgument('id'));
-            } else {
-                return;
-            }
-        } catch (\Exception $e) {
+        if (!$event->hasArgument('id')) {
             return;
         }
 
+        $id = $event->getArgument('id');
+
         // TODO: Remove when using only new orm for users
         $this->container->get('cache.manager')->getConnection('instance')
-            ->remove('user-' . $user->id);
+            ->remove('user-' . $id);
 
-        $this->objectCacheHandler->delete('user-' . $user->id);
-        $this->objectCacheHandler->delete('categories_for_user_' . $user->id);
+        $this->objectCacheHandler->delete('user-' . $id);
+        $this->objectCacheHandler->delete('categories_for_user_' . $id);
     }
 
     /**
@@ -433,25 +415,17 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheAuthor(Event $event)
     {
-        try {
-            if ($event->hasArgument('user')) {
-                $user = $event->getArgument('user');
-            } elseif ($event->hasArgument('id')) {
-                $user = $this->container->get('orm.manager')
-                    ->getRepository('User')
-                    ->find($event->getArgument('id'));
-            } else {
-                return;
-            }
-        } catch (\Exception $e) {
+        if (!$event->hasArgument('id')) {
             return;
         }
+
+        $id = $event->getArgument('id');
 
         $this->initializeSmartyCacheHandler();
 
         // Delete caches for opinion frontpage and author frontpages
         $this->smartyCacheHandler
-            ->deleteGroup($this->view->getCacheId('frontpage', 'author', $user->username))
+            ->deleteGroup($this->view->getCacheId('frontpage', 'author', $id))
             ->deleteGroup($this->view->getCacheId('frontpage', 'authors'));
 
         $this->cleanOpcode();
