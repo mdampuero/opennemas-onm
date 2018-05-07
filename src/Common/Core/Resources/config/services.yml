@@ -33,6 +33,15 @@ parameters:
             - canonical_url
             - css_includes
             - js_includes
+    core.helper.comment.default_params:
+        disable_comments: false
+        with_comments: true
+        number_elements: 10
+        moderation_manual: true
+        moderation_autoreject: false
+        moderation_autoaccept: false
+        moderation_blacklist: ''
+
 services:
     core.collector.brand:
         class: Common\Core\Component\Collector\BrandCollector
@@ -56,6 +65,13 @@ services:
     core.helper.advertisement:
         class:     Common\Core\Component\Helper\AdvertisementHelper
         arguments: [ '@service_container' ]
+
+    core.helper.comment:
+        class:     Common\Core\Component\Helper\CommentHelper
+        arguments:
+            - '@setting_repository'
+            - '@validator'
+            - '%core.helper.comment.default_params%'
 
     core.helper.instance_sync:
         class:     Common\Core\Component\Helper\InstanceSyncHelper

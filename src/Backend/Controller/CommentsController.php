@@ -242,7 +242,7 @@ class CommentsController extends Controller
      */
     public function configAction(Request $request)
     {
-        $defaultConfigs = $this->getDefaultConfigs();
+        $defaultConfigs = $this->get('core.helper.comment')->getDefaultConfigs();
 
         $sm = $this->get('setting_repository');
 
@@ -329,7 +329,10 @@ class CommentsController extends Controller
         $sm = $this->get('setting_repository');
 
         if ($request->getMethod() != 'POST') {
-            $configs = array_merge($this->getDefaultConfigs(), $sm->get('comments_config', []));
+            $configs = array_merge(
+                $this->get('core.helper.comment')->getDefaultConfigs(),
+                $sm->get('comments_config', [])
+            );
 
             return $this->render('comment/config.tpl', [
                 'configs'        => $configs,
@@ -345,7 +348,10 @@ class CommentsController extends Controller
         $shortname = $request->request->filter('shortname', null, FILTER_SANITIZE_STRING);
         $secretKey = $request->request->filter('secret_key', null, FILTER_SANITIZE_STRING);
 
-        $configs = array_merge($this->getDefaultConfigs(), $configs);
+        $configs = array_merge(
+            $this->get('core.helper.comment')->getDefaultConfigs(),
+            $configs
+        );
         if ($sm->set('disqus_shortname', $shortname)
             && $sm->set('disqus_secret_key', $secretKey)
             && $sm->set('comments_config', $configs)
@@ -402,7 +408,10 @@ class CommentsController extends Controller
         $fbSettings = $this->get('setting_repository')->get('facebook');
 
         if ($request->getMethod() != 'POST') {
-            $configs = array_merge($this->getDefaultConfigs(), $sm->get('comments_config', []));
+            $configs = array_merge(
+                $this->get('core.helper.comment')->getDefaultConfigs(),
+                $sm->get('comments_config', [])
+            );
 
             return $this->render('comment/config.tpl', [
                 'configs' => $configs,
@@ -419,7 +428,11 @@ class CommentsController extends Controller
         $configs    = $request->request->filter('configs', [], FILTER_SANITIZE_STRING);
         $fbSettings = array_merge($fbSettings, $fbAppId);
 
-        $configs = array_merge($this->getDefaultConfigs(), $configs);
+
+        $configs = array_merge(
+            $this->get('core.helper.comment')->getDefaultConfigs(),
+            $configs
+        );
         if ($sm->set('facebook', $fbSettings)
             && $sm->set('comments_config', $configs)
         ) {
@@ -437,23 +450,5 @@ class CommentsController extends Controller
         );
 
         return $this->redirect($this->generateUrl('backend_comments_facebook_config'));
-    }
-
-    /**
-     * Returns a list of configurations for the comments module
-     *
-     * @return array the list of default configurations
-     **/
-    public function getDefaultConfigs()
-    {
-        return [
-            'disable_comments'      => false,
-            'with_comments'         => true,
-            'number_elements'       => 10,
-            'moderation_manual'     => true,
-            'moderation_autoreject' => false,
-            'moderation_autoaccept' => false,
-            'moderation_blacklist'  => "",
-        ];
     }
 }

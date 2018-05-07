@@ -17,7 +17,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for comments
@@ -36,12 +35,13 @@ class CommentsController extends Controller
     public function getAction(Request $request)
     {
         $contentID   = $request->query->filter('content_id', null, FILTER_SANITIZE_NUMBER_INT);
-        $elemsByPage = $request->query->getDigits('elems_per_page', 10);
+        $elemsByPage = $request->query->getDigits('elems_per_page');
         $offset      = $request->query->getDigits('offset', 1);
         $darkTheme   = $request->query->getDigits('dark_theme', 0);
 
+        $configs = $this->get('core.helper.comment')->getConfigs();
         if (empty($elemsByPage)) {
-            $elemsByPage = 10;
+            $elemsByPage = (int) $configs['number_elements'];
         }
 
         if (empty($contentID)
@@ -51,13 +51,9 @@ class CommentsController extends Controller
         }
 
         // Getting comments and total count comments for current article
-        $commentManager = $this->get('comment_repository');
-        $total          = $commentManager->countCommentsForContentId($contentID);
-        $comments       = $commentManager->getCommentsforContentId(
-            $contentID,
-            $elemsByPage,
-            $offset
-        );
+        $cm       = $this->get('comment_repository');
+        $total    = $cm->countCommentsForContentId($contentID);
+        $comments = $cm->getCommentsforContentId($contentID, $elemsByPage, $offset);
 
         foreach ($comments as &$comment) {
             $vote           = new \Vote($comment->id);
@@ -85,50 +81,45 @@ class CommentsController extends Controller
     public function ajaxAction(Request $request)
     {
         $contentID   = $request->query->filter('content_id', null, FILTER_SANITIZE_NUMBER_INT);
-        $elemsByPage = $request->query->getDigits('elems_per_page', 10);
+        $elemsByPage = $request->query->getDigits('elems_per_page');
         $offset      = $request->query->getDigits('offset', 1);
 
-        if (!empty($contentID)
-            && \Content::checkExists($contentID)
+        if (empty($contentID)
+            || !\Content::checkExists($contentID)
         ) {
-            // Getting comments for current article
-            $commentManager = $this->get('comment_repository');
-            $total          = $commentManager->countCommentsForContentId($contentID);
-            $comments       = $commentManager->getCommentsforContentId(
-                $contentID,
-                $elemsByPage,
-                $offset
-            );
-
-            foreach ($comments as &$comment) {
-                $vote           = new \Vote($comment->id);
-                $comment->votes = $vote;
-            }
-
-            $contents = $this->renderView('comments/partials/comment_element.tpl', [
-                'total'          => $total,
-                'comments'       => $comments,
-                'contentId'      => $contentID,
-                'elems_per_page' => $elemsByPage,
-                'offset'         => $offset,
-            ]);
-
-            // Inform the client if there is more elements
-            $more = true;
-            if ($total < ($elemsByPage * $offset)) {
-                $more = false;
-            }
-
-            $output = [
-                'contents' => $contents,
-                'more'     => $more,
-            ];
-
-            $response = new Response(json_encode($output), 200);
-        } else {
-            $response = new Response('', 404);
+            return new Response('Content doesnt exists', 404);
         }
-        return $response;
+
+        $configs = $this->get('core.helper.comment')->getConfigs();
+        if (empty($elemsByPage)) {
+            $elemsByPage = (int) $configs['number_elements'];
+        }
+
+        // Getting comments for current article
+        $cm       = $this->get('comment_repository');
+        $total    = $cm->countCommentsForContentId($contentID);
+        $comments = $cm->getCommentsforContentId($contentID, $elemsByPage, $offset);
+
+        foreach ($comments as &$comment) {
+            $vote           = new \Vote($comment->id);
+            $comment->votes = $vote;
+        }
+
+        $contents = $this->renderView('comments/partials/comment_element.tpl', [
+            'total'          => $total,
+            'comments'       => $comments,
+            'contentId'      => $contentID,
+            'elems_per_page' => $elemsByPage,
+            'offset'         => $offset,
+        ]);
+
+        // Inform the client if there is more elements
+        $more = ($total < ($elemsByPage * $offset)) ? false : true;
+
+        return new Response(json_encode([
+            'contents' => $contents,
+            'more'     => $more,
+        ]), 200);
     }
 
     /**
@@ -201,27 +192,10 @@ class CommentsController extends Controller
         $contentId   = $request->request->getDigits('content-id');
         $ip          = getUserRealIP();
 
-        // Check if data is not empty
-        if (empty($body)
-            || empty($authorName)
-            || empty($contentId)
-        ) {
-            return new Response(_('Ensure you have completed all the form fields.'), 400);
-        }
+        $cm      = $this->get('core.helper.comment');
+        $configs = $cm->getConfigs();
 
-        // Check if email is valid
-        if (!filter_var($authorEmail, FILTER_VALIDATE_EMAIL) &&
-            !empty($authorEmail)
-        ) {
-            return new Response(_('Please enter a valid email address'), 400);
-        }
-
-        // Check that data is insanity prone.
-        if (\Repository\CommentManager::hasBadWordsComment($authorName . ' ' . $body)) {
-            return new Response(_('Your comment was rejected due insults usage.'), 400);
-        }
-
-        $comment = new \Comment();
+        $httpCode = 200;
         try {
             $data = [
                 'content_id'   => $contentId,
@@ -234,21 +208,35 @@ class CommentsController extends Controller
 
             $data['body'] = '<p>' . preg_replace('@\\n@', '</p><p>', $data['body']) . '</p>';
 
-            // Check moderation option
-            $commentsOpt = s::get('comments_config');
-            if (is_array($commentsOpt)
-                && array_key_exists('moderation', $commentsOpt)
-                && $commentsOpt['moderation'] == 0
-            ) {
-                $data['status'] = \Comment::STATUS_ACCEPTED;
 
-                $message = _('Your comment was accepted. Refresh the page to see it.');
-            } else {
+            if ($cm->moderateManually()) {
+                $data['status'] = \Comment::STATUS_PENDING;
+
                 $message = _('Your comment was accepted and now we have to moderate it.');
+            } else {
+                $errors = $cm->validate($data);
+
+                if (empty($errors)) {
+                    $data['status'] = \Comment::STATUS_PENDING;
+                    if ($configs['moderation_autoreject']) {
+                        $data['status'] = \Comment::STATUS_REJECTED;
+                    }
+
+                    $httpCode = 200;
+                    $message  = _('Your comment was accepted.');
+                } else {
+                    $data['status'] = \Comment::STATUS_REJECTED;
+                    if ($configs['moderation_autoaccept']) {
+                        $data['status'] = \Comment::STATUS_REJECTED;
+                    }
+
+                    $httpCode = 400;
+                    $message  = implode('<br>', $errors);
+                }
             }
 
+            $comment = new \Comment();
             $comment->create($data);
-            $httpCode = 200;
         } catch (\Exception $e) {
             $httpCode = 400;
             $message  = $e->getMessage();
