@@ -1,6 +1,6 @@
 <div class="modal-body text-center">
   <i class="fa fa-4x m-b-10 m-t-40" ng-class="template.iconName"></i>
-  <h4 class="modal-title m-b-10">{t escape=off 1="[% template.handler %]"}Change comment manager to "<strong>%1</strong>"{/t}</h4>
+  <h4 class="modal-title m-b-30">{t escape=off 1="[% template.handler %]"}Change comment manager to <span class="text-primary">%1</span>{/t}</h4>
   <p >{t 1="[% template.handler %]"}Are you sure you want to change your comment system handler?{/t}</p>
 </div>
 

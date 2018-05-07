@@ -247,7 +247,7 @@ class CommentsController extends Controller
         $sm = $this->get('setting_repository');
 
         if ('POST' !== $request->getMethod()) {
-            $configs         = $sm->get('comments_config');
+            $configs         = $sm->get('comments_config', []);
             $commentsHandler = $sm->get('comment_system');
 
             foreach ($configs as $configName => $value) {
@@ -329,7 +329,7 @@ class CommentsController extends Controller
         $sm = $this->get('setting_repository');
 
         if ($request->getMethod() != 'POST') {
-            $configs = array_merge($this->getDefaultConfigs(), $sm->get('comments_config'));
+            $configs = array_merge($this->getDefaultConfigs(), $sm->get('comments_config', []));
 
             return $this->render('comment/config.tpl', [
                 'configs'        => $configs,
@@ -402,7 +402,7 @@ class CommentsController extends Controller
         $fbSettings = $this->get('setting_repository')->get('facebook');
 
         if ($request->getMethod() != 'POST') {
-            $configs = array_merge($this->getDefaultConfigs(), $sm->get('comments_config'));
+            $configs = array_merge($this->getDefaultConfigs(), $sm->get('comments_config', []));
 
             return $this->render('comment/config.tpl', [
                 'configs' => $configs,

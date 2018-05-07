@@ -32,8 +32,21 @@
   display:block;
   text-align:center;
 }
-.comment-system .comment-system-block:hover {
-  background:#eee;
+.comment-system .comment-system-block:not(.btn-primary):hover {
+  background-color: #fff !important;
+  box-shadow: 0 2px 5px rgba(55, 94, 146, 0.3);
+}
+.comment-system .comment-system-block:not(.btn-primary) .fa-comments {
+  color: #1b9fe2;
+}
+.comment-system .comment-system-block:not(.btn-primary) .fa-comment {
+  color: #229cff;
+}
+.comment-system .comment-system-block:not(.btn-primary) .fa-facebook-official {
+  color: #4267b2;
+}
+.comment-system .comment-system-block.btn-primary {
+  pointer-events: none;
 }
 .comment-system.active .comment-system-block {
   background-color: #0aa699 !important;
@@ -43,11 +56,6 @@
 .comment-system.active .comment-system-block .help {
   color:White;
 }
-
-.comment-system .comment-system-block.btn-success {
-  box-shadow: 0 0 0 0.2rem rgba(10,166,153,.4);
-}
-
-.comment-system .comment-system-block:hover {
-  box-shadow: 0 0 0 0.2rem rgba(0,0,0,.1);
+.comment-system .comment-system-block.btn-primary {
+  box-shadow: 0 0 5px #376092;
 }

@@ -27,7 +27,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-success" type="submit">
+                <button class="btn btn-primary" type="submit">
                   <i class="fa fa-save"></i>
                   {t}Save{/t}
                 </button>
