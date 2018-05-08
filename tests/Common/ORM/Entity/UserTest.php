@@ -64,11 +64,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([ 'ROLE_USER' ], $this->user->getRoles());
 
         $this->user->type = 0;
-        $this->assertContains('ADMIN', $this->user->getRoles());
-        $this->assertNotContains('MASTER', $this->user->getRoles());
+        $this->assertContains('ROLE_ADMIN', $this->user->getRoles());
+        $this->assertNotContains('ROLE_MASTER', $this->user->getRoles());
 
         $this->user->setOrigin('manager');
-        $this->assertContains('MASTER', $this->user->getRoles());
+        $this->assertContains('ROLE_MASTER', $this->user->getRoles());
     }
 
     /**
