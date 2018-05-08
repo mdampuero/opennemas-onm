@@ -10,6 +10,7 @@
 namespace Frontend\Controller;
 
 use Common\Core\Controller\Controller;
+use Common\ORM\Core\Exception\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,7 +66,7 @@ class ArticlesController extends Controller
         try {
             $category = $this->get('orm.manager')->getRepository('Category')
                 ->findOneBy(sprintf('name = "%s"', $categoryName));
-        } catch (\Exception $e) {
+        } catch (EntityNotFoundException $e) {
             throw new ResourceNotFoundException();
         }
 
