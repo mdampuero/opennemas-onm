@@ -62,8 +62,12 @@ class ArticlesController extends Controller
             throw new AccessDeniedException();
         }
 
-        $category = $this->get('orm.manager')->getRepository('Category')
-            ->findOneBy(sprintf('name = "%s"', $categoryName));
+        try {
+            $category = $this->get('orm.manager')->getRepository('Category')
+                ->findOneBy(sprintf('name = "%s"', $categoryName));
+        } catch (\Exception $e) {
+            throw new ResourceNotFoundException();
+        }
 
         list($positions, $advertisements) =
             $this->getAds($category->pk_content_category);
