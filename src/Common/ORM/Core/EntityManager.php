@@ -117,7 +117,6 @@ class EntityManager
         $class = '\\' . $converter['class'];
         $args  = $this->parseArgs($converter['arguments']);
         $class = new \ReflectionClass($class);
-
         return $class->newInstanceArgs($args);
     }
 

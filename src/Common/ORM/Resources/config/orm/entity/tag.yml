@@ -4,13 +4,13 @@ orm:
             name: Tag
             properties:
                 name:        string
-                pk_language: string
-                pk_tag:      integer
+                language_id: string
+                id:          integer
                 slug:        string
             converters:
                 default:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter
-                    arguments: [ '@orm.metadata.content' ]
+                    arguments: [ '@orm.metadata.tag' ]
             repositories:
                 instance:
                     class:     Common\ORM\Database\Repository\BaseRepository
@@ -31,10 +31,10 @@ orm:
                             options: { default: null, notnull: true, length: 5  }
                         id:
                             type: integer
-                            options: { default: 0}
+                            options: { default: null, unsigned: true, autoincrement: true }
                         slug:
                             type: string
-                            options: { default: 0, notnull: true, length: 50 }
+                            options: { default: null, notnull: true, length: 50 }
                     index:
                         -
                             name:    PRIMARY
