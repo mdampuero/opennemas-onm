@@ -48,6 +48,9 @@ class UserController extends Controller
         $this->get('api.service.user')->deleteItem($id);
         $msg->add(_('Item deleted successfully'), 'success');
 
+        // TODO: Remove when deprecated old user_repository
+        $this->get('core.dispatcher')->dispatch('user.delete', ['id' => $id]);
+
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
@@ -122,6 +125,10 @@ class UserController extends Controller
 
         $this->get('api.service.user')
             ->patchItem($id, $request->request->all());
+
+        // TODO: Remove when deprecated old user_repository
+        $this->get('core.dispatcher')->dispatch('user.update', ['id' => $id]);
+
         $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -236,6 +243,9 @@ class UserController extends Controller
 
         $this->get('api.service.user')
             ->updateItem($id, $request->request->all());
+
+        // TODO: Remove when deprecated old user_repository
+        $this->get('core.dispatcher')->dispatch('user.update', ['id' => $id]);
 
         $msg->add(_('Item saved successfully'), 'success');
 
