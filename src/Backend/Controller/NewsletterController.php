@@ -221,7 +221,7 @@ class NewsletterController extends Controller
         }
 
         return $this->redirect($this->generateUrl(
-            'admin_newsletter_preview',
+            'backend_newsletters_preview',
             ['id' => $newsletter->pk_newsletter]
         ));
     }
