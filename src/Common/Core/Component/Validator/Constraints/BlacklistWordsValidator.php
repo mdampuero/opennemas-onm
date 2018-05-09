@@ -41,25 +41,45 @@ class BlacklistWordsValidator extends ConstraintValidator
         }
 
         $value = (string) $value;
-        $valid = true;
-        foreach ($constraint->words as $regexp) {
-            $returnValue = preg_match_all('@' . trim($regexp) . '@', $value);
 
-            $value = $value && ($returnValue !== 0);
-        }
-
-        if (!$value) {
+        if ($this->match($value, $constraint->words)) {
             if ($this->context instanceof ExecutionContextInterface) {
                 $this->context->buildViolation($constraint->message)
                     ->setParameter('{{ value }}', $this->formatValue($value))
-                    ->setCode(BlacklistWords::IS_BLACKLIST_WORD_ERROR)
+                    ->setCode(BlacklistWords::BLACKLIST_WORD_ERROR)
                     ->addViolation();
             } else {
                 $this->buildViolation($constraint->message)
                     ->setParameter('{{ value }}', $this->formatValue($value))
-                    ->setCode(BlacklistWords::IS_BLACKLIST_WORD_ERROR)
+                    ->setCode(BlacklistWords::BLACKLIST_WORD_ERROR)
                     ->addViolation();
             }
         }
+    }
+
+    /**
+     * Whether the provided value matches against the list of regexp
+     *
+     * @param string       $value     the value to get matches from
+     * @param array|string $blacklist the list of regexp to validate against
+     *
+     * @return boolean true if the value matches against the list of regextp
+     **/
+    public function match($value, $blacklist)
+    {
+        if (!is_array($blacklist)) {
+            $blacklist = explode("\n", $blacklist);
+        }
+
+        foreach ($blacklist as $regexp) {
+            $cleanRegexp = '@' . trim($regexp) . '@m';
+            $returnValue = preg_match_all($cleanRegexp, $value);
+
+            if ($returnValue !== false && $returnValue > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
