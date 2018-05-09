@@ -43,7 +43,7 @@ class BlacklistWordsValidator extends ConstraintValidator
         $value = (string) $value;
         $valid = true;
         foreach ($constraint->words as $regexp) {
-            $returnValue = preg_match_all('@' . $regexp . '@', $value);
+            $returnValue = preg_match_all('@' . trim($regexp) . '@', $value);
 
             $value = $value && ($returnValue !== 0);
         }
