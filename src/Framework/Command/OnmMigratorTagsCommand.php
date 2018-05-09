@@ -151,6 +151,10 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
 
                 $searcheableWord = $tagService->createSearchableWord($tag);
 
+                if (empty($searcheableWord)) {
+                    continue;
+                }
+
                 if (array_key_exists($tag, $tags)) {
                     $contentTagRel[] = [ 'content_id' => $content['pk_content'], 'tag_id' => $tags[$tag]];
                     continue;
