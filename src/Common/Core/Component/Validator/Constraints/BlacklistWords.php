@@ -20,33 +20,29 @@ use Symfony\Component\Validator\Constraint;
  */
 class BlacklistWords extends Constraint
 {
-    const IS_BLACKLIST_WORD_ERROR = '9f0865f1-8bee-4bc6-b936-15ef0f33ca7c
-';
+    const BLACKLIST_WORD_ERROR = '9f0865f1-8bee-4bc6-b936-15ef0f33ca7c';
 
     protected static $errorNames = [
-        self::IS_BLACKLIST_WORD_ERROR => 'IS_BLACKLIST_WORD_ERROR',
+        self::BLACKLIST_WORD_ERROR => 'BLACKLIST_WORD_ERROR',
     ];
 
     public $message = 'This value contains not allowed words.';
 
     public $words;
 
-    public function __construct($options = null)
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOption()
     {
-        if (null !== $options && !is_array($options)) {
-            $options = [
-                'words'   => $options,
-                'message' => $options,
-            ];
-        }
+        return 'words';
+    }
 
-        parent::__construct($options);
-
-        if (null === $this->words && null === $this->max) {
-            throw new MissingOptionsException(
-                sprintf('The parameter "words" must be given for constraint %s', __CLASS__),
-                ['words']
-            );
-        }
+    /**
+     * {@inheritdoc}
+     */
+    public function getRequiredOptions()
+    {
+        return [ 'words' ];
     }
 }
