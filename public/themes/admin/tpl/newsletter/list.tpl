@@ -147,7 +147,7 @@
       </h4>
     </div>
     <div class="modal-body">
-      <p>{t escape=off}Are you sure you want to remove permanently [% template.selected.contents.length %] item(s)?{/t}</p>
+      <p>{t escape=off 1="[% template.selected.contents.length %]"}Are you sure you want to remove permanently %1 item(s)?{/t}</p>
       <p class="alert alert-error">{t} You will not be able to restore them back.{/t}</p>
     </div>
     <div class="modal-footer">

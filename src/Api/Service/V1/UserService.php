@@ -10,6 +10,8 @@
 namespace Api\Service\V1;
 
 use Api\Exception\CreateItemException;
+use Api\Exception\DeleteItemException;
+use Api\Exception\DeleteListException;
 use Api\Exception\GetItemException;
 use Api\Exception\UpdateItemException;
 
@@ -42,6 +44,74 @@ class UserService extends OrmService
         }
 
         return parent::createItem($data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteItem($id)
+    {
+        if ($id == $this->container->get('core.user')->id) {
+            throw new DeleteItemException('You cannot delete this item', 403);
+        }
+
+        try {
+            $item = $this->getItem($id);
+
+            // Convert if subscriber + user
+            if ($item->type === 2) {
+                $this->convert($item);
+                return;
+            }
+
+            $this->em->remove($item, $item->getOrigin());
+        } catch (\Exception $e) {
+            $this->container->get('error.log')->error($e->getMessage());
+            throw new DeleteItemException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteList($ids)
+    {
+        if (!is_array($ids) || empty($ids)) {
+            throw new DeleteListException('Invalid ids', 400);
+        }
+
+        $oql = $this->getOqlForIds($ids);
+
+        try {
+            $response = parent::getList($oql);
+        } catch (\Exception $e) {
+            $this->container->get('error.log')->error($e->getMessage());
+            throw new DeleteListException($e->getMessage(), $e->getCode());
+        }
+
+        $deleted = 0;
+        foreach ($response['items'] as $item) {
+            // Ignore current user
+            if ($item === $this->container->get('core.user')) {
+                continue;
+            }
+
+            try {
+                // Convert if subscriber + user
+                if ($item->type === 2) {
+                    $this->convert($item);
+                    $deleted++;
+                    continue;
+                }
+
+                $this->em->remove($item, $item->getOrigin());
+                $deleted++;
+            } catch (\Exception $e) {
+                $this->container->get('error.log')->error($e->getMessage());
+            }
+        }
+
+        return $deleted;
     }
 
     /**
@@ -109,6 +179,17 @@ class UserService extends OrmService
         }
 
         parent::updateItem($id, $data);
+    }
+
+    /**
+     * Converts an subscriber + user when deleting.
+     *
+     * @param Entity $item The item to convert.
+     */
+    protected function convert($item)
+    {
+        $item->type = 1;
+        $this->em->persist($item, $item->getOrigin());
     }
 
     /**

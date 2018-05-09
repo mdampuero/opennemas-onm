@@ -1,39 +1,32 @@
 <?php
 /**
- * Defines the frontend controller for the article content type
- *
- * @package Frontend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace Frontend\Controller;
 
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\StringUtils;
-use Onm\Settings as s;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
- * Defines the frontend controller for the articles content type
- *
- * @package Frontend_Controllers
+ * Defines the frontend controller for the articles.
  */
 class ArticlesController extends Controller
 {
     /**
-     * Displays the article given its id
+     * Displays the article given its id.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
+     * @return Response The response object.
      */
     public function showAction(Request $request)
     {
@@ -48,115 +41,79 @@ class ArticlesController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        // If external link is set, redirect
-        if (isset($article->params['bodyLink']) && !empty($article->params['bodyLink'])) {
+        // Redirect if external link is set
+        if (array_key_exists('bodyLink', $article->params)
+            && !empty($article->params['bodyLink'])
+        ) {
             // TODO: Remove when target="_blank"' not included in URI for external
             $url = str_replace('" target="_blank', '', $article->params['bodyLink']);
 
-            return $this->forward('FrontendBundle:Redirectors:externalLink', [
-                'to'  => $url,
-            ]);
+            return $this->forward(
+                'FrontendBundle:Redirectors:externalLink',
+                [ 'to'  => $url ]
+            );
         }
 
-        $subscriptionFilter = new \Frontend\Filter\SubscriptionFilter($this->view, $this->get('core.user'));
-        $cacheable          = $subscriptionFilter->subscriptionHook($article);
+        $sh = $this->get('core.helper.subscription');
 
-        // Advertisements for single article NO CACHE
-        $this->ccm                        = \ContentCategoryManager::get_instance();
-        $actualCategoryId                 = $this->ccm->get_id($categoryName);
-        list($positions, $advertisements) = $this->getAds($actualCategoryId);
+        $token = $sh->getToken($article);
 
-        // Fetch general layout
-        $layout = $this->get('setting_repository')->get('frontpage_layout_' . $actualCategoryId);
-        if (empty($layout)) {
-            $layout = 'default';
+        if ($sh->isBlocked($token, 'access')) {
+            throw new AccessDeniedException();
         }
-        $layoutFile = 'layouts/' . $layout . '.tpl';
-        $this->view->assign('layoutFile', $layoutFile);
 
-        // Setup templating cache layer
+        $category = $this->get('orm.manager')->getRepository('Category')
+            ->findOneBy(sprintf('name = "%s"', $categoryName));
+
+        list($positions, $advertisements) =
+            $this->getAds($category->pk_content_category);
+
+        $layout = $this->get('setting_repository')->get(
+            'frontpage_layout_' . $category->pk_content_category,
+            'default'
+        );
+
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('content', $article->id);
 
         if ($this->view->getCaching() === 0
-            || !$this->view->isCached("extends:{$layoutFile}|article/article.tpl", $cacheID)
+            || !$this->view->isCached("extends:layouts/{$layout}.tpl|article/article.tpl", $cacheID)
         ) {
-            // Categories code -------------------------------------------
-            // TODO: Seems that this is rubbish, evaluate its removal
-            $actualCategoryTitle = $this->ccm->getTitle($categoryName);
-            $categoryData        = null;
-            if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $this->ccm->categories)) {
-                $categoryData = $this->ccm->categories[$actualCategoryId];
-            }
+            $em = $this->get('entity_repository');
 
-            $this->view->assign([
-                'category_name'         => $categoryName,
-                'actual_category_title' => $actualCategoryTitle,
-                'actual_category_id'    => $actualCategoryId,
-                'category_data'         => $categoryData,
-            ]);
-
-            // Associated media code --------------------------------------
-            $er = $this->get('entity_repository');
             if (isset($article->img2) && ($article->img2 > 0)) {
-                $photoInt = $er->find('Photo', $article->img2);
+                $photoInt = $em->find('Photo', $article->img2);
                 $this->view->assign('photoInt', $photoInt);
             }
 
             if (isset($article->fk_video2) && ($article->fk_video2 > 0)) {
-                $videoInt = $er->find('Video', $article->fk_video2);
+                $videoInt = $em->find('Video', $article->fk_video2);
                 $this->view->assign('videoInt', $videoInt);
             }
 
-            $article->media_url = '';
-            if (is_object($article->author)) {
-                $article->author->getPhoto();
-            }
-
-            // Related contents code ---------------------------------------
-            $relatedContents = [];
-            $relations       = $this->get('related_contents')->getRelations($article->id, 'inner');
-            if (count($relations) > 0) {
-                $contentObjects = $this->get('entity_repository')->findMulti($relations);
-
-                // Filter out not ready for publish contents.
-                foreach ($contentObjects as $content) {
-                    if ($content->isReadyForPublish()) {
-                        $content->category_name = $this->ccm->getName($content->category);
-                        if ($content->content_type == 1 && !empty($content->img1)) {
-                            $content->photo = $er->find('Photo', $content->img1);
-                        } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
-                            $content->video = $er->find('Video', $content->fk_video);
-                        }
-                        $relatedContents[] = $content;
-                    }
-                }
-            }
-            $this->view->assign('relationed', $relatedContents);
-
-            // Machine suggested contents code -----------------------------
-            $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
-                'article',
-                "category_name= '" . $article->category_name . "' AND pk_content <>" . $article->id,
-                4
-            );
-
-            $this->view->assign('suggested', $machineSuggestedContents);
+            $this->view->assign([
+                'relationed' => $this->getRelated($article),
+                'suggested'  => $this->getSuggested($article, $category)
+            ]);
         }
 
-        return $this->render("extends:{$layoutFile}|article/article.tpl", [
-            'ads_positions'   => $positions,
-            'advertisements'  => $advertisements,
-            'cache_id'        => $cacheID,
-            'contentId'       => $article->id,
-            'category_name'   => $categoryName,
-            'article'         => $article,
-            'content'         => $article,
-            'actual_category' => $categoryName,
-            'time'            => '12345',
-            'x-tags'          => 'article,' . $article->id,
-            'x-cache-for'     => '+1 day',
-            'x-cacheable'     => $cacheable,
+        return $this->render("extends:layouts/{$layout}.tpl|article/article.tpl", [
+            'actual_category'       => $category->name,
+            'actual_category_id'    => $category->pk_content_category,
+            'actual_category_title' => $category->title,
+            'ads_positions'         => $positions,
+            'advertisements'        => $advertisements,
+            'article'               => $article,
+            'cache_id'              => $cacheID,
+            'category_data'         => $category,
+            'category_name'         => $category->name,
+            'content'               => $article,
+            'contentId'             => $article->id,
+            'time'                  => '12345',
+            'o-token'               => $token,
+            'x-cache-for'           => '+1 day',
+            'x-cacheable'           => empty($token),
+            'x-tags'                => 'article,' . $article->id
         ]);
     }
 
@@ -240,11 +197,69 @@ class ArticlesController extends Controller
         $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
 
         // TODO: Use $this->get when the function changes to non-static
-        $positionManager = getService('core.helper.advertisement');
-        $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7 ]);
-        $advertisements  = getService('advertisement_repository')
+        $positions      = getService('core.helper.advertisement')
+            ->getPositionsForGroup('article_inner', [ 7 ]);
+        $advertisements = getService('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
 
         return [ $positions, $advertisements ];
+    }
+
+    /**
+     * Returns the list of related contents for an article.
+     *
+     * @param Article $article The article object.
+     *
+     * @return array The list of rellated contents.
+     */
+    private function getRelated($article)
+    {
+        $relations = $this->get('related_contents')
+            ->getRelations($article->id, 'inner');
+
+        if (empty($relations)) {
+            return [];
+        }
+
+        $em = $this->get('entity_repository');
+
+        $related  = [];
+        $contents = $em->findMulti($relations);
+
+        // Filter out not ready for publish contents.
+        foreach ($contents as $content) {
+            if (!$content->isReadyForPublish()) {
+                continue;
+            }
+
+            if ($content->content_type == 1 && !empty($content->img1)) {
+                $content->photo = $em->find('Photo', $content->img1);
+            } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
+                $content->video = $em->find('Video', $content->fk_video);
+            }
+
+            $related[] = $content;
+        }
+
+        return $related;
+    }
+
+    /**
+     * Returns the list of suggested contents for an article.
+     *
+     * @param Article  $article  The current article.
+     * @param Category $category The article category.
+     *
+     * @return array The list of suggested contents.
+     */
+    private function getSuggested($article, $category)
+    {
+        $query = sprintf(
+            'category_name = "%s" AND pk_content <> %s',
+            $category->name,
+            $article->id
+        );
+
+        return $this->get('automatic_contents')->searchSuggestedContents($query);
     }
 }

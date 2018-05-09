@@ -105,6 +105,22 @@
 
           $scope.list();
         };
+
+        /**
+         * @function isSelectable
+         * @memberOf UserListCtrl
+         *
+         * @description
+         *   Checks if the item is selectable.
+         *
+         * @param {Object} item The item to check.
+         *
+         * @return {Boolean} True if the item is selectable. False otherwise.
+         */
+        $scope.isSelectable = function(item) {
+          return $scope.backup.master ||
+            $scope.getId(item) !== $scope.backup.id;
+        };
       }
     ]);
 })();

@@ -19,15 +19,22 @@
     line-height: 14px;
 
     .fa {
+      line-height: 14px;
       width: 20px;
+
+      &.fa-angle-right {
+        line-height: 18px;
+      }
     }
 
     a {
-      padding: 8px 0;
       color: #505458;
+      display: inline-block;
+      padding: 8px 0;
 
       &:hover {
         color: #000;
+        text-decoration: underline;
       }
     }
   }
@@ -137,12 +144,6 @@
 
 .actions-navbar {
   z-index: 250;
-
-  h4 {
-    .fa {
-      margin-right: 5px;
-    }
-  }
 
   .navbar-inner {
     padding: 0 15px;

@@ -9,42 +9,44 @@
  * {/acl}
  *
 */
-function smarty_block_acl($params, $content, Smarty_Internal_Template $smarty, $open) {
+function smarty_block_acl($params, $content, Smarty_Internal_Template $smarty, $open)
+{
     if (!$open) {
         $security = getService('core.security');
         $check    = true;
 
+        if (isset($params['hasExtension'])) {
+            $check = $check && $security->hasExtension($params['hasExtension']);
+        }
+
         if (isset($params['isAllowed'])) {
             $isAllowed = $params['isAllowed'];
-            $check = $check
+            $check     = $check
                 && ($security->hasPermission($isAllowed)
                 || $security->hasRole($isAllowed));
         }
 
         if (isset($params['isNotAllowed'])) {
-            $isAllowed = $params['isNotAllowed'];
-
             $check = $check
-                && !($security->hasPermission($isAllowed)
-                || $security->hasRole($isAllowed));
+                && !($security->hasPermission($params['isNotAllowed'])
+                || $security->hasRole($params['isNotAllowed']));
         }
 
         if (isset($params['hasCategoryAccess'])) {
-            $hasCategoryAccess = $params['hasCategoryAccess'];
-            $check = $check && $security->hasCategory($hasCategoryAccess);
+            $check = $check
+                && $security->hasCategory($params['hasCategoryAccess']);
         }
 
         if (isset($params['nohasCategoryAccess'])) {
-            $hasCategoryAccess = $params['nohasCategoryAccess'];
-            $check = $check && !$security->hasCategory($hasCategoryAccess);
-            $check = !($check);
+            $check = $check && !$security->hasCategory($params['nohasCategoryAccess']);
         }
+
         $else = $smarty->left_delimiter . 'aclelse' . $smarty->right_delimiter;
 
         // $check = false;
         $true_false = explode($else, $content, 2);
-        $true = (isset($true_false[0]) ? $true_false[0] : null);
-        $false = (isset($true_false[1]) ? $true_false[1] : null);
+        $true       = (isset($true_false[0]) ? $true_false[0] : null);
+        $false      = (isset($true_false[1]) ? $true_false[1] : null);
 
         return $check ? $true : $false;
     }

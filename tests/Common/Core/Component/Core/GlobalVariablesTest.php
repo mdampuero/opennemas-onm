@@ -30,6 +30,14 @@ class GlobalVariablesTest extends KernelTestCase
     }
 
     /**
+     * Tests getContainer.
+     */
+    public function testGetContainer()
+    {
+        $this->assertEquals($this->container, $this->globals->getContainer());
+    }
+
+    /**
      * Tests getEnvironment.
      */
     public function testGetEnvironment()
@@ -60,6 +68,17 @@ class GlobalVariablesTest extends KernelTestCase
             ->with('core.locale');
 
         $this->globals->getLocale();
+    }
+
+    /**
+     * Tests getSubscription.
+     */
+    public function testGetSubscription()
+    {
+        $this->container->expects($this->once())->method('get')
+            ->with('core.helper.subscription')->willReturn('waldo');
+
+        $this->assertEquals('waldo', $this->globals->getSubscription());
     }
 
     /**

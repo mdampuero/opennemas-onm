@@ -8,12 +8,16 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
+                <i class="fa fa-edit m-r-10"></i>
+                <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/566184-opennemas-gesti%C3%B3n-de-autores" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                  <i class="fa fa-question"></i>
+                </a>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
                 <a class="no-padding" href="[% routing.generate('backend_authors_list') %]">
-                  <i class="fa fa-edit"></i>
                   {t}Authors{/t}
-                  <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/566184-opennemas-gesti%C3%B3n-de-autores" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
-                    <i class="fa fa-question"></i>
-                  </a>
                 </a>
               </h4>
             </li>
@@ -22,16 +26,15 @@
                 <i class="fa fa-question fa-lg"></i>
               </a>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.http.loading && item">
-              <div class="p-l-10 p-r-10 p-t-10">
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
                 <i class="fa fa-angle-right"></i>
-              </div>
+              </h4>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.http.loading && item">
-              <h5 class="ng-cloak">
-                <strong ng-if="item.id">{t}Edit{/t}</strong>
-                <strong ng-if="!item.id">{t}Create{/t}</strong>
-              </h5>
+            <li class="quicklinks hidden-xs">
+              <h4>
+                {if empty($id)}{t}Create{/t}{else}{t}Edit{/t}{/if}
+              </h4>
             </li>
           </ul>
           <div class="all-actions pull-right">
@@ -39,7 +42,7 @@
               <li class="quicklinks">
                 <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" type="button">
                   <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
-                  <span class="text">{t}Save{/t}</span>
+                  {t}Save{/t}
                 </button>
               </li>
             </ul>
@@ -69,7 +72,7 @@
             <div class="grid simple">
               <div class="grid-body no-padding">
                 <div class="grid-collapse-title">
-                  <div class="form-group">
+                  <div class="form-group no-margin">
                     <div class="checkbox">
                       <input id="inrss" name="inrss" ng-false-value="'0'" ng-model="item.inrss" ng-true-value="'1'" type="checkbox">
                       <label class="form-label" for="inrss">
@@ -82,7 +85,7 @@
                     </div>
                   </div>
                   {is_module_activated name="BLOG_MANAGER"}
-                    <div class="form-group no-margin">
+                    <div class="form-group no-margin m-t-15">
                       <div class="checkbox">
                         <input name="is_blog" id="is_blog" ng-false-value="'0'" ng-model="item.is_blog" ng-true-value="'1'" type="checkbox">
                         <label class="form-label" for="is_blog">
@@ -165,7 +168,7 @@
                         <div class="form-group" ng-class="{ 'has-error': form.name.$dirty && form.name.$invalid }">
                           <label class="form-label" for="name">{t}Name{/t}</label>
                           <div class="controls input-with-icon right">
-                            <input class="form-control" id="name" name="name" ng-model="item.name" ng-maxlength="50" type="text"/>
+                            <input class="form-control" id="name" name="name" ng-blur="getUsername()" ng-model="item.name" ng-maxlength="50" type="text"/>
                             <span class="icon right ng-cloak" ng-if="!flags.http.loading">
                               <span class="fa fa-check text-success" ng-if="form.name.$dirty && form.name.$valid"></span>
                               <span class="fa fa-info-circle text-info" ng-if="!form.name.$dirty && form.name.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
@@ -178,7 +181,7 @@
                         <div class="form-group" ng-class="{ 'has-error': form.name.$dirty && form.name.$invalid }">
                           <label class="form-label" for="username">{t}Username{/t}</label>
                           <div class="controls input-with-icon right">
-                            <input class="form-control" id="username" name="username" ng-disabled="flags.http.slug" ng-model="item.username" ng-maxlength="50" {if !$app.user->isMaster()}readonly{/if} type="text"/>
+                            <input class="form-control" id="username" name="username" ng-disabled="flags.http.slug" ng-model="item.username" ng-maxlength="50" required type="text">
                             <span class="icon right ng-cloak" ng-if="!flags.http.loading">
                               <span class="fa fa-circle-o-notch fa-spin" ng-if="flags.http.slug"></span>
                               <span class="fa fa-check text-success" ng-if="!flags.http.slug && form.username.$dirty && form.username.$valid"></span>
