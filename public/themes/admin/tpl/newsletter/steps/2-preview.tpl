@@ -1,32 +1,33 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form action="{url name=admin_newsletter_save_html id=$newsletter->id}" method="POST" id="newsletter-preview-form" ng-controller="NewsletterCtrl">
+  <form action="{url name=backend_newsletters_save_html id=$newsletter->id}" method="POST" id="newsletter-preview-form" ng-controller="NewsletterCtrl">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-home fa-lg"></i>
-                {t}Newsletters{/t}
+                <a class="no-padding" href="{url name=backend_newsletters_list}" title="{t}Go back to list{/t}">
+                  <i class="fa fa-envelope"></i>
+                  {t}Newsletters{/t}
+                </a>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
             <li class="quicklinks hidden-xs">
-              <h5>{t}Preview{/t}</h5>
+              <div class="p-l-10 p-r-10 p-t-10">
+                <i class="fa fa-angle-right"></i>
+              </div>
+            </li>
+            <li class="quicklinks hidden-xs">
+              <h5><strong>{t}Preview{/t}</strong></h5>
             </li>
           </ul>
+
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
-              <li class="quicklinks">
-                <a href="{url name=admin_newsletters}" class="btn btn-link" title="{t}Go back to list{/t}">
-                  <span class="fa fa-reply"></span>
-                </a>
-              </li>
-              <li class="quicklinks"><span class="h-seperate"></span></li>
               <li class="quicklinks btn-group">
-                <a href="{url name=admin_newsletter_show_contents id=$newsletter->id}" class="btn btn-primary" title="{t}Previous{/t}" id="prev-button">
+                <a href="{url name=backend_newsletters_show_contents id=$newsletter->id}" class="btn btn-primary" title="{t}Previous{/t}" id="prev-button">
                   <span class="fa fa-chevron-left"></span>
                   <span class="hidden-xs">{t}Previous{/t}</span>
                 </a>
@@ -42,17 +43,18 @@
     </div>
     <div class="content">
       <div class="grid simple">
+        <div class="grid-title">
+          <i class="fa fa-eye"></i>
+          <h4>{t}Email subject{/t}</h4>
+        </div>
         <div class="grid-body">
           <div class="form-group">
-            <label for="name" class="form-label">{t}Email subject{/t}</label>
-            <div class="controls">
               <input type="text" name="subject" id="title" value="{$newsletter->title}" required class="form-control"/>
-            </div>
           </div>
         </div>
       </div>
       <div class="grid simple">
-        <button class="btn btn-default pull-right" ng-click="edit = !edit; saveHtml('{url name=admin_newsletter_save_html id=$newsletter->id}', !edit)" style="margin: 7px 7px 0 0" type="button">
+        <button class="btn btn-default pull-right" ng-click="edit = !edit; saveHtml('{url name=backend_newsletters_save_html id=$newsletter->id}', !edit)" style="margin: 7px 7px 0 0" type="button">
           <span ng-if="!edit">
             <span class="fa fa-pencil"></span>
             {t}Edit{/t}
@@ -69,7 +71,7 @@
           <input name="html" type="hidden" ng-value="html">
           <input name="hiddenHtml" type="hidden" value="{$newsletter->html|escape:'html'}">
           <div class="form-group" ng-show="edit">
-            <textarea onm-editor class="form-control" ng-model="html" cols="30" rows="10"></textarea>
+            <textarea onm-editor class="form-control" ng-model="html" cols="100" rows="10"></textarea>
           </div>
           <div class="form-group" ng-show="!edit">
             <div class="controls">
