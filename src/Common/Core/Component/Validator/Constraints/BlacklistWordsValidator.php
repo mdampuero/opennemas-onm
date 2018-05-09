@@ -72,7 +72,7 @@ class BlacklistWordsValidator extends ConstraintValidator
         }
 
         foreach ($blacklist as $regexp) {
-            $cleanRegexp = '@' . trim($regexp) . '@m';
+            $cleanRegexp = '@' . trim(str_replace('@', '\@', $regexp)) . '@m';
             $returnValue = preg_match_all($cleanRegexp, $value);
 
             if ($returnValue !== false && $returnValue > 0) {
