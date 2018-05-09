@@ -1447,6 +1447,30 @@ class Privilege
                 'description'  => _('Marks this group as public'),
                 'module'       => 'INTERNAL',
             ],
+            224 => [
+                'pk_privilege' => '224',
+                'name'         => 'TAG_ADMIN',
+                'description'  => _('List'),
+                'module'       => 'TAG',
+            ],
+            225 => [
+                'pk_privilege' => '225',
+                'name'         => 'TAG_UPDATE',
+                'description'  => _('Edit'),
+                'module'       => 'TAG',
+            ],
+            226 => [
+                'pk_privilege' => '226',
+                'name'         => 'TAG_DELETE',
+                'description'  => _('Delete'),
+                'module'       => 'TAG',
+            ],
+            227 => [
+                'pk_privilege' => '227',
+                'name'         => 'TAG_CREATE',
+                'description'  => _('Create'),
+                'module'       => 'TAG',
+            ],
         );
 
         return self::$privileges;

@@ -2152,6 +2152,12 @@ class Content implements \JsonSerializable
         $this->removeMetadata($emptyKeys);
     }
 
+    /**
+     * method for associating tags to a content
+     *
+     * @param array   $tagsList  with the list of tags
+     * @param integer $contentId id for content
+     */
     public static function saveTags($tagsList, $contentId = null)
     {
         if (empty($tagsList)) {
@@ -2178,7 +2184,13 @@ class Content implements \JsonSerializable
         );
     }
 
-    public static function deleteTags($contentId = null)
+
+    /**
+     * deletion of all tags associated with a content
+     *
+     * param mixed $contentId id for content
+     */
+    public static function deleteTags($contentId)
     {
         if (empty($contentId)) {
             return null;

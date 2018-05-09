@@ -9,14 +9,82 @@
  */
 namespace Api\Service\V1;
 
+use Common\ORM\Entity\Tag;
+
 class TagService extends OrmService
 {
 
     /**
      * Method to simplificate the tag word for enable a search system
+     *
+     * @param string $word word for transformation
+     *
+     * @return string searcheable word.
      */
     public function createSearchableWord($word)
     {
         return \Onm\StringUtils::generateSlug($word, false);
+    }
+
+    /**
+     * Method for retrieve the number of contents related with some tag
+     *
+     * @param array list with all number of related contents by tag
+     *
+     * @return array list with all tags and the number of contest
+     */
+    public function getNumContentsRel($tagList)
+    {
+        if (empty($tagList)) {
+            return [];
+        }
+
+        $tagListIds = $tagList;
+        if (!is_array($tagList) && is_object($tagList)) {
+            $tagListIds = $tagList['id'];
+        } elseif (is_array($tagList) && is_object($tagList[0])) {
+            $tagListIds = array_map(
+                function ($tag) {
+                    return $tag->id;
+                },
+                $tagList
+            );
+        }
+
+        return \Tag::numberOfContent($tagListIds);
+    }
+
+    /**
+     * Method for replace the parameter name by slug
+     *
+     * @param oql $oql to check and replace the field name by slug
+     *
+     * @return String new oql with the field name replace
+     */
+    public function replaceSearchBySlug($oql)
+    {
+        $oqlAux = $oql;
+        if (preg_match('/and\s*name\s*~\s*"?[^"]*"?/', $oql, $matches)) {
+            $oqlNameAux = split('"', $matches[0]);
+            if (count($oqlNameAux) == 3) {
+                $oqlNameAux[0] = str_replace("name", 'slug', $oqlNameAux[0]);
+                $oqlNameAux[1] = '"' . $this->createSearchableWord($oqlNameAux[1]) . '"';
+                $oqlNameAux    = implode($oqlNameAux);
+                $oqlAux        = str_replace($matches[0], $oqlNameAux, $oql);
+            }
+        }
+        return $oqlAux;
+    }
+
+    /**
+     * Method to validate a list of tags
+     *
+     * @param mixed $tags list of all tags to validate
+     *
+     * @return mixed List with all tags validate against DB
+     */
+    public function validateTags($languageId, $tags)
+    {
+        return \Tag::validateTags($languageId, $tags);
     }
 }
