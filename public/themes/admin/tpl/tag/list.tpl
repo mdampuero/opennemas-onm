@@ -110,14 +110,14 @@
           <h3 class="spinner-text">{t}Loading{/t}...</h3>
         </div>
       </div>
-      <div class="listing-no-contents ng-cloak" ng-if="!flags.http.loading && items.length == 0">
+      <div class="listing-no-contents ng-cloak" ng-if="!flags.http.loading && items.length == 0 && !editedTag">
         <div class="text-center p-b-15 p-t-15">
           <i class="fa fa-4x fa-warning text-warning"></i>
           <h3>{t}Unable to find any item that matches your search.{/t}</h3>
           <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
         </div>
       </div>
-      <div class="grid simple ng-cloak" ng-if="!flags.http.loading && items.length > 0">
+      <div class="grid simple ng-cloak" ng-if="(!flags.http.loading && items.length > 0) || editedTag">
         <div class="grid-body no-padding">
           <div class="table-wrapper">
             <table class="table table-hover no-margin">
@@ -188,7 +188,7 @@
             </table>
           </div>
         </div>
-        <div class="grid-footer clearfix ng-cloak">
+        <div class="grid-footer clearfix ng-cloak" ng-if="items.length !== 0">
           <div class="pull-right">
             <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>
