@@ -20,7 +20,7 @@
               </div>
             </li>
             <li class="quicklinks hidden-xs">
-              <h5><strong>{t}Preview{/t}</strong></h5>
+              <h5><strong>{t}Send{/t}</strong></h5>
             </li>
           </ul>
 
@@ -31,7 +31,7 @@
                   <span class="fa fa-chevron-left"></span>
                   <span class="hidden-xs">{t}Previous{/t}</span>
                 </a>
-                <a href="{url name=admin_newsletter_pick_recipients id=$newsletter->id}" class="btn btn-primary" title="{t}Next{/t}" id="next-button">
+                <a href="{url name=backend_newsletters_pick_recipients id=$newsletter->id}" class="btn btn-primary" title="{t}Next{/t}" id="next-button">
                   <span class="hidden-xs">{t}Next{/t}</span>
                   <span class="fa fa-chevron-right"></span>
                 </a>
@@ -41,7 +41,8 @@
         </div>
       </div>
     </div>
-    <div class="content">
+    <div class="content" ng-init="step = 1">
+      {include file="newsletter/partials/send_steps.tpl"}
       <div class="grid simple">
         <div class="grid-title">
           <i class="fa fa-eye"></i>
