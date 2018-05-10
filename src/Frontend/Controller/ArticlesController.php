@@ -260,6 +260,7 @@ class ArticlesController extends Controller
             $article->id
         );
 
-        return $this->get('automatic_contents')->searchSuggestedContents($query);
+        return $this->get('automatic_contents')
+            ->searchSuggestedContents('article', $query);
     }
 }
