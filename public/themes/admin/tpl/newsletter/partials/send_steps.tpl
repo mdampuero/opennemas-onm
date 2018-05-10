@@ -1,4 +1,4 @@
-<div class="form-wizard-steps clearfix m-b-15 ng-cloak">
+{* <div class="form-wizard-steps clearfix m-b-15 ng-cloak">
   <ul class="form-wizard wizard-steps wizard-steps-4">
     <li class="text-center" ng-class="{ 'active': step == 0 }">
       <span class="step">1</span>
@@ -18,3 +18,4 @@
     </li>
   </ul>
 </div>
+ *}

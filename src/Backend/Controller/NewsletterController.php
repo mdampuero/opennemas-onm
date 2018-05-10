@@ -211,13 +211,11 @@ class NewsletterController extends Controller
             $newsletter->update($newValues);
         } else {
             $newsletter = new \Newsletter();
-            $newsletter->create(
-                [
-                    'title'   => $title,
-                    'data'    => json_encode($containers),
-                    'html'    => $nm->render($containers),
-                ]
-            );
+            $newsletter->create([
+                'title'   => $title,
+                'data'    => json_encode($containers),
+                'html'    => $nm->render($containers),
+            ]);
         }
 
         return $this->redirect($this->generateUrl(
@@ -374,7 +372,7 @@ class NewsletterController extends Controller
                 _('Your newsletter configuration is not complete. You must complete the sender email address.')
             );
 
-            return $this->redirect($this->generateUrl('admin_newsletters'));
+            return $this->redirect($this->generateUrl('backend_newsletters_list'));
         }
 
         $params = [
