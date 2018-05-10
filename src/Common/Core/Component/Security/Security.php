@@ -115,7 +115,7 @@ class Security
         }
 
         if (empty($this->categories)) {
-            return false;
+            return true;
         }
 
         return in_array($category, $this->categories);

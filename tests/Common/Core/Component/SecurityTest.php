@@ -83,7 +83,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         $security->setUser($this->user);
         $security->setInstance($this->instance);
 
-        $this->assertFalse($security->hasCategory('fubar'));
+        $this->assertTrue($security->hasCategory('fubar'));
     }
 
     /**
