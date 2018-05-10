@@ -20,7 +20,7 @@
               </div>
             </li>
             <li class="quicklinks hidden-xs">
-              <h5><strong>{t}Content selection{/t}</strong></h5>
+              <h5><strong>{t}Send{/t}</strong></h5>
             </li>
           </ul>
           <div class="all-actions pull-right">
@@ -36,7 +36,8 @@
         </div>
       </div>
     </div>
-    <div class="content newsletter-manager">
+    <div class="content newsletter-manager" ng-init="step = 0">
+      {include file="newsletter/partials/send_steps.tpl"}
       <div class="grid simple">
         <div class="grid-title">
           <i class="fa fa-eye"></i>
