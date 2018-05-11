@@ -88,7 +88,7 @@
 
               <div class="accordion-option" ng-if="newsletter_handler == 'lists'">
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded == 'lists' }" ng-click="expanded = 'lists'">
-                  <i class="fa fa-users m-r-10"></i>{t}Subscription lists{/t}
+                  <i class="fa fa-address-book m-r-10"></i>{t}Subscription lists{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded == 'lists' }"></i>
                   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="expanded != 'lists'">
                     <span>[% (source.items|filter:{ type: 'list' }).length %]</span>
@@ -152,7 +152,7 @@
           </div>
           <div class="grid-body">
             <div ng-show="recipients.items.length == 0" class="text-center p-t-50 p-b-50">
-              <i class="fa fa-users fa-4x m-b-30"></i>
+              <i class="fa fa-address-book fa-4x m-b-30"></i>
               <p>{t escape=off}No recipients selected{/t}</p>
             </div>
             <div class="ng-cloak" ng-show="recipients.items.length > 0">
@@ -161,7 +161,7 @@
                   <input id="checkbox-right-[% $index %]" checklist-model="recipients.selected" checklist-value="item" type="checkbox">
                   <label for="checkbox-right-[% $index %]">
                     <span ng-if="item.type == 'external'"><i class="fa fa-external-link" uib-tooltip="{t}External service{/t}"></i></span>
-                    <span ng-if="item.type == 'list'"><i class="fa fa-users" uib-tooltip="{t}Subscription list{/t}"></i> </span>
+                    <span ng-if="item.type == 'list'"><i class="fa fa-address-book" uib-tooltip="{t}Subscription list{/t}"></i> </span>
                     <span ng-if="item.type == 'email'"><i class="fa fa-envelope" uib-tooltip="{t}Email address{/t}"></i> </span>
                     [% item.name %]
                     <span class="badge badge-default m-l-5" ng-if="item.type == 'list'">{t 1="[% item.subscribers %]"}%1 subscriptors{/t}</span>

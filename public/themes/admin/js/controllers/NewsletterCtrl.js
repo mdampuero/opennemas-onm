@@ -115,16 +115,30 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
      * Opens a modal to confirm newsletter sending.
      */
     $scope.send = function() {
+      var emailsToSend = 0;
+
+      $scope.recipients.items.forEach(function(el) {
+        if (el.type == 'list') {
+          emailsToSend += el.subscribers;
+        } else {
+          ++emailsToSend;
+        }
+      });
+
       $uibModal.open({
         backdrop:    true,
         controller:  'YesNoModalCtrl',
         templateUrl: 'modal-confirm-send',
         resolve: {
           template: function() {
-            return {};
+            return {
+              emails_to_send: emailsToSend
+            };
           },
           yes: function() {
-            $('form').submit();
+            return function() {
+              $('form').submit();
+            };
           },
           no: function() {
             return function(modalWindow) {
