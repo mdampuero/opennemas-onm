@@ -56,11 +56,11 @@
       <div class="col-sm-6">
         <div class="grid simple">
           <div class="grid-title">
-            <h5>{t}Select your recipients{/t}</h5>
+            <h4>{t}Select your recipients{/t}</h4>
           </div>
           <div class="grid-body no-padding">
             <div id="providers-accordion">
-              <div class="accordion-option">
+              <div class="accordion-option" ng-if="newsletter_handler == 'external'">
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded == 'external' }" ng-click="expanded = 'external'">
                   <i class="fa fa-external-link m-r-10"></i>{t}External service{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded == 'external' }"></i>
@@ -86,16 +86,16 @@
                 </div>
               </div>
 
-              <div class="accordion-option">
-                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded == 'internal' }" ng-click="expanded = 'internal'">
+              <div class="accordion-option" ng-if="newsletter_handler == 'lists'">
+                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded == 'lists' }" ng-click="expanded = 'lists'">
                   <i class="fa fa-users m-r-10"></i>{t}Subscription lists{/t}
-                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded == 'internal' }"></i>
-                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="expanded != 'internal'">
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded == 'lists' }"></i>
+                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="expanded != 'lists'">
                     <span>[% (source.items|filter:{ type: 'list' }).length %]</span>
                   </span>
                 </div>
 
-                <div class="grid-collapse-body clearfix ng-cloak" ng-class="{ 'expanded': expanded == 'internal' }">
+                <div class="grid-collapse-body clearfix ng-cloak" ng-class="{ 'expanded': expanded == 'lists' }">
                   <div class="form-group">
                     <div class="help">
                       {t 1="[% routing.generate('backend_subscriptions_list') %]" escape=off}Subscription lists available from <a href="%1">subscriptions module</a> {/t}
@@ -140,9 +140,12 @@
       </div>
       <div class="col-sm-6">
         <div class="grid simple">
+          <div style="position:absolute; top: 45%; left: -10px;">
+            <i class="fa fa-angle-right" style="width:15px"></i>
+          </div>
           <div class="grid-title clearfix">
-            <h5 class="pull-left">{t}Receivers{/t} <span class="badge badge-default ng-cloak" ng-show="recipients.items.length > 0">[% recipients.items.length %]</span></h5>
-            <button class="btn btn-danger btn-mini pull-right m-t-5" ng-click="removeRecipients()" ng-disabled="recipients.selected.length == 0" type="button" ng-show="recipients.selected.length > 0">
+            <h4 class="pull-left">{t}Receivers{/t} <span class="badge badge-default ng-cloak" ng-show="recipients.items.length > 0">[% recipients.items.length %]</span></h4>
+            <button class="btn btn-danger btn-mini pull-right m-t-5 ng-cloak" ng-click="removeRecipients()" ng-disabled="recipients.selected.length == 0" type="button" ng-show="recipients.selected.length > 0">
               <i class="fa fa-trash fa-lg"></i>
               {t}Remove selected{/t}
             </button>
