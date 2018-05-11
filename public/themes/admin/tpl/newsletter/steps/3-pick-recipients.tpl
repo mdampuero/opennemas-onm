@@ -39,10 +39,10 @@
                   <span class="fa fa-chevron-left"></span>
                   <span class="hidden-xs">{t}Previous{/t}</span>
                 </a>
-                <button class="btn btn-danger" ng-click="send()" {* disabled ng-disabled="target.items.length == 0" *} type="button">
+                <a class="btn btn-danger" ng-click="send()" {* disabled ng-disabled="target.items.length == 0" *} type="button">
                   <span class="fa fa-envelope"></span>
                   <span class="hidden-xs">{t}Send{/t}</span>
-                </button>
+                </a>
               </div>
             </li>
           </ul>
