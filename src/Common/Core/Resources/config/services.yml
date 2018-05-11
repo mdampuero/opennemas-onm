@@ -73,6 +73,18 @@ services:
         class:     Common\Core\Component\Helper\L10nRouteHelper
         arguments: [ '@service_container' ]
 
+    core.helper.newsletter:
+        class:     Common\Core\Component\Helper\NewsletterHelper
+        arguments:
+            - '@setting_repository'
+            - '@newsletter_manager'
+            - '@error.log'
+            - '@application.log'
+            - '@core.instance'
+            - '@mailer'
+            - '@api.service.subscriber'
+            - '%mailer_no_reply_address%'
+
     core.helper.oql:
         class:     Common\Core\Component\Helper\OqlHelper
         arguments: [ '@service_container' ]

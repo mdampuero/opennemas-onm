@@ -29,6 +29,12 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       $scope.newsletter = newsletter;
       $scope.source.items = extra.recipients;
       $scope.newsletter_handler = extra.newsletter_handler;
+
+      if ($scope.newsletter_handler === 'submit') {
+        $scope.newsletter_handler = 'lists';
+      }
+
+      $scope.expanded = $scope.newsletter_handler;
     };
 
     /**
