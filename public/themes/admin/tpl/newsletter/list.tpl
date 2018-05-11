@@ -17,18 +17,18 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li>
-              <a class="btn btn-link" href="{url name=admin_newsletter_config}" class="admin_add" title="{t}Config newsletter module{/t}">
+              <a class="btn btn-link" href="{url name=backend_newsletters_config}" class="admin_add" title="{t}Config newsletter module{/t}">
                 <span class="fa fa-cog fa-lg"></span>
               </a>
             </li>
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
-            <li class="hidden-xs">
+            {* <li class="hidden-xs">
               <a class="btn btn-danger" href="{url name=admin_newsletter_subscriptors}" class="admin_add" id="submit_mult" title="{t}Subscribers{/t}">
                 <span class="fa fa-users"></span>
                 {t}Subscribers{/t}
               </a>
             </li>
-            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li> *}
             <li class="quicklinks">
               <a class="btn btn-primary" href="{url name=backend_newsletters_create}" accesskey="N" tabindex="1" id="create-button">
                 <i class="fa fa-plus"></i>
@@ -82,33 +82,33 @@
             <thead>
               <tr>
                 <th>{t}Title{/t}</th>
-                <th class="center hidden-xs hidden-sm" style="width:250px;">{t}Updated{/t}</th>
+                <th class="hidden-xs hidden-sm" style="width:250px;">{t}Updated{/t}</th>
                 <th class="right">{t}Sendings{/t}</th>
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat="content in contents">
-                <td class="left">
-                  <p ng-if="content.title != ''">[% content.title %]</p>
-                  <p ng-if="content.title == ''">{t}Newsletter{/t}  -  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]</p>
+                <td>
+                  <div ng-if="content.title != ''">[% content.title %]</div>
+                  <div ng-if="content.title == ''">{t}Newsletter{/t}  -  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]</div>
                   <div class="small-text">
                     <strong>{t}Created:{/t}</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
                   <div class="listing-inline-actions">
-                    <a class="link" href="[% edit(content.id, 'backend_newsletters_show_contents') %]" title="{t}Edit{/t}" >
+                    <a class="btn btn-default btn-small" href="[% edit(content.id, 'backend_newsletters_show_contents') %]" title="{t}Edit{/t}" >
                       <i class="fa fa-pencil"></i> {t}Edit{/t}
                     </a>
-                    <a href="[% edit(content.id, 'backend_newsletters_preview') %]" title="{t}Preview{/t}" class="link">
+                    <a href="[% edit(content.id, 'backend_newsletters_preview') %]" title="{t}Preview{/t}" class="btn btn-primary btn-small">
                       <i class="fa fa-eye"></i>
-                      {t}Show contents{/t}
+                      {t}Preview{/t}
                     </a>
-                    <button ng-if="content.sent < 1" class="link link-danger" ng-click="removePermanently(content)" type="button">
+                    <button class="btn btn-danger btn-small" ng-if="content.sent < 1" class="link link-danger" ng-click="removePermanently(content)" type="button">
                       <i class="fa fa-trash-o"></i>
                       {t}Delete{/t}
                     </button>
                   </div>
                 </td>
-                <td class="center hidden-xs hidden-sm">
+                <td class="hidden-xs hidden-sm">
                   [% content.updated | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                 </td>
                 <td class="right">
