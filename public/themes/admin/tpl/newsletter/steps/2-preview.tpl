@@ -45,7 +45,7 @@
       {include file="newsletter/partials/send_steps.tpl"}
       <div class="grid simple">
         <div class="grid-title">
-          <i class="fa fa-eye"></i>
+          <i class="fa fa-envelope-o"></i>
           <h4>{t}Email subject{/t}</h4>
         </div>
         <div class="grid-body">
