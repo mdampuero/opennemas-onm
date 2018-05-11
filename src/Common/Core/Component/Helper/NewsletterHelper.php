@@ -127,19 +127,26 @@ class NewsletterHelper
 
             try {
                 if ($mailbox->type == 'list') {
-                    $sentEmails += $this->sendList($newsletter, $mailbox);
+                    list($errors, $sentEmailsList) = $this->sendList($newsletter, $mailbox);
+
+                    $sentEmails    += $sentEmailsList;
+                    $sendResults[] = [ $mailbox, true, sprintf(_('%d subscribers'), $sentEmailsList) ];
+                    if (count($errors) > 0) {
+                        foreach ($errors as $error) {
+                            $sendResults[] = [ $mailbox, false, $error ];
+                        }
+                    }
                 } else {
                     $sentEmails += $this->sendEmail($newsletter, $mailbox);
+
+                    $sendResults[] = [ $mailbox, (bool) $properlySent, '' ];
                 }
 
                 $properlySent = $sentEmails !== false;
 
-
                 $remaining -= $sentEmails;
-
-                $sendResults[] = [ $mailbox, (bool) $properlySent,_('Email queued') ];
             } catch (\Exception $e) {
-                $sendResults[] = [ $mailbox, false,  $e->getMessage() . _('Unable to deliver your email') ];
+                $sendResults[] = [ $mailbox, false,  _('Unable to deliver your email') ];
 
                 $this->errorLog->error('Error sending newsletter ' . $e->getMessage());
             }
@@ -171,25 +178,32 @@ class NewsletterHelper
      * @param Newsletter $newsletter the newsletter
      * @param array      $recipients the subscription group to send the newsletter
      *
-     * @return int the number of emails sent
+     * @return array the number of emails sent
      */
     public function sendList($newsletter, $list)
     {
-        $emailsSent = 0;
+        $sentEmails = 0;
         $users      = $this->ssb->getList(
             '(user_group_id ~ "' . $list->id
             . '" and status != 0)'
         );
 
         if ($users['total'] == 0) {
-            return $emailsSent;
+            return [ [], $sentEmails ];
         }
 
+        $errors = [];
         foreach ($users['items'] as $user) {
-            $emailsSent += $this->sendEmail($newsletter, $user);
+            try {
+                $sentEmails += $this->sendEmail($newsletter, $user);
+            } catch (\Swift_RfcComplianceException $e) {
+                $errors[] = sprintf(_('Email not valid: %s'), $user->email);
+            } catch (\Exception $e) {
+                $errors[] = _('Unable to deliver your email');
+            }
         }
 
-        return $emailsSent;
+        return [ $errors, $sentEmails ];
     }
 
     /**
@@ -209,7 +223,7 @@ class NewsletterHelper
             ->setBody($newsletter->html, 'text/html')
             ->setFrom([$this->newsletterConfigs['sender'] => $this->siteName])
             ->setSender($this->noReplyAddress)
-            ->setTo([$mailbox->email => $mailbox->name]);
+            ->setTo([ $mailbox->email => $mailbox->name ]);
 
         $headers = $message->getHeaders();
         $headers->addParameterizedHeader(
