@@ -273,9 +273,6 @@ class ContentManager
             }, $contentIds);
 
             $contentsRaw = $er->findMulti($contentsMap);
-
-            $er->populateContentMetasInContents($contentsRaw);
-
             $contentsRaw = $this->checkAndCleanFrontpageSize($contentsRaw);
 
             // iterate over all found contents to hydrate them
