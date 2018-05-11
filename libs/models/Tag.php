@@ -64,15 +64,15 @@ class Tag
     public function validateTags($languageId, $tags)
     {
         if (empty($tags)) {
-            return null;
+            return [];
         }
 
         $sqlTags = '';
         $params  = [$languageId];
 
         if (is_array($tags)) {
-            $sqlTags = ' IN (' . substr(str_repeat(', ?', count($TAGS)), 2) . ')';
-            $params  = array_merge($tags);
+            $sqlTags = ' IN (' . substr(str_repeat(', ?', count($tags)), 2) . ')';
+            $params  = array_merge($params, $tags);
         } else {
             $sqlTags  = ' = ?';
             $params[] = $tags;

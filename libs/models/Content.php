@@ -596,10 +596,11 @@ class Content implements \JsonSerializable
             // Insert into contents table
             $conn->insert('contents', $contentData);
 
-            $this->id           = $conn->lastInsertId();
-            $this->pk_content   = $this->id;
-            $data['pk_content'] = $this->id;
-            $data['id']         = $this->id;
+            $this->id            = $conn->lastInsertId();
+            $this->pk_content    = $this->id;
+            $data['pk_content']  = $this->id;
+            $data['id']          = $this->id;
+            $contentData['tags'] = $this->addTagsByName($contentData);
 
             self::load($contentData);
 
@@ -739,6 +740,9 @@ class Content implements \JsonSerializable
             } else {
                 $catName = $this->category_name;
             }
+
+            $contentData['tags'] = $this->addTagsByName($contentData);
+            $this->tags = $contentData['tags'];
 
             logContentEvent(__METHOD__, $this);
             dispatchEventWithParams('content.update', [ 'content' => $this ]);
@@ -2201,11 +2205,24 @@ class Content implements \JsonSerializable
             ' = ?';
 
         $sql = 'DELETE FROM contents_tags WHERE content_id ' . $sqlContentId;
-
         $conn = getService('dbal_connection');
         getService('dbal_connection')->executeUpdate(
             $sql,
-            $contentId
+            is_array($contentId) ? $contentId : [$contentId]
         );
+    }
+
+    /**
+     * Method for associate some tags by name to the content
+     *
+     * @param Array $data
+     */
+    public function addTagsByName($data)
+    {
+        $ts      = getService('api.service.tag');
+        $tagsIds = $ts->getTagsIds($data);
+        self::deleteTags($this->id);
+        self::saveTags($tagsIds, $this->id);
+        return $tagsIds;
     }
 }

@@ -87,4 +87,51 @@ class TagService extends OrmService
     {
         return \Tag::validateTags($languageId, $tags);
     }
+
+
+    /**
+     *  Method to retrieve the ids for a list of tags. In case some tag not exist
+     * the system generate a new tag and upload the data
+     *
+     * @param array $tags List of tags from we want to retrieve the ids
+     *
+     * @return array List with all ids for the tags
+     */
+    public function getTagsIds($tags)
+    {
+        if (empty($tags['metadata'])) {
+            return [];
+        }
+
+        $locale  = $this->container->get('core.locale')
+            ->getLocale('frontend');
+        $tagsArr = explode(',', $tags['metadata']);
+
+        $validTags = $this->validateTags($locale, $tagsArr);
+
+        $clearTagNames = array_map(function ($tag) {
+            return $tag->name;
+        }, $validTags);
+
+        $newTags = [];
+        foreach ($tagsArr as $tagToCheck) {
+            if (!in_array($tagToCheck, $clearTagNames)) {
+                $newTags[] = $tagToCheck;
+            }
+        }
+
+        if (!empty($newTags)) {
+            foreach ($newTags as $tagName) {
+                $tagData             = [
+                    'name'        => $tagName,
+                    'slug'        => $this->createSearchableWord($tagName),
+                    'language_id' => $locale
+                ];
+
+                $tag                 = parent::createItem($tagData);
+                $validTags[$tag->id] = $tag;
+            }
+        }
+        return array_keys($validTags);
+    }
 }
