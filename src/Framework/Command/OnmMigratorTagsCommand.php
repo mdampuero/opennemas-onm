@@ -72,10 +72,17 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
 
         $instance = $this->getContainer()->get('core.loader')
             ->loadInstanceFromInternalName($instanceName);
-
         $conn->selectDatabase($instance->getDatabaseName());
-        $locale = $this->getContainer()->get('core.locale')
-            ->getLocale('frontend');
+
+        $ls = $this->getContainer()->get('core.locale');
+
+        $config = $this->getContainer()->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get('locale');
+
+        $ls->setContext('frontend')->configure($config);
+
+        $locale = $ls->getLocale('frontend');
 
         $epp        = 500;
         $page       = 0;
