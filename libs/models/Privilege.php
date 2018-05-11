@@ -1447,25 +1447,25 @@ class Privilege
                 'description'  => _('Marks this group as public'),
                 'module'       => 'INTERNAL',
             ],
-            224 => [
+            225 => [
                 'pk_privilege' => '225',
                 'name'         => 'TAG_ADMIN',
                 'description'  => _('List'),
                 'module'       => 'TAG',
             ],
-            225 => [
+            226 => [
                 'pk_privilege' => '226',
                 'name'         => 'TAG_UPDATE',
                 'description'  => _('Edit'),
                 'module'       => 'TAG',
             ],
-            226 => [
+            227 => [
                 'pk_privilege' => '227',
                 'name'         => 'TAG_DELETE',
                 'description'  => _('Delete'),
                 'module'       => 'TAG',
             ],
-            227 => [
+            228 => [
                 'pk_privilege' => '228',
                 'name'         => 'TAG_CREATE',
                 'description'  => _('Create'),
