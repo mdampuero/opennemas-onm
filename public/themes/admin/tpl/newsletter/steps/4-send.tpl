@@ -50,10 +50,9 @@
             {$item[0]->name}
             {if $item[1]}
             <i class="fa fa-check text-success"></i>
+            <span class="text-success">{$item[2]}</span>
             {else}
             <i class="fa fa-times text-danger"></i>
-            {/if}
-            {if !$item[1]}
             <span class="text-danger">{$item[2]}</span>
             {/if}
           </div>
