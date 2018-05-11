@@ -406,7 +406,7 @@ class NewsletterController extends Controller
                 _('Newsletter module settings saved successfully.')
             );
 
-            return $this->redirect($this->generateUrl('admin_newsletter_config'));
+            return $this->redirect($this->generateUrl('backend_newsletters_config'));
         }
 
         $configurations = $this->get('setting_repository')->get([
