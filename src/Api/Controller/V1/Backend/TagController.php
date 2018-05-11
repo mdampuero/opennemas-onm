@@ -203,7 +203,6 @@ class TagController extends Controller
     {
         $ts   = $this->get('api.service.tag');
         $text = $request->query->get('text', null);
-        $text = $ts->createSearchableWord($text);
 
         $msg = $this->get('core.messenger');
         if (empty($text)) {

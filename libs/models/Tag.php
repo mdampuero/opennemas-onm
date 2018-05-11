@@ -72,7 +72,14 @@ class Tag
 
         if (is_array($tags)) {
             $sqlTags = ' IN (' . substr(str_repeat(', ?', count($TAGS)), 2) . ')';
-            $params  = array_merge($tags);
+            $params  = array_merge(
+                array_map(
+                    function ($tag) {
+                        return $ts->createSearchableWord($tag);
+                    },
+                    $tags
+                )
+            );
         } else {
             $sqlTags  = ' = ?';
             $params[] = $tags;
