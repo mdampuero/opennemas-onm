@@ -1029,12 +1029,15 @@
          */
         $scope.enhanceAction = function() {
           $scope.enhance = !$scope.enhance;
-          var photoEditor = new window.OnmPhotoEditor({
-            container: 'photoEditor',
-            image: $window.instanceMedia + '/images' + $scope.selected.lastSelected.path_img,
-            closeCallBack: $scope.uploadMediaImg,
-            maximunSize: { width: 800, height: 600 }
-          });
+          var photoEditor = new window.OnmPhotoEditor(
+            {
+              container: 'photoEditor',
+              image: $window.instanceMedia + '/images' + $scope.selected.lastSelected.path_img,
+              closeCallBack: $scope.uploadMediaImg,
+              maximunSize: { width: 800, height: 600 }
+            },
+            photoEditorTranslations
+          );
 
           $('.picker-dialog').addClass('picker-photo-editor');
           photoEditor.init();
