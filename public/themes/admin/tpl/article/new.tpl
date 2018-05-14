@@ -276,6 +276,7 @@
                     </label>
                     <div class="controls">
                       <tags-input ng-model="article.metadata" min-length="2" placeholder="{t}Write a tag and press Enter...{/t}"></tags-input>
+                      <onm-tag ng-model="ffffff" />
                     </div>
                   </div>
                   <div class="form-group">

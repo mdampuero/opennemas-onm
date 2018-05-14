@@ -551,6 +551,7 @@
       @Common/src/angular-picker/js/picker.js,
       @Common/src/angular-picker/js/content-picker.js,
       @Common/src/angular-picker/js/media-picker.js,
+      @Common/src/angular-tag/js/onm-tag.js,
       @Common/src/angular-query-manager/query-manager.js,
       @Common/src/angular-renderer/renderer.js,
       @Common/src/angular-repeat-finish/repeat-finish.js,
