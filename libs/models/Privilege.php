@@ -42,7 +42,7 @@ class Privilege
      *
      * @return array The list of privileges groupd by module name.
      */
-    public function getPrivilegesByModules()
+    public static function getPrivilegesByModules()
     {
         $privileges = self::loadPrivileges();
         $grouped    = [];
