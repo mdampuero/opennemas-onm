@@ -18,7 +18,6 @@
  */
 class Article extends Content
 {
-
     const EXTRA_INFO_TYPE = 'extraInfoContents.ARTICLE_MANAGER';
 
     /**
@@ -155,6 +154,8 @@ class Article extends Content
     {
         parent::load($data);
 
+        $this->loadAllContentProperties();
+
         return $this;
     }
 
@@ -289,11 +290,11 @@ class Article extends Content
 
             return $this->id;
         } catch (\Exception $e) {
-            $conn->rollback();
             getService('error.log')->error(
                 'Error creating article (ID:' . $this->id . '): ' . $e->getMessage() .
                 ' Stack Trace: ' . $e->getTraceAsString()
             );
+            $conn->rollback();
             return false;
         }
     }
@@ -393,11 +394,11 @@ class Article extends Content
 
             return true;
         } catch (\Exception $e) {
-            $conn->rollback();
             getService('error.log')->error(
                 'Error updating article (ID:' . $this->id . '): ' . $e->getMessage() .
                 ' Stack Trace: ' . $e->getTraceAsString()
             );
+            $conn->rollback();
             return false;
         }
     }
@@ -496,7 +497,7 @@ class Article extends Content
      *
      * @return array the author data
      */
-    public function getAuthor()
+    private function getAuthor()
     {
         if (empty($this->author)) {
             $this->author = getService('user_repository')->find($this->fk_author);

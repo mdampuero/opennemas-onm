@@ -46,6 +46,10 @@ class SubscriberController extends Controller
         $msg = $this->get('core.messenger');
 
         $this->get('api.service.subscriber')->deleteItem($id);
+
+        // TODO: Remove when deprecated old user_repository
+        $this->get('core.dispatcher')->dispatch('user.delete', ['id' => $id]);
+
         $msg->add(_('Item deleted successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -194,6 +198,10 @@ class SubscriberController extends Controller
 
         $this->get('api.service.subscriber')
             ->patchItem($id, $request->request->all());
+
+        // TODO: Remove when deprecated old user_repository
+        $this->get('core.dispatcher')->dispatch('user.update', ['id' => $id]);
+
         $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -324,6 +332,9 @@ class SubscriberController extends Controller
 
         $this->get('api.service.subscriber')
             ->updateItem($id, $request->request->all());
+
+        // TODO: Remove when deprecated old user_repository
+        $this->get('core.dispatcher')->dispatch('user.update', ['id' => $id]);
 
         $msg->add(_('Item saved successfully'), 'success');
 

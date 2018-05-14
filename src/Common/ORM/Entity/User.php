@@ -74,7 +74,7 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
             $roles[] = 'ROLE_MANAGER';
         }
 
-        $roles[] = $this->type === 0 ? 'ROLE_BACKEND' : 'ROLE_FRONTEND';
+        $roles[] = $this->type !== 1 ? 'ROLE_BACKEND' : 'ROLE_FRONTEND';
 
         return array_unique($roles);
     }

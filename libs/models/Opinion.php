@@ -112,7 +112,7 @@ class Opinion extends Content
                     }
                 }
 
-                $uri = Uri::generate( $type, [
+                $uri = Uri::generate($type, [
                     'id'       => sprintf('%06d', $this->id),
                     'date'     => date('YmdHis', strtotime($this->created)),
                     'slug'     => urlencode($this->slug),

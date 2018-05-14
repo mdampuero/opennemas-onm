@@ -115,7 +115,7 @@ class Security
         }
 
         if (empty($this->categories)) {
-            return false;
+            return true;
         }
 
         return in_array($category, $this->categories);
@@ -129,10 +129,6 @@ class Security
      */
     public function hasExtension($uuid)
     {
-        if (!empty($this->user) && $this->hasPermission('MASTER')) {
-            return true;
-        }
-
         return in_array($uuid, $this->instance->activated_modules);
     }
 

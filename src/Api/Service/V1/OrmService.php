@@ -29,6 +29,13 @@ class OrmService extends Service
     protected $class;
 
     /**
+     * Wheter to return the total number of items when calling getList.
+     *
+     * @var boolean
+     */
+    protected $count = true;
+
+    /**
      * The entity manager.
      *
      * @var EntityManager
@@ -163,14 +170,31 @@ class OrmService extends Service
             $repository = $this->container->get('orm.manager')
                 ->getRepository($this->entity, $this->origin);
 
-            $total = $repository->countBy($oql);
-            $items = $repository->findBy($oql);
+            $response = [ 'items' => $repository->findBy($oql) ];
 
-            return [ 'items' => $items, 'total' => $total ];
+            if ($this->count) {
+                $response['total'] = $repository->countBy($oql);
+            }
+
+            return $response;
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new GetListException($e->getMessage(), $e->getCode());
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getListByIds($ids)
+    {
+        if (!is_array($ids) || empty($ids)) {
+            throw new GetListException('Invalid ids', 400);
+        }
+
+        $oql = $this->getOqlForIds($ids);
+
+        return $this->getList($oql);
     }
 
     /**
@@ -240,6 +264,20 @@ class OrmService extends Service
     public function responsify($item)
     {
         return $this->em->getConverter($this->entity)->responsify($item);
+    }
+
+    /**
+     * Changes the value of the count flag.
+     *
+     * @param string $count The count flag value.
+     *
+     * @return BaseService The current service.
+     */
+    public function setCount($count)
+    {
+        $this->count = $count;
+
+        return $this;
     }
 
     /**
