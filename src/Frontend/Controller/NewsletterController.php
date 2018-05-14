@@ -27,6 +27,8 @@ class NewsletterController extends Controller
      * it redirects to the /user/register action
      *
      * @return Response the response given to the user
+     *
+     * @Security("hasExtension('NEWSLETTER_MANAGER')")
      */
     public function subscribeAction()
     {
@@ -57,6 +59,8 @@ class NewsletterController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("hasExtension('NEWSLETTER_MANAGER')")
      */
     public function createSubscriptionAction(Request $request)
     {
