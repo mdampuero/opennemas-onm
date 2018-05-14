@@ -139,10 +139,10 @@ class NewsletterHelper
                 } else {
                     $sentEmails += $this->sendEmail($newsletter, $mailbox);
 
-                    $sendResults[] = [ $mailbox, (bool) $properlySent, '' ];
+                    $sendResults[] = [ $mailbox, $sentEmails > 0, '' ];
                 }
 
-                $properlySent = $sentEmails !== false;
+                $sentEmails !== false;
 
                 $remaining -= $sentEmails;
             } catch (\Exception $e) {
