@@ -239,6 +239,79 @@ class NewsletterHelper
         return ($this->mailer->send($message)) ? 1 : 0;
     }
 
+    /**
+     * Sends an email with the new subscription data
+     *
+     * @param Array $data Data for subscription
+     *
+     * @return Array Message and class to show the user
+     * @throws Exception Thrown on any problem with the external service
+     */
+    public function sendSubscriptionMail($data)
+    {
+        $settings = $this->sm->get([
+            'site_name',
+            'newsletter_maillist'
+        ]);
+
+        // Checking the type of action to do (alta/baja)
+        if ($data['subscription'] == 'alta') {
+            $subject = "Solicitud de ALTA - Boletín ";
+            $text    = [ "Solicitud de Alta en el boletín de:" ];
+
+            $message = _("You have been subscribed to the newsletter.");
+        } else {
+            $subject = "Solicitud de BAJA - Boletín ";
+            $text    = [ "Solicitud de Baja en el boletín de:" ];
+
+            $message = _("You have been unsusbscribed from the newsletter.");
+        }
+        $subject .= $settings['site_name'];
+
+        // Build mail body
+        $text[] = "Nombre: {$data['name']}";
+        $text[] = "Email: {$data['email']}";
+
+        if (!empty($data['subscritorEntity'])) {
+            $text[] = "Entidad: {$data['subscritorEntity']}";
+        }
+
+        if (!empty($data['subscritorCountry'])) {
+            $text[] = "País: {$data['subscritorCountry']}";
+        }
+
+        if (!empty($data['subscritorCommunity'])) {
+            $text[] = "Provincia de Origen: {$data['subscritorCommunity']}";
+        }
+
+        $body = implode("\r\n", $text);
+
+        //  Build the message
+        $email = \Swift_Message::newInstance();
+        $email
+            ->setSubject($subject)
+            ->setBody($body, 'text/html')
+            ->setBody(strip_tags($body), 'text/plain')
+            ->setTo([ $settings['newsletter_maillist']['subscription'] => _('Subscription form') ])
+            ->setFrom([ $data['email'] => $data['name'] ])
+            ->setSender([ 'no-reply@postman.opennemas.com' => $settings['site_name'] ]);
+
+
+        $headers = $email->getHeaders();
+        $headers->addParameterizedHeader(
+            'ACUMBAMAIL-SMTPAPI',
+            $this->instanceInternalName . ' - Newsletter subscription'
+        );
+
+        try {
+            return $this->mailer->send($email);
+        } catch (\Swift_SwiftException $e) {
+            throw new \Exception(_(
+                "Sorry, we were unable to complete your request.\n"
+                . "Check the form and try again"
+            ));
+        }
+    }
 
     /**
      * Count total mailing sends in current month
