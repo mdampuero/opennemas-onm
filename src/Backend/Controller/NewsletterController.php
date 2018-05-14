@@ -448,7 +448,7 @@ class NewsletterController extends Controller
                 _('Please fill the mail list email address in the module configuration.')
             );
 
-            return $this->redirect($this->generateUrl('admin_newsletter_config'));
+            return $this->redirect($this->generateUrl('backend_newsletter_config'));
         }
 
         // There is settings saved but we will check if they are valid
