@@ -90,14 +90,17 @@ class AmpController extends Controller
             throw new AccessDeniedException();
         }
 
-        $ccm      = new \ContentCategoryManager();
-        $category = $ccm->find(sprintf('name = "%s"', $categoryName));
+        try {
+            $category = $this->get('orm.manager')->getRepository('Category')
+                ->findOneBy(sprintf('name = "%s"', $categoryName));
 
-        if (empty($category)) {
+            $category->title = $this->get('data.manager.filter')
+                ->set($category->title)
+                ->filter('localize')
+                ->get();
+        } catch (EntityNotFoundException $e) {
             throw new ResourceNotFoundException();
         }
-
-        $category = array_pop($category);
 
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('content', $article->id, 'amp');
