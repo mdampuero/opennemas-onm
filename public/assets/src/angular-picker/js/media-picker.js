@@ -131,7 +131,7 @@
                             '</strong>' +
                           '</a>' +
                         '</li>' +
-                        '<li>' +
+                        '<li ng-if="picker.isPhotoEditorEnabled()">' +
                           '<a class="btn btn-primary ng-isolate-scope" ng-click="enhanceAction()">' +
                               '<i class="fa fa-sliders"></i>' +
                               '[% picker.params.explore.enhance %]' +
@@ -295,6 +295,7 @@
                 enabled:   [ 'photo' ],
                 available: [ 'photo', 'video' ]
               },
+              photoEditorEnabled: attrs.photoEditorEnabled && attrs.photoEditorEnabled === 'true',
 
               /**
                * Closes the current media picker.
@@ -364,6 +365,13 @@
                */
               enable: function(mode) {
                 this.modes.active = mode;
+              },
+
+              /**
+               * Checks if the photo editor is enabled.
+               */
+              isPhotoEditorEnabled: function() {
+                return this.photoEditorEnabled;
               },
 
               /**
