@@ -36,100 +36,96 @@ class ErrorController extends Controller
      */
     public function defaultAction(Request $request)
     {
-        if ($this->container->hasParameter('environment')) {
-            $environment = $this->container->getParameter('environment');
-        }
-
-        // Fetch error information
         $error = $request->attributes->get('exception');
-        $name = join('', array_slice(explode('\\', $error->getClass()), -1));
-        if (!defined('INSTANCE_UNIQUE_NAME')) {
-            define('INSTANCE_UNIQUE_NAME', 'unknown-instance');
-        }
+        $name  = basename(str_replace('\\', '/', $error->getClass()));
 
-        $errorID = strtoupper(INSTANCE_UNIQUE_NAME.'_'.uniqid());
-
-        $requestAddress = $request->getSchemeAndHttpHost().$request->getRequestUri();
         switch ($name) {
+            case 'AccessDeniedException':
+                $this->get('application.log')
+                    ->info('security.authorization.failure');
+
+                return $this->getAccessDeniedResponse($request);
+
             case 'ContentNotMigratedException':
             case 'ResourceNotFoundException':
+                $this->get('application.log')->info($name);
+
+                return $this->getNotFoundResponse();
+
             case 'NotFoundHttpException':
-                $path = $request->getRequestUri();
+                $this->get('application.log')->info($name);
 
                 // Redirect to redirectors URLs without /
-                if ($name === 'NotFoundHttpException') {
-                    $url = $this->generateUrl('frontend_redirect_content', [
-                        'slug'  => mb_ereg_replace('^\/', '', $path)
-                    ]);
-
-                    return new RedirectResponse($url, 301);
-                }
-
-                $page = new \stdClass();
-
-                error_log('Frontend page not found error at: '.$requestAddress);
-
-                // Dummy content while testing this feature
-                $page->title   = _('Unable to find the page you are looking for.');
-                $page->content = 'Whoups!';
-
-                $errorMessage = sprintf('Oups! We can\'t find anything at "%s".', $path);
-                if ($this->request->isXmlHttpRequest()) {
-                    $content = $errorMessage;
-                } else {
-                    list($positions, $advertisements) =
-                        \Frontend\Controller\ArticlesController::getAds();
-
-                    // Setup templating cache layer
-                    $this->view->setConfig('articles');
-                    $cacheID = $this->view->getCacheId('error', 404);
-
-                    $content = $this->renderView('static_pages/404.tpl', [
-                        'ads_positions'      => $positions,
-                        'advertisements'     => $advertisements,
-                        'cache_id'           => $cacheID,
-                        'category_real_name' => $page->title,
-                        'page'               => $page,
-                    ]);
-                }
-
-                $headers  = [
-                    'x-cache-for' => '1d',
-                    'x-cacheable' => true,
-                    'x-instance'  => $this->get('core.instance')->internal_name,
-                    'x-tags'      => 'instance-' . $this->get('core.instance')->internal_name . ',' . 'not-found',
-                ];
-
-                return new Response($content, 404, $headers);
-                break;
-            default:
-                // Change this handle to a more generic error template
-                $errorMessage = _('Oups! Seems that we had an unknown problem while trying to run your request.');
-
-                if ($environment == 'development') {
-                    $errorMessage = $error->getMessage();
-                }
-
-                error_log('Frontend unknown error at '.$requestAddress.' '.$error->getMessage().' '.json_encode($error->getTrace()));
-
-                // Dummy content while testing this feature
-                $page = new \stdClass();
-                $page->title   = $errorMessage;
-                $page->content = 'Whoups!';
-
-                $content = $this->renderView('static_pages/statics.tpl', [
-                    'backtrace'          => $error->getTrace(),
-                    'category_real_name' => $page->title,
-                    'environment'        => $environment,
-                    'error'              => $error,
-                    'error_id'           => $errorID,
-                    'error_message'      => $errorMessage,
-                    'page'               => $page,
+                $url = $this->generateUrl('frontend_redirect_content', [
+                    'slug'  => mb_ereg_replace('^\/', '', $request->getRequestUri())
                 ]);
 
-                return new Response($content, 500);
+                return new RedirectResponse($url, 301);
 
-                break;
+            default:
+                $this->get('error.log')->error($error->getMessage(), $error->getTrace());
+                return $this->getErrorResponse();
         }
+    }
+
+    /**
+     * Generates a response when the error is caused by an unauthorized access
+     * to a protected resolurce.
+     *
+     * @return Response The response object.
+     */
+    protected function getAccessDeniedResponse()
+    {
+        list($positions, $advertisements) =
+            \Frontend\Controller\ArticlesController::getAds();
+
+        return new Response($this->renderView('static_pages/403.tpl', [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+        ]), 403);
+    }
+
+    /**
+     * Generates a response when an unknown error happens.
+     *
+     * @return Response The response object.
+     */
+    protected function getErrorResponse()
+    {
+        $content = $this->renderView('static_pages/statics.tpl');
+
+        return new Response($content, 500);
+    }
+
+    /**
+     * Generates a response when the error is caused by a resource that could
+     * not be found.
+     *
+     * @return Response The response object.
+     */
+    protected function getNotFoundResponse()
+    {
+        list($positions, $advertisements) =
+            \Frontend\Controller\ArticlesController::getAds();
+
+        // Setup templating cache layer
+        $this->view->setConfig('articles');
+        $cacheID = $this->view->getCacheId('error', 404);
+
+        $content = $this->renderView('static_pages/404.tpl', [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'cache_id'       => $cacheID,
+        ]);
+
+        return new Response($content, 404, [
+            'x-cache-for' => '1d',
+            'x-cacheable' => true,
+            'x-instance'  => $this->get('core.instance')->internal_name,
+            'x-tags'      => sprintf(
+                'instance-%s,not-found',
+                $this->get('core.instance')->internal_name
+            )
+        ]);
     }
 }

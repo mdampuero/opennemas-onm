@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-24 13:44+0000\n"
-"PO-Revision-Date: 2018-04-24 15:45+0200\n"
+"POT-Creation-Date: 2018-04-26 15:40+0000\n"
+"PO-Revision-Date: 2018-04-26 17:44+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -1829,9 +1829,6 @@ msgid "Unable to send the email. Please try to send it later."
 msgstr ""
 "No fue posible enviar el correo electrónico. Por favor inténtalo más tarde."
 
-msgid "Unable to find the page you are looking for."
-msgstr "No se pudo encontrar la página que estabas buscando."
-
 msgid "Email is required but it will not be published"
 msgstr "El email es obligatorio aunque no se publicará"
 
@@ -2878,6 +2875,54 @@ msgstr "Ejecutar"
 msgid "Marks this group as public"
 msgstr "Marca este grupo como público"
 
+msgid "Send newsletter"
+msgstr "Enviar boletín de noticias"
+
+msgid "Hide advertisements"
+msgstr "Ocultar publicidad"
+
+msgid "Requires payment"
+msgstr "Pago requerido"
+
+msgid "Hide print button"
+msgstr "Ocultar botón de imprimir"
+
+msgid "Hide social networks buttons"
+msgstr "Ocultar botones de redes sociales"
+
+msgid "Block browser actions (cut, copy,...)"
+msgstr "Bloquear acciones del navegador (cortar, copiar,...)"
+
+msgid "Block access to content"
+msgstr "Bloquear acceso al contenido"
+
+msgid "Hide title"
+msgstr "Ocultar título"
+
+msgid "Hide summary"
+msgstr "Ocultar entradilla"
+
+msgid "Hide body"
+msgstr "Ocultar cuerpo"
+
+msgid "Hide pretitle"
+msgstr "Ocultar antetítulo"
+
+msgid "Hide media"
+msgstr "Ocultar media"
+
+msgid "Hide related contents"
+msgstr "Ocultar contenidos relacionados"
+
+msgid "Hide content information"
+msgstr "Ocultar información del contenido"
+
+msgid "Hide tags"
+msgstr "Ocultar etiquetas"
+
+msgid "Prevent search engine indexation"
+msgstr "Evitar el indexado de motores de búsqueda"
+
 msgid "Static Page"
 msgstr "Página estática"
 
@@ -3265,12 +3310,8 @@ msgstr ""
 msgid "Restore selected items"
 msgstr "Restaurar elementos seleccionados"
 
-msgid ""
-"Are you sure you want to restore [% template.selected.contents.length %] "
-"item(s)?"
-msgstr ""
-"¿Estás seguro de que quieres restaurar [% template.selected.contents.length "
-"%] elemento(s)?"
+msgid "Are you sure you want to restore %1 item(s)?"
+msgstr "¿Estás seguro de que quieres restaurar %1 elemento(s)?"
 
 msgid "Yes, restore them all"
 msgstr "Si, restaurarlos todos"
@@ -3281,12 +3322,8 @@ msgstr "No"
 msgid "Restore item"
 msgstr "Restaurar elemento"
 
-msgid ""
-"Are you sure that do you want restore from trash \"[% template.content.title "
-"%]\"?"
-msgstr ""
-"¿Estás seguro de que quieres restaurar de la papelera \"[% template.content."
-"title %]\"?"
+msgid "Are you sure that do you want restore from trash \"%1\"?"
+msgstr "¿Estás seguro de que quieres restaurar de la papelera \"%1\"?"
 
 msgid "Yes, restore"
 msgstr "Si, restaurar"
@@ -3317,12 +3354,8 @@ msgstr "Mantener"
 msgid "Permanently remove item"
 msgstr "Eliminar de forma permanente el elemento"
 
-msgid ""
-"Are you sure that do you want remove permanently from trash \"[% template."
-"content.title %]\"?"
-msgstr ""
-"¿Estás seguro de que quieres eliminar de forma permanente \"[% template."
-"content.title %]\"?"
+msgid "Are you sure that do you want remove permanently from trash \"%1\"?"
+msgstr "¿Estás seguro de que quieres eliminar de forma permanente \"%1\"?"
 
 msgid " You will not be able to restore it back."
 msgstr "No podrás restaurarlos"
@@ -3333,12 +3366,8 @@ msgstr "Si, eliminar"
 msgid "Delete selected items"
 msgstr "Eliminar elementos seleccionados"
 
-msgid ""
-"Are you sure you want to delete [% template.selected.contents.length %] "
-"item(s)?"
-msgstr ""
-"¿Estás seguro de que quieres eliminar [% template.selected.contents.length "
-"%] elemento(s)?"
+msgid "Are you sure you want to delete %1 item(s)?"
+msgstr "¿Estás seguro de que quieres eliminar %1 elemento(s)?"
 
 msgid "Deleting"
 msgstr "Eliminando"
@@ -3346,12 +3375,8 @@ msgstr "Eliminando"
 msgid "Yes, delete all"
 msgstr "Si, eliminarlos todos"
 
-msgid ""
-"Are you sure that do you want send to the trash \"[% template.content."
-"title ? template.content.title : template.content.name %]\"?"
-msgstr ""
-"¿Estás seguro de que quieres enviar a la papelera \"[% template.content."
-"title ? template.content.title : template.content.name %]\"?"
+msgid "Are you sure that do you want send to the trash \"%1\"?"
+msgstr "¿Estás seguro de que quieres enviar a la papelera \"%1\"?"
 
 msgid "Yes, delete"
 msgstr "Si, eliminar"
@@ -3385,19 +3410,11 @@ msgstr ""
 "Esto quitará los contenidos seleccionados de <strong>TODAS LAS PORTADAS</"
 "strong> pero seguirán disponibles para su lectura."
 
-msgid "Are you sure you want to delete [% template.selected %] item(s)?"
-msgstr ""
-"¿Estás seguro de que quieres eliminar [% template.selected %] elemento(s)?"
-
 msgid "Remove permanently selected items"
 msgstr "Eliminar de forma permanente los elementos seleccionados"
 
-msgid ""
-"Are you sure you want to remove permanently [% template.selected.contents."
-"length %] item(s)?"
-msgstr ""
-"¿Estás seguro de que quieres eliminar de forma permanente [% template."
-"selected.length %] elemento(s)?"
+msgid "Are you sure you want to remove permanently %1 item(s)?"
+msgstr "¿Está seguro de que quiere eliminar de forma permanente %1 elemento(s)?"
 
 msgid " You will not be able to restore them back."
 msgstr "No podrás restaurarlos."
@@ -3408,61 +3425,29 @@ msgstr "Si, eliminarlos todos"
 msgid "Update selected items"
 msgstr "Actualizar los elementos seleccionados"
 
-msgid ""
-"Are you sure you want to unpublish [% template.selected.contents.length %] "
-"item(s)?"
-msgstr ""
-"¿Estás seguro de que quieres despublicar [% template.selected.contents."
-"length %] elemento(s)?"
+msgid "Are you sure you want to unpublish %1 item(s)?"
+msgstr "¿Estás seguro de que quieres despublicar %1 elemento(s)?"
 
-msgid ""
-"Are you sure you want to publish [% template.selected.contents.length %] "
-"item(s)?"
-msgstr ""
-"¿Estás seguro de que quieres publicar [% template.selected.contents.length "
-"%] elemento(s)?"
+msgid "Are you sure you want to publish %1 item(s)?"
+msgstr "¿Estás seguro de que quieres publicar %1 elemento(s)?"
 
-msgid ""
-"Are you sure you want to disable [% template.selected.contents.length %] "
-"item(s)?"
-msgstr ""
-"¿Estás seguro de que quieres desactivar [% template.selected.contents.length "
-"%] elemento(s)?"
+msgid "Are you sure you want to disable %1 item(s)?"
+msgstr "¿Estás seguro de que quieres desactivar %1 elemento(s)?"
 
-msgid ""
-"Are you sure you want to enable [% template.selected.contents.length %] "
-"item(s)?"
-msgstr ""
-"¿Estás seguro de que quieres activar [% template.selected.contents.length %] "
-"elemento(s)?"
+msgid "Are you sure you want to enable %1 item(s)?"
+msgstr "¿Estás seguro de que quieres activar %1 elemento(s)?"
 
-msgid ""
-"Are you sure you want to reject [% template.selected.contents.length %] "
-"item(s)?"
-msgstr ""
-"¿Estás seguro de que quieres rechazar [% template.selected.contents.length "
-"%] elemento(s)?"
+msgid "Are you sure you want to reject %1 item(s)?"
+msgstr "¿Estás seguro de que quieres rechazar %1 elemento(s)?"
 
-msgid ""
-"Are you sure you want to accept [% template.selected.contents.length %] "
-"item(s)?"
-msgstr ""
-"¿Estás seguro de que quieres aceptar [% template.selected.contents.length %] "
-"elemento(s)?"
+msgid "Are you sure you want to accept %1 item(s)?"
+msgstr "¿Estás seguro de que quieres aceptar %1 elemento(s)?"
 
-msgid ""
-"Are you sure you want to drop from home [% template.selected.contents.length "
-"%] item(s)?"
-msgstr ""
-"¿Estás seguro de que quieres sacar de la portada [% template.selected."
-"contents.length %] elemento(s)?"
+msgid "Are you sure you want to drop from home %1 item(s)?"
+msgstr "¿Está seguro de que quiere quitar de la portada %1 elemento(s)?"
 
-msgid ""
-"Are you sure you want to add to home [% template.selected.contents.length %] "
-"item(s)?"
-msgstr ""
-"¿Estás seguro de que quieres añadir a la portada [% template.selected."
-"contents.length %] elemento(s)?"
+msgid "Are you sure you want to add to home %1 item(s)?"
+msgstr "¿Estás seguro de que quieres añadir a la portada %1 elemento(s)?"
 
 msgid "Yes, update all"
 msgstr "Si, actualizar todos"
@@ -3690,9 +3675,8 @@ msgstr "Enlace para correo-e a"
 msgid "Edit this content"
 msgstr "Editar este contenido"
 
-msgid "Are you sure that do you want remove \"[% template.content.title %]\"?"
-msgstr ""
-"¿Estás seguro de que quieres eliminar \"[% template.content.title %]\"?"
+msgid "Are you sure that do you want remove \"%1\"?"
+msgstr "¿Estás seguro de que quieres eliminar \"%1\"?"
 
 msgid "Sidebars"
 msgstr "Barras laterales"
@@ -4368,8 +4352,15 @@ msgstr "Hora del sistema:"
 msgid "Publication end date"
 msgstr "Fecha de final de publicación"
 
-msgid "Only available for subscribers"
-msgstr "Solo disponible para subscriptores"
+msgid "There are no enabled <a href=\"%1\">subscriptions</a>"
+msgstr "No hai <a href=\"%1\">suscripciones</a> disponibles"
+
+msgid ""
+"The content will be fully available only for subscribers in the selected "
+"subscriptions"
+msgstr ""
+"El contenido estará disponible por completo solo para los suscriptores de "
+"las suscripciones seleccionadas"
 
 msgid "Additional data"
 msgstr "Datos adicionales"
@@ -5102,11 +5093,9 @@ msgstr ""
 "sistema para gestionar los comentarios de su sitio web."
 
 msgid ""
-"Are you sure that do you want send to the trash this comment from \"[% "
-"template.content.author %]\"?"
+"Are you sure that do you want send to the trash this comment from \"%1\"?"
 msgstr ""
-"¿Estás seguro de que quieres enviar a la papelera este comentario de \"[% "
-"template.content.author %]\"?"
+"¿Estás seguro de que quieres enviar a la papelera este comentario de \"%1\"?"
 
 msgid "Editing comment"
 msgstr "Editando comentario"
@@ -5487,14 +5476,20 @@ msgstr "No se pudieron encontrar páginas que coincidan con tu búsqueda."
 msgid "Open in a new window"
 msgstr "Abrir en una nueva ventana"
 
-msgid "Convert to subscriber + user"
-msgstr "Convertir a suscriptor + usuario"
+msgid "Convert to"
+msgstr "Convertir a"
 
-msgid "Convert to user"
-msgstr "Convertir a usuario"
+msgid "subscriber"
+msgstr "suscriptor"
+
+msgid "user"
+msgstr "usuario"
 
 msgid "Enabled"
 msgstr "Activado"
+
+msgid "There are no <a href=\"%1\">subscriptions</a>"
+msgstr "No hai <a href=\"%1\">suscripciones</a> disponibles"
 
 msgid "Subscribed"
 msgstr "Suscrito"
@@ -5511,46 +5506,32 @@ msgstr "Las contraseñas no coinciden"
 msgid "Select a country"
 msgstr "Seleccione un país"
 
-msgid ""
-"Do you want to convert the <strong>subscriber<span ng-if=\"template.item."
-"type === 2\"> + user</span></strong> to <strong>user</strong>?"
-msgstr ""
-"¿Quieres convertir el <strong>suscriptor<span ng-if=\"template.item.type === "
-"2\"> + usuario</span></strong> a <strong>usuario</strong>?"
+msgid "Do you want to convert the <strong>%1</strong> to <strong>%2</strong>?"
+msgstr "¿Quieres convertir el <strong>%1</strong> a <strong>%2</strong>?"
 
 msgid ""
-"Do you want to convert the <strong>subscriber</strong> to <strong>subscriber "
-"+ user</strong>?"
+"This means the item will not be a %1 anymore. It will only appear in the "
+"list of users and the subscriptions will be removed too."
 msgstr ""
-"¿Quieres convertir el <strong>suscriptor</strong> a <strong>suscriptor + "
-"usuario</strong>?"
+"Esto significa que el elemento dejará de ser %1. Sólo aparecerá en el "
+"listado de usuarios y se le eliminarán las suscripciones asociadas."
 
 msgid ""
-"This means the subscriber will not be a subscriber anymore. The user will "
-"only appear in the list of users and the subscriptions will be removed too."
+"This means the item will not be a  anymore. It will only appear in the list "
+"of subscribers and the user groups will be removed too."
 msgstr ""
-"Esto significa que el suscriptor dejará de ser suscriptor. El usuario solo "
-"aparecerá en el listado de usuarios y se le eliminarán las suscripciones "
-"asociadas."
-
-msgid "You will be able to convert the user to subscriber again."
-msgstr "Podrás convertir el usuario en subscriptor de nuevo."
+"Esto significa que el elemento dejará de ser %2. Sólo aparecerá en el "
+"listado de suscriptores y se le eliminarán los grupos de usuarios asociadas."
 
 msgid ""
-"This means the subscriber will be a subscriber and a user in the system. It "
-"will appear in both list of users and list of subscribers. The subscriptions "
-"will not be modified."
+"This means the item will be a subscriber and a user in the system. It will "
+"appear in the list of users and the list of subscribers."
 msgstr ""
-"Esto significa que el suscriptor será un suscriptor y un usuario del "
-"sistema. Aparecerá en los listados de usuarios y suscriptores. Las "
-"suscripciones no serán modificadas."
+"Esto significa que el elemento será un suscriptor y un usuario del sistema. "
+"Aparecerá en los listados de usuarios y suscriptores."
 
-msgid ""
-"You will be able to convert the subscriber + user to only user or only "
-"subscriber again."
-msgstr ""
-"Podrás convertir el suscriptor + usuario a solo usuario o solosuscriptor de "
-"nuevo."
+msgid "You will be able to convert the item again in the future."
+msgstr "Podrá convertir el elemento de nuevo en el futuro."
 
 msgid "Config users module"
 msgstr "Configurar el módulo usuarios"
@@ -5839,8 +5820,8 @@ msgstr "No se pudieron encontrar widgets que coincidan con tu búsqueda."
 msgid "There is no available widgets"
 msgstr "Non hay ningún widget"
 
-msgid "Edit widget '[% content.title %]'"
-msgstr "Editar widget '[% content.title %]'"
+msgid "Edit widget '%1'"
+msgstr "Editar widget «%1»"
 
 msgid "User Groups"
 msgstr "Grupos de usuarios"
@@ -6037,11 +6018,8 @@ msgstr "Eliminar ficheros locales"
 msgid "Import items"
 msgstr "Importar elementos"
 
-msgid ""
-"Are you sure you want to import [% template.contents.length %] elements?"
-msgstr ""
-"¿Estás seguro de que quieres importar [% template.contents.length %] "
-"elementos?"
+msgid "Are you sure you want to import %1 elements?"
+msgstr "¿Estás seguro de que quieres importar %1 elemento(s)?"
 
 msgid "Import"
 msgstr "Importar"
@@ -6242,11 +6220,9 @@ msgid "Add Container label"
 msgstr "Añadir nombre del contenedor"
 
 msgid ""
-"Are you sure that you want to delete the subscriber with the mail \"[% "
-"template.content.email %]\"?"
+"Are you sure that you want to delete the subscriber with the mail \"%1\"?"
 msgstr ""
-"¿Está seguro de que quiere eliminar el suscriptor con el correo-e \"[% "
-"template.content.email %]\"?"
+"¿Está seguro de que quiere eliminar el suscriptor con el correo-e \"%1\"?"
 
 msgid "Delete videos"
 msgstr "Eliminar vídeos"
@@ -6731,8 +6707,8 @@ msgstr "¿Está seguro de que quiere eliminar <span>%num%</span> álbumes?"
 msgid "Delete album"
 msgstr "Eliminar álbum"
 
-msgid "Are you sure that do you want delete \"[% content.name %]\"?"
-msgstr "¿Estás seguro de que quieres eliminar \"[% content.name %]\"?"
+msgid "Are you sure that do you want delete \"%1\"?"
+msgstr "¿Estás seguro de que quieres eliminar \"%1\"?"
 
 msgid "Editing album"
 msgstr "Editando álbum"
@@ -6925,12 +6901,8 @@ msgstr "Principal"
 msgid "Customize the language appears in the URL (e.g. en)."
 msgstr "Personalizar el idioma que aparece en la URL (e.g. en)."
 
-msgid ""
-"URLs will look like http://newspaper.opennemas.com/[% settings.locale."
-"frontend.language.slug[item.code] %]/<slug>"
-msgstr ""
-"Las URLs seran como http://periodico.opennemas.com/[% settings.locale."
-"frontend.language.slug[item.code] %]/<slug>"
+msgid "URLs will look like http://newspaper.opennemas.com/%1/<slug>"
+msgstr "Las URLs seran como http://periodico.opennemas.com/%1/<slug>"
 
 msgid "Locale needs 2 characters"
 msgstr "El locale necesita 2 caracteres"
@@ -7854,12 +7826,8 @@ msgstr "Actualiza tus registros de DNS"
 msgid "Point the www entrace in your domain to the Opennemas service."
 msgstr "Apunta la entrada www de tu dominio al servicio Opennemas."
 
-msgid ""
-"Redirect traffic from [% domain.name.replace('www.', '') %] to  www.[% "
-"domain.name.replace('www.', '') %]"
-msgstr ""
-"Redirigir tráfico desde [% domain.name.replace('www.', '') %] hacia  www.[% "
-"domain.name.replace('www.', '') %]"
+msgid "Redirect traffic from %1 to  www.%2"
+msgstr "Redirigir tráfico desde %1 a www.%2"
 
 msgid ""
 "Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done "
@@ -8287,24 +8255,15 @@ msgstr ""
 msgid "Features for members"
 msgstr "Características para miembros"
 
-msgid "Send newsletter"
-msgstr "Enviar boletín de noticias"
-
 msgid ""
 "If enabled, this subscription will be selectable when creating newsletters"
 msgstr ""
 "Si está activado, esta suscripción será seleccionable cuando se creen "
 "boletines de noticias"
 
-msgid "Hide advertisements"
-msgstr "Ocultar publicidad"
-
 msgid "If enabled, advertisements will be disabled when using safeframe"
 msgstr ""
 "Si está activado, la publicidad se deshabilitará cuando se use safeframe"
-
-msgid "Requires payment"
-msgstr "Pago requerido"
 
 msgid "If enabled, this subscription will require a payment to become a member"
 msgstr ""
@@ -8314,21 +8273,12 @@ msgstr ""
 msgid "Restrictions"
 msgstr "Restricciones"
 
-msgid "Hide print button"
-msgstr "Ocultar botón de imprimir"
-
 msgid "If enabled, button to print contents will be hidden"
 msgstr "Si está activado, se ocultará el botón de imprimir contenidos"
-
-msgid "Hide social buttons"
-msgstr "Ocultar botones de redes sociales"
 
 msgid "If enabled, button to share contents in social networks will be hidden"
 msgstr ""
 "Si está activado, se ocultarán los botones para compartir en redes sociais"
-
-msgid "Block browser actions (cut, copy,...)"
-msgstr "Bloquear acciones del navegador (cortar, copiar,...)"
 
 msgid "If enabled, some browser actions (e.g. cut, copy,...) will be blocked"
 msgstr ""
@@ -8338,42 +8288,24 @@ msgstr ""
 msgid "Restrictions for non-members"
 msgstr "Restricciones para no-miembros"
 
-msgid "Redirect to frontpage"
-msgstr "Redirigir a portada"
+msgid "Access"
+msgstr "Acceder"
 
 msgid ""
-"If enabled, non-members will be redirect to frontpage when accessing "
-"contents in this subscription"
+"If enabled, non-members will not be able to access to contents in this "
+"subscription"
 msgstr ""
-"Si está activado, los no-miembros serán redirigidos a portada cuando accedan "
-"a contenidos de esta suscripción"
+"Si está activado, los no-miembros no podrán acceder al contenido de esta "
+"suscripción."
+
+msgid "Indexation"
+msgstr "Indexado"
+
+msgid "If enabled, the noindex directive will be added to the HTML"
+msgstr "Si está activado, se añadirá la directiva noindex al HTML"
 
 msgid "Hide information"
 msgstr "Ocultar información"
-
-msgid "Hide title"
-msgstr "Ocultar título"
-
-msgid "Hide summary"
-msgstr "Ocultar entradilla"
-
-msgid "Hide body"
-msgstr "Ocultar cuerpo"
-
-msgid "Hide pretitle"
-msgstr "Ocultar antetítulo"
-
-msgid "Hide media"
-msgstr "Ocultar media"
-
-msgid "Hide related contents"
-msgstr "Ocultar contenidos relacionados"
-
-msgid "Hide content information"
-msgstr "Ocultar información del contenido"
-
-msgid "Hide tags"
-msgstr "Ocultar etiquetas"
 
 msgid ""
 "Some information will be hidden for non-members when accessing contents in "
@@ -8381,6 +8313,9 @@ msgid ""
 msgstr ""
 "Alguna información será ocultada para no-miembros cuando accedan a "
 "contenidos en esta suscripción"
+
+msgid "Block actions"
+msgstr "Bloquear acciones"
 
 msgid "Group name"
 msgstr "Nombre del grupo"
@@ -9165,372 +9100,3 @@ msgstr "reiniciar"
 
 msgid "apply"
 msgstr "aplicar"
-
-#~ msgid "You are a master"
-#~ msgstr "Eres un master"
-
-#~ msgid "Request"
-#~ msgstr "Solicitud"
-
-#~ msgid "Edit group"
-#~ msgstr "Editar grupo"
-
-#~ msgid "New user group"
-#~ msgstr "Nuevo grupo de usuarios"
-
-#~ msgid "Edit user group"
-#~ msgstr "Editar grupo de usuario"
-
-#~ msgid "New user"
-#~ msgstr "Nuevo usuario"
-
-#, fuzzy
-#~ msgid "Unable to find any subscriber with id \"%1\"."
-#~ msgstr "No se pudo encontrar el usuario con el identificador «%d»"
-
-#, fuzzy
-#~ msgid "Unable to find any user with id \"%1\"."
-#~ msgstr "No se pudo encontrar el usuario con el identificador «%d»"
-
-#, fuzzy
-#~ msgid "Unable to find any user group with id \"%1\"."
-#~ msgstr "No se pudo encontrar el grupo de usuario con el identificador «%d»"
-
-#, fuzzy
-#~ msgid "Unable to find any subscription with id \"%1\"."
-#~ msgstr ""
-#~ "No se pudo encontrar el artículo de opinión con el identificador «%d»"
-
-#~ msgid "[% section.title %]"
-#~ msgstr "[% section.title %]"
-
-#, fuzzy
-#~ msgid "Unable to find any subscriber that matches your search."
-#~ msgstr "No se pudieron encontrar usuarios que coincidan con tu búsqueda."
-
-#~ msgid "Unable to find any author that matches your search."
-#~ msgstr "No se pudieron encontrar autores que coincidan con tu búsqueda."
-
-#~ msgid "Unable to find any user group that matches your search."
-#~ msgstr ""
-#~ "No se pudieron encontrar grupos de usuarios que coincidan con tu búsqueda."
-
-#~ msgid "Unable to find any user that matches your search."
-#~ msgstr "No se pudieron encontrar usuarios que coincidan con tu búsqueda."
-
-#, fuzzy
-#~ msgid "Unable to find any subscription that matches your search."
-#~ msgstr "No se pudieron encontrar usuarios que coincidan con tu búsqueda."
-
-#~ msgid "Unable to find the author with the id '%d'"
-#~ msgstr "No se pudo encontrar el autor con el identificador «%d»"
-
-#~ msgid "User created successfully."
-#~ msgstr "Usuario creado correctamente."
-
-#~ msgid "Author updated successfully."
-#~ msgstr "Autor actualizado correctamente."
-
-#~ msgid "Undefined"
-#~ msgstr "No definido"
-
-#~ msgid ""
-#~ "Unable to find the password reset request.  Please check the url we sent "
-#~ "you in the email."
-#~ msgstr ""
-#~ "No se pudo encontrar la solicitud de reinicio de contraseña. Por favor "
-#~ "comprueba la URL que te enviamos por correo electrónico."
-
-#~ msgid "The email address or user name is already in use."
-#~ msgstr ""
-#~ "La dirección de correo electrónico o nombre de usuario ya está en uso."
-
-#~ msgid "User data updated successfully."
-#~ msgstr "Datos del usuario actualizados correctamente."
-
-#~ msgid "User group created successfully."
-#~ msgstr "Grupo de usuarios creado correctamente."
-
-#~ msgid "User group updated successfully."
-#~ msgstr "Grupo de usuario actualizado correctamente."
-
-#~ msgid "Unable to update the user group with id \"%d\""
-#~ msgstr "No se pudo actualizar el grupo de usuario con el identificador «%d»"
-
-#~ msgid "Not assigned"
-#~ msgstr "No asignado"
-
-#~ msgid "Are you sure that do you want to delete \"<span>%title%</span>\"?"
-#~ msgstr "¿Estás seguro de que quieres eliminar \"<span>%title%</span>\"?"
-
-#~ msgid "Editing group"
-#~ msgstr "Editando grupo"
-
-#~ msgid "Creating user group"
-#~ msgstr "Creando grupo de usuarios"
-
-#~ msgid "Delete this user group"
-#~ msgstr "Eliminar este grupo de usuario"
-
-#~ msgid ""
-#~ "Are you sure that you want to delete the user \"[% template.content.name "
-#~ "%]\"?"
-#~ msgstr ""
-#~ "¿Estás seguro de que quieres eliminar el usuario \"[% template.content."
-#~ "name %]\"?"
-
-#~ msgid ""
-#~ "Activate the access to Backend means to add a User to your platform and "
-#~ "has a cost of 12€/month."
-#~ msgstr ""
-#~ "Al activar un usuario con acceso al Panel de control se añade un Usuario "
-#~ "a tu plataforma y esto tiene un coste de 12€/mes."
-
-#~ msgid "Are you sure you want to create a new user?"
-#~ msgstr "¿Está seguro de que quiere crear un usuario?"
-
-#~ msgid "Are you sure you want to update the user?"
-#~ msgstr "¿Estás seguro de que quieres actualizar el usuario?"
-
-#~ msgid ""
-#~ "Are you sure you want to disable [% template.selected.items.length %] "
-#~ "user(s)?"
-#~ msgstr ""
-#~ "¿Estás seguro de que quieres desactivar [% template.selected.items.length "
-#~ "%] usuario(s)?"
-
-#~ msgid ""
-#~ "Are you sure you want to enable [% template.selected.items.length %] "
-#~ "user(s)?"
-#~ msgstr ""
-#~ "¿Estás seguro de que quieres activar [% template.selected.items.length %] "
-#~ "usuario(s)?"
-
-#~ msgid "Yes, save it"
-#~ msgstr "Si, guardar"
-
-#~ msgid "Yes, update it"
-#~ msgstr "Si, actualizar"
-
-#~ msgid "Editing user"
-#~ msgstr "Editando usuario"
-
-#~ msgid "Creating user"
-#~ msgstr "Creando usuario"
-
-#~ msgid "Only lowercase letters, numbers, point and hyphen allowed"
-#~ msgstr "Sólo letras minúsculas, números, puntos y guión están permitidos"
-
-#~ msgid ""
-#~ "If you want a custom avatar sign up in <a href='http://www.gravatar."
-#~ "com'>gravatar.com</a> with the same email address as you have here in "
-#~ "Opennemas"
-#~ msgstr ""
-#~ "Si quieres usar un avatar personalizado regístrate en <a href='http://www."
-#~ "gravatar.com'>gravatar.com</a> y asegúrate de usar el mismo correo "
-#~ "electrónico que tienes aquí en Opennemas"
-
-#~ msgid "Has backend access"
-#~ msgstr "Acceso al panel"
-
-#~ msgid "Used to enable or disable user access to control panel."
-#~ msgstr "Úsalo para activar o desactivar el acceso al panel de control."
-
-#~ msgid "User group"
-#~ msgstr "Grupo de usuarios"
-
-#~ msgid "Select"
-#~ msgstr "Seleccionar"
-
-#~ msgid ""
-#~ "Categories that this user will have access to. Leave empty to give access "
-#~ "to all categories"
-#~ msgstr ""
-#~ "Categorías a las que este usuario tiene acceso. Déjalo en blanco para dar "
-#~ "acceso a todas las categorías."
-
-#~ msgid "Paywall time limit:"
-#~ msgstr "Tiempo límite de Paywall:"
-
-#~ msgid "Deactivated"
-#~ msgstr "Desactivado"
-
-#~ msgid "Avatar"
-#~ msgstr "Avatar"
-
-#~ msgid "Backend access"
-#~ msgstr "Acceso al panel"
-
-#~ msgid "Editing author"
-#~ msgstr "Editando autor"
-
-#~ msgid "Creating author"
-#~ msgstr "Creando autor"
-
-#~ msgid "User info"
-#~ msgstr "Información de usuario"
-
-#~ msgid "Other Blog Url"
-#~ msgstr "Otra url de blog"
-
-#~ msgid "Create new author"
-#~ msgstr "Crear nuevo autor"
-
-#~ msgid "Recover password"
-#~ msgstr "Recuperar contraseña"
-
-#~ msgid ""
-#~ "Your user is not allowed to access, please contact your administrator"
-#~ msgstr ""
-#~ "Tu usuario no tiene permitido el acceso, contacta con tu administrador"
-
-#~ msgid "Unable to find an user linked to that account."
-#~ msgstr "No se pudo encontrar un usuario asociado a esa cuenta."
-
-#~ msgid "First you have to link your %s account to your opennemas account."
-#~ msgstr "Primero debe asociar la cuenta %s a la cuenta opennemas."
-
-#~ msgid "Enable cookies agreement"
-#~ msgstr "Activar aceptación de cookies"
-
-#~ msgid ""
-#~ "Mark this if you want to show a message to your users that your site is "
-#~ "using cookies."
-#~ msgstr ""
-#~ "Marca esta casilla si quieres mostrarle un mensaje a tus usuarios que les "
-#~ "informe que tu sitio web está usando cookies."
-
-#~ msgid "Where to show this ad"
-#~ msgstr "Donde mostrar esta publicidad"
-
-#~ msgid "Pages of type"
-#~ msgstr "Páginas del tipo"
-
-#~ msgid "Gallery: frontpage"
-#~ msgstr "Galería: portada"
-
-#~ msgid "Gallery: inner"
-#~ msgstr "Galería: interior"
-
-#~ msgid "AMP inner article - Button 1"
-#~ msgstr "Artículo interior AMP - Botón 1"
-
-#~ msgid "AMP inner article - Button 2"
-#~ msgstr "Artículo interior AMP - Botón 2"
-
-#~ msgid "AMP inner article - Button 3"
-#~ msgstr "Artículo interior AMP - Botón 3"
-
-#~ msgid "Instant Articles inner article - Button 1"
-#~ msgstr "Artículo interior Instant Articles - Botón 1"
-
-#~ msgid "Instant Articles inner article - Button 2"
-#~ msgstr "Artículo interior Instant Articles - Botón 2"
-
-#~ msgid "Instant Articles inner article - Button 3"
-#~ msgstr "Artículo interior Instant Articles - Botón 3"
-
-#~ msgid "Category created successfully."
-#~ msgstr "Categoría creada correctamente."
-
-#~ msgid "Unable to find a category for the given id."
-#~ msgstr ""
-#~ "No se pudo encontrar una categoría con el identificador proporcionado."
-
-#~ msgid "Category \"%s\" updated successfully."
-#~ msgstr "Categoría «%s» actualizada correctamente."
-
-#~ msgid "ePaper"
-#~ msgstr "ePapel"
-
-#~ msgid "Delete all the contents in this category"
-#~ msgstr "Eliminar todos los contenidos en esta categoría"
-
-#~ msgid "-- All --"
-#~ msgstr "-- Todos -- "
-
-#~ msgid "Album Categories"
-#~ msgstr "Categorías de álbum"
-
-#~ msgid "Video Categories"
-#~ msgstr "Categorías de vídeo"
-
-#~ msgid "Poll Categories"
-#~ msgstr "Categorías de encuestas"
-
-#~ msgid "Sync Categories"
-#~ msgstr "Sincronizar categorías"
-
-#~ msgid "Automatic Categories"
-#~ msgstr "Categorías automáticas"
-
-#~ msgid "Add item"
-#~ msgstr "Añadir elemento"
-
-#~ msgid "Menu contents"
-#~ msgstr "Contenidos del menú"
-
-#~ msgid "Permanence"
-#~ msgstr "Permanencia"
-
-#~ msgid "Viewed:"
-#~ msgstr "Visualizaciones:"
-
-#~ msgid ""
-#~ "You can get your Facebook App Keys from <a class=\"external-link\" ng-"
-#~ "click=\"$event.stopPropagation();\"  href=\"https://developers.facebook."
-#~ "com/apps\" target=\"_blank\">Facebook Developers website</a>."
-#~ msgstr ""
-#~ "Puedes obtener tus llaves de aplicación de Facebook desde <a class="
-#~ "\"external-link\" ng-click=\"$event.stopPropagation();\" href=\"https://"
-#~ "developers.facebook.com/apps\" target=\"_blank\">el sitio web Facebook "
-#~ "Developers</a>."
-
-#~ msgid "Site logo"
-#~ msgstr "Logo del sitio"
-
-#~ msgid "Pick image"
-#~ msgstr "Escoger imagen"
-
-#~ msgid "SEO"
-#~ msgstr "SEO"
-
-#~ msgid "Web Master Tools"
-#~ msgstr "Web Master Tools"
-
-#~ msgid "Default language"
-#~ msgstr "Idioma por defecto"
-
-#~ msgid "Listing & sorting"
-#~ msgstr "Listados y ordenación"
-
-#~ msgid "Remove File"
-#~ msgstr "Eliminar fichero"
-
-#~ msgid "Add another"
-#~ msgstr "Añadir otro"
-
-#~ msgid "Google+ and YouTube"
-#~ msgstr "Google+ y YouTube"
-
-#~ msgid "Language to translate"
-#~ msgstr "Lenguaje de destino"
-
-#~ msgid "Translation service"
-#~ msgstr "Servicio de traducción"
-
-#~ msgid ""
-#~ "We use cookies to personalise content and ads, to provide social media "
-#~ "features and to analyse our traffic. We also share information about your "
-#~ "use of our site with our social media, advertising and analytics partners "
-#~ "who may combine it with other information you’ve provided to them or "
-#~ "they’ve collected from your use of their services. <a target=\"_blank\" "
-#~ "href=\"%s\"> See details &gt; </a>"
-#~ msgstr ""
-#~ "Las cookies de este sitio web se usan para personalizar el contenido y "
-#~ "los anuncios, ofrecer funciones de redes sociales y analizar el tráfico. "
-#~ "Además, compartimos información sobre el uso que haga del sitio web con "
-#~ "nuestros partners de redes sociales, publicidad y análisis web, quienes "
-#~ "pueden combinarla con otra información que les haya proporcionado o que "
-#~ "hayan recopilado a partir del uso que haya hecho de sus servicios. <a "
-#~ "target=\"_blank\" href=\"%s\"> Ver detalles &gt; </a>"

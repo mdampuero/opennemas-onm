@@ -248,7 +248,7 @@
                         <label class="form-label" for="title">
                           {t}Footer text for inner video:{/t}
                         </label>
-                        <textarea  class="form-control" name="footer_video" ng-model="article.footer_video" placeholder="[% data.article.footer_video[data.extra.options.default] %]" tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" uib-tooltip="[% data.article.footer_video[data.extra.options.default] %]"></textarea>
+                        <textarea  class="form-control" name="footer_video1" ng-model="article.footer_video1" placeholder="[% data.article.footer_video1[data.extra.options.default] %]" tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" uib-tooltip="[% data.article.footer_video[data.extra.options.default] %]"></textarea>
                       </div>
                     </div>
                   </div>

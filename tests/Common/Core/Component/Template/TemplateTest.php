@@ -19,6 +19,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'get', 'hasParameter' ])
             ->getMock();
 
+        $this->locale = $this->getMockBuilder('Locale')
+            ->setMethods([ 'getRequestLocale' ])
+            ->getMock();
+
         $this->ormManager = $this->getMockBuilder('Manager')
             ->setMethods([ 'getDataSet' ])
             ->getMock();
@@ -33,11 +37,33 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             return $this->ormManager;
         }
 
+        if ($name === 'core.locale') {
+            return $this->locale;
+        }
+
         return null;
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::addFilter
+     * Tests addActiveTheme.
+     */
+    public function testAddActiveTheme()
+    {
+        $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->setMethods([ 'addTheme', 'setTemplateVars', 'setupCompiles', 'setupPlugins' ])
+            ->setConstructorArgs([ $this->container, [] ])
+            ->getMock();
+
+        $template->expects($this->once())->method('setTemplateVars')->with('wubble');
+        $template->expects($this->once())->method('setupCompiles')->with('wubble');
+        $template->expects($this->once())->method('setupPlugins')->with('wubble');
+        $template->expects($this->once())->method('addTheme')->with('wubble');
+
+        $template->addActiveTheme('wubble');
+    }
+
+    /**
+     * Tests addFilter for valid and invalid sections.
      */
     public function testAddFilter()
     {
@@ -67,24 +93,46 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::getCacheId
+     * Tests addInstance.
+     */
+    public function testAddInstance()
+    {
+        $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->setMethods([ 'setupCache' ])
+            ->setConstructorArgs([ $this->container, [] ])
+            ->getMock();
+
+        $template->expects($this->once())->method('setupCache')->with('fred');
+
+        $template->addInstance('fred');
+    }
+
+    /**
+     * Tests getCacheId with multiple values.
      */
     public function testGetCacheId()
     {
         $template = new Template($this->container, []);
 
-        $this->assertEquals(
-            '',
-            $template->getCacheId()
-        );
+        $this->locale->expects($this->any())->method('getRequestLocale')
+            ->willReturn('en');
+
+        $this->assertEquals('', $template->getCacheId());
 
         $this->assertEquals(
-            'frontend|categoryname|1234234234234',
+            'frontend|categoryname|1234234234234|en',
             $template->getCacheId('frontend', 'category-name', '1234234234234')
         );
 
         $this->assertEquals(
-            'frontend|categoryname',
+            'frontend|categoryname|en',
+            $template->getCacheId('frontend', 'category-name')
+        );
+
+        $template->assign('token', 12345);
+
+        $this->assertEquals(
+            'frontend|categoryname|en|12345',
             $template->getCacheId('frontend', 'category-name')
         );
     }

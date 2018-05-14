@@ -26,13 +26,6 @@ class SubscriberValidatorTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->security = $this->getMockBuilder('Security' . uniqid())
-            ->setMethods([ 'hasPermission' ])
-            ->getMock();
-
-        $this->container->expects($this->any())->method('get')
-            ->with('core.security')->willReturn($this->security);
-
         $this->validator = new SubscriberValidator($this->container);
     }
 
@@ -64,32 +57,17 @@ class SubscriberValidatorTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException Api\Exception\InvalidArgumentException
      */
-    public function testValidateWhenInvalidTypeForNonMasters()
+    public function testValidateWhenInvalid()
     {
-        $this->security->expects($this->once())->method('hasPermission')
-            ->willReturn(false);
-
-        $this->validator->validate(new Entity([ 'type' => 2 ]));
+        $this->validator->validate(new Entity([ 'type' => 0 ]));
     }
 
     /**
      * Tests validate when valid type provided.
-     *
-     * @expectedException Api\Exception\InvalidArgumentException
      */
-    public function testValidateWhenInvalidTypeForMasters()
+    public function testValidateWhenValid()
     {
-        $this->validator->validate(new Entity([ 'type' => 3 ]));
-    }
-
-    /**
-     * Tests validate when valid type only for master subscribers provided.
-     */
-    public function testValidateWhenValidTypeForMaster()
-    {
-        $this->security->expects($this->once())->method('hasPermission')
-            ->willReturn(true);
-
+        $this->validator->validate(new Entity([ 'type' => 1 ]));
         $this->validator->validate(new Entity([ 'type' => 2 ]));
     }
 }

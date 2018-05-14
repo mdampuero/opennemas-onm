@@ -83,7 +83,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         $security->setUser($this->user);
         $security->setInstance($this->instance);
 
-        $this->assertFalse($security->hasCategory('fubar'));
+        $this->assertTrue($security->hasCategory('fubar'));
     }
 
     /**
@@ -92,7 +92,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
     public function testHasExtension()
     {
         $this->security->setPermissions([ 'MASTER' ]);
-        $this->assertTrue($this->security->hasExtension('wobble'));
+        $this->assertFalse($this->security->hasExtension('wobble'));
 
         $this->security->setPermissions([ 'ROLE_BACKEND' ]);
         $this->assertFalse($this->security->hasExtension('wobble'));

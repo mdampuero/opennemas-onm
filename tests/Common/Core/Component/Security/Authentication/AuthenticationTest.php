@@ -276,6 +276,63 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('xyzzy', $this->auth->getErrorMessage());
     }
 
+    /**
+     * Tests getInternalErrorMessage when the error is about invalid credentials.
+     */
+    public function testGetInternalErrorMessageWhenInvalidCredentials()
+    {
+        $this->session->expects($this->any())->method('get')
+            ->with(Security::AUTHENTICATION_ERROR)
+            ->willReturn(new BadCredentialsException());
+
+        $this->assertEquals(
+            'security.authentication.failure.credentials',
+            $this->auth->getInternalErrorMessage()
+        );
+    }
+
+    /**
+     * Tests getInternalErrorMessage when the error is about invalid CSRF token.
+     */
+    public function testGetInternalErrorMessageWhenInvalidCsrfToken()
+    {
+        $this->session->expects($this->any())->method('get')
+            ->with(Security::AUTHENTICATION_ERROR)
+            ->willReturn(new InvalidCsrfTokenException());
+
+        $this->assertEquals(
+            'security.authentication.failure.csrf',
+            $this->auth->getInternalErrorMessage()
+        );
+    }
+
+    /**
+     * Tests getInternalErrorMessage when the error is about invalid CSRF token.
+     */
+    public function testGetInternalErrorMessageWhenInvalidRecaptcha()
+    {
+        $this->session->expects($this->any())->method('get')
+            ->with(Security::AUTHENTICATION_ERROR)
+            ->willReturn(new InvalidRecaptchaException());
+
+        $this->assertEquals(
+            'security.authentication.failure.recaptcha',
+            $this->auth->getInternalErrorMessage()
+        );
+    }
+
+    /**
+     * Tests getInternalErrorMessage when the error is a unknown exception.
+     */
+    public function testGetInternalErrorMessageWhenException()
+    {
+        $this->session->expects($this->any())->method('get')
+            ->with(Security::AUTHENTICATION_ERROR)
+            ->willReturn(new \Exception('xyzzy'));
+
+        $this->assertEquals('xyzzy', $this->auth->getInternalErrorMessage());
+    }
+
     public function testGetRecaptchaFromParameters()
     {
         $this->recaptcha->expects($this->once())->method('configureFromParameters')

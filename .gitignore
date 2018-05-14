@@ -8,6 +8,8 @@
 .deploy.php
 .deploy.themes.php
 .maintenance
+.phpintel
+.vscode
 
 # app
 app/config/parameters.yml

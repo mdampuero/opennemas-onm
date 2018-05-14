@@ -44,6 +44,10 @@ class AuthorController extends UserController
         $msg = $this->get('core.messenger');
 
         $this->get('api.service.author')->deleteItem($id);
+
+        // TODO: Remove when deprecated old user_repository
+        $this->get('core.dispatcher')->dispatch('user.delete', ['id' => $id]);
+
         $msg->add(_('Item deleted successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -169,6 +173,9 @@ class AuthorController extends UserController
 
         $this->get('api.service.author')
             ->updateItem($id, $request->request->all());
+
+        // TODO: Remove when deprecated old user_repository
+        $this->get('core.dispatcher')->dispatch('user.update', ['id' => $id]);
 
         $msg->add(_('Item saved successfully'), 'success');
 

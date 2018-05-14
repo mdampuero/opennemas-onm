@@ -75,7 +75,6 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
         Request $request,
         TokenInterface $token
     ) {
-        $user      = $token->getUser();
         $recaptcha = $request->get('g-recaptcha-response');
         $session   = $request->getSession();
         $target    = $request->get('_target');
@@ -99,12 +98,7 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
         }
 
         if ($this->auth->hasError()) {
-            $this->auth->failure();
-
-            $error = $this->auth->getErrorMessage();
-
-            $session->getFlashBag()->add('error', $error);
-            $this->logger->info($error);
+            $this->logger->info($this->auth->getInternalErrorMessage());
             $this->ts->setToken(null);
 
             if (!$request->isXmlHttpRequest()) {
@@ -115,7 +109,7 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
         }
 
         $this->auth->success();
-        $this->logger->info("User $user->username (ID: $user->id) has logged in.");
+        $this->logger->info('security.authentication.success');
 
         return new RedirectResponse($target);
     }

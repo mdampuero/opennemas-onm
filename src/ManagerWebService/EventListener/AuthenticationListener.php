@@ -68,7 +68,7 @@ class AuthenticationListener implements EventSubscriberInterface
         $data = json_decode($response->getContent(), true);
 
         $data['instance']    = $this->container->get('core.instance')->getData();
-        $data['permissions'] = $this->getPermissions($user);
+        $data['permissions'] = array_values($this->getPermissions($user));
         $data['instances']   = $this->getInstances($user);
 
         $response->setContent(json_encode($data));
@@ -132,20 +132,6 @@ class AuthenticationListener implements EventSubscriberInterface
             $permissions = array_merge($permissions, $userGroup->privileges);
         }
 
-        $p = new \Privilege();
-        $permissions = array_filter(
-            $p::$privileges,
-            function ($a) use ($permissions) {
-                if (in_array($a['pk_privilege'], $permissions)) {
-                    return true;
-                }
-
-                return false;
-            }
-        );
-
-        return array_values(array_map(function ($a) {
-            return $a['name'];
-        }, $permissions));
+        return \Privilege::getNames($permissions);
     }
 }
