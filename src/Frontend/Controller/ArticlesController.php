@@ -110,7 +110,7 @@ class ArticlesController extends Controller
             'content'               => $article,
             'contentId'             => $article->id,
             'time'                  => '12345',
-            'o-token'               => $token,
+            'o_token'               => $token,
             'x-cache-for'           => '+1 day',
             'x-cacheable'           => empty($token),
             'x-tags'                => 'article,' . $article->id
