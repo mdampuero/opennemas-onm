@@ -47,6 +47,13 @@ class Template extends \Smarty
     protected $instance = null;
 
     /**
+     * Whether to include locale in the cache id.
+     *
+     * @var boolean
+     */
+    protected $locale = true;
+
+    /**
      * The active theme.
      *
      * @var Theme
@@ -183,9 +190,17 @@ class Template extends \Smarty
             }
         );
 
-        $cacheID = implode('|', $params);
+        if (!empty($params) && $this->locale) {
+            $params[] = $this->container->get('core.locale')->getRequestLocale();
+        }
 
-        return $cacheID;
+        if (!empty($this->getTemplateVars())
+            && array_key_exists('token', $this->getTemplateVars())
+        ) {
+            $params[] = $this->getTemplateVars()['token'];
+        }
+
+        return implode('|', $params);
     }
 
     /**
@@ -340,6 +355,20 @@ class Template extends \Smarty
             '_template' => $this,
             'params'    => [ 'IMAGE_DIR' => $this->image_dir ]
         ]);
+    }
+
+    /**
+     * Changes the value of the locale flag.
+     *
+     * @param boolean $locale The locale flag value.
+     *
+     * @return Template The current template.
+     */
+    protected function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
     }
 
     /**

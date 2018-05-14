@@ -8,31 +8,54 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
+                <i class="fa fa-user m-r-10"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
                 <a class="no-padding" href="[% routing.generate('backend_users_list') %]">
-                  <i class="fa fa-user"></i>
                   {t}Users{/t}
                 </a>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.http.loading && item">
-              <div class="p-l-10 p-r-10 p-t-10">
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
                 <i class="fa fa-angle-right"></i>
-              </div>
+              </h4>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.http.loading && item">
-              <h5 class="ng-cloak">
-                <strong ng-if="item.id">{t}Edit{/t}</strong>
-                <strong ng-if="!item.id">{t}Create{/t}</strong>
-              </h5>
+            <li class="quicklinks hidden-xs">
+              <h4>
+                {if empty($id)}{t}Create{/t}{else}{t}Edit{/t}{/if}
+              </h4>
             </li>
           </ul>
-          <div class="all-actions pull-right">
+          <div class="all-actions pull-right ng-cloak" ng-if="!flags.http.loading && item">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-loading btn-success text-uppercase" ng-click="confirm()" type="button">
-                  <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
-                  <span class="text">{t}Save{/t}</span>
-                </button>
+                <div class="btn-group">
+                  <button class="btn btn-loading btn-success text-uppercase" ng-click="confirm()" ng-disabled="flags.http.saving || form.$invalid || (item.password && item.password !== rpassword)" type="button">
+                    <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
+                    {t}Save{/t}
+                  </button>
+                  <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" ng-disabled="flags.http.saving || form.$invalid || (item.password && item.password !== rpassword)" ng-if="item.id" type="button">
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu no-padding pull-right" ng-if="item.id">
+                    <li>
+                      <a href="#" ng-click="convertTo('type', 2)" ng-if="item.type !== 2">
+                        <i class="fa fa-user-plus"></i>
+                        {t}Convert to{/t} {t}subscriber{/t} + {t}user{/t}
+                      </a>
+                    </li>
+                    <li class="divider" ng-if="item.type !== 2"></li>
+                    <li>
+                      <a href="#" ng-click="convertTo('type', 1)">
+                        <i class="fa fa-address-card"></i>
+                        {t}Convert to{/t} {t}subscriber{/t}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </li>
             </ul>
           </div>
@@ -72,10 +95,9 @@
                   </div>
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.user_groups }" ng-click="expanded.user_groups = !expanded.user_groups">
-                  <i class="fa fa-users m-r-5"></i>
-                  {t}User Groups{/t}
+                  <i class="fa fa-users m-r-10"></i>{t}User Groups{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.user_groups }"></i>
-                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.user_groups && (toArray(item.user_groups) | filter: { status: 1 }).length > 0">
+                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.user_groups && countUserGroups(item) && (toArray(item.user_groups) | filter: { status: 1 }).length > 0">
                     <span ng-show="countUserGroups(item) === toArray(data.extra.user_groups).length">{t}All{/t}</span>
                     <span ng-show="countUserGroups(item) !== toArray(data.extra.user_groups).length">
                       <strong>[% countUserGroups(item) %]</strong> {t}selected{/t}
@@ -92,8 +114,7 @@
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.category = !expanded.category">
                   <input name="categories" ng-value="categories" type="hidden">
-                  <i class="fa fa-bookmark m-r-5"></i>
-                  {t}Categories{/t}
+                  <i class="fa fa-bookmark m-r-10"></i>{t}Categories{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
                   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.category">
                     <span ng-show="item.categories.length === 0 || flags.categories.none">{t}All{/t}</span>
@@ -155,8 +176,7 @@
                   </div>
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.settings }" ng-click="expanded.language = !expanded.language">
-                  <i class="fa fa-globe m-r-5"></i>
-                  {t}Language & time{/t}
+                  <i class="fa fa-globe m-r-10"></i>{t}Language & time{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.language }"></i>
                 </div>
                 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.language }">
@@ -269,7 +289,7 @@
                         <div class="form-group" ng-class="{ 'has-error': form.name.$dirty && form.name.$invalid }">
                           <label class="form-label" for="name">{t}Name{/t}</label>
                           <div class="controls input-with-icon right">
-                            <input class="form-control" id="name" name="name" ng-model="item.name" ng-maxlength="50" type="text"/>
+                            <input class="form-control" id="name" name="name" ng-blur="getUsername()" ng-model="item.name" ng-maxlength="50" type="text"/>
                             <span class="icon right ng-cloak" ng-if="!flags.http.loading">
                               <span class="fa fa-check text-success" ng-if="form.name.$dirty && form.name.$valid"></span>
                               <span class="fa fa-info-circle text-info" ng-if="!form.name.$dirty && form.name.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
@@ -282,7 +302,7 @@
                         <div class="form-group" ng-class="{ 'has-error': form.name.$dirty && form.name.$invalid }">
                           <label class="form-label" for="username">{t}Username{/t}</label>
                           <div class="controls input-with-icon right">
-                            <input class="form-control" id="username" name="username" ng-disabled="flags.http.slug" ng-model="item.username" ng-maxlength="50" {if !$app.user->isMaster()}readonly{/if} type="text"/>
+                            <input class="form-control" id="username" name="username" ng-disabled="flags.http.slug" ng-model="item.username" ng-maxlength="50" required type="text"/>
                             <span class="icon right ng-cloak" ng-if="!flags.http.loading">
                               <span class="fa fa-circle-o-notch fa-spin" ng-if="flags.http.slug"></span>
                               <span class="fa fa-check text-success" ng-if="!flags.http.slug && form.username.$dirty && form.username.$valid"></span>
@@ -356,6 +376,9 @@
         </div>
       </div>
     </div>
+    <script type="text/ng-template" id="modal-convert">
+      {include file="subscriber/modal.convert.tpl"}
+    </script>
     <script type="text/ng-template" id="modal-confirm">
       {include file="user/modal.confirm.tpl"}
     </script>

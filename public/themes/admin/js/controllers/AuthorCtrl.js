@@ -57,6 +57,32 @@
         };
 
         /**
+         * @function getUsername
+         * @memberOf AuthorCtrl
+         *
+         * @description
+         *   Generates an username basing on the name.
+         */
+        $scope.getUsername = function() {
+          if ($scope.item.username) {
+            return;
+          }
+
+          $scope.flags.http.slug = 1;
+
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+          }
+
+          $scope.tm = $timeout(function() {
+            $scope.getSlug($scope.item.name, function(response) {
+              $scope.item.username = response.data.slug;
+              $scope.form.username.$setDirty(true);
+            });
+          }, 500);
+        };
+
+        /**
          * @function getData
          * @memberOf SubscriberCtrl
          *
@@ -114,26 +140,6 @@
               data.extra.photos[$scope.item.avatar_img_id];
           }
         };
-
-        // Generates an username when name changes
-        $scope.$watch('item.name', function(nv, ov) {
-          if (!ov || !nv || nv === ov) {
-            return;
-          }
-
-          $scope.flags.http.slug = 1;
-
-          if ($scope.tm) {
-            $timeout.cancel($scope.tm);
-          }
-
-          $scope.tm = $timeout(function() {
-            $scope.getSlug(nv, function(response) {
-              $scope.item.username = response.data.slug;
-              $scope.form.username.$setDirty(true);
-            });
-          }, 500);
-        });
       }
     ]);
 })();

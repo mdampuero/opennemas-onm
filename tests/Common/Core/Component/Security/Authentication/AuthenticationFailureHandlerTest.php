@@ -23,14 +23,10 @@ class AuthenticationFailureHandlerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->auth = $this->getMockBuilder('Authentication')
-            ->setMethods([ 'addError', 'failure', 'getErrorMessage' ])
+            ->setMethods([ 'addError', 'failure', 'getInternalErrorMessage' ])
             ->getMock();
 
         $this->exception = new AuthenticationException();
-
-        $this->fb = $this->getMockBuilder('FlashBag')
-            ->setMethods([ 'add' ])
-            ->getMock();
 
         $this->headers = $this->getMockBuilder('Headers')
             ->setMethods([ 'get' ])
@@ -41,30 +37,16 @@ class AuthenticationFailureHandlerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->setMethods([ 'getSession', 'isXmlHttpRequest' ])
+            ->setMethods([ 'isXmlHttpRequest' ])
             ->getMock();
 
         $this->router = $this->getMockBuilder('Router')
             ->setMethods([ 'generate' ])
             ->getMock();
 
-        $this->session = $this->getMockBuilder('Session')
-            ->setMethods([ 'getFlashBag' ])
-            ->getMock();
-
         $this->auth->expects($this->once())->method('addError')
             ->with($this->exception);
         $this->auth->expects($this->once())->method('failure');
-        $this->auth->expects($this->once())->method('getErrorMessage')
-            ->willReturn('gorp');
-
-        $this->fb->expects($this->once())->method('add')->with('error', 'gorp');
-
-        $this->request->expects($this->any())->method('getSession')
-            ->willReturn($this->session);
-
-        $this->session->expects($this->any())->method('getFlashBag')
-            ->willReturn($this->fb);
 
         $this->request->headers = $this->headers;
 
@@ -78,6 +60,8 @@ class AuthenticationFailureHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->headers->expects($this->once())->method('get')
             ->with('referer')->willReturn('/admin/login');
+        $this->auth->expects($this->once())->method('getInternalErrorMessage');
+        $this->logger->expects($this->once())->method('info');
         $this->router->expects($this->once())->method('generate')
             ->with('backend_authentication_login')->willReturn('wubble/foo');
 
@@ -101,6 +85,8 @@ class AuthenticationFailureHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->headers->expects($this->once())->method('get')
             ->with('referer')->willReturn('/fred');
+        $this->auth->expects($this->once())->method('getInternalErrorMessage');
+        $this->logger->expects($this->once())->method('info');
         $this->router->expects($this->once())->method('generate')
             ->with('frontend_authentication_login')->willReturn('wubble/foo');
 
@@ -124,6 +110,8 @@ class AuthenticationFailureHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->headers->expects($this->once())->method('get')
             ->with('referer')->willReturn('/admin/login');
+        $this->auth->expects($this->once())->method('getInternalErrorMessage');
+        $this->logger->expects($this->once())->method('info');
         $this->router->expects($this->once())->method('generate')
             ->with('core_authentication_authenticated')->willReturn('wubble/foo');
         $this->request->expects($this->once())->method('isXmlHttpRequest')

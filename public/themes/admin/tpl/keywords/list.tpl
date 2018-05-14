@@ -188,7 +188,7 @@
       </h4>
     </div>
     <div class="modal-body">
-      <p>{t escape=off}Are you sure that do you want remove "[% template.content.title %]"?{/t}</p>
+      <p>{t escape=off 1="[% template.content.title %]"}Are you sure that do you want remove "%1"?{/t}</p>
       <p class="alert alert-error">{t} You will not be able to restore it back.{/t}</p>
     </div>
     <div class="modal-footer">
@@ -206,7 +206,7 @@
       </h4>
     </div>
     <div class="modal-body">
-      <p>{t escape=off}Are you sure you want to remove permanently [% template.selected.contents.length %] item(s)?{/t}</p>
+      <p>{t escape=off 1="[% template.selected.contents.length %]"}Are you sure you want to remove permanently %1 item(s)?{/t}</p>
       <p class="alert alert-error">{t} You will not be able to restore them back.{/t}</p>
     </div>
     <div class="modal-footer">

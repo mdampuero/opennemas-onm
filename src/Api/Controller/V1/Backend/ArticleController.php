@@ -70,10 +70,7 @@ class ArticleController extends Controller
      */
     public function showAction($id)
     {
-        $er          = $this->get('entity_repository');
-        $article     = $er->find('Article', $id);
-        $articleList = [$article];
-        $er->populateContentMetasInContents($articleList);
+        $article = $this->get('entity_repository')->find('Article', $id);
 
         if (is_null($article->id)) {
             return new JsonResponse(
@@ -150,15 +147,15 @@ class ArticleController extends Controller
             'title' => $all ? _('All') : _('Select a category...')
         ]);
 
-        $converter = $this->get('orm.manager')->getConverter('User');
-        $users     = $this->get('orm.manager')->getRepository('User')
-            ->findBy('fk_user_group regexp "^3($|,)|,\s*3\s*,|(^|,)\s*3$" order by name asc');
+        $ss = $this->get('api.service.subscription');
+        $as = $this->get('api.service.author');
 
-        foreach ($users as $user) {
-            $user->eraseCredentials();
-        }
+        $subscriptions = $ss->getList('enabled = 1 order by name asc');
+        $authors       = $as->getList('order by name asc');
 
-        $extra['users'] = $converter->responsify($users);
+        $extra['subscriptions'] = $ss->responsify($subscriptions['items']);
+        $extra['users']         = $as->responsify($authors['items']);
+
         array_unshift($extra['users'], [
             'id'   => null,
             'name' => $all ? _('All') : _('Select an author...')

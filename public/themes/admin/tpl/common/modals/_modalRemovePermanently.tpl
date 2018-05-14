@@ -6,7 +6,7 @@
   </h4>
 </div>
 <div class="modal-body">
-    <p>{t escape=off}Are you sure that do you want remove permanently from trash "[% template.content.title %]"?{/t}</p>
+    <p>{t escape=off 1="[% template.content.title %]"}Are you sure that do you want remove permanently from trash "%1"?{/t}</p>
     <p class="alert alert-error">{t} You will not be able to restore it back.{/t}</p>
 </div>
 <div class="modal-footer">

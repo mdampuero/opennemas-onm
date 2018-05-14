@@ -393,7 +393,7 @@ jQuery(document).ready(function($) {
                   </small>
                 </div>
               </div>
-              {if $safeFrame}
+              {if $extra['safeFrame']}
                 <div class="grid-collapse-title pointer ng-cloak" ng-click="expanded.user_groups = !expanded.user_groups" ng-hide="!extra.user_groups || extra.user_groups.length === 0">
                   <i class="fa fa-users m-r-5"></i>{t}User groups{/t}
                   <i class="animated fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.user_groups }"></i>

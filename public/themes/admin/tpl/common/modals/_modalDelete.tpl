@@ -6,7 +6,7 @@
   </h4>
 </div>
 <div class="modal-body">
-    <p>{t escape=off}Are you sure that do you want send to the trash "[% template.content.title ? template.content.title : template.content.name %]"?{/t}</p>
+    <p>{t escape=off 1="[% template.content.title ? template.content.title : template.content.name %]"}Are you sure that do you want send to the trash "%1"?{/t}</p>
 </div>
 <div class="modal-footer">
     <span class="loading" ng-if="deleting == 1"></span>

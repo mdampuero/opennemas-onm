@@ -40,8 +40,6 @@ class AuthenticationController extends Controller
         }
 
         if ($auth->hasError()) {
-            $auth->failure();
-
             $session->getFlashBag()->add('error', $auth->getErrorMessage());
         }
 

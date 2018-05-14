@@ -92,8 +92,8 @@ security:
             pattern:    ^/*
             anonymous:  ~
             form_login:
+                login_path:                     frontend_authentication_login
                 check_path:                     core_authentication_check
-                always_use_default_target_path: false
                 target_path_parameter:          _target
                 always_use_default_target_path: false
                 use_referer:                    false
@@ -110,8 +110,8 @@ security:
                 resource_owners:
                     facebook: "/oauth/login/check-facebook"
                     twitter:  "/oauth/login/check-twitter"
-                login_path:          core_authentication_complete
-                default_target_path: core_authentication_complete
+                login_path:          frontend_authentication_login
+                default_target_path: frontend_authentication_login
                 check_path:          core_authentication_check
                 use_forward:         false
                 failure_path:        core_authentication_complete
