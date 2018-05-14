@@ -1,6 +1,6 @@
 {extends file="base/admin.tpl"}
 {block name="content"}
-<form action="{url name=admin_newsletter_config}" method="POST" id="formulario" ng-controller="InnerCtrl" ng-init="type='{if empty($configs['newsletter_subscriptionType'])}submit{else}{$configs['newsletter_subscriptionType']}{/if}'">
+<form action="{url name=backend_newsletters_config}" method="POST" id="formulario" ng-controller="InnerCtrl" ng-init="type='{if empty($configs['newsletter_subscriptionType'])}submit{else}{$configs['newsletter_subscriptionType']}{/if}'">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
