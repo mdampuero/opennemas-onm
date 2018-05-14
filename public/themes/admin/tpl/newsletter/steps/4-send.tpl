@@ -30,7 +30,14 @@
     <div class="text-center">
       <i class="fa fa-envelope fa-4x text-success"></i>
       <h3>{t}Newsletter sending report{/t}</h3>
-      <h5>{t escape=off 1=$send_report['total']}We queued <strong>%1 emails</strong> to be sent. Please, find below the report.{/t}</h5>
+      <h5>
+        {if $send_report['total'] > 0}
+        {t escape=off 1=$send_report['total']}<strong>%1 emails</strong> have being sent.{/t}
+        {else}
+        {t}No emails were sent.{/t}
+        {/if}
+        {t}Please, find below the report.{/t}
+      </h5>
     </div>
     <div class="row m-t-30">
       <div class="newsletter-report">
@@ -38,13 +45,13 @@
         {foreach $send_report['report'] as $item}
           <div class="p-r-15 p-b-15 p-t-15 p-l-15" style="border-bottom: 1px solid #ccc">
             {if $item[0]->type == 'external'}
-              <i class="fa fa-external-link m-r-10" uib-tooltip="{t}External service{/t}"></i>
+              <i class="fa fa-external-link m-r-5" uib-tooltip="{t}External service{/t}"></i>
             {/if}
             {if $item[0]->type == 'list'}
-              <i class="fa fa-address-book m-r-10" uib-tooltip="{t}Subscription list{/t}"></i>
+              <i class="fa fa-address-book m-r-5" uib-tooltip="{t}Subscription list{/t}"></i>
             {/if}
             {if $item[0]->type == 'email'}
-              <i class="fa fa-envelope m-r-10" uib-tooltip="{t}Email address{/t}"></i>
+              <i class="fa fa-envelope m-r-5" uib-tooltip="{t}Email address{/t}"></i>
             {/if}
 
             {$item[0]->name}
