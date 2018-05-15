@@ -371,7 +371,7 @@ class NewsletterController extends Controller
         }
         $newsletter->html = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
-        $report = $this->get('core.helper.newsletter')->send($newsletter, $recipients);
+        $report = $this->get('core.helper.newsletter_sender')->send($newsletter, $recipients);
 
         return $this->render('newsletter/steps/4-send.tpl', [
             'send_report' => $report,
@@ -440,7 +440,7 @@ class NewsletterController extends Controller
         $type   = $this->get('setting_repository')->get('newsletter_subscriptionType');
         $config = $this->get('setting_repository')->get('newsletter_maillist');
 
-        // If the module doesnt have settings already saved
+        // If the module doesn't have settings already saved
         // we redirect to the module configuration form
         if (is_null($config) || !$type) {
             $this->get('session')->getFlashBag()->add(
@@ -454,17 +454,15 @@ class NewsletterController extends Controller
         // There is settings saved but we will check if they are valid
         foreach ($config as $key => $value) {
             if ($type == 'submit' || ($key != 'subscription' && $key != 'email')) {
-                if (empty($value)) {
-                    $this->get('session')->getFlashBag()->add(
-                        'error',
-                        _(
-                            'Your newsletter configuration is not completed. Please' .
-                            ' go to settings and complete the form.'
-                        )
-                    );
-
-                    return $this->redirect($this->generateUrl('admin_newsletter_config'));
+                if (!empty($value)) {
+                    continue;
                 }
+                $this->get('session')->getFlashBag()->add('error', _(
+                    'Your newsletter configuration is not completed. Please' .
+                    ' go to settings and complete the form.'
+                ));
+
+                return $this->redirect($this->generateUrl('backend_newsletter_config'));
             }
         }
 

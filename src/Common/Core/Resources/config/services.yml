@@ -78,11 +78,17 @@ services:
         arguments:
             - '@setting_repository'
             - '@newsletter_manager'
+
+    core.helper.newsletter_sender:
+        class:     Common\Core\Component\Helper\NewsletterSenderHelper
+        arguments:
+            - '@setting_repository'
             - '@error.log'
             - '@application.log'
             - '@core.instance'
             - '@mailer'
             - '@api.service.subscriber'
+            - '@core.helper.newsletter'
             - '%mailer_no_reply_address%'
 
     core.helper.oql:

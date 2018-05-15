@@ -33,7 +33,7 @@ class NewsletterController extends Controller
     public function subscribeAction()
     {
         // If newsletter manager is internal then redirect to user register action
-        $subscriptionType = $this->get('setting_repository')->get('newsletter_subscriptionType');
+        $subscriptionType = $this->get('core.helper.newsletter')->getSubscriptionType();
         if ($subscriptionType === 'create_subscriptor') {
             return $this->redirect(
                 $this->generateUrl('frontend_user_register', [ 'target' => 'newsletter', ]),
@@ -64,12 +64,15 @@ class NewsletterController extends Controller
      */
     public function createSubscriptionAction(Request $request)
     {
+        // If the request is not HTTP POST then redirect back to the form
         if ('POST' != $request->getMethod()) {
             return new RedirectResponse($this->generateUrl('frontend_newsletter_subscribe_show'));
         }
 
+        $nh = $this->get('core.helper.newsletter');
+
         // If newsletter manager is internal then redirect to user register action
-        $subscriptionType = $this->get('setting_repository')->get('newsletter_subscriptionType');
+        $subscriptionType = $nh->getSubscriptionType();
         if ($subscriptionType === 'create_subscriptor') {
             return $this->redirect(
                 $this->generateUrl('frontend_user_register', [ 'target' => 'newsletter', ]),
@@ -104,7 +107,7 @@ class NewsletterController extends Controller
             }
 
             // Create the subscription
-            $this->get('core.helper.newsletter')->sendSubscriptionMail($data);
+            $nh->sendSubscriptionMail($data);
 
             $rs = ['class' => 'success'];
             if ($data['subscription'] == 'alta') {
