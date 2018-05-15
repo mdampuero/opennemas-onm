@@ -92,7 +92,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
     public function testHasExtension()
     {
         $this->security->setPermissions([ 'MASTER' ]);
-        $this->assertFalse($this->security->hasExtension('wobble'));
+        $this->assertTrue($this->security->hasExtension('wobble'));
 
         $this->security->setPermissions([ 'ROLE_BACKEND' ]);
         $this->assertFalse($this->security->hasExtension('wobble'));
