@@ -19,7 +19,7 @@
             </div>
           </li>
           <li class="quicklinks hidden-xs">
-            <h5><strong>{t}Send{/t}</strong></h5>
+            <h4>{t}Send{/t}</h4>
           </li>
         </ul>
       </div>
