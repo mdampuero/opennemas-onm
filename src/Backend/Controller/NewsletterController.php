@@ -37,15 +37,20 @@ class NewsletterController extends Controller
         $lastInvoiceText = $lastInvoice->format(_('Y-m-d'));
 
         // Check if the module is configured, if not redirect to the config form
-        $configuredRedirection = $this->checkModuleActivated();
-
-        if ($configuredRedirection != false) {
+        if ($this->checkModuleActivated() != false) {
             return $configuredRedirection;
         }
 
-        $message = sprintf(_('No newsletter sent from %s.'), $lastInvoiceText);
+        if ($maxAllowed > 0 && $totalSendings >= $maxAllowed) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('You have reached your maximum of emails allowed to send per month')
+            );
+        }
+
+        $message = sprintf(_('No newsletters were sent from %s'), $lastInvoiceText);
         if ($totalSendings > 0) {
-            $message = sprintf(_('%d newsletter sent from %s.'), (int) $totalSendings, $lastInvoiceText);
+            $message = sprintf(_('%d newsletter sent from %s'), (int) $totalSendings, $lastInvoiceText);
         }
 
         if ($maxAllowed > 0) {
@@ -351,25 +356,11 @@ class NewsletterController extends Controller
         $recipients = $request->request->get('recipients');
         $recipients = json_decode($recipients);
 
-        $newsletterSender = $this->container->getParameter('mailer_no_reply_address');
-        $configurations   = $this->get('setting_repository')->get('newsletter_maillist');
-
-        if (empty($newsletterSender)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Your newsletter configuration is not complete. You must complete the sender email address.')
-            );
-
-            return $this->redirect($this->generateUrl('backend_newsletters_list'));
-        }
-
         // Prepare the newsletter contents to send
-        $newsletter = new \Newsletter($id);
-
-        if (empty($newsletter->title)) {
-            $newsletter->title = '[Boletin]';
-        }
-        $newsletter->html = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
+        $newsletter        = new \Newsletter($id);
+        $newsletter->html  = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
+        $newsletter->title = empty($newsletter->title)
+            ? _('[Newsletter]') : $newsletter->title;
 
         $report = $this->get('core.helper.newsletter_sender')->send($newsletter, $recipients);
 
