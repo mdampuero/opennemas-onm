@@ -9,12 +9,14 @@
  */
 namespace Frontend\Controller;
 
-use Common\ORM\Core\Exception\EntityNotFoundException;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Api\Exception\CreateItemException;
+use Api\Exception\GetItemException;
+use Api\Exception\GetListException;
+use Api\Exception\UpdateItemException;
 use Common\Core\Controller\Controller;
 use Onm\Settings as s;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Handles the actions for the user profile.
@@ -22,36 +24,130 @@ use Onm\Settings as s;
 class UserController extends Controller
 {
     /**
+     * Activates an user account given an token.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function activateAction(Request $request)
+    {
+        $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
+
+        try {
+            $ss   = $this->get('api.service.subscriber');
+            $user = $ss->getItemBy(sprintf('token = "%s" limit 1', $token));
+
+            $ss->patchItem($user->id, [ 'activated' => true, 'token' => null ]);
+
+            $this->get('core.security.authentication')->authenticate($user);
+            $this->get('application.log')->info('subscriber.activate.success');
+
+            $this->sendActivateEmail($user);
+            $this->get('application.log')->info('subscriber.activate.email.success');
+
+            $this->get('session')->getFlashBag()
+                ->add('success', _('Your account is now activated'));
+
+            return $this->redirect($this->generateUrl('frontend_user_show'));
+        } catch (GetItemException $e) {
+            $this->get('application.log')->error(
+                'subscriber.activate.failure: ' . $token,
+                $e->getTrace()
+            );
+
+            $this->get('session')->getFlashBag()
+                ->add('error', _('Unable to find your account'));
+
+            return $this->redirect($this->generateUrl('core_authentication_logout'));
+        } catch (UpdateItemException $e) {
+            $this->get('application.log')->error(
+                'subscriber.activate.failure: ' . $token,
+                $e->getTrace()
+            );
+
+            $this->get('session')->getFlashBag()
+                ->add('error', _('Unable to activate your account'));
+
+            return $this->redirect($this->generateUrl('core_authentication_logout'));
+        } catch (\Exception $e) {
+            $this->get('application.log')->error(
+                'subscriber.activate.email.failure: ' . $token,
+                $e->getTrace()
+            );
+
+            $this->get('session')->getFlashBag()
+                ->add('error', _('Unable to activate your account'));
+
+            return $this->redirect($this->generateUrl('core_authentication_logout'));
+        }
+    }
+
+    /**
+     * Generates the HTML for the user menu by ajax.
+     *
+     * @return Response The response object.
+     */
+    public function getUserMenuAction()
+    {
+        $photo = null;
+
+        if (!empty($this->get('core.user')->avatar_img_id)) {
+            $photo = $this->get('entity_repository')
+                ->find('Photo', $this->get('core.user')->avatar_img_id);
+        }
+
+        return $this->render('user/menu.tpl', [ 'photo' => $photo ]);
+    }
+
+    /**
      * Shows the user information.
      *
      * @return Response The response object.
      */
     public function showAction()
     {
-        if (empty($this->getUser())) {
-            return $this->redirect($this->generateUrl('frontend_authentication_login'));
+        $photo     = null;
+        $countries = array_merge(
+            [ '' => _('Select a country') . '...' ],
+            $this->get('core.geo')->getCountries()
+        );
+
+        if (!empty($this->get('core.user')->avatar_img_id)) {
+            $photo = $this->get('entity_repository')
+                ->find('Photo', $this->get('core.user')->avatar_img_id);
         }
 
-        $user = $this->get('orm.manager')->getRepository('User')
-            ->find($this->getUser()->id);
-
-        // Get current time
-        $currentTime = new \DateTime();
-
-        // Get user orders
-        $order      = new \Order();
-        $userOrders = $order->find('user_id = ' . $user->id);
-
-        // Fetch paywall settings
-        $paywallSettings = $this->get('setting_repository')->get('paywall_settings');
-
         return $this->render('user/show.tpl', [
-            'countries'        => $this->get('core.geo')->getCountries(),
-            'current_time'     => $currentTime,
-            'paywall_settings' => $paywallSettings,
-            'user'             => $user,
-            'user_groups'      => $this->getUserGroups(),
-            'user_orders'      => $userOrders
+            'countries'     => $countries,
+            'photo'         => $photo,
+            'settings'      => $this->getSettings(),
+            'subscriptions' => $this->getSubscriptions(),
+            'user'          => $this->get('core.user'),
+        ]);
+    }
+
+    /**
+     * Displays a form to create a new user.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function registerAction()
+    {
+        $countries = array_merge(
+            [ '' => _('Select a country') . '...' ],
+            $this->get('core.geo')->getCountries()
+        );
+
+        return $this->render('user/register.tpl', [
+            'countries'     => $countries,
+            'recaptcha'     => $this->get('core.recaptcha')
+                ->configureFromSettings()
+                ->getHtml(),
+            'settings'      => $this->getSettings(),
+            'subscriptions' => $this->getSubscriptions(),
         ]);
     }
 
@@ -62,154 +158,66 @@ class UserController extends Controller
      *
      * @return Response The response object.
      */
-    public function registerAction(Request $request)
+    public function saveAction(Request $request)
     {
-        $errors = [];
-        if ('POST' == $request->getMethod()) {
-            // Check reCAPTCHA
-            $valid    = false;
-            $response = $request->get('g-recaptcha-response');
-            $ip       = $request->getClientIp();
-
-            if (!is_null($response)) {
-                $valid = $this->get('core.recaptcha')
-                    ->configureFromSettings()
-                    ->isValid($response, $ip);
-
-                if (!$valid) {
-                    $errors[] = _(
-                        'The reCAPTCHA wasn\'t entered correctly.'
-                        . ' Try to authenticate again.'
-                    );
-                }
-            }
-
-            $data = [
-                'activated'     => 0, // Before activation by mail, user is not allowed
-                'cpwd'          => $request->request->filter('cpwd', null, FILTER_SANITIZE_STRING),
-                'email'         => $request->request->filter('user_email', null, FILTER_SANITIZE_EMAIL),
-                'username'      => $request->request->filter('user_name', null, FILTER_SANITIZE_STRING),
-                'name'          => $request->request->filter('full_name', null, FILTER_SANITIZE_STRING),
-                'password'      => $request->request->filter('pwd', null, FILTER_SANITIZE_STRING),
-                'token'         => md5(uniqid(mt_rand(), true)), // Token for activation,
-                'type'          => 1, // It is a frontend user registration.
-                'id_user_group' => [],
-                'bio'           => '',
-                'url'           => '',
-                'avatar_img_id' => 0,
-                'meta'          => $request->request->get('meta'),
-            ];
-
-            // Before send mail and create user on DB, do some checks
-            $user = new \User();
-
-            // Check if pwd and cpwd are the same
-            if (($data['password'] != $data['cpwd'])) {
-                $errors[] = _('Password and confirmation must be equal.');
-            }
-
-            // Check existing mail
-            if ($user->checkIfExistsUserEmail($data['email'])) {
-                $errors[] = _('The email address is already in use.');
-            }
-
-            // Fill username and name with email if empty
-            foreach ([ 'username', 'name' ] as $value) {
-                if (empty($data[$value])) {
-                    $data[$value] = $data['email'];
-                }
-            }
-
-            // Check existing user name
-            if ($user->checkIfExistsUserName($data['username'])) {
-                $errors[] = _('The user name is already in use.');
-            }
-
-            // If checks are both false and pass is valid then send mail
-            if (count($errors) <= 0) {
-                $url = $this->generateUrl('frontend_user_activate', ['token' => $data['token']], true);
-
-                $this->view->setCaching(0);
-
-                $mailSubject = sprintf(_('New user account in %s'), s::get('site_title'));
-                $mailBody    = $this->renderView(
-                    'user/emails/register.tpl',
-                    [
-                        'name' => $data['name'],
-                        'url'  => $url,
-                    ]
-                );
-
-                // If user is successfully created, send an email
-                if (!$user->create($data)) {
-                    $errors[] = _('An error has occurred. Try to complete the form with valid data.');
-                } else {
-                    if (!empty($data['meta'])) {
-                        $user->setMeta($data['meta']);
-                    }
-
-                    // Set registration date
-                    $currentTime = new \DateTime();
-                    $currentTime->setTimezone(new \DateTimeZone('UTC'));
-
-                    $user->setMeta(['register_date' => $currentTime->format('Y-m-d H:i:s')]);
-
-                    try {
-                        // Build the message
-                        $message = \Swift_Message::newInstance();
-                        $message
-                            ->setSubject($mailSubject)
-                            ->setBody($mailBody, 'text/html')
-                            // And optionally an alternative body
-                            ->addPart(strip_tags($mailBody), 'text/plain')
-                            ->setTo($data['email'])
-                            ->setFrom([
-                                'no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')
-                            ]);
-
-                        $headers = $message->getHeaders();
-                        $headers->addParameterizedHeader(
-                            'ACUMBAMAIL-SMTPAPI',
-                            $this->get('core.instance')->internal_name . ' - User register'
-                        );
-
-                        $mailer = $this->get('mailer');
-                        $mailer->send($message);
-
-                        $this->get('application.log')->notice(
-                            "Email sent. Frontend register user (to: " . $data['email'] . ")"
-                        );
-
-                        $this->view->assign([
-                            'mailSent' => true,
-                            'email'    => $data['email'],
-                        ]);
-                    } catch (\Exception $e) {
-                        // Log this error
-                        $this->get('application.log')->notice(
-                            "Unable to send the user activation email for the "
-                            . "user {$user->id}: " . $e->getMessage()
-                        );
-
-                        $this->get('session')->getFlashBag()->add(
-                            'error',
-                            _('Unable to send your registration email. Please try it later.')
-                        );
-                    }
-
-                    $this->view->assign('success', true);
-                }
-            }
+        if (!$this->checkRecaptcha($request)) {
+            return $this->redirect($this->generateUrl('frontend_user_register'));
         }
 
-        return $this->render('authentication/register.tpl', [
-            'errors'      => $errors,
-            'countries'   => $this->get('core.geo')->getCountries(),
-            'recaptcha'   => $this->get('core.recaptcha')
+        $data = $request->request->all();
+        unset($data['g-recaptcha-response']);
+
+        if (array_key_exists('user_groups', $data)) {
+            $data['user_groups'] =
+                $this->parseSubscriptions($data['user_groups']);
+        }
+
+        $data['type']          = 1;
+        $data['token']         = md5(uniqid(mt_rand(), true));
+        $data['register_date'] = new \DateTime();
+
+        try {
+            $this->get('api.service.subscriber')->createItem($data);
+            $this->get('application.log')
+                ->info('subscriber.create.success');
+
+            $this->sendCreateEmail($data);
+            $this->get('application.log')
+                ->info('subscriber.create.email.success');
+        } catch (CreateItemException $e) {
+            $this->get('application.log')->error(
+                'subscriber.create.failure: ' . $e->getMessage(),
+                $e->getTrace()
+            );
+
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                _('Unable to create your user account. Please try it later.')
+            );
+
+            return $this->redirect($this->generateUrl('frontend_user_register'));
+        } catch (\Exception $e) {
+            $this->get('application.log')->error(
+                'subscriber.create.email.failure: ' . $e->getMessage(),
+                $e->getTrace()
+            );
+
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                _('Unable to send your registration email. Please try it later.')
+            );
+
+            return $this->redirect($this->generateUrl('frontend_user_register'));
+        }
+
+        return $this->render('user/complete.tpl', [
+            'countries'     => $this->get('core.geo')->getCountries(),
+            'email'         => $data['email'],
+            'recaptcha'     => $this->get('core.recaptcha')
                 ->configureFromSettings()
                 ->getHtml(),
-            'settings'    => $this->getSettings(),
-            'user_groups' => $this->getUserGroups()
+            'settings'      => $this->getSettings(),
+            'subscriptions' => $this->getSubscriptions(),
         ]);
     }
 
@@ -222,19 +230,11 @@ class UserController extends Controller
      */
     public function updateAction(Request $request)
     {
-        if (empty($this->getUser())) {
-            return $this->redirect($this->generateUrl('frontend_authentication_login'));
-        }
-
         $data = $request->request->all();
 
-        if ($data['password'] !== $data['password-verify']) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Password and confirmation must be equal.')
-            );
-
-            return $this->redirect($this->generateUrl('frontend_user_show'));
+        if (array_key_exists('user_groups', $data)) {
+            $data['user_groups'] =
+                $this->parseSubscriptions($data['user_groups']);
         }
 
         // Remove to prevent password changes when empty
@@ -244,269 +244,48 @@ class UserController extends Controller
 
         unset($data['password-verify']);
 
-        $em        = $this->get('orm.manager');
-        $converter = $em->getConverter('User');
-
         try {
-            $user = $em->getRepository('User')->find($this->getUser()->id);
+            $this->get('api.service.subscriber')
+                ->updateItem($this->getUser()->id, $data);
 
-            if (!empty($data['password'])) {
-                $encoder = $this->get('security.password_encoder');
-
-                $data['password'] = $encoder->encodePassword($user, $data['password']);
-            }
-
-            $user->merge($converter->objectify($data));
-            $em->persist($user);
-
-            $this->get('session')->getFlashBag()->add('success', _('Data updated successfully'));
-            $this->get('core.dispatcher')->dispatch('user.update', [ 'id' => $user->id ]);
-        } catch (EntityNotFoundException $e) {
-            $this->get('session')->getFlashBag()->add('error', _('The user does not exists.'));
+            $this->get('session')->getFlashBag()
+                ->add('success', _('Item updated successfully'));
         } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add('error', _('Unable to update the user.'));
+            $this->get('error.log')
+                ->error('frontend.subscriber.update: ' . $e->getMessage());
+            $this->get('session')->getFlashBag()
+                ->add('error', _('Unable to update the user.'));
         }
 
         return $this->redirect($this->generateUrl('frontend_user_show'));
     }
 
     /**
-     * Activates an user account given an token.
+     * Checks if there is a valid recaptcha reponse in the request.
      *
      * @param Request $request The request object.
      *
-     * @return Response The response object.
+     * @return boolean True if there is no recaptcha response or the recaptcha
+     *                 response is valid. False otherwise.
      */
-    public function activateAction(Request $request)
+    protected function checkRecaptcha($request)
     {
-        // When user confirms registration from email
-        $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
-        $em    = $this->get('orm.manager');
-        $oql   = sprintf('token = "%s"', $token);
-
-        try {
-            $user = $em->getRepository('User')->findOneBy($oql);
-
-            $user->activated  = true;
-            $user->last_login = new \DateTime('now');
-            $user->token      = null;
-
-            $em->persist($user);
-
-            $request->getSession()->migrate();
-
-            $token   = new UsernamePasswordToken($user, null, 'frontend', $user->getRoles());
-            $session = $request->getSession();
-
-            $securityContext = $this->get('security.token_storage');
-            $securityContext->setToken($token);
-            $session->set('user', $user);
-            $session->set('_security_frontend', serialize($token));
-
-            $session->getFlashBag()->add('success', _('Log in succesful.'));
-
-            // Send welcome mail with link to subscribe action
-            $url = $this->generateUrl('frontend_paywall_showcase', [], true);
-
-            $mailSubject = sprintf(_('Welcome to %s'), $this->get('setting_repository')->get('site_name'));
-            $mailBody    = $this->renderView(
-                'user/emails/welcome.tpl',
-                [
-                    'name' => $user->name,
-                    'url'  => $url,
-                ]
+        $valid = $this->get('core.recaptcha')->configureFromSettings()
+            ->isValid(
+                $request->get('g-recaptcha-response'),
+                $request->getClientIp()
             );
 
-            // Build the message
-            $message = \Swift_Message::newInstance();
-            $message
-                ->setSubject($mailSubject)
-                ->setBody($mailBody, 'text/html')
-                // And optionally an alternative body
-                ->addPart(strip_tags($mailBody), 'text/plain')
-                ->setTo($user->email)
-                ->setFrom(['no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')]);
-
-            $headers = $message->getHeaders();
-            $headers->addParameterizedHeader(
-                'ACUMBAMAIL-SMTPAPI',
-                $this->get('core.instance')->internal_name . ' - User activation'
-            );
-
-            try {
-                $mailer = $this->get('mailer');
-                $mailer->send($message);
-
-                $this->get('application.log')->notice(
-                    "Email sent. Frontend activate user (to: " . $user->email . ")"
-                );
-
-                $this->view->assign('mailSent', true);
-            } catch (\Exception $e) {
-                // Log this error
-                $this->get('application.log')->notice(
-                    "Unable to send the user welcome email for the "
-                    . "user {$user->id}: " . $e->getMessage()
-                );
-
-                $this->get('session')->getFlashBag()->add('error', _('Unable to send your welcome email.'));
-            }
-        } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add(
+        if (!$valid) {
+            $request->getSession()->getFlashBag()->add(
                 'error',
-                _('There was an error while creating your user account.')
+                'The reCAPTCHA wasn\'t entered correctly. Try to authenticate again.'
             );
 
-            return $this->redirect($this->generateUrl('frontend_user_register'));
+            return false;
         }
 
-        return $this->redirect($this->generateUrl('frontend_frontpage'));
-    }
-
-    /**
-     * Shows the form for recovering the pass of a user and send the mail to the
-     * user.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     */
-    public function recoverPasswordAction(Request $request)
-    {
-        if ('POST' != $request->getMethod()) {
-            return $this->render('user/recover_pass.tpl');
-        }
-
-        $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
-
-        // Get user by email
-        $user = new \User();
-        $user->findByEmail($email);
-
-        // If e-mail exists in DB
-        if (!is_null($user->id)) {
-            // Generate and update user with new token
-            $token = md5(uniqid(mt_rand(), true));
-            $user->updateUserToken($user->id, $token);
-
-            $url = $this->generateUrl('frontend_user_resetpass', ['token' => $token], true);
-
-            $this->view->setCaching(0);
-
-            $mailSubject = sprintf(_('Password reminder for %s'), $this->get('setting_repository')->get('site_title'));
-            $mailBody    = $this->renderView(
-                'user/emails/recoverpassword.tpl',
-                [
-                    'user' => $user,
-                    'url'  => $url,
-                ]
-            );
-
-            //  Build the message
-            $message = \Swift_Message::newInstance();
-            $message
-                ->setSubject($mailSubject)
-                ->setBody($mailBody, 'text/plain')
-                ->setTo($user->email)
-                ->setFrom(['no-reply@postman.opennemas.com' => $this->get('setting_repository')->get('site_name')]);
-
-            $headers = $message->getHeaders();
-            $headers->addParameterizedHeader(
-                'ACUMBAMAIL-SMTPAPI',
-                $this->get('core.instance')->internal_name . ' - Frontend Recover Password'
-            );
-
-            try {
-                $mailer = $this->get('mailer');
-                $mailer->send($message);
-
-                $this->get('application.log')->notice(
-                    "Email sent. Frontend recover password (to: " . $user->email . ")"
-                );
-
-                $this->view->assign([
-                    'mailSent' => true,
-                    'user'     => $user
-                ]);
-            } catch (\Exception $e) {
-                // Log this error
-                $this->get('application.log')->notice(
-                    "Unable to send the recover password email for the "
-                    . "user {$user->id}: " . $e->getMessage()
-                );
-
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _('Unable to send your recover password email. Please try it later.')
-                );
-            }
-        } else {
-            $this->get('session')->getFlashBag()->add('error', _('Unable to find an user with that email.'));
-        }
-
-        // Display form
-        return $this->render('user/recover_pass.tpl');
-    }
-
-    /**
-     * Regenerates the pass for a user.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     */
-    public function regeneratePasswordAction(Request $request)
-    {
-        $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
-
-        $user = new \User();
-        $user = $user->findByToken($token);
-
-        if ('POST' !== $request->getMethod()) {
-            if (empty($user->id)) {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _(
-                        'Unable to find the password reset request. '
-                        . 'Please check the url we sent you in the email.'
-                    )
-                );
-
-                $this->view->assign('userNotValid', true);
-            } else {
-                $this->view->assign('user', $user);
-            }
-        } else {
-            $password       = $request->request->filter('password', null, FILTER_SANITIZE_STRING);
-            $passwordVerify = $request->request->filter('password-verify', null, FILTER_SANITIZE_STRING);
-
-            if ($password == $passwordVerify && !empty($password)) {
-                $user->updateUserPassword($user->id, $password);
-                $user->updateUserToken($user->id, null);
-
-                $this->view->assign('updated', true);
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'notice',
-                    _('Unable to find the password reset request. Please check the url we sent you in the email.')
-                );
-            }
-        }
-
-        return $this->render('user/regenerate_pass.tpl', [
-            'token' => $token,
-            'user'  => $user
-        ]);
-    }
-
-    /**
-     * Generates the HTML for the user menu by ajax.
-     *
-     * @return Response The response object.
-     */
-    public function getUserMenuAction()
-    {
-        return $this->render('user/menu.tpl');
+        return true;
     }
 
     /**
@@ -552,20 +331,106 @@ class UserController extends Controller
      *
      * @return array The list of public user groups.
      */
-    protected function getUserGroups()
+    protected function getSubscriptions()
     {
-        $userGroups = $this->get('orm.manager')
-            ->getRepository('UserGroup')->findBy();
+        $response = $this->get('api.service.subscription')
+            ->setCount(false)->getList('enabled = 1 and private = 0');
 
-        // Show only public groups ()
-        $userGroups = array_filter($userGroups, function ($a) {
-            return in_array(223, $a->privileges);
-        });
+        return $response['items'];
+    }
 
-        $userGroups = array_map(function ($a) {
-            return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
-        }, $userGroups);
+    /**
+     * Parses subscriptions from form.
+     *
+     * @param array $subscriptions The list of subscriptions.
+     *
+     * @return array The list of parsed subscriptions.
+     */
+    protected function parseSubscriptions($subscriptions)
+    {
+        $ids   = array_keys($subscriptions);
+        $items = $this->get('api.service.subscription')
+            ->setCount(false)
+            ->getListByIds($ids);
 
-        return array_values($userGroups);
+        $subscriptions = [];
+        foreach ($items['items'] as $item) {
+            $subscriptions[$item->pk_user_group] = [
+                'user_group_id' => $item->pk_user_group,
+                'status'        => $item->request ? 2 : 1
+            ];
+        }
+
+        return $subscriptions;
+    }
+
+    /**
+     * Sends the email before account creation.
+     *
+     * @param array $data The email information.
+     */
+    protected function sendCreateEmail($data)
+    {
+        $ds = $this->get('orm.manager')->getDataSet('Settings');
+
+        $subject = sprintf(_('New user account in %s'), $ds->get('site_title'));
+
+        $this->view->setCaching(0);
+        $body = $this->renderView('user/emails/register.tpl', [
+            'name' => $data['name'],
+            'url'  => $this->get('router')->generate('frontend_user_activate', [
+                'token' => $data['token']
+            ], true),
+        ]);
+
+        $message = \Swift_Message::newInstance();
+        $message
+            ->setSubject($subject)
+            ->setBody($body, 'text/html')
+            ->addPart(strip_tags($body), 'text/plain')
+            ->setTo($data['email'])
+            ->setFrom([
+                'no-reply@postman.opennemas.com' => $ds->get('site_name')
+            ]);
+
+        $message->getHeaders()->addParameterizedHeader(
+            'ACUMBAMAIL-SMTPAPI',
+            $this->get('core.instance')->internal_name . ' - User register'
+        );
+
+        $this->get('mailer')->send($message);
+    }
+
+    /**
+     * Sends the email after account is activated.
+     *
+     * @param array $data The user.
+     */
+    protected function sendActivateEmail($user)
+    {
+        $ds = $this->get('orm.manager')->getDataSet('Settings');
+
+        $subject = sprintf(_('Welcome to %s'), $ds->get('site_name'));
+        $body    = $this->renderView('user/emails/welcome.tpl', [
+            'name' => $user->name,
+            'url'  => $this->generateUrl('frontend_paywall_showcase', [], true),
+        ]);
+
+        $message = \Swift_Message::newInstance();
+        $message
+            ->setSubject($subject)
+            ->setBody($body, 'text/html')
+            ->addPart(strip_tags($body), 'text/plain')
+            ->setTo($user->email)
+            ->setFrom([
+                'no-reply@postman.opennemas.com' => $ds->get('site_name')
+            ]);
+
+        $message->getHeaders()->addParameterizedHeader(
+            'ACUMBAMAIL-SMTPAPI',
+            $this->get('core.instance')->internal_name . ' - User activation'
+        );
+
+        $this->get('mailer')->send($message);
     }
 }

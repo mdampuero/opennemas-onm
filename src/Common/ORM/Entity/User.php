@@ -68,13 +68,15 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
      */
     public function getRoles()
     {
-        $roles = [];
+        $roles = [ 'ROLE_USER' ];
 
         if ($this->getOrigin() === 'manager') {
-            $roles[] = 'ROLE_MANAGER';
+            $roles[] = 'ROLE_MASTER';
         }
 
-        $roles[] = $this->type !== 1 ? 'ROLE_BACKEND' : 'ROLE_FRONTEND';
+        if ($this->type !== 1) {
+            $roles[] = 'ROLE_ADMIN';
+        }
 
         return array_unique($roles);
     }
@@ -120,7 +122,7 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
      */
     public function getUsername()
     {
-        return $this->username;
+        return $this->email;
     }
 
     /**

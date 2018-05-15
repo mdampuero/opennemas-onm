@@ -20,30 +20,19 @@ function smarty_block_acl($params, $content, Smarty_Internal_Template $smarty, $
         }
 
         if (isset($params['isAllowed'])) {
-            $isAllowed = $params['isAllowed'];
-            $check     = $check
-                && ($security->hasPermission($isAllowed)
-                || $security->hasRole($isAllowed));
+            $check = $check && $security->hasPermission($params['isAllowed']);
         }
 
         if (isset($params['isNotAllowed'])) {
-            $check = $check
-                && !($security->hasPermission($params['isNotAllowed'])
-                || $security->hasRole($params['isNotAllowed']));
+            $check = $check && !$security->hasPermission($params['isNotAllowed']);
         }
 
         if (isset($params['hasCategoryAccess'])) {
-            $check = $check
-                && $security->hasCategory($params['hasCategoryAccess']);
-        }
-
-        if (isset($params['nohasCategoryAccess'])) {
-            $check = $check && !$security->hasCategory($params['nohasCategoryAccess']);
+            $check = $check && $security->hasCategory($params['hasCategoryAccess']);
         }
 
         $else = $smarty->left_delimiter . 'aclelse' . $smarty->right_delimiter;
 
-        // $check = false;
         $true_false = explode($else, $content, 2);
         $true       = (isset($true_false[0]) ? $true_false[0] : null);
         $false      = (isset($true_false[1]) ? $true_false[1] : null);

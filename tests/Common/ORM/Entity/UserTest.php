@@ -20,10 +20,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $this->user = new User([
             'activated'     => true,
+            'email'         => 'waldo@baz.com',
             'fk_user_group' => [],
-            'username'      => 'waldo',
             'password'      => 'glorp',
             'token'         => 'baz',
+            'username'      => 'waldo',
         ]);
     }
 
@@ -32,10 +33,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     public function testEquals()
     {
-        $user = new User(['username' => 'waldo' ]);
+        $user = new User(['email' => 'waldo@baz.com' ]);
         $this->assertTrue($this->user->equals($user));
 
-        $user = new User(['username' => 'fubar' ]);
+        $user = new User(['email' => 'fubar@gorp.org' ]);
         $this->assertFalse($this->user->equals($user));
     }
 
@@ -60,15 +61,14 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testGetRoles()
     {
         $this->user->type = 1;
-        $this->assertTrue(in_array('ROLE_FRONTEND', $this->user->getRoles()));
-        $this->assertFalse(in_array('ROLE_BACKEND', $this->user->getRoles()));
+        $this->assertEquals([ 'ROLE_USER' ], $this->user->getRoles());
 
         $this->user->type = 0;
-        $this->assertTrue(in_array('ROLE_BACKEND', $this->user->getRoles()));
-        $this->assertFalse(in_array('ROLE_MANAGER', $this->user->getRoles()));
+        $this->assertContains('ROLE_ADMIN', $this->user->getRoles());
+        $this->assertNotContains('ROLE_MASTER', $this->user->getRoles());
 
         $this->user->setOrigin('manager');
-        $this->assertTrue(in_array('ROLE_MANAGER', $this->user->getRoles()));
+        $this->assertContains('ROLE_MASTER', $this->user->getRoles());
     }
 
     /**
@@ -106,7 +106,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUsername()
     {
-        $this->assertEquals($this->user->username, $this->user->getUsername());
+        $this->assertEquals($this->user->email, $this->user->getUsername());
     }
 
     /**
@@ -149,11 +149,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsEqualTo()
     {
-        $user = new User([ 'username' => 'garply', 'fk_user_group' => [] ]);
+        $user = new User([ 'email' => 'garply@xyzzy.gar', 'fk_user_group' => [] ]);
 
         $this->assertFalse($this->user->isEqualTo($user));
 
-        $user->username = 'waldo';
+        $user->email = 'waldo@baz.com';
         $this->assertTrue($this->user->isEqualTo($user));
     }
 }

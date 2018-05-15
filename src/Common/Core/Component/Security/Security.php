@@ -183,22 +183,6 @@ class Security
     }
 
     /**
-     * Checks if the current user has the role.
-     *
-     * @param string $role The role to check.
-     *
-     * @return boolean True if the current user has the role. False otherwise.
-     */
-    public function hasRole($role)
-    {
-        if (empty($this->user) || empty($this->user->getRoles())) {
-            return false;
-        }
-
-        return in_array($role, $this->user->getRoles());
-    }
-
-    /**
      * Changes the current categories.
      *
      * @param array $categories The list of categories.
