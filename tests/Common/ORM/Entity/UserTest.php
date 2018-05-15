@@ -61,14 +61,14 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testGetRoles()
     {
         $this->user->type = 1;
-        $this->assertEquals([ 'ROLE_USER' ], $this->user->getRoles());
+        $this->assertEquals([ 'ROLE_FRONTEND' ], $this->user->getRoles());
 
         $this->user->type = 0;
-        $this->assertContains('ROLE_ADMIN', $this->user->getRoles());
-        $this->assertNotContains('ROLE_MASTER', $this->user->getRoles());
+        $this->assertContains('ROLE_BACKEND', $this->user->getRoles());
+        $this->assertNotContains('ROLE_MANAGER', $this->user->getRoles());
 
         $this->user->setOrigin('manager');
-        $this->assertContains('ROLE_MASTER', $this->user->getRoles());
+        $this->assertContains('ROLE_MANAGER', $this->user->getRoles());
     }
 
     /**
