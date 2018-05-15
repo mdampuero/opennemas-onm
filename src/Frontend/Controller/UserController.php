@@ -334,7 +334,7 @@ class UserController extends Controller
     protected function getSubscriptions()
     {
         $response = $this->get('api.service.subscription')
-            ->setCount(false)->getList('enabled = 1');
+            ->setCount(false)->getList('enabled = 1 and private = 0');
 
         return $response['items'];
     }
