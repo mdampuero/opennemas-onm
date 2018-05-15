@@ -300,23 +300,23 @@ class NewsletterController extends Controller
         $oql      = $request->query->get('oql', '');
         $response = $ss->getList($oql);
 
-        $recipients = array_map(function ($list) use ($ssb) {
-            $item = [
+        $lists = array_filter($response['items'], function ($list) {
+            return in_array(224, $list->privileges);
+        });
+
+        $recipients = [];
+        foreach ($lists as $list) {
+            $recipients[] = [
                 'uuid' => uniqid(),
                 'type' => 'list',
                 'name' => $list->name,
                 'id'   => $list->pk_user_group,
                 'subscribers' => $ssb->getList(
-                    '(user_group_id ~ "' . $list->pk_user_group
+                    '(user_group_id = "' . $list->pk_user_group
                     . '" and status != 0)'
                 )['total']
             ];
-
-            return $item;
-        }, array_filter($response['items'], function ($list) {
-            return in_array(224, $list->privileges);
-        }));
-
+        }
 
         $maillistConfigs = $sm->get('newsletter_maillist');
 
