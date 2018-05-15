@@ -15,5 +15,9 @@ frontend_newsletter_subscribe_create:
     defaults: { _controller: FrontendBundle:Newsletter:createSubscription }
     options:
         l10n: true
-    options:
-        l10n: true
+
+frontend_newsletter_show:
+    path: /newsletter/{id}
+    defaults: { _controller: FrontendBundle:Newsletter:show }
+    requirements:
+        id   : '([0-9]+)'

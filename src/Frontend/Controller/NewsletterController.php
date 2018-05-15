@@ -23,6 +23,29 @@ use Common\Core\Controller\Controller;
 class NewsletterController extends Controller
 {
     /**
+     * Shows a newsletter publicly
+     *
+     * @param int $id the id of the newsletter to show
+     *
+     * @return Response the response given to the user
+     *
+     * @Security("hasExtension('NEWSLETTER_MANAGER')")
+     **/
+    public function showAction($id = null)
+    {
+        $newsletter = new \Newsletter((int) $id);
+        if (empty($newsletter->id)) {
+            throw new ResourceNotFoundException();
+        }
+
+        $internalName = $this->get('core.instance')->internal_name;
+        return new Response($newsletter->html, 200, [
+            'x-instance' => $internalName,
+            'x-tags'     => 'instance-' . $internalName . ',newsletter-' . $id,
+        ]);
+    }
+
+    /**
      * Shows the subscription form if the newsletter management is external if not
      * it redirects to the /user/register action
      *
