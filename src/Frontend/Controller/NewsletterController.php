@@ -130,7 +130,7 @@ class NewsletterController extends Controller
             }
 
             // Create the subscription
-            $nh->sendSubscriptionMail($data);
+            $this->get('core.helper.newsletter_sender')->sendSubscriptionMail($data);
 
             $rs = ['class' => 'success'];
             if ($data['subscription'] == 'alta') {
