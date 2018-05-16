@@ -248,7 +248,7 @@ $menuXml = [
         'id'          => 'newsletter_manager',
         'title'       => _('Newsletters'),
         'icon'        => 'fa fa-envelope',
-        'link'        => url('admin_newsletters'),
+        'link'        => url('backend_newsletters_list'),
         'module_name' => 'NEWSLETTER_MANAGER',
         'privilege'   => 'NEWSLETTER_ADMIN',
     ],

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-26 15:40+0000\n"
-"PO-Revision-Date: 2018-04-26 17:44+0200\n"
+"POT-Creation-Date: 2018-05-16 11:11+0000\n"
+"PO-Revision-Date: 2018-05-16 13:23+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -540,13 +540,17 @@ msgstr "Servidor de agencia de noticias actualizado."
 msgid "Y-m-d"
 msgstr "d-m-Y"
 
-#, php-format
-msgid "No newsletter sent from %s."
-msgstr "No se enviaron boletines desde %s."
+msgid "You have reached your maximum of emails allowed to send per month"
+msgstr ""
+"Has alcanzado el número máximo de correos-e permitidos para el envío por mes"
 
 #, php-format
-msgid "%d newsletter sent from %s."
-msgstr "%d boletines enviados desde %s."
+msgid "No newsletters were sent from %s"
+msgstr "No se enviaron boletines desde el %s"
+
+#, php-format
+msgid "%d newsletter sent from %s"
+msgstr "%d boletines enviados desde el %s"
 
 #, php-format
 msgid "%s newsletter sent from %s (%d allowed)."
@@ -556,18 +560,8 @@ msgstr "%s boletines enviados desde %s (%d permitidos)."
 msgid "Content saved successfully"
 msgstr "Contenido guardado con éxito"
 
-msgid ""
-"Your newsletter configuration is not complete. You must complete the sender "
-"email address."
-msgstr ""
-"La configuración de Boletín de noticias no está completa. Debes completar la "
-"dirección de correo-e del remitente."
-
-msgid "Unable to deliver your email"
-msgstr "No se pudo enviar tu correo"
-
-msgid "Max sents reached."
-msgstr "Has alcanzado el número máximo de envíos."
+msgid "[Newsletter]"
+msgstr "[Boletín de noticias]"
 
 msgid "Newsletter module settings saved successfully."
 msgstr "Configuración del módulo «Boletín de noticias» guardado correctamente."
@@ -583,9 +577,6 @@ msgid ""
 msgstr ""
 "La configuración de Boletín de noticias no está completa. Vete a las "
 "preferencias del módulo y completa el formulario."
-
-msgid "You have reached the maximum of emails allowed to send"
-msgstr "Has alcanzado el número máximo de correos-e permitodos para el envío"
 
 msgid "Unable to create the new subscriber. This email is already in use"
 msgstr ""
@@ -1849,6 +1840,15 @@ msgstr "Nombre"
 msgid "Email"
 msgstr "Email"
 
+msgid "Check the form and try again"
+msgstr "Revisa el formulario e inténtalo de nuevo"
+
+msgid "You have been subscribed to our newsletter."
+msgstr "Te has suscrito al boletín de noticias."
+
+msgid "You have been unsubscribed from our newsletter."
+msgstr "Hemos eliminado tu suscripción al boletín de noticias "
+
 #, php-format
 msgid "You already have an active Subscription until %s"
 msgstr "Ya tienes una suscripción activa hasta el %s"
@@ -1886,81 +1886,36 @@ msgstr "Últimas opiniones"
 msgid "Latest Videos"
 msgstr "Últimos vídeos"
 
-msgid "Check the form and try again"
-msgstr "Revisa el formulario e inténtalo de nuevo"
+msgid "Your account is now activated"
+msgstr "Tu cuenta ahora está activada"
 
-msgid "You have been subscribed to the newsletter."
-msgstr "Te has suscrito al boletín de noticias."
+msgid "Unable to find your account"
+msgstr "No se pudo encontrar tu cuenta"
 
-msgid "You have been unsusbscribed from the newsletter."
-msgstr "Hemos eliminado tu suscripción del boletín de noticias."
+msgid "Unable to activate your account"
+msgstr "No se pudo activar tu cuenta"
 
-msgid "Subscription form"
-msgstr "Formulario de suscripción"
+msgid "Select a country"
+msgstr "Seleccione un país"
 
-msgid "You have been subscribed to our newsletter."
-msgstr "Te has suscrito al boletín de noticias."
-
-msgid "You have been unsubscribed from our newsletter."
-msgstr "Hemos eliminado tu suscripción al boletín de noticias "
-
-msgid ""
-"Sorry, we were unable to complete your request.\n"
-"Check the form and try again"
-msgstr ""
-"No hemos podido completar tu petición.\n"
-"Comprueba el formulario e inténtalo de nuevo."
-
-msgid "You have been unsubscribed from our newsletter"
-msgstr "Hemos eliminado tu suscripción al boletín de noticias"
-
-msgid "Sorry, that email is not in our database"
-msgstr ""
-"Lo sentimos, pero ese correo electrónico no esta en la lista de suscriptores"
-
-msgid "The reCAPTCHA wasn't entered correctly. Try to authenticate again."
-msgstr "El código de reCAPTCHA no fue escrito correctamente. Pruebe de nuevo."
-
-msgid "The email address is already in use."
-msgstr "La dirección de correo electrónico ya está en uso."
-
-msgid "The user name is already in use."
-msgstr "El nombre de usuario ya está en uso."
-
-#, php-format
-msgid "New user account in %s"
-msgstr "Nueva cuenta de usuario en %s"
-
-msgid "An error has occurred. Try to complete the form with valid data."
-msgstr ""
-"Se ha producido un error. Intente completar el formulario con datos válidos."
+msgid "Unable to create your user account. Please try it later."
+msgstr "No se pudo crear tu cuenta de usuario. Por favor inténtalo más tarde"
 
 msgid "Unable to send your registration email. Please try it later."
 msgstr ""
 "No se pudo enviar el correo electrónico de registro. Por favor inténtalo más "
 "tarde"
 
-msgid "Data updated successfully"
-msgstr "Datos actualizados correctamente."
-
-msgid "The user does not exists."
-msgstr "El usuario no existe."
-
 msgid "Unable to update the user."
 msgstr "No se pudo actualizar el usuario."
 
-msgid "Log in succesful."
-msgstr "Inicio de sesión correcto."
+#, php-format
+msgid "New user account in %s"
+msgstr "Nueva cuenta de usuario en %s"
 
 #, php-format
 msgid "Welcome to %s"
 msgstr "Bienvenido a %s"
-
-msgid "Unable to send your welcome email."
-msgstr "No fue posible enviar tu correo-e de bienvenida."
-
-msgid "There was an error while creating your user account."
-msgstr "Se ha producido un error al crear su cuenta de usuario."
 
 #, php-format
 msgid "%s - Premium subscription activated"
@@ -2301,6 +2256,36 @@ msgstr "Pagar con PayPal"
 
 msgid "There is no billing information."
 msgstr "No hay información de facturación."
+
+msgid "Max sents reached"
+msgstr "Has alcanzado el número máximo de envíos"
+
+#, php-format
+msgid "%d subscribers"
+msgstr "%d suscriptores"
+
+msgid "Unable to deliver your email"
+msgstr "No se pudo enviar tu correo"
+
+#, php-format
+msgid "Email not valid: %s"
+msgstr "Dirección de correo no válida: %s"
+
+msgid "You have been subscribed to the newsletter."
+msgstr "Te has suscrito al boletín de noticias."
+
+msgid "You have been unsusbscribed from the newsletter."
+msgstr "Hemos eliminado tu suscripción del boletín de noticias."
+
+msgid "Subscription form"
+msgstr "Formulario de suscripción"
+
+msgid ""
+"Sorry, we were unable to complete your request.\n"
+"Check the form and try again"
+msgstr ""
+"No hemos podido completar tu petición.\n"
+"Comprueba el formulario e inténtalo de nuevo."
 
 msgid ""
 "Url must be longer than 4 characters and only must content characters and "
@@ -3411,7 +3396,8 @@ msgid "Remove permanently selected items"
 msgstr "Eliminar de forma permanente los elementos seleccionados"
 
 msgid "Are you sure you want to remove permanently %1 item(s)?"
-msgstr "¿Está seguro de que quiere eliminar de forma permanente %1 elemento(s)?"
+msgstr ""
+"¿Está seguro de que quiere eliminar de forma permanente %1 elemento(s)?"
 
 msgid " You will not be able to restore them back."
 msgstr "No podrás restaurarlos."
@@ -5500,9 +5486,6 @@ msgstr "Confirmar contraseña"
 msgid "The passwords don't match"
 msgstr "Las contraseñas no coinciden"
 
-msgid "Select a country"
-msgstr "Seleccione un país"
-
 msgid "Do you want to convert the <strong>%1</strong> to <strong>%2</strong>?"
 msgstr "¿Quieres convertir el <strong>%1</strong> a <strong>%2</strong>?"
 
@@ -6177,11 +6160,11 @@ msgstr "¿En que categoría quieres importar este elemento?"
 msgid "You must save a changes or back to list"
 msgstr "Debes guardar los cambios o volver a la lista"
 
-msgid "Are you sure to send the newsletter."
-msgstr "¿Estás seguro que quieres enviar el boletín de noticias?"
+msgid "This newsletter is going to be sent"
+msgstr "Este boletín de noticias está a punto de ser enviado."
 
-msgid "This newsletter is going to send. Are you sure?"
-msgstr "Este boletín de noticias está a punto de ser enviado. ¿Estás seguro?"
+msgid "Are you sure to send %1 emails?"
+msgstr "¿Estás seguro que quieres enviar %1 correos-e?"
 
 msgid "Send"
 msgstr "Enviar"
@@ -6297,8 +6280,14 @@ msgstr "Aceptado por el administrador"
 msgid "Disabled by administrator"
 msgstr "Desactivado por el administrador"
 
+msgid "Articles in Frontpage"
+msgstr "Artículos en portada"
+
 msgid "Pick contents"
 msgstr "Seleccionar contenidos"
+
+msgid "Pick recipients"
+msgstr "Seleccionar destinatarios"
 
 msgid "Email subject"
 msgstr "Asunto del email"
@@ -6321,52 +6310,57 @@ msgstr ""
 "Clique en el botón «Añadir contenidos» de arriba o arrastra contenidos de "
 "otros contenedores"
 
-msgid "Delivering report"
-msgstr "Informe de envío"
-
-msgid "Back to list"
-msgstr "Volver al listado"
-
 msgid "Newsletter sending report"
 msgstr "Informe de envío de boletín"
 
+msgid "<strong>%1 emails</strong> have being sent."
+msgstr "Se han enviado <strong>%1 correos-e</strong>."
+
+msgid "No emails were sent."
+msgstr "No se envió ningún correo-e."
+
+msgid "Please, find below the report."
+msgstr "Debajo puedes encontrar el informe."
+
+msgid "External service"
+msgstr "Servicio externos"
+
+msgid "Subscription list"
+msgstr "Lista de suscripción"
+
+msgid "Email address"
+msgstr "Dirección de correo"
+
+msgid "Go back to the list"
+msgstr "Volver a la lista"
+
+msgid "Select your recipients"
+msgstr "Selecciona tus destinatarios"
+
 msgid ""
-"Your newsletter was sent to the list of mails. Please find below the "
-"detailed report for each email and its status."
+"External email address configured on the <a href=\"%1\">newsletter "
+"configuration section</a> "
 msgstr ""
-"Tu boletín fue enviado a la lista de correos. Debajo puede ver información "
-"detallada para cada uno de los mismos y su estado."
-
-msgid "OK"
-msgstr "Correcto"
-
-msgid "Failed"
-msgstr "Fallido"
-
-msgid "Recipient selection"
-msgstr "Selección de destinatarios"
-
-msgid "Please select your desired persons to sent the newsletter to."
-msgstr ""
-"Selecciona las personas a las que quiere enviar el boletín de noticias."
+"La dirección de correo-e externa se configura desde la <a href=\"%1\">"
+"sección de configuración de boletines</a> "
 
 msgid "Add to list"
 msgstr "Añadir a la lista"
 
-msgid "Toggle all"
-msgstr "Activar/desactivar todos"
+msgid "Subscription lists"
+msgstr "Listas de suscripción"
 
-msgid "Select receivers"
-msgstr "Seleccionar receptores"
+msgid ""
+"Subscription lists available from <a href=\"%1\">subscriptions module</a> "
+msgstr ""
+"Las listas de subscripción están disponibles desde el <a href=\"%1\">el "
+"módulo de subscripciones</a> "
 
-msgid "Remove from list"
-msgstr "Quitar de la lista"
+msgid "%1 subscriptors"
+msgstr "%1 suscriptores"
 
-msgid "Receivers"
-msgstr "Destinatarios"
-
-msgid "Add more emails"
-msgstr "Añadir más correos"
+msgid "Add recipients manually"
+msgstr "Añadir destinatarios manualmente"
 
 msgid "Write a list of email address writing one per line"
 msgstr ""
@@ -6375,17 +6369,20 @@ msgstr ""
 msgid "Parse list & add"
 msgstr "Analizar lista y añadir"
 
-msgid "Articles in Frontpage"
-msgstr "Artículos en portada"
+msgid "Receivers"
+msgstr "Destinatarios"
 
-msgid "Subscriber"
-msgstr "Suscriptor"
+msgid "Remove selected"
+msgstr "Eliminar los seleccionados"
+
+msgid "No recipients selected"
+msgstr "No se seleccionó ningún destinatario"
+
+msgid "Toggle all"
+msgstr "Activar/desactivar todos"
 
 msgid "Search by subject"
 msgstr "Buscar por asunto"
-
-msgid "Unable to find any newsletter that matches your search."
-msgstr "No existe ningún boletín que coincida con tu búsqueda."
 
 msgid "Updated"
 msgstr "Actualizado"
@@ -6396,15 +6393,48 @@ msgstr "Envios"
 msgid "Created:"
 msgstr "Creado:"
 
-msgid "Show contents"
-msgstr "Mostrar contenidos"
-
 msgid ""
 "Before using newsletter you have to fill the <a href=\"%1#external\"  target="
 "\"_blank\">reCaptcha keys on system settings</a>"
 msgstr ""
 "Antes de utilizar el boletín, debes completar las claves de reCaptcha en las "
 "<a href=\"%1#external\" target=\"_blank\">opciones del sistema</a>"
+
+msgid "Newsletter handler"
+msgstr "Gestor de boletines"
+
+msgid ""
+"Opennemas allows you to use different methods to send your newsletters. "
+"Choose between those available below:"
+msgstr ""
+"Opennemas le permite seleccionar distintos métodos de envío de sus "
+"boletines. Seleccione entre los disponibles debajo:"
+
+msgid "Internal Send"
+msgstr "Envio interno"
+
+msgid "Mailing list address"
+msgstr "Dirección de la lista de correo electrónico"
+
+msgid ""
+"If you have a mailing list service to deliver newsletters add the address "
+"here"
+msgstr ""
+"Si tienes un servicio de lista de correo para entrega de boletines agrega la "
+"dirección aquí"
+
+msgid "Mail address to receive new subscriptions"
+msgstr "Dirección de correo para recibir nuevas suscripciones"
+
+msgid ""
+"You've choosen to use the <a href=\"%1\" target=\"_blank\">internal "
+"subscription list</a> to send your newsletters."
+msgstr ""
+"Seleccionó usar las <a href=\"%1\" target=\"_blank\">listas de suscripción "
+"internas</a> para enviar sus boletines."
+
+msgid "Newsletter contents"
+msgstr "Contenidos del boletín"
 
 msgid "Newsletter subject"
 msgstr "Asunto del boletín"
@@ -6424,48 +6454,18 @@ msgstr "Emisor del correo"
 msgid "Newsletter links points to"
 msgstr "Los enlaces del boletín apuntan a"
 
-msgid ""
-"You can choose if you prefer that the links of the contents of the "
-"newsletter point within the content or contents on the frontpage"
-msgstr ""
-"Puedes elegir si los enlaces de los contenidos del boletín apuntan al "
-"interior del contenido o al contenido en la portada"
-
 msgid "Point to inner"
 msgstr "Apuntar al interior"
 
 msgid "Point to frontpage"
 msgstr "Apuntar a la portada"
 
-msgid "Newsletter type"
-msgstr "Tipo de boletín"
-
 msgid ""
-"Whether to manage new subscriptions by an external maillist or using the <a "
-"href=\"%1\" target=\"_blank\"> Opennemas-managed list of subscribers</a>."
+"You can choose if you prefer that the links of the contents of the "
+"newsletter point within the content or contents on the frontpage"
 msgstr ""
-"Puedes elegir entre recibir las nuevas suscripciones por correo electrónico "
-"o utilizando la <a href=\"%1\" target=\"_blank\">tabla de suscriptores "
-"gestionada por Opennemas</a>."
-
-msgid "External Send"
-msgstr "Envio externo"
-
-msgid "Internal Send"
-msgstr "Envio interno"
-
-msgid "Mailing list address"
-msgstr "Dirección de la lista de correo electrónico"
-
-msgid ""
-"If you have a mailing list service to deliver newsletters add the address "
-"here"
-msgstr ""
-"Si tienes un servicio de lista de correo para entrega de boletines agrega la "
-"dirección aquí"
-
-msgid "Mail address to receive new subscriptions"
-msgstr "Dirección de correo para recibir nuevas suscripciones"
+"Puedes elegir si los enlaces de los contenidos del boletín apuntan al "
+"interior del contenido o al contenido en la portada"
 
 msgid "Add new item"
 msgstr "Añadir nuevo elemento"
@@ -9052,6 +9052,104 @@ msgstr ""
 "'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif; "
 "font-size: 14px; line-height: normal;\" target=\"_blank\">Opennemas</a> "
 "<span style=\"color:#000000\">Equipo</span>"
+
+#~ msgid ""
+#~ "Your newsletter configuration is not complete. You must complete the "
+#~ "sender email address."
+#~ msgstr ""
+#~ "La configuración de Boletín de noticias no está completa. Debes completar "
+#~ "la dirección de correo-e del remitente."
+
+#~ msgid "You have been unsubscribed from our newsletter"
+#~ msgstr "Hemos eliminado tu suscripción al boletín de noticias"
+
+#~ msgid "Sorry, that email is not in our database"
+#~ msgstr ""
+#~ "Lo sentimos, pero ese correo electrónico no esta en la lista de "
+#~ "suscriptores"
+
+#~ msgid "The reCAPTCHA wasn't entered correctly. Try to authenticate again."
+#~ msgstr ""
+#~ "El código de reCAPTCHA no fue escrito correctamente. Pruebe de nuevo."
+
+#~ msgid "The email address is already in use."
+#~ msgstr "La dirección de correo electrónico ya está en uso."
+
+#~ msgid "The user name is already in use."
+#~ msgstr "El nombre de usuario ya está en uso."
+
+#~ msgid "An error has occurred. Try to complete the form with valid data."
+#~ msgstr ""
+#~ "Se ha producido un error. Intente completar el formulario con datos "
+#~ "válidos."
+
+#~ msgid "Data updated successfully"
+#~ msgstr "Datos actualizados correctamente."
+
+#~ msgid "The user does not exists."
+#~ msgstr "El usuario no existe."
+
+#~ msgid "Log in succesful."
+#~ msgstr "Inicio de sesión correcto."
+
+#~ msgid "Unable to send your welcome email."
+#~ msgstr "No fue posible enviar tu correo-e de bienvenida."
+
+#~ msgid "There was an error while creating your user account."
+#~ msgstr "Se ha producido un error al crear su cuenta de usuario."
+
+#~ msgid "Delivering report"
+#~ msgstr "Informe de envío"
+
+#~ msgid "Back to list"
+#~ msgstr "Volver al listado"
+
+#~ msgid ""
+#~ "Your newsletter was sent to the list of mails. Please find below the "
+#~ "detailed report for each email and its status."
+#~ msgstr ""
+#~ "Tu boletín fue enviado a la lista de correos. Debajo puede ver "
+#~ "información detallada para cada uno de los mismos y su estado."
+
+#~ msgid "OK"
+#~ msgstr "Correcto"
+
+#~ msgid "Failed"
+#~ msgstr "Fallido"
+
+#~ msgid "Recipient selection"
+#~ msgstr "Selección de destinatarios"
+
+#~ msgid "Please select your desired persons to sent the newsletter to."
+#~ msgstr ""
+#~ "Selecciona las personas a las que quiere enviar el boletín de noticias."
+
+#~ msgid "Remove from list"
+#~ msgstr "Quitar de la lista"
+
+#~ msgid "Add more emails"
+#~ msgstr "Añadir más correos"
+
+#~ msgid "Subscriber"
+#~ msgstr "Suscriptor"
+
+#~ msgid "Unable to find any newsletter that matches your search."
+#~ msgstr "No existe ningún boletín que coincida con tu búsqueda."
+
+#~ msgid "Show contents"
+#~ msgstr "Mostrar contenidos"
+
+#~ msgid ""
+#~ "Whether to manage new subscriptions by an external maillist or using the "
+#~ "<a href=\"%1\" target=\"_blank\"> Opennemas-managed list of subscribers</"
+#~ "a>."
+#~ msgstr ""
+#~ "Puedes elegir entre recibir las nuevas suscripciones por correo "
+#~ "electrónico o utilizando la <a href=\"%1\" target=\"_blank\">tabla de "
+#~ "suscriptores gestionada por Opennemas</a>."
+
+#~ msgid "External Send"
+#~ msgstr "Envio externo"
 
 #~ msgid ""
 #~ "Redirect traffic from [% domain.name.replace('www.', '') %] to  www.[% "

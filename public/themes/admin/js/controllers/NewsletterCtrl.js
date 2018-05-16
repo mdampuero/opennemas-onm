@@ -10,80 +10,48 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
     $scope.source = {
+      items: [],
+      selected: []
+    };
+
+    $scope.recipients = {
       all: false,
       items: [],
       selected: []
     };
 
-    $scope.target = {
-      all: false,
-      items: [],
-      selected: []
-    };
+    $scope.expanded = 'external';
 
     /**
      * Initialize list of mail accounts
      */
-    $scope.init = function(items) {
-      $scope.sourceCurrentPage = 1;
-      $scope.targetCurrentPage = 1;
-      $scope.perPage = 10;
-      $scope.maxSize = 5;
-      $scope.sourcePagedItems = items.slice(0, 10);
-      $scope.targetPagedItems = [];
+    $scope.initPickRecipients = function(newsletter, extra) {
+      $scope.newsletter = newsletter;
+      $scope.source.items = extra.recipients;
+      $scope.newsletter_handler = extra.newsletter_handler;
+
+      if ($scope.newsletter_handler === 'submit' ||
+        $scope.newsletter_handler === 'create_subscriptor'
+      ) {
+        $scope.newsletter_handler = 'lists';
+      }
+
+      $scope.expanded = $scope.newsletter_handler;
     };
-
-    /**
-     * Source pagination
-     */
-    $scope.sourcePageChanged = function() {
-      $scope.sourcePagedItems = $scope.source.items.slice(
-        (($scope.sourceCurrentPage - 1) * $scope.perPage),
-        (($scope.sourceCurrentPage - 1) * $scope.perPage) + $scope.perPage
-      );
-    };
-
-    /**
-     * Target pagination
-     */
-    $scope.targetPageChanged = function() {
-      $scope.targetPagedItems = $scope.target.items.slice(
-        (($scope.targetCurrentPage - 1) * $scope.perPage),
-        (($scope.targetCurrentPage - 1) * $scope.perPage) + $scope.perPage
-      );
-    };
-
-    /**
-     * Source pagination
-     */
-    $scope.$watch("sourceCurrentPage", function() {
-      $scope.sourcePageChanged();
-    });
-
-    /**
-     * Target pagination
-     */
-    $scope.$watch("targetCurrentPage ", function() {
-      $scope.targetPageChanged();
-    });
 
     /**
      * Add selected email to receivers list and remove them from available
      * receivers list.
      */
-    $scope.addRecipients = function() {
-      $scope.target.items =
-        $scope.target.items.concat($scope.source.selected);
+    $scope.addRecipients = function(section) {
+      // Had to use forEach in order to avoid to insert duplicates
+      $scope.source.selected.forEach(function(el) {
+        if ($scope.recipients.items.indexOf(el) < 0) {
+          $scope.recipients.items.push(el);
+        }
+      });
 
-      for (var i = 0; i < $scope.source.selected.length; i++) {
-        var index = $scope.source.items.indexOf($scope.source.selected[i]);
-        $scope.source.items.splice(index, 1);
-      }
-
-      $scope.source.all = false;
       $scope.source.selected = [];
-      $scope.sourcePageChanged();
-      $scope.targetPageChanged();
     };
 
     /**
@@ -91,18 +59,11 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
      * receivers list.
      */
     $scope.removeRecipients = function() {
-      $scope.source.items =
-        $scope.source.items.concat($scope.target.selected);
+      for (var i = 0; i < $scope.recipients.selected.length; i++) {
+        var index = $scope.recipients.items.indexOf($scope.recipients.selected[i]);
 
-      for (var i = 0; i < $scope.target.selected.length; i++) {
-        var index = $scope.target.items.indexOf($scope.target.selected[i]);
-        $scope.target.items.splice(index, 1);
+        $scope.recipients.items.splice(index, 1);
       }
-
-      $scope.target.all = false;
-      $scope.target.selected = [];
-      $scope.sourcePageChanged();
-      $scope.targetPageChanged();
     };
 
     /**
@@ -111,32 +72,9 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
      * @param array nv The new values.
      * @param array ov The old values.
      */
-    $scope.$watch('target.items', function(nv, ov) {
-      var items = [];
-
-      if (nv instanceof Array) {
-        for (var i = 0; i < nv.length; i++) {
-          items.push({ email: nv[i].email, name: nv[i].name });
-        }
-      }
-
-      $scope.targetItems = angular.toJson(items);
+    $scope.$watch('recipients.items', function(nv, ov) {
+      $scope.targetItems = angular.toJson(nv);
     }, true);
-
-    /**
-     * Selects/unselects all items of a list.
-     *
-     * @param {Array} source The list.
-     */
-    $scope.toggleAllRecipients = function(source) {
-      if (source.all === false) {
-        source.selected = angular.copy(source.items);
-        source.all = true;
-      } else {
-        source.selected = [];
-        source.all = false;
-      }
-    };
 
     /**
      * Parses and add more emails to newsletter receivers.
@@ -149,8 +87,9 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
 
       // Get only emails to easy checking
       var currentEmails = [];
-      for (var i = 0; i < $scope.target.items.length; i++) {
-        currentEmails.push($scope.target.items[i].email);
+
+      for (var i = 0; i < $scope.recipients.items.length; i++) {
+        currentEmails.push($scope.recipients.items[i].email);
       }
 
       // Save new valid emails
@@ -158,10 +97,12 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
         if (pattern.test(emails[i]) &&
             currentEmails.indexOf(emails[i]) === -1
         ) {
-          $scope.target.items.push({ email: emails[i], name: emails[i] });
+          $scope.recipients.items.push({
+            type: 'email',
+            email: emails[i],
+            name: emails[i],
+          });
           $scope.moreEmails = $scope.moreEmails.replace(emails[i] + '\n', '');
-          $scope.sourcePageChanged();
-          $scope.targetPageChanged();
         }
 
         if (!pattern.test(emails[i])) {
@@ -170,8 +111,55 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       }
     };
 
+    /**
+     * Opens a modal to confirm newsletter sending.
+     */
+    $scope.send = function() {
+      var emailsToSend = 0;
+
+      $scope.recipients.items.forEach(function(el) {
+        if (el.type == 'list') {
+          emailsToSend += el.subscribers;
+        } else {
+          ++emailsToSend;
+        }
+      });
+
+      $uibModal.open({
+        backdrop:    true,
+        controller:  'YesNoModalCtrl',
+        templateUrl: 'modal-confirm-send',
+        resolve: {
+          template: function() {
+            return {
+              emails_to_send: emailsToSend
+            };
+          },
+          yes: function() {
+            return function() {
+              $('form').submit();
+            };
+          },
+          no: function() {
+            return function(modalWindow) {
+              modalWindow.close();
+            };
+          }
+        }
+      });
+    };
+
+    $scope.toggleAllRecipients = function() {
+      if ($scope.recipients.all) {
+        $scope.recipients.selected = [];
+      } else {
+        $scope.recipients.selected = $scope.recipients.items;
+      }
+    };
+
+    /*  ====================================================================== */
     $scope.saveHtml = function(url, save) {
-      if(save) {
+      if (save) {
         var data = {
           title: $scope.subject,
           html: $scope.html
@@ -183,27 +171,6 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       }
     };
 
-    /**
-     * Opens a modal to confirm newsletter sending.
-     */
-    $scope.send = function() {
-      var modal = $uibModal.open({
-        templateUrl: 'modal-confirm-send',
-        backdrop: 'static',
-        controller: 'modalCtrl',
-        resolve: {
-          template: function() {
-            return null;
-          },
-          success: function() {
-            return function() {
-              $('form').submit();
-            };
-          }
-        }
-      });
-    };
-
     /*  ====================================================================== */
     $scope.stepOne = function(containers) {
       if (containers !== null) {
@@ -213,17 +180,17 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       }
 
       $scope.sortableOptions = {
-          placeholder: 'newsletter-content-placeholder',
-          connectWith: '.newsletter-container-contents-sortable'
+        placeholder: 'newsletter-content-placeholder',
+        connectWith: '.newsletter-container-contents-sortable'
       };
     };
 
     $scope.addContainer = function() {
       $scope.newsletterContents.push({
-        'id': 0,
-        'title': '',
-        'position': '',
-        'items': []
+        id: 0,
+        title: '',
+        position: '',
+        items: []
       });
     };
 
@@ -231,14 +198,14 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       var from = $scope.newsletterContents.indexOf(container);
       var to = from - 1;
 
-      $scope.newsletterContents.splice(to,0,$scope.newsletterContents.splice(from,1)[0]);
+      $scope.newsletterContents.splice(to, 0, $scope.newsletterContents.splice(from, 1)[0]);
     };
 
     $scope.moveContainerDown = function(container) {
       var from = $scope.newsletterContents.indexOf(container);
       var to = from + 1;
 
-      $scope.newsletterContents.splice(to,0,$scope.newsletterContents.splice(from,1)[0]);
+      $scope.newsletterContents.splice(to, 0, $scope.newsletterContents.splice(from, 1)[0]);
     };
 
     $scope.removeContainer = function(container) {
@@ -263,7 +230,8 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       accept: function(sourceNode, destNodes, destIndex) {
         var data = sourceNode.$modelValue;
         var destType = destNodes.$element.attr('type');
-        return (data.content_type == destType);
+
+        return data.content_type == destType;
       }
     };
 

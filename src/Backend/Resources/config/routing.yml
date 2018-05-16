@@ -478,66 +478,6 @@ admin_search_content_provider:
     defaults: { _controller  : BackendBundle:Search:contentProvider }
 
 # Keywork controller routes
-admin_newsletters:
-    path:     /newsletters
-    defaults: { _controller  : BackendBundle:Newsletter:list }
-
-admin_newsletter_create:
-    path:     /newsletter/create
-    defaults: { _controller  : BackendBundle:Newsletter:create }
-
-admin_newsletter_show_contents:
-    path:     /newsletter/{id}/contents
-    defaults: { _controller  : BackendBundle:Newsletter:showContents }
-    options:
-        expose: true
-
-admin_newsletter_save_contents:
-    path:     /newsletter/save-contents
-    defaults: { _controller  : BackendBundle:Newsletter:saveContents }
-    methods:  [POST]
-
-admin_newsletter_preview:
-    path:     /newsletter/{id}/preview
-    defaults: { _controller  : BackendBundle:Newsletter:preview }
-    options:
-        expose: true
-
-admin_newsletter_save_html:
-    path:     /newsletter/{id}/save-html
-    defaults: { _controller  : BackendBundle:Newsletter:saveHtmlContent }
-
-admin_newsletter_pick_recipients:
-    path:     /newsletter/{id}/pick-recipients
-    defaults: { _controller  : BackendBundle:Newsletter:pickRecipients }
-
-admin_newsletter_send:
-    path:     /newsletter/{id}/send
-    defaults: { _controller  : BackendBundle:Newsletter:send }
-
-admin_newsletter_config:
-    path:     /newsletters/config
-    defaults: { _controller  : BackendBundle:Newsletter:config }
-
-admin_newsletter_subscriptors:
-    path:     /newsletters/subscriptors
-    defaults: { _controller  : BackendBundle:NewsletterSubscribers:list }
-
-admin_newsletter_subscriptor_create:
-    path:     /newsletters/subscriptor/create
-    defaults: { _controller  : BackendBundle:NewsletterSubscribers:create }
-
-admin_newsletter_subscriptor_show:
-    path:     /newsletters/subscriptor/{id}/show
-    defaults: { _controller  : BackendBundle:NewsletterSubscribers:show }
-    options:
-        expose: true
-
-admin_newsletter_subscriptor_update:
-    path:     /newsletters/subscriptor/{id}/update
-    defaults: { _controller  : BackendBundle:NewsletterSubscribers:update }
-
-# Keywork controller routes
 admin_keywords:
     path:     /keywords
     defaults: { _controller  : BackendBundle:Keywords:list }
@@ -896,6 +836,10 @@ backend_category:
 backend_domain:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/domain.yml'
+
+backend_newsletter:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/newsletter.yml'
 
 backend_news_agency_server:
     prefix:   /
