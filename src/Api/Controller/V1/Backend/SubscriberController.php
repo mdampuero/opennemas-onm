@@ -14,6 +14,7 @@ use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Intl\Intl;
 
 /**
  * Displays, saves, modifies and removes subscribers.
@@ -127,7 +128,8 @@ class SubscriberController extends Controller
                 $gender,
                 !empty($item->birth_date) ? $item->birth_date : '',
                 !empty($item->postal_code) ? $item->postal_code : '',
-                !empty($item->register_date) ? $item->register_date : '',
+                !empty($item->register_date) ?
+                    $item->register_date->format('Y-m-d H:i:s') : '',
             ];
 
             $output .= "\n" . implode(",", $row);
@@ -379,6 +381,7 @@ class SubscriberController extends Controller
 
         return [
             'photos'        => $photos,
+            'countries'     => Intl::getRegionBundle()->getCountryNames(),
             'settings'      => $settings,
             'subscriptions' => $ss->responsify($subscriptions)
         ];

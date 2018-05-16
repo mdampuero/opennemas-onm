@@ -18,7 +18,7 @@
 
 <div class="content welcome-page">
   <div class="row">
-    {acl isAllowed="ROLE_ADMIN"}
+    {acl isAllowed="ADMIN"}
     <div class="col-sm-6">
       <a href="{url name=backend_domain_add}">
         <div class="grid simple">
@@ -113,7 +113,7 @@
           </div>
         </div>
       </div>
-      {acl isAllowed="ROLE_ADMIN"}
+      {acl isAllowed="ADMIN"}
       <div class="grid simple merchant">
         <div class="grid-title">
           <h4>{t}Want more features?{/t}</h4>

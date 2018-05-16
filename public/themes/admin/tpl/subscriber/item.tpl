@@ -263,7 +263,7 @@
                       <input class="form-control" datetime-picker id="[% field.name %]" name="[% field.name %]" ng-if="field.type === 'date'" ng-model="item[field.name]" type="text">
                       <select class="form-control" id="[% field.name %]" name="[% field.name %]" ng-if="field.type === 'country'" ng-model="item[field.name]">
                         <option value="">{t}Select a country{/t}...</option>
-                        <option value="[% key %]" ng-repeat="(key,value) in extra.countries" ng-selected="[% item[field.name] === value %]">[% value %]</option>
+                        <option value="[% key %]" ng-repeat="(key,value) in data.extra.countries" ng-selected="[% item[field.name] === value %]">[% value %]</option>
                       </select>
                       <div class="radio" ng-if="field.type === 'options'" ng-repeat="option in field.values">
                         <input id="option-[% option.key %]" name="[% field.name %]" ng-model="item[field.name]" value="[% option.key %]" type="radio">

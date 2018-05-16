@@ -61,7 +61,7 @@ class SmartyOutputFilterNoindex extends \PHPUnit_Framework_TestCase
     public function testNoindexWhenIndexed()
     {
         $this->smarty->expects($this->any())->method('getTemplateVars')
-            ->willReturn([ 'o-token' => '0000000000000' ]);
+            ->willReturn([ 'o_token' => '0000000000000' ]);
 
         $this->subscription->expects($this->once())->method('isIndexable')
             ->with('0000000000000')->willReturn(true);
@@ -78,7 +78,7 @@ class SmartyOutputFilterNoindex extends \PHPUnit_Framework_TestCase
     public function testNoindexWhenNoIndexed()
     {
         $this->smarty->expects($this->any())->method('getTemplateVars')
-            ->willReturn([ 'o-token' => '0000000000000' ]);
+            ->willReturn([ 'o_token' => '0000000000000' ]);
 
         $this->subscription->expects($this->once())->method('isIndexable')
             ->with('0000000000000')->willReturn(false);

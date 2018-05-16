@@ -266,6 +266,56 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests getItemBy when no error.
+     */
+    public function testGetItemBy()
+    {
+        $item = new Entity([ 'name' => 'wubble' ]);
+
+        $this->repository->expects($this->once())->method('countBy')
+            ->with('order by title asc')->willReturn(1);
+        $this->repository->expects($this->once())->method('findBy')
+            ->with('order by title asc')->willReturn([ $item ]);
+
+        $response = $this->service->getItemBy('order by title asc');
+
+        $this->assertEquals($item, $response);
+    }
+
+    /**
+     * Tests getItemBy when error while searching.
+     *
+     * @expectedException Api\Exception\GetItemException
+     */
+    public function testGetItemByWhenErrorWhileSearching()
+    {
+        $this->repository->expects($this->once())->method('findBy')
+            ->will($this->throwException(new \Exception()));
+
+        $this->service->getItemBy('order by title asc');
+    }
+
+    /**
+     * Tests getItemBy when the criteria returns more than one result.
+     *
+     * @expectedException Api\Exception\GetItemException
+     */
+    public function testGetItemByWhenMoreThanOneResult()
+    {
+        $items = [
+            new Entity([ 'name' => 'wubble' ]),
+            new Entity([ 'name' => 'mumble' ])
+        ];
+
+        $this->repository->expects($this->once())->method('countBy')
+            ->with('order by title asc')->willReturn(2);
+        $this->repository->expects($this->once())->method('findBy')
+            ->with('order by title asc')->willReturn($items);
+
+        $this->service->getItemBy('order by title asc');
+    }
+
+    /**
      * Tests getList when no error.
      */
     public function testGetList()

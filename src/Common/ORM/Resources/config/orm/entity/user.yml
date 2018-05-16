@@ -18,13 +18,14 @@ orm:
                 name:               string
                 password:           string
                 paywall_time_limit: datetime
+                register_date:      datetime
                 terms_accepted:     datetime
                 token:              string
                 type:               integer
                 url:                string
+                user_groups:        array
                 user_language:      string
                 username:           string
-                user_groups:        array
             converters:
                 default:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter

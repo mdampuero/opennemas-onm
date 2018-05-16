@@ -84,7 +84,7 @@ class ArticlesController extends Controller
         );
 
         $this->view->setConfig('articles');
-        $cacheID = $this->view->getCacheId('content', $article->id);
+        $cacheID = $this->view->getCacheId('content', $article->id, $token);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached("extends:layouts/{$layout}.tpl|article/article.tpl", $cacheID)
@@ -120,7 +120,7 @@ class ArticlesController extends Controller
             'content'               => $article,
             'contentId'             => $article->id,
             'time'                  => '12345',
-            'o-token'               => $token,
+            'o_token'               => $token,
             'x-cache-for'           => '+1 day',
             'x-cacheable'           => empty($token),
             'x-tags'                => 'article,' . $article->id

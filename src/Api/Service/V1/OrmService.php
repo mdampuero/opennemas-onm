@@ -160,6 +160,37 @@ class OrmService extends Service
     }
 
     /**
+     * Returns only an item basing on a criteria.
+     *
+     * This action should be used when the criteria returns only one item but
+     * ignoring the limit and offset contitions.
+     *
+     * If the criteria does not grant that the result is only one item then this
+     * action is not recommended.
+     *
+     * @param string $oql The criteria.
+     *
+     * @return mixed The item.
+     *
+     * @throws GetItemException If the item was not found.
+     */
+    public function getItemBy($oql)
+    {
+        try {
+            $response = $this->getList($oql);
+        } catch (\Exception $e) {
+            $this->container->get('error.log')->error($e->getMessage());
+            throw new GetItemException($e->getMessage(), $e->getCode());
+        }
+
+        if (count($response['items']) !== 1) {
+            throw new GetItemException();
+        }
+
+        return array_pop($response['items']);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getList($oql = '')
@@ -184,7 +215,14 @@ class OrmService extends Service
     }
 
     /**
-     * {@inheritdoc}
+     * Returns a list of items basing on a list of ids.
+     *
+     * @param array $ids The list of ids.
+     *
+     * @return array The list of items.
+     *
+     * @throws GetListException If no ids provided or if there was a problem to
+     *                          find items.
      */
     public function getListByIds($ids)
     {

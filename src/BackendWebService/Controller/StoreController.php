@@ -16,7 +16,7 @@ class StoreController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('ROLE_ADMIN')")
+     * @Security("hasPermission('ADMIN')")
      */
     public function checkoutAction(Request $request)
     {
@@ -63,7 +63,7 @@ class StoreController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('ROLE_ADMIN')")
+     * @Security("hasPermission('ADMIN')")
      */
     public function checkPhoneAction(Request $request)
     {
@@ -92,7 +92,7 @@ class StoreController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('ROLE_ADMIN')")
+     * @Security("hasPermission('ADMIN')")
      */
     public function checkVatAction(Request $request)
     {
@@ -123,7 +123,7 @@ class StoreController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('ROLE_ADMIN')")
+     * @Security("hasPermission('ADMIN')")
      */
     public function listAction()
     {

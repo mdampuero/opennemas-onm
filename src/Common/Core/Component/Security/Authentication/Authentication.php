@@ -10,10 +10,11 @@
 namespace Common\Core\Component\Security\Authentication;
 
 use Common\Core\Component\Exception\Security\InvalidRecaptchaException;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Csrf\CsrfToken;
 
 class Authentication
 {
@@ -51,6 +52,20 @@ class Authentication
     public function addError($error)
     {
         $this->session->set(Security::AUTHENTICATION_ERROR, $error);
+    }
+
+    /**
+     * Authenticates an user programatically.
+     *
+     * @param User $user The user to authenticate.
+     */
+    public function authenticate($user)
+    {
+        $token = new UsernamePasswordToken($user, null, 'frontend', $user->getRoles());
+
+        $this->container->get('security.token_storage')->setToken($token);
+        $this->session->set('user', $user);
+        $this->session->set('_security_opennemas', serialize($token));
     }
 
     /**

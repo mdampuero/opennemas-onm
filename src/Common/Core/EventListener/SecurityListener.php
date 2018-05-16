@@ -164,7 +164,7 @@ class SecurityListener implements EventSubscriberInterface
             $permissions = array_merge($permissions, $userGroup->privileges);
         }
 
-        return \Privilege::getNames($permissions);
+        return array_merge($user->getRoles(), \Privilege::getNames($permissions));
     }
 
     /**

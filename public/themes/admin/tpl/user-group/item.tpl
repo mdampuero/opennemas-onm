@@ -133,7 +133,7 @@
                         </div>
                         <div class="col-sm-12 m-b-5" ng-repeat="privilege in data.extra.modules[name]">
                           <div class="checkbox check-default">
-                            <input id="checkbox-[% name + '-' + $index %]" checklist-model="item.privileges" checklist-value="privilege.id" type="checkbox">
+                            <input id="checkbox-[% name + '-' + $index %]" checklist-model="item.privileges" checklist-value="privilege.pk_privilege" type="checkbox">
                             <label for="checkbox-[% name + '-' + $index %]">
                               [% privilege.description %]
                             </label>
