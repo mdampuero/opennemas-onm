@@ -248,7 +248,7 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->helper->requiresSubscription($this->content));
 
-        $this->content->subscription = [ 1 ];
+        $this->content->subscriptions = [ 1 ];
         $this->assertFalse($this->helper->requiresSubscription($this->content));
     }
 
@@ -264,7 +264,7 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->helper->requiresSubscription($this->content));
 
-        $this->content->subscription = [ 1 ];
+        $this->content->subscriptions = [ 1 ];
         $this->assertTrue($this->helper->requiresSubscription($this->content));
     }
 }

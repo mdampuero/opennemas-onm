@@ -167,7 +167,7 @@ class SubscriptionHelper
             return false;
         }
 
-        return !empty($content->subscription);
+        return !empty($content->subscriptions);
     }
 
     /**
