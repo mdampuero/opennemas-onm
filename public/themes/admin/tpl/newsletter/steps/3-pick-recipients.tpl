@@ -22,10 +22,10 @@
               </a>
             </h4>
           </li>
-          <li class="quicklinks hidden-xs">
-            <div class="p-l-10 p-r-10 p-t-10">
+          <li class="quicklinks hidden-xs m-l-5 m-r-5">
+            <h4>
               <i class="fa fa-angle-right"></i>
-            </div>
+            </h4>
           </li>
           <li class="quicklinks hidden-xs">
             <h4>{t}Send{/t}</h4>
