@@ -184,7 +184,7 @@ class User
         /* Notice log of this action */
         logUserEvent(__METHOD__, $this->id, $data);
 
-        dispatchEventWithParams('user.create', ['user' => $this]);
+        dispatchEventWithParams('user.create', ['id' => $this->id]);
 
         return true;
     }
@@ -336,7 +336,7 @@ class User
         /* Notice log of this action */
         logUserEvent(__METHOD__, $this->id, $data);
 
-        dispatchEventWithParams('user.update', ['user' => $this]);
+        dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
 
         return true;
     }
@@ -364,7 +364,7 @@ class User
         /* Notice log of this action */
         logUserEvent(__METHOD__, $id);
 
-        dispatchEventWithParams('user.delete', ['user' => $this]);
+        dispatchEventWithParams('user.delete', [ 'id' => $this->id ]);
 
         return true;
     }
@@ -530,8 +530,8 @@ class User
         });
 
         return $authors;
-
     }
+
     /**
      * Sets user configurations given a named array
      *
@@ -551,7 +551,7 @@ class User
                 );
             }
 
-            dispatchEventWithParams('user.update', [ 'user' => $this ]);
+            dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
 
             return true;
         } catch (\Exception $e) {
@@ -571,7 +571,7 @@ class User
                 [ 'id'       => $this->id ]
             );
 
-            dispatchEventWithParams('user.update', [ 'user' => $this ]);
+            dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
@@ -635,7 +635,7 @@ class User
                 [ 'user_id' => $userId, ]
             );
 
-            dispatchEventWithParams('user.update', [ 'user' => $this ]);
+            dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
 
             return true;
         } catch (\Exception $e) {
@@ -663,7 +663,7 @@ class User
                 ]
             );
 
-            dispatchEventWithParams('user.update', [ 'user' => $this ]);
+            dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
 
             return true;
         } catch (\Exception $e) {
@@ -732,7 +732,7 @@ class User
                 [ 'id'    => (int) $id ]
             );
 
-            dispatchEventWithParams('user.update', [ 'user' => $this ]);
+            dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
 
             return true;
         } catch (\Exception $e) {
@@ -758,7 +758,7 @@ class User
                 [ 'id' => (int) $id ]
             );
 
-            dispatchEventWithParams('user.update', [ 'user' => $this ]);
+            dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
 
             return true;
         } catch (\Exception $e) {

@@ -250,6 +250,9 @@ class UserController extends Controller
 
             $this->get('session')->getFlashBag()
                 ->add('success', _('Item updated successfully'));
+
+            $this->get('core.dispatcher')
+                ->dispatch('user.update', [ 'id' => $user->id ]);
         } catch (\Exception $e) {
             $this->get('error.log')
                 ->error('frontend.subscriber.update: ' . $e->getMessage());

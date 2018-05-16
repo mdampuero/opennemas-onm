@@ -10,6 +10,7 @@
 namespace Frontend\Controller;
 
 use Common\Core\Controller\Controller;
+use Common\ORM\Core\Exception\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,8 +63,17 @@ class ArticlesController extends Controller
             throw new AccessDeniedException();
         }
 
-        $category = $this->get('orm.manager')->getRepository('Category')
-            ->findOneBy(sprintf('name = "%s"', $categoryName));
+        try {
+            $category = $this->get('orm.manager')->getRepository('Category')
+                ->findOneBy(sprintf('name = "%s"', $categoryName));
+
+            $category->title = $this->get('data.manager.filter')
+                ->set($category->title)
+                ->filter('localize')
+                ->get();
+        } catch (EntityNotFoundException $e) {
+            throw new ResourceNotFoundException();
+        }
 
         list($positions, $advertisements) =
             $this->getAds($category->pk_content_category);
@@ -260,6 +270,7 @@ class ArticlesController extends Controller
             $article->id
         );
 
-        return $this->get('automatic_contents')->searchSuggestedContents($query);
+        return $this->get('automatic_contents')
+            ->searchSuggestedContents('article', $query);
     }
 }
