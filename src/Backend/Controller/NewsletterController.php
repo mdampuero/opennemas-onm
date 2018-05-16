@@ -37,8 +37,9 @@ class NewsletterController extends Controller
         $lastInvoiceText = $lastInvoice->format(_('Y-m-d'));
 
         // Check if the module is configured, if not redirect to the config form
-        if ($this->checkModuleActivated() != false) {
-            return $configuredRedirection;
+        $redirection = $this->checkModuleActivated();
+        if ($redirection != false) {
+            return $redirection;
         }
 
         if ($maxAllowed > 0 && $totalSendings >= $maxAllowed) {
@@ -439,7 +440,7 @@ class NewsletterController extends Controller
                 _('Please fill the mail list email address in the module configuration.')
             );
 
-            return $this->redirect($this->generateUrl('backend_newsletter_config'));
+            return $this->redirect($this->generateUrl('backend_newsletters_config'));
         }
 
         // There is settings saved but we will check if they are valid
@@ -453,7 +454,7 @@ class NewsletterController extends Controller
                     ' go to settings and complete the form.'
                 ));
 
-                return $this->redirect($this->generateUrl('backend_newsletter_config'));
+                return $this->redirect($this->generateUrl('backend_newsletters_config'));
             }
         }
 
