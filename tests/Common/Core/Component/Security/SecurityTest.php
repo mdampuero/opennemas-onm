@@ -73,7 +73,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         $this->security->setPermissions([ 'MASTER' ]);
         $this->assertTrue($this->security->hasCategory('wobble'));
 
-        $this->security->setPermissions([ 'ROLE_BACKEND' ]);
+        $this->security->setPermissions([ 'ADMIN' ]);
         $this->assertFalse($this->security->hasCategory('wobble'));
 
         $this->assertTrue($this->security->hasCategory('frog'));
@@ -83,7 +83,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         $security->setUser($this->user);
         $security->setInstance($this->instance);
 
-        $this->assertFalse($security->hasCategory('fubar'));
+        $this->assertTrue($security->hasCategory('fubar'));
     }
 
     /**
@@ -94,7 +94,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         $this->security->setPermissions([ 'MASTER' ]);
         $this->assertTrue($this->security->hasExtension('wobble'));
 
-        $this->security->setPermissions([ 'ROLE_BACKEND' ]);
+        $this->security->setPermissions([ 'ADMIN' ]);
         $this->assertFalse($this->security->hasExtension('wobble'));
         $this->assertTrue($this->security->hasExtension('norf'));
     }
@@ -127,22 +127,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         $this->security->setInstances([ 'garply' ]);
         $this->assertTrue($this->security->hasPermission('wubble'));
 
-        $this->security->setPermissions([ 'ROLE_BACKEND' ]);
-        $this->assertTrue($this->security->hasPermission('ROLE_BACKEND'));
-    }
-
-    /**
-     * Tests hasRole for normal, admin and master users.
-     */
-    public function testHasRole()
-    {
-        $this->user->type = 0;
-        $this->assertTrue($this->security->hasRole('ROLE_BACKEND'));
-
-        $this->user->type = 1;
-        $this->assertTrue($this->security->hasRole('ROLE_FRONTEND'));
-
-        $security = new Security();
-        $this->assertFalse($security->hasRole('fubar'));
+        $this->security->setPermissions([ 'ADMIN' ]);
+        $this->assertTrue($this->security->hasPermission('ADMIN'));
     }
 }

@@ -185,7 +185,7 @@ class CacheManagerController extends Controller
      */
     private function clearRedis()
     {
-        $this->get('cache.manager')->getConnection('instance')->removeByPattern(
+        return $this->get('cache.manager')->getConnection('instance')->removeByPattern(
             '*' . $this->get('core.instance')->internal_name . '*'
         );
     }

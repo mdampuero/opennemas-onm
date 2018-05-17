@@ -9,6 +9,7 @@
  */
 namespace Tests\Common\Core\Component\Security\Authentication;
 
+use Common\ORM\Entity\User;
 use Common\Core\Component\Exception\Security\InvalidRecaptchaException;
 use Common\Core\Component\Security\Authentication\Authentication;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
@@ -52,6 +53,10 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'getToken', 'isTokenValid' ])
             ->getMock();
 
+        $this->ts = $this->getMockBuilder('TokenStorage')
+            ->setMethods([ 'setToken' ])
+            ->getMock();
+
         $this->request->attributes = $this->attributes;
 
         $this->container->expects($this->any())->method('get')
@@ -78,6 +83,9 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             case 'security.csrf.token_manager':
                 return $this->tm;
 
+            case 'security.token_storage':
+                return $this->ts;
+
             case 'session':
                 return $this->session;
 
@@ -95,6 +103,19 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             ->with(Security::AUTHENTICATION_ERROR, 'grault');
 
         $this->auth->addError('grault');
+    }
+
+    /**
+     * Tests authenticate.
+     */
+    public function testAuthenticate()
+    {
+        $user = new User();
+
+        $this->ts->expects($this->once())->method('setToken');
+        $this->session->expects($this->exactly(2))->method('set');
+
+        $this->auth->authenticate($user);
     }
 
     /**
@@ -223,6 +244,9 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('glork', $this->auth->getError());
     }
 
+    /**
+     * Tests getErrorMessage when no error.
+     */
     public function testGetErrorMessageWhenNoError()
     {
         $this->assertEmpty($this->auth->getErrorMessage());
@@ -274,6 +298,71 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             ->willReturn(new \Exception('xyzzy'));
 
         $this->assertEquals('xyzzy', $this->auth->getErrorMessage());
+    }
+
+    /**
+     * Tests getInternalErrorMessage when no error.
+     */
+    public function testGetInternalErrorMessageWhenNoError()
+    {
+        $this->assertEmpty($this->auth->getInternalErrorMessage());
+    }
+
+    /**
+     * Tests getInternalErrorMessage when the error is about invalid credentials.
+     */
+    public function testGetInternalErrorMessageWhenInvalidCredentials()
+    {
+        $this->session->expects($this->any())->method('get')
+            ->with(Security::AUTHENTICATION_ERROR)
+            ->willReturn(new BadCredentialsException());
+
+        $this->assertEquals(
+            'security.authentication.failure.credentials',
+            $this->auth->getInternalErrorMessage()
+        );
+    }
+
+    /**
+     * Tests getInternalErrorMessage when the error is about invalid CSRF token.
+     */
+    public function testGetInternalErrorMessageWhenInvalidCsrfToken()
+    {
+        $this->session->expects($this->any())->method('get')
+            ->with(Security::AUTHENTICATION_ERROR)
+            ->willReturn(new InvalidCsrfTokenException());
+
+        $this->assertEquals(
+            'security.authentication.failure.csrf',
+            $this->auth->getInternalErrorMessage()
+        );
+    }
+
+    /**
+     * Tests getInternalErrorMessage when the error is about invalid CSRF token.
+     */
+    public function testGetInternalErrorMessageWhenInvalidRecaptcha()
+    {
+        $this->session->expects($this->any())->method('get')
+            ->with(Security::AUTHENTICATION_ERROR)
+            ->willReturn(new InvalidRecaptchaException());
+
+        $this->assertEquals(
+            'security.authentication.failure.recaptcha',
+            $this->auth->getInternalErrorMessage()
+        );
+    }
+
+    /**
+     * Tests getInternalErrorMessage when the error is a unknown exception.
+     */
+    public function testGetInternalErrorMessageWhenException()
+    {
+        $this->session->expects($this->any())->method('get')
+            ->with(Security::AUTHENTICATION_ERROR)
+            ->willReturn(new \Exception('xyzzy'));
+
+        $this->assertEquals('xyzzy', $this->auth->getInternalErrorMessage());
     }
 
     public function testGetRecaptchaFromParameters()

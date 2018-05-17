@@ -4,10 +4,12 @@ parameters:
     core.maintenance.file: '%kernel.root_dir%/../.maintenance'
     core.template.filters:
         output:
+            - meta_amphtml
+            - noindex
+            - canonical_url
             - ads_generator
             - ads_scripts
             - adsense_validator
-            - canonical_url
             - comscore
             - chartbeat
             - google_tags_manager
@@ -16,7 +18,6 @@ parameters:
             - generate_fb_pages_tag
             - google_analytics
             - js_includes
-            - meta_amphtml
             - ojd
             - piwik
     core.template.admin.filters:
@@ -72,6 +73,24 @@ services:
         class:     Common\Core\Component\Helper\L10nRouteHelper
         arguments: [ '@service_container' ]
 
+    core.helper.newsletter:
+        class:     Common\Core\Component\Helper\NewsletterHelper
+        arguments:
+            - '@setting_repository'
+            - '@newsletter_manager'
+
+    core.helper.newsletter_sender:
+        class:     Common\Core\Component\Helper\NewsletterSenderHelper
+        arguments:
+            - '@setting_repository'
+            - '@error.log'
+            - '@application.log'
+            - '@core.instance'
+            - '@mailer'
+            - '@api.service.subscriber'
+            - '@core.helper.newsletter'
+            - '%mailer_no_reply_address%'
+
     core.helper.oql:
         class:     Common\Core\Component\Helper\OqlHelper
         arguments: [ '@service_container' ]
@@ -79,6 +98,10 @@ services:
     core.helper.structured_data:
         class:     Common\Core\Component\Helper\StructuredData
         arguments: [ '@setting_repository' ]
+
+    core.helper.subscription:
+        class:     Common\Core\Component\Helper\SubscriptionHelper
+        arguments: [ '@core.security', '@api.service.subscription' ]
 
     core.helper.url:
         class:     Common\Core\Component\Helper\UrlHelper

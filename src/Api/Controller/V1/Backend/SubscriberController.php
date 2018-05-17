@@ -14,6 +14,7 @@ use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Intl\Intl;
 
 /**
  * Displays, saves, modifies and removes subscribers.
@@ -46,6 +47,10 @@ class SubscriberController extends Controller
         $msg = $this->get('core.messenger');
 
         $this->get('api.service.subscriber')->deleteItem($id);
+
+        // TODO: Remove when deprecated old user_repository
+        $this->get('core.dispatcher')->dispatch('user.delete', ['id' => $id]);
+
         $msg->add(_('Item deleted successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -123,7 +128,8 @@ class SubscriberController extends Controller
                 $gender,
                 !empty($item->birth_date) ? $item->birth_date : '',
                 !empty($item->postal_code) ? $item->postal_code : '',
-                !empty($item->register_date) ? $item->register_date : '',
+                !empty($item->register_date) ?
+                    $item->register_date->format('Y-m-d H:i:s') : '',
             ];
 
             $output .= "\n" . implode(",", $row);
@@ -194,6 +200,10 @@ class SubscriberController extends Controller
 
         $this->get('api.service.subscriber')
             ->patchItem($id, $request->request->all());
+
+        // TODO: Remove when deprecated old user_repository
+        $this->get('core.dispatcher')->dispatch('user.update', ['id' => $id]);
+
         $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -325,6 +335,9 @@ class SubscriberController extends Controller
         $this->get('api.service.subscriber')
             ->updateItem($id, $request->request->all());
 
+        // TODO: Remove when deprecated old user_repository
+        $this->get('core.dispatcher')->dispatch('user.update', ['id' => $id]);
+
         $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -368,6 +381,7 @@ class SubscriberController extends Controller
 
         return [
             'photos'        => $photos,
+            'countries'     => Intl::getRegionBundle()->getCountryNames(),
             'settings'      => $settings,
             'subscriptions' => $ss->responsify($subscriptions)
         ];

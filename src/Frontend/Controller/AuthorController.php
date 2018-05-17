@@ -35,19 +35,18 @@ class AuthorController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 12;
 
+        $user = $this->get('user_repository')->findOneBy("username='{$slug}'");
+        if (empty($user)) {
+            throw new ResourceNotFoundException();
+        }
+
         // Setup templating cache layer
         $this->view->setConfig('articles');
-        $cacheID = $this->view->getCacheId('frontpage', 'author', $slug, $page);
+        $cacheID = $this->view->getCacheId('frontpage', 'author', $user->id, $page);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('user/author_frontpage.tpl', $cacheID))
         ) {
-            $user = $this->get('user_repository')->findOneBy("username='{$slug}'");
-
-            if (empty($user)) {
-                throw new ResourceNotFoundException();
-            }
-
             $user->photo = $this->get('entity_repository')->find('Photo', $user->avatar_img_id);
 
             $criteria = [

@@ -81,6 +81,10 @@ class AuthenticationController extends Controller
             $recaptcha = $auth->getRecaptchaFromParameters();
         }
 
+        if ($auth->hasError()) {
+            $session->getFlashBag()->add('error', $auth->getErrorMessage());
+        }
+
         return $this->render('login/login.tpl', [
             'locale'    => $this->get('core.locale')->getLocale(),
             'locales'   => $this->get('core.locale')->getAvailableLocales(),

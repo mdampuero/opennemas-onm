@@ -70,6 +70,9 @@ frontend_newstand:
 frontend_opinion:
     resource: '@FrontendBundle/Resources/config/routing/opinion.yml'
 
+frontend_password:
+    resource: '@FrontendBundle/Resources/config/routing/password.yml'
+
 frontend_paywall:
     resource: '@FrontendBundle/Resources/config/routing/paywall.yml'
 

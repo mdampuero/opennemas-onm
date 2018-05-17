@@ -13,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Intl;
 
 /**
  * Lists and displays users.
@@ -47,6 +46,9 @@ class UserController extends Controller
 
         $this->get('api.service.user')->deleteItem($id);
         $msg->add(_('Item deleted successfully'), 'success');
+
+        // TODO: Remove when deprecated old user_repository
+        $this->get('core.dispatcher')->dispatch('user.delete', ['id' => $id]);
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
@@ -122,6 +124,10 @@ class UserController extends Controller
 
         $this->get('api.service.user')
             ->patchItem($id, $request->request->all());
+
+        // TODO: Remove when deprecated old user_repository
+        $this->get('core.dispatcher')->dispatch('user.update', ['id' => $id]);
+
         $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -219,7 +225,7 @@ class UserController extends Controller
      * This action is not mapped with Security annotation because it's
      * used in edit profile action that should be available to all users with
      * or without having users module activated.
-
+     *
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
@@ -236,6 +242,9 @@ class UserController extends Controller
 
         $this->get('api.service.user')
             ->updateItem($id, $request->request->all());
+
+        // TODO: Remove when deprecated old user_repository
+        $this->get('core.dispatcher')->dispatch('user.update', ['id' => $id]);
 
         $msg->add(_('Item saved successfully'), 'success');
 
@@ -295,7 +304,6 @@ class UserController extends Controller
         return [
             'categories'  => $categories,
             'client'      => $client,
-            'countries'   => Intl::getRegionBundle()->getCountryNames(),
             'languages'   => $languages,
             'photos'      => $photos,
             'taxes'       => $this->get('vat')->getTaxes(),

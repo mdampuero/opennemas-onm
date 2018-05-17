@@ -145,6 +145,21 @@
         };
 
         /**
+         * @function isSelectable
+         * @memberOf RestListCtrl
+         *
+         * @description
+         *   Checks if the item is selectable.
+         *
+         * @param {Object} item The item to check.
+         *
+         * @return {Boolean} True if the item is selectable. False otherwise.
+         */
+        $scope.isSelectable = function() {
+          return true;
+        };
+
+        /**
          * @function list
          * @memberOf RestListCtrl
          *
@@ -180,9 +195,9 @@
          * @description
          *   Enables/disables an item.
          *
-         * @param {String}  item     The item.
-         * @param {String}  property The property name.
-         * @param {Boolean} value    The property value.
+         * @param {String} item     The item.
+         * @param {String} property The property name.
+         * @param {Mixed} value     The property value.
          */
         $scope.patch = function(item, property, value) {
           var data = {};
@@ -262,7 +277,9 @@
          */
         $scope.toggleAll = function() {
           if ($scope.selected.all) {
-            $scope.selected.items = $scope.items.map(function(item) {
+            $scope.selected.items = $scope.items.filter(function(item) {
+              return $scope.isSelectable(item);
+            }).map(function(item) {
               return $scope.getId(item);
             });
           } else {

@@ -69,6 +69,23 @@
           </li>
         </ul>
         <ul class="nav quick-section pull-right">
+          <li class="quicklinks" ng-if="config.multilanguage">
+            {acl isAllowed="ARTICLE_UPDATE"}
+            <div class="dropdown">
+              <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" uib-tooltip="{t}Translate selected{/t}" tooltip-placement="bottom">
+                <i class="fa fa-globe fa-lg"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right no-padding" aria-labelledby="dropdownMenuButton">
+                <li ng-repeat="(locale_key, locale_name) in data.extra.options.available" ng-show="locale_key != data.extra.locale" class="dropdown-item" ng-class="{ 'disabled': selectedItemsAreTranslatedTo(locale_key) }">
+                  <a href="#" ng-click="!selectedItemsAreTranslatedTo(locale_key) && translateSelected(locale_key)" >{t 1="[% locale_name %]"}Translate into %1{/t}</a>
+                </li>
+              </ul>
+            </div>
+            {/acl}
+          </li>
+          <li class="quicklinks hidden-xs" ng-if="config.multilanguage">
+            <span class="h-seperate"></span>
+          </li>
           {acl isAllowed="ARTICLE_AVAILABLE"}
           <li class="quicklinks">
             <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
@@ -164,9 +181,10 @@
           <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
         <div class="listing-no-contents ng-cloak" ng-if="!loading && items.length == 0">
-          <div class="center">
-            <h4>{t}Unable to find any article that matches your search.{/t}</h4>
-            <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
+          <div class="text-center p-b-15 p-t-15">
+            <i class="fa fa-4x fa-warning text-warning"></i>
+            <h3>{t}Unable to find any item that matches your search.{/t}</h3>
+            <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
           </div>
         </div>
         <div class="table-wrapper ng-cloak" ng-if="!loading && items.length > 0">
@@ -212,13 +230,13 @@
                   </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="ARTICLE_UPDATE"}
-                      <translator class="m-r-10" item="data.results[$index]" keys="data.extra.keys" link="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="config.multilanguage" options="data.extra.options" text="{t}Edit{/t}"></translator>
-                      <a class="link" href="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="!config.multilanguage">
+                      <translator class="m-r-5" item="data.results[$index]" keys="data.extra.keys" link="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="config.multilanguage" options="data.extra.options" text="{t}Edit{/t}"></translator>
+                      <a class="btn btn-default btn-small" href="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="!config.multilanguage">
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
                     {/acl}
                     {acl isAllowed="ARTICLE_DELETE"}
-                      <button class="link link-danger" ng-click="sendToTrash(content)" type="button">
+                      <button class="btn btn-danger btn-small" ng-click="sendToTrash(content)" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                       </button>
                     {/acl}
@@ -262,13 +280,16 @@
     </div>
   </div>
   <script type="text/ng-template" id="modal-delete">
-    {include file="common/modals/_modalDelete.tpl"}
+    {include file="base/modal/modal.delete.tpl"}
   </script>
   <script type="text/ng-template" id="modal-delete-selected">
     {include file="common/modals/_modalBatchDelete.tpl"}
   </script>
   <script type="text/ng-template" id="modal-update-selected">
     {include file="common/modals/_modalBatchUpdate.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-translate-selected">
+    {include file="common/modals/_translate_selected.tpl"}
   </script>
 </div>
 {/block}

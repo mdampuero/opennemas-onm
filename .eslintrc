@@ -4,8 +4,9 @@
         "jquery": true
     },
     "globals": {
-        "angular": true,
-        "_": true
+        "ActiveXObject": true,
+        "_": true,
+        "angular": true
     },
     "rules": {
         // Errors
