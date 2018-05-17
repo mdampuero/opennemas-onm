@@ -123,15 +123,15 @@
             <table class="table table-hover no-margin">
               <thead>
                 <tr>
-                  <th class="checkbox-cell" width="50">
+                  <th class="checkbox-cell" width="10">
                     <div class="checkbox checkbox-default">
                       <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
                       <label for="select-all"></label>
                     </div>
                   </th>
                   <th>{t}Name{/t}</th>
-                  <th width="150">{t}Nº contents{/t}</th>
-                  <th class="text-center" width="150"></th>
+                  <th class="text-center" width="10">{t}Nº contents{/t}</th>
+                  <th class="text-center" width="10"></th>
                 </tr>
               </thead>
               <tbody>
@@ -179,7 +179,7 @@
                   <td class="text-center">
                     [% data.extra.numberOfContents[item.id] %]
                   </td>
-                  <td class="text-center">
+                  <td class="text-right">
                     <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
                     <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}</button>
                   </td>

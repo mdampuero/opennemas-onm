@@ -21,9 +21,11 @@
 class Tag
 {
     /**
-     * Get number of contents of some tag
+     * Returns the number of contents for a given tag id or a list of tag ids
      *
-     * param mixed $tagId id for tag
+     * @param int|array $tagId wether a list of tag ids or only one tag id
+     *
+     * @return int  the number of contents
      */
     public static function numberOfContent($tagId)
     {
@@ -45,6 +47,7 @@ class Tag
         foreach ($rs as $row) {
             $numberOfContents[$row['tag_id']] = $row['related_content_count'];
         }
+
         return $numberOfContents;
     }
 
