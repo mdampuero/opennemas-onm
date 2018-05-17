@@ -20,7 +20,6 @@
  */
 class Tag
 {
-
     /**
      * Get number of contents of some tag
      *
@@ -40,11 +39,7 @@ class Tag
             $sqlTagId .
             'GROUP BY tag_id';
 
-        $conn = getService('dbal_connection');
-        $rs   = getService('dbal_connection')->fetchAll(
-            $sql,
-            $tagId
-        );
+        $rs = getService('dbal_connection')->fetchAll($sql, $tagId);
 
         $numberOfContents = [];
         foreach ($rs as $row) {
@@ -71,7 +66,7 @@ class Tag
         $params  = [$languageId];
 
         if (is_array($tags)) {
-            $sqlTags = ' IN (' . substr(str_repeat(', ?', count($TAGS)), 2) . ')';
+            $sqlTags = ' IN (' . substr(str_repeat(', ?', count($tags)), 2) . ')';
             $params  = array_merge(
                 array_map(
                     function ($tag) {
@@ -85,15 +80,10 @@ class Tag
             $params[] = $tags;
         }
 
-        $sql = 'SELECT id, name, language_id, slug FROM tags WHERE language_id = ? AND slug ' .
-            $sqlTags .
-            ' LIMIT 25';
+        $sql = 'SELECT id, name, language_id, slug FROM tags '
+            . 'WHERE language_id = ? AND slug ' . $sqlTags . ' LIMIT 25';
 
-        $conn = getService('dbal_connection');
-        $rs   = getService('dbal_connection')->fetchAll(
-            $sql,
-            $params
-        );
+        $rs = getService('dbal_connection')->fetchAll($sql, $params);
 
         $validateTags = [];
         foreach ($rs as $row) {
@@ -104,6 +94,7 @@ class Tag
             $tagAux->language_id       = $row['language_id'];
             $validateTags[$tagAux->id] = $tagAux;
         }
+
         return $validateTags;
     }
 }
