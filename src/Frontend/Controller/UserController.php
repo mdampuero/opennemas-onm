@@ -52,8 +52,7 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('frontend_user_show'));
         } catch (GetItemException $e) {
             $this->get('application.log')->error(
-                'subscriber.activate.failure: ' . $token,
-                $e->getTrace()
+                'subscriber.activate.failure: ' . $token
             );
 
             $this->get('session')->getFlashBag()
@@ -62,8 +61,7 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('core_authentication_logout'));
         } catch (UpdateItemException $e) {
             $this->get('application.log')->error(
-                'subscriber.activate.failure: ' . $token,
-                $e->getTrace()
+                'subscriber.activate.failure: ' . $token
             );
 
             $this->get('session')->getFlashBag()
@@ -72,8 +70,7 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('core_authentication_logout'));
         } catch (\Exception $e) {
             $this->get('application.log')->error(
-                'subscriber.activate.email.failure: ' . $token,
-                $e->getTrace()
+                'subscriber.activate.email.failure: ' . $token
             );
 
             $this->get('session')->getFlashBag()
@@ -186,8 +183,7 @@ class UserController extends Controller
                 ->info('subscriber.create.email.success');
         } catch (CreateItemException $e) {
             $this->get('application.log')->error(
-                'subscriber.create.failure: ' . $e->getMessage(),
-                $e->getTrace()
+                'subscriber.create.failure: ' . $e->getMessage()
             );
 
             $request->getSession()->getFlashBag()->add(
@@ -198,8 +194,7 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('frontend_user_register'));
         } catch (\Exception $e) {
             $this->get('application.log')->error(
-                'subscriber.create.email.failure: ' . $e->getMessage(),
-                $e->getTrace()
+                'subscriber.create.email.failure: ' . $e->getMessage()
             );
 
             $request->getSession()->getFlashBag()->add(
