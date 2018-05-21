@@ -87,7 +87,7 @@
           {block name="header_links"}
             <div class="pull-left">
               <ul class="nav quick-section">
-                {acl isAllowed="ROLE_ADMIN"}
+                {acl isAllowed="ADMIN"}
                   <li class="quicklinks">
                     <a href="{url name=backend_account_show}" title="{t}Instance information{/t}">
                       <i class="fa fa-bullseye"></i>
@@ -229,7 +229,7 @@
                   </li>
                 {/block}
                 {block name="master_actions_block"}
-                {acl isAllowed="MASTER"}
+                {acl isAllowed="MASTER" hasExtension="CACHE_MANAGER"}
                   <li class="quicklinks">
                     <span class="h-seperate"></span>
                   </li>

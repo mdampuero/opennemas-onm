@@ -286,10 +286,10 @@
             $scope.selected.all[name] = true;
 
             for (var i = 0; i < module.length; i++) {
-              $scope.privileges.push(module[i].id);
-              $scope.modules[name].push(module[i].id);
+              $scope.privileges.push(module[i].pk_privilege);
+              $scope.modules[name].push(module[i].pk_privilege);
 
-              if ($scope.item.privileges.indexOf(module[i].id) === -1) {
+              if ($scope.item.privileges.indexOf(module[i].pk_privilege) === -1) {
                 $scope.selected.all[name] = false;
               }
             }

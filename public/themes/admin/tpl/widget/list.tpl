@@ -181,7 +181,7 @@
                   [% content.title %]
                   <div class="listing-inline-actions">
                     {acl isAllowed="WIDGET_UPDATE"}
-                    <a class="link" href="[% edit(content.id, 'admin_widget_show') %]" title="{t}Edit widget '[% content.title %]'{/t}">
+                    <a class="link" href="[% edit(content.id, 'admin_widget_show') %]" title="{t 1="[% content.title %]"}Edit widget '%1'{/t}">
                       <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                     </a>
                     {/acl}

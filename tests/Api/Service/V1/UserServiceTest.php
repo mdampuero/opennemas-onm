@@ -56,6 +56,14 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'countBy', 'findBy', 'findOneBy'])
             ->getMock();
 
+        $this->user = new Entity([
+            'email'    => 'flob@garply.com',
+            'id'       => 1,
+            'name'     => 'flob',
+            'password' => 'quux',
+            'type'     => 1
+        ]);
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
         $this->em->expects($this->any())->method('getConverter')
@@ -79,6 +87,9 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         switch ($name) {
             case 'core.security.encoder.password':
                 return $this->encoder;
+
+            case 'core.user':
+                return $this->user;
 
             case 'error.log':
                 return $this->logger;
@@ -145,6 +156,202 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->service->createItem($data);
     }
+
+    /**
+     * Tests deleteItem when no error.
+     */
+    public function testDeleteItem()
+    {
+        $item = new Entity();
+
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->willReturn($item);
+        $this->em->expects($this->once())->method('remove')
+            ->with($item);
+
+        $this->service->deleteItem(23);
+    }
+
+    /**
+     * Tests deleteItem when the item to delete is the current user.
+     *
+     * @expectedException Api\Exception\DeleteItemException
+     */
+    public function testDeleteItemWhenEqualsToCurrentUser()
+    {
+        $this->service->deleteItem(1);
+    }
+
+    /**
+     * Tests deleteItem when no error.
+     */
+    public function testDeleteItemForSubscriberAndUser()
+    {
+        $item = new Entity([ 'type' => 2 ]);
+
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->willReturn($item);
+        $this->em->expects($this->once())->method('persist')
+            ->with($item);
+
+        $this->service->deleteItem(23);
+    }
+
+    /**
+     * Tests deleteItem when no item found.
+     *
+     * @expectedException Api\Exception\DeleteItemException
+     */
+    public function testDeleteItemWhenNoEntity()
+    {
+        $this->repository->expects($this->any())->method('findOneBy')
+            ->will($this->throwException(new \Exception()));
+        $this->logger->expects($this->exactly(2))->method('error');
+
+        $this->service->deleteItem(23);
+    }
+
+    /**
+     * Tests deleteItem when an error happens while removing object.
+     *
+     * @expectedException Api\Exception\DeleteItemException
+     */
+    public function testDeleteItemWhenErrorWhileRemoving()
+    {
+        $item = new Entity();
+
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->willReturn($item);
+        $this->em->expects($this->once())->method('remove')
+            ->with($item)->will($this->throwException(new \Exception()));
+
+        $this->logger->expects($this->once())->method('error');
+
+        $this->service->deleteItem(23);
+    }
+
+    /**
+     * Tests deleteList when no error.
+     */
+    public function testDeleteList()
+    {
+        $itemA = new Entity([ 'name' => 'wubble']);
+        $itemB = new Entity([ 'name' => 'xyzzy' ]);
+
+        $this->fixer->expects($this->once())->method('fix');
+        $this->fixer->expects($this->once())->method('addCondition');
+        $this->fixer->expects($this->once())->method('getOql')
+            ->willReturn('type != 0 and id in [1,2]');
+
+        $this->repository->expects($this->once())->method('findBy')
+            ->with('type != 0 and id in [1,2]')
+            ->willReturn([ $itemA, $itemB ]);
+        $this->em->expects($this->exactly(2))->method('remove');
+
+        $this->assertEquals(2, $this->service->deleteList([ 1, 2 ]));
+    }
+
+    /**
+     * Tests deleteList when no error and an user is the current user.
+     */
+    public function testDeleteListWhenOneCurrentUser()
+    {
+        $item = new Entity([ 'name' => 'wubble', 'type' => 0 ]);
+
+        $this->fixer->expects($this->once())->method('fix');
+        $this->fixer->expects($this->once())->method('addCondition');
+        $this->fixer->expects($this->once())->method('getOql')
+            ->willReturn('type != 0 and id in [1,2,3]');
+
+        $this->repository->expects($this->once())->method('findBy')
+            ->with('type != 0 and id in [1,2,3]')
+            ->willReturn([ $this->user, $item ]);
+
+        $this->em->expects($this->once())->method('remove')->with($item);
+
+        $this->assertEquals(1, $this->service->deleteList([ 1, 2 ]));
+    }
+
+    /**
+     * Tests deleteList when no error and an user is also a subscriber.
+     */
+    public function testDeleteListWhenOneSubscriberUser()
+    {
+        $itemA = new Entity([ 'name' => 'wubble', 'type' => 2 ]);
+        $itemB = new Entity([ 'name' => 'xyzzy', 'type' => 0 ]);
+
+        $this->fixer->expects($this->once())->method('fix');
+        $this->fixer->expects($this->once())->method('addCondition');
+        $this->fixer->expects($this->once())->method('getOql')
+            ->willReturn('type != 0 and id in [1,2]');
+
+        $this->repository->expects($this->once())->method('findBy')
+            ->with('type != 0 and id in [1,2]')
+            ->willReturn([ $itemA, $itemB ]);
+
+        $this->em->expects($this->once())->method('persist')->with($itemA);
+        $this->em->expects($this->once())->method('remove')->with($itemB);
+
+        $this->assertEquals(2, $this->service->deleteList([ 1, 2 ]));
+    }
+
+    /**
+     * Tests deleteList when invalid list of ids provided.
+     *
+     * @expectedException Api\Exception\DeleteListException
+     */
+    public function testDeleteListWhenInvalidIds()
+    {
+        $this->service->deleteList('xyzzy');
+    }
+
+    /**
+     * Tests deleteList when one error happens while removing.
+     */
+    public function testDeleteListWhenOneErrorWhileRemoving()
+    {
+        $itemA = new Entity([ 'name' => 'wubble']);
+        $itemB = new Entity([ 'name' => 'xyzzy' ]);
+
+        $this->fixer->expects($this->once())->method('fix');
+        $this->fixer->expects($this->once())->method('addCondition');
+        $this->fixer->expects($this->once())->method('getOql')
+            ->willReturn('type != 0 and id in [1,2]');
+
+        $this->repository->expects($this->once())->method('findBy')
+            ->with('type != 0 and id in [1,2]')
+            ->willReturn([ $itemA, $itemB ]);
+        $this->em->expects($this->at(2))->method('remove');
+        $this->em->expects($this->at(3))->method('remove')
+            ->will($this->throwException(new \Exception()));
+
+        $this->logger->expects($this->once())->method('error');
+
+        $this->assertEquals(1, $this->service->deleteList([ 1, 2 ]));
+    }
+
+    /**
+     * Tests deleteList when an error happens while searching.
+     *
+     * @expectedException Api\Exception\DeleteListException
+     */
+    public function testDeleteListWhenErrorWhileSearching()
+    {
+        $this->fixer->expects($this->once())->method('fix');
+        $this->fixer->expects($this->once())->method('addCondition');
+        $this->fixer->expects($this->once())->method('getOql')
+            ->willReturn('type != 0 and id in [1,2]');
+
+        $this->repository->expects($this->once())->method('findBy')
+            ->with('type != 0 and id in [1,2]')
+            ->will($this->throwException(new \Exception()));
+
+        $this->logger->expects($this->exactly(2))->method('error');
+
+        $this->service->deleteList([ 1, 2 ]);
+    }
+
+
 
     /**
      * Tests getItem when no error.

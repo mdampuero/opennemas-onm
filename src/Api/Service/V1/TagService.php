@@ -88,7 +88,6 @@ class TagService extends OrmService
         return \Tag::validateTags($languageId, $tags);
     }
 
-
     /**
      *  Method to retrieve the ids for a list of tags. In case some tag not exist
      * the system generate a new tag and upload the data
