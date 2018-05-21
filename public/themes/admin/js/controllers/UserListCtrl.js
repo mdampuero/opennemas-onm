@@ -44,7 +44,7 @@
          *   Shows a modal to confirm user update.
          */
         $scope.confirm = function(property, value, item) {
-          if ($scope.master || !value) {
+          if ($scope.backup.master || !value) {
             if (item) {
               $scope.patch(item, property, value);
               return;
