@@ -2188,7 +2188,6 @@ class Content implements \JsonSerializable
         );
     }
 
-
     /**
      * deletion of all tags associated with a content
      *
