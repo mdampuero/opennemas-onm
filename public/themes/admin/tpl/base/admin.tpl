@@ -355,7 +355,7 @@
                 </li>
                 <li class="quicklinks user-info dropdown">
                   <span class="link" data-toggle="dropdown">
-                    {if is_object($app.user) && $app.user->isMaster()}
+                    {if $app.security->hasPermission('MASTER')}
                       <i class="fa fa-rebel pull-left m-r-5"></i>
                     {/if}
                     <i class="fa fa-angle-down"></i>
@@ -381,7 +381,7 @@
                     </li>
                     <li class="divider"></li>
                     <li>
-                      {if is_object($app.user) && $app.user->isMaster()}
+                      {if $app.security->hasPermission('MASTER')}
                         <a ng-href="{get_parameter name=manager_url}manager#/users/{$app.user->id}" target="_blank">
                           <i class="fa fa-user"></i>
                           {t}Profile{/t}

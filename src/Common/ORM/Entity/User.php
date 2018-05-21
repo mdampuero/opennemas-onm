@@ -162,7 +162,7 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
      */
     public function isEnabled()
     {
-        return $this->isMaster() || $this->activated;
+        return $this->activated;
     }
 
     /**
@@ -189,20 +189,6 @@ class User extends Entity implements AdvancedUserInterface, EquatableInterface, 
             }
 
             return $isEqual;
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns whether or not user is in master group.
-     *
-     * @return boolean True if the users is in master group.
-     */
-    public function isMaster()
-    {
-        if (in_array('4', $this->fk_user_group)) {
-            return true;
         }
 
         return false;
