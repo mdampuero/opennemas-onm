@@ -40,7 +40,7 @@ class Tag
         $sql = 'SELECT tag_id, count(1) AS related_content_count FROM `contents_tags` WHERE tag_id ' .
             $sqlTagId .
             'GROUP BY tag_id';
-        $rs = getService('dbal_connection')->fetchAll($sql, $tagId);
+        $rs  = getService('dbal_connection')->fetchAll($sql, $tagId);
 
         $numberOfContents = [];
         foreach ($rs as $row) {
@@ -68,9 +68,10 @@ class Tag
         $params  = [$languageId];
 
         if (is_array($tags)) {
-            $sqlTags = ' IN (' . substr(str_repeat(', ?', count($TAGS)), 2) . ')';
-            $ts      = $this->get('api.service.tag');
+            $sqlTags = ' IN (' . substr(str_repeat(', ?', count($tags)), 2) . ')';
+            $ts      = getService('api.service.tag');
             $params  = array_merge(
+                $params,
                 array_map(
                     function ($tag) use ($ts) {
                         return $ts->createSearchableWord($tag);
