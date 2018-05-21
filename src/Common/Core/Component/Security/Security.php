@@ -107,10 +107,7 @@ class Security
             return true;
         }
 
-        if ($this->hasPermission('MASTER')
-            || (!empty($this->user)
-                && $this->user->isAdmin())
-        ) {
+        if ($this->hasPermission('MASTER') || $this->hasPermission('ADMIN')) {
             return true;
         }
 
@@ -170,11 +167,12 @@ class Security
         }
 
         // ADMIN and PARTNER have all permissions for their instances
-        // TODO: Remove isAdmin when using ADMIN permission for administrators
+        // TODO: Do not check user group 5 when ADMIN permission in database
         if ($this->instance->internal_name !== 'manager'
             && $permission !== 'MASTER'
             && (in_array('ADMIN', $this->permissions)
-                || (!empty($this->user) && $this->user->isAdmin())
+                || (!empty($this->user)
+                    && array_key_exists(5, $this->user->user_groups))
                 || (in_array('PARTNER', $this->permissions)
                     && $this->hasInstance($this->instance->internal_name)
                 )

@@ -29,7 +29,8 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->user = new User([
-            'fk_user_group' => []
+            'fk_user_group' => [],
+            'user_groups'   => []
         ]);
 
         $this->security = new Security();
@@ -74,8 +75,9 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->security->hasCategory('wobble'));
 
         $this->security->setPermissions([ 'ADMIN' ]);
-        $this->assertFalse($this->security->hasCategory('wobble'));
+        $this->assertTrue($this->security->hasCategory('wobble'));
 
+        $this->security->setPermissions([]);
         $this->assertTrue($this->security->hasCategory('frog'));
         $this->assertFalse($this->security->hasCategory('wobble'));
 

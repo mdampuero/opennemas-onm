@@ -89,7 +89,7 @@
         </div>
       </div>
     </div>
-    {if $user->isAdmin()}
+    {if $app.security->hasPermission('ADMIN')}
       <div class="wizard-container store" ng-class="{ 'active': step == 4, 'previous': previous == 4 }">
         <div class="wizard-overlay"></div>
         <div class="wizard-content">
@@ -131,7 +131,7 @@
         </div>
       </div>
     {/if}
-    <div class="wizard-container ready" ng-class="{ 'active': step == {if $user->isAdmin()}5{else}4{/if},  'previous': previous == {if $user->isAdmin()}5{else}4{/if}}">
+    <div class="wizard-container ready" ng-class="{ 'active': step == {if $app.security->hasPermission('ADMIN')}5{else}4{/if},  'previous': previous == {if $app.security->hasPermission('ADMIN')}5{else}4{/if}}">
       <div class="wizard-overlay"></div>
       <div class="wizard-content">
         <div class="wizard-title">
@@ -179,14 +179,14 @@
             <h5 class="wizard-step-list-item-text top">{t}Help{/t}</h5>
           </div>
         </li>
-        {if $user->isAdmin()}
+        {if $app.security->hasPermission('ADMIN')}
           <li class="wizard-step-list-item" ng-class="{ 'active': step > 3 }" ng-click="goToStep(4)" ng-disabled="!termsAccepted">
             <div class="wizard-step-list-item-fill">
               <h5 class="wizard-step-list-item-text bottom">{t}Opennemas Store{/t}</h5>
             </div>
           </li>
         {/if}
-        <li class="wizard-step-list-item"  ng-class="{ 'active': step > {if $user->isAdmin()}4{else}3{/if} }" ng-click="goToStep({if $user->isAdmin()}5{else}4{/if})" ng-disabled="!termsAccepted">
+        <li class="wizard-step-list-item"  ng-class="{ 'active': step > {if $app.security->hasPermission('ADMIN')}4{else}3{/if} }" ng-click="goToStep({if $app.security->hasPermission('ADMIN')}5{else}4{/if})" ng-disabled="!termsAccepted">
           <div class="wizard-step-list-item-fill">
             <h5 class="wizard-step-list-item-text top">{t}Ready!{/t}</h5>
           </div>
