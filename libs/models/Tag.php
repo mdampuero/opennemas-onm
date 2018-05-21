@@ -69,10 +69,11 @@ class Tag
         $params  = [$languageId];
 
         if (is_array($tags)) {
-            $sqlTags = ' IN (' . substr(str_repeat(', ?', count($tags)), 2) . ')';
+            $sqlTags = ' IN (' . substr(str_repeat(', ?', count($TAGS)), 2) . ')';
+            $ts      = $this->get('api.service.tag');
             $params  = array_merge(
                 array_map(
-                    function ($tag) {
+                    function ($tag) use ($ts) {
                         return $ts->createSearchableWord($tag);
                     },
                     $tags
