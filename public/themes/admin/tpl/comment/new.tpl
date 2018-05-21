@@ -19,7 +19,7 @@
               </div>
             </li>
             <li class="quicklinks hidden-xs">
-              <h5><strong>{t}Edit{/t}</strong></h5>
+              <h4>{t}Edit{/t}</h4>
             </li>
           </ul>
           <div class="all-actions pull-right">

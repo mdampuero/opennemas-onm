@@ -15,7 +15,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <h5>{t}Disqus{/t}</h5>
+            <h4>{t}Disqus{/t}</h4>
           </li>
         </ul>
         <div class="all-actions pull-right">
