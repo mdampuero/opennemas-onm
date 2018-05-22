@@ -7,28 +7,30 @@
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-home fa-lg"></i>
-              {t}Newsletters{/t}
+              <a class="no-padding" href="{url name=backend_newsletters_list}" title="{t}Go back to list{/t}">
+                <i class="fa fa-envelope"></i>
+                {t}Newsletters{/t}
+              </a>
             </h4>
           </li>
         </ul>
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li>
-              <a class="btn btn-link" href="{url name=admin_newsletter_config}" class="admin_add" title="{t}Config newsletter module{/t}">
+              <a class="btn btn-link" href="{url name=backend_newsletters_config}" class="admin_add" title="{t}Config newsletter module{/t}">
                 <span class="fa fa-cog fa-lg"></span>
               </a>
             </li>
             <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
-            <li class="hidden-xs">
-              <a class="btn btn-white" href="{url name=admin_newsletter_subscriptors}" class="admin_add" id="submit_mult" title="{t}Subscribers{/t}">
+            {* <li class="hidden-xs">
+              <a class="btn btn-danger" href="{url name=admin_newsletter_subscriptors}" class="admin_add" id="submit_mult" title="{t}Subscribers{/t}">
                 <span class="fa fa-users"></span>
-                {t}Subscriber{/t}
+                {t}Subscribers{/t}
               </a>
             </li>
-            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li> *}
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_newsletter_create}" accesskey="N" tabindex="1" id="create-button">
+              <a class="btn btn-primary" href="{url name=backend_newsletters_create}" accesskey="N" tabindex="1" id="create-button">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
               </a>
@@ -62,62 +64,51 @@
     </div>
   </div>
   <div class="content">
+    <div class="spinner-wrapper" ng-if="loading">
+      <div class="loading-spinner"></div>
+      <div class="spinner-text">{t}Loading{/t}...</div>
+    </div>
+    <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
+      <div class="text-center p-b-15 p-t-15">
+        <i class="fa fa-4x fa-warning text-warning"></i>
+        <h3>{t}Unable to find any item that matches your search.{/t}</h3>
+        <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
+      </div>
+    </div>
     <div class="grid simple">
       <div class="grid-body no-padding">
-        <div class="spinner-wrapper" ng-if="loading">
-          <div class="loading-spinner"></div>
-          <div class="spinner-text">{t}Loading{/t}...</div>
-        </div>
-        <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
-          <div class="center">
-            <h4>{t}Unable to find any newsletter that matches your search.{/t}</h4>
-            <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
-          </div>
-        </div>
         <div class="table-wrapper ng-cloak" ng-if="!loading && contents.length > 0">
           <table class="table table-hover no-margin">
             <thead>
               <tr>
-                {*<th class="checkbox-cell">
-                  <div class="checkbox checkbox-default">
-                    <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
-                    <label for="select-all"></label>
-                  </div>
-                </th>*}
                 <th>{t}Title{/t}</th>
-                <th class="center hidden-xs hidden-sm" style="width:250px;">{t}Updated{/t}</th>
+                <th class="hidden-xs hidden-sm" style="width:250px;">{t}Updated{/t}</th>
                 <th class="right">{t}Sendings{/t}</th>
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
-                {*<td class="checkbox-cell">
-                  <div class="checkbox check-default">
-                    <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
-                    <label for="checkbox[%$index%]"></label>
-                  </div>
-                </td>*}
-                <td class="left">
-                  <p ng-if="content.title != ''">[% content.title %]</p>
-                  <p ng-if="content.title == ''">{t}Newsletter{/t}  -  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]</p>
+              <tr ng-repeat="content in contents">
+                <td>
+                  <div ng-if="content.title != ''">[% content.title %]</div>
+                  <div ng-if="content.title == ''">{t}Newsletter{/t}  -  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]</div>
                   <div class="small-text">
                     <strong>{t}Created:{/t}</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
                   <div class="listing-inline-actions">
-                    <a class="link" href="[% edit(content.id, 'admin_newsletter_show_contents') %]" title="{t}Edit{/t}" >
+                    <a class="btn btn-default btn-small" href="[% edit(content.id, 'backend_newsletters_show_contents') %]" title="{t}Edit{/t}" >
                       <i class="fa fa-pencil"></i> {t}Edit{/t}
                     </a>
-                    <a href="[% edit(content.id, 'admin_newsletter_preview') %]" title="{t}Preview{/t}" class="link">
+                    <a href="[% edit(content.id, 'backend_newsletters_preview') %]" title="{t}Preview{/t}" class="btn btn-primary btn-small">
                       <i class="fa fa-eye"></i>
-                      {t}Show contents{/t}
+                      {t}Preview{/t}
                     </a>
-                    <button ng-if="content.sent < 1" class="link link-danger" ng-click="removePermanently(content)" type="button">
+                    <button class="btn btn-danger btn-small" ng-if="content.sent < 1" class="link link-danger" ng-click="removePermanently(content)" type="button">
                       <i class="fa fa-trash-o"></i>
                       {t}Delete{/t}
                     </button>
                   </div>
                 </td>
-                <td class="center hidden-xs hidden-sm">
+                <td class="hidden-xs hidden-sm">
                   [% content.updated | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                 </td>
                 <td class="right">

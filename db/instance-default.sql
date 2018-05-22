@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.21, for Linux (x86_64)
 --
--- Host: mysql    Database: 1
+-- Host: mysql    Database: default
 -- ------------------------------------------------------
--- Server version	5.7.20-log
+-- Server version	5.7.22-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -1096,7 +1096,7 @@ CREATE TABLE `user_groups` (
   `request` tinyint(1) NOT NULL DEFAULT '0',
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`pk_user_group`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1105,7 +1105,7 @@ CREATE TABLE `user_groups` (
 
 LOCK TABLES `user_groups` WRITE;
 /*!40000 ALTER TABLE `user_groups` DISABLE KEYS */;
-INSERT INTO `user_groups` VALUES (3,'Autores',0,0,0,1),(5,'Administrador',0,0,0,1),(6,'Usuarios',0,0,0,1);
+INSERT INTO `user_groups` VALUES (3,'Autores',0,0,0,1),(5,'Administrador',0,0,0,1),(6,'Usuarios',0,0,0,1),(7,'Newsletter',1,0,0,1);
 /*!40000 ALTER TABLE `user_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1131,7 +1131,7 @@ CREATE TABLE `user_groups_privileges` (
 
 LOCK TABLES `user_groups_privileges` WRITE;
 /*!40000 ALTER TABLE `user_groups_privileges` DISABLE KEYS */;
-INSERT INTO `user_groups_privileges` VALUES (6,1),(6,2),(6,3),(6,4),(6,5),(6,6),(6,7),(6,8),(6,9),(6,10),(6,11),(6,12),(6,13),(6,15),(6,16),(6,17),(6,26),(6,27),(6,28),(6,29),(6,30),(6,31),(6,32),(6,33),(6,34),(6,35),(6,36),(6,37),(6,38),(6,39),(6,40),(6,41),(6,60),(6,61),(6,62),(6,63),(6,64),(6,65),(6,66),(6,67),(6,68),(6,69),(6,70),(6,82),(6,83),(6,84),(6,85),(6,104),(6,105),(6,106),(6,107),(6,108),(6,109),(6,114),(6,115),(6,116),(6,117),(6,118),(6,122),(6,123),(6,124),(6,132),(6,133),(6,134),(6,161),(6,162),(6,164);
+INSERT INTO `user_groups_privileges` VALUES (6,1),(6,2),(6,3),(6,4),(6,5),(6,6),(6,7),(6,8),(6,9),(6,10),(6,11),(6,12),(6,13),(6,15),(6,16),(6,17),(6,26),(6,27),(6,28),(6,29),(6,30),(6,31),(6,32),(6,33),(6,34),(6,35),(6,36),(6,37),(6,38),(6,39),(6,40),(6,41),(6,60),(6,61),(6,62),(6,63),(6,64),(6,65),(6,66),(6,67),(6,68),(6,69),(6,70),(6,82),(6,83),(6,84),(6,85),(6,104),(6,105),(6,106),(6,107),(6,108),(6,109),(6,114),(6,115),(6,116),(6,117),(6,118),(6,122),(6,123),(6,124),(6,132),(6,133),(6,134),(6,161),(6,162),(6,164),(7,224);
 /*!40000 ALTER TABLE `user_groups_privileges` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1341,4 +1341,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-28 16:06:36
+-- Dump completed on 2018-05-16  9:51:59

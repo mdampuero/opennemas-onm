@@ -32,20 +32,26 @@ class NewsletterController extends Controller
     public function listAction()
     {
         $maxAllowed      = $this->get('setting_repository')->get('max_mailing');
-        $totalSendings   = $this->getTotalNumberOfNewslettersSend();
+        $totalSendings   = $this->get('core.helper.newsletter')->getTotalNumberOfNewslettersSend();
         $lastInvoice     = new \DateTime($this->get('setting_repository')->get('last_invoice'));
         $lastInvoiceText = $lastInvoice->format(_('Y-m-d'));
 
         // Check if the module is configured, if not redirect to the config form
-        $configuredRedirection = $this->checkModuleActivated();
-
-        if ($configuredRedirection != false) {
-            return $configuredRedirection;
+        $redirection = $this->checkModuleActivated();
+        if ($redirection != false) {
+            return $redirection;
         }
 
-        $message = sprintf(_('No newsletter sent from %s.'), $lastInvoiceText);
+        if ($maxAllowed > 0 && $totalSendings >= $maxAllowed) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('You have reached your maximum of emails allowed to send per month')
+            );
+        }
+
+        $message = sprintf(_('No newsletters were sent from %s'), $lastInvoiceText);
         if ($totalSendings > 0) {
-            $message = sprintf(_('%d newsletter sent from %s.'), (int) $totalSendings, $lastInvoiceText);
+            $message = sprintf(_('%d newsletter sent from %s'), (int) $totalSendings, $lastInvoiceText);
         }
 
         if ($maxAllowed > 0) {
@@ -211,17 +217,15 @@ class NewsletterController extends Controller
             $newsletter->update($newValues);
         } else {
             $newsletter = new \Newsletter();
-            $newsletter->create(
-                [
-                    'title'   => $title,
-                    'data'    => json_encode($containers),
-                    'html'    => $nm->render($containers),
-                ]
-            );
+            $newsletter->create([
+                'title'   => $title,
+                'data'    => json_encode($containers),
+                'html'    => $nm->render($containers),
+            ]);
         }
 
         return $this->redirect($this->generateUrl(
-            'admin_newsletter_preview',
+            'backend_newsletters_preview',
             ['id' => $newsletter->pk_newsletter]
         ));
     }
@@ -261,23 +265,16 @@ class NewsletterController extends Controller
         $id = (int) $request->query->getDigits('id');
 
         $newsletter = new \Newsletter($id);
-
-        $values = [
+        $newsletter->update([
             'title' => $request->request->filter('title', FILTER_SANITIZE_STRING),
             'html'  => $request->request->filter('html', FILTER_SANITIZE_STRING),
-        ];
-
-        $newsletter->update($values);
-
-        return new JsonResponse([
-            'messages' => [
-                [
-                    'id'      => '200',
-                    'type'    => 'success',
-                    'message' => sprintf(_('Content saved successfully'))
-                ]
-            ]
         ]);
+
+        return new JsonResponse(['messages' => [[
+            'id'      => '200',
+            'type'    => 'success',
+            'message' => sprintf(_('Content saved successfully'))
+        ]]]);
     }
 
     /**
@@ -293,53 +290,53 @@ class NewsletterController extends Controller
      */
     public function pickRecipientsAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
-
-        $subscriptionType = $this->get('setting_repository')
-            ->get('newsletter_subscriptionType');
-
-        $accounts = [];
-        if ($subscriptionType === 'create_subscriptor') {
-            $sbManager = new \Subscriber();
-            $accounts  = $sbManager->getUsers(
-                'status > 0 AND subscription = 1',
-                '',
-                'pk_pc_user ASC'
-            );
-        } else {
-            $configurations = $this->get('setting_repository')->get('newsletter_maillist');
-
-            if (!is_null($configurations)
-                && array_key_exists('email', $configurations)
-                && !empty($configurations['email'])
-            ) {
-                $subscriber = new \Subscriber();
-
-                $subscriber->email = $configurations['email'];
-                $subscriber->name  = $configurations['name'];
-
-                $accounts[] = $subscriber;
-            }
-        }
-
-        $accounts = \Onm\StringUtils::convertToUtf8($accounts);
-
-        // Ajax request
-        if ($request->isXmlHttpRequest()) {
-            return new Response(
-                json_encode($accounts),
-                200,
-                ['Content-type' => 'application/json']
-            );
-        }
-
+        $id         = $request->query->getDigits('id');
+        $sm         = $this->get('setting_repository');
+        $content    = new \Newsletter($id);
         $recipients = [];
 
+
+        $ss       = $this->get('api.service.subscription');
+        $ssb      = $this->get('api.service.subscriber');
+        $oql      = $request->query->get('oql', '');
+        $response = $ss->getList($oql);
+
+        $lists = array_filter($response['items'], function ($list) {
+            return in_array(224, $list->privileges);
+        });
+
+        $recipients = [];
+        foreach ($lists as $list) {
+            $recipients[] = [
+                'uuid' => uniqid(),
+                'type' => 'list',
+                'name' => $list->name,
+                'id'   => $list->pk_user_group,
+                'subscribers' => $ssb->getList(
+                    '(user_group_id = "' . $list->pk_user_group
+                    . '" and status != 0)'
+                )['total']
+            ];
+        }
+
+        $maillistConfigs = $sm->get('newsletter_maillist');
+
+        if (!empty($maillistConfigs['email'])) {
+            $recipients[] = [
+                'uuid' => uniqid(),
+                'type' => 'external',
+                'name' => $maillistConfigs['email'],
+                'email' => $maillistConfigs['email'],
+            ];
+        }
+
         return $this->render('newsletter/steps/3-pick-recipients.tpl', [
-            'id'               => $id,
-            'accounts'         => $accounts,
-            'recipients'       => $recipients,
-            'subscriptionType' => $subscriptionType,
+            'id'      => $id,
+            'content' => $content,
+            'extra'   => [
+                'newsletter_handler' => $sm->get('newsletter_subscriptionType'),
+                'recipients'         => $recipients,
+            ]
         ]);
     }
 
@@ -360,89 +357,16 @@ class NewsletterController extends Controller
         $recipients = $request->request->get('recipients');
         $recipients = json_decode($recipients);
 
-        $sentResult = [];
-        $newsletter = new \Newsletter($id);
+        // Prepare the newsletter contents to send
+        $newsletter        = new \Newsletter($id);
+        $newsletter->html  = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
+        $newsletter->title = empty($newsletter->title)
+            ? _('[Newsletter]') : $newsletter->title;
 
-        $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
-
-        $newsletterSender = $this->container->getParameter('mailer_no_reply_address');
-        $configurations   = $this->get('setting_repository')->get('newsletter_maillist');
-
-        if (empty($newsletterSender)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Your newsletter configuration is not complete. You must complete the sender email address.')
-            );
-
-            return $this->redirect($this->generateUrl('admin_newsletters'));
-        }
-
-        $params = [
-            'subject'        => $newsletter->title,
-            'mail_from'      => $configurations['sender'],
-            'mail_from_name' => $this->get('setting_repository')->get('site_name'),
-        ];
-
-        $maxAllowed = $this->get('setting_repository')->get('max_mailing');
-        $remaining  = $maxAllowed - $this->getTotalNumberOfNewslettersSend();
-
-        $subject = (!isset($params['subject'])) ? '[Boletin]' : $params['subject'];
-
-        $message = $htmlContent;
-
-        $sent = 0;
-        if (!empty($recipients)) {
-            foreach ($recipients as $mailbox) {
-                if (empty($maxAllowed) || (!empty($maxAllowed) && !empty($remaining))) {
-                    try {
-                         // Build the message
-                        $message = \Swift_Message::newInstance();
-                        $message
-                            ->setSubject($subject)
-                            ->setBody($htmlContent, 'text/html')
-                            ->setFrom([$params['mail_from'] => $params['mail_from_name']])
-                            ->setSender($newsletterSender)
-                            ->setTo([$mailbox->email => $mailbox->name]);
-
-                        $headers = $message->getHeaders();
-                        $headers->addParameterizedHeader(
-                            'ACUMBAMAIL-SMTPAPI',
-                            $this->get('core.instance')->internal_name . ' - Newsletter'
-                        );
-
-                        // Send it
-                        $properlySent = $this->get('mailer')->send($message);
-
-                        $this->get('application.log')->notice(
-                            "Email sent. Backend newsletter sent (to: " . $mailbox->email . ")"
-                        );
-
-                        $sentResult[] = [$mailbox, (bool) $properlySent, _('Unable to deliver your email')];
-                        $remaining--;
-                        $sent++;
-                    } catch (\Exception $e) {
-                        $sentResult[] = [$mailbox, false, $e->getMessage()];
-                    }
-                } else {
-                    $sentResult[] = [$mailbox, false, _('Max sents reached.')];
-                }
-            }
-        }
-
-        if (empty($newsletter->sent)) {
-            $newsletter->update(['sent' => $sent]);
-        } else {
-            //duplicated newsletter for count month mail send
-            $newsletter->create([
-                'title'   => $newsletter->title,
-                'data'    => $newsletter->data,
-                'html'    => $newsletter->html,
-                'sent'    => $sent,
-            ]);
-        }
+        $report = $this->get('core.helper.newsletter_sender')->send($newsletter, $recipients);
 
         return $this->render('newsletter/steps/4-send.tpl', [
-            'sent_result' => $sentResult,
+            'send_report' => $report,
             'newsletter'  => $newsletter,
         ]);
     }
@@ -474,7 +398,7 @@ class NewsletterController extends Controller
                 _('Newsletter module settings saved successfully.')
             );
 
-            return $this->redirect($this->generateUrl('admin_newsletter_config'));
+            return $this->redirect($this->generateUrl('backend_newsletters_config'));
         }
 
         $configurations = $this->get('setting_repository')->get([
@@ -508,7 +432,7 @@ class NewsletterController extends Controller
         $type   = $this->get('setting_repository')->get('newsletter_subscriptionType');
         $config = $this->get('setting_repository')->get('newsletter_maillist');
 
-        // If the module doesnt have settings already saved
+        // If the module doesn't have settings already saved
         // we redirect to the module configuration form
         if (is_null($config) || !$type) {
             $this->get('session')->getFlashBag()->add(
@@ -516,110 +440,24 @@ class NewsletterController extends Controller
                 _('Please fill the mail list email address in the module configuration.')
             );
 
-            return $this->redirect($this->generateUrl('admin_newsletter_config'));
+            return $this->redirect($this->generateUrl('backend_newsletters_config'));
         }
 
         // There is settings saved but we will check if they are valid
         foreach ($config as $key => $value) {
             if ($type == 'submit' || ($key != 'subscription' && $key != 'email')) {
-                if (empty($value)) {
-                    $this->get('session')->getFlashBag()->add(
-                        'error',
-                        _(
-                            'Your newsletter configuration is not completed. Please' .
-                            ' go to settings and complete the form.'
-                        )
-                    );
-
-                    return $this->redirect($this->generateUrl('admin_newsletter_config'));
+                if (!empty($value)) {
+                    continue;
                 }
+                $this->get('session')->getFlashBag()->add('error', _(
+                    'Your newsletter configuration is not completed. Please' .
+                    ' go to settings and complete the form.'
+                ));
+
+                return $this->redirect($this->generateUrl('backend_newsletters_config'));
             }
         }
 
         return false;
-    }
-
-    /**
-     * Count total mailing sends in current month
-     *
-     * @return int Total number of mail sent in current mount
-     */
-    private function getTotalNumberOfNewslettersSend()
-    {
-        // Get maximum number of allowed sending mails
-        $maxAllowed = $this->get('setting_repository')->get('max_mailing');
-
-        // Get last invoice DateTime
-        $lastInvoiceDate = $this->updateLastInvoice();
-
-        // Get today DateTime
-        $today = new \DateTime();
-
-        // Get all newsletters updated between today and last invoice
-        $nm    = $this->get('newsletter_manager');
-        $where = " updated >= '" . $lastInvoiceDate->format('Y-m-d H:i:s')
-            . "' AND updated <= '" . $today->format('Y-m-d H:i:s') . "' and sent > 0";
-
-        list($nmCount, $newsletters) = $nm->find($where, 'created DESC');
-
-        // Check if user has reached the limit of sent newsletters
-        $totalSent = 0;
-        if ($nmCount > 0) {
-            foreach ($newsletters as $newsletter) {
-                $totalSent += $newsletter->sent;
-            }
-
-            if ($maxAllowed > 0 && ($maxAllowed - $totalSent <= 0)) {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _('You have reached the maximum of emails allowed to send')
-                );
-
-                return $maxAllowed;
-            }
-        }
-
-        return $totalSent;
-    }
-
-    /**
-     * Updates last invoice date
-     *
-     * @param string $date Date of last invoice
-     *
-     * @return DateTime Last invoice
-     */
-    private function updateLastInvoice()
-    {
-        // Generate last invoice DateTime
-        $lastInvoice = new \DateTime($this->get('setting_repository')->get('last_invoice'));
-
-        // Set day to 28 if it's more than that
-        if ($lastInvoice->format('d') > 28) {
-            $lastInvoice->setDate(
-                $lastInvoice->format('Y'),
-                $lastInvoice->format('m'),
-                28
-            );
-        }
-
-        // Get today DateTime
-        $today = new \DateTime();
-
-        // Get next invoice DateTime
-        $nextInvoiceDate = new \DateTime($lastInvoice->format('Y-m-d H:i:s'));
-        $nextInvoiceDate->modify('+1 month');
-
-        // Update next invoice DateTime
-        while ($today > $nextInvoiceDate) {
-            $nextInvoiceDate->modify('+1 month');
-        }
-
-        // Update last invoice DateTime
-        $lastInvoice = $nextInvoiceDate->modify('-1 month');
-
-        $this->get('setting_repository')->set('last_invoice', $lastInvoice->format('Y-m-d H:i:s'));
-
-        return $lastInvoice;
     }
 }

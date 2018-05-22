@@ -70,10 +70,7 @@ class ArticleController extends Controller
      */
     public function showAction($id)
     {
-        $er          = $this->get('entity_repository');
-        $article     = $er->find('Article', $id);
-        $articleList = [$article];
-        $er->populateContentMetasInContents($articleList);
+        $article = $this->get('entity_repository')->find('Article', $id);
 
         if (is_null($article->id)) {
             return new JsonResponse(

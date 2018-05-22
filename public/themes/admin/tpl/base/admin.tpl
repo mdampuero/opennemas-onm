@@ -87,7 +87,7 @@
           {block name="header_links"}
             <div class="pull-left">
               <ul class="nav quick-section">
-                {acl isAllowed="ROLE_ADMIN"}
+                {acl isAllowed="ADMIN"}
                   <li class="quicklinks">
                     <a href="{url name=backend_account_show}" title="{t}Instance information{/t}">
                       <i class="fa fa-bullseye"></i>

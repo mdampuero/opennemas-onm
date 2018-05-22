@@ -115,7 +115,7 @@ class Security
         }
 
         if (empty($this->categories)) {
-            return false;
+            return true;
         }
 
         return in_array($category, $this->categories);
@@ -129,6 +129,10 @@ class Security
      */
     public function hasExtension($uuid)
     {
+        if ($this->hasPermission('MASTER')) {
+            return true;
+        }
+
         return in_array($uuid, $this->instance->activated_modules);
     }
 
@@ -180,22 +184,6 @@ class Security
         }
 
         return in_array($permission, $this->permissions);
-    }
-
-    /**
-     * Checks if the current user has the role.
-     *
-     * @param string $role The role to check.
-     *
-     * @return boolean True if the current user has the role. False otherwise.
-     */
-    public function hasRole($role)
-    {
-        if (empty($this->user) || empty($this->user->getRoles())) {
-            return false;
-        }
-
-        return in_array($role, $this->user->getRoles());
     }
 
     /**

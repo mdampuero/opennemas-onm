@@ -63,7 +63,7 @@ class ErrorController extends Controller
                 return new RedirectResponse($url, 301);
 
             default:
-                $this->get('error.log')->error($error->getMessage(), $error->getTrace());
+                $this->get('error.log')->error($error->getMessage());
                 return $this->getErrorResponse();
         }
     }

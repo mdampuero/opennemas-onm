@@ -248,7 +248,7 @@ $menuXml = [
         'id'          => 'newsletter_manager',
         'title'       => _('Newsletters'),
         'icon'        => 'fa fa-envelope',
-        'link'        => url('admin_newsletters'),
+        'link'        => url('backend_newsletters_list'),
         'module_name' => 'NEWSLETTER_MANAGER',
         'privilege'   => 'NEWSLETTER_ADMIN',
     ],
@@ -369,21 +369,21 @@ $menuXml = [
         'title' => _('Store'),
         'icon'  => 'fa fa-shopping-cart',
         'link'  => url('admin_store_list'),
-        'privilege' => 'ROLE_ADMIN'
+        'privilege' => 'ADMIN'
     ],
     [
         'id'          => 'theme-manager',
         'title'       => _('Themes'),
         'icon'        => 'fa fa-magic',
         'link'        => url('backend_theme_list'),
-        'privilege'   => 'ROLE_ADMIN',
+        'privilege'   => 'ADMIN',
     ],
     [
         'id'          => 'domain_manager',
         'title'       => _('Domains'),
         'icon'        => 'fa fa-at',
         'link'        => url('backend_domains_list'),
-        'privilege'   => 'ROLE_ADMIN',
+        'privilege'   => 'ADMIN',
     ],
     [
         'id'      => 'faq_and_support',

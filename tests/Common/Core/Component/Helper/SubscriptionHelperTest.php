@@ -24,7 +24,7 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->security = $this->getMockBuilder('Security')
-            ->setMethods([ 'getUser', 'hasExtension' ])
+            ->setMethods([ 'getUser', 'hasExtension', 'hasPermission' ])
             ->getMock();
 
         $this->ss = $this->getMockBuilder('SubscriptionService')
@@ -132,6 +132,20 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->assertEquals('111', $this->helper->getToken($this->content));
+    }
+
+    /**
+     * Tests hasAdvertisements.
+     */
+    public function testHasAdvertisements()
+    {
+        $this->security->expects($this->at(0))->method('hasPermission')
+            ->with('MEMBER_HIDE_ADVERTISEMENTS')->willReturn(true);
+        $this->security->expects($this->at(1))->method('hasPermission')
+            ->with('MEMBER_HIDE_ADVERTISEMENTS')->willReturn(false);
+
+        $this->assertFalse($this->helper->hasAdvertisements());
+        $this->assertTrue($this->helper->hasAdvertisements());
     }
 
     /**
@@ -248,7 +262,7 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->helper->requiresSubscription($this->content));
 
-        $this->content->subscription = [ 1 ];
+        $this->content->subscriptions = [ 1 ];
         $this->assertFalse($this->helper->requiresSubscription($this->content));
     }
 
@@ -264,7 +278,7 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->helper->requiresSubscription($this->content));
 
-        $this->content->subscription = [ 1 ];
+        $this->content->subscriptions = [ 1 ];
         $this->assertTrue($this->helper->requiresSubscription($this->content));
     }
 }

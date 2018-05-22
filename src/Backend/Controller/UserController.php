@@ -102,7 +102,8 @@ class UserController extends Controller
      */
     public function socialAction(Request $request, $id, $resource)
     {
-        $template = 'acl/user/social.tpl';
+        $template = 'user/social.tpl';
+
         try {
             $user = $this->get('orm.manager')->getRepository('User')->find($id);
         } catch (\Exception $e) {
@@ -135,7 +136,7 @@ class UserController extends Controller
         }
 
         if ($request->get('style') && $request->get('style') == 'orb') {
-            $template = 'acl/user/social_alt.tpl';
+            $template = 'user/social_alt.tpl';
         }
 
         $this->get('core.dispatcher')->dispatch('social.connect', ['user' => $user]);

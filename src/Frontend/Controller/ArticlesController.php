@@ -10,6 +10,7 @@
 namespace Frontend\Controller;
 
 use Common\Core\Controller\Controller;
+use Common\ORM\Core\Exception\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,8 +63,17 @@ class ArticlesController extends Controller
             throw new AccessDeniedException();
         }
 
-        $category = $this->get('orm.manager')->getRepository('Category')
-            ->findOneBy(sprintf('name = "%s"', $categoryName));
+        try {
+            $category = $this->get('orm.manager')->getRepository('Category')
+                ->findOneBy(sprintf('name = "%s"', $categoryName));
+
+            $category->title = $this->get('data.manager.filter')
+                ->set($category->title)
+                ->filter('localize')
+                ->get();
+        } catch (EntityNotFoundException $e) {
+            throw new ResourceNotFoundException();
+        }
 
         list($positions, $advertisements) =
             $this->getAds($category->pk_content_category);
@@ -74,7 +84,7 @@ class ArticlesController extends Controller
         );
 
         $this->view->setConfig('articles');
-        $cacheID = $this->view->getCacheId('content', $article->id);
+        $cacheID = $this->view->getCacheId('content', $article->id, $token);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached("extends:layouts/{$layout}.tpl|article/article.tpl", $cacheID)
@@ -110,7 +120,7 @@ class ArticlesController extends Controller
             'content'               => $article,
             'contentId'             => $article->id,
             'time'                  => '12345',
-            'o-token'               => $token,
+            'o_token'               => $token,
             'x-cache-for'           => '+1 day',
             'x-cacheable'           => empty($token),
             'x-tags'                => 'article,' . $article->id
@@ -260,6 +270,7 @@ class ArticlesController extends Controller
             $article->id
         );
 
-        return $this->get('automatic_contents')->searchSuggestedContents($query);
+        return $this->get('automatic_contents')
+            ->searchSuggestedContents('article', $query);
     }
 }
