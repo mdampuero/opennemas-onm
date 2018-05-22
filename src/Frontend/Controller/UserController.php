@@ -225,10 +225,14 @@ class UserController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $data = $request->request->all();
+        $data = array_merge(
+            [ 'fk_user_group' => [], 'user_groups' => [] ],
+            $request->request->all()
+        );
 
         if (array_key_exists('user_groups', $data)) {
-            $data['user_groups'] =
+            $data['fk_user_group'] = array_keys($data['user_groups']);
+            $data['user_groups']   =
                 $this->parseSubscriptions($data['user_groups']);
         }
 
@@ -247,7 +251,7 @@ class UserController extends Controller
                 ->add('success', _('Item updated successfully'));
 
             $this->get('core.dispatcher')
-                ->dispatch('user.update', [ 'id' => $user->id ]);
+                ->dispatch('user.update', [ 'id' => $this->getUser()->id ]);
         } catch (\Exception $e) {
             $this->get('error.log')
                 ->error('frontend.subscriber.update: ' . $e->getMessage());
@@ -346,6 +350,10 @@ class UserController extends Controller
      */
     protected function parseSubscriptions($subscriptions)
     {
+        if (empty($subscriptions)) {
+            return [];
+        }
+
         $ids   = array_keys($subscriptions);
         $items = $this->get('api.service.subscription')
             ->setCount(false)
