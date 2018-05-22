@@ -153,7 +153,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests createItem when no email provided.
      *
-     * @expectedException Api\Exception\CreateItemException
+     * @expectedException Api\Exception\CreateExistingItemException
      */
     public function testCreateItemWhenEmailInUseForSubscriberAndUser()
     {

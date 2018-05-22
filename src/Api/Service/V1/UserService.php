@@ -9,6 +9,7 @@
  */
 namespace Api\Service\V1;
 
+use Api\Exception\CreateExistingItemException;
 use Api\Exception\CreateItemException;
 use Api\Exception\DeleteItemException;
 use Api\Exception\DeleteListException;
@@ -44,6 +45,8 @@ class UserService extends OrmService
             if (!empty($item)) {
                 return $this->convert($item, 2);
             }
+        } catch (CreateExistingItemException $e) {
+            throw $e;
         } catch (\Exception $e) {
             throw new CreateItemException($e->getMessage(), $e->getCode());
         }
@@ -177,7 +180,10 @@ class UserService extends OrmService
             $items = $this->getList($oql);
 
             if (!empty($items['items'])) {
-                throw new \Exception('The email is already in use', 409);
+                throw new \Exception(
+                    'The email address is already in use',
+                    409
+                );
             }
         } catch (\Exception $e) {
             throw new UpdateItemException($e->getMessage(), $e->getCode());
@@ -214,7 +220,10 @@ class UserService extends OrmService
         }
 
         if ($item->type === $this->type || $item->type === 2) {
-            throw new \Exception('The email is already in use', 409);
+            throw new CreateExistingItemException(
+                'The email address is already in use',
+                409
+            );
         }
 
         return $item;
