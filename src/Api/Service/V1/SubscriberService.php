@@ -21,6 +21,11 @@ class SubscriberService extends UserService
     protected $type = 1;
 
     /**
+     * The type for subscriber + user when converted to user.
+     */
+    protected $ctype = 0;
+
+    /**
      * {@inheritdoc}
      */
     public function getItem($id)

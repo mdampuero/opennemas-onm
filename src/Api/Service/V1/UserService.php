@@ -24,6 +24,11 @@ class UserService extends OrmService
     protected $type = 0;
 
     /**
+     * The type for subscriber + user when converted to subscriber.
+     */
+    protected $ctype = 1;
+
+    /**
      * {@inheritdoc}
      */
     public function createItem($data)
@@ -225,7 +230,7 @@ class UserService extends OrmService
         $item->type = $type;
 
         if (empty($type)) {
-            $item->type = $this->type;
+            $item->type = $this->ctype;
         }
 
         $this->em->persist($item, $item->getOrigin());
