@@ -58,7 +58,7 @@ class Tag
      *
      * @return mixed List with all tags validate against DB
      */
-    public function validateTags($languageId, $tags)
+    public static function validateTags($languageId, $tags)
     {
         if (empty($tags)) {
             return [];
