@@ -18,6 +18,7 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
+use Common\Core\Component\Validator\Validator;
 
 /**
  * Handles the actions for comments
@@ -256,21 +257,30 @@ class CommentsController extends Controller
                 }
             }
 
+
             $configs = array_merge($defaultConfigs, $configs);
 
             return $this->render('comment/config.tpl', [
                 'configs' => $configs,
                 'extra'   => [
-                    'handler' => $commentsHandler
+                    'handler' => $commentsHandler,
+                    'blacklist_comment' => $this->get('core.validator')
+                        ->getConfig(Validator::BLACKLIST_RULESET_COMMENTS),
                 ],
             ]);
         }
 
         $configs = $request->request->get('configs', []);
-
-        $defaultConfigs['moderation_manual'] = false;
+        if (!array_key_exists('moderation_manual', $configs)) {
+            $configs['moderation_manual'] = false;
+        }
 
         $configs = array_merge($defaultConfigs, $configs);
+
+        $this->get('core.validator')->setConfig(
+            Validator::BLACKLIST_RULESET_COMMENTS,
+            $request->request->get('blacklist_comment', '')
+        );
 
         $result = ['success', _('Settings saved.')];
         if (!$sm->set('comments_config', $configs)) {
