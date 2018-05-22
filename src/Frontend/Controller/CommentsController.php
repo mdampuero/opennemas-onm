@@ -192,8 +192,7 @@ class CommentsController extends Controller
         $contentId   = $request->request->getDigits('content-id');
         $ip          = getUserRealIP();
 
-        $cm      = $this->get('core.helper.comment');
-        $configs = $cm->getConfigs();
+        $cm        = $this->get('core.helper.comment');
 
         $httpCode = 200;
         try {
@@ -214,21 +213,19 @@ class CommentsController extends Controller
 
                 $message = _('Your comment was accepted and now we have to moderate it.');
             } else {
-                $errors = $cm->validate($data);
+                $errors = $this->get('core.validator')->validate($data, 'comment');
 
                 if (empty($errors)) {
-                    $data['status'] = \Comment::STATUS_PENDING;
-                    if ($configs['moderation_autoreject']) {
-                        $data['status'] = \Comment::STATUS_REJECTED;
-                    }
+                    $data['status'] = $cm->autoReject()
+                        ? \Comment::STATUS_REJECTED
+                        : \Comment::STATUS_PENDING;
 
                     $httpCode = 200;
                     $message  = _('Your comment was accepted.');
                 } else {
-                    $data['status'] = \Comment::STATUS_REJECTED;
-                    if ($configs['moderation_autoaccept']) {
-                        $data['status'] = \Comment::STATUS_REJECTED;
-                    }
+                    $data['status'] = $cm->autoAccept()
+                        ? \Comment::STATUS_REJECTED
+                        : \Comment::STATUS_ACCEPTED;
 
                     $httpCode = 400;
                     $message  = implode('<br>', $errors);
