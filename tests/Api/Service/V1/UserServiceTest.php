@@ -11,6 +11,7 @@ namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\UserService;
 use Common\ORM\Core\Entity;
+use Common\ORM\Core\Exception\EntityNotFoundException;
 
 /**
  * Defines test cases for UserService class.
@@ -114,6 +115,9 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
             'type'     => 1
         ];
 
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->with('email = "flob@garply.com"')
+            ->will($this->throwException(new EntityNotFoundException('User')));
         $this->encoder->expects($this->once())->method('encodePassword')
             ->with('quux')->willReturn('quux');
         $this->converter->expects($this->any())->method('objectify')
@@ -127,20 +131,42 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests createItem when no email provided.
-     *
-     * @expectedException Api\Exception\CreateItemException
      */
-    public function testCreateItemWhenEmailInUse()
+    public function testCreateItemWhenEmailInUseForSubscriber()
     {
         $data = [ 'name' => 'flob', 'email' => 'flob@garply.com' ];
 
-        $this->fixer->expects($this->once())->method('fix')
-            ->with('email = "flob@garply.com"');
-        $this->fixer->expects($this->once())->method('getOql')
-            ->willReturn('email = "flob@garply.com" and type != 1');
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('email = "flob@garply.com" and type != 1')
-            ->willReturn(new Entity([]));
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->with('email = "flob@garply.com"')
+            ->willReturn(new Entity([
+                'id'    => 1,
+                'email' => 'flob@garply.com',
+                'name'  => 'mumble',
+                'type'  => 1
+            ]));
+
+        $this->em->expects($this->once())->method('persist');
+
+        $this->service->createItem($data);
+    }
+
+    /**
+     * Tests createItem when no email provided.
+     *
+     * @expectedException Api\Exception\CreateItemException
+     */
+    public function testCreateItemWhenEmailInUseForSubscriberAndUser()
+    {
+        $data = [ 'name' => 'flob', 'email' => 'flob@garply.com' ];
+
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->with('email = "flob@garply.com"')
+            ->willReturn(new Entity([
+                'id'    => 1,
+                'email' => 'flob@garply.com',
+                'name'  => 'mumble',
+                'type'  => 2
+            ]));
 
         $this->service->createItem($data);
     }
