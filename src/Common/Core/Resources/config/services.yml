@@ -40,7 +40,6 @@ parameters:
         moderation_manual: true
         moderation_autoreject: false
         moderation_autoaccept: false
-        moderation_blacklist: ''
 
 services:
     core.collector.brand:
@@ -70,7 +69,6 @@ services:
         class:     Common\Core\Component\Helper\CommentHelper
         arguments:
             - '@setting_repository'
-            - '@validator'
             - '%core.helper.comment.default_params%'
 
     core.helper.instance_sync:
@@ -292,3 +290,9 @@ services:
 
     core.user:
         alias:     'core.security.user'
+
+    core.validator:
+        class:      Common\Core\Component\Validator\Validator
+        arguments:
+            - '@setting_repository'
+            - '@validator'

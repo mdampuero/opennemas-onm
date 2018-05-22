@@ -9,9 +9,6 @@
  */
 namespace Common\Core\Component\Helper;
 
-use Symfony\Component\Validator\Constraints as Assert;
-use Common\Core\Component\Validator\Constraints as OnmAssert;
-
 class CommentHelper
 {
     /**
@@ -26,78 +23,41 @@ class CommentHelper
      *
      * @param ServiceContainer $container The service container.
      */
-    public function __construct($sm, $validator, $defaultConfigs)
+    public function __construct($sm, $defaultConfigs)
     {
         $this->sm             = $sm;
         $this->configs        = $sm->get('comments_config');
-        $this->validator      = $validator;
         $this->defaultConfigs = $defaultConfigs;
     }
 
-    public function moderateManually()
-    {
-        $configs = $this->getConfigs();
-
-        return $configs['moderation_manual'] == 1;
-    }
-
     /**
-     * Checks if the content of a comment has bad words.
+     * Whether if comments must be automatically rejected according to configs
      *
-     * @param array $data The data of the comment.
-     *
-     * @return integer Higher values means more bad words.
+     * @return boolean true if comments must be autorejected
      */
-    public static function hasBadWordsComment($string)
+    public function autoReject()
     {
-        $weight = \Onm\StringUtils::getWeightBadWords($string);
-
-        return $weight > 100;
+        return $this->getConfigs()['moderation_autoreject'] == 1;
     }
 
     /**
-     * Validates the comment information against a set of rules
+     * Whether if comments must be automatically accepted according to configs
      *
-     * @return array the list of errors
-     **/
-    public function validate($data)
+     * @return boolean true if comments must be autoaccepted
+     */
+    public function autoAccept()
     {
-        $constraint = new Assert\Collection([
-            'author'       => new Assert\NotBlank([
-                'message' => _('Please provide a valid author name.')
-            ]),
-            'author_email' => new Assert\Email([
-                'message' => _('Please provide a valid email address')
-            ]),
-            'author_ip'    => new Assert\NotBlank([
-                'message' => _('Your IP address is not valid.')
-            ]),
-            'body'         => [
-                new Assert\Length([
-                    'min'     => 10,
-                    'minMessage' => _('Your comment has no enought contents.')
-                ]),
-                new OnmAssert\BlacklistWords([
-                    'words'      => $this->getConfigs()['moderation_blacklist'],
-                    'message' => _('Your comment uses words that are not allowed.')
-                ]),
-            ],
-            'content_id'   => new Assert\Range(['min' => 1]),
-        ]);
+        return $this->getConfigs()['moderation_autoaccept'] == 1;
+    }
 
-        $violations = $this->validator->validate($data, $constraint);
-
-        if (count($violations) > 0) {
-            $errors = [];
-
-            foreach ($violations as $el) {
-                $errors[] = $el->getMessage();
-            }
-
-            return $errors;
-        }
-
-        return [];
+    /**
+     * Returns the complete configs merged with the default
+     *
+     * @return array the list of configs
+     **/
+    public function getConfigs()
+    {
+        return array_merge($this->getDefaultConfigs(), $this->configs);
     }
 
     /**
@@ -111,17 +71,12 @@ class CommentHelper
     }
 
     /**
-     * undocumented function
+     * Whether if comments must be moderated manually or not according to configs
      *
-     * @return void
-     * @author
-     **/
-    public function getConfigs()
+     * @return boolean true if the comments are moderated manually
+     */
+    public function moderateManually()
     {
-        $configs = array_merge($this->getDefaultConfigs(), $this->configs);
-
-        $configs['moderation_blacklist'] = explode("\n", $configs['moderation_blacklist']);
-
-        return $configs;
+        return $this->getConfigs()['moderation_manual'] == 1;
     }
 }
