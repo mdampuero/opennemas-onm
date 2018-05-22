@@ -9,6 +9,7 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\CreateExistingItemException;
 use Api\Exception\CreateItemException;
 use Api\Exception\GetItemException;
 use Api\Exception\GetListException;
@@ -181,6 +182,15 @@ class UserController extends Controller
             $this->sendCreateEmail($data);
             $this->get('application.log')
                 ->info('subscriber.create.email.success');
+        } catch (CreateExistingItemException $e) {
+            $this->get('application.log')->info(
+                'subscriber.create.failure: ' . $e->getMessage()
+            );
+
+            $request->getSession()->getFlashBag()
+                ->add('error', _('The email address is already in use.'));
+
+            return $this->redirect($this->generateUrl('frontend_user_register'));
         } catch (CreateItemException $e) {
             $this->get('application.log')->error(
                 'subscriber.create.failure: ' . $e->getMessage()
