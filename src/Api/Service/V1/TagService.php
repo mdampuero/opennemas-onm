@@ -65,7 +65,7 @@ class TagService extends OrmService
     {
         $oqlAux = $oql;
         if (preg_match('/and\s*name\s*~\s*"?[^"]*"?/', $oql, $matches)) {
-            $oqlNameAux = split('"', $matches[0]);
+            $oqlNameAux = explode('"', $matches[0]);
             if (count($oqlNameAux) == 3) {
                 $oqlNameAux[0] = str_replace("name", 'slug', $oqlNameAux[0]);
                 $oqlNameAux[1] = '"' . $this->createSearchableWord($oqlNameAux[1]) . '"';
@@ -121,7 +121,7 @@ class TagService extends OrmService
 
         if (!empty($newTags)) {
             foreach ($newTags as $tagName) {
-                $tagData             = [
+                $tagData = [
                     'name'        => $tagName,
                     'slug'        => $this->createSearchableWord($tagName),
                     'language_id' => $locale
