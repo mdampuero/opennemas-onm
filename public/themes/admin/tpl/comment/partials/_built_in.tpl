@@ -32,10 +32,10 @@
         <div class="checkbox">
           <input id="moderation_manual" name="configs[moderation_manual]" type="checkbox" value="1" ng-model="configs.moderation_manual">
           <label class="form-label" for="moderation_manual">
-            <span class="checkbox-title">{t}Manually moderation of comments{/t}</span>
+            <span class="checkbox-title">{t}Manual moderation of comments{/t}</span>
           </label>
           <div class="help p-l-25">
-            {t}An administrator must always approve a comment in order to make it publicly available.{/t}
+            {t}Comments must be manually approved by an administrator before is publicly available.{/t}
           </div>
         </div>
       </div>
@@ -74,7 +74,7 @@
         <div class="col-xs-12">
           <h5><i class="fa fa-fire m-r-5"></i> {t}Words and rules prohibited{/t}</h5>
           <div class="form-group">
-            <textarea name="configs[moderation_blacklist]" id="blacklist_rules" class="form-control" rows=10>{$configs['moderation_blacklist']}</textarea>
+            <textarea name="blacklist_comment" id="blacklist_comment" class="form-control" rows=10>{$extra['blacklist_comment']}</textarea>
             <div class="help">{t}List of words or regular expressions that are prohibited on comments, one per line.{/t}</div>
           </div>
         </div>
