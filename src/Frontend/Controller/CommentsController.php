@@ -191,8 +191,7 @@ class CommentsController extends Controller
         $authorEmail = $request->request->filter('author-email', '', FILTER_SANITIZE_STRING);
         $contentId   = $request->request->getDigits('content-id');
         $ip          = getUserRealIP();
-
-        $cm        = $this->get('core.helper.comment');
+        $cm          = $this->get('core.helper.comment');
 
         $httpCode = 200;
         try {
@@ -216,16 +215,16 @@ class CommentsController extends Controller
                 $errors = $this->get('core.validator')->validate($data, 'comment');
 
                 if (empty($errors)) {
-                    $data['status'] = $cm->autoReject()
-                        ? \Comment::STATUS_REJECTED
+                    $data['status'] = $cm->autoAccept()
+                        ? \Comment::STATUS_ACCEPTED
                         : \Comment::STATUS_PENDING;
 
                     $httpCode = 200;
                     $message  = _('Your comment was accepted.');
                 } else {
-                    $data['status'] = $cm->autoAccept()
+                    $data['status'] = $cm->autoReject()
                         ? \Comment::STATUS_REJECTED
-                        : \Comment::STATUS_ACCEPTED;
+                        : \Comment::STATUS_PENDING;
 
                     $httpCode = 400;
                     $message  = implode('<br>', $errors);
