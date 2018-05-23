@@ -30,10 +30,12 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       $scope.source.items = extra.recipients;
       $scope.newsletter_handler = extra.newsletter_handler;
 
-      if ($scope.newsletter_handler === 'submit' ||
-        $scope.newsletter_handler === 'create_subscriptor'
-      ) {
+      if ($scope.newsletter_handler === 'create_subscriptor') {
         $scope.newsletter_handler = 'lists';
+      }
+
+      if ($scope.newsletter_handler === 'submit') {
+        $scope.newsletter_handler = 'external';
       }
 
       $scope.expanded = $scope.newsletter_handler;
