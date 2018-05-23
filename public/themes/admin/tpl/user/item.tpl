@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form name="form" ng-controller="UserCtrl" ng-init="getItem({$id});master = {if $app.user->isMaster()}true{else}false{/if}">
+  <form name="form" ng-controller="UserCtrl" ng-init="getItem({$id});backup.master = {if $app.container->get('core.security')->hasPermission('MASTER')}true{else}false{/if}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">

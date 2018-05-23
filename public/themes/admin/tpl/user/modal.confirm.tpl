@@ -20,7 +20,7 @@
       </div>
     </div>
   </div>
-  <div class="modal-footer row">
+  <div class="modal-footer row" ng-if="template.step > 1">
     <div class="col-xs-6">
       <button class="btn btn-block btn-danger text-uppercase" data-dismiss="modal" ng-click="dismiss()" ng-disabled="loading" type="button">
         <h4 class="bold text-uppercase text-white">

@@ -64,7 +64,7 @@ class NotificationController extends Controller
             $oql .= ' and id !in [' . implode(', ', array_keys($read)) . ']';
         }
 
-        if (!$this->getUser()->isAdmin()) {
+        if (!$this->get('core.security')->hasPermission('ADMIN')) {
             $oql .= ' and (users is null or users = 0)';
         }
 
@@ -106,7 +106,7 @@ class NotificationController extends Controller
             . " and enabled = 1 and start <= '%s'"
             . " and (end is null or end > '%s')";
 
-        if (!$this->getUser()->isAdmin()) {
+        if (!$this->get('core.security')->hasPermission('ADMIN')) {
             $oql .= ' and (users is null or users = 0)';
         }
 

@@ -37,14 +37,14 @@
         };
 
         /**
-         * @function confirmUser
+         * @function confirm
          * @memberOf UserCtrl
          *
          * @description
          *   Shows a modal to confirm user update.
          */
         $scope.confirm = function(property, value, item) {
-          if ($scope.master || !value) {
+          if (!value || $scope.backup.master) {
             if (item) {
               $scope.patch(item, property, value);
               return;
@@ -61,8 +61,7 @@
             resolve: {
               template: function() {
                 return {
-                  name: $scope.id ? 'update' : 'create',
-                  backend_access: true,
+                  name:  $scope.id ? 'update' : 'create',
                   value: 1,
                   extra: $scope.data.extra,
                 };

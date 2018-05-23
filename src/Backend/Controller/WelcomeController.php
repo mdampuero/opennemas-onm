@@ -34,7 +34,7 @@ class WelcomeController extends Controller
 
         if (empty($user->terms_accepted)
             //|| $termsAccepted && $termsAccepted < '2015-07-23 15:24:15')
-            && !$this->getUser()->isMaster()
+            && !$this->get('core.security')->hasPermission('MASTER')
         ) {
             return $this->redirect($this->generateUrl('admin_getting_started'));
         }

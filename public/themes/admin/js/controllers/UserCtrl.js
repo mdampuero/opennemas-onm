@@ -86,7 +86,7 @@
          *   Shows a modal to confirm user update.
          */
         $scope.confirm = function() {
-          if ($scope.master || !$scope.item.activated ||
+          if ($scope.backup.master || !$scope.item.activated ||
               $scope.item.activated === $scope.backup.activated) {
             $scope.save();
             $scope.backup.activated = $scope.item.activated;
@@ -269,8 +269,8 @@
          */
         $scope.parseItem = function(data) {
           if (data.item) {
-            $scope.item   = angular.extend($scope.item, data.item);
-            $scope.backup = { activated: $scope.item.activated };
+            $scope.item             = angular.extend($scope.item, data.item);
+            $scope.backup.activated = $scope.item.activated;
           }
 
           $scope.flags.categories = { none: false, all: false };

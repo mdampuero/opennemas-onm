@@ -71,6 +71,17 @@ class GlobalVariablesTest extends KernelTestCase
     }
 
     /**
+     * Tests getSecurity.
+     */
+    public function testGetSecurity()
+    {
+        $this->container->expects($this->once())->method('get')
+            ->with('core.security');
+
+        $this->globals->getSecurity();
+    }
+
+    /**
      * Tests getSubscription.
      */
     public function testGetSubscription()
