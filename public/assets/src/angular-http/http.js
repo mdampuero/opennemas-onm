@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   /**
@@ -12,6 +12,7 @@
    *   using Symfony with FOSJsRoutingBundle.
    */
   angular.module('onm.http', [ 'onm.routing' ])
+
     /**
      * @ngdoc Service
      * @name  http
@@ -52,7 +53,11 @@
           }
 
           // First call or Array/Object values
-          if (value instanceof Object && !(value instanceof File)) {
+          if (value instanceof HTMLCanvasElement) {
+            var blob = this.dataURItoBlob(value.toDataURL());
+
+            formData.append(key, new File([ blob ], key));
+          } else if (value instanceof Object && !(value instanceof File)) {
             for (var i in value) {
               var k = i;
 
@@ -72,6 +77,38 @@
           }
 
           return formData;
+        };
+
+        /**
+         * @function dataURItoBlob
+         * @memberOf http
+         *
+         * @description
+         *   Converts datauri type to blob.
+         *
+         * @param {Object}   dataUri     The data tu convert to blob.
+         *
+         * @return {blob} The same data but in blob format
+         */
+        this.dataURItoBlob = function(dataURI) {
+          // Convert base64 to raw binary data held in a string
+          var byteString = atob(dataURI.split(',')[1]);
+
+          // Separate out the mime component
+          var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+          // Write the bytes of the string to an ArrayBuffer
+          var arrayBuffer = new ArrayBuffer(byteString.length);
+          var ia = new Uint8Array(arrayBuffer);
+
+          for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+          }
+
+          var dataView = new DataView(arrayBuffer);
+          var blob = new Blob([ dataView ], { type: mimeString });
+
+          return blob;
         };
 
         /**
@@ -169,7 +206,7 @@
 
           return $http.post(this.getUrl(route), formData, {
             transformRequest: angular.identity,
-            headers: {'Content-Type': undefined}
+            headers: { 'Content-Type': undefined } // eslint-disable-line no-undefined
           });
         };
 
@@ -194,7 +231,7 @@
 
           return $http.post(this.getUrl(route), formData, {
             transformRequest: angular.identity,
-            headers: {'Content-Type': undefined}
+            headers: { 'Content-Type': undefined } // eslint-disable-line no-undefined
           });
         };
 
@@ -229,7 +266,7 @@
          * @return {Boolean} True if there are files in data. False otherwise.
          */
         this.hasFile = function(data) {
-          if (data instanceof File) {
+          if (data instanceof File || data instanceof HTMLCanvasElement) {
             return true;
           }
 

@@ -1370,6 +1370,9 @@ msgstr ""
 msgid "Thumbnail details"
 msgstr "Detalhes de miniaturas"
 
+msgid "Enhance"
+msgstr "Editar imagem"
+
 msgid "Add files..."
 msgstr "Adicionar arquivos..."
 
@@ -8731,6 +8734,42 @@ msgid ""
 "font-size: 14px; line-height: normal;\" target=\"_blank\">Opennemas</a> "
 "<span style=\"color:#000000\">Team</span>"
 msgstr ""
+
+msgid "transform"
+msgstr "transformar"
+
+msgid "light"
+msgstr "luz"
+
+msgid "landscape"
+msgstr "panorama"
+
+msgid "portrait"
+msgstr "retrato"
+
+msgid "free"
+msgstr "livre"
+
+msgid "brightness"
+msgstr "brilho"
+
+msgid "contrast"
+msgstr "contraste"
+
+msgid "cancel"
+msgstr "cancelar"
+
+msgid "edit image"
+msgstr "editar imagem"
+
+msgid "save"
+msgstr "salve"
+
+msgid "reset"
+msgstr "reiniciar"
+
+msgid "apply"
+msgstr "aplique"
 
 #~ msgid "Site logo"
 #~ msgstr "Logotipo do site"
