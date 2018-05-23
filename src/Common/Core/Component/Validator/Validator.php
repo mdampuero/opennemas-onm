@@ -105,19 +105,31 @@ class Validator
         $config = $this->getConfig(self::BLACKLIST_RULESET_COMMENTS);
 
         $constraint = new Assert\Collection([
-            'author' => new Assert\NotBlank([
-                'message' => _('Please provide a valid author name.')
-            ]),
-            'author_email' => new Assert\Email([
-                'message' => _('Please provide a valid email address')
-            ]),
+            'author' => [
+                new Assert\NotBlank([
+                    'message' => _('Please provide a valid author name')
+                ]),
+                new OnmAssert\BlacklistWords([
+                    'words'   => $config,
+                    'message' => _('Your name has invalid words')
+                ]),
+            ],
+            'author_email' => [
+                new Assert\Email([
+                    'message' => _('Please provide a valid email address')
+                ]),
+                new OnmAssert\BlacklistWords([
+                    'words'   => $config,
+                    'message' => _('Your email is not allowed')
+                ]),
+            ],
             'author_ip'    => new Assert\NotBlank([
                 'message' => _('Your IP address is not valid.')
             ]),
             'body'         => [
                 new Assert\Length([
-                    'min'        => 10,
-                    'minMessage' => _('Your comment has no enought contents.')
+                    'min'        => 5,
+                    'minMessage' => _('Your comment is too short')
                 ]),
                 new OnmAssert\BlacklistWords([
                     'words'   => $config,
