@@ -770,6 +770,7 @@ window.OnmPhotoEditor.prototype.initTransform = function(status) {
   divCrop.appendChild(topCircle);
   divCrop.appendChild(bottomCircle);
   divCrop.appendChild(applyDivBtn);
+  divCrop.addEventListener('mousedown', this.initMoveCropSel.bind(this));
 
   this.displayElements.push(divCrop);
 
@@ -1613,6 +1614,57 @@ window.OnmPhotoEditor.prototype.resizeMovingCorner = function(cornerPoint, conta
 
   resizeEle.style.width  = newSize.width + 'px';
   resizeEle.style.height = newSize.height + 'px';
+};
+
+window.OnmPhotoEditor.prototype.initMoveCropSel = function(e) {
+  if (e.target.className.indexOf('photoEditorCrop') === -1) {
+    return null;
+  }
+  var that      = this;
+  var move      = null;
+  var stopMove  = null;
+  var cropDiv   = e.currentTarget;
+  var cropDivVP = cropDiv.getBoundingClientRect();
+  var canvasVP  = this.canvas.getBoundingClientRect();
+  var initPoint = this.getInitPoint(this.canvas, cropDiv, { x: e.clientX, y: e.clientY });
+  var limits    = {
+    widthMin: 0,
+    widthMax: canvasVP.width - cropDivVP.width,
+    heightMin: 0,
+    heightMax: canvasVP.height - cropDivVP.height
+  };
+
+  move = function(e) {
+    that.moveCropDiv({ x: e.clientX, y: e.clientY }, initPoint, limits, cropDiv);
+  };
+
+  stopMove = function() {
+    window.removeEventListener('mousemove', move, false);
+    window.removeEventListener('mouseup', stopMove, false);
+  };
+
+  window.addEventListener('mousemove', move, false);
+  window.addEventListener('mouseup', stopMove, false);
+  return null;
+};
+
+window.OnmPhotoEditor.prototype.getInitPoint = function(containerEle, resizeEle, initPoint) {
+  var containerVP = containerEle.getBoundingClientRect();
+  var resizeEleVP = resizeEle.getBoundingClientRect();
+  var marginTop   = resizeEleVP.top - containerVP.top;
+  var marginLeft  =  resizeEleVP.left - containerVP.left;
+  var initPoint   = { x: initPoint.x - marginLeft, y: initPoint.y - marginTop };
+
+  return initPoint;
+};
+
+window.OnmPhotoEditor.prototype.moveCropDiv = function(point, refPoint, limits, resizeEle) {
+  var dist = { x: point.x - refPoint.x, y: point.y - refPoint.y };
+
+  dist = this.checkLimits(dist, limits, null);
+
+  resizeEle.style.marginTop  = dist.y + 'px';
+  resizeEle.style.marginLeft = dist.x + 'px';
 };
 
 window.OnmPhotoEditor.prototype.getSizeValues = function(cornerPos, resizeEle, isTopCorner) {
