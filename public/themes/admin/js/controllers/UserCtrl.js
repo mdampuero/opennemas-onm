@@ -150,10 +150,11 @@
                   data.type = value;
 
                   if (value === 1) {
-                    // Remove all subscriptions
-                    data.fk_user_group = _.difference(
-                      data.fk_user_group,
-                      Object.keys($scope.data.extra.subscriptions));
+                    var ids = Object.keys($scope.data.extra.user_groups);
+
+                    // Remove all user groups
+                    data.fk_user_group = _.difference(data.fk_user_group, ids);
+                    data.user_groups   = _.difference(data.user_groups, ids);
                   }
 
                   return http.put(route, data);
@@ -166,9 +167,9 @@
             messenger.post(response.data);
 
             if (response.success) {
-              if (value === 0) {
-                $window.location.href = routing.generate('backend_user_show',
-                  { id: $scope.item.id });
+              if (value === 1) {
+                $window.location.href = routing.generate(
+                  'backend_subscriber_show', { id: $scope.item.id });
               }
             }
           });
