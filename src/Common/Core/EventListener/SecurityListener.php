@@ -224,6 +224,8 @@ class SecurityListener implements EventSubscriberInterface
      */
     protected function logout($event, $instance, $uri)
     {
+        $this->context->setToken(null);
+
         $exception = new BadCredentialsException();
         $response  = new RedirectResponse(
             $this->router->generate('frontend_authentication_login')
@@ -255,8 +257,6 @@ class SecurityListener implements EventSubscriberInterface
             $response = new RedirectResponse(
                 $this->router->generate('backend_authentication_login')
             );
-
-            $this->context->setToken(null);
         }
 
         // Logout for web services
