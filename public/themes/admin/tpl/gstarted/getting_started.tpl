@@ -25,7 +25,7 @@
       <div class="wizard-overlay"></div>
       <div class="wizard-content">
         <p>
-          {t}In order to use Opennemas you must accept the terms of use{/t}
+          {t}In order to use Opennemas you must accept the Legal notice & Terms of use{/t}
         </p>
         <div class="terms-wrapper">
           <div class="terms-container">
@@ -34,7 +34,7 @@
           <div class="checkbox">
             <input name="accept-terms" id="accept-terms" ng-click="acceptTerms()" ng-model="termsAccepted" ng-value="termsAccepted" type="checkbox">
             <label for="accept-terms">
-              {t}Accept the terms of use{/t}
+              {t}Accept the Legal notice & Terms of use{/t}
             </label>
             <div class="arrow hidden-sm hidden-xs" ng-class="{ 'warning': warning && !termsAccepted }"></div>
           </div>
