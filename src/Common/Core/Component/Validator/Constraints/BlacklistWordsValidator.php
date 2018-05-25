@@ -32,7 +32,7 @@ class BlacklistWordsValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, __NAMESPACE__ . '\BlacklistWords');
         }
 
-        if (null === $value || '' === $value) {
+        if (empty($value)) {
             return;
         }
 
