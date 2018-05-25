@@ -184,9 +184,22 @@
                   </td>
                   <td class="text-center">
                     {acl isAllowed="COMMENT_AVAILABLE"}
-                      <button class="btn btn-white" ng-class="{ statusLoading: content.statusLoading == 1, published: content.status == 'accepted', unpublished: (content.status == 'rejected' || content.status == 'pending') }" ng-click="patch(content, 'status', content.status != 'accepted' ? 'accepted' : 'rejected')" type="button">
-                        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.statusLoading, 'fa-check text-success' : !content.statusLoading && content.status == 'accepted', 'fa-times text-error': !content.statusLoading && (content.status == 'pending' || content.status == 'rejected') }"></i>
-                      </button>
+                      <span ng-show="content.status != 'pending'">
+                        <button class="btn btn-white" ng-class="{ statusLoading: content.statusLoading == 1, published: content.status == 'accepted', unpublished: (content.status == 'rejected' || content.status == 'pending') }" ng-click="patch(content, 'status', content.status != 'accepted' ? 'accepted' : 'rejected')" type="button" uib-tooltip-html="content.status !== 'accepted' ? '{t}Rejected{/t}' : '{t}Accepted{/t}'">
+                          <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.statusLoading, 'fa-check text-success' : !content.statusLoading && content.status == 'accepted', 'fa-times text-error': !content.statusLoading && (content.status == 'pending' || content.status == 'rejected') }"></i>
+                        </button>
+                      </span>
+                      <span ng-show="content.status == 'pending'">
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" uib-tooltip="{t}Pending{/t}">
+                            <i class="fa fa-hourglass-2 text-warning"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-right no-padding">
+                            <li><a href="#" ng-click="patch(content, 'status', 'rejected')"><i class="fa fa-times text-error"></i> {t}Reject{/t}</a> </li>
+                            <li><a href="#" ng-click="patch(content, 'status', 'accepted')"><i class="fa fa-check text-success"></i> {t}Accept{/t}</a></li>
+                          </ul>
+                        </div>
+                      </span>
                     {/acl}
                   </td>
                 </tr>
