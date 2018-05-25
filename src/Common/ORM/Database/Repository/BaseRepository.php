@@ -321,6 +321,17 @@ class BaseRepository extends Repository
                 return $a[$key];
             }, $values);
 
+            // Set relations to empty
+            foreach ($values as $id => $value) {
+                $values[$id] = array_merge(
+                    $values[$id],
+                    array_fill_keys(
+                        array_keys($this->metadata->getRelations()),
+                        []
+                    )
+                );
+            }
+
             $metas     = $this->getMetas($ids);
             $relations = $this->getRelations($ids);
 
