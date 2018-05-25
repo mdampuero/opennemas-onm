@@ -159,7 +159,6 @@ class CommentsController extends Controller
 
         return $this->render('comment/new.tpl', [
             'statuses'      => [
-                [ 'title' => _('Not moderated'), 'value' => null ],
                 [ 'title' => _('Accepted'), 'value' => \Comment::STATUS_ACCEPTED ],
                 [ 'title' => _('Rejected'), 'value' => \Comment::STATUS_REJECTED ],
                 [ 'title' => _('Pending'), 'value' => \Comment::STATUS_PENDING ],
