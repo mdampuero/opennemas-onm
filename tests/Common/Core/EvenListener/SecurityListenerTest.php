@@ -242,14 +242,11 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->user);
         $this->listener->expects($this->once())->method('hasSecurity')
             ->willReturn(true);
-        $this->listener->expects($this->once())->method('logout')
-            ->with($this->event, $this->instance, '/fred');
+        $this->ts->expects($this->once())->method('setToken')
+            ->with(null);
 
         $this->repository->expects($this->any())->method('find')
             ->will($this->throwException(new EntityNotFoundException('foo')));
-
-        $this->listener->expects($this->once())->method('logout')
-            ->with($this->event, $this->instance, '/fred');
 
         $this->assertEmpty($this->listener->onKernelRequest($this->event));
     }

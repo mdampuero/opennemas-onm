@@ -68,7 +68,7 @@ class SecurityListener implements EventSubscriberInterface
                 ->getRepository('User', $user->getOrigin())
                 ->find($user->id);
         } catch (EntityNotFoundException $e) {
-            $this->logout($event, $instance, $uri);
+            $this->context->setToken(null);
             return;
         }
 
