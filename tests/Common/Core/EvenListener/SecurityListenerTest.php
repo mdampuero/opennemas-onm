@@ -10,6 +10,7 @@
 namespace Tests\Common\Core\EventListener;
 
 use Common\Core\EventListener\SecurityListener;
+use Common\ORM\Core\Exception\EntityNotFoundException;
 use Common\ORM\Entity\Instance;
 use Common\ORM\Entity\User;
 
@@ -224,6 +225,31 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
             ->with([ 'flob', 'grault' ]);
         $this->security->expects($this->once())->method('setPermissions')
             ->with([ 'waldo', 'bar' ]);
+
+        $this->assertEmpty($this->listener->onKernelRequest($this->event));
+    }
+
+    /**
+     * Tests onKernelRequest when no instance to check security.
+     */
+    public function testOnKernelRequestWhenUserDeleted()
+    {
+        $this->request->expects($this->once())->method('getRequestUri')
+            ->willReturn('/fred');
+        $this->ts->expects($this->any())->method('getToken')
+            ->willReturn($this->token);
+        $this->token->expects($this->any())->method('getUser')
+            ->willReturn($this->user);
+        $this->listener->expects($this->once())->method('hasSecurity')
+            ->willReturn(true);
+        $this->listener->expects($this->once())->method('logout')
+            ->with($this->event, $this->instance, '/fred');
+
+        $this->repository->expects($this->any())->method('find')
+            ->will($this->throwException(new EntityNotFoundException('foo')));
+
+        $this->listener->expects($this->once())->method('logout')
+            ->with($this->event, $this->instance, '/fred');
 
         $this->assertEmpty($this->listener->onKernelRequest($this->event));
     }
@@ -527,7 +553,7 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->router->expects($this->at(0))->method('generate')
-            ->with('backend_authentication_login')->willReturn('/admin/login');
+            ->with('frontend_authentication_login')->willReturn('/admin/login');
         $this->router->expects($this->at(1))->method('generate')
             ->with('core_authentication_complete')->willReturn('/auth/complete');
         $this->session->expects($this->once())->method('set')
@@ -559,7 +585,9 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->headers->expects($this->once())->method('get')
             ->with('referer')->willReturn('/admin/login');
-        $this->router->expects($this->once())->method('generate')
+        $this->router->expects($this->at(0))->method('generate')
+            ->with('frontend_authentication_login')->willReturn('/admin/login');
+        $this->router->expects($this->at(1))->method('generate')
             ->with('backend_authentication_login')->willReturn('/admin/login');
 
         $this->fb->expects($this->once())->method('add')
@@ -592,7 +620,9 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->headers->expects($this->once())->method('get')
             ->with('referer')->willReturn('/admin/login');
-        $this->router->expects($this->once())->method('generate')
+        $this->router->expects($this->at(0))->method('generate')
+            ->with('frontend_authentication_login')->willReturn('/login');
+        $this->router->expects($this->at(1))->method('generate')
             ->with('backend_authentication_login')->willReturn('/admin/login');
         $this->ts->expects($this->once())->method('setToken')->with(null);
 
