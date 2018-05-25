@@ -8,8 +8,14 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-              <i class="fa fa-comment"></i>
-              {t}Comments{/t}
+                <i class="fa fa-comment m-r-10"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
+                <a class="no-padding" href="{url name=backend_comments}" title="{t}Go back to list{/t}">
+                  {t}Comments{/t}
+                </a>
               </h4>
             </li>
           </ul>
