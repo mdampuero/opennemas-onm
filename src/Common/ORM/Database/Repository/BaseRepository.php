@@ -389,13 +389,6 @@ class BaseRepository extends Repository
 
         $values = [];
         foreach ($relations as $name => $relation) {
-            if (array_key_exists('repository', $relation)
-                && !empty($relation['repository'])
-                && $this->name !== $relation['repository']
-            ) {
-                continue;
-            }
-
             $table = $relation['table'];
             $rid   = $relation['ids'][$this->metadata->getIdKeys()[0]];
             $sql   = 'select * from ' . $table
