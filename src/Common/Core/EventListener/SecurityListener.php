@@ -10,6 +10,7 @@
 namespace Common\Core\EventListener;
 
 use Common\Core\Component\Exception\Instance\InstanceBlockedException;
+use Common\ORM\Core\Exception\EntityNotFoundException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -62,18 +63,28 @@ class SecurityListener implements EventSubscriberInterface
 
         $user = $this->context->getToken()->getUser();
 
-        $instances = $this->getInstances($user);
+        try {
+            $user = $this->container->get('orm.manager')
+                ->getRepository('User', $user->getOrigin())
+                ->find($user->id);
+        } catch (EntityNotFoundException $e) {
+            $user = null;
+        }
+
+        if (empty($user) || !$user->isEnabled()) {
+            $this->context->setToken(null);
+            return;
+        }
+
+        $this->security->setUser($user);
+
         // TODO: Uncomment when checking by category name
         //$categories  = $this->getCategories($user);
+        $instances   = $this->getInstances($user);
         $permissions = $this->getPermissions($user);
 
-        $user = $this->container->get('orm.manager')
-            ->getRepository('User', $user->getOrigin())
-            ->find($user->id);
-
-        $this->security->setInstances($instances);
-        $this->security->setUser($user);
         $this->security->setCategories($user->categories);
+        $this->security->setInstances($instances);
         $this->security->setPermissions($permissions);
 
         if ($this->isAllowed($instance, $user, $uri)) {
@@ -218,13 +229,18 @@ class SecurityListener implements EventSubscriberInterface
      */
     protected function logout($event, $instance, $uri)
     {
+        $this->context->setToken(null);
+
         $exception = new BadCredentialsException();
         $response  = new RedirectResponse(
-            $this->router->generate('backend_authentication_login')
+            $this->router->generate('frontend_authentication_login')
         );
 
         if ($instance->blocked) {
             $exception = new InstanceBlockedException($instance->internal_name);
+
+            $event->getRequest()->getSession()->getFlashBag()
+                ->add('error', $exception->getMessage());
 
             // Redirect to last URL
             $target = $event->getRequest()->headers->get('referer');
@@ -241,19 +257,18 @@ class SecurityListener implements EventSubscriberInterface
             }
         }
 
+        // Logout for backend
+        if (preg_match('@^/admin.*@', $uri)) {
+            $response = new RedirectResponse(
+                $this->router->generate('backend_authentication_login')
+            );
+        }
+
         // Logout for web services
         if (preg_match('@^/admin/entityws.*@', $uri)
             || preg_match('@^/manager(ws).*@', $uri)
         ) {
             $response = new JsonResponse($exception->getMessage(), 401);
-        }
-
-        // Logout for backend
-        if (preg_match('@^/admin.*@', $uri)) {
-            $this->context->setToken(null);
-
-            $event->getRequest()->getSession()->getFlashBag()
-                ->add('error', $exception->getMessage());
         }
 
         $event->setResponse($response);
