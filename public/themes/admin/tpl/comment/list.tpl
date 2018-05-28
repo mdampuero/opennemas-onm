@@ -145,7 +145,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-if="contents.length > 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
+                <tr ng-if="contents.length > 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id), 'bg-warning': (content.status == 'pending') }">
                   <td class="checkbox-cell">
                     <div class="checkbox check-default">
                       <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
@@ -192,7 +192,7 @@
                       <span ng-show="content.status == 'pending'">
                         <div class="btn-group">
                           <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" uib-tooltip="{t}Pending{/t}">
-                            <i class="fa fa-hourglass-2 text-warning"></i>
+                            <i class="fa fa-clock-o text-warning"></i>
                           </button>
                           <ul class="dropdown-menu dropdown-menu-right no-padding">
                             <li><a href="#" ng-click="patch(content, 'status', 'rejected')"><i class="fa fa-times text-error"></i> {t}Reject{/t}</a> </li>
