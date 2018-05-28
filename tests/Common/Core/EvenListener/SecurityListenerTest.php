@@ -181,6 +181,8 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
             ->with($this->user)->willReturn([ 'waldo', 'bar' ]);
         $this->listener->expects($this->once())->method('isAllowed')
             ->with($this->instance, $this->user, '/fred')->willReturn(true);
+        $this->user->expects($this->once())->method('isEnabled')
+            ->willReturn(true);
 
         $this->security->expects($this->once())->method('setInstances')
             ->with(['baz', 'wibble']);
@@ -206,6 +208,8 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->token);
         $this->token->expects($this->any())->method('getUser')
             ->willReturn($this->user);
+        $this->user->expects($this->once())->method('isEnabled')
+            ->willReturn(true);
         $this->listener->expects($this->once())->method('hasSecurity')
             ->willReturn(true);
         $this->listener->expects($this->once())->method('getInstances')
@@ -238,15 +242,36 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
             ->willReturn('/fred');
         $this->ts->expects($this->any())->method('getToken')
             ->willReturn($this->token);
+        $this->ts->expects($this->once())->method('setToken')
+            ->with(null);
         $this->token->expects($this->any())->method('getUser')
             ->willReturn($this->user);
         $this->listener->expects($this->once())->method('hasSecurity')
             ->willReturn(true);
-        $this->ts->expects($this->once())->method('setToken')
-            ->with(null);
 
         $this->repository->expects($this->any())->method('find')
             ->will($this->throwException(new EntityNotFoundException('foo')));
+
+        $this->assertEmpty($this->listener->onKernelRequest($this->event));
+    }
+
+    /**
+     * Tests onKernelRequest when user is disabled.
+     */
+    public function testOnKernelRequestWhenUserDisabled()
+    {
+        $this->request->expects($this->once())->method('getRequestUri')
+            ->willReturn('/fred');
+        $this->ts->expects($this->any())->method('getToken')
+            ->willReturn($this->token);
+        $this->ts->expects($this->once())->method('setToken')
+            ->with(null);
+        $this->token->expects($this->any())->method('getUser')
+            ->willReturn($this->user);
+        $this->listener->expects($this->once())->method('hasSecurity')
+            ->willReturn(true);
+        $this->user->expects($this->once())->method('isEnabled')
+            ->willReturn(false);
 
         $this->assertEmpty($this->listener->onKernelRequest($this->event));
     }

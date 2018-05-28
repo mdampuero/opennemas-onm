@@ -68,18 +68,23 @@ class SecurityListener implements EventSubscriberInterface
                 ->getRepository('User', $user->getOrigin())
                 ->find($user->id);
         } catch (EntityNotFoundException $e) {
+            $user = null;
+        }
+
+        if (empty($user) || !$user->isEnabled()) {
             $this->context->setToken(null);
             return;
         }
 
-        $instances = $this->getInstances($user);
+        $this->security->setUser($user);
+
         // TODO: Uncomment when checking by category name
         //$categories  = $this->getCategories($user);
+        $instances   = $this->getInstances($user);
         $permissions = $this->getPermissions($user);
 
-        $this->security->setInstances($instances);
-        $this->security->setUser($user);
         $this->security->setCategories($user->categories);
+        $this->security->setInstances($instances);
         $this->security->setPermissions($permissions);
 
         if ($this->isAllowed($instance, $user, $uri)) {
