@@ -258,6 +258,13 @@ class SubscriberController extends Controller
         $msg      = $this->get('core.messenger');
         $settings = $request->request->all();
 
+        if (!is_array($settings) ||
+            !array_key_exists('fields', $settings) ||
+            !is_array($settings['fields'])
+        ) {
+            $settings = ['fields' => []];
+        }
+
         try {
             $this->get('orm.manager')->getDataSet('Settings', 'instance')
                 ->set('user_settings', $settings);
