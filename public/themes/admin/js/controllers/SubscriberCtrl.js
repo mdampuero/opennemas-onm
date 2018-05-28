@@ -168,7 +168,9 @@
             $scope.item = angular.extend($scope.item, data.item);
           }
 
-          if (!$scope.item.user_groups) {
+          if (!$scope.item.user_groups ||
+              angular.isArray($scope.item.user_groups) &&
+              $scope.item.user_groups.length === 0) {
             $scope.item.user_groups = {};
           }
 
