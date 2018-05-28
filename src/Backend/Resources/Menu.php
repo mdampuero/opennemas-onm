@@ -415,7 +415,7 @@ $menuXml = [
 
     [
         'id'          => 'settings_manager',
-        'title'       => _('Settings'),
+        'title'       => _('System'),
         'icon'        => 'fa fa-cogs',
         'link'        => url('admin_system_settings'),
         'module_name' => 'SETTINGS_MANAGER',

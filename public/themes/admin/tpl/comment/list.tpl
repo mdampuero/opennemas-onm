@@ -190,7 +190,7 @@
                         </button>
                       </span>
                       <span ng-show="content.status == 'pending'">
-                        <div class="btn-group">
+                        <div class="btn-group open-on-hover">
                           <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" uib-tooltip="{t}Pending{/t}">
                             <i class="fa fa-clock-o text-warning"></i>
                           </button>
