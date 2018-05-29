@@ -118,14 +118,15 @@ class SubscriberController extends Controller
             $headers[] = $extraField['title'];
         }
 
-        $userGroups = (!empty($user->user_groups)) ?
-            array_map(function ($group) use ($subscriptions) {
-                return $subscriptions[$group['user_group_id']]['name'];
-            }, $user->user_groups)
-            : [];
-
         $data = [];
         foreach ($items['items'] as $user) {
+            $userGroups = [];
+            foreach ($user->user_groups as $value) {
+                if (array_key_exists($value['user_group_id'], $subscriptions)) {
+                    $userGroups[] = $subscriptions[$value['user_group_id']]['name'];
+                }
+            }
+
             $userInfo = [
                 $user->email,
                 $user->name,
