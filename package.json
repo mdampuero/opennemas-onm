@@ -19,6 +19,8 @@
   },
   "devDependencies": {
     "apidoc": "~0.15.1",
+    "csslint": "^1.0.5",
+    "eslint": "^4.19.1",
     "gulp": "~3.9.1",
     "gulp-batch": "*",
     "gulp-livereload": "~3.8.1",
