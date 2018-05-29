@@ -118,6 +118,12 @@ class SubscriberController extends Controller
             $headers[] = $extraField['title'];
         }
 
+        $userGroups = (!empty($user->user_groups)) ?
+            array_map(function ($group) use ($subscriptions) {
+                return $subscriptions[$group['user_group_id']]['name'];
+            }, $user->user_groups)
+            : [];
+
         $data = [];
         foreach ($items['items'] as $user) {
             $userInfo = [
@@ -126,9 +132,7 @@ class SubscriberController extends Controller
                 ($user->activated) ? _('Yes') : _('No'),
                 ($user->register_date instanceof \DateTime)
                     ? $user->register_date->format('Y-m-d') : '',
-                implode(',', array_map(function ($group) use ($subscriptions) {
-                    return $subscriptions[$group['user_group_id']]['name'];
-                }, (!empty($user->user_groups)) ? $user->user_groups : [])),
+                implode(',', $userGroups),
             ];
 
             foreach ($extraFields as $extraField) {
