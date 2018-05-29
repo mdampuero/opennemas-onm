@@ -12,7 +12,7 @@
     }
   },
   "dependencies": {
-    "bower": "~1.7.7",
+    "bower": "~1.8.4",
     "less": "~2.6.0",
     "uglify-js": "~2.6.2",
     "uglifycss": "0.0.20"
