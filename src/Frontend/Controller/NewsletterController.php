@@ -135,9 +135,9 @@ class NewsletterController extends Controller
 
             $rs = ['class' => 'success'];
             if ($data['subscription'] == 'alta') {
-                $rs['message'] = _("You have been subscribed to our newsletter.");
+                $rs['message'] = _("You have been subscribed to the newsletter.");
             } else {
-                $rs['message'] = _("You have been unsubscribed from our newsletter.");
+                $rs['message'] = _("You have been unsubscribed from the newsletter.");
             }
         } catch (\Exception $e) {
             $rs = [

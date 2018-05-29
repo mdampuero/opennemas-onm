@@ -91,17 +91,7 @@ class AdvertisementController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $content  = $this->get('setting_repository')->get('ads_txt');
-        $content .= "\ngoogle.com, pub-7694073983816204, DIRECT, f08c47fec0942fa0\n"
-            . "smartadserver.com,3066,DIRECT\n"
-            . "contextweb.com,560288,DIRECT,89ff185a4c4e857c\n"
-            . "pubmatic.com,156439,DIRECT\n"
-            . "pubmatic.com,154037,DIRECT\n"
-            . "rubiconproject.com,16114,DIRECT,0bfd66d529a55807\n"
-            . "openx.com,537149888,DIRECT,6a698e2ec38604c6\n"
-            . "sovrn.com,257611,DIRECT,fafdf38b16bf6b2b\n"
-            . "appnexus.com,3703,DIRECT,f5ab79cb980f11d1";
-
+        $content      = $this->get('setting_repository')->get('ads_txt');
         $instanceName = getService('core.instance')->internal_name;
 
         return new Response(trim($content), 200, [

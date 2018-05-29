@@ -137,6 +137,16 @@ class GlobalVariables implements \ArrayAccess
     }
 
     /**
+     * Returns the security service.
+     *
+     * @return Locale The locale service.
+     */
+    public function getSecurity()
+    {
+        return $this->container->get('core.security');
+    }
+
+    /**
      * Returns the subscriptions helper.
      *
      * @return SubscriptionHelper The subscription helper.

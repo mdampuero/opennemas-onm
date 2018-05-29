@@ -48,6 +48,7 @@
       @Common/src/angular-onm-pagination/less/main.less,
       @Common/src/sidebar/less/main.less,
       @Common/src/opennemas-webarch/css/layout/*,
+      @Common/src/photo-editor/css/photo-editor.css,
       @Common/src/opennemas-webarch/less/main.less" filters="cssrewrite,less" output="common"}
     {/stylesheets}
     {stylesheets src="@Common/components/angular-bootstrap/ui-bootstrap-csp.css,
@@ -67,6 +68,20 @@
       var instanceMedia = '{$smarty.const.INSTANCE_MEDIA}';
       var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
       var leaveMessage = '{t}You are leaving the current page.{/t}';
+      var photoEditorTranslations = {
+        transform: '{t}transform{/t}',
+        light: '{t}light{/t}',
+        landscape: '{t}landscape{/t}',
+        portrait: '{t}portrait{/t}',
+        free: '{t}free{/t}',
+        brightness: '{t}brightness{/t}',
+        contrast: '{t}contrast{/t}',
+        cancel: '{t}cancel{/t}',
+        editImage: '{t}edit image{/t}',
+        save: '{t}save{/t}',
+        reset: '{t}reset{/t}',
+        apply: '{t}apply{/t}'
+      };
     </script>
   {/block}
 </head>
@@ -355,7 +370,7 @@
                 </li>
                 <li class="quicklinks user-info dropdown">
                   <span class="link" data-toggle="dropdown">
-                    {if is_object($app.user) && $app.user->isMaster()}
+                    {if $app.security->hasPermission('MASTER')}
                       <i class="fa fa-rebel pull-left m-r-5"></i>
                     {/if}
                     <i class="fa fa-angle-down"></i>
@@ -381,7 +396,7 @@
                     </li>
                     <li class="divider"></li>
                     <li>
-                      {if is_object($app.user) && $app.user->isMaster()}
+                      {if $app.security->hasPermission('MASTER')}
                         <a ng-href="{get_parameter name=manager_url}manager#/users/{$app.user->id}" target="_blank">
                           <i class="fa fa-user"></i>
                           {t}Profile{/t}
@@ -520,6 +535,7 @@
       @Common/src/angular-security/security.js,
       @Common/src/angular-serializer/serializer.js,
       @Common/src/opennemas-webarch/js/core.js,
+      @Common/src/photo-editor/js/photo-editor.js,
       @Common/src/sidebar/js/sidebar.js" filters="uglifyjs" output="common"}
     {/javascripts}
     {javascripts src="
@@ -556,6 +572,7 @@
       @Common/src/angular-repeat-finish/repeat-finish.js,
       @Common/src/angular-scroll/angular-scroll.js,
       @Common/src/angular-translator/js/translator.js,
+      @Common/src/photo-editor/js/photo-editor.js,
       @AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js,
       @AdminTheme/js/app.js,
       @AdminTheme/js/config.js,

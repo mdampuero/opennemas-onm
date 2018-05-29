@@ -235,7 +235,7 @@
           for (var i in $scope.data.extra.modules) {
             $scope.selected.all[$scope.data.extra.modules[i].name] = true;
             var privileges = $scope.data.extra.modules[i].map(function(e) {
-              return e.id;
+              return e.pk_privilege;
             });
 
             ids = _.union(ids, privileges);

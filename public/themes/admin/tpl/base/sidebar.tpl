@@ -47,7 +47,7 @@
         <span class="title">{$app.user->name}</span>
       </li>
       <li>
-        {if is_object($app.user) && $app.user->isMaster()}
+        {if $app.security->hasPermission('MASTER')}
           <a ng-href="{get_parameter name=manager_url}manager#/user/{$app.user->id}/show" target="_blank">
             <i class="fa fa-user"></i>
             <span class="title">{t}Profile{/t}</span>

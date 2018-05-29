@@ -352,6 +352,7 @@ class SubscriberController extends Controller
      */
     private function getExtraData($items = null)
     {
+        $client   = null;
         $ss       = $this->get('api.service.subscription');
         $photos   = [];
         $response = $ss->getList();
@@ -379,9 +380,19 @@ class SubscriberController extends Controller
                 ->get();
         }
 
+        $em = $this->get('orm.manager');
+
+        if (!empty($this->get('core.instance')->getClient())) {
+            $client = $em->getRepository('Client')
+                ->find($this->get('core.instance')->getClient());
+
+            $client = $em->getConverter('Client')->responsify($client);
+        }
+
         return [
-            'photos'        => $photos,
             'countries'     => Intl::getRegionBundle()->getCountryNames(),
+            'client'        => $client,
+            'photos'        => $photos,
             'settings'      => $settings,
             'subscriptions' => $ss->responsify($subscriptions)
         ];
