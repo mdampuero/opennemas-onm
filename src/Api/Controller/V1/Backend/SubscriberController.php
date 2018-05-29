@@ -120,6 +120,10 @@ class SubscriberController extends Controller
 
         $data = [];
         foreach ($items['items'] as $user) {
+            if (!is_array($user->user_groups)) {
+                $user->user_groups = [];
+            }
+
             $userGroups = [];
             foreach ($user->user_groups as $value) {
                 if (array_key_exists($value['user_group_id'], $subscriptions)) {
@@ -386,6 +390,10 @@ class SubscriberController extends Controller
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('user_settings', []);
+
+        if (!is_array($settings['fields'])) {
+            $settings['fields'] = [];
+        }
 
         if (!empty($items)) {
             $ids = array_filter(array_map(function ($a) {
