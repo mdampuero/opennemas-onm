@@ -42,6 +42,8 @@ class NewslettersController extends Controller
         list($total, $newsletters) =
             $nm->find($criteria, $order, $page, $epp);
 
+        $newsletters = \Onm\StringUtils::convertToUtf8($newsletters);
+
         // new code
         return new JsonResponse([
             'results' => $newsletters,
