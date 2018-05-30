@@ -260,7 +260,7 @@
                     <label class="form-label">{t}Hide information{/t}</label>
                     <div class="form-group no-margin">
                       <div class="checkbox m-b-5" ng-repeat="permission in data.extra.modules.FRONTEND | filter: { name: 'NON_MEMBER_HIDE' }">
-                        <input checklist-model="item.privileges" checklist-value="permission.pk_privilege" id="non-member-[% $index %]" ng-disabled="item.privileges.indexOf(getPermissionId('NON_MEMBER_REDIRECT')) !== -1" type="checkbox">
+                        <input checklist-model="item.privileges" checklist-value="permission.pk_privilege" id="non-member-[% $index %]" ng-disabled="item.privileges.indexOf(getPermissionId('NON_MEMBER_ACCESS')) !== -1" type="checkbox">
                         <label for="non-member-[% $index %]">[% permission.description %]</label>
                       </div>
                       <div class="help m-l-3" ng-show="isHelpEnabled()">
@@ -274,7 +274,7 @@
                       <label class="form-label">{t}Block actions{/t}</label>
                       <label class="pointer" for="non-member-block">
                         <div class="checkbox">
-                          <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_BLOCK_BROWSER')" id="non-member-block" ng-disabled="item.privileges.indexOf(getPermissionId('NON_MEMBER_REDIRECT')) !== -1" type="checkbox">
+                          <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_BLOCK_BROWSER')" id="non-member-block" ng-disabled="item.privileges.indexOf(getPermissionId('NON_MEMBER_ACCESS')) !== -1" type="checkbox">
                           <label for="non-member-block">{t}Block browser actions (cut, copy,...){/t}</label>
                         </div>
                         <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
