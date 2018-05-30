@@ -106,7 +106,7 @@ $menuXml = [
                 'id'          => 'comment_manager',
                 'title'       => _('Comments'),
                 'icon'        => 'fa fa-comment',
-                'link'        => url('admin_comments'),
+                'link'        => url('backend_comments'),
                 'module_name' => 'COMMENT_MANAGER',
                 'privilege'   => 'COMMENT_ADMIN',
             ],

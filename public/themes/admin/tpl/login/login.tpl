@@ -146,8 +146,8 @@
 
             if (form.find('input[name="_password"]').length > 0) {
               var password = form.find('input[name="_password"]').val();
-              if (password_input_val.indexOf('md5:') === -1) {
-                password_input_val = 'md5:' + hex_md5(password_input_val);
+              if (password.indexOf('md5:') === -1) {
+                password = 'md5:' + hex_md5(password);
               }
               form.find('input[name="_password"]').val(password);
             }
