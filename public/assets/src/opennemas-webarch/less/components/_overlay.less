@@ -10,9 +10,19 @@
   visibility: hidden;
   z-index: 50;
 
+  &.overlay-white,
   &.photo-overlay {
     position: absolute;
-    background: rgba(255, 255, 255, .85);
+    background: rgba(255, 255, 255, .95);
     z-index: 110;
+  }
+
+  &.overlay-border {
+    border: 1px solid #ddd;
+  }
+
+  &.open {
+    opacity: 1;
+    visibility: visible;
   }
 }
