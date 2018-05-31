@@ -98,8 +98,8 @@ html [type=button] {
   color: #fff;
 }
 .btn {
-  border-radius: .25rem;
   border: 1px solid transparent;
+  border-radius: .25rem;
   display: inline-block;
   font-size: .9rem;
   font-weight: 400;
@@ -118,22 +118,22 @@ button, input {
   overflow: visible;
 }
 button, input, optgroup, select, textarea {
-  margin: 0;
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
+  margin: 0;
 }
 button {
   border-radius: 0;
 }
 .btn-primary {
-  color: #fff;
   background-color: #545b62;
   border-color: #4e555b;
+  color: #fff;
 }
 .btn-primary.focus,
 .btn-primary:focus {
-    box-shadow: 0 0 0 0.2rem rgba(52,58,64,.5);
+  box-shadow: 0 0 0 0.2rem rgba(52,58,64,.5);
 }
 
 
@@ -142,34 +142,34 @@ button {
 button,
 input,select,
 textarea{
- font-size:100%;
- margin:0;
- vertical-align:baseline;
- outline:0 none;
+  font-size:100%;
+  margin:0;
+  outline:0 none;
+  vertical-align:baseline;
 }
 button,input{
- line-height:normal;
+  line-height:normal;
 }
 button::-moz-focus-inner,input::-moz-focus-inner{
- border:0;
- padding:0
+  border:0;
+  padding:0
 }
 button,input[type="button"],input[type="reset"],input[type="submit"]{
- -webkit-appearance:button;
- cursor:pointer;
+  -webkit-appearance:button;
+  cursor:pointer;
 }
 textarea{
- overflow:auto;
- vertical-align:top
+  overflow:auto;
+  vertical-align:top
 }
 
 /* Header ------------------------------------------------------------------- */
 .post-count h4 {
+  color:#333;
   font-size: 18px;
   font-weight: 600;
   line-height: 1.2;
   margin:10px 0 15px 0;
-  color:#333;
 }
 
 /* Form ------------------------------------------------------------------- */
@@ -287,8 +287,8 @@ textarea{
 
 .post-list .post {
   border-bottom: 1px solid rgba(0,0,0,0.1);
-  margin-bottom:25px;
   margin:15px 0;
+  margin-bottom:25px;
   position:relative;
 }
 .post-list .post:last-child {
@@ -296,13 +296,13 @@ textarea{
 }
 
 .post-list .post .post-body {
-  margin-left:50px;
   margin-bottom:15px;
+  margin-left:50px;
 }
 
 .post-list .post .post-info {
-  font-size:.9em;
   cursor:pointer;
+  font-size:.9em;
 }
 
 .post-list .post .post-info .comment-author-name {
@@ -341,13 +341,13 @@ textarea{
   vertical-align:middle;
 }
 .post-voting a:after{
+  bottom:-10px;
   content:"";
   display:block;
-  position:absolute;
-  top:-10px;
   left:0;
+  position:absolute;
   right:-6px;
-  bottom:-10px
+  top:-10px;
 }
 .post-voting .control{
   border-left:0 solid transparent;
@@ -420,11 +420,11 @@ a.vote-down {
 }
 
 .load-more .btn {
-  font-size:13px;
-  font-weight:500;
-  display:block;
-  text-align:center;
-  padding:8px 14px !important;
   background:#ccc;
   color:#333;
+  display:block;
+  font-size:13px;
+  font-weight:500;
+  padding:8px 14px !important;
+  text-align:center;
 }
