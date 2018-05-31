@@ -8,6 +8,10 @@ body {
   font-size:14px;
   -webkit-font-smoothing:antialiased
 }
+body,
+.comments-page section {
+  text-align:left !important;
+}
 
 html, body {
   margin:0;

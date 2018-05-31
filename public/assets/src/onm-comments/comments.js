@@ -57,7 +57,7 @@ jQuery(document).ready(function() {
           .slideDown()
           .fadeIn();
       }).always(function() {
-        if (typeof recaptcha !== 'undefined') {
+        if (typeof grecaptcha !== 'undefined') {
           grecaptcha.reset();
         }
       });
