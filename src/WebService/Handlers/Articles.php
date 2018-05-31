@@ -121,15 +121,12 @@ class Articles
 
         // Generate external url for suggested
         foreach ($article->suggested as &$element) {
-            $element['uri'] = 'ext' . \Uri::generate(
-                'article',
-                [
-                    'id'       => $element['pk_content'],
-                    'date'     => date('YmdHis', strtotime($element['created'])),
-                    'category' => $element['catName'],
-                    'slug'     => urlencode(\Onm\StringUtils::generateSlug($element['title'])),
-                ]
-            );
+            $element['uri'] = 'ext' . \Uri::generate('article', [
+                'id'       => $element['pk_content'],
+                'date'     => date('YmdHis', strtotime($element['created'])),
+                'category' => $element['category_name'],
+                'slug'     => urlencode(\Onm\StringUtils::generateSlug($element['title'])),
+            ]);
         }
 
         return serialize($article);

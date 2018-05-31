@@ -1,17 +1,20 @@
-# Learn more about services, parameters and containers at
-# http://symfony.com/doc/current/book/service_container.html
-parameters:
-#    parameter_name: value
-
 services:
-    #session.memcache:
-        #class: Memcached
-        #calls:
-             #- [ addServer, [ %session_memcache_host%, %session_memcache_port% ]]
+    application.log:
+        alias: monolog.logger.applog
 
-    #session.handler.memcache:
-        #class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
-        #arguments: [ "@session.memcache", { prefix: %session_memcache_prefix%, expiretime: %session_memcache_expire% } ]
+    error.log:
+        alias: monolog.logger.errorlog
+
+    monolog.formatter.standard:
+        class: Monolog\Formatter\LineFormatter
+        arguments:
+            format: "%%datetime%% | %%level_name%% | %%extra.user_agent%% | %%extra.client_ip%% | %%extra.url%% | %%extra.instance%% | %%extra.user%% | %%message%% %%context%%\n"
+
+    monolog.processor.onm:
+        class: Framework\Monolog\OnmFormatter
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: monolog.processor, method: processRecord }
 
     session.handler.drak.redis:
         class: Drak\NativeSession\NativeRedisSessionHandler
@@ -20,23 +23,6 @@ services:
     session.handler.drak.memcached:
         class: Drak\NativeSession\NativeMemcachedSessionHandler
         arguments: [%session_handler_savepath%, %session_handler_options%]
-
-    monolog.formatter.standard:
-        class: Monolog\Formatter\LineFormatter
-        arguments:
-            format: "%%datetime%% | %%level_name%% | %%extra.user-agent%% | %%extra.client_ip%% | %%extra.url%% | %%extra.instance%%: %%message%% %%context%%\n"
-
-    monolog.processor.onm:
-        class: Framework\Monolog\OnmFormatter
-        arguments: [ @request_stack, @core.loader ]
-        tags:
-            - { name: monolog.processor, method: processRecord }
-
-    application.log:
-        alias: monolog.logger.applog
-
-    error.log:
-        alias: monolog.logger.errorlog
 
     shared_key_jwt_encoder:
         class: Lexik\Bundle\JWTAuthenticationBundle\Encoder\SharedKeyJWTEncoder

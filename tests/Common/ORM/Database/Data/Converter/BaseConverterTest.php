@@ -32,6 +32,7 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                 'wobble' => 'string',
                 'quux'   => 'integer',
                 'glorp'  => 'array::a=>b:integer',
+                'mumble' => 'datetime',
             ],
             'mapping' => [
                 'database' => [
@@ -88,7 +89,7 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                     'norf' => 0,
                     'quux' => null,
                 ],
-                [ 'wobble' => 'wubble' ],
+                [ 'wobble' => 'wubble', 'mumble' => null ],
                 [
                     'foo'  => \PDO::PARAM_STR,
                     'bar'  => \PDO::PARAM_INT,
@@ -128,7 +129,7 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                         'norf' => null,
                         'quux' => null,
                     ],
-                    [ 'wobble' => null ],
+                    [ 'wobble' => null, 'mumble' => null ],
                     [
                         'foo'  => \PDO::PARAM_STR,
                         'bar'  => \PDO::PARAM_STR,
@@ -150,7 +151,7 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
                         'norf' => null,
                         'quux' => null,
                     ],
-                    [ 'wobble' => null ],
+                    [ 'wobble' => null, 'mumble' => null ],
                     [
                         'foo'  => \PDO::PARAM_STR,
                         'bar'  => \PDO::PARAM_INT,
@@ -179,16 +180,26 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             [
-                'foo' => 'foobar',
-                'bar' => 1,
-                'baz' => [ 'garply', 'gorp' ],
-                'norf' => false
+                'foo'    => 'foobar',
+                'bar'    => 1,
+                'baz'    => [ 'garply', 'gorp' ],
+                'norf'   => false,
+                'mumble' => \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    '2010-10-01 10:10:10',
+                    new \DateTimeZone('UTC')
+                )
             ],
             $this->converter->objectifyStrict([
-                'foo' => 'foobar',
-                'bar' => 1,
-                'baz' => '["garply","gorp"]',
-                'norf' => 0
+                'foo'    => 'foobar',
+                'bar'    => 1,
+                'baz'    => '["garply","gorp"]',
+                'norf'   => 0,
+                'mumble' => \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    '2010-10-01 10:10:10',
+                    new \DateTimeZone('UTC')
+                )
             ], true)
         );
     }

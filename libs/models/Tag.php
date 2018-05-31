@@ -20,11 +20,12 @@
  */
 class Tag
 {
-
     /**
-     * Get number of contents of some tag
+     * Returns the number of contents for a given tag id or a list of tag ids
      *
-     * param mixed $tagId id for tag
+     * @param int|array $tagId wether a list of tag ids or only one tag id
+     *
+     * @return int  the number of contents
      */
     public static function numberOfContent($tagId)
     {
@@ -39,17 +40,13 @@ class Tag
         $sql = 'SELECT tag_id, count(1) AS related_content_count FROM `contents_tags` WHERE tag_id ' .
             $sqlTagId .
             'GROUP BY tag_id';
-
-        $conn = getService('dbal_connection');
-        $rs   = getService('dbal_connection')->fetchAll(
-            $sql,
-            $tagId
-        );
+        $rs  = getService('dbal_connection')->fetchAll($sql, $tagId);
 
         $numberOfContents = [];
         foreach ($rs as $row) {
             $numberOfContents[$row['tag_id']] = $row['related_content_count'];
         }
+
         return $numberOfContents;
     }
 
@@ -61,7 +58,7 @@ class Tag
      *
      * @return mixed List with all tags validate against DB
      */
-    public function validateTags($languageId, $tags)
+    public static function validateTags($languageId, $tags)
     {
         if (empty($tags)) {
             return [];
@@ -72,21 +69,25 @@ class Tag
 
         if (is_array($tags)) {
             $sqlTags = ' IN (' . substr(str_repeat(', ?', count($tags)), 2) . ')';
-            $params  = array_merge($params, $tags);
+            $ts      = getService('api.service.tag');
+            $params  = array_merge(
+                $params,
+                array_map(
+                    function ($tag) use ($ts) {
+                        return $ts->createSearchableWord($tag);
+                    },
+                    $tags
+                )
+            );
         } else {
             $sqlTags  = ' = ?';
             $params[] = $tags;
         }
 
-        $sql = 'SELECT id, name, language_id, slug FROM tags WHERE language_id = ? AND slug ' .
-            $sqlTags .
-            ' LIMIT 25';
+        $sql = 'SELECT id, name, language_id, slug FROM tags '
+            . 'WHERE language_id = ? AND slug ' . $sqlTags . ' LIMIT 25';
 
-        $conn = getService('dbal_connection');
-        $rs   = getService('dbal_connection')->fetchAll(
-            $sql,
-            $params
-        );
+        $rs = getService('dbal_connection')->fetchAll($sql, $params);
 
         $validateTags = [];
         foreach ($rs as $row) {
@@ -97,6 +98,7 @@ class Tag
             $tagAux->language_id       = $row['language_id'];
             $validateTags[$tagAux->id] = $tagAux;
         }
+
         return $validateTags;
     }
 }

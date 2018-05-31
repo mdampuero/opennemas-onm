@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for sitemaps
- *
- * @package Frontend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,8 +15,6 @@ use Common\Core\Controller\Controller;
 
 /**
  * Handles the actions for sitemaps
- *
- * @package Frontend_Controllers
  */
 class SitemapController extends Controller
 {
@@ -102,22 +95,22 @@ class SitemapController extends Controller
             $er = getService('entity_repository');
             foreach ($contents as $key => &$content) {
                 if (!empty($content->params['bodyLink'])) {
-                    // Remove external articles
                     unset($contents[$key]);
-                } else {
-                    // Get content image
-                    if (!empty($content->img1)) {
-                        $content->image = $er->find('Photo', $content->img2);
-                    } elseif (!empty($content->img2)) {
-                        $content->image = $er->find('Photo', $content->img2);
-                    }
+                    continue;
+                }
 
-                    // Get content video
-                    if (!empty($content->fk_video)) {
-                        $content->video = $er->find('Video', $content->fk_video);
-                    } elseif (!empty($content->fk_video2)) {
-                        $content->video = $er->find('Video', $content->fk_video2);
-                    }
+                // Get content image
+                if (!empty($content->img1)) {
+                    $content->image = $er->find('Photo', $content->img2);
+                } elseif (!empty($content->img2)) {
+                    $content->image = $er->find('Photo', $content->img2);
+                }
+
+                // Get content video
+                if (!empty($content->fk_video)) {
+                    $content->video = $er->find('Video', $content->fk_video);
+                } elseif (!empty($content->fk_video2)) {
+                    $content->video = $er->find('Video', $content->fk_video2);
                 }
             }
 
@@ -169,11 +162,12 @@ class SitemapController extends Controller
                 if (!empty($content->params['bodyLink'])) {
                     // Remove external articles
                     unset($contents[$key]);
-                } else {
-                    // Get content image
-                    if (!empty($content->img2)) {
-                        $content->image = $er->find('Photo', $content->img2);
-                    }
+                    continue;
+                }
+
+                // Get content image
+                if (!empty($content->img2)) {
+                    $content->image = $er->find('Photo', $content->img2);
                 }
             }
 
@@ -287,6 +281,7 @@ class SitemapController extends Controller
         // Filter by scheduled
         $cm       = new \ContentManager();
         $contents = $cm->getInTime($contents);
+        $contents = $cm->filterBlocked($contents);
 
         return $contents;
     }

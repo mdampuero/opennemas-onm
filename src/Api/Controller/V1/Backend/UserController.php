@@ -13,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Intl;
 
 /**
  * Lists and displays users.
@@ -226,7 +225,7 @@ class UserController extends Controller
      * This action is not mapped with Security annotation because it's
      * used in edit profile action that should be available to all users with
      * or without having users module activated.
-
+     *
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
@@ -305,7 +304,6 @@ class UserController extends Controller
         return [
             'categories'  => $categories,
             'client'      => $client,
-            'countries'   => Intl::getRegionBundle()->getCountryNames(),
             'languages'   => $languages,
             'photos'      => $photos,
             'taxes'       => $this->get('vat')->getTaxes(),

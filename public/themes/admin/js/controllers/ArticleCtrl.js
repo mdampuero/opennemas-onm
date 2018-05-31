@@ -90,6 +90,13 @@
               $scope.data.article.metadata.split(',');
           }
 
+          if ($scope.data.article.subscriptions) {
+            for (var i = 0; i < $scope.data.article.subscriptions.length; i++) {
+              $scope.data.article.subscriptions[i] =
+                parseInt($scope.data.article.subscriptions[i]);
+            }
+          }
+
           var keys = [
             'img1', 'img2', 'fk_video', 'fk_video2', 'relatedFront',
             'relatedInner', 'relatedHome'
@@ -625,12 +632,8 @@
             }
 
             for (var i = 0; i < nv.length; i++) {
-              var footer = 'footer_video';
+              var footer = 'footer_video' + (i + 1);
               var model  = $scope.article;
-
-              if (i > 0) {
-                footer = 'footer_video2';
-              }
 
               if (angular.isObject(nv[i]) &&
                 (angular.isUndefined(model[footer]) ||

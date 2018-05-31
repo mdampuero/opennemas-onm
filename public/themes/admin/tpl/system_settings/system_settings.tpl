@@ -488,7 +488,7 @@
                                   <input class="form-control" name="slug-[% $index %]" ng-maxlength="2" ng-minlength="2" ng-model="settings.locale.frontend.language.slug[item.code]" placeholder="{t}Customize the language appears in the URL (e.g. en).{/t}" required type="text">
                                   <div class="absolute help" ng-if="settingForm['slug-' + $index].$valid">
                                     <i class="fa fa-info-circle text-info m-l-5 m-r-5"></i>
-                                    {t}URLs will look like http://newspaper.opennemas.com/[% settings.locale.frontend.language.slug[item.code] %]/<slug>{/t}
+                                    {t 1="[% settings.locale.frontend.language.slug[item.code] %]"}URLs will look like http://newspaper.opennemas.com/%1/<slug>{/t}
                                   </div>
                                   <div class="absolute help" ng-if="!settingForm['slug-' + $index].$valid">
                                     <i class="fa fa-exclamation-circle text-danger m-l-5 m-r-5"></i>

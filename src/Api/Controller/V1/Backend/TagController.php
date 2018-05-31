@@ -204,8 +204,7 @@ class TagController extends Controller
         $ts   = $this->get('api.service.tag');
         $text = $request->query->get('text', null);
         $text = $ts->createSearchableWord($text);
-
-        $msg = $this->get('core.messenger');
+        $msg  = $this->get('core.messenger');
         if (empty($text)) {
             $msg->add(_('Invalid tag'), 'success');
             return new JsonResponse($msg->getMessages(), $msg->getCode());

@@ -6,7 +6,7 @@
   </h4>
 </div>
 <div class="modal-body">
-    <p>{t escape=off}Are you sure you want to restore [% template.selected.contents.length %] item(s)?{/t}</p>
+    <p>{t escape=off 1="[% template.selected.contents.length %]"}Are you sure you want to restore %1 item(s)?{/t}</p>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" ng-click="yes()" ng-disabled="yesLoading" type="button">

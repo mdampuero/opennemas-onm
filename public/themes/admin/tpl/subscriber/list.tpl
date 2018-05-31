@@ -1,14 +1,18 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div ng-app="BackendApp" ng-controller="SubscriberListCtrl" ng-init="init()">
+  <div ng-app="BackendApp" ng-controller="SubscriberListCtrl" ng-init="init();backup.master = {if $app.user->isMaster()}true{else} false{/if};backup.id = {$app.user->id}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-address-card"></i>
+                <i class="fa fa-address-card m-r-10"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
                 {t}Subscribers{/t}
               </h4>
             </li>
@@ -184,7 +188,7 @@
               <tbody>
                 <tr ng-if="items.length > 0" ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
                   <td class="checkbox-cell">
-                    <div class="checkbox check-default">
+                    <div class="checkbox check-default" ng-if="isSelectable(item)">
                       <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
                       <label for="checkbox[%$index%]"></label>
                     </div>
@@ -210,7 +214,7 @@
                       <a class="btn btn-default btn-small" href="[% routing.generate('backend_subscriber_show', { id: item.id }) %]">
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
-                      <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
+                      <button class="btn btn-danger btn-small" ng-click="delete(item.id)" ng-if="backup.master || item.id != backup.id" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                       </button>
                     </div>

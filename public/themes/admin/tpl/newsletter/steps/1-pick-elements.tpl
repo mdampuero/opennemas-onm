@@ -1,30 +1,30 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_newsletter_save_contents}" method="POST" name="newsletterForm" id="newsletter-pick-elements-form" ng-controller="NewsletterCtrl" ng-init="stepOne({json_encode($newsletterContent)|clear_json})">
+<form action="{url name=backend_newsletters_save_contents}" method="POST" name="newsletterForm" id="newsletter-pick-elements-form" ng-controller="NewsletterCtrl" ng-init="stepOne({json_encode($newsletterContent)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-home fa-lg"></i>
-                {t}Newsletters{/t}
+                <a class="no-padding" href="{url name=backend_newsletters_list}" title="{t}Go back to list{/t}">
+                  <i class="fa fa-envelope"></i>
+                  {t}Newsletters{/t}
+                </a>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
+                <i class="fa fa-angle-right"></i>
+              </h4>
+            </li>
             <li class="quicklinks hidden-xs">
-              <h5>{t}Pick contents{/t}</h5>
+              <h4>{t}Send{/t}</h4>
             </li>
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
-              <li class="quicklinks">
-                <a href="{url name=admin_newsletters}" class="btn btn-link" title="{t}Go back to list{/t}">
-                  <span class="fa fa-reply"></span>
-                </a>
-              </li>
-              <li class="quicklinks"><span class="h-seperate"></span></li>
               <li class="quicklinks btn-group">
                 <button class="btn btn-primary" type="submit" title="{t}Next{/t}" id="next-button">
                   <span class="hidden-xs">{t}Next{/t}</span>
@@ -36,14 +36,16 @@
         </div>
       </div>
     </div>
-    <div class="content newsletter-manager">
+    <div class="content newsletter-manager" ng-init="step = 0">
+      {include file="newsletter/partials/send_steps.tpl"}
       <div class="grid simple">
+        <div class="grid-title">
+          <i class="fa fa-envelope-o"></i>
+          <h4>{t}Email subject{/t}</h4>
+        </div>
         <div class="grid-body">
           <div class="form-group">
-            <label for="name" class="form-label">{t}Email subject{/t}</label>
-            <div class="controls">
-              <input type="text" name="title" id="title" value="{$newsletter->title|default:$name}" required class="form-control"/>
-            </div>
+              <input type="text" name="title" id="title" value="{$newsletter->title|default:$name}" required class="form-control" placeholder="{$name}"/>
           </div>
         </div>
       </div>

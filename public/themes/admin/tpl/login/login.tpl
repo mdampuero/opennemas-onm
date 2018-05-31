@@ -64,7 +64,7 @@
                       <div class="form-group">
                         <div class="input-group">
                           <span class="input-group-addon"><span class="fa fa-user"></span></span>
-                          <input autofocus class="form-control" id="_username" name="_username" value="{$smarty.cookies.login_username|default:""}" placeholder="{t}Username or email{/t}" tabindex="1" type="text">
+                          <input autofocus class="form-control" id="_username" name="_username" placeholder="{t}Username or email{/t}" tabindex="1" type="text">
                         </div>
                       </div>
                       <div class="form-group">
@@ -72,7 +72,7 @@
                           <span class="input-group-addon">
                             <i class="fa fa-lock"></i>
                           </span>
-                          <input class="form-control" id="_password" name="_password" placeholder="{t}Password{/t}" tabindex="2" type="password" value="{$smarty.cookies.login_password|default:""}">
+                          <input class="form-control" id="_password" name="_password" placeholder="{t}Password{/t}" tabindex="2" type="password">
                         </div>
                       </div>
                       {$recaptcha}

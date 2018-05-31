@@ -8,22 +8,25 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
+                <i class="fa fa-address-card m-r-10"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
                 <a class="no-padding" href="[% routing.generate('backend_subscribers_list') %]">
-                  <i class="fa fa-address-card"></i>
                   {t}Subscribers{/t}
                 </a>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.http.loading && item">
-              <div class="p-l-10 p-r-10 p-t-10">
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
                 <i class="fa fa-angle-right"></i>
-              </div>
+              </h4>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.http.loading && item">
-              <h5 class="ng-cloak">
-                <strong ng-if="item.id">{t}Edit{/t}</strong>
-                <strong ng-if="!item.id">{t}Create{/t}</strong>
-              </h5>
+            <li class="quicklinks hidden-xs">
+              <h4>
+                {if empty($id)}{t}Create{/t}{else}{t}Edit{/t}{/if}
+              </h4>
             </li>
           </ul>
           <div class="all-actions pull-right ng-cloak" ng-if="!flags.http.loading && item">
@@ -34,28 +37,24 @@
                     <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                     {t}Save{/t}
                   </button>
-                  {acl isAllowed=MASTER}
-                    <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" ng-disabled="flags.http.saving || form.$invalid || (item.password && item.password !== rpassword)" ng-if="item.id" type="button">
-                      <span class="caret"></span>
-                    </button>
-                  {/acl}
-                  {acl isAllowed=MASTER}
-                    <ul class="dropdown-menu no-padding pull-right" ng-if="item.id">
-                      <li>
-                        <a href="#" ng-click="convertTo('type', 2)" ng-if="item.type !== 2">
-                          <i class="fa fa-level-up"></i>
-                          {t}Convert to subscriber + user{/t}
-                        </a>
-                      </li>
-                      <li class="divider" ng-if="item.type !== 2"></li>
-                      <li>
-                        <a href="#" ng-click="convertTo('type', 0)">
-                          <i class="fa fa-retweet"></i>
-                          {t}Convert to user{/t}
-                        </a>
-                      </li>
-                    </ul>
-                  {/acl}
+                  <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" ng-disabled="flags.http.saving || form.$invalid || (item.password && item.password !== rpassword)" ng-if="item.id" type="button">
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu no-padding pull-right" ng-if="item.id">
+                    <li>
+                      <a href="#" ng-click="convertTo('type', 2)" ng-if="item.type !== 2">
+                        <i class="fa fa-user-plus"></i>
+                        {t}Convert to{/t} {t}subscriber{/t} + {t}user{/t}
+                      </a>
+                    </li>
+                    <li class="divider" ng-if="item.type !== 2"></li>
+                    <li>
+                      <a href="#" ng-click="convertTo('type', 0)">
+                        <i class="fa fa-user"></i>
+                        {t}Convert to{/t} {t}user{/t}
+                      </a>
+                    </li>
+                  </ul>
                 </div>
               </li>
             </ul>
@@ -95,11 +94,14 @@
                   </div>
                 </div>
                 <div class="grid-collapse-title pointer" ng-class="{ 'open': expanded.subscriptions }" ng-click="expanded.subscriptions = !expanded.subscriptions">
-                  <i class="fa fa-check-square-o m-r-5"></i>
-                  {t}Subscriptions{/t}
+                  <i class="fa fa-check-square-o m-r-10"></i>{t}Subscriptions{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.subscriptions }"></i>
                 </div>
                 <div class="grid-collapse-body no-padding ng-cloak" ng-class="{ 'expanded': expanded.subscriptions }">
+                  <div class="p-l-15 p-t-15 p-b-15 p-r-15 b-t" ng-show="!data.extra.subscriptions || data.extra.subscriptions.length === 0">
+                    <i class="fa fa-warning m-r-5 text-warning"></i>
+                    {t escape=off 1="[% routing.generate('backend_subscriptions_list') %]"}There are no <a href="%1">subscriptions</a>{/t}
+                  </div>
                   <div class="p-l-15 p-t-15 p-b-15 p-r-15 b-t" ng-repeat="subscription in data.extra.subscriptions">
                     <label class="form-label">
                       <span ng-class="{ 'text-danger': item.user_groups && item.user_groups[subscription.pk_user_group] && item.user_groups[subscription.pk_user_group].status === 2 }">
@@ -261,7 +263,7 @@
                       <input class="form-control" datetime-picker id="[% field.name %]" name="[% field.name %]" ng-if="field.type === 'date'" ng-model="item[field.name]" type="text">
                       <select class="form-control" id="[% field.name %]" name="[% field.name %]" ng-if="field.type === 'country'" ng-model="item[field.name]">
                         <option value="">{t}Select a country{/t}...</option>
-                        <option value="[% key %]" ng-repeat="(key,value) in extra.countries" ng-selected="[% item[field.name] === value %]">[% value %]</option>
+                        <option value="[% key %]" ng-repeat="(key,value) in data.extra.countries" ng-selected="[% item[field.name] === value %]">[% value %]</option>
                       </select>
                       <div class="radio" ng-if="field.type === 'options'" ng-repeat="option in field.values">
                         <input id="option-[% option.key %]" name="[% field.name %]" ng-model="item[field.name]" value="[% option.key %]" type="radio">

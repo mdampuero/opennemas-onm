@@ -7,49 +7,70 @@
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-home"></i>
-              {t}Newsletters{/t}
+              <a class="no-padding" href="{url name=backend_newsletters_list}" title="{t}Go back to list{/t}">
+                <i class="fa fa-envelope"></i>
+                {t}Newsletters{/t}
+              </a>
             </h4>
           </li>
-          <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+          <li class="quicklinks hidden-xs m-l-5 m-r-5">
+            <h4>
+              <i class="fa fa-angle-right"></i>
+            </h4>
+          </li>
           <li class="quicklinks hidden-xs">
-            <h5>{t}Delivering report{/t}</h5>
+            <h4>{t}Send{/t}</h4>
           </li>
         </ul>
-        <div class="all-actions pull-right">
-          <ul class="nav quick-section">
-            <li>
-              <a href="{url name=admin_newsletters}" class="btn btn-link" title="{t}Back to list{/t}">
-                <span class="fa fa-reply"></span>
-                {t}Back to list{/t}
-              </a>
-            </li>
-          </ul>
-        </div>
       </div>
     </div>
   </div>
-  <div class="content newsletter-manager">
-    <div class="grid simple">
-      <div class="grid-title">
-        <h4>{t}Newsletter sending report{/t}</h4>
-      </div>
-      <div class="grid-body">
-        <p>{t}Your newsletter was sent to the list of mails. Please find below the detailed report for each email and its status.{/t}</p>
-        <table class="table">
-          {foreach from=$sent_result item=result}
-          <tr>
-            <td>
-              {$result[0]->name} &lt;{$result[0]->email}&gt;
-              {if $result[1]}
-              <span class="ok">{t}OK{/t}</span>
-              {else}
-              <span class="failed">{t}Failed{/t} - {$result[2]}</span>
-              {/if}
-            </td>
-          </tr>
-          {/foreach}
-        </table>
+  <div class="content newsletter-manager" ng-init="step = 3">
+    {include file="newsletter/partials/send_steps.tpl"}
+    <div class="text-center">
+      <i class="fa fa-envelope fa-4x text-success"></i>
+      <h3>{t}Newsletter sending report{/t}</h3>
+      <h5>
+        {if $send_report['total'] > 0}
+        {t escape=off 1=$send_report['total']}<strong>%1 emails</strong> have being sent.{/t}
+        {else}
+        {t}No emails were sent.{/t}
+        {/if}
+        {t}Please, find below the report.{/t}
+      </h5>
+    </div>
+    <div class="row m-t-30">
+      <div class="newsletter-report">
+        <div class="newsletter-report-list">
+        {foreach $send_report['report'] as $item}
+          <div class="p-r-15 p-b-15 p-t-15 p-l-15" style="border-bottom: 1px solid #ccc">
+            {if $item[0]->type == 'external'}
+              <i class="fa fa-external-link m-r-5" uib-tooltip="{t}External service{/t}"></i>
+            {/if}
+            {if $item[0]->type == 'list'}
+              <i class="fa fa-address-book m-r-5" uib-tooltip="{t}Subscription list{/t}"></i>
+            {/if}
+            {if $item[0]->type == 'email'}
+              <i class="fa fa-envelope m-r-5" uib-tooltip="{t}Email address{/t}"></i>
+            {/if}
+
+            {$item[0]->name}
+            {if $item[1]}
+            <i class="fa fa-check text-success"></i>
+            <span class="text-success">{$item[2]}</span>
+            {else}
+            <i class="fa fa-times text-danger"></i>
+            <span class="text-danger">{$item[2]}</span>
+            {/if}
+          </div>
+        {/foreach}
+        </div>
+        <div class=" m-t-20 m-r-15 m-b-15 m-t-15 m-l-15">
+          <a class="btn-block btn btn-lg btn-success" href="{url name=backend_newsletters_list}" title="{t}Go back to list{/t}">
+            <i class="fa fa-reply"></i>
+            {t}Go back to the list{/t}
+          </a>
+        </div>
       </div>
     </div>
   </div>

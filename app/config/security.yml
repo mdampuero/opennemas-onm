@@ -7,9 +7,9 @@ security:
             id: core.security.encoder.password
 
     role_hierarchy:
-        ROLE_MASTER:   [ ROLE_MANAGER, ROLE_ALLOWED_TO_SWITCH ]
+        ROLE_MASTER:   [ ROLE_BACKEND, ROLE_ALLOWED_TO_SWITCH ]
         ROLE_MANAGER:  [ ROLE_BACKEND ]
-        ROLE_BACKEND:  [ ROLE_FRONTEND ]
+        ROLE_BACKEND:  []
         ROLE_FRONTEND: []
 
     providers:
@@ -54,12 +54,12 @@ security:
             pattern:  ^/login$
             security: false
 
-        backend_recover:
-            pattern:  ^/admin/password/*
+        backend_password:
+            pattern:  ^/(admin/)?password/*
             security: false
 
-        frontend_recover:
-            pattern:  ^/user/(recover*|register|(activate/*))
+        frontend_user_activate:
+            pattern:  ^/user/activate/*
             security: false
 
         framework:
@@ -92,8 +92,8 @@ security:
             pattern:    ^/*
             anonymous:  ~
             form_login:
+                login_path:                     frontend_authentication_login
                 check_path:                     core_authentication_check
-                always_use_default_target_path: false
                 target_path_parameter:          _target
                 always_use_default_target_path: false
                 use_referer:                    false
@@ -110,8 +110,8 @@ security:
                 resource_owners:
                     facebook: "/oauth/login/check-facebook"
                     twitter:  "/oauth/login/check-twitter"
-                login_path:          core_authentication_complete
-                default_target_path: core_authentication_complete
+                login_path:          frontend_authentication_login
+                default_target_path: frontend_authentication_login
                 check_path:          core_authentication_check
                 use_forward:         false
                 failure_path:        core_authentication_complete
@@ -125,4 +125,5 @@ security:
         - { path: ^/api/v1/backend/*,              roles: [ ROLE_BACKEND ] }
         - { path: ^/managerws/(login|check),       roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
         - { path: ^/managerws,                     roles: [ ROLE_MANAGER ] }
+        - { path: ^/user/me$,                      roles: [ IS_AUTHENTICATED_FULLY ] }
         - { path: ^/*,                             roles: [ IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY ] }

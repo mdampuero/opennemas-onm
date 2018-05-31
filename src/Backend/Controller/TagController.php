@@ -25,6 +25,8 @@ class TagController extends Controller
      */
     public function listAction()
     {
-        return $this->render('tag/list.tpl', ['locale' => $this->get('core.locale')->getLocale('frontend')]);
+        return $this->render('tag/list.tpl', [
+            'locale' => $this->get('core.locale')->getLocale('frontend')
+        ]);
     }
 }

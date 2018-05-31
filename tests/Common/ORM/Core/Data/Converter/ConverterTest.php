@@ -35,6 +35,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 'baz'    => 'array',
                 'norf'   => 'boolean',
                 'wobble' => 'string',
+                'mumble' => 'datetime',
                 'quux'   => 'integer',
             ],
             'mapping' => [
@@ -53,7 +54,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->converter = new Converter($this->metadata, $this->locale);
 
-        $keys    = [ 'convert', 'convertFrom', 'convertTo', 'translate' ];
+        $keys = [ 'convert', 'convertFrom', 'convertTo', 'translate' ];
+
         $this->methods = [];
         foreach ($keys as $method) {
             $this->methods[$method] = new \ReflectionMethod($this->converter, $method);
@@ -68,16 +70,26 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             [
-                'foo' => 'foobar',
-                'bar' => 1,
-                'baz' => [ 'garply', 'gorp' ],
-                'norf' => false
+                'foo'    => 'foobar',
+                'bar'    => 1,
+                'baz'    => [ 'garply', 'gorp' ],
+                'norf'   => false,
+                'mumble' => \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    '2010-10-01 10:10:10',
+                    new \DateTimeZone('UTC')
+                )
             ],
             $this->converter->objectify([
-                'foo'  => 'foobar',
-                'bar'  => '1',
-                'baz'  => serialize([ 'garply', 'gorp' ]),
-                'norf' => '0'
+                'foo'    => 'foobar',
+                'bar'    => '1',
+                'baz'    => serialize([ 'garply', 'gorp' ]),
+                'norf'   => '0',
+                'mumble' => \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    '2010-10-01 10:10:10',
+                    new \DateTimeZone('UTC')
+                )
             ])
         );
     }
@@ -215,9 +227,25 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     public function testTranslate()
     {
         $this->assertEmpty($this->methods['translate']->invokeArgs($this->converter, [ 'baz', null ]));
-        $this->assertEquals([ 'corge' ], $this->methods['translate']->invokeArgs($this->converter, [ 'foo', [ 'corge' ] ]));
-        $this->assertEquals('wobble', $this->methods['translate']->invokeArgs($this->converter, [ 'baz', 'wobble' ]));
-        $this->assertEquals('wobble', $this->methods['translate']->invokeArgs($this->converter, ['baz', [ 'en' => 'wobble' ] ]));
-        $this->assertEquals('grault', $this->methods['translate']->invokeArgs($this->converter, ['baz', [ 'es' => 'grault' ] ]));
+
+        $this->assertEquals(
+            [ 'corge' ],
+            $this->methods['translate']->invokeArgs($this->converter, [ 'foo', [ 'corge' ] ])
+        );
+
+        $this->assertEquals(
+            'wobble',
+            $this->methods['translate']->invokeArgs($this->converter, [ 'baz', 'wobble' ])
+        );
+
+        $this->assertEquals(
+            'wobble',
+            $this->methods['translate']->invokeArgs($this->converter, ['baz', [ 'en' => 'wobble' ] ])
+        );
+
+        $this->assertEquals(
+            'grault',
+            $this->methods['translate']->invokeArgs($this->converter, ['baz', [ 'es' => 'grault' ] ])
+        );
     }
 }
