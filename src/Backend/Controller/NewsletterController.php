@@ -245,6 +245,8 @@ class NewsletterController extends Controller
         $id         = (int) $request->query->getDigits('id');
         $newsletter = new \Newsletter($id);
 
+        $newsletter = \Onm\StringUtils::convertToUtf8($newsletter);
+
         return $this->render('newsletter/steps/2-preview.tpl', [
             'newsletter' => $newsletter
         ]);
