@@ -24,7 +24,7 @@ angular.module('BackendApp.controllers')
        * @memberOf PollCtrl
        * Method to init the poll controller
        *
-       * @param {object} poll   Opinion to edit
+       * @param {object} poll   Poll to edit
        * @param {String} locale Locale for the poll
        * @param {Array}  tags   Array with all the tags needed for the poll
        */
