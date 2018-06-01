@@ -33,8 +33,8 @@
                       '<span>[% acceptedTag.name %]</span><a href="#" ng-click="removeTag(acceptedTag)">x</a>' +
                     '</li>' +
                   '</ul>' +
-                  '<input type="text" ng-class=" invalidTag ? \'has-error \' : \'\'" ng-model="newTag" placeholder="[% placeholder %]" ng-keyup="$event.keyCode == 13 && validateTag()" uib-typeahead="tagSuggested as tagSuggested.name for tagSuggested in getLocalSuggestedTags($viewValue)" typeahead-loading="loadingLocations" typeahead-wait-ms="500" typeahead-on-select="suggestedTagAccepted($item, $model, $label)" typeahead-min-length="2" typeahead-focus-first="false">' +
-                  '<input type="hidden" name="tag_ids" ng-model="ngModel">' +
+                  '<input type="text" ng-class=" invalidTag ? \'has-error \' : \'\'" ng-model="newTag" placeholder="[% placeholder %]" ng-keydown="validateTag($event)" uib-typeahead="tagSuggested as tagSuggested.name for tagSuggested in getLocalSuggestedTags($viewValue)" typeahead-loading="loadingLocations" typeahead-wait-ms="500" typeahead-on-select="suggestedTagAccepted($item, $model, $label)" typeahead-min-length="2" typeahead-focus-first="false">' +
+                  '<input type="hidden" name="tag_ids" ng-value="getTagIdsList()">' +
                 '</div>' +
                 '<div>' +
                   '<span>Suggested tags</span>' +
@@ -82,7 +82,11 @@
               return returnVal;
             };
 
-            $scope.validateTag = function() {
+            $scope.validateTag = function(e) {
+              if (e.keyCode !== 13) {
+                return null;
+              }
+              e.preventDefault();
               if ($scope.newTag === '') {
                 $scope.invalidTag = false;
                 return null;
@@ -164,6 +168,10 @@
                 }
               }
               return null;
+            };
+
+            $scope.getTagIdsList = function() {
+              return JSON.stringify($scope.ngModel);
             };
           },
         };

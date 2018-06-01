@@ -246,12 +246,17 @@ class OpinionsController extends Controller
                 ->get(OpinionsController::EXTRA_INFO_TYPE);
         }
 
+        $ls = $this->get('core.locale');
+
         return $this->render('opinion/new.tpl', [
             'opinion'        => $opinion,
             'all_authors'    => $allAuthors,
             'author'         => $author,
             'commentsConfig' => s::get('comments_config'),
-            'extra_fields'   => $extraFields
+            'extra_fields'   => $extraFields,
+            'locale'         => $ls->getRequestLocale('frontend'),
+            'tags'           => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($opinion->tag_ids)['items']
         ]);
     }
 
@@ -280,10 +285,13 @@ class OpinionsController extends Controller
                     ->get('extraInfoContents.OPINION_MANAGER');
             }
 
+            $ls = $this->get('core.locale');
             return $this->render('opinion/new.tpl', [
                 'all_authors'    => $allAuthors,
                 'commentsConfig' => s::get('comments_config'),
-                'extra_fields'   => $extraFields
+                'extra_fields'   => $extraFields,
+                'locale'         => $ls->getLocale('frontend'),
+                'tags'           => []
             ]);
         }
 
@@ -309,8 +317,6 @@ class OpinionsController extends Controller
             'img2_footer'         =>
                 $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'in_home'             => (empty($inhome)) ? 0 : 1,
-            'metadata'            =>
-                \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'starttime'           => $request->request->get('starttime', ''),
             'summary'             => $request->request->get('summary', ''),
             'title'               =>
@@ -318,8 +324,9 @@ class OpinionsController extends Controller
             'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
             'with_comment'        => (empty($withComment)) ? 0 : 1,
             'params'              => [
-                'only_registered'  => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
-            ]
+                'only_registered' => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
+            ],
+            'tag_ids'             => json_decode($request->request->get('tag_ids', ''))
         ];
 
         $data = $this->loadMetaDataFields($data, $request->request, OpinionsController::EXTRA_INFO_TYPE);
@@ -410,8 +417,6 @@ class OpinionsController extends Controller
             'img2_footer'         =>
                 $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'in_home'             => (empty($inhome)) ? 0 : 1,
-            'metadata'            =>
-                \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'starttime'           => $request->request->get('starttime', ''),
             'summary'             => $request->request->get('summary', ''),
             'title'               =>
@@ -419,8 +424,9 @@ class OpinionsController extends Controller
             'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
             'with_comment'        => (empty($withComment)) ? 0 : 1,
             'params'              => [
-                'only_registered'  => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
+                'only_registered' => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
             ],
+            'tag_ids'             => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         $data = $this->loadMetaDataFields($data, $request->request, OpinionsController::EXTRA_INFO_TYPE);

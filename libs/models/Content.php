@@ -2195,6 +2195,7 @@ class Content implements \JsonSerializable
         $newTags    = [];
         $insertTags = [];
         $ts         = getService('api.service.tag');
+
         foreach ($tagIds as $tag) {
             if (is_array($tag)) {
                 $tag['slug']  = $ts->createSearchableWord($tag['name']);

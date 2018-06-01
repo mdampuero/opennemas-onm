@@ -174,7 +174,7 @@
 
             if (callback &&
                 getType.toString.call(callback) === '[object Function]') {
-              callback(response);
+              return callback(response);
             }
             return null;
           }, function() {
@@ -292,7 +292,7 @@
                 response.data.items.filter(function(tagElement) {
                   return currentTags.indexOf(tagElement.id) === -1;
                 }) :
-                currentTags;
+                response.data.items;
 
               return tagsuggestedList;
             }, $scope.errorCb
