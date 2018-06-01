@@ -254,7 +254,7 @@ class NewsletterSenderHelper
             $subject = "Solicitud de BAJA - Boletín ";
             $text    = [ "Solicitud de Baja en el boletín de:" ];
 
-            $message = _("You have been unsusbscribed from the newsletter.");
+            $message = _("You have been unsubscribed from the newsletter.");
         }
         $subject .= $settings['site_name'];
 

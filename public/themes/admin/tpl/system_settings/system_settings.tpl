@@ -390,7 +390,7 @@
                         </div>
                         {/is_module_activated}
                       </div>
-                      {if $app.user->isMaster()}
+                      {if $app.security->hasPermission('MASTER')}
                       <h4>
                         <i class="fa fa-rss"></i>
                         RSS
@@ -791,7 +791,7 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="row" ng-show="{if $app.user->isMaster()}true{/if}">
+                              <div class="row" ng-show="{if $app.security->hasPermission('MASTER')}true{/if}">
                                 <div class="col-md-6">
                                   <div class="form-group">
                                     <label class="form-label">
@@ -859,7 +859,7 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="row" ng-show="{if $app.user->isMaster()}true{/if}">
+                              <div class="row" ng-show="{if $app.security->hasPermission('MASTER')}true{/if}">
                                 <div class="col-md-12">
                                   <div class="form-group">
                                     <label class="form-label">
@@ -1442,7 +1442,7 @@
                 </div>
               </div>
             </uib-tab>
-            {if $app.user->isMaster()}
+            {if $app.security->hasPermission('MASTER')}
               <uib-tab>
                 <uib-tab-heading>
                   <i class="fa fa-rebel m-r-5"></i>

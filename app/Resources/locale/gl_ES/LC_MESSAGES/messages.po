@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-16 11:11+0000\n"
-"PO-Revision-Date: 2018-05-16 13:17+0200\n"
+"POT-Creation-Date: 2018-05-29 08:22+0000\n"
+"PO-Revision-Date: 2018-05-29 10:45+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -196,15 +196,6 @@ msgstr "Libro"
 msgid "Internal"
 msgstr "Interno"
 
-msgid "Accepted"
-msgstr "Aceptado"
-
-msgid "Rejected"
-msgstr "Rexeitado"
-
-msgid "Pending"
-msgstr "Pendente"
-
 msgid "Now you are using the Opennemas comment system."
 msgstr "Parabéns! Agora está a usar o sistema de comentario Opennemas."
 
@@ -214,12 +205,34 @@ msgstr "Agora estase usando o sistema de comentario de Facebook."
 msgid "Comment data sent not valid."
 msgstr "Os datos enviados do comentario non son válidos."
 
+msgid "Accepted"
+msgstr "Aceptado"
+
+msgid "Rejected"
+msgstr "Rexeitado"
+
+msgid "Pending"
+msgstr "Pendente"
+
+#, php-format
+msgid "Comment with id \"%d\" doesn't exists."
+msgstr "Non existe o comentario co identificador «%d»"
+
+msgid "Comment updated successfully."
+msgstr "Comentario actualizado correctamente."
+
+msgid "There was an error while saving the settings"
+msgstr "Produciuse un erro ao gardar as preferencias."
+
 msgid ""
 "Please provide your Disqus configuration to start to use your Disqus "
 "Comments module"
 msgstr ""
 "Complete a configuración de Disqus para comezar a usar módulo «Comentarios "
 "de Disqus»"
+
+msgid "Disqus configurations saved properly."
+msgstr "Configuracións de Disqus gardadas correctamente."
 
 msgid "There was an error while saving the Disqus module configuration"
 msgstr "Produciuse un erro ao gardar a configuración do módulo «Disqus»"
@@ -232,16 +245,6 @@ msgid ""
 msgstr ""
 "Produciuse un erro ao gardar a configuración do módulo «Comentarios de "
 "Facebook»"
-
-#, php-format
-msgid "Comment with id \"%d\" doesn't exists."
-msgstr "Non existe o comentario co identificador «%d»"
-
-msgid "Comment updated successfully."
-msgstr "Comentario actualizado correctamente."
-
-msgid "There was an error while saving the settings"
-msgstr "Produciuse un erro ao gardar as preferencias."
 
 #, php-format
 msgid "Unable to arquive content with id %s: %s"
@@ -1281,6 +1284,9 @@ msgstr "Ate"
 msgid "Thumbnail details"
 msgstr "Detalles da miniatura"
 
+msgid "Enhance"
+msgstr "Editar a foto"
+
 msgid "Add files..."
 msgstr "Engadir ficheiros…"
 
@@ -1748,20 +1754,11 @@ msgstr "Erro: non hai valor de votación!"
 msgid "You have voted this comment previously."
 msgstr "Xa votaches neste comentario anteriormente."
 
-msgid "Please enter a valid email address"
-msgstr "Escribe un enderezo de correo válido"
-
-msgid "Your comment was rejected due insults usage."
-msgstr "O teu comentario foi rexeitado debido ao uso de insultos."
-
-msgid "Your comment was accepted. Refresh the page to see it."
-msgstr "O teu comentario foi aceptado. Recargua a páxina para velo."
-
 msgid "Your comment was accepted and now we have to moderate it."
 msgstr "O teu comentario foi aceptado e agora deberá moderarse."
 
-msgid "Ensure you have completed all the form fields."
-msgstr "Asegúrate de completar todos os campos do formulario."
+msgid "Your comment was accepted."
+msgstr "O teu comentario foi aceptado."
 
 msgid "The reCAPTCHA was not entered correctly. Try to authenticate again."
 msgstr ""
@@ -1812,11 +1809,11 @@ msgstr "Correo electrónico"
 msgid "Check the form and try again"
 msgstr "Revisa o formulario e inténtao de novo"
 
-msgid "You have been subscribed to our newsletter."
-msgstr "Subscribicheste ao boletín de novas."
+msgid "You have been subscribed to the newsletter."
+msgstr "Subscribícheste ao boletín de novas."
 
-msgid "You have been unsubscribed from our newsletter."
-msgstr "Desubscribicheste do boletín de novas. "
+msgid "You have been unsubscribed from the newsletter."
+msgstr "Desubscribícheste do boletín de novas."
 
 #, php-format
 msgid "You already have an active Subscription until %s"
@@ -1866,6 +1863,9 @@ msgstr "Non foi posíbel activar a túa conta"
 
 msgid "Select a country"
 msgstr "Seleccione un país"
+
+msgid "The email address is already in use."
+msgstr "O enderezo que escribiu xa está en uso."
 
 msgid "Unable to create your user account. Please try it later."
 msgstr ""
@@ -2239,12 +2239,6 @@ msgstr "Non se puido enviar o teu correo"
 msgid "Email not valid: %s"
 msgstr "Enderezo de correo non válido: %s"
 
-msgid "You have been subscribed to the newsletter."
-msgstr "Subscribicheste ao boletín de novas."
-
-msgid "You have been unsusbscribed from the newsletter."
-msgstr "Subscrición do boletín de novas eliminada."
-
 msgid "Subscription form"
 msgstr "Formulario de subscrición"
 
@@ -2259,6 +2253,9 @@ msgid ""
 "Url must be longer than 4 characters and only must content characters and "
 "numbers"
 msgstr "A url debe ter cando menos 4 letras ou números"
+
+msgid "Please enter a valid email address"
+msgstr "Escribe un enderezo de correo válido"
 
 msgid "The email that you entered is already in use"
 msgstr "O enderezo que escribiu xa está en uso"
@@ -2280,6 +2277,27 @@ msgstr "Entrando na páxina solicitada"
 
 msgid "Skip advertisement"
 msgstr "Saltar publicidade"
+
+msgid "Please provide a valid author name"
+msgstr "Fornece un nome de autor válido"
+
+msgid "Your name has invalid words"
+msgstr "O teu nome conten palabras non válidas"
+
+msgid "Please provide a valid email address"
+msgstr "Escribe un enderezo de correo válido"
+
+msgid "Your email is not allowed"
+msgstr "O teu correo non está permitido"
+
+msgid "Your IP address is not valid."
+msgstr "O teu enderezo IP non é válido."
+
+msgid "Your comment is too short"
+msgstr "O teu comentario é demasiado curto"
+
+msgid "Your comment has invalid words"
+msgstr "O teu comentario ten palabras non válidas"
 
 #, php-format
 msgid "Unable to create a %s"
@@ -3448,11 +3466,13 @@ msgstr ""
 "por exemplo configurar as túas contas sociais e obter máis información sobre "
 "como usar Opennemas"
 
-msgid "In order to use Opennemas you must accept the terms of use"
-msgstr "Para poder usar Opennemas debes aceptar os termos de uso:"
+msgid ""
+"In order to use Opennemas you must accept the Legal notice & Terms of use"
+msgstr ""
+"Para poder usar Opennemas debes aceptar o Aviso legal e Condicións de uso"
 
-msgid "Accept the terms of use"
-msgstr "Aceptar os termos de uso"
+msgid "Accept the Legal notice & Terms of use"
+msgstr "Aceptar o Aviso legal e Condicións de uso"
 
 msgid "Do you need some help?"
 msgstr "¿Precisas axuda?"
@@ -3754,6 +3774,42 @@ msgstr "Administración de OpenNemas"
 
 msgid "You are leaving the current page."
 msgstr "Está saíndo da páxina."
+
+msgid "transform"
+msgstr "transformar"
+
+msgid "light"
+msgstr "luz"
+
+msgid "landscape"
+msgstr "apaisado"
+
+msgid "portrait"
+msgstr "retrato"
+
+msgid "free"
+msgstr "libre"
+
+msgid "brightness"
+msgstr "brillo"
+
+msgid "contrast"
+msgstr "contraste"
+
+msgid "cancel"
+msgstr "cancelar"
+
+msgid "edit image"
+msgstr "editar imaxe"
+
+msgid "save"
+msgstr "gardar"
+
+msgid "reset"
+msgstr "reiniciar"
+
+msgid "apply"
+msgstr "aplicar"
 
 msgid "Any"
 msgstr "Calquera"
@@ -4984,53 +5040,16 @@ msgstr "Termos"
 msgid "Notes"
 msgstr "Notas"
 
-msgid "Change comment manager"
-msgstr "Cambiar xestor de comentarios"
-
-msgid ""
-"Opennemas supports multiple managers for comments. You can change to your "
-"desired manager whenever you want."
+msgid "Change comment manager to <span class=\"text-primary\">%1</span>"
 msgstr ""
-"Opennemas admite varios xestores de comentarios. Podes cambiar ao xestor que "
-"desexes cando queiras."
+"Cambiar o xestor de comentarios a <span class=\"text-primary\">%1</span>"
 
-msgid "Pick the method to manage comments:"
-msgstr "Selecciona o método para a xestión de comentarios:"
-
-msgid "Built-in system"
-msgstr "Sistema integrado"
-
-msgid ""
-"Opennemas has simple but effective comment system that requires zero "
-"configuration."
-msgstr ""
-"Opennemas conta cun sistema de comentarios simple pero efectivo que non "
-"require configuración algunha."
-
-msgid ""
-"Integrate Opennemas with the <a href=\"http://www.disqus.com/\">Disqus "
-"comment system</a> and use their powerful system to manage your website "
-"comments."
-msgstr ""
-"Integra Opennemas co <a href=\"http://www.disqus.com/\">sistema de "
-"comentarios de Disqus</a> e use o seu potente sistema para xestionar os "
-"comentarios do seu sitio."
-
-msgid ""
-"Integrate Opennemas with the <a href=\"https://developers.facebook.com/docs/"
-"plugins/comments/\">Facebook comment system</a> and use their online tools "
-"to manage your website comments."
-msgstr ""
-"Integre Opennemas co <a href=\"https://developers.facebook.com/docs/plugins/"
-"comments/\">sistema de comentarios de Facebook</a> e use as súas ferramentas "
-"en liña para xestionar os comentarios do seu sitio."
+msgid "Are you sure you want to change your comment system handler?"
+msgstr "Tes certeza que queres cambiar o xestor de sistema de comentarios?"
 
 msgid ""
 "Are you sure that do you want send to the trash this comment from \"%1\"?"
 msgstr "Tes certeza que queres enviar ao lixo este comentario  «%1»?"
-
-msgid "Editing comment"
-msgstr "Editando comentario"
 
 msgid "Nickname"
 msgstr "Alcume"
@@ -5038,8 +5057,8 @@ msgstr "Alcume"
 msgid "Submitted on"
 msgstr "Enviado o"
 
-msgid "Sent from IP address"
-msgstr "Enviado desde o enderezo IP"
+msgid "Sender IP"
+msgstr "IP do emisor"
 
 msgid "Commented on"
 msgstr "Comentado en"
@@ -5050,30 +5069,193 @@ msgstr "Facebook"
 msgid "Config facebook module"
 msgstr "Configuración do módulo «Facebook»"
 
-msgid "You are now using Facebook comments"
-msgstr "Agora estás usando o sistema de comentarios de Facebook"
+msgid "Your are using the external comment system \"%1\""
+msgstr "Agora estás usando o sistema de comentario «%1»."
+
+msgid ""
+"To moderate your comments, go to <a href=\"https://developers.facebook.com/"
+"tools/comments\" target=\"_blank\">Facebook moderation tool page</a>"
+msgstr ""
+"Para moderar os teus comentarios debes ir á <a href=\""
+"https://developers.facebook.com/tools/comments\" target=\"_blank\">páxina da "
+"ferramenta de moderación de comentarios de Facebook</a>"
+
+msgid "Facebook comments are not configured"
+msgstr "Os comentarios de Facebook non están configurados"
 
 msgid ""
 "If you want to moderate comments, you first need to create a Facebook "
-"application in <a href=\"https://developers.facebook.com/\" target=\"_blank"
-"\">here</a> to get an application Id and then click on settings to configure "
-"it"
+"application in <br><a href=\"https://developers.facebook.com/\" target="
+"\"_blank\">here</a> to get an application Id and then click on settings to "
+"configure it"
 msgstr ""
-"Se queres moderar comentarios, antes necesitas crear unha aplicación de "
-"Facebook. Vai <a href=\"https://developers.facebook.com/\" target=\"_blank"
-"\"> aquí </a> para obter un identificador de aplicación e, a continuación, "
-"preme Configuración para engadilo"
+"Se queres moderar comentarios, antes precisas crear un aplicativo de "
+"Facebook. Vai <a href=\"https://developers.facebook.com/\" target=\"_blank\""
+">aquí</a> para obter un identificador de aplicación e, a continuación, preme "
+"Configuración para configuralo"
+
+msgid "Visualization"
+msgstr "Visuaalización"
+
+msgid "Number of comments to show"
+msgstr "Numero de comentarios a mostrar"
+
+msgid "Number of comments to show by page"
+msgstr "Numero de comentarios a mostrar por páxina"
+
+msgid "Comment moderation"
+msgstr "Moderación de comentarios"
+
+msgid "Manual moderation of comments"
+msgstr "Moderar os comentarios manualmente"
 
 msgid ""
-"To moderate your comments go to <a href=\"https://developers.facebook.com/"
-"tools/comments\" target=\"_blank\">Facebook moderation tool page</a>"
+"Comments must be manually approved by an administrator before is publicly "
+"available."
 msgstr ""
-"Para moderar os seus comentarios debes ir á <a href=\"https://developers."
-"facebook.com/tools/comments\" target=\"_blank\"> páxina da ferramenta de "
-"moderación de comentarios de Facebook</a>"
+"Os comentarios deben ser aprobados por un administrador antes de que se "
+"publiquen."
 
-msgid "Change comments module"
-msgstr "Cambiar módulo de comentarios"
+msgid "Blacklist"
+msgstr "Lista negra"
+
+msgid "<strong>Auto-accept comments</strong> if they pass the blacklist rules"
+msgstr ""
+"<strong>Auto-aceptar comentarios</strong> se pasan as regras de lista negra"
+
+msgid ""
+"When a comment is submitted and it passes the blacklist checks, then accept "
+"it without intervenction."
+msgstr ""
+"Cando se recibe un comentario e pasa con éxito as comprobacións de lista "
+"negra, aprobalo automaticamente sen intervención"
+
+msgid ""
+"<strong>Auto-reject comments</strong> if they don't pass the blacklist rules"
+msgstr ""
+"<strong>Auto-rexeitar comentarios</strong> se pasan as regras de lista negra"
+
+msgid ""
+"When a comment is submitted and it doesn't pass the blacklist checks, then "
+"reject it without intervenction."
+msgstr ""
+"Cando se recibe un comentario e non pasa con éxito as comprobacións de lista "
+"negra, rexeitalo automaticamente sen intervención"
+
+msgid "Words and rules prohibited"
+msgstr "Regras de palabras prohibidas"
+
+msgid ""
+"List of words or regular expressions that are prohibited on comments, one "
+"per line."
+msgstr ""
+"Lista de palabras ou expresións regulares que están prohibidas nos "
+"comentarios, unha por liña."
+
+msgid "Configuration"
+msgstr "Configuración"
+
+msgid "Please enter your Disqus settings"
+msgstr "Por faor escribe as configuracións de Disqus"
+
+msgid ""
+"A shortname is the unique identifier assigned to a Disqus site. All the "
+"comments posted to a site are referenced with the shortname"
+msgstr ""
+"Un shortname é o identificador único asignado a un sitio Disqus. Todos os "
+"comentarios publicados neste sitio son referenciados co shortname"
+
+msgid ""
+"You can get your Disqus secret key in <a href=\"http://disqus.com/api/"
+"applications/\" target=\"_blank\">here</a>"
+msgstr ""
+"Pode obter as súas chaves de Disqus desde <a href=\"http://disqus.com/api/"
+"applications/\" target=\"_blank\">aquí</a>"
+
+msgid "Default settings"
+msgstr "Configuracións por omisión"
+
+msgid "Disallow comments on site"
+msgstr "Desactivar os comentarios do sitio"
+
+msgid ""
+"If set, users will not be able to comment on the site and comments already "
+"approved will not be displayed"
+msgstr ""
+"Se se activa, os usuarios non poderán comentar no sitio e os comentarios xa "
+"aprobados non se amosarán"
+
+msgid "Allow comments in contents by default"
+msgstr "Permitir comentarios nos contidos por defecto"
+
+msgid ""
+"Whether to allow users to comment in comments by default for all contents "
+"(you can change this setting for specific contents)"
+msgstr ""
+"Indica se os usuarios poden comentar nos contidos por defecto para todos os "
+"contidos (pode cambiar esta preferencia para contidos específicos)"
+
+msgid "Comment handler"
+msgstr "Xestor de comentarios"
+
+msgid ""
+"Note: your site will not show any kind of comment and users will not be "
+"allowed to send more comments. Registered comments are not removed."
+msgstr ""
+"Nota: o teu siti non mostrará ningún tipo de comentario e os  usuarios non "
+"poderán enviar máis comentarios. Porén os comentarios xa rexistrados non se "
+"eliminarán"
+
+msgid ""
+"Opennemas supports multiple managers for comments. You can change to your "
+"desired manager whenever you want."
+msgstr ""
+"Opennemas admite varios xestores de comentarios. Podes cambiar ao xestor que "
+"desexes cando queiras."
+
+msgid "Built-in system"
+msgstr "Sistema integrado"
+
+msgid "Use the built-in comment system"
+msgstr "Usar o sistema de comentarios propio"
+
+msgid ""
+"Use our simple but effective comment system that requires zero configuration "
+"to start."
+msgstr ""
+"Usar o noso sistema de comentarios, simple máis efectivo, que non require "
+"configuración algunha."
+
+msgid "Use the Facebook comment system"
+msgstr "Usar o sistema de comentarios de Facebook"
+
+msgid ""
+"Use the external <a href=\"https://developers.facebook.com/docs/plugins/"
+"comments/\" target=\"_blank\">Facebook comment system</a> to show comments "
+"on your page. You can only manage comments using their online tools."
+msgstr ""
+"Usar o <a href=\"https://developers.facebook.com/docs/plugins/comments/\" "
+"target=\"_blank\">sistema de comentarios de Facebook</a> externo para mostra "
+"comentarios no teu sitio. Tamén pode xestionar os comentarios usando a súa "
+"ferramenta en liña."
+
+msgid "Use the Disqus comment system"
+msgstr "Usar o sistema de comentarios de Disqus"
+
+msgid ""
+"Use the external <a href=\"http://www.disqus.com/\" target=\"_blank\">Disqus "
+"comment system</a> and use their powerful system to manage your website "
+"comments."
+msgstr ""
+"Usar o <a href=\"http://www.disqus.com/\">sistema de comentarios de "
+"Disqus</a> externo e use o seu potente sistema para xestionar os comentarios "
+"do seu sitio."
+
+msgid "Please enter your Facebook settings"
+msgstr "Por faor escribe as configuracións de Facebook"
+
+msgid "Facebook App Id"
+msgstr "Identificador de aplicativo de Facebook"
 
 msgid ""
 "To be able to moderate comments of your site in Facebook you must create and "
@@ -5089,26 +5271,6 @@ msgstr ""
 "Podes obter as túas chaves de aplicativo de Facebook desde <a href=\"https://"
 "developers.facebook.com/apps\" target=\"_blank\">o sitio web Facebook "
 "Developers</a>."
-
-msgid "Allow comments in contents by default"
-msgstr "Permitir comentarios nos contidos por defecto"
-
-msgid ""
-"Whether to allow users to comment in comments by default for all contents "
-"(you can change this setting for specific contents)"
-msgstr ""
-"Indica se os usuarios poden comentar nos contidos por defecto para todos os "
-"contidos (pode cambiar esta preferencia para contidos específicos)"
-
-msgid "Disable all comments on site"
-msgstr "Eliminar todos os comentarios do sitio"
-
-msgid ""
-"If set, users will not be able to comment on the site and comments already "
-"approved will not be displayed"
-msgstr ""
-"Se se activa, os usuarios non poderán comentar no sitio e os comentarios xa "
-"aprobados non se amosarán"
 
 msgid "Config comments module"
 msgstr "Configurar módulo «Comentarios»"
@@ -5140,40 +5302,15 @@ msgstr "Disqus"
 msgid "Disqus module configuration"
 msgstr "Configuración do módulo «Disqus»"
 
-msgid "To moderate your Disqus comments, click here"
-msgstr "Para moderar os comentarios de Disqus, prema aquí"
+msgid ""
+"To moderate your comments, <a href=\"http://%1.disqus.com/admin/moderate/\" "
+"target=\"_blank\">click here</a>"
+msgstr ""
+"Para moderar os seus comentarios, <a href=\""
+"http://disqus.com/api/applications/\" target=\"_blank\">prema aquí</a>"
 
 msgid "Disqus not configured"
 msgstr "Disqus non está configurado"
-
-msgid "Set your Disqus configuration"
-msgstr "Estabeleza a configuración de Disqus"
-
-msgid ""
-"A shortname is the unique identifier assigned to a Disqus site. All the "
-"comments posted to a site are referenced with the shortname"
-msgstr ""
-"Un shortname é o identificador único asignado a un sitio Disqus. Todos os "
-"comentarios publicados neste sitio son referenciados co shortname"
-
-msgid ""
-"You can get your Disqus secret key in <a href=\"http://disqus.com/api/"
-"applications/\" target=\"_blank\">here</a>"
-msgstr ""
-"Pode obter as súas chaves de Disqus desde <a href=\"http://disqus.com/api/"
-"applications/\" target=\"_blank\">aquí</a>"
-
-msgid "Display"
-msgstr "Mostrar"
-
-msgid "Number of comments to show by page"
-msgstr "Numero de comentarios a mostrar por páxina"
-
-msgid "Before a comment appears"
-msgstr "Antes de que o comentario apareza"
-
-msgid "An administrator must always approve the comment "
-msgstr "Un administrador debe aprobar o comentario"
 
 msgid "Delete all trashed contents"
 msgstr "Eliminar todos os contidos no lixo"
@@ -5921,9 +6058,6 @@ msgstr "Filtrar contidos que conteñen unha ou máis listas de palabras"
 
 msgid "Comma-separated list of words to match"
 msgstr "Lista de palabras separadas por comas"
-
-msgid "Configuration"
-msgstr "Configuración"
 
 msgid "Add server"
 msgstr "Engadir servidor"
@@ -8970,605 +9104,41 @@ msgstr ""
 "'lucida sans unicode', 'lucida sans', tahoma, sans-serif; font-size: 14px; "
 "line-height: normal;\" target=\"_blank\">Opennemas</a>"
 
-#~ msgid ""
-#~ "Your newsletter configuration is not complete. You must complete the "
-#~ "sender email address."
-#~ msgstr ""
-#~ "A configuración do boletín non está completa. Debe completar o enderezo "
-#~ "de correo-e do remitente."
+#~ msgid "Your comment was rejected due insults usage."
+#~ msgstr "O teu comentario foi rexeitado debido ao uso de insultos."
 
-#~ msgid "You have been unsubscribed from our newsletter"
-#~ msgstr "Eliminaches a subscrición ao boletín de novas."
+#~ msgid "Ensure you have completed all the form fields."
+#~ msgstr "Asegúrate de completar todos os campos do formulario."
 
-#~ msgid "Sorry, that email is not in our database"
-#~ msgstr ""
-#~ "Sentimolo, este correo electrónico non está rexistrado nas nosas base de "
-#~ "datos"
+#~ msgid "Change comment manager"
+#~ msgstr "Cambiar xestor de comentarios"
 
-#~ msgid "The reCAPTCHA wasn't entered correctly. Try to authenticate again."
-#~ msgstr "O reCAPTCHA non foi completado correctamente. Téntao de novo."
+#~ msgid "Pick the method to manage comments:"
+#~ msgstr "Selecciona o método para a xestión de comentarios:"
 
-#~ msgid "The email address is already in use."
-#~ msgstr "O enderezo de correo electrónico xa está en uso."
+#~ msgid "Change comments module"
+#~ msgstr "Cambiar módulo de comentarios"
 
-#~ msgid "The user name is already in use."
-#~ msgstr "O nome de usuario xa está en uso."
+#~ msgid "You are now using Facebook comments"
+#~ msgstr "Agora estás usando o sistema de comentarios de Facebook"
 
-#~ msgid "An error has occurred. Try to complete the form with valid data."
-#~ msgstr "Produciuse un erro. Proba cubrindo o formulario con datos válidos."
+#~ msgid "Editing comment"
+#~ msgstr "Editando comentario"
 
-#~ msgid "Data updated successfully"
-#~ msgstr "Datos actualizados correctamente."
+#~ msgid "Sent from IP address"
+#~ msgstr "Enviado desde o enderezo IP"
 
-#~ msgid "The user does not exists."
-#~ msgstr "O usuario non existe."
+#~ msgid "Display"
+#~ msgstr "Mostrar"
 
-#~ msgid "Log in succesful."
-#~ msgstr "Inicio de sesión correcto."
+#~ msgid "Before a comment appears"
+#~ msgstr "Antes de que o comentario apareza"
 
-#~ msgid "Unable to send your welcome email."
-#~ msgstr ""
-#~ "Non se puido enviar o correo electrónico de benvida. Ténteo máis tarde."
+#~ msgid "An administrator must always approve the comment "
+#~ msgstr "Un administrador debe aprobar o comentario"
 
-#~ msgid "There was an error while creating your user account."
-#~ msgstr "Produciuse un erro ao crear a túa conta de usuario."
+#~ msgid "Set your Disqus configuration"
+#~ msgstr "Estabeleza a configuración de Disqus"
 
-#~ msgid "Delivering report"
-#~ msgstr "Informe de envío"
-
-#~ msgid "Back to list"
-#~ msgstr "Volver á lista"
-
-#~ msgid ""
-#~ "Your newsletter was sent to the list of mails. Please find below the "
-#~ "detailed report for each email and its status."
-#~ msgstr ""
-#~ "O seu boletín foi enviado á lista de correos. Embaixo pode atopar máis "
-#~ "información detallada para cada correo e o seu estado"
-
-#~ msgid "OK"
-#~ msgstr "Correcto"
-
-#~ msgid "Failed"
-#~ msgstr "Fallido"
-
-#~ msgid "Recipient selection"
-#~ msgstr "Selección de destinatarios"
-
-#~ msgid "Please select your desired persons to sent the newsletter to."
-#~ msgstr "Seleccione as persoas ás que quere enviarlle o boletín de novas."
-
-#~ msgid "Remove from list"
-#~ msgstr "Quitar da lista"
-
-#~ msgid "Add more emails"
-#~ msgstr "Engadir máis correos"
-
-#~ msgid "Subscriber"
-#~ msgstr "Subscritor"
-
-#~ msgid "Unable to find any newsletter that matches your search."
-#~ msgstr "Non se puideron atopar boletíns que coincidan coa súa busca."
-
-#~ msgid "Show contents"
-#~ msgstr "Mostrar contidos"
-
-#~ msgid ""
-#~ "Whether to manage new subscriptions by an external maillist or using the "
-#~ "<a href=\"%1\" target=\"_blank\"> Opennemas-managed list of subscribers</"
-#~ "a>."
-#~ msgstr ""
-#~ "Podes escoller se queres recibir as novas subscricións nunha lista de "
-#~ "correo externa ou usar a táboa <a href=\"%1\" target=\"_blank\">de "
-#~ "subscritores de Opennemas</a>."
-
-#~ msgid "External Send"
-#~ msgstr "Envio externo"
-
-#~ msgid ""
-#~ "Redirect traffic from [% domain.name.replace('www.', '') %] to  www.[% "
-#~ "domain.name.replace('www.', '') %]"
-#~ msgstr ""
-#~ "Redirixir o tráfico desde [% domain.name.replace('www.', '') %] hacia www."
-#~ "[% domain.name.replace('www.', '') %]"
-
-#~ msgid ""
-#~ "Are you sure that do you want remove \"[% template.content.title %]\"?"
-#~ msgstr "Tes certeza que queres eliminar \"[% template.content.title %]\"?"
-
-#~ msgid "Edit widget '[% content.title %]'"
-#~ msgstr "Editar widget «[% content.title %]»"
-
-#~ msgid "Are you sure that do you want delete \"[% content.name %]\"?"
-#~ msgstr "Tes certeza que queres eliminar \"[% content.name %]\"?"
-
-#~ msgid ""
-#~ "Are you sure you want to import [% template.contents.length %] elements?"
-#~ msgstr ""
-#~ "Tes certeza que queres importar [% template.contents.length %] elementos?"
-
-#~ msgid ""
-#~ "There are no <a href=\"[% routing.generate('backend_subscriptions_list') "
-#~ "%]\">subscriptions</a>"
-#~ msgstr ""
-#~ "Non hai <a href=\"[% routing.generate('backend_subscriptions_list') "
-#~ "%]\">subscricións</a>"
-
-#~ msgid ""
-#~ "Are you sure that do you want send to the trash \"[% template.content."
-#~ "title ? template.content.title : template.content.name %]\"?"
-#~ msgstr ""
-#~ "Tes certeza que queres enviar ao lixo «[% template.content.title ? "
-#~ "template.content.title : template.content.name %]»?"
-
-#~ msgid ""
-#~ "Are you sure you want to remove permanently [% template.selected.contents."
-#~ "length %] item(s)?"
-#~ msgstr ""
-#~ "Tes certeza que queres eliminar de forma permanente [% template.selected."
-#~ "length %] elemento(s)?"
-
-#~ msgid ""
-#~ "Are you sure you want to unpublish [% template.selected.contents.length "
-#~ "%] item(s)?"
-#~ msgstr ""
-#~ "Tes certeza que queres eliminar de forma permanente [% template.selected."
-#~ "contents.length %] elemento(s)?"
-
-#~ msgid ""
-#~ "Are you sure you want to publish [% template.selected.contents.length %] "
-#~ "item(s)?"
-#~ msgstr ""
-#~ "Tes certeza que queres publicar [% template.selected.contents.length %] "
-#~ "elemento(s)?"
-
-#~ msgid ""
-#~ "Are you sure you want to disable [% template.selected.contents.length %] "
-#~ "item(s)?"
-#~ msgstr ""
-#~ "Tes certeza que queres desactivar [% template.selected.contents.length %] "
-#~ "elemento(s)?"
-
-#~ msgid ""
-#~ "Are you sure you want to enable [% template.selected.contents.length %] "
-#~ "item(s)?"
-#~ msgstr ""
-#~ "Tes certeza que queres activar [% template.selected.contents.length %] "
-#~ "elemento(s)?"
-
-#~ msgid ""
-#~ "Are you sure you want to reject [% template.selected.contents.length %] "
-#~ "item(s)?"
-#~ msgstr ""
-#~ "Tes certeza que queres eliminar rexeitar [% template.selected.contents."
-#~ "length %] elemento(s)?"
-
-#~ msgid ""
-#~ "Are you sure you want to accept [% template.selected.contents.length %] "
-#~ "item(s)?"
-#~ msgstr ""
-#~ "Tes certeza que queres aceptar [% template.selected.contents.length %] "
-#~ "elemento(s)?"
-
-#~ msgid ""
-#~ "Are you sure you want to drop from home [% template.selected.contents."
-#~ "length %] item(s)?"
-#~ msgstr ""
-#~ "Tes certeza que queres eliminar quitar da portada [% template.selected."
-#~ "contents.length %] elemento(s)?"
-
-#~ msgid ""
-#~ "Are you sure you want to add to home [% template.selected.contents.length "
-#~ "%] item(s)?"
-#~ msgstr ""
-#~ "Tes certeza que queres engadir á portada [% template.selected.contents."
-#~ "length %] elemento(s)?"
-
-#~ msgid ""
-#~ "Are you sure you want to restore [% template.selected.contents.length %] "
-#~ "item(s)?"
-#~ msgstr ""
-#~ "Tes certeza que queres restaurar [% template.selected.contents.length %] "
-#~ "elemento(s)?"
-
-#~ msgid ""
-#~ "Are you sure you want to delete [% template.selected.contents.length %] "
-#~ "item(s)?"
-#~ msgstr ""
-#~ "Tes certeza que queres eliminar [% template.selected.contents.length %] "
-#~ "elemento(s)?"
-
-#~ msgid "Are you sure you want to delete [% template.selected %] item(s)?"
-#~ msgstr "¿Seguro que queres eliminar [% template.selected %] elemento(s)?"
-
-#~ msgid "Unable to find the page you are looking for."
-#~ msgstr "Non se puido atopar o ficheiro co identificador «%d»."
-
-#~ msgid "Only available for subscribers"
-#~ msgstr "Só dispoñíbel para subscritores"
-
-#~ msgid "Convert to subscriber + user"
-#~ msgstr "Converter a subscritor + usuario"
-
-#~ msgid ""
-#~ "Do you want to convert the <strong>subscriber<span ng-if=\"template.item."
-#~ "type === 2\"> + user</span></strong> to <strong>user</strong>?"
-#~ msgstr ""
-#~ "¿Queres converter o <strong>subscritor<span ng-if=\"template.item.type "
-#~ "=== 2\"> + usuario</span></strong> a <strong>usuario</strong>?"
-
-#~ msgid ""
-#~ "You will be able to convert the subscriber + user to only user or only "
-#~ "subscriber again."
-#~ msgstr ""
-#~ "Poderás converter o subscritor + usuario a só usuario ou só subscritor de "
-#~ "novo."
-
-#~ msgid "Redirect to frontpage"
-#~ msgstr "Redirixir a portada"
-
-#~ msgid "Unable to find any article that matches your search."
-#~ msgstr "Non se puideron atopar artigos que coincidan coa súa busca."
-
-#~ msgid "Do you want to use an automatic translator?"
-#~ msgstr "Desexas usar un tradutor automático?"
-
-#~ msgid "Select a translator..."
-#~ msgstr "Seleccionar un tradutor…"
-
-#~ msgid "You are a master"
-#~ msgstr "Eres un master"
-
-#~ msgid "Request"
-#~ msgstr "Solicitude"
-
-#~ msgid "Edit group"
-#~ msgstr "Editar grupo"
-
-#~ msgid "New user group"
-#~ msgstr "Nuevo grupo de usuario"
-
-#~ msgid "Edit user group"
-#~ msgstr "Editar grupo de usuarios"
-
-#~ msgid "New user"
-#~ msgstr "Novo usuario"
-
-#, fuzzy
-#~ msgid "Unable to find any subscriber with id \"%1\"."
-#~ msgstr "Non se puido atopar o usuario co identificador «%d»"
-
-#, fuzzy
-#~ msgid "Unable to find any user with id \"%1\"."
-#~ msgstr "Non se puido atopar o usuario co identificador «%d»"
-
-#, fuzzy
-#~ msgid "Unable to find any user group with id \"%1\"."
-#~ msgstr "Non se puido atopar o grupo de usuarios co identificador «%d»"
-
-#, fuzzy
-#~ msgid "Unable to find any subscription with id \"%1\"."
-#~ msgstr "Non se puido atopar a opinión co identificador «%d»"
-
-#~ msgid "[% section.title %]"
-#~ msgstr "[% section.title %]"
-
-#, fuzzy
-#~ msgid "Unable to find any subscriber that matches your search."
-#~ msgstr "Non se puideron atopar usuarios que coincidan coa súa busca."
-
-#~ msgid "Unable to find any author that matches your search."
-#~ msgstr "Non se puideron atopar autores que coincidan coa súa busca."
-
-#~ msgid "Unable to find any user group that matches your search."
-#~ msgstr ""
-#~ "Non se puideron atopar grupos de usuarios que coincidan coa súa busca."
-
-#~ msgid "Unable to find any user that matches your search."
-#~ msgstr "Non se puideron atopar usuarios que coincidan coa súa busca."
-
-#, fuzzy
-#~ msgid "Unable to find any subscription that matches your search."
-#~ msgstr "Non se puideron atopar usuarios que coincidan coa súa busca."
-
-#~ msgid "Unable to find the author with the id '%d'"
-#~ msgstr "Non se puido atopar o autor co identificador «%d»"
-
-#~ msgid "User created successfully."
-#~ msgstr "Usuario creado correctamente."
-
-#~ msgid "Author updated successfully."
-#~ msgstr "Datos do autor actualizados correctamente."
-
-#~ msgid "Undefined"
-#~ msgstr "Indefinida"
-
-#~ msgid ""
-#~ "Unable to find the password reset request.  Please check the url we sent "
-#~ "you in the email."
-#~ msgstr ""
-#~ "Non se puido atopar a solicitude de restabelecemento de contrasinal. Por "
-#~ "favor comproba o URL que che enviamos por correo electrónico."
-
-#~ msgid "The email address or user name is already in use."
-#~ msgstr ""
-#~ "O enderezo de correo electrónico ou o nome de usuario xa está en uso."
-
-#~ msgid "User data updated successfully."
-#~ msgstr "Datos do usuario actualizados correctamente."
-
-#~ msgid "User group created successfully."
-#~ msgstr "Grupo de usuarios creado correctamente."
-
-#~ msgid "User group updated successfully."
-#~ msgstr "Grupo de usuario actualizado correctamente."
-
-#~ msgid "Unable to update the user group with id \"%d\""
-#~ msgstr "Non se puido actualizar o grupo de usuario «%d»"
-
-#~ msgid "Not assigned"
-#~ msgstr "Non asignado"
-
-#~ msgid "Are you sure that do you want to delete \"<span>%title%</span>\"?"
-#~ msgstr "Tes certeza que queres eliminar «<span>%title%</span>»?"
-
-#~ msgid "Editing group"
-#~ msgstr "Editando grupo"
-
-#~ msgid "Creating user group"
-#~ msgstr "Creando grupo de usuario"
-
-#~ msgid "Delete this user group"
-#~ msgstr "Eliminar este grupo de usuarios"
-
-#~ msgid ""
-#~ "Are you sure that you want to delete the user \"[% template.content.name "
-#~ "%]\"?"
-#~ msgstr ""
-#~ "Tes certeza que queres eliminar o usuario «[% template.content.name %]»?"
-
-#~ msgid ""
-#~ "Activate the access to Backend means to add a User to your platform and "
-#~ "has a cost of 12€/month."
-#~ msgstr ""
-#~ "Ao activar un usuario con acceso ao Panel de control engádese un Usuario "
-#~ "á tua plataforma e isto conleva un custo de 12€/mes."
-
-#~ msgid ""
-#~ "Are you sure you want to disable [% template.selected.items.length %] "
-#~ "user(s)?"
-#~ msgstr ""
-#~ "Tes certeza que queres desactivar [% template.selected.items.length %] "
-#~ "usuario(s)?"
-
-#~ msgid ""
-#~ "Are you sure you want to enable [% template.selected.items.length %] "
-#~ "user(s)?"
-#~ msgstr ""
-#~ "Tes certeza que queres activar [% template.selected.items.length %] "
-#~ "usuario(s)?"
-
-#~ msgid "Yes, save it"
-#~ msgstr "Si, gardar"
-
-#~ msgid "Yes, update it"
-#~ msgstr "Si, actualizar"
-
-#~ msgid "Editing user"
-#~ msgstr "Editando usuario"
-
-#~ msgid "Creating user"
-#~ msgstr "Crear usuario"
-
-#~ msgid "Only lowercase letters, numbers, point and hyphen allowed"
-#~ msgstr "Só letras minúsculas, números, puntos e guión están permitidos"
-
-#~ msgid ""
-#~ "If you want a custom avatar sign up in <a href='http://www.gravatar."
-#~ "com'>gravatar.com</a> with the same email address as you have here in "
-#~ "Opennemas"
-#~ msgstr ""
-#~ "Se queres usar un avatar personalizado rexistrate en <a href='http://www."
-#~ "gravatar.com'>gravatar.com</a> e asegúrate de usar o mesmo correo "
-#~ "electrónico que tes aquí en Opennemas"
-
-#~ msgid "Has backend access"
-#~ msgstr "Acceso ao panel"
-
-#~ msgid "Used to enable or disable user access to control panel."
-#~ msgstr "Úseo para activar ou desactivar o acceso ao panel de control."
-
-#~ msgid "User group"
-#~ msgstr "Grupo de usuarios"
-
-#~ msgid "Select"
-#~ msgstr "Seleccionar"
-
-#~ msgid ""
-#~ "Categories that this user will have access to. Leave empty to give access "
-#~ "to all categories"
-#~ msgstr ""
-#~ "Categorías ás que este usuario ten acceso. Déixao en branco para dar "
-#~ "acceso a todas as categorías."
-
-#~ msgid "Paywall time limit:"
-#~ msgstr "Limite de tiempo del paywall:"
-
-#~ msgid "Deactivated"
-#~ msgstr "Desactivado"
-
-#~ msgid "Avatar"
-#~ msgstr "Avatar"
-
-#~ msgid "Backend access"
-#~ msgstr "Acceso ao panel"
-
-#~ msgid "Editing author"
-#~ msgstr "Editando autor"
-
-#~ msgid "Creating author"
-#~ msgstr "Creando autor"
-
-#~ msgid "User info"
-#~ msgstr "Información do usuario"
-
-#~ msgid "Other Blog Url"
-#~ msgstr "Outro url do blog"
-
-#~ msgid "Create new author"
-#~ msgstr "Crear novo autor"
-
-#~ msgid "Recover password"
-#~ msgstr "Recuperar contrasinal"
-
-#~ msgid ""
-#~ "Your user is not allowed to access, please contact your administrator"
-#~ msgstr ""
-#~ "O teu usuario non ten permitido o acceso, contacta co teu administrador"
-
-#~ msgid "First you have to link your %s account to your opennemas account."
-#~ msgstr "Primerio debes asociar a túa conta %s á túa conta opennemas."
-
-#~ msgid "Enable cookies agreement"
-#~ msgstr "Activar aceptación de cookies"
-
-#~ msgid ""
-#~ "Mark this if you want to show a message to your users that your site is "
-#~ "using cookies."
-#~ msgstr ""
-#~ "Marca isto se queres mostrarlle aos usuarios do sitio web que o sitio "
-#~ "está usando cookies."
-
-#~ msgid "Where to show this ad"
-#~ msgstr "Onde mostrar esta publicidade"
-
-#~ msgid "Pages of type"
-#~ msgstr "Páxinas do tipo"
-
-#~ msgid "Gallery: frontpage"
-#~ msgstr "Album: portada"
-
-#~ msgid "Gallery: inner"
-#~ msgstr "Album: interior"
-
-#~ msgid "AMP inner article - Button 1"
-#~ msgstr "Artigo interior AMP - Botón 1"
-
-#~ msgid "AMP inner article - Button 2"
-#~ msgstr "Artigo interior AMP - Botón 2"
-
-#~ msgid "AMP inner article - Button 3"
-#~ msgstr "Artigo interior AMP - Botón 3"
-
-#~ msgid "Instant Articles inner article - Button 1"
-#~ msgstr "Artigo interior Instant Articles - Botón 1"
-
-#~ msgid "Instant Articles inner article - Button 2"
-#~ msgstr "Artigo interior Instant Articles - Botón 2"
-
-#~ msgid "Instant Articles inner article - Button 3"
-#~ msgstr "Artigo interior Instant Articles - Botón 3"
-
-#~ msgid "Category created successfully."
-#~ msgstr "Categoria creada correctamente."
-
-#~ msgid "Unable to find a category for the given id."
-#~ msgstr "Non foi posíbel atopar unha categoría co identificador fornecido."
-
-#~ msgid "Category \"%s\" updated successfully."
-#~ msgstr "Categoria «%s» actualizada correctamente."
-
-#~ msgid "ePaper"
-#~ msgstr "ePapel"
-
-#~ msgid "Delete all the contents in this category"
-#~ msgstr "Eliminar todos os contidos nesta categoría"
-
-#~ msgid "-- All --"
-#~ msgstr "-- Todos --"
-
-#~ msgid "Album Categories"
-#~ msgstr "Categorias de álbum"
-
-#~ msgid "Video Categories"
-#~ msgstr "Categorias de vídeo"
-
-#~ msgid "Poll Categories"
-#~ msgstr "Categorias de enquisas"
-
-#~ msgid "Sync Categories"
-#~ msgstr "Sincronizar categorías"
-
-#~ msgid "Automatic Categories"
-#~ msgstr "Categorias automáticas"
-
-#~ msgid "Add item"
-#~ msgstr "Engadir elemento"
-
-#~ msgid "Menu contents"
-#~ msgstr "Contidos do menú"
-
-#~ msgid "Permanence"
-#~ msgstr "Permanencia"
-
-#~ msgid "Viewed:"
-#~ msgstr "Visto:"
-
-#~ msgid ""
-#~ "You can get your Facebook App Keys from <a class=\"external-link\" ng-"
-#~ "click=\"$event.stopPropagation();\"  href=\"https://developers.facebook."
-#~ "com/apps\" target=\"_blank\">Facebook Developers website</a>."
-#~ msgstr ""
-#~ "Podes obter as túas chaves de aplicativo de Facebook desde <a class="
-#~ "\"external-link\" ng-click=\"$event.stopPropagation();\" href=\"https://"
-#~ "developers.facebook.com/apps\" target=\"_blank\">o sitio web Facebook "
-#~ "Developers</a>."
-
-#~ msgid "Site logo"
-#~ msgstr "Logotipo do sitio"
-
-#~ msgid "Pick image"
-#~ msgstr "Escoller imaxe"
-
-#~ msgid "SEO"
-#~ msgstr "SEO"
-
-#~ msgid "Web Master Tools"
-#~ msgstr "Web Master Tools"
-
-#~ msgid "Default language"
-#~ msgstr "Idioma por defecto"
-
-#~ msgid "Listing & sorting"
-#~ msgstr "Listados e ordenación"
-
-#~ msgid "Remove File"
-#~ msgstr "Eliminar ficheiro"
-
-#~ msgid "Add another"
-#~ msgstr "Engadir outro"
-
-#~ msgid "Google+ and YouTube"
-#~ msgstr "Google+ e YouTube"
-
-#~ msgid "Language to translate"
-#~ msgstr "Linguaxe de destino"
-
-#~ msgid "Translation service"
-#~ msgstr "Servizo de tradución"
-
-#~ msgid ""
-#~ "We use cookies to personalise content and ads, to provide social media "
-#~ "features and to analyse our traffic. We also share information about your "
-#~ "use of our site with our social media, advertising and analytics partners "
-#~ "who may combine it with other information you’ve provided to them or "
-#~ "they’ve collected from your use of their services. <a target=\"_blank\" "
-#~ "href=\"%s\"> See details &gt; </a>"
-#~ msgstr ""
-#~ "As cookies deste sitio web son utilizados para personalizar contido e "
-#~ "anuncios, ofrecer recursos de redes sociais e analizar o tráfico. Tamén "
-#~ "compartir información sobre o uso do sitio web cos nosos socios da rede "
-#~ "social, publicidade e análise da web que pode combina-lo con outras "
-#~ "informacións fornecidas a eles ou que se reuniron a partir da utilización "
-#~ "dos seus servizos. <a target=\"_blank\" href=\"%s\"> Vexa detalles &gt; </"
-#~ "a>"
+#~ msgid "To moderate your Disqus comments, click here"
+#~ msgstr "Para moderar os comentarios de Disqus, prema aquí"

@@ -63,7 +63,7 @@ class AuthenticationController extends Controller
             $session->set('_security_backend', serialize($token));
 
             // Set last_login date
-            if (!$user->isMaster()) {
+            if (!$this->get('core.security')->hasPermission('MASTER')) {
                 $time = new \DateTime();
                 $time->setTimezone(new \DateTimeZone('UTC'));
                 $time = $time->format('Y-m-d H:i:s');

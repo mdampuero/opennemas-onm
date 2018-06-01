@@ -226,7 +226,7 @@ class SettingController extends Controller
         $settings = array_merge($defaults, $settings);
 
         // Remove settings for only masters
-        if (!$this->getUser()->isMaster()) {
+        if (!$this->get('core.security')->hasPermission('MASTER')) {
             foreach ($this->onlyMasters as $key) {
                 unset($settings[$key]);
             }
