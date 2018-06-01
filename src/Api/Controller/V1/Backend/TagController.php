@@ -210,7 +210,7 @@ class TagController extends Controller
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $languageId = $request->query->get('language_id', null);
+        $languageId = $request->query->get('languageId', null);
 
         $tags = (is_null($text) || is_null($languageId)) ? null : $ts->validateTags($languageId, $text);
 
@@ -239,10 +239,29 @@ class TagController extends Controller
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $response = $ts->getList('language_id = "' . $languageId . '" and slug ~ "' . $tagAux . '" limit 25');
+        $response = $ts->getList('language_id = "' . $languageId . '" and slug ~ "' . $tagAux . '%" limit 25');
 
         return new JsonResponse([
             'items' => $ts->responsify($response['items'])
+        ]);
+    }
+
+    /**
+     * Get suggested tags for some word.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('TAG_ADMIN')")
+     */
+    public function autoSuggesterAction(Request $request)
+    {
+        $tags       = $request->query->get('tags', null);
+        $languageId = $request->query->get('languageId', null);
+        $ts         = $this->get('api.service.tag');
+        return new JsonResponse([
+            'items' => $ts->getTagsIds($languageId, $tags)
         ]);
     }
 

@@ -85,52 +85,73 @@ class TagService extends OrmService
      */
     public function validateTags($languageId, $tags)
     {
-        return \Tag::validateTags($languageId, $tags);
+        $ts      = $this;
+        $tagsAux = $tags;
+        if (is_array($tags)) {
+            $tagsAux = array_filter($tags, function ($tag) use ($ts) {
+                return !empty($ts->createSearchableWord($tag));
+            });
+        } else {
+            if (empty($ts->createSearchableWord($tagsAux))) {
+                return null;
+            }
+        }
+        return \Tag::validateTags($languageId, $tagsAux);
     }
 
     /**
      *  Method to retrieve the ids for a list of tags. In case some tag not exist
-     * the system generate a new tag and upload the data
+     * the system generate a new tag but whithout id
      *
      * @param array $tags List of tags from we want to retrieve the ids
      *
      * @return array List with all ids for the tags
      */
-    public function getTagsIds($tags)
+    public function getTagsIds($locale, $tagsArr)
     {
-        if (empty($tags['metadata'])) {
-            return [];
-        }
-
-        $locale  = $this->container->get('core.locale')
-            ->getLocale('frontend');
-        $tagsArr = explode(',', $tags['metadata']);
-
         $validTags = $this->validateTags($locale, $tagsArr);
 
-        $clearTagNames = array_map(function ($tag) {
-            return $tag->name;
-        }, $validTags);
+        $returnTags    = [];
+        $clearTagNames = [];
+        foreach ($validTags as $value) {
+            if (in_array($value->name, $tagsArr)) {
+                $returnTags[]    = $value;
+                $clearTagNames[] = $value->name;
+            }
+        }
 
         $newTags = [];
         foreach ($tagsArr as $tagToCheck) {
             if (!in_array($tagToCheck, $clearTagNames)) {
-                $newTags[] = $tagToCheck;
-            }
-        }
-
-        if (!empty($newTags)) {
-            foreach ($newTags as $tagName) {
-                $tagData = [
-                    'name'        => $tagName,
-                    'slug'        => $this->createSearchableWord($tagName),
+                $returnTags[] = [
+                    'name' => $tagToCheck,
                     'language_id' => $locale
                 ];
-
-                $tag                 = parent::createItem($tagData);
-                $validTags[$tag->id] = $tag;
             }
         }
-        return array_keys($validTags);
+
+        return $returnTags;
+    }
+
+    /**
+     *  Method to retrieve the tags for a list of tag ids
+     *
+     * @param array $ids List of ids we want to retrieve
+     *
+     * @return array List of tags fo this tags.
+     */
+    public function getListByIdsKeyMapped($ids)
+    {
+        if (empty($ids)) {
+            return ['items' => []];
+        }
+        $tags      = $this->getListByIds($ids);
+        $returnArr = [];
+
+        foreach ($tags['items'] as $tag) {
+            $returnArr[$tag->id] = \Onm\StringUtils::convertToUtf8($tag);
+        }
+        $tags['items'] = $this->responsify($returnArr);
+        return $tags;
     }
 }

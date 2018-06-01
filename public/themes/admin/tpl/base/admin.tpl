@@ -46,6 +46,7 @@
       @Common/src/webarch/css/magic_space.css,
       @Common/src/angular-dynamic-image/less/main.less,
       @Common/src/angular-onm-pagination/less/main.less,
+      @Common/src/angular-tag/less/main.less,
       @Common/src/sidebar/less/main.less,
       @Common/src/opennemas-webarch/css/layout/*,
       @Common/src/opennemas-webarch/less/main.less" filters="cssrewrite,less" output="common"}

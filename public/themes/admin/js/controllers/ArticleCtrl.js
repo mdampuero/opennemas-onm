@@ -43,7 +43,8 @@
           summary: '',
           content_status: 0,
           created: new Date(),
-          starttime: new Date()
+          starttime: new Date(),
+          tag_ids: []
         };
 
         /**
@@ -302,9 +303,10 @@
               angular.extend($scope.article, $scope.data.article);
 
             // Load items
-            $scope.article      = $scope.data.article;
-            $scope.categories   = $scope.data.extra.categories;
-            $scope.fieldsByModule = $scope.data.extra.moduleFields;
+            $scope.article         = $scope.data.article;
+            $scope.categories      = $scope.data.extra.categories;
+            $scope.fieldsByModule  = $scope.data.extra.moduleFields;
+            $scope.tags            = $scope.data.extra.tags;
 
             $scope.build();
 
@@ -455,8 +457,10 @@
             if (response.status === 201) {
               $window.location.href = response.headers().location;
             }
-
-            messenger.post(response.data);
+            $scope.tags                 = response.data.tags;
+            $scope.data.article.tag_ids = response.data.tag_ids;
+            $scope.article.tag_ids      = response.data.tag_ids;
+            messenger.post(response.data.message);
             $scope.backup.content_status = $scope.article.content_status;
           };
 
@@ -574,19 +578,65 @@
 
                       template.translating = false;
                       template.translation_done = true;
-                    }, function(response) {
-                      var message = {
-                        id: new Date().getTime(),
-                        message: 'Unable to translate contents. Please check your configuration.',
-                        type: 'error'
-                      };
-
+                    }, function() {
                       modal.close({ response: true, error: true });
                     });
                 };
               }
             }
           });
+        };
+
+        /**
+         * @function getTagsAutoSuggestedFields
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Concat all fields from where generate auto suggested tags
+         *
+         * @return {string} all words for all fields
+         */
+        $scope.getTagsAutoSuggestedFields = function() {
+          var title    = $scope.article.title ? $scope.article.title : '';
+          var category = '';
+
+          // Get category name from category id
+          if ($scope.article.category) {
+            var categories = $scope.data.extra.categories.filter(function(e) {
+              return e.pk_content_category ===
+                $scope.article.pk_fk_content_category;
+            });
+
+            if (categories.length > 0) {
+              category = categories[0].title;
+            }
+          }
+
+          return title + ' ' + category;
+        };
+
+        /**
+         * @function loadAutoSuggestedTags
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Retrieve all auto suggested words for this article
+         *
+         * @return {string} all words for all fields
+         */
+        $scope.loadAutoSuggestedTags = function() {
+          var data = $scope.getTagsAutoSuggestedFields();
+
+          $scope.checkAutoSuggesterTags(
+            function(items) {
+              if (items !== null) {
+                $scope.article.tag_ids = $scope.article.tag_ids.concat(items);
+              }
+            },
+            data,
+            $scope.article.tag_ids,
+            $scope.config.locale
+          );
         };
 
         // Update footers when photos change
@@ -679,10 +729,12 @@
           }
 
           // Show a message when leaving before saving
+
           $($window).bind('beforeunload', function() {
             if ($scope.articleForm.$dirty) {
               return $window.leaveMessage;
             }
+            return null;
           });
 
           $scope.articleForm.$setDirty(true);
@@ -728,41 +780,18 @@
 
         // Update metadata when title or category change
         $scope.$watch('[ article.title, article.category ]', function(nv, ov) {
-          if ($scope.article.metadata && $scope.article.metadata.length > 0 ||
+          if ($scope.article.tag_ids && $scope.article.tag_ids.length > 0 ||
               !nv || nv === ov) {
             return;
           }
 
-          var title    = $scope.article.title ? $scope.article.title : '';
-          var category = '';
-          var data     = title + ' ' + category;
-
-          // Get category name from category id
-          if ($scope.article.category) {
-            var categories = $scope.data.extra.categories.filter(function(e) {
-              return e.pk_content_category ===
-                $scope.article.pk_fk_content_category;
-            });
-
-            if (categories.length > 0) {
-              category = categories[0].title;
-            }
+          if ($scope.mtm) {
+            $timeout.cancel($scope.mtm);
           }
 
-          if (!$scope.config.multilanguage) {
-            if ($scope.mtm) {
-              $timeout.cancel($scope.mtm);
-            }
-
-            $scope.mtm = $timeout(function() {
-              http.get({
-                name: 'admin_utils_calculate_tags',
-                params: { data: data }
-              }).then(function(response) {
-                $scope.article.metadata = response.data.split(',');
-              });
-            }, 2500);
-          }
+          $scope.mtm = $timeout(function() {
+            $scope.loadAutoSuggestedTags();
+          }, 2500);
         });
 
         // Shows a modal window to translate content automatically

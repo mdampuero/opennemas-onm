@@ -15,8 +15,8 @@
      *   Handles all actions in tag list.
      */
     .controller('TagListCtrl', [
-      '$controller', '$scope', 'oqlEncoder', 'http', 'messenger', '$timeout',
-      function($controller, $scope, oqlEncoder, http, messenger, $timeout) {
+      '$controller', '$scope', 'oqlEncoder', 'http', 'messenger',
+      function($controller, $scope, oqlEncoder, http, messenger) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -33,7 +33,6 @@
           update:         'api_v1_backend_tag_update',
           save:           'api_v1_backend_tag_save',
           list:           'api_v1_backend_tags_list',
-          tagValidator:   'api_v1_backend_tags_validator'
         };
 
         /**
@@ -127,45 +126,18 @@
          *   Method for the tag validation. This method check the text added with the DB
          */
         $scope.validateTag = function() {
-          if ($scope.tm) {
-            $timeout.cancel($scope.tm);
-          }
-
-          $scope.tm = $timeout(function() {
-            $scope.enableUpdate = false;
-            if ($scope.editedTag.name.length < 2) {
-              return false;
+          var locale = $scope.editedTag.language_id ?
+            $scope.editedTag.language_id :
+            $scope.criteria.language_id;
+          var callback = function(response) {
+            if (typeof response === 'object') {
+              $scope.enableUpdate = false;
+            } else {
+              $scope.enableUpdate = response;
             }
-            var route = {
-              name: $scope.routes.tagValidator,
-              params: {
-                text: $scope.editedTag.name,
-                language_id: $scope.editedTag.language_id ? $scope.editedTag.language_id : $scope.criteria.language_id
-              }
-            };
+          };
 
-            http.get(route).then(
-              function(response) {
-                if (!response.data.items) {
-                  $scope.editedTagError = response.data.message;
-                  return null;
-                }
-                if (response.data.items.length === 0) {
-                  $scope.enableUpdate   = true;
-                  $scope.editedTagError = null;
-                  return null;
-                }
-
-                $scope.enableUpdate = $scope.editedTag.id &&
-                  response.data.items === 1 &&
-                  response.data.items[$scope.editedTag.id];
-                return null;
-              }, $scope.errorCb
-            );
-            return null;
-          }, 500);
-
-          return false;
+          return this.checkNewTags(callback, $scope.editedTag.name, locale, $scope.editedTag.id);
         };
       }
     ]);

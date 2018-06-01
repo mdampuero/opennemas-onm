@@ -61,11 +61,18 @@ api_v1_backend_tags_validator:
         expose: true
 
 api_v1_backend_tags_suggester:
-    path:     /tags/suggester/{language_id}/{tag}
+    path:     /tags/suggester/{languageId}/{tag}
     defaults: { _controller  : ApiBundle:V1/Backend/Tag:suggester }
     methods:  [ GET ]
     options:
         expose: true
     requirements:
-        tag:         '[^/]+'
-        language_id: '[^/]+'
+        tag:        '[^/]+'
+        languageId: '[^/]+'
+
+api_v1_backend_tags_auto_suggester:
+    path:     /tags/autosuggester
+    defaults: { _controller  : ApiBundle:V1/Backend/Tag:autoSuggester }
+    methods:  [ GET ]
+    options:
+        expose: true

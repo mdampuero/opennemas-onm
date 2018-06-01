@@ -44,10 +44,27 @@ class EntityManager extends BaseManager
      *
      * @param string  $contentType Content type name.
      * @param integer $id          Content id.
+     * @param boolean $isMulti
      *
      * @return Content The found content.
      */
     public function find($contentType, $id)
+    {
+        return $this->findOne($contentType, $id);
+    }
+
+    /**
+     * Finds one content from the given content type and content id.
+     *
+     * @param string  $contentType Content type name.
+     * @param integer $id          Content id.
+     * @param boolean $isMulti     Indicates if it is called from findMulti and
+     *                             several are to be ordered and it is not
+     *                             necessary to cache
+     *
+     * @return Content The found content.
+     */
+    private function findOne($contentType, $id, $isMulti = false)
     {
         $entity = null;
 
@@ -55,11 +72,13 @@ class EntityManager extends BaseManager
 
         if (!empty($id)
             && class_exists($contentType)
-            && (!$this->hasCache()
+            && ($isMulti
+            || !$this->hasCache()
             || ($entity = $this->cache->fetch($cacheId)) === false
             || !is_object($entity))
         ) {
             $entity = new $contentType($id);
+
 
             if (!is_object($entity)
                 || $entity->content_type_name !== \underscore($contentType)
@@ -68,8 +87,14 @@ class EntityManager extends BaseManager
                 return null;
             }
 
-            if ($this->hasCache()) {
-                $this->cache->save($cacheId, $entity);
+            if (!$isMulti) {
+                $contentsToLoad            = [$entity];
+                $contentsToLoadExtraData   = [];
+                $contentsToLoadExtraData[] = $entity->id;
+                $this->loadExtraDataToContents($contentsToLoadExtraData, $contentsToLoad);
+                if ($this->hasCache()) {
+                    $this->cache->save($cacheId, $entity);
+                }
             }
         }
 
@@ -98,13 +123,20 @@ class EntityManager extends BaseManager
 
         $missedIds = array_diff($ids, $cachedIds);
 
+        $saveInCacheIds = [];
         foreach ($missedIds as $id) {
             list($contentType, $contentId) = explode($this->cacheSeparator, $id);
 
-            $content = $this->find(\classify($contentType), $contentId);
+            $content = $this->findOne(\classify($contentType), $contentId, true);
             if (!is_null($content) && $content->id) {
-                $contents[$id] = $content;
+                $saveInCacheIds[$id] = $content->id;
+                $contents[$id]       = $content;
             }
+        }
+
+        $elementToCache = $this->loadExtraDataToContents($saveInCacheIds, $contents);
+        if ($this->hasCache()) {
+            $this->cache->save($elementToCache);
         }
 
         $ids = array_intersect($ids, array_keys($contents));
@@ -415,5 +447,30 @@ class EntityManager extends BaseManager
         }
 
         return $photosAlbum;
+    }
+
+    /**
+     *  Method to load extra data to list of contents
+     *
+     * @param array $saveInCacheIds list of contents ids to load extra data
+     * @param array $contents       List of contents where load the extra data
+     */
+    private function loadExtraDataToContents($saveInCacheIds, &$contents)
+    {
+        if (empty($saveInCacheIds)) {
+            return [];
+        }
+
+        $tagsByContent    = array_values($contents)[0]->getContentTags(array_values($saveInCacheIds));
+        $contentsForCache = [];
+        foreach ($saveInCacheIds as $cacheKey => $contentId) {
+            if (array_key_exists($contentId, $tagsByContent)) {
+                $contents[$cacheKey]->tag_ids = $tagsByContent[$contentId];
+            } else {
+                $contents[$cacheKey]->tag_ids = [];
+            }
+            $contentsForCache[$cacheKey] = serialize($contents[$cacheKey]);
+        }
+        return $contentsForCache;
     }
 }

@@ -124,13 +124,6 @@ class ArticleController extends Controller
 
         $data = $request->request->all();
 
-        if (array_key_exists('metadata', $data) && !empty($data['metadata'])) {
-            $data['metadata'] = $this->get('data.manager.filter')
-                ->set($data['metadata'])
-                ->filter('tags', [ 'exclude' => [ '.', '-', '#' ] ])
-                ->get();
-        }
-
         $data['category'] = $data['pk_fk_content_category'];
 
         if (!$article->update($data)) {
@@ -143,6 +136,11 @@ class ArticleController extends Controller
         }
 
         $msg->add(_('Article successfully updated.'), 'success');
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
+        $response['message'] = $msg->getMessages()[0];
+        $response['tag_ids'] = $article->tag_ids;
+        $response['tags']    = $this->get('api.service.tag')
+            ->getListByIdsKeyMapped($article->tag_ids)['items'];
+
+        return new JsonResponse($response, $msg->getCode());
     }
 }
