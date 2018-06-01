@@ -326,7 +326,7 @@ class OpinionsController extends Controller
             'params'              => [
                 'only_registered' => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
             ],
-            'tag_ids'             => json_decode($request->request->get('tag_ids', ''))
+            'tag_ids'             => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         $data = $this->loadMetaDataFields($data, $request->request, OpinionsController::EXTRA_INFO_TYPE);

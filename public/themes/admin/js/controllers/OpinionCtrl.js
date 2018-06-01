@@ -9,6 +9,17 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     // Initialize the super class and extend it.
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
+    /**
+     * @function init
+     * @memberOf OpinionCtrl
+     *
+     * @description
+     * Method to init the opinion controller
+     *
+     * @param {object} opinion  Opinion to edit
+     * @param {String} locale   Locale for the opinion
+     * @param {Array}  tags     Array with all the tags needed for the opinion
+     */
     $scope.init = function(opinion, locale, tags) {
       $scope.tag_ids = opinion !== null ? opinion.tag_ids : [];
       $scope.locale  = locale;
@@ -64,7 +75,12 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     };
 
     /**
-     *  Method to method to retrieve th title for the autosuggested words
+     * @function getTagsAutoSuggestedFields
+     * @memberOf OpinionCtrl
+     *
+     * @description
+     *   Method to method to retrieve th title for the autosuggested words
+     *
      */
     $scope.getTagsAutoSuggestedFields = function() {
       return $scope.title;
