@@ -2,8 +2,8 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('SpecialCtrl', [
-  '$controller', '$rootScope', '$scope', '$timeout',
-  function($controller, $rootScope, $scope, $timeout) {
+  '$controller', '$rootScope', '$scope',
+  function($controller, $rootScope, $scope) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -24,6 +24,7 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
       $scope.tag_ids = special !== null ? special.tag_ids : [];
       $scope.locale  = locale;
       $scope.tags    = tags;
+      $scope.watchTagIds('title');
     };
 
     /**
@@ -54,51 +55,6 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
     $scope.getTagsAutoSuggestedFields = function() {
       return $scope.title;
     };
-
-    /**
-     * @function loadAutoSuggestedTags
-     * @memberOf SpecialCtrl
-     *
-     * @description
-     *   Retrieve all auto suggested words for this special
-     *
-     * @return {string} all words for the title
-     */
-    $scope.loadAutoSuggestedTags = function() {
-      var data = $scope.getTagsAutoSuggestedFields();
-
-      $scope.checkAutoSuggesterTags(
-        function(items) {
-          if (items !== null) {
-            $scope.tag_ids = $scope.tag_ids.concat(items);
-          }
-        },
-        data,
-        $scope.tag_ids,
-        $scope.locale
-      );
-    };
-
-    /**
-     * Updates scope when title changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('title', function(nv, ov) {
-      if ($scope.tag_ids && $scope.tag_ids.length > 0 ||
-          !nv || nv === ov) {
-        return;
-      }
-
-      if ($scope.mtm) {
-        $timeout.cancel($scope.mtm);
-      }
-
-      $scope.mtm = $timeout(function() {
-        $scope.loadAutoSuggestedTags();
-      }, 2500);
-    });
 
     /**
      * Updates scope when photo1 changes.

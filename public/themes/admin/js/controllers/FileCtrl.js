@@ -24,6 +24,7 @@ angular.module('BackendApp.controllers').controller('FileCtrl', [
       $scope.tag_ids = file !== null ? file.tag_ids : [];
       $scope.locale  = locale;
       $scope.tags    = tags;
+      $scope.watchTagIds('title');
     };
 
     /**
@@ -37,15 +38,5 @@ angular.module('BackendApp.controllers').controller('FileCtrl', [
     $scope.getTagsAutoSuggestedFields = function() {
       return $scope.title;
     };
-
-    /**
-     * Updates scope when title changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('title', function(nv, ov) {
-      $scope.watchTagIds(nv, ov);
-    });
   }
 ]);

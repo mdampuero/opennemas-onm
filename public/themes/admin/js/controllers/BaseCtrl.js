@@ -456,22 +456,23 @@
          * @description
          * Updates scope when the tag related fields changes.
          *
-         * @param array nv The new values.
-         * @param array ov The old values.
+         * @param mixed fields Fields to watch
          */
-        $scope.watchTagIds = function(nv, ov) {
-          if ($scope.tag_ids && $scope.tag_ids.length > 0 ||
-              !nv || nv === ov) {
-            return;
-          }
+        $scope.watchTagIds = function(fields) {
+          $scope.$watch(fields, function(nv, ov) {
+            if ($scope.tag_ids && $scope.tag_ids.length > 0 ||
+                !nv || nv === ov) {
+              return;
+            }
 
-          if ($scope.mtm) {
-            $timeout.cancel($scope.mtm);
-          }
+            if ($scope.mtm) {
+              $timeout.cancel($scope.mtm);
+            }
 
-          $scope.mtm = $timeout(function() {
-            $scope.loadAutoSuggestedTags();
-          }, 2500);
+            $scope.mtm = $timeout(function() {
+              $scope.loadAutoSuggestedTags();
+            }, 2500);
+          });
         };
 
         /**

@@ -206,6 +206,8 @@ class ArticleController extends Controller
             )
         ];
 
+        $extra['tags'] = [];
+
         if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
             $extra['moduleFields'] = $this->get('setting_repository')
                 ->get('extraInfoContents.ARTICLE_MANAGER');
