@@ -36,7 +36,6 @@ class StaticPageController extends Controller
         $data = [
             'title'    => $req->filter('title', null, FILTER_SANITIZE_STRING),
             'slug'     => $req->filter('slug', null, FILTER_SANITIZE_STRING),
-            'metadata' => \Onm\StringUtils::normalizeMetadata($req->filter('metadata', null, FILTER_SANITIZE_STRING)),
             'id'       => $req->filter('id', 0, FILTER_SANITIZE_STRING),
         ];
 

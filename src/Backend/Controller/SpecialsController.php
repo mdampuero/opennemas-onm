@@ -112,7 +112,11 @@ class SpecialsController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
-            return $this->render('special/new.tpl');
+            $ls = $this->get('core.locale');
+            return $this->render('special/new.tpl', [
+                'locale' => $ls->getLocale('frontend'),
+                'tags'   => []
+            ]);
         }
 
         $special = new \Special();
@@ -123,9 +127,6 @@ class SpecialsController extends Controller
             'pretitle'       => $request->request
                 ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $request->request->get('description', ''),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
-            ),
             'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
             'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -133,6 +134,7 @@ class SpecialsController extends Controller
             'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
             'noticias_right' => json_decode($request->request->get('noticias_right_input')),
             'noticias_left'  => json_decode($request->request->get('noticias_left_input')),
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         if ($special->create($data)) {
@@ -166,6 +168,7 @@ class SpecialsController extends Controller
         $id = $request->query->getDigits('id', null);
 
         $special = new \Special($id);
+
         if (is_null($special->id)) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -174,6 +177,11 @@ class SpecialsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_specials'));
         }
+
+        $auxTagIds        = $special->getContentTags($special->id);
+        $special->tag_ids = array_key_exists($special->id, $auxTagIds) ?
+            $auxTagIds[$special->id] :
+            [];
 
         $contents = $special->getContents($id);
 
@@ -200,9 +208,13 @@ class SpecialsController extends Controller
             ]);
         }
 
+        $ls = $this->get('core.locale');
         return $this->render('special/new.tpl', [
             'special'  => $special,
             'category' => $special->category,
+            'locale'         => $ls->getRequestLocale('frontend'),
+            'tags'           => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($special->tag_ids)['items']
         ]);
     }
 
@@ -240,9 +252,6 @@ class SpecialsController extends Controller
                 'pretitle'       => $request->request
                     ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'description'    => $request->request->get('description', ''),
-                'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                    $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
-                ),
                 'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
                 'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -250,6 +259,7 @@ class SpecialsController extends Controller
                 'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
                 'noticias_left'  => json_decode($request->request->get('noticias_left_input')),
                 'noticias_right' => json_decode($request->request->get('noticias_right_input')),
+                'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
             ];
 
             if ($special->update($data)) {
