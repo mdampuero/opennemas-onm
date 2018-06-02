@@ -189,7 +189,7 @@ class PollsController extends Controller
             return $this->redirect($this->generateUrl('admin_polls'));
         }
 
-        $auxTagIds = $poll->getContentTags($poll->id);
+        $auxTagIds     = $poll->getContentTags($poll->id);
         $poll->tag_ids = array_key_exists($poll->id, $auxTagIds) ?
             $auxTagIds[$poll->id] :
             [];
