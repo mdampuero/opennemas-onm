@@ -422,6 +422,59 @@
         };
 
         /**
+         * @function loadAutoSuggestedTags
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Retrieve all auto suggested words for the content
+         *
+         * @return {string} all words for the title
+         */
+        $scope.loadAutoSuggestedTags = function() {
+          if (typeof $scope.getTagsAutoSuggestedFields === 'undefined') {
+            return null;
+          }
+          var data = $scope.getTagsAutoSuggestedFields();
+
+          $scope.checkAutoSuggesterTags(
+            function(items) {
+              if (items !== null) {
+                $scope.tag_ids = $scope.tag_ids.concat(items);
+              }
+            },
+            data,
+            $scope.tag_ids,
+            $scope.locale
+          );
+          return null;
+        };
+
+        /**
+         * @function watchTagIds
+         * @memberOf BaseCtrl
+         *
+         * @description
+         * Updates scope when the tag related fields changes.
+         *
+         * @param array nv The new values.
+         * @param array ov The old values.
+         */
+        $scope.watchTagIds = function(nv, ov) {
+          if ($scope.tag_ids && $scope.tag_ids.length > 0 ||
+              !nv || nv === ov) {
+            return;
+          }
+
+          if ($scope.mtm) {
+            $timeout.cancel($scope.mtm);
+          }
+
+          $scope.mtm = $timeout(function() {
+            $scope.loadAutoSuggestedTags();
+          }, 2500);
+        };
+
+        /**
          * Insert the selected items in media picker in the target element.
          *
          * @param  Object event The event object.

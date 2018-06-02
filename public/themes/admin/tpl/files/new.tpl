@@ -4,10 +4,6 @@
   {javascripts}
     <script type="text/javascript">
       $(document).ready(function($) {
-        $('#title').on('change', function(e, ui) {
-          fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
-        });
-
         $('.fileinput').fileinput({ name: 'path' });
       });
     </script>
@@ -15,7 +11,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if !is_null($attaches)}{url name=admin_files_update id=$attaches->id}{else}{url name=admin_files_create}{/if}" enctype="multipart/form-data" method="POST" name="formulario" id="formulario" ng-controller="InnerCtrl" />
+  <form action="{if !is_null($attaches)}{url name=admin_files_update id=$attaches->id}{else}{url name=admin_files_create}{/if}" enctype="multipart/form-data" method="POST" name="formulario" id="formulario" ng-controller="FileCtrl" ng-init="init({json_encode($attaches)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})" />
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -68,7 +64,7 @@
               <div class="form-group">
                 <label for="" class="form-label">{t}Title{/t}</label>
                 <div class="controls">
-                  <input type="text" id="title" name="title" value="{$attaches->title|clearslash}" class="form-control" required>
+                  <input type="text" id="title" name="title" ng-model="title" value="{$attaches->title|clearslash}" class="form-control" required>
                 </div>
               </div>
               <div class="form-group">
@@ -92,7 +88,7 @@
               <div class="form-group">
                 <label for="metadata" class="form-label">{t}Tags{/t}</label>
                 <div class="controls">
-                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="text" value="{$attaches->metadata|clearslash}">
+                  <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="checkNewTags" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
                 </div>
               </div>
               <div class="form-group">
