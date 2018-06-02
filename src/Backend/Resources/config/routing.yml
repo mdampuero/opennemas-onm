@@ -291,6 +291,8 @@ admin_videos_create:
 admin_videos_get_info:
     path:     /videos/get-video-information
     defaults: { _controller  : BackendBundle:Videos:videoInformation }
+    options:
+        expose: true
 
 admin_video_show:
     path:     /videos/{id}/show

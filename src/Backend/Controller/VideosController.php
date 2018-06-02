@@ -126,12 +126,15 @@ class VideosController extends Controller
                     $authors[$author->id] = $author->name;
                 }
 
+                $ls = $this->get('core.locale');
                 return $this->render(
                     'video/new.tpl',
                     [
                         'type'           => $type,
                         'authors'        => $authors,
                         'commentsConfig' => s::get('comments_config'),
+                        'locale'         => $ls->getLocale('frontend'),
+                        'tags'           => []
                     ]
                 );
             }
@@ -140,7 +143,6 @@ class VideosController extends Controller
         $requestPost = $request->request;
 
         $type     = $requestPost->filter('type', null, FILTER_SANITIZE_STRING);
-        $page     = $requestPost->getDigits('page', 1);
         $category = $requestPost->getDigits('category');
 
         $videoData = [
@@ -150,8 +152,6 @@ class VideosController extends Controller
             'content_status' => (int) $requestPost->getDigits('content_status', 0),
             'fk_author'      => $requestPost->getDigits('fk_author', 0),
             'information'    => json_decode($requestPost->get('information', ''), true),
-            'metadata'       =>
-                \Onm\StringUtils::normalizeMetadata($requestPost->filter('metadata', null, FILTER_SANITIZE_STRING)),
             'params'         => $request->request->get('params', []),
             'description'    => $requestPost->get('description', ''),
             'endtime'        =>
@@ -162,6 +162,7 @@ class VideosController extends Controller
                 $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'video_url'      => $requestPost->filter('video_url', ''),
             'with_comment'   => (int) $requestPost->getDigits('with_comment', 0),
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         if ($type == 'external' || $type == 'script') {
@@ -237,8 +238,6 @@ class VideosController extends Controller
             'title'          =>
                 $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'body'           => $requestPost->filter('body', ''),
-            'metadata'       =>
-                \Onm\StringUtils::normalizeMetadata($requestPost->filter('metadata', null, FILTER_SANITIZE_STRING)),
             'description'    => $requestPost->get('description', ''),
             'fk_author'      => $requestPost->getDigits('fk_author', 0),
             'starttime'      =>
@@ -250,6 +249,7 @@ class VideosController extends Controller
             'information'    => json_decode($requestPost->get('information', ''), true),
             'video_url'      => $requestPost->filter('video_url', ''),
             'params'         => $request->request->get('params', []),
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         if ($video->author_name == 'external' || $video->author_name == 'script') {
@@ -352,6 +352,11 @@ class VideosController extends Controller
             return $this->redirect($this->generateUrl('admin_videos'));
         }
 
+        $auxTagIds      = $video->getContentTags($video->id);
+        $video->tag_ids = array_key_exists($video->id, $auxTagIds) ?
+            $auxTagIds[$video->id] :
+            [];
+
         if (is_object($video->information)) {
             $video->information = get_object_vars($video->information);
         }
@@ -370,6 +375,7 @@ class VideosController extends Controller
             $authors[$author->id] = $author->name;
         }
 
+        $ls = $this->get('core.locale');
         return $this->render(
             'video/new.tpl',
             [
@@ -377,6 +383,9 @@ class VideosController extends Controller
                 'video'          => $video,
                 'authors'        => $authors,
                 'commentsConfig' => s::get('comments_config'),
+                'locale'         => $ls->getRequestLocale('frontend'),
+                'tags'           => $this->get('api.service.tag')
+                    ->getListByIdsKeyMapped($video->tag_ids)['items']
             ]
         );
     }

@@ -16,13 +16,8 @@
   {javascripts src="@AdminTheme/js/onm/video.js" filters="uglifyjs" output="video"}
     <script type="text/javascript">
       var video_manager_url = {
-        get_information: '{url name=admin_videos_get_info}',
-        fill_tags: '{url name=admin_utils_calculate_tags}'
+        get_information: '{url name=admin_videos_get_info}'
       }
-
-      $('#title').on('change', function(e, ui) {
-        fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
-      });
 
       $('#starttime, #endtime').datetimepicker({
         format: 'YYYY-MM-DD HH:mm:ss',
@@ -37,20 +32,12 @@
         $('#starttime').data("DateTimePicker").maxDate(e.date);
       });
 
-      $(":submit").on("click", function (e) {
-        var tags = $('.bootstrap-tagsinput span').length;
-        if(tags === 0) {
-          $('.bootstrap-tagsinput input').attr("required", "true");
-          return null;
-        }
-        $('.bootstrap-tagsinput input').removeAttr("required");
-      });
     </script>
   {/javascripts}
 {/block}
 
 {block name="content"}
-<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" class="video-form" enctype="multipart/form-data" ng-controller="InnerCtrl" id="formulario">
+<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" class="video-form" enctype="multipart/form-data" ng-controller="VideoCtrl" ng-init="init({json_encode($video)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})" id="formulario">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -160,9 +147,9 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="metadata" class="form-label">{t}Tags{/t}</label>
+              <label for="tag_ids" class="form-label">{t}Tags{/t}</label>
               <div class="controls">
-                <input data-role="tagsinput" type="text" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required value="{$video->metadata}" class="form-control" />
+                <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="checkNewTags" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
               </div>
             </div>
             {if isset($video)}
