@@ -205,7 +205,7 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                 $published = new \DateTime((string) $video->published);
                 $date      = date_format($published, 'Y-m-d H:i:s');
 
-                $fm = $this->getcontainer()->get('data.manager.filter');
+                $ts = $this->getcontainer()->get('api.service.tag');
 
                 // Generate data array for creating video in Onm instance
                 $data = [
@@ -217,7 +217,7 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                     'fk_author'      => 0,
                     'video_url'      => $videoUrl,
                     'title'          => $title,
-                    'metadata'       => $fm->set($title)->filter('tags')->get(),
+                    'tag_ids'        => $ts->getTagIdsFromStr($title),
                     'description'    => (string) $video->summary,
                     'author_name'    => 'Youtube',
                     'information'    => $information,
@@ -278,7 +278,7 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                 continue;
             }
 
-            $fm = $this->getContainer()->get('data.manager.filter');
+            $ts = $this->getContainer()->get('api.service.tag');
 
             $data = [
                 'author_name'    => 'script',
@@ -286,7 +286,7 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                 'category'       => $this->category,
                 'content_status' => 1,
                 'fk_author'      => 0,
-                'metadata'       => $fm->set($item[0])->filter('tags')->get(),
+                'tag_ids'        => $ts->getTagIdsFromStr($item[0]),
                 'params'         => [],
                 'description'    => $item[0],
                 'endtime'        => '',
