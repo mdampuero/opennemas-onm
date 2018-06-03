@@ -523,7 +523,7 @@ class NewsAgencyController extends Controller
                         'category'       => $category,
                         'content_status' => 1,
                         'title'          => $video->getTitle(),
-                        'metadata'       => $this->get('api.service.tag')
+                        'tag_ids'       => $this->get('api.service.tag')
                             ->getTagIdsFromStr($video->getTitle()),
                         'description'    => '',
                         'author_name'    => 'internal',
@@ -553,7 +553,8 @@ class NewsAgencyController extends Controller
             'frontpage'      => 0,
             'in_home'        => 0,
             'title_int'      => $element->getTitle(),
-            'metadata'       => $tagSystem->filter($element->getTitle()),
+            'tag_ids'        => $this->get('api.service.tag')
+                ->getTagIdsFromStr($element->getTitle()),
             'subtitle'       => $element->getPretitle(),
             'agency'         => $server['agency_string'],
             'fk_author'      => (isset($authorId) ? $authorId : 0),

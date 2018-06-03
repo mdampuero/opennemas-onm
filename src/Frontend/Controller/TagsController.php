@@ -86,7 +86,7 @@ class TagsController extends Controller
     public function tagsAction(Request $request)
     {
         $tagName = strip_tags($request->query->filter('tag_name', '', FILTER_SANITIZE_STRING));
-        $tagName = '';//$this->get('api.service.tag')->createSearchableWord($tagName);
+        $tagName = $this->get('api.service.tag')->createSearchableWord($tagName);
         $page    = $request->query->getDigits('page', 1);
 
         if ($page > 1) {

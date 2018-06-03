@@ -68,12 +68,12 @@ class SearchController extends Controller
         if (!empty($searchString)) {
             $fm     = $this->get('data.manager.filter');
             $tokens = $fm->set($searchString)->filter('tags')->get();
-            $tokens = explode(', ', $tokens);
+            $tokens = explode(',', $tokens);
 
             $er = $this->get('entity_repository');
 
             // Build field search with LIKE
-            $fields = ['metadata', 'title'];
+            $fields = ['title'];
             $search = [];
             foreach ($fields as $field) {
                 $searchChunk = [];
@@ -84,6 +84,26 @@ class SearchController extends Controller
                 $search[] = "(" . implode(' AND ', $searchChunk) . ") ";
             }
 
+            //Clean the input words
+            $tagsWords = array_map(
+                function ($tag) {
+                    return $tag->id;
+                },
+                $this->get('api.service.tag')
+                    ->validateTags(explode(' ', $searchString))
+            );
+
+            //Create the query if exist tagsWords
+            if (!empty($tagsWords)) {
+                $countTagsWords = count($tagsWords) - 1;
+                $tagsWords      = implode(',', $tagsWords);
+                $search[]       = ' pk_content in (SELECT contents_tags.content_id'
+                . " FROM contents_tags WHERE contents_tags.tag_id IN ($tagsWords)"
+                . ' GROUP BY contents_tags.content_id'
+                . ' HAVING COUNT(contents_tags.tag_id) >'
+                . $countTagsWords . ')';
+            }
+
             // Final search
             $search = "(" . implode(' OR ', $search) . ")";
 
@@ -92,8 +112,9 @@ class SearchController extends Controller
                 . ' AND fk_content_type IN (1, 2, 4, 7, 9, 11, 12)'
                 . ' AND ' . $search;
 
-            $order   = [ 'starttime' => 'desc' ];
-            $total   = true;
+            $order = [ 'starttime' => 'desc' ];
+            $total = true;
+
             $results = $er->findBy($criteria, $order, 8, $page, 0, $total);
 
             foreach ($results as $content) {
