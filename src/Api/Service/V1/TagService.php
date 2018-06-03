@@ -180,4 +180,27 @@ class TagService extends OrmService
         $tags['items'] = $this->responsify($returnArr);
         return $tags;
     }
+
+    /**
+     *  Method to retrieve the tags for a list of tag ids
+     *
+     * @param array $ids List of ids we want to retrieve
+     *
+     * @return string List of tags fo this tags.
+     */
+    public function getTagsSepByCommas($ids)
+    {
+        if (empty($ids)) {
+            return ['items' => []];
+        }
+        $tags      = $this->getListByIds($ids);
+        $returnArr = [];
+
+        $tagsString = '';
+        foreach ($tags['items'] as $tag) {
+            $tagsString .= ',' . $tag->name;
+        }
+        // We remove the first comma
+        return substr($tagsString, 1);
+    }
 }

@@ -74,11 +74,11 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
         $this->data['video']->description = "<p>Video description</p>";
         $this->data['video']->created     = "2016-10-13 11:40:32";
         $this->data['video']->thumb       = "http://video-thumb.com";
-        $this->data['video']->metadata    = "keywords,video,json,linking,data";
+        $this->data['video']->tag_ids     = [1,2,3,4,5];
 
         $this->data['category']->title = "Mundo";
 
-        $this->data['content']->metadata = "keywords,content,json,linking,data";
+        $this->data['content']->metadata = [1,2,3,4,5];
         $this->data['content']->body     = "This is the body text";
 
         $sm = $this->getMockBuilder('SettingManager')
@@ -86,7 +86,12 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->object = new StructuredData($sm);
+        $ts = $this->getMockBuilder('TagService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getTagsSepByCommas' ])
+            ->getMock();
+
+        $this->object = new StructuredData($sm, $ts);
     }
 
     public function serviceContainerCallback($name)
@@ -156,6 +161,8 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
 
         $this->object->sm->expects($this->once())->method('get')
             ->willReturn('Site Name');
+        $this->object->ts->expects($this->once())->method('getTagsSepByCommas')
+            ->willReturn('keywords,video,json,linking,data');
 
         $this->assertEquals($videoJson, $this->object->generateVideoJsonLDCode($this->data));
     }
@@ -193,10 +200,12 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ '_getAttachedPhotos' ])
             ->getMock();
 
-        $this->data['content']->metadata = 'keywords,object,json,linking,data';
+        $this->data['content']->tag_ids = [1,2,3,4,5];
 
         // Gallery only with cover image
         $onlyCover = $galleryJson . '}';
+        $this->object->ts->expects($this->any())->method('getTagsSepByCommas')
+            ->willReturn('keywords,object,json,linking,data');
         $this->assertEquals($onlyCover, $this->object->generateImageGalleryJsonLDCode($this->data));
 
         // Load album photos
@@ -266,6 +275,8 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
 
         // Gallery with several photos
         $severalImages = $galleryJson . $albumPhotosJson . '}' . $albumPhotosObjectJson;
+        $this->object->ts->expects($this->any())->method('getTagsSepByCommas')
+            ->willReturn('keywords,video,json,linking,data');
         $this->assertEquals($severalImages, $this->object->generateImageGalleryJsonLDCode($this->data));
     }
 
@@ -307,6 +318,8 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
 
         $this->object->sm->expects($this->any())->method('get')
             ->willReturn('Site Name');
+        $this->object->ts->expects($this->any())->method('getTagsSepByCommas')
+            ->willReturn('keywords,content,json,linking,data');
 
         // Article with image
         $imageJson = '

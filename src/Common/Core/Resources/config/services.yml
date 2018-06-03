@@ -97,7 +97,7 @@ services:
 
     core.helper.structured_data:
         class:     Common\Core\Component\Helper\StructuredData
-        arguments: [ '@setting_repository' ]
+        arguments: [ '@setting_repository', '@api.service.tag' ]
 
     core.helper.subscription:
         class:     Common\Core\Component\Helper\SubscriptionHelper

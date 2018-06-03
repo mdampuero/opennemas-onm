@@ -41,6 +41,11 @@ class SmartyStructuredDataTagsTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->ts = $this->getMockBuilder('TagService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getTagsSepByCommas' ])
+            ->getMock();
+
         $this->cm = $this->getMockBuilder('CategoryManager')
             ->setMethods([ 'find' ])
             ->getMock();
@@ -70,7 +75,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit_Framework_TestCase
                 'generateNewsArticleJsonLDCode',
                 'generateImageJsonLDCode'
             ])
-            ->setConstructorArgs([ $this->sm ])
+            ->setConstructorArgs([ $this->sm, $this->ts ])
             ->getMock();
 
         $this->requestStack->expects($this->any())
@@ -88,6 +93,9 @@ class SmartyStructuredDataTagsTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->any())
             ->method('getUri')
             ->willReturn('http://route/to/content.html');
+
+        $this->ts->expects($this->any())->method('getTagsSepByCommas')
+            ->willReturn('foo, bar, baz, thud');
     }
 
     /**
@@ -154,7 +162,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit_Framework_TestCase
                         'fk_author'         => 4,
                         'slug'              => 'foobar-thud',
                         'agency'            => 'Onm Agency',
-                        'metadata'          => 'foo, bar, baz, thud',
+                        'tag_ids'           => [1,2,3,4],
                         'content_type_name' => 'album',
                         'created'           => '2016-10-13 11:40:32',
                         'changed'           => '2016-10-13 11:40:32',
@@ -237,7 +245,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit_Framework_TestCase
                         'fk_author'         => 4,
                         'slug'              => 'foobar-thud',
                         'agency'            => 'Onm Agency',
-                        'metadata'          => 'foo, bar, baz, thud',
+                        'tag_ids'           => [1,2,3,4,5],
                         'content_type_name' => 'article',
                         'created'           => '2016-10-13 11:40:32',
                         'changed'           => '2016-10-13 11:40:32',
@@ -339,7 +347,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit_Framework_TestCase
                         'fk_author'         => 4,
                         'agency'            => '',
                         'slug'              => 'foobar-thud',
-                        'metadata'          => 'foo, bar, baz, thud',
+                        'metadata'          => [1,2,3,4,5],
                         'content_type_name' => 'video',
                         'created'           => '2016-10-13 11:40:32',
                         'changed'           => '2016-10-13 11:40:32',
@@ -431,7 +439,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit_Framework_TestCase
                         'fk_author'         => 4,
                         'agency'            => 'Onm Agency',
                         'slug'              => 'foobar-thud',
-                        'metadata'          => 'foo, bar, baz, thud',
+                        'metadata'          => [1,2,3,4],
                         'content_type_name' => 'video',
                         'created'           => '2016-10-13 11:40:32',
                         'changed'           => '2016-10-13 11:40:32',
@@ -518,7 +526,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit_Framework_TestCase
                         'fk_author'         => 4,
                         'slug'              => 'foobar-thud',
                         'agency'            => 'Onm Agency',
-                        'metadata'          => 'foo, bar, baz, thud',
+                        'metadata'          => [1,2,3,4],
                         'content_type_name' => 'video',
                         'created'           => '2016-10-13 11:40:32',
                         'changed'           => '2016-10-13 11:40:32',
