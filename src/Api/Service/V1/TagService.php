@@ -77,26 +77,52 @@ class TagService extends OrmService
     }
 
     /**
-     * Method to validate a list of tags
+     * Method to validate a text as tags
      *
-     * @param mixed $tags list of all tags to validate
+     * @param mixed $text       Text with all tags
+     * @param mixed $languageId Language of the tag
      *
      * @return mixed List with all tags validate against DB
      */
-    public function validateTags($languageId, $tags)
+    public function getTagIdsFromStr($text, $languageId = null)
+    {
+        $wordArr = explode(' ', $text);
+        return array_map(
+            function ($tag) {
+                return $tag->id;
+            },
+            $this->validateTags($wordArr, $languageId)
+        );
+    }
+
+    /**
+     * Method to validate a list of tags
+     *
+     * @param mixed $tags       List of all tags to validate
+     * @param mixed $languageId Language of the tag
+     *
+     * @return mixed List with all tags validate against DB
+     */
+    public function validateTags($tags, $languageId = null)
     {
         $ts      = $this;
-        $tagsAux = $tags;
+        $tagsAux = null;
         if (is_array($tags)) {
-            $tagsAux = array_filter($tags, function ($tag) use ($ts) {
-                return !empty($ts->createSearchableWord($tag));
-            });
-        } else {
-            if (empty($ts->createSearchableWord($tagsAux))) {
-                return null;
+            $tagsAux = [];
+            $tagAux  = null;
+            foreach ($tags as $tag) {
+                $tagAux = $ts->createSearchableWord($tag);
+                if (!empty($tagAux)) {
+                    $tagsAux[] = $tagAux;
+                }
             }
+        } else {
+            $tagsAux = $ts->createSearchableWord($tagsAux);
         }
-        return \Tag::validateTags($languageId, $tagsAux);
+        if (empty($tagsAux)) {
+            return null;
+        }
+        return \Tag::validateTags($tagsAux, $languageId);
     }
 
     /**

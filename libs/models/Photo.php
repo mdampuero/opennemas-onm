@@ -115,7 +115,6 @@ class Photo extends Content
         $this->height      = $properties['height'];
         $this->author_name = $properties['author_name'];
         $this->description = ($this->description);
-        $this->metadata    = ($this->metadata);
         $this->address     = $properties['address'];
         $this->type_img    = pathinfo($this->name, PATHINFO_EXTENSION);
 
@@ -281,11 +280,13 @@ class Photo extends Content
             'title'               => isset($data['title']) ? $data['title'] : $originalFileName,
             'name'                => $finalPhotoFileName,
             'path_file'           => $dateForDirectory,
-            'created'             => $data["created"],
-            'changed'             => $data["changed"],
+            'created'             => $data['created'],
+            'changed'             => $data['changed'],
             'content_status'      => $data['content_status'],
             'description'         => $data['description'],
-            'metadata'            => $data["metadata"],
+            'tag_ids'             => empty($data['tag_ids']) ?
+                [] :
+                $data['tag_ids'],
             'urn_source'          => $data['urn_source'],
             'size'                => round($fileInformation->size / 1024, 2),
             'date'                => $dateString,
@@ -521,17 +522,6 @@ class Photo extends Content
                             $errorReporting = ini_get('error_reporting');
                             error_reporting('E_ALL');
 
-                            if (isset($iptc["2#025"])) {
-                                $keywordcount = count($iptc["2#025"]);
-                                $keywords     = $iptc["2#025"][0];
-
-                                for ($i = 1; $i < $keywordcount; $i++) {
-                                    $keywords .= ", " . $iptc["2#025"][$i];
-                                }
-                            } else {
-                                $keywords = '';
-                            }
-
                             $myiptc['Keywords']     = $keywords;
                             $myiptc['Caption']      = $iptc["2#120"][0];
                             $myiptc['Graphic_name'] = $iptc["2#005"][0];
@@ -562,8 +552,14 @@ class Photo extends Content
                                 $this->description = $myiptc['Caption'];
                             }
 
-                            if (empty($this->metadata)) {
-                                $this->metadata = \Onm\StringUtils::convertToUTF8AndStrToLower($keywords);
+                            if (empty($this->tag_ids)) {
+                                $this->tag_ids = array_map(
+                                    function ($tag) {
+                                        return $tag->id;
+                                    },
+                                    getService('api.service.tag')
+                                        ->validateTags($iptc["2#025"])
+                                );
                             }
 
                             if (empty($this->author_name)) {

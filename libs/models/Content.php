@@ -162,13 +162,6 @@ class Content implements \JsonSerializable
     public $in_litter = null;
 
     /**
-     * The list of tags of this content separated by commas
-     *
-     * @var string
-     */
-    public $metadata = '';
-
-    /**
      * An array for misc information of this content
      * Must be serialized when saved to database
      *
@@ -552,7 +545,6 @@ class Content implements \JsonSerializable
             'description'         => (empty($data['description'])
                 && !isset($data['description'])) ? '' : $data['description'],
             'body'                => (!array_key_exists('body', $data)) ? '' : $data['body'],
-            'metadata'            => (!array_key_exists('metadata', $data)) ? '' : $data['metadata'],
             'starttime'           => ($data['starttime'] < date("Y-m-d H:i:s")
                 && !is_null($data['starttime'])) ? date("Y-m-d H:i:s") : $data['starttime'],
             'endtime'             => (empty($data['endtime'])) ? null : $data['endtime'],

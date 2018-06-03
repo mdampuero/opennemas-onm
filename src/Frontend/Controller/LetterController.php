@@ -310,7 +310,7 @@ class LetterController extends Controller
             'category'          => $category,
             'category_name'     => $category_name,
             'description'       => '',
-            'metadata'          => '',
+            'tag_ids'           => [],
         ];
 
         try {

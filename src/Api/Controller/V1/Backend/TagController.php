@@ -212,7 +212,9 @@ class TagController extends Controller
 
         $languageId = $request->query->get('languageId', null);
 
-        $tags = (is_null($text) || is_null($languageId)) ? null : $ts->validateTags($languageId, $text);
+        $tags = (is_null($text) || is_null($languageId)) ?
+            null :
+            $ts->validateTags($text, $languageId);
 
         return new JsonResponse([
             'items' => $tags

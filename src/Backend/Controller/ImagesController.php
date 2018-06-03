@@ -129,7 +129,6 @@ class ImagesController extends Controller
                     $auxTagIds[$photo->id] :
                     [];
                 $allTags        = array_merge($allTags, $photo->tag_ids);
-                $photo->getPhotoMetaData();
 
                 if (!is_null($photo->pk_photo)) {
                     $photos [] = $photo;
