@@ -117,7 +117,7 @@ class TagService extends OrmService
                 }
             }
         } else {
-            $tagsAux = $ts->createSearchableWord($tagsAux);
+            $tagsAux = $ts->createSearchableWord($tags);
         }
         if (empty($tagsAux)) {
             return null;

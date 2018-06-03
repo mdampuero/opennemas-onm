@@ -203,7 +203,6 @@ class TagController extends Controller
     {
         $ts   = $this->get('api.service.tag');
         $text = $request->query->get('text', null);
-        $text = $ts->createSearchableWord($text);
         $msg  = $this->get('core.messenger');
         if (empty($text)) {
             $msg->add(_('Invalid tag'), 'success');
@@ -211,7 +210,6 @@ class TagController extends Controller
         }
 
         $languageId = $request->query->get('languageId', null);
-
         $tags = (is_null($text) || is_null($languageId)) ?
             null :
             $ts->validateTags($text, $languageId);
