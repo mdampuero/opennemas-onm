@@ -576,7 +576,10 @@ class Content implements \JsonSerializable
             $this->pk_content       = $this->id;
             $data['pk_content']     = $this->id;
             $data['id']             = $this->id;
-            $contentData['tag_ids'] = $this->addTags($data['tag_ids']);
+
+            $contentData['tag_ids'] = (empty($data['tag_ids'])) ?
+                [] :
+                $this->addTags($data['tag_ids']);
 
             self::load($contentData);
 
@@ -716,8 +719,9 @@ class Content implements \JsonSerializable
                 $catName = $this->category_name;
             }
 
-            $contentData['tag_ids'] = $this->addTags($data['tag_ids']);
-            $this->tag_ids = $contentData['tag_ids'];
+            $this->tag_ids = (empty($data['tag_ids'])) ?
+                [] :
+                $this->addTags($data['tag_ids']);
 
             logContentEvent(__METHOD__, $this);
             dispatchEventWithParams('content.update', [ 'content' => $this ]);
