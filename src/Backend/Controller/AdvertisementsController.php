@@ -134,11 +134,12 @@ class AdvertisementsController extends Controller
             $categories = null;
         }
 
+        $title  = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+        $tagIds = $this->getTagsFromTitle($title);
+
         $data = [
-            'title'              =>
-                $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'           =>
-                \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'title'              => $title,
+            'tag_ids'            => $tagIds,
             'category'           => 0,
             'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -280,13 +281,14 @@ class AdvertisementsController extends Controller
             $categories = null;
         }
 
+        $title  = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+        $tagIds = $this->getTagsFromTitle($title);
+
         $data = [
             'id'                 => $ad->id,
-            'title'              =>
-                $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'           =>
-                \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'title'              => $title,
             'category'           => 0,
+            'tag_ids'            => $tagIds,
             'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -499,5 +501,27 @@ class AdvertisementsController extends Controller
         }, $subscriptions['items']);
 
         return array_values($subscriptions);
+    }
+
+    /**
+     * Returns the list of existing tags from the title.
+     *
+     * @param string title Advertisement title
+     *
+     * @return array The list of existing tags.
+     */
+    private function getTagsFromTitle($title)
+    {
+        $tagIds       = $this->get('api.service.tag')->getTagsIds(
+            $this->get('core.locale')->getRequestLocale('frontend'),
+            explode(' ', $title)
+        );
+        $returnTagIds = [];
+        foreach ($tagIds as $tag) {
+            if (!empty($tag->id)) {
+                $returnTagIds[] = $tag->id;
+            }
+        }
+        return $returnTagIds;
     }
 }

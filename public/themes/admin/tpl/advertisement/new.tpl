@@ -4,10 +4,6 @@
 {javascripts}
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-  $('#formulario').on('change', '#title', function() {
-    fill_tags(jQuery('#title').val(), '#metadata', '{url name=admin_utils_calculate_tags}');
-  });
-
   $('#starttime, #endtime').datetimepicker({
     format: 'YYYY-MM-DD HH:mm:ss',
     useCurrent: false,
@@ -93,14 +89,6 @@ jQuery(document).ready(function($) {
                 </label>
                 <div class="controls">
                   <input class="form-control" id="title" name="title" required type="text" value="{$advertisement->title|clearslash|escape:"html"|default:""}"/>
-                </div>
-              </div>
-              <div class="hidden">
-                <label for="metadata" class="form-label">
-                  {t}Keywords{/t}
-                </label>
-                <div class="controls">
-                  <input class="form-control" id="metadata" name="metadata" required title="Metadatos" type="hidden" value="{$advertisement->metadata|strip|default:''}">
                 </div>
               </div>
               <div class="form-group">
