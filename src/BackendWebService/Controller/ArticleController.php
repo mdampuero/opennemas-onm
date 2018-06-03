@@ -37,18 +37,9 @@ class ArticleController extends Controller
             $params = [];
         }
 
-        $data = $request->request->all();
-
-        if (array_key_exists('metadata', $data) && !empty($data['metadata'])) {
-            $data['metadata'] = $this->get('data.manager.filter')
-                ->set($data['metadata'])
-                ->filter('tags', [ 'exclude' => [ '.', '-', '#' ] ])
-                ->get();
-        }
-
+        $data             = $request->request->all();
         $data['category'] = $data['pk_fk_content_category'];
-
-        $msg = $this->get('core.messenger');
+        $msg              = $this->get('core.messenger');
 
         if (!$article->create($data)) {
             $msg->add(_('Unable to create the new article.'), 'error', 400);
