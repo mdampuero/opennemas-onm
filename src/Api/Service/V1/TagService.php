@@ -135,7 +135,7 @@ class TagService extends OrmService
      */
     public function getTagsIds($locale, $tagsArr)
     {
-        $validTags = $this->validateTags($locale, $tagsArr);
+        $validTags = $this->validateTags($tagsArr, $locale);
 
         $returnTags    = [];
         $clearTagNames = [];
