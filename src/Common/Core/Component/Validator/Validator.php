@@ -104,7 +104,7 @@ class Validator
     {
         $config = $this->getConfig(self::BLACKLIST_RULESET_COMMENTS);
 
-        $constraint = new Assert\Collection([
+        $constraintMap = [
             'author' => [
                 new Assert\NotBlank([
                     'message' => _('Please provide a valid author name')
@@ -114,18 +114,10 @@ class Validator
                     'message' => _('Your name has invalid words')
                 ]),
             ],
-            'author_email' => [
-                new Assert\Email([
-                    'message' => _('Please provide a valid email address')
-                ]),
-                new OnmAssert\BlacklistWords([
-                    'words'   => $config,
-                    'message' => _('Your email is not allowed')
-                ]),
-            ],
             'author_ip'    => new Assert\NotBlank([
                 'message' => _('Your IP address is not valid.')
             ]),
+            'author_email' => new Assert\Blank(),
             'body'         => [
                 new Assert\Length([
                     'min'        => 5,
@@ -137,7 +129,21 @@ class Validator
                 ]),
             ],
             'content_id' => new Assert\Range(['min' => 1]),
-        ]);
+        ];
+
+        if (array_key_exists('author_email', $data) && !empty($data['author_email'])) {
+            $constraintMap['author_email'] = [
+                new Assert\Email([
+                    'message' => _('Please provide a valid email address')
+                ]),
+                new OnmAssert\BlacklistWords([
+                    'words'   => $config,
+                    'message' => _('Your email is not allowed')
+                ]),
+            ];
+        }
+
+        $constraint = new Assert\Collection($constraintMap);
 
         $violations = $this->validator->validate($data, $constraint);
 
