@@ -180,10 +180,11 @@ class Vote
             return false;
         }
 
-        $values              = [ 'ips_count_vote' => serialize($this->ips_count_vote) ];
-        $values['value_pos'] = ++$this->value_pos;
+        $values = [ 'ips_count_vote' => serialize($this->ips_count_vote) ];
         if ($vote == '2') {
             $values['value_neg'] = ++$this->value_neg;
+        } else {
+            $values['value_pos'] = ++$this->value_pos;
         }
 
         try {
