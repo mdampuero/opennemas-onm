@@ -232,6 +232,9 @@ class CommentsController extends Controller
                     'message' => _('Your comment was accepted and now we have to moderate it.'),
                     'type'    => 'warning',
                 ];
+
+                $comment = new \Comment();
+                $comment->create($data);
             } else {
                 $errors = $this->get('core.validator')->validate($data, 'comment');
 
@@ -245,21 +248,27 @@ class CommentsController extends Controller
                         'message' => _('Your comment was accepted.'),
                         'type'    => 'success',
                     ];
+
+                    $comment = new \Comment();
+                    $comment->create($data);
                 } else {
                     $data['status'] = $cm->autoReject()
                         ? \Comment::STATUS_REJECTED
                         : \Comment::STATUS_PENDING;
 
-                    $httpCode = 400;
-                    $message  = [
-                        'message' => implode('<br>', $errors),
+                    $errorType = $errors['type'];
+                    $httpCode  = 400;
+                    $message   = [
+                        'message' => implode('<br>', $errors['errors']),
                         'type'    => 'error',
                     ];
+
+                    if ($errorType != 'fatal') {
+                        $comment = new \Comment();
+                        $comment->create($data);
+                    }
                 }
             }
-
-            $comment = new \Comment();
-            $comment->create($data);
         } catch (\Exception $e) {
             $httpCode = 400;
             $message  = $e->getMessage();

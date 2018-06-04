@@ -147,14 +147,23 @@ class Validator
 
         $violations = $this->validator->validate($data, $constraint);
 
+
         if (count($violations) > 0) {
             $errors = [];
 
+            $type = 'normal';
             foreach ($violations as $el) {
+                if ($el->getCode() !== OnmAssert\BlacklistWords::BLACKLIST_WORD_ERROR) {
+                    $type = 'fatal';
+                }
+
                 $errors[] = $el->getMessage();
             }
 
-            return $errors;
+            return [
+                'type' => $type,
+                'errors' => $errors
+            ];
         }
 
         return [];
