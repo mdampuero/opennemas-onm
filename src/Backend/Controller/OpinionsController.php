@@ -250,7 +250,7 @@ class OpinionsController extends Controller
             'opinion'        => $opinion,
             'all_authors'    => $allAuthors,
             'author'         => $author,
-            'commentsConfig' => s::get('comments_config'),
+            'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
             'extra_fields'   => $extraFields
         ]);
     }
@@ -282,7 +282,7 @@ class OpinionsController extends Controller
 
             return $this->render('opinion/new.tpl', [
                 'all_authors'    => $allAuthors,
-                'commentsConfig' => s::get('comments_config'),
+                'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
                 'extra_fields'   => $extraFields
             ]);
         }
