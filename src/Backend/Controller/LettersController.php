@@ -46,46 +46,45 @@ class LettersController extends Controller
      */
     public function createAction(Request $request)
     {
-        if ('POST' == $request->getMethod()) {
-            $letter = new \Letter();
-
-            $data = [
-                'title'          => $request->request
-                    ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                    $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
-                ),
-                'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
-                'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
-                'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-                'email'          => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
-                'params'         => $request->request->get('params'),
-                'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
-                'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-                'body'           => $request->request->get('body', ''),
-            ];
-
-            if ($letter->create($data)) {
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    _('Letter successfully created.')
-                );
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _('Unable to create the new letter.')
-                );
-            }
-
-            return $this->redirect($this->generateUrl('admin_letter_show', [
-                'id' => $letter->id ]
-            ));
-        } else {
+        if ('POST' !== $request->getMethod()) {
             return $this->render('letter/new.tpl', [
-                'commentsConfig' => $this->get('setting_repository')
-                    ->get('comments_config')
+                'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
             ]);
         }
+
+        $letter = new \Letter();
+
+        $data = [
+            'title'          => $request->request
+                ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'metadata'       => \Onm\StringUtils::normalizeMetadata(
+                $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
+            ),
+            'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
+            'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
+            'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
+            'email'          => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
+            'params'         => $request->request->get('params'),
+            'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
+            'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'body'           => $request->request->get('body', ''),
+        ];
+
+        if ($letter->create($data)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Letter successfully created.')
+            );
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Unable to create the new letter.')
+            );
+        }
+
+        return $this->redirect($this->generateUrl('admin_letter_show', [
+            'id' => $letter->id
+        ]));
     }
 
     /**
@@ -117,14 +116,10 @@ class LettersController extends Controller
             return $this->redirect($this->generateUrl('admin_letters'));
         }
 
-        return $this->render(
-            'letter/new.tpl',
-            [
-                'letter' => $letter,
-                'commentsConfig' => $this->get('setting_repository')
-                    ->get('comments_config')
-            ]
-        );
+        return $this->render('letter/new.tpl', [
+            'letter'         => $letter,
+            'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
+        ]);
     }
 
     /**
@@ -174,9 +169,9 @@ class LettersController extends Controller
             $this->get('session')->getFlashBag()->add('error', _('Unable to update the letter.'));
         }
 
-        return $this->redirect(
-            $this->generateUrl('admin_letter_show', ['id' => $letter->id ])
-        );
+        return $this->redirect($this->generateUrl('admin_letter_show', [
+            'id' => $letter->id
+        ]));
     }
 
     /**
@@ -219,13 +214,10 @@ class LettersController extends Controller
             ]
         ]);
 
-        return $this->render(
-            'letter/content-provider.tpl',
-            [
-                'letters'    => $letters,
-                'pagination' => $pagination,
-            ]
-        );
+        return $this->render('letter/content-provider.tpl', [
+            'letters'    => $letters,
+            'pagination' => $pagination,
+        ]);
     }
 
     /**
@@ -267,12 +259,9 @@ class LettersController extends Controller
             'route'       => 'admin_letters_content_provider_related'
         ]);
 
-        return $this->render(
-            "common/content_provider/_container-content-list.tpl",
-            [
-                'contents'   => $letters,
-                'pagination' => $pagination
-            ]
-        );
+        return $this->render("common/content_provider/_container-content-list.tpl", [
+            'contents'   => $letters,
+            'pagination' => $pagination
+        ]);
     }
 }
