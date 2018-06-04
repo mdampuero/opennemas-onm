@@ -90,6 +90,10 @@ class Vote
      */
     public function create($votePK, $vote, $ip)
     {
+        // TODO: clearly this a remanent from old opennemas times, for now I'll
+        // keep it here but no uses are in place.
+        $karma = 100;
+
         try {
             getService('dbal_connection')->insert("votes", [
                 'pk_vote'       => $votePK,
@@ -183,7 +187,7 @@ class Vote
         }
 
         try {
-            $rs = getService('dbal_connection')->update(
+            getService('dbal_connection')->update(
                 "votes",
                 $values,
                 [ 'pk_vote' => (int) $this->pk_vote ]
