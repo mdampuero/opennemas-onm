@@ -153,10 +153,7 @@ class CommentsController extends Controller
         }
 
         // 1 Vote up - 2 Vote down
-        $voteValue = 2;
-        if ($voteValue == 'up') {
-            $voteValue = 1;
-        }
+        $voteValue = ($voteValue == 'up') ? 1 : 2;
 
         // Create the vote
         $vote = new \Vote($commentId);
