@@ -46,14 +46,14 @@ class HttpRssAtom extends HttpRss
                 sprintf(
                     _(
                         'Can\'t connect to server %s. Please check your'
-                        .' connection details.'
+                        . ' connection details.'
                     ),
                     $this->params['name']
                 )
             );
         }
 
-        $xml   = simplexml_load_string($content);
+        $xml = simplexml_load_string($content);
 
         $xml->registerXPathNamespace('f', 'http://www.w3.org/2005/Atom');
         $files = $xml->xpath('/f:feed/f:entry');
@@ -79,16 +79,20 @@ class HttpRssAtom extends HttpRss
     {
         $article = new \Article();
 
-        $article->id    = md5($path);
-        $article->title = (string) $content->title;
-        $article->body = (string) $content->content;
-        $article->summary = (string) $content->summary;
+        $article->id               = md5($path);
+        $article->title            = (string) $content->title;
+        $article->body             = (string) $content->content;
+        $article->summary          = (string) $content->summary;
         $article->created_datetime = new \DateTime($content->published);
         $article->updated_datetime = new \DateTime($content->updated);
 
         $newsMLString = $this->tpl->fetch(
             'news_agency/newsml_templates/base.tpl',
-            array('article' => $article)
+            [
+                'article' => $article,
+                'tags'    => $this->get('api.service.tag')
+                    ->getListByIdsKeyMapped($article->tag_ids)['items']
+            ]
         );
 
         file_put_contents($path, $newsMLString);

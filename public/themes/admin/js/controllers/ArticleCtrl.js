@@ -85,12 +85,6 @@
          *   Executes actions to adapt data from template to the webservice.
          */
         $scope.build = function() {
-          // Convert metadata to an array
-          if ($scope.data.article.metadata) {
-            $scope.data.article.metadata =
-              $scope.data.article.metadata.split(',');
-          }
-
           if ($scope.data.article.subscriptions) {
             for (var i = 0; i < $scope.data.article.subscriptions.length; i++) {
               $scope.data.article.subscriptions[i] =
@@ -193,12 +187,6 @@
          */
         $scope.clean = function(article, preview) {
           var data = angular.copy(article);
-
-          if (angular.isArray(article.metadata)) {
-            data.metadata = article.metadata.map(function(e) {
-              return e.text;
-            }).join(',');
-          }
 
           var keys = [ 'img1', 'img2', 'fk_video', 'fk_video2' ];
 
@@ -392,12 +380,6 @@
           var data = $scope.clean($scope.article, true);
 
           data = cleaner.clean(data);
-
-          if (angular.isArray(data.metadata)) {
-            data.metadata = data.metadata.map(function(e) {
-              return e.text;
-            }).join(',');
-          }
 
           var postData = { article: data, locale: $scope.config.locale };
 

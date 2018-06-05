@@ -76,14 +76,14 @@ class HttpRss extends Http
                 sprintf(
                     _(
                         'Can\'t connect to server %s. Please check your'
-                        .' connection details.'
+                        . ' connection details.'
                     ),
                     $this->params['name']
                 )
             );
         }
 
-        $xml   = simplexml_load_string($content);
+        $xml = simplexml_load_string($content);
         if (!is_object($xml)) {
             return $this->remoteFiles;
         }
@@ -122,7 +122,11 @@ class HttpRss extends Http
 
         $newsMLString = $this->tpl->fetch(
             'news_agency/newsml_templates/base.tpl',
-            array('article' => $article)
+            [
+                'article' => $article,
+                'tags'    => $this->get('api.service.tag')
+                    ->getListByIdsKeyMapped($article->tag_ids)['items']
+            ]
         );
 
         file_put_contents($path, $newsMLString);
