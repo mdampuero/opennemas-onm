@@ -66,6 +66,10 @@
             $scope.acceptedTags = function() {
               var returnVal = [];
 
+              if (!$scope.ngModel) {
+                return returnVal;
+              }
+
               for (var i = 0; i < $scope.ngModel.length; i++) {
                 if (
                   typeof $scope.ngModel[i] === 'object' &&
