@@ -220,11 +220,12 @@ class StaticPageController extends Controller
         $entity->content_status = (empty($status)) ? 0 : 1;
 
         try {
-            $em->persist($entity);
-            $contentAux     = new \Content();
-            $contentAux->id = $id;
+            $contentAux              = new \Content();
+            $contentAux->id          = $id;
+            $entity->data['tag_ids'] = $contentAux->addTags($tagIds);
+            $entity->tag_ids         = $entity->data['tag_ids'];
 
-            $contentAux->addTags($tagIds);
+            $em->persist($entity);
 
             // TODO: Remove when static pages list ported to the new ORM
             $this->get('cache')->delete('static_page-' . $id);
