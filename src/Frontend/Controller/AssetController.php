@@ -273,6 +273,12 @@ class AssetController extends Controller
 
         $favicoUrl = realpath(SITE_PATH . '/' . $favicoUrl);
 
+        if (empty($favicoUrl)) {
+            // Default favico
+            $favicoUrl = realpath(SITE_PATH . '/assets/images/favicon.png');
+            $favicoFileName = 'favicon.png';
+        }
+
         return new Response(
             file_get_contents($favicoUrl),
             200,

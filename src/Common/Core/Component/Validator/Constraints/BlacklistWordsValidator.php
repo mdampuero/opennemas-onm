@@ -67,6 +67,10 @@ class BlacklistWordsValidator extends ConstraintValidator
      **/
     public function match($value, $blacklist)
     {
+        if (empty($blacklist)) {
+            return false;
+        }
+
         if (!is_array($blacklist)) {
             $blacklist = explode("\n", $blacklist);
         }

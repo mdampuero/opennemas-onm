@@ -157,10 +157,7 @@ class CommentsController extends Controller
         }
 
         // 1 Vote up - 2 Vote down
-        $vote = 2;
-        if ($voteValue == 'up') {
-            $vote = 1;
-        }
+        $voteValue = ($voteValue == 'up') ? 1 : 2;
 
         // Create the vote
         $voteObject = new \Vote($commentId);
@@ -168,7 +165,7 @@ class CommentsController extends Controller
             return new Response(_("Error: no vote value!", 400));
         }
 
-        $update = $voteObject->update($vote, $ip);
+        $update = $voteObject->update($voteValue, $ip);
 
         if ($update) {
             $response = new Response('ok', 200);
