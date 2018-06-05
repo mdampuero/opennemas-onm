@@ -56,6 +56,7 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
             'changed'  => '2016-10-13 11:40:32',
             'category' => new \ContentCategory(),
             'summary'  => '<p>This is the summary</p>',
+            'tag_ids'  => [1,2,3,4],
             'logo'     => [
                 'url'    => 'http://onm.com/asset/logo.png',
                 'width'  => 350,
@@ -300,7 +301,7 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
             "datePublished" : "2016-10-13 11:40:32",
             "dateModified": "2016-10-13 11:40:32",
             "articleSection" : "Mundo",
-            "keywords": "keywords,content,json,linking,data",
+            "keywords": "",
             "url": "http://onm.com/20161013114032000674.html",
             "wordCount": 5,
             "description": "This is the summary",
@@ -319,7 +320,7 @@ class StructuredDataTest extends \PHPUnit_Framework_TestCase
         $this->object->sm->expects($this->any())->method('get')
             ->willReturn('Site Name');
         $this->object->ts->expects($this->any())->method('getTagsSepByCommas')
-            ->willReturn('keywords,content,json,linking,data');
+            ->willReturn('');
 
         // Article with image
         $imageJson = '

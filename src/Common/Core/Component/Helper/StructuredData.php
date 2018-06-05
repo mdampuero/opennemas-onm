@@ -57,7 +57,9 @@ class StructuredData
      */
     public function generateVideoJsonLDCode($data)
     {
-        $keywords = $this->ts->getTagsSepByCommas($data['video']->tag_ids);
+        $keywords = empty($data['video']->tag_ids) ?
+            '' :
+            $this->ts->getTagsSepByCommas($data['video']->tag_ids);
         $code     = '{
             "@context": "http://schema.org/",
             "@type": "VideoObject",
@@ -91,7 +93,9 @@ class StructuredData
      */
     public function generateImageGalleryJsonLDCode($data)
     {
-        $keywords = $this->ts->getTagsSepByCommas($data['content']->tag_ids);
+        $keywords = empty($data['content']->tag_ids) ?
+            '' :
+            $this->ts->getTagsSepByCommas($data['content']->tag_ids);
         $code     = '{
             "@context":"http://schema.org",
             "@type":"ImageGallery",
@@ -152,7 +156,9 @@ class StructuredData
      */
     public function generateNewsArticleJsonLDCode($data)
     {
-        $keywords = $this->ts->getTagsSepByCommas($data['content']->tag_ids);
+        $keywords = empty($data['content']->tag_ids) ?
+            '' :
+            $this->ts->getTagsSepByCommas($data['content']->tag_ids);
         $code     = '{
             "@context" : "http://schema.org",
             "@type" : "NewsArticle",
