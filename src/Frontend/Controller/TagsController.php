@@ -30,7 +30,7 @@ class TagsController extends Controller
      */
     public function indexAction()
     {
-        if (!$this->get('core.security')
+        if ($this->get('core.security')
             ->hasExtension('es.openhost.module.tagsIndex')
         ) {
             throw new ResourceNotFoundException();
@@ -44,24 +44,25 @@ class TagsController extends Controller
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('tag/index.tpl', $cacheId)
         ) {
-            $fm      = $this->get('data.manager.filter');
-            $t       = $this->get('core.manager.tag')->findAll();
+            $fm = $this->get('data.manager.filter');
+            $t  = $this->get('api.service.tag')->getList()['items'];
+
             $letters = range('a', 'z');
 
             foreach ($t as $tag) {
-                if (is_numeric($tag[0])) {
-                    $tags['#'][] = $tag;
+                if (is_numeric($tag->name[0])) {
+                    $tags['#'][] = $tag->name;
                     continue;
                 }
 
-                $normalized = $fm->set($tag)->filter('normalize')->get();
+                $normalized = $fm->set($tag->name)->filter('normalize')->get();
 
                 if (in_array($normalized[0], $letters)) {
-                    $tags[$normalized[0]][] = $tag;
+                    $tags[$normalized[0]][] = $tag->name;
                     continue;
                 }
 
-                $tags['*'][] = $tag;
+                $tags['*'][] = $tag->name;
             }
         }
 
