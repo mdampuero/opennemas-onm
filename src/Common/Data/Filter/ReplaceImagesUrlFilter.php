@@ -27,12 +27,14 @@ class ReplaceImagesUrlFilter extends Filter
 
         foreach ($matches['slug'] as $slug) {
             $translation = $this->container->get('core.redirector')
-                ->getTranslationBySlug($slug);
+                ->getTranslation($slug, 'photo');
 
-            $photo = $this->container->get('entity_repository')
-                ->find('photo', $translation['pk_content']);
+            if ($translation) {
+                $photo = $this->container->get('entity_repository')
+                    ->find('Photo', $translation['pk_content']);
 
-            $str = str_replace($slug, $path . $photo->path_img, $str);
+                $str = str_replace($slug, $path . $photo->path_img, $str);
+            }
         }
 
         return $str;

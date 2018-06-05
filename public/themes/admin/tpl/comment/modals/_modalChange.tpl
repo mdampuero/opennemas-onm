@@ -1,64 +1,24 @@
-<div class="modal fade" id="modal-comment-change">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">{t}Change comment manager{/t}</h4>
-      </div>
-      <div class="modal-body">
-        <p>{t}Opennemas supports multiple managers for comments. You can change to your desired manager whenever you want.{/t}</p>
-        <p>{t}Pick the method to manage comments:{/t}</p>
+<div class="modal-body text-center">
+  <i class="fa fa-4x m-b-10 m-t-40" ng-class="template.iconName"></i>
+  <h4 class="modal-title m-b-30">{t escape=off 1="[% template.handler %]"}Change comment manager to <span class="text-primary">%1</span>{/t}</h4>
+  <p >{t 1="[% template.handler %]"}Are you sure you want to change your comment system handler?{/t}</p>
+</div>
 
-        <div class="row clearfix comment-system-element">
-          <a href="{url name=admin_comments_select type=onm}" class="col-md-2">
-            <i class="fa fa-comment fa-4x"></i>
-          </a>
-          <div class="col-md-10">
-            <a href="{url name=admin_comments_select type=onm}">
-              <h4>{t}Built-in system{/t}</h4>
-            </a>
-            {t}Opennemas has simple but effective comment system that requires zero configuration.{/t}
-          </div>
-        </div>
-        <div class="row clearfix comment-system-element">
-          <a href="{url name=admin_comments_select type=disqus}" class="col-md-2">
-            <img src="{$_template->getImageDir()}/disqus-icon.png" alt="Disqus" width="100%"/>
-          </a>
-          <div class="col-md-10">
-            <a href="{url name=admin_comments_select type=disqus}">
-              <h4>Disqus</h4>
-            </a>
-            {t escape=off}Integrate Opennemas with the <a href="http://www.disqus.com/">Disqus comment system</a> and use their powerful system to manage your website comments.{/t}
-          </div>
-        </div>
-        <p></p>
-        <div class="row clearfix comment-system-element">
-          <a href="{url name=admin_comments_select type=facebook}" class="col-md-2">
-            <i class="fa fa-facebook fa-4x"></i>
-          </a>
-          <div class="col-md-10">
-            <a href="{url name=admin_comments_select type=facebook}">
-              <h4>Facebook</h4>
-            </a>
-            {t escape=off}Integrate Opennemas with the <a href="https://developers.facebook.com/docs/plugins/comments/">Facebook comment system</a> and use their online tools to manage your website comments.{/t}
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="modal-footer row">
+  <div class="col-xs-6">
+    <button class="btn btn-block btn-danger text-uppercase" data-dismiss="modal" ng-click="no()" ng-disabled="loading" type="button">
+      <h4 class="bold text-uppercase text-white">
+        <i class="fa fa-times m-r-5"></i>
+        {t}No{/t}
+      </h4>
+    </button>
+  </div>
+  <div class="col-xs-6">
+    <button type="button" class="btn btn-block btn-success" ng-click="yes()">
+      <h4 class="bold text-uppercase text-white">
+        <i class="fa fa-check m-r-5"></i>
+        {t}Yes{/t}
+      </h4>
+    </button>
   </div>
 </div>
-{javascripts}
-  <script>
-  jQuery("#modal-comment-change").modal({
-      backdrop: 'static', //Show a grey back drop
-      keyboard: true, //Can close on escape
-      show: false
-  });
-
-  jQuery('.change').click(function(e) {
-      //Sets up the modal
-      jQuery("#modal-comment-change").modal('show');
-      e.preventDefault();
-  });
-  </script>
-{/javascripts}

@@ -280,20 +280,6 @@ class CommentManager extends BaseManager
     }
 
     /**
-     * Checks if the content of a comment has bad words.
-     *
-     * @param array $data The data of the comment.
-     *
-     * @return integer Higher values means more bad words.
-     */
-    public static function hasBadWordsComment($string)
-    {
-        $weight = \Onm\StringUtils::getWeightBadWords($string);
-
-        return $weight > 100;
-    }
-
-    /**
      * Deletes a comment from cache.
      *
      * @param integer $id Id of the comment to delete.

@@ -1,15 +1,61 @@
-#modal-comment-change {
-  .comment-system-element {
-    width:90%;
-    padding:20px 10px;
-    margin:0 auto;
-    margin-bottom: 10px;
-    border:1px solid transparent;
-    border-radius:5px;
-
-    &:hover {
-      border:1px solid #ccc;
+.comments-listing {
+    .table-wrapper {
+      white-space: normal !important;
     }
-  }
+    .table td {
+      white-space: normal;
+    }
+
+    .comment-author-info, .comment-body-block {
+      display:block;
+      width:100%;
+      clear:both;
+    }
+    .gravatar.img-thumbnail {
+      min-width: 40px;
+    }
 }
 
+.checkbox-title {
+  font-family: 'Open Sans';
+  font-weight: 300;
+  color: #505458;
+  font-size: 1.12em;
+}
+
+.comment-system .comment-system-block {
+  border:1px solid #ccc;
+  border-radius:3px;
+  padding:10px ;
+  cursor:pointer;
+  width:100%;
+  display:block;
+  text-align:center;
+}
+.comment-system .comment-system-block:not(.btn-primary):hover {
+  background-color: #fff !important;
+  box-shadow: 0 2px 5px rgba(55, 94, 146, 0.3);
+}
+.comment-system .comment-system-block:not(.btn-primary) .fa-comments {
+  color: #1b9fe2;
+}
+.comment-system .comment-system-block:not(.btn-primary) .fa-comment {
+  color: #229cff;
+}
+.comment-system .comment-system-block:not(.btn-primary) .fa-facebook-official {
+  color: #4267b2;
+}
+.comment-system .comment-system-block.btn-primary {
+  pointer-events: none;
+}
+.comment-system.active .comment-system-block {
+  background-color: #0aa699 !important;
+  border: 1px solid #0aa699 !important;
+  color: White;
+}
+.comment-system.active .comment-system-block .help {
+  color:White;
+}
+.comment-system .comment-system-block.btn-primary {
+  box-shadow: 0 0 5px #376092;
+}
