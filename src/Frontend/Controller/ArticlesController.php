@@ -123,7 +123,9 @@ class ArticlesController extends Controller
             'o_token'               => $token,
             'x-cache-for'           => '+1 day',
             'x-cacheable'           => empty($token),
-            'x-tags'                => 'article,' . $article->id
+            'x-tags'                => 'article,' . $article->id,
+            'tags'                   => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($article->tag_ids)['items']
         ]);
     }
 

@@ -143,6 +143,8 @@ class LetterController extends Controller
             'letter'         => $letter,
             'x-tags'         => 'letter,' . $letter->id,
             'x-cache-for'    => '+1 day',
+            'tags'                   => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($letter->tag_ids)['items']
         ]);
     }
 

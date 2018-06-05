@@ -43,10 +43,10 @@ class NewStandController extends Controller
         // $page  = $this->request->query->getDigits('page', 1);
         $this->category_name = $this->request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
-        $this->view->assign(array( 'actual_category' => $this->category_name, ));
+        $this->view->assign([ 'actual_category' => $this->category_name, ]);
 
         if (!defined('KIOSKO_DIR')) {
-            define('KIOSKO_DIR', "kiosko".SS);
+            define('KIOSKO_DIR', "kiosko" . SS);
         }
     }
 
@@ -59,9 +59,9 @@ class NewStandController extends Controller
      */
     public function frontpageAction(Request $request)
     {
-        $month     = $request->query->getDigits('month', date('m'));
-        $year      = $request->query->getDigits('year', date('Y'));
-        $day       = $request->query->getDigits('day', '01');
+        $month = $request->query->getDigits('month', date('m'));
+        $year  = $request->query->getDigits('year', date('Y'));
+        $day   = $request->query->getDigits('day', '01');
 
         if (empty($this->category_name)) {
             $this->category_name = 'home';
@@ -85,31 +85,31 @@ class NewStandController extends Controller
         ) {
             $kioskos = [];
 
-            if ($order =='grouped') {
+            if ($order == 'grouped') {
                 $ccm         = \ContentCategoryManager::get_instance();
                 $contentType = \ContentManager::getContentTypeIdFromName('kiosko');
                 $category    = $ccm->get_id($this->category_name);
 
-                list($allcategorys, $subcat, $categoryData)
-                    = $ccm->getArraysMenu($category, $contentType);
+                list($allcategorys, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
+
                 $where = "";
                 $limit = "LIMIT 48";
                 $month = $request->query->getDigits('month');
                 if (!empty($month)) {
                     $where .= " AND MONTH(`kioskos`.date)='{$month}' ";
-                    $limit ="";
+                    $limit  = "";
                 }
                 $year = $request->query->getDigits('year');
                 if (!empty($year)) {
                     $where .= " AND YEAR(`kioskos`.date)='{$year}' ";
-                    $limit ="";
+                    $limit  = "";
                 }
 
                 foreach ($allcategorys as $theCategory) {
                     $portadas = $this->cm->find_by_category(
                         'Kiosko',
                         $theCategory->pk_content_category,
-                        ' `contents`.`content_status`=1   '.
+                        ' `contents`.`content_status`=1   ' .
                         $where,
                         "ORDER BY `kioskos`.date DESC  {$limit}"
                     );
@@ -120,11 +120,11 @@ class NewStandController extends Controller
                         ];
                     }
                 }
-            } elseif ($order =='sections') {
+            } elseif ($order == 'sections') {
                 $date     = "$year-$month-$day";
                 $portadas = $this->cm->findAll(
                     'Kiosko',
-                    ' `contents`.`content_status`=1 AND  `kioskos`.date ="'.$date.'"',
+                    ' `contents`.`content_status`=1 AND  `kioskos`.date ="' . $date . '"',
                     'ORDER BY `kioskos`.date DESC '
                 );
 
@@ -135,22 +135,23 @@ class NewStandController extends Controller
                 $ccm         = \ContentCategoryManager::get_instance();
                 $contentType = \ContentManager::getContentTypeIdFromName('kiosko');
                 $category    = $ccm->get_id($this->category_name);
+
                 list($allcategorys, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
 
                 foreach ($allcategorys as $theCategory) {
                     $portadas = $this->cm->find_by_category(
                         'Kiosko',
                         $theCategory->pk_content_category,
-                        ' `contents`.`content_status`=1   '.
-                        'AND MONTH(`kioskos`.date)='.$month.' AND'.
-                        ' YEAR(`kioskos`.date)='.$year.'',
+                        ' `contents`.`content_status`=1   ' .
+                        'AND MONTH(`kioskos`.date)=' . $month . ' AND' .
+                        ' YEAR(`kioskos`.date)=' . $year . '',
                         'ORDER BY `kioskos`.date DESC '
                     );
                     if (!empty($portadas)) {
-                        $kioskos[] = array (
+                        $kioskos[] = [
                             'category' => $theCategory->title,
                             'portadas' => $portadas
-                        );
+                        ];
                     }
                 }
             }
@@ -167,8 +168,8 @@ class NewStandController extends Controller
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
             'cache_id'       => $cacheID,
-            'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
-            'selected_date'  => '1-'.$month.'-'.$year,
+            'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
+            'selected_date'  => '1-' . $month . '-' . $year,
             'MONTH'          => $month,
             'YEAR'           => $year,
             'year'           => $year,
@@ -207,7 +208,7 @@ class NewStandController extends Controller
             $month = date('m', $date);
             $year  = date('Y', $date);
 
-            $kioskos = $this->cm->find_by_category(
+            $kioskos      = $this->cm->find_by_category(
                 'Kiosko',
                 $content->category,
                 ' `contents`.`content_status`=1   ',
@@ -220,11 +221,12 @@ class NewStandController extends Controller
                     'portadas' => $kioskos
                 ];
             }
+
             $this->view->assign([
-                'date'           => '1-'.$month.'-'.$year,
-                'MONTH'          => $month,
-                'YEAR'           => $year,
-                'kiosko'         => $otherKioskos
+                'date'   => '1-' . $month . '-' . $year,
+                'MONTH'  => $month,
+                'YEAR'   => $year,
+                'kiosko' => $otherKioskos
             ]);
         }
 
@@ -239,8 +241,10 @@ class NewStandController extends Controller
             'epaper'         => $content,
             'content'        => $content,
             'cache_id'       => $cacheID,
-            'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
-            'x-tags'         => 'newsstand,'.$content->pk_content,
+            'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
+            'x-tags'         => 'newsstand,' . $content->pk_content,
+            'tags'           => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($content->tag_ids)['items']
         ]);
     }
 
@@ -253,7 +257,7 @@ class NewStandController extends Controller
     {
         //for widget_newsstand_dates
         //TODO: intelligent wigget
-        $ki = new \Kiosko();
+        $ki            = new \Kiosko();
         $months_kiosko = $ki->getMonthsByYears();
         $this->view->assign('months_kiosko', $months_kiosko);
     }
@@ -265,12 +269,15 @@ class NewStandController extends Controller
      */
     private function getAds()
     {
-        $category = (!isset($category) || ($category == 'home'))? 0: $category;
+        $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
 
         // Get news_stand positions
         $positionManager = $this->get('core.helper.advertisement');
-        $positions = $positionManager->getPositionsForGroup('frontpage', array(103, 105));
-        $advertisements =  $this->get('advertisement_repository')
+        $positions       = $positionManager->getPositionsForGroup(
+            'frontpage',
+            [103, 105]
+        );
+        $advertisements  = $this->get('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
 
         return [ $positions, $advertisements ];

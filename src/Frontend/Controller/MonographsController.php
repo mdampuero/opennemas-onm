@@ -216,6 +216,8 @@ class MonographsController extends Controller
             'cache_id'  => $cacheID,
             'x-tags'      => 'monograph,' . $special->id,
             'x-cache-for' => '+1 day',
+            'tags'            => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($special->tag_ids)['items']
         ]);
     }
 }
