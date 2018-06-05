@@ -391,7 +391,11 @@ class SubscriberController extends Controller
             ->getDataSet('Settings', 'instance')
             ->get('user_settings', []);
 
-        if (!is_array($settings['fields'])) {
+        if (!is_array($settings)) {
+            $settings = [ 'fields' => [] ];
+        }
+
+        if (!array_key_exists('fields', $settings) || !is_array($settings['fields'])) {
             $settings['fields'] = [];
         }
 
