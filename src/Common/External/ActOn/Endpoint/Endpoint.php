@@ -12,6 +12,13 @@ namespace Common\External\ActOn\Endpoint;
 class Endpoint
 {
     /**
+     * The HTTP client
+     *
+     * @var object
+     */
+    protected $client;
+
+    /**
      * The endpoint configuration.
      *
      * @var array
@@ -21,15 +28,11 @@ class Endpoint
     /**
      * Initializes the endpoint.
      *
-     * @param array $config The endpoint configuration.
+     * @param object $client The HTTP client.
      */
-    public function __construct($config = [])
+    public function __construct($client)
     {
-        if (!is_array($config)) {
-            return;
-        }
-
-        $this->config = array_merge($this->config, $config);
+        $this->client = $client;
     }
 
     /**
@@ -76,5 +79,19 @@ class Endpoint
     public function getConfiguration()
     {
         return $this->config;
+    }
+
+    /**
+     * Sets the endpoint configuration.
+     *
+     * @param array $config The endpoint configuration.
+     */
+    public function setConfiguration($config = [])
+    {
+        if (!is_array($config)) {
+            return;
+        }
+
+        $this->config = $config;
     }
 }

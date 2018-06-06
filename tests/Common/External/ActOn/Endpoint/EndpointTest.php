@@ -21,6 +21,9 @@ class EndpointTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        $this->client = $this->getMockBuilder('HTTPClient')
+            ->getMock();
+
         $this->config = [
             'actions' => [
                 'foo' => [
@@ -32,15 +35,9 @@ class EndpointTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->endpoint = new Endpoint($this->config);
-    }
+        $this->endpoint = new Endpoint($this->client);
 
-    /**
-     * Tests constructor when provided configuration is not an array.
-     */
-    public function testConstructorWithInvalidConfig()
-    {
-        new Endpoint(null);
+        $this->endpoint->setConfiguration($this->config);
     }
 
     /**
@@ -71,8 +68,15 @@ class EndpointTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests getConfiguration.
      */
-    public function testGetConfiguration()
+    public function testGetAndSetConfiguration()
     {
         $this->assertEquals($this->config, $this->endpoint->getConfiguration());
+
+        $config = [ 'wibble' => 'flob' ];
+
+        $this->endpoint->setConfiguration($config);
+        $this->endpoint->setConfiguration(null);
+
+        $this->assertEquals($config, $this->endpoint->getConfiguration());
     }
 }
