@@ -567,15 +567,15 @@ class Content implements \JsonSerializable
             'params'              => (!isset($data['params'])
                 || empty($data['params'])) ? null : serialize($data['params'])
         ];
-        $conn = getService('dbal_connection');
+        $conn        = getService('dbal_connection');
         try {
             // Insert into contents table
             $conn->insert('contents', $contentData);
 
-            $this->id               = $conn->lastInsertId();
-            $this->pk_content       = $this->id;
-            $data['pk_content']     = $this->id;
-            $data['id']             = $this->id;
+            $this->id           = $conn->lastInsertId();
+            $this->pk_content   = $this->id;
+            $data['pk_content'] = $this->id;
+            $data['id']         = $this->id;
 
             $contentData['tag_ids'] = (empty($data['tag_ids'])) ?
                 [] :
@@ -719,9 +719,7 @@ class Content implements \JsonSerializable
                 $catName = $this->category_name;
             }
 
-            $this->tag_ids = (empty($data['tag_ids'])) ?
-                [] :
-                $this->addTags($data['tag_ids']);
+            $this->tag_ids = $this->addTags(is_array($data['tag_ids']) ? $data['tag_ids'] : []);
 
             logContentEvent(__METHOD__, $this);
             dispatchEventWithParams('content.update', [ 'content' => $this ]);
@@ -2193,6 +2191,7 @@ class Content implements \JsonSerializable
         $ts         = getService('api.service.tag');
 
         if (empty($tagIds)) {
+            self::deleteTags($this->id);
             return [];
         }
 
