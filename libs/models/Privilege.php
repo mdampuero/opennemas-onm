@@ -1641,7 +1641,7 @@ class Privilege
         ];
 
         return array_filter(self::$privileges, function ($a) {
-            return $a['enabled'] === 1;
+            return array_key_exists('enabled', $a) && $a['enabled'] === 1;
         });
     }
 }
