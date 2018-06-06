@@ -184,8 +184,8 @@
                   {/is_module_activated}
                   <div class="grid-title">
                     <h4>
-                      <i class="fa fa-bullhorn"></i>
-                      {t}Advertisement{/t}
+                      <i class="fa fa-plus"></i>
+                      {t}Advanced{/t}
                     </h4>
                   </div>
                   <div class="grid-body">
