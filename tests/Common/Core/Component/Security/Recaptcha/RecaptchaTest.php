@@ -18,7 +18,7 @@ class RecaptchaTest extends KernelTestCase
     {
         $this->baseRecaptcha = $this->getMockBuilder('\ReCaptcha\ReCaptcha')
             ->disableOriginalConstructor()
-            ->setMethods([ 'isSuccess', 'verify' ])
+            ->setMethods([ 'isSuccess', 'verify', 'getHostName' ])
             ->getMock();
 
         $this->repository = $this->getMockBuilder('SettingManager')
@@ -29,7 +29,14 @@ class RecaptchaTest extends KernelTestCase
             ->setMethods([ 'get', 'getParameter' ])
             ->getMock();
 
-        $this->recaptcha = new Recaptcha($this->container);
+        $this->requestStack = $this->getMockBuilder('RequestStack')
+            ->setMethods(['getCurrentRequest'])->getMock();
+
+        $this->request = $this->getMockBuilder('Request')
+            ->setMethods(['getHost'])->getMock();
+
+        $this->recaptchaResponse = $this->getMockBuilder('Response')
+            ->setMethods(['getHostName', 'isSuccess'])->getMock();
     }
 
     /**
@@ -40,9 +47,17 @@ class RecaptchaTest extends KernelTestCase
         $this->container->expects($this->at(0))->method('getParameter')
             ->with('api.recaptcha.site_key')->willReturn('fred');
         $this->container->expects($this->at(1))->method('getParameter')
-            ->with('api.recaptcha.secret_key')->willReturn('fred');
+            ->with('api.recaptcha.secret_key')->willReturn('fres');
 
+        $keys = [
+            'siteKey'   => 'fred',
+            'secretKey' => 'fres',
+        ];
+
+        $this->recaptcha = new Recaptcha($this->container);
         $this->recaptcha->configureFromParameters();
+
+        $this->assertAttributeEquals($keys, 'recaptchaKeys', $this->recaptcha);
     }
 
     /**
@@ -52,6 +67,7 @@ class RecaptchaTest extends KernelTestCase
      */
     public function testConfigureForBackendWithNoKey()
     {
+        $this->recaptcha = new Recaptcha($this->container);
         $this->recaptcha->configureFromParameters();
     }
 
@@ -60,6 +76,11 @@ class RecaptchaTest extends KernelTestCase
      */
     public function testConfigureForFrontend()
     {
+        $keys = [
+            'siteKey'   => 'wobble',
+            'secretKey' => 'baz',
+        ];
+
         $this->container->expects($this->any())
             ->method('get')
             ->with('setting_repository')
@@ -70,7 +91,10 @@ class RecaptchaTest extends KernelTestCase
             ->with('recaptcha')
             ->willReturn([ 'private_key' => 'wobble', 'public_key' => 'baz' ]);
 
+        $this->recaptcha = new Recaptcha($this->container);
         $this->recaptcha->configureFromSettings();
+
+        $this->assertAttributeEquals($keys, 'recaptchaKeys', $this->recaptcha);
     }
 
     /**
@@ -80,6 +104,11 @@ class RecaptchaTest extends KernelTestCase
      */
     public function testConfigureForFrontendWithNoKey()
     {
+        $keys = [
+            'siteKey'   => 'fred',
+            'secretKey' => 'fres',
+        ];
+
         $this->container->expects($this->any())
             ->method('get')
             ->with('setting_repository')
@@ -90,7 +119,10 @@ class RecaptchaTest extends KernelTestCase
             ->with('recaptcha')
             ->willReturn([]);
 
+        $this->recaptcha = new Recaptcha($this->container);
         $this->recaptcha->configureFromSettings();
+
+        $this->assertAttributeEquals($keys, 'recaptchaKeys', $this->recaptcha);
     }
 
     /**
@@ -105,23 +137,27 @@ class RecaptchaTest extends KernelTestCase
 
         $locale->expects($this->any())->method('getLocaleShort')->willReturn('en');
 
-        $this->container->expects($this->any())
+        $this->container->expects($this->once())
             ->method('get')
             ->with('core.locale')
             ->willReturn($locale);
 
-        $property = new \ReflectionProperty($this->recaptcha, 'recaptcha');
-        $property->setAccessible(true);
-        $property->setValue($this->recaptcha, $this->baseRecaptcha);
+        $this->recaptcha = new Recaptcha($this->container);
 
-        $property = new \ReflectionProperty($this->recaptcha, 'siteKey');
+        $property = new \ReflectionProperty($this->recaptcha, 'recaptcha');
         $property->setAccessible(true);
         $property->setValue($this->recaptcha, 'bar');
 
+        $property = new \ReflectionProperty($this->recaptcha, 'recaptchaKeys');
+        $property->setAccessible(true);
+        $property->setValue($this->recaptcha, [
+            'siteKey'   => 'fred',
+            'secretKey' => 'fres',
+        ]);
         $html = $this->recaptcha->getHtml();
 
         $this->assertContains('hl=en', $html);
-        $this->assertContains('data-sitekey="bar"', $html);
+        $this->assertContains('data-sitekey="fred"', $html);
     }
 
     /**
@@ -129,25 +165,90 @@ class RecaptchaTest extends KernelTestCase
      */
     public function testGetHtmlWhenNoRecaptcha()
     {
+        $this->recaptcha = new Recaptcha($this->container);
+
         $this->assertEquals('ReCaptcha service is not configured', $this->recaptcha->getHtml());
     }
-
 
     /**
      * Tests isValid for valid and invalid recaptcha codes.
      */
     public function testIsValid()
     {
-        $this->baseRecaptcha->expects($this->any())->method('verify')->willReturn($this->baseRecaptcha);
-        $this->baseRecaptcha->expects($this->at(1))->method('isSuccess')->willReturn(true);
-        $this->baseRecaptcha->expects($this->at(3))->method('isSuccess')->willReturn(false);
+        $hostName = 'www.example.com';
+
+        $this->request->expects($this->any())
+            ->method('getHost')->willReturn($hostName);
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+        $this->container->expects($this->any())
+            ->method('get')->with('request_stack')->willReturn($this->requestStack);
+
+        $this->recaptchaResponse->expects($this->any())->method('isSuccess')->willReturn(true);
+        $this->recaptchaResponse->expects($this->any())->method('getHostName')->willReturn($hostName);
+        $this->baseRecaptcha->expects($this->any())->method('verify')->willReturn($this->recaptchaResponse);
+
+        $this->recaptcha = new Recaptcha($this->container);
 
         $property = new \ReflectionProperty($this->recaptcha, 'recaptcha');
         $property->setAccessible(true);
         $property->setValue($this->recaptcha, $this->baseRecaptcha);
 
         $this->assertTrue($this->recaptcha->isValid('norf', '127.0.0.1'));
-        $this->assertFalse($this->recaptcha->isValid('grault', '127.0.0.1'));
+    }
+
+    /**
+     * Tests isValid for valid and invalid recaptcha codes.
+     */
+    public function testIsValidWithRecaptchaFalseValue()
+    {
+        $hostName = 'www.example.com';
+
+        $this->request->expects($this->any())
+            ->method('getHost')->willReturn($hostName);
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+        $this->container->expects($this->any())
+            ->method('get')->with('request_stack')->willReturn($this->requestStack);
+
+        $this->recaptchaResponse->expects($this->any())->method('isSuccess')->willReturn(false);
+        $this->recaptchaResponse->expects($this->any())->method('getHostName')->willReturn($hostName);
+        $this->baseRecaptcha->expects($this->any())->method('verify')->willReturn($this->recaptchaResponse);
+
+        $this->recaptcha = new Recaptcha($this->container);
+
+        $property = new \ReflectionProperty($this->recaptcha, 'recaptcha');
+        $property->setAccessible(true);
+        $property->setValue($this->recaptcha, $this->baseRecaptcha);
+
+        $this->assertFalse($this->recaptcha->isValid('norf', '127.0.0.1'));
+    }
+
+    /**
+     * Tests isValid for valid and invalid recaptcha codes.
+     */
+    public function testIsValidWithRecaptchaDifferentHostNames()
+    {
+        $hostName = 'www.example.com';
+
+        $this->request->expects($this->any())
+            ->method('getHost')->willReturn($hostName);
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+        $this->container->expects($this->any())
+            ->method('get')->with('request_stack')->willReturn($this->requestStack);
+
+        $this->recaptchaResponse->expects($this->any())->method('isSuccess')->willReturn(true);
+        $this->recaptchaResponse->expects($this->any())->method('getHostName')->willReturn('invalid.hostname.com');
+        $this->baseRecaptcha->expects($this->any())->method('verify')->willReturn($this->recaptchaResponse);
+
+        $this->recaptcha = new Recaptcha($this->container);
+
+        $property = new \ReflectionProperty($this->recaptcha, 'recaptcha');
+        $property->setAccessible(true);
+        $property->setValue($this->recaptcha, $this->baseRecaptcha);
+
+        $this->assertFalse($this->recaptcha->isValid('norf', '127.0.0.1'));
     }
 
     /**
@@ -157,6 +258,12 @@ class RecaptchaTest extends KernelTestCase
      */
     public function testIsValidWhenNoRecaptcha()
     {
+        $this->recaptcha = new Recaptcha($this->container);
+
+        $property = new \ReflectionProperty($this->recaptcha, 'recaptcha');
+        $property->setAccessible(true);
+        $property->setValue($this->recaptcha, null);
+
         $this->recaptcha->isValid('frog', '127.0.0.1');
     }
 }

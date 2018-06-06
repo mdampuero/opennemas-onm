@@ -25,18 +25,11 @@ class Recaptcha
     protected $recaptcha;
 
     /**
-     * The ReCaptcha secret key.
+     * Array that contains the site_key and secret_keys.
      *
      * @var string
      */
-    protected $secretKey;
-
-    /**
-     * The ReCaptcha site key.
-     *
-     * @var string
-     */
-    protected $siteKey;
+    protected $recaptchaKeys;
 
     /**
      * The service container.
@@ -44,6 +37,8 @@ class Recaptcha
      * @var ServiceContainer
      */
     protected $container;
+
+
 
     /**
      * Initializes the Recaptcha service.
@@ -53,6 +48,13 @@ class Recaptcha
     public function __construct($container)
     {
         $this->container = $container;
+
+        // By default we will use the platform recaptcha keys configured via
+        // paramters.yml
+        $this->recaptchaKeys = [
+            'siteKey'   => $container->getParameter('api.recaptcha.site_key'),
+            'secretKey' => $container->getParameter('api.recaptcha.secret_key'),
+        ];
     }
 
     /**
@@ -60,12 +62,7 @@ class Recaptcha
      */
     public function configureFromParameters()
     {
-        $this->siteKey =
-            $this->container->getParameter('api.recaptcha.site_key');
-        $this->secretKey =
-            $this->container->getParameter('api.recaptcha.secret_key');
-
-        $this->recaptcha = new BaseRecaptcha($this->secretKey);
+        $this->recaptcha = new BaseRecaptcha($this->recaptchaKeys['secretKey']);
 
         return $this;
     }
@@ -75,18 +72,23 @@ class Recaptcha
      */
     public function configureFromSettings()
     {
-        $keys = $this->container->get('setting_repository')->get('recaptcha');
+        $instanceKeys = $this->container->get('setting_repository')->get('recaptcha');
+        $keys         = array_merge([
+            'public_key' => '',
+            'private_key' => '',
+        ], is_array($instanceKeys) ? $instanceKeys : []);
 
-        if (!empty($keys)
-            && is_array($keys)
-            && array_key_exists('private_key', $keys)
-            && array_key_exists('public_key', $keys)
+        // Use the instance keys only if they are "valid" aka not empty
+        if (!empty($keys['private_key'])
+            && !empty($keys['public_key'])
         ) {
-            $this->secretKey = $keys['private_key'];
-            $this->siteKey   = $keys['public_key'];
+            $this->recaptchaKeys = [
+                'siteKey'   => $keys['private_key'],
+                'secretKey' => $keys['public_key'],
+            ];
         }
 
-        $this->recaptcha  = new BaseRecaptcha($this->secretKey);
+        $this->recaptcha = new BaseRecaptcha($this->recaptchaKeys['secretKey']);
 
         return $this;
     }
@@ -108,7 +110,7 @@ class Recaptcha
         return sprintf(
             $html,
             $this->container->get('core.locale')->getLocaleShort(),
-            $this->siteKey
+            $this->recaptchaKeys['siteKey']
         );
     }
 
@@ -121,12 +123,19 @@ class Recaptcha
      * @return boolean True if the recaptcha code was solved successfully. False
      *                 otherwise.
      */
-    public function isValid($response, $ip)
+    public function isValid($responseCode, $ip)
     {
         if (empty($this->recaptcha)) {
             throw new \RuntimeException();
         }
 
-        return $this->recaptcha->verify($response, $ip)->isSuccess();
+        $response        = $this->recaptcha->verify($responseCode, $ip);
+        $requestHostName = $this->container->get('request_stack')->getCurrentRequest()->getHost();
+
+        if ($response->getHostName() !== $requestHostName) {
+            return false;
+        }
+
+        return $response->isSuccess();
     }
 }
