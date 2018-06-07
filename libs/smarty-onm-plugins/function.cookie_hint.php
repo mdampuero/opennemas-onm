@@ -2,6 +2,10 @@
 
 function smarty_function_cookie_hint($params, &$smarty)
 {
+    if ($smarty->getContainer()->get('setting_repository')->get('cmp_script')) {
+        return '';
+    }
+
     $url = $smarty->getContainer()->get('setting_repository')->get('cookies_hint_url');
 
     $message = sprintf(

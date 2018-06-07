@@ -366,6 +366,14 @@
                           <input class="form-control" id="cookies-hint-url" name="cookies-hint-url" ng-model="settings.cookies_hint_url" type="text">
                         </div>
                       </div>
+                      <div class="form-group">
+                        <div class="checkbox">
+                          <input class="form-control" id="cmp-script" name="cmp-script" ng-false-value="'0'" ng-model="settings.cmp_script" ng-true-value="'1'"  type="checkbox"/>
+                          <label class="form-label" for="cmp-script">
+                            {t}Use Consent Management Platform (CMP){/t}
+                          </label>
+                        </div>
+                      </div>
                       <h4>
                         <i class="fa fa-list"></i>
                         {t}Listing{/t}

@@ -280,19 +280,6 @@
         };
 
         /**
-         * @function removeile
-         * @memberOf SettingsCtrl
-         *
-         * @description
-         *   Removes a file from settings.
-         *
-         * @param {String} name The file name.
-         */
-        $scope.removeFile = function(name) {
-          $scope.settings[name] = null;
-        };
-
-        /**
          * @function removeRTBFile
          * @memberOf SettingsCtrl
          *
