@@ -87,6 +87,7 @@
             };
 
             $scope.validateTag = function(e) {
+              $scope.invalidTag = false;
               if (e.keyCode !== 13) {
                 return null;
               }
