@@ -12,6 +12,7 @@ parameters:
             - adsense_validator
             - comscore
             - chartbeat
+            - cmp_script
             - google_tags_manager
             - css_includes
             - generate_fb_admin_tag
@@ -33,6 +34,14 @@ parameters:
             - canonical_url
             - css_includes
             - js_includes
+    core.helper.comment.default_params:
+        disable_comments: false
+        with_comments: true
+        number_elements: 10
+        moderation_manual: true
+        moderation_autoreject: false
+        moderation_autoaccept: false
+
 services:
     core.collector.brand:
         class: Common\Core\Component\Collector\BrandCollector
@@ -56,6 +65,12 @@ services:
     core.helper.advertisement:
         class:     Common\Core\Component\Helper\AdvertisementHelper
         arguments: [ '@service_container' ]
+
+    core.helper.comment:
+        class:     Common\Core\Component\Helper\CommentHelper
+        arguments:
+            - '@setting_repository'
+            - '%core.helper.comment.default_params%'
 
     core.helper.instance_sync:
         class:     Common\Core\Component\Helper\InstanceSyncHelper
@@ -272,3 +287,9 @@ services:
 
     core.user:
         alias:     'core.security.user'
+
+    core.validator:
+        class:      Common\Core\Component\Validator\Validator
+        arguments:
+            - '@setting_repository'
+            - '@validator'

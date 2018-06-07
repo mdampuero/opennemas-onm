@@ -101,10 +101,11 @@
                   data.type = value;
 
                   if (value === 1) {
+                    var ids = Object.keys($scope.data.extra.subscriptions);
+
                     // Remove all subscriptions
-                    data.fk_user_group = _.difference(
-                      data.fk_user_group,
-                      Object.keys($scope.data.extra.subscriptions));
+                    data.fk_user_group = _.difference(data.fk_user_group, ids);
+                    data.user_groups   = _.difference(data.user_groups, ids);
                   }
 
                   return http.put(route, data);
@@ -167,7 +168,9 @@
             $scope.item = angular.extend($scope.item, data.item);
           }
 
-          if (!$scope.item.user_groups) {
+          if (!$scope.item.user_groups ||
+              angular.isArray($scope.item.user_groups) &&
+              $scope.item.user_groups.length === 0) {
             $scope.item.user_groups = {};
           }
 

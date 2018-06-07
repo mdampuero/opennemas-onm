@@ -366,6 +366,14 @@
                           <input class="form-control" id="cookies-hint-url" name="cookies-hint-url" ng-model="settings.cookies_hint_url" type="text">
                         </div>
                       </div>
+                      <div class="form-group">
+                        <div class="checkbox">
+                          <input class="form-control" id="cmp-script" name="cmp-script" ng-false-value="'0'" ng-model="settings.cmp_script" ng-true-value="'1'"  type="checkbox"/>
+                          <label class="form-label" for="cmp-script">
+                            {t}Use Consent Management Platform (CMP){/t}
+                          </label>
+                        </div>
+                      </div>
                       <h4>
                         <i class="fa fa-list"></i>
                         {t}Listing{/t}
@@ -390,7 +398,7 @@
                         </div>
                         {/is_module_activated}
                       </div>
-                      {if $app.user->isMaster()}
+                      {if $app.security->hasPermission('MASTER')}
                       <h4>
                         <i class="fa fa-rss"></i>
                         RSS
@@ -791,7 +799,7 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="row" ng-show="{if $app.user->isMaster()}true{/if}">
+                              <div class="row" ng-show="{if $app.security->hasPermission('MASTER')}true{/if}">
                                 <div class="col-md-6">
                                   <div class="form-group">
                                     <label class="form-label">
@@ -859,7 +867,7 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="row" ng-show="{if $app.user->isMaster()}true{/if}">
+                              <div class="row" ng-show="{if $app.security->hasPermission('MASTER')}true{/if}">
                                 <div class="col-md-12">
                                   <div class="form-group">
                                     <label class="form-label">
@@ -1442,7 +1450,7 @@
                 </div>
               </div>
             </uib-tab>
-            {if $app.user->isMaster()}
+            {if $app.security->hasPermission('MASTER')}
               <uib-tab>
                 <uib-tab-heading>
                   <i class="fa fa-rebel m-r-5"></i>

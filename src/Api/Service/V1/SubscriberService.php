@@ -16,6 +16,16 @@ use Api\Exception\GetItemException;
 class SubscriberService extends UserService
 {
     /**
+     * The default type value for users.
+     */
+    protected $type = 1;
+
+    /**
+     * The type for subscriber + user when converted to user.
+     */
+    protected $ctype = 0;
+
+    /**
      * {@inheritdoc}
      */
     public function getItem($id)
@@ -30,15 +40,6 @@ class SubscriberService extends UserService
             $this->container->get('error.log')->error($e->getMessage());
             throw new GetItemException($e->getMessage(), $e->getCode());
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function convert($item)
-    {
-        $item->type = 0;
-        $this->em->persist($item, $item->getOrigin());
     }
 
     /**

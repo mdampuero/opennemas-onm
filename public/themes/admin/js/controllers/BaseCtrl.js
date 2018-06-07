@@ -19,8 +19,8 @@
      *   and inners will need. All controllers should extend this.
      */
     .controller('BaseCtrl', [
-      '$rootScope', '$scope', '$timeout', 'Editor', 'http', 'messenger', 'Renderer',
-      function($rootScope, $scope, $timeout, Editor, http, messenger, Renderer) {
+      '$rootScope', '$scope', '$timeout', '$uibModal', '$window', 'Editor', 'http', 'messenger', 'Renderer',
+      function($rootScope, $scope, $timeout, $uibModal, $window, Editor, http, messenger, Renderer) {
         /**
          * @memberOf BaseCtrl
          *
@@ -473,6 +473,61 @@
               $scope.loadAutoSuggestedTags();
             }, 2500);
           });
+
+        /**
+         * @function launchPhotoEditor
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *   launch the photo editor.
+         *
+         * @param {String} locale The locale to check.
+         *
+         * @return {Boolean} True if the article is translated. False otherwise.
+         */
+        $scope.launchPhotoEditor = function(imgData) {
+          var modal = $uibModal.open({
+            template: '<div id="photoEditor" class="photoEditor"><div>',
+            backdrop: 'static',
+            windowClass: 'modal-photo-editor'
+          });
+
+          modal.rendered.then(function() {
+            var photoEditor = new window.OnmPhotoEditor({
+                container: 'photoEditor',
+                image: $window.instanceMedia + '/images' + imgData.path_img,
+                closeCallBack: modal.close,
+              },
+              photoEditorTranslations
+            );
+
+            photoEditor.init();
+          });
+
+          modal.result.then(function(image) {
+            $scope.uploadMediaImg(image, imgData);
+          });
+        };
+
+        $scope.uploadMediaImg = function(image, imgData) {
+          if (image === null) {
+            return null;
+          }
+
+          var body = {};
+
+          body[imgData.name] = image;
+
+          var route = { name: 'admin_image_create' };
+
+          http.post(route, body).success(function() {
+            if (typeof $scope.list === 'function') {
+              $scope.list($scope.route, true);
+            }
+          }).error(function() {
+            return null;
+          });
+          return null;
         };
 
         /**

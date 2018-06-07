@@ -1,0 +1,59 @@
+backend_comments:
+    path:     /comments
+    defaults: { _controller  : BackendBundle:Comments:default }
+
+backend_comments_list:
+    path:     /comments/list
+    defaults: { _controller  : BackendBundle:Comments:list }
+
+backend_comments_select:
+    path:     /comments/select
+    defaults: { _controller  : BackendBundle:Comments:select }
+
+admin_comment_show:
+    path:     /comments/{id}/show
+    defaults: { _controller  : BackendBundle:Comments:show }
+    options:
+        expose: true
+
+backend_comments_update:
+    path:     /comments/{id}/update
+    defaults: { _controller  : BackendBundle:Comments:update }
+
+backend_comments_delete:
+    path:     /comments/{id}/delete
+    defaults: { _controller  : BackendBundle:Comments:delete }
+
+backend_comments_toggle_status:
+    path:     /comments/{id}/toggle-status
+    defaults: { _controller  : BackendBundle:Comments:toggleStatus }
+
+backend_comments_batch_status:
+    path:     /comments/batch-status
+    defaults: { _controller  : BackendBundle:Comments:batchStatus }
+
+backend_comments_batch_delete:
+    path:     /comments/batch-delete
+    defaults: { _controller  : BackendBundle:Comments:batchDelete }
+
+backend_comments_config:
+    path:     /comments/config
+    defaults: { _controller  : BackendBundle:Comments:config }
+
+# Comments by Disqus controller routes
+backend_comments_disqus:
+    path:     /comments/disqus
+    defaults: { _controller  : BackendBundle:Comments:disqusDefault }
+
+backend_comments_disqus_config:
+    path:     /comments/disqus/config
+    defaults: { _controller  : BackendBundle:Comments:disqusConfig }
+
+# Comments by Facebook controller routes
+backend_comments_facebook:
+    path:     /comments/facebook
+    defaults: { _controller  : BackendBundle:Comments:facebookDefault }
+
+backend_comments_facebook_config:
+    path:     /comments/facebook/config
+    defaults: { _controller  : BackendBundle:Comments:facebookConfig }

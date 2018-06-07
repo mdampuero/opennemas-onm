@@ -170,7 +170,7 @@
                 </label>
                 {acl isAllowed='PHOTO_ADMIN'}
                 <div class="pull-right">
-                  <div class="btn btn-default btn-mini" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="5" media-picker-target="editor.summary">
+                  <div class="btn btn-default btn-mini" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="5" media-picker-target="editor.summary" {is_module_activated name="es.openhost.module.imageEditor"} photo-editor-enabled="true" {/is_module_activated}>
                     {t}Insert image{/t}
                   </div>
                 </div>
@@ -185,7 +185,7 @@
                 </label>
                 {acl isAllowed='PHOTO_ADMIN'}
                 <div class="pull-right">
-                  <div class="btn btn-default btn-mini" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="5" media-picker-target="editor.body">
+                  <div class="btn btn-default btn-mini" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="5" media-picker-target="editor.body" {is_module_activated name="es.openhost.module.imageEditor"} photo-editor-enabled="true" {/is_module_activated}>
                     {t}Insert image{/t}
                   </div>
                 </div>

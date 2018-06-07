@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div ng-app="BackendApp" ng-controller="SubscriberListCtrl" ng-init="init();backup.master = {if $app.user->isMaster()}true{else} false{/if};backup.id = {$app.user->id}">
+  <div ng-app="BackendApp" ng-controller="SubscriberListCtrl" ng-init="init();backup.master = {if $app.container->get('core.security')->hasPermission('MASTER')}true{else}false{/if};backup.id = {$app.user->id}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -69,12 +69,12 @@
           <ul class="nav quick-section pull-right">
             {acl isAllowed="SUBSCRIBER_AVAILABLE"}
               <li class="quicklinks">
-                <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+                <button class="btn btn-link" ng-click="confirm('activated', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
                   <i class="fa fa-times fa-lg"></i>
                 </button>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-link" ng-click="patchSelected('activated', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+                <button class="btn btn-link" ng-click="confirm('activated', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
                   <i class="fa fa-check fa-lg"></i>
                 </button>
               </li>
@@ -244,7 +244,7 @@
                     </ul>
                   </td>
                   <td class="text-center">
-                    <button class="btn btn-white" ng-click="patch(item, 'activated', item.activated != 1 ? 1 : 0)" type="button">
+                    <button class="btn btn-white" ng-click="confirm('activated', item.activated != 1 ? 1 : 0, item)" type="button">
                       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading && item.activated == '1', 'fa-times text-error': !item.activatedLoading && item.activated == '0' }"></i>
                     </button>
                   </td>
@@ -260,6 +260,9 @@
         </div>
       </div>
     </div>
+    <script type="text/ng-template" id="modal-confirm">
+      {include file="user/modal.confirm.tpl"}
+    </script>
     <script type="text/ng-template" id="modal-delete">
       {include file="base/modal/modal.delete.tpl"}
     </script>

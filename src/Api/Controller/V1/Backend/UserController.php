@@ -13,6 +13,7 @@ use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Intl\Intl;
 
 /**
  * Lists and displays users.
@@ -304,6 +305,7 @@ class UserController extends Controller
         return [
             'categories'  => $categories,
             'client'      => $client,
+            'countries'   => Intl::getRegionBundle()->getCountryNames(),
             'languages'   => $languages,
             'photos'      => $photos,
             'taxes'       => $this->get('vat')->getTaxes(),

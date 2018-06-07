@@ -309,6 +309,7 @@ class PickerController extends Controller
             'title'               => _('Title'),
             'to'                  => _('To'),
             'thumbnailDetails'    => _('Thumbnail details'),
+            'enhance'             => _('Enhance'),
         ];
     }
 

@@ -1,0 +1,439 @@
+.photoEditor {
+  height: 600px;
+  width: 800px;
+  background-color: #fff;
+}
+
+.photoEditor ul {
+  float:left;
+  list-style: none;
+  margin: auto;
+  padding: 0;
+  position: relative;
+  text-align:center;
+  width: 100%;
+}
+
+.photoEditor li {
+  display: inline-block;
+  padding: 0;
+  color: black;
+  vertical-align: middle;
+}
+
+.photoEditor li a {
+  color: #282323;
+  cursor: pointer;
+  display: block;
+  line-height: 50px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.photoEditor li i {
+  width: 100%;
+}
+
+.photoEditor .menu {
+  position: absolute;
+  bottom: 0;
+  float: left;
+  width: 100%;
+  height: 84px;
+  background-color: #ffffff;
+  font-family: Helvetica, Arial, sans-serif;
+  text-transform: capitalize;
+}
+
+.photoEditor .menu .disable {
+  opacity: 0.3;
+}
+
+.photoEditor .menu .leftMenu,
+.photoEditor .menu .rightMenu {
+  position: absolute;
+  top: 50%;
+  text-align: center;
+  min-width: 55px;
+  -webkit-transform: translateY(-50%);
+     -moz-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+
+.photoEditor .menu .leftMenu {
+  left: 5px;
+}
+
+.photoEditor .menu .rightMenu {
+  right: 5px;
+}
+
+.photoEditor .menu .leftMenu a,
+.photoEditor .menu .rightMenu a {
+  color: #333843;
+  line-height: 40px;
+  padding: 10px 5px;
+  border: none;
+  border-radius: 4px;
+  min-width: 55px;
+  display: block;
+}
+
+.photoEditor .menu .leftMenu:hover a,
+.photoEditor .menu .rightMenu:hover a {
+  background-color: rgba(0, 0, 0, 0.07);
+  color: #357ae8;
+}
+
+.photoEditor .menu a {
+  padding: 0;
+  text-align: center;
+  text-transform: capitalize;
+  line-height: 1em;
+}
+
+.photoEditor .menu a:hover {
+  color: #0e8fd9;
+}
+
+.photoEditor .menu ul {
+  position: relative;
+  padding-top: 12px;
+}
+
+.photoEditor .menu ul li {
+  margin-right: 10px;
+  font-size: 11px;
+}
+
+.photoEditor .menu ul li:last-of-type {
+  margin-right: 0;
+}
+
+.photoEditor .menu ul li.quicklinks {
+  width: 1px;
+  height: 64px;
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+.photoEditor .menu ul li .fa {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  width: 48px;
+  height: 48px;
+  font-size: 18px;
+  line-height: 48px;
+}
+
+.photoEditor .menu ul li.noicon a {
+  min-width: 48px;
+  font: 16px/48px Helvetica;
+  font-weight: 300;
+}
+
+.photoEditor .menu ul ul {
+  position: absolute;
+  top: auto;
+  bottom: 100%;
+  display: none;
+  margin-bottom: -2px;
+  padding: 0;
+  width: auto;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 4px;
+  background-color: white;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+  -webkit-transform: translateX(50%);
+     -moz-transform: translateX(50%);
+      -ms-transform: translateX(50%);
+          transform: translateX(50%);
+}
+
+.photoEditor .menu ul ul li {
+  position: static;
+  margin: 0;
+  min-width: 64px;
+}
+
+.photoEditor .menu li.active,
+.photoEditor .menu li.active a {
+  color: #357ae8;
+}
+
+.photoEditor .menu ul ul li a {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.photoEditor .menu ul ul li.noicon a {
+  margin-bottom: 0;
+}
+
+.photoEditor .menu ul li:hover ul,
+.photoEditor .menu ul .subSelected ul {
+  display: block;
+}
+
+.photoEditor .divCanvasCenter {
+  clear: both;
+}
+
+.photoEditor .divCanvas {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  z-index: 1;
+  margin: 0 auto;
+  text-align: center;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+     -moz-transform: translateX(-50%) translateY(-50%);
+      -ms-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+
+.photoEditor .divCanvas canvas,
+.photoEditor .divCanvas div {
+  position: absolute;
+}
+
+.photoEditor .divCanvas canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  overflow: hidden;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+     -moz-transform: translateX(-50%) translateY(-50%);
+      -ms-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+
+.photoEditor .topMenuBack {
+  float: left;
+}
+
+.photoEditor .topMenu {
+  height: 50px;
+  background-color: #ffffff;
+  color: #282323;
+  font: 16px Helvetica, "Open Sans", Arial, sans-serif;
+  font-weight: 300;
+  text-transform: capitalize;
+}
+
+.photoEditor .topMenu h4,
+.photoEditor .topMenu .topMenuTitle a {
+  display: inline-block;
+  margin: 0;
+  padding-right: 15px;
+  padding-left: 15px;
+  color: #282323;
+  text-transform: capitalize;
+  font: lighter 18px/50px "Open Sans", Helvetica, sans-serif;
+  pointer-events: none;
+}
+
+.photoEditor .topMenu li:not(.topMenuTitle) {
+  padding: 5px;
+}
+
+.photoEditor .topMenu li:not(.topMenuTitle) a {
+  min-width: 40px;
+  border: none;
+  border-radius: 4px;
+  line-height: 40px;
+}
+
+.photoEditor .topMenu li:not(.topMenuTitle) a:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.photoEditor .topMenu .topMenuTitle a {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.photoEditor .topMenu .topMenuTitle:nth-of-type(1n+3):before {
+  height: 25px;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  content: "";
+}
+
+.photoEditor .topMenu a:hover {
+  color: #0e8fd9;
+}
+
+.photoEditor .topMenuSave {
+  float: right;
+}
+
+.photoEditor .photoEditorCrop {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-left-width: 1px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  cursor: move;
+}
+
+.photoEditor .photoEditorCircle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.photoEditor .topCircle {
+  top: -12px;
+  left: -12px;
+}
+
+.photoEditor .bottomCircle {
+  right: -12px;
+  bottom: -12px;
+}
+
+.photoEditor .divCanvas .buttonApply {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: inline-block;
+  margin: auto;
+  min-width: 80px;
+  width: auto;
+  border: 1px solid rgba(0,0,0,0.15);
+  border: none;
+  border-radius: 3px;
+  background-color: white;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+  color: #505458;
+  font: 300 14px Helvetica, "Open Sans", sans-serif;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+     -moz-transform: translateX(-50%) translateY(-50%);
+      -ms-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+
+.photoEditor .divCanvas .buttonApply:hover {
+  opacity: 0.9;
+}
+
+.photoEditor .divCanvas .buttonApply a {
+  padding: 10px;
+  color: #505458;
+  text-transform: capitalize;
+  line-height: 38px;
+}
+
+.photoEditor .divCanvas .buttonApply a .fa {
+  margin-right: 4px;
+}
+
+.photoEditor .divCanvas .canvasForm .formContainer {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  margin: auto;
+  max-width: 320px;
+  width: 100%;
+  -webkit-transform: translateX(-50%);
+     -moz-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+
+.photoEditor .divCanvas .canvasForm .formContainer input {
+  border: 0;
+}
+
+/* Input range custom look */
+.photoEditor input[type=range] {
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+}
+.photoEditor input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+.photoEditor input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+.photoEditor input[type=range]::-ms-track {
+  width: 100%;
+  border-color: transparent;
+  /* Hides the slider so custom styles can be added */
+  background: transparent;
+  color: transparent;
+  cursor: pointer;
+}
+/* Special styling for WebKit/Blink */
+.photoEditor input[type=range]::-webkit-slider-thumb {
+  margin-top: -12px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0 0 1px #0d0d0d; /* Add cool effects to your sliders! */
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+/* All the same stuff for Firefox */
+.photoEditor input[type=range]::-moz-range-thumb {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0px 0px 1px #0d0d0d;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+}
+/* All the same stuff for IE */
+.photoEditor input[type=range]::-ms-thumb {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0px 0px 1px #0d0d0d;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+}
+.photoEditor input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 1px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  background: #fff;
+}
+.photoEditor input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #fff;
+}
+.photoEditor input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 1px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  background: #fff;
+}
+.photoEditor input[type=range]::-ms-track {
+  width: 100%;
+  height: 1px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+.photoEditor input[type=range]::-ms-fill-lower {
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.photoEditor input[type=range]:focus::-ms-fill-lower {
+  background: #fff;
+}
+.photoEditor input[type=range]::-ms-fill-upper {
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.photoEditor input[type=range]:focus::-ms-fill-upper {
+  background: #fff;
+}

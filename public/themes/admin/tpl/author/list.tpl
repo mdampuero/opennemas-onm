@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div ng-app="BackendApp" ng-controller="AuthorListCtrl" ng-init="init();backup.master = {if $app.user->isMaster()}true{else} false{/if};backup.id = {$app.user->id}">
+  <div ng-app="BackendApp" ng-controller="AuthorListCtrl" ng-init="init();backup.master = {if $app.security->hasPermission('MASTER')}true{else}false{/if};backup.id = {$app.user->id}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">

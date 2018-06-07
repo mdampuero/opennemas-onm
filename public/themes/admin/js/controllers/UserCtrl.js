@@ -86,7 +86,7 @@
          *   Shows a modal to confirm user update.
          */
         $scope.confirm = function() {
-          if ($scope.master || !$scope.item.activated ||
+          if ($scope.backup.master || !$scope.item.activated ||
               $scope.item.activated === $scope.backup.activated) {
             $scope.save();
             $scope.backup.activated = $scope.item.activated;
@@ -150,10 +150,11 @@
                   data.type = value;
 
                   if (value === 1) {
-                    // Remove all subscriptions
-                    data.fk_user_group = _.difference(
-                      data.fk_user_group,
-                      Object.keys($scope.data.extra.subscriptions));
+                    var ids = Object.keys($scope.data.extra.user_groups);
+
+                    // Remove all user groups
+                    data.fk_user_group = _.difference(data.fk_user_group, ids);
+                    data.user_groups   = _.difference(data.user_groups, ids);
                   }
 
                   return http.put(route, data);
@@ -166,9 +167,9 @@
             messenger.post(response.data);
 
             if (response.success) {
-              if (value === 0) {
-                $window.location.href = routing.generate('backend_user_show',
-                  { id: $scope.item.id });
+              if (value === 1) {
+                $window.location.href = routing.generate(
+                  'backend_subscriber_show', { id: $scope.item.id });
               }
             }
           });
@@ -269,8 +270,8 @@
          */
         $scope.parseItem = function(data) {
           if (data.item) {
-            $scope.item   = angular.extend($scope.item, data.item);
-            $scope.backup = { activated: $scope.item.activated };
+            $scope.item             = angular.extend($scope.item, data.item);
+            $scope.backup.activated = $scope.item.activated;
           }
 
           $scope.flags.categories = { none: false, all: false };

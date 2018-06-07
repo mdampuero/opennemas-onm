@@ -117,22 +117,6 @@ class WebServiceController extends Controller
             $this->get('application.log')
         );
 
-        $user = new User($converter->objectify([
-            'activated'     => true,
-            'email'         => $instance->contact_mail,
-            'fk_user_group' => [ 5 ],
-            'name'          => $instance->contact_mail,
-            'token'         => md5(uniqid(mt_rand(), true)),
-            'type'          => 0,
-            'username'      => $instance->contact_mail
-        ]));
-
-        $user->password = $this->get('core.security.encoder.password')
-            ->encodePassword(
-                $request->request->filter('user_password', '', FILTER_SANITIZE_STRING),
-                null
-            );
-
         try {
             $errors      = [];
             $companyMail = [
@@ -166,7 +150,27 @@ class WebServiceController extends Controller
                 'locale'       => $locale,
                 'site_created' => $instance->created,
             ]);
-            $em->persist($user, 'instance');
+
+            $password = $request->request->filter('user_password', '', FILTER_SANITIZE_STRING);
+            $user     = $this->get('api.service.user')->createItem(
+                [
+                    'activated'     => true,
+                    'email'         => $instance->contact_mail,
+                    'fk_user_group' => [ 5 ],
+                    'name'          => $instance->contact_mail,
+                    'token'         => md5(uniqid(mt_rand(), true)),
+                    'type'          => 0,
+                    'username'      => $instance->contact_mail,
+                    'user_language' => 'default',
+                    'password'      => $password,
+                    'user_groups'   => [
+                        '5' => [
+                            'status'        => 1,
+                            'user_group_id' => 5
+                        ]
+                    ]
+                ]
+            );
         } catch (DatabaseNotRestoredException $e) {
             // Can not create database
             $errors[] = $e->getMessage();

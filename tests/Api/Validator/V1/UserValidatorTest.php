@@ -32,38 +32,19 @@ class UserValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests validate when type changed and valid type provided.
      */
-    public function testValidateWhenChanges()
+    public function testValidateWhenValid()
     {
+        $this->validator->validate(new Entity([]));
         $this->validator->validate(new Entity([ 'type' => 0 ]));
     }
 
     /**
      * Tests validate when there are no changes in type.
-     */
-    public function testValidateWhenNoChanges()
-    {
-        $item = new Entity([ 'type' => 0 ]);
-        $item->refresh();
-
-        $this->validator->validate($item);
-    }
-
-    /**
-     * Tests validate when valid type provided.
-     */
-    public function testValidateWhenInvalidTypeForNonMasters()
-    {
-        $this->validator->validate(new Entity([ 'type' => 0 ]));
-        $this->validator->validate(new Entity([ 'type' => 2 ]));
-    }
-
-    /**
-     * Tests validate when valid type provided.
      *
      * @expectedException Api\Exception\InvalidArgumentException
      */
-    public function testValidateWhenInvalidTypeForMasters()
+    public function testValidateWhenInvalid()
     {
-        $this->validator->validate(new Entity([ 'type' => 1 ]));
+        $this->validator->validate(new Entity([ 'type' => 3 ]));
     }
 }

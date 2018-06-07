@@ -11,9 +11,10 @@ namespace Api\Controller\V1\Backend;
 
 use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
+use League\Csv\Writer;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Intl;
 
 /**
@@ -97,46 +98,63 @@ class SubscriberController extends Controller
      */
     public function exportAction()
     {
+        // Get information
         $items = $this->get('api.service.subscriber')->getList();
+        $extra = $this->getExtraData($items['items']);
 
-        $csvHeaders = [
-            _('Name'), _('Username'), _('Activated'), _('Email'), _('Gender'),
-            _('Date Birth'),  _('Postal Code'),  _('Registration date'),
+        $extraFields   = $extra['settings']['fields'];
+        $subscriptions = $extra['subscriptions'];
+
+        // Prepare contents for CSV
+        $headers = [
+            _('Email'),
+            _('Name'),
+            _('Activated'),
+            _('Registration date'),
+            _('Subscriptions')
         ];
 
-        $output = implode(",", $csvHeaders);
-
-        foreach ($items['items'] as &$item) {
-            switch ($item->gender) {
-                case 'male':
-                    $gender = _('Male');
-                    break;
-                case 'female':
-                    $gender = _('Female');
-                    break;
-
-                default:
-                    $gender = empty($item->gender) ? _('Not defined') : _('Other');
-                    break;
-            }
-
-            $row = [
-                $item->name,
-                $item->username,
-                $item->activated,
-                $item->email,
-                $gender,
-                !empty($item->birth_date) ? $item->birth_date : '',
-                !empty($item->postal_code) ? $item->postal_code : '',
-                !empty($item->register_date) ?
-                    $item->register_date->format('Y-m-d H:i:s') : '',
-            ];
-
-            $output .= "\n" . implode(",", $row);
+        foreach ($extraFields as $extraField) {
+            $headers[] = $extraField['title'];
         }
 
-        $response = new Response($output, 200);
+        $data = [];
+        foreach ($items['items'] as $user) {
+            if (!is_array($user->user_groups)) {
+                $user->user_groups = [];
+            }
 
+            $userGroups = [];
+            foreach ($user->user_groups as $value) {
+                if (array_key_exists($value['user_group_id'], $subscriptions)) {
+                    $userGroups[] = $subscriptions[$value['user_group_id']]['name'];
+                }
+            }
+
+            $userInfo = [
+                $user->email,
+                $user->name,
+                ($user->activated) ? _('Yes') : _('No'),
+                ($user->register_date instanceof \DateTime)
+                    ? $user->register_date->format('Y-m-d') : '',
+                implode(',', $userGroups),
+            ];
+
+            foreach ($extraFields as $extraField) {
+                array_push($userInfo, $user->{$extraField['name']});
+            }
+
+            $data[] = $userInfo;
+        }
+
+        // Prepare the CSV content
+        $writer = Writer::createFromFileObject(new \SplTempFileObject());
+        $writer->setDelimiter(';');
+        $writer->setEncodingFrom('utf-8');
+        $writer->insertOne($headers);
+        $writer->insertAll($data);
+
+        $response = new Response($writer, 200);
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Description', 'Subscribers list Export');
         $response->headers->set(
@@ -258,6 +276,13 @@ class SubscriberController extends Controller
         $msg      = $this->get('core.messenger');
         $settings = $request->request->all();
 
+        if (!is_array($settings) ||
+            !array_key_exists('fields', $settings) ||
+            !is_array($settings['fields'])
+        ) {
+            $settings = ['fields' => []];
+        }
+
         try {
             $this->get('orm.manager')->getDataSet('Settings', 'instance')
                 ->set('user_settings', $settings);
@@ -352,6 +377,7 @@ class SubscriberController extends Controller
      */
     private function getExtraData($items = null)
     {
+        $client   = null;
         $ss       = $this->get('api.service.subscription');
         $photos   = [];
         $response = $ss->getList();
@@ -364,6 +390,14 @@ class SubscriberController extends Controller
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('user_settings', []);
+
+        if (!is_array($settings)) {
+            $settings = [ 'fields' => [] ];
+        }
+
+        if (!array_key_exists('fields', $settings) || !is_array($settings['fields'])) {
+            $settings['fields'] = [];
+        }
 
         if (!empty($items)) {
             $ids = array_filter(array_map(function ($a) {
@@ -379,9 +413,19 @@ class SubscriberController extends Controller
                 ->get();
         }
 
+        $em = $this->get('orm.manager');
+
+        if (!empty($this->get('core.instance')->getClient())) {
+            $client = $em->getRepository('Client')
+                ->find($this->get('core.instance')->getClient());
+
+            $client = $em->getConverter('Client')->responsify($client);
+        }
+
         return [
-            'photos'        => $photos,
             'countries'     => Intl::getRegionBundle()->getCountryNames(),
+            'client'        => $client,
+            'photos'        => $photos,
             'settings'      => $settings,
             'subscriptions' => $ss->responsify($subscriptions)
         ];

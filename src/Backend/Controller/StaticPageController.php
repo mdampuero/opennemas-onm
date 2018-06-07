@@ -195,8 +195,7 @@ class StaticPageController extends Controller
 
         $url = $this->generateUrl('backend_static_page_show', [ 'id' => $id ]);
 
-        // TODO: Remove isAdmin after fixing permissions in database
-        if (!$this->get('core.user')->isAdmin()
+        if (!$this->get('core.security')->hasPermission('ADMIN')
             && !$security->hasPermission('CONTENT_OTHER_UPDATE')
             && $entity->fk_publisher !== $this->get('core.user')->id
         ) {

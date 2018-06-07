@@ -112,21 +112,6 @@ class SubscriberServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /*
-     * Tests convert.
-     */
-    public function testConvert()
-    {
-        $item   = new Entity([ 'type' => 2 ]);
-        $method = new \ReflectionMethod($this->service, 'convert');
-        $method->setAccessible(true);
-
-        $this->em->expects($this->once())->method('persist')
-            ->with($item);
-
-        $method->invokeArgs($this->service, [ $item ]);
-    }
-
-    /*
      * Tests getOqlForList.
      */
     public function testGetOqlForList()

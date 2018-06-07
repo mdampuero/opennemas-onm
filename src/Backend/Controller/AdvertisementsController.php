@@ -359,9 +359,7 @@ class AdvertisementsController extends Controller
             ($page - 1) * $epp
         );
 
-        $em  = $this->get('advertisement_repository');
-        $map = $this->container->get('core.helper.advertisement')
-            ->getPositions();
+        $em = $this->get('advertisement_repository');
 
         list($criteria, $order, $epp, $page) = $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
@@ -423,7 +421,7 @@ class AdvertisementsController extends Controller
                 'adsense_id'      => $formValues->filter('adsense_id', '', FILTER_SANITIZE_STRING),
             ];
 
-            if ($this->getUser()->isMaster()) {
+            if ($this->get('core.security')->hasPermission('MASTER')) {
                 $settings['dfp_custom_code'] =
                     base64_encode($formValues->get('dfp_custom_code'));
             }
