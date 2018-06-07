@@ -719,7 +719,7 @@ contents_tags:
             type: bigint
             options: { length: 20, unsigned: true }
         tag_id:
-            type: int
+            type: integer
             options: { unsigned: true }
     index:
         -
