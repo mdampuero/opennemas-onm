@@ -36,17 +36,6 @@
     </div>
   </div>
   <div class="content">
-
-    {if $missing_recaptcha}
-    {capture name=url}{url name=admin_system_settings}{/capture}
-    <ul class="messenger messenger-fixed messenger-on-bottom">
-      <li>
-        <div class="alert alert-error messenger-message">
-          <div class="messenger-message-inner">{t escape=off 1=$smarty.capture.url}Before using newsletter you have to fill the <a href="%1#external"  target="_blank">reCaptcha keys on system settings</a>{/t}.</div>
-        </div>
-      </li>
-    </ul>
-    {/if}
     <div class="grid simple">
       <div class="grid-title">
         <h4>
