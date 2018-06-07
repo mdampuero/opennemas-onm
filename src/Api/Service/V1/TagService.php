@@ -166,7 +166,7 @@ class TagService extends OrmService
      *
      * @return array List of tags fo this tags.
      */
-    public function getListByIdsKeyMapped($ids)
+    public function getListByIdsKeyMapped($ids, $locale = null)
     {
         if (empty($ids)) {
             return ['items' => []];
@@ -175,7 +175,9 @@ class TagService extends OrmService
         $returnArr = [];
 
         foreach ($tags['items'] as $tag) {
-            $returnArr[$tag->id] = \Onm\StringUtils::convertToUtf8($tag);
+            if (is_null($locale) || $tag->language_id == $locale) {
+                $returnArr[$tag->id] = \Onm\StringUtils::convertToUtf8($tag);
+            }
         }
         $tags['items'] = $this->responsify($returnArr);
         return $tags;
@@ -188,7 +190,7 @@ class TagService extends OrmService
      *
      * @return string List of tags fo this tags.
      */
-    public function getTagsSepByCommas($ids)
+    public function getTagsSepByCommas($ids, $locale = null)
     {
         if (empty($ids)) {
             return ['items' => []];
@@ -198,7 +200,9 @@ class TagService extends OrmService
 
         $tagsString = '';
         foreach ($tags['items'] as $tag) {
-            $tagsString .= ',' . $tag->name;
+            if (is_null($locale) || $tag->language_id == $locale) {
+                $tagsString .= ',' . $tag->name;
+            }
         }
         // We remove the first comma
         return substr($tagsString, 1);

@@ -130,8 +130,9 @@ class TagsController extends Controller
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/tags.tpl', $cacheId)
         ) {
-            $epp = $this->get('setting_repository')->get('items_in_blog', 10);
-            $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
+            $epp    = $this->get('setting_repository')->get('items_in_blog', 10);
+            $epp    = (is_null($epp) || $epp <= 0) ? 10 : $epp;
+            $locale = getService('core.locale')->getRequestLocale();
 
             $criteria = [
                 'content_status'  => [ [ 'value' => 1 ] ],
@@ -145,7 +146,8 @@ class TagsController extends Controller
                 ],
                 'exists' => 'EXISTS(SELECT 1 FROM tags' .
                     ' INNER JOIN contents_tags ON contents_tags.tag_id = tags.id' .
-                    " WHERE contents_tags.content_id = contents.pk_content AND tags.slug LIKE '%$tagName%')"
+                    ' WHERE contents_tags.content_id = contents.pk_content AND' .
+                    " tags.language_id = '$locale' AND tags.slug LIKE '%$tagName%')"
             ];
 
             $em       = $this->get('entity_repository');

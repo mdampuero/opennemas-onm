@@ -38,10 +38,10 @@ function smarty_function_renderTags($params, &$smarty)
     // Generate tags links
     $i = 0;
     foreach ($content->tag_ids as $tagId) {
-        $tag = trim($tags[$tagId]['name']);
-        if (empty($tag)) {
+        if (!array_key_exists($tagId, $tags)) {
             continue;
         }
+        $tag = $tags[$tagId]['name'];
 
         $url = $target = '';
         switch ($method) {
