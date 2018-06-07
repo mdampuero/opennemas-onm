@@ -36,7 +36,7 @@
                   '<input type="text" ng-class=" invalidTag ? \'has-error \' : \'\'" ng-model="newTag" placeholder="[% placeholder %]" ng-keydown="validateTag($event)" uib-typeahead="tagSuggested as tagSuggested.name for tagSuggested in getLocalSuggestedTags($viewValue)" typeahead-loading="loadingLocations" typeahead-wait-ms="500" typeahead-on-select="suggestedTagAccepted($item, $model, $label)" typeahead-min-length="2" typeahead-focus-first="false">' +
                   '<input type="hidden" name="tag_ids" ng-value="getTagIdsList()">' +
                 '</div>' +
-                '<div ng-if="loadAutoSuggestedTags">' +
+                '<div class="autoSuggested" ng-if="loadAutoSuggestedTags">' +
                   '<span>Suggested tags</span>' +
                   '<a class="btn btn-primary btn-xs" ng-click="loadAutoSuggestedTags()" href="#">' +
                     '<i class="fa fa-refresh m-r-5"></i>' +

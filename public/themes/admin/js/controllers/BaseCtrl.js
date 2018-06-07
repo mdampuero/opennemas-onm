@@ -473,6 +473,7 @@
               $scope.loadAutoSuggestedTags();
             }, 2500);
           });
+        };
 
         /**
          * @function launchPhotoEditor
