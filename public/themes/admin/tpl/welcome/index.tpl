@@ -120,6 +120,7 @@
           </div>
         </div>
       </div>
+      {if !in_array('es.openhost.module.whiteLabel', $app.instance->activated_modules)}
       {acl isAllowed="ADMIN"}
       <div class="grid simple merchant">
         <div class="grid-title">
@@ -151,6 +152,7 @@
         </div>
       </div>
       {/acl}
+      {/if}
     </div>
     <div class="col-sm-6">
       {if !in_array('es.openhost.module.whiteLabel', $app.instance->activated_modules)}
