@@ -33,10 +33,11 @@
                       '<span>[% acceptedTag.name %]</span><a href="#" ng-click="removeTag(acceptedTag)">x</a>' +
                     '</li>' +
                   '</ul>' +
-                  '<input type="text" ng-class=" invalidTag ? \'has-error \' : \'\'" ng-model="newTag" placeholder="[% placeholder %]" ng-keydown="validateTag($event)" uib-typeahead="tagSuggested as tagSuggested.name for tagSuggested in getLocalSuggestedTags($viewValue)" typeahead-loading="loadingLocations" typeahead-wait-ms="500" typeahead-on-select="suggestedTagAccepted($item, $model, $label)" typeahead-min-length="2" typeahead-focus-first="false">' +
+                  '<input type="text" ng-class=" invalidTag ? \'has-error \' : \'\'" ng-model="newTag" placeholder="[% placeholder %]" ng-keydown="validateTag($event)" uib-typeahead="tagSuggested as tagSuggested.name for tagSuggested in getLocalSuggestedTags($viewValue)" typeahead-loading="isSuggesting" typeahead-wait-ms="500" typeahead-on-select="suggestedTagAccepted($item, $model, $label)" typeahead-min-length="2" typeahead-focus-first="false">' +
+                  '<i class="fa fa-circle-o-notch fa-spin" ng-show="isSuggesting || isValidating"></i>' +
                   '<input type="hidden" name="tag_ids" ng-value="getTagIdsList()">' +
                 '</div>' +
-                '<div class="autoSuggested" ng-if="loadAutoSuggestedTags">' +
+                '<div class="autoSuggested" ng-show="loadAutoSuggestedTags">' +
                   '<span>Suggested tags</span>' +
                   '<a class="btn btn-primary btn-xs" ng-click="loadAutoSuggestedTags()" href="#">' +
                     '<i class="fa fa-refresh m-r-5"></i>' +
@@ -55,8 +56,9 @@
               $scope.placeholder = '';
             }
 
-            $scope.newTag     = '';
-            $scope.invalidTag = false;
+            $scope.newTag       = '';
+            $scope.invalidTag   = false;
+            $scope.isValidating = false;
 
             /**
              * Change the current language.
@@ -107,8 +109,10 @@
                     $scope.newTag = '';
                   }
                 }
+                $scope.isValidating = false;
               };
 
+              $scope.isValidating = true;
               this.checkNewTags(callback, $scope.newTag, $scope.locale);
               return null;
             };
