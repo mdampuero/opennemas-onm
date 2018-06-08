@@ -124,7 +124,7 @@ class HttpRss extends Http
             'news_agency/newsml_templates/base.tpl',
             [
                 'article' => $article,
-                'tags'    => $this->get('api.service.tag')
+                'tags'    => getService('api.service.tag')
                     ->getListByIdsKeyMapped($article->tag_ids)['items']
             ]
         );
