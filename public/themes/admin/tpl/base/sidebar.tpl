@@ -3,13 +3,15 @@
   <div class="sidebar-wrapper">
   <scrollable>
     <div class="user-info-wrapper clearfix">
+      {if !in_array('es.openhost.module.whiteLabel', $app.instance->activated_modules)}
       <div class="profile-wrapper">
-          <img src="/assets/images/launcher-icons/IOS-60@2x.png" />
+        <img src="/assets/images/launcher-icons/IOS-60@2x.png" />
       </div>
       <div class="user-info" ng-click="mode = 'list'">
         <div class="greeting">{t}Welcome{/t}</div>
         <div class="username" title="{$app.instance->name}">{$app.instance->name}</div>
       </div>
+      {/if}
     </div>
     <div class="user-action-wrapper visible-xs">
       <div class="user-actions cleafix">
