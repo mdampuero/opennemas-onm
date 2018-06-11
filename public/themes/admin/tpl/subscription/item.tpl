@@ -240,7 +240,7 @@
                     <div class="form-group no-margin">
                       <label class="pointer" for="member-payment">
                         <div class="checkbox">
-                          <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_REQUIRES_PAYMENT')" id="member-payment" {is_module_activated deactivated="1" name="es.openhost.module.advancedSubscription"}{is_module_activated deactivated="1" name="PAYWALL"}ng-disabled="true"{/is_module_activated}{/is_module_activated} type="checkbox">
+                          <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_REQUIRES_PAYMENT')" id="member-payment" ng-disabled="true" type="checkbox">
                           <label for="member-payment">{t}Requires payment{/t}</label>
                         </div>
                         <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
