@@ -115,7 +115,7 @@
             <li class="quicklinks hidden-xs ng-cloak">
               <ui-select name="group" theme="select2" ng-model="criteria.user_group_id">
                 <ui-select-match>
-                  <strong>{t}Subscription{/t}:</strong> [% $select.selected.name %]
+                  <strong>{t}Lists{/t}:</strong> [% $select.selected.name %]
                 </ui-select-match>
                 <ui-select-choices repeat="item.pk_user_group as item in toArray(addEmptyValue(data.extra.subscriptions, 'pk_user_group')) | filter: $select.search">
                   <div ng-bind-html="item.name | highlight: $select.search"></div>
@@ -180,7 +180,7 @@
                   <th class="hidden-xs text-center" width="80"><i class="fa fa-picture-o"></i></th>
                   <th width="400">{t}Name{/t}</th>
                   <th class="hidden-xs" width="400">{t}Email{/t}</th>
-                  <th class="hidden-sm">{t}Subscriptions{/t}</th>
+                  <th class="hidden-sm">{t}Lists{/t}</th>
                   <th class="hidden-sm hidden-xs text-center" width="100">{t}Social{/t}</th>
                   <th class="text-center" width="50">{t}Enabled{/t}</th>
                 </tr>

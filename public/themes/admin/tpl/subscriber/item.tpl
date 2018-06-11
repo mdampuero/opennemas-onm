@@ -94,7 +94,7 @@
                   </div>
                 </div>
                 <div class="grid-collapse-title pointer" ng-class="{ 'open': expanded.subscriptions }" ng-click="expanded.subscriptions = !expanded.subscriptions">
-                  <i class="fa fa-check-square-o m-r-10"></i>{t}Subscriptions{/t}
+                  <i class="fa fa-list m-r-10"></i>{t}Lists{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.subscriptions }"></i>
                 </div>
                 <div class="grid-collapse-body no-padding ng-cloak" ng-class="{ 'expanded': expanded.subscriptions }">
