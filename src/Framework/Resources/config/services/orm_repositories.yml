@@ -47,10 +47,6 @@ services:
         class: Repository\SettingManager
         arguments: [ '@orm.connection.instance', '@cache', %cache_prefix% ]
 
-    newsletter_manager:
-        class: Repository\NewsletterManager
-        arguments: [ '@dbal_connection', '@cache', %cache_prefix%, '@core.template', '@entity_repository' ]
-
     # TODO: Remove arguments when new ORM repositories replace search features
     core.manager.menu:
         class: Repository\MenuManager
