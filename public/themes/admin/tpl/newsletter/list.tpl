@@ -90,10 +90,10 @@
                     <strong>{t}Created:{/t}</strong> [% item.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
                   <div class="listing-inline-actions">
-                    <a class="btn btn-default btn-small" href="[% edit(item.id, 'backend_newsletters_show_contents') %]" title="{t}Edit{/t}" >
+                    <a class="btn btn-default btn-small" href="[% routing.generate('backend_newsletters_show_contents', { id: item.id }) %]" title="{t}Edit{/t}" >
                       <i class="fa fa-pencil"></i> {t}Edit{/t}
                     </a>
-                    <a class="btn btn-primary btn-small" href="[% edit(item.id, 'backend_newsletters_preview') %]" title="{t}Preview{/t}">
+                    <a class="btn btn-primary btn-small" href="[% routing.generate('backend_newsletters_preview', { id: item.id }) %]" title="{t}Preview{/t}">
                       <i class="fa fa-eye"></i>
                       {t}Preview{/t}
                     </a>
