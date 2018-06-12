@@ -83,8 +83,8 @@ class Recaptcha
             && !empty($keys['public_key'])
         ) {
             $this->recaptchaKeys = [
-                'siteKey'   => $keys['private_key'],
-                'secretKey' => $keys['public_key'],
+                'siteKey'   => $keys['public_key'],
+                'secretKey' => $keys['private_key'],
             ];
         }
 

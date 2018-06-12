@@ -77,8 +77,8 @@ class RecaptchaTest extends KernelTestCase
     public function testConfigureForFrontend()
     {
         $keys = [
-            'siteKey'   => 'wobble',
-            'secretKey' => 'baz',
+            'siteKey'   => 'site_wooble',
+            'secretKey' => 'secret_baz',
         ];
 
         $this->container->expects($this->any())
@@ -89,7 +89,7 @@ class RecaptchaTest extends KernelTestCase
         $this->repository->expects($this->once())
             ->method('get')
             ->with('recaptcha')
-            ->willReturn([ 'private_key' => 'wobble', 'public_key' => 'baz' ]);
+            ->willReturn([ 'public_key' => 'site_wooble', 'private_key' => 'secret_baz',  ]);
 
         $this->recaptcha = new Recaptcha($this->container);
         $this->recaptcha->configureFromSettings();
