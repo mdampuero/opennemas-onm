@@ -77,10 +77,6 @@ backend_ws_keywords:
     resource: '@BackendWebServiceBundle/Resources/config/routing/keywords.yml'
     prefix:   /
 
-backend_ws_newsletter:
-    resource: '@BackendWebServiceBundle/Resources/config/routing/newsletter.yml'
-    prefix:   /
-
 backend_ws_notification:
     resource: '@BackendWebServiceBundle/Resources/config/routing/notification.yml'
     prefix:   /
