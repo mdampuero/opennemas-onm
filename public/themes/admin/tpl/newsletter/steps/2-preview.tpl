@@ -70,7 +70,7 @@
         </div>
         <div class="grid-body">
           <input name="html" type="hidden" ng-value="html">
-          <input name="hiddenHtml" type="hidden" value="{$newsletter->html|escape:'html'}">
+          <input name="hiddenHtml" type="hidden" value="{$newsletter->generated_html|escape:'html'}">
           <div class="form-group" ng-show="edit">
             <textarea onm-editor class="form-control" ng-model="html" cols="100" rows="10"></textarea>
           </div>

@@ -193,44 +193,38 @@ class NewsletterController extends Controller
             }
         }
 
-        $time = new \DateTime();
-        $time = $time->format('d/m/Y');
+        $ns = $this->get('api.service.newsletter');
+        $nm = $this->get('core.renderer.newsletter');
 
-        $title = $request->request->filter(
-            'title',
-            $this->get('setting_repository')->get('site_name') . ' [' . $time . ']',
-            FILTER_SANITIZE_STRING
-        );
+        $siteTitle    = $this->get('setting_repository')->get('site_name');
+        $time         = new \DateTime();
+        $defaultTitle = sprintf('%s [%s]', $siteTitle, $time->format('d/m/Y'));
+        $title        = $request->request->filter('title', $defaultTitle, FILTER_SANITIZE_STRING);
+        $html         = $nm->render($containers);
 
-        $nm = $this->get('newsletter_manager');
-
-        if ($id > 0) {
-            $newsletter = new \Newsletter($id);
-
-            $newValues = [
-                'title' => $title,
-                'data'  => $contentsRAW,
-                'html'  => $nm->render($containers),
-            ];
-
-            if (is_null($newsletter->html)) {
-                $newValues['html'] = $nm->render($containers);
+        try {
+            if ($id > 0) {
+                $newsletter = $ns->patchItem($id, [
+                    'title'          => $title,
+                    'contents'       => $containers,
+                    'generated_html' => $html,
+                    'updated'        => new \Datetime(),
+                ]);
+            } else {
+                $newsletter = $ns->createItem([
+                    'title'          => $title,
+                    'contents'       => $containers,
+                    'generated_html' => $html,
+                ]);
             }
 
-            $newsletter->update($newValues);
-        } else {
-            $newsletter = new \Newsletter();
-            $newsletter->create([
-                'title'   => $title,
-                'data'    => json_encode($containers),
-                'html'    => $nm->render($containers),
-            ]);
+            return $this->redirect($this->generateUrl(
+                'backend_newsletters_preview',
+                ['id' => $id]
+            ));
+        } catch (\Api\Exception\GetItemException $e) {
+            return $this->redirect($this->generateUrl('backend_newsletters_list'));
         }
-
-        return $this->redirect($this->generateUrl(
-            'backend_newsletters_preview',
-            ['id' => $newsletter->pk_newsletter]
-        ));
     }
 
     /**
@@ -245,14 +239,19 @@ class NewsletterController extends Controller
      */
     public function previewAction(Request $request)
     {
-        $id         = (int) $request->query->getDigits('id');
-        $newsletter = new \Newsletter($id);
+        $id = (int) $request->query->getDigits('id');
 
-        $newsletter = \Onm\StringUtils::convertToUtf8($newsletter);
+        try {
+            $item = $this->get('api.service.newsletter')->getItem($id);
 
-        return $this->render('newsletter/steps/2-preview.tpl', [
-            'newsletter' => $newsletter
-        ]);
+            return $this->render('newsletter/steps/2-preview.tpl', [
+                'newsletter' => $item
+            ]);
+        } catch (\Api\Exception\GetItemException $e) {
+            return $this->redirect($this->generateUrl(
+                'backend_newsletters_list'
+            ));
+        }
     }
 
     /**
@@ -269,17 +268,31 @@ class NewsletterController extends Controller
     {
         $id = (int) $request->query->getDigits('id');
 
-        $newsletter = new \Newsletter($id);
-        $newsletter->update([
-            'title' => $request->request->filter('title', FILTER_SANITIZE_STRING),
-            'html'  => $request->request->filter('html', FILTER_SANITIZE_STRING),
-        ]);
+        try {
+            $newsletter = $this->get('api.service.newsletter')->patchItem($id, [
+                'title'          => $request->request->filter('title', FILTER_SANITIZE_STRING),
+                'generated_html' => $request->request->filter('html', FILTER_SANITIZE_STRING),
+                'updated'        => new \Datetime(),
+            ]);
 
-        return new JsonResponse(['messages' => [[
-            'id'      => '200',
-            'type'    => 'success',
-            'message' => sprintf(_('Content saved successfully'))
-        ]]]);
+            return new JsonResponse(['messages' => [[
+                'id'      => '200',
+                'type'    => 'success',
+                'message' => sprintf(_('Content saved successfully'))
+            ]]]);
+        } catch (\Exception $e) {
+            $this->get('error.log')->error(sprintf(
+                'Error while updating the newsletter (%d): %s',
+                $id,
+                $e->getMessage()
+            ));
+
+            return new JsonResponse(['messages' => [[
+                'id'      => '400',
+                'type'    => 'error',
+                'message' => sprintf(_('Error while updating content'))
+            ]]]);
+        }
     }
 
     /**
