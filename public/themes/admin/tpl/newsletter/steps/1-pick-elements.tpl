@@ -107,7 +107,7 @@
       </div>
     </div>
     <input type="hidden" name="content_ids" ng-value="contents">
-    <input type="hidden" name="id" value="{$newsletter->pk_newsletter}">
+    <input type="hidden" name="id" value="{$newsletter->id}">
     <script type="text/ng-template" id="item">
       <div class="newsletter-item clearfix" ui-tree-handle>
         <span></span>

@@ -144,27 +144,26 @@ class NewsletterController extends Controller
      */
     public function showContentsAction(Request $request)
     {
-        $id         = $request->query->getDigits('id');
-        $newsletter = new \Newsletter($id);
+        $id = $request->query->getDigits('id');
 
-        $containers = json_decode($newsletter->data);
+        $item = $this->get('api.service.newsletter')->getItem($id);
 
-        foreach ($containers as $container) {
-            foreach ($container->items as &$item) {
-                if (!property_exists($item, 'content_type_l10n_name')) {
-                    $type    = $item->content_type;
+        foreach ($item->contents as $container) {
+            foreach ($container['items'] as &$containerElement) {
+                if (!array_key_exists('content_type_l10n_name', $containerElement)) {
+                    $type    = $containerElement['type'];
                     $content = new $type();
 
-                    $item->content_type_l10n_name = $content->content_type_l10n_name;
-                    $item->content_type_name      = \underscore($type);
+                    $containerElement->content_type_l10n_name = $content->content_type_l10n_name;
+                    $containerElement->content_type_name      = \underscore($type);
                 }
             }
         }
 
         return $this->render('newsletter/steps/1-pick-elements.tpl', [
             'with_html'         => true,
-            'newsletter'        => $newsletter,
-            'newsletterContent' => $containers,
+            'newsletter'        => $item,
+            'newsletterContent' => $item->contents,
         ]);
     }
 
