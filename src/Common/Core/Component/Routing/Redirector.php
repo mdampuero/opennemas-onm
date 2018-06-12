@@ -122,10 +122,17 @@ class Redirector
      */
     protected function getTranslationBySlug($slug, $type)
     {
-        return $this->conn->fetchAssoc(
-            'SELECT * FROM `translation_ids` WHERE `slug` = ? AND `type` = ? LIMIT 1',
-            [ $slug, $type ]
-        );
+        $sql    = 'SELECT * FROM `translation_ids` WHERE `slug` = ?';
+        $params = [ $slug ];
+
+        if (!empty($type)) {
+            $sql     .= ' AND `type` = ?';
+            $params[] = $type;
+        }
+
+        $sql .= ' LIMIT 1';
+
+        return $this->conn->fetchAssoc($sql, $params);
     }
 
     /**
