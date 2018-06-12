@@ -5,13 +5,13 @@ orm:
             properties:
                 id:              integer
                 type:            integer
-                enabled:         boolean
+                enabled:         integer
                 title:           string
                 contents:        array
                 recipients:      array
                 schedule:        array
                 generated_html:  string
-                sent:            string
+                sends:           string
                 created:         datetime
                 updated:         datetime
                 template_id:     integer
@@ -37,8 +37,8 @@ orm:
                         type:
                             type: integer
                             options: { length: 10, notnull: true }
-                        enabled:
-                            type: boolean
+                        status:
+                            type: integer
                             options: { notnull: true }
                         title:
                             type: string
@@ -58,9 +58,12 @@ orm:
                         updated:
                             type: datetime
                             options: { notnull: false }
-                        sent:
+                        sends:
                             type: integer
                             options: { default: 0, notnull: true }
+                        send_date:
+                            type: datetime
+                            options: { default: CURRENT_TIMESTAMP, notnull: true }
                         generated_html:
                             type: text
                             options: { length: 4294967295, default: null, notnull: false }
