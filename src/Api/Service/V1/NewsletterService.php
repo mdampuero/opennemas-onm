@@ -146,7 +146,7 @@ class NewsletterService extends OrmService
 
         // Get all newsletters updated between today and last invoice
         $oql = sprintf(
-            'updated >= "%s" and updated <= "%s" and sent > 0 order by created desc',
+            'updated >= "%s" and updated <= "%s" and sends > 0 order by created desc',
             $lastInvoiceDate->format('Y-m-d H:i:s'),
             $today->format('Y-m-d H:i:s')
         );

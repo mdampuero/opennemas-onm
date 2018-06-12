@@ -77,7 +77,7 @@
             <thead>
               <tr>
                 <th>{t}Title{/t}</th>
-                <th class="hidden-xs hidden-sm" style="width:250px;">{t}Updated{/t}</th>
+                <th class="hidden-xs hidden-sm" style="width:250px;">{t}Send date{/t}</th>
                 <th class="right">{t}Sendings{/t}</th>
               </tr>
             </thead>
@@ -87,7 +87,8 @@
                   <div ng-if="item.title != ''">[% item.title %]</div>
                   <div ng-if="item.title == ''">{t}Newsletter{/t}  -  [% item.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]</div>
                   <div class="small-text">
-                    <strong>{t}Created:{/t}</strong> [% item.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                    <strong>{t}Created:{/t}</strong> [% item.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %] <br>
+                    <strong>{t}Updated:{/t}</strong> [% item.updated | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
                   <div class="listing-inline-actions">
                     <a class="btn btn-default btn-small" href="[% routing.generate('backend_newsletters_show_contents', { id: item.id }) %]" title="{t}Edit{/t}" >
@@ -97,17 +98,17 @@
                       <i class="fa fa-eye"></i>
                       {t}Preview{/t}
                     </a>
-                    <button class="btn btn-danger btn-small" ng-if="item.sent < 1" class="link link-danger" ng-click="delete(item.id)" type="button">
+                    <button class="btn btn-danger btn-small" ng-if="item.sends < 1" class="link link-danger" ng-click="delete(item.id)" type="button">
                       <i class="fa fa-trash-o"></i>
                       {t}Delete{/t}
                     </button>
                   </div>
                 </td>
                 <td class="hidden-xs hidden-sm">
-                  [% item.updated | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                  [% item.send_date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                 </td>
                 <td class="right">
-                  [% item.sent != 0 ? item.sent : '{t}No{/t}' %]
+                  [% item.sends != 0 ? item.sends : '{t}No{/t}' %]
                 </td>
               </tr>
             </tbody>

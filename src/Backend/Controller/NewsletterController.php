@@ -383,12 +383,13 @@ class NewsletterController extends Controller
             $report     = $newsletterSender->send($newsletter, $recipients);
 
             // Duplicate newsletter if it was sent before.
-            if ($newsletter->sent > 0) {
+            if ($newsletter->sends > 0) {
                 $data = array_merge($newsletter->getStored(), [
                     'created'    => new \Datetime(),
                     'updated'    => new \Datetime(),
                     'recipients' => $recipients,
-                    'sent'       => $report['total']
+                    'sends'      => $report['total'],
+                    'send_date'  => new \Datetime(),
                 ]);
 
                 unset($data['id']);
@@ -398,7 +399,8 @@ class NewsletterController extends Controller
                 $this->get('api.service.newsletter')->patchItem($id, [
                     'recipients' => $recipients,
                     'updated'    => new \Datetime(),
-                    'sent'       => $report['total']
+                    'sends'      => $report['total'],
+                    'send_date'  => new \Datetime(),
                 ]);
             }
 
