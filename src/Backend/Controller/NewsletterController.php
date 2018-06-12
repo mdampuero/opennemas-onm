@@ -370,23 +370,45 @@ class NewsletterController extends Controller
      */
     public function sendAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
+        $id = (int) $request->query->getDigits('id');
 
         $recipients = $request->request->get('recipients');
         $recipients = json_decode($recipients);
 
-        // Prepare the newsletter contents to send
-        $newsletter        = new \Newsletter($id);
-        $newsletter->html  = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
-        $newsletter->title = empty($newsletter->title)
-            ? _('[Newsletter]') : $newsletter->title;
+        $newsletterService = $this->get('api.service.newsletter');
+        $newsletterSender  = $this->get('core.helper.newsletter_sender');
 
-        $report = $this->get('core.helper.newsletter_sender')->send($newsletter, $recipients);
+        try {
+            $newsletter = $newsletterService->getItem($id);
+            $report     = $newsletterSender->send($newsletter, $recipients);
 
-        return $this->render('newsletter/steps/4-send.tpl', [
-            'send_report' => $report,
-            'newsletter'  => $newsletter,
-        ]);
+            // Duplicate newsletter if it was sent before.
+            if ($newsletter->sent > 0) {
+                $data = array_merge($newsletter->getStored(), [
+                    'created'    => new \Datetime(),
+                    'updated'    => new \Datetime(),
+                    'recipients' => $recipients,
+                    'sent'       => $report['total']
+                ]);
+
+                unset($data['id']);
+
+                $newsletter = $this->get('api.service.newsletter')->createItem($data);
+            } else {
+                $this->get('api.service.newsletter')->patchItem($id, [
+                    'recipients' => $recipients,
+                    'updated'    => new \Datetime(),
+                    'sent'       => $report['total']
+                ]);
+            }
+
+            return $this->render('newsletter/steps/4-send.tpl', [
+                'send_report' => $report,
+                'newsletter'  => $newsletter,
+            ]);
+        } catch (\Exception $e) {
+            return new RedirectResponse($this->generateUrl('backend_newsletters_list'));
+        }
     }
 
     /**
