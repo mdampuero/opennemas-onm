@@ -76,7 +76,7 @@ class NewsletterSenderHelper
         $instance,
         $mailer,
         $ssb,
-        $newsletterHelper,
+        $newsletterService,
         $noReplyAddress
     ) {
         $this->sm                   = $settingsRepository;
@@ -86,7 +86,7 @@ class NewsletterSenderHelper
         $this->instanceInternalName = $instance->internal_name;
         $this->mailer               = $mailer;
         $this->ssb                  = $ssb;
-        $this->nh                   = $newsletterHelper;
+        $this->ns                   = $newsletterService;
         $this->newsletterConfigs    = $this->sm->get('newsletter_maillist');
         $this->siteName             = $this->sm->get('site_name');
     }
@@ -106,9 +106,10 @@ class NewsletterSenderHelper
             return [];
         }
 
-        $sentEmails = 0;
-        $maxAllowed = (int) $this->sm->get('max_mailing', 0);
-        $remaining  = $maxAllowed - $this->nh->getTotalNumberOfNewslettersSend();
+        $sentEmails      = 0;
+        $maxAllowed      = (int) $this->sm->get('max_mailing', 0);
+        $lastInvoiceDate = $this->getLastInvoiceDate();
+        $remaining       = $maxAllowed - $this->ns->getSentNewslettersSinceLastInvoice($lastInvoiceDate);
 
         foreach ($recipients as $mailbox) {
             if ($maxAllowed > 0 && abs($remaining) >= 0) {
@@ -142,23 +143,10 @@ class NewsletterSenderHelper
             }
         }
 
-        // If the newsletter was already sent in the past, then duplicate it
-        if (empty($newsletter->sent)) {
-            $newsletter->update([
-                'sent' => $sentEmails
-            ]);
-        } else {
-            $newsletter->create([
-                'title' => $newsletter->title,
-                'data'  => $newsletter->data,
-                'html'  => $newsletter->html,
-                'sent'  => $sentEmails,
-            ]);
-        }
-
         return [
-            'total' => $sentEmails,
-            'report' => $sendResults,
+            'total'      => $sentEmails,
+            'report'     => $sendResults,
+            'create_new' => !empty($newsletter->sent),
         ];
     }
 
@@ -301,5 +289,46 @@ class NewsletterSenderHelper
                 . "Check the form and try again"
             ));
         }
+    }
+
+    /**
+     * Updates last invoice date
+     *
+     * @param string $date Date of last invoice
+     *
+     * @return DateTime Last invoice
+     */
+    public function getLastInvoiceDate()
+    {
+        // Generate last invoice DateTime
+        $lastInvoice = new \DateTime($this->sm->get('last_invoice'));
+
+        // Set day to 28 if it's more than that
+        if ($lastInvoice->format('d') > 28) {
+            $lastInvoice->setDate(
+                $lastInvoice->format('Y'),
+                $lastInvoice->format('m'),
+                28
+            );
+        }
+
+        // Get today DateTime
+        $today = new \DateTime();
+
+        // Get next invoice DateTime
+        $nextInvoiceDate = new \DateTime($lastInvoice->format('Y-m-d H:i:s'));
+        $nextInvoiceDate->modify('+1 month');
+
+        // Update next invoice DateTime
+        while ($today > $nextInvoiceDate) {
+            $nextInvoiceDate->modify('+1 month');
+        }
+
+        // Update last invoice DateTime
+        $lastInvoice = $nextInvoiceDate->modify('-1 month');
+
+        $this->sm->set('last_invoice', $lastInvoice->format('Y-m-d H:i:s'));
+
+        return $lastInvoice;
     }
 }
