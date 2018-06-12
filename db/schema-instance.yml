@@ -909,29 +909,63 @@ menues:
             primary: false
             unique: false
             flags: {  }
-newsletter_archive:
+newsletters:
     columns:
-        pk_newsletter:
+        id:
+            type: bigint
+            options: { lenght: 20, default: null, unsigned: true, autoincrement: true }
+        type:
             type: integer
-            options: { unsigned: true, autoincrement: true }
+            options: { length: 10, notnull: true }
+        enabled:
+            type: boolean
+            options: { notnull: true }
         title:
             type: string
-            options: { length: 255, default: null }
-        data:
+            options: { default: null, length: 512 }
+        contents:
             type: text
             options: { length: 65532, default: null, notnull: false }
-        html:
+        recipients:
             type: text
-            options: { length: 4294967295, default: null, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
+        schedule:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
         created:
             type: datetime
-            options: { default: CURRENT_TIMESTAMP }
+            options: { default: CURRENT_TIMESTAMP, notnull: true }
         updated:
             type: datetime
-            options: { default: CURRENT_TIMESTAMP, onUpdate: CURRENT_TIMESTAMP }
+            options: { default: CURRENT_TIMESTAMP, notnull: false }
         sent:
-            type: string
-            options: { length: 255, default: null }
+            type: integer
+            options: { default: 0, notnull: true }
+        generated_html:
+            type: text
+            options: { length: 4294967295, default: null, notnull: false }
+        template_id:
+            type: bigint
+            options: { lenght: 20, default: null, unsigned: true, notnull: false  }
+    index:
+        -
+            name:    PRIMARY
+            columns: [ id ]
+            primary: true
+            unique:  true
+            flags:   {}
+        -
+            name:    newsletter_type
+            columns: [ type ]
+            primary: false
+            unique:  false
+            flags:   {}
+        -
+            name:    newsletter_template_id
+            columns: [ template_id ]
+            primary: false
+            unique:  false
+            flags:   {}
     index:
         -
             name: PRIMARY
