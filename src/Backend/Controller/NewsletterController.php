@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 use Onm\Settings as s;
+use Common\ORM\Entity\Newsletter;
 
 /**
  * Handles the actions for the newsletter
@@ -31,9 +32,12 @@ class NewsletterController extends Controller
      */
     public function listAction()
     {
-        $maxAllowed      = $this->get('setting_repository')->get('max_mailing');
-        $totalSendings   = $this->get('core.helper.newsletter')->getTotalNumberOfNewslettersSend();
-        $lastInvoice     = new \DateTime($this->get('setting_repository')->get('last_invoice'));
+        $sr                = $this->get('setting_repository');
+        $newsletterService = $this->get('api.service.newsletter');
+
+        $maxAllowed      = $sr->get('max_mailing');
+        $lastInvoice     = new \DateTime($sr->get('last_invoice'));
+        $totalSendings   = $newsletterService->getSentNewslettersSinceLastInvoice($lastInvoice);
         $lastInvoiceText = $lastInvoice->format(_('Y-m-d'));
 
         // Check if the module is configured, if not redirect to the config form
