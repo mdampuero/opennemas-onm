@@ -310,7 +310,7 @@ class NewsletterController extends Controller
     {
         $id         = $request->query->getDigits('id');
         $sm         = $this->get('setting_repository');
-        $content    = new \Newsletter($id);
+        $newsletter = $this->get('api.service.newsletter')->getItem($id);
         $recipients = [];
 
 
@@ -350,7 +350,7 @@ class NewsletterController extends Controller
 
         return $this->render('newsletter/steps/3-pick-recipients.tpl', [
             'id'      => $id,
-            'content' => $content,
+            'content' => $newsletter,
             'extra'   => [
                 'newsletter_handler' => $sm->get('newsletter_subscriptionType'),
                 'recipients'         => $recipients,
