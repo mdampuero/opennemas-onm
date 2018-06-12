@@ -53,6 +53,10 @@
   transition: all .25s;
 }
 
+.grid {
+  position: relative;
+}
+
 .grid.simple .grid-body {
   border-color: #e5e5e5;
 }
