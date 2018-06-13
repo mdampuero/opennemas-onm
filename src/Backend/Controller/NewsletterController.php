@@ -205,6 +205,7 @@ class NewsletterController extends Controller
         try {
             if ($id > 0) {
                 $newsletter = $ns->patchItem($id, [
+                    'status'         => 0,
                     'title'          => $title,
                     'contents'       => $containers,
                     'generated_html' => $html,
@@ -212,6 +213,7 @@ class NewsletterController extends Controller
                 ]);
             } else {
                 $newsletter = $ns->createItem([
+                    'status'         => 0,
                     'title'          => $title,
                     'contents'       => $containers,
                     'generated_html' => $html,
