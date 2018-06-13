@@ -259,7 +259,7 @@ class NewsletterController extends Controller
     }
 
     /**
-     * Description of this action
+     * Saves the HTML content of a newsletter
      *
      * @param Request $request the request object
      *
