@@ -5,15 +5,16 @@ orm:
             properties:
                 id:              integer
                 type:            integer
-                enabled:         integer
+                status:         integer
                 title:           string
                 contents:        array
                 recipients:      array
                 schedule:        array
-                generated_html:  string
-                sends:           string
                 created:         datetime
                 updated:         datetime
+                sends:           string
+                send_date:       datetime
+                generated_html:  string
                 template_id:     integer
             converters:
                 default:
