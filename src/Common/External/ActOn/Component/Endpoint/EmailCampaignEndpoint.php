@@ -9,6 +9,8 @@
  */
 namespace Common\External\ActOn\Component\Endpoint;
 
+use Common\External\ActOn\Component\Exception\ActOnException;
+
 class EmailCampaignEndpoint extends Endpoint
 {
     /**
@@ -19,6 +21,7 @@ class EmailCampaignEndpoint extends Endpoint
      * @return integer The message id.
      *
      * @throws InvalidArgumentException If parameters are invalid.
+     * @throws ActOnException           If the action fails.
      */
     public function createMessage($params)
     {
@@ -26,9 +29,22 @@ class EmailCampaignEndpoint extends Endpoint
             throw new \InvalidArgumentException();
         }
 
-        $response = $this->post(array_merge([ 'type' => 'draft' ], $params));
+        $url  = $this->url . $this->config['actions']['create_message']['path'];
+        $data = [
+            'headers' => [
+                'authorization' => 'Bearer ' . $this->auth->getToken(),
+            ],
+            'form_params' => array_merge([ 'type' => 'draft' ], $params)
+        ];
 
-        return $response['id'];
+        try {
+            $response = $this->client->post($url, $data);
+            $body     = json_decode($response->getBody(), true);
+
+            return $body['id'];
+        } catch (\Exception $e) {
+            throw new ActOnException('acton.email.failure: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -37,13 +53,28 @@ class EmailCampaignEndpoint extends Endpoint
      * @param array $params The action parameters.
      *
      * @throws InvalidArgumentException If parameters are invalid.
+     * @throws ActOnException           If the action fails.
      */
-    public function sendMessage($params)
+    public function sendMessage($id, $params)
     {
         if (!$this->areParametersValid($params, 'send_message')) {
             throw new \InvalidArgumentException();
         }
 
-        $this->post($params);
+        $url = $this->url . $this->config['actions']['send_message']['path'];
+        $url = str_replace('{id}', $id, $url);
+
+        $data = [
+            'headers' => [
+                'authorization' => 'Bearer ' . $this->auth->getToken(),
+            ],
+            'form_params' => $params
+        ];
+
+        try {
+            $this->client->post($url, $data);
+        } catch (\Exception $e) {
+            throw new ActOnException('acton.email.failure: ' . $e->getMessage());
+        }
     }
 }
