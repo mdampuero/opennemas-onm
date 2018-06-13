@@ -21,8 +21,7 @@ class EndpointTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->cp     = $this->getMockBuilder('ConfigurationProvider')->getMock();
-        $this->tp     = $this->getMockBuilder('TokenProvider')->getMock();
+        $this->auth   = $this->getMockBuilder('Authentication')->getMock();
         $this->client = $this->getMockBuilder('HTTPClient')->getMock();
 
         $this->config = [
@@ -36,7 +35,7 @@ class EndpointTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->endpoint = new Endpoint($this->cp, $this->tp, $this->client, 'flob');
+        $this->endpoint = new Endpoint($this->auth, $this->client, 'flob');
 
         $this->endpoint->setConfiguration($this->config);
     }
