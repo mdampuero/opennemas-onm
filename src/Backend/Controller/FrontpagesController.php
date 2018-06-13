@@ -38,39 +38,9 @@ class FrontpagesController extends Controller
             throw new AccessDeniedException();
         }
 
-        // Fetch all categories
-        $categories[] = [
-            'id'    => 0,
-            'name'  => _('Frontpage'),
-            'value' => 'home',
-            'group' => _('Frontpages')
-        ];
-
         $ccm = \ContentCategoryManager::get_instance();
 
-        list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($categoryId);
-        unset($datos_cat);
-        foreach ($parentCategories as $key => $category) {
-            if ($category->inmenu == 1) {
-                $categories[$category->id] = [
-                    'id'    => $category->id,
-                    'name'  => $category->title,
-                    'value' => $category->name,
-                    'group' => _('Categories')
-                ];
-            }
-
-            foreach ($subcat[$key] as $subcategory) {
-                if ($subcategory->inmenu == 1) {
-                    $categories[$subcategory->id] = [
-                        'id'    => $subcategory->id,
-                        'name'  => $subcategory->title,
-                        'value' => $subcategory->name,
-                        'group' => _('Categories')
-                    ];
-                }
-            }
-        }
+        $categories = $ccm->findAll();
 
         // Get theme layout
         $layoutTheme = s::get('frontpage_layout_' . $categoryId, 'default');

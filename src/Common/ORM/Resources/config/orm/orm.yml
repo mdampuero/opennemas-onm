@@ -25,6 +25,8 @@ imports:
     - { resource: entity/comment.yml }
     - { resource: entity/content.yml }
     - { resource: entity/extension.yml }
+    - { resource: entity/frontpage.yml }
+    - { resource: entity/frontpage_version.yml }
     - { resource: entity/instance.yml }
     - { resource: entity/invoice.yml }
     - { resource: entity/notification.yml }

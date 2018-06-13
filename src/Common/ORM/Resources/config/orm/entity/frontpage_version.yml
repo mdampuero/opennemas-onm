@@ -1,0 +1,65 @@
+orm:
+    metadata:
+        -
+            name: FrontpageVersion
+            enum:
+                type: [ 1, 2 ]
+            properties:
+                id:           integer
+                frontpage_id: integer
+                name:         string
+                type:         integer
+                created:      datetime
+                publish_date: datetime
+                params:       string
+
+            converters:
+                default:
+                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.frontpage_version' ]
+            repositories:
+                instance:
+                    class:     Common\ORM\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.frontpage_version', '@cache.connection.instance' ]
+            persisters:
+                instance:
+                    class:     Common\ORM\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.frontpage_version', '@cache.connection.instance' ]
+            mapping:
+                database:
+                    table: frontpage_versions
+                    columns:
+                        id:
+                            type: integer
+                            options: { default: null, unsigned: true, autoincrement: true }
+                        frontpage_id:
+                            type: integer
+                            options: { default: null, unsigned: true }
+                        name:
+                            type: string
+                            options: { default: null, unsigned: true, lenght: 100 }
+                        type:
+                            type: integer
+                            options: { default: null, notnull: false }
+                        created:
+                            type: datetimetz
+                            options: { default: null, notnull: false }
+                        publish_date:
+                            type: datetimetz
+                            options: { default: null, notnull: false }
+                        params:
+                            type: string
+                            options: { default: null, notnull: false, lenght: 250 }
+                    index:
+                        -
+                            name: PRIMARY
+                            columns: [ id ]
+                            primary: true
+                            unique: true
+                            flags: {  }
+                        -
+                            name: frontpage_id
+                            columns: [frontpage_id]
+                            primary: false
+                            unique: false
+                            flags: {  }

@@ -3,6 +3,14 @@ services:
         class:     Api\Service\V1\AuthorService
         arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
 
+    api.service.frontpage:
+        class:     Api\Service\V1\FrontpageService
+        arguments: [ '@service_container', 'Common\ORM\Entity\Frontpage' ]
+
+    api.service.frontpage_version:
+        class:     Api\Service\V1\FrontpageVersionService
+        arguments: [ '@service_container', 'Common\ORM\Entity\FrontpageVersion' ]
+
     api.service.subscriber:
         class:     Api\Service\V1\SubscriberService
         arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
