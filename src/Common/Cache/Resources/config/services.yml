@@ -3,9 +3,14 @@ parameters:
 
 services:
     cache.loader:
-        class: Common\Cache\Core\Loader\Loader
+        class:     'Common\Cache\Core\Loader\Loader'
         arguments: [ '%cache.config_path%', '%kernel.environment%', '%cache.default%' ]
 
     cache.manager:
-        class: Common\Cache\Core\CacheManager
+        class:     'Common\Cache\Core\CacheManager'
         arguments: [ '@service_container' ]
+
+    cache.connection.instance:
+        class:     'Common\ORM\Entity\Instance'
+        factory:   [ '@cache.manager', 'getConnection' ]
+        arguments: [ 'instance' ]
