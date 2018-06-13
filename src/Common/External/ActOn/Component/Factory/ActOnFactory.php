@@ -74,6 +74,20 @@ class ActOnFactory
     }
 
     /**
+     * Returns a new Guzzle client.
+     *
+     * @return Client The new Guzzle client.
+     */
+    public function getClient()
+    {
+        if (empty($this->client)) {
+            $this->client = new Client();
+        }
+
+        return $this->client;
+    }
+
+    /**
      * Returns the service to interact with the requested endpoint.
      *
      * @param string $name The endpoint name.
@@ -109,19 +123,5 @@ class ActOnFactory
         }
 
         return $endpoint;
-    }
-
-    /**
-     * Returns a new Guzzle client.
-     *
-     * @return Client The new Guzzle client.
-     */
-    protected function getClient()
-    {
-        if (empty($this->client)) {
-            $this->client = new Client();
-        }
-
-        return $this->client;
     }
 }

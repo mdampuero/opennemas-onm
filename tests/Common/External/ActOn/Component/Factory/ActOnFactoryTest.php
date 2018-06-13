@@ -72,13 +72,7 @@ class ActOnFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetClient()
     {
-        $method = new \ReflectionMethod($this->factory, 'getClient');
-        $method->setAccessible(true);
-
-        $this->assertInstanceOf(
-            'GuzzleHttp\Client',
-            $method->invokeArgs($this->factory, [])
-        );
+        $this->assertInstanceOf('GuzzleHttp\Client', $this->factory->getClient());
     }
 
     /**
