@@ -73,11 +73,6 @@ class NewsletterService extends OrmService
 
         $deleted = 0;
         foreach ($response['items'] as $item) {
-            // Ignore current user
-            if ($item === $this->container->get('core.user')) {
-                continue;
-            }
-
             try {
                 $this->em->remove($item, $item->getOrigin());
                 $deleted++;
@@ -152,7 +147,7 @@ class NewsletterService extends OrmService
         $total = 0;
         if (count($newsletters) > 0) {
             foreach ($newsletters as $newsletter) {
-                $total += (int) $newsletter->sent;
+                $total += (int) $newsletter->sends;
             }
         }
 
