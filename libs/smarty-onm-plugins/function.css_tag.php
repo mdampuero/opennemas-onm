@@ -36,12 +36,6 @@ function smarty_function_css_tag($params, &$smarty)
         $rel = "rel=\"{$params['rel']}\"";
     }
 
-    unset($params['rel']);
-    unset($params['href']);
-    unset($params['type']);
-    unset($params['basepath']);
-    unset($params['common']);
-
     // Clean internal properties
     $keys = [ 'basepath', 'common', 'href', 'type', 'rel', 'src', ];
     foreach ($keys as $key) {
