@@ -9,8 +9,25 @@
  */
 namespace Common\External\ActOn\Component\Factory;
 
+use Common\External\ActOn\Component\Authentication\Authentication;
+use GuzzleHttp\Client;
+
 class ActOnFactory
 {
+    /**
+     * The Act-On authentication service.
+     *
+     * @var Authentication
+     */
+    protected $auth;
+
+    /**
+     * The HTTP client
+     *
+     * @var Client
+     */
+    protected $client;
+
     /**
      * The Act-On configuration.
      *
@@ -38,6 +55,24 @@ class ActOnFactory
     }
 
     /**
+     * Returns a configured authentication service.
+     *
+     * @return Authentication A configured authentication service.
+     */
+    public function getAuthentication()
+    {
+        if (empty($this->auth)) {
+            $this->auth = new Authentication(
+                $this->container->get($this->config['http_client']),
+                $this->container->get($this->config['config_provider']),
+                $this->container->get($this->config['token_provider'])
+            );
+        }
+
+        return $this->auth;
+    }
+
+    /**
      * Returns the service to interact with the requested endpoint.
      *
      * @param string $name The endpoint name.
@@ -50,13 +85,20 @@ class ActOnFactory
 
         $class = '\\' . $this->config['endpoints'][$name]['class'];
         $class = new \ReflectionClass($class);
-        $args  = [];
+        $args  = [
+            $this->container->get($this->config['http_client']),
+            $this->container->get($this->config['config_provider']),
+            $this->container->get($this->config['token_provider'])
+        ];
 
         if (array_key_exists('args', $this->config['endpoints'][$name])) {
-            $args = array_map(function ($a) use ($container) {
-                return $a[0] === '@' ? $container->get($a) :
-                    $container->getParameter($a);
-            }, $this->config['endpoints'][$name]['args']);
+            $args = array_merge(
+                $args,
+                array_map(function ($a) use ($container) {
+                    return $a[0] === '@' ? $container->get($a) :
+                        $container->getParameter($a);
+                }, $this->config['endpoints'][$name]['args'])
+            );
         }
 
         $endpoint = $class->newInstanceArgs($args);
@@ -66,5 +108,19 @@ class ActOnFactory
         }
 
         return $endpoint;
+    }
+
+    /**
+     * Returns a new Guzzle client.
+     *
+     * @return Client The new Guzzle client.
+     */
+    protected function getClient()
+    {
+        if (empty($this->client)) {
+            $this->client = new Client();
+        }
+
+        return $this->client;
     }
 }
