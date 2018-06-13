@@ -57,7 +57,12 @@ class ActOnFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAuthentication()
     {
-        $this->container->expects($this->at(0))->method('get')->with('mumble');
+        $this->cp = $this->getMockBuilder('ConfigurationProvider')
+            ->setMethods([ 'getConfiguration' ])
+            ->getMock();
+
+        $this->container->expects($this->at(0))->method('get')
+            ->with('mumble')->willReturn($this->cp);
         $this->container->expects($this->at(1))->method('get')->with('garply');
         $this->container->expects($this->at(2))->method('get')->with('corge');
 
