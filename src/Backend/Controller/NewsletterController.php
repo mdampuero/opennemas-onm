@@ -218,11 +218,13 @@ class NewsletterController extends Controller
                     'contents'       => $containers,
                     'generated_html' => $html,
                 ]);
+
+                $id = $newsletter->id;
             }
 
             return $this->redirect($this->generateUrl(
                 'backend_newsletters_preview',
-                ['id' => $id]
+                [ 'id' => $id ]
             ));
         } catch (\Api\Exception\GetItemException $e) {
             return $this->redirect($this->generateUrl('backend_newsletters_list'));
