@@ -9,8 +9,8 @@
  */
 namespace Tests\Common\External\ActOn\Factory;
 
-use Common\External\ActOn\Endpoint\EmailCampaignEndpoint;
-use Common\External\ActOn\Factory\ActOnFactory;
+use Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint;
+use Common\External\ActOn\Component\Factory\ActOnFactory;
 
 /**
  * Defines test cases for EndpointFactory class.
@@ -26,7 +26,7 @@ class ActOnFactoryTest extends \PHPUnit_Framework_TestCase
             'token'     => 'mumblenorfthudwaldo',
             'endpoints' => [
                 'email_campaign' => [
-                    'class'  => 'Common\External\ActOn\Endpoint\EmailCampaignEndpoint',
+                    'class'  => 'Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint',
                     'args'   => [ '@gorp', '%glork%' ],
                     'config' => [
                         'actions' => [
@@ -61,7 +61,7 @@ class ActOnFactoryTest extends \PHPUnit_Framework_TestCase
     public function testGetEndpoint()
     {
         $this->assertInstanceOf(
-            'Common\External\ActOn\Endpoint\EmailCampaignEndpoint',
+            'Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint',
             $this->factory->getEndpoint('email_campaign')
         );
     }
