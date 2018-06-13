@@ -111,6 +111,9 @@ class NewsletterSenderHelper
         $lastInvoiceDate = $this->getLastInvoiceDate();
         $remaining       = $maxAllowed - $this->ns->getSentNewslettersSinceLastInvoice($lastInvoiceDate);
 
+        // Fix encoding of the html
+        $newsletter = htmlspecialchars_decode($newsletter, ENT_QUOTES);
+
         foreach ($recipients as $mailbox) {
             if ($maxAllowed > 0 && abs($remaining) >= 0) {
                 $sendResults[] = [$mailbox, false, _('Max sents reached')];
@@ -273,7 +276,6 @@ class NewsletterSenderHelper
             ->setTo([ $settings['newsletter_maillist']['subscription'] => _('Subscription form') ])
             ->setFrom([ $data['email'] => $data['name'] ])
             ->setSender([ 'no-reply@postman.opennemas.com' => $settings['site_name'] ]);
-
 
         $headers = $email->getHeaders();
         $headers->addParameterizedHeader(
