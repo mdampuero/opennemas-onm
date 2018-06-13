@@ -31,7 +31,7 @@
         $scope.criteria = {
           epp: 25,
           page: 1,
-          orderBy: { title: 'asc' }
+          orderBy: { id: 'desc' }
         };
 
         /**
