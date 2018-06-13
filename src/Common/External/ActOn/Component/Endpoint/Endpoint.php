@@ -26,13 +26,29 @@ class Endpoint
     protected $config = [];
 
     /**
+     * The Act-On configuration provider.
+     *
+     * @var ConfigurationProvider
+     */
+    protected $configProvider;
+
+    /**
+     * The Act-On token provider.
+     *
+     * @var TokenProvider
+     */
+    protected $tokenProvider;
+
+    /**
      * Initializes the endpoint.
      *
      * @param object $client The HTTP client.
      */
-    public function __construct($client)
+    public function __construct($configProvider, $tokenProvider, $client)
     {
-        $this->client = $client;
+        $this->client         = $client;
+        $this->configProvider = $configProvider;
+        $this->tokenProvider  = $tokenProvider;
     }
 
     /**
