@@ -61,6 +61,12 @@
           $scope.columns.key     = 'newsletter-columns';
           $scope.backup.criteria = $scope.criteria;
 
+          oqlEncoder.configure({
+            placeholder: {
+              title: 'title ~ "[value]"',
+            }
+          });
+
           $scope.list();
         };
 
