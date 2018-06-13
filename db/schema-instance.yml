@@ -916,10 +916,10 @@ newsletters:
             options: { lenght: 20, default: null, unsigned: true, autoincrement: true }
         type:
             type: integer
-            options: { length: 10, notnull: true }
+            options: { length: 10, default: 0, notnull: true }
         status:
-            type: boolean
-            options: { notnull: true }
+            type: integer
+            options: { length: 10, default: 0, notnull: true }
         title:
             type: string
             options: { default: null, length: 512 }
@@ -943,7 +943,7 @@ newsletters:
             options: { default: 0, notnull: true }
         send_date:
             type: datetime
-            options: { default: CURRENT_TIMESTAMP, notnull: true }
+            options: { default: CURRENT_TIMESTAMP, notnull: false }
         generated_html:
             type: text
             options: { length: 4294967295, default: null, notnull: false }
