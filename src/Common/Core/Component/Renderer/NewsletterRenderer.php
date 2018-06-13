@@ -33,11 +33,17 @@ class NewsletterRenderer
     public function __construct(
         $tpl,
         EntityManager $entityManager,
-        $settingManager
+        $settingManager,
+        $advertisementHelper,
+        $advertisementRepository,
+        $instance
     ) {
-        $this->tpl = $tpl;
-        $this->er  = $entityManager;
-        $this->sr  = $settingManager;
+        $this->tpl      = $tpl;
+        $this->er       = $entityManager;
+        $this->sr       = $settingManager;
+        $this->adHelper = $advertisementHelper;
+        $this->ar       = $advertisementRepository;
+        $this->instance = $instance;
     }
 
     /**
@@ -82,10 +88,8 @@ class NewsletterRenderer
         $this->tpl->assign('menuFrontpage', $menu->items);
 
         // Fetch and assign newsletter ads
-        $positions = getService('core.helper.advertisement')
-            ->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
-        $ads       = getService('advertisement_repository')
-            ->findByPositionsAndCategory($positions, 0);
+        $positions = $this->adHelper->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
+        $ads       = $this->ar->findByPositionsAndCategory($positions, 0);
         $this->tpl->assign('advertisements', $ads);
 
         // Format and assign the current date.
@@ -110,7 +114,7 @@ class NewsletterRenderer
         $publicUrl = preg_replace(
             '@^http[s]?://(.*?)/$@i',
             'http://$1',
-            getService('core.instance')->getMainDomain()
+            $this->instance->getMainDomain()
         );
         $this->tpl->assign('URL_PUBLIC', 'http://' . $publicUrl);
 

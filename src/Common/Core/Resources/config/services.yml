@@ -225,7 +225,13 @@ services:
 
     core.renderer.newsletter:
         class:     Common\Core\Component\Renderer\NewsletterRenderer
-        arguments: [ '@core.template', '@entity_repository', '@setting_repository' ]
+        arguments:
+            - '@core.template'
+            - '@entity_repository'
+            - '@setting_repository'
+            - '@core.helper.advertisement'
+            - '@advertisement_repository'
+            - '@core.instance'
 
     core.status.checker:
         class:     Common\Core\Component\Status\Checker
