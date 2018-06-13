@@ -12,6 +12,13 @@ namespace Common\External\ActOn\Component\Endpoint;
 class Endpoint
 {
     /**
+     * The Act-On authentication service.
+     *
+     * @var Authentication
+     */
+    protected $auth;
+
+    /**
      * The HTTP client
      *
      * @var object
@@ -24,20 +31,6 @@ class Endpoint
      * @var array
      */
     protected $config = [];
-
-    /**
-     * The Act-On configuration provider.
-     *
-     * @var ConfigurationProvider
-     */
-    protected $configProvider;
-
-    /**
-     * The Act-On token provider.
-     *
-     * @var TokenProvider
-     */
-    protected $tokenProvider;
 
     /**
      * The Act-On API URL.
@@ -54,12 +47,11 @@ class Endpoint
      * @param Client                $client         The HTTP client.
      * @param string                $url            The Act-On API URL.
      */
-    public function __construct($configProvider, $tokenProvider, $client, $url)
+    public function __construct($auth, $client, $url)
     {
-        $this->client         = $client;
-        $this->configProvider = $configProvider;
-        $this->tokenProvider  = $tokenProvider;
-        $this->url            = $url;
+        $this->client = $client;
+        $this->auth   = $auth;
+        $this->url    = $url;
     }
 
     /**
