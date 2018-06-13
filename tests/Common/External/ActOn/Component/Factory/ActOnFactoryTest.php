@@ -23,8 +23,10 @@ class ActOnFactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->config = [
-            'token'     => 'mumblenorfthudwaldo',
-            'endpoints' => [
+            'config_provider' => 'mumble',
+            'http_client'     => 'corge',
+            'token_provider'  => 'garply',
+            'endpoints'       => [
                 'email_campaign' => [
                     'class'  => 'Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint',
                     'args'   => [ '@gorp', '%glork%' ],
@@ -46,13 +48,39 @@ class ActOnFactoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'get', 'getParameter' ])
             ->getMock();
 
-        $this->container->expects($this->any())->method('get')
-            ->willReturn('gorp');
-        $this->container->expects($this->any())->method('getParameter')
-            ->willReturn('glork');
-
-
         $this->factory = new ActOnFactory($this->container, $this->config);
+    }
+
+    /**
+     * Tests getAuthentication.
+     */
+    public function testGetAuthentication()
+    {
+        $this->container->expects($this->at(0))->method('get')
+            ->with('corge');
+        $this->container->expects($this->at(1))->method('get')
+            ->with('mumble');
+        $this->container->expects($this->at(2))->method('get')
+            ->with('garply');
+
+        $this->assertInstanceOf(
+            'Common\External\ActOn\Component\Authentication\Authentication',
+            $this->factory->getAuthentication()
+        );
+    }
+
+    /**
+     * Tests getClient.
+     */
+    public function testGetClient()
+    {
+        $method = new \ReflectionMethod($this->factory, 'getClient');
+        $method->setAccessible(true);
+
+        $this->assertInstanceOf(
+            'GuzzleHttp\Client',
+            $method->invokeArgs($this->factory, [])
+        );
     }
 
     /**
@@ -60,6 +88,11 @@ class ActOnFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEndpoint()
     {
+        $this->container->expects($this->any())->method('get')
+            ->willReturn('gorp');
+        $this->container->expects($this->any())->method('getParameter')
+            ->willReturn('glork');
+
         $this->assertInstanceOf(
             'Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint',
             $this->factory->getEndpoint('email_campaign')
