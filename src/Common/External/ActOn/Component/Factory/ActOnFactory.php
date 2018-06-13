@@ -63,9 +63,10 @@ class ActOnFactory
     {
         if (empty($this->auth)) {
             $this->auth = new Authentication(
-                $this->container->get($this->config['http_client']),
                 $this->container->get($this->config['config_provider']),
-                $this->container->get($this->config['token_provider'])
+                $this->container->get($this->config['token_provider']),
+                $this->container->get($this->config['http_client']),
+                $this->config['url']
             );
         }
 

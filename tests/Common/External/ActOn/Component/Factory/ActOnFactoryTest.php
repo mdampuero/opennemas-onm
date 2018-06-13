@@ -26,6 +26,7 @@ class ActOnFactoryTest extends \PHPUnit_Framework_TestCase
             'config_provider' => 'mumble',
             'http_client'     => 'corge',
             'token_provider'  => 'garply',
+            'url'             => 'baz',
             'endpoints'       => [
                 'email_campaign' => [
                     'class'  => 'Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint',
@@ -56,12 +57,9 @@ class ActOnFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAuthentication()
     {
-        $this->container->expects($this->at(0))->method('get')
-            ->with('corge');
-        $this->container->expects($this->at(1))->method('get')
-            ->with('mumble');
-        $this->container->expects($this->at(2))->method('get')
-            ->with('garply');
+        $this->container->expects($this->at(0))->method('get')->with('mumble');
+        $this->container->expects($this->at(1))->method('get')->with('garply');
+        $this->container->expects($this->at(2))->method('get')->with('corge');
 
         $this->assertInstanceOf(
             'Common\External\ActOn\Component\Authentication\Authentication',
