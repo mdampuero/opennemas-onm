@@ -71,6 +71,16 @@ class CommentHelper
     }
 
     /**
+     * Whether comments must be enabled by default in comments or not
+     *
+     * @return boolean true if comments are enabled by default on contents
+     **/
+    public function enableCommentsByDefault()
+    {
+        return $this->getConfigs()['with_comments'] == 1;
+    }
+
+    /**
      * Whether if comments must be moderated manually or not according to configs
      *
      * @return boolean true if the comments are moderated manually

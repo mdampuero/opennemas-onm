@@ -164,7 +164,7 @@
                   {is_module_activated name="COMMENT_MANAGER"}
                     <div class="form-group">
                       <div class="checkbox">
-                        <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($opinion) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($opinion) && $opinion->with_comment eq 1)}checked{/if}  />
+                        <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($opinion) && (!isset($enableComments) || $enableComments) eq 1) || (isset($opinion) && $opinion->with_comment eq 1)}checked{/if}  />
                         <label for="with_comment">
                           {t}Allow comments{/t}
                         </label>

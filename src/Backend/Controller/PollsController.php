@@ -160,7 +160,7 @@ class PollsController extends Controller
         }
 
         return $this->render('poll/new.tpl', [
-            'commentsConfig' => s::get('comments_config')
+            'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
         ]);
     }
 
