@@ -40,15 +40,26 @@ class Endpoint
     protected $tokenProvider;
 
     /**
+     * The Act-On API URL.
+     *
+     * @var string
+     */
+    protected $url;
+
+    /**
      * Initializes the endpoint.
      *
-     * @param object $client The HTTP client.
+     * @param ConfigurationProvider $configProvider The configuration provider.
+     * @param TokenProvider         $tokenProvider  The token provider.
+     * @param Client                $client         The HTTP client.
+     * @param string                $url            The Act-On API URL.
      */
-    public function __construct($configProvider, $tokenProvider, $client)
+    public function __construct($configProvider, $tokenProvider, $client, $url)
     {
         $this->client         = $client;
         $this->configProvider = $configProvider;
         $this->tokenProvider  = $tokenProvider;
+        $this->url            = $url;
     }
 
     /**

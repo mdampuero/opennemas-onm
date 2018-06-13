@@ -27,7 +27,7 @@ class EmailCampaignEndpointTest extends \PHPUnit_Framework_TestCase
 
         $this->endpoint = $this->getMockBuilder('Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint')
             ->setMethods([ 'post' ])
-            ->setConstructorArgs([ $this->cp, $this->tp, $this->client ])
+            ->setConstructorArgs([ $this->cp, $this->tp, $this->client, 'foo' ])
             ->getMock();
 
         $this->endpoint->setConfiguration([

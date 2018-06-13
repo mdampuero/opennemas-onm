@@ -36,7 +36,7 @@ class EndpointTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->endpoint = new Endpoint($this->cp, $this->tp, $this->client);
+        $this->endpoint = new Endpoint($this->cp, $this->tp, $this->client, 'flob');
 
         $this->endpoint->setConfiguration($this->config);
     }
