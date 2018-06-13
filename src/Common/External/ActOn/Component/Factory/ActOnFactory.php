@@ -103,7 +103,8 @@ class ActOnFactory
         $args  = [
             $this->container->get($this->config['http_client']),
             $this->container->get($this->config['config_provider']),
-            $this->container->get($this->config['token_provider'])
+            $this->container->get($this->config['token_provider']),
+            $this->config['url']
         ];
 
         if (array_key_exists('args', $this->config['endpoints'][$name])) {
