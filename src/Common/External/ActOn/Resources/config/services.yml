@@ -6,7 +6,7 @@ parameters:
         url:             'https://restapi.actonsoftware.com'
         endpoints:
             email_campaign:
-                class: 'Common\External\ActOn\Endpoint\EmailCampaignEndpoint'
+                class: 'Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint'
                 config:
                     actions:
                         create_message:
