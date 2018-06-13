@@ -17,18 +17,19 @@ function smarty_function_script_tag($params, &$smarty)
 
     $output = '';
     $src    = $params['src'];
-    $mtime  = THEMES_DEPLOYED_AT;
+    $mtime  = DEPLOYED_AT;
     $server = '';
     $type   = "type=\"text/javascript\"";
     $escape = false;
 
-    //Comprobar si es un link externo
+    // Comprobar si es un link externo
     if (!array_key_exists('external', $params)) {
         $server = DS . 'assets' . DS . 'js' . DS;
 
         if (!array_key_exists('common', $params)) {
             $basepath = $params['basepath'] ? : DS . 'js';
             $server   = DS . $smarty->getTheme()->path . DS . $basepath;
+            $mtime    = THEMES_DEPLOYED_AT;
         }
     }
 
@@ -40,11 +41,11 @@ function smarty_function_script_tag($params, &$smarty)
         $escape = true;
     }
 
-    unset($params['common']);
-    unset($params['src']);
-    unset($params['type']);
-    unset($params['escape']);
-    unset($params['basepath']);
+    // Clean internal properties
+    $keys = [ 'basepath', 'common', 'escape', 'src', 'type', ];
+    foreach ($keys as $key) {
+        unset($params[$key]);
+    }
 
     $properties = '';
     foreach ($params as $key => $value) {
