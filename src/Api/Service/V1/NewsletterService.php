@@ -24,22 +24,16 @@ class NewsletterService extends OrmService
      */
     public function createItem($data)
     {
-        try {
-            if (!array_key_exists('type', $data)) {
-                $data['type'] = 0;
-            }
-
-            if (!array_key_exists('enabled', $data)) {
-                $data['enabled'] = 1;
-            }
-
-            $data['created'] = new \Datetime();
-            $data['updated'] = new \Datetime();
-        } catch (CreateExistingItemException $e) {
-            throw $e;
-        } catch (\Exception $e) {
-            throw new CreateItemException($e->getMessage(), $e->getCode());
+        if (!array_key_exists('type', $data)) {
+            $data['type'] = 0;
         }
+
+        if (!array_key_exists('enabled', $data)) {
+            $data['enabled'] = 1;
+        }
+
+        $data['created'] = new \Datetime();
+        $data['updated'] = new \Datetime();
 
         return parent::createItem($data);
     }
