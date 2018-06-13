@@ -47,6 +47,7 @@ class AppKernel extends Kernel
             new Common\Data\DataBundle(),
             new Common\Migration\MigrationBundle(),
             new Common\ORM\OrmBundle(),
+            new Common\External\ActOn\ActOnBundle(),
         ];
 
         if (in_array($this->getEnvironment(), [ 'dev', 'test' ], true)) {
