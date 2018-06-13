@@ -409,6 +409,10 @@ class NewsletterController extends Controller
                 'newsletter'  => $newsletter,
             ]);
         } catch (\Exception $e) {
+            $this->get('error.log')->error(
+                sprintf('Error while sending the newsletter %s: %s', $id, $e->getMessage())
+            );
+
             return new RedirectResponse($this->generateUrl('backend_newsletters_list'));
         }
     }
