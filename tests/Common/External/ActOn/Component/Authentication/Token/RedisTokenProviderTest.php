@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\External\ActOn\Authentication\Token;
+namespace Tests\Common\External\ActOn\Component\Authentication\Token;
 
-use Common\External\ActOn\Authentication\Token\RedisTokenProvider;
+use Common\External\ActOn\Component\Authentication\Token\RedisTokenProvider;
 
 /**
  * Defines test cases for RedisTokenProvider class.

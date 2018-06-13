@@ -9,7 +9,7 @@
  */
 namespace Tests\Common\External\ActOn\Endpoint;
 
-use Common\External\ActOn\Endpoint\Endpoint;
+use Common\External\ActOn\Component\Endpoint\Endpoint;
 
 /**
  * Defines test cases for EmailCampaignEndpoint class.

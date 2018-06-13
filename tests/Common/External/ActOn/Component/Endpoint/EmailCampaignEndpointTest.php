@@ -9,7 +9,7 @@
  */
 namespace Tests\Common\External\ActOn\Endpoint;
 
-use Common\External\ActOn\Endpoint\EmailCampaignEndpoint;
+use Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint;
 
 /**
  * Defines test cases for EmailCampaignEndpoint class.
@@ -24,7 +24,7 @@ class EmailCampaignEndpointTest extends \PHPUnit_Framework_TestCase
         $this->client = $this->getMockBuilder('HTTPClient')
             ->getMock();
 
-        $this->endpoint = $this->getMockBuilder('Common\External\ActOn\Endpoint\EmailCampaignEndpoint')
+        $this->endpoint = $this->getMockBuilder('Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint')
             ->setMethods([ 'post' ])
             ->setConstructorArgs([ $this->client ])
             ->getMock();
