@@ -12,11 +12,12 @@
  */
 namespace Frontend\Controller;
 
+use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Handles the actions for comments
@@ -68,6 +69,9 @@ class CommentsController extends Controller
             'offset'         => $offset,
             'dark_theme'     => $darkTheme,
             'count'          => $total,
+            'recaptcha'      => $this->get('core.recaptcha')
+                ->configureFromSettings()
+                ->getHtml(),
         ]);
     }
 
@@ -156,11 +160,12 @@ class CommentsController extends Controller
         $voteValue = ($voteValue == 'up') ? 1 : 2;
 
         // Create the vote
-        $vote = new \Vote($commentId);
-        if (is_null($vote)) {
+        $voteObject = new \Vote($commentId);
+        if (is_null($voteObject)) {
             return new Response(_("Error: no vote value!", 400));
         }
-        $update = $vote->update($voteValue, $ip);
+
+        $update = $voteObject->update($voteValue, $ip);
 
         if ($update) {
             $response = new Response('ok', 200);
@@ -187,8 +192,22 @@ class CommentsController extends Controller
         $authorName  = $request->request->filter('author-name', '', FILTER_SANITIZE_STRING);
         $authorEmail = $request->request->filter('author-email', '', FILTER_SANITIZE_STRING);
         $contentId   = $request->request->getDigits('content-id');
+        $response    = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
         $ip          = getUserRealIP();
         $cm          = $this->get('core.helper.comment');
+
+
+        // Check current recaptcha
+        $isValid = $this->get('core.recaptcha')
+            ->configureFromSettings()
+            ->isValid($response, $request->getClientIp());
+
+        if (!$isValid) {
+            return new JsonResponse([
+                'type' => 'error',
+                'message' => _('Please fill the captcha code.'),
+            ], 400);
+        }
 
         $httpCode = 200;
         try {
@@ -203,11 +222,16 @@ class CommentsController extends Controller
 
             $data['body'] = '<p>' . preg_replace('@\\n@', '</p><p>', $data['body']) . '</p>';
 
-
             if ($cm->moderateManually()) {
                 $data['status'] = \Comment::STATUS_PENDING;
 
-                $message = _('Your comment was accepted and now we have to moderate it.');
+                $message = [
+                    'message' => _('Your comment was accepted and now we have to moderate it.'),
+                    'type'    => 'warning',
+                ];
+
+                $comment = new \Comment();
+                $comment->create($data);
             } else {
                 $errors = $this->get('core.validator')->validate($data, 'comment');
 
@@ -217,25 +241,44 @@ class CommentsController extends Controller
                         : \Comment::STATUS_PENDING;
 
                     $httpCode = 200;
-                    $message  = _('Your comment was accepted.');
+                    $message  = [
+                        'message' => _('Your comment was accepted.'),
+                        'type'    => 'success',
+                    ];
+
+                    $comment = new \Comment();
+                    $comment->create($data);
                 } else {
                     $data['status'] = $cm->autoReject()
                         ? \Comment::STATUS_REJECTED
                         : \Comment::STATUS_PENDING;
 
-                    $httpCode = 400;
-                    $message  = implode('<br>', $errors);
+                    $errorType = $errors['type'];
+                    $httpCode  = 400;
+                    $message   = [
+                        'message' => implode('<br>', $errors['errors']),
+                        'type'    => 'error',
+                    ];
+
+                    if ($errorType != 'fatal') {
+                        $comment = new \Comment();
+                        $comment->create($data);
+                    }
                 }
             }
-
-            $comment = new \Comment();
-            $comment->create($data);
         } catch (\Exception $e) {
             $httpCode = 400;
             $message  = $e->getMessage();
         }
 
-        return new Response($message, $httpCode);
+        $response = new JsonResponse($message, $httpCode);
+        if (!$request->isXmlHttpRequest()) {
+            $response = new RedirectResponse($this->generateUrl('frontend_comments_get', [
+                'id' => $contentId,
+            ]));
+        }
+
+        return $response;
     }
 
     /**

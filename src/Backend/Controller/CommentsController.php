@@ -256,8 +256,8 @@ class CommentsController extends Controller
                 }
             }
 
-
             $configs = array_merge($defaultConfigs, $configs);
+
 
             return $this->render('comment/config.tpl', [
                 'configs' => $configs,
@@ -272,6 +272,10 @@ class CommentsController extends Controller
         $configs = $request->request->get('configs', []);
         if (!array_key_exists('moderation_manual', $configs)) {
             $configs['moderation_manual'] = false;
+        }
+
+        if (!array_key_exists('with_comments', $configs)) {
+            $configs['with_comments'] = false;
         }
 
         $configs = array_merge($defaultConfigs, $configs);
