@@ -10,12 +10,22 @@ parameters:
                 config:
                     actions:
                         create_message:
+                            path: '/api/1/message'
                             parameters:
-                                required: [ 'subject', 'title' ]
-                                optional: [ 'htmlbody' ]
+                                required:
+                                    - htmlbody
+                                    - subject
+                                    - title
+                                optional: []
                         send_message:
+                            path: '/api/1/message/{id}/send'
                             parameters:
-                                required: [ 'id' ]
+                                required:
+                                    - senderemail
+                                    - sendername'
+                                    - sendtoids
+                                    - subject
+                                    - when
 
 services:
     external.act_on.provider.config:

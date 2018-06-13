@@ -21,26 +21,29 @@ class EmailCampaignEndpointTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->cp     = $this->getMockBuilder('ConfigurationProvider')->getMock();
-        $this->tp     = $this->getMockBuilder('TokenProvider')->getMock();
-        $this->client = $this->getMockBuilder('HTTPClient')->getMock();
-
-        $this->endpoint = $this->getMockBuilder('Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint')
-            ->setMethods([ 'post' ])
-            ->setConstructorArgs([ $this->cp, $this->tp, $this->client, 'foo' ])
+        $this->auth = $this->getMockBuilder('Authentication')
+            ->setMethods([ 'getToken' ])
             ->getMock();
+
+        $this->client = $this->getMockBuilder('HTTPClient')
+            ->setMethods([ 'post' ])
+            ->getMock();
+
+        $this->endpoint = new EmailCampaignEndpoint($this->auth, $this->client, 'foo');
 
         $this->endpoint->setConfiguration([
             'actions' => [
                 'create_message' => [
+                    'path'       => '/message',
                     'parameters' => [
                         'required' => [ 'title', 'subject' ],
                         'optional' => [ 'body' ]
                     ]
                 ],
                 'send_message' => [
+                    'path'       => '/message/{id}/send',
                     'parameters' => [
-                        'required' => [ 'id' ],
+                        'required' => [ 'sendertoids' ],
                     ]
                 ]
             ]
@@ -58,15 +61,45 @@ class EmailCampaignEndpointTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests createMessage when the request fails.
+     *
+     * @expectedException Common\External\ActOn\Component\Exception\ActOnException
+     */
+    public function testCreateMessageWhenRequestFails()
+    {
+        $params = [ 'title' => 'wubble', 'subject' => 'fred' ];
+
+        $this->auth->expects($this->once())->method('getToken')
+            ->willReturn('awlodwbobelgrop');
+        $this->client->expects($this->once())->method('post')
+            ->will($this->throwException(new \Exception()));
+
+        $this->assertEquals(1, $this->endpoint->createMessage($params));
+    }
+
+    /**
      * Tests createMessage when valid parameters provided.
      */
     public function testCreateMessageWhenValidParameters()
     {
         $params = [ 'title' => 'wubble', 'subject' => 'fred' ];
 
-        $this->endpoint->expects($this->once())->method('post')
-            ->with(array_merge([ 'type' => 'draft' ], $params))
-            ->willReturn([ 'status' => 'success', 'id' => 1 ]);
+        $response = $this->getMockBuilder('Response')
+            ->setMethods([ 'getBody' ])
+            ->getMock();
+
+        $response->expects($this->once())->method('getBody')
+            ->willReturn(json_encode([ 'status' => 'success', 'id' => 1 ]));
+
+        $this->auth->expects($this->once())->method('getToken')
+            ->willReturn('awlodwbobelgrop');
+        $this->client->expects($this->once())->method('post')
+            ->with('foo/message', [
+                'headers' => [
+                    'authorization' => 'Bearer awlodwbobelgrop'
+                ],
+                'form_params' => array_merge([ 'type' => 'draft' ], $params)
+            ])->willReturn($response);
 
         $this->assertEquals(1, $this->endpoint->createMessage($params));
     }
@@ -78,7 +111,24 @@ class EmailCampaignEndpointTest extends \PHPUnit_Framework_TestCase
      */
     public function testSendMessageWhenInvalidParameters()
     {
-        $this->endpoint->sendMessage(null);
+        $this->endpoint->sendMessage(1, null);
+    }
+
+    /**
+     * Tests sendMessage when request fails.
+     *
+     * @expectedException Common\External\ActOn\Component\Exception\ActOnException
+     */
+    public function testSendMessageWhenRequestFails()
+    {
+        $params = [ 'sendertoids' => '1' ];
+
+        $this->auth->expects($this->once())->method('getToken')
+            ->willReturn('awlodwbobelgrop');
+        $this->client->expects($this->once())->method('post')
+            ->will($this->throwException(new \Exception()));
+
+        $this->endpoint->sendMessage(1, $params);
     }
 
     /**
@@ -86,12 +136,18 @@ class EmailCampaignEndpointTest extends \PHPUnit_Framework_TestCase
      */
     public function testSendMessageWhenValidParameters()
     {
-        $params = [ 'id' => 1 ];
+        $params = [ 'sendertoids' => '1' ];
 
-        $this->endpoint->expects($this->once())->method('post')
-            ->with($params)
-            ->willReturn([ 'status' => 'success' ]);
+        $this->auth->expects($this->once())->method('getToken')
+            ->willReturn('awlodwbobelgrop');
+        $this->client->expects($this->once())->method('post')
+            ->with('foo/message/1/send', [
+                'headers' => [
+                    'authorization' => 'Bearer awlodwbobelgrop'
+                ],
+                'form_params' => $params
+            ]);
 
-        $this->endpoint->sendMessage($params);
+        $this->endpoint->sendMessage(1, $params);
     }
 }
