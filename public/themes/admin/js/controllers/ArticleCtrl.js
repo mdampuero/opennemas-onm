@@ -588,9 +588,11 @@
               return e.pk_content_category ===
                 $scope.article.pk_fk_content_category;
             });
+            var lz   = localizer.get($scope.data.extra.options);
 
             if (categories.length > 0) {
-              category = categories[0].title;
+              category = lz.localize(categories[0],
+                [ 'title' ], $scope.config.locale).title;
             }
           }
 
