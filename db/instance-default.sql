@@ -180,7 +180,7 @@ CREATE TABLE `articles` (
   `fk_video2` bigint(20) unsigned DEFAULT NULL,
   `footer_video2` text,
   `footer_video1` text,
-  `title_int` varchar(255) DEFAULT NULL,
+  `title_int` text DEFAULT NULL,
   PRIMARY KEY (`pk_article`),
   CONSTRAINT `article_id_contents_id` FOREIGN KEY (`pk_article`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=614 DEFAULT CHARSET=utf8;
