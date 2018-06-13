@@ -23,9 +23,9 @@ class ActOnFactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->config = [
-            'config_provider' => 'mumble',
-            'http_client'     => 'corge',
-            'token_provider'  => 'garply',
+            'config_provider' => 'config_provider',
+            'http_client'     => 'http_client',
+            'token_provider'  => 'token_provider',
             'url'             => 'baz',
             'endpoints'       => [
                 'email_campaign' => [
@@ -62,9 +62,11 @@ class ActOnFactoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->container->expects($this->at(0))->method('get')
-            ->with('mumble')->willReturn($this->cp);
-        $this->container->expects($this->at(1))->method('get')->with('garply');
-        $this->container->expects($this->at(2))->method('get')->with('corge');
+            ->with('config_provider')->willReturn($this->cp);
+        $this->container->expects($this->at(1))->method('get')
+            ->with('token_provider');
+        $this->container->expects($this->at(2))->method('get')
+            ->with('http_client');
 
         $this->assertInstanceOf(
             'Common\External\ActOn\Component\Authentication\Authentication',
@@ -85,9 +87,19 @@ class ActOnFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEndpoint()
     {
-        $this->container->expects($this->any())->method('get')
-            ->willReturn('gorp');
-        $this->container->expects($this->any())->method('getParameter')
+        $this->cp = $this->getMockBuilder('ConfigurationProvider')
+            ->setMethods([ 'getConfiguration' ])
+            ->getMock();
+
+        $this->container->expects($this->at(0))->method('get')
+            ->with('config_provider')->willReturn($this->cp);
+        $this->container->expects($this->at(1))->method('get')
+            ->with('token_provider')->willReturn('gorp');
+        $this->container->expects($this->at(2))->method('get')
+            ->with('http_client')->willReturn('gorp');
+        $this->container->expects($this->at(3))->method('get')
+            ->willReturn('grault');
+        $this->container->expects($this->at(4))->method('getParameter')
             ->willReturn('glork');
 
         $this->assertInstanceOf(

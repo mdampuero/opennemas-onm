@@ -101,9 +101,8 @@ class ActOnFactory
         $class = '\\' . $this->config['endpoints'][$name]['class'];
         $class = new \ReflectionClass($class);
         $args  = [
+            $this->getAuthentication(),
             $this->container->get($this->config['http_client']),
-            $this->container->get($this->config['config_provider']),
-            $this->container->get($this->config['token_provider']),
             $this->config['url']
         ];
 
