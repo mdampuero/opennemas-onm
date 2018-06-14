@@ -48,13 +48,20 @@
             <input class="no-boarder" name="title" ng-model="criteria.title" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by title{/t}" type="text"/>
           </li>
           <li class="quicklinks"><span class="h-seperate"></span></li>
-          <li class="quicklinks hidden-xs">
-            <span class="info">{$message}</span>
+          <li class="quicklinks hidden-xs ng-cloak">
+            <ui-select name="view" theme="select2" ng-model="criteria.epp">
+              <ui-select-match>
+                <strong>{t}View{/t}:</strong> [% $select.selected %]
+              </ui-select-match>
+              <ui-select-choices repeat="item in views  | filter: $select.search">
+                <div ng-bind-html="item | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
         </ul>
-        <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
+        <ul class="nav quick-section pull-right ng-cloak" ng-if="items.length > 0">
           <li class="quicklinks hidden-xs">
-            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </li>
         </ul>
       </div>
@@ -109,7 +116,7 @@
                   </div>
                 </td>
                 <td class="hidden-xs hidden-sm">
-                  [% item.sends != 0 ? (item.send_date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}') : '{t}Not yet sent{/t}' %]
+                  [% item.sends != 0 ? (item.send_date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}') : '{t}Not sent{/t}' %]
                 </td>
                 <td class="right">
                   [% item.sends %]
