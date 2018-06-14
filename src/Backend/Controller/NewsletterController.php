@@ -67,6 +67,12 @@ class NewsletterController extends Controller
             );
         }
 
+        $this->get('session')->getFlashBag()->add(
+            'info',
+            $message
+        );
+
+
         return $this->render('newsletter/list.tpl', [ 'message' => $message ]);
     }
 
