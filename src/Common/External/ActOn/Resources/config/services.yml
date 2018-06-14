@@ -22,7 +22,7 @@ parameters:
                             parameters:
                                 required:
                                     - senderemail
-                                    - sendername'
+                                    - sendername
                                     - sendtoids
                                     - subject
                                     - when
