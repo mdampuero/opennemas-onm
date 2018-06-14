@@ -112,7 +112,7 @@ class NewsletterSenderHelper
         $remaining       = $maxAllowed - $this->ns->getSentNewslettersSinceLastInvoice($lastInvoiceDate);
 
         // Fix encoding of the html
-        $newsletter = htmlspecialchars_decode($newsletter, ENT_QUOTES);
+        $newsletter->html = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
         foreach ($recipients as $mailbox) {
             if ($maxAllowed > 0 && abs($remaining) >= 0) {
