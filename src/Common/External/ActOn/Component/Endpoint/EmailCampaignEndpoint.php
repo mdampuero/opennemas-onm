@@ -40,11 +40,18 @@ class EmailCampaignEndpoint extends Endpoint
         try {
             $response = $this->client->post($url, $data);
             $body     = json_decode($response->getBody(), true);
-
-            return $body['id'];
         } catch (\Exception $e) {
-            throw new ActOnException('acton.email.failure: ' . $e->getMessage());
+            throw new ActOnException('acton.email.create.failure: ' . $e->getMessage());
         }
+
+        if (!array_key_exists('status', $body)
+            || $body['status'] !== 'success'
+            || !array_key_exists('id', $body)
+        ) {
+            throw new ActOnException('acton.email.create.failure');
+        }
+
+        return $body['id'];
     }
 
     /**
@@ -72,9 +79,19 @@ class EmailCampaignEndpoint extends Endpoint
         ];
 
         try {
-            $this->client->post($url, $data);
+            $response = $this->client->post($url, $data);
+            $body     = json_decode($response->getBody(), true);
         } catch (\Exception $e) {
-            throw new ActOnException('acton.email.failure: ' . $e->getMessage());
+            throw new ActOnException('acton.email.send.failure: ' . $e->getMessage());
         }
+
+        if (!array_key_exists('status', $body)
+            || $body['status'] !== 'success'
+            || !array_key_exists('message', $body)
+        ) {
+            throw new ActOnException('acton.email.create.failure');
+        }
+
+        return $body['message'];
     }
 }
