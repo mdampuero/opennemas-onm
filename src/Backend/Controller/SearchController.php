@@ -85,13 +85,8 @@ class SearchController extends Controller
             }
 
             //Clean the input words
-            $tagsWords = array_map(
-                function ($tag) {
-                    return $tag->id;
-                },
-                $this->get('api.service.tag')
-                    ->validateTags(explode(' ', $searchString))
-            );
+            $tagsWords = $this->get('api.service.tag')
+                ->getTagIdsFromStr($searchString);
 
             //Create the query if exist tagsWords
             if (!empty($tagsWords)) {

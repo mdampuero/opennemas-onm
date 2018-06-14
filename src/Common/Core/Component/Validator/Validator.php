@@ -16,6 +16,7 @@ class Validator
 {
     // List of ruleset names
     const BLACKLIST_RULESET_COMMENTS = 'comment';
+    const BLACKLIST_RULESET_TAGS     = 'tag';
 
     /**
      * The settings repository
@@ -59,15 +60,26 @@ class Validator
         $constants       = $classReflection->getConstants();
 
         $validRuleSet = in_array($ruleName, $constants);
-        $methodName   = 'validate' . ucfirst($ruleName);
-        if ($validRuleSet && method_exists($this, $methodName)) {
-            return $this->{$methodName}($entity);
+        $methodName   = 'get' . ucfirst($ruleName) . 'Constraint';
+
+        if (!$validRuleSet || !method_exists($this, $methodName)) {
+            throw new \InvalidArgumentException(sprintf(
+                "The ruleset '%s' is not valid",
+                $ruleName
+            ));
         }
 
-        throw new \InvalidArgumentException(sprintf(
-            "The ruleset '%s' is not valid",
-            $ruleName
-        ));
+        $violations = $this->validator->validate(
+            $entity,
+            $this->{$methodName}() //getting the constrains to validate
+        );
+
+        $errors = [];
+        foreach ($violations as $el) {
+            $errors[] = $el->getMessage();
+        }
+
+        return $errors;
     }
 
     /**
@@ -94,17 +106,15 @@ class Validator
     }
 
     /**
-     * Validates comments given an array of data
+     * Get the constrains for comments
      *
-     * @param array $data the comment data
-     *
-     * @return array the list of violations
+     * @return Collection Assert collection for comments
      **/
-    private function validateComment($data)
+    private function getCommentConstraint()
     {
         $config = $this->getConfig(self::BLACKLIST_RULESET_COMMENTS);
 
-        $constraint = new Assert\Collection([
+        return new Assert\Collection([
             'author' => [
                 new Assert\NotBlank([
                     'message' => _('Please provide a valid author name')
@@ -138,19 +148,32 @@ class Validator
             ],
             'content_id' => new Assert\Range(['min' => 1]),
         ]);
+    }
 
-        $violations = $this->validator->validate($data, $constraint);
 
-        if (count($violations) > 0) {
-            $errors = [];
+    /**
+     * Get the constrains for tags
+     *
+     * @return Collection Assert collection for tags
+     **/
+    private function getTagConstraint()
+    {
+        $config = $this->getConfig(self::BLACKLIST_RULESET_TAGS);
 
-            foreach ($violations as $el) {
-                $errors[] = $el->getMessage();
-            }
-
-            return $errors;
-        }
-
-        return [];
+        return new Assert\Collection([
+            'name' => [
+                new Assert\NotBlank([
+                    'message' => _('Please provide a valid tag')
+                ]),
+                new OnmAssert\BlacklistWords([
+                    'words'   => $config,
+                    'message' => _('Your tag has invalid words')
+                ]),
+                new Assert\Length([
+                    'min'        => 2,
+                    'minMessage' => _('Your tag is too short')
+                ])
+            ]
+        ]);
     }
 }

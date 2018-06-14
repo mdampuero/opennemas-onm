@@ -53,9 +53,9 @@ api_v1_backend_tags_list:
     options:
         expose: true
 
-api_v1_backend_tags_validator:
+api_v1_backend_tags_valid_new_tag:
     path:     /tags/validator
-    defaults: { _controller  : ApiBundle:V1/Backend/Tag:validator }
+    defaults: { _controller  : ApiBundle:V1/Backend/Tag:validNewTag }
     methods:  [ GET ]
     options:
         expose: true
@@ -73,6 +73,20 @@ api_v1_backend_tags_suggester:
 api_v1_backend_tags_auto_suggester:
     path:     /tags/autosuggester
     defaults: { _controller  : ApiBundle:V1/Backend/Tag:autoSuggester }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_tag_conf_save:
+    path:     /tags/config
+    defaults: { _controller  : ApiBundle:V1/Backend/Tag:updateConf }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_tags_config:
+    path:     /tags/config
+    defaults: { _controller  : ApiBundle:V1/Backend/Tag:showConf }
     methods:  [ GET ]
     options:
         expose: true

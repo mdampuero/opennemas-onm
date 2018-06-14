@@ -323,7 +323,7 @@
               return false;
             }
             var route = {
-              name: 'api_v1_backend_tags_validator',
+              name: 'api_v1_backend_tags_valid_new_tag',
               params: {
                 text: tag2Check,
                 languageId: locale
@@ -332,21 +332,16 @@
 
             http.get(route).then(
               function(response) {
-                if (!response.data.items) {
+                if (!response.data.valid) {
                   callback({ error: response.data.message });
                   return null;
                 }
-                if (response.data.items.length === 0) {
-                  callback(true);
-                  return null;
-                }
-
-                callback(id &&
-                  response.data.items.length === 1 &&
-                  id in response.data.items
-                );
+                callback(response.data.valid);
                 return null;
-              }, $scope.errorCb
+              }, function(response) {
+                callback({ error: response.data.message });
+                return null;
+              }
             );
             return null;
           }, 500);
@@ -495,11 +490,11 @@
 
           modal.rendered.then(function() {
             var photoEditor = new window.OnmPhotoEditor({
-                container: 'photoEditor',
-                image: $window.instanceMedia + '/images' + imgData.path_img,
-                closeCallBack: modal.close,
-              },
-              photoEditorTranslations
+              container: 'photoEditor',
+              image: $window.instanceMedia + '/images' + imgData.path_img,
+              closeCallBack: modal.close,
+            },
+            photoEditorTranslations
             );
 
             photoEditor.init();

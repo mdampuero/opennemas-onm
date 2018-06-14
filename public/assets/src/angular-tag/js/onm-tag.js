@@ -99,6 +99,13 @@
                 return null;
               }
 
+              for (var i = 0; i < $scope.ngModel.length; i++) {
+                if (!$scope.ngModel[i].id && $scope.ngModel[i].name === $scope.newTag) {
+                  $scope.invalidTag = true;
+                  return null;
+                }
+              }
+
               var callback = function(response) {
                 if (typeof response === 'object') {
                   $scope.invalidTag = true;

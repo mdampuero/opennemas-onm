@@ -58,7 +58,7 @@ class Tag
      *
      * @return mixed List with all tags validate against DB
      */
-    public static function validateTags($tags, $languageId = null)
+    public static function getTagsBySlug($tags, $languageId = null)
     {
         if (empty($tags)) {
             return [];
@@ -96,6 +96,6 @@ class Tag
             $validateTags[$tagAux->id] = $tagAux;
         }
 
-        return $validateTags;
+        return ['items' => $validateTags];
     }
 }

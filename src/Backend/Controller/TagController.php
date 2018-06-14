@@ -11,6 +11,7 @@ namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
+use Common\Core\Component\Validator\Validator;
 
 class TagController extends Controller
 {
@@ -28,5 +29,18 @@ class TagController extends Controller
         return $this->render('tag/list.tpl', [
             'locale' => $this->get('core.locale')->getLocale('frontend')
         ]);
+    }
+
+    /**
+     * Config for article system
+     *
+     * @return Response the response object
+     *
+     * @Security("hasExtension('TAG_MANAGER')
+     *     and hasPermission('TAG_ADMIN')")
+     */
+    public function configAction()
+    {
+        return $this->render('tag/config.tpl');
     }
 }

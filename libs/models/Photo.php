@@ -558,7 +558,7 @@ class Photo extends Content
                                         return $tag->id;
                                     },
                                     getService('api.service.tag')
-                                        ->validateTags($iptc["2#025"])
+                                        ->getValidateTagBySlug($iptc["2#025"])['items']
                                 );
                             }
 

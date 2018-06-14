@@ -13,7 +13,7 @@ use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Intl;
+use Common\Core\Component\Validator\Validator;
 
 /**
  * Lists and displays tags.
@@ -199,7 +199,7 @@ class TagController extends Controller
      *
      * @Security("hasPermission('TAG_ADMIN')")
      */
-    public function validatorAction(Request $request)
+    public function validNewTagAction(Request $request)
     {
         $ts   = $this->get('api.service.tag');
         $text = $request->query->get('text', null);
@@ -210,12 +210,10 @@ class TagController extends Controller
         }
 
         $languageId = $request->query->get('languageId', null);
-        $tags = (is_null($text) || is_null($languageId)) ?
-            null :
-            $ts->validateTags($text, $languageId);
+        $valid      = !is_null($languageId) && $ts->isValidNewTag($text, $languageId);
 
         return new JsonResponse([
-            'items' => $tags
+            'valid' => $valid
         ]);
     }
 
@@ -261,8 +259,62 @@ class TagController extends Controller
         $languageId = $request->query->get('languageId', null);
         $ts         = $this->get('api.service.tag');
         return new JsonResponse([
-            'items' => $ts->getTagsIds($languageId, $tags)
+            'items' => $ts->getTagsAndNewTags($languageId, $tags)
         ]);
+    }
+
+    /**
+     * Get the tag config.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('TAG_ADMIN')")
+     */
+    public function showConfAction()
+    {
+        return new JsonResponse([
+            'blacklist_tag' => $this->get('core.validator')
+                ->getConfig(Validator::BLACKLIST_RULESET_TAGS)
+        ]);
+    }
+
+    /**
+     * Update tag config.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('TAG_ADMIN')")
+     */
+    public function updateConfAction(Request $request)
+    {
+        $blacklistConf = $request->request->all();
+
+        if (!is_array($blacklistConf) ||
+            !array_key_exists('blacklist_tag', $blacklistConf) ||
+            empty($blacklistConf['blacklist_tag'])
+        ) {
+            $blacklistConf = ['blacklist_tag' => null];
+        }
+
+        $msg = $this->get('core.messenger');
+        try {
+            $this->get('core.validator')->setConfig(
+                Validator::BLACKLIST_RULESET_TAGS,
+                $blacklistConf['blacklist_tag']
+            );
+            $msg->add(_('Item saved successfully'), 'success');
+        } catch (\Exception $e) {
+            $msg->add(
+                _('Unable to save settings'),
+                'error'
+            );
+            $this->get('error.log')->error($e->getMessage());
+        }
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**

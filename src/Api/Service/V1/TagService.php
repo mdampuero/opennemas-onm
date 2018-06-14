@@ -10,6 +10,7 @@
 namespace Api\Service\V1;
 
 use Common\ORM\Entity\Tag;
+use Common\Core\Component\Validator\Validator;
 
 class TagService extends OrmService
 {
@@ -87,12 +88,38 @@ class TagService extends OrmService
     public function getTagIdsFromStr($text, $languageId = null)
     {
         $wordArr = explode(' ', $text);
-        return array_map(
-            function ($tag) {
-                return $tag->id;
-            },
-            $this->validateTags($wordArr, $languageId)
-        );
+
+        return $this->getTagIdsFromWordArr($wordArr, $languageId);
+    }
+
+    /**
+     * Method to validate a text as tags
+     *
+     * @param mixed $text       Text with all tags
+     * @param mixed $languageId Language of the tag
+     *
+     * @return mixed List with all tags validate against DB
+     */
+    public function getTagIdsFromWordArr($wordArr, $languageId = null)
+    {
+        if (!is_array($wordArr)) {
+            return null;
+        }
+
+        $tags = $this->getValidateTagBySlug($wordArr, $languageId);
+
+        if (empty($tags['items'])) {
+            return [];
+        }
+
+        $returnIds = [];
+        foreach ($tags['items'] as $tag) {
+            if (in_array($tag->name, $wordArr)) {
+                $returnIds[] = $tag->id;
+            }
+        }
+
+        return $returnIds;
     }
 
     /**
@@ -103,26 +130,112 @@ class TagService extends OrmService
      *
      * @return mixed List with all tags validate against DB
      */
-    public function validateTags($tags, $languageId = null)
+    public function validTags($tags, $languageId = null)
     {
-        $ts      = $this;
-        $tagsAux = null;
-        if (is_array($tags)) {
-            $tagsAux = [];
-            $tagAux  = null;
-            foreach ($tags as $tag) {
-                $tagAux = $ts->createSearchableWord($tag);
-                if (!empty($tagAux)) {
-                    $tagsAux[] = $tagAux;
-                }
+        $tagsAux     = [];
+        $tagsToCheck = is_array($tags) ? $tags : [$tags];
+
+        $tagsAux = [];
+        $tagAux  = null;
+        foreach ($tagsToCheck as $tag) {
+            $tagValidation = $this->container->get('core.validator')->validate(
+                [ 'name' => $tag ],
+                Validator::BLACKLIST_RULESET_TAGS
+            );
+
+            if (!empty($tagValidation)) {
+                continue;
             }
-        } else {
-            $tagsAux = $ts->createSearchableWord($tags);
+
+            if (empty($this->createSearchableWord($tag))) {
+                continue;
+            }
+
+            $tagsAux[] = $tag;
         }
-        if (empty($tagsAux)) {
-            return null;
+
+        if (is_array($tags)) {
+            return $tagsAux;
         }
-        return \Tag::validateTags($tagsAux, $languageId);
+
+        return empty($tagsAux) ? null : $tags;
+    }
+
+    /**
+     *  Get all tags by the exact slug by validated
+     *
+     * @param mixed  $slugs      slugs to check
+     * @param string $languageId Language id to search for it
+     *
+     * @return array tags for this slugs
+     */
+    public function getValidateTagBySlug($slugs, $languageId = null, $limit = 25)
+    {
+        $arr = $this->validTags($slugs, $languageId);
+
+        if (empty($arr)) {
+            return [];
+        }
+
+        $slugs = $this->createSearchableWord($arr);
+
+
+        //return $this->getTagBySlug($slugs, $languageId, $limit);
+        return \Tag::getTagsBySlug($slugs, $languageId, $limit);
+    }
+
+    /**
+     *  Get all tags by the exact slug
+     *
+     * @param mixed  $slugs      slugs to check
+     * @param string $languageId Language id to search for it
+     *
+     * @return array tags for this slugs
+     */
+    public function getTagBySlug($slugs, $languageId = null, $limit = 25)
+    {
+        if (empty($slugs)) {
+            return ['items' => []];
+        }
+
+        $oql = is_array($slugs) ?
+            ' in ("' . implode('", "', $slugs) . '")' :
+            ' = "' . $slugs . '"';
+
+        $oql = 'slug' . $oql . ' limit ' . $limit;
+
+        if (!empty($languageId)) {
+            $oql = 'language_id = "' . $languageId . '" and ' . $oql;
+        }
+
+        return $this->getList($oql);
+    }
+
+    /**
+     *  Check if the tag is a valid new tag
+     *
+     * @param string $tag        Tag to check
+     * @param string $languageId Language id to search for it
+     *
+     * @return boolean if the tag is a valid new tag
+     */
+    public function isValidNewTag($tag, $languageId = null)
+    {
+        if (!is_string($tag) || empty($tag)) {
+            return false;
+        }
+
+
+        $arr = $this->validTags($tag, $languageId);
+
+        if (empty($arr)) {
+            return false;
+        }
+
+        $arr = $this->createSearchableWord($arr);
+
+        $findTags = $this->getTagBySlug($arr, $languageId, 1);
+        return empty($findTags['items']);
     }
 
     /**
@@ -133,21 +246,38 @@ class TagService extends OrmService
      *
      * @return array List with all ids for the tags
      */
-    public function getTagsIds($locale, $tagsArr)
+    public function getTagsAndNewTags($locale, $tagsArr)
     {
-        $validTags = $this->validateTags($tagsArr, $locale);
+        if (!is_array($tagsArr)) {
+            return null;
+        }
+        $validTags = $this->validTags($tagsArr, $locale);
+
+        if (empty($validTags)) {
+            return [];
+        }
+
+        $slugs = $this->createSearchableWord($validTags);
+
+
+        //$recoverTags = $this->getTagBySlug($slugs, $locale, 25);
+        $recoverTags = \Tag::getTagsBySlug($slugs, $locale);
+
+        if (count($recoverTags['items']) == 25) {
+            return $recoverTags['items'];
+        }
 
         $returnTags    = [];
         $clearTagNames = [];
-        foreach ($validTags as $value) {
-            if (in_array($value->name, $tagsArr)) {
+        foreach ($recoverTags['items'] as $value) {
+            if (in_array($value->name, $validTags)) {
                 $returnTags[]    = $value;
                 $clearTagNames[] = $value->name;
             }
         }
 
         $newTags = [];
-        foreach ($tagsArr as $tagToCheck) {
+        foreach ($validTags as $tagToCheck) {
             if (!in_array($tagToCheck, $clearTagNames)) {
                 $returnTags[] = [
                     'name' => $tagToCheck,

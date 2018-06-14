@@ -135,7 +135,7 @@ class AdvertisementsController extends Controller
         }
 
         $title  = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-        $tagIds = $this->getTagsFromTitle($title);
+        $tagIds = $this->get('api.service.tag')->getTagIdsFromStr($title);
 
         $data = [
             'title'              => $title,
@@ -282,7 +282,7 @@ class AdvertisementsController extends Controller
         }
 
         $title  = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-        $tagIds = $this->getTagsFromTitle($title);
+        $tagIds = $this->get('api.service.tag')->getTagIdsFromStr($title);
 
         $data = [
             'id'                 => $ad->id,
@@ -499,27 +499,5 @@ class AdvertisementsController extends Controller
         }, $subscriptions['items']);
 
         return array_values($subscriptions);
-    }
-
-    /**
-     * Returns the list of existing tags from the title.
-     *
-     * @param string title Advertisement title
-     *
-     * @return array The list of existing tags.
-     */
-    private function getTagsFromTitle($title)
-    {
-        $tagIds       = $this->get('api.service.tag')->getTagsIds(
-            $this->get('core.locale')->getRequestLocale('frontend'),
-            explode(' ', $title)
-        );
-        $returnTagIds = [];
-        foreach ($tagIds as $tag) {
-            if (!empty($tag->id)) {
-                $returnTagIds[] = $tag->id;
-            }
-        }
-        return $returnTagIds;
     }
 }
