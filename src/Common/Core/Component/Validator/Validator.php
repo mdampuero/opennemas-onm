@@ -71,10 +71,31 @@ class Validator
 
         $violations = $this->validator->validate(
             $entity,
-            $this->{$methodName}() //getting the constrains to validate
+            $this->{$methodName}($entity) //getting the constrains to validate
         );
 
-        $errors = [];
+        if (count($violations) > 0) {
+            $errors = [];
+
+            $type = 'normal';
+            foreach ($violations as $el) {
+                if ($el->getCode() !== OnmAssert\BlacklistWords::BLACKLIST_WORD_ERROR) {
+                    $type = 'fatal';
+                }
+
+                $errors[] = $el->getMessage();
+            }
+
+            return [
+                'type' => $type,
+                'errors' => $errors
+            ];
+        }
+
+        return [];
+
+
+
         foreach ($violations as $el) {
             $errors[] = $el->getMessage();
         }
@@ -110,11 +131,11 @@ class Validator
      *
      * @return Collection Assert collection for comments
      **/
-    private function getCommentConstraint()
+    private function getCommentConstraint($data)
     {
         $config = $this->getConfig(self::BLACKLIST_RULESET_COMMENTS);
 
-        return new Assert\Collection([
+        $constraintMap = [
             'author' => [
                 new Assert\NotBlank([
                     'message' => _('Please provide a valid author name')
@@ -124,18 +145,10 @@ class Validator
                     'message' => _('Your name has invalid words')
                 ]),
             ],
-            'author_email' => [
-                new Assert\Email([
-                    'message' => _('Please provide a valid email address')
-                ]),
-                new OnmAssert\BlacklistWords([
-                    'words'   => $config,
-                    'message' => _('Your email is not allowed')
-                ]),
-            ],
             'author_ip'    => new Assert\NotBlank([
                 'message' => _('Your IP address is not valid.')
             ]),
+            'author_email' => new Assert\Blank(),
             'body'         => [
                 new Assert\Length([
                     'min'        => 5,
@@ -147,7 +160,21 @@ class Validator
                 ]),
             ],
             'content_id' => new Assert\Range(['min' => 1]),
-        ]);
+        ];
+
+        if (array_key_exists('author_email', $data) && !empty($data['author_email'])) {
+            $constraintMap['author_email'] = [
+                new Assert\Email([
+                    'message' => _('Please provide a valid email address')
+                ]),
+                new OnmAssert\BlacklistWords([
+                    'words'   => $config,
+                    'message' => _('Your email is not allowed')
+                ]),
+            ];
+        }
+
+        return new Assert\Collection($constraintMap);
     }
 
 
@@ -156,7 +183,7 @@ class Validator
      *
      * @return Collection Assert collection for tags
      **/
-    private function getTagConstraint()
+    private function getTagConstraint($data)
     {
         $config = $this->getConfig(self::BLACKLIST_RULESET_TAGS);
 

@@ -99,7 +99,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $data      = [];
 
         $this->assertEquals(
-            ['Error message.'],
+            ['type' => 'fatal', 'errors' => ['Error message.']],
             $validator->validate($data, Validator\Validator::BLACKLIST_RULESET_COMMENTS)
         );
     }

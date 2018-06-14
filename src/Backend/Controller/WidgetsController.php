@@ -96,15 +96,18 @@ class WidgetsController extends Controller
         if ('POST' == $request->getMethod()) {
             $post = $request->request;
 
+            $title      = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+            $tagIds     = $this->get('api.service.tag')->getTagIdsFromStr($title);
             $widgetData = [
                 'id'             => $post->getDigits('id'),
                 'action'         => $post->filter('action', null, FILTER_SANITIZE_STRING),
-                'title'          => $post->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'title'          => $title,
+                'tag_ids'        => $tagIds,
                 'content_status' => (int) $post->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'renderlet'      => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
                 'description'    => $post->get('description', ''),
                 'content'        => $post->filter('content', ''),
-                'params'          => json_decode($post->get('parsedParams', null)),
+                'params'         => json_decode($post->get('parsedParams', null)),
             ];
 
             if ($widgetData['renderlet'] == 'intelligentwidget') {
@@ -165,10 +168,13 @@ class WidgetsController extends Controller
             return $this->redirect($this->generateUrl('admin_widget_show', [ 'id' => $id ]));
         }
 
+        $title      = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+        $tagIds     = $this->get('api.service.tag')->getTagIdsFromStr($title);
         $widgetData = [
             'id'              => $id,
             'action'          => $post->filter('action', null, FILTER_SANITIZE_STRING),
-            'title'           => $post->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'title'           => $title,
+            'tag_ids'         => $tagIds,
             'content_status'  => (int) $post->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'renderlet'       => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
             'description'     => $post->get('description', ''),
