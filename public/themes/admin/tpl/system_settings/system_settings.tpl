@@ -1183,6 +1183,77 @@
                         </div>
                       </div>
                     </div>
+
+                    <div class="panel-group" data-toggle="collapse" id="panel-group-acton">
+                      <div class="panel panel-default">
+                        <div class="panel-heading collapsed">
+                          <h4 class="panel-title">
+                            <a class="collapsed" data-parent="#panel-group-acton" data-toggle="collapse" href="#act-on">
+                              <i class="fa fa-tag"></i>
+                              {t}Act-ON{/t}
+                            </a>
+                          </h4>
+                        </div>
+                        <div class="panel-collapse collapse" id="act-on">
+                          <div class="panel-body">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label class="form-label" for="act-on-username">
+                                    {t}Act-ON user name{/t}
+                                  </label>
+                                  <div class="controls">
+                                    <input class="form-control" id="act-on-username" name="act-on-username" ng-model="settings.act_on_configuration.username" type="text">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label class="form-label" for="act-on-password">
+                                    {t}Act-ON password{/t}
+                                  </label>
+                                  <div class="controls">
+                                    <input class="form-control" id="act-on-password" name="" ng-model="settings.act_on_configuration.password" type="text">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label class="form-label" for="act-on-client-id">
+                                    {t}Act-ON client_id{/t}
+                                  </label>
+                                  <div class="controls">
+                                    <input class="form-control" id="act-on-client-id" name="act-on-client-id" ng-model="settings.act_on_configuration.client_id" type="text">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label class="form-label" for="act-on-client-secret">
+                                    {t}Act-ON secret{/t}
+                                  </label>
+                                  <div class="controls">
+                                    <input class="form-control" id="act-on-client-secret" name="act-on-client-secret" ng-model="settings.act_on_configuration.client_secret" type="text">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+
+                            <small class="help">
+                              <i class="fa fa-info-circle m-r-5 text-info"></i>
+                              {t escape=off}You can get your <strong>Act-ON</strong> auth codes from your <a class="external-link" href="http://act-on.com" target="_blank" ng-click="$event.stopPropagation();">the Act-ON account</a>.{/t}
+                            </small>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
                   </div>
                   <div class="col-md-6">
                     <h4>
