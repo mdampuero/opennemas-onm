@@ -25,7 +25,7 @@ class NewsletterRenderer
     protected $container;
 
     /**
-     * Initializes the entity manager.
+     * Initializes the newsletter renderer.
      *
      * @param Template            $template      The template service.
      * @param EntityRepository    $dbConn        The database connection.
