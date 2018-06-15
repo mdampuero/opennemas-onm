@@ -361,6 +361,7 @@
          * @return {Array} List of suggested tags
          */
         $scope.checkAutoSuggesterTags = function(callback, text2Check, currentTags, locale) {
+          var text2Check = text2Check.replace(/[^0-9A-zÀ-ú_\-\s]/gi, '');
           var tagsVal = text2Check.split(' ').filter(function(tag) {
             return tag.length > 1;
           });
