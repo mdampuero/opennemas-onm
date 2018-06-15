@@ -204,44 +204,6 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
         $this->service->getItem(1);
     }
 
-    /**
-     * Tests responsify with an item.
-     */
-    public function testResponsifyWithItem()
-    {
-        $entity = $this->getMockBuilder('Entity' . uniqid())
-            ->setMethods([ 'eraseCredentials' ])
-            ->getMock();
-
-        $service = new NewsletterService($this->container, get_class($entity));
-
-        $service->responsify($entity);
-    }
-
-    /**
-     * Tests responsify with a list of items.
-     */
-    public function testResponsifyWithList()
-    {
-        $entity = $this->getMockBuilder('Entity' . uniqid())
-            ->setMethods([ 'eraseCredentials' ])
-            ->getMock();
-
-        $service = new NewsletterService($this->container, get_class($entity));
-
-        $service->responsify([ $entity, $entity ]);
-    }
-
-    /**
-     * Tests responsify with a value that can not be responsified.
-     */
-    public function testResponsifyWithInvalidValues()
-    {
-        $this->assertEquals(null, $this->service->responsify(null));
-        $this->assertEquals(1, $this->service->responsify(1));
-        $this->assertEquals('glork', $this->service->responsify('glork'));
-    }
-
     /*
      * Tests getOqlForList.
      */

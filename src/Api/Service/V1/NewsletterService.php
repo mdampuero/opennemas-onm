@@ -43,26 +43,6 @@ class NewsletterService extends OrmService
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function responsify($item)
-    {
-        if (is_array($item)) {
-            foreach ($item as &$i) {
-                $i = $this->responsify($i);
-            }
-
-            return $item;
-        }
-
-        if ($item instanceof $this->class) {
-            return parent::responsify($item);
-        }
-
-        return $item;
-    }
-
-    /**
      * Count total mailing sends in current month
      *
      * @param DateTime $lastInvoiceDate the DateTime object of the last invoice
