@@ -30,7 +30,8 @@
                 '<div>' +
                   '<ul class="onmTagList">' +
                     '<li ng-repeat="acceptedTag in acceptedTags()" ng-class=" !acceptedTag.id ? \'newTag\' : \'\'">' +
-                      '<span>[% acceptedTag.name %]</span><a href="#" ng-click="removeTag(acceptedTag)">x</a>' +
+                      '<span>[% acceptedTag.name %]</span>' +
+                      '<a href="#" ng-click="removeTag(acceptedTag)"><i class="fa fa-times" aria-hidden="true"></i></a>' +
                     '</li>' +
                   '</ul>' +
                   '<input type="text" ng-class=" invalidTag ? \'has-error \' : \'\'" ng-model="newTag" placeholder="[% placeholder %]" ng-keydown="validateTag($event)" uib-typeahead="tagSuggested as tagSuggested.name for tagSuggested in getLocalSuggestedTags($viewValue)" typeahead-loading="isSuggesting" typeahead-wait-ms="500" typeahead-on-select="suggestedTagAccepted($item, $model, $label)" typeahead-min-length="2" typeahead-focus-first="false">' +
