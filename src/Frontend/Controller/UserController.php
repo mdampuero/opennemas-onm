@@ -315,6 +315,10 @@ class UserController extends Controller
             return [];
         }
 
+        if (!is_array($settings['fields'])) {
+            $settings['fields'] = [];
+        }
+
         foreach ($settings['fields'] as &$field) {
             if ($field['type'] === 'options') {
                 $options = [];

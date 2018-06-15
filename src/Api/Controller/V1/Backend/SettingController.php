@@ -29,6 +29,7 @@ class SettingController extends Controller
         'body_end_script',
         'body_start_script',
         'chartbeat',
+        'cmp_script',
         'comscore',
         'contact_email',
         'cookies_hint_url',

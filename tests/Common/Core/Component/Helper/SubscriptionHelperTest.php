@@ -68,13 +68,13 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
         $this->ss->expects($this->at(0))->method('getListbyIds')
             ->willReturn([ 'items' => [ $subscriptions[1] ], 'total' => 1 ]);
 
-        $this->assertEquals('0000100100000', $this->helper->getToken($this->content));
+        $this->assertEquals('000100100000', $this->helper->getToken($this->content));
 
         $this->content->subscriptions = [ 2 ];
         $this->ss->expects($this->at(0))->method('getListbyIds')
             ->willReturn([ 'items' => [ $subscriptions[2] ], 'total' => 1 ]);
 
-        $this->assertEquals('0010001000000', $this->helper->getToken($this->content));
+        $this->assertEquals('010001000000', $this->helper->getToken($this->content));
 
         $this->content->subscriptions = [ 1, 2 ];
         $this->ss->expects($this->at(0))->method('getListbyIds')->willReturn([
@@ -82,7 +82,7 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
             'total' => 2
         ]);
 
-        $this->assertEquals('0010101100000', $this->helper->getToken($this->content));
+        $this->assertEquals('010101100000', $this->helper->getToken($this->content));
     }
 
     /**
@@ -162,10 +162,10 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->helper->isBlocked('001', 'browser'));
         $this->assertTrue($this->helper->isBlocked('111', 'browser'));
 
-        $this->assertFalse($this->helper->isBlocked('0000000000000', 'wibble'));
-        $this->assertFalse($this->helper->isBlocked('0000000000000', 'browser'));
-        $this->assertTrue($this->helper->isBlocked('0000000000010', 'browser'));
-        $this->assertTrue($this->helper->isBlocked('0010010010010', 'browser'));
+        $this->assertFalse($this->helper->isBlocked('000000000000', 'wibble'));
+        $this->assertFalse($this->helper->isBlocked('000000000000', 'browser'));
+        $this->assertTrue($this->helper->isBlocked('000000000010', 'browser'));
+        $this->assertTrue($this->helper->isBlocked('010010010010', 'browser'));
     }
 
     /**
@@ -181,9 +181,9 @@ class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->helper->isHidden('000', 'print'));
         $this->assertTrue($this->helper->isHidden('101', 'print'));
 
-        $this->assertFalse($this->helper->isHidden('0000000000000', 'wibble'));
-        $this->assertTrue($this->helper->isHidden('0000010000010', 'media'));
-        $this->assertTrue($this->helper->isHidden('0000000010010', 'tags'));
+        $this->assertFalse($this->helper->isHidden('000000000000', 'wibble'));
+        $this->assertTrue($this->helper->isHidden('000010000010', 'media'));
+        $this->assertTrue($this->helper->isHidden('000000010010', 'tags'));
     }
 
     /**

@@ -12,6 +12,7 @@ parameters:
             - adsense_validator
             - comscore
             - chartbeat
+            - cmp_script
             - google_tags_manager
             - css_includes
             - generate_fb_admin_tag

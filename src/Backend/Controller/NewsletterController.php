@@ -406,21 +406,11 @@ class NewsletterController extends Controller
         $configurations = $this->get('setting_repository')->get([
             'newsletter_maillist',
             'newsletter_subscriptionType',
-            'recaptcha',
             'max_mailing'
         ]);
 
-        // Check that user has configured reCaptcha keys if newsletter is enabled
-        $missingRecaptcha = false;
-        if (empty($configurations['recaptcha']['public_key'])
-            || empty($configurations['recaptcha']['private_key'])
-        ) {
-            $missingRecaptcha = true;
-        }
-
         return $this->render('newsletter/config.tpl', [
             'configs'           => $configurations,
-            'missing_recaptcha' => $missingRecaptcha,
         ]);
     }
 
