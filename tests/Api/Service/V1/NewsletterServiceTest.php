@@ -46,7 +46,7 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'findBy', 'findOneBy'])
+            ->setMethods([ 'countBy', 'findBy', 'find'])
             ->getMock();
 
         $this->newsletter = new Entity([
@@ -113,34 +113,6 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
         $item = $this->service->createItem($data);
 
         $this->assertEquals($data['title'], $item->title);
-    }
-
-    /**
-     * Tests deleteItem when no error.
-     */
-    public function testDeleteItem()
-    {
-        $item = new Entity();
-
-        $this->repository->expects($this->once())->method('findOneBy')
-            ->willReturn($item);
-        $this->em->expects($this->once())->method('remove')
-            ->with($item);
-
-        $this->service->deleteItem(23);
-    }
-
-    /**
-     * Tests deleteItem when the item to delete is the current user.
-     *
-     * @expectedException Api\Exception\DeleteItemException
-     */
-    public function testDeleteItemWhenEqualsToCurrentUser()
-    {
-        $this->repository->expects($this->once())->method('findOneBy')
-            ->with('id = 1')
-            ->will($this->throwException(new EntityNotFoundException('Newsletter')));
-        $this->service->deleteItem(1);
     }
 
     /**
@@ -212,8 +184,8 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
     {
         $item = new Entity([ 'type' => 2 ]);
 
-        $this->repository->expects($this->once())->method('findOneBy')
-            ->with('id = 1')->willReturn($item);
+        $this->repository->expects($this->once())->method('find')
+            ->with(1)->willReturn($item);
 
         $this->assertEquals($item, $this->service->getItem(1));
     }
@@ -225,8 +197,8 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetItemWhenErrorWhenNoUser()
     {
-        $this->repository->expects($this->once())->method('findOneBy')
-            ->with('id = 1')
+        $this->repository->expects($this->once())->method('find')
+            ->with(1)
             ->will($this->throwException(new \Exception()));
 
         $this->service->getItem(1);
