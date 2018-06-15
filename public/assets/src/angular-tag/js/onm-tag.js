@@ -27,26 +27,28 @@
           },
           template: function() {
             return '<div class="onmTag">' +
-                '<div>' +
+                '<div class="currentTags">' +
                   '<ul class="onmTagList">' +
                     '<li ng-repeat="acceptedTag in acceptedTags()" ng-class=" !acceptedTag.id ? \'newTag\' : \'\'">' +
                       '<span>[% acceptedTag.name %]</span>' +
-                      '<a href="#" ng-click="removeTag(acceptedTag)"><i class="fa fa-times" aria-hidden="true"></i></a>' +
+                      '<a href="#" ng-click="removeTag(acceptedTag)"><i class="fa fa-times tagIcon" aria-hidden="true"></i></a>' +
                     '</li>' +
                   '</ul>' +
-                  '<input type="text" ng-class=" invalidTag ? \'has-error \' : \'\'" ng-model="newTag" placeholder="[% placeholder %]" ng-keydown="validateTag($event)" uib-typeahead="tagSuggested as tagSuggested.name for tagSuggested in getLocalSuggestedTags($viewValue)" typeahead-loading="isSuggesting" typeahead-wait-ms="500" typeahead-on-select="suggestedTagAccepted($item, $model, $label)" typeahead-min-length="2" typeahead-focus-first="false">' +
-                  '<i class="fa fa-circle-o-notch fa-spin" ng-show="isSuggesting || isValidating"></i>' +
+                  '<div class="tag-input">' +
+                    '<input type="text" ng-class=" invalidTag ? \'has-error \' : \'\'" ng-model="newTag" placeholder="[% placeholder %]" ng-keydown="validateTag($event)" uib-typeahead="tagSuggested as tagSuggested.name for tagSuggested in getLocalSuggestedTags($viewValue)" typeahead-loading="isSuggesting" typeahead-wait-ms="500" typeahead-on-select="suggestedTagAccepted($item, $model, $label)" typeahead-min-length="2" typeahead-focus-first="false">' +
+                    '<i class="fa fa-circle-o-notch fa-spin loading-icon" ng-show="isSuggesting || isValidating"></i>' +
+                  '</div>' +
                   '<input type="hidden" name="tag_ids" ng-value="getTagIdsList()">' +
                 '</div>' +
                 '<div class="autoSuggested" ng-show="loadAutoSuggestedTags">' +
-                  '<span>Suggested tags</span>' +
-                  '<a class="btn btn-primary btn-xs" ng-click="loadAutoSuggestedTags()" href="#">' +
+                  '<span class="title">Suggested tags</span>' +
+                  '<a class="reload-tags btn btn-primary btn-xs pull-right" ng-click="loadAutoSuggestedTags()" href="#">' +
                     '<i class="fa fa-refresh m-r-5"></i>' +
                     'Reload' +
                   '</a>' +
                   '<ul class="onmTagList">' +
                     '<li ng-repeat="suggestedTag in suggestedTags" class="newTag">' +
-                      '<span>[% suggestedTag.name %]</span><a href="#" ng-click="addTag(suggestedTag)">+</a>' +
+                      '<span>[% suggestedTag.name %]</span><a href="#" ng-click="addTag(suggestedTag)"><i class="fa fa-plus tagIcon" aria-hidden="true"></a>' +
                     '</li>' +
                   '</ul>' +
                 '</div>' +
