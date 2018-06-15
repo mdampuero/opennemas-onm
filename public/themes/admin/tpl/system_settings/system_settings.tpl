@@ -1191,7 +1191,7 @@
                         </div>
                       </div>
                     </div>
-
+                    {is_module_activated name="es.openhost.module.acton"}
                     <div class="panel-group" data-toggle="collapse" id="panel-group-acton">
                       <div class="panel panel-default">
                         <div class="panel-heading collapsed">
@@ -1260,8 +1260,7 @@
                         </div>
                       </div>
                     </div>
-
-
+                    {/is_module_activated}
                   </div>
                   <div class="col-md-6">
                     <h4>
