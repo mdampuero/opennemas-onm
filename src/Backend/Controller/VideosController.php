@@ -132,7 +132,8 @@ class VideosController extends Controller
                     [
                         'type'           => $type,
                         'authors'        => $authors,
-                        'commentsConfig' => s::get('comments_config'),
+                        'enableComments' => $this->get('core.helper.comment')
+                            ->enableCommentsByDefault(),
                         'locale'         => $ls->getLocale('frontend'),
                         'tags'           => []
                     ]
@@ -261,12 +262,9 @@ class VideosController extends Controller
 
         $this->get('session')->getFlashBag()->add('success', _("Video updated successfully."));
 
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_video_show',
-                ['id' => $video->id]
-            )
-        );
+        return $this->redirect($this->generateUrl('admin_video_show', [
+            'id' => $video->id
+        ]));
     }
 
     /**
@@ -303,15 +301,10 @@ class VideosController extends Controller
         }
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_videos',
-                    [
-                        'category' => $video->category,
-                        'page' => $page
-                    ]
-                )
-            );
+            return $this->redirect($this->generateUrl('admin_videos', [
+                'category' => $video->category,
+                'page' => $page
+            ]));
         } else {
             return new Response('ok');
         }
@@ -370,7 +363,7 @@ class VideosController extends Controller
         }
 
         $authorsComplete = \User::getAllUsersAuthors();
-        $authors         = ['0' => _(' - Select one author - ')];
+        $authors         = [ '0' => _(' - Select one author - ') ];
         foreach ($authorsComplete as $author) {
             $authors[$author->id] = $author->name;
         }
@@ -382,7 +375,8 @@ class VideosController extends Controller
                 'information'    => $video->information,
                 'video'          => $video,
                 'authors'        => $authors,
-                'commentsConfig' => s::get('comments_config'),
+                'enableComments' => $this->get('core.helper.comment')
+                    ->enableCommentsByDefault(),
                 'locale'         => $ls->getRequestLocale('frontend'),
                 'tags'           => $this->get('api.service.tag')
                     ->getListByIdsKeyMapped($video->tag_ids)['items']

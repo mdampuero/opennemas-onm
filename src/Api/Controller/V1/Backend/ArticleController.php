@@ -213,6 +213,8 @@ class ArticleController extends Controller
                 ->get('extraInfoContents.ARTICLE_MANAGER');
         }
 
+        $extra['with_comment'] = $this->get('core.helper.comment')->enableCommentsByDefault();
+
         return $extra;
     }
 

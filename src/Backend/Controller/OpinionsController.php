@@ -252,7 +252,8 @@ class OpinionsController extends Controller
             'opinion'        => $opinion,
             'all_authors'    => $allAuthors,
             'author'         => $author,
-            'commentsConfig' => s::get('comments_config'),
+            'enableComments' => $this->get('core.helper.comment')
+                ->enableCommentsByDefault(),
             'extra_fields'   => $extraFields,
             'locale'         => $ls->getRequestLocale('frontend'),
             'tags'           => $this->get('api.service.tag')
@@ -288,7 +289,8 @@ class OpinionsController extends Controller
             $ls = $this->get('core.locale');
             return $this->render('opinion/new.tpl', [
                 'all_authors'    => $allAuthors,
-                'commentsConfig' => s::get('comments_config'),
+                'enableComments' => $this->get('core.helper.comment')
+                    ->enableCommentsByDefault(),
                 'extra_fields'   => $extraFields,
                 'locale'         => $ls->getLocale('frontend'),
                 'tags'           => []

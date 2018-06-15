@@ -32,7 +32,6 @@ class SubscriptionHelper
      */
     protected $notSubscribedPermissions = [
         'NON_MEMBER_BLOCK_ACCESS',
-        'NON_MEMBER_HIDE_TITLE',
         'NON_MEMBER_HIDE_SUMMARY',
         'NON_MEMBER_HIDE_BODY',
         'NON_MEMBER_HIDE_PRETITLE',

@@ -52,6 +52,7 @@ class LettersController extends Controller
                 'commentsConfig' => $this->get('setting_repository')
                     ->get('comments_config'),
                 'locale'         => $ls->getLocale('frontend'),
+                'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
                 'tags'           => []
             ]);
         }
@@ -129,8 +130,8 @@ class LettersController extends Controller
             'letter/new.tpl',
             [
                 'letter' => $letter,
-                'commentsConfig' => $this->get('setting_repository')
-                    ->get('comments_config'),
+                'enableComments' => $this->get('core.helper.comment')
+                    ->enableCommentsByDefault(),
                 'locale'         => $ls->getRequestLocale('frontend'),
                 'tags'           => $this->get('api.service.tag')
                     ->getListByIdsKeyMapped($letter->tag_ids)['items']
@@ -183,9 +184,9 @@ class LettersController extends Controller
             $this->get('session')->getFlashBag()->add('error', _('Unable to update the letter.'));
         }
 
-        return $this->redirect(
-            $this->generateUrl('admin_letter_show', ['id' => $letter->id ])
-        );
+        return $this->redirect($this->generateUrl('admin_letter_show', [
+            'id' => $letter->id
+        ]));
     }
 
     /**
@@ -228,13 +229,10 @@ class LettersController extends Controller
             ]
         ]);
 
-        return $this->render(
-            'letter/content-provider.tpl',
-            [
-                'letters'    => $letters,
-                'pagination' => $pagination,
-            ]
-        );
+        return $this->render('letter/content-provider.tpl', [
+            'letters'    => $letters,
+            'pagination' => $pagination,
+        ]);
     }
 
     /**
@@ -276,12 +274,9 @@ class LettersController extends Controller
             'route'       => 'admin_letters_content_provider_related'
         ]);
 
-        return $this->render(
-            "common/content_provider/_container-content-list.tpl",
-            [
-                'contents'   => $letters,
-                'pagination' => $pagination
-            ]
-        );
+        return $this->render("common/content_provider/_container-content-list.tpl", [
+            'contents'   => $letters,
+            'pagination' => $pagination
+        ]);
     }
 }

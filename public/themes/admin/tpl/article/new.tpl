@@ -346,14 +346,14 @@
               </div>
             </div>
           </div>
-          {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
+          {is_module_activated name="es.openhost.module.advancedSubscription"}
             <div class="row">
               <div class="col-md-12">
                 <div class="grid simple">
                   <div class="grid-title">
                     <h4>
                       <a href="[% routing.generate('backend_subscriptions_list') %]">
-                        <i class="fa fa-check-square-o m-r-10"></i>{t}Subscriptions{/t}
+                        <i class="fa fa-list m-r-12"></i>{t}Lists{/t}
                       </a>
                     </h4>
                   </div>

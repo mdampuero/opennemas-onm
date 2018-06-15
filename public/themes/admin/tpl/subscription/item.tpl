@@ -129,122 +129,158 @@
                 </div>
               </div>
             </div>
-            <div class="grid simple">
+            <div class="grid simple" ng-mouseenter="showNewsletter = true" ng-mouseleave="showNewsletter = false">
+              {is_module_activated deactivated="1" name="NEWSLETTER_MANAGER"}
+                <div class="overlay overlay-border overlay-white ng-cloak p-b-15 p-l-15 p-r-15 p-t-15 text-center" ng-class="{ 'open': showNewsletter }">
+                  <h4 class="semi-bold">
+                    {t}Do you want this feature?{/t}
+                  </h4>
+                  <a class="btn btn-info m-t-5" href="{url name="admin_store_list"}">
+                    <h5 class="bold text-uppercase text-white">
+                      <i class="fa fa-shopping-cart m-r-5"></i>
+                      {t}Go to Store{/t}
+                    </h5>
+                  </a>
+                </div>
+              {/is_module_activated}
               <div class="grid-title">
-                <h4>{t}Features for members{/t}</h4>
+                <h4>
+                  <i class="fa fa-envelope"></i>
+                  {t}Newsletter{/t}
+                </h4>
               </div>
               <div class="grid-body">
-                <div class="col-sm-6">
-                  <div class="form-group no-margin">
-                    <label class="form-label">{t}Newsletter{/t}</label>
-                    <label class="pointer" for="member-newsletter">
-                      <div class="checkbox">
-                        <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_SEND_NEWSLETTER')" id="member-newsletter" type="checkbox">
-                        <label for="member-newsletter">{t}Send newsletter{/t}</label>
-                      </div>
-                      <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
-                        <i class="fa fa-info-circle m-r-5 text-info"></i>
-                        {t}If enabled, this subscription will be selectable when creating newsletters{/t}
-                      </span>
-                    </label>
-                  </div>
-                  <div class="form-group no-margin">
-                    <label class="form-label m-t-15">{t}Advertisement{/t}</label>
-                    <label class="pointer" for="member-advertisement">
-                      <div class="checkbox">
-                        <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_HIDE_ADVERTISEMENTS')"id="member-advertisement" type="checkbox">
-                        <label for="member-advertisement">{t}Hide advertisements{/t}</label>
-                      </div>
-                      <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
-                        <i class="fa fa-info-circle m-r-5 text-info"></i>
-                        {t}If enabled, advertisements will be disabled when using safeframe{/t}
-                      </span>
-                    </label>
-                  </div>
-                  <div class="form-group no-margin">
-                    <label class="form-label m-t-15">{t}Payment{/t}</label>
-                    <label class="pointer" for="member-payment">
-                      <div class="checkbox">
-                        <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_REQUIRES_PAYMENT')" id="member-payment" type="checkbox">
-                        <label for="member-payment">{t}Requires payment{/t}</label>
-                      </div>
-                      <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
-                        <i class="fa fa-info-circle m-r-5 text-info"></i>
-                        {t}If enabled, this subscription will require a payment to become a member{/t}
-                      </span>
-                    </label>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group no-margin">
-                    <label class="form-label">{t}Restrictions{/t}</label>
-                    <label class="pointer" for="member-print">
-                      <div class="checkbox">
-                        <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_HIDE_PRINT')" id="member-print" type="checkbox">
-                        <label for="member-print">{t}Hide print button{/t}</label>
-                      </div>
-                      <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
-                        <i class="fa fa-info-circle m-r-5 text-info"></i>
-                        {t}If enabled, button to print contents will be hidden{/t}
-                      </span>
-                    </label>
-                  </div>
-                  <div class="form-group no-margin">
-                    <label class="form-label m-t-15">&nbsp</label>
-                    <label class="pointer" for="member-social">
-                      <div class="checkbox">
-                        <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_HIDE_SOCIAL')" id="member-social" type="checkbox">
-                        <label for="member-social">{t}Hide social networks buttons{/t}</label>
-                      </div>
-                      <span class="help m-l-3 m-t-6" ng-show="isHelpEnabled()">
-                        <i class="fa fa-info-circle m-r-5 text-info"></i>
-                        {t}If enabled, button to share contents in social networks will be hidden{/t}
-                      </span>
-                    </label>
-                  </div>
-                  <div class="form-group no-margin">
-                    <label class="form-label m-t-15">&nbsp</label>
-                    <label class="pointer" for="member-edit">
-                      <div class="checkbox">
-                        <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_BLOCK_BROWSER')" id="member-edit" type="checkbox">
-                        <label for="member-edit">{t}Block browser actions (cut, copy,...){/t}</label>
-                      </div>
-                      <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
-                        <i class="fa fa-info-circle m-r-5 text-info"></i>
-                        {t}If enabled, some browser actions (e.g. cut, copy,...) will be blocked{/t}
-                      </span>
-                    </label>
-                  </div>
+                <div class="form-group no-margin">
+                  <label class="pointer" for="member-newsletter">
+                    <div class="checkbox">
+                      <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_SEND_NEWSLETTER')" id="member-newsletter" {is_module_activated deactivated="1" name="NEWSLETTER_MANAGER"}ng-disabled="true"{/is_module_activated} type="checkbox">
+                      <label for="member-newsletter">{t}Send newsletter{/t}</label>
+                    </div>
+                    <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                      <i class="fa fa-info-circle m-r-5 text-info"></i>
+                      {t}If enabled, this subscription will be selectable when creating newsletters{/t}
+                    </span>
+                  </label>
                 </div>
               </div>
             </div>
-            <div class="grid simple">
+            <div class="grid simple" ng-mouseenter="showMember = true" ng-mouseleave="showMember = false">
+              {is_module_activated deactivated="1" name="es.openhost.module.advancedSubscription"}
+                <div class="overlay overlay-border overlay-white ng-cloak p-b-15 p-l-15 p-r-15 p-t-15 text-center" ng-class="{ 'open': showMember }">
+                  <h4 class="semi-bold m-t-50">
+                    {t}Do you want this feature?{/t}
+                  </h4>
+                  <a class="btn btn-info m-t-5" href="{url name="admin_store_list"}">
+                    <h5 class="bold text-uppercase text-white">
+                      <i class="fa fa-shopping-cart m-r-5"></i>
+                      {t}Go to Store{/t}
+                    </h5>
+                  </a>
+                </div>
+              {/is_module_activated}
               <div class="grid-title">
-                <h4>{t}Restrictions for non-members{/t}</h4>
+                <h4>
+                  <i class="fa fa-address-card"></i>
+                  {t}Restrictions for members{/t}
+                </h4>
               </div>
               <div class="grid-body">
                 <div class="row">
-                  <div class="col-xs-6">
+                  <div class="col-sm-6">
                     <div class="form-group">
-                      <label class="form-label">{t}Access{/t}</label>
-                      <label class="pointer" for="non-member-block-access">
+                      <label class="pointer" for="member-print">
                         <div class="checkbox">
-                          <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_BLOCK_ACCESS')" id="non-member-block-access" type="checkbox">
-                          <label for="non-member-block-access">{t}Block access to content{/t}</label>
+                          <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_HIDE_PRINT')" id="member-print" {is_module_activated deactivated="1" name="es.openhost.module.advancedSubscription"}ng-disabled="true"{/is_module_activated} type="checkbox">
+                          <label for="member-print">{t}Hide print button{/t}</label>
                         </div>
-                        <span class="help m-l-3" ng-show="isHelpEnabled()">
+                        <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
                           <i class="fa fa-info-circle m-r-5 text-info"></i>
-                          {t}If enabled, non-members will not be able to access to contents in this subscription{/t}
+                          {t}If enabled, button to print contents will be hidden{/t}
+                        </span>
+                      </label>
+                    </div>
+                    <div class="form-group">
+                      <label class="pointer" for="member-social">
+                        <div class="checkbox">
+                          <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_HIDE_SOCIAL')" id="member-social" {is_module_activated deactivated="1" name="es.openhost.module.advancedSubscription"}ng-disabled="true"{/is_module_activated} type="checkbox">
+                          <label for="member-social">{t}Hide social networks buttons{/t}</label>
+                        </div>
+                        <span class="help m-l-3 m-t-6" ng-show="isHelpEnabled()">
+                          <i class="fa fa-info-circle m-r-5 text-info"></i>
+                          {t}If enabled, button to share contents in social networks will be hidden{/t}
+                        </span>
+                      </label>
+                    </div>
+                    <div class="form-group no-margin">
+                      <label class="pointer" for="member-edit">
+                        <div class="checkbox">
+                          <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_BLOCK_BROWSER')" id="member-edit" {is_module_activated deactivated="1" name="es.openhost.module.advancedSubscription"}ng-disabled="true"{/is_module_activated} type="checkbox">
+                          <label for="member-edit">{t}Block browser actions (cut, copy,...){/t}</label>
+                        </div>
+                        <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                          <i class="fa fa-info-circle m-r-5 text-info"></i>
+                          {t}If enabled, some browser actions (e.g. cut, copy,...) will be blocked{/t}
                         </span>
                       </label>
                     </div>
                   </div>
-                  <div class="col-xs-6">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label class="pointer" for="member-advertisement">
+                        <div class="checkbox">
+                          <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_HIDE_ADVERTISEMENTS')" id="member-advertisement" {is_module_activated deactivated="1" name="es.openhost.module.advancedSubscription"}ng-disabled="true"{/is_module_activated} type="checkbox">
+                          <label for="member-advertisement">{t}Hide advertisements{/t}</label>
+                        </div>
+                        <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                          <i class="fa fa-info-circle m-r-5 text-info"></i>
+                          {t}If enabled, advertisements will be disabled when using safeframe{/t}
+                        </span>
+                      </label>
+                    </div>
                     <div class="form-group no-margin">
-                      <label class="form-label">{t}Indexation{/t}</label>
+                      <label class="pointer" for="member-payment">
+                        <div class="checkbox">
+                          <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_REQUIRES_PAYMENT')" id="member-payment" ng-disabled="true" type="checkbox">
+                          <label for="member-payment">{t}Requires payment{/t}</label>
+                        </div>
+                        <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                          <i class="fa fa-info-circle m-r-5 text-info"></i>
+                          {t}If enabled, this subscription will require a payment to become a member{/t}
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="grid simple" ng-mouseenter="showNonMember = true" ng-mouseleave="showNonMember = false">
+              {is_module_activated deactivated="1" name="es.openhost.module.advancedSubscription"}
+                <div class="overlay overlay-border overlay-white ng-cloak p-b-15 p-l-15 p-r-15 p-t-15 text-center" ng-class="{ 'open': showNonMember }">
+                  <h4 class="semi-bold m-t-50 p-t-50">
+                    {t}Do you want this feature?{/t}
+                  </h4>
+                  <a class="btn btn-info m-t-5" href="{url name="admin_store_list"}">
+                    <h5 class="bold text-uppercase text-white">
+                      <i class="fa fa-shopping-cart m-r-5"></i>
+                      {t}Go to Store{/t}
+                    </h5>
+                  </a>
+                </div>
+              {/is_module_activated}
+              <div class="grid-title">
+                <h4>
+                  <i class="fa fa-ban"></i>
+                  {t}Restrictions for non-members{/t}
+                </h4>
+              </div>
+              <div class="grid-body">
+                <div class="row">
+                  <div class="col-xs-6">
+                    <label class="form-label">{t}Indexation{/t}</label>
+                    <div class="form-group m-t-5">
                       <label class="pointer" for="non-member-no-index">
                         <div class="checkbox">
-                          <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_NO_INDEX')" id="non-member-no-index" type="checkbox">
+                          <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_NO_INDEX')" id="non-member-no-index" {is_module_activated deactivated="1" name="es.openhost.module.advancedSubscription"}ng-disabled="true"{/is_module_activated} type="checkbox">
                           <label for="non-member-no-index">{t}Prevent search engine indexation{/t}</label>
                         </div>
                         <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
@@ -253,35 +289,49 @@
                         </span>
                       </label>
                     </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-xs-6">
-                    <label class="form-label">{t}Hide information{/t}</label>
-                    <div class="form-group no-margin">
-                      <div class="checkbox m-b-5" ng-repeat="permission in data.extra.modules.FRONTEND | filter: { name: 'NON_MEMBER_HIDE' }">
-                        <input checklist-model="item.privileges" checklist-value="permission.pk_privilege" id="non-member-[% $index %]" ng-disabled="item.privileges.indexOf(getPermissionId('NON_MEMBER_REDIRECT')) !== -1" type="checkbox">
-                        <label for="non-member-[% $index %]">[% permission.description %]</label>
+                    <div class="form-group">
+                      <label class="form-label">{t}Block actions{/t}</label>
+                      <div class="form-group m-t-5">
+                        <label class="pointer" for="non-member-block-access">
+                          <div class="checkbox">
+                            <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_BLOCK_ACCESS')" id="non-member-block-access" {is_module_activated deactivated="1" name="es.openhost.module.advancedSubscription"}ng-disabled="true"{/is_module_activated} type="checkbox">
+                            <label for="non-member-block-access">{t}Block access to content{/t}</label>
+                          </div>
+                          <div class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                            <i class="fa fa-info-circle m-r-5 text-info"></i>
+                            {t}If enabled, non-members will not be able to access to contents in this subscription{/t}
+                          </div>
+                          <div class="help m-l-3 m-t-5">
+                            <i class="fa fa-warning m-r-5 text-warning"></i>
+                            {t}The content will not be available in frontpages, widgets, RSS and sitemaps{/t}
+                          </div>
+                        </label>
                       </div>
-                      <div class="help m-l-3" ng-show="isHelpEnabled()">
-                        <i class="fa fa-info-circle m-r-5 text-info"></i>
-                        {t}Some information will be hidden for non-members when accessing contents in this subscription{/t}
+                      <div class="form-group">
+                        <label class="pointer" for="non-member-block">
+                          <div class="checkbox">
+                            <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_BLOCK_BROWSER')" id="non-member-block" ng-disabled="{is_module_activated deactivated="1" name="es.openhost.module.advancedSubscription"}true ||{/is_module_activated}item.privileges.indexOf(getPermissionId('NON_MEMBER_BLOCK_ACCESS')) !== -1" type="checkbox">
+                            <label for="non-member-block">{t}Block browser actions (cut, copy,...){/t}</label>
+                          </div>
+                          <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                            <i class="fa fa-info-circle m-r-5 text-info"></i>
+                            {t}If enabled, subscribers will not see this subscription while registering or editing profile{/t}.
+                          </span>
+                        </label>
                       </div>
                     </div>
                   </div>
                   <div class="col-xs-6">
-                    <div class="form-group">
-                      <label class="form-label">{t}Block actions{/t}</label>
-                      <label class="pointer" for="non-member-block">
-                        <div class="checkbox">
-                          <input checklist-model="item.privileges" checklist-value="getPermissionId('NON_MEMBER_BLOCK_BROWSER')" id="non-member-block" ng-disabled="item.privileges.indexOf(getPermissionId('NON_MEMBER_REDIRECT')) !== -1" type="checkbox">
-                          <label for="non-member-block">{t}Block browser actions (cut, copy,...){/t}</label>
-                        </div>
-                        <span class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
-                          <i class="fa fa-info-circle m-r-5 text-info"></i>
-                          {t}If enabled, subscribers will not see this subscription while registering or editing profile{/t}
-                        </span>
-                      </label>
+                    <label class="form-label">{t}Hide information{/t}</label>
+                    <div class="form-group no-margin">
+                      <div class="checkbox m-b-5" ng-repeat="permission in data.extra.modules.FRONTEND | filter: { name: 'NON_MEMBER_HIDE' }">
+                        <input checklist-model="item.privileges" checklist-value="permission.pk_privilege" id="non-member-[% $index %]" ng-checked="item.privileges.indexOf(permission.pk_privilege) !== -1 || item.privileges.indexOf(getPermissionId('NON_MEMBER_BLOCK_ACCESS')) !== -1" ng-disabled="{is_module_activated deactivated="1" name="es.openhost.module.advancedSubscription"}true ||{/is_module_activated}item.privileges.indexOf(getPermissionId('NON_MEMBER_BLOCK_ACCESS')) !== -1" type="checkbox">
+                        <label for="non-member-[% $index %]">[% permission.description %]</label>
+                      </div>
+                      <div class="help m-l-3" ng-show="isHelpEnabled()">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}Some information will be hidden for non-members when accessing contents in this subscription{/t}.
+                      </div>
                     </div>
                   </div>
                 </div>
