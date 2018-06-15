@@ -27,22 +27,26 @@ class NewsletterRenderer
     /**
      * Initializes the entity manager.
      *
-     * @param DbalWrapper    $dbConn      The database connection.
-     * @param  Template       $template    The template service.
+     * @param Template            $template      The template service.
+     * @param EntityRepository    $dbConn        The database connection.
+     * @param SettingRepository   $settinManager The settings repository.
+     * @param AdvertisementHelper $adsHelper     The advertisement helper.
+     * @param adsRepository       $adsRepository The advertisement repository.
+     * @param Instance            $instance      The current instance.
      */
     public function __construct(
         $tpl,
         EntityManager $entityManager,
         $settingManager,
-        $advertisementHelper,
-        $advertisementRepository,
+        $adsHelper,
+        $adsRepository,
         $instance
     ) {
         $this->tpl      = $tpl;
         $this->er       = $entityManager;
         $this->sr       = $settingManager;
-        $this->adHelper = $advertisementHelper;
-        $this->ar       = $advertisementRepository;
+        $this->adHelper = $adsHelper;
+        $this->ar       = $adsRepository;
         $this->instance = $instance;
     }
 
