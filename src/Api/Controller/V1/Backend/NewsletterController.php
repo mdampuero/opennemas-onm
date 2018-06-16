@@ -25,7 +25,8 @@ class NewsletterController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('USER_CREATE')")
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
      */
     public function createAction()
     {
@@ -39,7 +40,8 @@ class NewsletterController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('USER_DELETE')")
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
      */
     public function deleteAction($id)
     {
@@ -61,7 +63,8 @@ class NewsletterController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('USER_DELETE')")
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -93,8 +96,8 @@ class NewsletterController extends Controller
      * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      *
-     * @Security("hasExtension('USER_MANAGER')
-     *     and hasPermission('USER_ADMIN')")
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
      */
     public function listAction(Request $request)
     {
@@ -116,7 +119,8 @@ class NewsletterController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('USER_UPDATE')")
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
      */
     public function patchAction(Request $request, $id)
     {
@@ -137,7 +141,8 @@ class NewsletterController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('USER_UPDATE')")
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
      */
     public function patchSelectedAction(Request $request)
     {
@@ -174,7 +179,8 @@ class NewsletterController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('NEWSLETTER_CREATE')")
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
      */
     public function saveAction(Request $request)
     {
@@ -203,7 +209,8 @@ class NewsletterController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('USER_UPDATE')")
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
      */
     public function showAction($id)
     {
@@ -218,13 +225,12 @@ class NewsletterController extends Controller
     /**
      * Updates the newsletter information given its id and the new information.
      *
-     * This action is not mapped with Security annotation because it's
-     * used in edit profile action that should be available to all newsletters with
-     * or without having newsletters module activated.
-     *
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
+     *
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
      */
     public function updateAction(Request $request, $id)
     {
