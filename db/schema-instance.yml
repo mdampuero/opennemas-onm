@@ -938,13 +938,13 @@ newsletters:
         updated:
             type: datetime
             options: { default: CURRENT_TIMESTAMP, notnull: false }
-        sends:
+        sent_items:
             type: integer
             options: { default: 0, notnull: true }
         send_date:
             type: datetime
             options: { default: CURRENT_TIMESTAMP, notnull: false }
-        generated_html:
+        html:
             type: text
             options: { length: 4294967295, default: null, notnull: false }
         template_id:

@@ -211,8 +211,8 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
     {
         $date = new \Datetime('2012-12-12 00:00:00');
 
-        $itemA = new Entity([ 'title' => 'wubble', 'sends' => 5 ]);
-        $itemB = new Entity([ 'title' => 'xyzzy', 'sends' => 10 ]);
+        $itemA = new Entity([ 'title' => 'wubble', 'sent_items' => 5 ]);
+        $itemB = new Entity([ 'title' => 'xyzzy', 'sent_items' => 10 ]);
 
         $this->repository->expects($this->once())->method('findBy')
             ->willReturn([ $itemA, $itemB ]);

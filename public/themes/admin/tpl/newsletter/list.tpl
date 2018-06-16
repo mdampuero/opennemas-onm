@@ -109,17 +109,17 @@
                       <i class="fa fa-eye"></i>
                       {t}Preview{/t}
                     </a>
-                    <button class="btn btn-danger btn-small" ng-if="item.sends < 1" class="link link-danger" ng-click="delete(item.id)" type="button">
+                    <button class="btn btn-danger btn-small" ng-if="item.sent_items < 1" class="link link-danger" ng-click="delete(item.id)" type="button">
                       <i class="fa fa-trash-o"></i>
                       {t}Delete{/t}
                     </button>
                   </div>
                 </td>
                 <td class="hidden-xs hidden-sm">
-                  [% item.sends != 0 ? (item.send_date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}') : '{t}Not sent{/t}' %]
+                  [% item.sent_items != 0 ? (item.send_date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}') : '{t}Not sent{/t}' %]
                 </td>
                 <td class="right">
-                  [% item.sends %]
+                  [% item.sent_items %]
                 </td>
               </tr>
             </tbody>

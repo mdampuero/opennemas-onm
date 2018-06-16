@@ -56,7 +56,7 @@ class NewsletterService extends OrmService
 
         // Get all newsletters updated between today and last invoice
         $oql = sprintf(
-            'updated >= "%s" and updated <= "%s" and sends > 0 order by created desc',
+            'updated >= "%s" and updated <= "%s" and sent_items > 0 order by created desc',
             $lastInvoiceDate->format('Y-m-d H:i:s'),
             $today->format('Y-m-d H:i:s')
         );
@@ -68,7 +68,7 @@ class NewsletterService extends OrmService
         $total = 0;
         if (count($newsletters) > 0) {
             foreach ($newsletters as $newsletter) {
-                $total += (int) $newsletter->sends;
+                $total += (int) $newsletter->sent_items;
             }
         }
 
