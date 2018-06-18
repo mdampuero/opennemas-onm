@@ -211,18 +211,19 @@ class NewsletterController extends Controller
         try {
             if ($id > 0) {
                 $newsletter = $ns->patchItem($id, [
-                    'status'         => 0,
-                    'title'          => $title,
-                    'contents'       => $containers,
-                    'html' => $html,
-                    'updated'        => new \Datetime(),
+                    'status'   => 0,
+                    'title'    => $title,
+                    'contents' => $containers,
+                    'html'     => $html,
+                    'updated'  => new \Datetime(),
                 ]);
             } else {
                 $newsletter = $ns->createItem([
-                    'status'         => 0,
-                    'title'          => $title,
-                    'contents'       => $containers,
-                    'html' => $html,
+                    'status'   => 0,
+                    'title'    => $title,
+                    'contents' => $containers,
+                    'sent'     => null,
+                    'html'     => $html,
                 ]);
 
                 $id = $newsletter->id;
@@ -233,6 +234,11 @@ class NewsletterController extends Controller
                 [ 'id' => $id ]
             ));
         } catch (\Exception $e) {
+            $this->get('error.log')->error(sprintf(
+                'Error while saving the newsletter contents: %s',
+                $e->getMessage()
+            ));
+
             $this->get('session')->getFlashBag()->add(
                 'error',
                 _("There was an error while saving the newsletter ")
@@ -290,9 +296,9 @@ class NewsletterController extends Controller
 
         try {
             $newsletter = $this->get('api.service.newsletter')->patchItem($id, [
-                'title'          => $request->request->filter('title', FILTER_SANITIZE_STRING),
-                'generated_html' => $request->request->filter('html', FILTER_SANITIZE_STRING),
-                'updated'        => new \Datetime(),
+                'title'   => $request->request->filter('title', FILTER_SANITIZE_STRING),
+                'html'    => $request->request->filter('html', FILTER_SANITIZE_STRING),
+                'updated' => new \Datetime(),
             ]);
 
             return new JsonResponse(['messages' => [[
@@ -410,11 +416,10 @@ class NewsletterController extends Controller
             // Duplicate newsletter if it was sent before.
             if ($newsletter->sends > 0) {
                 $data = array_merge($newsletter->getStored(), [
-                    'created'    => new \Datetime(),
-                    'updated'    => new \Datetime(),
                     'recipients' => $recipients,
-                    'sent_items'      => $report['total'],
                     'sent'       => new \Datetime(),
+                    'sent_items' => $report['total'],
+                    'updated'    => new \Datetime(),
                 ]);
 
                 unset($data['id']);
@@ -423,9 +428,9 @@ class NewsletterController extends Controller
             } else {
                 $this->get('api.service.newsletter')->patchItem($id, [
                     'recipients' => $recipients,
-                    'updated'    => new \Datetime(),
-                    'sent_items'      => $report['total'],
                     'sent'       => new \Datetime(),
+                    'sent_items' => $report['total'],
+                    'updated'    => new \Datetime(),
                 ]);
             }
 
