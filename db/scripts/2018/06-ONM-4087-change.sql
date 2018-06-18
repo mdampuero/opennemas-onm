@@ -5,6 +5,7 @@ ALTER TABLE `newsletters` ADD `type` INT DEFAULT 0 NOT NULL AFTER `id`;
 ALTER TABLE `newsletters` ADD `status` INT DEFAULT 0 NOT NULL AFTER `type`;
 ALTER TABLE `newsletters` CHANGE `title` `title` VARCHAR(512) NOT NULL;
 ALTER TABLE `newsletters` CHANGE `data` `contents` TEXT DEFAULT NULL;
+ALTER TABLE `newsletters` CHANGE `html` `html` LONGTEXT DEFAULT NULL;
 ALTER TABLE `newsletters` ADD `recipients` TEXT DEFAULT NULL AFTER `contents`;
 ALTER TABLE `newsletters` CHANGE `html` `html` MEDIUMTEXT DEFAULT NULL;
 ALTER TABLE `newsletters` ADD `schedule` TEXT DEFAULT NULL AFTER `recipients`;
