@@ -379,6 +379,18 @@ class NewsletterController extends Controller
             ];
         }
 
+        $actOnMarketingList = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+            ->get('actOn.marketingLists', []);
+
+        foreach ($actOnMarketingList as $list) {
+            $recipients[] = [
+                'uuid' => uniqid(),
+                'type' => 'acton',
+                'name' => $list['name'],
+                'id'   => $list['id'],
+            ];
+        }
+
         return $this->render('newsletter/steps/3-pick-recipients.tpl', [
             'id'      => $id,
             'content' => $newsletter,

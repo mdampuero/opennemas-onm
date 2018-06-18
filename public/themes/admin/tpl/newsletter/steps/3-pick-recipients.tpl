@@ -123,6 +123,38 @@
               </div>
 
               <div class="accordion-option">
+                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded == 'lists' }" ng-click="expanded = 'lists'">
+                  <i class="fa fa-address-book m-r-10"></i>{t}Act-On marketing lists{/t}
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded == 'lists' }"></i>
+                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="expanded != 'lists'">
+                    <span>[% (source.items|filter:{ type: 'acton' }).length %]</span>
+                  </span>
+                </div>
+
+                <div class="grid-collapse-body clearfix ng-cloak" ng-class="{ 'expanded': expanded == 'lists' }">
+                  <div class="form-group">
+                    <div class="help">
+                      {t 1="[% routing.generate('backend_subscriptions_list') %]" escape=off}Subscription lists available from <a href="%1">subscriptions module</a> {/t}
+                    </div>
+                    <div class="m-t-15 m-b-10" ng-repeat="item in source.items|filter:{ type: 'acton' }">
+                      <div class="checkbox">
+                        <input id="checkbox-left-[% item.uuid %]" checklist-model="source.selected" checklist-value="item" type="checkbox">
+                        <label for="checkbox-left-[% item.uuid %]">
+                          <strong>[% item.name %]</strong>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="m-b-20">
+                    <button class="btn btn-block" ng-click="addRecipients()" ng-disabled="source.external.selected.length == 0" type="button">
+                      {t}Add to list{/t}
+                      <i class="fa fa-chevron-right"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-option">
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded == 'manual' }" ng-click="expanded = 'manual'">
                   <i class="fa fa-envelope m-r-10"></i>{t}{t}Add recipients manually{/t}{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded == 'manual' }"></i>

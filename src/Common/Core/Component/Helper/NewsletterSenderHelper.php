@@ -76,6 +76,7 @@ class NewsletterSenderHelper
         $instance,
         $mailer,
         $ssb,
+        $actOnFactory,
         $newsletterService,
         $noReplyAddress
     ) {
@@ -86,6 +87,7 @@ class NewsletterSenderHelper
         $this->instanceInternalName = $instance->internal_name;
         $this->mailer               = $mailer;
         $this->ssb                  = $ssb;
+        $this->actOnFactory         = $actOnFactory;
         $this->ns                   = $newsletterService;
         $this->newsletterConfigs    = $this->sm->get('newsletter_maillist');
         $this->siteName             = $this->sm->get('site_name');
@@ -126,7 +128,11 @@ class NewsletterSenderHelper
             }
 
             try {
-                if ($mailbox->type == 'list') {
+                if ($mailbox->type == 'acton') {
+                    list($errors, $sentEmails) = $this->sendActon($newsletter, $mailbox);
+
+                    $sendResults[] = [ $mailbox, $sentEmails > 0, '' ];
+                } elseif ($mailbox->type == 'list') {
                     list($errors, $sentEmailsList) = $this->sendList($newsletter, $mailbox);
 
                     $sentEmails   += $sentEmailsList;
@@ -155,6 +161,44 @@ class NewsletterSenderHelper
             'report'     => $sendResults,
             'create_new' => !empty($newsletter->sent),
         ];
+    }
+
+    /**
+     * Sends the newsletter to a subscription list
+     *
+     * @param Newsletter $newsletter the newsletter
+     * @param array      $recipients the subscription group to send the newsletter
+     *
+     * @return array the number of emails sent
+     */
+    public function sendActon($newsletter, $marketingList)
+    {
+        $sentEmails = 0;
+
+        $errors = [];
+        try {
+            $endpoint = $this->actOnFactory->getEndpoint('email_campaign');
+
+            $id = $endpoint->createMessage([
+                'subject'  => $newsletter->title,
+                'title'    => $newsletter->title,
+                'htmlbody' => $newsletter->html
+            ]);
+
+            $endpoint->sendMessage($id, [
+                'sendername'  => 'Developers Opennemas',
+                'senderemail' => 'developers@opennemas.com',
+                'subject'     => $newsletter->title,
+                'when'        => time(),
+                'sendtoids'   => $marketingList->id
+            ]);
+
+            $sentEmails += 1;
+        } catch (\Exception $e) {
+            $errors[] = _('Unable to deliver your email');
+        }
+
+        return [ $errors, $sentEmails ];
     }
 
     /**
