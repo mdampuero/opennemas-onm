@@ -426,7 +426,7 @@ class NewsletterController extends Controller
             $report     = $newsletterSender->send($newsletter, $recipients);
 
             // Duplicate newsletter if it was sent before.
-            if ($newsletter->sends > 0) {
+            if ($newsletter->sent_items > 0) {
                 $data = array_merge($newsletter->getStored(), [
                     'recipients' => $recipients,
                     'sent'       => new \Datetime(),
