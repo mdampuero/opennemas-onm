@@ -301,7 +301,7 @@
             $scope.data.article =
               angular.extend($scope.article, $scope.data.article);
 
-            if (!('with_comments' in $scope.data.article)) {
+            if (!('with_comment' in $scope.data.article)) {
               $scope.data.article.with_comment =
                 $scope.data.extra.with_comment ? 1 : 0;
             }
