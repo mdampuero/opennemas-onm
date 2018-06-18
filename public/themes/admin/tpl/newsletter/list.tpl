@@ -116,7 +116,7 @@
                   </div>
                 </td>
                 <td class="hidden-xs hidden-sm">
-                  [% item.sent_items != 0 ? (item.send_date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}') : '{t}Not sent{/t}' %]
+                  [% item.sent_items != 0 ? (item.sent | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}') : '{t}Not sent{/t}' %]
                 </td>
                 <td class="right">
                   [% item.sent_items %]

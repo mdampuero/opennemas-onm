@@ -94,7 +94,7 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
         $data = [
             'title'          => 'Newsletter',
             'contents'       => [],
-            'generated_html' => '<!DOCTYPE html>
+            'html' => '<!DOCTYPE html>
             <html>
             <head>
                 <title></title>

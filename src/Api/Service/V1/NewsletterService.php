@@ -32,8 +32,8 @@ class NewsletterService extends OrmService
             $data['enabled'] = 1;
         }
 
-        if (!array_key_exists('send_date', $data)) {
-            $data['send_date'] = null;
+        if (!array_key_exists('sent', $data)) {
+            $data['sent'] = null;
         }
 
         $data['created'] = new \Datetime();

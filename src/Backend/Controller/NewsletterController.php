@@ -448,7 +448,7 @@ class NewsletterController extends Controller
                 _("There was an error while sending the newsletter ")
             );
 
-            return new RedirectResponse($this->generateUrl('backend_newsletters_list'));
+            return $this->redirect($this->generateUrl('backend_newsletters_list'));
         }
     }
 
