@@ -191,8 +191,8 @@ articles:
             type: bigint
             options: { length: 20, unsigned: true, autoincrement: true }
         title_int:
-            type: string
-            options: { length: 255, default: null, notnull: false }
+            type: text
+            options: { length: 65532, default: null, notnull: false }
         summary:
             type: text
             options: { length: 65532, default: null, notnull: false }
