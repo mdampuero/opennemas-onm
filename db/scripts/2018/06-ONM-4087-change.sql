@@ -17,4 +17,4 @@ ALTER TABLE `newsletters` ADD `template_id` BIGINT UNSIGNED DEFAULT NULL;
 CREATE INDEX newsletter_type ON newsletters (type);
 CREATE INDEX newsletter_template_id ON newsletters (template_id);
 
-UPDATE newsletters SET `send_date`=`updated` WHERE `sends` > 0;
+UPDATE newsletters SET `sent`=`updated` WHERE `sends` > 0;
