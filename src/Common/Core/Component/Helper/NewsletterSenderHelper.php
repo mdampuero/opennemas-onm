@@ -103,7 +103,11 @@ class NewsletterSenderHelper
     {
         // if no recipients we can exit directly
         if (empty($recipients)) {
-            return [];
+            return [
+                'total'      => 0,
+                'create_new' => false,
+                'report'     => [],
+            ];
         }
 
         $sentEmails      = 0;
