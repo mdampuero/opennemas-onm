@@ -462,35 +462,9 @@ class NewsletterController extends Controller
      * @Security("hasExtension('NEWSLETTER_MANAGER')
      *     and hasPermission('NEWSLETTER_ADMIN')")
      */
-    public function configAction(Request $request)
+    public function configAction()
     {
-        if ('POST' == $request->getMethod()) {
-            $configurations = [
-                'newsletter_maillist'         => $request->request->get('newsletter_maillist'),
-                'newsletter_subscriptionType' => $request->request->get('newsletter_subscriptionType'),
-            ];
-
-            foreach ($configurations as $key => $value) {
-                $this->get('setting_repository')->set($key, $value);
-            }
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Newsletter module settings saved successfully.')
-            );
-
-            return $this->redirect($this->generateUrl('backend_newsletters_config'));
-        }
-
-        $configurations = $this->get('setting_repository')->get([
-            'newsletter_maillist',
-            'newsletter_subscriptionType',
-            'max_mailing'
-        ]);
-
-        return $this->render('newsletter/config.tpl', [
-            'configs'           => $configurations,
-        ]);
+        return $this->render('newsletter/settings.tpl');
     }
 
     /**

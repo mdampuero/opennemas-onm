@@ -113,6 +113,24 @@ class NewsletterController extends Controller
     }
 
     /**
+     * Returns the list of settings for CONTENT_SUBSCRIPTIONS extension.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function listSettingsAction()
+    {
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get([
+                'newsletter_maillist',
+                'newsletter_subscriptionType',
+                'actOn.marketingLists',
+            ]);
+
+        return new JsonResponse([ 'settings' => $settings ]);
+    }
+
+    /**
      * Updates some properties for an newsletter.
      *
      * @param Request $request The request object.
@@ -200,6 +218,33 @@ class NewsletterController extends Controller
         );
 
         return $response;
+    }
+
+    /**
+     * Saves settings for CONTENT_SUBSCRIPTIONS extension.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResposne The response object.
+     */
+    public function saveSettingsAction(Request $request)
+    {
+        $msg      = $this->get('core.messenger');
+        $settings = $request->request->all();
+
+        $settings['actOn.marketingLists'] = $settings['actOn_marketingLists'];
+        unset($settings['actOn_marketingLists']);
+
+        try {
+            $this->get('orm.manager')->getDataSet('Settings', 'instance')
+                ->set($settings);
+
+            $msg->add(_('Settings saved successfully'), 'success');
+        } catch (\Exception $e) {
+            $msg->add(_('Unable to save settings'), 'error', 400);
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
