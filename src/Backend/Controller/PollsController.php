@@ -118,7 +118,7 @@ class PollsController extends Controller
         if ('POST' != $request->getMethod()) {
             $ls = $this->get('core.locale');
             return $this->render('poll/new.tpl', [
-                'commentsConfig' => s::get('comments_config'),
+                'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
                 'locale'         => $ls->getLocale('frontend'),
                 'tags'           => []
             ]);
