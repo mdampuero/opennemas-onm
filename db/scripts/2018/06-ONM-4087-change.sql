@@ -10,7 +10,7 @@ ALTER TABLE `newsletters` CHANGE `html` `html` MEDIUMTEXT DEFAULT NULL;
 ALTER TABLE `newsletters` ADD `schedule` TEXT DEFAULT NULL AFTER `recipients`;
 ALTER TABLE `newsletters` CHANGE `updated` `updated` DATETIME DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE `newsletters` CHANGE `sent` `sent_items` INT DEFAULT 0 NOT NULL;
-ALTER TABLE `newsletters` ADD `send_date` DATETIME DEFAULT CURRENT_TIMESTAMP AFTER `sent_items`;
+ALTER TABLE `newsletters` ADD `sent` DATETIME DEFAULT CURRENT_TIMESTAMP AFTER `updated`;
 ALTER TABLE `newsletters` ADD `template_id` BIGINT UNSIGNED DEFAULT NULL;
 
 CREATE INDEX newsletter_type ON newsletters (type);

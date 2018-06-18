@@ -12,8 +12,8 @@ orm:
                 schedule:        array
                 created:         datetime
                 updated:         datetime
-                sent_items:      string
-                send_date:       datetime
+                sent:            datetime
+                sent_items:      integer
                 html:            string
                 template_id:     integer
             converters:
@@ -59,12 +59,12 @@ orm:
                         updated:
                             type: datetime
                             options: { notnull: false }
+                        sent:
+                            type: datetime
+                            options: { default: CURRENT_TIMESTAMP, notnull: false }
                         sent_items:
                             type: integer
                             options: { default: 0, notnull: true }
-                        send_date:
-                            type: datetime
-                            options: { default: CURRENT_TIMESTAMP, notnull: false }
                         html:
                             type: text
                             options: { length: 4294967295, default: null, notnull: false }

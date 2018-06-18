@@ -214,7 +214,7 @@ class NewsletterController extends Controller
                     'status'         => 0,
                     'title'          => $title,
                     'contents'       => $containers,
-                    'generated_html' => $html,
+                    'html' => $html,
                     'updated'        => new \Datetime(),
                 ]);
             } else {
@@ -222,7 +222,7 @@ class NewsletterController extends Controller
                     'status'         => 0,
                     'title'          => $title,
                     'contents'       => $containers,
-                    'generated_html' => $html,
+                    'html' => $html,
                 ]);
 
                 $id = $newsletter->id;
@@ -413,8 +413,8 @@ class NewsletterController extends Controller
                     'created'    => new \Datetime(),
                     'updated'    => new \Datetime(),
                     'recipients' => $recipients,
-                    'sends'      => $report['total'],
-                    'send_date'  => new \Datetime(),
+                    'sent_items'      => $report['total'],
+                    'sent'       => new \Datetime(),
                 ]);
 
                 unset($data['id']);
@@ -424,8 +424,8 @@ class NewsletterController extends Controller
                 $this->get('api.service.newsletter')->patchItem($id, [
                     'recipients' => $recipients,
                     'updated'    => new \Datetime(),
-                    'sends'      => $report['total'],
-                    'send_date'  => new \Datetime(),
+                    'sent_items'      => $report['total'],
+                    'sent'       => new \Datetime(),
                 ]);
             }
 
