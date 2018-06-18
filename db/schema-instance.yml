@@ -909,29 +909,66 @@ menues:
             primary: false
             unique: false
             flags: {  }
-newsletter_archive:
+newsletters:
     columns:
-        pk_newsletter:
+        id:
+            type: bigint
+            options: { lenght: 20, default: null, unsigned: true, autoincrement: true }
+        type:
             type: integer
-            options: { unsigned: true, autoincrement: true }
+            options: { length: 10, default: 0, notnull: true }
+        status:
+            type: integer
+            options: { length: 10, default: 0, notnull: true }
         title:
             type: string
-            options: { length: 255, default: null }
-        data:
+            options: { default: null, length: 512 }
+        contents:
             type: text
             options: { length: 65532, default: null, notnull: false }
+        recipients:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        schedule:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        created:
+            type: datetime
+            options: { default: CURRENT_TIMESTAMP, notnull: true }
+        updated:
+            type: datetime
+            options: { default: CURRENT_TIMESTAMP, notnull: false }
+        sent_items:
+            type: integer
+            options: { default: 0, notnull: true }
+        send_date:
+            type: datetime
+            options: { default: CURRENT_TIMESTAMP, notnull: false }
         html:
             type: text
             options: { length: 4294967295, default: null, notnull: false }
-        created:
-            type: datetime
-            options: { default: CURRENT_TIMESTAMP }
-        updated:
-            type: datetime
-            options: { default: CURRENT_TIMESTAMP, onUpdate: CURRENT_TIMESTAMP }
-        sent:
-            type: string
-            options: { length: 255, default: null }
+        template_id:
+            type: bigint
+            options: { lenght: 20, default: null, unsigned: true, notnull: false  }
+    index:
+        -
+            name:    PRIMARY
+            columns: [ id ]
+            primary: true
+            unique:  true
+            flags:   {}
+        -
+            name:    newsletter_type
+            columns: [ type ]
+            primary: false
+            unique:  false
+            flags:   {}
+        -
+            name:    newsletter_template_id
+            columns: [ template_id ]
+            primary: false
+            unique:  false
+            flags:   {}
     index:
         -
             name: PRIMARY

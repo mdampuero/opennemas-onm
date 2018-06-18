@@ -57,6 +57,10 @@ class CommentHelper
      **/
     public function getConfigs()
     {
+        if (!is_array($this->configs)) {
+            $this->configs = [];
+        }
+
         return array_merge($this->getDefaultConfigs(), $this->configs);
     }
 
