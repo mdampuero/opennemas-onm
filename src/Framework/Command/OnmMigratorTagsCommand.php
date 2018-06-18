@@ -107,7 +107,7 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
                     $contentTagRel,
                     $tagService
                 );
-                $contentsId[] = $content['pk_content'];
+                $contentsId[]                         = $content['pk_content'];
             }
             $tags  = $this->insertData($newTagsInBatch, $contentTagRel, $locale, $tags, $contentsId);
             $page += 1;
@@ -125,11 +125,11 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
         $output->writeln(
             '<fg=yellow>*** Finished ONM Tags Migrator for instance ' .
             $instanceName .
+            ' migrate ' . ($epp * $page) . ' contents' .
             ' in ' .
             ($end - $start) .
             ' ***</fg=yellow>'
         );
-
     }
 
     /**
@@ -143,13 +143,8 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
      */
     private function getContentTags($content, $tags, $newTagsInBatch, $contentTagRel, $tagService)
     {
-        $contentTags = array_map(
-            function ($tagAux) {
-                return strtolower(trim($tagAux));
-            },
-            explode(',', $content['metadata'])
-        );
-        $contentTags = array_unique($contentTags);
+        $contentTags = $this->getTagsFromString($content['metadata']);
+
         if (!empty($contentTags)) {
             foreach ($contentTags as $tag) {
                 if (strlen($tag) > 60) {
@@ -243,6 +238,8 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
      * Insert a new tag in the database
      *
      * @param Array @tag List with all values for a tag
+     *
+     * @return Integer Return the tag id
      */
     private function insertTags($tag)
     {
@@ -256,5 +253,32 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
             $tag
         );
         return $conn->lastInsertId();
+    }
+
+    /**
+     *  Method to retrieve tags from a string
+     *
+     * @param String @tagStr String with all tags
+     *
+     * @return Array List with all the different tags
+     *
+     */
+    private function getTagsFromString($tagStr)
+    {
+        $tagsArr   = explode(',', \Onm\StringUtils::removeShorts($tagStr));
+        $returnArr = [];
+        $aux       = null;
+        foreach ($tagsArr as $tagAux) {
+            // Remove text between parentheses
+            $aux = preg_replace("/\([^)]+\)/", "", $tagAux);
+            $aux = explode(' ', $aux);
+            foreach ($aux as $realTag) {
+                $realTag = trim($realTag);
+                if (strlen($realTag) > 1) {
+                    $returnArr[] = $realTag;
+                }
+            }
+        }
+        return array_unique($returnArr);
     }
 }
