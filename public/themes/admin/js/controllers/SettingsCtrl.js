@@ -280,19 +280,6 @@
         };
 
         /**
-         * @function removeile
-         * @memberOf SettingsCtrl
-         *
-         * @description
-         *   Removes a file from settings.
-         *
-         * @param {String} name The file name.
-         */
-        $scope.removeFile = function(name) {
-          $scope.settings[name] = null;
-        };
-
-        /**
          * @function removeRTBFile
          * @memberOf SettingsCtrl
          *
@@ -376,6 +363,25 @@
               $scope.saving = false;
               messenger.post(response.data);
             });
+        };
+
+        /**
+         * @function save
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Saves settings.
+         */
+        $scope.toggleDefaultTranslator = function(index) {
+          var current = $scope.settings.translators[index];
+
+          current.default = true;
+
+          angular.forEach($scope.settings.translators, function(translator, key) {
+            if (key !== index && translator.to === current.to && translator.from === current.from) {
+              delete translator.default;
+            }
+          });
         };
 
         /**
@@ -490,6 +496,10 @@
             $scope.settings.locale.frontend.language.available.map(function(e) {
               return { code: e, name: $scope.extra.locales.frontend[e] };
             });
+
+          angular.forEach($scope.settings.translators, function(value) {
+            value.default = value.default === 'true';
+          });
         };
 
         /**

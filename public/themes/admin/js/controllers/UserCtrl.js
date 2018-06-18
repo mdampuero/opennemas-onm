@@ -8,16 +8,19 @@
      * @name  UserCtrl
      *
      * @requires $controller
-     * @requires $http
-     * @requires $uibModal
      * @requires $scope
+     * @requires $uibModal
+     * @requires $window
+     * @requires cleaner
+     * @requires http
+     * @requires messenger
      *
      * @description
      *   Check billing information when saving user.
      */
     .controller('UserCtrl', [
-      '$controller', '$http', '$scope', '$timeout', '$uibModal', 'cleaner',
-      function($controller, $http, $scope, $timeout, $uibModal, cleaner) {
+      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'messenger', 'routing',
+      function($controller, $scope, $timeout, $uibModal, $window, cleaner, http, messenger, routing) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -83,7 +86,7 @@
          *   Shows a modal to confirm user update.
          */
         $scope.confirm = function() {
-          if ($scope.master || !$scope.item.activated ||
+          if ($scope.backup.master || !$scope.item.activated ||
               $scope.item.activated === $scope.backup.activated) {
             $scope.save();
             $scope.backup.activated = $scope.item.activated;
@@ -113,6 +116,61 @@
             if (response) {
               $scope.save();
               $scope.backup.activated = $scope.item.activated;
+            }
+          });
+        };
+
+        /**
+         * @function convertTo
+         * @memberOf UserCtrl
+         *
+         * @description
+         *   Opens a modal to confirm user conversion.
+         */
+        $scope.convertTo = function(property, value) {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-convert',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  item: $scope.item,
+                  type: value
+                };
+              },
+              success: function() {
+                return function() {
+                  var data  = $scope.getData();
+                  var route = {
+                    name: 'api_v1_backend_user_update',
+                    params: { id: $scope.item.id }
+                  };
+
+                  data.type = value;
+
+                  if (value === 1) {
+                    var ids = Object.keys($scope.data.extra.user_groups);
+
+                    // Remove all user groups
+                    data.fk_user_group = _.difference(data.fk_user_group, ids);
+                    data.user_groups   = _.difference(data.user_groups, ids);
+                  }
+
+                  return http.put(route, data);
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            messenger.post(response.data);
+
+            if (response.success) {
+              if (value === 1) {
+                $window.location.href = routing.generate(
+                  'backend_subscriber_show', { id: $scope.item.id });
+              }
             }
           });
         };
@@ -176,6 +234,32 @@
         };
 
         /**
+         * @function getUsername
+         * @memberOf UserCtrl
+         *
+         * @description
+         *   Generates an username basing on the name.
+         */
+        $scope.getUsername = function() {
+          if ($scope.item.username) {
+            return;
+          }
+
+          $scope.flags.http.slug = 1;
+
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+          }
+
+          $scope.tm = $timeout(function() {
+            $scope.getSlug($scope.item.name, function(response) {
+              $scope.item.username = response.data.slug;
+              $scope.form.username.$setDirty(true);
+            });
+          }, 500);
+        };
+
+        /**
          * @function parseItem
          * @memberOf UserCtrl
          *
@@ -186,8 +270,8 @@
          */
         $scope.parseItem = function(data) {
           if (data.item) {
-            $scope.item   = angular.extend($scope.item, data.item);
-            $scope.backup = { activated: $scope.item.activated };
+            $scope.item             = angular.extend($scope.item, data.item);
+            $scope.backup.activated = $scope.item.activated;
           }
 
           $scope.flags.categories = { none: false, all: false };
@@ -237,26 +321,6 @@
             $scope.flags.categories.all = true;
           }
         }, true);
-
-        // Generates an username when name changes
-        $scope.$watch('item.name', function(nv, ov) {
-          if (!ov || !nv || nv === ov) {
-            return;
-          }
-
-          $scope.flags.http.slug = 1;
-
-          if ($scope.tm) {
-            $timeout.cancel($scope.tm);
-          }
-
-          $scope.tm = $timeout(function() {
-            $scope.getSlug(nv, function(response) {
-              $scope.item.username = response.data.slug;
-              $scope.form.username.$setDirty(true);
-            });
-          }, 500);
-        });
       }
     ]);
 })();

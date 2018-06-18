@@ -1,14 +1,18 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div ng-app="BackendApp" ng-controller="SubscriberListCtrl" ng-init="init()">
+  <div ng-app="BackendApp" ng-controller="SubscriberListCtrl" ng-init="init();backup.master = {if $app.container->get('core.security')->hasPermission('MASTER')}true{else}false{/if};backup.id = {$app.user->id}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-address-card"></i>
+                <i class="fa fa-address-card m-r-10"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
                 {t}Subscribers{/t}
               </h4>
             </li>
@@ -65,12 +69,12 @@
           <ul class="nav quick-section pull-right">
             {acl isAllowed="SUBSCRIBER_AVAILABLE"}
               <li class="quicklinks">
-                <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+                <button class="btn btn-link" ng-click="confirm('activated', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
                   <i class="fa fa-times fa-lg"></i>
                 </button>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-link" ng-click="patchSelected('activated', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+                <button class="btn btn-link" ng-click="confirm('activated', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
                   <i class="fa fa-check fa-lg"></i>
                 </button>
               </li>
@@ -111,7 +115,7 @@
             <li class="quicklinks hidden-xs ng-cloak">
               <ui-select name="group" theme="select2" ng-model="criteria.user_group_id">
                 <ui-select-match>
-                  <strong>{t}Subscription{/t}:</strong> [% $select.selected.name %]
+                  <strong>{t}Lists{/t}:</strong> [% $select.selected.name %]
                 </ui-select-match>
                 <ui-select-choices repeat="item.pk_user_group as item in toArray(addEmptyValue(data.extra.subscriptions, 'pk_user_group')) | filter: $select.search">
                   <div ng-bind-html="item.name | highlight: $select.search"></div>
@@ -176,7 +180,7 @@
                   <th class="hidden-xs text-center" width="80"><i class="fa fa-picture-o"></i></th>
                   <th width="400">{t}Name{/t}</th>
                   <th class="hidden-xs" width="400">{t}Email{/t}</th>
-                  <th class="hidden-sm">{t}Subscriptions{/t}</th>
+                  <th class="hidden-sm">{t}Lists{/t}</th>
                   <th class="hidden-sm hidden-xs text-center" width="100">{t}Social{/t}</th>
                   <th class="text-center" width="50">{t}Enabled{/t}</th>
                 </tr>
@@ -184,7 +188,7 @@
               <tbody>
                 <tr ng-if="items.length > 0" ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
                   <td class="checkbox-cell">
-                    <div class="checkbox check-default">
+                    <div class="checkbox check-default" ng-if="isSelectable(item)">
                       <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
                       <label for="checkbox[%$index%]"></label>
                     </div>
@@ -210,7 +214,7 @@
                       <a class="btn btn-default btn-small" href="[% routing.generate('backend_subscriber_show', { id: item.id }) %]">
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
-                      <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
+                      <button class="btn btn-danger btn-small" ng-click="delete(item.id)" ng-if="backup.master || item.id != backup.id" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                       </button>
                     </div>
@@ -240,7 +244,7 @@
                     </ul>
                   </td>
                   <td class="text-center">
-                    <button class="btn btn-white" ng-click="patch(item, 'activated', item.activated != 1 ? 1 : 0)" type="button">
+                    <button class="btn btn-white" ng-click="confirm('activated', item.activated != 1 ? 1 : 0, item)" type="button">
                       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading && item.activated == '1', 'fa-times text-error': !item.activatedLoading && item.activated == '0' }"></i>
                     </button>
                   </td>
@@ -256,6 +260,9 @@
         </div>
       </div>
     </div>
+    <script type="text/ng-template" id="modal-confirm">
+      {include file="user/modal.confirm.tpl"}
+    </script>
     <script type="text/ng-template" id="modal-delete">
       {include file="base/modal/modal.delete.tpl"}
     </script>

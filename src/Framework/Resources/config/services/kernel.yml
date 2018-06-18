@@ -22,7 +22,7 @@ services:
 
     kernel.listener.general_exceptions:
         class: Framework\EventListener\GeneralExceptionsListener
-        arguments: [ %kernel.environment% ]
+        arguments: [ '@service_container' ]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 98 }
 

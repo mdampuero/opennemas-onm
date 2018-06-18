@@ -1,36 +1,28 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<style>
-  .table-wrapper {
-    white-space: normal !important;
-  }
-  .table td {
-    white-space: normal;
-  }
-
-  .comment-author-info, .comment-body-block {
-    display:block;
-    width:100%;
-    clear:both;
-  }
-</style>
-  <div action="{url name=admin_comments_list}" ng-app="BackendApp" ng-controller="CommentListCtrl" ng-init="init(null, 'backend_ws_contents_list')">
+  <div action="{url name=backend_comments_list}" ng-app="BackendApp" ng-controller="CommentListCtrl" ng-init="init(null, 'backend_ws_contents_list')" class="comments-listing">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-              <i class="fa fa-comment"></i>
-              {t}Comments{/t}
+                <i class="fa fa-comment m-r-10"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
+                <a class="no-padding" href="{url name=backend_comments}" title="{t}Go back to list{/t}">
+                  {t}Comments{/t}
+                </a>
               </h4>
             </li>
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_comments_config}" title="{t}Config comments module{/t}">
+                <a class="btn btn-link" href="{url name=backend_comments_config}" title="{t}Config comments module{/t}">
                   <i class="fa fa-gear fa-lg"></i>
                 </a>
               </li>
@@ -131,7 +123,8 @@
             <div class="spinner-text">{t}Loading{/t}...</div>
           </div>
           <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
-            <div class="center">
+            <div class="text-center p-b-15 p-t-15">
+              <i class="fa fa-4x fa-warning text-warning"></i>
               <h4>{t}Unable to find any comment that matches your search.{/t}</h4>
               <h6>{t}Maybe changing any filter could help.{/t}</h6>
             </div>
@@ -146,24 +139,25 @@
                       <label for="select-all"></label>
                     </div>
                   </th>
-                  <th><span class="col-md-offset-1">{t}Comment{/t}</span></th>
+                  <th class="hidden-xs text-center" width="40"><i class="fa fa-picture-o"></i></th>
+                  <th>{t}Comment{/t}</th>
                   <th class="text-right" width="10px">{t}Published{/t}</th>
                 </tr>
               </thead>
               <tbody>
-                <tr ng-if="contents.length > 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
+                <tr ng-if="contents.length > 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id), 'bg-warning': (content.status == 'pending') }">
                   <td class="checkbox-cell">
                     <div class="checkbox check-default">
                       <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
                       <label for="checkbox[%$index%]"></label>
                     </div>
                   </td>
+                  <td class="text-center hidden-xs">
+                    <gravatar class="gravatar img-thumbnail img-thumbnail-circle" ng-model="content.author_email" size="40"></gravatar>
+                  </td>
                   <td>
                     <div class="comment-author-info row">
-                      <span class="col-xs-1">
-                        <gravatar class="gravatar thumbnail" ng-model="content.author_email" size="40"></gravatar>
-                      </span>
-                      <small class="gravatar col-xs-11">
+                      <small class="gravatar">
                         <div class="submitted-on">
                           <strong>{t}Author:{/t}</strong> [% content.author %] <span ng-if="content.author_email">([% content.author_email %])</span>
                           - <span class="hidden-xs">[% content.author_ip %]</span>
@@ -173,15 +167,15 @@
                       </small>
                     </div>
                     <div class="comment-body-block row">
-                      <div ng-bind-html="content.body" class=" col-md-offset-1"></div>
-                      <div class="listing-inline-actions col-md-offset-1">
+                      <div ng-bind-html="content.body"></div>
+                      <div class="listing-inline-actions">
                         {acl isAllowed="COMMENT_UPDATE"}
-                        <a class="link" href="[% edit(content.id, 'admin_comment_show') %]" title="{t}Edit{/t}">
+                        <a class="btn btn-defauilt btn-small" href="[% edit(content.id, 'admin_comment_show') %]" title="{t}Edit{/t}">
                           <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                         </a>
                         {/acl}
                         {acl isAllowed="COMMENT_DELETE"}
-                        <button class="link link-danger" ng-click="delete(content, 'backend_ws_comment_delete')" type="button">
+                        <button class="btn btn-danger btn-small" ng-click="delete(content, 'backend_ws_comment_delete')" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                         </button>
                         {/acl}
@@ -190,9 +184,22 @@
                   </td>
                   <td class="text-center">
                     {acl isAllowed="COMMENT_AVAILABLE"}
-                      <button class="btn btn-white" ng-class="{ statusLoading: content.statusLoading == 1, published: content.status == 'accepted', unpublished: (content.status == 'rejected' || content.status == 'pending') }" ng-click="patch(content, 'status', content.status != 'accepted' ? 'accepted' : 'rejected')" type="button">
-                        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.statusLoading, 'fa-check text-success' : !content.statusLoading && content.status == 'accepted', 'fa-times text-error': !content.statusLoading && (content.status == 'pending' || content.status == 'rejected') }"></i>
-                      </button>
+                      <span ng-show="content.status != 'pending'">
+                        <button class="btn btn-white" ng-class="{ statusLoading: content.statusLoading == 1, published: content.status == 'accepted', unpublished: (content.status == 'rejected' || content.status == 'pending') }" ng-click="patch(content, 'status', content.status != 'accepted' ? 'accepted' : 'rejected')" type="button" uib-tooltip-html="content.status !== 'accepted' ? '{t}Rejected{/t}' : '{t}Accepted{/t}'">
+                          <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.statusLoading, 'fa-check text-success' : !content.statusLoading && content.status == 'accepted', 'fa-times text-error': !content.statusLoading && (content.status == 'pending' || content.status == 'rejected') }"></i>
+                        </button>
+                      </span>
+                      <span ng-show="content.status == 'pending'">
+                        <div class="btn-group open-on-hover">
+                          <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" uib-tooltip="{t}Pending{/t}">
+                            <i class="fa fa-clock-o text-warning"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-right no-padding">
+                            <li><a href="#" ng-click="patch(content, 'status', 'rejected')"><i class="fa fa-times text-error"></i> {t}Reject{/t}</a> </li>
+                            <li><a href="#" ng-click="patch(content, 'status', 'accepted')"><i class="fa fa-check text-success"></i> {t}Accept{/t}</a></li>
+                          </ul>
+                        </div>
+                      </span>
                     {/acl}
                   </td>
                 </tr>

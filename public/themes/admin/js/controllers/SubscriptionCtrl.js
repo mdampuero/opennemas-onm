@@ -67,6 +67,31 @@
         };
 
         /**
+         * @function getPermissionId
+         * @memberOf SubscriptionCtrl
+         *
+         * @description
+         *   Returns the permission id basing on the permission name.
+         *
+         * @param {String} name The permission name.
+         *
+         * @return {Integer} The permission id.
+         */
+        $scope.getPermissionId = function(name) {
+          if (!$scope.data || !$scope.data.extra) {
+            return null;
+          }
+
+          var privileges = $scope.data.extra.modules.FRONTEND
+            .filter(function(e) {
+              return e.name === name;
+            });
+
+          return privileges.length ?
+            parseInt(privileges[0].pk_privilege) : null;
+        };
+
+        /**
          * @function itemHasId
          * @memberOf SubscriptionCtrl
          *

@@ -193,6 +193,13 @@
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
                       {/acl}
+                      {acl isAllowed="PHOTO_CREATE"}
+                        {is_module_activated name="es.openhost.module.imageEditor"}
+                          <a class="btn btn-link" ng-click="launchPhotoEditor(content)" type="button" >
+                              <i class="fa fa-sliders m-r-5"></i>{t}Enhance{/t}
+                          </a>
+                        {/is_module_activated}
+                      {/acl}
                       {acl isAllowed="PHOTO_DELETE"}
                       <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
@@ -243,6 +250,11 @@
                   <a class="thumbnail-action" href="[% edit(content.id, 'admin_photo_show') %]" ng-click="$event.stopPropagation()">
                     <i class="fa fa-pencil fa-2x"></i>
                   </a>
+                  {is_module_activated name="es.openhost.module.imageEditor"}
+                    <a class="thumbnail-action" ng-click="launchPhotoEditor(content)" >
+                      <i class="fa fa-sliders fa-2x"></i>
+                    </a>
+                  {/is_module_activated}
                 {/acl}
               </div>
             </dynamic-image>
@@ -282,13 +294,19 @@
             <strong>[% selected.lastSelected.name %]</strong>
           </li>
           <li>
-            <a class="btn btn-default" ng-href="[% routing.generate('admin_photo_show', { id: selected.lastSelected.id}) %]">
-              <strong>
-                <i class="fa fa-edit"></i>
+            <a class="btn btn-primary ng-isolate-scope" ng-href="[% routing.generate('admin_photo_show', { id: selected.lastSelected.id}) %]">
+                <i class="fa fa-edit ng-isolate-scope"></i>
                 {t}Edit{/t}
-              </strong>
             </a>
           </li>
+          {is_module_activated name="es.openhost.module.imageEditor"}
+          <li>
+            <a class="btn btn-primary ng-isolate-scope" ng-click="launchPhotoEditor(selected.lastSelected)">
+                <i class="fa fa-sliders"></i>
+                {t}Enhance{/t}
+            </a>
+          </li>
+          {/is_module_activated}
           <li>[% selected.lastSelected.created | moment %]</li>
           <li><strong>{t}Size:{/t}</strong> [% selected.lastSelected.width %] x [% selected.lastSelected.height %] ([% selected.lastSelected.size %] KB)</li>
           <li>

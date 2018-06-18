@@ -357,9 +357,7 @@ class AdvertisementsController extends Controller
             ($page - 1) * $epp
         );
 
-        $em  = $this->get('advertisement_repository');
-        $map = $this->container->get('core.helper.advertisement')
-            ->getPositions();
+        $em = $this->get('advertisement_repository');
 
         list($criteria, $order, $epp, $page) = $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
@@ -421,7 +419,7 @@ class AdvertisementsController extends Controller
                 'adsense_id'      => $formValues->filter('adsense_id', '', FILTER_SANITIZE_STRING),
             ];
 
-            if ($this->getUser()->isMaster()) {
+            if ($this->get('core.security')->hasPermission('MASTER')) {
                 $settings['dfp_custom_code'] =
                     base64_encode($formValues->get('dfp_custom_code'));
             }
@@ -477,7 +475,7 @@ class AdvertisementsController extends Controller
                 'ads_positions'             => $adsPositions->getPositionNames(),
                 'categories'                => $this->getCategories(),
                 'server_url'                => $serverUrl,
-                'user_groups'               => $this->getUserGroups(),
+                'user_groups'               => $this->getSubscriptions(),
                 'default_mark'              => $renderer->getMark(),
             ],
         ];
@@ -488,20 +486,16 @@ class AdvertisementsController extends Controller
      *
      * @return array The list of public user groups.
      */
-    protected function getUserGroups()
+    protected function getSubscriptions()
     {
-        $userGroups = $this->get('orm.manager')
-            ->getRepository('UserGroup')->findBy();
+        $subscriptions = $this->get('api.service.subscription')
+            ->setCount(false)
+            ->getList();
 
-        // Show only public groups ()
-        $userGroups = array_filter($userGroups, function ($a) {
-            return in_array(223, $a->privileges);
-        });
-
-        $userGroups = array_map(function ($a) {
+        $subscriptions = array_map(function ($a) {
             return [ 'id' => $a->pk_user_group, 'name' => $a->name ];
-        }, $userGroups);
+        }, $subscriptions['items']);
 
-        return array_values($userGroups);
+        return array_values($subscriptions);
     }
 }

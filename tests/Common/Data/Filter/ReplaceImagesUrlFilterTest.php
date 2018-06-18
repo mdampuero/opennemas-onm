@@ -34,7 +34,7 @@ class ReplaceImagesUrlFilterTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->redirector = $this->getMockBuilder('Redirector')
-            ->setMethods([ 'getTranslationBySlug' ])
+            ->setMethods([ 'getTranslation' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -80,10 +80,10 @@ class ReplaceImagesUrlFilterTest extends \PHPUnit_Framework_TestCase
 
         $photo->path_img = '/2017/01/01/grault-01.jpg';
 
-        $this->redirector->expects($this->once())->method('getTranslationBySlug')
+        $this->redirector->expects($this->once())->method('getTranslation')
             ->willReturn([ 'pk_content' => 1234 ]);
         $this->em->expects($this->once())->method('find')
-            ->with('photo', 1234)->willReturn($photo);
+            ->with('Photo', 1234)->willReturn($photo);
 
         $this->assertEquals(
             'plugh/frog/2017/01/01/grault-01.jpg',

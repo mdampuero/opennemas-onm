@@ -17,6 +17,20 @@
   background: #fff;
 }
 
+.grid-collapse-title .fa {
+  text-align: center;
+  width: 15px;
+}
+
+.grid-title a {
+  color: #505458;
+}
+
+.grid-title a:hover {
+  color: #505458;
+  text-decoration: underline;
+}
+
 .grid .grid-collapse-body {
   max-height: 0;
   opacity: 0;
@@ -37,6 +51,10 @@
 
 .grid-collapse-title .fa-chevron-right {
   transition: all .25s;
+}
+
+.grid {
+  position: relative;
 }
 
 .grid.simple .grid-body {

@@ -3,6 +3,8 @@
   "description": "The best CMS for online jornalism",
   "homepage": "https://www.opennemas.com",
   "version": "0.1.0",
+  "repository": "https://bitbucket.org/opennemas/onm/",
+  "license": "SEE LICENSE IN LICENSE",
   "apidoc": {
     "title": "Opennemas REST API",
     "header": {
@@ -10,28 +12,29 @@
     }
   },
   "dependencies": {
-    "bower": "~1.7.7",
+    "bower": "~1.8.4",
     "less": "~2.6.0",
     "uglify-js": "~2.6.2",
     "uglifycss": "0.0.20"
   },
   "devDependencies": {
-    "apidoc": "~0.15.1",
+    "apidoc": "^0.17.6",
+    "csslint": "^1.0.5",
+    "eslint": "^4.19.1",
     "gulp": "~3.9.1",
     "gulp-batch": "*",
     "gulp-livereload": "~3.8.1",
-    "jasmine-core": "~2.4.1",
-    "jsdoc": "~3.4.0",
-    "jshint": "~2.9.1",
-    "karma": "~0.13.21",
+    "jasmine-core": "~3.1.0",
+    "jsdoc": "~3.5.5",
+    "karma": "~2.0.2",
     "karma-html-reporter": "~0.2.7",
-    "karma-jasmine": "~0.3.7",
-    "karma-junit-reporter": "^0.3.8",
-    "karma-phantomjs-launcher": "~1.0.0",
+    "karma-jasmine": "~1.1.2",
+    "karma-junit-reporter": "^1.2.0",
+    "karma-phantomjs-launcher": "~1.0.4",
     "logme": "0.4.0",
-    "newman": "2.0.9",
-    "node-notifier": "^4.5.0",
+    "newman": "3.9.4",
+    "node-notifier": "^5.2.1",
     "openhost-jsdoc": "~0.3.5",
-    "phantomjs-prebuilt": "~2.1.4"
+    "phantomjs-prebuilt": "~2.1.16"
   }
 }

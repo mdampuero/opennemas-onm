@@ -28,6 +28,7 @@ class SettingController extends Controller
         'body_end_script',
         'body_start_script',
         'chartbeat',
+        'cmp_script',
         'comscore',
         'contact_email',
         'cookies_hint_url',
@@ -226,7 +227,7 @@ class SettingController extends Controller
         $settings = array_merge($defaults, $settings);
 
         // Remove settings for only masters
-        if (!$this->getUser()->isMaster()) {
+        if (!$this->get('core.security')->hasPermission('MASTER')) {
             foreach ($this->onlyMasters as $key) {
                 unset($settings[$key]);
             }

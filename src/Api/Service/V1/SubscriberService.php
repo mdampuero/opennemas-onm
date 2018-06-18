@@ -16,67 +16,14 @@ use Api\Exception\GetItemException;
 class SubscriberService extends UserService
 {
     /**
-     * {@inheritdoc}
+     * The default type value for users.
      */
-    public function deleteItem($id)
-    {
-        try {
-            $item = $this->getItem($id);
-
-            // Convert to user if subscriber + user
-            if ($item->type === 2) {
-                $item->type = 0;
-
-                $this->em->persist($item, $item->getOrigin());
-                return;
-            }
-
-            $this->em->remove($item, $item->getOrigin());
-        } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
-            throw new DeleteItemException($e->getMessage(), $e->getCode());
-        }
-    }
+    protected $type = 1;
 
     /**
-     * {@inheritdoc}
+     * The type for subscriber + user when converted to user.
      */
-    public function deleteList($ids)
-    {
-        if (!is_array($ids) || empty($ids)) {
-            throw new DeleteListException('Invalid ids', 400);
-        }
-
-        $oql = $this->getOqlForIds($ids);
-
-        try {
-            $response = parent::getList($oql);
-        } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
-            throw new DeleteListException($e->getMessage(), $e->getCode());
-        }
-
-        $deleted = 0;
-        foreach ($response['items'] as $item) {
-            try {
-                // Convert to user if subscriber + user
-                if ($item->type === 2) {
-                    $item->type = 0;
-
-                    $this->em->persist($item, $item->getOrigin());
-                    $deleted++;
-                    continue;
-                }
-
-                $this->em->remove($item, $item->getOrigin());
-                $deleted++;
-            } catch (\Exception $e) {
-                $this->container->get('error.log')->error($e->getMessage());
-            }
-        }
-
-        return $deleted;
-    }
+    protected $ctype = 0;
 
     /**
      * {@inheritdoc}

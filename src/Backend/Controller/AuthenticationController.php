@@ -63,7 +63,7 @@ class AuthenticationController extends Controller
             $session->set('_security_backend', serialize($token));
 
             // Set last_login date
-            if (!$user->isMaster()) {
+            if (!$this->get('core.security')->hasPermission('MASTER')) {
                 $time = new \DateTime();
                 $time->setTimezone(new \DateTimeZone('UTC'));
                 $time = $time->format('Y-m-d H:i:s');
@@ -79,6 +79,10 @@ class AuthenticationController extends Controller
 
         if ($auth->isRecaptchaRequired()) {
             $recaptcha = $auth->getRecaptchaFromParameters();
+        }
+
+        if ($auth->hasError()) {
+            $session->getFlashBag()->add('error', $auth->getErrorMessage());
         }
 
         return $this->render('login/login.tpl', [

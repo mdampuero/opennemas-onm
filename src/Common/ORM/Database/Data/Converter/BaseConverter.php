@@ -202,6 +202,10 @@ class BaseConverter extends Converter
             $to     = 'String';
             $params = [];
 
+            if ($from === 'Object') {
+                $from = \classify(strtolower(get_class($value)));
+            }
+
             if (array_key_exists($key, $this->metadata->properties)) {
                 $params = explode('::', $this->metadata->properties[$key]);
                 $to     = \classify(array_shift($params));

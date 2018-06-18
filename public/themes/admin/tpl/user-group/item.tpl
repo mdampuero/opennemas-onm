@@ -8,22 +8,25 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
+                <i class="fa fa-users m-r-10"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
                 <a class="no-padding" href="[% routing.generate('backend_user_groups_list') %]">
-                  <i class="fa fa-users"></i>
                   {t}User groups{/t}
                 </a>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.http.loading && item">
-              <div class="p-l-10 p-r-10 p-t-10">
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
                 <i class="fa fa-angle-right"></i>
-              </div>
+              </h4>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="!flags.http.loading && item">
-              <h5 class="ng-cloak">
-                <strong ng-if="item.pk_user_group">{t}Edit{/t}</strong>
-                <strong ng-if="!item.pk_user_group">{t}Create{/t}</strong>
-              </h5>
+            <li class="quicklinks hidden-xs">
+              <h4>
+                {if empty($id)}{t}Create{/t}{else}{t}Edit{/t}{/if}
+              </h4>
             </li>
           </ul>
           <div class="all-actions pull-right">
@@ -69,8 +72,7 @@
                   </div>
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.visibility }" ng-click="expanded.visibility = !expanded.visibility">
-                  <i class="fa fa-eye m-r-5"></i>
-                  {t}Visibility{/t}
+                  <i class="fa fa-eye m-r-10"></i>{t}Visibility{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.visibility }"></i>
                   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.visibility">
                     <span ng-show="item.private">{t}Private{/t}</span>
@@ -131,7 +133,7 @@
                         </div>
                         <div class="col-sm-12 m-b-5" ng-repeat="privilege in data.extra.modules[name]">
                           <div class="checkbox check-default">
-                            <input id="checkbox-[% name + '-' + $index %]" checklist-model="item.privileges" checklist-value="privilege.id" type="checkbox">
+                            <input id="checkbox-[% name + '-' + $index %]" checklist-model="item.privileges" checklist-value="privilege.pk_privilege" type="checkbox">
                             <label for="checkbox-[% name + '-' + $index %]">
                               [% privilege.description %]
                             </label>

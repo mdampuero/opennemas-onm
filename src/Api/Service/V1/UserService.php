@@ -9,12 +9,26 @@
  */
 namespace Api\Service\V1;
 
+use Api\Exception\CreateExistingItemException;
 use Api\Exception\CreateItemException;
+use Api\Exception\DeleteItemException;
+use Api\Exception\DeleteListException;
 use Api\Exception\GetItemException;
 use Api\Exception\UpdateItemException;
+use Common\ORM\Core\Exception\EntityNotFoundException;
 
 class UserService extends OrmService
 {
+    /**
+     * The default type value for users.
+     */
+    protected $type = 0;
+
+    /**
+     * The type for subscriber + user when converted to subscriber.
+     */
+    protected $ctype = 1;
+
     /**
      * {@inheritdoc}
      */
@@ -25,12 +39,14 @@ class UserService extends OrmService
                 throw new \Exception('The email is required', 400);
             }
 
-            $oql   = sprintf('email = "%s"', $data['email']);
-            $items = $this->getList($oql);
+            $item = $this->checkItem($data['email']);
 
-            if (!empty($items['items'])) {
-                throw new \Exception('The email is already in use', 409);
+            // Convert item to subscriber + user
+            if (!empty($item)) {
+                return $this->convert($item, 2);
             }
+        } catch (CreateExistingItemException $e) {
+            throw $e;
         } catch (\Exception $e) {
             throw new CreateItemException($e->getMessage(), $e->getCode());
         }
@@ -42,6 +58,74 @@ class UserService extends OrmService
         }
 
         return parent::createItem($data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteItem($id)
+    {
+        if ($id == $this->container->get('core.user')->id) {
+            throw new DeleteItemException('You cannot delete this item', 403);
+        }
+
+        try {
+            $item = $this->getItem($id);
+
+            // Convert if subscriber + user
+            if ($item->type === 2) {
+                $this->convert($item);
+                return;
+            }
+
+            $this->em->remove($item, $item->getOrigin());
+        } catch (\Exception $e) {
+            $this->container->get('error.log')->error($e->getMessage());
+            throw new DeleteItemException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteList($ids)
+    {
+        if (!is_array($ids) || empty($ids)) {
+            throw new DeleteListException('Invalid ids', 400);
+        }
+
+        $oql = $this->getOqlForIds($ids);
+
+        try {
+            $response = parent::getList($oql);
+        } catch (\Exception $e) {
+            $this->container->get('error.log')->error($e->getMessage());
+            throw new DeleteListException($e->getMessage(), $e->getCode());
+        }
+
+        $deleted = 0;
+        foreach ($response['items'] as $item) {
+            // Ignore current user
+            if ($item === $this->container->get('core.user')) {
+                continue;
+            }
+
+            try {
+                // Convert if subscriber + user
+                if ($item->type === 2) {
+                    $this->convert($item);
+                    $deleted++;
+                    continue;
+                }
+
+                $this->em->remove($item, $item->getOrigin());
+                $deleted++;
+            } catch (\Exception $e) {
+                $this->container->get('error.log')->error($e->getMessage());
+            }
+        }
+
+        return $deleted;
     }
 
     /**
@@ -96,7 +180,10 @@ class UserService extends OrmService
             $items = $this->getList($oql);
 
             if (!empty($items['items'])) {
-                throw new \Exception('The email is already in use', 409);
+                throw new \Exception(
+                    'The email address is already in use',
+                    409
+                );
             }
         } catch (\Exception $e) {
             throw new UpdateItemException($e->getMessage(), $e->getCode());
@@ -108,7 +195,56 @@ class UserService extends OrmService
                 ->encodePassword($data['password'], null);
         }
 
-        parent::updateItem($id, $data);
+        return parent::updateItem($id, $data);
+    }
+
+    /**
+     * Checks if there is an item with the given email and it can be used to
+     * create/update an item basing on it.
+     *
+     * @param string $email The email address.
+     *
+     * @return Entity The item with the given email.
+     *
+     * @throws Exception If there is an item but it can not be used to
+     *                   create/update an item basing on it.
+     */
+    protected function checkItem($email)
+    {
+        try {
+            $item = $this->container->get('orm.manager')
+                ->getRepository($this->entity, $this->origin)
+                ->findOneBy(sprintf('email = "%s"', $email));
+        } catch (EntityNotFoundException $e) {
+            return null;
+        }
+
+        if ($item->type === $this->type || $item->type === 2) {
+            throw new CreateExistingItemException(
+                'The email address is already in use',
+                409
+            );
+        }
+
+        return $item;
+    }
+
+    /**
+     * Converts an subscriber + user when deleting.
+     *
+     * @param Entity $item The item to convert.
+     */
+    protected function convert($item, $type = null)
+    {
+        $item->type = $type;
+
+        if (empty($type)) {
+            $item->type = $this->ctype;
+        }
+
+        $this->em->persist($item, $item->getOrigin());
+
+        return $item;
     }
 
     /**

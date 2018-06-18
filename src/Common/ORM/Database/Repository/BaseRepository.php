@@ -321,6 +321,17 @@ class BaseRepository extends Repository
                 return $a[$key];
             }, $values);
 
+            // Set relations to empty
+            foreach ($values as $id => $value) {
+                $values[$id] = array_merge(
+                    $values[$id],
+                    array_fill_keys(
+                        array_keys($this->metadata->getRelations()),
+                        []
+                    )
+                );
+            }
+
             $metas     = $this->getMetas($ids);
             $relations = $this->getRelations($ids);
 
@@ -389,13 +400,6 @@ class BaseRepository extends Repository
 
         $values = [];
         foreach ($relations as $name => $relation) {
-            if (array_key_exists('repository', $relation)
-                && !empty($relation['repository'])
-                && $this->name !== $relation['repository']
-            ) {
-                continue;
-            }
-
             $table = $relation['table'];
             $rid   = $relation['ids'][$this->metadata->getIdKeys()[0]];
             $sql   = 'select * from ' . $table

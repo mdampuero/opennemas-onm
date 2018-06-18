@@ -199,13 +199,19 @@ class RedirectorTest extends KernelTestCase
         $method = new \ReflectionMethod($this->redirector, 'getTranslationBySlug');
         $method->setAccessible(true);
 
-        $this->connection->expects($this->once())->method('fetchAssoc')
+        $this->connection->expects($this->at(0))->method('fetchAssoc')
+            ->with(
+                'SELECT * FROM `translation_ids` WHERE `slug` = ? LIMIT 1',
+                [ 'garply' ]
+            )->willReturn($translation);
+        $this->connection->expects($this->at(1))->method('fetchAssoc')
             ->with(
                 'SELECT * FROM `translation_ids` WHERE `slug` = ? AND `type` = ? LIMIT 1',
                 [ 'garply', 'norf' ]
             )->willReturn($translation);
 
-        $this->assertEquals($translation, $method->invokeArgs($this->redirector, [ 'garply', 'norf']));
+        $this->assertEquals($translation, $method->invokeArgs($this->redirector, [ 'garply', null ]));
+        $this->assertEquals($translation, $method->invokeArgs($this->redirector, [ 'garply', 'norf' ]));
     }
 
     /**

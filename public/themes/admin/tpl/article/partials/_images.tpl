@@ -31,7 +31,7 @@
                   <div class="form-group">
                     <div class="thumbnail-placeholder">
                       <div class="img-thumbnail" ng-if="!article.img1">
-                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.img1" ng-click="articleForm.$setDirty(true)">
+                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.img1" ng-click="articleForm.$setDirty(true)" {is_module_activated name="es.openhost.module.imageEditor"} photo-editor-enabled="true" {/is_module_activated}>
                           <i class="fa fa-picture-o fa-2x"></i>
                           <h5>{t}Pick an image{/t}</h5>
                         </div>
@@ -42,11 +42,11 @@
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo1')">
                               <i class="fa fa-trash-o fa-2x"></i>
                             </div>
-                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.img1" ng-click="articleForm.$setDirty(true)">
+                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.img1" ng-click="articleForm.$setDirty(true)" {is_module_activated name="es.openhost.module.imageEditor"} photo-editor-enabled="true" {/is_module_activated}>
                               <i class="fa fa-camera fa-2x"></i>
                             </div>
                           </div>
-                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.img1" media-picker-type="photo" ng-click="articleForm.$setDirty(true)"></div>
+                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.img1" media-picker-type="photo" ng-click="articleForm.$setDirty(true)" {is_module_activated name="es.openhost.module.imageEditor"} photo-editor-enabled="true" {/is_module_activated}></div>
                         </dynamic-image>
                       </div>
                     </div>
@@ -248,7 +248,7 @@
                         <label class="form-label" for="title">
                           {t}Footer text for inner video:{/t}
                         </label>
-                        <textarea  class="form-control" name="footer_video" ng-model="article.footer_video" placeholder="[% data.article.footer_video[data.extra.options.default] %]" tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" uib-tooltip="[% data.article.footer_video[data.extra.options.default] %]"></textarea>
+                        <textarea  class="form-control" name="footer_video1" ng-model="article.footer_video1" placeholder="[% data.article.footer_video1[data.extra.options.default] %]" tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" uib-tooltip="[% data.article.footer_video[data.extra.options.default] %]"></textarea>
                       </div>
                     </div>
                   </div>

@@ -8,7 +8,11 @@
         <li class="quicklinks">
           <h4>
             <i class="fa fa-home fa-lg"></i>
+            {if !in_array('es.openhost.module.whiteLabel', $app.instance->activated_modules)}
             {t}Welcome to Opennemas{/t}
+            {else}
+            {t}Welcome{/t}
+            {/if}
           </h4>
         </li>
       </ul>
@@ -18,7 +22,9 @@
 
 <div class="content welcome-page">
   <div class="row">
-    {acl isAllowed="ROLE_ADMIN"}
+
+    {if !in_array('es.openhost.module.whiteLabel', $app.instance->activated_modules)}
+    {acl isAllowed="ADMIN"}
     <div class="col-sm-6">
       <a href="{url name=backend_domain_add}">
         <div class="grid simple">
@@ -46,6 +52,7 @@
       </a>
     </div>
     {/acl}
+    {/if}
     <div class="col-sm-6">
       <div class="grid simple add-contents">
         <div class="grid-title">
@@ -113,7 +120,8 @@
           </div>
         </div>
       </div>
-      {acl isAllowed="ROLE_ADMIN"}
+      {if !in_array('es.openhost.module.whiteLabel', $app.instance->activated_modules)}
+      {acl isAllowed="ADMIN"}
       <div class="grid simple merchant">
         <div class="grid-title">
           <h4>{t}Want more features?{/t}</h4>
@@ -144,8 +152,10 @@
         </div>
       </div>
       {/acl}
+      {/if}
     </div>
     <div class="col-sm-6">
+      {if !in_array('es.openhost.module.whiteLabel', $app.instance->activated_modules)}
       <div class="grid simple">
         <div class="grid-body blue welcome-message">
           <h4 class="text-white">{t escape=off}<strong>Are you new in Opennemas?</strong>{/t}</h4>
@@ -175,6 +185,7 @@
           </uib-carousel>
         </div>
       </div>
+      {/if}
     </div>
   </div>
 </div>

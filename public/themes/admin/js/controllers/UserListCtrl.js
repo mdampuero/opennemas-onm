@@ -37,14 +37,14 @@
         };
 
         /**
-         * @function confirmUser
+         * @function confirm
          * @memberOf UserCtrl
          *
          * @description
          *   Shows a modal to confirm user update.
          */
         $scope.confirm = function(property, value, item) {
-          if ($scope.master || !value) {
+          if (!value || $scope.backup.master) {
             if (item) {
               $scope.patch(item, property, value);
               return;
@@ -61,8 +61,7 @@
             resolve: {
               template: function() {
                 return {
-                  name: $scope.id ? 'update' : 'create',
-                  backend_access: true,
+                  name:  $scope.id ? 'update' : 'create',
                   value: 1,
                   extra: $scope.data.extra,
                 };
@@ -104,6 +103,22 @@
           });
 
           $scope.list();
+        };
+
+        /**
+         * @function isSelectable
+         * @memberOf UserListCtrl
+         *
+         * @description
+         *   Checks if the item is selectable.
+         *
+         * @param {Object} item The item to check.
+         *
+         * @return {Boolean} True if the item is selectable. False otherwise.
+         */
+        $scope.isSelectable = function(item) {
+          return $scope.backup.master ||
+            $scope.getId(item) !== $scope.backup.id;
         };
       }
     ]);

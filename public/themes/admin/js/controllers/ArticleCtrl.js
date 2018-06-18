@@ -90,6 +90,13 @@
               $scope.data.article.metadata.split(',');
           }
 
+          if ($scope.data.article.subscriptions) {
+            for (var i = 0; i < $scope.data.article.subscriptions.length; i++) {
+              $scope.data.article.subscriptions[i] =
+                parseInt($scope.data.article.subscriptions[i]);
+            }
+          }
+
           var keys = [
             'img1', 'img2', 'fk_video', 'fk_video2', 'relatedFront',
             'relatedInner', 'relatedHome'
@@ -294,6 +301,11 @@
             $scope.data.article =
               angular.extend($scope.article, $scope.data.article);
 
+            if (!('with_comments' in $scope.data.article)) {
+              $scope.data.article.with_comment =
+                $scope.data.extra.with_comment ? 1 : 0;
+            }
+
             // Load items
             $scope.article      = $scope.data.article;
             $scope.categories   = $scope.data.extra.categories;
@@ -492,24 +504,56 @@
          *
          * @return {type} description
          */
-        $scope.translate = function(to, config) {
+        $scope.translate = function(to, configParam) {
+          var config = {
+            translateFrom:  $scope.data.extra.locale,
+            translateTo: to,
+            locales: configParam.locales,
+            translators: configParam.translators,
+            translatorSelected: 0,
+          };
+
+          // Pick the default translator
+          config.translators.forEach(function(el, index) {
+            if (el.from === config.translateFrom &&
+              el.to === config.translateTo &&
+              el.default === true || el.default === 'true') {
+              config.translatorSelected = index;
+            }
+          });
+
+          // Raise a modal to indicate that background translation is being executed
           $uibModal.open({
-            backdrop:    true,
-            backdropClass: 'modal-backdrop-transparent',
-            controller:  'modalCtrl',
+            backdrop: 'static',
+            keyboard: false,
+            backdropClass: 'modal-backdrop-dark',
+            controller:  'BackgroundTaskModalCtrl',
             openedClass: 'modal-relative-open',
             templateUrl: 'modal-translate',
             resolve: {
               template: function() {
-                return { config: config, to: to };
+                return {
+                  config: config,
+                  translating: false,
+                };
               },
-              success: function() {
-                return function(modalWindow, template) {
+              callback: function() {
+                return function(modal, template) {
+                  var translator = config.translators[config.translatorSelected];
+
+                  // If no default translator dont call the server
+                  if (!translator) {
+                    return;
+                  }
+
+                  template.translating = true;
+                  template.translation_done = false;
+
                   var params = {
                     data: {},
-                    from: template.translator.from,
-                    to: template.translator.to,
-                    translator: template.translator.translator
+                    from: translator.from,
+                    to: translator.to,
+                    translator: config.translatorSelected,
                   };
 
                   for (var i = 0; i < $scope.data.extra.keys.length; i++) {
@@ -522,7 +566,10 @@
                     }
                   }
 
-                  return http.post('api_v1_backend_tools_translate', params)
+                  template.translating = true;
+                  template.translation_done = false;
+
+                  http.post('api_v1_backend_tools_translate_string', params)
                     .then(function(response) {
                       for (var i = 0; i < $scope.data.extra.keys.length; i++) {
                         var key = $scope.data.extra.keys[i];
@@ -530,7 +577,16 @@
                         $scope.article[key] = response.data[key];
                       }
 
-                      modalWindow.close({ response: true, success: true });
+                      template.translating = false;
+                      template.translation_done = true;
+                    }, function(response) {
+                      var message = {
+                        id: new Date().getTime(),
+                        message: 'Unable to translate contents. Please check your configuration.',
+                        type: 'error'
+                      };
+
+                      modal.close({ response: true, error: true });
                     });
                 };
               }
@@ -581,12 +637,8 @@
             }
 
             for (var i = 0; i < nv.length; i++) {
-              var footer = 'footer_video';
+              var footer = 'footer_video' + (i + 1);
               var model  = $scope.article;
-
-              if (i > 0) {
-                footer = 'footer_video2';
-              }
 
               if (angular.isObject(nv[i]) &&
                 (angular.isUndefined(model[footer]) ||

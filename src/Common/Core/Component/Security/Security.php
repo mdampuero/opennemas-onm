@@ -107,15 +107,12 @@ class Security
             return true;
         }
 
-        if ($this->hasPermission('MASTER')
-            || (!empty($this->user)
-                && $this->user->isAdmin())
-        ) {
+        if ($this->hasPermission('MASTER') || $this->hasPermission('ADMIN')) {
             return true;
         }
 
         if (empty($this->categories)) {
-            return false;
+            return true;
         }
 
         return in_array($category, $this->categories);
@@ -129,7 +126,7 @@ class Security
      */
     public function hasExtension($uuid)
     {
-        if (!empty($this->user) && $this->hasPermission('MASTER')) {
+        if ($this->hasPermission('MASTER')) {
             return true;
         }
 
@@ -170,11 +167,12 @@ class Security
         }
 
         // ADMIN and PARTNER have all permissions for their instances
-        // TODO: Remove isAdmin when using ADMIN permission for administrators
+        // TODO: Do not check user group 5 when ADMIN permission in database
         if ($this->instance->internal_name !== 'manager'
             && $permission !== 'MASTER'
             && (in_array('ADMIN', $this->permissions)
-                || (!empty($this->user) && $this->user->isAdmin())
+                || (!empty($this->user)
+                    && array_key_exists(5, $this->user->user_groups))
                 || (in_array('PARTNER', $this->permissions)
                     && $this->hasInstance($this->instance->internal_name)
                 )
@@ -184,22 +182,6 @@ class Security
         }
 
         return in_array($permission, $this->permissions);
-    }
-
-    /**
-     * Checks if the current user has the role.
-     *
-     * @param string $role The role to check.
-     *
-     * @return boolean True if the current user has the role. False otherwise.
-     */
-    public function hasRole($role)
-    {
-        if (empty($this->user) || empty($this->user->getRoles())) {
-            return false;
-        }
-
-        return in_array($role, $this->user->getRoles());
     }
 
     /**

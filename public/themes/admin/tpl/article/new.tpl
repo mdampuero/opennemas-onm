@@ -170,7 +170,7 @@
                 </label>
                 {acl isAllowed='PHOTO_ADMIN'}
                 <div class="pull-right">
-                  <div class="btn btn-default btn-mini" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="5" media-picker-target="editor.summary">
+                  <div class="btn btn-default btn-mini" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="5" media-picker-target="editor.summary" {is_module_activated name="es.openhost.module.imageEditor"} photo-editor-enabled="true" {/is_module_activated}>
                     {t}Insert image{/t}
                   </div>
                 </div>
@@ -185,7 +185,7 @@
                 </label>
                 {acl isAllowed='PHOTO_ADMIN'}
                 <div class="pull-right">
-                  <div class="btn btn-default btn-mini" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="5" media-picker-target="editor.body">
+                  <div class="btn btn-default btn-mini" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="5" media-picker-target="editor.body" {is_module_activated name="es.openhost.module.imageEditor"} photo-editor-enabled="true" {/is_module_activated}>
                     {t}Insert image{/t}
                   </div>
                 </div>
@@ -307,8 +307,7 @@
                   <div class="grid simple">
                     <div class="grid-title">
                       <h4>
-                        <i class="fa fa-clock-o"></i>
-                        {t}Schedule{/t}
+                        <i class="fa fa-clock-o m-r-10"></i>{t}Schedule{/t}
                       </h4>
                     </div>
                     <div class="grid-body">
@@ -347,44 +346,31 @@
               </div>
             </div>
           </div>
-          {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
+          {is_module_activated name="es.openhost.module.advancedSubscription"}
             <div class="row">
               <div class="col-md-12">
                 <div class="grid simple">
                   <div class="grid-title">
                     <h4>
-                      <i class="fa fa-check"></i>
-                      {t}Subscription{/t}
+                      <a href="[% routing.generate('backend_subscriptions_list') %]">
+                        <i class="fa fa-list m-r-12"></i>{t}Lists{/t}
+                      </a>
                     </h4>
                   </div>
                   <div class="grid-body">
-                    <div class="checkbox">
-                      <input id="only_registered" ng-model="article.params.only_registered" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
-                      <label for="only_registered">
-                        {t}Only available for registered users{/t}
-                      </label>
+                    <div ng-show="!data.extra.subscriptions || data.extra.subscriptions.length === 0">
+                      <i class="fa fa-warning m-r-5 text-warning"></i>
+                      {t escape=off 1="[% routing.generate('backend_subscriptions_list') %]"}There are no enabled <a href="%1">subscriptions</a>{/t}
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          {/is_module_activated}
-          {is_module_activated name="PAYWALL"}
-            <div class="row">
-              <div class="col-md-12">
-                <div class="grid simple">
-                  <div class="grid-title">
-                    <h4>
-                      <i class="fa fa-paypal"></i>
-                      {t}Paywall{/t}
-                    </h4>
-                  </div>
-                  <div class="grid-body">
-                    <div class="checkbox">
-                      <input id="only_subscribers" ng-model="article.params.only_subscribers" ng-false-value="'0'" ng-true-value="'1'" type="checkbox" value="1">
-                      <label for="only_subscribers">
-                        {t}Only available for subscribers{/t}
-                      </label>
+                    <div class="form-group no-margin" ng-show="data.extra.subscriptions && data.extra.subscriptions.length > 0">
+                      <div class="checkbox m-b-5" ng-repeat="subscription in data.extra.subscriptions">
+                        <input checklist-model="article.subscriptions" checklist-value="subscription.pk_user_group" id="checkbox-[% $index %]" type="checkbox">
+                        <label for="checkbox-[% $index %]">[% subscription.name %]</label>
+                      </div>
+                      <div class="help m-l-3" ng-if="isHelpEnabled()">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}The content will be fully available only for subscribers in the selected subscriptions{/t}
+                      </div>
                     </div>
                   </div>
                 </div>

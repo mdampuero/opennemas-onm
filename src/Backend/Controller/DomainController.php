@@ -21,7 +21,7 @@ class DomainController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("hasPermission('ROLE_ADMIN')")
+     * @Security("hasPermission('ADMIN')")
      */
     public function listAction()
     {
@@ -40,7 +40,7 @@ class DomainController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("hasPermission('ROLE_ADMIN')")
+     * @Security("hasPermission('ADMIN')")
      */
     public function addAction(Request $request)
     {

@@ -27,19 +27,19 @@
      */
     this.config = {};
 
-    var self = this;
+    var that = this;
 
     // Initializes the advertisement manager.
     var load = function() {
       setTimeout(function() {
-        self.config = window._onmaq;
+        that.config = window._onmaq;
 
-        self.init();
+        that.init();
       }, 1);
     };
 
     // Initialize the advertisement manager on load
-    self.addEventListener('load', load);
+    that.addEventListener('load', load);
   };
 
   /**
@@ -109,7 +109,7 @@
    */
   OAM.prototype.createInterstitial = function(ad) {
     var div = document.createElement('div');
-    var self = this;
+    var that = this;
 
     div.innerHTML = '<div class="interstitial interstitial-visible">' +
       '<div class="interstitial-wrapper">' +
@@ -128,7 +128,7 @@
 
     div.getElementsByClassName('interstitial-close-button')[0]
       .onclick = function(e) {
-        self.close(div, e);
+        that.close(div, e);
       };
 
     var oat     = div.getElementsByClassName('oat')[0];
@@ -140,7 +140,7 @@
     if (ad.timeout > 0) {
       iframe.onload = function() {
         window.setTimeout(function() {
-          self.close(div);
+          that.close(div);
         }, ad.timeout * 1000);
       };
     }
@@ -216,11 +216,11 @@
    * @param {Array} ads The list of advertisements to display.
    */
   OAM.prototype.displayInterstitial = function(ads) {
-    var self = this;
+    var that = this;
 
     // Display an interstitial if present
     var interstitials = ads.filter(function(e) {
-      return e.type.indexOf('interstitial') !== -1 && self.isVisible(e);
+      return e.type.indexOf('interstitial') !== -1 && that.isVisible(e);
     });
 
     if (interstitials.length === 0) {
@@ -251,7 +251,7 @@
    * @param {Array} ads The list of advertisements to display.
    */
   OAM.prototype.displayNormal = function(ads) {
-    var self  = this;
+    var that  = this;
     var slots = document.querySelectorAll('.oat');
 
     // Display normal advertisements
@@ -261,20 +261,20 @@
       var id   = parseInt(slot.getAttribute('data-id'));
 
       var available = ads.filter(function(e) { // eslint-disable-line no-loop-func
-        return self.isVisible(e, type, id);
+        return that.isVisible(e, type, id);
       });
 
       // Remove slot when no advertisement
       if (available.length === 0) {
-        if (!self.config.debug) {
+        if (!that.config.debug) {
           slot.remove();
         }
 
         continue;
       }
 
-      var ad   = self.getAdvertisement(available);
-      var size = self.getSize(ad);
+      var ad   = that.getAdvertisement(available);
+      var size = that.getSize(ad);
       var div  = document.createElement('div');
 
       div.className  += 'oat-container';
@@ -290,11 +290,11 @@
       }
 
       // TODO: Remove when no support sizes in templates
-      if (self.config.device === 'desktop' && slot.getAttribute('data-width')) {
+      if (that.config.device === 'desktop' && slot.getAttribute('data-width')) {
         div.style.width = parseInt(slot.getAttribute('data-width')) + 'px';
       }
 
-      var item = self.createNormal(ad, type, i);
+      var item = that.createNormal(ad, type, i);
 
       // Resize container when content loaded
       var resize = function(e) { // eslint-disable-line no-loop-func
@@ -325,11 +325,11 @@
         }
       };
 
-      self.addEventListener('oat-index-' + i + '-loaded', resize);
+      that.addEventListener('oat-index-' + i + '-loaded', resize);
 
       // Remove DFP slots when empty
       if (ad.format === 'DFP') {
-        self.addEventListener('oat-index-' + i + '-loaded', remove);
+        that.addEventListener('oat-index-' + i + '-loaded', remove);
       }
 
       div.appendChild(item);
@@ -361,7 +361,7 @@
    *   Requests the list of advertisements to the server.
    */
   OAM.prototype.getAdvertisements = function() {
-    var self = this;
+    var that = this;
     var req  = this.xhr();
 
     var url = this.normalize(this.config.url) +
@@ -377,8 +377,8 @@
 
       var ads = JSON.parse(req.response);
 
-      self.displayNormal(ads);
-      self.displayInterstitial(ads);
+      that.displayNormal(ads);
+      that.displayInterstitial(ads);
     };
 
     req.send();
@@ -404,7 +404,7 @@
     });
 
     if (cookies.length === 0) {
-      return;
+      return null;
     }
 
     return cookies[0].trim().replace(name + '=', '');
@@ -462,7 +462,7 @@
    *   Displays interstitials already present in the HTML document.
    */
   OAM.prototype.hideInterstitials = function() {
-    var self          = this;
+    var that          = this;
     var now           = new Date();
     var interstitials = document.getElementsByClassName('interstitial');
 
@@ -490,14 +490,14 @@
 
         interstitial.getElementsByClassName('interstitial-close-button')[0]
           .onclick = function(e) { // eslint-disable-line no-loop-func
-            self.close(interstitial, e);
+            that.close(interstitial, e);
           };
 
         interstitial.className = interstitial.className +
           ' interstitial-visible';
 
         window.setTimeout(function() { // eslint-disable-line no-loop-func
-          self.close(interstitial);
+          that.close(interstitial);
         }, timeout * 1000);
       }
 
@@ -514,6 +514,10 @@
    */
   OAM.prototype.init = function() {
     this.user = this.getUser();
+
+    if (this.user && !this.user.advertisements) {
+      return;
+    }
 
     if (this.config.slots.length > 0) {
       this.getAdvertisements();
@@ -616,12 +620,12 @@
       // Internet Explorer Browsers
       try {
         return new ActiveXObject('Msxml2.XMLHTTP');
-      } catch (e) {
+      } catch (f) {
         try {
           return new ActiveXObject('Microsoft.XMLHTTP');
-        } catch (e) {
+        } catch (g) {
           // Something went wrong
-          throw 'Unable to create the request';
+          throw new Error('Unable to create the request');
         }
       }
     }

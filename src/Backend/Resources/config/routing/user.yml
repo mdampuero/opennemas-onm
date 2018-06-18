@@ -5,7 +5,7 @@ backend_user_create:
         expose: true
 
 backend_user_show:
-    path:     /users/{id}/show
+    path:     /users/{id}
     defaults: { _controller  : BackendBundle:User:show }
     options:
         expose: true

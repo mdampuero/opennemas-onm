@@ -153,9 +153,14 @@ class BlogsController extends Controller
             return new RedirectResponse($this->generateUrl('frontend_blog_frontpage'));
         }
 
+        $author = $this->get('user_repository')->findOneBy("username='{$slug}'");
+        if (empty($author)) {
+            throw new ResourceNotFoundException();
+        }
+
         // Setup templating cache layer
         $this->view->setConfig('opinion');
-        $cacheID = $this->view->getCacheId('frontpage', 'author', $slug, $page);
+        $cacheID = $this->view->getCacheId('frontpage', 'author', $author->id, $page);
 
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/blog_author_index.tpl', $cacheID)
@@ -163,72 +168,67 @@ class BlogsController extends Controller
             $epp = $this->get('setting_repository')->get('items_per_page', 10);
             $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
-            $ur     = $this->get('user_repository');
-            $author = $ur->findOneBy("username='{$slug}'", 'ID DESC');
-            if (!empty($author)) {
-                $author->slug  = $author->username;
-                $author->photo = $this->get('entity_repository')->find('Photo', $author->avatar_img_id);
-                $author->getMeta();
+            $author->slug  = $author->username;
+            $author->photo = $this->get('entity_repository')->find('Photo', $author->avatar_img_id);
+            $author->getMeta();
 
-                $filter = 'opinions.type_opinion=0 AND opinions.fk_author=' . $author->id;
-                  // generate pagination params
+            $filter = 'opinions.type_opinion=0 AND opinions.fk_author=' . $author->id;
+            // generate pagination params
+            $_limit = ' LIMIT ' . (($page - 1) * $epp) . ', ' . ($epp);
 
-                $_limit = ' LIMIT ' . (($page - 1) * $epp) . ', ' . ($epp);
+            $this->cm = new \ContentManager();
 
-                $this->cm = new \ContentManager();
+            // Get the number of total opinions for this author for pagination purpouses
+            $countItems = $this->cm->count(
+                'Opinion',
+                $filter
+                . ' AND contents.content_status=1 '
+            );
 
-                // Get the number of total opinions for this author for pagination purpouses
-                $countItems = $this->cm->count(
-                    'Opinion',
-                    $filter
-                    . ' AND contents.content_status=1 '
-                );
+            // Get the list articles for this author
+            $blogs = $this->cm->getOpinionArticlesWithAuthorInfo(
+                $filter
+                . ' AND contents.content_status=1 AND starttime <= NOW()',
+                'ORDER BY starttime DESC ' . $_limit
+            );
 
-                // Get the list articles for this author
-                $blogs = $this->cm->getOpinionArticlesWithAuthorInfo(
-                    $filter
-                    . ' AND contents.content_status=1 AND starttime <= NOW()',
-                    'ORDER BY starttime DESC ' . $_limit
-                );
-
-                if (!empty($blogs)) {
-                    foreach ($blogs as &$blog) {
-                        $blog = $this->get('entity_repository')->find('Opinion', $blog['id']);
-                        if (isset($blog->img1) && ($blog->img1 > 0)) {
-                            $blog->img1 = $this->get('entity_repository')->find('Photo', $blog->img1);
-                        }
-
-                        // Overload blog object with more information
-                        $blog->pk_author        = $author->id;
-                        $blog->author_name_slug = $author->slug;
-
-                        // Generate author uri
-                        $blog->author_uri = $this->generateUrl(
-                            'frontend_blog_author_frontpage',
-                            [
-                                'author_slug' => $blog->author_name_slug,
-                            ]
-                        );
+            if (!empty($blogs)) {
+                foreach ($blogs as &$blog) {
+                    $blog = $this->get('entity_repository')->find('Opinion', $blog['id']);
+                    if (isset($blog->img1) && ($blog->img1 > 0)) {
+                        $blog->img1 = $this->get('entity_repository')->find('Photo', $blog->img1);
                     }
+
+                    // Overload blog object with more information
+                    $blog->pk_author        = $author->id;
+                    $blog->author_name_slug = $author->slug;
+
+                    // Generate author uri
+                    $blog->author_uri = $this->generateUrl(
+                        'frontend_blog_author_frontpage',
+                        [
+                            'author_slug' => $blog->author_name_slug,
+                        ]
+                    );
                 }
-
-                $pagination = $this->get('paginator')->get([
-                    'directional' => true,
-                    'epp'         => $epp,
-                    'total'       => $countItems,
-                    'route'       => [
-                        'name'   => 'frontend_blog_author_frontpage',
-                        'params' => [ 'author_slug' => $author->slug ]
-                    ],
-                ]);
-
-                $this->view->assign([
-                    'pagination' => $pagination,
-                    'blogs'      => $blogs,
-                    'author'     => $author,
-                    'page'       => $page,
-                ]);
             }
+
+            $pagination = $this->get('paginator')->get([
+                'directional' => true,
+                'epp'         => $epp,
+                'total'       => $countItems,
+                'route'       => [
+                    'name'   => 'frontend_blog_author_frontpage',
+                    'params' => [ 'author_slug' => $author->slug ]
+                ],
+            ]);
+
+            $this->view->assign([
+                'pagination' => $pagination,
+                'blogs'      => $blogs,
+                'author'     => $author,
+                'page'       => $page,
+            ]);
         } // End if isCached
 
         list($positions, $advertisements) = $this->getAds();

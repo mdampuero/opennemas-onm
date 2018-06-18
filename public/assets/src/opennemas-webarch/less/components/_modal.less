@@ -76,6 +76,10 @@
   visibility: hidden;
 }
 
+.modal-backdrop-dark {
+  background: rgba(0, 0, 0, 0.5);
+}
+
 .modal-relative-open {
   overflow: visible;
 }
@@ -96,6 +100,18 @@
 .modal-top {
   .modal-dialog {
     margin-top: 90px;
+  }
+}
+
+.modal.fade.modal-photo-editor  {
+  .modal-dialog {
+    display: inline-block;
+    width: 800px;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(50%, 50%); /* IE 9 */
+    transform: translate(-50%, -50%);
+    transition: transform 0;
   }
 }
 

@@ -478,66 +478,6 @@ admin_search_content_provider:
     defaults: { _controller  : BackendBundle:Search:contentProvider }
 
 # Keywork controller routes
-admin_newsletters:
-    path:     /newsletters
-    defaults: { _controller  : BackendBundle:Newsletter:list }
-
-admin_newsletter_create:
-    path:     /newsletter/create
-    defaults: { _controller  : BackendBundle:Newsletter:create }
-
-admin_newsletter_show_contents:
-    path:     /newsletter/{id}/contents
-    defaults: { _controller  : BackendBundle:Newsletter:showContents }
-    options:
-        expose: true
-
-admin_newsletter_save_contents:
-    path:     /newsletter/save-contents
-    defaults: { _controller  : BackendBundle:Newsletter:saveContents }
-    methods:  [POST]
-
-admin_newsletter_preview:
-    path:     /newsletter/{id}/preview
-    defaults: { _controller  : BackendBundle:Newsletter:preview }
-    options:
-        expose: true
-
-admin_newsletter_save_html:
-    path:     /newsletter/{id}/save-html
-    defaults: { _controller  : BackendBundle:Newsletter:saveHtmlContent }
-
-admin_newsletter_pick_recipients:
-    path:     /newsletter/{id}/pick-recipients
-    defaults: { _controller  : BackendBundle:Newsletter:pickRecipients }
-
-admin_newsletter_send:
-    path:     /newsletter/{id}/send
-    defaults: { _controller  : BackendBundle:Newsletter:send }
-
-admin_newsletter_config:
-    path:     /newsletters/config
-    defaults: { _controller  : BackendBundle:Newsletter:config }
-
-admin_newsletter_subscriptors:
-    path:     /newsletters/subscriptors
-    defaults: { _controller  : BackendBundle:NewsletterSubscribers:list }
-
-admin_newsletter_subscriptor_create:
-    path:     /newsletters/subscriptor/create
-    defaults: { _controller  : BackendBundle:NewsletterSubscribers:create }
-
-admin_newsletter_subscriptor_show:
-    path:     /newsletters/subscriptor/{id}/show
-    defaults: { _controller  : BackendBundle:NewsletterSubscribers:show }
-    options:
-        expose: true
-
-admin_newsletter_subscriptor_update:
-    path:     /newsletters/subscriptor/{id}/update
-    defaults: { _controller  : BackendBundle:NewsletterSubscribers:update }
-
-# Keywork controller routes
 admin_keywords:
     path:     /keywords
     defaults: { _controller  : BackendBundle:Keywords:list }
@@ -670,67 +610,6 @@ admin_opinions_content_provider_related:
 admin_opinions_config:
     path:     /opinions/config
     defaults: { _controller  : BackendBundle:Opinions:config }
-
-# Comments controller routes
-admin_comments:
-    path:     /comments
-    defaults: { _controller  : BackendBundle:Comments:default }
-
-admin_comments_select:
-    path:     /comments/select
-    defaults: { _controller  : BackendBundle:Comments:select }
-
-admin_comments_list:
-    path:     /comments/list
-    defaults: { _controller  : BackendBundle:Comments:list }
-
-admin_comments_config:
-    path:     /comments/config
-    defaults: { _controller  : BackendBundle:Comments:config }
-
-admin_comment_show:
-    path:     /comments/{id}/show
-    defaults: { _controller  : BackendBundle:Comments:show }
-    options:
-        expose: true
-
-admin_comments_update:
-    path:     /comments/{id}/update
-    defaults: { _controller  : BackendBundle:Comments:update }
-
-admin_comments_delete:
-    path:     /comments/{id}/delete
-    defaults: { _controller  : BackendBundle:Comments:delete }
-
-admin_comments_toggle_status:
-    path:     /comments/{id}/toggle-status
-    defaults: { _controller  : BackendBundle:Comments:toggleStatus }
-
-admin_comments_batch_status:
-    path:     /comments/batch-status
-    defaults: { _controller  : BackendBundle:Comments:batchStatus }
-
-admin_comments_batch_delete:
-    path:     /comments/batch-delete
-    defaults: { _controller  : BackendBundle:Comments:batchDelete }
-
-# Comments by Disqus controller routes
-admin_comments_disqus:
-    path:     /comments/disqus
-    defaults: { _controller  : BackendBundle:Comments:defaultDisqus }
-
-admin_comments_disqus_config:
-    path:     /comments/disqus/config
-    defaults: { _controller  : BackendBundle:Comments:configDisqus }
-
-# Comments by Facebook controller routes
-admin_comments_facebook:
-    path:     /comments/facebook
-    defaults: { _controller  : BackendBundle:Comments:defaultFacebook }
-
-admin_comments_facebook_config:
-    path:     /comments/facebook/config
-    defaults: { _controller  : BackendBundle:Comments:configFacebook }
 
 # Trash controller routes
 admin_trash:
@@ -893,9 +772,17 @@ backend_category:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/category.yml'
 
+backend_comment:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/comment.yml'
+
 backend_domain:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/domain.yml'
+
+backend_newsletter:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/newsletter.yml'
 
 backend_news_agency_server:
     prefix:   /

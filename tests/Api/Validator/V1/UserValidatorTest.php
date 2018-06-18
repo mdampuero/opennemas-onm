@@ -26,66 +26,25 @@ class UserValidatorTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->security = $this->getMockBuilder('Security' . uniqid())
-            ->setMethods([ 'hasPermission' ])
-            ->getMock();
-
-        $this->container->expects($this->any())->method('get')
-            ->with('core.security')->willReturn($this->security);
-
         $this->validator = new UserValidator($this->container);
     }
 
     /**
      * Tests validate when type changed and valid type provided.
      */
-    public function testValidateWhenChanges()
+    public function testValidateWhenValid()
     {
+        $this->validator->validate(new Entity([]));
         $this->validator->validate(new Entity([ 'type' => 0 ]));
     }
 
     /**
      * Tests validate when there are no changes in type.
-     */
-    public function testValidateWhenNoChanges()
-    {
-        $item = new Entity([ 'type' => 0 ]);
-        $item->refresh();
-
-        $this->validator->validate($item);
-    }
-
-    /**
-     * Tests validate when valid type provided.
      *
      * @expectedException Api\Exception\InvalidArgumentException
      */
-    public function testValidateWhenInvalidTypeForNonMasters()
-    {
-        $this->security->expects($this->once())->method('hasPermission')
-            ->willReturn(false);
-
-        $this->validator->validate(new Entity([ 'type' => 2 ]));
-    }
-
-    /**
-     * Tests validate when valid type provided.
-     *
-     * @expectedException Api\Exception\InvalidArgumentException
-     */
-    public function testValidateWhenInvalidTypeForMasters()
+    public function testValidateWhenInvalid()
     {
         $this->validator->validate(new Entity([ 'type' => 3 ]));
-    }
-
-    /**
-     * Tests validate when valid type only for master users provided.
-     */
-    public function testValidateWhenValidTypeForMaster()
-    {
-        $this->security->expects($this->once())->method('hasPermission')
-            ->willReturn(true);
-
-        $this->validator->validate(new Entity([ 'type' => 2 ]));
     }
 }

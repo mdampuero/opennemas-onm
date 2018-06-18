@@ -67,6 +67,16 @@ class GlobalVariables implements \ArrayAccess
     }
 
     /**
+     * Returns the service container.
+     *
+     * @return ServiceContainer The service container.
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
      * Returns the endpoint name where the current request has been handled.
      *
      * @return string The endpoint name.
@@ -124,6 +134,26 @@ class GlobalVariables implements \ArrayAccess
     public function getRoute()
     {
         return $this->route;
+    }
+
+    /**
+     * Returns the security service.
+     *
+     * @return Locale The locale service.
+     */
+    public function getSecurity()
+    {
+        return $this->container->get('core.security');
+    }
+
+    /**
+     * Returns the subscriptions helper.
+     *
+     * @return SubscriptionHelper The subscription helper.
+     */
+    public function getSubscription()
+    {
+        return $this->container->get('core.helper.subscription');
     }
 
     /**
