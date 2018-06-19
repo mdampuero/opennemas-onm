@@ -169,10 +169,11 @@ abstract class AbstractCache implements CacheInterface
         if (is_array($id)) {
             $values = [];
             foreach ($id as $key => $value) {
-                $values[$this->getNamespacedId($key)] = $value;
+                $this->mru[$this->getNamespacedId($key)] = $value;
+                $values[$this->getNamespacedId($key)]    = is_string($value) ?
+                    $value :
+                    serialize($value);
             }
-
-            $this->mru = array_merge($this->mru, $values);
 
             $this->buffer[] = [
                 'method' => 'saveMulti',
@@ -190,8 +191,10 @@ abstract class AbstractCache implements CacheInterface
             'params' => [ 'ids' => $id, 'values' => $data ],
             'time'   => microtime(true)
         ];
-
-        return $this->doSave($this->getNamespacedId($id), $data, $lifeTime);
+        $dataAux        = is_string($data) ?
+                    $data :
+                    serialize($data);
+        return $this->doSave($this->getNamespacedId($id), $dataAux, $lifeTime);
     }
 
     /**
@@ -206,11 +209,11 @@ abstract class AbstractCache implements CacheInterface
         if (empty($namespace)) {
             $id = $this->getNamespacedId($id);
         } else {
-            $id = $namespace.'_'.$id;
+            $id = $namespace . '_' . $id;
         }
 
         if (strpos($id, '*') !== false) {
-            return $this->deleteByRegex('/'.str_replace('*', '.*', $id).'/');
+            return $this->deleteByRegex('/' . str_replace('*', '.*', $id) . '/');
         }
 
         return $this->doDelete($id);
@@ -240,7 +243,7 @@ abstract class AbstractCache implements CacheInterface
      */
     public function deleteByRegex($regex)
     {
-        $deleted = array();
+        $deleted = [];
 
         $ids = $this->getIds();
 
@@ -262,10 +265,10 @@ abstract class AbstractCache implements CacheInterface
      */
     public function deleteByPrefix($prefix)
     {
-        $deleted = array();
+        $deleted = [];
 
         $prefix = $this->getNamespacedId($prefix);
-        $ids = $this->getIds();
+        $ids    = $this->getIds();
 
         foreach ($ids as $id) {
             if (strpos($id, $prefix) === 0) {
@@ -285,7 +288,7 @@ abstract class AbstractCache implements CacheInterface
      */
     public function deleteBySuffix($suffix)
     {
-        $deleted = array();
+        $deleted = [];
 
         $ids = $this->getIds();
 
@@ -309,11 +312,11 @@ abstract class AbstractCache implements CacheInterface
     {
         if (is_array($id)) {
             return array_map(function ($a) {
-                return $this->namespace . '_'. $a;
+                return $this->namespace . '_' . $a;
             }, $id);
         }
 
-        return $this->namespace . '_'. $id;
+        return $this->namespace . '_' . $id;
     }
 
     /**
@@ -356,7 +359,7 @@ abstract class AbstractCache implements CacheInterface
      * Puts data into the cache.
      *
      * @param string $id       The cache id.
-     * @param string $data     The cache entry/data.
+     * @param mixed  $data     The cache entry/data.
      * @param int    $lifeTime The lifetime. If != false, sets a specific
      *                         lifetime for this cache entry (null => infinite
      *                         lifeTime).

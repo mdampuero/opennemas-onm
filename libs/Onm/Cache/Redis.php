@@ -39,7 +39,7 @@ class Redis extends AbstractCache
                 $redis->auth($options['auth']);
             }
             if (array_key_exists('database', $options)) {
-               $redis->select($options['database']);
+                $redis->select($options['database']);
             }
             $this->setRedis($redis);
         }
@@ -74,7 +74,7 @@ class Redis extends AbstractCache
     public function getIds()
     {
         // TODO: implement
-        $keys = array();
+        $keys = [];
 
         return $keys;
     }
@@ -90,19 +90,20 @@ class Redis extends AbstractCache
             $newData = [];
 
             for ($i = 0; $i < count($id); $i++) {
-                if ($data[$i] !== false) {
-                    $dataUnserialized = @unserialize($data[$i]);
-                    if ($dataUnserialized !== false || $data[$i] === 'b:0;') {
-                        $newData[$id[$i]] = $dataUnserialized;
-                    } else {
-                        $newData[$id[$i]] = $data[$i];
-                    }
+                if ($data[$i] === false) {
+                    continue;
+                }
+                $dataUnserialized = @unserialize($data[$i]);
+                if ($dataUnserialized !== false || $data[$i] === 'b:0;') {
+                    $newData[$id[$i]] = $dataUnserialized;
+                } else {
+                    $newData[$id[$i]] = $data[$i];
                 }
             }
 
             return $newData;
         } else {
-            $data = $this->getRedis()->get($id);
+            $data             = $this->getRedis()->get($id);
             $dataUnserialized = @unserialize($data);
 
             if ($dataUnserialized !== false || $data === 'b:0;') {
@@ -111,7 +112,6 @@ class Redis extends AbstractCache
                 return $data;
             }
         }
-
     }
 
     /**
@@ -137,9 +137,6 @@ class Redis extends AbstractCache
                 }
             }
         } else {
-            if (!is_string($data)) {
-                $data = serialize($data);
-            }
             $saved = $this->getRedis()->set($id, $data);
 
             // Set the expire time for this key if valid lifeTime

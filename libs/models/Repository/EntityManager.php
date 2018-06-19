@@ -471,6 +471,7 @@ class EntityManager extends BaseManager
             }
             $contentsForCache[$cacheKey] = $contents[$cacheKey];
         }
+
         return $contentsForCache;
     }
 }
