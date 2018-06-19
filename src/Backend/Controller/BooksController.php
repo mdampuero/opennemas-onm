@@ -173,7 +173,9 @@ class BooksController extends Controller
                 _('Book created successfully.')
             );
 
-            return $this->render('book/new.tpl', [ 'book' => $book ]);
+            return $this->redirect(
+                $this->generateUrl('admin_book_show', [ 'id' => $id ])
+            );
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -181,7 +183,13 @@ class BooksController extends Controller
             );
         }
 
-        return $this->render('book/new.tpl');
+        return $this->render(
+            'book/new.tpl',
+            [
+                'locale' => $this->get('core.locale')->getLocale('frontend'),
+                'tags'   => []
+            ]
+        );
     }
 
     /**
