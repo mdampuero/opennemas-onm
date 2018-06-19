@@ -179,6 +179,11 @@ class NewsletterSenderHelper
         try {
             $endpoint = $this->actOnFactory->getEndpoint('email_campaign');
 
+            $settings = $this->sm->get([
+                'site_name',
+                'newsletter_maillist'
+            ]);
+
             $id = $endpoint->createMessage([
                 'subject'  => $newsletter->title,
                 'title'    => $newsletter->title,
@@ -186,8 +191,8 @@ class NewsletterSenderHelper
             ]);
 
             $endpoint->sendMessage($id, [
-                'sendername'  => 'Developers Opennemas',
-                'senderemail' => 'developers@opennemas.com',
+                'sendername'  => $settings['site_name'],
+                'senderemail' => $settings['newsletter_maillist'],
                 'subject'     => $newsletter->title,
                 'when'        => time(),
                 'sendtoids'   => $marketingList->id
