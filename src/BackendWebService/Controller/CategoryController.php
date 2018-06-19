@@ -46,7 +46,7 @@ class CategoryController extends ContentController
             'inmenu'              => $request->request->getDigits('inmenu', 0),
             'subcategory'         => $request->request->getDigits('subcategory', 0),
             'internal_category'   => $request->request->getDigits('internal_category'),
-            'logo_path'           => $request->request->filter('logoPath', '', FILTER_SANITIZE_STRING),
+            'logo_path'           => $request->request->filter('logo_path', '', FILTER_SANITIZE_STRING),
             'color'               => $request->request->filter('color', '', FILTER_SANITIZE_STRING),
             'params'  => [
                 'inrss'           => $inrss,
@@ -71,7 +71,7 @@ class CategoryController extends ContentController
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $logoPath = '';
+        // Handle category logo
         if (!empty($_FILES) && isset($_FILES['logo_path'])) {
             $nameFile  = $_FILES['logo_path']['name'];
             $uploadDir = MEDIA_PATH . '/sections/';
@@ -82,6 +82,8 @@ class CategoryController extends ContentController
             if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploadDir . $nameFile)) {
                 $data['logo_path'] = $nameFile;
             }
+        } else {
+            $data['logo_path'] = '';
         }
 
         $category   = null;
@@ -91,9 +93,6 @@ class CategoryController extends ContentController
             $execMethod = 'create';
         } else {
             $category = new \ContentCategory($data['id']);
-            if (empty($data['logo_path'])) {
-                $data['logo_path'] = '1';
-            }
         }
 
         if ($category->{$execMethod}($data)) {
