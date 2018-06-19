@@ -4,8 +4,12 @@
 @nightmode-border-color-dark: #333;
 
 @nightmode-text-color-dark: #999;
+@nightmode-text-color-light: White;
+
+@nightmode-button-primary-background-color: #376092;
 
 .night-mode {
+  background-color: @nightmode-background-color-dark !important;
     table, thead, tbody,
     .table-wrapper {
         border-color: @nightmode-background-color-dark;
@@ -105,18 +109,31 @@
     }
 
     .bootstrap-tagsinput input,
+    .btn,
     .btn-white, .btn-default, .bootstrap-tagsinput,
     .form-control,
-    .input-group .input-group-addon input,
     .pagination-controls input,
     .search-input .add-on,
     .search-input input,
     .welcome-page .merchant .btn,
     .welcome-page .merchant .thumbnail,
     textarea, select, .checkbox label:before {
-        background-color: @nightmode-background-color-dark;
-        border-color: @nightmode-background-color-dark;
-        color: @nightmode-text-color-dark;
+      background-color: @nightmode-background-color-dark !important;
+      border-color: @nightmode-background-color-dark !important;
+      color: @nightmode-text-color-dark !important;
+    }
+    .btn.btn-primary {
+      background-color: @nightmode-button-primary-background-color !important;
+      color: @nightmode-text-color-light !important;
+    }
+
+    .input-group .input-group-addon {
+      background-color: @nightmode-background-color-dark !important;
+      color: @nightmode-text-color-dark !important;
+    }
+    .thumbnail-placeholder .img-thumbnail,
+    .thumbnail-empty {
+        background-color: @nightmode-background-color-dark !important;
     }
 
     button.btn.btn-white {
