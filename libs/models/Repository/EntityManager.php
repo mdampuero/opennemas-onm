@@ -469,7 +469,7 @@ class EntityManager extends BaseManager
             } else {
                 $contents[$cacheKey]->tag_ids = [];
             }
-            $contentsForCache[$cacheKey] = serialize($contents[$cacheKey]);
+            $contentsForCache[$cacheKey] = $contents[$cacheKey];
         }
         return $contentsForCache;
     }
