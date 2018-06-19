@@ -128,7 +128,13 @@ class Redis extends AbstractCache
     protected function doSave($id, $data = null, $lifeTime = 0)
     {
         if (is_array($id)) {
-            $saved = $this->getRedis()->mSet($id);
+            $values = [];
+            foreach ($id as $key => $value) {
+                $values[$key] = is_string($value) ?
+                    $value :
+                    serialize($value);
+            }
+            $saved = $this->getRedis()->mSet($values);
 
             // Set the expire time for this key if valid lifeTime
             if ($lifeTime > 0) {
@@ -137,7 +143,10 @@ class Redis extends AbstractCache
                 }
             }
         } else {
-            $saved = $this->getRedis()->set($id, $data);
+            $dataAux = is_string($data) ?
+                    $data :
+                    serialize($data);
+            $saved   = $this->getRedis()->set($id, $dataAux);
 
             // Set the expire time for this key if valid lifeTime
             if ($lifeTime > 0) {

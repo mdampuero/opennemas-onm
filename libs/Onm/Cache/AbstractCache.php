@@ -170,9 +170,6 @@ abstract class AbstractCache implements CacheInterface
             $values = [];
             foreach ($id as $key => $value) {
                 $this->mru[$this->getNamespacedId($key)] = $value;
-                $values[$this->getNamespacedId($key)]    = is_string($value) ?
-                    $value :
-                    serialize($value);
             }
 
             $this->buffer[] = [
@@ -191,10 +188,7 @@ abstract class AbstractCache implements CacheInterface
             'params' => [ 'ids' => $id, 'values' => $data ],
             'time'   => microtime(true)
         ];
-        $dataAux        = is_string($data) ?
-                    $data :
-                    serialize($data);
-        return $this->doSave($this->getNamespacedId($id), $dataAux, $lifeTime);
+        return $this->doSave($this->getNamespacedId($id), $data, $lifeTime);
     }
 
     /**
