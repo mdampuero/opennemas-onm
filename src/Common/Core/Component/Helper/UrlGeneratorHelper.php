@@ -19,6 +19,13 @@ class UrlGeneratorHelper
     protected $container;
 
     /**
+     * The instance to generate URLs for.
+     *
+     * @var Instance
+     */
+    protected $instance;
+
+    /**
      * Initializes the UrlGeneratorHelper.
      *
      * @param ServiceContainer $container The service container.
@@ -26,33 +33,7 @@ class UrlGeneratorHelper
     public function __construct($container)
     {
         $this->container = $container;
-    }
-
-    /**
-     * Returns a generated uri for a content type given some params.
-     *
-     * @param string $content The content to generate the url.
-     * @param array  $params  The list of params required to generate the URI.
-     *
-     * @return string The generated URI.
-     */
-    public function generate($content, $params = [])
-    {
-        $absolute = (is_array($params)
-            && array_key_exists('absolute', $params)
-            && $params['absolute'] === true);
-
-        $url = '';
-        if ($absolute) {
-            $url = $this->container->get('request_stack')
-                ->getCurrentRequest()->getSchemeAndHttpHost();
-        }
-
-        if (!empty($content->externalUri)) {
-            return $content->externalUri;
-        }
-
-        return $url . '/' . $this->getUriForContent($content);
+        $this->instance  = $this->container->get('core.instance');
     }
 
     /**
@@ -81,32 +62,86 @@ class UrlGeneratorHelper
     /**
      * Returns a generated uri for a content type given some params.
      *
-     * @param string $contentType The content type to generate the URL.
-     * @param array  $params      The list of parameters to generate the URL.
+     * @param string $content The content to generate the url.
+     * @param array  $params  The list of params required to generate the URI.
      *
-     * @return string The generated URL.
+     * @return string The generated URI.
      */
-    private function generateUriFromConfig($contentType, $params = [])
+    public function generate($content, $params = [])
     {
-        if (!isset($contentType)) {
-            return;
+        if (!empty($content->externalUri)) {
+            return $content->externalUri;
         }
 
-        // Gets the URL template for the given contentType
-        $config = $this->getConfig();
-        if (!array_key_exists($contentType, $config)) {
-            return '';
+        $url = '';
+
+        if (is_array($params)
+            && array_key_exists('absolute', $params)
+            && $params['absolute']
+        ) {
+            // Absolute URL basing on the current instance
+            $url = '//' . $this->instance->getMainDomain();
+
+            $request = $this->container->get('request_stack')
+                ->getCurrentRequest();
+
+            if (!empty($request)) {
+                // Absolute URL basing on the current request
+                $url = $request->getSchemeAndHttpHost();
+            }
         }
 
-        $keys = $values = [];
-        foreach ($params as $tokenKey => $tokenValue) {
-            $keys[]   = "@_" . strtoupper($tokenKey) . "_@";
-            $values[] = $tokenValue;
-        }
+        return $url . '/' . $this->getUriForContent($content);
+    }
 
-        $uriTemplate = $config[$contentType];
+    /**
+     * Changes the instance to force URL generation for the specified instance.
+     *
+     * @param Instance $sintance The instance.
+     *
+     * @return UrlGeneratorHelper The current helper.
+     */
+    public function setInstance($instance)
+    {
+        $this->instance = $instance;
 
-        return preg_replace($keys, $values, $uriTemplate);
+        return $this;
+    }
+
+    /**
+     * Returns the URI for an attachment.
+     *
+     * @param Attachment $content The attachment object.
+     *
+     * @return string The attachment URI.
+     */
+    protected function getUriForAttachment($content)
+    {
+        $pathFile = trim(rtrim($content->path, DS), DS);
+
+        return implode(DS, [
+            'media',
+            $this->instance->internal_name,
+            FILE_DIR,
+            $pathFile
+        ]);
+    }
+
+    /**
+     * Returns the URI for an article.
+     *
+     * @param Article $article The article object.
+     *
+     * @return string The article URI.
+     */
+    protected function getUriForArticle($content)
+    {
+        return $this->generateUriFromConfig('article', [
+            'id'       => sprintf('%06d', $content->id),
+            'date'     => date('YmdHis', strtotime($content->created)),
+            'category' => $content->category_name,
+            'slug'     => urlencode($content->slug),
+        ]);
     }
 
     /**
@@ -116,7 +151,7 @@ class UrlGeneratorHelper
      *
      * @return string The generated URI.
      */
-    private function getUriForContent($content)
+    protected function getUriForContent($content)
     {
         // If the content has a bodyLink parameter then that it is the final uri.
         if (isset($content->params['bodyLink']) && !empty($content->params['bodyLink'])) {
@@ -129,37 +164,28 @@ class UrlGeneratorHelper
             return $this->{$methodName}($content);
         }
 
-        return $this->getUriForGeneralContent($content);
-    }
-
-    /**
-     * Returns the URI for an attachment.
-     *
-     * @param Attachment $content The attachment object.
-     *
-     * @return string The attachment URI.
-     */
-    private function getUriForAttachment($content)
-    {
-        $pathFile = trim(rtrim($content->path, DS), DS);
-
-        return implode(DS, ["media", INSTANCE_UNIQUE_NAME, FILE_DIR, $pathFile]);
-    }
-
-    /**
-     * Returns the URI for an article.
-     *
-     * @param Article $article The article object.
-     *
-     * @return string The article URI.
-     */
-    private function getUriForArticle($content)
-    {
-        return $this->generateUriFromConfig('article', [
+        return $this->generateUriFromConfig(strtolower($content->content_type_name), [
             'id'       => sprintf('%06d', $content->id),
             'date'     => date('YmdHis', strtotime($content->created)),
-            'category' => $content->category_name,
+            'category' => urlencode($content->category_name),
             'slug'     => urlencode($content->slug),
+        ]);
+    }
+
+    /**
+     * Returns the URI for a letter.
+     *
+     * @param Letter $content The letter object.
+     *
+     * @return string The letter URI.
+     */
+    protected function getUriForLetter($content)
+    {
+        return $this->generateUriFromConfig('letter', [
+            'id'       => sprintf('%06d', $content->id),
+            'date'     => date('YmdHis', strtotime($content->created)),
+            'slug'     => urlencode($content->slug),
+            'category' => urlencode(\Onm\StringUtils::generateSlug($content->author)),
         ]);
     }
 
@@ -170,7 +196,7 @@ class UrlGeneratorHelper
      *
      * @return string The opinion URI.
      */
-    private function getUriForOpinion($content)
+    protected function getUriForOpinion($content)
     {
         $type = 'opinion';
 
@@ -212,52 +238,54 @@ class UrlGeneratorHelper
     }
 
     /**
-     * Returns the URI for a letter.
-     *
-     * @param Letter $content The letter object.
-     *
-     * @return string The letter URI.
-     */
-    private function getUriForLetter($content)
-    {
-        return $this->generateUriFromConfig('letter', [
-            'id'       => sprintf('%06d', $content->id),
-            'date'     => date('YmdHis', strtotime($content->created)),
-            'slug'     => urlencode($content->slug),
-            'category' => urlencode(\Onm\StringUtils::generateSlug($content->author)),
-        ]);
-    }
-
-    /**
      * Returns the url for a photo.
      *
      * @param Photo $content The photo object.
      *
      * @return string The photo URI.
      */
-    private function getUriForPhoto($content)
+    protected function getUriForPhoto($content)
     {
         $pathFile    = trim(rtrim($content->path_file, DS), DS);
         $contentName = trim(rtrim($content->name, DS), DS);
 
-        return implode(DS, ["media", INSTANCE_UNIQUE_NAME, 'images', $pathFile, $contentName]);
+        return implode(DS, [
+            "media",
+            $this->instance->internal_name,
+            'images',
+            $pathFile,
+            $contentName
+        ]);
     }
 
     /**
-     * Returns the URI for a content.
+     * Returns a generated uri for a content type given some params.
      *
-     * @param Content $content The content object.
+     * @param string $contentType The content type to generate the URL.
+     * @param array  $params      The list of parameters to generate the URL.
      *
-     * @return string The content URI.
+     * @return string The generated URL.
      */
-    private function getUriForGeneralContent($content)
+    protected function generateUriFromConfig($contentType, $params = [])
     {
-        // The rest of content types follow a common pattern
-        return $this->generateUriFromConfig(strtolower($content->content_type_name), [
-            'id'       => sprintf('%06d', $content->id),
-            'date'     => date('YmdHis', strtotime($content->created)),
-            'category' => urlencode($content->category_name),
-            'slug'     => urlencode($content->slug),
-        ]);
+        if (!isset($contentType)) {
+            return;
+        }
+
+        // Gets the URL template for the given contentType
+        $config = $this->getConfig();
+        if (!array_key_exists($contentType, $config)) {
+            return '';
+        }
+
+        $keys = $values = [];
+        foreach ($params as $tokenKey => $tokenValue) {
+            $keys[]   = "@_" . strtoupper($tokenKey) . "_@";
+            $values[] = $tokenValue;
+        }
+
+        $uriTemplate = $config[$contentType];
+
+        return preg_replace($keys, $values, $uriTemplate);
     }
 }
