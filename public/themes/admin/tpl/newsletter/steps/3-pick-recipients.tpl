@@ -122,16 +122,16 @@
                 </div>
               </div>
 
-              <div class="accordion-option">
-                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded == 'lists' }" ng-click="expanded = 'lists'">
+              <div class="accordion-option" ng-if="newsletter_handler == 'acton'">
+                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded == 'acton' }" ng-click="expanded = 'acton'">
                   <i class="fa fa-address-book m-r-10"></i>{t}Act-On marketing lists{/t}
-                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded == 'lists' }"></i>
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded == 'acton' }"></i>
                   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="expanded != 'lists'">
                     <span>[% (source.items|filter:{ type: 'acton' }).length %]</span>
                   </span>
                 </div>
 
-                <div class="grid-collapse-body clearfix ng-cloak" ng-class="{ 'expanded': expanded == 'lists' }">
+                <div class="grid-collapse-body clearfix ng-cloak" ng-class="{ 'expanded': expanded == 'acton' }">
                   <div class="form-group">
                     <div class="help">
                       {t 1="[% routing.generate('backend_subscriptions_list') %]" escape=off}Subscription lists available from <a href="%1">subscriptions module</a> {/t}
