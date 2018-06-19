@@ -1,0 +1,1 @@
+ALTER TABLE `articles` CHANGE `title_int` `title_int` TEXT  NULL DEFAULT NULL;

@@ -351,7 +351,7 @@ class BaseRepository extends Repository
             $finder->followLinks()->files()->in($path)->name('*.yml');
 
             foreach ($finder as $file) {
-                $this->loadEntity($file->getRealPath());
+                $this->loadEntity($file->getPathname());
             }
         }
 
