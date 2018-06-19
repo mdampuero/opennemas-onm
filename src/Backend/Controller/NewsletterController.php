@@ -344,6 +344,14 @@ class NewsletterController extends Controller
         $newsletter = $this->get('api.service.newsletter')->getItem($id);
         $recipients = [];
 
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get([
+                'newsletter_maillist',
+                'newsletter_subscriptionType',
+                'actOn.marketingLists',
+            ]);
+
 
         $ss       = $this->get('api.service.subscription');
         $ssb      = $this->get('api.service.subscriber');
@@ -368,21 +376,20 @@ class NewsletterController extends Controller
             ];
         }
 
-        $maillistConfigs = $sm->get('newsletter_maillist');
-
-        if (!empty($maillistConfigs['email'])) {
+        if (!empty($settings['newsletter_maillist'])) {
             $recipients[] = [
                 'uuid' => uniqid(),
                 'type' => 'external',
-                'name' => $maillistConfigs['email'],
-                'email' => $maillistConfigs['email'],
+                'name' => $settings['newsletter_maillist']['email'],
+                'email' => $settings['newsletter_maillist']['email'],
             ];
         }
 
-        $actOnMarketingList = $this->get('orm.manager')->getDataSet('Settings', 'instance')
-            ->get('actOn.marketingLists', []);
+        if (empty($settings['actOn.marketingLists'])) {
+            $settings['actOn.marketingLists'] = [];
+        }
 
-        foreach ($actOnMarketingList as $list) {
+        foreach ($settings['actOn.marketingLists'] as $list) {
             $recipients[] = [
                 'uuid' => uniqid(),
                 'type' => 'acton',
@@ -395,7 +402,7 @@ class NewsletterController extends Controller
             'id'      => $id,
             'content' => $newsletter,
             'extra'   => [
-                'newsletter_handler' => $sm->get('newsletter_subscriptionType'),
+                'newsletter_handler' => $settings['newsletter_subscriptionType'],
                 'recipients'         => $recipients,
             ]
         ]);
