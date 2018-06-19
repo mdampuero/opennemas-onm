@@ -12,6 +12,7 @@ orm:
                 created:      datetime
                 publish_date: datetime
                 params:       string
+                category_id:  integer
 
             converters:
                 default:
@@ -50,6 +51,9 @@ orm:
                         params:
                             type: string
                             options: { default: null, notnull: false, lenght: 250 }
+                        category_id:
+                            type: integer
+                            options: { default: null, unsigned: true }
                     index:
                         -
                             name: PRIMARY
@@ -60,6 +64,12 @@ orm:
                         -
                             name: frontpage_id
                             columns: [frontpage_id]
+                            primary: false
+                            unique: false
+                            flags: {  }
+                        -
+                            name: category_id
+                            columns: [category_id]
                             primary: false
                             unique: false
                             flags: {  }

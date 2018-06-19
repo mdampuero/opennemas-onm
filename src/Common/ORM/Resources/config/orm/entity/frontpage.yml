@@ -30,9 +30,6 @@ orm:
                         name:
                             type: string
                             options: { default: null, lenght: 100, notnull: false }
-                        is_frontpage:
-                            type: boolean
-                            options: { default: null, notnull: false }
                     index:
                         -
                             name: PRIMARY
