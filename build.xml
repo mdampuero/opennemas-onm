@@ -96,7 +96,7 @@
             <arg value="--prefer-dist" />
             <arg value="--no-progress" />
 
-            <env key="SYMFONY_ENV" value="test"/>
+            <env key="SYMFONY_ENV" value="prod"/>
         </exec>
     </target>
 
