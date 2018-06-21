@@ -90,7 +90,7 @@
               <div class="form-group">
                 <div class="m-t-15 m-b-10">
                   <div class="checkbox" ng-repeat="recipient in data.extra.recipients|filter:{ type: 'external' }">
-                    <input id="checkbox-external-[% $index %]" checklist-model="source.selected" checklist-value="recipient" type="checkbox">
+                    <input id="checkbox-external-[% $index %]" checklist-model="item.recipients" checklist-value="recipient" type="checkbox" load-on-empty="true">
                     <label for="checkbox-external-[% $index %]">
                       [% recipient.email %]
                     </label>
@@ -104,7 +104,7 @@
               <div class="form-group">
                 <div class="m-t-15 m-b-10" ng-repeat="recipient in data.extra.recipients|filter:{ type: 'acton' }">
                   <div class="checkbox">
-                    <input id="checkbox-acton-[% $index %]" checklist-model="item.recipients" checklist-value="recipient" type="checkbox">
+                    <input id="checkbox-acton-[% $index %]" checklist-model="item.recipients" checklist-value="recipient" type="checkbox" load-on-empty="true">
                     <label for="checkbox-acton-[% $index %]">
                       <strong>[% recipient.name %]</strong>
                     </label>
@@ -141,15 +141,22 @@
             <div class="form-group days col-xs-12">
               <h5>{t}Days{/t}</h5>
 
-              <tags-input ng-model="item.schedule.days" add-on-paste="true"" placeholder="{t}Add a day{/t}">
-                <auto-complete source="loadDays($query)"></auto-complete>
-              </tags-input>
+              <div class="form-group">
+                <div class="m-t-15 m-b-10" ng-repeat="day in data.extra.days">
+                  <div class="checkbox col-xs-6 p-b-10">
+                    <input id="checkbox-days-[% $index %]" checklist-model="item.schedule.days" checklist-value="day.id" type="checkbox">
+                    <label for="checkbox-days-[% $index %]">
+                      <strong>[% day.name %]</strong>
+                    </label>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="form-group hours col-xs-12">
 
               <h5>{t}Hours{/t}</h5>
-              <tags-input ng-model="item.schedule.hours" add-on-paste="true" placeholder="{t}Add an hour{/t}">
-                <auto-complete source="loadHours($query)"></auto-complete>
+              <tags-input ng-model="item.schedule.hours" minTags=1 add-on-paste="true" add-from-autocomplete-only="true" placeholder="{t}Add an hour{/t}">
+                <auto-complete source="loadHours($query)" load-on-focus=true min-length="0" debounce-delay="0"></auto-complete>
               </tags-input>
               {* <select bootstrapTagsinput style="min-height:180px" ng-model="schedule.hours" multiple ng-options="hour for hour in hours"></select> *}
             </div>
@@ -161,6 +168,7 @@
     <div class="grid simple ng-cloak" ng-if="!flags.loading">
       <div class="grid-title clearfix">
         <h5 class="pull-left">{t}Contents{/t}</h5>
+        <div class="pull-right">
       </div>
       <div class="grid-body">
 

@@ -151,9 +151,26 @@ class NewsletterTemplateController extends Controller
             ];
         }
 
+        $hours = [];
+        for ($i = 0; $i < 24; $i++) {
+            $hours[] = sprintf("%02d:00", $i);
+        }
+
+        $days = [
+            [ "id" => 1, "name" => _("Monday") ],
+            [ "id" => 2, "name" => _("Tuesday") ],
+            [ "id" => 3, "name" => _("Wednesday") ],
+            [ "id" => 4, "name" => _("Thursday") ],
+            [ "id" => 5, "name" => _("Friday") ],
+            [ "id" => 6, "name" => _("Saturday") ],
+            [ "id" => 7, "name" => _("Sunday") ],
+        ];
+
         return [
             'newsletter_handler' => $settings['newsletter_subscriptionType'],
             'recipients'         => $recipients,
+            'hours'              => $hours,
+            'days'               => $days,
         ];
     }
 
@@ -330,12 +347,6 @@ class NewsletterTemplateController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        if ($id != $this->getUser()->id
-            && !$this->get('core.security')->hasPermission('USER_UPDATE')
-        ) {
-            throw new AccessDeniedException();
-        }
-
         $msg = $this->get('core.messenger');
 
         $this->get('api.service.newsletter')

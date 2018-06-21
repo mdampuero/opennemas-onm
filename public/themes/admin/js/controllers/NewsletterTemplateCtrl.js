@@ -19,24 +19,9 @@
      *   Check billing information when saving user.
      */
     .controller('NewsletterTemplateCtrl', [
-      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'messenger', 'routing',
-      function($controller, $scope, $timeout, $uibModal, $window, cleaner, http, messenger, routing) {
+      '$controller', '$scope',
+      function($controller, $scope) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
-
-        $scope.days = [
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Friday',
-          'Saturday',
-          'Sunday'
-        ];
-
-        $scope.hours = [];
-        for (var i = 0; i < 24; i++) {
-          $scope.hours.push(i + ':00');
-        }
 
         /**
          * @memberOf NewsletterTemplateCtrl
@@ -74,6 +59,13 @@
           save:     'api_v1_backend_newsletter_template_save',
           show:     'api_v1_backend_newsletter_template_show',
           update:   'api_v1_backend_newsletter_template_update'
+        };
+
+        $scope.compareRecipient = function(obj1, obj2) {
+          if (obj1.type === 'external' && obj1.type === obj2.type && obj1.name === obj2.name) {
+            return true;
+          }
+          return obj1.type === obj2.type && obj1.id === obj2.id;
         };
 
         $scope.loadHours = function($query) {
