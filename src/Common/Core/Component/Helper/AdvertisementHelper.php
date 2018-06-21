@@ -50,7 +50,8 @@ class AdvertisementHelper
 
         foreach ($positions as $data) {
             $data['custom'] = true;
-            $data['theme'] = $themeName;
+            $data['theme']  = $themeName;
+
             $this->positions[$data['position']] = $data;
         }
 
@@ -107,6 +108,7 @@ class AdvertisementHelper
     {
         $groupPositions = [];
         if (!is_null($groupName)) {
+            $this->container->get('core.globals')->setAdGroupName($groupName);
             // Get group positions
             foreach ($this->positions as $key => $value) {
                 if ($value['group'] == $groupName) {
