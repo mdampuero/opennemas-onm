@@ -14,6 +14,10 @@ api_v1_backend_newsletter:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/newsletter.yml'
     prefix:   /backend
 
+api_v1_backend_newsletter_templates:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/newsletter_template.yml'
+    prefix:   /backend
+
 api_v1_backend_setting:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/setting.yml'
     prefix:   /backend

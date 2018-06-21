@@ -96,8 +96,8 @@
                   </div>
                   <div class="newsletter-container-contents clearfix" ng-if="!container.hide" ui-tree-handle>
                     <div class="hint-message p-b-15" ng-if="container.items.length == 0">
-    -                 {t}Click in "Add contents" button above or drop contents from other containers{/t}
-    -               </div>
+                      {t}Click in "Add contents" button above or drop contents from other containers{/t}
+                    </div>
                     <ol ui-tree-nodes="" ng-model="container.items" type="content">
                       <li ng-repeat="content in container.items" ui-tree-node ng-include="'item'"></li>
                     </ol>
