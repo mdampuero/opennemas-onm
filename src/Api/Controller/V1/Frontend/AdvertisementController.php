@@ -72,6 +72,7 @@ class AdvertisementController extends Controller
     {
         $category  = $request->query->get('category', 'home');
         $module    = $request->query->get('module', 'frontpage');
+        $adGroup   = $request->query->get('adGroup', 'article_inner');
         $contentId = $request->query->get('contentId', '');
 
         $ad = $this->getAdvertisement($id);
@@ -95,6 +96,7 @@ class AdvertisementController extends Controller
             ->renderSafeFrame($ad, [
                 'category'  => $category,
                 'extension' => $module,
+                'adGroup'   => $adGroup,
                 'contentId' => $contentId,
             ]);
 
@@ -176,6 +178,10 @@ class AdvertisementController extends Controller
                 && preg_match('/googletag\.defineSlot/', $advertisement->script))
         ) {
             return 'DFP';
+        }
+
+        if ((int) $advertisement->with_script === 4) {
+            return 'Smart';
         }
 
         return 'html';

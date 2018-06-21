@@ -47,12 +47,14 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         $params = [
             'category'  => $category,
             'extension' => $app['extension'],
+            'adGroup'   => $app['adGroupName'],
             'content'   => $content,
             'x-tags'    => $xtags,
         ];
 
         $reviveOutput = $adsRenderer->renderInlineReviveHeader($ads);
         $dfpOutput    = $adsRenderer->renderInlineDFPHeader($ads, $params);
+        $smartOutput  = $adsRenderer->renderInlineSmartHeader($ads, $params);
         $interstitial = $adsRenderer->renderInlineInterstitial($ads, $params);
         $devices      = getService('core.template.admin')
             ->fetch('advertisement/helpers/inline/js.tpl');
@@ -61,6 +63,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
 
         $output = str_replace('</head>', $reviveOutput . '</head>', $output);
         $output = str_replace('</head>', $dfpOutput . '</head>', $output);
+        $output = str_replace('</head>', $smartOutput . '</head>', $output);
         $output = str_replace('</body>', $interstitial . '</body>', $output);
         $output = str_replace('</body>', $devices . '</body>', $output);
     } else {
@@ -80,6 +83,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'debug'     => $app['environment'] === 'dev' ? 'true' : 'false',
             'category'  => $category,
             'extension' => $app['extension'],
+            'adGroup'   => $app['adGroupName'],
             'contentId' => $content->id,
             'lifetime'  => $settings['lifetime_cookie'],
             'positions' => implode(',', $positions),
