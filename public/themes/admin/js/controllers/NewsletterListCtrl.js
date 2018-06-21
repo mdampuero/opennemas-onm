@@ -29,10 +29,21 @@
          * @type {Object}
          */
         $scope.criteria = {
+          type: 0,
           epp: 25,
           page: 1,
           orderBy: { id: 'desc' }
         };
+
+        /**
+         * @memberOf RestListCtrl
+         *
+         * @description
+         *   The newsletter type selected.
+         *
+         * @type {Object}
+         */
+        $scope.selectedType = 0;
 
         /**
          * @memberOf NewsletterListCtrl
@@ -52,7 +63,7 @@
 
         /**
          * @function init
-         * @memberOf UserListCtrl
+         * @memberOf NewsletterListCtrl
          *
          * @description
          *   Configures the controller.
@@ -68,6 +79,17 @@
           });
 
           $scope.list();
+        };
+
+        /**
+         * @function init
+         * @memberOf NewsletterListCtrl
+         *
+         * @description
+         *   Configures the controller.
+         */
+        $scope.selectType = function(type) {
+          $scope.selectedType = type;
         };
 
         /**
@@ -110,6 +132,12 @@
             }
           });
         };
+
+        $scope.$watch('selectedType', function(nv, ov) {
+          if (nv !== ov) {
+            $scope.criteria.type = $scope.selectedType;
+          }
+        });
       }
     ]);
 })();
