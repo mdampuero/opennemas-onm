@@ -122,8 +122,8 @@ class NewsletterTemplateController extends Controller
             $recipients[] = [
                 'type' => 'list',
                 'name' => $list->name,
-                'id'   => $list->pk_user_group,
-                'subscribers' => $ssb->getList(
+                'id'   => (string) $list->pk_user_group,
+                'subscribers' => (string) $ssb->getList(
                     '(user_group_id = "' . $list->pk_user_group
                     . '" and status != 0)'
                 )['total']
@@ -144,7 +144,6 @@ class NewsletterTemplateController extends Controller
 
         foreach ($settings['actOn.marketingLists'] as $list) {
             $recipients[] = [
-                'uuid' => uniqid(),
                 'type' => 'acton',
                 'name' => $list['name'],
                 'id'   => $list['id'],
@@ -210,7 +209,6 @@ class NewsletterTemplateController extends Controller
     public function patchAction(Request $request, $id)
     {
         $msg = $this->get('core.messenger');
-
         $this->get('api.service.newsletter')
             ->patchItem($id, $request->request->all());
 
@@ -349,8 +347,29 @@ class NewsletterTemplateController extends Controller
     {
         $msg = $this->get('core.messenger');
 
+        $values = $request->request->all();
+
+        foreach ($values['schedule']['hours'] as &$hour) {
+            $hour = $hour['text'];
+        }
+
+        foreach ($values['schedule']['days'] as &$day) {
+            $day = (int) $day;
+        }
+        $values['schedule']['days'] = array_unique($values['schedule']['days']);
+
+        foreach ($values['contents'] as &$container) {
+            foreach ($container['items'] as &$item) {
+                $item = [
+                    'content_type_name' => $item['content_type_name'],
+                    'id'                => $item['id'],
+                    'title'             => $item['title'],
+                ];
+            }
+        }
+
         $this->get('api.service.newsletter')
-            ->updateItem($id, $request->request->all());
+            ->updateItem($id, $values);
 
         $msg->add(_('Item saved successfully'), 'success');
 

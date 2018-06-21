@@ -43,8 +43,6 @@
           recipients: [],
         };
 
-        $scope.flags.expanded = 'recipients';
-
         /**
          * @memberOf UserCtrl
          *
@@ -69,25 +67,35 @@
         };
 
         $scope.loadHours = function($query) {
-          return $scope.hours;
-        };
-
-        $scope.loadDays = function($query) {
-          return $scope.days;
-        };
-
-        $scope.removeContainer = function(container) {
-          var position = $scope.item.contents.indexOf(container);
-
-          $scope.newsletterContents.splice(position, 1);
+          return $scope.data.extra.hours.filter(function(el) {
+            return el.indexOf($query) >= 0;
+          });
         };
 
         $scope.addContainer = function() {
-          $scope.newsletterContents.push({
-            id: 0,
+          $scope.item.contents.push({
             title: '',
-            position: '',
             items: []
+          });
+        };
+
+        // contents management
+        $scope.removeContainer = function(container) {
+          var position = $scope.item.contents.indexOf(container);
+
+          $scope.item.contents.splice(position, 1);
+        };
+
+        $scope.removeContent = function(container, content) {
+          var position = container.items.indexOf(content);
+
+          container.items.splice(position, 1);
+        };
+
+        $scope.addDynamicContent = function(container) {
+          container.items.push({
+            content_type: "list",
+            oql: "hola mundo"
           });
         };
       }

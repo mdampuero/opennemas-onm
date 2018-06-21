@@ -94,6 +94,8 @@
                     <label for="checkbox-external-[% $index %]">
                       [% recipient.email %]
                     </label>
+
+
                   </div>
                 </div>
               </div>
@@ -169,10 +171,12 @@
       <div class="grid-title clearfix">
         <h5 class="pull-left">{t}Contents{/t}</h5>
         <div class="pull-right">
+            <button type="button" class="btn btn-mini" ng-click="addContainer()">
+              <span class="fa fa-plus"></span> {t}Add section{/t}
+            </button>
+        </div>
       </div>
       <div class="grid-body">
-
-        {* [% item.contents %] *}
 
         <div ui-tree="options" id="newsletter-contents">
           <ol ui-tree-nodes ng-model="item.contents" type="container">
@@ -183,39 +187,55 @@
                   <div class="input-group-addon" id="basic-addon1"><i class="fa fa-pencil"></i></div>
                 </div>
                 <div class="container-actions pull-right">
-                  {* <button type="button" class="btn btn-white" data-nodrag content-picker content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="container.items" content-picker-type="album,article,attachment,opinion,poll,video,special">
-                    <i class="fa fa-plus"></i>
-                    {t}Add contents{/t}
-                  </button> *}
-                  <button type="button" data-nodrag ng-click="container.hide = !container.hide" class="btn btn-white">
-                    <i class="fa" ng-class="{ 'fa-plus-square-o': container.hide, 'fa-minus-square-o': !container.hide }"></i>
-                  </button>
                   <button class="btn btn-white" data-nodrag ng-click="removeContainer(container)" type="button">
                     <i class="fa fa-trash-o text-danger"></i>
                   </button>
                 </div>
               </div>
               <div class="newsletter-container-contents clearfix" ng-if="!container.hide" ui-tree-handle>
-                <div class="hint-message p-b-15" ng-if="container.items.length == 0">
-                  {t}Click in "Add contents" button above or drop contents from other containers{/t}
-                </div>
                 <ol ui-tree-nodes="" ng-model="container.items" type="content">
                   <li ng-repeat="content in container.items" ui-tree-node ng-include="'item'"></li>
                 </ol>
+                <div class="add-contents p-t-15" data-nodrag >
+                  <h5 class="p-b-20 text-center">{t}Add contents{/t}</h5>
+                  <div class="row">
+                    <div class="col-xs-4 col-md-offset-2">
+                      <a ng-click="addDynamicContent(container)" class="btn btn-primary btn-block">
+                        <i class="fa fa-bolt"></i>
+                        {t}Add dynamic contents{/t}
+                      </a>
+                    </div>
+                    <div class="col-xs-4">
+                      <button type="button" class="btn btn-primary btn-block" data-nodrag content-picker content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="container.items" content-picker-type="album,article,attachment,opinion,poll,video,special">
+                        <i class="fa fa-hand-o-up"></i>
+                        {t}Pick contents{/t}
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </li>
 
           </ol>
         </div>
+
       </div>
     </div>
   </div>
   <script type="text/ng-template" id="item">
     <div class="newsletter-item clearfix" ui-tree-handle>
       <span></span>
-      <span>[% content.content_type_l10n_name %]</span>
-      <span class="h-seperate"></span>
-      <span class="item-title">[% content.title %]</span>
+      <div ng-show="content.content_type_name !== 'list'">
+        <span>[% content.content_type_l10n_name %]</span>
+        <span class="h-seperate"></span>
+        <span class="item-title">[% content.title %]</span>
+      </div>
+      <div ng-show="content.content_type_name === 'list'">
+        <span>{t}List of contents{/t}</span>
+        <span class="h-seperate"></span>
+        <span class="item-title">[% content.oql %]</span>
+      </div>
       <button class="btn btn-white pull-right" data-nodrag ng-click="removeContent(container, content)" type="button">
         <i class="fa fa-trash-o text-danger"></i>
       </button>
