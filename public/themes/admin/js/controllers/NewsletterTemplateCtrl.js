@@ -19,8 +19,8 @@
      *   Check billing information when saving user.
      */
     .controller('NewsletterTemplateCtrl', [
-      '$controller', '$scope',
-      function($controller, $scope) {
+      '$controller', '$scope', 'oqlEncoder',
+      function($controller, $scope, oqlEncoder) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -44,6 +44,20 @@
         };
 
         /**
+         * @function numberOfElements
+         * @memberOf NewsletterTemplateCtrl
+         *
+         * @description
+         *   The list of posible amount of contents.
+         *
+         * @type {Array}
+         */
+        $scope.numberOfElements = [];
+        for (var i = 1; i < 21; i++) {
+          $scope.numberOfElements.push(i);
+        }
+
+        /**
          * @memberOf UserCtrl
          *
          * @description
@@ -59,19 +73,52 @@
           update:   'api_v1_backend_newsletter_template_update'
         };
 
-        $scope.compareRecipient = function(obj1, obj2) {
-          if (obj1.type === 'external' && obj1.type === obj2.type && obj1.name === obj2.name) {
-            return true;
-          }
-          return obj1.type === obj2.type && obj1.id === obj2.id;
+        /**
+         * @function getData
+         * @memberOf NewsletterTemplateCtrl
+         *
+         * @description
+         *   Returns the data to send when saving/updating an item.
+         */
+        $scope.getData = function() {
+          $scope.item.contents.map(function(container) {
+            return container.items.map(function(content) {
+              if (content.content_type_name !== 'list') {
+                return content;
+              }
+
+              content.oql = oqlEncoder.getOql(content.criteria);
+
+              return content;
+            });
+          });
+
+          // DO here the parser of the items oql encoders
+          return $scope.item;
         };
 
+        /**
+         * @function loadHours
+         * @memberOf NewsletterTemplateCtrl
+         *
+         * @description
+         *   Returns the filtered list of hours given a search query.
+         *
+         * @param {String} $query The text to filter the hours.
+         */
         $scope.loadHours = function($query) {
           return $scope.data.extra.hours.filter(function(el) {
             return el.indexOf($query) >= 0;
           });
         };
 
+        /**
+         * @function addContainer
+         * @memberOf NewsletterTemplateCtrl
+         *
+         * @description
+         *   Adds a new container to the newsletter contents.
+         */
         $scope.addContainer = function() {
           $scope.item.contents.push({
             title: '',
@@ -79,23 +126,57 @@
           });
         };
 
-        // contents management
+        /**
+         * @function removeContainer
+         * @memberOf NewsletterTemplateCtrl
+         *
+         * @description
+         *   Removes a container from the list.
+         *
+         * @param {Object} container The container to remove.
+         */
         $scope.removeContainer = function(container) {
           var position = $scope.item.contents.indexOf(container);
 
           $scope.item.contents.splice(position, 1);
         };
 
+        /**
+         * @function removeContent
+         * @memberOf NewsletterTemplateCtrl
+         *
+         * @description
+         *   Removes a content from a container.
+         *
+         * @param {Object} container The container where to remove.
+         * @param {Object} content The content to remove.
+         */
         $scope.removeContent = function(container, content) {
           var position = container.items.indexOf(content);
 
           container.items.splice(position, 1);
         };
 
+        /**
+         * @function addDynamicContent
+         * @memberOf NewsletterTemplateCtrl
+         *
+         * @description
+         *   Adds a dummy dynamic content.
+         *
+         * @param {Object} container The container where to remove.
+         * @param {Object} content The content to remove.
+         */
         $scope.addDynamicContent = function(container) {
           container.items.push({
-            content_type: "list",
-            oql: "hola mundo"
+            content_type_name: 'list',
+            oql: '',
+            criteria: {
+              content_type_name: null,
+              epp: 5,
+              in_litter: 0,
+              orderBy: { starttime:  'desc' }
+            }
           });
         };
       }

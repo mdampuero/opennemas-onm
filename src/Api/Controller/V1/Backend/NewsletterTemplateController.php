@@ -98,6 +98,8 @@ class NewsletterTemplateController extends Controller
      */
     private function getExtraData($items = null)
     {
+        $extra = [];
+
         $recipients = [];
 
         $settings = $this->get('orm.manager')
@@ -108,6 +110,7 @@ class NewsletterTemplateController extends Controller
                 'actOn.marketingLists',
             ]);
 
+        $extra['newsletter_handler'] = $settings['newsletter_subscriptionType'];
 
         $ss       = $this->get('api.service.subscription');
         $ssb      = $this->get('api.service.subscriber');
@@ -117,9 +120,9 @@ class NewsletterTemplateController extends Controller
             return in_array(224, $list->privileges);
         });
 
-        $recipients = [];
+        $extra['recipients'] = [];
         foreach ($lists as $list) {
-            $recipients[] = [
+            $extra['recipients'][] = [
                 'type' => 'list',
                 'name' => $list->name,
                 'id'   => (string) $list->pk_user_group,
@@ -131,7 +134,7 @@ class NewsletterTemplateController extends Controller
         }
 
         if (!empty($settings['newsletter_maillist'])) {
-            $recipients[] = [
+            $extra['recipients'][] = [
                 'type' => 'external',
                 'name' => $settings['newsletter_maillist']['email'],
                 'email' => $settings['newsletter_maillist']['email'],
@@ -143,19 +146,40 @@ class NewsletterTemplateController extends Controller
         }
 
         foreach ($settings['actOn.marketingLists'] as $list) {
-            $recipients[] = [
+            $extra['recipients'][] = [
                 'type' => 'acton',
                 'name' => $list['name'],
                 'id'   => $list['id'],
             ];
         }
 
-        $hours = [];
-        for ($i = 0; $i < 24; $i++) {
-            $hours[] = sprintf("%02d:00", $i);
+        $contentTypesAvailable = \ContentManager::getContentTypesFiltered();
+        unset($contentTypesAvailable['comment']);
+
+        $extra['content_types'] = [
+            [ 'title' => _('Any'), 'value' => null ]
+        ];
+
+        foreach ($contentTypesAvailable as $key => $value) {
+            $extra['content_types'][] = [
+                'title' => _($value),
+                'value' => $key
+            ];
         }
 
-        $days = [
+
+        // $hours = [];
+        // $date  = new DateTime(null, new DatetTimeZome('UTC'));
+        // for ($i = 0; $i < 24; $i++) {
+        //     $date->add('1 hour');
+        //     $hours[] = [ "internal" => $i, "text" => $date->format('h:m')];
+        // }
+        $extra['hours'] = [];
+        for ($i = 0; $i < 24; $i++) {
+            $extra['hours'][] = sprintf("%02d:00", $i);
+        }
+
+        $extra['days'] = [
             [ "id" => 1, "name" => _("Monday") ],
             [ "id" => 2, "name" => _("Tuesday") ],
             [ "id" => 3, "name" => _("Wednesday") ],
@@ -165,12 +189,18 @@ class NewsletterTemplateController extends Controller
             [ "id" => 7, "name" => _("Sunday") ],
         ];
 
-        return [
-            'newsletter_handler' => $settings['newsletter_subscriptionType'],
-            'recipients'         => $recipients,
-            'hours'              => $hours,
-            'days'               => $days,
-        ];
+        $converter  = $this->get('orm.manager')->getConverter('Category');
+        $categories = $this->get('orm.manager')
+            ->getRepository('Category')
+            ->findBy('internal_category = 1');
+
+        $extra['categories'] = $converter->responsify($categories);
+        array_unshift($extra['categories'], [
+            'pk_content_category' => null,
+            'title' => _('All')
+        ]);
+
+        return $extra;
     }
 
     /**
@@ -360,11 +390,22 @@ class NewsletterTemplateController extends Controller
 
         foreach ($values['contents'] as &$container) {
             foreach ($container['items'] as &$item) {
-                $item = [
-                    'content_type_name' => $item['content_type_name'],
-                    'id'                => $item['id'],
-                    'title'             => $item['title'],
-                ];
+                if ($item['content_type_name'] === 'list') {
+                    $newItem = [
+                        'content_type_l10n_name' => _('List of contents'),
+                        'oql' => $item['oql']
+                    ];
+                } else {
+                    $newItem = [
+                        'id'                     => $item['id'],
+                        'title'                  => $item['title'],
+                        'content_type_l10n_name' => $item['content_type_l10n_name'],
+                    ];
+                }
+
+                $item = array_merge([
+                    'content_type_name'      => $item['content_type_name'],
+                ], $newItem);
             }
         }
 

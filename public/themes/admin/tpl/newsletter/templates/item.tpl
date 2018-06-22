@@ -83,7 +83,6 @@
           </div>
 
           <div class="grid-body">
-
             <div class="external">
               <h5><i class="fa fa-external-link m-r-10"></i>{t}External service{/t}</h5>
 
@@ -94,8 +93,6 @@
                     <label for="checkbox-external-[% $index %]">
                       [% recipient.email %]
                     </label>
-
-
                   </div>
                 </div>
               </div>
@@ -136,7 +133,6 @@
         <div class="grid simple">
           <div class="grid-title">
             <h5><i class="fa fa-calendar m-r-10"></i>{t}Schedule{/t}</h5>
-            {* <div class="pull-right">[% item.schedule %]</div> *}
           </div>
 
           <div class="grid-body">
@@ -154,13 +150,13 @@
                 </div>
               </div>
             </div>
-            <div class="form-group hours col-xs-12">
 
-              <h5>{t}Hours{/t}</h5>
+            <div class="form-group hours col-xs-12">
+              <h5>{t}Hours{/t} <small class="pull-right">({t}Time zone: {/t} {date_default_timezone_get()})</small></h5>
+
               <tags-input ng-model="item.schedule.hours" minTags=1 add-on-paste="true" add-from-autocomplete-only="true" placeholder="{t}Add an hour{/t}">
                 <auto-complete source="loadHours($query)" load-on-focus=true min-length="0" debounce-delay="0"></auto-complete>
               </tags-input>
-              {* <select bootstrapTagsinput style="min-height:180px" ng-model="schedule.hours" multiple ng-options="hour for hour in hours"></select> *}
             </div>
           </div>
         </div>
@@ -171,13 +167,12 @@
       <div class="grid-title clearfix">
         <h5 class="pull-left">{t}Contents{/t}</h5>
         <div class="pull-right">
-            <button type="button" class="btn btn-mini" ng-click="addContainer()">
+            <button type="button" class="btn" ng-click="addContainer()">
               <span class="fa fa-plus"></span> {t}Add section{/t}
             </button>
         </div>
       </div>
       <div class="grid-body">
-
         <div ui-tree="options" id="newsletter-contents">
           <ol ui-tree-nodes ng-model="item.contents" type="container">
             <li class="newsletter-container ng-cloak" ui-tree-node ng-repeat="container in item.contents" collapsed="false">
@@ -194,10 +189,54 @@
               </div>
               <div class="newsletter-container-contents clearfix" ng-if="!container.hide" ui-tree-handle>
                 <ol ui-tree-nodes="" ng-model="container.items" type="content">
-                  <li ng-repeat="content in container.items" ui-tree-node ng-include="'item'"></li>
+                  <li ng-repeat="content in container.items" ui-tree-node{*  ng-include="'item'" *}>
+                    <div class="newsletter-item clearfix" ui-tree-handle>
+                      <span></span>
+                      <div ng-show="content.content_type_name !== 'list'">
+                        <span data-nodrag>[% content.content_type_l10n_name %]</span>
+                        <span class="h-seperate" data-nodrag></span>
+                        <span class="item-title" data-nodrag>[% content.title %]</span>
+                      </div>
+                      <div ng-show="content.content_type_name === 'list'" class="item-list">
+                        <span data-nodrag>{t}List of contents{/t}</span>
+                        <span class="h-seperate" data-nodrag></span>
+                        <span class="item-title" data-nodrag>
+                          <ui-select name="content_type" theme="select2" ng-model="content.criteria.content_type_name">
+                            <ui-select-match>
+                              <strong>{t}Type{/t}: </strong> [% $select.selected.title %]
+                            </ui-select-match>
+                            <ui-select-choices repeat="item.value as item in data.extra.content_types | filter: { title: $select.search }">
+                              <div ng-bind-html="item.title | highlight: $select.search"></div>
+                            </ui-select-choices>
+                          </ui-select>
+                          <ui-select name="category" theme="select2" ng-model="content.criteria.filter.category">
+                            <ui-select-match>
+                              <strong>{t}Category{/t}: </strong> [% $select.selected.title %]
+                            </ui-select-match>
+                            <ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in data.extra.categories | filter: { title: $select.search }">
+                              <div ng-bind-html="item.title | highlight: $select.search"></div>
+                            </ui-select-choices>
+                          </ui-select>
+
+                          <ui-select name="view" theme="select2" ng-model="content.criteria.epp">
+                            <ui-select-match>
+                              <strong>{t}Amount{/t}: </strong> [% $select.selected %]
+                            </ui-select-match>
+                            <ui-select-choices repeat="item in numberOfElements  | filter: $select.search">
+                              <div ng-bind-html="item | highlight: $select.search"></div>
+                            </ui-select-choices>
+                          </ui-select>
+                          {* <small>OQL: "[% content.oql %]"</small> *}
+                        </span>
+                      </div>
+                      <button class="btn btn-white pull-right" data-nodrag ng-click="removeContent(container, content)" type="button">
+                        <i class="fa fa-trash-o text-danger"></i>
+                      </button>
+                    </div>
+                  </li>
                 </ol>
-                <div class="add-contents p-t-15" data-nodrag >
-                  <h5 class="p-b-20 text-center">{t}Add contents{/t}</h5>
+                <div class="add-contents p-b-15" data-nodrag >
+                  <h5 class="text-center">{t}Add contents{/t}</h5>
                   <div class="row">
                     <div class="col-xs-4 col-md-offset-2">
                       <a ng-click="addDynamicContent(container)" class="btn btn-primary btn-block">
@@ -224,22 +263,7 @@
     </div>
   </div>
   <script type="text/ng-template" id="item">
-    <div class="newsletter-item clearfix" ui-tree-handle>
-      <span></span>
-      <div ng-show="content.content_type_name !== 'list'">
-        <span>[% content.content_type_l10n_name %]</span>
-        <span class="h-seperate"></span>
-        <span class="item-title">[% content.title %]</span>
-      </div>
-      <div ng-show="content.content_type_name === 'list'">
-        <span>{t}List of contents{/t}</span>
-        <span class="h-seperate"></span>
-        <span class="item-title">[% content.oql %]</span>
-      </div>
-      <button class="btn btn-white pull-right" data-nodrag ng-click="removeContent(container, content)" type="button">
-        <i class="fa fa-trash-o text-danger"></i>
-      </button>
-    </div>
+
   </script>
 </form>
 {/block}
