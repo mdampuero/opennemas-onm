@@ -348,7 +348,7 @@ class AdvertisementRenderer
         return $this->tpl
             ->fetch('advertisement/helpers/inline/smart.header.tpl', [
                 'config'        => $config,
-                'page_id'       => $config['page_id'][$params['adGroup']],
+                'page_id'       => $config['page_id'][$params['advertisementGroup']],
                 'zones'         => $zones,
                 'customCode'    => $this->getSmartCustomCode(),
                 'targetingCode' => $this->getSmartTargeting(
@@ -572,7 +572,7 @@ class AdvertisementRenderer
         $config = $this->sm->get('smart_ad_server');
         $params = [
             'config'        => $config,
-            'page_id'       => $config['page_id'][$params['adGroup']],
+            'page_id'       => $config['page_id'][$params['advertisementGroup']],
             'format_id'     => (int) $ad->params['smart_format_id']
         ];
 
