@@ -45,11 +45,11 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         });
 
         $params = [
-            'category'  => $category,
-            'extension' => $app['extension'],
-            'adGroup'   => $app['adGroupName'],
-            'content'   => $content,
-            'x-tags'    => $xtags,
+            'category'           => $category,
+            'extension'          => $app['extension'],
+            'advertisementGroup' => $app['advertisementGroup'],
+            'content'            => $content,
+            'x-tags'             => $xtags,
         ];
 
         $reviveOutput = $adsRenderer->renderInlineReviveHeader($ads);
@@ -80,15 +80,15 @@ function smarty_outputfilter_ads_generator($output, $smarty)
 
     $content = getService('core.template.admin')
         ->fetch('advertisement/helpers/safeframe/js.tpl', [
-            'debug'     => $app['environment'] === 'dev' ? 'true' : 'false',
-            'category'  => $category,
-            'extension' => $app['extension'],
-            'adGroup'   => $app['adGroupName'],
-            'contentId' => $content->id,
-            'lifetime'  => $settings['lifetime_cookie'],
-            'positions' => implode(',', $positions),
-            'time'      => time(),
-            'url'       => getService('router')
+            'debug'              => $app['environment'] === 'dev' ? 'true' : 'false',
+            'category'           => $category,
+            'extension'          => $app['extension'],
+            'advertisementGroup' => $app['advertisementGroup'],
+            'contentId'          => $content->id,
+            'lifetime'           => $settings['lifetime_cookie'],
+            'positions'          => implode(',', $positions),
+            'time'               => time(),
+            'url'                => getService('router')
                 ->generate('api_v1_advertisements_list')
         ]);
 

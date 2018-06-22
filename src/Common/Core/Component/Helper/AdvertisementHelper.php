@@ -26,6 +26,14 @@ class AdvertisementHelper
     protected $positions = [];
 
     /**
+     * The advertisement group name for a page.
+     *
+     * @var string
+     */
+    protected $group;
+
+
+    /**
      * Initializes the AdvertisementHelper.
      *
      * @param ServiceContainer $container The service container.
@@ -108,7 +116,7 @@ class AdvertisementHelper
     {
         $groupPositions = [];
         if (!is_null($groupName)) {
-            $this->container->get('core.globals')->setAdGroupName($groupName);
+            $this->group = $groupName; // Set ads group name
             // Get group positions
             foreach ($this->positions as $key => $value) {
                 if ($value['group'] == $groupName) {
@@ -140,6 +148,16 @@ class AdvertisementHelper
         }
 
         return $adsNames;
+    }
+
+    /**
+     * Returns the advertisement group.
+     *
+     * @return string The advertisement group name.
+     */
+    public function getGroup()
+    {
+        return $this->group;
     }
 
     /**

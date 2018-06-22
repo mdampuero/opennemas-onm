@@ -19,13 +19,6 @@ class GlobalVariables implements \ArrayAccess
     protected $action;
 
     /**
-     * The advertisement group name for a page.
-     *
-     * @var string
-     */
-    protected $adGroupName;
-
-    /**
      * The service container.
      *
      * @var ServiceContainer
@@ -78,9 +71,9 @@ class GlobalVariables implements \ArrayAccess
      *
      * @return string The advertisement group name.
      */
-    public function getAdGroupName()
+    public function getAdvertisementGroup()
     {
-        return $this->adGroupName;
+        return $this->container->get('core.helper.advertisement')->getGroup();
     }
 
     /**
@@ -245,16 +238,6 @@ class GlobalVariables implements \ArrayAccess
     public function setAction($action)
     {
         $this->action = $action;
-    }
-
-    /**
-     * Sets the current advertisement group name for a page.
-     *
-     * @param string $adGroupName The advertisement group name.
-     */
-    public function setAdGroupName($adGroupName)
-    {
-        $this->adGroupName = $adGroupName;
     }
 
     /**
