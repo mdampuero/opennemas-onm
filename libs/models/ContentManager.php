@@ -1509,6 +1509,45 @@ class ContentManager
     }
 
     /**
+     * Returns the list of content types for the modules activated
+     *
+     * @return array the list of content types
+     */
+    public static function getContentTypesFiltered()
+    {
+        $contentTypes         = \ContentManager::getContentTypes();
+        $contentTypesFiltered = [];
+
+        foreach ($contentTypes as $contentType) {
+            switch ($contentType['name']) {
+                case 'advertisement':
+                    $moduleName = 'ads';
+                    break;
+                case 'attachment':
+                    $moduleName = 'file';
+                    break;
+                case 'photo':
+                    $moduleName = 'image';
+                    break;
+                case 'static_page':
+                    $moduleName = 'static_pages';
+                    break;
+                default:
+                    $moduleName = $contentType['name'];
+                    break;
+            }
+
+            $moduleName = strtoupper($moduleName . '_MANAGER');
+
+            if (getService('core.security')->hasExtension($moduleName)) {
+                $contentTypesFiltered[$contentType['name']] = $contentType['title'];
+            }
+        }
+
+        return $contentTypesFiltered;
+    }
+
+    /**
      * Returns the id of a content type given its name.
      *
      * @param string $name the name of the content type
