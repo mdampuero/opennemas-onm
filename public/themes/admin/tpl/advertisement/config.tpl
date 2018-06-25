@@ -97,7 +97,7 @@
                   </div>
                 </div>
                 <h4>{t}Smart Ad server integration{/t}</h4>
-                <div class="form-group">
+                <div class="form-group" ng-init="smart.domain = {json_encode($configs['smart_ad_server']['domain'])|clear_json}">
                   <label for="smart_ad_server_domain" class="form-label">{t}Domain{/t}</label>
                   <div class="controls">
                     <input class="form-control" type="text" name="smart_ad_server_domain" ng-model="smart.domain" value="{$configs['smart_ad_server']['domain']}">
