@@ -159,7 +159,8 @@
               <thead>
                 <tr>
                   <th>{t}Title{/t}</th>
-                  <th class="hidden-xs hidden-sm">{t}Schedule{/t}</th>
+                  <th class="hidden-xs">{t}Schedule{/t}</th>
+                  <th class="text-right">{t}Enabled{/t}</th>
                 </tr>
               </thead>
               <tbody>
@@ -180,8 +181,23 @@
                       </button>
                     </div>
                   </td>
-                  <td class="hidden-xs hidden-sm">
-                    [% item.schedule %]
+                  <td class="hidden-xs">
+                    <span class="days">
+                      Days:
+                      <span ng-show="item.schedule.days.length > 0" class="badge badge-primary m-r-10" ng-repeat="day in item.schedule.days">[% data.extra.days[day] %]</span>
+                      <span ng-show="item.schedule.days.length <= 0" class="badge badge-default">{t}Not set{/t}</span>
+                    </span>
+                    <br>
+                    <span class="hours">
+                      Hours:
+                      <span ng-show="item.schedule.hours.length > 0" class="badge badge-primary m-r-10" ng-repeat="hour in item.schedule.hours">[% hour %]</span>
+                      <span ng-show="item.schedule.hours.length <= 0" class="badge badge-danger">{t}Not set{/t}</span>
+                    </span>
+                  </td>
+                  <td class="text-right">
+                    <button class="btn btn-white" ng-click="patch(item, 'status', item.status != 1 ? 1 : 0)" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.statusLoading, 'fa-check text-success' : !item.statusLoading && item.status == 1, 'fa-times text-error': !item.statusLoading && item.status == 0 }"></i>
+                    </button>
                   </td>
                 </tr>
               </tbody>
