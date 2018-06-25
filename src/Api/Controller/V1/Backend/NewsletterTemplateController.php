@@ -124,13 +124,13 @@ class NewsletterTemplateController extends Controller
         }
 
         $extra['days'] = [
-            [ "id" => 1, "name" => _("Monday") ],
-            [ "id" => 2, "name" => _("Tuesday") ],
-            [ "id" => 3, "name" => _("Wednesday") ],
-            [ "id" => 4, "name" => _("Thursday") ],
-            [ "id" => 5, "name" => _("Friday") ],
-            [ "id" => 6, "name" => _("Saturday") ],
-            [ "id" => 7, "name" => _("Sunday") ],
+            _("Monday"),
+            _("Tuesday"),
+            _("Wednesday"),
+            _("Thursday"),
+            _("Friday"),
+            _("Saturday"),
+            _("Sunday"),
         ];
 
         $converter  = $this->get('orm.manager')->getConverter('Category');

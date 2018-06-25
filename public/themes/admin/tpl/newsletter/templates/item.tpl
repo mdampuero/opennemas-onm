@@ -142,9 +142,9 @@
               <div class="form-group">
                 <div class="m-t-15 m-b-10" ng-repeat="day in data.extra.days">
                   <div class="checkbox col-xs-6 p-b-10">
-                    <input id="checkbox-days-[% $index %]" checklist-model="item.schedule.days" checklist-value="day.id" type="checkbox">
+                    <input id="checkbox-days-[% $index %]" checklist-model="item.schedule.days" checklist-value="$index + 1" type="checkbox">
                     <label for="checkbox-days-[% $index %]">
-                      <strong>[% day.name %]</strong>
+                      <strong>[% day %]</strong>
                     </label>
                   </div>
                 </div>
