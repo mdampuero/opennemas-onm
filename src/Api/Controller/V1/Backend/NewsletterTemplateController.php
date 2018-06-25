@@ -34,62 +34,6 @@ class NewsletterTemplateController extends Controller
     }
 
     /**
-     * Deletes an newsletter.
-     *
-     * @param integer $id The newsletter id.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasExtension('NEWSLETTER_MANAGER')
-     *     and hasPermission('NEWSLETTER_ADMIN')")
-     */
-    public function deleteAction($id)
-    {
-        $msg = $this->get('core.messenger');
-
-        $this->get('api.service.newsletter')->deleteItem($id);
-        $msg->add(_('Item deleted successfully'), 'success');
-
-        // TODO: Remove when deprecated old newsletter_repository
-        $this->get('core.dispatcher')->dispatch('newsletter.update', ['id' => $id]);
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Deletes the selected newsletters.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasExtension('NEWSLETTER_MANAGER')
-     *     and hasPermission('NEWSLETTER_ADMIN')")
-     */
-    public function deleteSelectedAction(Request $request)
-    {
-        $ids     = $request->request->get('ids', []);
-        $msg     = $this->get('core.messenger');
-        $deleted = $this->get('api.service.newsletter')->deleteList($ids);
-
-        if ($deleted > 0) {
-            $msg->add(
-                sprintf(_('%s items deleted successfully'), $deleted),
-                'success'
-            );
-        }
-
-        if ($deleted !== count($ids)) {
-            $msg->add(sprintf(
-                _('%s items could not be deleted successfully'),
-                count($ids) - $deleted
-            ), 'error');
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
      * Returns a list of extra data.
      *
      * @param array $item The list of items.
@@ -204,88 +148,6 @@ class NewsletterTemplateController extends Controller
     }
 
     /**
-     * Returns a list of contents in JSON format.
-     *
-     * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
-     * @return JsonResponse              The response object.
-     *
-     * @Security("hasExtension('NEWSLETTER_MANAGER')
-     *     and hasPermission('NEWSLETTER_ADMIN')")
-     */
-    public function listAction(Request $request)
-    {
-        $ns  = $this->get('api.service.newsletter');
-        $oql = $request->query->get('oql', '');
-
-        $response = $ns->getList($oql);
-
-        return new JsonResponse([
-            'items' => $ns->responsify($response['items']),
-            'total' => $response['total'],
-        ]);
-    }
-
-    /**
-     * Updates some properties for an newsletter.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasExtension('NEWSLETTER_MANAGER')
-     *     and hasPermission('NEWSLETTER_ADMIN')")
-     */
-    public function patchAction(Request $request, $id)
-    {
-        $msg = $this->get('core.messenger');
-        $this->get('api.service.newsletter')
-            ->patchItem($id, $request->request->all());
-
-        $msg->add(_('Item saved successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Updates some properties for a list of newsletters.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasExtension('NEWSLETTER_MANAGER')
-     *     and hasPermission('NEWSLETTER_ADMIN')")
-     */
-    public function patchSelectedAction(Request $request)
-    {
-        $params = $request->request->all();
-        $ids    = $params['ids'];
-        $msg    = $this->get('core.messenger');
-
-        unset($params['ids']);
-
-        $updated = $this->get('api.service.newsletter')
-            ->patchList($ids, $params);
-
-        if ($updated > 0) {
-            $msg->add(
-                sprintf(_('%s items updated successfully'), $updated),
-                'success'
-            );
-        }
-
-        if ($updated !== count($ids)) {
-            $msg->add(sprintf(
-                _('%s items could not be updated successfully'),
-                count($ids) - $updated
-            ), 'error');
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
      * Saves a new newsletter.
      *
      * @param Request $request The request object.
@@ -313,33 +175,6 @@ class NewsletterTemplateController extends Controller
         );
 
         return $response;
-    }
-
-    /**
-     * Saves settings for CONTENT_SUBSCRIPTIONS extension.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResposne The response object.
-     */
-    public function saveSettingsAction(Request $request)
-    {
-        $msg      = $this->get('core.messenger');
-        $settings = $request->request->all();
-
-        $settings['actOn.marketingLists'] = $settings['actOn_marketingLists'];
-        unset($settings['actOn_marketingLists']);
-
-        try {
-            $this->get('orm.manager')->getDataSet('Settings', 'instance')
-                ->set($settings);
-
-            $msg->add(_('Settings saved successfully'), 'success');
-        } catch (\Exception $e) {
-            $msg->add(_('Unable to save settings'), 'error', 400);
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
