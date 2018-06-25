@@ -63,7 +63,7 @@ parameters:
     manager_webservice:
         api_key:         sheequaiJie5deewijie6oojaiShie5R
         company_mail:    developers@openenmas.com
-        info_mail:       info@openhost.es
+        info_mail:       developers@opennemas.com
         no_reply_sender: no-reply@postman.opennemas.com
         no_reply_from:   no-reply@opennemas.com
     opennemas.assetic.asset_compilation_in_dev: false
