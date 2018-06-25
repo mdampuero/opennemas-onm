@@ -209,7 +209,8 @@
                               <div ng-bind-html="item.title | highlight: $select.search"></div>
                             </ui-select-choices>
                           </ui-select>
-                          <ui-select name="category" theme="select2" ng-model="content.criteria.filter.category">
+
+                          <ui-select name="category" theme="select2" ng-model="content.criteria.category">
                             <ui-select-match>
                               <strong>{t}Category{/t}: </strong> [% $select.selected.title %]
                             </ui-select-match>

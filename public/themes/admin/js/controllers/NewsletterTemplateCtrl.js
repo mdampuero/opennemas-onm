@@ -19,8 +19,8 @@
      *   Check billing information when saving user.
      */
     .controller('NewsletterTemplateCtrl', [
-      '$controller', '$scope', 'oqlEncoder',
-      function($controller, $scope, oqlEncoder) {
+      '$controller', '$scope', 'oqlEncoder', 'oqlDecoder',
+      function($controller, $scope, oqlEncoder, oqlDecoder) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -95,6 +95,33 @@
 
           // DO here the parser of the items oql encoders
           return $scope.item;
+        };
+
+        /**
+         * @function parseItem
+         * @memberOf NewsletterTemplateCtrl
+         *
+         * @description
+         *   Parses the response and adds information to the scope.
+         *
+         * @param {Object} data The data in the response.
+         */
+        $scope.parseItem = function(data) {
+          if (data.item) {
+            $scope.item = angular.extend($scope.item, data.item);
+          }
+
+          $scope.item.contents.map(function(container) {
+            container.items.map(function(element) {
+              if (element.content_type_name === 'list') {
+                element.criteria = oqlDecoder.decode(element.oql);
+              }
+
+              return element;
+            });
+
+            return container;
+          });
         };
 
         /**

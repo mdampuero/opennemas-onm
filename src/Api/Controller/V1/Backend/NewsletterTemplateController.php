@@ -96,7 +96,7 @@ class NewsletterTemplateController extends Controller
      *
      * @return array Array of template parameters.
      */
-    private function getExtraData($items = null)
+    private function getExtraData()
     {
         $extra = [];
 
