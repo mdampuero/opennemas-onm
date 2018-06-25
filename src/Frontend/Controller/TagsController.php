@@ -51,18 +51,18 @@ class TagsController extends Controller
 
             foreach ($t as $tag) {
                 if (is_numeric($tag->name[0])) {
-                    $tags['#'][] = $tag->name;
+                    $tags['#'][] = $tag;
                     continue;
                 }
 
                 $normalized = $fm->set($tag->name)->filter('normalize')->get();
 
                 if (in_array($normalized[0], $letters)) {
-                    $tags[$normalized[0]][] = $tag->name;
+                    $tags[$normalized[0]][] = $tag;
                     continue;
                 }
 
-                $tags['*'][] = $tag->name;
+                $tags['*'][] = $tag;
             }
         }
 
