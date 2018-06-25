@@ -271,6 +271,15 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
         foreach ($tagsArr as $tagAux) {
             // Remove text between parentheses
             $aux = preg_replace("/\([^)]+\)/", "", $tagAux);
+
+            if (strlen($aux) < 41) {
+                $aux = trim($aux);
+                if (strlen($aux) > 1) {
+                    $returnArr[] = $aux;
+                }
+                continue;
+            }
+
             $aux = explode(' ', $aux);
             foreach ($aux as $realTag) {
                 $realTag = trim($realTag);
