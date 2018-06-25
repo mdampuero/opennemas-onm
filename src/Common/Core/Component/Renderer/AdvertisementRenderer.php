@@ -354,7 +354,7 @@ class AdvertisementRenderer
                 'targetingCode' => $this->getSmartTargeting(
                     $params['category'],
                     $params['extension'],
-                    $params['contentId']
+                    $params['content']->id
                 )
             ]);
     }
