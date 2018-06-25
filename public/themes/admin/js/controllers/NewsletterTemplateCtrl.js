@@ -83,7 +83,7 @@
         $scope.getData = function() {
           $scope.item.contents.map(function(container) {
             return container.items.map(function(content) {
-              if (content.content_type_name !== 'list') {
+              if (content.content_type_name !== 'oql') {
                 return content;
               }
 
@@ -113,7 +113,7 @@
 
           $scope.item.contents.map(function(container) {
             container.items.map(function(element) {
-              if (element.content_type_name === 'list') {
+              if (element.content_type_name === 'oql') {
                 element.criteria = oqlDecoder.decode(element.oql);
               }
 
@@ -196,7 +196,7 @@
          */
         $scope.addDynamicContent = function(container) {
           container.items.push({
-            content_type_name: 'list',
+            content_type_name: 'oql',
             oql: '',
             criteria: {
               content_type_name: null,

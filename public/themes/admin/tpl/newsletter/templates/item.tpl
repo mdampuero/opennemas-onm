@@ -115,7 +115,7 @@
             <div class="internal">
               <h5><i class="fa fa-address-book m-r-10"></i>{t}Subscription lists{/t}</h5>
               <div class="form-group">
-                <div class="m-t-15 m-b-10" ng-repeat="recipient in data.extra.recipients|filter:{ type: 'list' }">
+                <div class="m-t-15 m-b-10" ng-repeat="recipient in data.extra.recipients|filter:{ type: 'oql' }">
                   <div class="checkbox">
                     <input id="checkbox-lists-[% $index %]" checklist-model="item.recipients" checklist-value="recipient" type="checkbox">
                     <label for="checkbox-lists-[% $index %]">
@@ -192,12 +192,12 @@
                   <li ng-repeat="content in container.items" ui-tree-node{*  ng-include="'item'" *}>
                     <div class="newsletter-item clearfix" ui-tree-handle>
                       <span></span>
-                      <div ng-show="content.content_type_name !== 'list'">
+                      <div ng-show="content.content_type_name !== 'oql'">
                         <span data-nodrag>[% content.content_type_l10n_name %]</span>
                         <span class="h-seperate" data-nodrag></span>
                         <span class="item-title" data-nodrag>[% content.title %]</span>
                       </div>
-                      <div ng-show="content.content_type_name === 'list'" class="item-list">
+                      <div ng-show="content.content_type_name === 'oql'" class="item-list">
                         <span data-nodrag>{t}List of contents{/t}</span>
                         <span class="h-seperate" data-nodrag></span>
                         <span class="item-title" data-nodrag>
