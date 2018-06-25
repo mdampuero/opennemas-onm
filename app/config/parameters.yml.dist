@@ -66,16 +66,16 @@ parameters:
         info_mail:       info@openhost.es
         no_reply_sender: no-reply@postman.opennemas.com
         no_reply_from:   no-reply@opennemas.com
+    opennemas.assetic.asset_compilation_in_dev: false
+    opennemas.assetic.asset_domain:             //media%d.opennemas.net
+    opennemas.assetic.asset_servers:            3
+    opennemas.assetic.use_asset_servers:        false
     opennemas.backend_force_ssl:                false
     opennemas.base_domain:                      .dev.opennemas.com
     opennemas.redirect_frontend:                false
-    opennemas.assetic.asset_compilation_in_dev: false
-    opennemas.assetic.use_asset_servers:        false
-    opennemas.assetic.asset_servers:            3
-    opennemas.assetic.asset_domain:             //media%d.opennemas.net
     piwik.url:                                  http://piwik.openhost.es
     piwik.token:                                long_alphanum_token
-    sales_email:                                sales@openhost.es
+    sales_email:                                developers@opennemas.com
 
     # Cache
     cache.default:
