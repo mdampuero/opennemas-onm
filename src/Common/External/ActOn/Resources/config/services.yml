@@ -1,0 +1,46 @@
+parameters:
+    external.act_on:
+        config_provider: 'external.act_on.provider.config'
+        token_provider:  'external.act_on.provider.token'
+        http_client:     'external.act_on.http_client'
+        url:             'https://restapi.actonsoftware.com'
+        endpoints:
+            email_campaign:
+                class: 'Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint'
+                config:
+                    actions:
+                        create_message:
+                            path: '/api/1/message'
+                            parameters:
+                                required:
+                                    - htmlbody
+                                    - subject
+                                    - title
+                                optional: []
+                        send_message:
+                            path: '/api/1/message/{id}/send'
+                            parameters:
+                                required:
+                                    - senderemail
+                                    - sendername
+                                    - sendtoids
+                                    - subject
+                                    - when
+
+services:
+    external.act_on.provider.config:
+        class:     'Common\External\ActOn\Component\Configuration\OrmConfigurationProvider'
+        arguments: [ '@orm.manager' ]
+
+    external.act_on.provider.token:
+        class:     'Common\External\ActOn\Component\Authentication\Token\RedisTokenProvider'
+        arguments: [ '@cache.connection.instance' ]
+
+    external.act_on.factory:
+        class:     'Common\External\ActOn\Component\Factory\ActOnFactory'
+        arguments: [ '@service_container', '%external.act_on%' ]
+
+    external.act_on.http_client:
+        class:   'GuzzleHttp\Client'
+        factory: [ '@external.act_on.factory', 'getClient' ]
+
