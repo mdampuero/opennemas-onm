@@ -145,7 +145,7 @@ class NewsletterTemplateController extends Controller
 
         $extra['categories'] = $converter->responsify($categories);
         array_unshift($extra['categories'], [
-            'pk_content_category' => null,
+            'pk_content_category' => "",
             'title' => _('All')
         ]);
 
