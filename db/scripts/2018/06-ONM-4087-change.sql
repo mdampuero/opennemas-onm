@@ -2,6 +2,7 @@ RENAME TABLE `newsletter_archive` TO `newsletters`;
 
 UPDATE newsletters SET `sent` = 0 WHERE `sent`='';
 
+ALTER TABLE `newsletters` CHANGE `created` `created` DATETIME DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE `newsletters` CHANGE `pk_newsletter` `id` BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL;
 ALTER TABLE `newsletters` ADD `type` INT DEFAULT 0 NOT NULL AFTER `id`;
 ALTER TABLE `newsletters` ADD `status` INT DEFAULT 0 NOT NULL AFTER `type`;
