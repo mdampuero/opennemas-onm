@@ -65,14 +65,15 @@ class NewsletterRenderer
             $newsletterContent = [];
         }
 
-        foreach ($newsletterContent as $container) {
+        // HACK: Force object conversion, not proud of this, please look other side
+        $newsletterContent = json_decode(json_encode($newsletterContent), false);
+
+        foreach ($newsletterContent as &$container) {
             foreach ($container->items as &$item) {
                 // if current item do not fullfill the required format
                 // then skip it
                 if ($item->content_type === 'label') {
                     continue;
-
-                $content = $this->er->find($item->content_type, $item->id);
                 } else {
                     $content = $this->er->find(classify($item->content_type), $item->id);
 

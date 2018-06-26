@@ -101,7 +101,7 @@ class NewsletterTemplateController extends Controller
         unset($contentTypesAvailable['comment']);
 
         $extra['content_types'] = [
-            [ 'title' => _('Any'), 'value' => null ]
+            [ 'title' => _('Any'), 'value' => '' ]
         ];
 
         foreach ($contentTypesAvailable as $key => $value) {
@@ -238,10 +238,18 @@ class NewsletterTemplateController extends Controller
      **/
     public function parseValues($values)
     {
+        if (!is_array($values['schedule']['hours'])) {
+            $values['schedule']['hours'] = [];
+        }
+
         foreach ($values['schedule']['hours'] as &$hour) {
             $hour = $hour['text'];
         }
+        $values['schedule']['hours'] = array_unique($values['schedule']['hours']);
 
+        if (!is_array($values['schedule']['days'])) {
+            $values['schedule']['hours'] = [];
+        }
         foreach ($values['schedule']['days'] as &$day) {
             $day = (int) $day;
         }
@@ -266,6 +274,7 @@ class NewsletterTemplateController extends Controller
                 $item = $newItem;
             }
         }
+
         return $values;
     }
 }

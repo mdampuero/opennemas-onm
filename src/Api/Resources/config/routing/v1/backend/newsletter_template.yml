@@ -6,7 +6,7 @@ api_v1_backend_newsletter_template_create:
         expose: true
 
 api_v1_backend_newsletter_template_save:
-    path:     /newsletters
+    path:     /newsletters/template
     defaults: { _controller  : ApiBundle:V1/Backend/NewsletterTemplate:save }
     methods:  [ POST ]
     options:

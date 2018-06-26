@@ -147,7 +147,8 @@
           container.items.push({
             content_type: 'list',
             criteria: {
-              content_type: null,
+              content_type: '',
+              category: '',
               epp: 5,
               in_litter: 0,
               orderBy: { starttime:  'desc' }

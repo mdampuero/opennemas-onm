@@ -177,10 +177,7 @@
           <ol ui-tree-nodes ng-model="item.contents" type="container">
             <li class="newsletter-container ng-cloak" ui-tree-node ng-repeat="container in item.contents" collapsed="false">
               <div class="newsletter-container-title clearfix" ui-tree-handle>
-                <div class="input-group title pull-left" data-nodrag>
-                  <input ng-model="container.title" type="text" class="form-control">
-                  <div class="input-group-addon" id="basic-addon1"><i class="fa fa-pencil"></i></div>
-                </div>
+                <input ng-model="container.title" type="text" data-nodrag class="form-control title pull-left" placeholder="{t}Block title{/t}">
                 <div class="container-actions pull-right">
                   <button class="btn btn-white" data-nodrag ng-click="removeContainer(container)" type="button">
                     <i class="fa fa-trash-o text-danger"></i>
