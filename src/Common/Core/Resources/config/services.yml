@@ -229,6 +229,7 @@ services:
         arguments:
             - '@core.template'
             - '@entity_repository'
+            - '@category_repository'
             - '@setting_repository'
             - '@core.helper.advertisement'
             - '@advertisement_repository'

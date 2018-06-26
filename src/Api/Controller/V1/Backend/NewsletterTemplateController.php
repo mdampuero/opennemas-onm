@@ -256,6 +256,12 @@ class NewsletterTemplateController extends Controller
         $values['schedule']['days'] = array_unique($values['schedule']['days']);
 
         foreach ($values['contents'] as &$container) {
+            if (!is_array($container['items'])
+                || count($container['items']) <= 0
+            ) {
+                continue;
+            }
+
             foreach ($container['items'] as &$item) {
                 $newItem = new \stdClass();
 

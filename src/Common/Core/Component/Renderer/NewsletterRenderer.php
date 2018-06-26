@@ -10,6 +10,7 @@
 namespace Common\Core\Component\Renderer;
 
 use Repository\EntityManager;
+use Repository\CategoryManager;
 
 /**
  * The AdvertisementRenderer service provides methods to generate the HTML code
@@ -37,6 +38,7 @@ class NewsletterRenderer
     public function __construct(
         $tpl,
         EntityManager $entityManager,
+        CategoryManager $categoryManager,
         $settingManager,
         $adsHelper,
         $adsRepository,
@@ -44,6 +46,7 @@ class NewsletterRenderer
     ) {
         $this->tpl      = $tpl;
         $this->er       = $entityManager;
+        $this->cr       = $categoryManager;
         $this->sr       = $settingManager;
         $this->adHelper = $adsHelper;
         $this->ar       = $adsRepository;
@@ -74,6 +77,9 @@ class NewsletterRenderer
                 // then skip it
                 if ($item->content_type === 'label') {
                     continue;
+                } elseif ($item->content_type === 'list') {
+                    $contents         = $this->getContents($item->criteria);
+                    $container->items = array_merge($container->items, $contents);
                 } else {
                     $content = $this->er->find(classify($item->content_type), $item->id);
 
@@ -181,5 +187,68 @@ class NewsletterRenderer
         }
 
         return $content;
+    }
+
+    /**
+     * Returns the list of contents
+     *
+     * @param array $criteria the list of properties required to find contents
+     *
+     * @return array the list of contents
+     **/
+    public function getContents($criteria)
+    {
+        $contents = [];
+
+        if (!is_object($criteria)) {
+            return $contents;
+        }
+
+        // Calculate the SQL to fetch contents
+        // Criteria has: content_type, category, epp and sortBy elements
+
+        $searchCriteria = [
+            'content_status'    => [ [ 'value' => 1 ] ],
+            'in_litter'         => [ [ 'value' => 0 ] ],
+            'starttime'         => [
+                'union' => 'OR',
+                [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+            ],
+            'endtime'           => [
+                'union' => 'OR',
+                [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+            ]
+        ];
+
+        if (!empty($criteria->content_type)) {
+            $contentTypeId                     = \ContentManager::getContentTypeIdFromName($criteria->content_type);
+            $searchCriteria['fk_content_type'] = [ ['value' => $contentTypeId ] ];
+        } else {
+            // ['frontpage', 'schedule', 'photo', 'event', 'advertisement', 'widget'];
+            $excludedTypes                     = [18, 16, 8, 5, 2, 12];
+            $searchCriteria['fk_content_type'] = [ [ 'value' => $excludedTypes, 'operator' => 'NOT IN' ] ];
+        }
+
+        if (!empty($criteria->category)) {
+            $category = $this->cr->find((int) $criteria->category);
+            if (is_object($category) && !empty($category->name)) {
+                $searchCriteria['category_name'] = [ ['value' => $category->name ] ];
+            }
+        }
+
+        $total   = ($criteria->epp > 0) ? $criteria->epp : 5;
+        $orderBy = [ 'starttime' => 'desc' ];
+
+        $contents = $this->er->findBy($searchCriteria, $orderBy, $total, 1);
+
+        foreach ($contents as &$content) {
+            $content = $this->hydrateContent($content);
+        }
+
+        return $contents;
     }
 }
