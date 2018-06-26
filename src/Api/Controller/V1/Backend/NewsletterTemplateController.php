@@ -105,6 +105,11 @@ class NewsletterTemplateController extends Controller
         ];
 
         foreach ($contentTypesAvailable as $key => $value) {
+            $notValidContentTypes = ['frontpage', 'schedule', 'photo', 'event', 'advertisement', 'widget'];
+            if (in_array($key, $notValidContentTypes)) {
+                continue;
+            }
+
             $extra['content_types'][] = [
                 'title' => _($value),
                 'value' => $key
@@ -161,8 +166,10 @@ class NewsletterTemplateController extends Controller
     {
         $msg = $this->get('core.messenger');
 
+        $values = $this->parseValues($request->request->all());
+
         $newsletter = $this->get('api.service.newsletter')
-            ->createItem($request->request->all());
+            ->createItem($values);
         $msg->add(_('Item saved successfully'), 'success', 201);
 
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -212,8 +219,25 @@ class NewsletterTemplateController extends Controller
     {
         $msg = $this->get('core.messenger');
 
-        $values = $request->request->all();
+        $values = $this->parseValues($request->request->all());
 
+        $this->get('api.service.newsletter')
+            ->updateItem($id, $values);
+
+        $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Cleans and formats the newsletter template values
+     *
+     * @param array $values the RAW values to clean
+     *
+     * @return array the cleaned values
+     **/
+    public function parseValues($values)
+    {
         foreach ($values['schedule']['hours'] as &$hour) {
             $hour = $hour['text'];
         }
@@ -225,30 +249,23 @@ class NewsletterTemplateController extends Controller
 
         foreach ($values['contents'] as &$container) {
             foreach ($container['items'] as &$item) {
-                if ($item['content_type_name'] === 'list') {
-                    $newItem = [
-                        'content_type_l10n_name' => _('List of contents'),
-                        'oql' => $item['oql']
-                    ];
+                $newItem = new \stdClass();
+
+                if ($item['content_type'] === 'list') {
+                    $newItem->content_type_l10n_name = _('List of contents');
+                    $newItem->criteria               = $item['criteria'];
+                    $newItem->content_type           = $item['content_type'];
                 } else {
-                    $newItem = [
-                        'id'                     => $item['id'],
-                        'title'                  => $item['title'],
-                        'content_type_l10n_name' => $item['content_type_l10n_name'],
-                    ];
+                    $newItem->content_type           = array_key_exists('content_type_name', $item)
+                        ? $item['content_type_name'] : $item['content_type'];
+                    $newItem->content_type_l10n_name = $item['content_type_l10n_name'];
+                    $newItem->id                     = $item['id'];
+                    $newItem->title                  = $item['title'];
                 }
 
-                $item = array_merge([
-                    'content_type_name'      => $item['content_type_name'],
-                ], $newItem);
+                $item = $newItem;
             }
         }
-
-        $this->get('api.service.newsletter')
-            ->updateItem($id, $values);
-
-        $msg->add(_('Item saved successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
+        return $values;
     }
 }

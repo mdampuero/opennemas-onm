@@ -69,18 +69,20 @@ class NewsletterRenderer
             foreach ($container->items as &$item) {
                 // if current item do not fullfill the required format
                 // then skip it
-                if (empty($item->id) || $item->content_type == 'label') {
+                if ($item->content_type === 'label') {
                     continue;
-                }
 
                 $content = $this->er->find($item->content_type, $item->id);
+                } else {
+                    $content = $this->er->find(classify($item->content_type), $item->id);
 
-                // if is not a real content, skip this element
-                if (!is_object($content) || is_null($content->id)) {
-                    continue;
+                    // if is not a real content, skip this element
+                    if (!is_object($content) || is_null($content->id)) {
+                        continue;
+                    }
+
+                    $item = $this->hydrateContent($content);
                 }
-
-                $item = $this->hydrateContent($content);
             }
         }
 

@@ -74,57 +74,6 @@
         };
 
         /**
-         * @function getData
-         * @memberOf NewsletterTemplateCtrl
-         *
-         * @description
-         *   Returns the data to send when saving/updating an item.
-         */
-        $scope.getData = function() {
-          $scope.item.contents.map(function(container) {
-            return container.items.map(function(content) {
-              if (content.content_type_name !== 'oql') {
-                return content;
-              }
-
-              content.oql = oqlEncoder.getOql(content.criteria);
-
-              return content;
-            });
-          });
-
-          // DO here the parser of the items oql encoders
-          return $scope.item;
-        };
-
-        /**
-         * @function parseItem
-         * @memberOf NewsletterTemplateCtrl
-         *
-         * @description
-         *   Parses the response and adds information to the scope.
-         *
-         * @param {Object} data The data in the response.
-         */
-        $scope.parseItem = function(data) {
-          if (data.item) {
-            $scope.item = angular.extend($scope.item, data.item);
-          }
-
-          $scope.item.contents.map(function(container) {
-            container.items.map(function(element) {
-              if (element.content_type_name === 'oql') {
-                element.criteria = oqlDecoder.decode(element.oql);
-              }
-
-              return element;
-            });
-
-            return container;
-          });
-        };
-
-        /**
          * @function loadHours
          * @memberOf NewsletterTemplateCtrl
          *
@@ -196,10 +145,9 @@
          */
         $scope.addDynamicContent = function(container) {
           container.items.push({
-            content_type_name: 'oql',
-            oql: '',
+            content_type: 'list',
             criteria: {
-              content_type_name: null,
+              content_type: null,
               epp: 5,
               in_litter: 0,
               orderBy: { starttime:  'desc' }

@@ -192,16 +192,16 @@
                   <li ng-repeat="content in container.items" ui-tree-node{*  ng-include="'item'" *}>
                     <div class="newsletter-item clearfix" ui-tree-handle>
                       <span></span>
-                      <div ng-show="content.content_type_name !== 'oql'">
+                      <div ng-show="content.content_type !== 'list'">
                         <span data-nodrag>[% content.content_type_l10n_name %]</span>
                         <span class="h-seperate" data-nodrag></span>
                         <span class="item-title" data-nodrag>[% content.title %]</span>
                       </div>
-                      <div ng-show="content.content_type_name === 'oql'" class="item-list">
+                      <div ng-show="content.content_type === 'list'" class="item-list">
                         <span data-nodrag>{t}List of contents{/t}</span>
                         <span class="h-seperate" data-nodrag></span>
                         <span class="item-title" data-nodrag>
-                          <ui-select name="content_type" theme="select2" ng-model="content.criteria.content_type_name">
+                          <ui-select name="content_type" theme="select2" ng-model="content.criteria.content_type">
                             <ui-select-match>
                               <strong>{t}Type{/t}: </strong> [% $select.selected.title %]
                             </ui-select-match>
@@ -227,7 +227,6 @@
                               <div ng-bind-html="item | highlight: $select.search"></div>
                             </ui-select-choices>
                           </ui-select>
-                          {* <small>OQL: "[% content.oql %]"</small> *}
                         </span>
                       </div>
                       <button class="btn btn-white pull-right" data-nodrag ng-click="removeContent(container, content)" type="button">
