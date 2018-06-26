@@ -45,7 +45,7 @@ class TagsController extends Controller
             || !$this->view->isCached('tag/index.tpl', $cacheId)
         ) {
             $fm = $this->get('data.manager.filter');
-            $t  = $this->get('api.service.tag')->getList()['items'];
+            $t  = $this->get('api.service.tag')->getList('order by name asc')['items'];
 
             $letters = range('a', 'z');
 
@@ -64,6 +64,7 @@ class TagsController extends Controller
 
                 $tags['*'][] = $tag;
             }
+            ksort($tags);
         }
 
         list($positions, $advertisements) = $this->getInnerAds();
