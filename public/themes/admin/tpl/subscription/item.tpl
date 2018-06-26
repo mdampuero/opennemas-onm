@@ -237,7 +237,7 @@
                         </span>
                       </label>
                     </div>
-                    <div class="form-group no-margin">
+                    {*<div class="form-group no-margin">
                       <label class="pointer" for="member-payment">
                         <div class="checkbox">
                           <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_REQUIRES_PAYMENT')" id="member-payment" ng-disabled="true" type="checkbox">
@@ -248,7 +248,7 @@
                           {t}If enabled, this subscription will require a payment to become a member{/t}
                         </span>
                       </label>
-                    </div>
+                    </div>*}
                   </div>
                 </div>
               </div>
