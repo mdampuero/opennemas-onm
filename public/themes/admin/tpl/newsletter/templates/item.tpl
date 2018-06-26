@@ -78,6 +78,38 @@
       <div class="col-xs-12 col-sm-6">
         <div class="grid simple">
           <div class="grid-title">
+            <h5><i class="fa fa-calendar m-r-10"></i>{t}Schedule{/t}</h5>
+          </div>
+
+          <div class="grid-body">
+            <div class="form-group days col-xs-12">
+              <h5>{t}Days{/t}</h5>
+
+              <div class="form-group">
+                <div class="m-t-15 m-b-10" ng-repeat="day in data.extra.days">
+                  <div class="checkbox col-xs-6 p-b-10">
+                    <input id="checkbox-days-[% $index %]" checklist-model="item.schedule.days" checklist-value="$index + 1" type="checkbox">
+                    <label for="checkbox-days-[% $index %]">
+                      <strong>[% day %]</strong>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group hours col-xs-12">
+              <h5>{t}Hours{/t} <small class="pull-right">({t}Time zone: {/t} {date_default_timezone_get()})</small></h5>
+
+              <tags-input ng-model="item.schedule.hours" minTags=1 add-on-paste="true" add-from-autocomplete-only="true" placeholder="{t}Add an hour{/t}">
+                <auto-complete source="loadHours($query)" load-on-focus=true min-length="0" debounce-delay="0"></auto-complete>
+              </tags-input>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6">
+        <div class="grid simple">
+          <div class="grid-title">
             <h5><i class="fa fa-users m-r-10"></i>{t}Recipients{/t}</h5>
             {* <div class="pull-right">[% item.recipients %]</div> *}
           </div>
@@ -125,38 +157,6 @@
                 </div>
               </div>
 
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-6">
-        <div class="grid simple">
-          <div class="grid-title">
-            <h5><i class="fa fa-calendar m-r-10"></i>{t}Schedule{/t}</h5>
-          </div>
-
-          <div class="grid-body">
-            <div class="form-group days col-xs-12">
-              <h5>{t}Days{/t}</h5>
-
-              <div class="form-group">
-                <div class="m-t-15 m-b-10" ng-repeat="day in data.extra.days">
-                  <div class="checkbox col-xs-6 p-b-10">
-                    <input id="checkbox-days-[% $index %]" checklist-model="item.schedule.days" checklist-value="$index + 1" type="checkbox">
-                    <label for="checkbox-days-[% $index %]">
-                      <strong>[% day %]</strong>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group hours col-xs-12">
-              <h5>{t}Hours{/t} <small class="pull-right">({t}Time zone: {/t} {date_default_timezone_get()})</small></h5>
-
-              <tags-input ng-model="item.schedule.hours" minTags=1 add-on-paste="true" add-from-autocomplete-only="true" placeholder="{t}Add an hour{/t}">
-                <auto-complete source="loadHours($query)" load-on-focus=true min-length="0" debounce-delay="0"></auto-complete>
-              </tags-input>
             </div>
           </div>
         </div>
