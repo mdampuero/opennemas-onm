@@ -265,15 +265,20 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
      */
     private function getTagsFromString($tagStr)
     {
-        $tagsArr   = explode(',', \Onm\StringUtils::removeShorts($tagStr));
+        $tagsArr   = explode(',', $tagStr);
         $returnArr = [];
         $aux       = null;
+
         foreach ($tagsArr as $tagAux) {
             // Remove text between parentheses
             $aux = preg_replace("/\([^)]+\)/", "", $tagAux);
-
             if (strlen($aux) < 41) {
                 $aux = trim($aux);
+
+                if (strlen(trim(\Onm\StringUtils::removeShorts($aux))) == 0) {
+                    continue;
+                }
+
                 if (strlen($aux) > 1) {
                     $returnArr[] = $aux;
                 }
@@ -283,6 +288,12 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
             $aux = explode(' ', $aux);
             foreach ($aux as $realTag) {
                 $realTag = trim($realTag);
+
+                if (strlen(trim(\Onm\StringUtils::removeShorts($realTag))) == 0
+                ) {
+                    continue;
+                }
+
                 if (strlen($realTag) > 1) {
                     $returnArr[] = $realTag;
                 }
