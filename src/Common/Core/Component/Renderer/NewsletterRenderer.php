@@ -72,13 +72,14 @@ class NewsletterRenderer
         $newsletterContent = json_decode(json_encode($newsletterContent), false);
 
         foreach ($newsletterContent as &$container) {
-            foreach ($container->items as &$item) {
+            foreach ($container->items as $index => &$item) {
                 // if current item do not fullfill the required format
                 // then skip it
                 if ($item->content_type === 'label') {
                     continue;
                 } elseif ($item->content_type === 'list') {
                     $contents         = $this->getContents($item->criteria);
+                    unset($container->items[$index]);
                     $container->items = array_merge($container->items, $contents);
                 } else {
                     $content = $this->er->find(classify($item->content_type), $item->id);
