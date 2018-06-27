@@ -111,11 +111,10 @@
         <div class="grid simple">
           <div class="grid-title">
             <h5><i class="fa fa-users m-r-10"></i>{t}Recipients{/t}</h5>
-            {* <div class="pull-right">[% item.recipients %]</div> *}
           </div>
 
           <div class="grid-body">
-            <div class="external">
+            <div class="external" ng-show="data.extra.newsletter_handler == 'submit'">
               <h5><i class="fa fa-external-link m-r-10"></i>{t}External service{/t}</h5>
 
               <div class="form-group">
@@ -130,7 +129,8 @@
               </div>
             </div>
 
-            <div class="acton">
+            {is_module_activated name="es.openhost.module.acton"}
+            <div class="acton" ng-show="data.extra.newsletter_handler == 'acton'">
               <h5><i class="fa fa-address-book m-r-10"></i>{t}Act-On marketing lists{/t}</h5>
               <div class="form-group">
                 <div class="m-t-15 m-b-10" ng-repeat="recipient in data.extra.recipients|filter:{ type: 'acton' }">
@@ -143,11 +143,12 @@
                 </div>
               </div>
             </div>
+            {/is_module_activated}
 
-            <div class="internal">
+            <div class="internal" ng-show="data.extra.newsletter_handler == 'create_subscriptor'">
               <h5><i class="fa fa-address-book m-r-10"></i>{t}Subscription lists{/t}</h5>
               <div class="form-group">
-                <div class="m-t-15 m-b-10" ng-repeat="recipient in data.extra.recipients|filter:{ type: 'oql' }">
+                <div class="m-t-15 m-b-10" ng-repeat="recipient in data.extra.recipients|filter:{ type: 'list' }">
                   <div class="checkbox">
                     <input id="checkbox-lists-[% $index %]" checklist-model="item.recipients" checklist-value="recipient" type="checkbox">
                     <label for="checkbox-lists-[% $index %]">
@@ -186,50 +187,7 @@
               </div>
               <div class="newsletter-container-contents clearfix" ng-if="!container.hide" ui-tree-handle>
                 <ol ui-tree-nodes="" ng-model="container.items" type="content">
-                  <li ng-repeat="content in container.items" ui-tree-node{*  ng-include="'item'" *}>
-                    <div class="newsletter-item clearfix" ui-tree-handle>
-                      <span></span>
-                      <div ng-show="content.content_type !== 'list'">
-                        <span data-nodrag>[% content.content_type_l10n_name %]</span>
-                        <span class="h-seperate" data-nodrag></span>
-                        <span class="item-title" data-nodrag>[% content.title %]</span>
-                      </div>
-                      <div ng-show="content.content_type === 'list'" class="item-list">
-                        <span data-nodrag>{t}List of contents{/t}</span>
-                        <span class="h-seperate" data-nodrag></span>
-                        <span class="item-title" data-nodrag>
-                          <ui-select name="content_type" theme="select2" ng-model="content.criteria.content_type">
-                            <ui-select-match>
-                              <strong>{t}Type{/t}: </strong> [% $select.selected.title %]
-                            </ui-select-match>
-                            <ui-select-choices repeat="item.value as item in data.extra.content_types | filter: { title: $select.search }">
-                              <div ng-bind-html="item.title | highlight: $select.search"></div>
-                            </ui-select-choices>
-                          </ui-select>
-
-                          <ui-select name="category" theme="select2" ng-model="content.criteria.category">
-                            <ui-select-match>
-                              <strong>{t}Category{/t}: </strong> [% $select.selected.title %]
-                            </ui-select-match>
-                            <ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in data.extra.categories | filter: { title: $select.search }">
-                              <div ng-bind-html="item.title | highlight: $select.search"></div>
-                            </ui-select-choices>
-                          </ui-select>
-
-                          <ui-select name="view" theme="select2" ng-model="content.criteria.epp">
-                            <ui-select-match>
-                              <strong>{t}Amount{/t}: </strong> [% $select.selected %]
-                            </ui-select-match>
-                            <ui-select-choices repeat="item in numberOfElements  | filter: $select.search">
-                              <div ng-bind-html="item | highlight: $select.search"></div>
-                            </ui-select-choices>
-                          </ui-select>
-                        </span>
-                      </div>
-                      <button class="btn btn-white pull-right" data-nodrag ng-click="removeContent(container, content)" type="button">
-                        <i class="fa fa-trash-o text-danger"></i>
-                      </button>
-                    </div>
+                  <li ng-repeat="content in container.items" ui-tree-node ng-include="'item'">
                   </li>
                 </ol>
                 <div class="add-contents p-b-15" data-nodrag >
@@ -260,7 +218,49 @@
     </div>
   </div>
   <script type="text/ng-template" id="item">
+  <div class="newsletter-item clearfix" ui-tree-handle>
+    <span></span>
+    <div ng-show="content.content_type !== 'list'">
+      <span>[% content.content_type_l10n_name %]</span>
+      <span class="h-seperate" data-nodrag></span>
+      <span class="item-title" data-nodrag>[% content.title %]</span>
+    </div>
+    <div ng-show="content.content_type === 'list'" class="item-list">
+      <span>{t}List of contents{/t}</span>
+      <span class="h-seperate" data-nodrag></span>
+      <span class="item-title" data-nodrag>
+        <ui-select name="content_type" theme="select2" ng-model="content.criteria.content_type">
+          <ui-select-match>
+            <strong>{t}Type{/t}: </strong> [% $select.selected.title %]
+          </ui-select-match>
+          <ui-select-choices repeat="item.value as item in data.extra.content_types | filter: { title: $select.search }">
+            <div ng-bind-html="item.title | highlight: $select.search"></div>
+          </ui-select-choices>
+        </ui-select>
 
+        <ui-select name="category" theme="select2" ng-model="content.criteria.category">
+          <ui-select-match>
+            <strong>{t}Category{/t}: </strong> [% $select.selected.title %]
+          </ui-select-match>
+          <ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in data.extra.categories | filter: { title: $select.search }">
+            <div ng-bind-html="item.title | highlight: $select.search"></div>
+          </ui-select-choices>
+        </ui-select>
+
+        <ui-select name="view" theme="select2" ng-model="content.criteria.epp">
+          <ui-select-match>
+            <strong>{t}Amount{/t}: </strong> [% $select.selected %]
+          </ui-select-match>
+          <ui-select-choices repeat="item in numberOfElements  | filter: $select.search">
+            <div ng-bind-html="item | highlight: $select.search"></div>
+          </ui-select-choices>
+        </ui-select>
+      </span>
+    </div>
+    <button class="btn btn-white pull-right" data-nodrag ng-click="removeContent(container, content)" type="button">
+      <i class="fa fa-trash-o text-danger"></i>
+    </button>
+  </div>
   </script>
 </form>
 {/block}

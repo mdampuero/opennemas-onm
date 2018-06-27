@@ -67,7 +67,9 @@
             <select name="newsletter_subscriptionType" id="newsletter_subscriptionType" ng-model="settings.newsletter_subscriptionType">
               <option value="submit">{t}External service{/t} - {t}Maillist{/t}</option>
               <option value="create_subscriptor">{t}Internal Send{/t} - {t}Subscriptions{/t}</option>
+              {is_module_activated name="es.openhost.module.acton"}
               <option value="acton">{t}External service{/t} - {t}Act-On lists{/t}</option>
+              {/is_module_activated}
             </select>
           </div>
         </div>

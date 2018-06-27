@@ -71,14 +71,21 @@ class NewsletterRenderer
         // HACK: Force object conversion, not proud of this, please look other side
         $newsletterContent = json_decode(json_encode($newsletterContent), false);
 
+        $index = 1;
         foreach ($newsletterContent as &$container) {
-            foreach ($container->items as &$item) {
+            if (!property_exists($container, 'id')) {
+                $container->id = $index;
+            }
+
+            foreach ($container->items as $index => &$item) {
                 // if current item do not fullfill the required format
                 // then skip it
                 if ($item->content_type === 'label') {
                     continue;
                 } elseif ($item->content_type === 'list') {
-                    $contents         = $this->getContents($item->criteria);
+                    $contents = $this->getContents($item->criteria);
+                    unset($container->items[$index]);
+
                     $container->items = array_merge($container->items, $contents);
                 } else {
                     $content = $this->er->find(classify($item->content_type), $item->id);
@@ -91,6 +98,8 @@ class NewsletterRenderer
                     $item = $this->hydrateContent($content);
                 }
             }
+
+            $index++;
         }
 
         $this->tpl->assign('newsletterContent', $newsletterContent);
