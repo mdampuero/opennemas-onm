@@ -111,11 +111,10 @@
         <div class="grid simple">
           <div class="grid-title">
             <h5><i class="fa fa-users m-r-10"></i>{t}Recipients{/t}</h5>
-            {* <div class="pull-right">[% item.recipients %]</div> *}
           </div>
 
           <div class="grid-body">
-            <div class="external">
+            <div class="external" ng-show="data.extra.newsletter_handler == 'submit'">
               <h5><i class="fa fa-external-link m-r-10"></i>{t}External service{/t}</h5>
 
               <div class="form-group">
@@ -130,7 +129,8 @@
               </div>
             </div>
 
-            <div class="acton">
+            {is_module_activated name="es.openhost.module.acton"}
+            <div class="acton" ng-show="data.extra.newsletter_handler == 'acton'">
               <h5><i class="fa fa-address-book m-r-10"></i>{t}Act-On marketing lists{/t}</h5>
               <div class="form-group">
                 <div class="m-t-15 m-b-10" ng-repeat="recipient in data.extra.recipients|filter:{ type: 'acton' }">
@@ -143,11 +143,12 @@
                 </div>
               </div>
             </div>
+            {/is_module_activated}
 
-            <div class="internal">
+            <div class="internal" ng-show="data.extra.newsletter_handler == 'create_subscriptor'">
               <h5><i class="fa fa-address-book m-r-10"></i>{t}Subscription lists{/t}</h5>
               <div class="form-group">
-                <div class="m-t-15 m-b-10" ng-repeat="recipient in data.extra.recipients|filter:{ type: 'oql' }">
+                <div class="m-t-15 m-b-10" ng-repeat="recipient in data.extra.recipients|filter:{ type: 'list' }">
                   <div class="checkbox">
                     <input id="checkbox-lists-[% $index %]" checklist-model="item.recipients" checklist-value="recipient" type="checkbox">
                     <label for="checkbox-lists-[% $index %]">
