@@ -25,6 +25,10 @@ class SmartyOutputFilterMetaAmpHtml extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'hasExtension' ])
             ->getMock();
 
+        $this->requestStack = $this->getMockBuilder('RequestStack')
+            ->setMethods([ 'getCurrentRequest' ])
+            ->getMock();
+
         $this->request = $this->getMockBuilder('Request')
             ->setMethods([ 'getUri' ])
             ->getMock();
@@ -50,6 +54,10 @@ class SmartyOutputFilterMetaAmpHtml extends \PHPUnit_Framework_TestCase
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')
+            ->willReturn($this->request);
     }
 
     /**
@@ -70,6 +78,8 @@ class SmartyOutputFilterMetaAmpHtml extends \PHPUnit_Framework_TestCase
                 return $this->security;
             case 'router':
                 return $this->router;
+            case 'request_stack':
+                return $this->requestStack;
         }
 
         return null;

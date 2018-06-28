@@ -4,11 +4,19 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 function smarty_outputfilter_meta_amphtml($output, $smarty)
 {
+    $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+
+    if (is_null($request)) {
+        return $output;
+    }
+
+    $uri = $request->getUri();
+
     $container = $smarty->getContainer();
 
     if (!$container->get('core.security')->hasExtension('AMP_MODULE')
-        || strstr($container->get('request')->getUri(), 'amp.html') !== false
-        || strstr($container->get('request')->getUri(), 'blog/section') !== false
+        || strstr($uri, 'amp.html') !== false
+        || strstr($uri, 'blog/section') !== false
         || !array_key_exists('content', $smarty->tpl_vars)
         || !is_object($smarty->tpl_vars['content']->value)
         || $smarty->tpl_vars['content']->value->content_type_name !== 'article'
