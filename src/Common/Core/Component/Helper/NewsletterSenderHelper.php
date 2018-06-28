@@ -200,6 +200,8 @@ class NewsletterSenderHelper
 
             $sentEmails += 1;
         } catch (\Exception $e) {
+            $this->errorLog->error('Error sending to ActOn: ' . $e->getMessage());
+
             $errors[] = _('Unable to deliver your email');
         }
 
