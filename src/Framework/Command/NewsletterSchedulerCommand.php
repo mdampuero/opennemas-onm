@@ -148,7 +148,7 @@ EOF
         }
 
         $diff    = $newDate->diff($sentNewsletters['items'][0]->sent);
-        $canSend = ($diff->d === 0 && $diff->h > 0) || ($diff->d > 0 && $diff->h === 0);
+        $canSend = ($diff->d === 0 && $diff->h > 0) || ($diff->d > 0);
 
         // var_dump($canSend, $diff->d, $diff->h, $sentNewsletters['items'][0]->sent, $time);
 
