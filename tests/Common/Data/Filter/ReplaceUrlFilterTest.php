@@ -22,7 +22,7 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->instance = new Instance();
+        $this->instance = new Instance([ 'internal_name' => 'qux' ]);
 
         $this->str = '<p>Taciti sociosqu ad litora torquent per
             conubia nostra, per inceptos himenaeos. Nulla lectus sem, tristique
@@ -101,7 +101,7 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
 
         $filter->expects($this->once())->method('getTranslation')
             ->with('waldo', false)
-            ->willReturn([ 'pk_content' => 1, 'type' => 'bar']);
+            ->willReturn([ [ 'pk_content' => 1, 'type' => 'bar'], 'qux' ]);
         $this->ug->expects($this->once())->method('setInstance')
             ->with($this->instance)->willReturn($this->ug);
         $this->ug->expects($this->once())->method('generate')
@@ -130,7 +130,7 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
 
         $filter->expects($this->once())->method('getTranslation')
             ->with('waldo', true)
-            ->willReturn([ 'pk_content' => 1, 'type' => 'bar']);
+            ->willReturn([ [ 'pk_content' => 1, 'type' => 'bar'], 'qux' ]);
         $this->ug->expects($this->once())->method('setInstance')
             ->with($this->instance)->willReturn($this->ug);
         $this->ug->expects($this->once())->method('generate')
@@ -159,7 +159,7 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
 
         $filter->expects($this->once())->method('getTranslation')
             ->with('waldo', false)
-            ->willReturn([ 'pk_content' => 1, 'type' => 'bar']);
+            ->willReturn([ [ 'pk_content' => 1, 'type' => 'bar' ], 'qux' ]);
         $this->repository->expects($this->once())->method('find')
             ->with('Bar', 1)->willReturn(null);
 
@@ -194,7 +194,7 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
             ])->getMock();
 
         $filter->expects($this->once())->method('getTranslation')
-            ->with('hendrerit', true)->willReturn(null);
+            ->with('hendrerit', true)->willReturn([ null, null ]);
 
         $this->assertEquals($this->str, $filter->filter($this->str));
     }
@@ -223,7 +223,10 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
         $this->redirector->expects($this->at(1))->method('getTranslation')
             ->with(null, null, 'waldo')->willReturn($translation);
 
-        $this->assertEquals($translation, $method->invokeArgs($filter, [ 'waldo', false ]));
+        $this->assertEquals(
+            [ $translation, 'grault' ],
+            $method->invokeArgs($filter, [ 'waldo', false ])
+        );
     }
 
     /**
@@ -246,7 +249,10 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
         $this->redirector->expects($this->exactly(2))->method('getTranslation')
             ->with(null, null, 'waldo')->willReturn(null);
 
-        $this->assertEmpty($method->invokeArgs($filter, [ 'waldo', false ]));
+        $this->assertEquals(
+            [ null, null ],
+            $method->invokeArgs($filter, [ 'waldo', false ])
+        );
     }
 
     /**
@@ -266,6 +272,9 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
         $this->redirector->expects($this->once())->method('getTranslation')
             ->with('waldo', null, null)->willReturn($translation);
 
-        $this->assertEquals($translation, $method->invokeArgs($filter, [ 'waldo', true ]));
+        $this->assertEquals(
+            [ $translation, 'qux' ],
+            $method->invokeArgs($filter, [ 'waldo', true ])
+        );
     }
 }

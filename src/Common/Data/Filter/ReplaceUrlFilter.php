@@ -21,7 +21,7 @@ class ReplaceUrlFilter extends Filter
     public function filter($str)
     {
         $pattern  = $this->getParameter('pattern');
-        $absolute = $this->getParameter('absolute', false);
+        $instance = $this->container->get('core.instance')->internal_name;
         $tokens   = [];
         $isSlug   = true;
 
@@ -37,7 +37,8 @@ class ReplaceUrlFilter extends Filter
         $tokens = array_unique($tokens);
 
         foreach ($tokens as $token) {
-            $translation = $this->getTranslation($token, $isSlug);
+            list($translation, $foundAt) =
+                $this->getTranslation($token, $isSlug);
 
             if (empty($translation)) {
                 continue;
@@ -53,7 +54,9 @@ class ReplaceUrlFilter extends Filter
             $url = $this->container->get('core.helper.url_generator')
                 ->setInstance(
                     $this->container->get('core.loader')->getInstance()
-                )->generate($content, [ 'absolute' => $absolute ]);
+                )->generate($content, [
+                    'absolute' => $instance !== $foundAt
+                ]);
 
             $str = str_replace($token, $url, $str);
         }
@@ -82,8 +85,11 @@ class ReplaceUrlFilter extends Filter
         }
 
         if (empty($instances)) {
-            return $this->container->get('core.redirector')
-                ->getTranslation($token, $type, $id);
+            return [
+                $this->container->get('core.redirector')
+                    ->getTranslation($token, $type, $id),
+                $this->container->get('core.instance')->internal_name
+            ];
         }
 
         foreach ($instances as $instance) {
@@ -94,10 +100,10 @@ class ReplaceUrlFilter extends Filter
                 ->getTranslation($token, $type, $id);
 
             if (!empty($translation)) {
-                return $translation;
+                return [ $translation, $instance ];
             }
         }
 
-        return null;
+        return [ null, null ];
     }
 }
