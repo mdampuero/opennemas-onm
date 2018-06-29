@@ -114,7 +114,7 @@
           </div>
 
           <div class="grid-body">
-            <div class="external" ng-show="data.extra.newsletter_handler == 'submit'">
+            <div class="external" ng-if="data.extra.newsletter_handler == 'submit'">
               <h5><i class="fa fa-external-link m-r-10"></i>{t}External service{/t}</h5>
 
               <div class="form-group">
@@ -130,7 +130,7 @@
             </div>
 
             {is_module_activated name="es.openhost.module.acton"}
-            <div class="acton" ng-show="data.extra.newsletter_handler == 'acton'">
+            <div class="acton" ng-if="data.extra.newsletter_handler == 'acton'">
               <h5><i class="fa fa-address-book m-r-10"></i>{t}Act-On marketing lists{/t}</h5>
               <div class="form-group">
                 <div class="m-t-15 m-b-10" ng-repeat="recipient in data.extra.recipients|filter:{ type: 'acton' }">
@@ -145,7 +145,7 @@
             </div>
             {/is_module_activated}
 
-            <div class="internal" ng-show="data.extra.newsletter_handler == 'create_subscriptor'">
+            <div class="internal" ng-if="data.extra.newsletter_handler == 'create_subscriptor'">
               <h5><i class="fa fa-address-book m-r-10"></i>{t}Subscription lists{/t}</h5>
               <div class="form-group">
                 <div class="m-t-15 m-b-10" ng-repeat="recipient in data.extra.recipients|filter:{ type: 'list' }">
@@ -157,19 +157,18 @@
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="grid simple ng-cloak" ng-if="!flags.loading">
+    <div class="grid simple ng-cloak newsletter-contents" ng-if="!flags.loading">
       <div class="grid-title clearfix">
         <h5 class="pull-left">{t}Contents{/t}</h5>
         <div class="pull-right">
             <button type="button" class="btn" ng-click="addContainer()">
-              <span class="fa fa-plus"></span> {t}Add section{/t}
+              <span class="fa fa-plus"></span> {t}Add Container{/t}
             </button>
         </div>
       </div>
@@ -193,7 +192,7 @@
                 <div class="add-contents p-b-15" data-nodrag >
                   <h5 class="text-center">{t}Add contents{/t}</h5>
                   <div class="row">
-                    <div class="col-xs-4 col-md-offset-2">
+                    <div class="col-xs-4 col-sm-offset-2">
                       <a ng-click="addDynamicContent(container)" class="btn btn-primary btn-block">
                         <i class="fa fa-bolt"></i>
                         {t}Add dynamic contents{/t}
