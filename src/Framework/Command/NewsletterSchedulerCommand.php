@@ -124,7 +124,8 @@ EOF
         // Check if it is the right hour of the week to send the newsletter
         $newDate = clone $time;
         $newDate->setTimeZone(getService('core.locale')->getTimeZone());
-        $currentHour = (int) $newDate->format('H') . ":00";
+        $currentHour = sprintf('%02d:00', (int) $newDate->format('H'));
+
         if (!in_array($currentHour, $template->schedule['hours'])) {
             return [
                 false,
