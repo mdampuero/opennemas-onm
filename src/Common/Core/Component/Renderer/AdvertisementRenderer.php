@@ -130,6 +130,8 @@ class AdvertisementRenderer
             return $this->renderInlineReviveSlot($ad);
         } elseif ($ad->with_script == 3) {
             return $this->renderInlineDFPSlot($ad);
+        } elseif ($ad->with_script == 4) {
+            return $this->renderInlineSmartSlot($ad);
         }
 
         $img = $this->getImage($ad);
@@ -273,7 +275,7 @@ class AdvertisementRenderer
         $zones  = [];
 
         foreach ($ads as $ad) {
-            $zones = [
+            $zones[] = [
                 'id'      => $ad->id,
                 'openXId' => (int) $ad->params['openx_zone_id']
             ];
@@ -306,6 +308,70 @@ class AdvertisementRenderer
                 'id'     => $ad->id,
                 'iframe' => $iframe,
                 'url'    => $url,
+            ]);
+    }
+
+    /**
+     * Generates the HTML code to include in header for Smart advertisements.
+     *
+     * @param array The list of advertisements.
+     * @param string $format the render format to use 'amp' or 'inline'
+     *
+     * @return string The HTML code to include in header.
+     */
+    public function renderInlineSmartHeader($ads, $params)
+    {
+        if (empty($ads)) {
+            return '';
+        }
+
+        $ads = array_filter($ads, function ($a) {
+            return $a->with_script == 4
+                && array_key_exists('smart_format_id', $a->params)
+                && !empty($a->params['smart_format_id']);
+        });
+
+        if (empty($ads)) {
+            return '';
+        }
+
+        $config = $this->sm->get('smart_ad_server');
+        $zones  = [];
+
+        foreach ($ads as $ad) {
+            $zones[] = [
+                'id'        => $ad->id,
+                'format_id' => (int) $ad->params['smart_format_id']
+            ];
+        }
+
+        return $this->tpl
+            ->fetch('advertisement/helpers/inline/smart.header.tpl', [
+                'config'        => $config,
+                'page_id'       => $config['page_id'][$params['advertisementGroup']],
+                'zones'         => $zones,
+                'customCode'    => $this->getSmartCustomCode(),
+                'targetingCode' => $this->getSmartTargeting(
+                    $params['category'],
+                    $params['extension'],
+                    $params['content']->id
+                )
+            ]);
+    }
+
+    /**
+     * Renders a Smart advertisement.
+     *
+     * @param Advertisement $ad the ad to render.
+     * @param string $format the render format to use 'amp' or 'inline'
+     *
+     * @return string the HTML content for the Smart slot.
+     */
+    public function renderInlineSmartSlot($ad)
+    {
+        return $this->tpl
+            ->fetch('advertisement/helpers/inline/smart.slot.tpl', [
+                'id' => $ad->params['smart_format_id'],
             ]);
     }
 
@@ -428,6 +494,8 @@ class AdvertisementRenderer
             return $this->renderSafeFrameRevive($ad, $params);
         } elseif ($ad->with_script == 3) {
             return $this->renderSafeFrameDFP($ad, $params);
+        } elseif ($ad->with_script == 4) {
+            return $this->renderSafeFrameSmart($ad, $params);
         }
 
         $img = $this->getImage($ad);
@@ -489,6 +557,26 @@ class AdvertisementRenderer
         ];
 
         return $this->tpl->fetch('advertisement/helpers/safeframe/dfp.tpl', $params);
+    }
+
+    /**
+     * Returns the HTML code for a Smart advertisement.
+     *
+     * @param Advertisement $ad       The advertisement object.
+     * @param string        $category The current category.
+     *
+     * @return string The HTML code for the Smart advertisement.
+     */
+    protected function renderSafeFrameSmart($ad, $params)
+    {
+        $config = $this->sm->get('smart_ad_server');
+        $params = [
+            'config'        => $config,
+            'page_id'       => $config['page_id'][$params['advertisementGroup']],
+            'format_id'     => (int) $ad->params['smart_format_id']
+        ];
+
+        return $this->tpl->fetch('advertisement/helpers/safeframe/smart.tpl', $params);
     }
 
     /**
@@ -571,7 +659,7 @@ class AdvertisementRenderer
      */
     protected function getDFPCustomCode()
     {
-        $code = $this->container->get('setting_repository')->get('dfp_custom_code');
+        $code = $this->sm->get('dfp_custom_code');
 
         if (empty($code)) {
             return '';
@@ -614,6 +702,58 @@ class AdvertisementRenderer
         ) {
             $targetingCode .=
                 "googletag.pubads().setTargeting('{$options['content_id']}', ['{$contentId}']);\n";
+        }
+
+        return $targetingCode;
+    }
+
+    /**
+     * Returns the custom code for Google DFP.
+     *
+     * @return string The custom code for Google DFP.
+     */
+    protected function getSmartCustomCode()
+    {
+        $code = $this->sm->get('smart_custom_code');
+
+        if (empty($code)) {
+            return '';
+        }
+
+        return base64_decode($code);
+    }
+
+    /**
+     * Returns the targeting-related JS code for google DFP.
+     *
+     * @param string $category The current category.
+     *
+     * @return string The targeting-related JS code.
+     */
+    protected function getSmartTargeting($category, $module, $contentId)
+    {
+        $config = $this->sm->get('smart_ad_server');
+
+        $targetingCode = '';
+        if (array_key_exists('category_targeting', $config)
+            && !empty($config['category_targeting'])
+            && !empty($category)
+        ) {
+            $targetingCode .= $config['category_targeting'] . '=' . $category . ';';
+        }
+
+        if (array_key_exists('module_targeting', $config)
+            && !empty($config['module_targeting'])
+            && !empty($module)
+        ) {
+            $targetingCode .= $config['module_targeting'] . '=' . $module . ';';
+        }
+
+        if (array_key_exists('url_targeting', $config)
+            && !empty($config['url_targeting'])
+            && !empty($contentId)
+        ) {
+            $targetingCode .= $config['url_targeting'] . '=' . $contentId . ';';
         }
 
         return $targetingCode;

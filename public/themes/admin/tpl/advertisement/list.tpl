@@ -207,6 +207,7 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
                     <i class="fa fa-file-code-o fa-lg m-r-5 text-info" ng-if="content.with_script == 1" title="Javascript"></i>
                     <i class="fa fa-gg fa-lg m-r-5 text-info" ng-if="content.with_script == 2" title="OpenX"></i>
                     <i class="fa fa-google fa-lg m-r-5 text-danger" ng-if="content.with_script == 3" title="Google DFP"></i>
+                    <i class="fa fa-plus-square fa-lg m-r-5 text-warning" ng-if="content.with_script == 4" title="Smart Adserver"></i>
                   </span>
                   [% content.title %]
                   <div class="small-text">
@@ -253,6 +254,7 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
                   <i class="fa fa-file-code-o fa-lg m-r-5 text-info" ng-if="content.with_script == 1" title="Javascript"></i>
                   <i class="fa fa-gg fa-lg m-r-5 text-info" ng-if="content.with_script == 2" title="OpenX"></i>
                   <i class="fa fa-google fa-lg m-r-5 text-danger" ng-if="content.with_script == 3" title="Google DFP"></i>
+                  <i class="fa fa-plus-square fa-lg m-r-5 text-warning" ng-if="content.with_script == 4" title="Smart Adserver"></i>
                 </td>
                 {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
                 <td class="text-center">

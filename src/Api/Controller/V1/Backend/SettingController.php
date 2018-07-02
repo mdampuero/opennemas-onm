@@ -25,6 +25,7 @@ class SettingController extends Controller
      * @var array
      */
     protected $keys = [
+        'act_on_configuration',
         'body_end_script',
         'body_start_script',
         'chartbeat',
