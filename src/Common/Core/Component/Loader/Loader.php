@@ -205,8 +205,7 @@ class Loader
         if ($this->container->has('cache.manager')) {
             $this->instance = $cacheManager->get($host);
 
-            // ONM-2799 Check that cache is not empty or invalid
-            if ($this->instance instanceof \Common\ORM\Entity\Instance) {
+            if ($this->checkInstanceData($this->instance, $host)) {
                 $this->configureInstance($this->instance);
 
                 return $this->instance;
@@ -241,6 +240,20 @@ class Loader
         $oql = sprintf('uuid = "%s"', $uuid);
 
         return $this->loadThemeFromOql($oql);
+    }
+
+    /**
+     * Checks if the object instance is valid
+     *
+     * @param Instance $instance the instance object to check
+     * @param string $host the host that we are looking for
+     *
+     * @return boolean true if the instance is valid
+     **/
+    protected function checkInstanceData($instance, $host)
+    {
+        return $instance instanceof \Common\ORM\Entity\Instance
+            && in_array($host, $instance->domains);
     }
 
     /**
