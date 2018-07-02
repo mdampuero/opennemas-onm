@@ -1,18 +1,12 @@
 parameters:
-    framework.trusted_proxies: ~
+    environment: development
     framework.secret: test
-    # A secret key that's used to generate certain security-related tokens
-    secret:            ThisTokenIsNotSoSecretChangeIt
+    framework.trusted_proxies: ~
     locale: en
+    # A secret key that's used to generate certain security-related tokens
+    secret: ThisTokenIsNotSoSecretChangeIt
 
-    logger_file_path: tmp/log/application.log
-
-    password_min_level: 1 # Weak(0) | Good(1) | Strong(2)
-
-    disable_robots: false
-
-    # environment:       production
-    environment:       development
+    # Doctrine DBAL
     database:
         dbal:
             default_connection: default
@@ -34,28 +28,21 @@ parameters:
                     #         user:                 root
                     #         password:             root
                     #         charset:              ~
-    orm.default:
-        connection:
-            driver: mysqli
-            dbname: onm-instances
-            host: localhost
-            port: 3306
-            user: root
-            password: root
-            charset: UTF-8
-    cache.default:
-        type: redis
-        file:
-            name: internal
-            namespace: internal
-            path: %kernel.root_dir%/../tmp/cache/%kernel.environment%/file
-        redis:
-            server: 127.0.0.1
-            port:   6379
-            prefix: onm
 
+    # HWIOAuthBundle
     hwi_oauth.target_path_parameter: _target_path
 
+    # JWTAuthentication
+    # JWT (RSA)
+    # public_private_key_algorithm: RS256
+    # public_key_path:              %kernel.root_dir%/jwt/rsa/public.pem
+    # private_key_path:             %kernel.root_dir%/jwt/rsa/private.pem
+    # pass_phrase:                  yourpassphrase
+    # JWT (Shared key)
+    shared_key_algorithm: HS512
+    shared_key:           yoursharedkey
+
+    # Swiftmailer
     mailer_transport:  mail
     mailer_host:       localhost
     mailer_user:       ~
@@ -64,29 +51,79 @@ parameters:
     mailer_port:       ~
     mailer_no_reply_address: no-reply@postman.opennemas.com
 
-    session.name:          __onm_sess
-    session.gc_maxlifetime: 86400
+    # Opennemas
+    backend_analytics.enabled: false
+    disable_robots:            false
+    password_min_level:        1 # Weak(0) | Good(1) | Strong(2)
+    instance_creator:
+        end_point:   https://manager.dev.opennemas.com/managerws/
+        base_domain: dev.opennemas.com
+        template:    es.openhost.theme.basic
+    manager_url: https://manager.dev.opennemas.com/
+    manager_webservice:
+        api_key:         sheequaiJie5deewijie6oojaiShie5R
+        company_mail:    developers@openenmas.com
+        info_mail:       developers@opennemas.com
+        no_reply_sender: no-reply@postman.opennemas.com
+        no_reply_from:   no-reply@opennemas.com
+    opennemas.assetic.asset_compilation_in_dev: false
+    opennemas.assetic.asset_domain:             //media%d.opennemas.net
+    opennemas.assetic.asset_servers:            3
+    opennemas.assetic.use_asset_servers:        false
+    opennemas.backend_force_ssl:                false
+    opennemas.base_domain:                      .dev.opennemas.com
+    opennemas.redirect_frontend:                false
+    piwik.url:                                  http://piwik.openhost.es
+    piwik.token:                                long_alphanum_token
+    sales_email:                                developers@opennemas.com
 
-    # Memcached options, savepath for Memcached (ip:port)
-    # session_handler_id:      session.handler.drak.memcached
-    # session_handler_savepath: 127.0.0.1:11211
-    # session_handler_options: []
+    # Cache
+    cache.default:
+        type: redis
+        file:
+            name:      internal
+            namespace: internal
+            path:      %kernel.root_dir%/../tmp/cache/%kernel.environment%/file
+        redis:
+            server:    127.0.0.1
+            port:      6379
+            prefix:    onm
 
-
-    # Sessions in redis, (tcp://ip:port?<options>)
-    session_handler_id: session.handler.drak.redis
-    session_handler_savepath: tcp://localhost:6379?timeout=2
-    session_handler_options: []
-
-    cache_handler:     Onm\Cache\Memcache
+    cache_handler:     Onm\Cache\Redis
     cache_handler_params:
         server: 127.0.0.1
-        port: 11211
+        port:   11211
         connection_string: tcp:\\127.0.0.1
         options:
             server: localhost
             prefix: onm
 
+    # ORM
+    orm.default:
+        connection:
+            driver:   mysqli
+            dbname:   onm-instances
+            host:     localhost
+            port:     3306
+            user:     root
+            password: root
+            charset:  UTF-8
+
+    # Session
+    session.name:          __onm_sess
+    session.gc_maxlifetime: 86400
+
+    # Memcached options, savepath for Memcached (ip:port)
+    # session_handler_id:       session.handler.drak.memcached
+    # session_handler_savepath: 127.0.0.1:11211
+    # session_handler_options:  []
+
+    # Sessions in redis, (tcp://ip:port?<options>)
+    session_handler_id:       session.handler.drak.redis
+    session_handler_savepath: tcp://localhost:6379?timeout=2
+    session_handler_options:  []
+
+    # Varnish
     varnish:
         header_name: X-Varnish-Ban
         servers:
@@ -94,61 +131,21 @@ parameters:
                 host: localhost
                 port: 80
 
-    manager_url: https://manager.onm.local/
-    manager_webservice:
-        api_key:         sheequaiJie5deewijie6oojaiShie5R
-        company_mail:    support@openenmas.com
-        info_mail:       info@openhost.es
-        no_reply_sender: no-reply@postman.opennemas.com
-        no_reply_from:   no-reply@opennemas.com
-
-    instance_creator:
-        end_point:   https://manager.onm.local/managerws/
-        base_domain: opennemas.com
-        template:    es.openhost.theme.basic
-
-    opennemas.backend_force_ssl: false
-    opennemas.base_domain: .opennemas.com
-    opennemas.redirect_frontend: false
-
-    opennemas.assetic.asset_compilation_in_dev: false
-    opennemas.assetic.use_asset_servers:        false
-    opennemas.assetic.asset_servers:            3
-    opennemas.assetic.asset_domain:             //media%d.opennemas.net
-
-    api.facebook.client_id:     330535510437103
-    api.facebook.client_secret: 292ccd17e59fd413f245c86c5e19e83b
-    api.recaptcha.site_key:     6LdWlgkUAAAAADzgu34FyZ-wBSB0xlCUc7UVFWGw
-    api.recaptcha.secret_key:   6LdWlgkUAAAAAOUnzzBwHNpPgTBIaLwfDjr6XaeQ
-    api.twitter.client_id:      2uP5o5b7ruolJLjEqZhDQPfO4
-    api.twitter.client_secret:  Lv1fVSQ84p936jDfxjcbhmORD6Mwav2DY3JB2NEJJlFfE7CGgB
-
-    piwik.url:   http://piwik.openhost.es
-    piwik.token: b4956f6e687b28851fa8a545b6ccd85b
-
-    # JWT (RSA)
-    # public_private_key_algorithm: RS256
-    # public_key_path:              %kernel.root_dir%/jwt/rsa/public.pem
-    # private_key_path:             %kernel.root_dir%/jwt/rsa/private.pem
-    # pass_phrase:                  yourpassphrase
-
-    # JWT (Shared key)
-    shared_key_algorithm: HS512
-    shared_key:           yoursharedkey
-
-    sales_email: sales@openhost.es
-
-    backend_analytics.enabled: false
-
-    braintree.environment: sandbox
-    braintree.merchant_id: numeric_id
-    braintree.private_key: long_alphanum_token
-    braintree.public_key: short_alphanum_token
-    braintree.url: https://sandbox.braintreegateway.com
-    freshbooks.domain: company_name
-    freshbooks.token: long_alphanum_token
-    freshbooks.url: https://%freshbooks.domain%.freshbooks.com
-
+    # External services
+    api.facebook.client_id:     numeric_id
+    api.facebook.client_secret: alphanum_token
+    api.recaptcha.site_key:     long_alphanum_token
+    api.recaptcha.secret_key:   long_alphanum_token
+    api.twitter.client_id:      short_alphanum_token
+    api.twitter.client_secret:  long_alphanum_token
+    braintree.environment:      sandbox
+    braintree.merchant_id:      numeric_id
+    braintree.private_key:      long_alphanum_token
+    braintree.public_key:       short_alphanum_token
+    braintree.url:              https://sandbox.braintreegateway.com
+    freshbooks.domain:          company_name
+    freshbooks.token:           long_alphanum_token
+    freshbooks.url:             https://%freshbooks.domain%.freshbooks.com
     panorama:
         youtube:
             api_key: your api_key here
