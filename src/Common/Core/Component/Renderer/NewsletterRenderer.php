@@ -2,98 +2,52 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Repository;
+namespace Common\Core\Component\Renderer;
 
-use Onm\Settings as s;
-use Onm\Cache\CacheInterface;
-use Onm\Database\DbalWrapper;
+use Repository\EntityManager;
 
 /**
- * Handles the operations of Newsletters.
+ * The AdvertisementRenderer service provides methods to generate the HTML code
+ * for advertisements basing on the advertisements information.
  */
-class NewsletterManager extends BaseManager
+class NewsletterRenderer
 {
     /**
-     * Initializes the entity manager.
+     * The service container.
      *
-     * @param DbalWrapper    $dbConn      The database connection.
-     * @param CacheInterface $cache       The cache service.
-     * @param string         $cachePrefix The cache prefix.
-     * @param  Template       $template    The template service.
+     * @var ServiceContainer
      */
-    public function __construct(
-        DbalWrapper $dbConn,
-        CacheInterface $cache,
-        $cachePrefix,
-        $tpl,
-        EntityManager $entityManager
-    ) {
-        $this->dbConn      = $dbConn;
-        $this->cache       = $cache;
-        $this->cachePrefix = $cachePrefix;
-        $this->tpl         = $tpl;
-        $this->er          = $entityManager;
-        $this->cm          = new \ContentManager();
-    }
+    protected $container;
 
     /**
-     * Performs searches in newsletters
+     * Initializes the newsletter renderer.
      *
-     * @param string  $whereClause  The where clause to insert into the search.
-     * @param string  $order        The order clause for the search.
-     * @param integer $page         The page where start the paginated results.
-     * @param integer $itemsPerPage The number of items per page.
-     *
-     * @return array The newsletters that matches the search criterias.
+     * @param Template            $template      The template service.
+     * @param EntityRepository    $dbConn        The database connection.
+     * @param SettingRepository   $settinManager The settings repository.
+     * @param AdvertisementHelper $adsHelper     The advertisement helper.
+     * @param adsRepository       $adsRepository The advertisement repository.
+     * @param Instance            $instance      The current instance.
      */
-    public function find(
-        $whereClause = '1 = 1',
-        $order = 'created DESC',
-        $page = null,
-        $itemsPerPage = 20
+    public function __construct(
+        $tpl,
+        EntityManager $entityManager,
+        $settingManager,
+        $adsHelper,
+        $adsRepository,
+        $instance
     ) {
-        $limit = '';
-        if (!is_null($page)) {
-            $limit = ' LIMIT ' . ($page - 1) * $itemsPerPage . ', ' . $itemsPerPage;
-
-            if ($page == 1) {
-                $limit = ' LIMIT ' . $itemsPerPage;
-            }
-        }
-
-        if (empty($whereClause)) {
-            $whereClause = '1 = 1';
-        }
-
-        try {
-            $rs = $this->dbConn->fetchAll(
-                'SELECT * FROM `newsletter_archive`'
-                . ' WHERE ' . $whereClause . ' ORDER BY ' . $order . ' ' . $limit
-            );
-
-            $countNm = $this->dbConn->fetchColumn(
-                'SELECT COUNT(`pk_newsletter`) FROM `newsletter_archive` '
-                . 'WHERE ' . $whereClause . ' ORDER BY ' . $order
-            );
-
-            $newsletters = [];
-            foreach ($rs as $newsletterData) {
-                $obj = new \Newsletter();
-                $obj->load($newsletterData);
-
-                $newsletters[] = $obj;
-            }
-
-            return [$countNm, $newsletters];
-        } catch (\Exception $e) {
-            error_log('Error fetching newsletters: ' . $e->getMessage());
-            return;
-        }
+        $this->tpl      = $tpl;
+        $this->er       = $entityManager;
+        $this->sr       = $settingManager;
+        $this->adHelper = $adsHelper;
+        $this->ar       = $adsRepository;
+        $this->instance = $instance;
     }
 
     /**
@@ -138,10 +92,8 @@ class NewsletterManager extends BaseManager
         $this->tpl->assign('menuFrontpage', $menu->items);
 
         // Fetch and assign newsletter ads
-        $positions = getService('core.helper.advertisement')
-            ->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
-        $ads       = getService('advertisement_repository')
-            ->findByPositionsAndCategory($positions, 0);
+        $positions = $this->adHelper->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
+        $ads       = $this->ar->findByPositionsAndCategory($positions, 0);
         $this->tpl->assign('advertisements', $ads);
 
         // Format and assign the current date.
@@ -166,12 +118,12 @@ class NewsletterManager extends BaseManager
         $publicUrl = preg_replace(
             '@^http[s]?://(.*?)/$@i',
             'http://$1',
-            getService('core.instance')->getMainDomain()
+            $this->instance->getMainDomain()
         );
         $this->tpl->assign('URL_PUBLIC', 'http://' . $publicUrl);
 
         // Fetch and assign settings
-        $configurations = s::get([
+        $configurations = $this->sr->get([
             'newsletter_maillist',
             'newsletter_subscriptionType',
         ]);

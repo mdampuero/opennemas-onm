@@ -668,31 +668,39 @@ INSERT INTO `menues` VALUES (1,'frontpage','','','a:1:{s:11:\"description\";s:0:
 UNLOCK TABLES;
 
 --
--- Table structure for table `newsletter_archive`
+-- Table structure for table `newsletters`
 --
 
-DROP TABLE IF EXISTS `newsletter_archive`;
+DROP TABLE IF EXISTS `newsletters`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `newsletter_archive` (
-  `pk_newsletter` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `data` text,
+CREATE TABLE `newsletters` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `type` int(11) NOT NULL DEFAULT '0',
+  `status` int(11) NOT NULL DEFAULT '0',
+  `title` varchar(512) NOT NULL,
+  `contents` text,
+  `recipients` text,
+  `schedule` text,
   `html` mediumtext,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `sent` varchar(255) NOT NULL,
-  PRIMARY KEY (`pk_newsletter`)
+  `updated` datetime DEFAULT CURRENT_TIMESTAMP,
+  `sent` datetime DEFAULT CURRENT_TIMESTAMP,
+  `sent_items` int(11) NOT NULL DEFAULT '0',
+  `template_id` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `newsletter_type` (`type`),
+  KEY `newsletter_template_id` (`template_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `newsletter_archive`
+-- Dumping data for table `newsletters`
 --
 
-LOCK TABLES `newsletter_archive` WRITE;
-/*!40000 ALTER TABLE `newsletter_archive` DISABLE KEYS */;
-/*!40000 ALTER TABLE `newsletter_archive` ENABLE KEYS */;
+LOCK TABLES `newsletters` WRITE;
+/*!40000 ALTER TABLE `newsletters` DISABLE KEYS */;
+/*!40000 ALTER TABLE `newsletters` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

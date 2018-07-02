@@ -16,8 +16,12 @@
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
+              <i class="fa fa-envelope m-r-10"></i>
+            </h4>
+          </li>
+          <li class="quicklinks">
+            <h4>
               <a class="no-padding" href="{url name=backend_newsletters_list}" title="{t}Go back to list{/t}">
-                <i class="fa fa-envelope"></i>
                 {t}Newsletters{/t}
               </a>
             </h4>
@@ -68,7 +72,7 @@
                 <div class="grid-collapse-body ng-cloak p-b-30" ng-class="{ 'expanded': expanded == 'external' }">
                   <div class="form-group">
                     <div class="help">
-                      {t 1="[% routing.generate('backend_newsletter_config') %]" escape=off}External email address configured on the <a href="%1">newsletter configuration section</a> {/t}
+                      {t 1="[% routing.generate('backend_newsletters_config') %]" escape=off}External email address configured on the <a href="%1">newsletter configuration section</a> {/t}
                     </div>
                     <div class="m-t-15 m-b-10">
                       <div class="checkbox" ng-repeat="item in source.items|filter:{ type: 'external' }">
