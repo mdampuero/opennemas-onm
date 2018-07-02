@@ -31,6 +31,7 @@ class FrontpagesController extends Controller
     public function showAction(Request $request)
     {
         $categoryName  = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $page          = $request->query->get('page', 1);
         $categoryId    = 0;
         $categoryTitle = 0;
         $category      = null;
@@ -71,7 +72,7 @@ class FrontpagesController extends Controller
 
         // Setup templating cache layer
         $this->view->setConfig('frontpages');
-        $cacheId = $this->view->getCacheId('frontpage', $categoryName, $lastSaved);
+        $cacheId = $this->view->getCacheId('frontpage', $categoryName, $lastSaved, $page);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheId)
@@ -189,6 +190,7 @@ class FrontpagesController extends Controller
             'cache_id'        => $cacheId,
             'category_name'   => $categoryName,
             'actual_category' => $categoryName,
+            'page'            => $page,
             'x-tags'          => 'frontpage-page,' . $categoryName,
             'x-cache-for'     => $expires,
         ]);
