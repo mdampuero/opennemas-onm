@@ -418,7 +418,10 @@ class CommentsController extends Controller
     public function facebookConfigAction(Request $request)
     {
         $sm         = $this->get('setting_repository');
-        $fbSettings = $this->get('setting_repository')->get('facebook');
+        $fbSettings = $this->get('setting_repository')->get('facebook', []);
+        if (!is_array($fbSettings)) {
+            $fbSettings = [];
+        }
 
         if ($request->getMethod() != 'POST') {
             $configs = array_merge(
@@ -440,7 +443,6 @@ class CommentsController extends Controller
         $fbAppId    = $request->request->filter('facebook', null, FILTER_SANITIZE_STRING);
         $configs    = $request->request->filter('configs', [], FILTER_SANITIZE_STRING);
         $fbSettings = array_merge($fbSettings, $fbAppId);
-
 
         $configs = array_merge(
             $this->get('core.helper.comment')->getDefaultConfigs(),

@@ -10,8 +10,8 @@ $iterator = Finder::create()
     ->name('*.php')
     ->exclude('Resources')
     ->exclude('Tests')
-    ->in(__DIR__ . '/../src')
-    ->in(__DIR__ . '/../libs')
+    ->in(__DIR__ . '/src')
+    ->in(__DIR__ . '/libs')
     ->exclude('adodb5');
 
 //$versions = GitVersionCollection::create($dir)
@@ -20,12 +20,12 @@ $iterator = Finder::create()
 
 $options = [
     'theme'     => 'default',
-    //'versions'  => $versions,
+    'build_dir' => __DIR__ . '/build/docs/php/core/',
+    'cache_dir' => __DIR__ . '/tmp/cache/docs/',
     'title'     => 'Opennemas API Documentation',
-    //'build_dir' => __DIR__ . '/../build/docs/core/%version%',
-    'build_dir' => __DIR__ . '/../build/docs/php/core/',
-    //'cache_dir' => __DIR__ . '/../tmp/cache/doc/core/%version%'
-    'cache_dir' => __DIR__ . '/../tmp/cache/docs/'
+    //'build_dir' => __DIR__ . '/build/docs/core/%version%',
+    //'versions'  => $versions,
+    // 'cache_dir' => __DIR__ . '/tmp/cache/doc/core/%version%'
 ];
 
 return new Sami($iterator, $options);

@@ -70,9 +70,10 @@ class AdvertisementController extends Controller
      */
     public function showAction(Request $request, $id)
     {
-        $category  = $request->query->get('category', 'home');
-        $module    = $request->query->get('module', 'frontpage');
-        $contentId = $request->query->get('contentId', '');
+        $category           = $request->query->get('category', 'home');
+        $module             = $request->query->get('module', 'frontpage');
+        $contentId          = $request->query->get('contentId', '');
+        $advertisementGroup = $request->query->get('advertisementGroup', 'article_inner');
 
         $ad = $this->getAdvertisement($id);
 
@@ -93,9 +94,10 @@ class AdvertisementController extends Controller
 
         $contents = $this->get('core.renderer.advertisement')
             ->renderSafeFrame($ad, [
-                'category'  => $category,
-                'extension' => $module,
-                'contentId' => $contentId,
+                'category'           => $category,
+                'extension'          => $module,
+                'advertisementGroup' => $advertisementGroup,
+                'contentId'          => $contentId,
             ]);
 
         return new Response($contents, 200, $headers);
@@ -176,6 +178,10 @@ class AdvertisementController extends Controller
                 && preg_match('/googletag\.defineSlot/', $advertisement->script))
         ) {
             return 'DFP';
+        }
+
+        if ((int) $advertisement->with_script === 4) {
+            return 'Smart';
         }
 
         return 'html';

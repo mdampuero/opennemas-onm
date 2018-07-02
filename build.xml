@@ -35,9 +35,9 @@
     <pathconvert pathsep=" " property="project.paths.js.space-separated" refid="project.paths.js"/>
     <pathconvert pathsep="," property="project.paths.js.comma-separated" refid="project.paths.js"/>
 
-    <target name="build" depends="prepare,phplint,jshint,phpunit-ci,tools-parallel"/>
+    <target name="build" depends="prepare,phplint,eslint,phpunit-ci,tools-parallel"/>
 
-    <target name="build-sequential" depends="prepare,phplint,jshint,karma,phpunit-ci,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,sami-ci,apidoc-ci,jsdoc-ci" />
+    <target name="build-sequential" depends="prepare,phplint,eslint,karma,phpunit-ci,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,sami-ci,apidoc-ci,jsdoc-ci" />
 
     <target name="tools-parallel" description="Run tools in parallel">
         <parallel>
@@ -56,12 +56,14 @@
         <delete dir="${basedir}/build/coverage"/>
         <delete dir="${basedir}/build/logs"/>
         <delete dir="${basedir}/build/pdepend"/>
+        <delete dir="${basedir}/tmp/cache/"/>
     </target>
 
     <target name="prepare" depends="clean" description="Prepare for build">
         <mkdir dir="${basedir}/build/coverage"/>
         <mkdir dir="${basedir}/build/logs"/>
         <mkdir dir="${basedir}/build/pdepend"/>
+        <mkdir dir="${basedir}/tmp/cache"/>
         <parallel>
             <antcall target="composer" />
             <antcall target="npm" />
@@ -94,7 +96,7 @@
             <arg value="--prefer-dist" />
             <arg value="--no-progress" />
 
-            <env key="SYMFONY_ENV" value="test"/>
+            <env key="SYMFONY_ENV" value="prod"/>
         </exec>
     </target>
 
@@ -107,6 +109,7 @@
     <target name="bower" description="Installing bower dependencies">
         <exec executable="${node_modules_bin_dir}/bower" failonerror="true">
             <arg value="install" />
+            <arg value="--allow-root"/>
         </exec>
     </target>
 
@@ -195,11 +198,11 @@
         </exec>
     </target>
 
-    <target name="jshint" description="Check style in JS files">
-        <exec executable="${node_modules_bin_dir}/jshint" failonerror="false" output="${basedir}/build/jshint.xml">
+    <target name="eslint" description="Check style in JS files">
+        <exec executable="${node_modules_bin_dir}/eslint" failonerror="false" output="${basedir}/build/eslint.xml">
             <arg line="-c" />
-            <arg value="${basedir}/.jshintrc" />
-            <arg line="--reporter=checkstyle" />
+            <arg value="${basedir}/.eslintrc" />
+            <arg line="--format=checkstyle" />
             <arg line="${project.paths.js.space-separated}" />
         </exec>
     </target>
@@ -207,7 +210,7 @@
     <target name="sami-ci" description="Generate internal API documentation">
         <exec executable="${toolsdir}/sami.php" failonerror="false">
             <arg line="update" />
-            <arg line="${basedir}/build/sami.php" />
+            <arg line="${basedir}/sami.php" />
         </exec>
     </target>
 
