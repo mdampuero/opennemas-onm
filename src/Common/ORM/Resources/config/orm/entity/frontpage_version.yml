@@ -20,7 +20,7 @@ orm:
                     arguments: [ '@orm.metadata.frontpage_version' ]
             repositories:
                 instance:
-                    class:     Common\ORM\Database\Repository\BaseRepository
+                    class:     Common\ORM\Database\Repository\FrontpageVersionRepository
                     arguments: [ '@orm.connection.instance', '@orm.metadata.frontpage_version', '@cache.connection.instance' ]
             persisters:
                 instance:

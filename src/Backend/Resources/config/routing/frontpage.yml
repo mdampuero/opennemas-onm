@@ -1,0 +1,47 @@
+# Frontpage management routes
+admin_frontpage_list:
+    path:     /frontpages/{category}
+    defaults: { _controller  : BackendBundle:Frontpages:show, category: 0 }
+    options:
+        expose: true
+
+admin_frontpage_savepositions:
+    path:     /frontpage/save-positions
+    defaults: { _controller  : BackendBundle:Frontpages:savePositions }
+    options:
+        expose: true
+
+admin_frontpage_savepositions:
+    path:     /frontpage/save-positions
+    defaults: { _controller  : BackendBundle:Frontpages:savePositions }
+    options:
+        expose: true
+
+admin_frontpage_preview:
+    path:     /frontpages/{category}/preview
+    defaults: { _controller  : BackendBundle:Frontpages:preview }
+    options:
+        expose: true
+
+admin_frontpage_get_preview:
+    path:     /frontpages/{category}/get-preview
+    defaults: { _controller  : BackendBundle:Frontpages:getPreview }
+    options:
+        expose: true
+
+admin_frontpage_pick_layout:
+    path:     /frontpages/{category}/pick-layout
+    defaults: { _controller  : BackendBundle:Frontpages:pickLayout }
+
+admin_frontpage_last_version:
+    path:     /frontpages/{category}/exists-new-version
+    defaults: { _controller  : BackendBundle:Frontpages:lastVersion }
+    options:
+        expose: true
+
+admin_frontpage_delete:
+    path:     /frontpages/{versionId}/{categoryId}
+    defaults: { _controller: BackendBundle:Frontpages:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true

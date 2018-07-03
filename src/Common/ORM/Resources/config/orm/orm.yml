@@ -24,6 +24,7 @@ imports:
     - { resource: entity/client.yml }
     - { resource: entity/comment.yml }
     - { resource: entity/content.yml }
+    - { resource: entity/content_position.yml }
     - { resource: entity/extension.yml }
     - { resource: entity/frontpage.yml }
     - { resource: entity/frontpage_version.yml }

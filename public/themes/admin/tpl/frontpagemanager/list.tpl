@@ -20,13 +20,11 @@
 
     var frontpage_urls = {
       list:                  '{url name=admin_frontpage_list}',
-      save_positions:        '{url name=admin_frontpage_savepositions}',
       toggle_suggested:      '{url name=admin_content_toggle_suggested}',
       quick_info:            '{url name=admin_content_quick_info}',
       set_arquived:          '{url name=admin_content_set_archived}',
       send_to_trash:         '{url name=admin_content_send_to_trash}',
-      customize_content:     '{url name=admin_content_update_property}',
-      check_version:         '{url name=admin_frontpage_last_version category=$category_id}'
+      customize_content:     '{url name=admin_content_update_property}'
     };
     var content_states = {
       {foreach from=$frontpage_articles item=content}
@@ -35,72 +33,130 @@
         {/if}
       {/foreach}
     }
-    var frontpage_info = {
-      last_saved : '{$frontpage_last_saved}',
-      changed: false
-    }
   </script>
   {/javascripts}
 {/block}
-
+f
 {block name="content"}
-<form action="#" method="get" name="formulario" id="formulario" ng-controller="FrontpageCtrl">
+<form action="#" method="get" name="formulario" id="formulario" ng-controller="FrontpageCtrl" ng-init="init({json_encode($frontpages)|clear_json}, {json_encode($versions)|clear_json}, {json_encode($category_id)|clear_json}, {json_encode($version_id)|clear_json}, {json_encode($time)|clear_json}, {json_encode($frontpage_last_saved)|clear_json})">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-newspaper-o page-navbar-icon"></i>
-              <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/221736-opennemas-c%C3%B3mo-insertar-mover-gestionar-art%C3%ADculo" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
-                <i class="fa fa-question"></i>
-              </a>
+              <i class="fa fa-newspaper-o m-r-10"></i>
+            </h4>
+          </li>
+          <li class="quicklinks">
+            <h4>
               {t}Frontpages{/t}
             </h4>
           </li>
-          <li class="quicklinks visible-xs">
-            <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/221736-opennemas-c%C3%B3mo-insertar-mover-gestionar-art%C3%ADculo" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
-              <i class="fa fa-question fa-lg"></i>
-            </a>
+          <li class="quicklinks hidden-xs m-l-5 m-r-5 ng-cloak">
+            <h4>
+              <i class="fa fa-angle-right"></i>
+            </h4>
           </li>
-          <li class="quicklinks hidden-xs hidden-sm">
-            <span class="h-seperate"></span>
+          <li class="quicklinks frontpages ng-cloak">
+            <ui-select name="frontpages" theme="select2" ng-model="categoryId" ng-change=changeCategory($select.selected.id)>
+              <ui-select-match>
+                [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices group-by="manual === true" repeat="item.id as item in frontpages | filter: { name: $select.search }">
+                <div><span class="fa fa-newspaper-o"></span><span ng-bind-html="item.name | highlight: $select.search"></span></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
-          <li class="quicklinks hidden-xs hidden-sm">
-            <h5>
-              {$categories[$category_id]['name']}
-              {if $available_layouts > 1}
-              <small class="hidden-xs hidden-sm hidden-md">({$layout_theme['name']})</small>
-              {/if}
-            </h5>
+          <li class="quicklinks hidden-xs m-l-5 m-r-5 ng-cloak">
+            <h4>
+              <i class="fa fa-angle-right"></i>
+            </h4>
+          </li>
+          <li class="quicklinks version ng-cloak">
+            <ui-select name="versions" theme="select2" ng-model="versionId" ng-change=changeVersion($select.selected.id) search-enabled="false">
+              <ui-select-match>
+                [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices  repeat="item.id as item in versions">
+                <div class="versionNotScheduled" ng-if="scheduledFFuture.indexOf(item.id) === -1 && item.id !== publishVersionId">
+                  <span class="notScheduled"></span>
+                  <span ng-bind-html="item.name | highlight: $select.search"></span>
+                  <span class="btn btn-link" ng-click="deleteVersion(item.id); $event.stopPropagation();"><span class="fa fa-trash-o text-danger"></span></span>
+                </div>
+                <div class="versionScheduled" ng-if="scheduledFFuture.indexOf(item.id) !== -1 && item.id !== publishVersionId">
+                  <span class="fa fa-calendar-check-o p-5"></span>
+                  <span ng-bind-html="item.name | highlight: $select.search"></span>
+                  <span class="versionDate">[% utcToTimezone(item.publish_date) %]</span>
+                </div>
+                <div class="versionLive"  ng-if="item.id === publishVersionId">
+                  <span class="fa fa-globe"></span>
+                  <span ng-bind-html="item.name | highlight: $select.search"></span>
+                  <span class="badge badge-pill badge-primary"><span class="fa fa-globe"></span>{t}LIVE{/t}</span>
+                </div>
+              </ui-select-choices>
+            </ui-select>
+          </li>
+          <li class="quicklinks ng-cloak" ng-if="publishVersionId === versionId">
+            <div class="badge badge-pill badge-primary"><span class="fa fa-globe"></span>{t}LIVE{/t}</div>
           </li>
         </ul>
-        <div class="all-actions pull-right hidden-xs">
+        <div class="all-actions pull-right hidden-xs ng-cloak">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <a class="btn btn-white" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
-                <span class="fa fa-plus"></span> <span class="hidden-xs">{t}Add contents{/t}</span>
-              </a>
-            </li>
-            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
-            <li class="quicklinks">
-              <button class="btn btn-white" id="button_previewfrontpage" ng-click="preview('{$categories[$category_id]['value']}')" title="{t}Preview frontpage with actual content positions{/t}" type="button" id="preview-button">
-                <span class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': loading }"></span>
-                {t}Preview{/t}
-              </button>
-            </li>
-            <li class="quicklinks"><span class="h-seperate"></span></li>
-            <li class="quicklinks">
-              <a id="button_savepositions" href="#" class="btn btn-primary" data-text="{t}Saving{/t}..." data-title="{t}Save changes{/t}" id="save-button">
-                <span class="fa fa-save"></span> <span class="hidden-xs text">{t}Save changes{/t}</span>
-              </a>
+              <div class="btn-group">
+                <button class="btn btn-primary" type="button" ng-click="save()">
+                  <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
+                  {t}Save{/t}
+                </button>
+                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button">
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu no-padding pull-right">
+                  <li>
+                    <a href="#" ng-click="preview()">
+                      <i class="fa fa-eye"></i>
+                      {t}Preview{/t}
+                    </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="#" ng-click="saveVersion()">
+                      <i class="fa fa-files-o"></i>
+                      {t}Save this version{/t}
+                    </a>
+                  </li>
+                  <li class="divider visible-md visible-sm"></li>
+                  <li class="visible-md visible-sm">
+                    <a href="#">
+                      <i class="fa fa-toggle-off"></i>
+                      {t}Live now{/t}
+                    </a>
+                  </li>
+                  <li class="divider visible-sm"></li>
+                  <li class="visible-sm">
+                    <a href="#" ng-click="deleteVersion()">
+                      <i class="fa fa-trash-o fa-lg"></i>
+                      {t}Delete{/t}
+                    </a>
+                  </li>
+                  {is_module_activated name="FRONTPAGES_LAYOUT"}
+                  <li class="divider" ng-if="item.type !== 2"></li>
+                  <li class="visible-md visible-sm">
+                    <a href="#" ng-click="open('modal-layout')">
+                      <i class="fa fa-cog"></i>
+                      {t}Settings{/t}
+                    </a>
+                  </li>
+                  {/is_module_activated}
+                </ul>
+              </div>
             </li>
           </ul>
         </div>
       </div>
     </div>
   </div>
-
   <div class="page-navbar selected-navbar collapsed hidden-xs" class="hidden" ng-class="{ 'collapsed': selected.contents.length == 0 }">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -134,42 +190,49 @@
       </div>
     </div>
   </div>
-
-  <div class="page-navbar filters-navbar hidden-xs">
+  <div class="page-navbar filters-navbar hidden-xs ng-cloak" ng-if="publishVersionId !== versionId">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <span class="info">{t}Managing frontpage:{/t}</span>
-          </li>
-          <li class="quicklinks hidden-xs ng-cloak"  ng-init="category='{$categories[$category_id]['value']}'; categories = {json_encode(array_values($categories))|clear_json}">
-            <ui-select name="author" theme="select2" ng-model="category" ng-change=changeCategory($select.selected.id)>
-              <ui-select-match>
-                <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
-              </ui-select-match>
-              <ui-select-choices group-by="'group'" repeat="item.value as item in categories | filter: { name: $select.search }">
-                <div ng-bind-html="item.name | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
+            <span class="info input-label">{t}Title{/t}:</span>
+            <input id="name" name="name" ng-model="version.name" type="text"  required="required">
           </li>
         </ul>
         <ul class="nav quick-section pull-right">
-          {is_module_activated name="FRONTPAGES_LAYOUT"}
           <li class="quicklinks">
+            <span class="info input-label">{t}Go live on{/t} ([% time.timezone %]):</span>
+            <input name="publish_date" ng-model="frontpageInfo.publish_date" type="datetime">
+            <span class="input-addon">
+              <span class="fa fa-calendar"></span>
+            </span>
+          </li>
+          <li class="quicklinks hidden-md hidden-sm hidden-xs">
+            <a class="btn btn-white" href="#" ng-click="saveLiveNow()">
+              <span class="fa fa-toggle-off"></span> <span>{t}Live now{/t}</span>
+            </a>
+          </li>
+          <li class="quicklinks hidden-sm">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks">
-            <div class="btn btn-default" id="frontpage-settings" ng-click="open('modal-layout')">
-              <i class="fa fa-cog"></i>
-            </div>
+          <li class="quicklinks hidden-sm">
+            <button class="btn btn-danger" ng-click="deleteVersion()" uib-tooltip="{t}Delete{/t}" tooltip-placement="left" ng-if="versionId !== publishVersionId">
+              <i class="fa fa-trash-o fa-lg"></i>
+            </button>
+            {is_module_activated name="FRONTPAGES_LAYOUT"}
+              <div class="btn btn-default hidden-md" id="frontpage-settings" uib-tooltip="{t}Settings{/t}" tooltip-placement="left" ng-click="open('modal-layout')">
+                <i class="fa fa-cog"></i>
+              </div>
+            {/is_module_activated}
           </li>
-          {/is_module_activated}
         </ul>
       </div>
     </div>
   </div>
-
-  <div class="content">
+  <div class="content ng-cloak">
+    <a class="btn btn-add btn-success hidden-xs" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
+      <span class="fa fa-plus"></span>
+    </a>
     <div id="warnings-validation"></div>
 
     <div class="grid simple visible-xs not-available-in-phone">
@@ -289,13 +352,21 @@
 <script type="text/ng-template" id="modal-archive-selected">
   {include file="common/modals/_modalArchiveSelected.tpl"}
 </script>
+<script type="text/ng-template" id="modal-new-version">
+  {include file="frontpagemanager/modals/_modal_new_version.tpl"}
+</script>
+<script type="text/ng-template" id="modal-publish-check">
+  {include file="frontpagemanager/modals/_publish_check.tpl"}
+</script>
+<script type="text/ng-template" id="modal-publish-now">
+  {include file="frontpagemanager/modals/_publish_now.tpl"}
+</script>
 {/block}
 
 
 {block name="modals"}
   {include file="frontpagemanager/modals/_modal_send_to_trash.tpl"}
   {include file="frontpagemanager/modals/_modal_archive.tpl"}
-  {include file="frontpagemanager/modals/_modal_new_version.tpl"}
 
   {is_module_activated name="ADVANCED_FRONTPAGE_MANAGER"}
   {include file="frontpagemanager/modals/_modal_customize_content.tpl"}

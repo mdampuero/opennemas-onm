@@ -7,11 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Api\Service\V1;
+namespace Common\ORM\Entity;
 
-use Common\ORM\Entity\Frontpage;
+use Common\ORM\Core\Entity;
 
-class FrontpageService extends OrmService
+/**
+ * The UserGroup class represents an user group.
+ */
+class Frontpage extends Entity
 {
-
 }

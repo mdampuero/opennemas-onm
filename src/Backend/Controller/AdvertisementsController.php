@@ -38,7 +38,6 @@ class AdvertisementsController extends Controller
 
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $ccm->getArraysMenu($this->category, $contentTypes);
-
         $this->view->assign([
             'subcat'       => $this->subcat,
             'allcategorys' => $this->parentCategories,
