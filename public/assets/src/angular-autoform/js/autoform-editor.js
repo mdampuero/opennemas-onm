@@ -56,9 +56,10 @@
                     '<option value="text">Text</option>' +
                     '<option value="date">Date</option>' +
                     '<option value="country">Country</option>' +
-                    '<option value="options">Options</option>' +
+                    '<option value="radio">Radio</option>' +
+                    '<option value="select">Select</option>' +
                   '</select>' +
-                  '<div class="m-t-15" ng-if="field.type === \'options\'">' +
+                  '<div class="m-t-15" ng-if="field.type === \'radio\' || field.type === \'select\'">' +
                     '<label class="form-label">Options</label>' +
                     '<span class="help m-l-5">Comma separated list of keys and value (key1:value1, key2:value2,...)</span>' +
                     '<div class="controls">' +
