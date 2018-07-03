@@ -31,8 +31,8 @@
                     '<option value="">{t}Select a country{/t}...</option>' +
                     '<option value="{{ key }}" ng-repeat="(key,value) in extra.countries" ng-selected="{{ ngModel[field.key] === value }}">{{ value }}</option>' +
                   '</select>' +
-                  '<select class="form-control" ng-if="field.type === \'select\'" ng-model="ngModel[field.key]">' +
-                    '<option value="{{ option.split(\':\')[0] }}" ng-repeat="option in field.values.split(\',\')">' +
+                  '<select class="form-control" id="{{ field.key }}" name="{{ field.key }}" ng-if="field.type === \'select\'" ng-init="ngModel[field.key] = ngModel[field.key].toString()" ng-model="ngModel[field.key]">' +
+                    '<option ng-repeat="option in field.values.split(\',\')" value="{{ option.split(\':\')[0] }}">' +
                       '{{ option.split(\':\')[1] }}' +
                     '</option>' +
                   '</select>' +
