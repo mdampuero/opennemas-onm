@@ -154,15 +154,15 @@ class NewsletterController extends Controller
 
         $item = $this->get('api.service.newsletter')->getItem($id);
 
-        foreach ($item->contents as $container) {
-            foreach ($container['items'] as &$containerElement) {
-                if (!array_key_exists('content_type_l10n_name', $containerElement)) {
-                    $type    = $containerElement['type'];
-                    $content = new $type();
+        foreach ($item->contents as &$container) {
+            foreach ($container['items'] as &$element) {
+                $contentType = array_key_exists('content_type_name', $element)
+                    ? $element['content_type_name'] : $element['content_type'];
 
-                    $containerElement->content_type_l10n_name = $content->content_type_l10n_name;
-                    $containerElement->content_type_name      = \underscore($type);
-                }
+                $element = $this->get('entity_repository')->find(
+                    classify($contentType),
+                    $element['id']
+                );
             }
         }
 
@@ -191,11 +191,12 @@ class NewsletterController extends Controller
 
         $this->get('core.locale')->setContext('frontend');
 
-        foreach ($containers as $container) {
+        foreach ($containers as &$container) {
             foreach ($container->items as &$content) {
-                $content->content_type = \classify($content->content_type_name);
-                unset($content->content_type_name);
-                unset($content->content_type_l10n_name);
+                $content = [
+                    'content_type'           => \classify($content->content_type_name),
+                    'id'                     => $content->id,
+                ];
             }
         }
 
