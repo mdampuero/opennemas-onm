@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-03 15:57+0000\n"
-"PO-Revision-Date: 2018-07-03 18:03+0200\n"
+"POT-Creation-Date: 2018-07-04 14:34+0000\n"
+"PO-Revision-Date: 2018-07-04 16:40+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -2131,6 +2131,27 @@ msgstr "%s elementos non se puideron eliminar correctamente"
 msgid "Item saved successfully"
 msgstr "Elemento gardado correctamente"
 
+msgid "Monday"
+msgstr "Luns"
+
+msgid "Tuesday"
+msgstr "Martes"
+
+msgid "Wednesday"
+msgstr "Mércores"
+
+msgid "Thursday"
+msgstr "Xoves"
+
+msgid "Friday"
+msgstr "Venres"
+
+msgid "Saturday"
+msgstr "Sábado"
+
+msgid "Sunday"
+msgstr "Domingo"
+
 #, php-format
 msgid "%s items updated successfully"
 msgstr "%s elementos actualizados correctamente"
@@ -2144,6 +2165,12 @@ msgstr "Configuración gardada correctamente"
 
 msgid "Unable to save settings"
 msgstr "Non se puido gardar as configuración"
+
+msgid "Any"
+msgstr "Calquera"
+
+msgid "List of contents"
+msgstr "Lista de contidos"
 
 msgid ""
 "The maximum height for the \"Site Logo\" is 120px. Please adjust your image "
@@ -3845,9 +3872,6 @@ msgstr "reiniciar"
 
 msgid "apply"
 msgstr "aplicar"
-
-msgid "Any"
-msgstr "Calquera"
 
 msgid "Instance information"
 msgstr "Información da instancia"
@@ -6304,11 +6328,53 @@ msgstr "Debes seleccionar un contenedor"
 msgid "Add Container label"
 msgstr "Engadir unha etiqueta de contendor"
 
-msgid "Articles in Frontpage"
-msgstr "Artigos en portada"
+msgid "Template"
+msgstr "Plantilla"
+
+msgid "Subject"
+msgstr "Asunto"
+
+msgid "Days"
+msgstr "Días"
+
+msgid "Hours"
+msgstr "Horas"
+
+msgid "Time zone: "
+msgstr "Fuso horario:"
+
+msgid "Add an hour"
+msgstr "Engadir unha hora"
+
+msgid "Recipients"
+msgstr "Destinatarios"
+
+msgid "External service"
+msgstr "Servizo externo"
+
+msgid "Act-On marketing lists"
+msgstr "Listas de marquetin de Act-On"
+
+msgid "Subscription lists"
+msgstr "Listas de subscrición"
+
+msgid "%1 subscriptors"
+msgstr "%s subscritores"
+
+msgid "Add section"
+msgstr "Engadir sección"
+
+msgid "Block title"
+msgstr "Título do bloque"
+
+msgid "Add dynamic contents"
+msgstr "Engadir contidos dinámicos"
 
 msgid "Pick contents"
 msgstr "Seleccionar contidos"
+
+msgid "Articles in Frontpage"
+msgstr "Artigos en portada"
 
 msgid "Pick recipients"
 msgstr "Seleccionar destinatarios"
@@ -6346,9 +6412,6 @@ msgstr "Non se enviou ningún correo."
 msgid "Please, find below the report."
 msgstr "Embaixo pode atopar un informe."
 
-msgid "External service"
-msgstr "Servizo externo"
-
 msgid "Subscription list"
 msgstr "Lista de subscrición"
 
@@ -6371,20 +6434,11 @@ msgstr ""
 msgid "Add to list"
 msgstr "Engadir á lista"
 
-msgid "Subscription lists"
-msgstr "Listas de subscrición"
-
 msgid ""
 "Subscription lists available from <a href=\"%1\">subscriptions module</a> "
 msgstr ""
 "As listas de subscrición están dispoñíbeis no <a href=\"%1\">módulo de "
 "subscrición</a> "
-
-msgid "%1 subscriptors"
-msgstr "%s subscritores"
-
-msgid "Act-On marketing lists"
-msgstr "Listas de marquetin de Act-On"
 
 msgid "Add recipients manually"
 msgstr "Engadir destinatarios manualmente"
@@ -6408,11 +6462,14 @@ msgstr "Non se seleccionaron destinatarios"
 msgid "Toggle all"
 msgstr "Trocar todos"
 
-msgid "Send date"
-msgstr "Data de envío"
+msgid "Create template"
+msgstr "Crear planificación"
 
 msgid "Sendings"
 msgstr "Envio"
+
+msgid "Sent"
+msgstr "Enviado"
 
 msgid "Created:"
 msgstr "Creado:"
@@ -6422,6 +6479,15 @@ msgstr "Actualizado:"
 
 msgid "Not sent"
 msgstr "Non enviado"
+
+msgid "%1 sent items"
+msgstr "%1 elementos enviados"
+
+msgid "Schedules"
+msgstr "Planificacións"
+
+msgid "Not set"
+msgstr "Non estabelecido"
 
 msgid "Unable to find setting for newsletters."
 msgstr "Non se encontraron as preferencias dos boletíns."
@@ -8702,9 +8768,6 @@ msgstr "Tamaño do media"
 msgid "(Human readable name)"
 msgstr "(Nome lexibel por humanos)"
 
-msgid "Template"
-msgstr "Plantilla"
-
 msgid "Contact mail"
 msgstr "Correo-e de contacto"
 
@@ -9155,6 +9218,9 @@ msgstr ""
 "opennemas.com/\" style=\"font-family: 'trebuchet ms', 'lucida grande', "
 "'lucida sans unicode', 'lucida sans', tahoma, sans-serif; font-size: 14px; "
 "line-height: normal;\" target=\"_blank\">Opennemas</a>"
+
+#~ msgid "Send date"
+#~ msgstr "Data de envío"
 
 #~ msgid "[Newsletter]"
 #~ msgstr "[Boletín de novas]"
