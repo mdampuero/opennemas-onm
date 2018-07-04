@@ -99,7 +99,7 @@
                 <thead>
                   <tr>
                     <th>{t}Title{/t}</th>
-                    <th class="hidden-xs hidden-sm text-center">{t}Sent{/t}</th>
+                    <th class="hidden-xs hidden-xs text-center">{t}Sent{/t}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -125,7 +125,7 @@
                         </button>
                       </div>
                     </td>
-                    <td class="hidden-xs hidden-sm text-center">
+                    <td class="hidden-xs text-center">
                       <div>
                         <i class="fa fa-check text-success" ng-show="item.sent_items != 0"></i>
                         <i class="fa fa-inbox" ng-show="item.sent_items == 0"></i>
