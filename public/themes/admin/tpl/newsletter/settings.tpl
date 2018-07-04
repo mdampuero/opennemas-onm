@@ -77,14 +77,14 @@
           <div class="form-group">
             <label for="email" class="form-label">{t}Mailing list address{/t}</label>
             <div class="controls">
-              <input class="form-control" id="email" name="newsletter_maillist[email]" required type="email" ng-value="settings.newsletter_maillist.email"/>
+              <input class="form-control" id="email" name="newsletter_maillist[email]" required type="email" ng-model="settings.newsletter_maillist.email"/>
               <div class="help">{t}If you have a mailing list service to deliver newsletters add the address here{/t}</div>
             </div>
           </div>
           <div class="form-group" >
             <label for="subscription" class="form-label">{t}Mail address to receive new subscriptions{/t}</label>
             <div class="controls">
-              <input class="form-control" id="subscription" required type="email" ng-value="settings.newsletter_maillist.subscription"/>
+              <input class="form-control" id="subscription" required type="email" ng-model="settings.newsletter_maillist.subscription"/>
             </div>
           </div>
         </div>
@@ -139,14 +139,14 @@
           <label for="name" class="form-label">{t}Newsletter subject{/t}</label>
           <span class="help">{t}The subject of the emails in this newsletter{/t}</span>
           <div class="controls">
-            <input type="text" required id="name" name="newsletter_maillist[name]" ng-value="settings.newsletter_maillist.name" class="form-control" placeholder="{t}Your newsletter subject{/t}"/>
+            <input type="text" required id="name" name="newsletter_maillist[name]" ng-model="settings.newsletter_maillist.name" class="form-control" placeholder="{t}Your newsletter subject{/t}"/>
           </div>
         </div>
         <div class="form-group">
           <label for="sender" class="form-label">{t}Email from{/t}</label>
           <span class="help">{t escape=off}Email sender{/t} (From)</span>
           <div class="controls">
-            <input type="text" required id="sender" name="newsletter_maillist[sender]" ng-value="settings.newsletter_maillist.sender" class="form-control" placeholder="noreply@your_domain_name.com"/>
+            <input type="text" required id="sender" name="newsletter_maillist[sender]" ng-model="settings.newsletter_maillist.sender" class="form-control" placeholder="noreply@your_domain_name.com"/>
           </div>
         </div>
         <div class="form-group">

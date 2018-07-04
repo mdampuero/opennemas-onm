@@ -106,9 +106,22 @@ class NewsletterController extends Controller
 
         $response = $ns->getList($oql);
 
+        $extra = [
+            'days' => [
+                _("Monday"),
+                _("Tuesday"),
+                _("Wednesday"),
+                _("Thursday"),
+                _("Friday"),
+                _("Saturday"),
+                _("Sunday"),
+            ],
+        ];
+
         return new JsonResponse([
             'items' => $ns->responsify($response['items']),
             'total' => $response['total'],
+            'extra' => $extra,
         ]);
     }
 
