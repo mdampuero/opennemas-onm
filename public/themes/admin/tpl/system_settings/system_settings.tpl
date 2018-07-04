@@ -1211,7 +1211,7 @@
                                     {t}Act-On user name{/t}
                                   </label>
                                   <div class="controls">
-                                    <input class="form-control" id="act-on-username" name="act-on-username" ng-model="settings.act_on_configuration.username" type="text">
+                                    <input class="form-control" id="act-on-username" name="act-on-username" ng-model="settings['actOn.authentication'].username" type="text">
                                   </div>
                                 </div>
                               </div>
@@ -1221,7 +1221,7 @@
                                     {t}Act-On password{/t}
                                   </label>
                                   <div class="controls">
-                                    <input class="form-control" id="act-on-password" name="" ng-model="settings.act_on_configuration.password" type="text">
+                                    <input class="form-control" id="act-on-password" name="" ng-model="settings['actOn.authentication'].password" type="text">
                                   </div>
                                 </div>
                               </div>
@@ -1234,7 +1234,7 @@
                                     {t}Act-On client_id{/t}
                                   </label>
                                   <div class="controls">
-                                    <input class="form-control" id="act-on-client-id" name="act-on-client-id" ng-model="settings.act_on_configuration.client_id" type="text">
+                                    <input class="form-control" id="act-on-client-id" name="act-on-client-id" ng-model="settings['actOn.authentication'].client_id" type="text">
                                   </div>
                                 </div>
                               </div>
@@ -1244,7 +1244,7 @@
                                     {t}Act-On secret{/t}
                                   </label>
                                   <div class="controls">
-                                    <input class="form-control" id="act-on-client-secret" name="act-on-client-secret" ng-model="settings.act_on_configuration.client_secret" type="text">
+                                    <input class="form-control" id="act-on-client-secret" name="act-on-client-secret" ng-model="settings['actOn.authentication'].client_secret" type="text">
                                   </div>
                                 </div>
                               </div>

@@ -102,6 +102,7 @@ services:
             - '@core.instance'
             - '@mailer'
             - '@api.service.subscriber'
+            - '@external.act_on.factory'
             - '@api.service.newsletter'
             - '%mailer_no_reply_address%'
 

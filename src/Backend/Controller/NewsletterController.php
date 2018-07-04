@@ -345,6 +345,14 @@ class NewsletterController extends Controller
         $newsletter = $this->get('api.service.newsletter')->getItem($id);
         $recipients = [];
 
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get([
+                'newsletter_maillist',
+                'newsletter_subscriptionType',
+                'actOn.marketingLists',
+            ]);
+
 
         $ss       = $this->get('api.service.subscription');
         $ssb      = $this->get('api.service.subscriber');
@@ -369,14 +377,25 @@ class NewsletterController extends Controller
             ];
         }
 
-        $maillistConfigs = $sm->get('newsletter_maillist');
-
-        if (!empty($maillistConfigs['email'])) {
+        if (!empty($settings['newsletter_maillist'])) {
             $recipients[] = [
                 'uuid' => uniqid(),
                 'type' => 'external',
-                'name' => $maillistConfigs['email'],
-                'email' => $maillistConfigs['email'],
+                'name' => $settings['newsletter_maillist']['email'],
+                'email' => $settings['newsletter_maillist']['email'],
+            ];
+        }
+
+        if (empty($settings['actOn.marketingLists'])) {
+            $settings['actOn.marketingLists'] = [];
+        }
+
+        foreach ($settings['actOn.marketingLists'] as $list) {
+            $recipients[] = [
+                'uuid' => uniqid(),
+                'type' => 'acton',
+                'name' => $list['name'],
+                'id'   => $list['id'],
             ];
         }
 
@@ -384,7 +403,7 @@ class NewsletterController extends Controller
             'id'      => $id,
             'content' => $newsletter,
             'extra'   => [
-                'newsletter_handler' => $sm->get('newsletter_subscriptionType'),
+                'newsletter_handler' => $settings['newsletter_subscriptionType'],
                 'recipients'         => $recipients,
             ]
         ]);
@@ -463,35 +482,9 @@ class NewsletterController extends Controller
      * @Security("hasExtension('NEWSLETTER_MANAGER')
      *     and hasPermission('NEWSLETTER_ADMIN')")
      */
-    public function configAction(Request $request)
+    public function configAction()
     {
-        if ('POST' == $request->getMethod()) {
-            $configurations = [
-                'newsletter_maillist'         => $request->request->get('newsletter_maillist'),
-                'newsletter_subscriptionType' => $request->request->get('newsletter_subscriptionType'),
-            ];
-
-            foreach ($configurations as $key => $value) {
-                $this->get('setting_repository')->set($key, $value);
-            }
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Newsletter module settings saved successfully.')
-            );
-
-            return $this->redirect($this->generateUrl('backend_newsletters_config'));
-        }
-
-        $configurations = $this->get('setting_repository')->get([
-            'newsletter_maillist',
-            'newsletter_subscriptionType',
-            'max_mailing'
-        ]);
-
-        return $this->render('newsletter/config.tpl', [
-            'configs'           => $configurations,
-        ]);
+        return $this->render('newsletter/settings.tpl');
     }
 
     /**

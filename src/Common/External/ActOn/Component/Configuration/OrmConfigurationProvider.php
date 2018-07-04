@@ -26,7 +26,7 @@ class OrmConfigurationProvider implements ConfigurationProvider
      */
     public function getConfiguration()
     {
-        return $this->dataset->get('act_on_configuration', []);
+        return $this->dataset->get('actOn.authentication', []);
     }
 
     /**
@@ -35,10 +35,10 @@ class OrmConfigurationProvider implements ConfigurationProvider
     public function setConfiguration($config)
     {
         if (empty($config)) {
-            $this->dataset->delete('act_on_configuration');
+            $this->dataset->delete('actOn.authentication');
             return;
         }
 
-        $this->dataset->set('act_on_configuration', $config);
+        $this->dataset->set('actOn.authentication', $config);
     }
 }
