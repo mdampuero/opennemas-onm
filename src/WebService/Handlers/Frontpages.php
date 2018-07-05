@@ -40,11 +40,9 @@ class Frontpages
                 $categoryData = $ccm->categories[$actualCategoryId];
             }
 
-            $cm                 = new \ContentManager;
-            $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
-            // Filter articles if some of them has time scheduling and sort them by position
-            $contentsInHomepage = $cm->getInTime($contentsInHomepage);
-            $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
+            list($contentPositions, $contentsInHomepage, $invalidationDt, $lastSaved) =
+                getService('api.service.frontpageVersion')
+                    ->getPublicFrontpageData($actualCategoryId);
 
             // Get all frontpages images
             $imageIdsList = [];
