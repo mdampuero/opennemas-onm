@@ -311,10 +311,11 @@ class PickerController extends Controller
      */
     private function listFrontpageContents()
     {
-        $cm = new \ContentManager();
-
         // Get contents for this home
-        $results = $cm->getContentsForHomepageOfCategory(0);
+        list($frontpageVersion, $contentPositions, $results) =
+            $this->get('api.service.frontpageVersion')
+                ->getPublicContentsForFrontpageData(0);
+
         $results = array_filter($results, function ($value) {
             return $value->content_type_name != 'widget';
         });
