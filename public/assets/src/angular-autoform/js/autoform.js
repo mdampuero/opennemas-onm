@@ -31,9 +31,14 @@
                     '<option value="">{t}Select a country{/t}...</option>' +
                     '<option value="{{ key }}" ng-repeat="(key,value) in extra.countries" ng-selected="{{ ngModel[field.key] === value }}">{{ value }}</option>' +
                   '</select>' +
-                  '<div class="radio" ng-if="field.type === \'options\'" ng-repeat="option in field.values">' +
-                    '<input id="option-{{ option.key }}" name="{{ field.key }}" ng-model="ngModel[field.key]" value="{{ option.key }}" type="radio">' +
-                    '<label for="option-{{ option.key }}">{{ option.value }}</label>' +
+                  '<select class="form-control" id="{{ field.key }}" name="{{ field.key }}" ng-if="field.type === \'select\'" ng-init="ngModel[field.key] = ngModel[field.key].toString()" ng-model="ngModel[field.key]">' +
+                    '<option ng-repeat="option in field.values.split(\',\')" value="{{ option.split(\':\')[0] }}">' +
+                      '{{ option.split(\':\')[1] }}' +
+                    '</option>' +
+                  '</select>' +
+                  '<div class="radio" ng-if="field.type === \'radio\'" ng-repeat="option in field.values.split(\',\')">' +
+                    '<input id="{{ field.key }}-option-{{ option.split(\':\')[0] }}" name="{{ field.key }}" ng-model="ngModel[field.key]" value="{{ option.split(\':\')[0] }}" type="radio">' +
+                    '<label for="{{ field.key }}-option-{{ option.split(\':\')[0] }}">{{ option.split(\':\')[1] }}</label>' +
                   '</div>' +
                 '</div>' +
               '</div>' +

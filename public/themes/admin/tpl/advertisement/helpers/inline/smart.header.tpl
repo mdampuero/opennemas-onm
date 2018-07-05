@@ -19,6 +19,12 @@
         {/foreach}
       ],
       target: targetingCode
+    }, {
+      onNoad: function(data) {
+        if (data.formatId) {
+          $('#' + data.tagId).parent().remove();
+        }
+      }
     });
   });
 </script>

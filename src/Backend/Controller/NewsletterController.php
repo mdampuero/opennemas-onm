@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 use Onm\Settings as s;
+use Common\ORM\Entity\Newsletter;
 
 /**
  * Handles the actions for the newsletter
@@ -31,9 +32,12 @@ class NewsletterController extends Controller
      */
     public function listAction()
     {
-        $maxAllowed      = $this->get('setting_repository')->get('max_mailing');
-        $totalSendings   = $this->get('core.helper.newsletter')->getTotalNumberOfNewslettersSend();
-        $lastInvoice     = new \DateTime($this->get('setting_repository')->get('last_invoice'));
+        $sr                = $this->get('setting_repository');
+        $newsletterService = $this->get('api.service.newsletter');
+
+        $maxAllowed      = $sr->get('max_mailing');
+        $lastInvoice     = new \DateTime($sr->get('last_invoice'));
+        $totalSendings   = $newsletterService->getSentNewslettersSinceLastInvoice($lastInvoice);
         $lastInvoiceText = $lastInvoice->format(_('Y-m-d'));
 
         // Check if the module is configured, if not redirect to the config form
@@ -62,6 +66,12 @@ class NewsletterController extends Controller
                 (int) $maxAllowed
             );
         }
+
+        $this->get('session')->getFlashBag()->add(
+            'info',
+            $message
+        );
+
 
         return $this->render('newsletter/list.tpl', [ 'message' => $message ]);
     }
@@ -140,27 +150,26 @@ class NewsletterController extends Controller
      */
     public function showContentsAction(Request $request)
     {
-        $id         = $request->query->getDigits('id');
-        $newsletter = new \Newsletter($id);
+        $id = $request->query->getDigits('id');
 
-        $containers = json_decode($newsletter->data);
+        $item = $this->get('api.service.newsletter')->getItem($id);
 
-        foreach ($containers as $container) {
-            foreach ($container->items as &$item) {
-                if (!property_exists($item, 'content_type_l10n_name')) {
-                    $type    = $item->content_type;
-                    $content = new $type();
+        foreach ($item->contents as &$container) {
+            foreach ($container['items'] as &$element) {
+                $contentType = array_key_exists('content_type_name', $element)
+                    ? $element['content_type_name'] : $element['content_type'];
 
-                    $item->content_type_l10n_name = $content->content_type_l10n_name;
-                    $item->content_type_name      = \underscore($type);
-                }
+                $element = $this->get('entity_repository')->find(
+                    classify($contentType),
+                    $element['id']
+                );
             }
         }
 
         return $this->render('newsletter/steps/1-pick-elements.tpl', [
             'with_html'         => true,
-            'newsletter'        => $newsletter,
-            'newsletterContent' => $containers,
+            'newsletter'        => $item,
+            'newsletterContent' => $item->contents,
         ]);
     }
 
@@ -182,52 +191,62 @@ class NewsletterController extends Controller
 
         $this->get('core.locale')->setContext('frontend');
 
-        foreach ($containers as $container) {
+        foreach ($containers as &$container) {
             foreach ($container->items as &$content) {
-                $content->content_type = \classify($content->content_type_name);
-                unset($content->content_type_name);
-                unset($content->content_type_l10n_name);
+                $content = [
+                    'content_type'           => \classify($content->content_type_name),
+                    'id'                     => $content->id,
+                ];
             }
         }
 
-        $time = new \DateTime();
-        $time = $time->format('d/m/Y');
+        $ns = $this->get('api.service.newsletter');
+        $nm = $this->get('core.renderer.newsletter');
 
-        $title = $request->request->filter(
-            'title',
-            $this->get('setting_repository')->get('site_name') . ' [' . $time . ']',
-            FILTER_SANITIZE_STRING
-        );
+        $siteTitle    = $this->get('setting_repository')->get('site_name');
+        $time         = new \DateTime();
+        $defaultTitle = sprintf('%s [%s]', $siteTitle, $time->format('d/m/Y'));
+        $title        = $request->request->filter('title', $defaultTitle, FILTER_SANITIZE_STRING);
+        $html         = $nm->render($containers);
 
-        $nm = $this->get('newsletter_manager');
+        try {
+            if ($id > 0) {
+                $newsletter = $ns->patchItem($id, [
+                    'status'   => 0,
+                    'title'    => $title,
+                    'contents' => $containers,
+                    'html'     => $html,
+                    'updated'  => new \Datetime(),
+                ]);
+            } else {
+                $newsletter = $ns->createItem([
+                    'status'   => 0,
+                    'title'    => $title,
+                    'contents' => $containers,
+                    'sent'     => null,
+                    'html'     => $html,
+                ]);
 
-        if ($id > 0) {
-            $newsletter = new \Newsletter($id);
-
-            $newValues = [
-                'title' => $title,
-                'data'  => $contentsRAW,
-                'html'  => $nm->render($containers),
-            ];
-
-            if (is_null($newsletter->html)) {
-                $newValues['html'] = $nm->render($containers);
+                $id = $newsletter->id;
             }
 
-            $newsletter->update($newValues);
-        } else {
-            $newsletter = new \Newsletter();
-            $newsletter->create([
-                'title'   => $title,
-                'data'    => json_encode($containers),
-                'html'    => $nm->render($containers),
-            ]);
-        }
+            return $this->redirect($this->generateUrl(
+                'backend_newsletters_preview',
+                [ 'id' => $id ]
+            ));
+        } catch (\Exception $e) {
+            $this->get('error.log')->error(sprintf(
+                'Error while saving the newsletter contents: %s',
+                $e->getMessage()
+            ));
 
-        return $this->redirect($this->generateUrl(
-            'backend_newsletters_preview',
-            ['id' => $newsletter->pk_newsletter]
-        ));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("There was an error while saving the newsletter ")
+            );
+
+            return $this->redirect($this->generateUrl('backend_newsletters_list'));
+        }
     }
 
     /**
@@ -242,18 +261,28 @@ class NewsletterController extends Controller
      */
     public function previewAction(Request $request)
     {
-        $id         = (int) $request->query->getDigits('id');
-        $newsletter = new \Newsletter($id);
+        $id = (int) $request->query->getDigits('id');
 
-        $newsletter = \Onm\StringUtils::convertToUtf8($newsletter);
+        try {
+            $item = $this->get('api.service.newsletter')->getItem($id);
 
-        return $this->render('newsletter/steps/2-preview.tpl', [
-            'newsletter' => $newsletter
-        ]);
+            return $this->render('newsletter/steps/2-preview.tpl', [
+                'newsletter' => $item
+            ]);
+        } catch (\Api\Exception\GetItemException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("There was an error while fetching the newsletter ")
+            );
+
+            return $this->redirect($this->generateUrl(
+                'backend_newsletters_list'
+            ));
+        }
     }
 
     /**
-     * Description of this action
+     * Saves the HTML content of a newsletter
      *
      * @param Request $request the request object
      *
@@ -266,17 +295,36 @@ class NewsletterController extends Controller
     {
         $id = (int) $request->query->getDigits('id');
 
-        $newsletter = new \Newsletter($id);
-        $newsletter->update([
-            'title' => $request->request->filter('title', FILTER_SANITIZE_STRING),
-            'html'  => $request->request->filter('html', FILTER_SANITIZE_STRING),
-        ]);
+        try {
+            $newsletter = $this->get('api.service.newsletter')->patchItem($id, [
+                'title'   => $request->request->filter('title', FILTER_SANITIZE_STRING),
+                'html'    => $request->request->filter('html', FILTER_SANITIZE_STRING),
+                'updated' => new \Datetime(),
+            ]);
 
-        return new JsonResponse(['messages' => [[
-            'id'      => '200',
-            'type'    => 'success',
-            'message' => sprintf(_('Content saved successfully'))
-        ]]]);
+            return new JsonResponse(['messages' => [[
+                'id'      => '200',
+                'type'    => 'success',
+                'message' => sprintf(_('Content saved successfully'))
+            ]]]);
+        } catch (\Exception $e) {
+            $this->get('error.log')->error(sprintf(
+                'Error while updating the newsletter (%d): %s',
+                $id,
+                $e->getMessage()
+            ));
+
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("There was an error while saving the newsletter ")
+            );
+
+            return new JsonResponse(['messages' => [[
+                'id'      => '400',
+                'type'    => 'error',
+                'message' => sprintf(_('Error while updating content'))
+            ]]]);
+        }
     }
 
     /**
@@ -294,8 +342,16 @@ class NewsletterController extends Controller
     {
         $id         = $request->query->getDigits('id');
         $sm         = $this->get('setting_repository');
-        $content    = new \Newsletter($id);
+        $newsletter = $this->get('api.service.newsletter')->getItem($id);
         $recipients = [];
+
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get([
+                'newsletter_maillist',
+                'newsletter_subscriptionType',
+                'actOn.marketingLists',
+            ]);
 
 
         $ss       = $this->get('api.service.subscription');
@@ -321,22 +377,33 @@ class NewsletterController extends Controller
             ];
         }
 
-        $maillistConfigs = $sm->get('newsletter_maillist');
-
-        if (!empty($maillistConfigs['email'])) {
+        if (!empty($settings['newsletter_maillist'])) {
             $recipients[] = [
                 'uuid' => uniqid(),
                 'type' => 'external',
-                'name' => $maillistConfigs['email'],
-                'email' => $maillistConfigs['email'],
+                'name' => $settings['newsletter_maillist']['email'],
+                'email' => $settings['newsletter_maillist']['email'],
+            ];
+        }
+
+        if (empty($settings['actOn.marketingLists'])) {
+            $settings['actOn.marketingLists'] = [];
+        }
+
+        foreach ($settings['actOn.marketingLists'] as $list) {
+            $recipients[] = [
+                'uuid' => uniqid(),
+                'type' => 'acton',
+                'name' => $list['name'],
+                'id'   => $list['id'],
             ];
         }
 
         return $this->render('newsletter/steps/3-pick-recipients.tpl', [
             'id'      => $id,
-            'content' => $content,
+            'content' => $newsletter,
             'extra'   => [
-                'newsletter_handler' => $sm->get('newsletter_subscriptionType'),
+                'newsletter_handler' => $settings['newsletter_subscriptionType'],
                 'recipients'         => $recipients,
             ]
         ]);
@@ -354,23 +421,55 @@ class NewsletterController extends Controller
      */
     public function sendAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
+        $id = (int) $request->query->getDigits('id');
 
         $recipients = $request->request->get('recipients');
         $recipients = json_decode($recipients);
 
-        // Prepare the newsletter contents to send
-        $newsletter        = new \Newsletter($id);
-        $newsletter->html  = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
-        $newsletter->title = empty($newsletter->title)
-            ? _('[Newsletter]') : $newsletter->title;
+        $newsletterService = $this->get('api.service.newsletter');
+        $newsletterSender  = $this->get('core.helper.newsletter_sender');
 
-        $report = $this->get('core.helper.newsletter_sender')->send($newsletter, $recipients);
+        try {
+            $newsletter = $newsletterService->getItem($id);
+            $report     = $newsletterSender->send($newsletter, $recipients);
 
-        return $this->render('newsletter/steps/4-send.tpl', [
-            'send_report' => $report,
-            'newsletter'  => $newsletter,
-        ]);
+            // Duplicate newsletter if it was sent before.
+            if ($newsletter->sent_items > 0) {
+                $data = array_merge($newsletter->getStored(), [
+                    'recipients' => $recipients,
+                    'sent'       => new \Datetime(),
+                    'sent_items' => $report['total'],
+                    'updated'    => new \Datetime(),
+                ]);
+
+                unset($data['id']);
+
+                $newsletter = $this->get('api.service.newsletter')->createItem($data);
+            } else {
+                $this->get('api.service.newsletter')->patchItem($id, [
+                    'recipients' => $recipients,
+                    'sent'       => new \Datetime(),
+                    'sent_items' => $report['total'],
+                    'updated'    => new \Datetime(),
+                ]);
+            }
+
+            return $this->render('newsletter/steps/4-send.tpl', [
+                'send_report' => $report,
+                'newsletter'  => $newsletter,
+            ]);
+        } catch (\Exception $e) {
+            $this->get('error.log')->error(
+                sprintf('Error while sending the newsletter %s: %s', $id, $e->getMessage())
+            );
+
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("There was an error while sending the newsletter ")
+            );
+
+            return $this->redirect($this->generateUrl('backend_newsletters_list'));
+        }
     }
 
     /**
@@ -383,35 +482,9 @@ class NewsletterController extends Controller
      * @Security("hasExtension('NEWSLETTER_MANAGER')
      *     and hasPermission('NEWSLETTER_ADMIN')")
      */
-    public function configAction(Request $request)
+    public function configAction()
     {
-        if ('POST' == $request->getMethod()) {
-            $configurations = [
-                'newsletter_maillist'         => $request->request->get('newsletter_maillist'),
-                'newsletter_subscriptionType' => $request->request->get('newsletter_subscriptionType'),
-            ];
-
-            foreach ($configurations as $key => $value) {
-                $this->get('setting_repository')->set($key, $value);
-            }
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Newsletter module settings saved successfully.')
-            );
-
-            return $this->redirect($this->generateUrl('backend_newsletters_config'));
-        }
-
-        $configurations = $this->get('setting_repository')->get([
-            'newsletter_maillist',
-            'newsletter_subscriptionType',
-            'max_mailing'
-        ]);
-
-        return $this->render('newsletter/config.tpl', [
-            'configs'           => $configurations,
-        ]);
+        return $this->render('newsletter/settings.tpl');
     }
 
     /**

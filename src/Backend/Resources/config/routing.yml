@@ -757,6 +757,10 @@ backend_newsletter:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/newsletter.yml'
 
+backend_newsletter_template:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/newsletter_template.yml'
+
 backend_news_agency_server:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/news_agency_server.yml'

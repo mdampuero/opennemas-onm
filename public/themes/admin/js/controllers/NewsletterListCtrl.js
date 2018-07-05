@@ -8,20 +8,90 @@
      * @name  NewsletterListCtrl
      *
      * @requires $controller
-     * @requires $http
      * @requires $scope
      * @requires $uibModal
-     * @requires messenger
-     * @requires routing
+     * @requires oqlEncoder
      *
      * @description
      *   Handles actions for newsletter list.
      */
     .controller('NewsletterListCtrl', [
-      '$controller', '$http', '$scope', '$uibModal', 'messenger', 'routing',
-      function($controller, $http, $scope, $uibModal, messenger, routing) {
-        // Initialize the super class and extend it.
-        $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
+      '$controller', '$scope', '$uibModal', 'oqlEncoder',
+      function($controller, $scope, $uibModal, oqlEncoder) {
+        $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
+
+        /**
+         * @memberOf RestListCtrl
+         *
+         * @description
+         *   The criteria to search.
+         *
+         * @type {Object}
+         */
+        $scope.criteria = {
+          type: 0,
+          epp: 10,
+          page: 1,
+          orderBy: { id: 'desc' }
+        };
+
+        /**
+         * @memberOf RestListCtrl
+         *
+         * @description
+         *   The newsletter type selected.
+         *
+         * @type {Object}
+         */
+        $scope.selectedType = 0;
+
+        /**
+         * @memberOf NewsletterListCtrl
+         *
+         * @description
+         *  The list of routes for the controller.
+         *
+         * @type {Object}
+         */
+        $scope.routes = {
+          delete:         'api_v1_backend_newsletter_delete',
+          deleteSelected: 'api_v1_backend_newsletters_delete',
+          list:           'api_v1_backend_newsletters_list',
+          patch:          'api_v1_backend_newsletter_patch',
+          patchSelected:  'api_v1_backend_newsletters_patch'
+        };
+
+        /**
+         * @function init
+         * @memberOf NewsletterListCtrl
+         *
+         * @description
+         *   Configures the controller.
+         */
+        $scope.init = function() {
+          $scope.columns.key     = 'newsletter-columns';
+          $scope.backup.criteria = $scope.criteria;
+
+          oqlEncoder.configure({
+            placeholder: {
+              title: 'title ~ "[value]"',
+            }
+          });
+
+          $scope.list();
+        };
+
+        /**
+         * @function init
+         * @memberOf NewsletterListCtrl
+         *
+         * @description
+         *   Configures the controller.
+         */
+        $scope.selectType = function(type) {
+          $scope.flags.http.loading = true;
+          $scope.selectedType = type;
+        };
 
         /**
          * @function removePermanetly
@@ -63,6 +133,12 @@
             }
           });
         };
+
+        $scope.$watch('selectedType', function(nv, ov) {
+          if (nv !== ov) {
+            $scope.criteria.type = $scope.selectedType;
+          }
+        });
       }
     ]);
 })();

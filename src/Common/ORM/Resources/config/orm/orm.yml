@@ -30,6 +30,7 @@ imports:
     - { resource: entity/frontpage_version.yml }
     - { resource: entity/instance.yml }
     - { resource: entity/invoice.yml }
+    - { resource: entity/newsletter.yml }
     - { resource: entity/notification.yml }
     - { resource: entity/payment.yml }
     - { resource: entity/purchase.yml }

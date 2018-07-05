@@ -8,8 +8,12 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
+                <i class="fa fa-envelope m-r-10"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
                 <a class="no-padding" href="{url name=backend_newsletters_list}" title="{t}Go back to list{/t}">
-                  <i class="fa fa-envelope"></i>
                   {t}Newsletters{/t}
                 </a>
               </h4>
@@ -92,8 +96,8 @@
                   </div>
                   <div class="newsletter-container-contents clearfix" ng-if="!container.hide" ui-tree-handle>
                     <div class="hint-message p-b-15" ng-if="container.items.length == 0">
-    -                 {t}Click in "Add contents" button above or drop contents from other containers{/t}
-    -               </div>
+                      {t}Click in "Add contents" button above or drop contents from other containers{/t}
+                    </div>
                     <ol ui-tree-nodes="" ng-model="container.items" type="content">
                       <li ng-repeat="content in container.items" ui-tree-node ng-include="'item'"></li>
                     </ol>
@@ -107,7 +111,7 @@
       </div>
     </div>
     <input type="hidden" name="content_ids" ng-value="contents">
-    <input type="hidden" name="id" value="{$newsletter->pk_newsletter}">
+    <input type="hidden" name="id" value="{$newsletter->id}">
     <script type="text/ng-template" id="item">
       <div class="newsletter-item clearfix" ui-tree-handle>
         <span></span>
