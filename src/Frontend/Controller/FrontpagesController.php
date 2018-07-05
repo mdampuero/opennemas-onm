@@ -52,8 +52,7 @@ class FrontpagesController extends Controller
             $fvs->getPublicFrontpageData($categoryId);
 
         $systemDate = new \DateTime(null, new \DateTimeZone('UTC'));
-        $lifetime   =
-                $invalidationDt->getTimestamp() - $systemDate->getTimestamp();
+        $lifetime   = $invalidationDt->getTimestamp() - $systemDate->getTimestamp();
         if (!empty($invalidationDt)) {
             if ($lifetime < $this->view->getCacheLifetime()) {
                 $this->view->setCacheLifetime($lifetime);
