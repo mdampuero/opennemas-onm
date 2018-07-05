@@ -26,23 +26,28 @@ class FrontpageVersionService extends OrmService
 
         $invalidationDt = $this->getInvalidationTime($contents, $categoryIdAux);
         $contents       = $this->getOnlyPublishContents($contents);
-        $lastSaved      = $this->getLastSaved($categoryIdAux, $frontpageVersion->id);
+        $lastSaved      = $this->getLastSaved(
+            $categoryIdAux,
+            $frontpageVersion == null ? null : $frontpageVersion->id
+        );
         return [$contentPositions, $contents, $invalidationDt, $lastSaved];
     }
 
     public function getPublicContentsForFrontpageData($categoryId)
     {
-        $categoryIdAux = empty($categoryId) ? 0 : $categoryId;
-
+        $categoryIdAux      = empty($categoryId) ? 0 : $categoryId;
         $frontpageVersionId = $this->getCurrentVersionDB($categoryIdAux);
-        if (empty($frontpageVersionId)) {
-            return [null, null];
+        $frontpageVersion   = null;
+        if (!empty($frontpageVersionId)) {
+            $frontpageVersion = $this->getItem($frontpageVersionId);
+            $frontpageVersion = $this->changeToUTC($frontpageVersion);
         }
-        $frontpageVersion = $this->getItem($frontpageVersionId);
-        $frontpageVersion = $this->changeToUTC($frontpageVersion);
 
         list($contentPositions, $contents) =
-            $this->getContentPositions($categoryIdAux, $frontpageVersion->id);
+            $this->getContentPositions(
+                $categoryIdAux,
+                empty($frontpageVersionId) ? null : $frontpageVersion->id
+            );
 
         return [$frontpageVersion, $contentPositions, $contents];
     }
@@ -66,6 +71,7 @@ class FrontpageVersionService extends OrmService
             // Add 1 year to the current timestamp
             $timestamp = $invalidationTime->getTimestamp() + 31536000;
             $invalidationTime->setTimestamp($timestamp);
+            $invalidationTime = $invalidationTime->format('Y-m-d H:i:s');
         }
 
         foreach ($contents as $content) {
@@ -85,6 +91,7 @@ class FrontpageVersionService extends OrmService
                 continue;
             }
         }
+
         $invalidationTime =
             \DateTime::createFromFormat('Y-m-d H:i:s', $invalidationTime, $tz);
         $invalidationTime->setTimeZone(new \DateTimeZone('UTC'));
