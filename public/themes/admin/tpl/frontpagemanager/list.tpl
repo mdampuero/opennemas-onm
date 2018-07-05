@@ -229,8 +229,8 @@ f
       </div>
     </div>
   </div>
-  <div class="content ng-cloak">
-    <a class="btn btn-add btn-success hidden-xs" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
+  <div class="content">
+    <a class="btn btn-add btn-success hidden-xs ng-cloak" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
       <span class="fa fa-plus"></span>
     </a>
     <div id="warnings-validation"></div>

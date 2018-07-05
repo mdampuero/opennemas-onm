@@ -110,8 +110,7 @@ class FrontpagesController extends Controller
         // Get application logger
         $logger = $this->get('application.log');
 
-        $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
-
+        $category = $request->request->get('category', null, FILTER_SANITIZE_STRING);
         if ($category === null && $category === '') {
             return new JsonResponse(
                 [ 'message' => _("Unable to save content positions: Data sent from the client were not valid.") ]
@@ -172,21 +171,18 @@ class FrontpagesController extends Controller
         $version  =
             $fvs->saveFrontPageVersion($request->request->get('version', null));
         $contents = [];
+
         // Iterate over each element and fetch its parameters to save.
         foreach ($contentsPositions as $params) {
             $contents[] = [
                 'id'                   => $params['id'],
-                'category'             => $categoryID,
                 'placeholder'          => $params['placeholder'],
                 'position'             => $params['position'],
-                'content_type'         => $params['content_type'],
-                'frontpage_version_id' => $version->id,
+                'content_type'         => $params['content_type']
             ];
         }
 
         // Save contents
-        //var_dump('ddd');die();
-
         $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $version->id, $contents);
 
 

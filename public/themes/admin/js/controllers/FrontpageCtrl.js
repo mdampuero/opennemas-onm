@@ -360,7 +360,8 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           contents_positions: els.length > 0 ? els : null,
           last_version:       $scope.frontpageInfo.lastSaved,
           contents_count:     els.length,
-          version:            version
+          version:            version,
+          category:           $scope.categoryId
         }).then(function(response) {
           if (!response.data.frontpage_last_saved) {
             return false;
