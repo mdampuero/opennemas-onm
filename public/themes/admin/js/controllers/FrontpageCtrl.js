@@ -207,20 +207,21 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
         });
     };
 
-    $scope.preview = function(category) {
+    $scope.preview = function() {
       $scope.loading = true;
 
       var contents = $scope.getContentsInFrontpage();
       var encoded  = JSON.stringify(contents);
       var data     = {
+        category: $scope.categoryId,
         contents: encoded,
-        category_name: category
+        version:  $scope.version.id
       };
 
-      var url = routing.generate('admin_frontpage_preview',
-        { category: category });
-
-      http.post(url, data).success(function() {
+      http.post({
+          name: 'admin_frontpage_preview',
+          params: {category: $scope.categoryId}
+      }, data).success(function() {
         $uibModal.open({
           templateUrl: 'modal-preview',
           windowClass: 'modal-fullscreen',
@@ -229,7 +230,10 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
             template: function() {
               return {
                 src: routing.generate('admin_frontpage_get_preview',
-                  { category: category })
+                  {
+                    category: $scope.categoryId
+                  }
+                )
               };
             },
             success: function() {

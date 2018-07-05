@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Common\Core\Controller\Controller;
 use Onm\Settings as s;
+use Common\ORM\Entity\ContentPosition;
 
 class FrontpagesController extends Controller
 {
@@ -310,13 +311,30 @@ class FrontpagesController extends Controller
         // Get the ID of the actual category from the categoryName
         $actualCategoryId = $ccm->get_id($categoryName);
 
-        $cm          = new \ContentManager;
-        $contentsRAW = $request->request->get('contents');
-        $contents    = json_decode($contentsRAW, true);
+        $contentsRAW         = $request->request->get('contents');
+        $contentPositionList = json_decode($contentsRAW, true);
+        $contentPositionMap  = [];
+        $contentsMap         = [];
 
-        $contentsInHomepage = $cm->getContentsForHomepageFromArray($contents);
-        // Filter articles if some of them has time scheduling and sort them by position
-        $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
+        foreach ($contentPositionList as $contentPosition) {
+            if (!array_key_exists($contentPosition['placeholder'], $contentPositionMap)) {
+                $contentPositionMap[$contentPosition['placeholder']] = [];
+            }
+
+            $contentPosition['pk_fk_content'] = intval($contentPosition['id']);
+            $contentPositionMap[$contentPosition['placeholder']][] =
+                new ContentPosition($contentPosition);
+            $contentsMap[$contentPosition['id']]                   =
+                [$contentPosition['content_type'], intval($contentPosition['id'])];
+        }
+
+        $contents =
+            $this->container->get('entity_repository')->findMulti($contentsMap);
+
+        $contentsInHomepage = [];
+        foreach ($contents as $content) {
+            $contentsInHomepage[$content->id] = $content;
+        }
 
         // Fetch ads
         list($positions, $advertisements) =
@@ -332,6 +350,7 @@ class FrontpagesController extends Controller
             }
         }
 
+        $cm = new \ContentManager;
         if (count($imageIdsList) > 0) {
             $imageList = $cm->find('Photo', 'pk_content IN (' . implode(',', $imageIdsList) . ')');
         } else {
@@ -346,6 +365,7 @@ class FrontpagesController extends Controller
                 ->loadRelatedContents();
         }
 
+        $this->view->assign('contentPositionByPos', $contentPositionMap);
         $this->view->assign('column', $contentsInHomepage);
 
         // Getting categories
