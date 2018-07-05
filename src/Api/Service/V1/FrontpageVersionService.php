@@ -220,6 +220,10 @@ class FrontpageVersionService extends OrmService
         $frontpages    = $existMainFrontPage ? [$mainFrontpage] : [];
         $frontpagesAut = !$existMainFrontPage ? [$mainFrontpage] : [];
         foreach ($categories as $category) {
+            if ($category->internal_category === 0) {
+                continue;
+            }
+
             if (array_key_exists($category->id, $catFrontpagesRel)) {
                 $frontpages[$category->id] = [
                     'id'           => $category->id,
@@ -229,9 +233,12 @@ class FrontpageVersionService extends OrmService
                 ];
             } else {
                 $frontpagesAut[$category->id] = [
-                    'id'        => $category->id,
-                    'name'      => $category->name,
-                    'manual'    => false
+                    'id'     => $category->id,
+                    'name'   => $this->container->get('data.manager.filter')
+                        ->set($category->title)
+                        ->filter('localize')
+                        ->get(),
+                    'manual' => false
                 ];
             }
         }
