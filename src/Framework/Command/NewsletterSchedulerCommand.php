@@ -150,8 +150,6 @@ EOF
         $diff    = $newDate->diff($sentNewsletters['items'][0]->sent);
         $canSend = ($diff->d === 0 && $diff->h > 0) || ($diff->d > 0);
 
-        // var_dump($canSend, $diff->d, $diff->h, $sentNewsletters['items'][0]->sent, $time);
-
         $message = 'Go ahead';
         if (!$canSend) {
             $message = sprintf(
@@ -165,10 +163,13 @@ EOF
     }
 
     /**
-     * undocumented function
+     * Sends a scheduled newsletter and stores the sending information into the database
      *
-     * @return void
-     * @author
+     * @param Newsletter $template the scheduled newsletter to send,
+     * @param Output $output the symfony output object to interact with the cli
+     * @param DateTime $time the current DateTime
+     *
+     * @return Newsletter the created newsletter
      **/
     public function sendScheduledTemplate($template, $output, $time)
     {
