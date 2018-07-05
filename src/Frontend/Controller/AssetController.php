@@ -94,7 +94,7 @@ class AssetController extends Controller
 
         list($frontpageVersion, $contentPositions, $contentsInHomepage) =
             $this->get('api.service.frontpageVersion')
-                ->getPublicContentsForFrontpageData($categoryIdAux);
+                ->getPublicContentsForFrontpageData($currentCategoryId);
 
         if (is_array($contentsInHomepage)) {
             $bgColor    = 'bgcolor_' . $currentCategoryId;
