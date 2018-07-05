@@ -54,6 +54,8 @@ EOF
 
         $loader->init();
 
+        $this->getContainer()->get('core.helper.url_generator')->forceHttp(true);
+
         $timezone = $this->getContainer()->get('setting_repository')->get('time_zone');
         $this->getContainer()->get('core.locale')->setTimeZone($timezone);
         $this->getContainer()->get('core.security')->setInstance($instance);
