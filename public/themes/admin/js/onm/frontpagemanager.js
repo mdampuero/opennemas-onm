@@ -1,18 +1,133 @@
+/**
+ * @function get_tooltip_content
+ *
+ * @description
+ *   Returns the tooltip content for an element
+ */
+window.get_tooltip_content = function(elem) {
+  var parentContentId = elem.closest('div.content-provider-element');
+  var contentHtml = '';
 
-function makeContentProviderAndPlaceholdersSortable() {
+  if (parentContentId.data('popover-content') === undefined) {
+    var id = parentContentId.data('content-id');
+    var $url = window.frontpage_urls.quick_info + '?id=' + id;
+    var content = '';
+
+    content = window.content_states[id];
+    if (content === undefined) {
+      jQuery.ajax({
+        url: $url,
+        async: false
+      }).done(function(data) {
+        window.content_states[id] = data;
+      });
+    } else {
+      contentHtml = window.tooltip_strings.state + content.state +
+        '<br>' + window.tooltip_strings.views + content.views +
+        '<br>' + window.tooltip_strings.category + content.category +
+        '<br>' + window.tooltip_strings.schedule +
+          '<span class="scheduled-state ' + content.scheduled_state +
+          '">' + content.scheduled_state + '</span>' +
+        '<br>' + window.tooltip_strings.starttime + content.starttime +
+        '<br>' + window.tooltip_strings.last_author + content.last_author;
+      parentContentId.data('popover-content', contentHtml);
+    }
+  } else {
+    contentHtml = parentContentId.data('popover-content');
+  }
+
+  return contentHtml;
+};
+
+/**
+ * @function get_tooltip_title
+ *
+ * @description
+ *   Returns the tooltip title for an element
+ */
+window.get_tooltip_title = function(elem) {
+  var id = elem.closest('div.content-provider-element').data('content-id');
+  var $url = window.frontpage_urls.quick_info + '?id=' + id;
+  var title = '';
+
+  var content = window.content_states[id];
+
+  if (content === undefined) {
+    jQuery.ajax({
+      url: $url,
+      async: false
+    }).done(function(data) {
+      window.content_states[id] = data;
+      if (window.content_states[id].hasOwnProperty('title')) {
+        title = window.content_states[id].title;
+      }
+    });
+  } else {
+    title = content.title;
+  }
+
+  return title;
+};
+
+/**
+ * @function showMessage
+ *
+ * @description
+ *   Shows a UI message
+ */
+window.showMessage = function(message, type, time, id) {
+  window.Messenger.options = {
+    extraClasses: 'messenger-fixed messenger-on-bottom',
+  };
+
+  window.Messenger().post({
+    message: message,
+    type: type,
+    hideAfter: time,
+    showCloseButton: true,
+    id: id
+  });
+};
+
+/**
+ * @function initializePopovers
+ *
+ * @description
+ *   Initializes the UI popovers
+ */
+window.initializePopovers = function() {
+  jQuery('div.placeholder div.content-provider-element .info').each(function() {
+    var element = jQuery(this);
+
+    jQuery(this).popover({
+      placement: 'top',
+      animation: false,
+      title: window.get_tooltip_title(element),
+      content: window.get_tooltip_content(element),
+      html: true
+    });
+  });
+};
+
+/**
+ * @function makeContentProviderAndPlaceholdersSortable
+ *
+ * @description
+ *   UI function that enables the jquery sortable behaviour on content providers
+ */
+window.makeContentProviderAndPlaceholdersSortable = function() {
   // Make content providers sortable and allow to D&D over the placeholders
   jQuery('div#content-provider .ui-tabs-panel > div:not(.pagination)').sortable({
     connectWith: 'div.placeholder div.content',
     placeholder: 'placeholder-element',
     handle: '.description',
-    update: function(event) {
-      initializePopovers();
+    update: function() {
+      window.initializePopovers();
     },
-    stop: function(event) {
-        showMessage(frontpage_messages.remember_save_positions, 'info', 3, 1234);
+    stop: function() {
+      window.showMessage(window.frontpage_messages.remember_save_positions, 'info', 3, 1234);
     },
     tolerance: 'pointer'
-    //containment: '#content-with-ticker'
   }).disableSelection();
 
   // Make content providers sortable and allow to D&D over placeholders and content provider
@@ -20,115 +135,36 @@ function makeContentProviderAndPlaceholdersSortable() {
     connectWith: 'div#content-provider .ui-tabs-panel > div:not(.pagination), div.placeholder div.content',
     placeholder: 'placeholder-element',
     handle: '.description',
-    update: function(event,ui) {
-      initializePopovers();
+    update: function() {
+      window.initializePopovers();
     },
-    stop: function(event,ui) {
-      showMessage(frontpage_messages.remember_save_positions, 'info', 3, 1234);
+    stop: function() {
+      window.showMessage(window.frontpage_messages.remember_save_positions, 'info', 3, 1234);
     },
     tolerance: 'pointer'
   }).disableSelection();
-}
-
-function get_tooltip_content(elem) {
-  var parent_content_div = elem.closest('div.content-provider-element');
-  var content_html = '';
-
-  if (parent_content_div.data('popover-content') === undefined) {
-    var id = parent_content_div.data('content-id');
-    var $url = frontpage_urls.quick_info + '?id=' + id;
-    var content = '';
-
-    content = content_states[id];
-    if (content === undefined) {
-      jQuery.ajax({
-        url: $url,
-        async: false
-      }).done(function(data) {
-        content_states[id] = data;
-      });
-    } else {
-      content_html = tooltip_strings.state + content.state +
-        '<br>' + tooltip_strings.views + content.views +
-        '<br>' + tooltip_strings.category + content.category +
-        "<br>" + tooltip_strings.schedule +
-          "<span class='scheduled-state " + content.scheduled_state +
-          "'>" + content.scheduled_state + '</span>'+
-        '<br>' + tooltip_strings.starttime + content.starttime +
-        '<br>' + tooltip_strings.last_author + content.last_author;
-      parent_content_div.data('popover-content', content_html);
-    }
-  } else {
-      content_html = parent_content_div.data('popover-content');
-  }
-
-  return content_html;
-}
-
-function get_tooltip_title(elem) {
-  var ajaxdata;
-  var id = elem.closest('div.content-provider-element').data('content-id');
-  var $url = frontpage_urls.quick_info + '?id=' + id;
-  var title = '';
-
-  content = content_states[id];
-  if (content === undefined) {
-    jQuery.ajax({
-      url: $url,
-      async: false
-    }).done(function(data) {
-      content_states[id] = data;
-      if (content_states[id].hasOwnProperty('title')) {
-        title = content_states[id].title;
-      }
-    });
-  } else {
-      title = content.title;
-  }
-
-  return title;
-}
-
-function remove_element(element) {
-  jQuery(element).each(function() {
-    jQuery(this).fadeTo('slow', 0.01, function() { //fade
-      jQuery(this).slideUp('slow', function() { //slide up
-        jQuery(this).remove(); //then remove from the DOM
-      });
-     });
-  });
-}
-
-function showMessage(message, type, time, id) {
-  Messenger.options = {
-    extraClasses: 'messenger-fixed messenger-on-bottom',
-  };
-
-  Messenger().post({
-    message: message,
-    type: type,
-    hideAfter: time,
-    showCloseButton: true,
-    id: id
-  });
-}
+};
 
 /**
- * Initizlize Popovers
+ * @function remove_element
+ *
+ * @description
+ *   Removes an element from the frontpage
  */
-function initializePopovers() {
-  jQuery('div.placeholder div.content-provider-element .info').each(function() {
-    var element = jQuery(this);
+window.remove_element = function(element) {
+  var speed = 0.01;
 
-    jQuery(this).popover({
-      placement: 'top',
-      animation: false,
-      title: get_tooltip_title(element),
-      content: get_tooltip_content(element),
-      html: true
+  jQuery(element).each(function() {
+    // Fade
+    jQuery(this).fadeTo('slow', speed, function() {
+      // Slide up
+      jQuery(this).slideUp('slow', function() {
+        // Then remove from the DOM
+        jQuery(this).remove();
+      });
     });
   });
-}
+};
 
 jQuery(function($) {
   /*
@@ -136,14 +172,13 @@ jQuery(function($) {
    * Sortable handlers
    **************************************************************************
    */
-  makeContentProviderAndPlaceholdersSortable();
+  window.makeContentProviderAndPlaceholdersSortable();
 
   /*
    **************************************************************************
    * Frontpage version control
    **************************************************************************
    */
-
   $('#modal-new-version').modal({
     backdrop: 'static',
     keyboard: true,
@@ -165,14 +200,15 @@ jQuery(function($) {
    */
   $('div.placeholder').on('click', '.content-provider-element input[type="checkbox"]', function() {
     // Checkbox = $(this);
-    var checked_elements = $('div.placeholder div.content-provider-element input[type="checkbox"]:checked').length;
+    var checkedElements = $('div.placeholder div.content-provider-element input[type="checkbox"]:checked').length;
 
-    if (checked_elements > 0) {
+    if (checkedElements > 0) {
       $('.old-button .batch-actions').fadeIn('fast');
     } else {
       $('.old-button .batch-actions').fadeOut('fast');
     }
   });
+
   $('div.content').on('mouseleave', 'div.placeholder div.content-provider-element', function() {
     $(this).find('.content-action-buttons').removeClass('open');
   });
@@ -180,11 +216,12 @@ jQuery(function($) {
   $('div.placeholder').on('mouseenter', 'div.content-provider-element .info', function() {
     $('div.placeholder div.content-provider-element .info').popover('show');
   });
+
   $('div.placeholder').on('mouseleave', 'div.content-provider-element .info', function() {
     $('div.placeholder div.content-provider-element .info').popover('hide');
   });
 
-  initializePopovers();
+  window.initializePopovers();
 
   /*
    **************************************************************************
@@ -196,6 +233,7 @@ jQuery(function($) {
     keyboard: true,
     show: false
   });
+
   $('#frontpagemanager').on('click', 'div.placeholder div.content-provider-element a.arquive', function(e) {
     var element = $(this).closest('.content-provider-element');
     var elementID = element.data('content-id');
@@ -215,17 +253,17 @@ jQuery(function($) {
 
     if (delId) {
       $.get(
-        frontpage_urls.set_arquived,
+        window.frontpage_urls.set_arquived,
         { ids: [ delId ] }
       ).done(function(data) {
-        showMessage(data, 'success', 5, new Date().getTime());
-        showMessage(frontpage_messages.remember_save_positions, 'info', 5, new Date().getTime());
+        window.showMessage(data, 'success', 5, new Date().getTime());
+        window.showMessage(window.frontpage_messages.remember_save_positions, 'info', 5, new Date().getTime());
       }).fail(function(data) {
-        showMessage(data.responseText, 'error', 5, new Date().getTime());
+        window.showMessage(data.responseText, 'error', 5, new Date().getTime());
       });
     }
     $('#modal-element-archive').modal('hide');
-    remove_element($('body').data('element-for-archive'));
+    window.remove_element($('body').data('element-for-archive'));
     e.preventDefault();
   });
 
@@ -239,8 +277,8 @@ jQuery(function($) {
     e.preventDefault();
     var parent = $(this).closest('.content-provider-element');
 
-    remove_element(parent);
-    showMessage(frontpage_messages.remember_save_positions, 'info', 5, new Date().getTime());
+    window.remove_element(parent);
+    window.showMessage(window.frontpage_messages.remember_save_positions, 'info', 5, new Date().getTime());
   });
 
   // Suggest-home
@@ -250,7 +288,7 @@ jQuery(function($) {
 
     if (contentId) {
       $.get(
-        frontpage_urls.toggle_suggested,
+        window.frontpage_urls.toggle_suggested,
         { ids: [ contentId ] }
       ).done(function() {
         return null;
@@ -286,11 +324,11 @@ jQuery(function($) {
     var delId = $('#modal-element-send-trash').data('selected-for-del');
 
     if (delId) {
-      $.get(frontpage_urls.send_to_trash,
+      $.get(window.frontpage_urls.send_to_trash,
         { id: delId }
       );
     }
-    showMessage(frontpage_messages.remember_save_positions, 'info', 5, new Date().getTime());
+    window.showMessage(window.frontpage_messages.remember_save_positions, 'info', 5, new Date().getTime());
     $('#modal-element-send-trash').modal('hide');
     $('body').data('element-for-del').animate({ backgroundColor: '#fb6c6c' }, 300).animate({ opacity: 0, height: 0 }, 300, function() {
       $(this).remove();
@@ -377,7 +415,7 @@ jQuery(function($) {
   $('#modal-element-customize-content').on('click', 'a.btn.yes', function(e) {
     var elementID = $('#modal-element-customize-content').data('selected-for-customize-content');
     var element   = $('[data-content-id=' + elementID + ']');
-    var url       = frontpage_urls.customize_content;
+    var url       = window.frontpage_urls.customize_content;
 
     var titleValues = {};
 
@@ -428,7 +466,7 @@ jQuery(function($) {
       properties[name2] = '';
     }
 
-    var format = $(".modal-body .radio input[type='radio']:checked").val();
+    var format = $('.modal-body .radio input[type="radio"]:checked').val();
     var vformat = 'format_' + $('#frontpagemanager').data('category');
 
     if (typeof format !== 'undefined' && (format.length > 0 && format !== 'auto')) {
@@ -507,7 +545,7 @@ jQuery(function($) {
     ajaxOptions: {
       error: function(xhr, status, index, anchor) {
         $(anchor.hash).html(
-          '<div>' + frontpage_messages.error_tab_content_provider + '</div>');
+          '<div>' + window.frontpage_messages.error_tab_content_provider + '</div>');
       },
       complete: function() {
         $('#content-provider .spinner').hide();
@@ -517,7 +555,7 @@ jQuery(function($) {
       }
     },
     load: function() {
-      makeContentProviderAndPlaceholdersSortable();
+      window.makeContentProviderAndPlaceholdersSortable();
     },
     fx: { opacity: 'toggle', duration: 'fast' }
   });
@@ -533,7 +571,7 @@ jQuery(function($) {
       }
     }).done(function(data) {
       parent.html(data);
-      makeContentProviderAndPlaceholdersSortable();
+      window.makeContentProviderAndPlaceholdersSortable();
     }).always(function() {
       $('#content-provider .spinner').hide();
     });
