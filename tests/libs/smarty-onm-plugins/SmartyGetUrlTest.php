@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 /**
  * Defines test cases for SmartyUrl class.
  */
-class SmartyGetUrlTest extends \PHPUnit_Framework_TestCase
+class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
