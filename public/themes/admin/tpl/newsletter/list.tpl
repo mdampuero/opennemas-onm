@@ -86,7 +86,7 @@
                 <h3 class="spinner-text">{t}Loading{/t}...</h3>
               </div>
             </div>
-            <div class="listing-no-contents ng-cloak" ng-if="!flags.http.loading && items.length == 0 && selectedType == 1">
+            <div class="listing-no-contents ng-cloak" ng-if="!flags.http.loading && items.length == 0 && selectedType == 0">
               <div class="text-center p-b-15 p-t-15">
                 <i class="fa fa-4x fa-warning text-warning"></i>
                 <h3>{t}Unable to find any item that matches your search.{/t}</h3>
