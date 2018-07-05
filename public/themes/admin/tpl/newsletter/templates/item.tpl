@@ -189,7 +189,7 @@
                   <li ng-repeat="content in container.items" ui-tree-node ng-include="'item'">
                   </li>
                 </ol>
-                <div class="add-contents p-b-15" data-nodrag >
+                <div class="add-contents p-b-15" data-nodrag>
                   <h5 class="text-center">{t}Add contents{/t}</h5>
                   <div class="row">
                     <div class="col-xs-4 col-sm-offset-2">
@@ -205,7 +205,6 @@
                       </button>
                     </div>
                   </div>
-
                 </div>
               </div>
             </li>

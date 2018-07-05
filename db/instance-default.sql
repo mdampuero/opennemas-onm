@@ -180,7 +180,7 @@ CREATE TABLE `articles` (
   `fk_video2` bigint(20) unsigned DEFAULT NULL,
   `footer_video2` text,
   `footer_video1` text,
-  `title_int` varchar(255) DEFAULT NULL,
+  `title_int` text DEFAULT NULL,
   PRIMARY KEY (`pk_article`),
   CONSTRAINT `article_id_contents_id` FOREIGN KEY (`pk_article`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=614 DEFAULT CHARSET=utf8;
@@ -505,6 +505,13 @@ CREATE TABLE `contents_categories` (
   CONSTRAINT `contentcategory_contentid_contents_id` FOREIGN KEY (`pk_fk_content`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+DROP TABLE IF EXISTS `contents_tags`;
+
+CREATE TABLE `contents_tags` (
+  `content_id` bigint(20) UNSIGNED NOT NULL,
+  `tag_id` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `contents_categories`
@@ -1052,6 +1059,16 @@ CREATE TABLE `static_pages` (
 ) ENGINE=InnoDB AUTO_INCREMENT=575 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+DROP TABLE IF EXISTS `tags`;
+
+CREATE TABLE `tags` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(60) NOT NULL,
+  `language_id` varchar(5) NOT NULL,
+  `slug` varchar(60) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 --
 -- Dumping data for table `static_pages`
 --
@@ -1340,6 +1357,19 @@ INSERT INTO `widgets` VALUES (186,'AllHeadlines','intelligentwidget'),(202,'Opin
 /*!40000 ALTER TABLE `widgets` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+
+ALTER TABLE `tags`
+  ADD PRIMARY KEY (`id`),
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  ADD INDEX `language_id` (`language_id`);
+--  ADD UNIQUE KEY `name` (`name`);
+
+ALTER TABLE `contents_tags`
+  ADD PRIMARY KEY (`tag_id`,`content_id`),
+  ADD CONSTRAINT `contents_tags_tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `content_tags_content_id` FOREIGN KEY (`content_id`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

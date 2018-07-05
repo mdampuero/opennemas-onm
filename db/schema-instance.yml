@@ -191,8 +191,8 @@ articles:
             type: bigint
             options: { length: 20, unsigned: true, autoincrement: true }
         title_int:
-            type: string
-            options: { length: 255, default: null, notnull: false }
+            type: text
+            options: { length: 65532, default: null, notnull: false }
         summary:
             type: text
             options: { length: 65532, default: null, notnull: false }
@@ -713,6 +713,34 @@ contents_categories:
         #     target_table: content_categories
         #     target_field: [ pk_content_category ]
         #     restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+contents_tags:
+    columns:
+        content_id:
+            type: bigint
+            options: { length: 20, unsigned: true }
+        tag_id:
+            type: integer
+            options: { unsigned: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [content_id, tag_id]
+            primary: true
+            unique: true
+            flags: {  }
+    foreign_keys:
+        -
+            name: content_tags_content_id
+            source_field: [ content_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: contents_tags_tag_id
+            source_field: [ tag_id ]
+            target_table: tags
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 content_views:
     columns:
         pk_fk_content:
@@ -1413,6 +1441,39 @@ static_pages:
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+tags:
+    columns:
+        id:
+            type: int
+            options: { unsigned: true, autoincrement: true }
+        name:
+            type: string
+            options: { length: 60, notnull: true }
+        language_id:
+            type: string
+            options: { length: 5, notnull: true }
+        slug:
+            type: string
+            options: { length: 60, notnull: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [id]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: language_id
+            columns: [language_id]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: slug
+            columns: [slug]
+            primary: false
+            unique: false
+            flags: {  }
 translation_ids:
     columns:
         pk_content_old:

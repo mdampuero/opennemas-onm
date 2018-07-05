@@ -156,8 +156,11 @@ class NewsletterController extends Controller
 
         foreach ($item->contents as &$container) {
             foreach ($container['items'] as &$element) {
+                $contentType = array_key_exists('content_type_name', $element)
+                    ? $element['content_type_name'] : $element['content_type'];
+
                 $element = $this->get('entity_repository')->find(
-                    classify($element['content_type']),
+                    classify($contentType),
                     $element['id']
                 );
             }
@@ -187,7 +190,6 @@ class NewsletterController extends Controller
         $containers  = json_decode($contentsRAW);
 
         $this->get('core.locale')->setContext('frontend');
-
 
         foreach ($containers as &$container) {
             foreach ($container->items as &$content) {

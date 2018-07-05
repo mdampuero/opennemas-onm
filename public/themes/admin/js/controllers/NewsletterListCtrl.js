@@ -89,6 +89,7 @@
          *   Configures the controller.
          */
         $scope.selectType = function(type) {
+          $scope.flags.http.loading = true;
           $scope.selectedType = type;
         };
 

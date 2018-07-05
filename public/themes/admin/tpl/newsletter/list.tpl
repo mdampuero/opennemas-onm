@@ -74,8 +74,11 @@
   <div class="content">
     <div class="grid simple">
       <div class="grid-body no-padding">
+
+        {is_module_activated name="es.openhost.module.newsletter_scheduling"}
         <uib-tabset active="active">
           <uib-tab heading="{t}Sendings{/t}" ng-click="selectType(0)">
+        {/is_module_activated}
 
             <div class="listing-no-contents ng-cloak" ng-hide="!flags.http.loading">
               <div class="text-center p-b-15 p-t-15" ng-show="selectedType == 0">
@@ -96,7 +99,7 @@
                 <thead>
                   <tr>
                     <th>{t}Title{/t}</th>
-                    <th class="hidden-xs hidden-sm text-center">{t}Sent{/t}</th>
+                    <th class="hidden-xs hidden-xs text-center">{t}Sent{/t}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -122,7 +125,7 @@
                         </button>
                       </div>
                     </td>
-                    <td class="hidden-xs hidden-sm text-center">
+                    <td class="hidden-xs text-center">
                       <div>
                         <i class="fa fa-check text-success" ng-show="item.sent_items != 0"></i>
                         <i class="fa fa-inbox" ng-show="item.sent_items == 0"></i>
@@ -140,6 +143,7 @@
             </div>
           </uib-tab>
 
+        {is_module_activated name="es.openhost.module.newsletter_scheduling"}
           <uib-tab heading="{t}Schedules{/t}" ng-click="selectType(1)">
             <div class="listing-no-contents ng-cloak" ng-hide="!flags.http.loading">
               <div class="text-center p-b-15 p-t-15" ng-show="selectedType == 1">
@@ -204,6 +208,7 @@
             </table>
           </uib-tab>
         </uib-tabset>
+        {/is_module_activated}
       </div>
       <div class="grid-footer clearfix ng-cloak" ng-if="!flags.http.loading && items.length > 0">
         <div class="pull-right">
