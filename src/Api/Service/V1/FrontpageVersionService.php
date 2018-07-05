@@ -38,6 +38,7 @@ class FrontpageVersionService extends OrmService
         $categoryIdAux      = empty($categoryId) ? 0 : $categoryId;
         $frontpageVersionId = $this->getCurrentVersionDB($categoryIdAux);
         $frontpageVersion   = null;
+
         if (!empty($frontpageVersionId)) {
             $frontpageVersion = $this->getItem($frontpageVersionId);
             $frontpageVersion = $this->changeToUTC($frontpageVersion);
@@ -238,6 +239,7 @@ class FrontpageVersionService extends OrmService
             } else {
                 $name = $this->container->get('data.manager.filter')
                     ->set($category->title)->filter('localize')->get();
+
                 $frontpagesAut[$category->id] = [
                     'id'     => $category->id,
                     'name'   => $name,
