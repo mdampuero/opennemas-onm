@@ -150,7 +150,10 @@ EOF
 
         $newDate->setTimeZone($sentNewsletters['items'][0]->sent->getTimeZone());
 
-        // If the last newsletter was sent
+        // We can send the shedule if the last newsletter was sent in the next conditions:
+        //  - a year ago
+        //  - a day ago
+        //  - o in the same day but in different hour.
         $canSend =
             ((int) $newDate->format('y') !== (int) $sentNewsletters['items'][0]->sent->format('y'))
             || ((int) $newDate->format('d') !== (int) $sentNewsletters['items'][0]->sent->format('d'))
