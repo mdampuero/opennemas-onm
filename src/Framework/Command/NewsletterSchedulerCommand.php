@@ -64,7 +64,6 @@ EOF
         $this->newsletterService  = $this->getContainer()->get('api.service.newsletter');
         $this->newsletterRenderer = $this->getContainer()->get('core.renderer.newsletter');
 
-
         if (!is_object($instance)) {
             throw new \Onm\Exception\InstanceNotFoundException(_('Instance not found'));
         }
@@ -149,8 +148,16 @@ EOF
             return [ true, '' ];
         }
 
-        $diff    = $newDate->diff($sentNewsletters['items'][0]->sent);
-        $canSend = ($diff->d === 0 && $diff->h > 0) || ($diff->d > 0);
+        $newDate->setTimeZone($sentNewsletters['items'][0]->sent->getTimeZone());
+
+        // If the last newsletter was sent
+        $canSend =
+            ((int) $newDate->format('y') !== (int) $sentNewsletters['items'][0]->sent->format('y'))
+            || ((int) $newDate->format('d') !== (int) $sentNewsletters['items'][0]->sent->format('d'))
+            || (
+                (int) $newDate->format('d') === (int) $sentNewsletters['items'][0]->sent->format('d')
+                && (int) $newDate->format('h') !== (int) $sentNewsletters['items'][0]->sent->format('h')
+            );
 
         $message = 'Go ahead';
         if (!$canSend) {
@@ -210,7 +217,7 @@ EOF
         $newItem = $this->newsletterService->createItem($data);
 
         $output->writeln(sprintf(
-            "\t- <info>Newsletter send and registered (id: %s, sends: %s)",
+            " + <info>Newsletter send and registered (id: %s, sends: %s)",
             $newItem->id,
             $report['total']
         ));
