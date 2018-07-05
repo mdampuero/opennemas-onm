@@ -63,8 +63,11 @@ f
               <ui-select-match>
                 [% $select.selected.name %]
               </ui-select-match>
-              <ui-select-choices group-by="manual === true" repeat="item.id as item in frontpages | filter: { name: $select.search }">
-                <div><span class="fa fa-newspaper-o"></span><span ng-bind-html="item.name | highlight: $select.search"></span></div>
+              <ui-select-choices group-by="'manual'" repeat="item.id as item in frontpages | filter: { name: $select.search }">
+                <div>
+                  <span ng-if="item.manual" class="fa fa-newspaper-o"></span>
+                  <span ng-bind-html="item.name | highlight: $select.search"></span>
+                </div>
               </ui-select-choices>
             </ui-select>
           </li>

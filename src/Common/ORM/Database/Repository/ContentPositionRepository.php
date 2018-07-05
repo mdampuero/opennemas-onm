@@ -60,4 +60,26 @@ class ContentPositionRepository extends BaseRepository
 
         return $contentPositions;
     }
+
+    /**
+     * Returns an array of categories grouped by entity id.
+     *
+     * @param array $ids The entity ids.
+     *
+     * @return array The array of categories.
+     */
+    public function getCategoriesWithManualFrontpage()
+    {
+        $sql = 'SELECT DISTINCT(fk_category) '
+            . ' from content_positions as cp';
+
+        $rs              = $this->conn->fetchAll($sql);
+        $categories      = [];
+        $contentPosition = null;
+        foreach ($rs as $value) {
+            $categories[] = $value['fk_category'];
+        }
+
+        return $categories;
+    }
 }

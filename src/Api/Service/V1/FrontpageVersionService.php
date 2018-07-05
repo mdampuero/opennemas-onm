@@ -209,6 +209,9 @@ class FrontpageVersionService extends OrmService
         $ccm                = \ContentCategoryManager::get_instance();
         $categories         = $ccm->findAll();
         $catFrontpagesRel   = $this->getCatFrontpagesRel();
+        $catWithFrontpage   = $this->container
+            ->get('api.service.contentposition')
+            ->getCategoriesWithManualFrontpage();
         $frontpages         = null;
         $existMainFrontPage = array_key_exists(0, $catFrontpagesRel);
         $mainFrontpage      = [
@@ -219,6 +222,7 @@ class FrontpageVersionService extends OrmService
 
         $frontpages    = $existMainFrontPage ? [$mainFrontpage] : [];
         $frontpagesAut = !$existMainFrontPage ? [$mainFrontpage] : [];
+
         foreach ($categories as $category) {
             if ($category->internal_category === 0) {
                 continue;
@@ -232,13 +236,12 @@ class FrontpageVersionService extends OrmService
                     'manual'       => true
                 ];
             } else {
+                $name = $this->container->get('data.manager.filter')
+                    ->set($category->title)->filter('localize')->get();
                 $frontpagesAut[$category->id] = [
                     'id'     => $category->id,
-                    'name'   => $this->container->get('data.manager.filter')
-                        ->set($category->title)
-                        ->filter('localize')
-                        ->get(),
-                    'manual' => false
+                    'name'   => $name,
+                    'manual' => in_array($category->id, $catWithFrontpage)
                 ];
             }
         }

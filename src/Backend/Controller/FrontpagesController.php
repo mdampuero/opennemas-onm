@@ -45,6 +45,9 @@ class FrontpagesController extends Controller
         list($frontpages, $versions, $contentPositionByPos, $contents, $versionId) =
             $fvs->getFrontpageData($categoryId, $versionId);
 
+        $this->container->get('api.service.contentposition')
+            ->getCategoriesWithManualFrontpage();
+
         $versions = $fvs->responsify($versions);
         // Get theme layout
         $layoutTheme = s::get('frontpage_layout_' . $categoryId, 'default');
@@ -235,9 +238,7 @@ class FrontpagesController extends Controller
             && $layoutValid
         ) {
             $this->get('setting_repository')->set('frontpage_layout_' . $category, $layout);
-
             $this->get('core.dispatcher')->dispatch('frontpage.pick_layout', [ 'category' => $category ]);
-
             $this->get('session')->getFlashBag()->add(
                 'success',
                 sprintf(_('Layout %s seleted.'), $layout)
