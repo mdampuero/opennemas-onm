@@ -72,7 +72,6 @@ class RssController extends Controller
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
             $id       = 0;
-            $cm       = new \ContentManager;
             $rssTitle = _('Homepage News');
 
             if (!empty($categoryName) && $categoryName !== 'home') {
@@ -89,19 +88,21 @@ class RssController extends Controller
                 $rssTitle = $category->title;
             }
 
-            $contents = $cm->getContentsForHomepageOfCategory($id);
-            $contents = $cm->getInTime($contents);
-            $contents = $cm->filterBlocked($contents);
+            list($contentPositions, $contents, $invalidationDt, $lastSaved) =
+                $this->get('api.service.frontpageVersion')
+                    ->getPublicFrontpageData($id);
 
             // Remove advertisements and widgets
-            $contents = array_filter($contents, function ($a) {
-                return !in_array(
-                    $a->content_type_name,
-                    [ 'advertisement', 'widget' ]
-                );
-            });
+            $contents = array_filter(
+                $contents,
+                function ($a) {
+                    return !in_array(
+                        $a->content_type_name,
+                        [ 'advertisement', 'widget' ]
+                    );
+                }
+            );
 
-            $this->sortByPlaceholder($contents, $categoryName);
             $this->getRelatedContents($contents);
 
             $this->view->assign([
@@ -430,9 +431,10 @@ class RssController extends Controller
             $positionB = array_search($b->placeholder, $order);
 
             return $positionA < $positionB ? -1 :
-                ($positionA > $positionB ? 1 :
-                ($a->position < $b->position ? -1 : 1)
-            );
+                (
+                    $positionA > $positionB ? 1 :
+                    ($a->position < $b->position ? -1 : 1)
+                );
         });
     }
 
@@ -487,7 +489,7 @@ class RssController extends Controller
     protected function getRelatedContents(&$contents, $limit = null)
     {
         // Fetch photo for each article
-        $er = getService('entity_repository');
+        $er = $this->get('entity_repository');
 
         foreach ($contents as $key => $content) {
             // Fetch photo for each content
