@@ -26,6 +26,13 @@ class UrlGeneratorHelper
     protected $instance;
 
     /**
+     * Whether to force HTTP when absolute URLs and no request present.
+     *
+     * @var boolean
+     */
+    protected $forceHttp = false;
+
+    /**
      * Initializes the UrlGeneratorHelper.
      *
      * @param ServiceContainer $container The service container.
@@ -34,6 +41,20 @@ class UrlGeneratorHelper
     {
         $this->container = $container;
         $this->instance  = $this->container->get('core.instance');
+    }
+
+    /**
+     * Enables or disables the forced HTTP mode.
+     *
+     * @param boolean $http The forced HTTP mode value.
+     *
+     * @return UrlGeneratorHelper The current generator helper.
+     */
+    public function forceHttp($http)
+    {
+        $this->forceHttp = $http;
+
+        return $this;
     }
 
     /**
@@ -80,7 +101,8 @@ class UrlGeneratorHelper
             && $params['absolute']
         ) {
             // Absolute URL basing on the current instance
-            $url = '//' . $this->instance->getMainDomain();
+            $url = ($this->forceHttp ? 'http://' : '//')
+                . $this->instance->getMainDomain();
 
             $request = $this->container->get('request_stack')
                 ->getCurrentRequest();

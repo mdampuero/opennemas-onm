@@ -120,22 +120,31 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->instance->expects($this->any())->method('getMainDomain')
             ->willReturn('thud.opennemas.com');
-        $this->requestStack->expects($this->once())->method('getCurrentRequest')
+
+        $this->requestStack->expects($this->any())->method('getCurrentRequest')
             ->willReturn(null);
 
-        $helper->expects($this->at(0))->method('getUriForContent')
-            ->with('wubble')->willReturn('wibble/fred');
-        $helper->expects($this->at(1))->method('getUriForContent')
+        $helper->expects($this->any())->method('getUriForContent')
             ->with('wubble')->willReturn('wibble/fred');
 
         $this->assertEquals(
             '/wibble/fred',
-            $helper->generate('wubble', ['absolute' => false  ])
+            $helper->generate('wubble', [ 'absolute' => false  ])
         );
 
         $this->assertEquals(
             '//thud.opennemas.com/wibble/fred',
             $helper->generate('wubble', [ 'absolute' => true ])
+        );
+
+        $this->assertEquals(
+            '/wibble/fred',
+            $helper->forceHttp(true)->generate('wubble', [ 'absolute' => false  ])
+        );
+
+        $this->assertEquals(
+            'http://thud.opennemas.com/wibble/fred',
+            $helper->forceHttp(true)->generate('wubble', [ 'absolute' => true ])
         );
     }
 
