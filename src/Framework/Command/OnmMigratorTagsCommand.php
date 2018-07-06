@@ -88,7 +88,7 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
         $page       = 0;
         $tagService = $this->getContainer()->get('api.service.tag');
         $contents   = $conn->fetchAll(
-            'SELECT pk_content, metadata FROM contents ORDER BY pk_content limit ? offset ?;',
+            'SELECT pk_content, metadata, fk_content_type FROM contents ORDER BY pk_content limit ? offset ?;',
             [$epp, $epp * $page]
         );
         $tags       = $this->getTags($conn, $locale);
@@ -113,7 +113,7 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
             $page += 1;
             unset($contents);
             $contents = $conn->fetchAll(
-                'SELECT pk_content, metadata FROM contents ORDER BY pk_content limit ? offset ?;',
+                'SELECT pk_content, metadata, fk_content_type FROM contents ORDER BY pk_content limit ? offset ?;',
                 [$epp, $epp * $page]
             );
             unset($newTagsInBatch);
@@ -143,7 +143,7 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
      */
     private function getContentTags($content, $tags, $newTagsInBatch, $contentTagRel, $tagService)
     {
-        $contentTags = $this->getTagsFromString($content['metadata']);
+        $contentTags = $this->getTagsFromString($content);
 
         if (!empty($contentTags)) {
             foreach ($contentTags as $tag) {
@@ -258,47 +258,60 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
     /**
      *  Method to retrieve tags from a string
      *
-     * @param String @tagStr String with all tags
+     * @param Array @content String with all tags
      *
      * @return Array List with all the different tags
      *
      */
-    private function getTagsFromString($tagStr)
+    private function getTagsFromString($content)
     {
-        $tagsArr   = explode(',', $tagStr);
+        $tagsArr   = explode(',', $content['metadata']);
         $returnArr = [];
         $aux       = null;
+        $isImg     = 8 == $content['fk_content_type'];
 
         foreach ($tagsArr as $tagAux) {
             // Remove text between parentheses
             $aux = preg_replace("/\([^)]+\)/", "", $tagAux);
-            if (strlen($aux) < 61) {
-                $aux = trim($aux);
+            $aux = strlen($aux) < 61 ? [$aux] : explode(' ', $aux);
 
-                if (strlen(trim(\Onm\StringUtils::removeShorts($aux))) == 0) {
-                    continue;
-                }
-
-                if (strlen($aux) > 1) {
-                    $returnArr[] = $aux;
-                }
-                continue;
-            }
-
-            $aux = explode(' ', $aux);
             foreach ($aux as $realTag) {
-                $realTag = trim($realTag);
-
-                if (strlen(trim(\Onm\StringUtils::removeShorts($realTag))) == 0
-                ) {
-                    continue;
-                }
-
-                if (strlen($realTag) > 1) {
-                    $returnArr[] = $realTag;
+                $tag = $this->fixTag($realTag, $isImg);
+                if (!empty($tag)) {
+                    $returnArr[] = $tag;
                 }
             }
         }
         return array_unique($returnArr);
+    }
+
+    /**
+     * Tags filtering to remove those invalid tags
+     *
+     * @param String  $realTag tag to fix
+     * @param boolean $isImg if the tags belong to an image
+     *
+     * @return return the tag fixed or null if is invalid
+     */
+    private function fixTag($realTag, $isImg)
+    {
+        $realTag = trim($realTag);
+
+        // remove words without meaning
+        if (strlen(trim(\Onm\StringUtils::removeShorts($realTag))) == 0) {
+            return null;
+        }
+
+        // remove number tags from the images
+        if ($isImg && is_numeric($realTag)) {
+            return null;
+        }
+
+        // remove tags with less than one character
+        if (strlen($realTag) < 2) {
+            return null;
+        }
+
+        return $realTag;
     }
 }
