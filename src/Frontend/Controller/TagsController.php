@@ -45,7 +45,8 @@ class TagsController extends Controller
             || !$this->view->isCached('tag/index.tpl', $cacheId)
         ) {
             $fm = $this->get('data.manager.filter');
-            $t  = $this->get('api.service.tag')->getList('order by name asc')['items'];
+            $t  = $this->get('api.service.tag')
+                ->getTagsAssociatedCertainContentsTypes([1]);
 
             $letters = range('a', 'z');
 

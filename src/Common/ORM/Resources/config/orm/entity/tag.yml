@@ -13,7 +13,7 @@ orm:
                     arguments: [ '@orm.metadata.tag' ]
             repositories:
                 instance:
-                    class:     Common\ORM\Database\Repository\BaseRepository
+                    class:     Common\ORM\Database\Repository\TagRepository
                     arguments: [ '@orm.connection.instance', '@orm.metadata.tag', '@cache.connection.instance' ]
             persisters:
                 instance:

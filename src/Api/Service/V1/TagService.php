@@ -337,4 +337,19 @@ class TagService extends OrmService
         // We remove the first comma
         return substr($tagsString, 1);
     }
+
+    /**
+     * Returns an array of tags associated with the list of contents type
+     * requested
+     *
+     * @param array $contentTypesIds ids for the content types
+     *
+     * @return array list of tags associated with the types of content indicated
+     */
+    public function getTagsAssociatedCertainContentsTypes($contentTypesIds)
+    {
+        return $this->container->get('orm.manager')
+            ->getRepository($this->entity, $this->origin)
+            ->getTagsAssociatedCertainContentsTypes($contentTypesIds);
+    }
 }
