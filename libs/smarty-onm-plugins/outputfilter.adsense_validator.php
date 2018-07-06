@@ -10,7 +10,13 @@
  */
 function smarty_outputfilter_adsense_validator($output, $smarty)
 {
-    $uri = $smarty->getContainer()->get('request_stack')->getCurrentRequest()->getUri();
+    $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+
+    if (is_null($request)) {
+        return $output;
+    }
+
+    $uri = $request->getUri();
 
     if (!preg_match('/\/manager/', $uri)
         && !preg_match('/\/managerws/', $uri)

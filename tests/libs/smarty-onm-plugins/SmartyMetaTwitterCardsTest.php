@@ -12,7 +12,7 @@ namespace Tests\Libs\Smarty;
 /**
  * Defines test cases for SmartyMetaTwitterCardsTest class.
  */
-class SmartyMetaTwitterCardsTest extends \PHPUnit_Framework_TestCase
+class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

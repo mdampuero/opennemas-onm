@@ -12,7 +12,7 @@ namespace Tests\Libs\Smarty;
 /**
  * Defines test cases for SmartyMetaFacebookTagsTest class.
  */
-class SmartyMetaFacebookTagsTest extends \PHPUnit_Framework_TestCase
+class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

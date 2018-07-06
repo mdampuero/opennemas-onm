@@ -246,6 +246,8 @@ class NewsletterTemplateController extends Controller
             $hour = $hour['text'];
         }
         $values['schedule']['hours'] = array_unique($values['schedule']['hours']);
+        sort($values['schedule']['hours']);
+
 
         if (!is_array($values['schedule']['days'])) {
             $values['schedule']['hours'] = [];

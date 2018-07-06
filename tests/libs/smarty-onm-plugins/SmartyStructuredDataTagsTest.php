@@ -12,7 +12,7 @@ namespace Tests\Libs\Smarty;
 /**
  * Defines test cases for SmartyStructuredDataTagsTest class.
  */
-class SmartyStructuredDataTagsTest extends \PHPUnit_Framework_TestCase
+class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
