@@ -128,7 +128,7 @@ class TagService extends OrmService
      * @param mixed $tags       List of all tags to validate
      * @param mixed $languageId Language of the tag
      *
-     * @return mixed List with all tags validate against DB
+     * @return mixed List with all tags validate against validation rules
      */
     public function validTags($tags, $languageId = null)
     {
@@ -136,7 +136,6 @@ class TagService extends OrmService
         $tagsToCheck = is_array($tags) ? $tags : [$tags];
 
         $tagsAux = [];
-        $tagAux  = null;
         foreach ($tagsToCheck as $tag) {
             $tagValidation = $this->container->get('core.validator')->validate(
                 [ 'name' => $tag ],
@@ -162,7 +161,7 @@ class TagService extends OrmService
     }
 
     /**
-     *  Get all tags by the exact slug by validated
+     *  Get all tags by the exact slug if is valid
      *
      * @param mixed  $slugs      slugs to check
      * @param string $languageId Language id to search for it
@@ -235,7 +234,14 @@ class TagService extends OrmService
         $arr = $this->createSearchableWord($arr);
 
         $findTags = $this->getTagBySlug($arr, $languageId, 1);
-        return empty($findTags['items']);
+
+        foreach ($findTags['items'] as $tagAux) {
+            if ($tag == $tagAux->name) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -260,7 +266,6 @@ class TagService extends OrmService
         $slugs = $this->createSearchableWord($validTags);
 
 
-        //$recoverTags = $this->getTagBySlug($slugs, $locale, 25);
         $recoverTags = \Tag::getTagsBySlug($slugs, $locale);
 
         if (count($recoverTags['items']) == 25) {
@@ -276,7 +281,6 @@ class TagService extends OrmService
             }
         }
 
-        $newTags = [];
         foreach ($validTags as $tagToCheck) {
             if (!in_array($tagToCheck, $clearTagNames)) {
                 $returnTags[] = [
@@ -325,8 +329,7 @@ class TagService extends OrmService
         if (empty($ids)) {
             return ['items' => []];
         }
-        $tags      = $this->getListByIds($ids);
-        $returnArr = [];
+        $tags = $this->getListByIds($ids);
 
         $tagsString = '';
         foreach ($tags['items'] as $tag) {
