@@ -278,7 +278,6 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           }
         }
       });
-      $scope.save();
     };
 
     $scope.saveVersion = function() {
