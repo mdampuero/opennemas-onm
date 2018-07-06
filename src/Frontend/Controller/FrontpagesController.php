@@ -46,7 +46,7 @@ class FrontpagesController extends Controller
             }
         }
 
-        $fvs = $this->get('api.service.frontpageVersion');
+        $fvs = $this->get('api.service.frontpage_version');
 
         list($contentPositions, $contents, $invalidationDt, $lastSaved) =
             $fvs->getPublicFrontpageData($categoryId);

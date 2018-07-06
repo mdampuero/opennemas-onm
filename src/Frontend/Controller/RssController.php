@@ -89,7 +89,7 @@ class RssController extends Controller
             }
 
             list($contentPositions, $contents, $invalidationDt, $lastSaved) =
-                $this->get('api.service.frontpageVersion')
+                $this->get('api.service.frontpage_version')
                     ->getPublicFrontpageData($id);
 
             // Remove advertisements and widgets

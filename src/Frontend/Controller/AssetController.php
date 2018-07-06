@@ -93,7 +93,7 @@ class AssetController extends Controller
         $currentCategoryId = $ccm->get_id($categoryName);
 
         list($frontpageVersion, $contentPositions, $contentsInHomepage) =
-            $this->get('api.service.frontpageVersion')
+            $this->get('api.service.frontpage_version')
                 ->getPublicContentsForFrontpageData($currentCategoryId);
 
         if (is_array($contentsInHomepage)) {

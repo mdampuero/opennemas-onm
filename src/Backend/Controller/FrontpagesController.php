@@ -41,7 +41,7 @@ class FrontpagesController extends Controller
             throw new AccessDeniedException();
         }
 
-        $fvs = $this->get('api.service.frontpageVersion');
+        $fvs = $this->get('api.service.frontpage_version');
 
         list($frontpages, $versions, $contentPositionByPos, $contents, $versionId) =
             $fvs->getFrontpageData($categoryId, $versionId);
@@ -171,7 +171,7 @@ class FrontpagesController extends Controller
             return new JsonResponse([ 'message' => $message ]);
         }
 
-        $fvs      = $this->get('api.service.frontpageVersion');
+        $fvs      = $this->get('api.service.frontpage_version');
         $version  =
             $fvs->saveFrontPageVersion($request->request->get('version', null));
         $contents = [];
@@ -278,7 +278,7 @@ class FrontpagesController extends Controller
         $category    = (int) $request->query->filter('category', '', FILTER_SANITIZE_STRING);
         $versionId   = (int) $request->query->filter('versionId', '', FILTER_SANITIZE_STRING);
 
-        $newVersionAvailable = $this->get('api.service.frontpageVersion')
+        $newVersionAvailable = $this->get('api.service.frontpage_version')
             ->checkLastSaved($category, $versionId, $dateRequest);
         return new Response(json_encode($newVersionAvailable));
     }
@@ -405,7 +405,7 @@ class FrontpagesController extends Controller
 
     public function deleteAction($versionId, $categoryId)
     {
-        $this->get('api.service.frontpageVersion')
+        $this->get('api.service.frontpage_version')
             ->deleteVersionItem($categoryId, $versionId);
 
         return new JsonResponse([
