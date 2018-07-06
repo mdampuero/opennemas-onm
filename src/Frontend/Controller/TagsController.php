@@ -96,6 +96,7 @@ class TagsController extends Controller
         }
 
         $cacheId = $this->view->getCacheId('frontpage', 'tag', $tagName, $page);
+
         if (empty($tagName)) {
             list($positions, $advertisements) = $this->getInnerAds();
 
@@ -158,13 +159,17 @@ class TagsController extends Controller
             // TODO: review this piece of CRAP
             $filteredContents = [];
             foreach ($contents as &$item) {
-                if ($item->fk_content_type == 7) {
+                if (isset($item->img1) && ($item->img1 > 0)) {
+                    $image = $em->find('Photo', $item->img1);
+                    if (is_object($image) && !is_null($image->id)) {
+                        $item->img1_path = $image->path_file . $image->name;
+                        $item->img1      = $image;
+                    }
+                } elseif ($item->fk_content_type == 7) {
                     $image           = $em->find('Photo', $item->cover_id);
                     $item->img1_path = $image->path_file . $image->name;
                     $item->img1      = $image;
-                }
-
-                if ($item->fk_content_type == 9) {
+                } elseif ($item->fk_content_type == 9) {
                     $item->obj_video = $item;
                     $item->summary   = $item->description;
                 }
