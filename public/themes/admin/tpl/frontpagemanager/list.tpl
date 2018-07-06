@@ -85,7 +85,7 @@ f
                 <div class="versionNotScheduled" ng-if="scheduledFFuture.indexOf(item.id) === -1 && item.id !== publishVersionId">
                   <span class="notScheduled"></span>
                   <span ng-bind-html="item.name | highlight: $select.search"></span>
-                  <span class="btn btn-link" ng-click="deleteVersion(item.id); $event.stopPropagation();"><span class="fa fa-trash-o text-danger"></span></span>
+                  <span class="btn btn-link" ng-click="deleteVersion($event, item.id)"><span class="fa fa-trash-o text-danger"></span></span>
                 </div>
                 <div class="versionScheduled" ng-if="scheduledFFuture.indexOf(item.id) !== -1 && item.id !== publishVersionId">
                   <span class="fa fa-calendar-check-o p-5"></span>
@@ -138,7 +138,7 @@ f
                   </li>
                   <li class="divider visible-sm"></li>
                   <li class="visible-sm">
-                    <a href="#" ng-click="deleteVersion()">
+                    <a href="#" ng-click="deleteVersion($event)">
                       <i class="fa fa-trash-o fa-lg"></i>
                       {t}Delete{/t}
                     </a>
@@ -219,7 +219,7 @@ f
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks hidden-sm">
-            <button class="btn btn-danger" ng-click="deleteVersion()" uib-tooltip="{t}Delete{/t}" tooltip-placement="left" ng-if="versionId !== publishVersionId">
+            <button class="btn btn-danger" ng-click="deleteVersion($event)" uib-tooltip="{t}Delete{/t}" tooltip-placement="left" ng-if="versionId !== publishVersionId">
               <i class="fa fa-trash-o fa-lg"></i>
             </button>
             {is_module_activated name="FRONTPAGES_LAYOUT"}

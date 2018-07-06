@@ -157,6 +157,7 @@ class FrontpageVersionService extends OrmService
             $contentPositions =
                 $this->container->get('api.service.contentposition')
                     ->getContentPositions($categoryId, $versionId);
+
             $this->setFrontpageDataFromCache($categoryId, $versionId, $contentPositions);
         }
 

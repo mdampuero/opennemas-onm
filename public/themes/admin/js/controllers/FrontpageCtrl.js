@@ -220,7 +220,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
 
       http.post({
           name: 'admin_frontpage_preview',
-          params: {category: $scope.categoryId}
+          params: { category: $scope.categoryId }
       }, data).success(function() {
         $uibModal.open({
           templateUrl: 'modal-preview',
@@ -507,7 +507,8 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       return version;
     };
 
-    $scope.deleteVersion = function(versionId) {
+    $scope.deleteVersion = function($event, versionId) {
+      $event.stopPropagation();
       http.delete({
         name:   'admin_frontpage_delete',
         params: {
@@ -515,12 +516,27 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           versionId:  versionId ? versionId : $scope.versionId
         }
       }).then(function(response) {
+        if (versionId === $scope.version.id) {
+          window.location = routing.generate('admin_frontpage_list', {
+            category: $scope.categoryId
+          });
+          return null;
+        }
+        var index = $scope.versions.length - 1;
+
+        for (index; index >= 0; index--) {
+          if ($scope.versions[index].id === versionId) {
+            break;
+          }
+        }
+        if (index > -1) {
+          $scope.versions.splice(index, 1);
+        }
         messenger.post(response.data.message);
-        window.location = routing.generate('admin_frontpage_list', {
-          category: $scope.categoryId
-        });
       }, function(response) {
-        messenger.post(response.data.responseText);
+        if (response.data) {
+          messenger.post(response.data.responseText);
+        }
       });
     };
   }
