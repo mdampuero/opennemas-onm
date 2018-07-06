@@ -29,6 +29,11 @@ function smarty_function_renderTags($params, &$smarty)
         $method = 'tags';
     }
 
+    if ($method == 'tags' && $content->fk_content_type != 1) {
+        $googleSearchKey = getService('setting_repository')->get('google_custom_search_api_key');
+        $method          = (!empty($googleSearchKey)) ? 'google' : 'tags';
+    }
+
     // Get url generator
     $generator = getService('router');
 
@@ -51,7 +56,12 @@ function smarty_function_renderTags($params, &$smarty)
                     $target  = 'target="_blank"';
                 }
                 break;
-
+            case 'google':
+                if (strpos($tag, '#') !== 0) {
+                    $baseUrl = $generator->generate('frontend_search_google');
+                    $url     = $baseUrl . '?q=' . $tag . '&ie=UTF-8&cx=' . $googleSearchKey;
+                }
+                break;
             case 'tags':
                 if (strpos($tag, '#') !== 0) {
                     $url = $generator->generate('tag_frontpage', [
