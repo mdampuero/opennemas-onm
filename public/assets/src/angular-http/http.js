@@ -54,7 +54,7 @@
 
           // First call or Array/Object values
           if (value instanceof HTMLCanvasElement) {
-            var blob = this.dataURItoBlob(value.toDataURL());
+            var blob = this.dataURItoBlob(value.toDataURL("image/jpeg", 0.65));
 
             formData.append(key, new File([ blob ], key));
           } else if (value instanceof Object && !(value instanceof File)) {
