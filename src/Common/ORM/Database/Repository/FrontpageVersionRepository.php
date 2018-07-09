@@ -48,10 +48,13 @@ class FrontpageVersionRepository extends BaseRepository
     public function getCurrentVerForCat($categoryId)
     {
         $sql = 'SELECT id FROM frontpage_versions'
-            . ' WHERE category_id = ? AND publish_date <= CURRENT_TIMESTAMP'
+            . ' WHERE category_id = ? AND publish_date <= ?'
             . ' ORDER BY publish_date desc LIMIT 1';
 
-        $rs = $this->conn->fetchAll($sql, [$categoryId]);
+        $rs = $this->conn->fetchAll($sql, [
+            $categoryId,
+            $this->getCurrentTimestampForDatabase()
+        ]);
 
         $frontpageVersionId = null;
 
@@ -72,10 +75,13 @@ class FrontpageVersionRepository extends BaseRepository
     public function getNextVerForCat($categoryId)
     {
         $sql = 'SELECT id FROM frontpage_versions'
-            . ' WHERE category_id = ? AND publish_date > CURRENT_TIMESTAMP'
+            . ' WHERE category_id = ? AND publish_date > ?'
             . ' ORDER BY publish_date asc LIMIT 1';
 
-        $rs = $this->conn->fetchAll($sql, [$categoryId]);
+        $rs = $this->conn->fetchAll($sql, [
+            $categoryId,
+            $this->getCurrentTimestampForDatabase()
+        ]);
 
         $frontpageVersionId = null;
 
@@ -84,5 +90,13 @@ class FrontpageVersionRepository extends BaseRepository
         }
 
         return $rs[0]['id'];
+    }
+
+    private function getCurrentTimestampForDatabase()
+    {
+        $dt = new \DateTime();
+        $dt->setTimezone(new \DateTimeZone('UTC'));
+        $dt->setTimestamp(time());
+        return $dt->format('Y-m-d H:i');
     }
 }
