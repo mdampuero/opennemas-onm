@@ -206,7 +206,7 @@
         <ul class="nav quick-section pull-right">
           <li class="quicklinks">
             <span class="info input-label">{t}Go live on{/t} ([% time.timezone %]):</span>
-            <input name="publish_date" ng-model="frontpageInfo.publish_date" type="datetime">
+            <input name="publish_date" datetime-picker datetime-picker-timezone="{$timezone}" keepOpen="true" ng-model="frontpageInfo.publish_date" type="datetime">
             <span class="input-addon">
               <span class="fa fa-calendar"></span>
             </span>
