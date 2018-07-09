@@ -1,0 +1,5 @@
+backend_tags_list:
+    path:     /tags
+    defaults: { _controller  : BackendBundle:Tag:list }
+    options:
+        expose: true

@@ -2123,6 +2123,14 @@ class Content implements \JsonSerializable
         $this->removeMetadata($emptyKeys);
     }
 
+    /**
+     * Associates a list of tags to a content
+     *
+     * @param array   $tagsList  the list of tags
+     * @param integer $contentId the content id
+     *
+     * @return  void
+     */
     public static function saveTags($tagsList, $contentId = null)
     {
         if (empty($tagsList)) {
@@ -2149,7 +2157,15 @@ class Content implements \JsonSerializable
         );
     }
 
-    public static function deleteTags($contentId = null)
+
+    /**
+     * Removes all tags associated with a content given its id
+     *
+     * @param mixed $contentId The id of the content
+     *
+     * @return void
+     */
+    public static function deleteTags($contentId)
     {
         if (empty($contentId)) {
             return null;
@@ -2161,7 +2177,6 @@ class Content implements \JsonSerializable
 
         $sql = 'DELETE FROM contents_tags WHERE content_id ' . $sqlContentId;
 
-        $conn = getService('dbal_connection');
         getService('dbal_connection')->executeUpdate(
             $sql,
             $contentId

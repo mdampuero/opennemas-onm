@@ -1,0 +1,71 @@
+api_v1_backend_tag_create:
+    path:     /tags/new
+    defaults: { _controller  : ApiBundle:V1/Backend/Tag:create }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_tag_delete:
+    path:     /tags/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Tag:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_tag_save:
+    path:     /tags
+    defaults: { _controller  : ApiBundle:V1/Backend/Tag:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_tag_show:
+    path:     /tags/{id}
+    defaults: { _controller  : ApiBundle:V1/Backend/Tag:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_tag_update:
+    path:     /tags/{id}
+    defaults: { _controller  : ApiBundle:V1/Backend/Tag:update }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_tags_delete:
+    path:     /tags
+    defaults: { _controller: ApiBundle:V1/Backend/Tag:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_tags_list:
+    path:     /tags
+    defaults: { _controller  : ApiBundle:V1/Backend/Tag:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_tags_validator:
+    path:     /tags/validator
+    defaults: { _controller  : ApiBundle:V1/Backend/Tag:validator }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_tags_suggester:
+    path:     /tags/suggester/{language_id}/{tag}
+    defaults: { _controller  : ApiBundle:V1/Backend/Tag:suggester }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        tag:         '[^/]+'
+        language_id: '[^/]+'

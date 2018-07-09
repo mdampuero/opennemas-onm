@@ -831,3 +831,7 @@ backend_user:
 backend_user_group:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/user_group.yml'
+
+backend_tag:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/tag.yml'
