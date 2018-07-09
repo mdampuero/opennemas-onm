@@ -456,10 +456,13 @@ content_positions:
         content_type:
             type: string
             options: { length: 45, default: null, notnull: false }
+        frontpage_version_id:
+            type: bigint
+            options: { length: 20, unsigned: true, notnull: true, default: '0' }
     index:
         -
             name: PRIMARY
-            columns: [pk_fk_content, fk_category, position, placeholder]
+            columns: [pk_fk_content, fk_category, position, placeholder, frontpage_version_id]
             primary: true
             unique: true
             flags: {  }
@@ -475,12 +478,24 @@ content_positions:
             primary: false
             unique: false
             flags: {  }
+        -
+            name: frontpage_version_id
+            columns: [frontpage_version_id]
+            primary: false
+            unique: false
+            flags: {  }
     foreign_keys:
         -
             name: contentposition_id_contents_id
             source_field: [ pk_fk_content ]
             target_table: contents
             target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: frontpage_version_id_id
+            source_field: [ frontpage_version_id ]
+            target_table: frontpage_versions
+            target_field: [ id ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 contentmeta:
     columns:
@@ -765,37 +780,71 @@ content_views:
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 frontpages:
     columns:
-        pk_frontpage:
+        id:
             type: bigint
             options: { length: 20, unsigned: true, autoincrement: true }
-        date:
-            type: integer
-            options: { default: null}
-        category:
-            type: bigint
-            options: { length: 20, unsigned: true }
-        version:
-            type: integer
-            options: { unsigned: true, default: null, notnull: false }
-        content_positions:
-            type: text
-            options: { default: null }
-        promoted:
-            type: boolean
-            options: { default: null, notnull: false }
-        day_frontpage:
-            type: boolean
-            options: { default: null, notnull: false }
-        params:
-            type: text
-            options: { length: 65532, default: null, comment: 'serialized params' }
+        name:
+            type: string
+            options: { length: 100, default: null, notnull: false }
     index:
         -
             name: PRIMARY
-            columns: [ pk_frontpage ]
+            columns: [ id ]
             primary: true
             unique: true
             flags: {  }
+frontpage_versions:
+    columns:
+        id:
+            type: bigint
+            options: { length: 20, unsigned: true, autoincrement: true }
+        name:
+            type: string
+            options: { length: 100, default: null, notnull: false }
+        type:
+            type: integer
+            options: { length: 10, default: null, notnull: true }
+        frontpage_id:
+            type: bigint
+            options: { length: 20, unsigned: true, notnull: false }
+        created:
+            type: datetime
+            options: { default: CURRENT_TIMESTAMP }
+        publish_date:
+            type: datetime
+            options: { notnull: false }
+        params:
+            type: string
+            options: { length: 255, default: null, notnull: false }
+        category_id:
+            type: bigint
+            options: { length: 20, unsigned: true, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [ id ]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: frontpage_id
+            columns: [frontpage_id]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: category_id
+            columns: [category_id]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: frontpage_id_id
+            source_field: [ frontpage_id ]
+            target_table: frontpages
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 kioskos:
     columns:
         pk_kiosko:
@@ -1444,7 +1493,7 @@ static_pages:
 tags:
     columns:
         id:
-            type: int
+            type: integer
             options: { unsigned: true, autoincrement: true }
         name:
             type: string
