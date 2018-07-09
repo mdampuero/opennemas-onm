@@ -89,8 +89,7 @@ class TagController extends Controller
      * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      *
-     * @Security("hasExtension('TAG_MANAGER')
-     *     and hasPermission('TAG_ADMIN')")
+     * @Security("hasPermission('TAG_ADMIN')")
      */
     public function listAction(Request $request)
     {
@@ -196,8 +195,6 @@ class TagController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
      */
     public function validNewTagAction(Request $request)
     {
@@ -223,8 +220,6 @@ class TagController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
      */
     public function suggesterAction(Request $request, $languageId, $tag)
     {
@@ -250,8 +245,6 @@ class TagController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
      */
     public function autoSuggesterAction(Request $request)
     {

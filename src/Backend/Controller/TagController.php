@@ -21,8 +21,7 @@ class TagController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("hasExtension('TAG_MANAGER')
-     *     and hasPermission('TAG_ADMIN')")
+     * @Security("hasPermission('TAG_ADMIN')")
      */
     public function listAction()
     {
@@ -36,8 +35,7 @@ class TagController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("hasExtension('TAG_MANAGER')
-     *     and hasPermission('TAG_ADMIN')")
+     * @Security("hasPermission('TAG_ADMIN')")
      */
     public function configAction()
     {
