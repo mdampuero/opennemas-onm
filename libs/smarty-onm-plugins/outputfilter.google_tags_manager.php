@@ -10,7 +10,12 @@
  */
 function smarty_outputfilter_google_tags_manager($output, $smarty)
 {
-    $request = getService('request');
+    $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+
+    if (is_null($request)) {
+        return $output;
+    }
+
     $uri     = $request->getUri();
     $referer = $request->headers->get('referer');
 
@@ -35,8 +40,8 @@ function smarty_outputfilter_google_tags_manager($output, $smarty)
         $headCode = $gtm->getGoogleTagsManagerHeadCode($containerId);
         $bodyCode = $gtm->getGoogleTagsManagerBodyCode($containerId);
 
-        $output = preg_replace('@(</head>)@', $headCode.'${1}', $output);
-        $output = preg_replace('@(<body.*>)@', '${1}'."\n".$bodyCode, $output);
+        $output = preg_replace('@(</head>)@', $headCode . '${1}', $output);
+        $output = preg_replace('@(<body.*>)@', '${1}' . "\n" . $bodyCode, $output);
     }
 
     return $output;

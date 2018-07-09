@@ -12,7 +12,7 @@ namespace Tests\Libs\Smarty;
 /**
  * Defines test cases for SmartyAdsenseValidatorTest class.
  */
-class SmartyAdsenseValidatorTest extends \PHPUnit_Framework_TestCase
+class SmartyAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -48,9 +48,6 @@ class SmartyAdsenseValidatorTest extends \PHPUnit_Framework_TestCase
         $this->smarty->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
-        $this->requestStack->expects($this->any())
-            ->method('getCurrentRequest')->willReturn($this->request);
-
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -84,6 +81,9 @@ class SmartyAdsenseValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidRegex()
     {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+
         $this->request->expects($this->any())->method('getUri')
             ->willReturn('http://manager/test.com');
 
@@ -154,6 +154,9 @@ class SmartyAdsenseValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testAdsModuleActivated()
     {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+
         $this->repository->expects($this->once())
             ->method('get')
             ->with('adsense_id')
@@ -184,6 +187,9 @@ class SmartyAdsenseValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testAdsModuleNotActivated()
     {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+
         $this->repository->expects($this->once())
             ->method('get')
             ->with('adsense_id')
@@ -213,6 +219,9 @@ class SmartyAdsenseValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidAdsenseCode()
     {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+
         $this->repository->expects($this->once())
             ->method('get')
             ->with('adsense_id')
@@ -234,6 +243,9 @@ class SmartyAdsenseValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidAdsenseCode()
     {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+
         $this->repository->expects($this->once())
             ->method('get')
             ->with('adsense_id')
@@ -254,6 +266,20 @@ class SmartyAdsenseValidatorTest extends \PHPUnit_Framework_TestCase
             . '</script></head><body></body></html>';
 
         $this->assertEquals($output, smarty_outputfilter_adsense_validator(
+            $this->output,
+            $this->smarty
+        ));
+    }
+
+    /**
+     * Test plugin with no currentRequest
+     */
+    public function testEmptyResturnIfNoRequest()
+    {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn(null);
+
+        $this->assertEquals($this->output, smarty_outputfilter_adsense_validator(
             $this->output,
             $this->smarty
         ));

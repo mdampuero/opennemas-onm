@@ -12,7 +12,7 @@ namespace Tests\Libs\Smarty;
 /**
  * Defines test cases for SmartyUrl class.
  */
-class SmartyRenderBannerTest extends \PHPUnit_Framework_TestCase
+class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

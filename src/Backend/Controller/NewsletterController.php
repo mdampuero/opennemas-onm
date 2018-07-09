@@ -32,11 +32,17 @@ class NewsletterController extends Controller
      */
     public function listAction()
     {
-        $sr                = $this->get('setting_repository');
         $newsletterService = $this->get('api.service.newsletter');
 
-        $maxAllowed      = $sr->get('max_mailing');
-        $lastInvoice     = new \DateTime($sr->get('last_invoice'));
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get([
+                'max_mailing',
+                'last_invoice',
+            ]);
+
+        $maxAllowed      = $settings['max_mailing'];
+        $lastInvoice     = new \DateTime($settings['last_invoice']);
         $totalSendings   = $newsletterService->getSentNewslettersSinceLastInvoice($lastInvoice);
         $lastInvoiceText = $lastInvoice->format(_('Y-m-d'));
 
@@ -72,7 +78,6 @@ class NewsletterController extends Controller
             $message
         );
 
-
         return $this->render('newsletter/list.tpl', [ 'message' => $message ]);
     }
 
@@ -86,7 +91,9 @@ class NewsletterController extends Controller
      */
     public function createAction()
     {
-        $configurations = $this->get('setting_repository')->get('newsletter_maillist');
+        $configurations = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('newsletter_maillist');
 
         $newsletterContent = [];
         $menu              = new \Menu();
@@ -203,7 +210,9 @@ class NewsletterController extends Controller
         $ns = $this->get('api.service.newsletter');
         $nm = $this->get('core.renderer.newsletter');
 
-        $siteTitle    = $this->get('setting_repository')->get('site_name');
+        $siteTitle    = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('site_name');
         $time         = new \DateTime();
         $defaultTitle = sprintf('%s [%s]', $siteTitle, $time->format('d/m/Y'));
         $title        = $request->request->filter('title', $defaultTitle, FILTER_SANITIZE_STRING);
@@ -341,7 +350,6 @@ class NewsletterController extends Controller
     public function pickRecipientsAction(Request $request)
     {
         $id         = $request->query->getDigits('id');
-        $sm         = $this->get('setting_repository');
         $newsletter = $this->get('api.service.newsletter')->getItem($id);
         $recipients = [];
 
@@ -352,7 +360,6 @@ class NewsletterController extends Controller
                 'newsletter_subscriptionType',
                 'actOn.marketingLists',
             ]);
-
 
         $ss       = $this->get('api.service.subscription');
         $ssb      = $this->get('api.service.subscriber');
@@ -494,8 +501,15 @@ class NewsletterController extends Controller
      */
     private function checkModuleActivated()
     {
-        $type   = $this->get('setting_repository')->get('newsletter_subscriptionType');
-        $config = $this->get('setting_repository')->get('newsletter_maillist');
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get([
+                'newsletter_maillist',
+                'newsletter_subscriptionType',
+            ]);
+
+        $type   = $settings['newsletter_subscriptionType'];
+        $config = $settings['newsletter_maillist'];
 
         // If the module doesn't have settings already saved
         // we redirect to the module configuration form
@@ -514,6 +528,7 @@ class NewsletterController extends Controller
                 if (!empty($value)) {
                     continue;
                 }
+
                 $this->get('session')->getFlashBag()->add('error', _(
                     'Your newsletter configuration is not completed. Please' .
                     ' go to settings and complete the form.'

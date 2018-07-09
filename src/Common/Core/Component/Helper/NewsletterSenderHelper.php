@@ -120,6 +120,7 @@ class NewsletterSenderHelper
         // Fix encoding of the html
         $newsletter->html = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
+        $recipients = json_decode(json_encode($recipients), false);
         foreach ($recipients as $mailbox) {
             if ($maxAllowed > 0 && abs($remaining) >= 0) {
                 $sendResults[] = [$mailbox, false, _('Max sents reached')];
@@ -200,6 +201,8 @@ class NewsletterSenderHelper
 
             $sentEmails += 1;
         } catch (\Exception $e) {
+            $this->errorLog->error('Error sending to ActOn: ' . $e->getMessage());
+
             $errors[] = _('Unable to deliver your email');
         }
 

@@ -10,7 +10,12 @@
  */
 function smarty_outputfilter_ojd($output, $smarty)
 {
-    $request = getService('request');
+    $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+
+    if (is_null($request)) {
+        return $output;
+    }
+
     $uri     = $request->getUri();
     $referer = $request->headers->get('referer');
 
@@ -44,7 +49,7 @@ function addOJDCode($output)
     $code = '<!-- START Nielsen//NetRatings SiteCensus V5.3 -->'
         . '<!-- COPYRIGHT 2007 Nielsen//NetRatings -->'
         . '<script type="text/javascript">'
-        . 'var _rsCI="'. $config['page_id'] .'";'
+        . 'var _rsCI="' . $config['page_id'] . '";'
         . 'var _rsCG="0";'
         . 'var _rsDN="//secure-uk.imrworldwide.com/";'
         . 'var _rsCC=0;'
@@ -52,7 +57,7 @@ function addOJDCode($output)
         . '<script type="text/javascript" src="//secure-uk.imrworldwide.com/v53.js"></script>'
         . '<noscript>'
         . '<div><img src="//secure-uk.imrworldwide.com/cgi-bin/m?ci='
-        . $config['page_id'] .'&amp;cg=0" alt=""/></div>'
+        . $config['page_id'] . '&amp;cg=0" alt=""/></div>'
         . '</noscript>'
         . '<!-- END Nielsen//NetRatings SiteCensus V5.3 -->';
 

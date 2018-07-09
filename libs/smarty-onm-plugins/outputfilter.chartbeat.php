@@ -10,7 +10,12 @@
  */
 function smarty_outputfilter_chartbeat($output, $smarty)
 {
-    $request = getService('request');
+    $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+
+    if (is_null($request)) {
+        return $output;
+    }
+
     $uri     = $request->getUri();
     $referer = $request->headers->get('referer');
 
@@ -53,8 +58,8 @@ function addChartBeatCode($output, $smarty, $type = null)
     $author = '';
     if (array_key_exists('content', $smarty->tpl_vars)) {
         $content = $smarty->tpl_vars['content']->value;
-        $user = getService('user_repository')->find($content->fk_author);
-        $author = (!is_null($user->name)) ? $user->name : $content->agency;
+        $user    = getService('user_repository')->find($content->fk_author);
+        $author  = (!is_null($user->name)) ? $user->name : $content->agency;
         if (empty($author)) {
             $author = getService('setting_repository')->get('site_name');
         }
@@ -68,23 +73,22 @@ function addChartBeatCode($output, $smarty, $type = null)
     <script type="application/json">
         {
             "vars": {
-                "uid": "'.$config['id'].'",
-                "domain": "'.$config['domain'].'",
-                "sections": "'.$smarty->tpl_vars['category_name'].'",
-                "authors": "'.$author.'"
+                "uid": "' . $config['id'] . '",
+                "domain": "' . $config['domain'] . '",
+                "sections": "' . $smarty->tpl_vars['category_name'] . '",
+                "authors": "' . $author . '"
             }
         }
     </script>
 </amp-analytics>
 <!-- End Chartbeat -->';
-
     } else {
         $code = '
 <script type="text/javascript">
   var _sf_async_config = _sf_async_config || {};
   /** CONFIGURATION START **/
-  _sf_async_config.sections = "'.$smarty->tpl_vars['category_name'].'";
-  _sf_async_config.authors = "'.$author.'";
+  _sf_async_config.sections = "' . $smarty->tpl_vars['category_name'] . '";
+  _sf_async_config.authors = "' . $author . '";
 
 
 
@@ -112,8 +116,8 @@ function addChartBeatCode($output, $smarty, $type = null)
 <script type="text/javascript">
     var _sf_async_config = _sf_async_config || {};
     /** CONFIGURATION START **/
-    _sf_async_config.uid = '.$config['id'].'; // ACCOUNT NUMBER
-    _sf_async_config.domain = "'.$config['domain'].'"; // DOMAIN
+    _sf_async_config.uid = ' . $config['id'] . '; // ACCOUNT NUMBER
+    _sf_async_config.domain = "' . $config['domain'] . '"; // DOMAIN
     _sf_async_config.flickerControl = false;
     _sf_async_config.useCanonical = true;
     /** CONFIGURATION END **/
