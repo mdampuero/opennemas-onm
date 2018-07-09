@@ -1486,7 +1486,6 @@ class Privilege
                 'module'       => 'INTERNAL',
                 'enabled'      => 1
             ],
-
             224 => [
                 'pk_privilege' => 224,
                 'name'         => 'MEMBER_SEND_NEWSLETTER',
