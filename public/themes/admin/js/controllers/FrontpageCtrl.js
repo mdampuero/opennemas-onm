@@ -24,7 +24,8 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       checkNewVersion: true
     };
 
-    $scope.init = function(frontpages, versions, categoryId, versionId, time, frontpageLastSaved) {
+    $scope.init = function(frontpages, versions, categoryId, versionId, time, frontpageLastSaved,
+      layouts, layout) {
       $scope.categoryId              = parseInt(categoryId);
       $scope.frontpages              = frontpages;
       $scope.frontpage               = frontpages[$scope.categoryId];
@@ -32,6 +33,8 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       $scope.time                    = time;
       $scope.time.diff               = new Date().getTime() - time.timestamp;
       $scope.scheduledFFuture        = [];
+      $scope.layouts                 = layouts;
+      $scope.layout                  = layout;
 
       if (versions.length === 0) {
         $scope.version = {
@@ -536,6 +539,40 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       }, function(response) {
         if (response.data) {
           messenger.post(response.data.responseText);
+        }
+      });
+    };
+
+    /**
+     * Opens layout modal window.
+     *
+     * @param {String} name The modal name.
+     */
+    $scope.openLayoutModal = function() {
+      $uibModal.open({
+        templateUrl: 'modal-layout',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              layouts:      $scope.layouts,
+              layout:       $scope.layout,
+              changeLayout: function(layoutKey) {
+                window.location = routing.generate(
+                  'admin_frontpage_pick_layout',
+                  {
+                    category:  $scope.categoryId,
+                    versionId: $scope.version.id,
+                    layout:    layoutKey
+                  }
+                );
+              }
+            };
+          },
+          success: function() {
+            return null;
+          }
         }
       });
     };

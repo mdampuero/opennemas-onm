@@ -51,7 +51,9 @@ class FrontpagesController extends Controller
 
         $versions = $fvs->responsify($versions);
         // Get theme layout
-        $layoutTheme = s::get('frontpage_layout_' . $categoryId, 'default');
+        $layoutTheme =
+            s::get('frontpage_layout_' . $categoryId, 'default');
+
         // Check if layout is valid,if not use the default value
         if (!file_exists(SITE_PATH . "/themes/" . TEMPLATE_USER . "/layouts/" . $layoutTheme . ".xml")) {
             $layoutTheme = 'default';
@@ -222,8 +224,12 @@ class FrontpagesController extends Controller
      */
     public function pickLayoutAction(Request $request)
     {
-        $category = $request->query->filter('category', '', FILTER_SANITIZE_STRING);
-        $layout   = $request->query->filter('layout', null, FILTER_SANITIZE_STRING);
+        $category           =
+            $request->query->filter('category', '', FILTER_SANITIZE_STRING);
+        $layout             =
+            $request->query->filter('layout', null, FILTER_SANITIZE_STRING);
+        $frontpageVersionId =
+            $request->query->filter('versionId', null, FILTER_SANITIZE_STRING);
 
         if ($category == 'home') {
             $category = 0;
@@ -239,7 +245,10 @@ class FrontpagesController extends Controller
             && $layoutValid
         ) {
             $this->get('setting_repository')->set('frontpage_layout_' . $category, $layout);
-            $this->get('core.dispatcher')->dispatch('frontpage.pick_layout', [ 'category' => $category ]);
+            $this->get('core.dispatcher')->dispatch(
+                'frontpage.pick_layout',
+                [ 'category' => $category, 'frontpageId' => $frontpageVersionId ]
+            );
             $this->get('session')->getFlashBag()->add(
                 'success',
                 sprintf(_('Layout %s seleted.'), $layout)
@@ -257,9 +266,15 @@ class FrontpagesController extends Controller
             $section = $category;
         }
 
-        $this->get('core.dispatcher')->dispatch('frontpage.save_position', [ 'category' => $category ]);
+        $this->get('core.dispatcher')->dispatch(
+            'frontpage.save_position',
+            [ 'category' => $category, 'frontpageId' => $frontpageVersionId ]
+        );
 
-        return $this->redirect($this->generateUrl('admin_frontpage_list', [ 'category' => $category ]));
+        return $this->redirect($this->generateUrl(
+            'admin_frontpage_list',
+            [ 'category' => $category, 'version' => $frontpageVersionId ]
+        ));
     }
 
     /**
@@ -321,7 +336,8 @@ class FrontpagesController extends Controller
                 $contentPositionMap[$contentPosition['placeholder']] = [];
             }
 
-            $contentPosition['pk_fk_content'] = intval($contentPosition['id']);
+            $contentPosition['pk_fk_content']                      =
+                intval($contentPosition['id']);
             $contentPositionMap[$contentPosition['placeholder']][] =
                 new ContentPosition($contentPosition);
             $contentsMap[$contentPosition['id']]                   =

@@ -36,9 +36,9 @@
   </script>
   {/javascripts}
 {/block}
-f
+
 {block name="content"}
-<form action="#" method="get" name="formulario" id="formulario" ng-controller="FrontpageCtrl" ng-init="init({json_encode($frontpages)|clear_json}, {json_encode($versions)|clear_json}, {json_encode($category_id)|clear_json}, {json_encode($version_id)|clear_json}, {json_encode($time)|clear_json}, {json_encode($frontpage_last_saved)|clear_json})">
+<form action="#" method="get" name="formulario" id="formulario" ng-controller="FrontpageCtrl" ng-init="init({json_encode($frontpages)|clear_json}, {json_encode($versions)|clear_json}, {json_encode($category_id)|clear_json}, {json_encode($version_id)|clear_json}, {json_encode($time)|clear_json}, {json_encode($frontpage_last_saved)|clear_json}, {json_encode($available_layouts)|clear_json}, {json_encode($layout_theme)|clear_json})">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -106,6 +106,16 @@ f
         </ul>
         <div class="all-actions pull-right hidden-xs ng-cloak">
           <ul class="nav quick-section">
+            {is_module_activated name="FRONTPAGES_LAYOUT"}
+            <li class="quicklinks">
+              <div class="btn btn-default hidden-md" id="frontpage-settings" uib-tooltip="{t}Settings{/t}" tooltip-placement="left" ng-click="openLayoutModal()">
+                <i class="fa fa-cog"></i>
+              </div>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+            {/is_module_activated}
             <li class="quicklinks">
               <div class="btn-group">
                 <button class="btn btn-primary" type="button" ng-click="save()">
@@ -143,15 +153,6 @@ f
                       {t}Delete{/t}
                     </a>
                   </li>
-                  {is_module_activated name="FRONTPAGES_LAYOUT"}
-                  <li class="divider" ng-if="item.type !== 2"></li>
-                  <li class="visible-md visible-sm">
-                    <a href="#" ng-click="open('modal-layout')">
-                      <i class="fa fa-cog"></i>
-                      {t}Settings{/t}
-                    </a>
-                  </li>
-                  {/is_module_activated}
                 </ul>
               </div>
             </li>
@@ -222,11 +223,6 @@ f
             <button class="btn btn-danger" ng-click="deleteVersion($event)" uib-tooltip="{t}Delete{/t}" tooltip-placement="left" ng-if="versionId !== publishVersionId">
               <i class="fa fa-trash-o fa-lg"></i>
             </button>
-            {is_module_activated name="FRONTPAGES_LAYOUT"}
-              <div class="btn btn-default hidden-md" id="frontpage-settings" uib-tooltip="{t}Settings{/t}" tooltip-placement="left" ng-click="open('modal-layout')">
-                <i class="fa fa-cog"></i>
-              </div>
-            {/is_module_activated}
           </li>
         </ul>
       </div>
@@ -310,33 +306,25 @@ f
       </div>
     </div><!-- /content-provider -->
   </div>
+  <script type="text/ng-template" id="modal-layout">
+    <div class="modal-header">
+    [% template.categoryId %]
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">&times;</button>
+      <h4 class="modal-title">
+        {t}Change the layout of this frontpage{/t}
+      </h4>
+      </div>
+      <div class="modal-body clearfix">
+        <a class="layout-type btn" ng-repeat="(layoutKey, layout) in template.layouts" ng-click="template.changeLayout(layoutKey)"> [% layout.name %]</a>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">{t}Close{/t}</button>
+      </div>
+    </div>
+  </script>
   <input type="hidden"  id="category" name="category" value="{$category_id}">
   <input type="hidden" name="id" id="id" value="{$id|default}" />
 </form>
-
-<script type="text/ng-template" id="modal-layout">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">&times;</button>
-    <h4 class="modal-title">
-      {t}Change the layout of this frontpage{/t}
-    </h4>
-  </div>
-  <div class="modal-body clearfix">
-    {if $available_layouts > 1}
-    {foreach from=$available_layouts key=key item=avlayout}
-    <a class="layout-type {if $avlayout['name'] eq $layout_theme['name']}active{/if}"
-    href="{url name=admin_frontpage_pick_layout category=$category_id layout=$key}">
-    {$avlayout['name']}
-  </a>
-  {/foreach}
-  {/if}
-</div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">Close</button>
-</div>
-</div>
-</script>
-
 <script type="text/ng-template" id="modal-preview">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">&times;</button>
