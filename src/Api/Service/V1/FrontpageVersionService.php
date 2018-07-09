@@ -61,18 +61,18 @@ class FrontpageVersionService extends OrmService
             $this->container->get('core.locale')->getTimeZone();
         $systemDateTz       = new \DateTime(null, $tz);
         $systemDateTz       = $systemDateTz->format('Y-m-d H:i:s');
-        if (!empty($frontpageVersionId)) {
-            $frontpageVersion = $this->getItem($frontpageVersionId);
-            if (!empty($frontpageVersion->publish_date)) {
-                $invalidationTime = $frontpageVersion->publish_date
-                    ->format('Y-m-d H:i:s');
-            }
-        } else {
+        if (empty($frontpageVersionId)) {
             $invalidationTime = new \DateTime(null, $tz);
             // Add 1 year to the current timestamp
             $timestamp = $invalidationTime->getTimestamp() + 31536000;
             $invalidationTime->setTimestamp($timestamp);
             $invalidationTime = $invalidationTime->format('Y-m-d H:i:s');
+        } else {
+            $frontpageVersion = $this->getItem($frontpageVersionId);
+            if (!empty($frontpageVersion->publish_date)) {
+                $invalidationTime = $frontpageVersion->publish_date
+                    ->format('Y-m-d H:i:s');
+            }
         }
 
         foreach ($contents as $content) {
@@ -96,7 +96,6 @@ class FrontpageVersionService extends OrmService
         $invalidationTime =
             \DateTime::createFromFormat('Y-m-d H:i:s', $invalidationTime, $tz);
         $invalidationTime->setTimeZone(new \DateTimeZone('UTC'));
-
         return $invalidationTime;
     }
 

@@ -169,7 +169,6 @@ class FrontpagesController extends Controller
         }
 
         list($adsPositions, $advertisements) = $this->getAds($categoryId, $contents);
-
         $invalidationDt->setTimeZone($this->get('core.locale')->getTimeZone());
         return $this->render('frontpage/frontpage.tpl', [
             'advertisements'  => $advertisements,
