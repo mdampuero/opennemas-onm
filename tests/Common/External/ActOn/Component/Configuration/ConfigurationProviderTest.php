@@ -41,7 +41,7 @@ class OrmConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testGetConfiguration()
     {
         $this->dataset->expects($this->once())->method('get')
-            ->with('act_on_configuration')->willReturn([ 'token' => 'glorp' ]);
+            ->with('actOn.authentication')->willReturn([ 'token' => 'glorp' ]);
 
         $this->assertEquals([ 'token' => 'glorp' ], $this->provider->getConfiguration());
     }
@@ -52,7 +52,7 @@ class OrmConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testSetConfigurationWhenEmpty()
     {
         $this->dataset->expects($this->once())->method('delete')
-            ->with('act_on_configuration');
+            ->with('actOn.authentication');
 
         $this->provider->setConfiguration(null);
     }
@@ -64,7 +64,7 @@ class OrmConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testSetConfigurationWhenValueProvided()
     {
         $this->dataset->expects($this->once())->method('set')
-            ->with('act_on_configuration', [ 'token' => 'glorp' ]);
+            ->with('actOn.authentication', [ 'token' => 'glorp' ]);
 
         $this->provider->setConfiguration([ 'token' => 'glorp' ]);
     }

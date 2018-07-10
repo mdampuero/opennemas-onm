@@ -10,8 +10,13 @@
  */
 function smarty_outputfilter_ads_scripts($output, $smarty)
 {
-    $request = getService('request');
-    $uri     = $request->getUri();
+    $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+
+    if (is_null($request)) {
+        return $output;
+    }
+
+    $uri = $request->getUri();
 
     if (!preg_match('/\/admin\/frontpages/', $referer)
         && !preg_match('/\/manager/', $uri)
@@ -30,7 +35,7 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
         ) {
             $output = preg_replace(
                 '@(</head>)@',
-                "\n". base64_decode($settings['header_script']) . "\n" . '${1}',
+                "\n" . base64_decode($settings['header_script']) . "\n" . '${1}',
                 $output
             );
         }
@@ -40,7 +45,7 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
         ) {
             $output = preg_replace(
                 '@(<body.*>)@',
-                '${1}' . "\n". base64_decode($settings['body_start_script']) . "\n",
+                '${1}' . "\n" . base64_decode($settings['body_start_script']) . "\n",
                 $output
             );
         }
@@ -50,7 +55,7 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
         ) {
             $output = preg_replace(
                 '@(</body.*>)@',
-                "\n". base64_decode($settings['body_end_script']) . "\n" . '${1}',
+                "\n" . base64_decode($settings['body_end_script']) . "\n" . '${1}',
                 $output
             );
         }

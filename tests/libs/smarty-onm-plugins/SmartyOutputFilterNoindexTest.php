@@ -12,7 +12,7 @@ namespace Tests\Libs\Smarty;
 /**
  * Defines test cases for SmartyUrl class.
  */
-class SmartyOutputFilterNoindex extends \PHPUnit_Framework_TestCase
+class SmartyOutputFilterNoindexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

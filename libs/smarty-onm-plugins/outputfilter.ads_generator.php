@@ -45,14 +45,16 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         });
 
         $params = [
-            'category'  => $category,
-            'extension' => $app['extension'],
-            'content'   => $content,
-            'x-tags'    => $xtags,
+            'category'           => $category,
+            'extension'          => $app['extension'],
+            'advertisementGroup' => $app['advertisementGroup'],
+            'content'            => $content,
+            'x-tags'             => $xtags,
         ];
 
         $reviveOutput = $adsRenderer->renderInlineReviveHeader($ads);
         $dfpOutput    = $adsRenderer->renderInlineDFPHeader($ads, $params);
+        $smartOutput  = $adsRenderer->renderInlineSmartHeader($ads, $params);
         $interstitial = $adsRenderer->renderInlineInterstitial($ads, $params);
         $devices      = getService('core.template.admin')
             ->fetch('advertisement/helpers/inline/js.tpl');
@@ -61,6 +63,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
 
         $output = str_replace('</head>', $reviveOutput . '</head>', $output);
         $output = str_replace('</head>', $dfpOutput . '</head>', $output);
+        $output = str_replace('</head>', $smartOutput . '</head>', $output);
         $output = str_replace('</body>', $interstitial . '</body>', $output);
         $output = str_replace('</body>', $devices . '</body>', $output);
     } else {
@@ -77,14 +80,15 @@ function smarty_outputfilter_ads_generator($output, $smarty)
 
     $content = getService('core.template.admin')
         ->fetch('advertisement/helpers/safeframe/js.tpl', [
-            'debug'     => $app['environment'] === 'dev' ? 'true' : 'false',
-            'category'  => $category,
-            'extension' => $app['extension'],
-            'contentId' => $content->id,
-            'lifetime'  => $settings['lifetime_cookie'],
-            'positions' => implode(',', $positions),
-            'time'      => time(),
-            'url'       => getService('router')
+            'debug'              => $app['environment'] === 'dev' ? 'true' : 'false',
+            'category'           => $category,
+            'extension'          => $app['extension'],
+            'advertisementGroup' => $app['advertisementGroup'],
+            'contentId'          => $content->id,
+            'lifetime'           => $settings['lifetime_cookie'],
+            'positions'          => implode(',', $positions),
+            'time'               => time(),
+            'url'                => getService('router')
                 ->generate('api_v1_advertisements_list')
         ]);
 

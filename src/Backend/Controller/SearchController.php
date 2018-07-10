@@ -32,7 +32,7 @@ class SearchController extends Controller
      */
     public function defaultAction()
     {
-        $contentTypesAvailable = $this->getContentTypesFiltered();
+        $contentTypesAvailable = \ContentManager::getContentTypesFiltered();
         unset($contentTypesAvailable['comment']);
 
         $types = [
@@ -161,44 +161,5 @@ class SearchController extends Controller
                 return $this->render('search_advanced/content-provider.tpl');
             }
         }
-    }
-
-    /**
-     * Returns the list of content types for the modules activated
-     *
-     * @return array the list of content types
-     */
-    private function getContentTypesFiltered()
-    {
-        $contentTypes         = \ContentManager::getContentTypes();
-        $contentTypesFiltered = [];
-
-        foreach ($contentTypes as $contentType) {
-            switch ($contentType['name']) {
-                case 'advertisement':
-                    $moduleName = 'ads';
-                    break;
-                case 'attachment':
-                    $moduleName = 'file';
-                    break;
-                case 'photo':
-                    $moduleName = 'image';
-                    break;
-                case 'static_page':
-                    $moduleName = 'static_pages';
-                    break;
-                default:
-                    $moduleName = $contentType['name'];
-                    break;
-            }
-
-            $moduleName = strtoupper($moduleName . '_MANAGER');
-
-            if ($this->get('core.security')->hasExtension($moduleName)) {
-                $contentTypesFiltered[$contentType['name']] = $contentType['title'];
-            }
-        }
-
-        return $contentTypesFiltered;
     }
 }

@@ -12,7 +12,7 @@ namespace Tests\Libs\Smarty;
 /**
  * Defines test cases for SmartyCmpScriptTest class.
  */
-class SmartyCmpScriptTest extends \PHPUnit_Framework_TestCase
+class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

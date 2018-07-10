@@ -34,13 +34,15 @@ class NewsletterController extends Controller
      **/
     public function showAction($id = null)
     {
-        $newsletter = new \Newsletter((int) $id);
-        if (empty($newsletter->id)) {
+        $item = $this->get('api.service.newsletter')->getItem($id);
+
+        if (!is_object($item) || $item->type == 1) {
             throw new ResourceNotFoundException();
+            // $item->html = $this->get('core.renderer.newsletter')->render($item->contents);
         }
 
         $internalName = $this->get('core.instance')->internal_name;
-        return new Response($newsletter->html, 200, [
+        return new Response($item->html, 200, [
             'x-instance' => $internalName,
             'x-tags'     => 'instance-' . $internalName . ',newsletter-' . $id,
         ]);

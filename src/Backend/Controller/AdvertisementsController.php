@@ -73,7 +73,8 @@ class AdvertisementsController extends Controller
             [ 'name' => _("Multimedia"), 'value' => 0 ],
             [ 'name' => _("Javascript"), 'value' => 1 ],
             [ 'name' => _("OpenX"), 'value' => 2 ],
-            [ 'name' => _("Google DFP"), 'value' => 3 ]
+            [ 'name' => _("Google DFP"), 'value' => 3 ],
+            [ 'name' => _("Smart"), 'value' => 4 ]
         ];
 
         $categories = [
@@ -162,6 +163,8 @@ class AdvertisementsController extends Controller
             'params'             => [
                 'sizes'             => json_decode($request->request->get('sizes', ''), true),
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
+                'smart_page_id'     => $request->request->getDigits('smart_page_id', ''),
+                'smart_format_id'   => $request->request->getDigits('smart_format_id', ''),
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
                 'user_groups'       => json_decode($request->request->get('user_groups'), true),
                 'orientation'       => $request->request->get('orientation', 'horizontal'),
@@ -309,6 +312,8 @@ class AdvertisementsController extends Controller
             'params'             => [
                 'sizes'             => json_decode($request->request->get('sizes', ''), true),
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
+                'smart_page_id'     => $request->request->getDigits('smart_page_id', ''),
+                'smart_format_id'   => $request->request->getDigits('smart_format_id', ''),
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
                 'user_groups'       => json_decode($request->request->get('user_groups', ''), true),
                 'orientation'       => $request->request->get('orientation', 'horizontal'),
@@ -403,12 +408,35 @@ class AdvertisementsController extends Controller
                 'ads_settings' => [
                     'lifetime_cookie' => $formValues->getDigits('ads_settings_lifetime_cookie'),
                     'no_generics'     => is_null($formValues->get('ads_settings_no_generics')) ? 1 : 0,
-                    'safe_frame'      => empty($formValues->get('safe_frame')) ? 0 : 1,
+                    'safe_frame'      => (int) $this->container->get('core.helper.advertisement')->isSafeFrameEnabled(),
                     'default_mark'    => $formValues->filter('ads_settings_mark_default', '', FILTER_SANITIZE_STRING),
                 ],
                 'revive_ad_server' => [
                     'url'     => $formValues->filter('revive_ad_server_url', '', FILTER_SANITIZE_STRING),
                     'site_id' => $formValues->getDigits('revive_ad_server_site_id'),
+                ],
+                'smart_ad_server' => [
+                    'domain'     => $formValues->filter('smart_ad_server_domain', '', FILTER_SANITIZE_STRING),
+                    'network_id' => $formValues->getDigits('smart_ad_server_network_id'),
+                    'site_id'    => $formValues->getDigits('smart_ad_server_site_id'),
+                    'page_id'    => [
+                        'frontpage'         => $formValues->getDigits('smart_ad_server_page_id_frontpage'),
+                        'article_inner'     => $formValues->getDigits('smart_ad_server_page_id_article_inner'),
+                        'opinion_frontpage' => $formValues->getDigits('smart_ad_server_page_id_opinion_frontpage'),
+                        'opinion_inner'     => $formValues->getDigits('smart_ad_server_page_id_opinion_inner'),
+                        'video_frontpage'   => $formValues->getDigits('smart_ad_server_page_id_video_frontpage'),
+                        'video_inner'       => $formValues->getDigits('smart_ad_server_page_id_video_inner'),
+                        'album_frontpage'   => $formValues->getDigits('smart_ad_server_page_id_album_frontpage'),
+                        'album_inner'       => $formValues->getDigits('smart_ad_server_page_id_album_inner'),
+                        'polls_frontpage'   => $formValues->getDigits('smart_ad_server_page_id_polls_frontpage'),
+                        'polls_inner'       => $formValues->getDigits('smart_ad_server_page_id_polls_inner'),
+                    ],
+                    'category_targeting' =>
+                        $formValues->filter('smart_ad_server_category_targeting', '', FILTER_SANITIZE_STRING),
+                    'module_targeting'   =>
+                        $formValues->filter('smart_ad_server_module_targeting', '', FILTER_SANITIZE_STRING),
+                    'url_targeting'      =>
+                        $formValues->filter('smart_ad_server_url_targeting', '', FILTER_SANITIZE_STRING),
                 ],
                 'dfp_options' => [
                     'target'     => $formValues->filter('dfp_options_target', '', FILTER_SANITIZE_STRING),
@@ -422,8 +450,12 @@ class AdvertisementsController extends Controller
             ];
 
             if ($this->get('core.security')->hasPermission('MASTER')) {
+                $settings['ads_settings']['safe_frame'] =
+                    empty($formValues->get('safe_frame')) ? 0 : 1;
                 $settings['dfp_custom_code'] =
                     base64_encode($formValues->get('dfp_custom_code'));
+                $settings['smart_custom_code'] =
+                    base64_encode($formValues->get('smart_custom_code'));
             }
 
             foreach ($settings as $key => $value) {
@@ -441,8 +473,9 @@ class AdvertisementsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads_config'));
         } else {
             $keys = [
-                'ads_settings', 'dfp_options',  'iadbox_id', 'revive_ad_server',
-                'tradedoubler_id', 'dfp_custom_code', 'ads_txt', 'adsense_id'
+                'adsense_id', 'ads_settings', 'ads_txt','dfp_custom_code',
+                'dfp_options', 'iadbox_id', 'revive_ad_server',
+                'smart_ad_server', 'smart_custom_code', 'tradedoubler_id',
             ];
 
             $configurations = $this->get('setting_repository')->get($keys);
@@ -464,9 +497,25 @@ class AdvertisementsController extends Controller
     {
         $adsPositions = $this->container->get('core.helper.advertisement');
         $renderer     = $this->container->get('core.renderer.advertisement');
-        $serverUrl    = '';
-        if ($openXsettings = $this->get('setting_repository')->get('revive_ad_server')) {
-            $serverUrl = $openXsettings['url'];
+
+        // OpenX
+        $openxServerUrl = '';
+        $openxSettings  = $this->get('setting_repository')->get('revive_ad_server');
+        if (is_array($openxSettings)
+            && array_key_exists('url', $openxSettings)
+        ) {
+            $openxServerUrl = $openxSettings['url'];
+        }
+
+        // Smart+
+        $smartServerUrl = '';
+        $smartSettings  = $this->get('setting_repository')->get('smart_ad_server');
+        if (is_array($smartSettings)
+            && array_key_exists('domain', $smartSettings)
+            && array_key_exists('network_id', $smartSettings)
+            && array_key_exists('site_id', $smartSettings)
+        ) {
+            $smartServerUrl = $smartSettings['domain'];
         }
 
         return [
@@ -476,7 +525,8 @@ class AdvertisementsController extends Controller
                 'aditional_theme_positions' => $adsPositions->getPositionsForTheme(),
                 'ads_positions'             => $adsPositions->getPositionNames(),
                 'categories'                => $this->getCategories(),
-                'server_url'                => $serverUrl,
+                'openx_server_url'          => $openxServerUrl,
+                'smart_server_url'          => $smartServerUrl,
                 'user_groups'               => $this->getSubscriptions(),
                 'default_mark'              => $renderer->getMark(),
             ],

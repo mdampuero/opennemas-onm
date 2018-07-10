@@ -240,8 +240,8 @@ class CategoryController extends Controller
         // Get article_inner and category_frontpage positions
         $positionManager = $this->get('core.helper.advertisement');
         $positions       = array_merge(
-            $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ]),
-            $positionManager->getPositionsForGroup('category_frontpage')
+            $positionManager->getPositionsForGroup('category_frontpage'),
+            $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ])
         );
 
         $advertisements = $this->get('advertisement_repository')

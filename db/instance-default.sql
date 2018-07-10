@@ -359,10 +359,13 @@ CREATE TABLE `content_positions` (
   `placeholder` varchar(45) CHARACTER SET latin1 NOT NULL DEFAULT '',
   `params` text CHARACTER SET latin1,
   `content_type` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
-  PRIMARY KEY (`pk_fk_content`,`fk_category`,`position`,`placeholder`),
+  `frontpage_version_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`pk_fk_content`,`fk_category`,`position`,`placeholder`,`frontpage_version_id`),
   KEY `content_position_pk_content` (`pk_fk_content`),
   KEY `content_position_fk_category` (`fk_category`),
-  CONSTRAINT `contentposition_id_contents_id` FOREIGN KEY (`pk_fk_content`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `frontpage_version_id` (`frontpage_version_id`),
+  CONSTRAINT `contentposition_id_contents_id` FOREIGN KEY (`pk_fk_content`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `frontpage_version_id_id` FOREIGN KEY (`frontpage_version_id`) REFERENCES `frontpage_versions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -372,7 +375,7 @@ CREATE TABLE `content_positions` (
 
 LOCK TABLES `content_positions` WRITE;
 /*!40000 ALTER TABLE `content_positions` DISABLE KEYS */;
-INSERT INTO `content_positions` VALUES (186,25,0,'placeholder_1_6',NULL,'Widget'),(229,25,3,'placeholder_0_0',NULL,'Widget'),(236,0,1,'placeholder_3_4',NULL,'Widget'),(236,25,0,'placeholder_3_1',NULL,'Widget'),(237,0,1,'placeholder_3_6',NULL,'Widget'),(237,24,0,'placeholder_3_2',NULL,'Widget'),(240,0,0,'placeholder_3_3',NULL,'Widget'),(240,24,0,'placeholder_3_1',NULL,'Widget'),(242,22,0,'placeholder_0_0','a:0:{}','Article'),(244,25,0,'placeholder_1_1',NULL,'Article'),(248,22,0,'placeholder_0_0','a:0:{}','Article'),(250,0,1,'placeholder_3_3',NULL,'Article'),(250,34,0,'placeholder_0_0','a:0:{}','Article'),(252,0,2,'placeholder_3_6',NULL,'Article'),(252,34,0,'placeholder_0_0','a:0:{}','Article'),(260,22,0,'placeholder_0_0','a:0:{}','Article'),(268,0,2,'placeholder_3_3',NULL,'Article'),(268,34,0,'placeholder_0_0','a:0:{}','Article'),(270,34,0,'placeholder_0_0','a:0:{}','Article'),(272,34,0,'placeholder_0_0','a:0:{}','Article'),(280,0,0,'placeholder_2_2',NULL,'Article'),(280,34,0,'placeholder_0_0','a:0:{}','Article'),(282,34,0,'placeholder_0_0','a:0:{}','Article'),(284,34,0,'placeholder_0_0','a:0:{}','Article'),(286,34,0,'placeholder_0_0','a:0:{}','Article'),(293,34,0,'placeholder_0_0','a:0:{}','Article'),(307,34,0,'placeholder_0_0','a:0:{}','Article'),(309,34,0,'placeholder_0_0','a:0:{}','Article'),(311,26,0,'placeholder_0_0','a:0:{}','Article'),(313,34,0,'placeholder_0_0','a:0:{}','Article'),(317,26,0,'placeholder_0_0','a:0:{}','Article'),(321,22,0,'placeholder_0_0','a:0:{}','Article'),(324,26,0,'placeholder_0_0','a:0:{}','Article'),(326,34,0,'placeholder_0_0','a:0:{}','Article'),(328,23,0,'placeholder_0_0','a:0:{}','Article'),(330,34,0,'placeholder_0_0','a:0:{}','Article'),(336,0,0,'placeholder_1_2',NULL,'Article'),(336,33,0,'placeholder_0_0','a:0:{}','Article'),(338,22,0,'placeholder_0_0','a:0:{}','Article'),(340,0,2,'placeholder_2_1',NULL,'Article'),(343,34,0,'placeholder_0_0','a:0:{}','Article'),(347,0,0,'placeholder_1_5',NULL,'Article'),(347,34,0,'placeholder_0_0','a:0:{}','Article'),(350,34,0,'placeholder_0_0','a:0:{}','Article'),(358,34,0,'placeholder_0_0','a:0:{}','Article'),(362,23,0,'placeholder_0_0','a:0:{}','Article'),(364,0,2,'placeholder_0_0',NULL,'Article'),(364,23,0,'placeholder_0_0','a:0:{}','Article'),(365,0,0,'placeholder_0_0',NULL,'Widget'),(367,0,0,'placeholder_3_2',NULL,'Widget'),(369,0,0,'placeholder_3_1',NULL,'Widget'),(369,24,1,'placeholder_3_1',NULL,'Widget'),(370,34,0,'placeholder_0_0','a:0:{}','Article'),(385,25,0,'placeholder_2_1',NULL,'Article'),(388,34,0,'placeholder_0_0','a:0:{}','Article'),(389,26,0,'placeholder_0_0','a:0:{}','Article'),(392,0,2,'placeholder_1_2',NULL,'Article'),(392,22,0,'placeholder_0_0','a:0:{}','Article'),(397,22,0,'placeholder_0_0','a:0:{}','Article'),(399,26,0,'placeholder_0_0','a:0:{}','Article'),(406,0,0,'placeholder_2_4',NULL,'Article'),(406,33,0,'placeholder_0_0','a:0:{}','Article'),(408,0,0,'placeholder_2_5',NULL,'Article'),(408,22,0,'placeholder_0_0','a:0:{}','Article'),(416,0,0,'placeholder_1_4',NULL,'Article'),(425,0,3,'placeholder_2_1',NULL,'Article'),(441,0,3,'placeholder_0_0',NULL,'Article'),(445,0,0,'placeholder_2_1',NULL,'Article'),(448,0,1,'placeholder_3_2',NULL,'Article'),(455,0,0,'placeholder_1_1',NULL,'Article'),(457,0,1,'placeholder_2_1',NULL,'Article'),(459,0,1,'placeholder_1_2',NULL,'Article'),(466,0,2,'placeholder_3_2',NULL,'Article'),(471,0,1,'placeholder_0_0',NULL,'Article'),(473,0,1,'placeholder_1_6',NULL,'Article'),(477,0,0,'placeholder_1_6',NULL,'Article'),(486,0,1,'placeholder_2_4',NULL,'Article'),(489,0,0,'placeholder_0_1',NULL,'Widget'),(489,25,0,'placeholder_0_1',NULL,'Widget'),(535,25,0,'placeholder_0_0',NULL,'Article'),(537,25,2,'placeholder_0_0',NULL,'Article'),(543,0,1,'placeholder_1_4',NULL,'Article'),(544,25,1,'placeholder_3_1',NULL,'Widget'),(545,0,2,'placeholder_1_6',NULL,'Widget'),(545,25,1,'placeholder_0_0',NULL,'Widget'),(546,0,2,'placeholder_3_4',NULL,'Widget'),(546,25,2,'placeholder_3_1',NULL,'Widget'),(567,0,0,'placeholder_3_4',NULL,'Widget'),(567,25,0,'placeholder_2_6',NULL,'Widget'),(568,25,0,'placeholder_0_8',NULL,'Widget'),(571,0,0,'placeholder_3_5',NULL,'Widget'),(584,0,3,'placeholder_3_2',NULL,'Album'),(585,0,0,'placeholder_3_6',NULL,'Album');
+INSERT INTO `content_positions` VALUES (186,25,0,'placeholder_1_6',NULL,'Widget',0),(229,25,3,'placeholder_0_0',NULL,'Widget',0),(236,0,1,'placeholder_3_4',NULL,'Widget',0),(236,25,0,'placeholder_3_1',NULL,'Widget',0),(237,0,1,'placeholder_3_6',NULL,'Widget',0),(237,24,0,'placeholder_3_2',NULL,'Widget',0),(240,0,0,'placeholder_3_3',NULL,'Widget',0),(240,24,0,'placeholder_3_1',NULL,'Widget',0),(242,22,0,'placeholder_0_0','a:0:{}','Article',0),(244,25,0,'placeholder_1_1',NULL,'Article',0),(248,22,0,'placeholder_0_0','a:0:{}','Article',0),(250,0,1,'placeholder_3_3',NULL,'Article',0),(250,34,0,'placeholder_0_0','a:0:{}','Article',0),(252,0,2,'placeholder_3_6',NULL,'Article',0),(252,34,0,'placeholder_0_0','a:0:{}','Article',0),(260,22,0,'placeholder_0_0','a:0:{}','Article',0),(268,0,2,'placeholder_3_3',NULL,'Article',0),(268,34,0,'placeholder_0_0','a:0:{}','Article',0),(270,34,0,'placeholder_0_0','a:0:{}','Article',0),(272,34,0,'placeholder_0_0','a:0:{}','Article',0),(280,0,0,'placeholder_2_2',NULL,'Article',0),(280,34,0,'placeholder_0_0','a:0:{}','Article',0),(282,34,0,'placeholder_0_0','a:0:{}','Article',0),(284,34,0,'placeholder_0_0','a:0:{}','Article',0),(286,34,0,'placeholder_0_0','a:0:{}','Article',0),(293,34,0,'placeholder_0_0','a:0:{}','Article',0),(307,34,0,'placeholder_0_0','a:0:{}','Article',0),(309,34,0,'placeholder_0_0','a:0:{}','Article',0),(311,26,0,'placeholder_0_0','a:0:{}','Article',0),(313,34,0,'placeholder_0_0','a:0:{}','Article',0),(317,26,0,'placeholder_0_0','a:0:{}','Article',0),(321,22,0,'placeholder_0_0','a:0:{}','Article',0),(324,26,0,'placeholder_0_0','a:0:{}','Article',0),(326,34,0,'placeholder_0_0','a:0:{}','Article',0),(328,23,0,'placeholder_0_0','a:0:{}','Article',0),(330,34,0,'placeholder_0_0','a:0:{}','Article',0),(336,0,0,'placeholder_1_2',NULL,'Article',0),(336,33,0,'placeholder_0_0','a:0:{}','Article',0),(338,22,0,'placeholder_0_0','a:0:{}','Article',0),(340,0,2,'placeholder_2_1',NULL,'Article',0),(343,34,0,'placeholder_0_0','a:0:{}','Article',0),(347,0,0,'placeholder_1_5',NULL,'Article',0),(347,34,0,'placeholder_0_0','a:0:{}','Article',0),(350,34,0,'placeholder_0_0','a:0:{}','Article',0),(358,34,0,'placeholder_0_0','a:0:{}','Article',0),(362,23,0,'placeholder_0_0','a:0:{}','Article',0),(364,0,2,'placeholder_0_0',NULL,'Article',0),(364,23,0,'placeholder_0_0','a:0:{}','Article',0),(365,0,0,'placeholder_0_0',NULL,'Widget',0),(367,0,0,'placeholder_3_2',NULL,'Widget',0),(369,0,0,'placeholder_3_1',NULL,'Widget',0),(369,24,1,'placeholder_3_1',NULL,'Widget',0),(370,34,0,'placeholder_0_0','a:0:{}','Article',0),(385,25,0,'placeholder_2_1',NULL,'Article',0),(388,34,0,'placeholder_0_0','a:0:{}','Article',0),(389,26,0,'placeholder_0_0','a:0:{}','Article',0),(392,0,2,'placeholder_1_2',NULL,'Article',0),(392,22,0,'placeholder_0_0','a:0:{}','Article',0),(397,22,0,'placeholder_0_0','a:0:{}','Article',0),(399,26,0,'placeholder_0_0','a:0:{}','Article',0),(406,0,0,'placeholder_2_4',NULL,'Article',0),(406,33,0,'placeholder_0_0','a:0:{}','Article',0),(408,0,0,'placeholder_2_5',NULL,'Article',0),(408,22,0,'placeholder_0_0','a:0:{}','Article',0),(416,0,0,'placeholder_1_4',NULL,'Article',0),(425,0,3,'placeholder_2_1',NULL,'Article',0),(441,0,3,'placeholder_0_0',NULL,'Article',0),(445,0,0,'placeholder_2_1',NULL,'Article',0),(448,0,1,'placeholder_3_2',NULL,'Article',0),(455,0,0,'placeholder_1_1',NULL,'Article',0),(457,0,1,'placeholder_2_1',NULL,'Article',0),(459,0,1,'placeholder_1_2',NULL,'Article',0),(466,0,2,'placeholder_3_2',NULL,'Article',0),(471,0,1,'placeholder_0_0',NULL,'Article',0),(473,0,1,'placeholder_1_6',NULL,'Article',0),(477,0,0,'placeholder_1_6',NULL,'Article',0),(486,0,1,'placeholder_2_4',NULL,'Article',0),(489,0,0,'placeholder_0_1',NULL,'Widget',0),(489,25,0,'placeholder_0_1',NULL,'Widget',0),(535,25,0,'placeholder_0_0',NULL,'Article',0),(537,25,2,'placeholder_0_0',NULL,'Article',0),(543,0,1,'placeholder_1_4',NULL,'Article',0),(544,25,1,'placeholder_3_1',NULL,'Widget',0),(545,0,2,'placeholder_1_6',NULL,'Widget',0),(545,25,1,'placeholder_0_0',NULL,'Widget',0),(546,0,2,'placeholder_3_4',NULL,'Widget',0),(546,25,2,'placeholder_3_1',NULL,'Widget',0),(567,0,0,'placeholder_3_4',NULL,'Widget',0),(567,25,0,'placeholder_2_6',NULL,'Widget',0),(568,25,0,'placeholder_0_8',NULL,'Widget',0),(571,0,0,'placeholder_3_5',NULL,'Widget',0),(584,0,3,'placeholder_3_2',NULL,'Album',0),(585,0,0,'placeholder_3_6',NULL,'Album',0);
 /*!40000 ALTER TABLE `content_positions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -524,6 +527,39 @@ INSERT INTO `contents_categories` VALUES (128,0,''),(130,0,''),(131,0,''),(133,0
 UNLOCK TABLES;
 
 --
+-- Table structure for table `frontpage_versions`
+--
+
+DROP TABLE IF EXISTS `frontpage_versions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `frontpage_versions` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `frontpage_id` bigint(20) unsigned DEFAULT NULL,
+  `name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `type` int(11) NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `publish_date` datetime DEFAULT NULL,
+  `params` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `category_id` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `frontpage_id` (`frontpage_id`),
+  KEY `category_id` (`category_id`),
+  CONSTRAINT `frontpage_id_id` FOREIGN KEY (`frontpage_id`) REFERENCES `frontpages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `frontpage_versions`
+--
+
+LOCK TABLES `frontpage_versions` WRITE;
+/*!40000 ALTER TABLE `frontpage_versions` DISABLE KEYS */;
+INSERT INTO `frontpage_versions` VALUES (0,NULL,'EMPTY',0,'2018-07-04 17:52:18',NULL,NULL,NULL);
+/*!40000 ALTER TABLE `frontpage_versions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `frontpages`
 --
 
@@ -531,16 +567,10 @@ DROP TABLE IF EXISTS `frontpages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `frontpages` (
-  `pk_frontpage` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `date` int(11) NOT NULL,
-  `category` bigint(20) unsigned NOT NULL,
-  `version` int(10) unsigned DEFAULT NULL,
-  `content_positions` longtext NOT NULL,
-  `promoted` tinyint(1) DEFAULT NULL,
-  `day_frontpage` tinyint(1) DEFAULT NULL,
-  `params` text NOT NULL COMMENT 'serialized params',
-  PRIMARY KEY (`pk_frontpage`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -668,31 +698,39 @@ INSERT INTO `menues` VALUES (1,'frontpage','','','a:1:{s:11:\"description\";s:0:
 UNLOCK TABLES;
 
 --
--- Table structure for table `newsletter_archive`
+-- Table structure for table `newsletters`
 --
 
-DROP TABLE IF EXISTS `newsletter_archive`;
+DROP TABLE IF EXISTS `newsletters`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `newsletter_archive` (
-  `pk_newsletter` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `data` text,
+CREATE TABLE `newsletters` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `type` int(11) NOT NULL DEFAULT '0',
+  `status` int(11) NOT NULL DEFAULT '0',
+  `title` varchar(512) NOT NULL,
+  `contents` text,
+  `recipients` text,
+  `schedule` text,
   `html` mediumtext,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `sent` varchar(255) NOT NULL,
-  PRIMARY KEY (`pk_newsletter`)
+  `updated` datetime DEFAULT CURRENT_TIMESTAMP,
+  `sent` datetime DEFAULT CURRENT_TIMESTAMP,
+  `sent_items` int(11) NOT NULL DEFAULT '0',
+  `template_id` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `newsletter_type` (`type`),
+  KEY `newsletter_template_id` (`template_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `newsletter_archive`
+-- Dumping data for table `newsletters`
 --
 
-LOCK TABLES `newsletter_archive` WRITE;
-/*!40000 ALTER TABLE `newsletter_archive` DISABLE KEYS */;
-/*!40000 ALTER TABLE `newsletter_archive` ENABLE KEYS */;
+LOCK TABLES `newsletters` WRITE;
+/*!40000 ALTER TABLE `newsletters` DISABLE KEYS */;
+/*!40000 ALTER TABLE `newsletters` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

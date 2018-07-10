@@ -12,7 +12,7 @@ namespace Tests\Libs\Smarty;
 /**
  * Defines test cases for SmartyCookieHintTest class.
  */
-class SmartyCookieHintTest extends \PHPUnit_Framework_TestCase
+class SmartyCookieHintTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

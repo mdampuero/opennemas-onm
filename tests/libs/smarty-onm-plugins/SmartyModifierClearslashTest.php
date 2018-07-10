@@ -12,7 +12,7 @@ namespace tests\libs\Smarty;
 /**
  * Defines test cases for SmartyUrl class.
  */
-class ModifierClearslashTest extends \PHPUnit_Framework_TestCase
+class ModifierClearslashTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

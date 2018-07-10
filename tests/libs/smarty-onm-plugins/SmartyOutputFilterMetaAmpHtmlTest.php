@@ -12,7 +12,7 @@ namespace Tests\Libs\Smarty;
 /**
  * Defines test cases for SmartyUrl class.
  */
-class SmartyOutputFilterMetaAmpHtml extends \PHPUnit_Framework_TestCase
+class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -23,6 +23,10 @@ class SmartyOutputFilterMetaAmpHtml extends \PHPUnit_Framework_TestCase
 
         $this->security = $this->getMockBuilder('Security')
             ->setMethods([ 'hasExtension' ])
+            ->getMock();
+
+        $this->requestStack = $this->getMockBuilder('RequestStack')
+            ->setMethods([ 'getCurrentRequest' ])
             ->getMock();
 
         $this->request = $this->getMockBuilder('Request')
@@ -70,6 +74,8 @@ class SmartyOutputFilterMetaAmpHtml extends \PHPUnit_Framework_TestCase
                 return $this->security;
             case 'router':
                 return $this->router;
+            case 'request_stack':
+                return $this->requestStack;
         }
 
         return null;
@@ -81,6 +87,10 @@ class SmartyOutputFilterMetaAmpHtml extends \PHPUnit_Framework_TestCase
      */
     public function testMetaAmpHtmlWithoutAmp()
     {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')
+            ->willReturn($this->request);
+
         $this->security->expects($this->once())->method('hasExtension')
             ->with('AMP_MODULE')->willReturn(false);
 
@@ -95,6 +105,10 @@ class SmartyOutputFilterMetaAmpHtml extends \PHPUnit_Framework_TestCase
      */
     public function testMetaAmpHtmlWhenAlreadyInAmp()
     {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')
+            ->willReturn($this->request);
+
         $this->security->expects($this->once())->method('hasExtension')
             ->with('AMP_MODULE')->willReturn(true);
 
@@ -112,6 +126,10 @@ class SmartyOutputFilterMetaAmpHtml extends \PHPUnit_Framework_TestCase
      */
     public function testMetaAmpHtmlWhenNoContent()
     {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')
+            ->willReturn($this->request);
+
         $this->security->expects($this->any())->method('hasExtension')
             ->with('AMP_MODULE')->willReturn(true);
 
@@ -137,6 +155,10 @@ class SmartyOutputFilterMetaAmpHtml extends \PHPUnit_Framework_TestCase
      */
     public function testMetaAmpHtmlWhenContent()
     {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')
+            ->willReturn($this->request);
+
         $this->security->expects($this->any())->method('hasExtension')
             ->with('AMP_MODULE')->willReturn(true);
 
@@ -177,5 +199,21 @@ class SmartyOutputFilterMetaAmpHtml extends \PHPUnit_Framework_TestCase
                 $this->smarty
             )
         );
+    }
+
+    /**
+     * Test plugin with no currentRequest
+     */
+    public function testEmptyResturnIfNoRequest()
+    {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn(null);
+
+        $output = '<html><head></head><body>Hello World!</body></html>';
+
+        $this->assertEquals($output, smarty_outputfilter_meta_amphtml(
+            $output,
+            $this->smarty
+        ));
     }
 }

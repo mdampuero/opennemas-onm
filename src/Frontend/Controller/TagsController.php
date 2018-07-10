@@ -220,8 +220,10 @@ class TagsController extends Controller
      */
     public static function getInnerAds($category = 'home')
     {
-        $category       = !isset($category) || ($category == 'home') ? 0 : $category;
-        $positions      = [ 7, 9, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193 ];
+        $category = !isset($category) || ($category == 'home') ? 0 : $category;
+
+        $positions      = getService('core.helper.advertisement')
+            ->getPositionsForGroup('article_inner', [ 7, 9 ]);
         $advertisements = getService('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
 

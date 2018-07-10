@@ -108,40 +108,53 @@ jQuery(document).ready(function($) {
                       <label for="html" title="{t}HTML or Javascript code{/t}">{t}HTML or Javascript code{/t}</label>
                     </div>
                   </div>
-                  {if !empty($server_url)}
-                  <div class="col-sm-3">
+                  {if !empty($extra['openx_server_url'])}
+                  <div class="col-sm-2">
                     <div class="radio">
                       <input id="open-x" name="with_script" ng-model="with_script"  {if $with_script == 2}checked{/if} type="radio" value="2">
                       <label for="open-x" title="{t}OpenX{/t}">{t}OpenX{/t}</label>
                     </div>
                   </div>
                   {/if}
-                  <div class="col-sm-3">
+                  <div class="col-sm-2">
                     <div class="radio">
                       <input id="dfp" name="with_script" ng-model="with_script" {if $with_script == 3}checked{/if} type="radio" value="3">
                       <label for="dfp" title="{t}Google DFP{/t}">{t}Google DFP{/t}</label>
                     </div>
                   </div>
+                  {if !empty($extra['smart_server_url'])}
+                  <div class="col-sm-2">
+                    <div class="radio">
+                      <input id="smart" name="with_script" ng-model="with_script" {if $with_script == 4}checked{/if} type="radio" value="4">
+                      <label for="smart" title="{t}Smart{/t}">{t}Smart{/t}</label>
+                    </div>
+                  </div>
+                  {/if}
                 </div>
               </div>
               <div class="form-group ng-cloak">
                 <div ng-show="!with_script || with_script == 0">
                   {include file="advertisement/partials/advertisement_images.tpl"}
                 </div>
-                <div  ng-show="with_script == 1">
+                <div ng-show="with_script == 1">
                   <textarea name="script" id="script" class="form-control" rows="10" ng-model="script">{$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
                 </div>
-                <div  ng-show="'{$server_url}' && with_script == 2">
+                <div ng-show="'{$extra['openx_server_url']}' && with_script == 2">
                   <label for="openx_zone">{t}OpenX zone id{/t}</label>
                   <input type="text" name="openx_zone_id" value="{$advertisement->params['openx_zone_id']}">
                   <div class="help-block"><small>{t 1=$server_url}OpenX/Revive Ad server uses an id to identify an advertisement. Please fill the zone id from your OpenX/Revive server %1{/t}</small></div>
                 </div>
-                <div  ng-show="with_script == 3">
+                <div ng-show="with_script == 3">
                   <label for="googledfp_zone_id">
                     {t}Google DFP unit id{/t}
                   </label>
                   <input class="form-control" type="text" name="googledfp_unit_id" ng-model="googledfp_unit_id" value="{$advertisement->params['googledfp_unit_id']}">
-                  <div class="help-block">{t 1=$server_url}Google DFP uses an unit ID to identify an advertisement. Please fill the zone id from your Google DFP panel{/t}</div>
+                  <div class="help-block"><small>{t 1=$server_url}Google DFP uses an unit ID to identify an advertisement. Please fill the zone id from your Google DFP panel{/t}</small></div>
+                </div>
+                <div ng-show="'{$extra['smart_server_url']}' && with_script == 4">
+                  <label for="smart_format_id">{t}Format ID{/t}</label>
+                  <input type="text" name="smart_format_id" value="{$advertisement->params['smart_format_id']}">
+                  <div class="help-block"><small>{t 1=$server_url}Smart Ad server uses format ID to identify the advertisement format{/t}</small></div>
                 </div>
               </div>
               <div class="form-group" id="div_url1" ng-show="with_script == 0">

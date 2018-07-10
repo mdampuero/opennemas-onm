@@ -67,6 +67,16 @@ class GlobalVariables implements \ArrayAccess
     }
 
     /**
+     * Returns the current advertisement group name for a page.
+     *
+     * @return string The advertisement group name.
+     */
+    public function getAdvertisementGroup()
+    {
+        return $this->container->get('core.helper.advertisement')->getGroup();
+    }
+
+    /**
      * Returns the service container.
      *
      * @return ServiceContainer The service container.

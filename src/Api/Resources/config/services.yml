@@ -3,6 +3,10 @@ services:
         class:     Api\Service\V1\AuthorService
         arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
 
+    api.service.newsletter:
+        class:     Api\Service\V1\NewsletterService
+        arguments: [ '@service_container', 'Common\ORM\Entity\Newsletter' ]
+
     api.service.subscriber:
         class:     Api\Service\V1\SubscriberService
         arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
