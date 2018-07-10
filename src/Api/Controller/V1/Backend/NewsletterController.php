@@ -138,6 +138,7 @@ class NewsletterController extends Controller
                 'newsletter_maillist',
                 'newsletter_subscriptionType',
                 'actOn.marketingLists',
+                'actOn.formPage',
             ]);
 
         return new JsonResponse([ 'settings' => $settings ]);
@@ -247,6 +248,9 @@ class NewsletterController extends Controller
 
         $settings['actOn.marketingLists'] = $settings['actOn_marketingLists'];
         unset($settings['actOn_marketingLists']);
+
+        $settings['actOn.formPage'] = $settings['actOn_formPage'];
+        unset($settings['actOn_formPage']);
 
         try {
             $this->get('orm.manager')->getDataSet('Settings', 'instance')
