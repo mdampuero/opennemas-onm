@@ -13,7 +13,7 @@ use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Intl;
+use Common\Core\Component\Validator\Validator;
 
 /**
  * Lists and displays tags.
@@ -89,8 +89,7 @@ class TagController extends Controller
      * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      *
-     * @Security("hasExtension('TAG_MANAGER')
-     *     and hasPermission('TAG_ADMIN')")
+     * @Security("hasPermission('TAG_ADMIN')")
      */
     public function listAction(Request $request)
     {
@@ -196,26 +195,22 @@ class TagController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
      */
-    public function validatorAction(Request $request)
+    public function validNewTagAction(Request $request)
     {
         $ts   = $this->get('api.service.tag');
         $text = $request->query->get('text', null);
-        $text = $ts->createSearchableWord($text);
         $msg  = $this->get('core.messenger');
         if (empty($text)) {
             $msg->add(_('Invalid tag'), 'success');
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $languageId = $request->query->get('language_id', null);
-
-        $tags = (is_null($text) || is_null($languageId)) ? null : $ts->validateTags($languageId, $text);
+        $languageId = $request->query->get('languageId', null);
+        $valid      = !is_null($languageId) && $ts->isValidNewTag($text, $languageId);
 
         return new JsonResponse([
-            'items' => $tags
+            'valid' => $valid
         ]);
     }
 
@@ -225,8 +220,6 @@ class TagController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
      */
     public function suggesterAction(Request $request, $languageId, $tag)
     {
@@ -239,11 +232,82 @@ class TagController extends Controller
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $response = $ts->getList('language_id = "' . $languageId . '" and slug ~ "' . $tagAux . '" limit 25');
+        $response = $ts->getList('language_id = "' . $languageId . '" and slug ~ "' . $tagAux . '%" limit 25');
 
         return new JsonResponse([
             'items' => $ts->responsify($response['items'])
         ]);
+    }
+
+    /**
+     * Get suggested tags for some word.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function autoSuggesterAction(Request $request)
+    {
+        $tags       = $request->query->get('tags', null);
+        $languageId = $request->query->get('languageId', null);
+        $ts         = $this->get('api.service.tag');
+        return new JsonResponse([
+            'items' => $ts->getTagsAndNewTags($languageId, $tags)
+        ]);
+    }
+
+    /**
+     * Get the tag config.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('TAG_ADMIN')")
+     */
+    public function showConfAction()
+    {
+        return new JsonResponse([
+            'blacklist_tag' => $this->get('core.validator')
+                ->getConfig(Validator::BLACKLIST_RULESET_TAGS)
+        ]);
+    }
+
+    /**
+     * Update tag config.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('TAG_ADMIN')")
+     */
+    public function updateConfAction(Request $request)
+    {
+        $blacklistConf = $request->request->all();
+
+        if (!is_array($blacklistConf) ||
+            !array_key_exists('blacklist_tag', $blacklistConf) ||
+            empty($blacklistConf['blacklist_tag'])
+        ) {
+            $blacklistConf = ['blacklist_tag' => null];
+        }
+
+        $msg = $this->get('core.messenger');
+        try {
+            $this->get('core.validator')->setConfig(
+                Validator::BLACKLIST_RULESET_TAGS,
+                $blacklistConf['blacklist_tag']
+            );
+            $msg->add(_('Item saved successfully'), 'success');
+        } catch (\Exception $e) {
+            $msg->add(
+                _('Unable to save settings'),
+                'error'
+            );
+            $this->get('error.log')->error($e->getMessage());
+        }
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**

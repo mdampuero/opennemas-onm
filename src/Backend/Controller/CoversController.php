@@ -126,6 +126,11 @@ class CoversController extends Controller
             return $this->redirect($this->generateUrl('admin_kioskos'));
         }
 
+        $auxTagIds      = $cover->getContentTags($cover->id);
+        $cover->tag_ids = array_key_exists($cover->id, $auxTagIds) ?
+            $auxTagIds[$cover->id] :
+            [];
+
         if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
             && !$cover->isOwner($this->getUser()->id)
         ) {
@@ -139,9 +144,13 @@ class CoversController extends Controller
             );
         }
 
+        $ls = $this->get('core.locale');
         return $this->render('covers/new.tpl', [
             'cover'          => $cover,
             'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
+            'locale'         => $ls->getRequestLocale('frontend'),
+            'tags'           => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($cover->tag_ids)['items']
         ]);
     }
 
@@ -158,16 +167,20 @@ class CoversController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
-            return $this->render('covers/new.tpl');
+            $ls = $this->get('core.locale');
+            return $this->render(
+                'covers/new.tpl',
+                [
+                    'locale'         => $ls->getLocale('frontend'),
+                    'tags'           => []
+                ]
+            );
         }
 
         $postInfo = $request->request;
 
         $coverData = [
             'title'          => $postInfo->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                $postInfo->filter('metadata', null, FILTER_SANITIZE_STRING)
-            ),
             'type'           => (int) $postInfo->getDigits('type', 0),
             'category'       => (int) $postInfo->getDigits('category'),
             'content_status' => (int) $postInfo->getDigits('content_status', 1),
@@ -175,6 +188,7 @@ class CoversController extends Controller
             'date'           => $postInfo->filter('date', null, FILTER_SANITIZE_STRING),
             'price'          => $postInfo->filter('price', null, FILTER_SANITIZE_NUMBER_FLOAT),
             'fk_publisher'   => (int) $this->getUser()->id,
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         $dateTime = new \DateTime($coverData['date']);
@@ -268,9 +282,6 @@ class CoversController extends Controller
                 'title'          => $postReq->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'date'           => $postReq->filter('date', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'cover'          => $postReq->filter('cover', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                    $postReq->filter('metadata', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES)
-                ),
                 'price'          => (float) $postReq
                     ->filter('price', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'content_status' => $postReq->getDigits('content_status', 0),
@@ -280,6 +291,7 @@ class CoversController extends Controller
                 'name'           => $cover->name,
                 'thumb_url'      => $cover->thumb_url,
                 'fk_user_last_editor' => $this->getUser()->id,
+                'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
             ];
 
             if (!$request->request->get('cover') && !empty($cover->name)) {

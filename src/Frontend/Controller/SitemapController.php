@@ -56,15 +56,20 @@ class SitemapController extends Controller
         ) {
             // Fetch contents
             $contents = $this->fetchContents([]);
+            $tags     = [];
 
             // Remove external articles
             foreach ($contents as $key => &$content) {
                 if (!empty($content->params['bodyLink'])) {
                     unset($contents[$key]);
+                } else {
+                    $tags = array_merge($content->tag_ids, $tags);
                 }
             }
-
-            $this->view->assign(['contents' => $contents]);
+            $this->view->assign([
+                'contents' => $contents,
+                'tags'     => $this->getTags($tags)
+            ]);
         }
 
         return $this->buildResponse($format, $cacheID, 'web');
@@ -92,7 +97,8 @@ class SitemapController extends Controller
             $contents = $this->fetchContents([]);
 
             // Fetch images and videos from contents
-            $er = getService('entity_repository');
+            $er   = getService('entity_repository');
+            $tags = [];
             foreach ($contents as $key => &$content) {
                 if (!empty($content->params['bodyLink'])) {
                     unset($contents[$key]);
@@ -112,11 +118,14 @@ class SitemapController extends Controller
                 } elseif (!empty($content->fk_video2)) {
                     $content->video = $er->find('Video', $content->fk_video2);
                 }
+                $tags = array_merge($content->tag_ids, $tags);
             }
 
             $this->view->assign([
                 'contents'   => $contents,
-                'googleNews' => $this->get('setting_repository')->get('google_news_name'),
+                'googleNews' => $this->get('setting_repository')
+                    ->get('google_news_name'),
+                'tags'       => $this->getTags($tags)
             ]);
         }
 
@@ -199,8 +208,15 @@ class SitemapController extends Controller
             $contents = $this->fetchContents([
                 'content_type_name' => [['value' => 'video']]
             ]);
+            $tags     = [];
+            foreach ($contents as $content) {
+                $tags = array_merge($content->tag_ids, $tags);
+            }
 
-            $this->view->assign(['contents' => $contents]);
+            $this->view->assign([
+                'contents' => $contents,
+                'tags'     => $this->getTags($tags)
+            ]);
         }
 
         return $this->buildResponse($format, $cacheID, 'video');
@@ -284,5 +300,19 @@ class SitemapController extends Controller
         $contents = $cm->filterBlocked($contents);
 
         return $contents;
+    }
+
+    /**
+     *  Method for recover all tags for the content list
+     *
+     * @param array $tagIds List of ids for tags
+     *
+     * @return array List of tags for the contents
+     */
+    public function getTags($tagIds)
+    {
+        $tagIds = array_unique($tagIds);
+        return $this->get('api.service.tag')
+            ->getListByIdsKeyMapped($tagIds)['items'];
     }
 }

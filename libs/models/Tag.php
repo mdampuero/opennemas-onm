@@ -53,39 +53,36 @@ class Tag
     /**
      * Method to validate a list of tags
      *
-     * @param string $languageId id for the language
      * @param mixed  $tags       list of all tags to validate
+     * @param string $languageId id for the language
      *
      * @return mixed List with all tags validate against DB
      */
-    public static function validateTags($languageId, $tags)
+    public static function getTagsBySlug($tags, $languageId = null)
     {
         if (empty($tags)) {
             return [];
         }
 
         $sqlTags = '';
-        $params  = [$languageId];
+        $params  = [];
 
         if (is_array($tags)) {
             $sqlTags = ' IN (' . substr(str_repeat(', ?', count($tags)), 2) . ')';
-            $ts      = getService('api.service.tag');
-            $params  = array_merge(
-                $params,
-                array_map(
-                    function ($tag) use ($ts) {
-                        return $ts->createSearchableWord($tag);
-                    },
-                    $tags
-                )
-            );
+            $params  = $tags;
         } else {
             $sqlTags  = ' = ?';
             $params[] = $tags;
         }
 
         $sql = 'SELECT id, name, language_id, slug FROM tags '
-            . 'WHERE language_id = ? AND slug ' . $sqlTags . ' LIMIT 25';
+            . 'WHERE slug ' . $sqlTags;
+
+        if (!empty($languageId)) {
+            $sql     .= ' AND language_id = ?';
+            $params[] = $languageId;
+        }
+        $sql .= ' LIMIT 25';
 
         $rs = getService('dbal_connection')->fetchAll($sql, $params);
 
@@ -99,6 +96,6 @@ class Tag
             $validateTags[$tagAux->id] = $tagAux;
         }
 
-        return $validateTags;
+        return ['items' => $validateTags];
     }
 }

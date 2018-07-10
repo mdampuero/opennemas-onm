@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form action="{if isset($page->id)}{url name=backend_static_page_update id=$page->id}{else}{url name=backend_static_page_save}{/if}" method="POST" ng-controller="InnerCtrl" id="formulario">
+  <form action="{if isset($page->id)}{url name=backend_static_page_update id=$page->id}{else}{url name=backend_static_page_save}{/if}" method="POST" ng-controller="StaticPageCtrl" ng-init="init({json_encode($page->tag_ids)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})" id="formulario" >
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -108,6 +108,12 @@
                 </div>
               </div>
               {/acl}
+              <div class="form-group">
+                <label for="metadata" class="form-label">{t}Tags{/t}</label>
+                <div class="controls">
+                  <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="checkNewTags" get-suggested-tags="getSuggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -122,9 +128,6 @@
         $(document).ready(function($){
           var previous = null;
           $('#title').on('change', function() {
-            if (!$('#metadata').val()) {
-              fill_tags($('#title').val(), '#metadata', '{url name=admin_utils_calculate_tags}');
-            }
 
             var slugy = $.trim($('#slug').val());
             if ((slugy.length <= 0) && (previous !== slugy)) {

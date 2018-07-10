@@ -211,7 +211,9 @@ class AmpController extends Controller
             'time'                  => '12345',
             'x-cache-for'           => '+1 day',
             'x-cacheable'           => empty($token),
-            'x-tags'                => 'article-amp,article,' . $article->id
+            'x-tags'                => 'article-amp,article,' . $article->id,
+            'tags'                  => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($article->tag_ids)['items']
         ]);
     }
 

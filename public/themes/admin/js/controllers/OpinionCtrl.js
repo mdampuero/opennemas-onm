@@ -10,6 +10,24 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
     /**
+     * @function init
+     * @memberOf OpinionCtrl
+     *
+     * @description
+     * Method to init the opinion controller
+     *
+     * @param {object} opinion  Opinion to edit
+     * @param {String} locale   Locale for the opinion
+     * @param {Array}  tags     Array with all the tags needed for the opinion
+     */
+    $scope.init = function(opinion, locale, tags) {
+      $scope.tag_ids = opinion !== null ? opinion.tag_ids : [];
+      $scope.locale  = locale;
+      $scope.tags    = tags;
+      $scope.watchTagIds('title');
+    };
+
+    /**
      * Opens a modal with the preview of the article.
      *
      * @param {String} previewUrl    The URL to generate the preview.
@@ -22,7 +40,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       CKEDITOR.instances.body.updateElement();
       CKEDITOR.instances.summary.updateElement();
 
-      var data = {'contents': $('#formulario').serializeArray()};
+      var data = { contents: $('#formulario').serializeArray() };
       var url  = routing.generate(previewUrl);
 
       $http.post(url, data).success(function() {
@@ -58,6 +76,18 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     };
 
     /**
+     * @function getTagsAutoSuggestedFields
+     * @memberOf OpinionCtrl
+     *
+     * @description
+     *   Method to method to retrieve th title for the autosuggested words
+     *
+     */
+    $scope.getTagsAutoSuggestedFields = function() {
+      return $scope.title;
+    };
+
+    /**
      * Updates scope when photo1 changes.
      *
      * @param array nv The new values.
@@ -69,15 +99,15 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       if ($scope.photo1) {
         $scope.img1 = $scope.photo1.id;
 
-        if (angular.isUndefined($scope.img1_footer)
-          || angular.isUndefined(ov)
-          || nv.id !== ov.id
+        if (angular.isUndefined($scope.img1_footer) ||
+          angular.isUndefined(ov) ||
+          nv.id !== ov.id
         ) {
           $scope.img1_footer = $scope.photo1.description;
         }
 
         // Set inner image if empty
-        if (angular.isUndefined($scope.photo2) && nv != ov) {
+        if (angular.isUndefined($scope.photo2) && nv !== ov) {
           $scope.photo2 = $scope.photo1;
         }
       }
@@ -95,9 +125,9 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       if ($scope.photo2) {
         $scope.img2 = $scope.photo2.id;
 
-        if (angular.isUndefined($scope.img2_footer)
-          || angular.isUndefined(ov)
-          || nv.id !== ov.id
+        if (angular.isUndefined($scope.img2_footer) ||
+          angular.isUndefined(ov) ||
+          nv.id !== ov.id
         ) {
           $scope.img2_footer = $scope.photo2.description;
         }
@@ -116,9 +146,9 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       if ($scope.photo3) {
         $scope.imageHome = $scope.photo3.id;
 
-        if (angular.isUndefined($scope.imageHomeFooter)
-          || angular.isUndefined(ov)
-          || nv.id !== ov.id
+        if (angular.isUndefined($scope.imageHomeFooter) ||
+          angular.isUndefined(ov) ||
+          nv.id !== ov.id
         ) {
           $scope.imageHomeFooter = $scope.photo3.description;
         }
@@ -140,7 +170,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
         $scope.footer_video = $scope.video1.description;
 
         // Set inner video if empty
-        if (angular.isUndefined($scope.video2) && nv != ov) {
+        if (angular.isUndefined($scope.video2) && nv !== ov) {
           $scope.video2 = $scope.video1;
         }
       }
@@ -152,7 +182,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @param array nv The new values.
      * @param array ov The old values.
      */
-    $scope.$watch('video2', function(nv, ov) {
+    $scope.$watch('video2', function() {
       $scope.fk_video2     = null;
       $scope.footer_video2 = null;
 
@@ -170,18 +200,20 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      */
     $scope.$watch('relatedInFrontpage', function(nv, ov) {
       // Set inner related if empty or equal to front
-      if ((!$scope.relatedInInner||
-        $scope.relatedInner == $scope.relatedFront) && nv != ov
+      if ((!$scope.relatedInInner ||
+        $scope.relatedInner === $scope.relatedFront) && nv !== ov
       ) {
         $scope.relatedInInner = angular.copy(nv);
       }
 
-      var items           = [];
       $scope.relatedFront = [];
+      var items           = [];
 
       if (nv instanceof Array) {
         for (var i = 0; i < nv.length; i++) {
-          items.push({ id: nv[i].id, position: i, content_type: nv[i].content_type_name });
+          items.push({
+            id: nv[i].id, position: i, content_type: nv[i].content_type_name
+          });
         }
       }
 
@@ -194,13 +226,15 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @param array nv The new values.
      * @param array ov The old values.
      */
-    $scope.$watch('relatedInInner', function(nv, ov) {
-      var items           = [];
+    $scope.$watch('relatedInInner', function(nv) {
       $scope.relatedInner = [];
+      var items           = [];
 
       if (nv instanceof Array) {
         for (var i = 0; i < nv.length; i++) {
-          items.push({ id: nv[i].id, position: i, content_type: nv[i].content_type_name });
+          items.push({
+            id: nv[i].id, position: i, content_type: nv[i].content_type_name
+          });
         }
       }
 
@@ -213,19 +247,20 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @param array nv The new values.
      * @param array ov The old values.
      */
-    $scope.$watch('relatedInHome', function(nv, ov) {
-      var items          = [];
+    $scope.$watch('relatedInHome', function(nv) {
       $scope.relatedHome = [];
+      var items          = [];
 
       if (nv instanceof Array) {
         for (var i = 0; i < nv.length; i++) {
-          items.push({ id: nv[i].id, position: i, content_type: nv[i].content_type_name });
+          items.push({
+            id: nv[i].id, position: i, content_type: nv[i].content_type_name
+          });
         }
       }
 
       $scope.relatedHome = angular.toJson(items);
     }, true);
-
 
     /**
      * Updates the model when galleryForFrontpage changes.
@@ -233,7 +268,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @param array nv The new values.
      * @param array ov The old values.
      */
-    $scope.$watch('galleryForFrontpage', function(nv, ov) {
+    $scope.$watch('galleryForFrontpage', function(nv) {
       delete $scope.withGallery;
 
       if (nv) {
@@ -247,7 +282,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @param array nv The new values.
      * @param array ov The old values.
      */
-    $scope.$watch('galleryForInner', function(nv, ov) {
+    $scope.$watch('galleryForInner', function(nv) {
       delete $scope.withGalleryInt;
 
       if (nv) {
@@ -261,13 +296,12 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @param array nv The new values.
      * @param array ov The old values.
      */
-    $scope.$watch('galleryForHome', function(nv, ov) {
+    $scope.$watch('galleryForHome', function(nv) {
       delete $scope.withGalleryHome;
 
       if (nv) {
         $scope.withGalleryHome = nv.id;
       }
     }, true);
-
   }
 ]);

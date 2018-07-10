@@ -46,6 +46,7 @@
       @Common/src/webarch/css/magic_space.css,
       @Common/src/angular-dynamic-image/less/main.less,
       @Common/src/angular-onm-pagination/less/main.less,
+      @Common/src/angular-tag/less/main.less,
       @Common/src/sidebar/less/main.less,
       @Common/src/opennemas-webarch/css/layout/*,
       @Common/src/photo-editor/css/photo-editor.css,
@@ -81,6 +82,10 @@
         save: '{t}save{/t}',
         reset: '{t}reset{/t}',
         apply: '{t}apply{/t}'
+      };
+      var tagTranlations = {
+        reload: '{t}Reload{/t}',
+        suggestedTag: '{t}Suggested tags{/t}',
       };
     </script>
   {/block}
@@ -569,6 +574,7 @@
       @Common/src/angular-picker/js/picker.js,
       @Common/src/angular-picker/js/content-picker.js,
       @Common/src/angular-picker/js/media-picker.js,
+      @Common/src/angular-tag/js/onm-tag.js,
       @Common/src/angular-query-manager/query-manager.js,
       @Common/src/angular-renderer/renderer.js,
       @Common/src/angular-repeat-finish/repeat-finish.js,

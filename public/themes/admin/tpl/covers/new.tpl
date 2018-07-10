@@ -9,10 +9,6 @@
           minDate: '{$cover->created|default:$smarty.now|date_format:"%Y-%m-%d"}'
         });
 
-        $('#title').on('change', function(e, ui) {
-          fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
-        });
-
         $('.fileinput').fileinput({
           name: 'cover',
           uploadtype:'image'
@@ -23,7 +19,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if !empty($cover->id)}{url name=admin_kiosko_update id=$cover->id}{else}{url name=admin_kiosko_create}{/if}" method="POST"  enctype="multipart/form-data">
+<form action="{if !empty($cover->id)}{url name=admin_kiosko_update id=$cover->id}{else}{url name=admin_kiosko_create}{/if}" method="POST" ng-controller="CoverCtrl" ng-init="init({json_encode($cover)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})"  enctype="multipart/form-data">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -66,7 +62,7 @@
               <div class="form-group">
                 <label for="title" class="form-label">{t}Title{/t}</label>
                 <div class="controls">
-                  <input type="text" id="title" name="title" value="{$cover->title|default:""}" required class="form-control"/>
+                  <input type="text" id="title" name="title" ng-model="title" value="{$cover->title|default:""}" required class="form-control"/>
                 </div>
               </div>
               <div class="form-group">
@@ -162,7 +158,7 @@
                 <label for="metadata" class="form-label">{t}Keywords{/t}</label>
                 <span class="help">{t}List of words separated by commas{/t}.</span>
                 <div class="controls">
-                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="text" value="{$cover->metadata|default:""}"/>
+                  <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="checkNewTags" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
                 </div>
               </div>
             </div>

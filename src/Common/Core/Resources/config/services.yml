@@ -112,7 +112,7 @@ services:
 
     core.helper.structured_data:
         class:     Common\Core\Component\Helper\StructuredData
-        arguments: [ '@setting_repository' ]
+        arguments: [ '@setting_repository', '@api.service.tag' ]
 
     core.helper.subscription:
         class:     Common\Core\Component\Helper\SubscriptionHelper
@@ -215,10 +215,6 @@ services:
     core.locale:
         class:     Common\Core\Component\Locale\Locale
         arguments: [ '%core.locale.available%', '%core.locale.path%' ]
-
-    core.manager.tag:
-        class:     Common\Core\Component\Tag\TagManager
-        arguments: [ '@orm.connection.instance', '@cache' ]
 
     core.renderer.advertisement:
         class:     Common\Core\Component\Renderer\AdvertisementRenderer

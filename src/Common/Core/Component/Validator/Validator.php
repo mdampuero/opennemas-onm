@@ -16,6 +16,7 @@ class Validator
 {
     // List of ruleset names
     const BLACKLIST_RULESET_COMMENTS = 'comment';
+    const BLACKLIST_RULESET_TAGS     = 'tag';
 
     /**
      * The settings repository
@@ -59,15 +60,47 @@ class Validator
         $constants       = $classReflection->getConstants();
 
         $validRuleSet = in_array($ruleName, $constants);
-        $methodName   = 'validate' . ucfirst($ruleName);
-        if ($validRuleSet && method_exists($this, $methodName)) {
-            return $this->{$methodName}($entity);
+        $methodName   = 'get' . ucfirst($ruleName) . 'Constraint';
+
+        if (!$validRuleSet || !method_exists($this, $methodName)) {
+            throw new \InvalidArgumentException(sprintf(
+                "The ruleset '%s' is not valid",
+                $ruleName
+            ));
         }
 
-        throw new \InvalidArgumentException(sprintf(
-            "The ruleset '%s' is not valid",
-            $ruleName
-        ));
+        $violations = $this->validator->validate(
+            $entity,
+            $this->{$methodName}($entity) //getting the constrains to validate
+        );
+
+        if (count($violations) > 0) {
+            $errors = [];
+
+            $type = 'normal';
+            foreach ($violations as $el) {
+                if ($el->getCode() !== OnmAssert\BlacklistWords::BLACKLIST_WORD_ERROR) {
+                    $type = 'fatal';
+                }
+
+                $errors[] = $el->getMessage();
+            }
+
+            return [
+                'type' => $type,
+                'errors' => $errors
+            ];
+        }
+
+        return [];
+
+
+
+        foreach ($violations as $el) {
+            $errors[] = $el->getMessage();
+        }
+
+        return $errors;
     }
 
     /**
@@ -94,13 +127,11 @@ class Validator
     }
 
     /**
-     * Validates comments given an array of data
+     * Get the constrains for comments
      *
-     * @param array $data the comment data
-     *
-     * @return array the list of violations
+     * @return Collection Assert collection for comments
      **/
-    private function validateComment($data)
+    private function getCommentConstraint($data)
     {
         $config = $this->getConfig(self::BLACKLIST_RULESET_COMMENTS);
 
@@ -143,29 +174,33 @@ class Validator
             ];
         }
 
-        $constraint = new Assert\Collection($constraintMap);
+        return new Assert\Collection($constraintMap);
+    }
 
-        $violations = $this->validator->validate($data, $constraint);
 
+    /**
+     * Get the constrains for tags
+     *
+     * @return Collection Assert collection for tags
+     **/
+    private function getTagConstraint($data)
+    {
+        $config = $this->getConfig(self::BLACKLIST_RULESET_TAGS);
 
-        if (count($violations) > 0) {
-            $errors = [];
-
-            $type = 'normal';
-            foreach ($violations as $el) {
-                if ($el->getCode() !== OnmAssert\BlacklistWords::BLACKLIST_WORD_ERROR) {
-                    $type = 'fatal';
-                }
-
-                $errors[] = $el->getMessage();
-            }
-
-            return [
-                'type' => $type,
-                'errors' => $errors
-            ];
-        }
-
-        return [];
+        return new Assert\Collection([
+            'name' => [
+                new Assert\NotBlank([
+                    'message' => _('Please provide a valid tag')
+                ]),
+                new OnmAssert\BlacklistWords([
+                    'words'   => $config,
+                    'message' => _('Your tag has invalid words')
+                ]),
+                new Assert\Length([
+                    'min'        => 2,
+                    'minMessage' => _('Your tag is too short')
+                ])
+            ]
+        ]);
     }
 }

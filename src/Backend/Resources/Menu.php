@@ -81,7 +81,7 @@ $menuXml = [
                 'title'       => _('Tags'),
                 'link'        => url('backend_tags_list'),
                 'icon'        => 'fa fa-tags',
-                'module_name' => 'TAG_MANAGER',
+                // 'module_name' => 'TAG_MANAGER',
                 'privilege'   => 'TAG_ADMIN',
             ],
         ],

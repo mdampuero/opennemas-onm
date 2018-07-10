@@ -79,6 +79,14 @@ class BlacklistWordsValidator extends ConstraintValidator
             $regexp = trim($regexp);
             if (empty($regexp)) {
                 continue;
+            } elseif (substr($regexp, 0, 1) !== '/' ||
+                substr($regexp, -1) !== '/'
+            ) {
+                $regexp = '\b' . $regexp . '\b';
+            } elseif (substr($regexp, 0, 1) === '/' &&
+                substr($regexp, -1) === '/'
+            ) {
+                $regexp = substr($regexp, 1, -1);
             }
 
             $cleanRegexp = '@' . trim(str_replace('@', '\@', $regexp)) . '@m';

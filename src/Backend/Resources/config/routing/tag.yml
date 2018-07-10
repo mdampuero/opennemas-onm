@@ -3,3 +3,9 @@ backend_tags_list:
     defaults: { _controller  : BackendBundle:Tag:list }
     options:
         expose: true
+
+backend_tags_config:
+    path:     /tags/config
+    defaults: { _controller  : BackendBundle:Tag:config }
+    options:
+        expose: true

@@ -44,17 +44,19 @@ class TagsController extends Controller
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('tag/index.tpl', $cacheId)
         ) {
-            $fm      = $this->get('data.manager.filter');
-            $t       = $this->get('core.manager.tag')->findAll();
+            $fm = $this->get('data.manager.filter');
+            $t  = $this->get('api.service.tag')
+                ->getTagsAssociatedCertainContentsTypes([1]);
+
             $letters = range('a', 'z');
 
             foreach ($t as $tag) {
-                if (is_numeric($tag[0])) {
+                if (is_numeric($tag->name[0])) {
                     $tags['#'][] = $tag;
                     continue;
                 }
 
-                $normalized = $fm->set($tag)->filter('normalize')->get();
+                $normalized = $fm->set($tag->name)->filter('normalize')->get();
 
                 if (in_array($normalized[0], $letters)) {
                     $tags[$normalized[0]][] = $tag;
@@ -63,6 +65,7 @@ class TagsController extends Controller
 
                 $tags['*'][] = $tag;
             }
+            ksort($tags);
         }
 
         list($positions, $advertisements) = $this->getInnerAds();
@@ -86,11 +89,41 @@ class TagsController extends Controller
     public function tagsAction(Request $request)
     {
         $tagName = strip_tags($request->query->filter('tag_name', '', FILTER_SANITIZE_STRING));
-        $tagName = \Onm\StringUtils::normalize($tagName);
+        $tagName = $this->get('api.service.tag')->createSearchableWord($tagName);
         $page    = $request->query->getDigits('page', 1);
 
         if ($page > 1) {
             $page = 2;
+        }
+
+        $cacheId = $this->view->getCacheId('frontpage', 'tag', $tagName, $page);
+
+        if (empty($tagName)) {
+            list($positions, $advertisements) = $this->getInnerAds();
+
+            $this->view->assign('contents', []);
+
+            $pagination = $this->get('paginator')->get([
+                'directional' => true,
+                'epp'         => 10,
+                'maxLinks'    => 0,
+                'page'        => $page,
+                'total'       => 0,
+                'route'       => [
+                    'name'   => 'tag_frontpage',
+                    'params' => [ 'tag_name' => $tagName ]
+                ]
+            ]);
+
+            $this->view->assign([ 'pagination' => $pagination ]);
+
+            return $this->render('frontpage/tags.tpl', [
+                'ads_positions'  => $positions,
+                'advertisements' => $advertisements,
+                'cache_id'       => $cacheId,
+                'tagName'        => $tagName,
+                'x-tags'         => 'tag-page,' . $tagName,
+            ]);
         }
 
         // Setup templating cache layer
@@ -100,9 +133,9 @@ class TagsController extends Controller
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/tags.tpl', $cacheId)
         ) {
-            $tag = preg_replace('/[^a-z0-9]/', '_', $tagName);
-            $epp = $this->get('setting_repository')->get('items_in_blog', 10);
-            $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
+            $epp    = $this->get('setting_repository')->get('items_in_blog', 10);
+            $epp    = (is_null($epp) || $epp <= 0) ? 10 : $epp;
+            $locale = getService('core.locale')->getRequestLocale();
 
             $criteria = [
                 'content_status'  => [ [ 'value' => 1 ] ],
@@ -114,9 +147,10 @@ class TagsController extends Controller
                     // [ 'value' => 9 ],
                     'union' => 'OR'
                 ],
-                'metadata' => [
-                    [ 'value' => '%' . $tag . '%', 'operator' => 'LIKE' ]
-                ]
+                'exists' => 'EXISTS(SELECT 1 FROM tags' .
+                    ' INNER JOIN contents_tags ON contents_tags.tag_id = tags.id' .
+                    ' WHERE contents_tags.content_id = contents.pk_content AND' .
+                    " tags.language_id = '$locale' AND tags.slug = '$tagName')"
             ];
 
             $em       = $this->get('entity_repository');
@@ -125,43 +159,28 @@ class TagsController extends Controller
 
             // TODO: review this piece of CRAP
             $filteredContents = [];
-            $tag              = strtolower($tag);
             foreach ($contents as &$item) {
-                $arrayMetadatas = explode(',', $item->metadata);
-
-                foreach ($arrayMetadatas as &$word) {
-                    $word = strtolower(trim($word));
-                    $word = \Onm\StringUtils::normalize($word);
-                    $word = preg_replace('/[^a-z0-9]/', '_', $word);
-                }
-
-                if (in_array($tag, $arrayMetadatas)) {
-                    if (isset($item->img1) && ($item->img1 > 0)) {
-                        $image = $em->find('Photo', $item->img1);
-                        if (is_object($image) && !is_null($image->id)) {
-                            $item->img1_path = $image->path_file . $image->name;
-                            $item->img1      = $image;
-                        }
-                    }
-
-                    if ($item->fk_content_type == 7) {
-                        $image           = $em->find('Photo', $item->cover_id);
+                if (isset($item->img1) && ($item->img1 > 0)) {
+                    $image = $em->find('Photo', $item->img1);
+                    if (is_object($image) && !is_null($image->id)) {
                         $item->img1_path = $image->path_file . $image->name;
                         $item->img1      = $image;
                     }
-
-                    if ($item->fk_content_type == 9) {
-                        $item->obj_video = $item;
-                        $item->summary   = $item->description;
-                    }
-
-                    if (isset($item->fk_video) && ($item->fk_video > 0)) {
-                        $item->video = $em->find('Video', $item->fk_video2);
-                    }
-
-                    // Add item to final array
-                    $filteredContents[] = $item;
+                } elseif ($item->fk_content_type == 7) {
+                    $image           = $em->find('Photo', $item->cover_id);
+                    $item->img1_path = $image->path_file . $image->name;
+                    $item->img1      = $image;
+                } elseif ($item->fk_content_type == 9) {
+                    $item->obj_video = $item;
+                    $item->summary   = $item->description;
                 }
+
+                if (isset($item->fk_video) && ($item->fk_video > 0)) {
+                    $item->video = $em->find('Video', $item->fk_video2);
+                }
+
+                // Add item to final array
+                $filteredContents[] = $item;
             }
 
             $this->view->assign('contents', $filteredContents);

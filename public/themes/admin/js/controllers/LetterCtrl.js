@@ -10,12 +10,39 @@ angular.module('BackendApp.controllers').controller('LetterCtrl', [
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
     /**
-     * Updates scope when photo1 changes.
+     * @function init
+     * @memberOf LetterCtrl
      *
-     * @param array nv The new values.
-     * @param array ov The old values.
+     * @description
+     * Method to init the letter controller
+     *
+     * @param {object} letter   Letter to edit
+     * @param {String} locale   Locale for the letter
+     * @param {Array}  tags     Array with all the tags needed for the Letter
      */
-    $scope.$watch('photo1', function(nv, ov) {
+    $scope.init = function(letter, locale, tags) {
+      $scope.tag_ids = letter !== null ? letter.tag_ids : [];
+      $scope.locale  = locale;
+      $scope.tags    = tags;
+      $scope.watchTagIds('title');
+    };
+
+    /**
+     * @function getTagsAutoSuggestedFields
+     * @memberOf LetterCtrl
+     *
+     * @description
+     *   Method to method to retrieve th title for the autosuggested words
+     *
+     */
+    $scope.getTagsAutoSuggestedFields = function() {
+      return $scope.title;
+    };
+
+    /**
+     * Updates scope when photo1 changes.
+     */
+    $scope.$watch('photo1', function() {
       $scope.img1 = null;
 
       if ($scope.photo1) {
