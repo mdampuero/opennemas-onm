@@ -1,7 +1,7 @@
 <div class="modal-body">
   <div class="clearfix">
     <p>
-    {t escape=off}The frontpage is going to be published ?{/t}<br/>
+    {t escape=off}Are you sure you want to publish this frontpage now?{/t}<br/>
     </p>
     <div>
       <button class="btn btn-danger" data-dismiss="modal" ng-click="no()" ng-disabled="noLoading" type="button">
