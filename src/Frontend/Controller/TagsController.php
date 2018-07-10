@@ -150,7 +150,7 @@ class TagsController extends Controller
                 'exists' => 'EXISTS(SELECT 1 FROM tags' .
                     ' INNER JOIN contents_tags ON contents_tags.tag_id = tags.id' .
                     ' WHERE contents_tags.content_id = contents.pk_content AND' .
-                    " tags.language_id = '$locale' AND tags.slug LIKE '%$tagName%')"
+                    " tags.language_id = '$locale' AND tags.slug = '$tagName')"
             ];
 
             $em       = $this->get('entity_repository');
