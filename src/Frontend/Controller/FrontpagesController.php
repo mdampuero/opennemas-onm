@@ -127,7 +127,9 @@ class FrontpagesController extends Controller
             }
 
             // Overloading information for contents
+            $tagsIds = [];
             foreach ($contents as &$content) {
+                $tagsIds = array_merge($content->tag_ids, $tagsIds);
                 if (isset($content->img1) && !empty($content->img1)
                     && !is_object($content->img1)
                     && array_key_exists($content->img1, $related)
@@ -166,6 +168,11 @@ class FrontpagesController extends Controller
             $this->view->assign('column', $contents);
             $this->view->assign('layoutFile', $layoutFile);
             $this->view->assign('contentPositionByPos', $contentPositions);
+            $this->view->assign(
+                'tags',
+                $this->get('api.service.tag')
+                    ->getListByIdsKeyMapped(array_unique($tagsIds))['items']
+            );
         }
 
         list($adsPositions, $advertisements) = $this->getAds($categoryId, $contents);

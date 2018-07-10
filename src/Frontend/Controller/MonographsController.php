@@ -91,23 +91,25 @@ class MonographsController extends Controller
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('special/special_frontpage.tpl', $cacheID))
         ) {
-            if (isset($this->category) && !empty($this->category)) {
-                $monographs = $this->cm->find_by_category(
-                    'Special',
-                    $this->category,
-                    'content_status=1',
-                    ' ORDER BY starttime DESC LIMIT 14'
-                );
-            } else {
-                $monographs = $this->cm->find(
-                    'Special',
-                    'content_status=1',
-                    ' ORDER BY starttime DESC LIMIT 14'
-                );
+            $em = $this->get('entity_repository');
+
+            $order   = [ 'starttime' => 'DESC' ];
+            $filters = [
+                'content_type_name' => [[ 'value' => 'special' ]],
+                'content_status'    => [[ 'value' => 1 ]],
+                'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+            ];
+
+            if ($this->category != 0) {
+                $filters['pk_fk_content_category'] = [ [ 'value' => $this->category ] ];
             }
 
+            $monographs = $em->findBy($filters, $order, 14);
+
+            $tagsIds = [];
             if (!empty($monographs)) {
                 foreach ($monographs as &$monograph) {
+                    $tagsIds = array_merge($monograph->tag_ids, $tagsIds);
                     if (!empty($monograph->img1)) {
                         $img = $this->get('entity_repository')
                             ->find('Photo', $monograph->img1);
@@ -118,6 +120,11 @@ class MonographsController extends Controller
                 }
 
                 $this->view->assign(['specials' => $monographs]);
+                $this->view->assign(
+                    'tags',
+                    $this->get('api.service.tag')
+                        ->getListByIdsKeyMapped(array_unique($tagsIds))['items']
+                );
             }
         }
 
@@ -216,6 +223,8 @@ class MonographsController extends Controller
             'cache_id'  => $cacheID,
             'x-tags'      => 'monograph,' . $special->id,
             'x-cache-for' => '+1 day',
+            'tags'            => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($special->tag_ids)['items']
         ]);
     }
 }

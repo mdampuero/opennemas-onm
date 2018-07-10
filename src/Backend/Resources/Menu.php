@@ -76,6 +76,14 @@ $menuXml = [
                 'module_name' => 'OPINION_MANAGER',
                 'privilege'   => 'AUTHOR_ADMIN',
             ],
+            [
+                'id'          => 'tags',
+                'title'       => _('Tags'),
+                'link'        => url('backend_tags_list'),
+                'icon'        => 'fa fa-tags',
+                // 'module_name' => 'TAG_MANAGER',
+                'privilege'   => 'TAG_ADMIN',
+            ],
         ],
     ],
 

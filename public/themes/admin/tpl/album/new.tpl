@@ -4,16 +4,6 @@
   {javascripts}
     <script>
       $(document).ready(function($){
-        $('#title').on('change', function(e, ui) {
-          var metaTags = $('#metadata');
-
-          // Fill tags from title and category
-          if (!metaTags.val()) {
-            var tags = $('#title').val();
-            fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
-          }
-        });
-
         $('#starttime, #endtime').datetimepicker({
           format: 'YYYY-MM-DD HH:mm:ss',
           useCurrent: false,
@@ -32,7 +22,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if isset($album->id)}{url name=admin_album_update id=$album->id}{else}{url name=admin_album_create}{/if}" method="POST" id="formulario" ng-controller="AlbumCtrl" ng-submit="validatePhotosAndCover($event);">
+  <form action="{if isset($album->id)}{url name=admin_album_update id=$album->id}{else}{url name=admin_album_create}{/if}" method="POST" id="formulario" ng-controller="AlbumCtrl" ng-init="init({json_encode($album)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})" ng-submit="validatePhotosAndCover($event);">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -106,7 +96,7 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="title" name="title" required type="text" value="{$album->title|clearslash|escape:"html"|default:""}"/>
+                  <input class="form-control" id="title" name="title" ng-model="title" required type="text" value="{$album->title|clearslash|escape:"html"|default:""}"/>
                 </div>
               </div>
               <div class="form-group">
@@ -178,7 +168,7 @@
                   {t}Tags{/t}
                 </label>
                 <div class="controls">
-                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="text" value="{$album->metadata}"/>
+                  <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="checkNewTags" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
                 </div>
               </div>
             </div>

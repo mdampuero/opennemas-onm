@@ -1,7 +1,7 @@
 <div class="form-group">
     <label for="title" class="form-label">{t}Title{/t}</label>
     <div class="controls">
-        <input type="text" id="title" name="title" value="{$video->title|clearslash|escape:"html"|default:""}" required class="form-control"/>
+        <input type="text" id="title" name="title" ng-model="title" value="{$video->title|clearslash|escape:"html"|default:""}" required class="form-control"/>
     </div>
 </div>
 

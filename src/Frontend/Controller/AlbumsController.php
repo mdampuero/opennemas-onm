@@ -222,7 +222,7 @@ class AlbumsController extends Controller
                 'album_photos'       => $_albumArray,
                 'album_photos_paged' => $_albumArrayPaged,
                 'items_page'         => $itemsPerPage,
-                'gallerys'           => $otherAlbums,
+                'gallerys'           => $otherAlbums
             ]);
         } // END iscached
 
@@ -238,7 +238,9 @@ class AlbumsController extends Controller
             'contentId'      => $album->id,
             'x-tags'         => 'album,' . $album->id,
             'x-cache-for'    => '+1 day',
-            'x-cacheable'    => $cacheable
+            'x-cacheable'    => $cacheable,
+            'tags'           => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($album->tag_ids)['items']
         ]);
     }
 

@@ -79,7 +79,7 @@ class ExtractImageFromBodyFilter extends Filter
                     'fk_category'       => 0,
                     'category'          => 0,
                     'category_name'     => '',
-                    'metadata'          => '',
+                    'tag_ids'           => [],
                 ];
 
                 try {
@@ -88,6 +88,7 @@ class ExtractImageFromBodyFilter extends Filter
 
                     $this->insertPhotoTranslation($photoID, $file);
                 } catch (\Exception $e) {
+                    continue;
                 }
             }
 
@@ -111,7 +112,7 @@ class ExtractImageFromBodyFilter extends Filter
         try {
             $photo = $conn->fetchAssoc(
                 "SELECT * FROM `contents` WHERE `content_type_name` = 'photo'"
-                ." AND `title`=?",
+                . " AND `title`=?",
                 [ $fileName ]
             );
 

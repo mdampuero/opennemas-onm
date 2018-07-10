@@ -43,12 +43,18 @@ class StaticPageController extends Controller
         // TODO: Remove when pk_content column renamed to id
         $content->id = $content->pk_content;
 
+        $contentAux       = new \Content();
+        $contentAux->id   = $content->id;
+        $auxTagIds        = $contentAux->getContentTags($content->id);
+        $content->tag_ids = array_key_exists($content->id, $auxTagIds) ?
+            $auxTagIds[$content->id] :
+            [];
+
         // Setup templating cache layer
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('content', $content->id);
 
         list($positions, $advertisements) = $this->getAds();
-
         return $this->render('static_pages/statics.tpl', [
             'ads_positions'      => $positions,
             'advertisements'     => $advertisements,
@@ -57,7 +63,9 @@ class StaticPageController extends Controller
             'content_id'         => $content->id,
             'page'               => $content,
             'cache_id'           => $cacheID,
-            'x-tags'             => 'static-page,'.$content->id,
+            'x-tags'             => 'static-page,' . $content->id,
+            'tags'               => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($content->tag_ids)['items']
         ]);
     }
 
@@ -70,7 +78,7 @@ class StaticPageController extends Controller
     {
         // Get static_pages positions
         $positionManager = getService('core.helper.advertisement');
-        $positions = $positionManager
+        $positions       = $positionManager
             ->getPositionsForGroup('article_inner', [ 1, 2, 5, 6, 7 ]);
 
         $advertisements = $this->get('advertisement_repository')

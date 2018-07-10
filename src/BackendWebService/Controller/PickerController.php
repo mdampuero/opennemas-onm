@@ -61,7 +61,16 @@ class PickerController extends Controller
         }
 
         if (!empty($title)) {
-            $filter[] = "(description LIKE '%$title%' OR title LIKE '%$title%' OR metadata LIKE '%$title%')";
+            $titleSql = "(description LIKE '%$title%' OR title LIKE '%$title%'";
+            $tagSearcheableWord = $this
+                ->get('api.service.tag')->createSearchableWord($title);
+            if (!empty($tagSearcheableWord)) {
+                $titleSql .= ' OR EXISTS(SELECT 1 FROM tags' .
+                    ' INNER JOIN contents_tags ON contents_tags.tag_id = tags.id' .
+                    " WHERE contents_tags.content_id = contents.pk_content AND tags.slug LIKE '%$tagSearcheableWord%')";
+            }
+            $titleSql .= ')';
+            $filter[] = $titleSql;
         }
 
         if (!empty($category)) {

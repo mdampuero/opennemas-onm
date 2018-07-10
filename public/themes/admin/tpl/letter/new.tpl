@@ -8,17 +8,13 @@
           format: 'YYYY-MM-DD HH:mm:ss',
           minDate: '{$letter->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}'
         });
-
-        $('#title').on('change', function(e, ui) {
-          fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
-        });
       });
     </script>
   {/javascripts}
 {/block}
 
 {block name="content"}
-  <form id="formulario" action="{if isset($letter->id)}{url name=admin_letter_update id=$letter->id}{else}{url name=admin_letter_create}{/if}" method="POST" ng-controller="LetterCtrl">
+  <form id="formulario" action="{if isset($letter->id)}{url name=admin_letter_update id=$letter->id}{else}{url name=admin_letter_create}{/if}" method="POST" ng-controller="LetterCtrl" ng-init="init({json_encode($letter)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -70,7 +66,7 @@
               <div class="form-group">
                 <label for="title" class="form-label">{t}Title{/t}</label>
                 <div class="controls">
-                  <input type="text" id="title" name="title" value="{$letter->title|clearslash|escape:"html"}" required class="form-control" />
+                  <input type="text" id="title" name="title" value="{$letter->title|clearslash|escape:"html"}" ng-model="title" required class="form-control" />
                 </div>
               </div>
               <div class="form-group">
@@ -145,10 +141,7 @@
               {/is_module_activated}
               <div class="form-group">
                 <label for="metadata" class="form-label">{t}Tags{/t}</label>
-                <span class="help">{t}List of words separated by words.{/t}</span>
-                <div class="controls">
-                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="hidden" value="{$letter->metadata|clearslash|escape:"html"}"/>
-                </div>
+                <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="checkNewTags" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
               </div>
               <div class="form-group">
                 <label for="url" class="form-label">{t}Related url{/t}</label>

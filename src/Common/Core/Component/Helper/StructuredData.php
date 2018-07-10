@@ -20,10 +20,12 @@ class StructuredData
      * Initializes StructuredData
      *
      * @param SettingManager $sm       The setting service.
+     * @param TagService     $ts       The tag service.
      */
-    public function __construct($sm)
+    public function __construct($sm, $ts)
     {
-        $this->sm  = $sm;
+        $this->sm = $sm;
+        $this->ts = $ts;
     }
 
     /**
@@ -36,13 +38,13 @@ class StructuredData
         $code = ',{
             "@context": "http://schema.org",
             "@type": "ImageObject",
-            "author": "'.$data['author'].'",
-            "contentUrl": "'.$data['image']->url.'",
-            "height": '.$data['image']->height.',
-            "width": '.$data['image']->width.',
-            "datePublished": "'.$data['created'].'",
-            "caption": "'.strip_tags($data['image']->description).'",
-            "name": "'.$data['title'].'"
+            "author": "' . $data['author'] . '",
+            "contentUrl": "' . $data['image']->url . '",
+            "height": ' . $data['image']->height . ',
+            "width": ' . $data['image']->width . ',
+            "datePublished": "' . $data['created'] . '",
+            "caption": "' . strip_tags($data['image']->description) . '",
+            "name": "' . $data['title'] . '"
         }';
 
         return $code;
@@ -55,26 +57,29 @@ class StructuredData
      */
     public function generateVideoJsonLDCode($data)
     {
-        $code = '{
+        $keywords = empty($data['video']->tag_ids) ?
+            '' :
+            $this->ts->getTagsSepByCommas($data['video']->tag_ids);
+        $code     = '{
             "@context": "http://schema.org/",
             "@type": "VideoObject",
-            "author": "'.$data['author'].'",
-            "name": "'.$data['video']->title.'",
-            "description": "'.strip_tags($data['video']->description).'",
-            "@id": "'.$data['url'].'",
-            "uploadDate": "'.$data['video']->created.'",
-            "thumbnailUrl": "'.$data['video']->thumb.'",
-            "keywords": "'.$data['video']->metadata.'",
+            "author": "' . $data['author'] . '",
+            "name": "' . $data['video']->title . '",
+            "description": "' . strip_tags($data['video']->description) . '",
+            "@id": "' . $data['url'] . '",
+            "uploadDate": "' . $data['video']->created . '",
+            "thumbnailUrl": "' . $data['video']->thumb . '",
+            "keywords": "' . $keywords . '",
             "publisher" : {
                 "@type" : "Organization",
-                "name" : "'.$this->sm->get("site_name").'",
+                "name" : "' . $this->sm->get("site_name") . '",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "'.$data['logo']['url'].'",
-                    "width": '.$data['logo']['width'].',
-                    "height": '.$data['logo']['height'].'
+                    "url": "' . $data['logo']['url'] . '",
+                    "width": ' . $data['logo']['width'] . ',
+                    "height": ' . $data['logo']['height'] . '
                 },
-                "url": "'.SITE_URL.'"
+                "url": "' . SITE_URL . '"
             }
         }';
 
@@ -88,30 +93,33 @@ class StructuredData
      */
     public function generateImageGalleryJsonLDCode($data)
     {
-        $code = '{
+        $keywords = empty($data['content']->tag_ids) ?
+            '' :
+            $this->ts->getTagsSepByCommas($data['content']->tag_ids);
+        $code     = '{
             "@context":"http://schema.org",
             "@type":"ImageGallery",
-            "description": "'.strip_tags($data['summary']).'",
-            "keywords": "'.$data['content']->metadata.'",
-            "datePublished" : "'.$data['created'].'",
-            "dateModified": "'.$data['changed'].'",
+            "description": "' . strip_tags($data['summary']) . '",
+            "keywords": "' . $keywords . '",
+            "datePublished" : "' . $data['created'] . '",
+            "dateModified": "' . $data['changed'] . '",
             "mainEntityOfPage": {
                 "@type": "WebPage",
-                "@id": "'.$data['url'].'"
+                "@id": "' . $data['url'] . '"
             },
-            "headline": "'.$data['title'].'",
-            "url": "'.$data['url'].'",
+            "headline": "' . $data['title'] . '",
+            "url": "' . $data['url'] . '",
             "author" : {
                 "@type" : "Person",
-                "name" : "'.$data['author'].'"
+                "name" : "' . $data['author'] . '"
             },
             "primaryImageOfPage": {
-                "url": "'.$data['image']->url.'",
-                "height": '.$data['image']->height.',
-                "width": '.$data['image']->width.'
+                "url": "' . $data['image']->url . '",
+                "height": ' . $data['image']->height . ',
+                "width": ' . $data['image']->width . '
             }';
 
-        $photos = $data['content']->_getAttachedPhotos($data['content']->id);
+        $photos     = $data['content']->_getAttachedPhotos($data['content']->id);
         $imgObjects = '';
         if (!empty($photos)) {
             $code .= ',"associatedMedia":[';
@@ -119,16 +127,16 @@ class StructuredData
                 $photo['photo']->url = MEDIA_IMG_ABSOLUTE_URL .
                     $photo['photo']->path_file . $photo['photo']->name;
 
-                $code .= '{
-                            "url": "'.$photo['photo']->url.'",
-                            "height": '.$photo['photo']->height.',
-                            "width": '.$photo['photo']->width.'
+                $code         .= '{
+                            "url": "' . $photo['photo']->url . '",
+                            "height": ' . $photo['photo']->height . ',
+                            "width": ' . $photo['photo']->width . '
                     },';
                 $data['image'] = $photo['photo'];
-                $imgObjects .= $this->generateImageJsonLDCode($data);
+                $imgObjects   .= $this->generateImageJsonLDCode($data);
             }
 
-            $code = rtrim($code, ',');
+            $code  = rtrim($code, ',');
             $code .= ']';
         }
 
@@ -148,44 +156,47 @@ class StructuredData
      */
     public function generateNewsArticleJsonLDCode($data)
     {
-        $code = '{
+        $keywords = empty($data['content']->tag_ids) ?
+            '' :
+            $this->ts->getTagsSepByCommas($data['content']->tag_ids);
+        $code     = '{
             "@context" : "http://schema.org",
             "@type" : "NewsArticle",
             "mainEntityOfPage": {
                 "@type": "WebPage",
-                "@id": "'.$data['url'].'"
+                "@id": "' . $data['url'] . '"
             },
-            "headline": "'.$data['title'].'",
+            "headline": "' . $data['title'] . '",
             "author" : {
                 "@type" : "Person",
-                "name" : "'.$data['author'].'"
+                "name" : "' . $data['author'] . '"
             },
-            "datePublished" : "'.$data['created'].'",
-            "dateModified": "'.$data['changed'].'",
-            "articleSection" : "'.$data['category']->title.'",
-            "keywords": "'.$data['content']->metadata.'",
-            "url": "'.$data['url'].'",
-            "wordCount": '.str_word_count($data['content']->body).',
-            "description": "'.strip_tags($data['summary']).'",
+            "datePublished" : "' . $data['created'] . '",
+            "dateModified": "' . $data['changed'] . '",
+            "articleSection" : "' . $data['category']->title . '",
+            "keywords": "' . $keywords . '",
+            "url": "' . $data['url'] . '",
+            "wordCount": ' . str_word_count($data['content']->body) . ',
+            "description": "' . strip_tags($data['summary']) . '",
             "publisher" : {
                 "@type" : "Organization",
-                "name" : "'.$this->sm->get("site_name").'",
+                "name" : "' . $this->sm->get("site_name") . '",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "'.$data['logo']['url'].'",
-                    "width": '.$data['logo']['width'].',
-                    "height": '.$data['logo']['height'].'
+                    "url": "' . $data['logo']['url'] . '",
+                    "width": ' . $data['logo']['width'] . ',
+                    "height": ' . $data['logo']['height'] . '
                 },
-                "url": "'.SITE_URL.'"
+                "url": "' . SITE_URL . '"
             }';
 
         if (!empty($data['image'])) {
             $code .= '
                 ,"image": {
                     "@type": "ImageObject",
-                    "url": "'.$data['image']->url.'",
-                    "height": '.$data['image']->height.',
-                    "width": '.$data['image']->width.'
+                    "url": "' . $data['image']->url . '",
+                    "height": ' . $data['image']->height . ',
+                    "width": ' . $data['image']->width . '
                 }';
         }
 

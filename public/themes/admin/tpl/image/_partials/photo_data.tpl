@@ -33,7 +33,7 @@
     <div class="form-group">
       <label for="metadata-{$photo->id}" class="form-label">{t}Keywords{/t}</label>
       <div class="controls">
-        <input data-role="tagsinput" type="text" id="metadata-{$photo->id}" name="metadata[{$photo->id}]" placeholder="{t}Write a tag and press Enter...{/t}" required value="{$photo->metadata|strip}" class="form-control" />
+        <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="checkNewTags" get-suggested-tags="getSuggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
         <div class="help-block">{t}Used for searches and automated suggestions.{/t}</div>
       </div>
     </div>
@@ -110,12 +110,3 @@
     <input type="hidden" name="category[{$photo->id}]" value="{$photo->category}" />
   </div><!-- /photo-{$rnf} -->
 </div>
-{javascripts}
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $('#description-{$photo->id}').on('change', function(e, ui) {
-        fill_tags(jQuery('#description-{$photo->id}').val(),'#metadata-{$photo->id}', '{url name=admin_utils_calculate_tags}');
-      });
-    });
-  </script>
-{/javascripts}

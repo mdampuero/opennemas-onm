@@ -43,14 +43,14 @@ function smarty_function_humandate($params, &$smarty)
 function humandate($timestamp)
 {
     $difference = time() - $timestamp;
-    $periods    = array("segundo", "minuto", "hora", "dia", "semana", "mes", "año", "decada");
-    $lengths    = array("60",  "60",  "24",   "7",   "4.35",   "12",  "10");
+    $periods    = [ "segundo", "minuto", "hora", "dia", "semana", "mes", "año", "decada" ];
+    $lengths    = [ "60",  "60",  "24",   "7",   "4.35",   "12",  "10" ];
 
     if ($difference > 0) { // this was in the past
         $humantext = "hace";
     } else { // this was in the future
         $difference = -$difference;
-        $humantext = "quedan";
+        $humantext  = "quedan";
     }
 
     for ($j = 0; $difference >= $lengths[$j]; $j++) {

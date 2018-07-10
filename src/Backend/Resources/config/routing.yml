@@ -260,6 +260,8 @@ admin_videos_create:
 admin_videos_get_info:
     path:     /videos/get-video-information
     defaults: { _controller  : BackendBundle:Videos:videoInformation }
+    options:
+        expose: true
 
 admin_video_show:
     path:     /videos/{id}/show
@@ -688,13 +690,6 @@ admin_system_settings_save:
     defaults: { _controller  : BackendBundle:SystemSettings:save }
     methods:  [POST]
 
-# Miscelaneous util routes
-admin_utils_calculate_tags:
-    path:     /utils/calculate-tags
-    defaults: { _controller  : BackendBundle:Utils:calculateTags }
-    options:
-        expose: true
-
 # Getting started routes
 admin_getting_started:
     path:     /getting-started
@@ -804,3 +799,7 @@ backend_user:
 backend_user_group:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/user_group.yml'
+
+backend_tag:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/tag.yml'

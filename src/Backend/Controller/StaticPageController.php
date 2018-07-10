@@ -36,7 +36,6 @@ class StaticPageController extends Controller
         $data = [
             'title'    => $req->filter('title', null, FILTER_SANITIZE_STRING),
             'slug'     => $req->filter('slug', null, FILTER_SANITIZE_STRING),
-            'metadata' => \Onm\StringUtils::normalizeMetadata($req->filter('metadata', null, FILTER_SANITIZE_STRING)),
             'id'       => $req->filter('id', 0, FILTER_SANITIZE_STRING),
         ];
 
@@ -64,7 +63,11 @@ class StaticPageController extends Controller
      */
     public function createAction()
     {
-        return $this->render('static_pages/new.tpl');
+        $ls = $this->get('core.locale');
+        return $this->render('static_pages/new.tpl', [
+            'locale' => $ls->getRequestLocale('frontend'),
+            'tags'   => []
+        ]);
     }
 
     /**
@@ -94,6 +97,7 @@ class StaticPageController extends Controller
         $converter = $em->getConverter('Content');
 
         $entity = new Content($converter->objectify($request->request->all()));
+        $tagIds = json_decode($request->request->get('tag_ids', ''), true);
 
         $entity->contentTypeName     = 'static_page';
         $entity->fk_content_type     = 13;
@@ -104,6 +108,9 @@ class StaticPageController extends Controller
 
         try {
             $em->persist($entity);
+            $contentAux     = new \Content();
+            $contentAux->id = $entity->pk_content;
+            $contentAux->addTags($tagIds);
 
             $this->get('session')->getFlashBag()
                 ->add('success', _('Content saved successfully'));
@@ -118,7 +125,7 @@ class StaticPageController extends Controller
                 )
             );
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $this->get('error.log')->error($e->getMessage());
 
             $this->get('session')->getFlashBag()
                 ->add('error', _('There were errors while creating the content'));
@@ -145,7 +152,13 @@ class StaticPageController extends Controller
                 ->getRepository('Content')
                 ->find($id);
 
-            $entity->id = $entity->pk_content;
+            $entity->id      = $entity->pk_content;
+            $contentAux      = new \Content();
+            $contentAux->id  = $entity->id;
+            $auxTagIds       = $contentAux->getContentTags($entity->id);
+            $entity->tag_ids = array_key_exists($entity->id, $auxTagIds) ?
+                $auxTagIds[$entity->id] :
+                [];
         } catch (EntityNotFoundException $e) {
             $request->getSession()->getFlashBag()->add(
                 'error',
@@ -154,7 +167,13 @@ class StaticPageController extends Controller
             return $this->redirect($this->generateUrl('backend_static_pages_list'));
         }
 
-        return $this->render('static_pages/new.tpl', [ 'page' => $entity ]);
+        $ls = $this->get('core.locale');
+        return $this->render('static_pages/new.tpl', [
+            'page'   => $entity,
+            'locale' => $ls->getRequestLocale('frontend'),
+            'tags'   => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($entity->tag_ids)['items']
+        ]);
     }
 
     /**
@@ -187,6 +206,7 @@ class StaticPageController extends Controller
         }
 
         $entity->setData($converter->objectify($request->request->all()));
+        $tagIds = json_decode($request->request->get('tag_ids', ''), true);
 
         $entity->changed = new \DateTime();
 
@@ -199,6 +219,9 @@ class StaticPageController extends Controller
         $entity->content_status = (empty($status)) ? 0 : 1;
 
         try {
+            $contentAux      = new \Content();
+            $contentAux->id  = $id;
+            $entity->tag_ids = $contentAux->addTags($tagIds);
             $em->persist($entity);
 
             // TODO: Remove when static pages list ported to the new ORM
@@ -210,7 +233,7 @@ class StaticPageController extends Controller
             $this->get('core.dispatcher')
                 ->dispatch('content.update', [ 'content' => $entity ]);
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $this->get('error.log')->error($e->getMessage());
 
             $this->get('session')->getFlashBag()
                 ->add('error', _('There were errors while updating the content'));

@@ -176,13 +176,15 @@ class FilesController extends Controller
         if (!empty($parentCategories) && !empty($aux_categories)) {
             foreach ($parentCategories as $k => $v) {
                 foreach ($aux_categories as $ind) {
-                    if (!empty($sub_files[$ind][0])) {
-                        foreach ($sub_files[$ind][0] as $value) {
-                            if ($v->pk_content_category == $ccm->get_id($ccm->getFather($value->catName))) {
-                                if ($ccm->get_id($ccm->getFather($value->catName))) {
-                                    $sub_size[$k][$ind] += filesize(MEDIA_PATH . '/' . FILE_DIR . '/' . $value->path);
-                                }
-                            }
+                    if (empty($sub_files[$ind][0])) {
+                        continue;
+                    }
+                    foreach ($sub_files[$ind][0] as $value) {
+                        if ($v->pk_content_category != $ccm->get_id($ccm->getFather($value->catName))) {
+                            continue;
+                        }
+                        if ($ccm->get_id($ccm->getFather($value->catName))) {
+                            $sub_size[$k][$ind] += filesize(MEDIA_PATH . '/' . FILE_DIR . '/' . $value->path);
                         }
                     }
 
@@ -216,7 +218,15 @@ class FilesController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
-            return $this->render('files/new.tpl', ['category' => $this->category,]);
+            $ls = $this->get('core.locale');
+            return $this->render(
+                'files/new.tpl',
+                [
+                    'category' => $this->category,
+                    'locale'   => $ls->getLocale('frontend'),
+                    'tags'     => []
+                ]
+            );
         }
 
         set_time_limit(0);
@@ -314,10 +324,8 @@ class FilesController extends Controller
             'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
             'content_status' => !preg_match('@(js|html)$@', $uploadedFile->getClientOriginalExtension()),
             'description'    => $request->request->get('description', ''),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                $request->request->filter('metadata', null, FILTER_SANITIZE_STRING)
-            ),
             'fk_publisher'   => $this->getUser()->id,
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         // Move uploaded file
@@ -373,6 +381,7 @@ class FilesController extends Controller
 
         $file = new \Attachment($id);
 
+
         // If the file doesn't exists redirect to the listing
         // and show error message
         if (is_null($file->pk_attachment)) {
@@ -383,11 +392,18 @@ class FilesController extends Controller
 
             return $this->redirect($this->generateUrl('admin_files'));
         }
+        $auxTagIds     = $file->getContentTags($file->id);
+        $file->tag_ids = array_key_exists($file->id, $auxTagIds) ?
+            $auxTagIds[$file->id] :
+            [];
 
-        // Show the
+        $ls = $this->get('core.locale');
         return $this->render('files/new.tpl', [
             'attaches' => $file,
             'page'     => $page,
+            'locale'         => $ls->getRequestLocale('frontend'),
+            'tags'           => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($file->tag_ids)['items']
         ]);
     }
 
@@ -412,10 +428,8 @@ class FilesController extends Controller
             'content_status' => 1,
             'id'             => (int) $id,
             'description'    => $request->request->filter('description', null),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                $request->request->filter('metadata', null, FILTER_SANITIZE_STRING)
-            ),
             'fk_publisher'   => $this->getUser()->id,
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         if ($file->update($data)) {

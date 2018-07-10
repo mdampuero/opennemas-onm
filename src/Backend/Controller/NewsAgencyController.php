@@ -32,7 +32,7 @@ class NewsAgencyController extends Controller
      */
     public function init()
     {
-        $this->syncFrom = array(
+        $this->syncFrom = [
             '3600'         => sprintf(_('%d hour'), '1'),
             '10800'         => sprintf(_('%d hours'), '3'),
             '21600'         => sprintf(_('%d hours'), '6'),
@@ -46,7 +46,7 @@ class NewsAgencyController extends Controller
             '604800'        => sprintf(_('%d week'), '1'),
             '1209600'       => sprintf(_('%d weeks'), '2'),
             'no_limits'     => _('No limit'),
-        );
+        ];
 
         ini_set('memory_limit', '128M');
         ini_set('set_time_limit', '0');
@@ -104,10 +104,10 @@ class NewsAgencyController extends Controller
             return $this->redirect(
                 $this->generateUrl(
                     'admin_news_agency_pickcategory',
-                    array(
+                    [
                         'id'        => $id,
                         'source_id' => $sourceId
-                    )
+                    ]
                 )
             );
         }
@@ -117,7 +117,7 @@ class NewsAgencyController extends Controller
             return $this->redirect(
                 $this->generateUrl(
                     'admin_article_show',
-                    array('id' => $article)
+                    ['id' => $article]
                 )
             );
         } else {
@@ -143,7 +143,7 @@ class NewsAgencyController extends Controller
     public function batchImportAction(Request $request)
     {
         $selected = $request->request->get('ids', null);
-        $updated  = array();
+        $updated  = [];
 
         if (is_array($selected) && count($selected) > 0) {
             foreach ($selected as $value) {
@@ -155,16 +155,14 @@ class NewsAgencyController extends Controller
         }
 
         return new JsonResponse(
-            array(
+            [
                 'already_imported' => true,
-                'messages'        => array(
-                    array(
-                        'id'      => $updated,
-                        'message' => sprintf(_('%s item(s) imported successfully'), count($updated)),
-                        'type'    => 'success'
-                    )
-                )
-            )
+                'messages'        => [[
+                    'id'      => $updated,
+                    'message' => sprintf(_('%s item(s) imported successfully'), count($updated)),
+                    'type'    => 'success'
+                ]]
+            ]
         );
     }
 
@@ -205,23 +203,23 @@ class NewsAgencyController extends Controller
         if (!empty($targetCategory)) {
             return $this->redirect($this->generateUrl(
                 'admin_news_agency_import',
-                array(
+                [
                     'source_id' => $sourceId,
                     'id'        => $id,
                     'category'  => $targetCategory,
-                )
+                ]
             ));
         }
 
         return $this->render(
             'news_agency/import_select_category.tpl',
-            array(
+            [
                 'id'           => $id,
                 'source_id'    => $sourceId,
                 'article'      => $element,
                 'subcat'       => $parentCategories[1],
                 'allcategorys' => $parentCategories[0],
-            )
+            ]
         );
     }
 
@@ -273,7 +271,7 @@ class NewsAgencyController extends Controller
      * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
      *     and hasPermission('IMPORT_ADMIN')")
      */
-    public function syncAction(Request $request)
+    public function syncAction()
     {
         $servers = $this->get('setting_repository')->get('news_agency_config');
         $tpl     = $this->get('view')->getBackendTemplate();
@@ -366,18 +364,18 @@ class NewsAgencyController extends Controller
                 if (file_exists($filePath)) {
                     // If the image is already imported use its id
                     if (!array_key_exists($photo->getId(), $importedPhotos)) {
-                        $data = array(
+                        $data = [
                             'title'         => $fileName,
                             'description'   => $photo->getTitle(),
                             'local_file'    => $filePath,
                             'fk_category'   => $category,
                             'category_name' => $categoryInstance->name,
                             'category'      => $categoryInstance->name,
-                            'metadata'      => $fm->set($photo->getTitle())
-                                ->filter('tags')->get(),
+                            'tag_ids'       => $this->get('api.service.tag')
+                                ->getTagIdsFromStr($photo->getTitle()),
                             'author_name'   => '&copy; EFE ' . date('Y'),
                             'original_filename' => $fileName,
-                        );
+                        ];
 
                         $newphoto = new \Photo();
                         $photoId  = $newphoto->createFromLocalFile($data);
@@ -464,7 +462,7 @@ class NewsAgencyController extends Controller
 
                             // Get all necessary data for the photo
                             $infor = new \MediaItem($localImagePath);
-                            $data  = array(
+                            $data  = [
                                 'title'       => $authorObj->photo->name,
                                 'name'        => $authorObj->photo->name,
                                 'user_name'   => $authorObj->photo->name,
@@ -481,7 +479,7 @@ class NewsAgencyController extends Controller
                                 'type_img'    => substr($authorObj->photo->name, -3),
                                 'media_type'  => 'image',
                                 'author_name' => $authorObj->username,
-                            );
+                            ];
 
                             $photo   = new \Photo();
                             $photoId = $photo->create($data);
@@ -519,16 +517,17 @@ class NewsAgencyController extends Controller
 
                 // Check if the file exists
                 if ($filePath) {
-                    $videoFileData = array(
+                    $videoFileData = [
                         'file_type'      => $video->getFileType(),
                         'file_path'      => $filePath,
                         'category'       => $category,
                         'content_status' => 1,
                         'title'          => $video->getTitle(),
-                        'metadata'       => $tagSystem->filter($video->getTitle()),
+                        'tag_ids'       => $this->get('api.service.tag')
+                            ->getTagIdsFromStr($video->getTitle()),
                         'description'    => '',
                         'author_name'    => 'internal',
-                    );
+                    ];
 
                     $video   = new \Video();
                     $videoID = $video->createFromLocalFile($videoFileData);
@@ -543,9 +542,9 @@ class NewsAgencyController extends Controller
             }
         }
 
-        $commentsConfig = (s::get('comments_config')) ? s::get('comments_config') : array();
+        $commentsConfig = s::get('comments_config') ? s::get('comments_config') : [];
 
-        $values = array(
+        $values = [
             'title'          => $element->getTitle(),
             'category'       => $category,
             'with_comment'   =>
@@ -554,7 +553,8 @@ class NewsAgencyController extends Controller
             'frontpage'      => 0,
             'in_home'        => 0,
             'title_int'      => $element->getTitle(),
-            'metadata'       => $tagSystem->filter($element->getTitle()),
+            'tag_ids'        => $this->get('api.service.tag')
+                ->getTagIdsFromStr($element->getTitle()),
             'subtitle'       => $element->getPretitle(),
             'agency'         => $server['agency_string'],
             'fk_author'      => (isset($authorId) ? $authorId : 0),
@@ -573,7 +573,7 @@ class NewsAgencyController extends Controller
             'ordenArti'      => '',
             'ordenArtiInt'   => '',
             'urn_source'     => $element->getUrn(),
-        );
+        ];
 
         $article      = new \Article();
         $newArticleID = $article->create($values);
