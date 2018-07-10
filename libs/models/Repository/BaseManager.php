@@ -209,7 +209,7 @@ abstract class BaseManager
         $orderSQL = '`id` DESC';
         if (is_string($order)) {
             $orderSQL = $order;
-        } elseif ([$order]) {
+        } elseif (is_array($order)) {
             $tokens = [];
             foreach ($order as $key => $value) {
                 if (in_array(strtoupper($value), ['DESC', 'ASC'])) {
