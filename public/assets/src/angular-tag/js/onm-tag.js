@@ -23,7 +23,7 @@
             getSuggestedTags:      '=',
             loadAutoSuggestedTags: '=',
             suggestedTags:         '=',
-            placeholder:           '@'
+            placeholder:           '@',
           },
           template: function() {
             return '<div class="onmTag">' +
@@ -41,10 +41,10 @@
                   '<input type="hidden" name="tag_ids" ng-value="getTagIdsList()">' +
                 '</div>' +
                 '<div class="autoSuggested" ng-show="loadAutoSuggestedTags">' +
-                  '<span class="title">Suggested tags</span>' +
+                  '<span class="title">' + window.tagTranlations.suggestedTag + '</span>' +
                   '<a class="reload-tags btn btn-primary btn-xs pull-right" ng-click="loadAutoSuggestedTags()" href="#">' +
                     '<i class="fa fa-refresh m-r-5"></i>' +
-                    'Reload' +
+                    window.tagTranlations.reload +
                   '</a>' +
                   '<ul class="onmTagList">' +
                     '<li ng-repeat="suggestedTag in suggestedTags" class="newTag">' +
