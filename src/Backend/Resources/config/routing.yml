@@ -10,10 +10,6 @@ admin_content_toggle_available:
     path:     /content/toggle-available
     defaults: { _controller  : BackendBundle:Content:toggleAvailable }
 
-admin_content_set_archived:
-    path:     /content/set-archived
-    defaults: { _controller  : BackendBundle:Content:setArchived }
-
 admin_content_toggle_suggested:
     path:     /content/toggle-suggested
     defaults: { _controller  : BackendBundle:Content:toggleSuggested }

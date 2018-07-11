@@ -41,3 +41,9 @@ admin_frontpage_delete:
     methods:  [ DELETE ]
     options:
         expose: true
+
+admin_content_set_archived:
+    path:     /content/set-archived
+    defaults: { _controller  : BackendBundle:Content:setArchived }
+    options:
+        expose: true

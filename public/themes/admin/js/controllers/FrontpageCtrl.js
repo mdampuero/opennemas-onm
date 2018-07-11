@@ -151,9 +151,10 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           },
           success: function() {
             return function() {
-              var url = frontpage_urls.set_arquived;
-
-              return http.get(url, { params: { 'ids[]': $scope.selected.contents } })
+              return http.get({
+                name: 'admin_content_set_archived',
+                params: { ids: $scope.selected.contents }
+              })
                 .success(function(response) {
                   $scope.showMessage(response, 'success', 5);
                 }).error(function(response) {
@@ -222,8 +223,8 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       };
 
       http.post({
-          name: 'admin_frontpage_preview',
-          params: { category: $scope.categoryId }
+        name: 'admin_frontpage_preview',
+        params: { category: $scope.categoryId }
       }, data).success(function() {
         $uibModal.open({
           templateUrl: 'modal-preview',
@@ -536,6 +537,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           $scope.versions.splice(index, 1);
         }
         messenger.post(response.data.message);
+        return null;
       }, function(response) {
         if (response.data) {
           messenger.post(response.data.responseText);
