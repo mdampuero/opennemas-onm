@@ -69,7 +69,7 @@ angular.module('BackendApp.controllers')
         }
 
         for (var i = 0; i < nv.length; i++) {
-          if (nv[i].footer === 'undefined') {
+          if (typeof nv[i].footer === 'undefined') {
             nv[i].footer = nv[i].description;
           }
         }
