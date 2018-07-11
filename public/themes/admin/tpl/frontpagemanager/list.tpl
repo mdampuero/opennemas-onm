@@ -71,6 +71,7 @@
               </ui-select-choices>
             </ui-select>
           </li>
+        {is_module_activated name="es.openhost.theme.scheduleFrontPage"}
           <li class="quicklinks hidden-xs m-l-5 m-r-5 ng-cloak">
             <h4>
               <i class="fa fa-angle-right"></i>
@@ -103,6 +104,7 @@
           <li class="quicklinks ng-cloak" ng-if="publishVersionId === versionId">
             <div class="badge badge-pill badge-primary"><span class="fa fa-globe"></span>{t}LIVE{/t}</div>
           </li>
+        {/is_module_activated}
         </ul>
         <div class="all-actions pull-right hidden-xs ng-cloak">
           <ul class="nav quick-section">
@@ -132,6 +134,7 @@
                       {t}Preview{/t}
                     </a>
                   </li>
+                {is_module_activated name="es.openhost.theme.scheduleFrontPage"}
                   <li class="divider"></li>
                   <li>
                     <a href="#" ng-click="saveVersion()">
@@ -153,6 +156,7 @@
                       {t}Delete{/t}
                     </a>
                   </li>
+                {/is_module_activated}
                 </ul>
               </div>
             </li>
@@ -194,6 +198,7 @@
       </div>
     </div>
   </div>
+{is_module_activated name="es.openhost.theme.scheduleFrontPage"}
   <div class="page-navbar filters-navbar hidden-xs ng-cloak" ng-if="publishVersionId !== versionId">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -228,6 +233,7 @@
       </div>
     </div>
   </div>
+{/is_module_activated}
   <div class="content">
     <a class="btn btn-add btn-success hidden-xs ng-cloak btn-down" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
       <span class="fa fa-plus"></span>
