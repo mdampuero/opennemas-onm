@@ -173,9 +173,9 @@
         </div>
       </div>
       <div class="grid-body">
-        <div ui-tree="options" id="newsletter-contents">
+        <div ui-tree id="newsletter-contents">
           <ol ui-tree-nodes ng-model="item.contents" type="container">
-            <li class="newsletter-container ng-cloak" ui-tree-node ng-repeat="container in item.contents" collapsed="false">
+            <li class="newsletter-container" ui-tree-node ng-repeat="container in item.contents">
               <div class="newsletter-container-title clearfix" ui-tree-handle>
                 <input ng-model="container.title" type="text" data-nodrag class="form-control title pull-left" placeholder="{t}Block title{/t}">
                 <div class="container-actions pull-right">
