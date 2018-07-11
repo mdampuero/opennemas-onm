@@ -723,7 +723,6 @@
             if ($scope.articleForm.$dirty) {
               return $window.leaveMessage;
             }
-            return null;
           });
 
           $scope.articleForm.$setDirty(true);
