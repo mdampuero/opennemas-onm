@@ -214,7 +214,7 @@ class NewsletterRenderer
         }
 
         // Calculate the SQL to fetch contents
-        // Criteria has: content_type, category, epp and sortBy elements
+        // Criteria has: content_type, category, filter, epp and sortBy elements
 
         $searchCriteria = [
             'content_status'    => [ [ 'value' => 1 ] ],
@@ -232,6 +232,9 @@ class NewsletterRenderer
                 [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
             ]
         ];
+
+        // Implementation for: in_last_day filter
+        // Implementation for: most_viewed in 24hours filter
 
         if (!empty($criteria->content_type)) {
             $contentTypeId                     = \ContentManager::getContentTypeIdFromName($criteria->content_type);

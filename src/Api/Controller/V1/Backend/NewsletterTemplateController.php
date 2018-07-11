@@ -116,13 +116,6 @@ class NewsletterTemplateController extends Controller
             ];
         }
 
-
-        // $hours = [];
-        // $date  = new DateTime(null, new DatetTimeZome('UTC'));
-        // for ($i = 0; $i < 24; $i++) {
-        //     $date->add('1 hour');
-        //     $hours[] = [ "internal" => $i, "text" => $date->format('h:m')];
-        // }
         $extra['hours'] = [];
         for ($i = 0; $i < 24; $i++) {
             $extra['hours'][] = sprintf("%02d:00", $i);
@@ -148,6 +141,12 @@ class NewsletterTemplateController extends Controller
             'pk_content_category' => "",
             'title' => _('All')
         ]);
+
+        $extra['filters'] = [
+            [ 'value' => null,          'title' => _('No filter') ],
+            [ 'value' => 'in_last_day', 'title' => _('Last in 24 hours') ],
+            [ 'value' => 'most_viewed', 'title' => _('Most viewed in 24 hours') ],
+        ];
 
         return $extra;
     }

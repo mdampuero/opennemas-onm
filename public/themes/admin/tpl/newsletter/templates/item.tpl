@@ -224,28 +224,42 @@
       <span class="item-title" data-nodrag>[% content.title %]</span>
     </div>
     <div ng-show="content.content_type === 'list'" class="item-list">
-      <span>{t}List of contents{/t}</span>
+      <span class="item-list-title">{t}List of contents{/t}</span>
       <span class="h-seperate" data-nodrag></span>
       <span class="item-title" data-nodrag>
-        <ui-select name="content_type" theme="select2" ng-model="content.criteria.content_type">
-          <ui-select-match>
-            <strong>{t}Type{/t}: </strong> [% $select.selected.title %]
-          </ui-select-match>
-          <ui-select-choices repeat="item.value as item in data.extra.content_types | filter: { title: $select.search }">
-            <div ng-bind-html="item.title | highlight: $select.search"></div>
-          </ui-select-choices>
-        </ui-select>
+        <div class="criteria clearfix">
+          <span class="item-list-icon fa fa-filter"></span>
 
-        <ui-select name="category" theme="select2" ng-model="content.criteria.category">
-          <ui-select-match>
-            <strong>{t}Category{/t}: </strong> [% $select.selected.title %]
-          </ui-select-match>
-          <ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in data.extra.categories | filter: { title: $select.search }">
-            <div ng-bind-html="item.title | highlight: $select.search"></div>
-          </ui-select-choices>
-        </ui-select>
+          <ui-select name="content_type" theme="select2" ng-model="content.criteria.content_type">
+            <ui-select-match>
+              <strong>{t}Type{/t}: </strong> [% $select.selected.title %]
+            </ui-select-match>
+            <ui-select-choices repeat="item.value as item in data.extra.content_types | filter: { title: $select.search }">
+              <div ng-bind-html="item.title | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
 
-        <ui-select name="view" theme="select2" ng-model="content.criteria.epp">
+          <ui-select name="category" theme="select2" ng-model="content.criteria.category">
+            <ui-select-match>
+              <strong>{t}Category{/t}: </strong> [% $select.selected.title %]
+            </ui-select-match>
+            <ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in data.extra.categories | filter: { title: $select.search }">
+              <div ng-bind-html="item.title | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+
+        <div class="limit clearfix">
+          <span class="item-list-icon fa fa-sort-amount-asc"></span>
+          <ui-select name="view" theme="select2" ng-model="content.criteria.filter">
+            <ui-select-match>
+              <strong>{t}Filter{/t}: </strong> [% $select.selected.title %]
+            </ui-select-match>
+            <ui-select-choices repeat="item.value as item in data.extra.filters | filter: { title: $select.search }">
+              <div ng-bind-html="item.title | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+          <ui-select name="view" theme="select2" ng-model="content.criteria.epp">
           <ui-select-match>
             <strong>{t}Amount{/t}: </strong> [% $select.selected %]
           </ui-select-match>
@@ -253,6 +267,8 @@
             <div ng-bind-html="item | highlight: $select.search"></div>
           </ui-select-choices>
         </ui-select>
+
+        </div>
       </span>
     </div>
     <button class="btn btn-white pull-right" data-nodrag ng-click="removeContent(container, content)" type="button">
