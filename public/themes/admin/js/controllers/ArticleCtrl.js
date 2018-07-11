@@ -424,8 +424,6 @@
             return;
           }
 
-          $scope.articleForm.$setPristine(true);
-
           $scope.flags.saving = true;
 
           var data = $scope.clean($scope.data.article);
@@ -438,12 +436,17 @@
            * @param {Object} response The response object.
            */
           var successCb = function(response) {
+            $scope.articleForm.$setPristine(true);
+
             $scope.disableFlags();
             webStorage.session.remove($scope.draftKey);
 
             if (response.status === 201) {
               $window.location.href = response.headers().location;
+
+              return;
             }
+
             $scope.tags                 = response.data.tags;
             $scope.data.article.tag_ids = response.data.tag_ids;
             $scope.article.tag_ids      = response.data.tag_ids;
@@ -723,7 +726,6 @@
             if ($scope.articleForm.$dirty) {
               return $window.leaveMessage;
             }
-            return null;
           });
 
           $scope.articleForm.$setDirty(true);
