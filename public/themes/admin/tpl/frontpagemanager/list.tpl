@@ -71,7 +71,7 @@
               </ui-select-choices>
             </ui-select>
           </li>
-        {is_module_activated name="es.openhost.theme.scheduleFrontPage"}
+        {is_module_activated name="es.openhost.theme.scheduleFrontpage"}
           <li class="quicklinks hidden-xs m-l-5 m-r-5 ng-cloak">
             <h4>
               <i class="fa fa-angle-right"></i>
@@ -134,7 +134,7 @@
                       {t}Preview{/t}
                     </a>
                   </li>
-                {is_module_activated name="es.openhost.theme.scheduleFrontPage"}
+                {is_module_activated name="es.openhost.theme.scheduleFrontpage"}
                   <li class="divider"></li>
                   <li>
                     <a href="#" ng-click="saveVersion()">
@@ -198,7 +198,7 @@
       </div>
     </div>
   </div>
-{is_module_activated name="es.openhost.theme.scheduleFrontPage"}
+{is_module_activated name="es.openhost.theme.scheduleFrontpage"}
   <div class="page-navbar filters-navbar hidden-xs ng-cloak" ng-if="publishVersionId !== versionId">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
