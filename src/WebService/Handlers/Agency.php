@@ -160,11 +160,15 @@ class Agency
         // Encode author in json format
         $article->author = json_encode($article->author);
 
+        $locale = getService('core.locale')->getRequestLocale();
+
         $output = $tpl->fetch('news_agency/newsml_templates/base.tpl', [
             'article'     => $article,
             'authorPhoto' => $authorPhoto,
             'photo'       => $article->img1,
             'photoInner'  => $article->img2,
+            'tags'        => getService('api.service.tag')
+                ->getListByIdsKeyMapped($article->tag_ids, $locale)['items']
         ]);
 
         XmlFormat::$rootName              = 'NewsML';
