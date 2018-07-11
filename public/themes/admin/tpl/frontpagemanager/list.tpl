@@ -109,12 +109,12 @@
         <div class="all-actions pull-right hidden-xs ng-cloak">
           <ul class="nav quick-section">
             {is_module_activated name="FRONTPAGES_LAYOUT"}
-            <li class="quicklinks">
-              <div class="btn btn-default hidden-md" id="frontpage-settings" uib-tooltip="{t}Settings{/t}" tooltip-placement="left" ng-click="openLayoutModal()">
+            <li class="quicklinks hidden-sm">
+              <div class="btn btn-default" id="frontpage-settings" uib-tooltip="{t}Settings{/t}" tooltip-placement="left" ng-click="openLayoutModal()">
                 <i class="fa fa-cog"></i>
               </div>
             </li>
-            <li class="quicklinks">
+            <li class="quicklinks hidden-sm">
               <span class="h-seperate"></span>
             </li>
             {/is_module_activated}
@@ -154,6 +154,15 @@
                     <a href="#" ng-click="deleteVersion($event)">
                       <i class="fa fa-trash-o fa-lg"></i>
                       {t}Delete{/t}
+                    </a>
+                  </li>
+                {/is_module_activated}
+                {is_module_activated name="FRONTPAGES_LAYOUT"}
+                  <li class="divider visible-sm"></li>
+                  <li class="visible-sm">
+                    <a href="#" ng-click="openLayoutModal()">
+                      <i class="fa fa-cog"></i>
+                      {t}Settings{/t}
                     </a>
                   </li>
                 {/is_module_activated}
