@@ -188,7 +188,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
         extraClasses: 'messenger-fixed messenger-on-bottom',
       };
 
-      messenger().post({
+      messenger.post({
         message: message,
         type: type,
         hideAfter: time,
@@ -372,7 +372,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           if (!response.data.frontpage_last_saved) {
             return false;
           }
-          messenger.post(response.data.message);
+          $scope.showMessage(response.data.message, 'success', 1);
           $scope.frontpageInfo.lastSaved = response.data.frontpage_last_saved;
           if (
             response.data.versionId &&
