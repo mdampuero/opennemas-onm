@@ -398,7 +398,8 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           }
           return null;
         }, function(response) {
-          messenger.post(response.data.responseText);
+          $scope.showMessage(response.data.responseText, 'error', 5);
+
           return null;
         });
       }
@@ -420,19 +421,22 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       var els   = [];
       var index = 0;
 
-      document.querySelectorAll('div.placeholder').forEach(function(placeholderEle) {
-        var placeholder = placeholderEle.getAttribute('data-placeholder');
+      $(document).find('div.placeholder').each(function(index, placeholderEle) {
+        var placeholder = $(placeholderEle).data('placeholder');
 
         index = 0;
-        placeholderEle.querySelectorAll('div.content-provider-element').forEach(
-          function(element) {
+        $(placeholderEle).find('div.content-provider-element').each(
+          function(index, element) {
+            var el = $(element);
+
             els.push({
-              id:           element.getAttribute('data-content-id'),
-              content_type: element.getAttribute('data-class'),
+              id:           el.data('content-id'),
+              content_type: el.data('class'),
               placeholder:  placeholder,
               position:     index,
               params:       {}
             });
+
             index++;
           }
         );
