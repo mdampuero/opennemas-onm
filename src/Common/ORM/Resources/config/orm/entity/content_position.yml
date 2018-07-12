@@ -1,0 +1,81 @@
+orm:
+    metadata:
+        -
+            name: ContentPosition
+            properties:
+                pk_fk_content:        integer
+                fk_category:          integer
+                position:             integer
+                placeholder:          string
+                params:               string
+                content_type:         string
+                frontpage_version_id: integer
+
+            converters:
+                default:
+                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.content_position' ]
+            repositories:
+                instance:
+                    class:     Common\ORM\Database\Repository\ContentPositionRepository
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.content_position', '@cache.connection.instance' ]
+            persisters:
+                instance:
+                    class:     Common\ORM\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.content_position', '@cache.connection.instance' ]
+            mapping:
+                database:
+                    table: content_positions
+                    columns:
+                        pk_fk_content:
+                            type: integer
+                            options: { default: null, unsigned: true autoincrement: true }
+                        fk_category:
+                            type: integer
+                            options: { default: null, unsigned: true }
+                        position:
+                            type: integer
+                            options: { default: null, unsigned: true }
+                        placeholder:
+                            type: string
+                            options: { default: null, notnull: false, lenght: 45 }
+                        params:
+                            type: string
+                            options: { default: null, notnull: false }
+                        content_type:
+                            type: string
+                            options: { default: null, notnull: false, lenght: 45 }
+                        frontpage_version_id:
+                            type: integer
+                            options: { default: null, unsigned: true }
+                    index:
+                        -
+                            name: PRIMARY
+                            columns: [ pk_fk_content, fk_category, position, placeholder ]
+                            primary: true
+                            unique: true
+                            flags: {  }
+                        -
+                            name: fk_category
+                            columns: [fk_category]
+                            primary: false
+                            unique: false
+                            flags: {  }
+                        -
+                            name: position
+                            columns: [position]
+                            primary: false
+                            unique: false
+                            flags: {  }
+                        -
+                            name: placeholder
+                            columns: [placeholder]
+                            primary: false
+                            unique: false
+                            flags: {  }
+                        -
+                            name: frontpage_version_id
+                            columns: [frontpage_version_id]
+                            primary: false
+                            unique: false
+                            flags: {  }

@@ -46,31 +46,21 @@ class FrontpagesController extends Controller
             }
         }
 
-        // Fetch when the frontpage was saved
-        $lastSaved = $this->get('setting_repository')->get('frontpage_' . $categoryId . '_last_saved');
+        $fvs = $this->get('api.service.frontpage_version');
 
-        $cm        = new \ContentManager;
-        $contents  = $cm->getContentsForHomepageOfCategory($categoryId);
-        $starttime = \ContentManager::getEarlierStarttimeOfScheduledContents($contents);
-        $endtime   = \ContentManager::getEarlierEndtimeOfScheduledContents($contents);
-        $expires   = $starttime;
+        list($contentPositions, $contents, $invalidationDt, $lastSaved) =
+            $fvs->getPublicFrontpageData($categoryId);
 
-        if (!empty($endtime) && (empty($expires) || $endtime < $starttime)) {
-            $expires = $endtime;
-        }
-
-        if (!empty($expires)) {
-            $lifetime = strtotime($expires) - time();
-
+        // Setup templating cache layer
+        $this->view->setConfig('frontpages');
+        $systemDate = new \DateTime(null, new \DateTimeZone('UTC'));
+        $lifetime   = $invalidationDt->getTimestamp() - $systemDate->getTimestamp();
+        if (!empty($invalidationDt)) {
             if ($lifetime < $this->view->getCacheLifetime()) {
                 $this->view->setCacheLifetime($lifetime);
             }
         }
 
-        $contents = $cm->getInTime($contents);
-
-        // Setup templating cache layer
-        $this->view->setConfig('frontpages');
         $cacheId = $this->view->getCacheId('frontpage', $categoryName, $lastSaved);
 
         if ($this->view->getCaching() === 0
@@ -85,18 +75,14 @@ class FrontpagesController extends Controller
                 'actual_category_id'    => $categoryId,
                 'actual_category_title' => $categoryTitle,
                 'category_data'         => $category,
-                'time'                  => time(),
+                'time'                  => $systemDate->getTimestamp()
             ]);
 
-            $contents = $cm->sortArrayofObjectsByProperty($contents, 'position');
-
-            $ids        = [];
             $relatedIds = [];
+            $ids        = array_keys($contents);
 
             // Get photo and video ids
             foreach ($contents as $content) {
-                $ids[] = $content->pk_content;
-
                 if (isset($content->img1) && !empty($content->img1)) {
                     $relatedIds[] = $content->img1;
                 }
@@ -181,6 +167,7 @@ class FrontpagesController extends Controller
 
             $this->view->assign('column', $contents);
             $this->view->assign('layoutFile', $layoutFile);
+            $this->view->assign('contentPositionByPos', $contentPositions);
             $this->view->assign(
                 'tags',
                 $this->get('api.service.tag')
@@ -189,7 +176,7 @@ class FrontpagesController extends Controller
         }
 
         list($adsPositions, $advertisements) = $this->getAds($categoryId, $contents);
-
+        $invalidationDt->setTimeZone($this->get('core.locale')->getTimeZone());
         return $this->render('frontpage/frontpage.tpl', [
             'advertisements'  => $advertisements,
             'ads_positions'   => $adsPositions,
@@ -197,7 +184,7 @@ class FrontpagesController extends Controller
             'category_name'   => $categoryName,
             'actual_category' => $categoryName,
             'x-tags'          => 'frontpage-page,' . $categoryName,
-            'x-cache-for'     => $expires,
+            'x-cache-for'     => $invalidationDt->format('Y-m-d H:i:s')
         ]);
     }
 

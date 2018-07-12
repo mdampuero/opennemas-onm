@@ -92,9 +92,10 @@ class AssetController extends Controller
         $ccm               = \ContentCategoryManager::get_instance();
         $currentCategoryId = $ccm->get_id($categoryName);
 
-        $cm                 = new \ContentManager;
-        $contentsInHomepage = $cm->getContentsForHomepageOfCategory($currentCategoryId);
-        //content_id | title_catID | serialize(font-family:;font-size:;color:)
+        list($frontpageVersion, $contentPositions, $contentsInHomepage) =
+            $this->get('api.service.frontpage_version')
+                ->getPublicContentsForFrontpageData($currentCategoryId);
+
         if (is_array($contentsInHomepage)) {
             $bgColor    = 'bgcolor_' . $currentCategoryId;
             $titleColor = "title_" . $currentCategoryId;
@@ -275,7 +276,7 @@ class AssetController extends Controller
 
         if (empty($favicoUrl)) {
             // Default favico
-            $favicoUrl = realpath(SITE_PATH . '/assets/images/favicon.png');
+            $favicoUrl      = realpath(SITE_PATH . '/assets/images/favicon.png');
             $favicoFileName = 'favicon.png';
         }
 

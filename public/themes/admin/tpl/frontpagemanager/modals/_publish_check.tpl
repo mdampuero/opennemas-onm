@@ -1,16 +1,16 @@
 <div class="modal-body">
   <div class="clearfix">
     <p>
-    {t escape=off}There is a new version for this frontpage, if you try to save the current changes the new version will be overwritten.{/t}<br/>
+    {t escape=off}This front page will be published in less than 1 hour. Are you sure?{/t}<br/>
     </p>
     <div>
       <button class="btn btn-danger" data-dismiss="modal" ng-click="no()" ng-disabled="noLoading" type="button">
         <i class="fa fa-absolute fa-times m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': noLoading }"></i>
-        {t}continue with the current version{/t}
+        {t}Change the publish date{/t}
       </button>
       <button class="btn btn-success" ng-click="yes()" ng-disabled="yesLoading" type="button">
         <i class="fa fa-absolute fa-check m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': yesLoading }"></i>
-        {t}Reload frontpage{/t}
+        {t}Save{/t}
       </button>
     </div>
   </div>
