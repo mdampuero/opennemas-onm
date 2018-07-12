@@ -53,7 +53,7 @@ class FrontpageVersionService extends OrmService
         $filteredContents = [];
 
         foreach ($contents as $content) {
-            if ($content->available === 1) {
+            if ($content->content_status === 1) {
                 $filteredContents[$content->id] = $content;
             }
         }
