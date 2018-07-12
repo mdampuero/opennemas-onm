@@ -363,29 +363,30 @@ jQuery(function($) {
     modal.data('selected-for-customize-content', elementID);
     modal.find('.modal-header #content-title').html(element.find('.title').html());
 
-    if (title['font-size'] !== 'undefined') {
+    if (typeof title['font-size'] !== 'undefined') {
       var size = title['font-size'].substring(0, 2);
 
       modal.find('.modal-body #font-size').val(size);
     } else {
       modal.find('.modal-body #font-size option[value=""]').attr('selected', 'selected');
     }
-    if (title['font-family'] !== 'undefined') {
+    if (typeof title['font-family'] !== 'undefined') {
       modal.find('.modal-body #font-family').val(title['font-family']);
     } else {
       modal.find('.modal-body #font-family').val('Auto');
     }
-    if (title['font-style'] !== 'undefined') {
+    if (typeof title['font-style'] !== 'undefined') {
       modal.find('.modal-body #font-style').val(title['font-style']);
     } else {
       modal.find('.modal-body #font-style').val('Normal');
     }
-    if (title['font-weight'] !== 'undefined') {
+    if (typeof title['font-weight'] !== 'undefined') {
       modal.find('.modal-body #font-weight').val(title['font-weight']);
     } else {
       modal.find('.modal-body #font-weight').val('Auto');
     }
-    if (title.color !== 'undefined') {
+
+    if (typeof title.color !== 'undefined') {
       modal.find('.modal-body input#font-color').val(title.color);
       modal.find('.modal-body input#font-color').trigger('input');
     } else {
