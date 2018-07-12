@@ -127,8 +127,13 @@ li.quicklinks > div.badge {
 }
 
 .btn-add-new-contents {
-  margin-bottom:-100px;
+  position:fixed;
+  top:100px;
   z-index:9999;
+
+  &.more-padding {
+    top:150px;
+  }
 
   .btn-add-new-contents-title {
     display:inline-block;
@@ -136,13 +141,13 @@ li.quicklinks > div.badge {
     opacity:0;
     line-height:1;
     float:right;
-    transition:font-size 200ms ease 1s, opacity 200ms ease;
+    transition: opacity 200ms ease, font-size 200ms ease 250ms;
   }
 
   &:hover .btn-add-new-contents-title {
     font-size:14px;
     opacity:1;
     padding: 3px 0 0 3px;
-    transition:font-size 200ms ease, opacity 200ms ease 1s;
+    transition: font-size 200ms ease, opacity 200ms ease 200ms;
   }
 }

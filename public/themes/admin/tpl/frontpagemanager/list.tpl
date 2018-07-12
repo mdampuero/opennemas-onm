@@ -244,7 +244,8 @@
       </div>
     </div>
     {/is_module_activated}
-    <a class="btn btn-add btn-success hidden-xs ng-cloak btn-add-new-contents" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
+
+    <a class="{is_module_activated name="es.openhost.theme.scheduleFrontpage"}more-padding{/is_module_activated} btn btn-add btn-success hidden-xs ng-cloak btn-add-new-contents" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
       <span class="fa fa-plus"></span>
       <span class='btn-add-new-contents-title'>{t}Add contents{/t}</span>
     </a>
