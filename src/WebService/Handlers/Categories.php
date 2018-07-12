@@ -29,7 +29,7 @@ class Categories
         $cm = new \ContentManager();
 
         list($frontpageVersion, $contentPositions, $categoryContents) =
-            $this->get('api.service.frontpage_version')
+            getService('api.service.frontpage_version')
                 ->getPublicContentsForFrontpageData($n1);
 
         return $categoryContents;
