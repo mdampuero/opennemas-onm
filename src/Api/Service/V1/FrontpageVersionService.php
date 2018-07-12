@@ -50,7 +50,15 @@ class FrontpageVersionService extends OrmService
                 empty($frontpageVersionId) ? null : $frontpageVersion->id
             );
 
-        return [$frontpageVersion, $contentPositions, $contents];
+        $filteredContents = [];
+
+        foreach ($contents as $content) {
+            if ($content->available === 1) {
+                $filteredContents[$content->id] = $content;
+            }
+        }
+
+        return [$frontpageVersion, $contentPositions, $filteredContents];
     }
 
     public function getInvalidationTime($contents, $categoryId)
