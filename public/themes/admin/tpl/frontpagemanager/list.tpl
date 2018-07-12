@@ -263,7 +263,7 @@
       {$layout}
     </div><!-- /frontpagemanager -->
 
-    <div id="content-provider" class="clearfix hidden-xs ng-cloak" title="{t}Available contents{/t}">
+    <div id="content-provider" class="clearfix hidden-xs" title="{t}Available contents{/t}">
       <div class="content-provider-block-wrapper clearfix">
         <ul>
           {is_module_activated name="ARTICLE_MANAGER"}
