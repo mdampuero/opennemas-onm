@@ -398,7 +398,8 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           }
           return null;
         }, function(response) {
-          messenger.post(response.data.responseText);
+          $scope.showMessage(response.data.responseText, 'error', 5);
+
           return null;
         });
       }
