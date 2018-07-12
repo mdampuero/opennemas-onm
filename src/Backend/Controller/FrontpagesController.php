@@ -83,6 +83,7 @@ class FrontpagesController extends Controller
         $lastSaved = $fvs->getLastSaved($categoryId, $versionId);
 
         return $this->render('frontpagemanager/list.tpl', [
+            'contents'             => $contents,
             'category_id'          => $categoryId,
             'layout'               => $layout,
             'available_layouts'    => $layouts,

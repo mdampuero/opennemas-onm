@@ -27,7 +27,7 @@
       customize_content:     '{url name=admin_content_update_property}'
     };
     var content_states = {
-      {foreach from=$frontpage_articles item=content}
+      {foreach $contents as $content}
         {if $content->id}
           {$content->id}: {$content->getQuickInfo()|json_encode},
         {/if}
@@ -38,7 +38,7 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="get" name="formulario" id="formulario" ng-controller="FrontpageCtrl" ng-init="init({json_encode($frontpages)|clear_json}, {json_encode($versions)|clear_json}, {json_encode($category_id)|clear_json}, {json_encode($version_id)|clear_json}, {json_encode($time)|clear_json}, {json_encode($frontpage_last_saved)|clear_json}, {json_encode($available_layouts)|clear_json}, {json_encode($layout_theme)|clear_json})">
+<form action="#" method="get" name="formulario" id="formulario" ng-controller="FrontpageCtrl" ng-init="init({json_encode($frontpages)|clear_json}, {json_encode($versions)|clear_json}, {json_encode($category_id)|clear_json}, {json_encode($version_id)|clear_json}, {json_encode($time)|clear_json}, {json_encode($frontpage_last_saved)|clear_json}, {json_encode($available_layouts)|clear_json}, {json_encode($layout_theme)|clear_json})" class="frontpagemanger-wrapper">
   <div>
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
@@ -245,7 +245,7 @@
     </div>
     {/is_module_activated}
 
-    <a class="{is_module_activated name="es.openhost.theme.scheduleFrontpage"}more-padding{/is_module_activated} btn btn-add btn-success hidden-xs ng-cloak btn-add-new-contents" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
+    <a class="{is_module_activated name="es.openhost.theme.scheduleFrontpage"}more-padding{/is_module_activated} btn btn-add btn-success hidden-xs btn-add-new-contents" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
       <span class="fa fa-plus"></span>
       <span class='btn-add-new-contents-title'>{t}Add contents{/t}</span>
     </a>
