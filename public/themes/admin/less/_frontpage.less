@@ -125,3 +125,24 @@ li.quicklinks > div.badge {
     margin-right: 10px
   }
 }
+
+.btn-add-new-contents {
+  margin-bottom:-100px;
+  z-index:9999;
+
+  .btn-add-new-contents-title {
+    display:inline-block;
+    font-size:0;
+    opacity:0;
+    line-height:1;
+    float:right;
+    transition:font-size 200ms ease 1s, opacity 200ms ease;
+  }
+
+  &:hover .btn-add-new-contents-title {
+    font-size:14px;
+    opacity:1;
+    padding: 3px 0 0 3px;
+    transition:font-size 200ms ease, opacity 200ms ease 1s;
+  }
+}
