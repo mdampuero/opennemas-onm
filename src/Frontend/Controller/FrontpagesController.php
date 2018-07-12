@@ -51,6 +51,8 @@ class FrontpagesController extends Controller
         list($contentPositions, $contents, $invalidationDt, $lastSaved) =
             $fvs->getPublicFrontpageData($categoryId);
 
+        // Setup templating cache layer
+        $this->view->setConfig('frontpages');
         $systemDate = new \DateTime(null, new \DateTimeZone('UTC'));
         $lifetime   = $invalidationDt->getTimestamp() - $systemDate->getTimestamp();
         if (!empty($invalidationDt)) {
@@ -59,8 +61,6 @@ class FrontpagesController extends Controller
             }
         }
 
-        // Setup templating cache layer
-        $this->view->setConfig('frontpages');
         $cacheId = $this->view->getCacheId('frontpage', $categoryName, $lastSaved);
 
         if ($this->view->getCaching() === 0
