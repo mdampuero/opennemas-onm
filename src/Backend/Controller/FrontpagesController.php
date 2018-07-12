@@ -66,6 +66,7 @@ class FrontpagesController extends Controller
 
         $views = $this->get('content_views_repository')->getViews(array_keys($contents));
 
+        $this->get('core.locale')->setContext('frontend');
         $layout = $lm->render([
             'contents'             => $contents,
             'home'                 => ($categoryId == 0),
@@ -74,6 +75,7 @@ class FrontpagesController extends Controller
             'contentPositionByPos' => $contentPositionByPos,
             'contents'             => $contents
         ]);
+        $this->get('core.locale')->setContext('backend');
 
         $layouts = $this->container->get('core.manager.layout')->getLayouts();
 
