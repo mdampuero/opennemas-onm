@@ -26,9 +26,11 @@ class Categories
     public function allContent($n1)
     {
         $this->validateInt(func_get_args());
-
         $cm = new \ContentManager();
-        $categoryContents = $cm->getContentsForHomepageOfCategory($n1);
+
+        list($frontpageVersion, $contentPositions, $categoryContents) =
+            getService('api.service.frontpage_version')
+                ->getPublicContentsForFrontpageData($n1);
 
         return $categoryContents;
     }
@@ -38,7 +40,7 @@ class Categories
     */
     public function id($actualCategory)
     {
-        $ccm = new \ContentCategoryManager();
+        $ccm              = new \ContentCategoryManager();
         $actualCategoryId = $ccm->get_id($actualCategory);
 
         return (int) $actualCategoryId;
@@ -71,8 +73,8 @@ class Categories
     {
         // Get category object
         $categoryManager = getService('category_repository');
-        $category = $categoryManager->findBy(
-            array('name' => array(array('value' => $categoryName))),
+        $category        = $categoryManager->findBy(
+            ['name' => [['value' => $categoryName]]],
             '1'
         );
 
@@ -89,10 +91,10 @@ class Categories
     */
     public function layout($actualCategory)
     {
-        $ccm = new \ContentCategoryManager();
+        $ccm              = new \ContentCategoryManager();
         $actualCategoryId = $ccm->get_id($actualCategory);
 
-        $layout = s::get('frontpage_layout_'.$actualCategoryId, 'default');
+        $layout = s::get('frontpage_layout_' . $actualCategoryId, 'default');
 
         return $layout;
     }
@@ -102,24 +104,27 @@ class Categories
     */
     protected function lists()
     {
-        $menu = new \Menu();
+        $menu           = new \Menu();
         $menuCategories = $menu->getMenu('frontpage');
 
-        $categories = array();
+        $categories = [];
         foreach ($menuCategories->items as $key => $value) {
-            if ($value->type == 'category' || $value->type == 'blog-category') {
-                if (!empty($value->submenu)) {
-                    foreach ($value->submenu as $subValue) {
-                        if ($subValue->type == 'category' || $subValue->type == 'blog-category') {
-                            $categories[$subValue->pk_item] = $subValue;
-                        }
-                    }
-                    unset($value->submenu);
-                    $categories[$key] = $value;
-                } else {
-                    $categories[$key] = $value;
+            if ($value->type != 'category' && $value->type != 'blog-category') {
+                continue;
+            }
+
+            if (empty($value->submenu)) {
+                $categories[$key] = $value;
+                continue;
+            }
+
+            foreach ($value->submenu as $subValue) {
+                if ($subValue->type == 'category' || $subValue->type == 'blog-category') {
+                    $categories[$subValue->pk_item] = $subValue;
                 }
             }
+            unset($value->submenu);
+            $categories[$key] = $value;
         }
 
         return $categories;

@@ -353,9 +353,14 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeObjectCacheFrontpageMap(Event $event)
     {
-        $category = $event->getArgument('category');
+        $category    = $event->getArgument('category');
+        $frontpageId = $event->getArgument('frontpageId');
 
-        $this->objectCacheHandler->delete('frontpage_elements_map_' . $category);
+        $this->objectCacheHandler->delete(
+            empty($frontpageId) ?
+                'frontpage_elements_map_' . $category :
+                'frontpage_elements_map_' . $category . '_' . $frontpageId
+        );
     }
 
     /**
