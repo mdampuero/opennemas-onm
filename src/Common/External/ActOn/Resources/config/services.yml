@@ -29,8 +29,7 @@ parameters:
                                     - subject
                                     - when
                                 optional:
-                                    - footerid
-                                    - headerid
+                                    - iscustom
 
 services:
     external.act_on.provider.config:
