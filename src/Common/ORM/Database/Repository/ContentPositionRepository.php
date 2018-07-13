@@ -42,8 +42,7 @@ class ContentPositionRepository extends BaseRepository
             $filterVal = $frontpageId;
         }
 
-        $sql .= ' order by placeholder, position limit '
-            . ContentPositionRepository::MAX_NUMBER_OF_CONTENTS;
+        $sql .= ' order by placeholder, position';
 
         $rs = $this->conn->fetchAll($sql, [$filterVal]);
 
