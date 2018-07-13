@@ -249,7 +249,7 @@ class NewsletterTemplateController extends Controller
 
 
         if (!is_array($values['schedule']['days'])) {
-            $values['schedule']['hours'] = [];
+            $values['schedule']['days'] = [];
         }
         foreach ($values['schedule']['days'] as &$day) {
             $day = (int) $day;
