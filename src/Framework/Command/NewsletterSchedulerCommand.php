@@ -190,7 +190,7 @@ EOF
             $output->writeln(sprintf("\t- <info>Rendering newsletter</info>", $template->id));
         }
 
-        $template->title = sprintf('%s [%s]', $template->title, $time->format('d/m/Y h:i:s'));
+        $template->title = sprintf('%s [%s]', $template->title, $time->format('d/m/Y'));
         $template->html  = $this->newsletterRenderer->render($template->contents);
 
         if ($output->isVerbose()) {
