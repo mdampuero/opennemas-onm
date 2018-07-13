@@ -129,19 +129,18 @@ class LayoutManager
      */
     public function renderElement($element, $value, $last)
     {
-        $output =  [];
+        $output = [];
         switch ($element) {
             case 'wrapper':
-                $output []= $this->renderWrapper($element, $value, $last);
+                $output[] = $this->renderWrapper($element, $value, $last);
                 break;
             case 'placeholder':
-                $output []= $this->renderPlaceholder($element, $value, $last);
+                $output[] = $this->renderPlaceholder($element, $value, $last);
                 break;
             case 'static':
-                $output []= $this->renderStatic($element, $value, $last);
+                $output[] = $this->renderStatic($element, $value, $last);
                 break;
             default:
-                # code...
                 break;
         }
 
@@ -159,19 +158,20 @@ class LayoutManager
      */
     public function renderWrapper($elementType, $innerValues, $isLast)
     {
-        $output = [];
-        $last = ($isLast)?" last":"";
-        $output []= '<div class="wrapper clearfix span-'.$innerValues['width'].$last.'">';
+        $output   = [];
+        $last     = ($isLast) ? ' last' : '';
+        $output[] = '<div class="wrapper clearfix span-' .
+            $innerValues['width'] . $last . '">';
 
-        $total = count($innerValues->children());
+        $total    = count($innerValues->children());
         $position = 0;
-        $last = false;
+        $last     = false;
         foreach ($innerValues->children() as $elementTypeInner => $innerValuesInner) {
             $position++;
-            $last = ($total == $position);
-            $output []= $this->renderElement($elementTypeInner, $innerValuesInner, $last);
+            $last     = ($total == $position);
+            $output[] = $this->renderElement($elementTypeInner, $innerValuesInner, $last);
         }
-        $output []= '</div><!-- end wrapper -->';
+        $output[] = '</div><!-- end wrapper -->';
 
         return implode("\n", $output);
     }
@@ -187,28 +187,27 @@ class LayoutManager
      */
     public function renderPlaceholder($elementType, $innerValues, $isLast)
     {
-        $last = ($isLast)?" last":"";
-
-        $description  = '';
-        $order = 'normal';
+        $last        = ($isLast) ? ' last' : '';
+        $description = '';
+        $order       = 'normal';
         if (!empty($innerValues['description'])) {
-            $description = '<div class="title">'.$innerValues['description'].'</div>';
+            $description = '<div class="title">' . $innerValues['description'] . '</div>';
         }
         if (!empty($innerValues['class'])) {
-            $description = '<div class="title">'.$innerValues['description'].'</div>';
+            $description = '<div class="title">' . $innerValues['description'] . '</div>';
         }
         if (!empty($innerValues['order'])) {
             $order = $innerValues['order'];
         }
-        $output  =
-            '<div class="placeholder clearfix '.$innerValues['class']
-            .' span-'.$innerValues['width'].$last
-            .'" data-placeholder="'.$innerValues['name'].'">'
-            .$description
-            .'<div class="content">'
-            .$this->renderContentsForPlaceholder($innerValues['name'], $order)
-            .'<!-- {placeholder-content-'.$innerValues['name']. '} --></div>'
-            .'</div><!-- end wrapper -->';
+        $output =
+            ' <div class="placeholder clearfix ' . $innerValues['class']
+            . ' span-' . $innerValues['width'] . $last
+            . '" data-placeholder="' . $innerValues['name'] . '">'
+            . $description
+            . '<div class="content">'
+            . $this->renderContentsForPlaceholder($innerValues['name'], $order)
+            . '<!-- {placeholder-content-' . $innerValues['name'] . '} --></div>'
+            . '</div><!-- end wrapper -->';
 
         return $output;
     }
@@ -224,19 +223,18 @@ class LayoutManager
      */
     public function renderStatic($elementType, $innerValues, $isLast)
     {
-        $last = ($isLast)?" last":"";
-
-        $description  = '';
+        $last        = ($isLast) ? ' last' : '';
+        $description = '';
         if (!empty($innerValues['description'])) {
-            $description = '<div class="title">'.$innerValues['description'].'</div>';
+            $description = '<div class="title">' . $innerValues['description'] . '</div>';
         }
         if (!empty($innerValues['class'])) {
-            $description = '<div class="title">'.$innerValues['description'].'</div>';
+            $description = '<div class="title">' . $innerValues['description'] . '</div>';
         }
-        $output  =  '<div class="static clearfix '.$innerValues['class']
-                    .' span-'.$innerValues['width'].$last.'">'
-                    .$description
-                    .'</div><!-- end static -->';
+        $output = '<div class="static clearfix ' . $innerValues['class']
+            . ' span-' . $innerValues['width'] . $last . '">'
+            . $description
+            . '</div><!-- end static -->';
 
         return $output;
     }
@@ -251,24 +249,18 @@ class LayoutManager
      */
     public function renderContentsForPlaceholder($placeholderName, $order)
     {
-        if (isset($this->contents) && count($this->contents) > 0) {
-            $output = '';
-            $filteredContents = array();
-            foreach ($this->contents as $content) {
-                if ($content->placeholder == $placeholderName) {
-                    $contentTypeName = $content->content_type_name;
-                    // TODO: Add logic here for delayed, in time or postponed elements
-                    // that will be passed to the view
-                    if (!empty($contentTypeName)) {
-                        $filteredContents []= $content;
-                    }
-                }
-            }
-
-            $this->orderContents($filteredContents, (string) $order);
-
-            foreach ($filteredContents as $content) {
-                $output .= $this->renderContent($content);
+        if (isset($this->contentPositionByPos) &&
+            array_key_exists((string) $placeholderName, $this->contentPositionByPos)
+        ) {
+            $contentPositionsOrder = $this->orderContents(
+                $this->contentPositionByPos[(string) $placeholderName],
+                (string) $order
+            );
+            $output                = '';
+            foreach ($contentPositionsOrder as $contentPosition) {
+                $output .= $this->renderContent(
+                    $this->contents[$contentPosition->pk_fk_content]
+                );
             }
 
             return $output;
@@ -309,9 +301,11 @@ class LayoutManager
         try {
             $contentName = strtolower($content->content_type_name);
 
-            return $this->tpl->fetch($contentName.'/content-provider/'.$contentName.".tpl")."\n";
+            return $this->tpl->fetch(
+                $contentName . '/content-provider/' . $contentName . '.tpl'
+            );
         } catch (\SmartyException $e) {
-            error_log('Error in LayoutManager::renderContent: '.$e->getMessage());
+            error_log('Error in LayoutManager::renderContent: ' . $e->getMessage());
             return '';
         }
     }
@@ -323,18 +317,20 @@ class LayoutManager
      *
      * @param array $params the params for rendering the layout
      */
-    public function render($params = array())
+    public function render($params = [])
     {
         if (isset($params['contents'])) {
-            $this->contents = $params['contents'];
+            $this->contents             = $params['contents'];
+            $this->contentPositionByPos = $params['contentPositionByPos'];
             unset($params['contents']);
+            unset($params['contentPositionByPos']);
         }
 
         $this->params = $params;
 
         $output = [];
         foreach ($this->layoutDoc as $element => $value) {
-            $output []= $this->renderElement($element, $value, false);
+            $output[] = $this->renderElement($element, $value, false);
         }
 
         return implode("\n", $output);

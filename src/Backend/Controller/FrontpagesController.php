@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Common\Core\Controller\Controller;
 use Onm\Settings as s;
+use Common\ORM\Entity\ContentPosition;
 
 class FrontpagesController extends Controller
 {
@@ -31,49 +32,28 @@ class FrontpagesController extends Controller
      */
     public function showAction(Request $request)
     {
-        $categoryId = $request->query->filter('category', '0', FILTER_SANITIZE_STRING);
+        $categoryId = intval($request->query->filter('category', null, FILTER_SANITIZE_NUMBER_INT));
+        $versionId  = $request->query->filter('version', null, FILTER_SANITIZE_NUMBER_INT);
+        $versionId  = $versionId == null ? $versionId : intval($versionId);
 
         // Check if the user can access a frontpage from other category
         if ((int) $categoryId !== 0 && !$this->get('core.security')->hasCategory($categoryId)) {
             throw new AccessDeniedException();
         }
 
-        // Fetch all categories
-        $categories[] = [
-            'id'    => 0,
-            'name'  => _('Frontpage'),
-            'value' => 'home',
-            'group' => _('Frontpages')
-        ];
+        $fvs = $this->get('api.service.frontpage_version');
 
-        $ccm = \ContentCategoryManager::get_instance();
+        list($frontpages, $versions, $contentPositionByPos, $contents, $versionId) =
+            $fvs->getFrontpageData($categoryId, $versionId);
 
-        list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($categoryId);
-        unset($datos_cat);
-        foreach ($parentCategories as $key => $category) {
-            if ($category->inmenu == 1) {
-                $categories[$category->id] = [
-                    'id'    => $category->id,
-                    'name'  => $category->title,
-                    'value' => $category->name,
-                    'group' => _('Categories')
-                ];
-            }
+        $this->container->get('api.service.contentposition')
+            ->getCategoriesWithManualFrontpage();
 
-            foreach ($subcat[$key] as $subcategory) {
-                if ($subcategory->inmenu == 1) {
-                    $categories[$subcategory->id] = [
-                        'id'    => $subcategory->id,
-                        'name'  => $subcategory->title,
-                        'value' => $subcategory->name,
-                        'group' => _('Categories')
-                    ];
-                }
-            }
-        }
-
+        $versions = $fvs->responsify($versions);
         // Get theme layout
-        $layoutTheme = s::get('frontpage_layout_' . $categoryId, 'default');
+        $layoutTheme =
+            s::get('frontpage_layout_' . $categoryId, 'default');
+
         // Check if layout is valid,if not use the default value
         if (!file_exists(SITE_PATH . "/themes/" . TEMPLATE_USER . "/layouts/" . $layoutTheme . ".xml")) {
             $layoutTheme = 'default';
@@ -84,60 +64,39 @@ class FrontpagesController extends Controller
 
         $layoutSettings = $lm->getLayout($layoutTheme);
 
-        // Get contents for this home
-        $cm = new \ContentManager();
+        $views = $this->get('content_views_repository')->getViews(array_keys($contents));
 
-        $contentElementsInFrontpage = $cm->getContentsForHomepageOfCategory(
-            $categoryId
-        );
-
-        // Sort all the elements by its position
-        $contentElementsInFrontpage = $cm->sortArrayofObjectsByProperty(
-            $contentElementsInFrontpage,
-            'position'
-        );
-
-        // Calculate the content views at once
-        $ids = array_map(function ($content) {
-            return $content->id;
-        }, $contentElementsInFrontpage);
-
-        $views = getService('content_views_repository')->getViews($ids);
-        foreach ($contentElementsInFrontpage as &$content) {
-            if (array_key_exists($content->id, $views)) {
-                $content->views = $views[$content->id];
-            } else {
-                $content->views = 0;
-            }
-        }
-
+        $this->get('core.locale')->setContext('frontend');
         $layout = $lm->render([
-            'contents'  => $contentElementsInFrontpage,
-            'home'      => ($categoryId == 0),
-            // 'smarty'    => $this->view,
-            'category'  => $categoryId,
+            'contents'             => $contents,
+            'home'                 => ($categoryId == 0),
+            'views'                => $views,
+            'category'             => $categoryId,
+            'contentPositionByPos' => $contentPositionByPos,
+            'contents'             => $contents
         ]);
+        $this->get('core.locale')->setContext('backend');
 
         $layouts = $this->container->get('core.manager.layout')->getLayouts();
 
         // Get last saved and check
-        $lastSaved = $this->get('cache')->fetch('frontpage_last_saved_' . $categoryId);
-        if ($lastSaved == false) {
-            // Save the actual date for
-            $date      = new \Datetime("now");
-            $dateForDB = $date->format(\DateTime::ISO8601);
-            $this->get('cache')->save('frontpage_last_saved_' . $categoryId, $dateForDB);
-            $lastSaved = $dateForDB;
-        }
+        $lastSaved = $fvs->getLastSaved($categoryId, $versionId);
 
         return $this->render('frontpagemanager/list.tpl', [
+            'contents'             => $contents,
             'category_id'          => $categoryId,
-            'frontpage_articles'   => $contentElementsInFrontpage,
             'layout'               => $layout,
             'available_layouts'    => $layouts,
             'layout_theme'         => $layoutSettings,
             'frontpage_last_saved' => $lastSaved,
-            'categories'           => $categories,
+            'frontpages'           => $frontpages,
+            'versions'             => $versions,
+            'version_id'           => $versionId,
+            'time'                 => [
+                'timezone'         => $this->get('core.locale')->getTimeZone()
+                    ->getName(),
+                'timestamp'        => time() * 1000
+            ]
         ]);
     }
 
@@ -160,8 +119,7 @@ class FrontpagesController extends Controller
         // Get application logger
         $logger = $this->get('application.log');
 
-        $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
-
+        $category = $request->request->get('category', null, FILTER_SANITIZE_STRING);
         if ($category === null && $category === '') {
             return new JsonResponse(
                 [ 'message' => _("Unable to save content positions: Data sent from the client were not valid.") ]
@@ -218,20 +176,24 @@ class FrontpagesController extends Controller
             return new JsonResponse([ 'message' => $message ]);
         }
 
+        $fvs      = $this->get('api.service.frontpage_version');
+        $version  =
+            $fvs->saveFrontPageVersion($request->request->get('version', null));
         $contents = [];
+
         // Iterate over each element and fetch its parameters to save.
         foreach ($contentsPositions as $params) {
             $contents[] = [
-                'id'           => $params['id'],
-                'category'     => $categoryID,
-                'placeholder'  => $params['placeholder'],
-                'position'     => $params['position'],
-                'content_type' => $params['content_type'],
+                'id'                   => $params['id'],
+                'placeholder'          => $params['placeholder'],
+                'position'             => $params['position'],
+                'content_type'         => $params['content_type']
             ];
         }
 
         // Save contents
-        $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $contents);
+        $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $version->id, $contents);
+
 
         if (!$savedProperly) {
             $message = _("Unable to save content positions: Error while saving in database.");
@@ -245,15 +207,11 @@ class FrontpagesController extends Controller
             . ' Ids ' . json_encode($contentsPositions)
         );
 
-        $this->get('core.dispatcher')->dispatch('frontpage.save_position', [ 'category' => $categoryID ]);
-
-        // Save the actual date for fronpage
-        $dateForDB = time();
-        $this->get('cache')->save('frontpage_last_saved_' . $category, $dateForDB);
-
+        $lastSaved = $fvs->getLastSaved($version->category_id, $version->id, true);
         return new JsonResponse([
-            'message' => _("Content positions saved properly"),
-            'date'    => $dateForDB,
+            'message'              => _("Content positions saved properly"),
+            'versionId'            => $version->id,
+            'frontpage_last_saved' => $lastSaved
         ]);
     }
 
@@ -269,8 +227,12 @@ class FrontpagesController extends Controller
      */
     public function pickLayoutAction(Request $request)
     {
-        $category = $request->query->filter('category', '', FILTER_SANITIZE_STRING);
-        $layout   = $request->query->filter('layout', null, FILTER_SANITIZE_STRING);
+        $category           =
+            $request->query->filter('category', '', FILTER_SANITIZE_STRING);
+        $layout             =
+            $request->query->filter('layout', null, FILTER_SANITIZE_STRING);
+        $frontpageVersionId =
+            $request->query->filter('versionId', null, FILTER_SANITIZE_STRING);
 
         if ($category == 'home') {
             $category = 0;
@@ -286,9 +248,10 @@ class FrontpagesController extends Controller
             && $layoutValid
         ) {
             $this->get('setting_repository')->set('frontpage_layout_' . $category, $layout);
-
-            $this->get('core.dispatcher')->dispatch('frontpage.pick_layout', [ 'category' => $category ]);
-
+            $this->get('core.dispatcher')->dispatch(
+                'frontpage.pick_layout',
+                [ 'category' => $category, 'frontpageId' => $frontpageVersionId ]
+            );
             $this->get('session')->getFlashBag()->add(
                 'success',
                 sprintf(_('Layout %s seleted.'), $layout)
@@ -306,9 +269,15 @@ class FrontpagesController extends Controller
             $section = $category;
         }
 
-        $this->get('core.dispatcher')->dispatch('frontpage.save_position', [ 'category' => $category ]);
+        $this->get('core.dispatcher')->dispatch(
+            'frontpage.save_position',
+            [ 'category' => $category, 'frontpageId' => $frontpageVersionId ]
+        );
 
-        return $this->redirect($this->generateUrl('admin_frontpage_list', [ 'category' => $category ]));
+        return $this->redirect($this->generateUrl(
+            'admin_frontpage_list',
+            [ 'category' => $category, 'version' => $frontpageVersionId ]
+        ));
     }
 
     /**
@@ -323,19 +292,12 @@ class FrontpagesController extends Controller
      */
     public function lastVersionAction(Request $request)
     {
-        $dateRequest         = (int) $request->query->filter('date', '', FILTER_SANITIZE_STRING);
-        $category            = $request->query->filter('category', '', FILTER_SANITIZE_STRING);
-        $newVersionAvailable = false;
+        $dateRequest = $request->query->filter('date', '', FILTER_SANITIZE_STRING);
+        $category    = (int) $request->query->filter('category', '', FILTER_SANITIZE_STRING);
+        $versionId   = (int) $request->query->filter('versionId', '', FILTER_SANITIZE_STRING);
 
-        if (!empty($dateRequest)) {
-            if ($category == 'home') {
-                $category = 0;
-            }
-
-            $lastSaved           = $this->get('cache')->fetch('frontpage_last_saved_' . $category);
-            $newVersionAvailable = $lastSaved > $dateRequest;
-        }
-
+        $newVersionAvailable = $this->get('api.service.frontpage_version')
+            ->checkLastSaved($category, $versionId, $dateRequest);
         return new Response(json_encode($newVersionAvailable));
     }
 
@@ -367,13 +329,31 @@ class FrontpagesController extends Controller
         // Get the ID of the actual category from the categoryName
         $actualCategoryId = $ccm->get_id($categoryName);
 
-        $cm          = new \ContentManager;
-        $contentsRAW = $request->request->get('contents');
-        $contents    = json_decode($contentsRAW, true);
+        $contentsRAW         = $request->request->get('contents');
+        $contentPositionList = json_decode($contentsRAW, true);
+        $contentPositionMap  = [];
+        $contentsMap         = [];
 
-        $contentsInHomepage = $cm->getContentsForHomepageFromArray($contents);
-        // Filter articles if some of them has time scheduling and sort them by position
-        $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
+        foreach ($contentPositionList as $contentPosition) {
+            if (!array_key_exists($contentPosition['placeholder'], $contentPositionMap)) {
+                $contentPositionMap[$contentPosition['placeholder']] = [];
+            }
+
+            $contentPosition['pk_fk_content']                      =
+                intval($contentPosition['id']);
+            $contentPositionMap[$contentPosition['placeholder']][] =
+                new ContentPosition($contentPosition);
+            $contentsMap[$contentPosition['id']]                   =
+                [$contentPosition['content_type'], intval($contentPosition['id'])];
+        }
+
+        $contents =
+            $this->container->get('entity_repository')->findMulti($contentsMap);
+
+        $contentsInHomepage = [];
+        foreach ($contents as $content) {
+            $contentsInHomepage[$content->id] = $content;
+        }
 
         // Fetch ads
         list($positions, $advertisements) =
@@ -389,6 +369,7 @@ class FrontpagesController extends Controller
             }
         }
 
+        $cm = new \ContentManager;
         if (count($imageIdsList) > 0) {
             $imageList = $cm->find('Photo', 'pk_content IN (' . implode(',', $imageIdsList) . ')');
         } else {
@@ -403,6 +384,7 @@ class FrontpagesController extends Controller
                 ->loadRelatedContents();
         }
 
+        $this->view->assign('contentPositionByPos', $contentPositionMap);
         $this->view->assign('column', $contentsInHomepage);
 
         // Getting categories
@@ -438,5 +420,15 @@ class FrontpagesController extends Controller
         $session->remove('last_preview');
 
         return new Response($content);
+    }
+
+    public function deleteAction($versionId, $categoryId)
+    {
+        $this->get('api.service.frontpage_version')
+            ->deleteVersionItem($categoryId, $versionId);
+
+        return new JsonResponse([
+            'message' => _("Version deleted properly")
+        ]);
     }
 }

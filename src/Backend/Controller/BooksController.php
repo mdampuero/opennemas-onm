@@ -136,7 +136,14 @@ class BooksController extends Controller
         if ('POST' != $request->getMethod()) {
             $this->view->assign('category', $this->category);
 
-            return $this->render('book/new.tpl');
+            $ls = $this->get('core.locale');
+            return $this->render(
+                'book/new.tpl',
+                [
+                    'locale' => $ls->getLocale('frontend'),
+                    'tags'   => []
+                ]
+            );
         }
 
         $data = [
@@ -147,13 +154,11 @@ class BooksController extends Controller
             'editorial'      => $request->request
                 ->filter('editorial', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $request->request->filter('description', ''),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
-            ),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->getInt('category', 0),
             'position'       => $request->request->getInt('position', 1),
             'content_status' => $request->request->getInt('content_status', 0),
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         $book = new \Book();
@@ -168,7 +173,9 @@ class BooksController extends Controller
                 _('Book created successfully.')
             );
 
-            return $this->render('book/new.tpl', [ 'book' => $book ]);
+            return $this->redirect(
+                $this->generateUrl('admin_book_show', [ 'id' => $id ])
+            );
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -176,7 +183,13 @@ class BooksController extends Controller
             );
         }
 
-        return $this->render('book/new.tpl');
+        return $this->render(
+            'book/new.tpl',
+            [
+                'locale' => $this->get('core.locale')->getLocale('frontend'),
+                'tags'   => []
+            ]
+        );
     }
 
     /**
@@ -204,6 +217,11 @@ class BooksController extends Controller
             return $this->redirect($this->generateUrl('admin_books'));
         }
 
+        $auxTagIds     = $book->getContentTags($book->id);
+        $book->tag_ids = array_key_exists($book->id, $auxTagIds) ?
+            $auxTagIds[$book->id] :
+            [];
+
         if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
             && !$book->isOwner($this->getUser()->id)
         ) {
@@ -215,9 +233,13 @@ class BooksController extends Controller
             return $this->redirect($this->generateUrl('admin_books'));
         }
 
+        $ls = $this->get('core.locale');
         return $this->render('book/new.tpl', [
             'book'     => $book,
             'category' => $book->category,
+            'locale'         => $ls->getRequestLocale('frontend'),
+            'tags'           => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($book->tag_ids)['items']
         ]);
     }
 
@@ -276,13 +298,11 @@ class BooksController extends Controller
                 ->filter('editorial', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'cover_id'       => $request->request->getInt('book_cover_id'),
             'description'    => $request->request->filter('description', ''),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
-            ),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->getInt('category', 0),
             'position'       => $request->request->getInt('position', 1),
             'content_status' => $request->request->getInt('content_status', 0),
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         if ($book->update($data)) {

@@ -324,7 +324,9 @@ class BlogsController extends Controller
             'actual_category' => 'blog', // Used in renderMenu
             'x-tags'          => 'blog-inner,' . $blog->id,
             'x-cache-for'     => '+1 day',
-            'x-cacheable'     => $cacheable
+            'x-cacheable'     => $cacheable,
+            'tags'            => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($blog->tag_ids)['items']
         ]);
     }
 

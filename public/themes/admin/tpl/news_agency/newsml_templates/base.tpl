@@ -68,7 +68,7 @@
                     <doc.rights provider="Opennemas"/>
                     <doc-id id-string="{$article->id}" />
                     <key-list>
-                      <keyword key="{$article->metadata|escape:"html"}"/>
+                      <keyword key="{renderMetaKeywords content=$article tags=$tags onlyTags=True }"/>
                     </key-list>
                   </docdata>
                 </head>

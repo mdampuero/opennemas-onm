@@ -15,6 +15,12 @@
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
+              <li class="quicklinks">
+                <a class="btn btn-link" href="{url name=backend_tags_config}" class="admin_add" title="{t}Config tag module{/t}">
+                  <span class="fa fa-cog fa-lg"></span>
+                </a>
+              </li>
+              <li class="quicklinks"><span class="h-seperate"></span></li>
               {acl isAllowed="TAG_CREATE"}
                 <li>
                   <a class="btn btn-primary text-uppercase" ng-click="createTag()">

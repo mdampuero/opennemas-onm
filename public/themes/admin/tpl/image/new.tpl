@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form id="formulario" name="form_upload" action="{url name=admin_image_update}" method="POST">
+  <form id="formulario" name="form_upload" action="{url name=admin_image_update}" method="POST" ng-controller="ImageCtrl" ng-init="init({json_encode($photos)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">

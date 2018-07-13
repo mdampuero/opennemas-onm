@@ -107,6 +107,8 @@ class ArticlesController extends Controller
             ]);
         }
 
+        $locale = getService('core.locale')->getRequestLocale();
+
         return $this->render("extends:layouts/{$layout}.tpl|article/article.tpl", [
             'actual_category'       => $category->name,
             'actual_category_id'    => $category->pk_content_category,
@@ -123,7 +125,9 @@ class ArticlesController extends Controller
             'o_token'               => $token,
             'x-cache-for'           => '+1 day',
             'x-cacheable'           => empty($token),
-            'x-tags'                => 'article,' . $article->id
+            'x-tags'                => 'article,' . $article->id,
+            'tags'                  => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($article->tag_ids, $locale)['items']
         ]);
     }
 

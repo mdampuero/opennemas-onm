@@ -22,7 +22,6 @@ orm:
                 frontpage:           integer
                 in_home:             boolean
                 in_litter:           boolean
-                metadata:            string
                 params:              string
                 pk_content:          integer
                 position:            integer
@@ -70,9 +69,6 @@ orm:
                         body:
                             type: text
                             options: { default: '', length: 65532, notnull: false }
-                        metadata:
-                            type: string
-                            options: { default: null, notnull: false, length: 255 }
                         starttime:
                             type: datetimetz
                             options: { default: null, notnull: false }

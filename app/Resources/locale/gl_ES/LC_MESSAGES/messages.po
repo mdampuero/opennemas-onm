@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-04 14:34+0000\n"
-"PO-Revision-Date: 2018-07-04 16:40+0200\n"
+"POT-Creation-Date: 2018-07-10 16:33+0000\n"
+"PO-Revision-Date: 2018-07-10 18:35+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -351,12 +351,6 @@ msgstr "Artigo actualizado correctamente."
 msgid "There was a problem while saving the file information."
 msgstr "Produciuse un erro ao gardar a información do ficheiro."
 
-msgid "Frontpage"
-msgstr "Portada"
-
-msgid "Frontpages"
-msgstr "Portadas"
-
 msgid ""
 "Unable to save content positions: Data sent from the client were not valid."
 msgstr ""
@@ -384,6 +378,9 @@ msgstr "Disposición %s seleccionada."
 
 msgid "Layout or category not valid."
 msgstr "Disposición ou categoría non válida."
+
+msgid "Version deleted properly"
+msgstr "Versión eliminada correctamente"
 
 msgid "Please provide a image id for show it."
 msgstr "Forneza un identificador dunha imaxe para mostrala."
@@ -462,6 +459,9 @@ msgstr "Menú actualizado correctamente."
 
 msgid "There was an error while updating the menu."
 msgstr "Produciuse un erro ao actualizar o menú."
+
+msgid "Frontpage"
+msgstr "Portada"
 
 msgid "Opinion"
 msgstr "Artigo de opinión"
@@ -848,6 +848,9 @@ msgstr "Menús"
 
 msgid "Authors"
 msgstr "Autores"
+
+msgid "Tags"
+msgstr "Etiquetas"
 
 msgid "Contents"
 msgstr "Contidos"
@@ -1637,6 +1640,14 @@ msgstr ""
 "    </li>\n"
 "</ul>"
 
+#, php-format
+msgid "Nothing to execute at current day (current:%d, valid: %s)"
+msgstr ""
+
+#, php-format
+msgid "Nothing to execute at current hour (current:%s, valid: %s)"
+msgstr ""
+
 msgid "Application upgraded"
 msgstr "Aplicativo actualizado"
 
@@ -2092,6 +2103,9 @@ msgstr "O teu xornal xa está en liña"
 msgid "Error when creating a new instance"
 msgstr "Erro ao crear unha nova instancia"
 
+msgid "You have exceeded the version limit. Delete one to create a new one"
+msgstr "Excedeches o límite de versións. Elimina unha para crear unha nova"
+
 msgid "Home"
 msgstr "Portada"
 
@@ -2191,6 +2205,12 @@ msgstr "Si"
 msgid "No"
 msgstr "Non"
 
+msgid "Wrong parameter slug"
+msgstr "Parámetro slug incorrecto"
+
+msgid "Invalid tag"
+msgstr "Etiqueta non válida"
+
 msgid "Contents translated successfully"
 msgstr "Contido traducido correctamente"
 
@@ -2280,6 +2300,15 @@ msgstr "Escribe un enderezo de correo válido"
 
 msgid "Your email is not allowed"
 msgstr "O teu correo non está permitido"
+
+msgid "Please provide a valid tag"
+msgstr "Fornece unha etiqueta válida"
+
+msgid "Your tag has invalid words"
+msgstr "A etiqueta conten palabras non válidas"
+
+msgid "Your tag is too short"
+msgstr "A etiqueta é demasiado curta"
 
 #, php-format
 msgid "Unable to create a %s"
@@ -3059,9 +3088,6 @@ msgstr "Favorito"
 
 msgid "Publication closed date"
 msgstr "Data de final de publicación"
-
-msgid "Tags"
-msgstr "Etiquetas"
 
 msgid "Write a tag and press Enter..."
 msgstr "Escribe unha etiqueta e preme Intro…"
@@ -3873,6 +3899,12 @@ msgstr "reiniciar"
 msgid "apply"
 msgstr "aplicar"
 
+msgid "Reload"
+msgstr "Recargar"
+
+msgid "Suggested tags"
+msgstr "Etiquetas suxeridas"
+
 msgid "Instance information"
 msgstr "Información da instancia"
 
@@ -4293,9 +4325,6 @@ msgstr "Creando especial"
 msgid "Editing special"
 msgstr "Editando especial"
 
-msgid "List of words separated by commas."
-msgstr "Lista de palabras separadas por comas"
-
 msgid "Slug"
 msgstr "Slug"
 
@@ -4551,6 +4580,31 @@ msgstr "Artigo con ligazon externa"
 msgid "Unasigned"
 msgstr "Sen asignar"
 
+msgid "Config tag module"
+msgstr "Configuración do módulo «Etiquetas»"
+
+msgid "Language"
+msgstr "Idioma"
+
+msgid "Nº contents"
+msgstr "Nº de contidos"
+
+msgid "The tag exist or is invalid"
+msgstr "A etiqueta existe ou non é válida"
+
+msgid "Words and rules prohibited"
+msgstr "Regras de palabras prohibidas"
+
+msgid ""
+"List of words or regular expressions that are prohibited on comments, one "
+"per line."
+msgstr ""
+"Lista de palabras ou expresións regulares que están prohibidas nos "
+"comentarios, unha por liña."
+
+msgid "Are you sure you want to publish this frontpage now?"
+msgstr "Tes certeza que queres publicar esta portada agora?"
+
 msgid "Customize font and color style"
 msgstr "Personalizar estilo do tipo de letra e cor"
 
@@ -4611,11 +4665,14 @@ msgstr "Imaxe á esquerda"
 msgid "Default"
 msgstr "Por defecto"
 
+msgid "This front page will be published in less than 1 hour. Are you sure?"
+msgstr "Esta portada publicarase en menos de unha hora. Tes certeza?"
+
+msgid "Change the publish date"
+msgstr "Cambiar a data de publicación"
+
 msgid "Are you sure that do you want to send to trash the next element?"
 msgstr "Tes certeza que queres enviar ao lixo o seguinte elemento?"
-
-msgid "New version available"
-msgstr "Nova versión dispoñíbel"
 
 msgid ""
 "There is a new version for this frontpage, if you try to save the current "
@@ -4623,6 +4680,9 @@ msgid ""
 msgstr ""
 "Hai unha nova versión desta portada, se tenta gardar os seus cambios a nova "
 "versión sobrescribirase."
+
+msgid "continue with the current version"
+msgstr "continuar coa versión actual"
 
 msgid "Reload frontpage"
 msgstr "Recargar portada"
@@ -4656,14 +4716,20 @@ msgstr ""
 msgid "Views"
 msgstr "Vistas"
 
-msgid "Preview frontpage with actual content positions"
-msgstr "Previsualizar portada coas posicións de contidos actuais"
+msgid "Frontpages"
+msgstr "Portadas"
 
-msgid "Save changes"
-msgstr "Gardar cambios"
+msgid "LIVE"
+msgstr "ACTUAL"
 
-msgid "Managing frontpage:"
-msgstr "Xestionar portada:"
+msgid "Save this version"
+msgstr "Gardar esta versión"
+
+msgid "Live now"
+msgstr "Publicada agora"
+
+msgid "Go live on"
+msgstr "Publicar en"
 
 msgid ""
 "The frontpage manager is currently <strong>unavaible for your screen size</"
@@ -4686,6 +4752,9 @@ msgstr "Últimos artigos"
 
 msgid "Change the layout of this frontpage"
 msgstr "Cambiar a disposición para esta portada"
+
+msgid "Close"
+msgstr "Pechar"
 
 msgid "Delete category"
 msgstr "Eliminar categoría"
@@ -5198,16 +5267,6 @@ msgstr ""
 "Cando se recibe un comentario e non pasa con éxito as comprobacións de lista "
 "negra, rexeitalo automaticamente sen intervención"
 
-msgid "Words and rules prohibited"
-msgstr "Regras de palabras prohibidas"
-
-msgid ""
-"List of words or regular expressions that are prohibited on comments, one "
-"per line."
-msgstr ""
-"Lista de palabras ou expresións regulares que están prohibidas nos "
-"comentarios, unha por liña."
-
 msgid "Configuration"
 msgstr "Configuración"
 
@@ -5395,9 +5454,6 @@ msgstr "Cartas"
 
 msgid "Covers"
 msgstr "Portadas"
-
-msgid "Reload"
-msgstr "Recargar"
 
 msgid "No contents in the trash that matches your search."
 msgstr "Non se puideron atopar contidos no lixo que coincidan coa súa busca."
@@ -5967,9 +6023,6 @@ msgstr ""
 msgid "Language & time"
 msgstr "Idioma e hora"
 
-msgid "Language"
-msgstr "Idioma"
-
 msgid "Used for interface, messages and units in the control panel"
 msgstr ""
 "Usado para a interface, as mensaxes e as unidades no seu panel de control"
@@ -6175,9 +6228,6 @@ msgstr ""
 msgid "Saving..."
 msgstr "Gardando…"
 
-msgid "Close"
-msgstr "Pechar"
-
 msgid "Yes, import them"
 msgstr "Si, importalos"
 
@@ -6287,6 +6337,9 @@ msgstr ""
 msgid "In which category you want to import this element?"
 msgstr "En que categoría desexas importar este elemento?"
 
+msgid "Save changes"
+msgstr "Gardar cambios"
+
 msgid "You must save a changes or back to list"
 msgstr "Debes gardar os cambios ou volver á lista"
 
@@ -6361,8 +6414,8 @@ msgstr "Listas de subscrición"
 msgid "%1 subscriptors"
 msgstr "%s subscritores"
 
-msgid "Add section"
-msgstr "Engadir sección"
+msgid "Add Container"
+msgstr "Engadir contenedor"
 
 msgid "Block title"
 msgstr "Título do bloque"
@@ -6384,9 +6437,6 @@ msgstr "Asunto da mensaxe"
 
 msgid "Add contents to groups by using the \"Add contents\" button"
 msgstr "Engadir contidos a grupos usando o botón «Engadir contidos»"
-
-msgid "Add Container"
-msgstr "Engadir contenedor"
 
 msgid "Clean containers"
 msgstr "Limpar contenedores"
@@ -6683,9 +6733,6 @@ msgstr "Información do autor"
 
 msgid "Created at"
 msgstr "Creado en"
-
-msgid "List of words separated by words."
-msgstr "Lista de palabras separadas por comas."
 
 msgid "Related url"
 msgstr "Url relacionado"
@@ -9218,6 +9265,24 @@ msgstr ""
 "opennemas.com/\" style=\"font-family: 'trebuchet ms', 'lucida grande', "
 "'lucida sans unicode', 'lucida sans', tahoma, sans-serif; font-size: 14px; "
 "line-height: normal;\" target=\"_blank\">Opennemas</a>"
+
+#~ msgid "New version available"
+#~ msgstr "Nova versión dispoñíbel"
+
+#~ msgid "Preview frontpage with actual content positions"
+#~ msgstr "Previsualizar portada coas posicións de contidos actuais"
+
+#~ msgid "Managing frontpage:"
+#~ msgstr "Xestionar portada:"
+
+#~ msgid "List of words separated by commas."
+#~ msgstr "Lista de palabras separadas por comas"
+
+#~ msgid "Add section"
+#~ msgstr "Engadir sección"
+
+#~ msgid "List of words separated by words."
+#~ msgstr "Lista de palabras separadas por comas."
 
 #~ msgid "Send date"
 #~ msgstr "Data de envío"

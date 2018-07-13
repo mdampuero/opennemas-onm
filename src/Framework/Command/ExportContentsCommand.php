@@ -160,7 +160,9 @@ EOF
             [
                 'article'    => $content,
                 'photo'      => $content->img1,
-                'photoInner' => $content->img2
+                'photoInner' => $content->img2,
+                'tags'       => $this->getContainer()->get('api.service.tag')
+                    ->getListByIdsKeyMapped($content->tag_ids)['items']
             ]
         );
 
@@ -390,11 +392,13 @@ EOF
 
                         $this->articlesCounter++;
                         $this->output->writeln(
-                            $this->articlesCounter . " of " . $this->total . '(id: ' . $content->id . ')');
+                            $this->articlesCounter . " of " . $this->total . '(id: ' . $content->id . ')'
+                        );
                     } else {
                         $this->opinionsCounter++;
                         $this->output->writeln(
-                            $this->opinionsCounter . " of " . $this->total . '(id: ' . $content->id . ')');
+                            $this->opinionsCounter . " of " . $this->total . '(id: ' . $content->id . ')'
+                        );
                     }
 
                     $imageId      = $content->img1;
@@ -510,7 +514,8 @@ EOF
             if ($content->content_type_name == 'video') {
                 $this->videosCounter++;
                 $this->output->writeln(
-                    $this->videosCounter . " of " . $this->total . '(id: ' . $content->id . ')');
+                    $this->videosCounter . " of " . $this->total . '(id: ' . $content->id . ')'
+                );
                 $newsMLString = $this->convertVideoToNewsML($content);
             } else {
                 $newsMLString = $this->convertToNewsML($content);

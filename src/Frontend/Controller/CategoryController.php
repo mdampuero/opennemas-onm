@@ -113,7 +113,7 @@ class CategoryController extends Controller
             // Overloading information for contents
             foreach ($articles as &$content) {
                 // Load category related information
-                $content->author         = $this->get('user_repository')->find($content->fk_author);
+                $content->author = $this->get('user_repository')->find($content->fk_author);
 
                 // Get number comments for a content
                 if ($content->with_comment == 1) {
@@ -143,6 +143,7 @@ class CategoryController extends Controller
                 'category'              => $category,
                 'time'                  => time(),
                 'pagination'            => $pagination,
+                'page'                  => $page,
                 'actual_category_title' => $category->title
             ]);
         }

@@ -61,6 +61,26 @@
         $scope.flags = { http: {} };
 
         /**
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *  List of tags by id
+         *
+         * @type {Array}
+         */
+        $scope.tags = {};
+
+        /**
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *  List of suggested tags
+         *
+         * @type {Array}
+         */
+        $scope.suggestedTags = {};
+
+        /**
          * @function configure
          * @memberOf BaseCtrl
          *
@@ -154,11 +174,13 @@
 
             if (callback &&
                 getType.toString.call(callback) === '[object Function]') {
-              callback(response);
+              return callback(response);
             }
+            return null;
           }, function() {
             $scope.disableFlags('http');
           });
+          return null;
         };
 
         /**
@@ -217,7 +239,7 @@
 
         /**
          * @function isTranslated
-         * @memberOf ArticleCtrl
+         * @memberOf BaseCtrl
          *
          * @description
          *   Checks if the article is translated to the locale.
@@ -234,6 +256,219 @@
           }
 
           return false;
+        };
+
+        /**
+         * @function getSuggestedTags
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Method to retrive all tags suggested tags from different fields.
+         *
+         * @param {Array} list of fields
+         *
+         * @return {Array} list of suggested tags from the fields
+         */
+        $scope.getSuggestedTags = function(locale, tagText, currentTags) {
+          var route = {
+            name: 'api_v1_backend_tags_suggester',
+            params: {
+              tag: tagText,
+              languageId: locale
+            }
+          };
+
+          return http.get(route).then(
+            function(response) {
+              if (!response.data.items || !Array.isArray(response.data.items)) {
+                return [];
+              }
+
+              /*
+               *  We check if from the suggested tags exist someones in the
+               * current tag list
+               */
+              var tagsuggestedList = Array.isArray(currentTags) && currentTags.length > 0 ?
+                response.data.items.filter(function(tagElement) {
+                  return currentTags.indexOf(tagElement.id) === -1;
+                }) :
+                response.data.items;
+
+              return tagsuggestedList;
+            }, $scope.errorCb
+          );
+        };
+
+        /**
+         * @function checkNewTags
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Check if the some tags exist or not in the DB
+         *
+         * @param function - function to apply the needed changes for the response
+         * @param String   - tag2Check tag to check
+         * @param String   - locale tag language
+         * @param int      - id of the actual tag if have one
+         *
+         * @return {Array} List of tags associate to his DB id
+         */
+        $scope.checkNewTags = function(callback, tag2Check, locale, id) {
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+          }
+
+          $scope.tm = $timeout(function() {
+            if (tag2Check.length < 2) {
+              return false;
+            }
+            var route = {
+              name: 'api_v1_backend_tags_valid_new_tag',
+              params: {
+                text: tag2Check,
+                languageId: locale
+              }
+            };
+
+            http.get(route).then(
+              function(response) {
+                if (!response.data.valid) {
+                  callback({ error: response.data.message });
+                  return null;
+                }
+                callback(response.data.valid);
+                return null;
+              }, function(response) {
+                callback({ error: response.data.message });
+                return null;
+              }
+            );
+            return null;
+          }, 500);
+        };
+
+        /**
+         * @function checkAutoSuggesterTags
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Check if the some tags exist or not in the DB
+         *
+         * @param function - applyChanges to apply the needed changes for the response
+         * @param String   - tag2Check tag to check
+         * @param String   - locale tag language
+         *
+         * @return {Array} List of suggested tags
+         */
+        $scope.checkAutoSuggesterTags = function(callback, text2Check, currentTags, locale) {
+          var text2Check = text2Check.replace(/[^0-9A-zÀ-ú_\-\s]/gi, '');
+          var tagsVal = text2Check.split(' ').filter(function(tag) {
+            return tag.length > 1;
+          });
+
+          // Remove dupes
+          tagsVal = tagsVal.filter(function(el, i, a) {
+            return i === a.indexOf(el);
+          });
+
+          var route = {
+            name: 'api_v1_backend_tags_auto_suggester',
+            params: {
+              tags: tagsVal,
+              languageId: locale
+            }
+          };
+
+          http.get(route).then(
+            function(response) {
+              if (!response.data.items || response.data.items === null) {
+                return null;
+              }
+              var items                = response.data.items;
+              var newTagsInCurrentTags = [];
+
+              $scope.suggestedTags = [];
+
+              for (var j = 0; j < currentTags.length; j++) {
+                if (typeof currentTags[j] === 'object') {
+                  newTagsInCurrentTags.push(currentTags[j].name);
+                }
+              }
+
+              var newTags = [];
+
+              for (var i = 0; i < items.length; i++) {
+                if (items[i].id) {
+                  if (!(items[i].id in $scope.tags)) {
+                    $scope.tags[items[i].id] = items[i];
+                  }
+                  if (currentTags.indexOf(items[i].id) === -1) {
+                    newTags.push(items[i].id);
+                  }
+                } else if (newTagsInCurrentTags.indexOf(items[i].name) === -1) {
+                  $scope.suggestedTags.push(items[i]);
+                }
+              }
+
+              callback(newTags);
+              return null;
+            }, $scope.errorCb
+          );
+          return null;
+        };
+
+        /**
+         * @function loadAutoSuggestedTags
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Retrieve all auto suggested words for the content
+         *
+         * @return {string} all words for the title
+         */
+        $scope.loadAutoSuggestedTags = function() {
+          if (typeof $scope.getTagsAutoSuggestedFields === 'undefined') {
+            return null;
+          }
+          var data = $scope.getTagsAutoSuggestedFields();
+
+          $scope.checkAutoSuggesterTags(
+            function(items) {
+              if (items !== null) {
+                $scope.tag_ids = $scope.tag_ids.concat(items);
+              }
+            },
+            data,
+            $scope.tag_ids,
+            $scope.locale
+          );
+          return null;
+        };
+
+        /**
+         * @function watchTagIds
+         * @memberOf BaseCtrl
+         *
+         * @description
+         * Updates scope when the tag related fields changes.
+         *
+         * @param mixed fields Fields to watch
+         */
+        $scope.watchTagIds = function(fields) {
+          $scope.$watch(fields, function(nv, ov) {
+            if ($scope.tag_ids && $scope.tag_ids.length > 0 ||
+                !nv || nv === ov) {
+              return;
+            }
+
+            if ($scope.mtm) {
+              $timeout.cancel($scope.mtm);
+            }
+
+            $scope.mtm = $timeout(function() {
+              $scope.loadAutoSuggestedTags();
+            }, 2500);
+          });
         };
 
         /**
@@ -256,11 +491,11 @@
 
           modal.rendered.then(function() {
             var photoEditor = new window.OnmPhotoEditor({
-                container: 'photoEditor',
-                image: $window.instanceMedia + '/images' + imgData.path_img,
-                closeCallBack: modal.close,
-              },
-              photoEditorTranslations
+              container: 'photoEditor',
+              image: $window.instanceMedia + '/images' + imgData.path_img,
+              closeCallBack: modal.close,
+            },
+            photoEditorTranslations
             );
 
             photoEditor.init();

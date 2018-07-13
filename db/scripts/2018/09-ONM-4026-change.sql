@@ -1,0 +1,3 @@
+SET names 'utf8';
+INSERT INTO `extension` VALUES (78,'es.openhost.theme.scheduleFrontpage','a:3:{s:2:\"en\";s:19:\"Frontpage schedule\";s:2:\"es\";s:23:\"Programador de portadas\";s:2:\"gl\";s:23:\"Programador de portadas\";}','module','Openhost S.L.','a:3:{s:2:\"en\";s:0:\"\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}','a:3:{s:2:\"en\";s:0:\"\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}',NULL,'2018-07-10 22:54:53','2018-07-10 10:06:31',0,'https://www.opennemas.com');
+INSERT INTO `extension_meta` VALUES (78,'category','module'),(78,'notes','a:3:{s:2:\"en\";s:0:\"\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}'),(78,'price','a:1:{i:0;a:2:{s:5:\"value\";i:0;s:4:\"type\";s:7:\"monthly\";}}'),(78,'terms','a:3:{s:2:\"en\";s:0:\"\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}');
