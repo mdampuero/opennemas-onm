@@ -25,9 +25,9 @@ class NewsletterHelper
      *
      * @return void
      */
-    public function __construct($settingsRepository)
+    public function __construct($ormManager)
     {
-        $this->sm = $settingsRepository;
+        $this->sm = $ormManager;
     }
 
     /**
@@ -37,6 +37,6 @@ class NewsletterHelper
      **/
     public function getSubscriptionType()
     {
-        return $this->sm->get('newsletter_subscriptionType');
+        return $this->sm->getDataSet('Settings', 'instance')->get('newsletter_subscriptionType');
     }
 }
