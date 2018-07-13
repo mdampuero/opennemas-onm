@@ -217,13 +217,16 @@ EOF
 
         unset($data['id']);
 
-        $newItem = $this->newsletterService->createItem($data);
+        // $newItem = $this->newsletterService->createItem($data);
 
         $output->writeln(sprintf(
             " + <info>Newsletter send and registered (id: %s, sends: %s)",
-            $newItem->id,
+            // $newItem->id,
+            'xxxx',
             $report['total']
         ));
+
+        return;
 
         return $newItem;
     }

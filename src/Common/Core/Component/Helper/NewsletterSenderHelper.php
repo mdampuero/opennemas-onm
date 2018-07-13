@@ -182,22 +182,23 @@ class NewsletterSenderHelper
 
             $settings = $this->sm->get([
                 'site_name',
-                'newsletter_maillist'
+                'newsletter_maillist',
+
             ]);
 
             $id = $endpoint->createMessage([
                 'subject'  => $newsletter->title,
                 'title'    => $newsletter->title,
-                'htmlbody' => $newsletter->html
+                'htmlbody' => $newsletter->html,
             ]);
 
-            $endpoint->sendMessage($id, [
+            $result = $endpoint->sendMessage($id, [
                 'sendername'  => $settings['site_name'],
                 'senderemail' => $settings['newsletter_maillist'],
                 'subject'     => $newsletter->title,
                 'when'        => time(),
-                'sendtoids'   => $marketingList->id
             ]);
+            var_dump($result);die();
 
             $sentEmails += 1;
         } catch (\Exception $e) {
