@@ -236,17 +236,14 @@ class NewsletterRenderer
             ]
         ];
 
-        // Implementation for: in_last_day filter
+        // Implementation for: most_viewed filter
         if ($criteria->filter === 'most_viewed') {
             $yesterday = new \DateTime(null, getService('core.locale')->getTimeZone('frontend'));
             $yesterday->sub(new \DateInterval('P1D'));
 
             $searchCriteria = array_merge($searchCriteria, [
                 'starttime'         => [
-                    // 'union' => 'OR',
-                    // [ 'value' => '0000-00-00 00:00:00' ],
-                    // [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
-                    // [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
                     [ 'value' => $yesterday->format('Y-m-d H:i:s'), 'operator' => '>=' ],
                 ],
             ]);
@@ -268,10 +265,7 @@ class NewsletterRenderer
                     ]
                 ],
                 'starttime'         => [
-                    // 'union' => 'OR',
-                    // [ 'value' => '0000-00-00 00:00:00' ],
-                    // [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
-                    // [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
                     [ 'value' => $yesterday->format('Y-m-d H:i:s'), 'operator' => '>=' ],
                 ],
             ]);
