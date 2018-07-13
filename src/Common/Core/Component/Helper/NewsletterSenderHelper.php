@@ -195,6 +195,13 @@ class NewsletterSenderHelper
                 'title'    => $newsletter->title,
                 'htmlbody' => $newsletter->html,
             ];
+            if (!empty($settings['actOn.headerId'])) {
+                $messageParams['headerid'] = $settings['actOn.headerId'];
+            }
+
+            if (!empty($settings['actOn.footerId'])) {
+                $messageParams['footerid'] = $settings['actOn.footerId'];
+            }
 
             $id = $endpoint->createMessage($messageParams);
 
