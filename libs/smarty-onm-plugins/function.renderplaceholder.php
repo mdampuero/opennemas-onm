@@ -18,6 +18,10 @@ function smarty_function_renderplaceholder($params, &$smarty)
     $params['category_name'] = $smarty->getTemplateVars('category_name');
     $contentPositionByPos    = $smarty->getTemplateVars('contentPositionByPos');
 
+    if (!is_array($contentPositionByPos) || empty($contentPositionByPos)) {
+        $contentPositionByPos = getPlaceholderInTheOldWay($placeholder, $items);
+    }
+
 
     // Doing some checks if this method was called properly
     if (!isset($items)) {
@@ -46,4 +50,29 @@ function smarty_function_renderplaceholder($params, &$smarty)
 
     // Return all the html collected
     return $outputHTML;
+}
+
+/**
+ * Method that constructs the positions of the contents from the customized
+ * fields inside the contents (the old way)
+ *
+ * @param string $placeholder The placeholder we are rendering
+ * @param array  $items       The list of all contents
+ *
+ * @return array List of all contents by placeholder.
+ */
+function getPlaceholderInTheOldWay($placeholder, $items)
+{
+    $contentPositionByPos               = [];
+    $contentPositionByPos[$placeholder] = [];
+
+    foreach ($items as $item) {
+        if (!empty($item->placeholder) &&
+            $item->placeholder === $placeholder
+        ) {
+            $contentPositionByPos[$placeholder][] =
+                (object) ['pk_fk_content' => $item->pk_content];
+        }
+    }
+    return $contentPositionByPos;
 }
