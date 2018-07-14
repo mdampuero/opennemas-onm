@@ -172,8 +172,8 @@ class EntityManager extends BaseManager
         $haveContentCategory = strpos($criteriaAux, 'pk_fk_content_category') !== false;
 
         if ($haveContentCategory) {
-            $sql .= 'LEFT JOIN contents_categories'
-            . ' ON pk_content = pk_fk_content ';
+            $sql .= ' LEFT JOIN contents_categories'
+            . ' ON contents.pk_content = contents_categories.pk_fk_content ';
         }
 
         if (strpos($criteriaAux, 'content_type_name') !== false) {
@@ -245,7 +245,7 @@ class EntityManager extends BaseManager
 
         if ($haveContentCategory) {
             $sql .= ' LEFT JOIN contents_categories'
-            . ' ON pk_content = pk_fk_content ';
+            . ' ON contents.pk_content = contents_categories.pk_fk_content ';
         }
 
         $sql .= " WHERE " . $this->getFilterSQL($criteria);
