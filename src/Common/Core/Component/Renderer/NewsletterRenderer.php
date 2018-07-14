@@ -236,8 +236,8 @@ class NewsletterRenderer
             ]
         ];
 
-        // Implementation for: most_viewed filter
-        if ($criteria->filter === 'most_viewed') {
+        // Implementation for: in_las_day filter
+        if ($criteria->filter === 'in_last_day') {
             $yesterday = new \DateTime(null, getService('core.locale')->getTimeZone('frontend'));
             $yesterday->sub(new \DateInterval('P1D'));
 
@@ -251,7 +251,6 @@ class NewsletterRenderer
             $orderBy = [ 'starttime' => 'desc' ];
         }
 
-
         // Implementation for: most_viewed in 24hours filter
         if ($criteria->filter === 'most_viewed') {
             $yesterday = new \DateTime(null, getService('core.locale')->getTimeZone('frontend'));
@@ -260,8 +259,9 @@ class NewsletterRenderer
             $searchCriteria = array_merge($searchCriteria, [
                 'join' => [
                     [
+                        'type'       => 'INNER',
                         'table'      => 'content_views',
-                        'pk_content' => [ [ 'value' => 'pk_fk_content', 'field' => true ] ]
+                        'contents.pk_content' => [ [ 'value' => 'content_views.pk_fk_content', 'field' => true ] ]
                     ]
                 ],
                 'starttime'         => [
@@ -283,12 +283,8 @@ class NewsletterRenderer
         }
 
         if (!empty($criteria->category)) {
-            $category = $this->cr->find((int) $criteria->category);
-            if (is_object($category) && !empty($category->name)) {
-                $searchCriteria['category_name'] = [ ['value' => $category->name ] ];
-            }
+            $searchCriteria['pk_fk_content_category'] = [[ 'value' => (int) $criteria->category, ]];
         }
-
 
         $contents = $this->er->findBy($searchCriteria, $orderBy, $total, 1);
 
