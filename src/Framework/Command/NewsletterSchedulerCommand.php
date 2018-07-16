@@ -222,7 +222,6 @@ EOF
         $output->writeln(sprintf(
             " + <info>Newsletter send and registered (id: %s, sends: %s)",
             $newItem->id,
-            'xxxx',
             $report['total']
         ));
 

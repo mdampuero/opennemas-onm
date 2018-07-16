@@ -37,8 +37,8 @@ class NewsletterController extends Controller
         $item = $this->get('api.service.newsletter')->getItem($id);
 
         if (!is_object($item) || $item->type == 1) {
-            // throw new ResourceNotFoundException();
-            $item->html = $this->get('core.renderer.newsletter')->render($item->contents);
+            throw new ResourceNotFoundException();
+            // $item->html = $this->get('core.renderer.newsletter')->render($item->contents);
         }
 
         $internalName = $this->get('core.instance')->internal_name;
