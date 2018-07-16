@@ -326,6 +326,11 @@ EOF
                     'Y-m-d H:i:s',
                     $content->created
                 );
+            $content->start_datetime   =
+                \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $content->starttime
+                );
             $content->updated_datetime =
                 \DateTime::createFromFormat(
                     'Y-m-d H:i:s',
@@ -506,6 +511,8 @@ EOF
             $content->author = $ur->find($content->fk_author);
             if (isset($content->author->name)) {
                 $content->author = $content->author->name;
+            } elseif (!empty($content->agency)) {
+                $content->author = $content->agency;
             } else {
                 $content->author = 'Redacción';
             }
