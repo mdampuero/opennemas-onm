@@ -61,7 +61,7 @@ function smarty_function_renderplaceholder($params, &$smarty)
  *
  * @return array List of all contents by placeholder.
  */
-function getPlaceholderInTheOldWay($placeholder, $items)
+function getPlaceholderInTheOldWay($placeholder, &$items)
 {
     $contentPositionByPos               = [];
     $contentPositionByPos[$placeholder] = [];
@@ -74,5 +74,12 @@ function getPlaceholderInTheOldWay($placeholder, $items)
                 (object) ['pk_fk_content' => $item->pk_content];
         }
     }
+
+    $newItems = [];
+    foreach ($items as $item) {
+        $newItems[$item->pk_content] = $item;
+    }
+    $items = $newItems;
+
     return $contentPositionByPos;
 }
