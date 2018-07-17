@@ -276,7 +276,7 @@ class NewsletterController extends Controller
         $item = $ns->getItem($id);
 
         return new JsonResponse([
-            'item'  => $ns->responsify($item),
+            'item'  => \Onm\StringUtils::convertToUtf8($ns->responsify($item)),
         ]);
     }
 
