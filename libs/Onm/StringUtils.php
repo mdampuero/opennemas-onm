@@ -954,26 +954,50 @@ class StringUtils
     /**
      * Converts all object properties to utf-8.
      *
-     * @param mixed $objects Object or list of objects to convert.
+     * @param mixed $input Object or list of input to convert.
      *
-     * @return mixed Object or list of objects with properties in utf-8.
+     * @return mixed Object or list of input with properties in utf-8.
      */
-    public static function convertToUtf8($objects)
+    public static function convertToUtf8($input)
     {
-        if (!is_array($objects) && !is_object($objects)) {
-            return $objects;
+        if (is_object($input)) {
+            $keys = array_keys(get_object_vars($input));
+
+            if ($input instanceof \Content) {
+                $keys = array_merge($keys, $input->getL10nKeys());
+            }
+
+            foreach ($keys as $key) {
+                if ($input instanceof \Content
+                    && is_array($input->{$key})
+                    && in_array($key, $input->getL10nKeys())
+                ) {
+                    $input->{$key} = array_map(function ($a) {
+                        return self::convertToUtf8($a);
+                    }, $value);
+
+                    continue;
+                }
+
+                $input->{$key} = self::convertToUtf8($input->{$key});
+            }
+
+            return $input;
         }
 
-        if (is_object($objects)) {
-            self::convertObjectToUtf8($objects);
-            return $objects;
+        if (is_array($input)) {
+            foreach ($input as &$value) {
+                $value = self::convertToUtf8($value);
+            }
+
+            return $input;
         }
 
-        foreach ($objects as &$object) {
-            self::convertObjectToUtf8($object);
+        if (is_string($input)) {
+            $input = mb_convert_encoding($input, 'UTF-8', mb_detect_encoding($input));
         }
 
-        return $objects;
+        return $input;
     }
 
     /**
