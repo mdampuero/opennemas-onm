@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-10 16:33+0000\n"
-"PO-Revision-Date: 2018-07-10 18:35+0200\n"
+"POT-Creation-Date: 2018-07-17 16:16+0000\n"
+"PO-Revision-Date: 2018-07-17 18:19+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -2182,6 +2182,15 @@ msgstr "Non se puido gardar as configuración"
 
 msgid "Any"
 msgstr "Calquera"
+
+msgid "No filter"
+msgstr "Sin filtro"
+
+msgid "Last in 24 hours"
+msgstr "Nas últimas 24 horas"
+
+msgid "Most viewed in 24 hours"
+msgstr "Máis vistas nas últimas 24 horas"
 
 msgid "List of contents"
 msgstr "Lista de contidos"
@@ -6426,6 +6435,9 @@ msgstr "Engadir contidos dinámicos"
 msgid "Pick contents"
 msgstr "Seleccionar contidos"
 
+msgid "Filter"
+msgstr "Filtro"
+
 msgid "Articles in Frontpage"
 msgstr "Artigos en portada"
 
@@ -6589,6 +6601,32 @@ msgstr "ID da lista"
 
 msgid "Add new marketing list"
 msgstr "Engadir nova lista de marquetin"
+
+msgid "Form static page url"
+msgstr "URL da páxina estática do formulario"
+
+msgid ""
+"The URL to the page that contains the form that allows users to subscribe to "
+"ActOn"
+msgstr ""
+"A URL da páxina que contén o formulario que permite aos usuarios "
+"subscribirse a ActOn"
+
+msgid "Act-On header id"
+msgstr "ID da cabeceira de Act-On"
+
+msgid "ActOn allow to specify a custom header text. This is the id."
+msgstr ""
+"ActOn permítelle especificar unha cabeceira de texto personalizada. Este e o "
+"identificador"
+
+msgid "Act-On footer id"
+msgstr "Id a cabeceira de Act-On"
+
+msgid "ActOn allow to specify a custom footer text. This is the id."
+msgstr ""
+"ActOn permítelle especificar un pe de texto personalizada. Este e o "
+"identificador"
 
 msgid "Newsletter contents"
 msgstr "Contidos do boletín"
