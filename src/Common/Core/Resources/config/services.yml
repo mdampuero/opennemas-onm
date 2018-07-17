@@ -226,6 +226,7 @@ services:
             - '@core.template'
             - '@entity_repository'
             - '@category_repository'
+            - '@api.service.author'
             - '@setting_repository'
             - '@core.helper.advertisement'
             - '@advertisement_repository'
