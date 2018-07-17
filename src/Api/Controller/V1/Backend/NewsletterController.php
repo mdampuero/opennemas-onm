@@ -119,7 +119,7 @@ class NewsletterController extends Controller
         ];
 
         return new JsonResponse([
-            'items' => $ns->responsify($response['items']),
+            'items' => \Onm\StringUtils::convertToUtf8($ns->responsify($response['items'])),
             'total' => $response['total'],
             'extra' => $extra,
         ]);
