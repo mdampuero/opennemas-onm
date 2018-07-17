@@ -974,7 +974,7 @@ class StringUtils
                 ) {
                     $input->{$key} = array_map(function ($a) {
                         return self::convertToUtf8($a);
-                    }, $value);
+                    }, $input->{$key});
 
                     continue;
                 }
