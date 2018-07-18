@@ -30,6 +30,7 @@ class PollsController extends Controller
 
         $request            = $this->get('request_stack')->getCurrentRequest();
         $this->categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $this->em           = $this->get('entity_repository');
 
         if (!empty($this->categoryName)) {
             $this->ccm          = new \ContentCategoryManager();
@@ -67,41 +68,34 @@ class PollsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->page = $request->query->getDigits('page', 1);
+        $page = $request->query->getDigits('page', 1);
+        $epp  = $this->get('setting_repository')->get('items_in_blog', 10);
 
         // Setup templating cache layer
         $this->view->setConfig('poll-frontpage');
-        $cacheID = $this->view->getCacheId('frontpage', 'poll', $this->categoryName, $this->page);
+        $cacheID = $this->view->getCacheId('frontpage', 'poll', $this->categoryName, $page);
 
         if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('poll/poll_frontpage.tpl', $cacheID))
         ) {
             $filter = [
-                'content_type_name' => [[ 'value' => 'poll']],
-                'content_status'    => [['value' => 1]],
-                'in_home'           => [['value' => 1]]
+                'content_type_name' => [[ 'value' => 'poll' ]],
+                'content_status'    => [[ 'value' => 1 ]]
             ];
 
             if (isset($this->category) && !empty($this->category)) {
-                $filter = [
-                    'content_type_name' => [[ 'value' => 'poll' ]],
-                    'content_status'    => [[ 'value' => 1 ]],
-                    'category_name'     => [[ 'value' => $this->categoryName ]],
-                ];
+                $filter['category_name'] = [[ 'value' => $this->categoryName ]];
             }
 
-            $polls = $this->get('entity_repository')->findBy(
+            $polls = $this->em->findBy(
                 $filter,
                 ['starttime' => 'DESC'],
-                2,
-                1
+                $epp,
+                $page
             );
 
-            $otherPolls = $this->get('entity_repository')->findBy(
-                [
-                    'content_type_name' => [[ 'value' => 'poll']],
-                    'content_status'    => [[ 'value' => 1 ]],
-                ],
+            $otherPolls = $this->em->findBy(
+                $filter,
                 ['starttime' => 'DESC'],
                 5,
                 1
@@ -125,9 +119,28 @@ class PollsController extends Controller
                 }
             }
 
+            $countPolls = $this->em->countBy($filter);
+            $pagination = $this->get('paginator')->get([
+                'boundary'    => false,
+                'directional' => true,
+                'maxLinks'    => 0,
+                'epp'         => $epp,
+                'page'        => $page,
+                'total'       => $countPolls,
+                'route'       => [
+                    'name'   => 'frontend_poll_frontpage_category',
+                    'params' => [
+                        'category_name' => $this->categoryName,
+                        'component' => 'encuesta'
+                    ]
+                ]
+            ]);
+
             $this->view->assign([
-                'polls'      => $polls,
-                'otherPolls' => $otherPolls
+                'polls'      => array_slice($polls, 0, 2),
+                'otherPolls' => $otherPolls,
+                'allPolls'   => $polls,
+                'pagination' => $pagination
             ]);
         }
 
@@ -169,7 +182,7 @@ class PollsController extends Controller
             $items         = $poll->items;
             $poll->dirtyId = $dirtyID;
 
-            $otherPolls = $this->get('entity_repository')->findBy(
+            $otherPolls = $this->em->findBy(
                 [
                     'content_type_name' => [[ 'value' => 'poll']],
                     'content_status'    => [[ 'value' => 1 ]],
@@ -202,7 +215,8 @@ class PollsController extends Controller
             $valid = (int) $request->query->getDigits('valid', 3);
             if ($voted == 1) {
                 if ($voted == 1 && $valid === 1) {
-                    $message = "<span class='thanks'>" . _('Thanks for participating.') . "</span>";
+                    $alreadyVoted = true;
+                    $message      = "<span class='thanks'>" . _('Thanks for participating.') . "</span>";
                 } elseif ($voted == 1 && $valid === 0) {
                     $message = "<span class='wrong'>" . _('Please select a valid poll answer.') . "</span>";
                 }
@@ -243,7 +257,7 @@ class PollsController extends Controller
         $answer = $request->request->filter('answer', '', FILTER_SANITIZE_STRING);
         $pollID = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
 
-        $poll = $this->get('entity_repository')->find('Poll', $pollID);
+        $poll = $this->em->find('Poll', $pollID);
         if (is_null($poll)) {
             throw new ResourceNotFoundException();
         }
