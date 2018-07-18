@@ -389,6 +389,8 @@ class ArticlesController extends Controller
             'actual_category_title' => $actual_category_title,
             'photoInt'              => $photoInt,
             'videoInt'              => $videoInt,
+            'tags'                  => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($article->tag_ids)['items']
         ]);
 
         $this->get('session')->set(

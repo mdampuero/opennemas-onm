@@ -119,7 +119,7 @@ class NewsletterController extends Controller
         ];
 
         return new JsonResponse([
-            'items' => $ns->responsify($response['items']),
+            'items' => \Onm\StringUtils::convertToUtf8($ns->responsify($response['items'])),
             'total' => $response['total'],
             'extra' => $extra,
         ]);
@@ -138,6 +138,7 @@ class NewsletterController extends Controller
                 'newsletter_maillist',
                 'newsletter_subscriptionType',
                 'actOn.marketingLists',
+                'actOn.formPage',
                 'actOn.headerId',
                 'actOn.footerId',
             ]);
@@ -257,6 +258,8 @@ class NewsletterController extends Controller
         unset($settings['actOn_headerId']);
         $settings['actOn.footerId'] = $settings['actOn_footerId'];
         unset($settings['actOn_footerId']);
+        $settings['actOn.formPage'] = $settings['actOn_formPage'];
+        unset($settings['actOn_formPage']);
 
         try {
             $this->get('orm.manager')->getDataSet('Settings', 'instance')
@@ -286,7 +289,7 @@ class NewsletterController extends Controller
         $item = $ns->getItem($id);
 
         return new JsonResponse([
-            'item'  => $ns->responsify($item),
+            'item'  => \Onm\StringUtils::convertToUtf8($ns->responsify($item)),
         ]);
     }
 

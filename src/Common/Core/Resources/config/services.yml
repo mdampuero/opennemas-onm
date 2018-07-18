@@ -91,7 +91,7 @@ services:
     core.helper.newsletter:
         class:     Common\Core\Component\Helper\NewsletterHelper
         arguments:
-            - '@setting_repository'
+            - '@orm.manager'
 
     core.helper.newsletter_sender:
         class:     Common\Core\Component\Helper\NewsletterSenderHelper

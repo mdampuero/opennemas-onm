@@ -124,6 +124,16 @@
           <a ng-click="addList()" class="btn btn-block">{t}Add new marketing list{/t}</a>
 
           <div class="row m-t-15">
+            <div class="form-group">
+              <label for="acton_form_page" class="form-label">{t}Form static page url{/t}</label>
+              <div class="controls">
+                <input id="acton_form_page" class="form-control" type="text" ng-model="settings['actOn.formPage']">
+                <span class="help">{t}The URL to the page that contains the form that allows users to subscribe to ActOn{/t}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row m-t-15">
             <div class="form-group col-sm-6">
               <label for="acton_header_id" class="form-label">{t}Act-On header id{/t}</label>
               <div class="controls">

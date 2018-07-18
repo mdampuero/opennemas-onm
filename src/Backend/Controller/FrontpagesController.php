@@ -204,7 +204,8 @@ class FrontpagesController extends Controller
         $logger->info(
             'User ' . $this->getUser()->name . ' (' . $this->getUser()->id . ') has executed'
             . ' action Frontpage save positions at category ' . $categoryID
-            . ' Ids ' . json_encode($contentsPositions)
+            . ', frontpage version ' . $version->id
+            . ' and Ids ' . json_encode($contentsPositions)
         );
 
         $lastSaved = $fvs->getLastSaved($version->category_id, $version->id, true);

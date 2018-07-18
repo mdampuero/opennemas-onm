@@ -658,6 +658,7 @@ class OpinionsController extends Controller
                 $opinion->{$value['name']} = $value['value'];
             }
         }
+        $opinion->tag_ids = json_decode($opinion->tag_ids);
 
         // Set a dummy Id for the opinion if doesn't exists
         if (empty($opinion->pk_article) && empty($opinion->id)) {
@@ -736,7 +737,9 @@ class OpinionsController extends Controller
             'author'         => $author,
             'contentId'      => $opinion->id,
             'photo'          => $photo,
-            'suggested'      => $machineSuggestedContents
+            'suggested'      => $machineSuggestedContents,
+            'tags'           => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($opinion->tag_ids)['items']
         ]);
 
         $session->set(
