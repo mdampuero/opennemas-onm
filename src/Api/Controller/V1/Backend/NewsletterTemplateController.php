@@ -143,7 +143,8 @@ class NewsletterTemplateController extends Controller
         ]);
 
         $extra['filters'] = [
-            [ 'value' => null,          'title' => _('No filter') ],
+            [ 'value' => '',          'title' => _('No filter') ],
+            [ 'value' => 'blogs',     'title' => _('Blogs') ],
             [ 'value' => 'in_last_day', 'title' => _('Last in 24 hours') ],
             [ 'value' => 'most_viewed', 'title' => _('Most viewed in 24 hours') ],
         ];
@@ -270,6 +271,10 @@ class NewsletterTemplateController extends Controller
                 $newItem = new \stdClass();
 
                 if ($item['content_type'] === 'list') {
+                    if (!array_key_exists('filter', $item['criteria'])) {
+                        $item['criteria']['filter'] = '';
+                    }
+
                     $newItem->content_type_l10n_name = _('List of contents');
                     $newItem->criteria               = $item['criteria'];
                     $newItem->content_type           = $item['content_type'];

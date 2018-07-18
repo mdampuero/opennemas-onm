@@ -11,6 +11,7 @@ namespace Common\Core\Component\Renderer;
 
 use Repository\EntityManager;
 use Repository\CategoryManager;
+use Api\Service\V1\AuthorService;
 
 /**
  * The AdvertisementRenderer service provides methods to generate the HTML code
@@ -28,17 +29,20 @@ class NewsletterRenderer
     /**
      * Initializes the newsletter renderer.
      *
-     * @param Template            $template      The template service.
-     * @param EntityRepository    $dbConn        The database connection.
-     * @param SettingRepository   $settinManager The settings repository.
-     * @param AdvertisementHelper $adsHelper     The advertisement helper.
-     * @param adsRepository       $adsRepository The advertisement repository.
-     * @param Instance            $instance      The current instance.
+     * @param Template            $template        The template service.
+     * @param EntityRepository    $entityManager   The entity manager.
+     * @param CategoryRepository  $categoryManager The category manager.
+     * @param AuthorService       $authorService   The author service.
+     * @param SettingRepository   $settinManager   The settings repository.
+     * @param AdvertisementHelper $adsHelper       The advertisement helper.
+     * @param adsRepository       $adsRepository   The advertisement repository.
+     * @param Instance            $instance        The current instance.
      */
     public function __construct(
         $tpl,
         EntityManager $entityManager,
         CategoryManager $categoryManager,
+        AuthorService $authorService,
         $settingManager,
         $adsHelper,
         $adsRepository,
@@ -47,6 +51,7 @@ class NewsletterRenderer
         $this->tpl      = $tpl;
         $this->er       = $entityManager;
         $this->cr       = $categoryManager;
+        $this->as       = $authorService;
         $this->sr       = $settingManager;
         $this->adHelper = $adsHelper;
         $this->ar       = $adsRepository;
@@ -271,6 +276,19 @@ class NewsletterRenderer
             ]);
 
             $orderBy = [ 'views' => 'desc', 'starttime' => 'desc' ];
+        }
+
+        // Implementation for: blogs in 24hours filter
+        if ($criteria->filter === 'blogs') {
+            $users      = $this->as->getList('is_blog=1')['items'];
+            $userBlogID = array_map(function ($el) {
+                return $el->id;
+            }, $users);
+
+            $searchCriteria = array_merge($searchCriteria, [
+                'contents.fk_author' => [[ 'value' => $userBlogID, 'operator' => 'IN' ]],
+                'contents.in_home'   => [[ 'value' => 1 ]],
+            ]);
         }
 
         if (!empty($criteria->content_type)) {
