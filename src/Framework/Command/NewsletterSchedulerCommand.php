@@ -43,6 +43,8 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->output = $output;
+
         // TODO: Remove ASAP
         $this->getContainer()->get('core.security')->setCliUser();
 
@@ -56,7 +58,10 @@ EOF
 
         $this->getContainer()->get('core.helper.url_generator')->forceHttp(true);
 
-        $timezone = $this->getContainer()->get('setting_repository')->get('time_zone');
+        $timezone = $this->getContainer()->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('time_zone');
+
         $this->getContainer()->get('core.locale')->setTimeZone($timezone);
         $this->getContainer()->get('core.security')->setInstance($instance);
 
@@ -72,13 +77,14 @@ EOF
             $message = _('Instance not activated');
             throw new \Common\Core\Component\Exception\InstanceNotActivatedException($message);
         }
+        $this->instanceName = $instance->internal_name;
 
         $output->writeln(sprintf(
             "Sending scheduled newsletters for instance %s",
             $instance->internal_name
         ));
 
-        $time = new \DateTime(null, new \DateTimeZone('UTC'));
+        $time = new \DateTime(null, $this->getContainer()->get('core.locale')->getTimeZone());
 
         // Fetch the newsletter template configuration
         $templates = $this->newsletterService->getList(
@@ -123,8 +129,7 @@ EOF
         }
 
         // Check if it is the right hour of the week to send the newsletter
-        $newDate = clone $time;
-        $newDate->setTimeZone(getService('core.locale')->getTimeZone());
+        $newDate     = clone $time;
         $currentHour = sprintf('%02d:00', (int) $newDate->format('H'));
 
         if (!in_array($currentHour, $template->schedule['hours'])) {
@@ -209,9 +214,8 @@ EOF
             'title'       => $template->title,
             'html'        => $template->html,
             'recipients'  => $template->recipients,
-            'sent'        => new \Datetime(),
+            'sent'        => new \Datetime(null, new \DateTimeZone('UTC')),
             'sent_items'  => $report['total'],
-            'updated'     => new \Datetime(),
             'template_id' => $template->id,
         ]);
 
