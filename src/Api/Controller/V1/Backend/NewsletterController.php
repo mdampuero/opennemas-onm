@@ -139,6 +139,8 @@ class NewsletterController extends Controller
                 'newsletter_subscriptionType',
                 'actOn.marketingLists',
                 'actOn.formPage',
+                'actOn.headerId',
+                'actOn.footerId',
             ]);
 
         return new JsonResponse([ 'settings' => $settings ]);
@@ -246,9 +248,16 @@ class NewsletterController extends Controller
         $msg      = $this->get('core.messenger');
         $settings = $request->request->all();
 
+        // Damned PHP with its weird behaviour
+        // http://php.net/manual/en/language.variables.external.php
+        // Dots and spaces in variable names are converted to underscores.
+        // For example <input name="a.b" /> becomes $_REQUEST["a_b"].
         $settings['actOn.marketingLists'] = $settings['actOn_marketingLists'];
         unset($settings['actOn_marketingLists']);
-
+        $settings['actOn.headerId'] = $settings['actOn_headerId'];
+        unset($settings['actOn_headerId']);
+        $settings['actOn.footerId'] = $settings['actOn_footerId'];
+        unset($settings['actOn_footerId']);
         $settings['actOn.formPage'] = $settings['actOn_formPage'];
         unset($settings['actOn_formPage']);
 

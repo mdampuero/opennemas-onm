@@ -16,7 +16,9 @@ parameters:
                                     - htmlbody
                                     - subject
                                     - title
-                                optional: []
+                                optional:
+                                    - footerid
+                                    - headerid
                         send_message:
                             path: '/api/1/message/{id}/send'
                             parameters:
@@ -26,6 +28,8 @@ parameters:
                                     - sendtoids
                                     - subject
                                     - when
+                                optional:
+                                    - iscustom
 
 services:
     external.act_on.provider.config:

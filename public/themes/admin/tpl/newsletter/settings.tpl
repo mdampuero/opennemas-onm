@@ -132,6 +132,24 @@
               </div>
             </div>
           </div>
+
+          <div class="row m-t-15">
+            <div class="form-group col-sm-6">
+              <label for="acton_header_id" class="form-label">{t}Act-On header id{/t}</label>
+              <div class="controls">
+                <input id="acton_header_id" class="form-control" type="text" ng-model="settings['actOn.headerId']">
+                <span class="help">{t}ActOn allow to specify a custom header text. This is the id.{/t}</span>
+              </div>
+            </div>
+            <div class="form-group col-sm-6">
+              <label for="acton_footer_id" class="form-label">{t}Act-On footer id{/t}</label>
+              <div class="controls">
+                <input id="acton_footer_id" class="form-control" type="text" ng-model="settings['actOn.footerId']">
+                <span class="help">{t}ActOn allow to specify a custom footer text. This is the id.{/t}</span>
+              </div>
+            </div>
+          </div>
+
         </div>
         {/is_module_activated}
       </div>
