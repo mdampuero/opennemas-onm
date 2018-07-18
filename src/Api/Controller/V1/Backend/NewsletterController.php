@@ -119,7 +119,7 @@ class NewsletterController extends Controller
         ];
 
         return new JsonResponse([
-            'items' => $ns->responsify($response['items']),
+            'items' => \Onm\StringUtils::convertToUtf8($ns->responsify($response['items'])),
             'total' => $response['total'],
             'extra' => $extra,
         ]);
@@ -280,7 +280,7 @@ class NewsletterController extends Controller
         $item = $ns->getItem($id);
 
         return new JsonResponse([
-            'item'  => $ns->responsify($item),
+            'item'  => \Onm\StringUtils::convertToUtf8($ns->responsify($item)),
         ]);
     }
 
