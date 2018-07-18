@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-17 16:16+0000\n"
-"PO-Revision-Date: 2018-07-17 18:19+0200\n"
+"POT-Creation-Date: 2018-07-18 10:18+0000\n"
+"PO-Revision-Date: 2018-07-18 12:19+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -6390,6 +6390,9 @@ msgstr "Debes seleccionar un contenedor"
 msgid "Add Container label"
 msgstr "Engadir unha etiqueta de contendor"
 
+msgid "Some content is required"
+msgstr "Requírense algúns contidos"
+
 msgid "Template"
 msgstr "Plantilla"
 
@@ -6601,32 +6604,6 @@ msgstr "ID da lista"
 
 msgid "Add new marketing list"
 msgstr "Engadir nova lista de marquetin"
-
-msgid "Form static page url"
-msgstr "URL da páxina estática do formulario"
-
-msgid ""
-"The URL to the page that contains the form that allows users to subscribe to "
-"ActOn"
-msgstr ""
-"A URL da páxina que contén o formulario que permite aos usuarios "
-"subscribirse a ActOn"
-
-msgid "Act-On header id"
-msgstr "ID da cabeceira de Act-On"
-
-msgid "ActOn allow to specify a custom header text. This is the id."
-msgstr ""
-"ActOn permítelle especificar unha cabeceira de texto personalizada. Este e o "
-"identificador"
-
-msgid "Act-On footer id"
-msgstr "Id a cabeceira de Act-On"
-
-msgid "ActOn allow to specify a custom footer text. This is the id."
-msgstr ""
-"ActOn permítelle especificar un pe de texto personalizada. Este e o "
-"identificador"
 
 msgid "Newsletter contents"
 msgstr "Contidos do boletín"
@@ -9303,6 +9280,32 @@ msgstr ""
 "opennemas.com/\" style=\"font-family: 'trebuchet ms', 'lucida grande', "
 "'lucida sans unicode', 'lucida sans', tahoma, sans-serif; font-size: 14px; "
 "line-height: normal;\" target=\"_blank\">Opennemas</a>"
+
+#~ msgid "Form static page url"
+#~ msgstr "URL da páxina estática do formulario"
+
+#~ msgid ""
+#~ "The URL to the page that contains the form that allows users to subscribe "
+#~ "to ActOn"
+#~ msgstr ""
+#~ "A URL da páxina que contén o formulario que permite aos usuarios "
+#~ "subscribirse a ActOn"
+
+#~ msgid "Act-On header id"
+#~ msgstr "ID da cabeceira de Act-On"
+
+#~ msgid "ActOn allow to specify a custom header text. This is the id."
+#~ msgstr ""
+#~ "ActOn permítelle especificar unha cabeceira de texto personalizada. Este "
+#~ "e o identificador"
+
+#~ msgid "Act-On footer id"
+#~ msgstr "Id a cabeceira de Act-On"
+
+#~ msgid "ActOn allow to specify a custom footer text. This is the id."
+#~ msgstr ""
+#~ "ActOn permítelle especificar un pe de texto personalizada. Este e o "
+#~ "identificador"
 
 #~ msgid "New version available"
 #~ msgstr "Nova versión dispoñíbel"
