@@ -213,8 +213,11 @@ class NewsletterRenderer
             return $contents;
         }
 
+        $total   = ($criteria->epp > 0) ? $criteria->epp : 5;
+        $orderBy = [ 'starttime' => 'desc' ];
+
         // Calculate the SQL to fetch contents
-        // Criteria has: content_type, category, epp and sortBy elements
+        // Criteria has: content_type, category, filter, epp and sortBy elements
 
         $searchCriteria = [
             'content_status'    => [ [ 'value' => 1 ] ],
@@ -233,9 +236,46 @@ class NewsletterRenderer
             ]
         ];
 
+        // Implementation for: in_las_day filter
+        if ($criteria->filter === 'in_last_day') {
+            $yesterday = new \DateTime(null, getService('core.locale')->getTimeZone('frontend'));
+            $yesterday->sub(new \DateInterval('P1D'));
+
+            $searchCriteria = array_merge($searchCriteria, [
+                'starttime'         => [
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    [ 'value' => $yesterday->format('Y-m-d H:i:s'), 'operator' => '>=' ],
+                ],
+            ]);
+
+            $orderBy = [ 'starttime' => 'desc' ];
+        }
+
+        // Implementation for: most_viewed in 24hours filter
+        if ($criteria->filter === 'most_viewed') {
+            $yesterday = new \DateTime(null, getService('core.locale')->getTimeZone('frontend'));
+            $yesterday->sub(new \DateInterval('P1D'));
+
+            $searchCriteria = array_merge($searchCriteria, [
+                'join' => [
+                    [
+                        'type'       => 'INNER',
+                        'table'      => 'content_views',
+                        'contents.pk_content' => [ [ 'value' => 'content_views.pk_fk_content', 'field' => true ] ]
+                    ]
+                ],
+                'starttime'         => [
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    [ 'value' => $yesterday->format('Y-m-d H:i:s'), 'operator' => '>=' ],
+                ],
+            ]);
+
+            $orderBy = [ 'views' => 'desc', 'starttime' => 'desc' ];
+        }
+
         if (!empty($criteria->content_type)) {
             $contentTypeId                     = \ContentManager::getContentTypeIdFromName($criteria->content_type);
-            $searchCriteria['fk_content_type'] = [ ['value' => $contentTypeId ] ];
+            $searchCriteria['fk_content_type'] = [ ['value' => (int) $contentTypeId ] ];
         } else {
             // ['frontpage', 'schedule', 'photo', 'event', 'advertisement', 'widget'];
             $excludedTypes                     = [18, 16, 8, 5, 2, 12];
@@ -243,14 +283,8 @@ class NewsletterRenderer
         }
 
         if (!empty($criteria->category)) {
-            $category = $this->cr->find((int) $criteria->category);
-            if (is_object($category) && !empty($category->name)) {
-                $searchCriteria['category_name'] = [ ['value' => $category->name ] ];
-            }
+            $searchCriteria['pk_fk_content_category'] = [[ 'value' => (int) $criteria->category, ]];
         }
-
-        $total   = ($criteria->epp > 0) ? $criteria->epp : 5;
-        $orderBy = [ 'starttime' => 'desc' ];
 
         $contents = $this->er->findBy($searchCriteria, $orderBy, $total, 1);
 

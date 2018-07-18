@@ -36,8 +36,11 @@ class NewsletterService extends OrmService
             $data['sent'] = null;
         }
 
-        $data['created'] = new \Datetime();
+        $data['created'] = new \Datetime(null);
         $data['updated'] = new \Datetime();
+
+        $data['created']->setTimeZone(new \DateTimeZone('UTC'));
+        $data['updated']->setTimeZone(new \DateTimeZone('UTC'));
 
         return parent::createItem($data);
     }

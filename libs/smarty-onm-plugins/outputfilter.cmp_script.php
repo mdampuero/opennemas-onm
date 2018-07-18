@@ -10,6 +10,12 @@
  */
 function smarty_outputfilter_cmp_script($output, $smarty)
 {
+    $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+
+    if (is_null($request)) {
+        return $output;
+    }
+
     if (empty($smarty->getContainer()->get('setting_repository')->get('cmp_script'))) {
         return $output;
     }
