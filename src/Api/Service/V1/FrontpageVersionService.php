@@ -45,7 +45,7 @@ class FrontpageVersionService extends OrmService
         }
 
         list($contentPositions, $contents) =
-            $this->getContentPositions(
+            $this->getContentPositionsAndContents(
                 $categoryIdAux,
                 empty($frontpageVersionId) ? null : $frontpageVersion->id
             );
@@ -151,25 +151,15 @@ class FrontpageVersionService extends OrmService
         $versionId = empty($version) ? null : $version->id;
 
         list($contentPositions, $contents) =
-            $this->getContentPositions($categoryId, $versionId);
+            $this->getContentPositionsAndContents($categoryId, $versionId);
 
         return [$frontpages, $versions, $contentPositions, $contents, $versionId];
     }
 
-    public function getContentPositions($categoryId, $versionId)
+    public function getContentPositionsAndContents($categoryId, $versionId)
     {
-        $contentPositions = $this->getFrontpageDataFromCache($categoryId, $versionId);
-
-        if (is_null($contentPositions)) {
-            $contentPositions =
-                $this->container->get('api.service.contentposition')
-                    ->getContentPositions($categoryId, $versionId);
-
-            $this->setFrontpageDataFromCache($categoryId, $versionId, $contentPositions);
-        }
-
-        $contentsMap = [];
-
+        $contentPositions = $this->getContentPositions($categoryId, $versionId);
+        $contentsMap      = [];
         foreach ($contentPositions as $contentpositionOfPosition) {
             foreach ($contentpositionOfPosition as $contentposition) {
                 if (array_key_exists($contentposition->pk_fk_content, $contentsMap)) {
@@ -188,6 +178,42 @@ class FrontpageVersionService extends OrmService
         }
 
         return [$contentPositions, $contents];
+    }
+
+    public function getContentPositions($categoryId, $versionId)
+    {
+        $contentPositions = $this->getFrontpageDataFromCache($categoryId, $versionId);
+
+        if (is_null($contentPositions)) {
+            $contentPositions =
+                $this->container->get('api.service.contentposition')
+                    ->getContentPositions($categoryId, $versionId);
+
+            $this->setFrontpageDataFromCache($categoryId, $versionId, $contentPositions);
+        }
+
+        return $contentPositions;
+    }
+
+    public function getContentIds($categoryId, $versionId, $contentType = null)
+    {
+        $versionIdAux = $versionId === null ?
+            $this->getCurrentVersionDB($categoryId) :
+            $versionId;
+
+        $contentPositions = $this->getContentPositions($categoryId, $versionIdAux);
+        $contentsIds      = [];
+        foreach ($contentPositions as $contentpositionOfPosition) {
+            foreach ($contentpositionOfPosition as $contentposition) {
+                if ($contentType === null ||
+                    $contentType === $contentposition->content_type
+                ) {
+                    $contentsIds[$contentposition->pk_fk_content] =
+                        $contentposition->pk_fk_content;
+                }
+            }
+        }
+        return array_unique($contentsIds);
     }
 
     public function getCurrentVersion($versions)
