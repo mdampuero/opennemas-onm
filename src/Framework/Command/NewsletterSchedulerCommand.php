@@ -79,7 +79,7 @@ EOF
         }
         $this->instanceName = $instance->internal_name;
 
-        $output->writeln(sprintf(
+        $this->outputLine(sprintf(
             "Sending scheduled newsletters for instance %s",
             $instance->internal_name
         ));
@@ -91,17 +91,21 @@ EOF
             'type=1 and status=1 order by created desc'
         );
 
+        if ($templates['total'] <= 0) {
+            $this->outputLine(sprintf("  - <info>No templates available</info>"));
+        }
+
         foreach ($templates['items'] as $template) {
-            $output->writeln(sprintf(" - Newsletter template %s - %s", $template->id, $template->title));
+            $this->outputLine(sprintf(" - Newsletter template %s - %s", $template->id, $template->title));
 
             list($canWeSend, $errors) = $this->canWeSendTemplate($template, $time);
 
             if ($canWeSend) {
-                $output->writeln(sprintf("  + <info>Generating newsletter %s</info>", $template->id));
+                $this->outputLine(sprintf("  + <info>Generating newsletter %s</info>", $template->id));
 
                 $this->sendScheduledTemplate($template, $output, $time);
             } else {
-                $output->writeln(sprintf("  + <info>%s</info>", $errors));
+                $this->outputLine(sprintf("  + <info>%s</info>", $errors));
             }
         }
     }
@@ -122,7 +126,7 @@ EOF
         $todaysDayWeekNumber = (int) $time->format('N');
         if (!in_array($todaysDayWeekNumber, $template->schedule['days'])) {
             return [false, sprintf(
-                _('Nothing to execute at current day (current:%d, valid: %s)'),
+                'Nothing to execute at current day (current:%d, valid: %s)',
                 $todaysDayWeekNumber,
                 implode(', ', $template->schedule['days'])
             )];
@@ -136,7 +140,7 @@ EOF
             return [
                 false,
                 sprintf(
-                    _('Nothing to execute at current hour (current:%s, valid: %s)'),
+                    'Nothing to execute at current hour (current:%s, valid: %s)',
                     $currentHour,
                     implode(', ', $template->schedule['hours'])
                 )
@@ -192,22 +196,23 @@ EOF
     {
         // Render the template
         if ($output->isVerbose()) {
-            $output->writeln(sprintf("\t- <info>Rendering newsletter</info>", $template->id));
+            $this->outputLine(sprintf("\t- <info>Rendering newsletter</info>", $template->id));
         }
 
         $template->title = sprintf('%s [%s]', $template->title, $time->format('d/m/Y'));
         $template->html  = $this->newsletterRenderer->render($template->contents);
 
         if ($output->isVerbose()) {
-            $output->writeln(sprintf("\t- <info>Sending newsletter</info>", $template->id));
+            $this->outputLine(sprintf("\t- <info>Sending newsletter</info>", $template->id));
         }
 
         // Send the schedule
         $report = $this->newsletterSender->send($template, $template->recipients);
 
         if ($output->isVerbose()) {
-            $output->writeln(sprintf("\t- <info>Creating newsletter entry</info>", $template->id));
+            $this->outputLine(sprintf("\t- <info>Creating newsletter entry</info>", $template->id));
         }
+
         // Store the newsletter info
         $data = array_merge($template->getStored(), [
             'type'        => 0,
@@ -223,12 +228,26 @@ EOF
 
         $newItem = $this->newsletterService->createItem($data);
 
-        $output->writeln(sprintf(
+        $this->outputLine(sprintf(
             " + <info>Newsletter send and registered (id: %s, sends: %s)",
             $newItem->id,
             $report['total']
         ));
 
         return $newItem;
+    }
+
+    /**
+     * Writes the provided line into the output
+     *
+     * @param string $line The line to write in the output
+     *
+     * @return void
+     **/
+    private function outputLine($line)
+    {
+        $fullLine = sprintf('[Instance %s] %s', $this->instanceName, $line);
+
+        $this->output->writeln($fullLine);
     }
 }
