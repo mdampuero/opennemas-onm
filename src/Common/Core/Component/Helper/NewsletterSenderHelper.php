@@ -80,7 +80,7 @@ class NewsletterSenderHelper
         $newsletterService,
         $noReplyAddress
     ) {
-        $this->sm                   = $settingsRepository;
+        $this->ormManager           = $settingsRepository;
         $this->appLog               = $appLog;
         $this->errorLog             = $errorLog;
         $this->noReplyAddress       = $noReplyAddress;
@@ -89,8 +89,8 @@ class NewsletterSenderHelper
         $this->ssb                  = $ssb;
         $this->actOnFactory         = $actOnFactory;
         $this->ns                   = $newsletterService;
-        $this->newsletterConfigs    = $this->sm->get('newsletter_maillist');
-        $this->siteName             = $this->sm->get('site_name');
+        $this->newsletterConfigs    = $this->ormManager->getDataSet('Settings', 'instance')->get('newsletter_maillist');
+        $this->siteName             = $this->ormManager->getDataSet('Settings', 'instance')->get('site_name');
     }
 
     /**
@@ -113,7 +113,7 @@ class NewsletterSenderHelper
         }
 
         $sentEmails      = 0;
-        $maxAllowed      = (int) $this->sm->get('max_mailing', 0);
+        $maxAllowed      = (int) $this->ormManager->getDataSet('Settings', 'instance')->get('max_mailing', 0);
         $lastInvoiceDate = $this->getLastInvoiceDate();
         $remaining       = $maxAllowed - $this->ns->getSentNewslettersSinceLastInvoice($lastInvoiceDate);
 
@@ -180,23 +180,38 @@ class NewsletterSenderHelper
         try {
             $endpoint = $this->actOnFactory->getEndpoint('email_campaign');
 
-            $settings = $this->sm->get([
-                'site_name',
-                'newsletter_maillist'
-            ]);
+            // Save settings
+            $settings = $this->ormManager
+                ->getDataSet('Settings', 'instance')
+                ->get([
+                    'site_name',
+                    'newsletter_maillist',
+                    'actOn.headerId',
+                    'actOn.footerId',
+                ]);
 
-            $id = $endpoint->createMessage([
+            $messageParams = [
                 'subject'  => $newsletter->title,
                 'title'    => $newsletter->title,
-                'htmlbody' => $newsletter->html
-            ]);
+                'htmlbody' => $newsletter->html,
+            ];
+            if (!empty($settings['actOn.headerId'])) {
+                $messageParams['headerid'] = $settings['actOn.headerId'];
+            }
 
-            $endpoint->sendMessage($id, [
+            if (!empty($settings['actOn.footerId'])) {
+                $messageParams['footerid'] = $settings['actOn.footerId'];
+            }
+
+            $id = $endpoint->createMessage($messageParams);
+
+            $result = $endpoint->sendMessage($id, [
+                'iscustom'    => true,
                 'sendername'  => $settings['site_name'],
                 'senderemail' => $settings['newsletter_maillist'],
                 'subject'     => $newsletter->title,
                 'when'        => time(),
-                'sendtoids'   => $marketingList->id
+                'sendtoids'   => $marketingList->id,
             ]);
 
             $sentEmails += 1;
@@ -286,7 +301,7 @@ class NewsletterSenderHelper
      */
     public function sendSubscriptionMail($data)
     {
-        $settings = $this->sm->get([
+        $settings = $this->ormManager->getDataSet('Settings', 'instance')->get([
             'site_name',
             'newsletter_maillist'
         ]);
@@ -359,7 +374,7 @@ class NewsletterSenderHelper
     public function getLastInvoiceDate()
     {
         // Generate last invoice DateTime
-        $lastInvoice = new \DateTime($this->sm->get('last_invoice'));
+        $lastInvoice = new \DateTime($this->ormManager->getDataSet('Settings', 'instance')->get('last_invoice'));
 
         // Set day to 28 if it's more than that
         if ($lastInvoice->format('d') > 28) {
@@ -385,7 +400,8 @@ class NewsletterSenderHelper
         // Update last invoice DateTime
         $lastInvoice = $nextInvoiceDate->modify('-1 month');
 
-        $this->sm->set('last_invoice', $lastInvoice->format('Y-m-d H:i:s'));
+        $this->ormManager->getDataSet('Settings', 'instance')
+            ->set('last_invoice', $lastInvoice->format('Y-m-d H:i:s'));
 
         return $lastInvoice;
     }

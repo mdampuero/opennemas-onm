@@ -511,12 +511,10 @@
             return null;
           }
 
-          var body = {};
+          var route = { name: 'admin_image_create' };
+          var body  = {};
 
           body[imgData.name] = image;
-
-          var route = { name: 'admin_image_create' };
-
           http.post(route, body).success(function() {
             if (typeof $scope.list === 'function') {
               $scope.list($scope.route, true);

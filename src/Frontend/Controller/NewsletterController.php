@@ -67,6 +67,16 @@ class NewsletterController extends Controller
             );
         }
 
+        // Redirect to configured url if subscription type is ActOn
+        if ($subscriptionType === 'acton') {
+            $setting = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('actOn.formPage', null);
+            if (!empty($setting)) {
+                return $this->redirect($setting);
+            }
+        }
+
         list($positions, $advertisements) = $this->getAds();
 
         return $this->render('static_pages/subscription.tpl', [

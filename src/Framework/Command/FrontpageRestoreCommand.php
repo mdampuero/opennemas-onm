@@ -24,9 +24,15 @@ class FrontpageRestoreCommand extends ContainerAwareCommand
             ->setName('frontpage:restore')
             ->setDescription('Restores the frontpage contents.')
             ->setDefinition([
-                new InputArgument('database', InputArgument::REQUIRED, 'database'),
+                new InputArgument('instance', InputArgument::REQUIRED, 'The instance internal name'),
                 new InputOption('file', 'f', InputOption::VALUE_REQUIRED, 'The frontpage positions file'),
                 new InputOption('category', 'c', InputOption::VALUE_REQUIRED, 'The frontpage positions file'),
+                new InputOption(
+                    'frontpageVersionId',
+                    'x',
+                    InputArgument::OPTIONAL,
+                    'The frontpage version id'
+                )
             ])
             ->setHelp(
                 <<<EOF
@@ -40,23 +46,18 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $databaseName = $input->getArgument('database');
-        $category     = $input->getOption('category');
-        $file         = $input->getOption('file');
-        $oql          = "settings regexp '\"BD_DATABASE\";s:[0-9]+:\""
-            . $databaseName . "\"'";
-
-        // Load instance
-        $loader = $this->getContainer()->get('core.loader');
-        $loader->loadInstanceFromOql($oql);
-        $loader->init();
+        $instanceName       = $input->getArgument('instance');
+        $category           = $input->getOption('category');
+        $file               = $input->getOption('file');
+        $frontpageVersionId = $input->getOption('frontpageVersionId');
 
         // TODO: Remove ASAP
         $this->getContainer()->get('core.security')->setCliUser();
 
-        $conn = getService('orm.manager')->getConnection('instance');
-
-        $conn->selectDatabase($databaseName);
+        $instance = $this->getContainer()->get('core.loader')
+            ->loadInstanceFromInternalName($instanceName);
+        $conn     = $this->getContainer()->get('dbal_connection');
+        $conn->selectDatabase($instance->getDatabaseName());
 
         $conn->fetchAssoc('SELECT count(*) FROM contents');
 
@@ -68,7 +69,13 @@ EOF
             return 1;
         }
 
-        $done = \ContentManager::saveContentPositionsForHomePage($category, $positions);
+        if (empty($frontpageVersionId)) {
+            $frontpageVersionId = $this->getContainer()
+                ->get('api.service.frontpage_version')
+                ->getCurrentVersionDB($category);
+        }
+
+        $done = \ContentManager::saveContentPositionsForHomePage($category, $frontpageVersionId, $positions);
 
         if ($done) {
             $output->writeln('[DONE]');
