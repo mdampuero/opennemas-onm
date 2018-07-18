@@ -169,7 +169,9 @@ abstract class AbstractCache implements CacheInterface
         if (is_array($id)) {
             $values = [];
             foreach ($id as $key => $value) {
-                $this->mru[$this->getNamespacedId($key)] = $value;
+                $cacheKey             = $this->getNamespacedId($key);
+                $this->mru[$cacheKey] = $value;
+                $values[$cacheKey]    = $value;
             }
 
             $this->buffer[] = [
