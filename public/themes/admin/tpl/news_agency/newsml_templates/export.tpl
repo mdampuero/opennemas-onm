@@ -23,8 +23,10 @@
       <NewsItemType FormalName="News" />
       <!--Creation date.-->
       <FirstCreated>{$article->created_datetime->format('Ymd\THisP')}</FirstCreated>
+      {if $article->start_datetime}
       <!--Published date.-->
       <FirstPublished>{$article->start_datetime->format('Ymd\THisP')}</FirstPublished>
+      {/if}
       <!--Last modification date.-->
       <ThisRevisionCreated>{$article->updated_datetime->format('Ymd\THisP')}</ThisRevisionCreated>
       <Status FormalName="Usable" />
