@@ -286,7 +286,8 @@ class NewsletterRenderer
             }, $users);
 
             $searchCriteria = array_merge($searchCriteria, [
-                'contents.fk_author'         => [[ 'value' => $userBlogID, 'operator' => 'IN' ]],
+                'contents.fk_author' => [[ 'value' => $userBlogID, 'operator' => 'IN' ]],
+                'contents.in_home'   => [[ 'value' => 1 ]],
             ]);
         }
 
