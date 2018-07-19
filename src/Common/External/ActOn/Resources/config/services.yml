@@ -29,6 +29,10 @@ parameters:
                                     - subject
                                     - when
                                 optional:
+                                    - footerid
+                                    - headerid
+                                    - htmlbody
+                                    - textbody
                                     - iscustom
 
 services:

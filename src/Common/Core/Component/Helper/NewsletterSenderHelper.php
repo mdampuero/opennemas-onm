@@ -205,14 +205,26 @@ class NewsletterSenderHelper
 
             $id = $endpoint->createMessage($messageParams);
 
-            $result = $endpoint->sendMessage($id, [
-                'iscustom'    => true,
+            $sendingParams = [
+                'iscustom'    => 'Y',
+                'htmlbody' => $newsletter->html,
+                'textbody' => $newsletter->html,
                 'sendername'  => $settings['site_name'],
-                'senderemail' => $settings['newsletter_maillist'],
+                'senderemail' => $settings['newsletter_maillist']['sender'],
                 'subject'     => $newsletter->title,
                 'when'        => time(),
                 'sendtoids'   => $marketingList->id,
-            ]);
+            ];
+
+            if (!empty($settings['actOn.headerId'])) {
+                $sendingParams['headerid'] = $settings['actOn.headerId'];
+            }
+
+            if (!empty($settings['actOn.footerId'])) {
+                $sendingParams['footerid'] = $settings['actOn.footerId'];
+            }
+
+            $result = $endpoint->sendMessage($id, $sendingParams);
 
             $sentEmails += 1;
         } catch (\Exception $e) {
