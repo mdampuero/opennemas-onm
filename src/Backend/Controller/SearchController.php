@@ -32,7 +32,7 @@ class SearchController extends Controller
      */
     public function defaultAction()
     {
-        $contentTypesAvailable = $this->getContentTypesFiltered();
+        $contentTypesAvailable = \ContentManager::getContentTypesFiltered();
         unset($contentTypesAvailable['comment']);
 
         $types = [
@@ -68,12 +68,12 @@ class SearchController extends Controller
         if (!empty($searchString)) {
             $fm     = $this->get('data.manager.filter');
             $tokens = $fm->set($searchString)->filter('tags')->get();
-            $tokens = explode(', ', $tokens);
+            $tokens = explode(',', $tokens);
 
             $er = $this->get('entity_repository');
 
             // Build field search with LIKE
-            $fields = ['metadata', 'title'];
+            $fields = ['title'];
             $search = [];
             foreach ($fields as $field) {
                 $searchChunk = [];
@@ -84,6 +84,21 @@ class SearchController extends Controller
                 $search[] = "(" . implode(' AND ', $searchChunk) . ") ";
             }
 
+            //Clean the input words
+            $tagsWords = $this->get('api.service.tag')
+                ->getTagIdsFromStr($searchString);
+
+            //Create the query if exist tagsWords
+            if (!empty($tagsWords)) {
+                $countTagsWords = count($tagsWords) - 1;
+                $tagsWords      = implode(',', $tagsWords);
+                $search[]       = ' pk_content in (SELECT contents_tags.content_id'
+                . " FROM contents_tags WHERE contents_tags.tag_id IN ($tagsWords)"
+                . ' GROUP BY contents_tags.content_id'
+                . ' HAVING COUNT(contents_tags.tag_id) >'
+                . $countTagsWords . ')';
+            }
+
             // Final search
             $search = "(" . implode(' OR ', $search) . ")";
 
@@ -92,8 +107,9 @@ class SearchController extends Controller
                 . ' AND fk_content_type IN (1, 2, 4, 7, 9, 11, 12)'
                 . ' AND ' . $search;
 
-            $order   = [ 'starttime' => 'desc' ];
-            $total   = true;
+            $order = [ 'starttime' => 'desc' ];
+            $total = true;
+
             $results = $er->findBy($criteria, $order, 8, $page, 0, $total);
 
             foreach ($results as $content) {
@@ -145,44 +161,5 @@ class SearchController extends Controller
                 return $this->render('search_advanced/content-provider.tpl');
             }
         }
-    }
-
-    /**
-     * Returns the list of content types for the modules activated
-     *
-     * @return array the list of content types
-     */
-    private function getContentTypesFiltered()
-    {
-        $contentTypes         = \ContentManager::getContentTypes();
-        $contentTypesFiltered = [];
-
-        foreach ($contentTypes as $contentType) {
-            switch ($contentType['name']) {
-                case 'advertisement':
-                    $moduleName = 'ads';
-                    break;
-                case 'attachment':
-                    $moduleName = 'file';
-                    break;
-                case 'photo':
-                    $moduleName = 'image';
-                    break;
-                case 'static_page':
-                    $moduleName = 'static_pages';
-                    break;
-                default:
-                    $moduleName = $contentType['name'];
-                    break;
-            }
-
-            $moduleName = strtoupper($moduleName . '_MANAGER');
-
-            if ($this->get('core.security')->hasExtension($moduleName)) {
-                $contentTypesFiltered[$contentType['name']] = $contentType['title'];
-            }
-        }
-
-        return $contentTypesFiltered;
     }
 }

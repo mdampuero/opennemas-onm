@@ -51,7 +51,7 @@ class MigrationSaver
      *
      * @var array
      */
-    protected $stats = array();
+    protected $stats = [];
 
     /**
      * Array of database translations
@@ -195,26 +195,26 @@ class MigrationSaver
      */
     public function saveAlbumPhotos($name, $schema, $data)
     {
-        $albums = array();
+        $albums = [];
 
         foreach ($data as $item) {
-            $values = array(
+            $values = [
                 'album'    => 0,
                 'photo'    => 0,
                 'footer'   => '',
                 'position' => 0
-            );
+            ];
 
             $values = $this->merge($values, $item, $schema);
 
             if ($values['photo'] !== false) {
                 // Group photos by album
                 if (!isset($albums[$values['album']]['album_photos_id'])) {
-                    $albums[$values['album']]['album_photos_id'] = array();
+                    $albums[$values['album']]['album_photos_id'] = [];
                 }
 
                 if (!isset($albums[$values['album']]['album_photos_footer'])) {
-                    $albums[$values['album']]['album_photos_footer'] = array();
+                    $albums[$values['album']]['album_photos_footer'] = [];
                 }
 
                 if (is_array($values['photo'])) {
@@ -284,14 +284,13 @@ class MigrationSaver
     public function saveAlbums($name, $schema, $data)
     {
         foreach ($data as $item) {
-            $values = array(
+            $values = [
                 'title'                 => null,
                 'available'             => 1,
                 'content_status'        => 1,
                 'category'              => 20,
                 'frontpage'             => 0,
                 'in_home'               => 0,
-                'metadata'              => null,
                 'slug'                  => null,
                 'description'           => null,
                 'body'                  => '',
@@ -303,7 +302,7 @@ class MigrationSaver
                 'fk_publisher'          => null,
                 'album_frontpage_image' => 0,
                 'agency'                => ''
-            );
+            ];
 
             $values = $this->merge($values, $item, $schema);
 
@@ -345,7 +344,7 @@ class MigrationSaver
     public function saveArticles($name, $schema, $data)
     {
         foreach ($data as $item) {
-            $values = array(
+            $values = [
                 'title'          => null,
                 'with_comment'   => 0,
                 'available'      => 1,
@@ -354,7 +353,6 @@ class MigrationSaver
                 'frontpage'      => 0,
                 'in_home'        => 0,
                 'title_int'      => null,
-                'metadata'       => null,
                 'subtitle'       => null,
                 'slug'           => null,
                 'agency'         => null,
@@ -376,7 +374,7 @@ class MigrationSaver
                 'fk_user'        => null,
                 'fk_author'      => null,
                 'fk_publisher'   => null,
-            );
+            ];
 
             $values = $this->merge($values, $item, $schema);
 
@@ -435,12 +433,12 @@ class MigrationSaver
     public function saveAttachments($name, $schema, $data)
     {
         foreach ($data as $item) {
-            $values = array(
+            $values = [
                 'pk_attachment' => 0,
                 'title'         => '',
                 'path'          => '',
                 'category'      => 20
-            );
+            ];
 
             $values = $this->merge($values, $item, $schema);
 
@@ -512,7 +510,7 @@ class MigrationSaver
     public function saveCategories($name, $schema, $data)
     {
         foreach ($data as $item) {
-            $values = array(
+            $values = [
                 'name'              => '',
                 'title'             => '',
                 'inmenu'            => 1,
@@ -520,9 +518,9 @@ class MigrationSaver
                 'internal_category' => 1,
                 'subcategory'       => 0,
                 'logo_path'         => null,
-                'params'            => array(),
+                'params'            => [],
                 'color'             => null
-            );
+            ];
 
             $values = $this->merge($values, $item, $schema);
 
@@ -582,7 +580,7 @@ class MigrationSaver
     public function saveComments($name, $schema, $data)
     {
         foreach ($data as $item) {
-            $values = array(
+            $values = [
                 'id'           => 0,
                 'content_id'   => 0,
                 'author'       => '',
@@ -597,7 +595,7 @@ class MigrationSaver
                 'parent_id'    => 0,
                 'user_id'      => 0,
                 'content_type_referenced' => ''
-            );
+            ];
 
             $values = $this->merge($values, $item, $schema);
 
@@ -685,7 +683,7 @@ class MigrationSaver
     public function saveOpinions($name, $schema, $data)
     {
         foreach ($data as $item) {
-            $values = array(
+            $values = [
                 'fk_author'      => 0,
                 'fk_author_img'  => 0,
                 'with_comment'   => 1,
@@ -696,7 +694,6 @@ class MigrationSaver
                 'category'       => 20,
                 'frontpage'      => 0,
                 'in_home'        => 0,
-                'metadata'       => null,
                 'slug'           => null,
                 'description'    => null,
                 'body'           => '',
@@ -706,7 +703,7 @@ class MigrationSaver
                 'changed'        => null,
                 'fk_user'        => null,
                 'fk_publisher'   => null
-            );
+            ];
 
             $values = $this->merge($values, $item, $schema);
 
@@ -765,7 +762,7 @@ class MigrationSaver
     public function savePolls($name, $schema, $data)
     {
         foreach ($data as $item) {
-            $values = array(
+            $values = [
                 'title'               => null,
                 'description'         => null,
                 'body'                => '',
@@ -773,7 +770,6 @@ class MigrationSaver
                 'endtime'             => null,
                 'created'             => null,
                 'changed'             => null,
-                'metadata'            => null,
                 'content_status'      => 1,
                 'fk_category'         => 20,
                 'fk_user'             => null,
@@ -790,7 +786,7 @@ class MigrationSaver
                 'used_ips'            => null,
                 'total_votes'         => 0,
                 'item'                => []
-            );
+            ];
 
             $values = $this->merge($values, $item, $schema);
 
@@ -850,12 +846,11 @@ class MigrationSaver
     {
         $items = [];
         foreach ($data as $item) {
-            $values = array(
+            $values = [
                 'fk_pk_poll' => 0,
                 'item'       => '',
-                'metadata'   => '',
                 'votes'      => 0
-            );
+            ];
 
             $values = $this->merge($values, $item, $schema);
 
@@ -879,7 +874,6 @@ class MigrationSaver
                 'endtime'             => $poll->endtime,
                 'created'             => $poll->created,
                 'changed'             => $poll->changed,
-                'metadata'            => $poll->metadata,
                 'content_status'      => $poll->content_status,
                 'fk_category'         => $poll->fk_category,
                 'fk_user'             => $poll->fk_user,
@@ -913,18 +907,18 @@ class MigrationSaver
      */
     public function savePhotos($name, $schema, $data)
     {
-        $settings = array (
+        $settings = [
             'image_thumb_size'       => '140',
             'image_inner_thumb_size' => '470',
             'image_front_thumb_size' => '350'
-        );
+        ];
 
         foreach ($settings as $key => $value) {
             s::set($key, $value);
         }
 
         foreach ($data as $item) {
-            $values = array(
+            $values = [
                 'title'               => null,
                 'description'         => null,
                 'body'                => '',
@@ -932,7 +926,6 @@ class MigrationSaver
                 'endtime'             => null,
                 // 'created'             => null,
                 'changed'             => null,
-                'metadata'            => null,
                 'content_status'      => 1,
                 'fk_category'         => 20,
                 'fk_user'             => null,
@@ -957,7 +950,7 @@ class MigrationSaver
                 'extension'           => '',
                 'directory'           => '',
                 'origin_path'         => ''
-            );
+            ];
 
             $values = $this->merge($values, $item, $schema);
 
@@ -1198,10 +1191,10 @@ class MigrationSaver
     public function saveUserGroups($name, $schema, $data)
     {
         foreach ($data as $item) {
-            $values = array(
+            $values = [
                 'name'       => null,
-                'privileges' => array()
-            );
+                'privileges' => []
+            ];
 
             $values = $this->merge($values, $item, $schema);
 
@@ -1245,7 +1238,7 @@ class MigrationSaver
     public function saveUsers($name, $schema, $data)
     {
         foreach ($data as $item) {
-            $values = array(
+            $values = [
                 'username'      => '',
                 'password'      => null,
                 'url'           => '',
@@ -1256,8 +1249,8 @@ class MigrationSaver
                 'type'          => 0,
                 'token'         => null,
                 'activated'     => 0,
-                'id_user_group' => array('3'),
-            );
+                'id_user_group' => ['3'],
+            ];
 
             if (array_key_exists('id_user_group', $item)) {
                 $item['id_user_group'] = explode(',', $item['id_user_group']);
@@ -1371,7 +1364,7 @@ class MigrationSaver
     public function saveVideos($name, $schema, $data)
     {
         foreach ($data as $item) {
-            $values = array(
+            $values = [
                 'file_path'      => '',
                 'video_url'      => '',
                 'category'       => 20,
@@ -1379,10 +1372,9 @@ class MigrationSaver
                 'content_status' => 1,
                 'information'    => '',
                 'title'          => '',
-                'metadata'       => '',
                 'description'    => '',
                 'author_name'    => '',
-            );
+            ];
 
             $values = $this->merge($values, $item, $schema);
 
@@ -1470,7 +1462,7 @@ class MigrationSaver
     public function saveWidgets($name, $schema, $data)
     {
         foreach ($data as $item) {
-            $values = array(
+            $values = [
                 'title'               => null,
                 'description'         => null,
                 'body'                => '',
@@ -1478,7 +1470,6 @@ class MigrationSaver
                 'endtime'             => null,
                 'created'             => null,
                 'changed'             => null,
-                'metadata'            => null,
                 'content_status'      => 1,
                 'fk_category'         => 20,
                 'fk_user'             => null,
@@ -1492,7 +1483,7 @@ class MigrationSaver
                 'id'                  => 0,
                 'content'             => '',
                 'renderlet'           => ''
-            );
+            ];
 
             $values = $this->merge($values, $item, $schema);
 
@@ -1631,19 +1622,6 @@ class MigrationSaver
     }
 
     /**
-     * Returns the string of keywords separated by commas.
-     *
-     * @param  string $string String to converto to metadata.
-     * @return string         Keywords separated by commas.
-     */
-    protected function convertToMetadata($string)
-    {
-        $fm = getService('data.manager.filter');
-
-        return $fm->set($string)->filter('tags')->get();
-    }
-
-    /**
      * Convert a given string to slug.
      *
      * @return string
@@ -1687,7 +1665,7 @@ class MigrationSaver
         $sql = 'INSERT INTO translation_ids(`pk_content_old`, `pk_content`, '
             . '`type`, `slug`) VALUES (?,?,?,?)';
 
-        $values = array($old, $new, $type, $slug);
+        $values = [$old, $new, $type, $slug];
 
         $rss = $this->conn->executeQuery($sql, $values);
 
@@ -1776,14 +1754,14 @@ class MigrationSaver
             switch ($type) {
                 case 'body': // Replaces the content of the field
                     $field = '<p>' . preg_replace(
-                        array(
+                        [
                             "/([\r\n])+/i",
                             "/([\n]{2,})/i",
                             "/([\n]{2,})/i",
                             "/(\n)/i",
                             "/\[caption.*?\].*?(<img.*?\/?>).*?\[\/caption\]/"
-                        ),
-                        array('</p><p>', '</p><p>', '<br>', '<br>', '${1}'),
+                        ],
+                        ['</p><p>', '</p><p>', '<br>', '<br>', '${1}'],
                         $field
                     ) . '</p>';
                     break;
@@ -1817,9 +1795,6 @@ class MigrationSaver
                     break;
                 case 'map':
                     $field = $this->convertToMap($field, $params['map']);
-                    break;
-                case 'metadata':
-                    $field = $this->convertToMetadata($field);
                     break;
                 case 'merge':
                     if (is_array($field) && count($field) > 0) {
@@ -1960,7 +1935,7 @@ class MigrationSaver
                 default:
                     if (method_exists($this, $type . 'Filter')) {
                         $field = call_user_func(
-                            array($this, $type . 'Filter'),
+                            [$this, $type . 'Filter'],
                             $field,
                             $params
                         );
@@ -1982,7 +1957,7 @@ class MigrationSaver
     {
         $sql = "UPDATE albums  SET `cover_id`=? WHERE pk_album=?";
 
-        $values = array($photo, $album);
+        $values = [$photo, $album];
 
         $this->conn->executeQuery($sql, $values);
     }
@@ -1999,7 +1974,7 @@ class MigrationSaver
         $sql = "UPDATE articles  SET `img1`=?, `img1_footer`=?"
             . "WHERE pk_article=?";
 
-        $values = array($photo, $footer, $id);
+        $values = [$photo, $footer, $id];
 
         $this->conn->executeQuery($sql, $values);
     }
@@ -2016,7 +1991,7 @@ class MigrationSaver
         $sql = "UPDATE articles  SET `img2`=?, `img2_footer`=?"
             . "WHERE pk_article=?";
 
-        $values = array($photo, $footer, $id);
+        $values = [$photo, $footer, $id];
 
         $this->conn->executeQuery($sql, $values);
     }
@@ -2033,14 +2008,14 @@ class MigrationSaver
         $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
             . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
 
-        $values = array($id, 'img1', $photo, $photo);
+        $values = [$id, 'img1', $photo, $photo];
 
         $this->conn->executeQuery($sql, $values);
 
         $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
             . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
 
-        $values = array($id, 'img1_footer', $footer, $footer);
+        $values = [$id, 'img1_footer', $footer, $footer];
 
         $this->conn->executeQuery($sql, $values);
     }
@@ -2057,14 +2032,14 @@ class MigrationSaver
         $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
             . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
 
-        $values = array($id, 'img2', $photo, $photo);
+        $values = [$id, 'img2', $photo, $photo];
 
         $this->conn->executeQuery($sql, $values);
 
         $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
             . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
 
-        $values = array($id, 'img2_footer', $footer, $footer);
+        $values = [$id, 'img2_footer', $footer, $footer];
 
         $this->conn->executeQuery($sql, $values);
     }
@@ -2119,7 +2094,7 @@ class MigrationSaver
         $sql = "UPDATE articles  SET `fk_video2`=?, `footer_video2`=?"
             . "WHERE pk_article=?";
 
-        $values = array($video, $footer, $id);
+        $values = [$video, $footer, $id];
 
         $this->conn->executeQuery($sql, $values);
     }

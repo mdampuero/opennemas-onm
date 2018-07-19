@@ -38,7 +38,6 @@ class AdvertisementsController extends Controller
 
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $ccm->getArraysMenu($this->category, $contentTypes);
-
         $this->view->assign([
             'subcat'       => $this->subcat,
             'allcategorys' => $this->parentCategories,
@@ -135,11 +134,12 @@ class AdvertisementsController extends Controller
             $categories = null;
         }
 
+        $title  = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+        $tagIds = $this->get('api.service.tag')->getTagIdsFromStr($title);
+
         $data = [
-            'title'              =>
-                $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'           =>
-                \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'title'              => $title,
+            'tag_ids'            => $tagIds,
             'category'           => 0,
             'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -283,13 +283,14 @@ class AdvertisementsController extends Controller
             $categories = null;
         }
 
+        $title  = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+        $tagIds = $this->get('api.service.tag')->getTagIdsFromStr($title);
+
         $data = [
             'id'                 => $ad->id,
-            'title'              =>
-                $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'           =>
-                \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
+            'title'              => $title,
             'category'           => 0,
+            'tag_ids'            => $tagIds,
             'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),

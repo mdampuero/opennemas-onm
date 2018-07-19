@@ -1,0 +1,39 @@
+orm:
+    metadata:
+        -
+            name: Frontpage
+            enum:
+                content_type_name: [ static_page ]
+            properties:
+                id:           integer
+                name:         string
+                is_frontpage: boolean
+            converters:
+                default:
+                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.frontpage' ]
+            repositories:
+                instance:
+                    class:     Common\ORM\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.frontpage', '@cache.connection.instance' ]
+            persisters:
+                instance:
+                    class:     Common\ORM\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.frontpage', '@cache.connection.instance' ]
+            mapping:
+                database:
+                    table: frontpages
+                    columns:
+                        id:
+                            type: integer
+                            options: { default: null, unsigned: true, autoincrement: true }
+                        name:
+                            type: string
+                            options: { default: null, lenght: 100, notnull: false }
+                    index:
+                        -
+                            name: PRIMARY
+                            columns: [ id ]
+                            primary: true
+                            unique: true
+                            flags: {  }

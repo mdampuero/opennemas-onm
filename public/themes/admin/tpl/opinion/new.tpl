@@ -17,17 +17,6 @@
           $('#starttime').data("DateTimePicker").maxDate(e.date);
         });
 
-        $('#title').on('change', function(e, ui) {
-          var metaTags = $('#metadata');
-          var title = $('#title input');
-
-          // Fill tags from title and category
-          if (!metaTags.val()) {
-            var tags = title.val();
-            fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
-          }
-        });
-
         $('#type_opinion').on('change', function() {
           var selected = $(this).find('option:selected').val();
           if (selected != 0) {
@@ -43,7 +32,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if $opinion->id}{url name=admin_opinion_update id=$opinion->id}{else}{url name=admin_opinion_create}{/if}" method="POST" id="formulario" ng-controller="OpinionCtrl">
+  <form action="{if $opinion->id}{url name=admin_opinion_update id=$opinion->id}{else}{url name=admin_opinion_create}{/if}" method="POST" id="formulario" ng-controller="OpinionCtrl" ng-init="init({json_encode($opinion)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -216,7 +205,7 @@
                       {t}Tags{/t}
                     </label>
                     <div class="controls">
-                      <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="text" value="{$opinion->metadata|clearslash|escape:"html"}"/>
+                      <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="checkNewTags" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
                     </div>
                   </div>
                   {if is_object($opinion)}

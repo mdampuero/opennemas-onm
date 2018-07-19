@@ -64,7 +64,7 @@ class ImagesController extends Controller
      */
     public function listAction()
     {
-        $years = array();
+        $years = [];
 
         $conn = $this->get('orm.manager')->getConnection('instance');
 
@@ -79,10 +79,10 @@ class ImagesController extends Controller
 
             if (!is_null($fmt)) {
                 $years[$date->format('Y')]['name']     = $date->format('Y');
-                $years[$date->format('Y')]['months'][] = array(
+                $years[$date->format('Y')]['months'][] = [
                     'name'  => ucfirst($fmt->format($date)),
                     'value' => $value['date_month']
-                );
+                ];
             }
         }
 
@@ -110,19 +110,25 @@ class ImagesController extends Controller
                 $this->get('session')->getFlashBag()->add('error', _('Please provide a image id for show it.'));
 
                 return $this->redirect(
-                    $this->generateUrl('admin_images', array('category' => $category))
+                    $this->generateUrl('admin_images', ['category' => $category])
                 );
             }
 
-            $ids = array($ids);
+            $ids = [$ids];
         }
 
-        $photos = array();
+        $contentAux = new \Content();
+        $auxTagIds  = $contentAux->getContentTags($ids);
+        $photos     = [];
+        $allTags    = [];
         foreach ($ids as $id) {
             $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
             if (!empty($id)) {
-                $photo = new \Photo($id);
-                $photo->getPhotoMetaData();
+                $photo          = new \Photo($id);
+                $photo->tag_ids = array_key_exists($photo->id, $auxTagIds) ?
+                    $auxTagIds[$photo->id] :
+                    [];
+                $allTags        = array_merge($allTags, $photo->tag_ids);
 
                 if (!is_null($photo->pk_photo)) {
                     $photos [] = $photo;
@@ -130,21 +136,32 @@ class ImagesController extends Controller
             }
         }
 
+        $ls = $this->get('core.locale');
+
         // Check if passed ids fits photos in database, if not redirect to listing
         if (count($photos) <= 0) {
             $this->get('session')->getFlashBag()->add('error', _('Unable to find any photo with that id'));
 
             return $this->redirect(
-                $this->generateUrl('admin_images', [ 'page' => $page ])
+                $this->generateUrl(
+                    'admin_images',
+                    [ 'page'     => $page,
+                        'locale' => $ls->getRequestLocale('frontend'),
+                        'tags'   => []
+                    ]
+                )
             );
         }
 
         return $this->render(
             'image/new.tpl',
-            array(
+            [
                 'photos'        => $photos,
                 'MEDIA_IMG_URL' => $this->imgUrl,
-            )
+                'locale'        => $ls->getRequestLocale('frontend'),
+                'tags'          => $this->get('api.service.tag')
+                    ->getListByIdsKeyMapped(array_unique($allTags))['items']
+            ]
         );
     }
 
@@ -164,7 +181,7 @@ class ImagesController extends Controller
         $photosSaved = 0;
 
         foreach (array_keys($photosRAW) as $id) {
-            $photoData = array(
+            $photoData = [
                 'id'             => filter_var($id, FILTER_SANITIZE_STRING),
                 'title'          => filter_var($_POST['title'][$id], FILTER_SANITIZE_STRING),
                 'description'    => filter_var(
@@ -172,14 +189,12 @@ class ImagesController extends Controller
                     FILTER_SANITIZE_STRING,
                     FILTER_FLAG_NO_ENCODE_QUOTES
                 ),
-                'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                    filter_var($_POST['metadata'][$id], FILTER_SANITIZE_STRING)
-                ),
                 'author_name'    => filter_var($_POST['author_name'][$id], FILTER_SANITIZE_STRING),
                 'address'        => filter_var($_POST['address'][$id], FILTER_SANITIZE_STRING),
                 'category'       => filter_var($_POST['category'][$id], FILTER_SANITIZE_STRING),
-                'content_status' => 1
-            );
+                'content_status' => 1,
+                'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            ];
 
             $photo = new \Photo($id);
 
@@ -231,10 +246,10 @@ class ImagesController extends Controller
         return $this->redirect(
             $this->generateUrl(
                 'admin_images',
-                array(
+                [
                     'category' => $photo->category,
                     'page'     => $page,
-                )
+                ]
             )
         );
     }
@@ -261,94 +276,85 @@ class ImagesController extends Controller
             'Access-Control-Allow-Headers' => 'X-File-Name, X-File-Type, X-File-Size',
         ]);
 
-        switch ($request->getMethod()) {
-            case 'HEAD':
-            case 'GET':
-                return $response->setContent(json_encode([]));
-            case 'POST':
-                // check if category, and filesizes are properly setted and category_name is valid
-                $category = $request->request->getDigits('category', 0);
-                if (empty($category) || !array_key_exists($category, $this->ccm->categories)) {
-                    $category_name = '';
-                } else {
-                    $category_name = $this->ccm->categories[$category]->name;
-                }
-
-                $files = isset($_FILES) ? $_FILES : null;
-                $info  = [];
-
-                foreach ($files as $file) {
-                    $photo = new \Photo();
-
-                    if (empty($file['tmp_name'])) {
-                        $info [] = array(
-                            'error' => _('Not valid file format or the file exceeds the max allowed file size.'),
-                        );
-                        continue;
-                    }
-
-                    $tempName = pathinfo($file['name'], PATHINFO_FILENAME);
-
-                    // Check if the image has an IPTC title an use it as original title
-                    $size = getimagesize($file['tmp_name'], $imageInfo);
-                    if (isset($imageInfo['APP13'])) {
-                        $iptc = iptcparse($imageInfo["APP13"]);
-                        if (isset($iptc['2#120'])) {
-                            $tempName = str_replace("\000", "", $iptc["2#120"][0]);
-                        }
-                    }
-
-                    $fm = $this->get('data.manager.filter');
-
-                    $data = array(
-                        'local_file'        => $file['tmp_name'],
-                        'original_filename' => $file['name'],
-                        'title'             => $tempName,
-                        'description'       => $tempName,
-                        'fk_category'       => $category,
-                        'category'          => $category,
-                        'category_name'     => $category_name,
-                        'metadata'          => $fm->set($tempName)->filter('tags')->get(),
-                    );
-
-                    try {
-                        $photo   = new \Photo();
-                        $photoId = $photo->createFromLocalFile($data);
-
-                        $photo = new \Photo($photoId);
-
-                        $info = $photo;
-                    } catch (Exception $e) {
-                        $info [] = array(
-                            'error'         => $e->getMessage(),
-                        );
-                    }
-                }
-
-                $json = json_encode($info);
-                $response->setContent($json);
-
-                $response->headers->add([ 'Vary' => 'Accept' ]);
-
-                $redirect = $request->request->filter('redirect', null, FILTER_SANITIZE_STRING);
-                if (!empty($redirect)) {
-                    return $this->redirect(sprintf($redirect, rawurlencode($json)));
-                }
-
-                if (isset($_SERVER['HTTP_ACCEPT'])
-                    && (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)
-                ) {
-                    $response->headers->add(array('Content-type' => 'application/json'));
-                } else {
-                    $response->headers->add(array('Content-type' => 'text/plain'));
-                }
-                return $response;
-            case 'DELETE':
-                break;
-            default:
-                header('HTTP/1.1 405 Method Not Allowed');
+        if ($request->getMethod() != 'POST') {
+            return new JsonResponse([], 200);
         }
 
+        $category = $request->request->getDigits('category', 0);
+        if (empty($category) || !array_key_exists($category, $this->ccm->categories)) {
+            $category_name = '';
+        } else {
+            $category_name = $this->ccm->categories[$category]->name;
+        }
+
+        $files = isset($_FILES) ? $_FILES : null;
+        $info  = [];
+
+        foreach ($files as $file) {
+            $photo = new \Photo();
+
+            if (empty($file['tmp_name'])) {
+                $info [] = [
+                    'error' => _('Not valid file format or the file exceeds the max allowed file size.'),
+                ];
+                continue;
+            }
+
+            $tempName = pathinfo($file['name'], PATHINFO_FILENAME);
+
+            // Check if the image has an IPTC title an use it as original title
+            $size = getimagesize($file['tmp_name'], $imageInfo);
+            if (isset($imageInfo['APP13'])) {
+                $iptc = iptcparse($imageInfo["APP13"]);
+                if (isset($iptc['2#120'])) {
+                    $tempName = str_replace("\000", "", $iptc["2#120"][0]);
+                }
+            }
+
+            $fm = $this->get('data.manager.filter');
+
+            $data = [
+                'local_file'        => $file['tmp_name'],
+                'original_filename' => $file['name'],
+                'title'             => $tempName,
+                'description'       => $tempName,
+                'fk_category'       => $category,
+                'category'          => $category,
+                'category_name'     => $category_name,
+                'tag_ids'           => json_decode($request->request->get('tag_ids', ''), true)
+            ];
+
+            try {
+                $photo   = new \Photo();
+                $photoId = $photo->createFromLocalFile($data);
+
+                $photo = new \Photo($photoId);
+
+                $info = $photo;
+            } catch (Exception $e) {
+                $info [] = [
+                    'error'         => $e->getMessage(),
+                ];
+            }
+        }
+
+        $json = json_encode($info);
+        $response->setContent($json);
+
+        $response->headers->add([ 'Vary' => 'Accept' ]);
+
+        $redirect = $request->request->filter('redirect', null, FILTER_SANITIZE_STRING);
+        if (!empty($redirect)) {
+            return $this->redirect(sprintf($redirect, rawurlencode($json)));
+        }
+
+        if (isset($_SERVER['HTTP_ACCEPT'])
+            && (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)
+        ) {
+            $response->headers->add(['Content-type' => 'application/json']);
+        } else {
+            $response->headers->add(['Content-type' => 'text/plain']);
+        }
         return $response;
     }
 }

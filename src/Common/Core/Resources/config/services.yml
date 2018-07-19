@@ -91,19 +91,19 @@ services:
     core.helper.newsletter:
         class:     Common\Core\Component\Helper\NewsletterHelper
         arguments:
-            - '@setting_repository'
-            - '@newsletter_manager'
+            - '@orm.manager'
 
     core.helper.newsletter_sender:
         class:     Common\Core\Component\Helper\NewsletterSenderHelper
         arguments:
-            - '@setting_repository'
+            - '@orm.manager'
             - '@error.log'
             - '@application.log'
             - '@core.instance'
             - '@mailer'
             - '@api.service.subscriber'
-            - '@core.helper.newsletter'
+            - '@external.act_on.factory'
+            - '@api.service.newsletter'
             - '%mailer_no_reply_address%'
 
     core.helper.oql:
@@ -112,7 +112,7 @@ services:
 
     core.helper.structured_data:
         class:     Common\Core\Component\Helper\StructuredData
-        arguments: [ '@setting_repository' ]
+        arguments: [ '@setting_repository', '@api.service.tag' ]
 
     core.helper.subscription:
         class:     Common\Core\Component\Helper\SubscriptionHelper
@@ -216,13 +216,21 @@ services:
         class:     Common\Core\Component\Locale\Locale
         arguments: [ '%core.locale.available%', '%core.locale.path%' ]
 
-    core.manager.tag:
-        class:     Common\Core\Component\Tag\TagManager
-        arguments: [ '@orm.connection.instance', '@cache' ]
-
     core.renderer.advertisement:
         class:     Common\Core\Component\Renderer\AdvertisementRenderer
         arguments: [ '@service_container' ]
+
+    core.renderer.newsletter:
+        class:     Common\Core\Component\Renderer\NewsletterRenderer
+        arguments:
+            - '@core.template'
+            - '@entity_repository'
+            - '@category_repository'
+            - '@api.service.author'
+            - '@setting_repository'
+            - '@core.helper.advertisement'
+            - '@advertisement_repository'
+            - '@core.instance'
 
     core.status.checker:
         class:     Common\Core\Component\Status\Checker

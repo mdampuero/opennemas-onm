@@ -60,23 +60,14 @@ class MigrateTagsCommand extends ContainerAwareCommand
 
         $output->write('Migrating instance <fg=blue>' . $instance . '</>...');
 
-        $conn    = $this->getContainer()->get('orm.manager')->getConnection('instance');
-        $cache   = $this->getContainer()->get('cache.manager')->getConnection('instance');
+        $conn  = $this->getContainer()->get('orm.manager')->getConnection('instance');
+        $cache = $this->getContainer()->get('cache.manager')->getConnection('instance');
 
-        $sql = 'select pk_content, content_type_name, metadata'
-            . ' from contents'
-            . ' where metadata regexp "(á|à|ã|ä|â|Á|À|Ã|Ä|Â|é|è|ë|ê|É|È|Ë|Ê|í|ì|ï|î|Í|Ì|Ï|Î|ó|ò|õ|ö|ô|Ó|Ò|Õ|Ö|Ô|ú|ù|ü|û|Ú|Ù|Ü|Û)+"';
+        $sql = 'select id, name'
+            . ' from tags'
+            . ' where name regexp'
+            . ' "(á|à|ã|ä|â|Á|À|Ã|Ä|Â|é|è|ë|ê|É|È|Ë|Ê|í|ì|ï|î|Í|Ì|Ï|Î|ó|ò|õ|ö|ô|Ó|Ò|Õ|Ö|Ô|ú|ù|ü|û|Ú|Ù|Ü|Û)+"';
         $rs  = $conn->fetchAll($sql);
-
-        //if (count($rs) === 0) {
-            //if ($output->isVerbose()) {
-                //$output->writeln("\n<info>Hurrah! No contents to migrate</>");
-                //return;
-            //}
-
-            //$output->writeln(' <info>DONE</>');
-            //return;
-        //}
 
         $output->write("\nMigrating <info>" . count($rs) . '</> contents...');
 
@@ -89,23 +80,23 @@ class MigrateTagsCommand extends ContainerAwareCommand
 
         foreach ($rs as $r) {
             if ($output->isVerbose()) {
-                $output->writeln("  - Migrating <info>{$r['content_type_name']}</><fg=magenta>({$r['pk_content']})</>...");
+                $output->writeln("  - Migrating <info><fg=magenta>({$r['id']})</>...");
             }
 
             if ($output->isVeryVerbose()) {
-                $output->writeln("    <fg=red>Before</>: {$r['metadata']}");
+                $output->writeln("    <fg=red>Before</>: {$r['name']}");
             }
 
-            $metadata = \Onm\StringUtils::normalizeMetadata($r['metadata']);
+            $name = \Onm\StringUtils::normalizeMetadata($r['name']);
 
             if ($output->isVeryVerbose()) {
-                $output->writeln("    <info>After</>:  $metadata\n");
+                $output->writeln("    <info>After</>:  $name\n");
             }
 
             if (!$preview) {
                 try {
-                    $conn->update('contents', [ 'metadata' => $metadata ], [ 'pk_content' => $r['pk_content'] ]);
-                    $cache->delete($r['content_type_name'] . '-' . $r['pk_content']);
+                    $conn->update('tags', [ 'name' => $metadata ], [ 'id' => $r['id'] ]);
+                    $cache->delete('tag-' . $r['id']);
                     $updated++;
                 } catch (\Exception $e) {
                     $errors++;
@@ -121,7 +112,10 @@ class MigrateTagsCommand extends ContainerAwareCommand
         }
 
         if ($errors > 0) {
-            $output->writeln(sprintf("<fg=red>%s errors while updating</>. For more information, check error log.", $errors));
+            $output->writeln(sprintf(
+                "<fg=red>%s errors while updating</>. For more information, check error log.",
+                $errors
+            ));
         }
     }
 }

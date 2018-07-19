@@ -3,6 +3,10 @@ services:
         class:     Api\Service\V1\AuthorService
         arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
 
+    api.service.newsletter:
+        class:     Api\Service\V1\NewsletterService
+        arguments: [ '@service_container', 'Common\ORM\Entity\Newsletter' ]
+
     api.service.subscriber:
         class:     Api\Service\V1\SubscriberService
         arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
@@ -19,6 +23,22 @@ services:
         class:     Api\Service\V1\UserGroupService
         arguments: [ '@service_container', 'Common\ORM\Entity\UserGroup', '@api.validator.user_group' ]
 
+    api.service.frontpage:
+        class:     Api\Service\V1\FrontpageService
+        arguments: [ '@service_container', 'Common\ORM\Entity\Frontpage' ]
+
+    api.service.frontpage_version:
+        class:     Api\Service\V1\FrontpageVersionService
+        arguments: [ '@service_container', 'Common\ORM\Entity\FrontpageVersion' ]
+
+    api.service.content_position:
+        class:     Api\Service\V1\ContentPositionService
+        arguments: [ '@service_container', 'Common\ORM\Entity\ContentPosition' ]
+
+    api.service.tag:
+        class:     Api\Service\V1\TagService
+        arguments: [ '@service_container', 'Common\ORM\Entity\Tag' ]
+
     api.validator.subscriber:
         class:     Api\Validator\V1\SubscriberValidator
         arguments: [ '@service_container' ]
@@ -27,10 +47,10 @@ services:
         class:     Api\Validator\V1\SubscriptionValidator
         arguments: [ '@service_container' ]
 
-    api.validator.user_group:
-        class:     Api\Validator\V1\UserGroupValidator
-        arguments: [ '@service_container' ]
-
     api.validator.user:
         class:     Api\Validator\V1\UserValidator
+        arguments: [ '@service_container' ]
+
+    api.validator.user_group:
+        class:     Api\Validator\V1\UserGroupValidator
         arguments: [ '@service_container' ]

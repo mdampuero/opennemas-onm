@@ -10,6 +10,24 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
     /**
+     * @function init
+     * @memberOf SpecialCtrl
+     *
+     * @description
+     * Method to init the special controller
+     *
+     * @param {object} special  Special to edit
+     * @param {String} locale   Locale for the special
+     * @param {Array}  tags     Array with all the tags needed for the special
+     */
+    $scope.init = function(special, locale, tags) {
+      $scope.tag_ids = special !== null ? special.tag_ids : [];
+      $scope.locale  = locale;
+      $scope.tags    = tags;
+      $scope.watchTagIds('title');
+    };
+
+    /**
      * Parse the photos from template and initialize the scope properly
      *
      * @param Object photos The album photos.
@@ -27,32 +45,42 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
     };
 
     /**
-     * Updates scope when photo1 changes.
+     * @function getTagsAutoSuggestedFields
+     * @memberOf SpecialCtrl
      *
-     * @param array nv The new values.
-     * @param array ov The old values.
+     * @description
+     *   Method to method to retrieve th title for the autosuggested words
+     *
      */
-    $scope.$watch('photo1', function(nv, ov) {
-      $scope.img1        = null;
+    $scope.getTagsAutoSuggestedFields = function() {
+      return $scope.title;
+    };
+
+    /**
+     * Updates scope when photo1 changes.
+     */
+    $scope.$watch('photo1', function() {
+      $scope.img1 = null;
 
       if ($scope.photo1) {
         $scope.img1 = $scope.photo1.id;
       }
     }, true);
 
-        /**
+    /**
      * Updates scope when relatedInFrontpage changes.
      *
      * @param array nv The new values.
-     * @param array ov The old values.
      */
-    $scope.$watch('contentsLeft', function(nv, ov) {
-      var items          = [];
+    $scope.$watch('contentsLeft', function(nv) {
       $scope.relatedLeft = [];
+      var items          = [];
 
       if (nv instanceof Array) {
         for (var i = 0; i < nv.length; i++) {
-          items.push({ id: nv[i].id, position: i, content_type: nv[i].content_type_name });
+          items.push({
+            id: nv[i].id, position: i, content_type: nv[i].content_type_name
+          });
         }
       }
 
@@ -63,15 +91,16 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
      * Updates scope when relatedInInner changes.
      *
      * @param array nv The new values.
-     * @param array ov The old values.
      */
-    $scope.$watch('contentsRight', function(nv, ov) {
-      var items           = [];
+    $scope.$watch('contentsRight', function(nv) {
       $scope.relatedRight = [];
+      var items           = [];
 
       if (nv instanceof Array) {
         for (var i = 0; i < nv.length; i++) {
-          items.push({ id: nv[i].id, position: i, content_type: nv[i].content_type_name });
+          items.push({
+            id: nv[i].id, position: i, content_type: nv[i].content_type_name
+          });
         }
       }
 

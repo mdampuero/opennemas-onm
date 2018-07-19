@@ -33,6 +33,29 @@
   margin-top: 0;
 }
 
+.table {
+  td.editable {
+    cursor: text;
+    a {
+      opacity: 0;
+    }
+  }
+
+  td.editing {
+    input {
+      display: inline;
+      width: 40%
+    }
+  }
+
+  td.editable:hover {
+    a {
+      opacity: 1;
+      cursor: pointer;
+    }
+  }
+}
+
 .table-hover tbody tr:hover > td,
 .table-hover tbody tr:hover > th,
 .table tr.row_selected td {

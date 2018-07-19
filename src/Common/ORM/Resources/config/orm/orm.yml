@@ -24,13 +24,18 @@ imports:
     - { resource: entity/client.yml }
     - { resource: entity/comment.yml }
     - { resource: entity/content.yml }
+    - { resource: entity/content_position.yml }
     - { resource: entity/extension.yml }
+    - { resource: entity/frontpage.yml }
+    - { resource: entity/frontpage_version.yml }
     - { resource: entity/instance.yml }
     - { resource: entity/invoice.yml }
+    - { resource: entity/newsletter.yml }
     - { resource: entity/notification.yml }
     - { resource: entity/payment.yml }
     - { resource: entity/purchase.yml }
     - { resource: entity/settings.yml }
+    - { resource: entity/tag.yml }
     - { resource: entity/theme.yml }
     - { resource: entity/user.yml }
     - { resource: entity/user_group.yml }

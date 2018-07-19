@@ -246,12 +246,18 @@ class OpinionsController extends Controller
                 ->get(OpinionsController::EXTRA_INFO_TYPE);
         }
 
+        $ls = $this->get('core.locale');
+
         return $this->render('opinion/new.tpl', [
             'opinion'        => $opinion,
             'all_authors'    => $allAuthors,
             'author'         => $author,
-            'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
-            'extra_fields'   => $extraFields
+            'enableComments' => $this->get('core.helper.comment')
+                ->enableCommentsByDefault(),
+            'extra_fields'   => $extraFields,
+            'locale'         => $ls->getRequestLocale('frontend'),
+            'tags'           => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($opinion->tag_ids)['items']
         ]);
     }
 
@@ -280,10 +286,14 @@ class OpinionsController extends Controller
                     ->get('extraInfoContents.OPINION_MANAGER');
             }
 
+            $ls = $this->get('core.locale');
             return $this->render('opinion/new.tpl', [
                 'all_authors'    => $allAuthors,
-                'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
-                'extra_fields'   => $extraFields
+                'enableComments' => $this->get('core.helper.comment')
+                    ->enableCommentsByDefault(),
+                'extra_fields'   => $extraFields,
+                'locale'         => $ls->getLocale('frontend'),
+                'tags'           => []
             ]);
         }
 
@@ -309,8 +319,6 @@ class OpinionsController extends Controller
             'img2_footer'         =>
                 $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'in_home'             => (empty($inhome)) ? 0 : 1,
-            'metadata'            =>
-                \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'starttime'           => $request->request->get('starttime', ''),
             'summary'             => $request->request->get('summary', ''),
             'title'               =>
@@ -318,8 +326,9 @@ class OpinionsController extends Controller
             'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
             'with_comment'        => (empty($withComment)) ? 0 : 1,
             'params'              => [
-                'only_registered'  => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
-            ]
+                'only_registered' => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
+            ],
+            'tag_ids'             => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         $data = $this->loadMetaDataFields($data, $request->request, OpinionsController::EXTRA_INFO_TYPE);
@@ -410,8 +419,6 @@ class OpinionsController extends Controller
             'img2_footer'         =>
                 $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'in_home'             => (empty($inhome)) ? 0 : 1,
-            'metadata'            =>
-                \Onm\StringUtils::normalizeMetadata($request->request->filter('metadata', '', FILTER_SANITIZE_STRING)),
             'starttime'           => $request->request->get('starttime', ''),
             'summary'             => $request->request->get('summary', ''),
             'title'               =>
@@ -419,8 +426,9 @@ class OpinionsController extends Controller
             'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
             'with_comment'        => (empty($withComment)) ? 0 : 1,
             'params'              => [
-                'only_registered'  => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
+                'only_registered' => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
             ],
+            'tag_ids'             => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         $data = $this->loadMetaDataFields($data, $request->request, OpinionsController::EXTRA_INFO_TYPE);
@@ -498,13 +506,18 @@ class OpinionsController extends Controller
      */
     public function contentProviderAction(Request $request)
     {
-        $categoryId   = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = 8;
+        $categoryId         = $request->query->getDigits('category', 0);
+        $page               = $request->query->getDigits('page', 1);
+        $itemsPerPage       = 8;
+        $frontpageVersionId =
+            $request->query->getDigits('frontpage_version_id', null);
+        $frontpageVersionId = $frontpageVersionId === '' ?
+            null :
+            $frontpageVersionId;
 
         $em  = $this->get('entity_repository');
-        $ids = $this->get('frontpage_repository')
-            ->getContentIdsForHomepageOfCategory((int) $categoryId);
+        $ids = $this->get('api.service.frontpage_version')
+            ->getContentIds((int) $categoryId, $frontpageVersionId, 'Opinion');
 
         $filters = [
             'content_type_name' => [ [ 'value' => 'opinion' ] ],
@@ -650,6 +663,7 @@ class OpinionsController extends Controller
                 $opinion->{$value['name']} = $value['value'];
             }
         }
+        $opinion->tag_ids = json_decode($opinion->tag_ids);
 
         // Set a dummy Id for the opinion if doesn't exists
         if (empty($opinion->pk_article) && empty($opinion->id)) {
@@ -728,7 +742,9 @@ class OpinionsController extends Controller
             'author'         => $author,
             'contentId'      => $opinion->id,
             'photo'          => $photo,
-            'suggested'      => $machineSuggestedContents
+            'suggested'      => $machineSuggestedContents,
+            'tags'           => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($opinion->tag_ids)['items']
         ]);
 
         $session->set(

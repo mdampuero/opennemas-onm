@@ -46,9 +46,14 @@ class LettersController extends Controller
      */
     public function createAction(Request $request)
     {
-        if ('POST' !== $request->getMethod()) {
+        if ('POST' != $request->getMethod()) {
+            $ls = $this->get('core.locale');
             return $this->render('letter/new.tpl', [
+                'commentsConfig' => $this->get('setting_repository')
+                    ->get('comments_config'),
+                'locale'         => $ls->getLocale('frontend'),
                 'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
+                'tags'           => []
             ]);
         }
 
@@ -57,9 +62,6 @@ class LettersController extends Controller
         $data = [
             'title'          => $request->request
                 ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
-            ),
             'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
@@ -68,6 +70,7 @@ class LettersController extends Controller
             'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
             'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'body'           => $request->request->get('body', ''),
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         if ($letter->create($data)) {
@@ -82,9 +85,10 @@ class LettersController extends Controller
             );
         }
 
-        return $this->redirect($this->generateUrl('admin_letter_show', [
-            'id' => $letter->id
-        ]));
+        return $this->redirect($this->generateUrl(
+            'admin_letter_show',
+            [ 'id' => $letter->id]
+        ));
     }
 
     /**
@@ -116,10 +120,23 @@ class LettersController extends Controller
             return $this->redirect($this->generateUrl('admin_letters'));
         }
 
-        return $this->render('letter/new.tpl', [
-            'letter'         => $letter,
-            'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
-        ]);
+        $auxTagIds       = $letter->getContentTags($letter->id);
+        $letter->tag_ids = array_key_exists($letter->id, $auxTagIds) ?
+            $auxTagIds[$letter->id] :
+            [];
+
+        $ls = $this->get('core.locale');
+        return $this->render(
+            'letter/new.tpl',
+            [
+                'letter' => $letter,
+                'enableComments' => $this->get('core.helper.comment')
+                    ->enableCommentsByDefault(),
+                'locale'         => $ls->getRequestLocale('frontend'),
+                'tags'           => $this->get('api.service.tag')
+                    ->getListByIdsKeyMapped($letter->tag_ids)['items']
+            ]
+        );
     }
 
     /**
@@ -150,9 +167,6 @@ class LettersController extends Controller
             'id'             => $id,
             'title'          => $request->request
                 ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
-            ),
             'content_status' => $request->request->filter('content_status', '', FILTER_SANITIZE_STRING),
             'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
@@ -161,6 +175,7 @@ class LettersController extends Controller
             'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
             'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'body'           => $request->request->filter('body', ''),
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         if ($letter->update($data)) {
@@ -184,13 +199,18 @@ class LettersController extends Controller
      */
     public function contentProviderAction(Request $request)
     {
-        $categoryId   = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = 8;
+        $categoryId         = $request->query->getDigits('category', 0);
+        $page               = $request->query->getDigits('page', 1);
+        $itemsPerPage       = 8;
+        $frontpageVersionId =
+            $request->query->getDigits('frontpage_version_id', null);
+        $frontpageVersionId = $frontpageVersionId === '' ?
+            null :
+            $frontpageVersionId;
 
         $em  = $this->get('entity_repository');
-        $ids = $this->get('frontpage_repository')
-            ->getContentIdsForHomepageOfCategory((int) $categoryId);
+        $ids = $this->get('api.service.frontpage_version')
+            ->getContentIds((int) $categoryId, $frontpageVersionId, 'Letter');
 
         $filters = [
             'content_type_name' => [ ['value' => 'letter'] ],

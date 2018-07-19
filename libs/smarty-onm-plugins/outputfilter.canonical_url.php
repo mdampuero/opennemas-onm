@@ -10,10 +10,14 @@
  */
 function smarty_outputfilter_canonical_url($output, $smarty)
 {
-    $theme = $smarty->getTheme();
-    $uri   = $smarty->getContainer()->get('request_stack')
-        ->getCurrentRequest()
-        ->getUri();
+    $theme   = $smarty->getTheme();
+    $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+
+    if (is_null($request)) {
+        return $output;
+    }
+
+    $uri = $request->getUri();
 
     if (empty($theme)
         || $theme->uuid === 'es.openhost.theme.admin'

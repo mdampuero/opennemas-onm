@@ -7,16 +7,12 @@
         format: 'YYYY-MM-DD HH:mm:ss',
         minDate: '{$book->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}'
       });
-
-      jQuery('#title').on('change', function(e, ui) {
-        fill_tags(jQuery('#title').val(), '#metadata', '{url name=admin_utils_calculate_tags}');
-      });
     </script>
   {/javascripts}
 {/block}
 
 {block name="content"}
-<form id="formulario" action="{if isset($book)}{url name=admin_books_update id=$book->id}{else}{url name=admin_books_create}{/if}" method="POST" ng-controller="BookCtrl">
+<form id="formulario" action="{if isset($book)}{url name=admin_books_update id=$book->id}{else}{url name=admin_books_create}{/if}" method="POST" ng-controller="BookCtrl" ng-init="init({json_encode($book)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -78,7 +74,7 @@
             <div class="form-group">
               <label for="title" class="form-label">{t}Title{/t}</label>
               <div class="controls">
-                <input type="text" id="title" name="title" value="{$book->title|default:""}" required class="form-control"/>
+                <input type="text" id="title" name="title" ng-model="title" value="{$book->title|default:""}" required class="form-control"/>
               </div>
             </div>
 
@@ -143,8 +139,7 @@
               <label for="metadata" class="form-label">{t}Keywords{/t}</label>
               <span class="help">{t}Separated by comas{/t}</span>
               <div class="controls">
-                <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="text" value="{$book->metadata|default:""}" />
-
+                <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="checkNewTags" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
               </div>
             </div>
 

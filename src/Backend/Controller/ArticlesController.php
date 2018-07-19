@@ -141,11 +141,18 @@ class ArticlesController extends Controller
      */
     public function contentProviderSuggestedAction(Request $request)
     {
-        $category = $request->query->getDigits('category', 0);
-        $page     = $request->query->getDigits('page', 1);
+        $category           = $request->query->getDigits('category', 0);
+        $page               = $request->query->getDigits('page', 1);
+        $frontpageVersionId =
+            $request->query->getDigits('frontpage_version_id', null);
+        $frontpageVersionId = $frontpageVersionId === '' ?
+            null :
+            $frontpageVersionId;
 
         $em  = $this->get('entity_repository');
-        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory(0);
+        $ids = $this->get('api.service.frontpage_version')
+            ->getContentIds($category, $frontpageVersionId, 'Article');
+
 
         $filters = [
             'content_type_name' => [ [ 'value' => 'article' ] ],
@@ -189,12 +196,18 @@ class ArticlesController extends Controller
      */
     public function contentProviderCategoryAction(Request $request)
     {
-        $categoryId     = $request->query->getDigits('category', 0);
-        $page           = $request->query->getDigits('page', 1);
-        $filterCategory = $request->query->getDigits('filter_by_category', 1);
+        $categoryId         = $request->query->getDigits('category', 0);
+        $page               = $request->query->getDigits('page', 1);
+        $frontpageVersionId =
+            $request->query->getDigits('frontpage_version_id', null);
+        $frontpageVersionId = $frontpageVersionId === '' ?
+            null :
+            $frontpageVersionId;
 
-        $em       = $this->get('entity_repository');
-        $ids      = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory($categoryId);
+        $em  = $this->get('entity_repository');
+        $ids = $this->get('api.service.frontpage_version')
+            ->getContentIds($categoryId, $frontpageVersionId, 'Article');
+
         $category = $this->get('category_repository')->find($categoryId);
 
         $filters = [
@@ -204,7 +217,7 @@ class ArticlesController extends Controller
             'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ],
         ];
 
-        if ($categoryId != 0 && $filterCategory) {
+        if ($categoryId != 0) {
             $filters['category_name'] = [ [ 'value' => $category->name ] ];
         }
 
@@ -223,8 +236,7 @@ class ArticlesController extends Controller
             'route'       => [
                 'name'   => 'admin_articles_content_provider_category',
                 'params' => [
-                    'category'           => $categoryId,
-                    'filter_by_category' => $filterCategory,
+                    'category'           => $categoryId
                 ]
             ],
         ]);
@@ -389,6 +401,8 @@ class ArticlesController extends Controller
             'actual_category_title' => $actual_category_title,
             'photoInt'              => $photoInt,
             'videoInt'              => $videoInt,
+            'tags'                  => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($article->tag_ids)['items']
         ]);
 
         $this->get('session')->set(

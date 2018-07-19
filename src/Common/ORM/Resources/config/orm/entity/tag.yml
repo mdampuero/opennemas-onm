@@ -1,0 +1,50 @@
+orm:
+    metadata:
+        -
+            name: Tag
+            properties:
+                name:        string
+                language_id: string
+                id:          integer
+                slug:        string
+            converters:
+                default:
+                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.tag' ]
+            repositories:
+                instance:
+                    class:     Common\ORM\Database\Repository\TagRepository
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.tag', '@cache.connection.instance' ]
+            persisters:
+                instance:
+                    class:     Common\ORM\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.tag', '@cache.connection.instance' ]
+            mapping:
+                database:
+                    table: tags
+                    columns:
+                        name:
+                            type: string
+                            options: { default: null, length: 50 }
+                        language_id:
+                            type: string
+                            options: { default: null, notnull: true, length: 5  }
+                        id:
+                            type: integer
+                            options: { default: null, unsigned: true, autoincrement: true }
+                        slug:
+                            type: string
+                            options: { default: null, notnull: true, length: 50 }
+                    index:
+                        -
+                            name:    PRIMARY
+                            columns: [ id ]
+                            primary: true
+                            unique:  true
+                            flags:   {}
+                        -
+                            name: slug
+                            columns: [ slug ]
+                            primary: false
+                            unique: true
+                            flags: {  }

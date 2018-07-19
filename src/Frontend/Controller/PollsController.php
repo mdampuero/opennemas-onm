@@ -226,6 +226,8 @@ class PollsController extends Controller
             'cache_id'       => $cacheID,
             'msg'            => $message,
             'already_voted'  => $alreadyVoted,
+            'tags'           => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($poll->tag_ids)['items']
         ]);
     }
 

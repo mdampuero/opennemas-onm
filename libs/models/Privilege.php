@@ -1486,7 +1486,6 @@ class Privilege
                 'module'       => 'INTERNAL',
                 'enabled'      => 1
             ],
-
             224 => [
                 'pk_privilege' => 224,
                 'name'         => 'MEMBER_SEND_NEWSLETTER',
@@ -1637,6 +1636,30 @@ class Privilege
                 'description'  => _('Prevent search engine indexation'),
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
+            ],
+            243 => [
+                'pk_privilege' => 243,
+                'name'         => 'TAG_ADMIN',
+                'description'  => _('List'),
+                'module'       => 'TAG',
+            ],
+            244 => [
+                'pk_privilege' => 244,
+                'name'         => 'TAG_UPDATE',
+                'description'  => _('Edit'),
+                'module'       => 'TAG',
+            ],
+            245 => [
+                'pk_privilege' => 245,
+                'name'         => 'TAG_DELETE',
+                'description'  => _('Delete'),
+                'module'       => 'TAG',
+            ],
+            246 => [
+                'pk_privilege' => 246,
+                'name'         => 'TAG_CREATE',
+                'description'  => _('Create'),
+                'module'       => 'TAG',
             ],
         ];
 

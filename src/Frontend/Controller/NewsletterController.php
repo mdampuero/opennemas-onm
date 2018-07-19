@@ -34,13 +34,15 @@ class NewsletterController extends Controller
      **/
     public function showAction($id = null)
     {
-        $newsletter = new \Newsletter((int) $id);
-        if (empty($newsletter->id)) {
+        $item = $this->get('api.service.newsletter')->getItem($id);
+
+        if (!is_object($item) || $item->type == 1) {
             throw new ResourceNotFoundException();
+            // $item->html = $this->get('core.renderer.newsletter')->render($item->contents);
         }
 
         $internalName = $this->get('core.instance')->internal_name;
-        return new Response($newsletter->html, 200, [
+        return new Response($item->html, 200, [
             'x-instance' => $internalName,
             'x-tags'     => 'instance-' . $internalName . ',newsletter-' . $id,
         ]);
@@ -63,6 +65,16 @@ class NewsletterController extends Controller
                 $this->generateUrl('frontend_user_register', [ 'target' => 'newsletter', ]),
                 301
             );
+        }
+
+        // Redirect to configured url if subscription type is ActOn
+        if ($subscriptionType === 'acton') {
+            $setting = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('actOn.formPage', null);
+            if (!empty($setting)) {
+                return $this->redirect($setting);
+            }
         }
 
         list($positions, $advertisements) = $this->getAds();

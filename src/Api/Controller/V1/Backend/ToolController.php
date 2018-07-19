@@ -194,7 +194,6 @@ class ToolController extends Controller
             'id'             => $content->id,
             'img1'           => $content->img1,
             'img2'           => $content->img2,
-            'metadata'       => $content->metadata,
             'relatedFront'   => array_map(function ($el) {
                 return $el[1];
             }, $relatedSrv->getRelations($content->id, 'frontpage')),

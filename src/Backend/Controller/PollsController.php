@@ -115,53 +115,55 @@ class PollsController extends Controller
      */
     public function createAction(Request $request)
     {
-        if ('POST' == $request->getMethod()) {
-            $poll = new \Poll();
+        if ('POST' != $request->getMethod()) {
+            $ls = $this->get('core.locale');
+            return $this->render('poll/new.tpl', [
+                'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
+                'locale'         => $ls->getLocale('frontend'),
+                'tags'           => []
+            ]);
+        }
 
-            $data = [
-                'title'          => $request->request
-                    ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'pretitle'       => $request->request
-                    ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'description'    => $request->request
-                    ->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                    $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
-                ),
-                'favorite'       => $request->request->getDigits('favorite', 0),
-                'with_comment'   => $request->request->getDigits('with_comment', 0),
-                'visualization'  => $request->request->getDigits('visualization', 0),
-                'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
-                'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
-                'item'           => json_decode($request->request->get('parsedAnswers')),
-                'params'         => $request->request->get('params', []),
-            ];
-            $poll = $poll->create($data);
+        $poll = new \Poll();
 
-            if (!empty($poll->id)) {
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    _('Poll successfully created.')
-                );
+        $data = [
+            'title'          => $request->request
+                ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'pretitle'       => $request->request
+                ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'description'    => $request->request
+                ->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'favorite'       => $request->request->getDigits('favorite', 0),
+            'with_comment'   => $request->request->getDigits('with_comment', 0),
+            'visualization'  => $request->request->getDigits('visualization', 0),
+            'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
+            'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
+            'item'           => json_decode($request->request->get('parsedAnswers')),
+            'params'         => $request->request->get('params', []),
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+        ];
 
-                return $this->redirect(
-                    $this->generateUrl('admin_poll_show', ['id' => $poll->id])
-                );
-            }
+        $poll = $poll->create($data);
 
+        if (!empty($poll->id)) {
             $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Unable to create the new poll.')
+                'success',
+                _('Poll successfully created.')
             );
 
             return $this->redirect(
-                $this->generateUrl('admin_polls', ['category' => $data['category']])
+                $this->generateUrl('admin_poll_show', ['id' => $poll->id])
             );
         }
 
-        return $this->render('poll/new.tpl', [
-            'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
-        ]);
+        $this->get('session')->getFlashBag()->add(
+            'error',
+            _('Unable to create the new poll.')
+        );
+
+        return $this->redirect(
+            $this->generateUrl('admin_polls', ['category' => $data['category']])
+        );
     }
 
     /**
@@ -175,9 +177,9 @@ class PollsController extends Controller
      */
     public function showAction(Request $request)
     {
-        $id = $request->query->getDigits('id', null);
-
+        $id   = $request->query->getDigits('id', null);
         $poll = new \Poll($id);
+
         if (is_null($poll->id)) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -187,14 +189,23 @@ class PollsController extends Controller
             return $this->redirect($this->generateUrl('admin_polls'));
         }
 
+        $auxTagIds     = $poll->getContentTags($poll->id);
+        $poll->tag_ids = array_key_exists($poll->id, $auxTagIds) ?
+            $auxTagIds[$poll->id] :
+            [];
+
         if (is_string($poll->params)) {
             $poll->params = unserialize($poll->params);
         }
 
+        $ls = $this->get('core.locale');
         return $this->render('poll/new.tpl', [
             'poll'  => $poll,
             'items' => $poll->items,
             'commentsConfig' => s::get('comments_config'),
+            'locale'         => $ls->getRequestLocale('frontend'),
+            'tags'           => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($poll->tag_ids)['items']
         ]);
     }
 
@@ -240,15 +251,13 @@ class PollsController extends Controller
                 ->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'visualization'  => $request->request
                 ->filter('visualization', '', FILTER_SANITIZE_STRING),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
-            ),
             'favorite'       => $request->request->getDigits('favorite', 0),
             'with_comment'   => $request->request->getDigits('with_comment', 0),
             'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
             'content_status' => $request->request->getDigits('content_status', 0),
             'item'           => json_decode($request->request->get('parsedAnswers')),
             'params'         => $request->request->get('params'),
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         if ($poll->update($data)) {
@@ -317,13 +326,18 @@ class PollsController extends Controller
      */
     public function contentProviderAction(Request $request)
     {
-        $categoryId   = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = 8;
+        $categoryId         = $request->query->getDigits('category', 0);
+        $page               = $request->query->getDigits('page', 1);
+        $itemsPerPage       = 8;
+        $frontpageVersionId =
+            $request->query->getDigits('frontpage_version_id', null);
+        $frontpageVersionId = $frontpageVersionId === '' ?
+            null :
+            $frontpageVersionId;
 
         $em  = $this->get('entity_repository');
-        $ids = $this->get('frontpage_repository')
-            ->getContentIdsForHomepageOfCategory((int) $categoryId);
+        $ids = $this->get('api.service.frontpage_version')
+            ->getContentIds((int) $categoryId, $frontpageVersionId, 'Poll');
 
         $filters = [
             'content_type_name' => [ [ 'value' => 'poll' ] ],

@@ -244,10 +244,10 @@
                   </div>
                 </td>
                 <td class="hidden-xs">
-                  <span ng-if="content.fk_author != 0">
+                  <span ng-if="content.fk_author">
                     [% (data.extra.users | filter: { id: content.fk_author }: true)[0].name %]
                   </span>
-                  <span ng-if="content.fk_author == 0 && content.agency != ''">
+                  <span ng-if="!content.fk_author && content.agency != ''">
                     [% content.agency %]
                   </span>
                 </td>

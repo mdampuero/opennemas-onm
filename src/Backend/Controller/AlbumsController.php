@@ -104,10 +104,12 @@ class AlbumsController extends Controller
             foreach ($authorsComplete as $author) {
                 $authors[$author->id] = $author->name;
             }
-
+            $ls = $this->get('core.locale');
             return $this->render('album/new.tpl', [
                 'authors' => $authors,
-                'commentsConfig' => s::get('comments_config')
+                'commentsConfig' => s::get('comments_config'),
+                'locale'         => $ls->getLocale('frontend'),
+                'tags'           => []
             ]);
         }
 
@@ -119,9 +121,6 @@ class AlbumsController extends Controller
             'agency'         => $request->request
                 ->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $request->request->get('description', ''),
-            'metadata'       => \Onm\StringUtils::normalizeMetadata(
-                $request->request->filter('metadata', '', FILTER_SANITIZE_STRING)
-            ),
             'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
             'album_frontpage_image' => $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
             'album_photos_id'       => $request->request->get('album_photos_id'),
@@ -132,6 +131,7 @@ class AlbumsController extends Controller
             'starttime'      => $request->request
                 ->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'params'         => $request->request->get('params', []),
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         $album = new \Album();
@@ -220,6 +220,11 @@ class AlbumsController extends Controller
             return $this->redirect($this->generateUrl('admin_albums'));
         }
 
+        $auxTagIds      = $album->getContentTags($album->id);
+        $album->tag_ids = array_key_exists($album->id, $auxTagIds) ?
+            $auxTagIds[$album->id] :
+            [];
+
         if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
             && !$album->isOwner($this->getUser()->id)
         ) {
@@ -240,12 +245,16 @@ class AlbumsController extends Controller
             $authors[$author->id] = $author->name;
         }
 
+        $ls = $this->get('core.locale');
         return $this->render('album/new.tpl', [
             'category'       => $album->category,
             'photos'         => $photos,
             'album'          => $album,
             'authors'        => $authors,
             'commentsConfig' => s::get('comments_config'),
+            'locale'         => $ls->getRequestLocale('frontend'),
+            'tags'           => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($album->tag_ids)['items']
         ]);
     }
 
@@ -305,10 +314,6 @@ class AlbumsController extends Controller
             'agency'         => $requestPost
                 ->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $requestPost->get('description', ''),
-            'metadata'       => $this->get('data.manager.filter')
-                ->set($requestPost->filter('metadata', '', FILTER_SANITIZE_STRING))
-                ->filter('tags', [ 'exclude' => [ '.', '-', '#' ] ])
-                ->get(),
             'with_comment'   => $requestPost->filter('with_comment', 0, FILTER_SANITIZE_STRING),
             'album_frontpage_image' => $requestPost->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
             'album_photos_id'       => $requestPost->get('album_photos_id'),
@@ -319,6 +324,7 @@ class AlbumsController extends Controller
             'starttime'      => $requestPost
                 ->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'params'         => $requestPost->get('params', []),
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         $album->update($data);
@@ -376,13 +382,18 @@ class AlbumsController extends Controller
      */
     public function contentProviderAction(Request $request)
     {
-        $categoryId   = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = 8;
+        $categoryId         = $request->query->getDigits('category', 0);
+        $page               = $request->query->getDigits('page', 1);
+        $itemsPerPage       = 8;
+        $frontpageVersionId =
+            $request->query->getDigits('frontpage_version_id', null);
+        $frontpageVersionId = $frontpageVersionId === '' ?
+            null :
+            $frontpageVersionId;
 
         $em  = $this->get('entity_repository');
-        $ids = $this->get('frontpage_repository')
-            ->getContentIdsForHomepageOfCategory((int) $categoryId);
+        $ids = $this->get('api.service.frontpage_version')
+            ->getContentIds((int) $categoryId, $frontpageVersionId, 'Album');
 
         $filters = [
             'content_type_name' => [ [ 'value' => 'album' ] ],

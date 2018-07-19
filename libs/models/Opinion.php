@@ -409,7 +409,9 @@ class Opinion extends Content
 
         $category = 0;
 
-        $contentsSuggestedInFrontpage = $cm->getContentsForHomepageOfCategory($category);
+        list($contentPositions, $contentsSuggestedInFrontpage, $invalidationDt, $lastSaved) =
+                getService('api.service.frontpageVersion')
+                    ->getPublicFrontpageData($id);
 
         foreach ($contentsSuggestedInFrontpage as $content) {
             if ($content->content_type == 4) {

@@ -749,6 +749,8 @@ class OpinionsController extends Controller
             'x-tags'          => 'opinion,' . $opinion->id,
             'x-cache-for'     => '+1 day',
             'x-cacheable'     => $cacheable,
+            'tags'            => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($opinion->tag_ids)['items']
         ]);
     }
 

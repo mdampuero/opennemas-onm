@@ -162,13 +162,6 @@ class Content implements \JsonSerializable
     public $in_litter = null;
 
     /**
-     * The list of tags of this content separated by commas
-     *
-     * @var string
-     */
-    public $metadata = '';
-
-    /**
      * An array for misc information of this content
      * Must be serialized when saved to database
      *
@@ -552,7 +545,6 @@ class Content implements \JsonSerializable
             'description'         => (empty($data['description'])
                 && !isset($data['description'])) ? '' : $data['description'],
             'body'                => (!array_key_exists('body', $data)) ? '' : $data['body'],
-            'metadata'            => (!array_key_exists('metadata', $data)) ? '' : $data['metadata'],
             'starttime'           => ($data['starttime'] < date("Y-m-d H:i:s")
                 && !is_null($data['starttime'])) ? date("Y-m-d H:i:s") : $data['starttime'],
             'endtime'             => (empty($data['endtime'])) ? null : $data['endtime'],
@@ -575,8 +567,7 @@ class Content implements \JsonSerializable
             'params'              => (!isset($data['params'])
                 || empty($data['params'])) ? null : serialize($data['params'])
         ];
-
-        $conn = getService('dbal_connection');
+        $conn        = getService('dbal_connection');
         try {
             // Insert into contents table
             $conn->insert('contents', $contentData);
@@ -585,6 +576,10 @@ class Content implements \JsonSerializable
             $this->pk_content   = $this->id;
             $data['pk_content'] = $this->id;
             $data['id']         = $this->id;
+
+            $contentData['tag_ids'] = (empty($data['tag_ids'])) ?
+                [] :
+                $this->addTags($data['tag_ids']);
 
             self::load($contentData);
 
@@ -689,7 +684,6 @@ class Content implements \JsonSerializable
             'fk_user_last_editor' => (int) $data['fk_user_last_editor'],
             'frontpage'      => (!isset($data['frontpage'])) ? $this->frontpage : (int) $data['frontpage'],
             'in_home'        => (!isset($data['in_home'])) ? $this->in_home : (int) $data['in_home'],
-            'metadata'       => (!empty($data['metadata'])) ? $data['metadata'] : '',
             'params'         => (!isset($data['params']) || empty($data['params'])) ? null : serialize($data['params']),
             'slug'           => $data['slug'],
             'starttime'      => (!isset($data['starttime'])) ? $this->starttime : $data['starttime'],
@@ -724,6 +718,8 @@ class Content implements \JsonSerializable
             } else {
                 $catName = $this->category_name;
             }
+
+            $this->tag_ids = $this->addTags(is_array($data['tag_ids']) ? $data['tag_ids'] : []);
 
             logContentEvent(__METHOD__, $this);
             dispatchEventWithParams('content.update', [ 'content' => $this ]);
@@ -2121,5 +2117,139 @@ class Content implements \JsonSerializable
             }
         }
         $this->removeMetadata($emptyKeys);
+    }
+
+    /**
+     * Associates a list of tags to a content
+     *
+     * @param array   $tagsList  the list of tags
+     * @param integer $contentId the content id
+     *
+     * @return  void
+     */
+    public static function saveTags($tagsList, $contentId = null)
+    {
+        if (empty($tagsList)) {
+            return null;
+        }
+
+        $tagsListAux = $tagsList;
+        if (!is_array($tagsList)) {
+            $tagsListAux = [$tagsList];
+        }
+
+        $sql      = 'INSERT INTO contents_tags (content_id, tag_id) VALUES ';
+        $inputVal = [];
+        foreach ($tagsListAux as $tag) {
+            $sql       .= '(?, ?), ';
+            $inputVal[] = $contentId == null ? $tag['content_id'] : $contentId;
+            $inputVal[] = $contentId == null ? $tag['tag_id'] : $tag;
+        }
+        $sql = substr($sql, 0, -2) . ';';
+
+        getService('dbal_connection')->executeUpdate(
+            $sql,
+            $inputVal
+        );
+    }
+
+    /**
+     * Removes all tags associated with a content given its id
+     *
+     * @param mixed $contentId The id of the content
+     *
+     * @return void
+     */
+    public static function deleteTags($contentId)
+    {
+        if (empty($contentId)) {
+            return null;
+        }
+
+        $sqlContentId = is_array($contentId) ?
+            ' IN (' . substr(str_repeat(', ?', count($contentId)), 2) . ')' :
+            ' = ?';
+
+        $sql = 'DELETE FROM contents_tags WHERE content_id ' . $sqlContentId;
+
+        getService('dbal_connection')->executeUpdate(
+            $sql,
+            is_array($contentId) ? $contentId : [$contentId]
+        );
+    }
+
+    /**
+     * Method for associate some tags by name to the content
+     * This is crap and should be in the article service.
+     *
+     * @param Array $data
+     */
+    public function addTags($tagIds)
+    {
+        $newTags    = [];
+        $insertTags = [];
+        $ts         = getService('api.service.tag');
+
+        if (empty($tagIds)) {
+            self::deleteTags($this->id);
+            return [];
+        }
+
+        foreach ($tagIds as $tag) {
+            if (is_array($tag)) {
+                $tag['slug']  = $ts->createSearchableWord($tag['name']);
+                $tag          = $ts->createItem($tag);
+                $insertTags[] = $tag->id;
+                $newTags[]    = $tag;
+            } else {
+                $insertTags[] = intval($tag);
+            }
+        }
+
+        self::deleteTags($this->id);
+        self::saveTags($insertTags, $this->id);
+        return $insertTags;
+    }
+
+    /**
+     * Method for recover the tags for contents
+     *
+     * @param mixed $contentIds a array with all the ids of the contents you want recover
+     *  If you use a integer only recover this one.
+     */
+    public function getContentTags($contentIds)
+    {
+        if ($contentIds === null) {
+            return null;
+        }
+
+        if (is_array($contentIds) && empty($contentIds)) {
+            return [];
+        }
+
+        $filter = is_array($contentIds) ?
+            'IN (' . substr(str_repeat(', ?', count($contentIds)), 2) . ')' :
+            '= ?';
+
+        $sql = 'SELECT content_id, GROUP_CONCAT(tag_id) as tagsList  FROM contents_tags as ct WHERE ct.content_id ' .
+            $filter .
+            ' GROUP BY content_id';
+
+        try {
+            $rs = getService('dbal_connection')->fetchAll(
+                $sql,
+                is_array($contentIds) ? $contentIds : [$contentIds]
+            );
+
+            $contentTagsArray = [];
+            foreach ($rs as $row) {
+                $contentTagsArray[$row['content_id']] = array_map('intval', explode(',', $row['tagsList']));
+            }
+
+            return $contentTagsArray;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            throw new Exception("Error Processing Request", 500);
+        }
     }
 }

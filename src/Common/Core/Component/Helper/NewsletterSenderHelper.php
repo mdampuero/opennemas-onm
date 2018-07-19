@@ -76,19 +76,21 @@ class NewsletterSenderHelper
         $instance,
         $mailer,
         $ssb,
-        $newsletterHelper,
+        $actOnFactory,
+        $newsletterService,
         $noReplyAddress
     ) {
-        $this->sm                   = $settingsRepository;
+        $this->ormManager           = $settingsRepository;
         $this->appLog               = $appLog;
         $this->errorLog             = $errorLog;
         $this->noReplyAddress       = $noReplyAddress;
         $this->instanceInternalName = $instance->internal_name;
         $this->mailer               = $mailer;
         $this->ssb                  = $ssb;
-        $this->nh                   = $newsletterHelper;
-        $this->newsletterConfigs    = $this->sm->get('newsletter_maillist');
-        $this->siteName             = $this->sm->get('site_name');
+        $this->actOnFactory         = $actOnFactory;
+        $this->ns                   = $newsletterService;
+        $this->newsletterConfigs    = $this->ormManager->getDataSet('Settings', 'instance')->get('newsletter_maillist');
+        $this->siteName             = $this->ormManager->getDataSet('Settings', 'instance')->get('site_name');
     }
 
     /**
@@ -103,13 +105,22 @@ class NewsletterSenderHelper
     {
         // if no recipients we can exit directly
         if (empty($recipients)) {
-            return [];
+            return [
+                'total'      => 0,
+                'create_new' => false,
+                'report'     => [],
+            ];
         }
 
-        $sentEmails = 0;
-        $maxAllowed = (int) $this->sm->get('max_mailing', 0);
-        $remaining  = $maxAllowed - $this->nh->getTotalNumberOfNewslettersSend();
+        $sentEmails      = 0;
+        $maxAllowed      = (int) $this->ormManager->getDataSet('Settings', 'instance')->get('max_mailing', 0);
+        $lastInvoiceDate = $this->getLastInvoiceDate();
+        $remaining       = $maxAllowed - $this->ns->getSentNewslettersSinceLastInvoice($lastInvoiceDate);
 
+        // Fix encoding of the html
+        $newsletter->html = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
+
+        $recipients = json_decode(json_encode($recipients), false);
         foreach ($recipients as $mailbox) {
             if ($maxAllowed > 0 && abs($remaining) >= 0) {
                 $sendResults[] = [$mailbox, false, _('Max sents reached')];
@@ -118,7 +129,11 @@ class NewsletterSenderHelper
             }
 
             try {
-                if ($mailbox->type == 'list') {
+                if ($mailbox->type == 'acton') {
+                    list($errors, $sentEmails) = $this->sendActon($newsletter, $mailbox);
+
+                    $sendResults[] = [ $mailbox, $sentEmails > 0, '' ];
+                } elseif ($mailbox->type == 'list') {
                     list($errors, $sentEmailsList) = $this->sendList($newsletter, $mailbox);
 
                     $sentEmails   += $sentEmailsList;
@@ -142,24 +157,83 @@ class NewsletterSenderHelper
             }
         }
 
-        // If the newsletter was already sent in the past, then duplicate it
-        if (empty($newsletter->sent)) {
-            $newsletter->update([
-                'sent' => $sentEmails
-            ]);
-        } else {
-            $newsletter->create([
-                'title' => $newsletter->title,
-                'data'  => $newsletter->data,
-                'html'  => $newsletter->html,
-                'sent'  => $sentEmails,
-            ]);
+        return [
+            'total'      => $sentEmails,
+            'report'     => $sendResults,
+            'create_new' => !empty($newsletter->sent),
+        ];
+    }
+
+    /**
+     * Sends the newsletter to a subscription list
+     *
+     * @param Newsletter $newsletter the newsletter
+     * @param array      $recipients the subscription group to send the newsletter
+     *
+     * @return array the number of emails sent
+     */
+    public function sendActon($newsletter, $marketingList)
+    {
+        $sentEmails = 0;
+
+        $errors = [];
+        try {
+            $endpoint = $this->actOnFactory->getEndpoint('email_campaign');
+
+            // Save settings
+            $settings = $this->ormManager
+                ->getDataSet('Settings', 'instance')
+                ->get([
+                    'site_name',
+                    'newsletter_maillist',
+                    'actOn.headerId',
+                    'actOn.footerId',
+                ]);
+
+            $messageParams = [
+                'subject'  => $newsletter->title,
+                'title'    => $newsletter->title,
+                'htmlbody' => $newsletter->html,
+            ];
+            if (!empty($settings['actOn.headerId'])) {
+                $messageParams['headerid'] = $settings['actOn.headerId'];
+            }
+
+            if (!empty($settings['actOn.footerId'])) {
+                $messageParams['footerid'] = $settings['actOn.footerId'];
+            }
+
+            $id = $endpoint->createMessage($messageParams);
+
+            $sendingParams = [
+                'iscustom'    => 'Y',
+                'htmlbody' => $newsletter->html,
+                'textbody' => $newsletter->html,
+                'sendername'  => $settings['site_name'],
+                'senderemail' => $settings['newsletter_maillist']['sender'],
+                'subject'     => $newsletter->title,
+                'when'        => time(),
+                'sendtoids'   => $marketingList->id,
+            ];
+
+            if (!empty($settings['actOn.headerId'])) {
+                $sendingParams['headerid'] = $settings['actOn.headerId'];
+            }
+
+            if (!empty($settings['actOn.footerId'])) {
+                $sendingParams['footerid'] = $settings['actOn.footerId'];
+            }
+
+            $result = $endpoint->sendMessage($id, $sendingParams);
+
+            $sentEmails += 1;
+        } catch (\Exception $e) {
+            $this->errorLog->error('Error sending to ActOn: ' . $e->getMessage());
+
+            $errors[] = _('Unable to deliver your email');
         }
 
-        return [
-            'total' => $sentEmails,
-            'report' => $sendResults,
-        ];
+        return [ $errors, $sentEmails ];
     }
 
     /**
@@ -239,7 +313,7 @@ class NewsletterSenderHelper
      */
     public function sendSubscriptionMail($data)
     {
-        $settings = $this->sm->get([
+        $settings = $this->ormManager->getDataSet('Settings', 'instance')->get([
             'site_name',
             'newsletter_maillist'
         ]);
@@ -286,7 +360,6 @@ class NewsletterSenderHelper
             ->setFrom([ $data['email'] => $data['name'] ])
             ->setSender([ 'no-reply@postman.opennemas.com' => $settings['site_name'] ]);
 
-
         $headers = $email->getHeaders();
         $headers->addParameterizedHeader(
             'ACUMBAMAIL-SMTPAPI',
@@ -301,5 +374,47 @@ class NewsletterSenderHelper
                 . "Check the form and try again"
             ));
         }
+    }
+
+    /**
+     * Updates last invoice date
+     *
+     * @param string $date Date of last invoice
+     *
+     * @return DateTime Last invoice
+     */
+    public function getLastInvoiceDate()
+    {
+        // Generate last invoice DateTime
+        $lastInvoice = new \DateTime($this->ormManager->getDataSet('Settings', 'instance')->get('last_invoice'));
+
+        // Set day to 28 if it's more than that
+        if ($lastInvoice->format('d') > 28) {
+            $lastInvoice->setDate(
+                $lastInvoice->format('Y'),
+                $lastInvoice->format('m'),
+                28
+            );
+        }
+
+        // Get today DateTime
+        $today = new \DateTime();
+
+        // Get next invoice DateTime
+        $nextInvoiceDate = new \DateTime($lastInvoice->format('Y-m-d H:i:s'));
+        $nextInvoiceDate->modify('+1 month');
+
+        // Update next invoice DateTime
+        while ($today > $nextInvoiceDate) {
+            $nextInvoiceDate->modify('+1 month');
+        }
+
+        // Update last invoice DateTime
+        $lastInvoice = $nextInvoiceDate->modify('-1 month');
+
+        $this->ormManager->getDataSet('Settings', 'instance')
+            ->set('last_invoice', $lastInvoice->format('Y-m-d H:i:s'));
+
+        return $lastInvoice;
     }
 }

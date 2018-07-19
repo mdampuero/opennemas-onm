@@ -418,7 +418,7 @@ class ContentManager
      *
      * @return boolean, if all went good this will be true and viceversa
      */
-    public static function saveContentPositionsForHomePage($categoryID, $elements = [])
+    public static function saveContentPositionsForHomePage($categoryID, $frontpageVersionId, $elements = [])
     {
         $positions   = [];
         $contentIds  = [];
@@ -438,7 +438,8 @@ class ContentManager
                 $conn->quote($categoryID, \PDO::PARAM_INT),
                 $conn->quote($element['position'], \PDO::PARAM_INT),
                 $conn->quote($element['placeholder'], \PDO::PARAM_STR),
-                $conn->quote($element['content_type'], \PDO::PARAM_STR)
+                $conn->quote($element['content_type'], \PDO::PARAM_STR),
+                $conn->quote($frontpageVersionId, \PDO::PARAM_INT),
             ];
         }
 
@@ -446,11 +447,12 @@ class ContentManager
             $conn->beginTransaction();
 
             // Clean all the contents for this category after insert the new ones
-            self::clearContentPositionsForHomePageOfCategory($categoryID, $conn);
+
+            self::clearContentPositionsForHomePageOfCategory($categoryID, $frontpageVersionId, $conn);
 
             // construct the final sql statement and execute it
             $stmt = 'INSERT INTO content_positions (pk_fk_content, fk_category,'
-                  . ' position, placeholder, content_type) '
+                  . ' position, placeholder, content_type, frontpage_version_id) '
                   . 'VALUES ';
 
             foreach ($positions as $position) {
@@ -524,12 +526,16 @@ class ContentManager
     *                        to clear positions from
     * @return boolean if all went good this will be true and viceversa
     */
-    public static function clearContentPositionsForHomePageOfCategory($categoryID, $conn = false)
+    public static function clearContentPositionsForHomePageOfCategory($categoryID, $frontpageVersionId, $conn = false)
     {
         $conn = getService('orm.manager')->getConnection('instance');
 
         // clean actual contents for the homepage of this category
-        $sql = 'DELETE FROM content_positions WHERE `fk_category` = ' . $categoryID;
+        $sql  = 'DELETE FROM content_positions WHERE ';
+        $sql .= empty($frontpageVersionId) ?
+            '`fk_category` = ' . $categoryID :
+            '`fk_category` = ' . $categoryID . ' AND frontpage_version_id IN (' .
+            $frontpageVersionId . ', 0)';
         $conn->executeUpdate($sql);
 
         getService('application.log')->info(
@@ -1506,6 +1512,45 @@ class ContentManager
         ];
 
         return $contentTypes;
+    }
+
+    /**
+     * Returns the list of content types for the modules activated
+     *
+     * @return array the list of content types
+     */
+    public static function getContentTypesFiltered()
+    {
+        $contentTypes         = \ContentManager::getContentTypes();
+        $contentTypesFiltered = [];
+
+        foreach ($contentTypes as $contentType) {
+            switch ($contentType['name']) {
+                case 'advertisement':
+                    $moduleName = 'ads';
+                    break;
+                case 'attachment':
+                    $moduleName = 'file';
+                    break;
+                case 'photo':
+                    $moduleName = 'image';
+                    break;
+                case 'static_page':
+                    $moduleName = 'static_pages';
+                    break;
+                default:
+                    $moduleName = $contentType['name'];
+                    break;
+            }
+
+            $moduleName = strtoupper($moduleName . '_MANAGER');
+
+            if (getService('core.security')->hasExtension($moduleName)) {
+                $contentTypesFiltered[$contentType['name']] = $contentType['title'];
+            }
+        }
+
+        return $contentTypesFiltered;
     }
 
     /**

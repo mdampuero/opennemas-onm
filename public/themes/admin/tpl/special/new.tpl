@@ -1,19 +1,6 @@
 {extends file="base/admin.tpl"}
-
-{block name="footer-js" append}
-  {javascripts}
-    <script>
-      $(document).ready(function($){
-        $('#title').on('change', function(e, ui) {
-          fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
-        });
-      });
-    </script>
-  {/javascripts}
-{/block}
-
 {block name="content"}
-  <form action="{if $special->id}{url name=admin_special_update id=$special->id}{else}{url name=admin_special_create}{/if}" method="post" ng-controller="SpecialCtrl" id="formulario">
+  <form action="{if $special->id}{url name=admin_special_update id=$special->id}{else}{url name=admin_special_create}{/if}" method="post" ng-controller="SpecialCtrl" id="formulario" ng-init="init({json_encode($special)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -67,7 +54,7 @@
               <div class="form-group">
                 <label for="title" class="form-label">{t}Title{/t}</label>
                 <div class="controls">
-                  <input type="text" id="title" name="title" required class="form-control"
+                  <input type="text" id="title" ng-model="title" name="title" required class="form-control"
                   value="{$special->title|clearslash|escape:"html"}"/>
                 </div>
               </div>
@@ -106,10 +93,7 @@
               </div>
               <div class="form-group">
                 <label for="metadata" class="form-label">{t}Tags{/t}</label>
-                <span class="help">{t}List of words separated by commas.{/t}</span>
-                <div class="controls">
-                  <input  data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required type="text" value="{$special->metadata|clearslash|escape:"html"}"/>
-                </div>
+                <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="checkNewTags" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
               </div>
               <div class="form-group">
                 <label for="slug" class="form-label">{t}Slug{/t}</label>

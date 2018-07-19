@@ -2,18 +2,26 @@
 /* {renderplaceholder items=$articles tpl='xxx.tpl' placeholder="placeholder_0_0"} */
 function smarty_function_renderplaceholder($params, &$smarty)
 {
-    $outputHTML    = '';
+    $outputHTML = '';
 
     // Get all the parameters passed to the function
     $items       = $params['items'];
     $tpl         = $params['tpl'];
     $placeholder = $params['placeholder'];
     $cssclass    = $params['cssclass'];
-    $order       = (array_key_exists('order', $params))? $params['order'] : 'normal';
+    $order       = (array_key_exists('order', $params)) ?
+        $params['order'] :
+        'normal';
     unset($params['items']);
 
     // Assign smarty variables to params
     $params['category_name'] = $smarty->getTemplateVars('category_name');
+    $contentPositionByPos    = $smarty->getTemplateVars('contentPositionByPos');
+
+    if (!is_array($contentPositionByPos) || empty($contentPositionByPos)) {
+        $contentPositionByPos = getPlaceholderInTheOldWay($placeholder, $items);
+    }
+
 
     // Doing some checks if this method was called properly
     if (!isset($items)) {
@@ -26,18 +34,15 @@ function smarty_function_renderplaceholder($params, &$smarty)
 
     $tpl->setCaching(\Smarty::CACHING_OFF);
 
-    $filteredContents = [];
-    if (isset($items) && count($items>0)) {
-        foreach ($items as $i => $item) {
-            if ($item->placeholder == $placeholder && ($item->content_status == 1)) {
-                $filteredContents []= $item;
+    if (array_key_exists($placeholder, $contentPositionByPos)) {
+        $count = 0;
+        foreach ($contentPositionByPos[$placeholder] as $contentPosition) {
+            if (!array_key_exists($contentPosition->pk_fk_content, $items)) {
+                continue;
             }
-        }
-        $count=0;
-        $filteredContents = \Onm\LayoutManager::orderContents($filteredContents, $order);
-        foreach ($filteredContents as $content) {
+            $content                  = $items[$contentPosition->pk_fk_content];
             $content->render_position = $count++;
-            $outputHTML .= $content->render($params, $smarty);
+            $outputHTML              .= $content->render($params, $smarty);
         }
     }
 
@@ -45,4 +50,36 @@ function smarty_function_renderplaceholder($params, &$smarty)
 
     // Return all the html collected
     return $outputHTML;
+}
+
+/**
+ * Method that constructs the positions of the contents from the customized
+ * fields inside the contents (the old way)
+ *
+ * @param string $placeholder The placeholder we are rendering
+ * @param array  $items       The list of all contents
+ *
+ * @return array List of all contents by placeholder.
+ */
+function getPlaceholderInTheOldWay($placeholder, &$items)
+{
+    $contentPositionByPos               = [];
+    $contentPositionByPos[$placeholder] = [];
+
+    foreach ($items as $item) {
+        if (!empty($item->placeholder) &&
+            $item->placeholder === $placeholder
+        ) {
+            $contentPositionByPos[$placeholder][] =
+                (object) ['pk_fk_content' => $item->pk_content];
+        }
+    }
+
+    $newItems = [];
+    foreach ($items as $item) {
+        $newItems[$item->pk_content] = $item;
+    }
+    $items = $newItems;
+
+    return $contentPositionByPos;
 }

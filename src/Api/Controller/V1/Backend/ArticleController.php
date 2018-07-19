@@ -79,13 +79,13 @@ class ArticleController extends Controller
             );
         }
 
-        $extra = $this->getExtraData(false);
-        $extra = array_merge($extra, $this->getPhotos($article));
-        $extra = array_merge($extra, $this->getVideos($article));
-        $extra = array_merge($extra, $this->getAlbums($article));
-        $extra = array_merge($extra, $this->getRelated($article));
-
-        $article = \Onm\StringUtils::convertToUtf8($article);
+        $extra         = $this->getExtraData(false);
+        $extra         = array_merge($extra, $this->getPhotos($article));
+        $extra         = array_merge($extra, $this->getVideos($article));
+        $extra         = array_merge($extra, $this->getAlbums($article));
+        $extra         = array_merge($extra, $this->getRelated($article));
+        $extra['tags'] = $this->get('api.service.tag')
+            ->getListByIdsKeyMapped($article->tag_ids)['items'];
 
         return new JsonResponse([ 'article' => $article, 'extra' => $extra ]);
     }
@@ -205,6 +205,8 @@ class ArticleController extends Controller
                 }
             )
         ];
+
+        $extra['tags'] = [];
 
         if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
             $extra['moduleFields'] = $this->get('setting_repository')

@@ -10,7 +10,12 @@
  */
 function smarty_outputfilter_comscore($output, $smarty)
 {
-    $request = getService('request');
+    $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+
+    if (is_null($request)) {
+        return $output;
+    }
+
     $uri     = $request->getUri();
     $referer = $request->headers->get('referer');
 
@@ -23,7 +28,6 @@ function smarty_outputfilter_comscore($output, $smarty)
         && !preg_match('/\/comments/', $uri)
         && !preg_match('/\/fb\/instant-articles/', $uri)
     ) {
-
         $isAmp = preg_match('@\.amp\.html$@', $uri);
         if ($isAmp) {
             $code = addComScoreCode($output, 'amp');
@@ -54,7 +58,7 @@ function addComScoreCode($output, $type = null)
                 <script type="application/json">
                 {
                     "vars": {
-                        "c2": "'.$config['page_id'].'"
+                        "c2": "' . $config['page_id'] . '"
                     }
                 }
                 </script>
@@ -64,19 +68,20 @@ function addComScoreCode($output, $type = null)
         $code = '<!-- BegincomScore Tag -->'
             . '<script>'
             . 'var _comscore = _comscore || [];'
-            . '_comscore.push({ c1: "2", c2: "'. $config['page_id'] .'" });'
+            . '_comscore.push({ c1: "2", c2: "' . $config['page_id'] . '" });'
             . '(function() {'
-            . 'var s = document.createElement("script"), el = document.getElementsByTagName("script")[0]; s.async = true;'
-            . 's.src = (document.location.protocol == "https:" ? "https://sb" :"http://b") + ".scorecardresearch.com/beacon.js";'
+            . 'var s = document.createElement("script"), '
+            . 'el = document.getElementsByTagName("script")[0]; s.async = true;'
+            . 's.src = (document.location.protocol == "https:" '
+            . '? "https://sb" :"http://b") + ".scorecardresearch.com/beacon.js";'
             . 'el.parentNode.insertBefore(s, el);'
             . '})();'
             . '</script>'
             . '<noscript>'
-            . '<img src="http://b.scorecardresearch.com/p?c1=2&c2='. $config['page_id'] .'&cv=2.0&cj=1" />'
+            . '<img src="http://b.scorecardresearch.com/p?c1=2&c2=' . $config['page_id'] . '&cv=2.0&cj=1" />'
             . '</noscript>'
             . '<!-- EndcomScore  Tag -->';
     }
-
 
     return str_replace('</body>', $code . '</body>', $output);
 }

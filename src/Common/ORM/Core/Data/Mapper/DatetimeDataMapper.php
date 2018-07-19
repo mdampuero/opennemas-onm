@@ -82,6 +82,18 @@ class DatetimeDataMapper
     }
 
     /**
+     * Returns a null from a null date.
+     *
+     * @param string $value The date string.
+     *
+     * @return null.
+     */
+    public function fromNull($value)
+    {
+        return null;
+    }
+
+    /**
      * Returns a DateTime from a date string in format Y-m-d H:i:s in the
      * UTC timezone.
      *

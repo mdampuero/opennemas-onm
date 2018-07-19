@@ -8,8 +8,12 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
+                <i class="fa fa-envelope m-r-10"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
                 <a class="no-padding" href="{url name=backend_newsletters_list}" title="{t}Go back to list{/t}">
-                  <i class="fa fa-envelope"></i>
                   {t}Newsletters{/t}
                 </a>
               </h4>

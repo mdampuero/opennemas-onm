@@ -1,0 +1,92 @@
+orm:
+    metadata:
+        -
+            name: Newsletter
+            properties:
+                id:              integer
+                type:            integer
+                status:          integer
+                title:           string
+                contents:        array
+                recipients:      array
+                schedule:        array
+                created:         datetime
+                updated:         datetime
+                sent:            datetime
+                sent_items:      integer
+                html:            string
+                template_id:     integer
+            converters:
+                default:
+                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.newsletter' ]
+            repositories:
+                instance:
+                    class:     Common\ORM\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.newsletter', '@cache.connection.instance' ]
+            persisters:
+                instance:
+                    class:     Common\ORM\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.newsletter', '@cache.connection.instance' ]
+            mapping:
+                database:
+                    table: newsletters
+                    columns:
+                        id:
+                            type: bigint
+                            options: { lenght: 20, default: null, unsigned: true, autoincrement: true }
+                        type:
+                            type: integer
+                            options: { length: 10, default: 0, notnull: true }
+                        status:
+                            type: integer
+                            options: { length: 10, default: 0, notnull: true }
+                        title:
+                            type: string
+                            options: { default: null, length: 512 }
+                        contents:
+                            type: array_json
+                            options: { length: 65532, default: null, notnull: false }
+                        recipients:
+                            type: array_json
+                            options: { length: 65532, default: null, notnull: false }
+                        schedule:
+                            type: array_json
+                            options: { length: 65532, default: null, notnull: false }
+                        created:
+                            type: datetimetz
+                            options: { notnull: false }
+                        updated:
+                            type: datetimetz
+                            options: { notnull: false }
+                        sent:
+                            type: datetimetz
+                            options: { default: CURRENT_TIMESTAMP, notnull: false }
+                        sent_items:
+                            type: integer
+                            options: { default: 0, notnull: true }
+                        html:
+                            type: text
+                            options: { length: 4294967295, default: null, notnull: false }
+                        template_id:
+                            type: bigint
+                            options: { lenght: 20, default: null, unsigned: true }
+                    index:
+                        -
+                            name:    PRIMARY
+                            columns: [ id ]
+                            primary: true
+                            unique:  true
+                            flags:   {}
+                        -
+                            name:    newsletter_type
+                            columns: [ type ]
+                            primary: false
+                            unique:  false
+                            flags:   {}
+                        -
+                            name:    newsletter_template_id
+                            columns: [ template_id ]
+                            primary: false
+                            unique:  false
+                            flags:   {}

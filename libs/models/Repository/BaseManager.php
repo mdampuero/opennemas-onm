@@ -56,7 +56,7 @@ abstract class BaseManager
      */
     public function __call($method, $params)
     {
-        $rs = call_user_func_array(array($this->dbConn, $method), $params);
+        $rs = call_user_func_array([$this->dbConn, $method], $params);
 
         return $rs;
     }
@@ -102,43 +102,50 @@ abstract class BaseManager
     protected function getFilterSQL($criteria)
     {
         if (empty($criteria)) {
-            $filterSQL = ' 1=1 ';
-        } elseif (!is_array($criteria)) {
-            $filterSQL = $criteria;
-        } else {
-            $filterSQL = array();
-
-            $fieldUnion = ' AND ';
-            if (array_key_exists('union', $criteria)) {
-                $fieldUnion = ' ' . trim($criteria['union']) . ' ';
-                unset($criteria['union']);
-            }
-
-            foreach ($criteria as $field => $filters) {
-                $valueUnion = ' AND ';
-                if (array_key_exists('union', $filters)) {
-                    $valueUnion = ' ' . trim($filters['union']) . ' ';
-                    unset($filters['union']);
-                }
-
-                $fieldFilters = array();
-                foreach ($filters as $filter) {
-                    $sql = $this->parseFilter($field, $filter);
-
-                    if (!empty($sql)) {
-                        $fieldFilters[] = $sql;
-                    }
-                }
-
-                if (!empty($fieldFilters)) {
-                    // Add filters for the current $field
-                    $filterSQL[] = '(' . implode($valueUnion, $fieldFilters) . ')';
-                }
-            }
-
-            // Build filters
-            $filterSQL = implode($fieldUnion, $filterSQL);
+            return ' 1=1 ';
         }
+
+        if (!is_array($criteria)) {
+            return $criteria;
+        }
+
+        $filterSQL = [];
+
+        $fieldUnion = ' AND ';
+        if (array_key_exists('union', $criteria)) {
+            $fieldUnion = ' ' . trim($criteria['union']) . ' ';
+            unset($criteria['union']);
+        }
+
+        if (array_key_exists('exists', $criteria)) {
+            $filterSQL = [' ' . trim($criteria['exists']) . ' '];
+            unset($criteria['exists']);
+        }
+
+        foreach ($criteria as $field => $filters) {
+            $valueUnion = ' AND ';
+            if (array_key_exists('union', $filters)) {
+                $valueUnion = ' ' . trim($filters['union']) . ' ';
+                unset($filters['union']);
+            }
+
+            $fieldFilters = [];
+            foreach ($filters as $filter) {
+                $sql = $this->parseFilter($field, $filter);
+
+                if (!empty($sql)) {
+                    $fieldFilters[] = $sql;
+                }
+            }
+
+            if (!empty($fieldFilters)) {
+                // Add filters for the current $field
+                $filterSQL[] = '(' . implode($valueUnion, $fieldFilters) . ')';
+            }
+        }
+
+        // Build filters
+        $filterSQL = implode($fieldUnion, $filterSQL);
 
         return $filterSQL;
     }
@@ -180,15 +187,15 @@ abstract class BaseManager
      */
     protected function getLimitSQL($elements = 20, $page = 1, $offset = 0)
     {
-        $limitSQL = '';
         if ($page == 1) {
-            $limitSQL = ' LIMIT '. ($offset + $elements);
-        } elseif ($page > 1) {
-            $limitSQL = ' LIMIT ' . ($offset + ($page - 1) * $elements)
-                . ', ' . $elements;
+            return ' LIMIT ' . ($offset + $elements);
+        }
+        if ($page > 1) {
+            return ' LIMIT ' . ($offset + ($page - 1) * $elements) .
+                ', ' . $elements;
         }
 
-        return $limitSQL;
+        return '';
     }
 
     /**
@@ -199,13 +206,13 @@ abstract class BaseManager
      */
     protected function getOrderBySQL($order)
     {
-        $orderSQL  = '`id` DESC';
+        $orderSQL = '`id` DESC';
         if (is_string($order)) {
             $orderSQL = $order;
         } elseif (is_array($order)) {
-            $tokens = array();
+            $tokens = [];
             foreach ($order as $key => $value) {
-                if (in_array(strtoupper($value), array('DESC', 'ASC'))) {
+                if (in_array(strtoupper($value), ['DESC', 'ASC'])) {
                     $tokens[] = "$key $value";
                 }
             }
@@ -294,7 +301,7 @@ abstract class BaseManager
      */
     protected function parseValues($values, $operator)
     {
-        $parsed = array();
+        $parsed = [];
 
         foreach ($values as $value) {
             if (strtoupper($operator) == 'LIKE') {
