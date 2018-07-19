@@ -72,7 +72,7 @@
                 </ui-select-choices>
               </ui-select>
             </li>
-          {is_module_activated name="es.openhost.theme.scheduleFrontpage"}
+          {is_module_activated name="es.openhost.module.scheduleFrontpage"}
             <li class="quicklinks hidden-xs m-l-5 m-r-5 ng-cloak">
               <h4>
                 <i class="fa fa-angle-right"></i>
@@ -135,7 +135,7 @@
                         {t}Preview{/t}
                       </a>
                     </li>
-                  {is_module_activated name="es.openhost.theme.scheduleFrontpage"}
+                  {is_module_activated name="es.openhost.module.scheduleFrontpage"}
                     <li class="divider"></li>
                     <li>
                       <a href="#" ng-click="saveVersion()">
@@ -208,7 +208,7 @@
         </div>
       </div>
     </div>
-    {is_module_activated name="es.openhost.theme.scheduleFrontpage"}
+    {is_module_activated name="es.openhost.module.scheduleFrontpage"}
     <div class="page-navbar filters-navbar hidden-xs ng-cloak" ng-if="publishVersionId !== versionId">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -245,7 +245,7 @@
     </div>
     {/is_module_activated}
 
-    <a class="{is_module_activated name="es.openhost.theme.scheduleFrontpage"}more-padding{/is_module_activated} btn btn-add btn-success hidden-xs btn-add-new-contents" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
+    <a class="{is_module_activated name="es.openhost.module.scheduleFrontpage"}more-padding{/is_module_activated} btn btn-add btn-success hidden-xs btn-add-new-contents" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
       <span class="fa fa-plus"></span>
       <span class='btn-add-new-contents-title'>{t}Add contents{/t}</span>
     </a>
