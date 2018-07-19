@@ -234,7 +234,7 @@ EOF
     public function exportContents()
     {
         // Sql order, limit and filters
-        $order   = [ 'created' => 'DESC' ];
+        $order   = [ 'created' => 'ASC' ];
         $filters = [
             'content_type_name' => [
                 'union' => 'OR',
