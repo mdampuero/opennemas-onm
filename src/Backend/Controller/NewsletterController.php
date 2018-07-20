@@ -100,8 +100,9 @@ class NewsletterController extends Controller
         $time = $time->format('d/m/Y');
         $name = '[' . $time . ']';
 
-        if (!empty($configurations['newsletter_maillist'])
-            && array_key_exists('name', $configurations['newsletter_maillist'])
+        if (!empty($configurations)
+            && array_key_exists('name', $configurations)
+            && !empty($configurations['name'])
         ) {
             $name = $configurations['name'] . ' ' . $name;
         }

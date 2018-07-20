@@ -92,7 +92,7 @@
         $scope.save = function() {
           $scope.saving = true;
 
-          var data = $scope.settings;
+          var data = cleaner.clean($scope.settings);
 
           http.put('api_v1_backend_newsletters_settings_save', data)
             .then(function(response) {
