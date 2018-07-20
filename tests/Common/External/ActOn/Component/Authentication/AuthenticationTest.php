@@ -198,6 +198,8 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 
         $this->tp->expects($this->once())->method('setAccessToken')
             ->with('glorp', 1234)->willReturn($this->tp);
+        $this->tp->expects($this->once())->method('setRefreshToken')
+            ->with('flob')->willReturn($this->tp);
 
         $this->auth->refreshToken();
     }
