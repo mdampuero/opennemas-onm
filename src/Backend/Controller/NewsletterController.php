@@ -95,8 +95,18 @@ class NewsletterController extends Controller
             ->getDataSet('Settings', 'instance')
             ->get('newsletter_maillist');
 
+        $menu = new \Menu();
+        $time = new \DateTime();
+        $time = $time->format('d/m/Y');
+        $name = '[' . $time . ']';
+
+        if (!empty($configurations['newsletter_maillist'])
+            && array_key_exists('name', $configurations['newsletter_maillist'])
+        ) {
+            $name = $configurations['name'] . ' ' . $name;
+        }
+
         $newsletterContent = [];
-        $menu              = new \Menu();
 
         $menu->getMenu('frontpage');
         $i = 1;
@@ -136,11 +146,8 @@ class NewsletterController extends Controller
             $i++;
         }
 
-        $time = new \DateTime();
-        $time = $time->format('d/m/Y');
-
         return $this->render('newsletter/steps/1-pick-elements.tpl', [
-            'name'              => $configurations['name'] . ' [' . $time . ']',
+            'name'              => $name,
             'newsletterContent' => $newsletterContent,
         ]);
     }
