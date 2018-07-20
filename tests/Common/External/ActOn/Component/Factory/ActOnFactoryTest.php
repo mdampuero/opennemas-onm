@@ -49,6 +49,10 @@ class ActOnFactoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'get', 'getParameter' ])
             ->getMock();
 
+        $this->tp = $this->getMockBuilder('TokenProvider')
+            ->setMethods([ 'setNamespace' ])
+            ->getMock();
+
         $this->factory = new ActOnFactory($this->container, $this->config);
     }
 
@@ -64,9 +68,10 @@ class ActOnFactoryTest extends \PHPUnit_Framework_TestCase
         $this->container->expects($this->at(0))->method('get')
             ->with('config_provider')->willReturn($this->cp);
         $this->container->expects($this->at(1))->method('get')
-            ->with('token_provider');
+            ->with('token_provider')->willReturn($this->tp);
         $this->container->expects($this->at(2))->method('get')
             ->with('http_client');
+        $this->tp->expects($this->once())->method('setNamespace');
 
         $this->assertInstanceOf(
             'Common\External\ActOn\Component\Authentication\Authentication',
@@ -94,7 +99,7 @@ class ActOnFactoryTest extends \PHPUnit_Framework_TestCase
         $this->container->expects($this->at(0))->method('get')
             ->with('config_provider')->willReturn($this->cp);
         $this->container->expects($this->at(1))->method('get')
-            ->with('token_provider')->willReturn('gorp');
+            ->with('token_provider')->willReturn($this->tp);
         $this->container->expects($this->at(2))->method('get')
             ->with('http_client')->willReturn('gorp');
         $this->container->expects($this->at(3))->method('get')
