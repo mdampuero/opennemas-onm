@@ -29,11 +29,35 @@ class RedisTokenProvider implements TokenProvider
     }
 
     /**
+     * Changes and recovers cache namespace before and after executing a
+     * function given as callback.
+     *
+     * @param callable $callback The function to execute.
+     * @param array    $args     The list of arguments for the callable.
+     *
+     * @return mixed The result of the callback action.
+     */
+    public function execute($callback, $args)
+    {
+        $namespace = $this->conn->getNamespace();
+
+        $this->conn->setNamespace('acton');
+
+        $result = call_user_func_array($callback, $args);
+
+        $this->conn->setNamespace($namespace);
+
+        return $result;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getAccessToken()
     {
-        return $this->conn->get('acton-access-token');
+        return $this->execute(function () {
+            return $this->conn->get('acton-access-token');
+        }, []);
     }
 
     /**
@@ -41,7 +65,9 @@ class RedisTokenProvider implements TokenProvider
      */
     public function getRefreshToken()
     {
-        return $this->conn->get('acton-refresh-token');
+        return $this->execute(function () {
+            return $this->conn->get('acton-refresh-token');
+        }, []);
     }
 
     /**
@@ -49,7 +75,9 @@ class RedisTokenProvider implements TokenProvider
      */
     public function hasAccessToken()
     {
-        return $this->conn->exists('acton-access-token');
+        return $this->execute(function () {
+            return $this->conn->exists('acton-access-token');
+        }, []);
     }
 
     /**
@@ -57,7 +85,9 @@ class RedisTokenProvider implements TokenProvider
      */
     public function hasRefreshToken()
     {
-        return $this->conn->exists('acton-refresh-token');
+        return $this->execute(function () {
+            return $this->conn->exists('acton-refresh-token');
+        }, []);
     }
 
     /**
@@ -65,9 +95,11 @@ class RedisTokenProvider implements TokenProvider
      */
     public function setAccessToken($token, $ttl)
     {
-        $this->conn->set('acton-access-token', $token, $ttl);
+        return $this->execute(function ($a, $b) {
+            $this->conn->set('acton-access-token', $a, $b);
 
-        return $this;
+            return $this;
+        }, [ $token, $ttl ]);
     }
 
     /**
@@ -75,8 +107,10 @@ class RedisTokenProvider implements TokenProvider
      */
     public function setRefreshToken($token)
     {
-        $this->conn->set('acton-refresh-token', $token);
+        return $this->execute(function ($a) {
+            $this->conn->set('acton-refresh-token', $a);
 
-        return $this;
+            return $this;
+        }, [ $token ]);
     }
 }
