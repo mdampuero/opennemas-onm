@@ -133,13 +133,16 @@ class RedirectorsController extends Controller
      */
     protected function getCategory($id)
     {
-        $content = $this->get('category_repository')->find($id);
+        try {
+            $content = $this->get('orm.manager')->getRepository('Category')
+                ->find($id);
 
-        if (!empty($content)) {
             $content->uri = mb_ereg_replace('^/', '', $this->generateUrl(
                 'category_frontpage',
                 [ 'category_name' => $content->name ]
             ));
+        } catch (\Exception $e) {
+            return null;
         }
 
         return $content;
