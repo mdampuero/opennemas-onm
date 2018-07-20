@@ -19,6 +19,13 @@ class RedisTokenProvider implements TokenProvider
     protected $conn;
 
     /**
+     * The token provider namespace.
+     *
+     * @var string
+     */
+    protected $namespace;
+
+    /**
      * Initializes the RedisTokenProvider.
      *
      * @param Connection $conn The redis connection.
@@ -41,7 +48,7 @@ class RedisTokenProvider implements TokenProvider
     {
         $namespace = $this->conn->getNamespace();
 
-        $this->conn->setNamespace('acton');
+        $this->conn->setNamespace($this->namespace);
 
         $result = call_user_func_array($callback, $args);
 
@@ -58,6 +65,14 @@ class RedisTokenProvider implements TokenProvider
         return $this->execute(function () {
             return $this->conn->get('acton-access-token');
         }, []);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
     }
 
     /**
@@ -100,6 +115,16 @@ class RedisTokenProvider implements TokenProvider
 
             return $this;
         }, [ $token, $ttl ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setNamespace($namespace)
+    {
+        $this->namespace = $namespace;
+
+        return $this;
     }
 
     /**

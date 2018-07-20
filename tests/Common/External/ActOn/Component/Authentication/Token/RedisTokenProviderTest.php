@@ -27,6 +27,8 @@ class RedisTokenProviderTest extends \PHPUnit_Framework_TestCase
             ])->getMock();
 
         $this->provider = new RedisTokenProvider($this->conn);
+
+        $this->provider->setNamespace('frog');
     }
 
     /**
@@ -37,7 +39,7 @@ class RedisTokenProviderTest extends \PHPUnit_Framework_TestCase
         $this->conn->expects($this->at(0))->method('getNamespace')
             ->willReturn('gorp');
         $this->conn->expects($this->at(1))->method('setNamespace')
-            ->with('acton');
+            ->with('frog');
         $this->conn->expects($this->at(2))->method('get')
             ->with('acton-access-token')->willReturn(true);
         $this->conn->expects($this->at(3))->method('setNamespace')
@@ -54,13 +56,21 @@ class RedisTokenProviderTest extends \PHPUnit_Framework_TestCase
         $this->conn->expects($this->at(0))->method('getNamespace')
             ->willReturn('gorp');
         $this->conn->expects($this->at(1))->method('setNamespace')
-            ->with('acton');
+            ->with('frog');
         $this->conn->expects($this->at(2))->method('get')
             ->with('acton-access-token')->willReturn(false);
         $this->conn->expects($this->at(3))->method('setNamespace')
             ->with('gorp');
 
         $this->assertFalse($this->provider->getAccessToken());
+    }
+
+    /**
+     * Tests getNamespace.
+     */
+    public function testGetNamespace()
+    {
+        $this->assertEquals('frog', $this->provider->getNamespace());
     }
 
     /**
@@ -71,7 +81,7 @@ class RedisTokenProviderTest extends \PHPUnit_Framework_TestCase
         $this->conn->expects($this->at(0))->method('getNamespace')
             ->willReturn('gorp');
         $this->conn->expects($this->at(1))->method('setNamespace')
-            ->with('acton');
+            ->with('frog');
         $this->conn->expects($this->at(2))->method('get')
             ->with('acton-refresh-token')->willReturn(true);
         $this->conn->expects($this->at(3))->method('setNamespace')
@@ -88,7 +98,7 @@ class RedisTokenProviderTest extends \PHPUnit_Framework_TestCase
         $this->conn->expects($this->at(0))->method('getNamespace')
             ->willReturn('gorp');
         $this->conn->expects($this->at(1))->method('setNamespace')
-            ->with('acton');
+            ->with('frog');
         $this->conn->expects($this->at(2))->method('get')
             ->with('acton-refresh-token')->willReturn(false);
         $this->conn->expects($this->at(3))->method('setNamespace')
@@ -105,7 +115,7 @@ class RedisTokenProviderTest extends \PHPUnit_Framework_TestCase
         $this->conn->expects($this->at(0))->method('getNamespace')
             ->willReturn('gorp');
         $this->conn->expects($this->at(1))->method('setNamespace')
-            ->with('acton');
+            ->with('frog');
         $this->conn->expects($this->at(2))->method('exists')
             ->with('acton-access-token')->willReturn(true);
         $this->conn->expects($this->at(3))->method('setNamespace')
@@ -122,7 +132,7 @@ class RedisTokenProviderTest extends \PHPUnit_Framework_TestCase
         $this->conn->expects($this->at(0))->method('getNamespace')
             ->willReturn('gorp');
         $this->conn->expects($this->at(1))->method('setNamespace')
-            ->with('acton');
+            ->with('frog');
         $this->conn->expects($this->at(2))->method('exists')
             ->with('acton-access-token')->willReturn(false);
         $this->conn->expects($this->at(3))->method('setNamespace')
@@ -139,7 +149,7 @@ class RedisTokenProviderTest extends \PHPUnit_Framework_TestCase
         $this->conn->expects($this->at(0))->method('getNamespace')
             ->willReturn('gorp');
         $this->conn->expects($this->at(1))->method('setNamespace')
-            ->with('acton');
+            ->with('frog');
         $this->conn->expects($this->at(2))->method('exists')
             ->with('acton-refresh-token')->willReturn(true);
         $this->conn->expects($this->at(3))->method('setNamespace')
@@ -156,7 +166,7 @@ class RedisTokenProviderTest extends \PHPUnit_Framework_TestCase
         $this->conn->expects($this->at(0))->method('getNamespace')
             ->willReturn('gorp');
         $this->conn->expects($this->at(1))->method('setNamespace')
-            ->with('acton');
+            ->with('frog');
         $this->conn->expects($this->at(2))->method('exists')
             ->with('acton-refresh-token')->willReturn(false);
         $this->conn->expects($this->at(3))->method('setNamespace')
@@ -173,7 +183,7 @@ class RedisTokenProviderTest extends \PHPUnit_Framework_TestCase
         $this->conn->expects($this->at(0))->method('getNamespace')
             ->willReturn('gorp');
         $this->conn->expects($this->at(1))->method('setNamespace')
-            ->with('acton');
+            ->with('frog');
         $this->conn->expects($this->at(2))->method('set')
             ->with('acton-access-token', 'frog', 1200);
         $this->conn->expects($this->at(3))->method('setNamespace')
@@ -190,7 +200,7 @@ class RedisTokenProviderTest extends \PHPUnit_Framework_TestCase
         $this->conn->expects($this->at(0))->method('getNamespace')
             ->willReturn('gorp');
         $this->conn->expects($this->at(1))->method('setNamespace')
-            ->with('acton');
+            ->with('frog');
         $this->conn->expects($this->at(2))->method('set')
             ->with('acton-refresh-token', 'bar');
         $this->conn->expects($this->at(3))->method('setNamespace')
