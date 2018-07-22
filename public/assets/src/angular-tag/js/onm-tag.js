@@ -64,9 +64,13 @@
             $scope.isValidating = false;
 
             /**
-             * Change the current language.
+             * @function acceptedTags
+             * @memberOf onm-tag
              *
-             * @param {Object} $event The language value.
+             * @description
+             *   Return the tags for the current locale
+             *
+             * @return {Array} List of tags for the current locale
              */
             $scope.acceptedTags = function() {
               var returnVal = [];
@@ -91,6 +95,13 @@
               return returnVal;
             };
 
+            /**
+             * @function validateTag
+             * @memberOf onm-tag
+             *
+             * @description
+             *   Add a new tag to the list when the user press enter.
+             */
             $scope.validateTag = function(e) {
               $scope.invalidTag = false;
               if (e.keyCode !== 13) {
@@ -107,32 +118,69 @@
                   $scope.invalidTag = true;
                   return null;
                 }
+                if ($scope.ngModel[i].id &&
+                  $scope.tagsList[$scope.ngModel[i].id].locale === $scope.locale &&
+                  $scope.tagsList[$scope.ngModel[i].id].locale === $scope.newTag
+                ) {
+                  $scope.invalidTag = true;
+                  return null;
+                }
               }
 
               var callback = function(response) {
-                if (typeof response === 'object') {
+                if (!response.data || !response.data.items ||
+                  !Array.isArray(response.data.items) ||
+                  response.data.items.length !== 1
+                ) {
                   $scope.invalidTag = true;
                 } else {
-                  $scope.invalidTag = !response;
-                  if (response) {
-                    $scope.ngModel.push({ name: $scope.newTag, language_id: $scope.locale });
-                    $scope.newTag = '';
+                  $scope.invalidTag = false;
+                  var tag = response.data.items[0];
+
+                  if (tag.id) {
+                    $scope.tagsList[tag.id] = tag;
+                    $scope.ngModel.push(tag.id);
+                  } else {
+                    $scope.ngModel.push(tag);
+                    $scope.removeFromSuggested(tag);
                   }
+                  $scope.newTag = '';
                 }
                 $scope.isValidating = false;
+                $scope.isSuggesting = false;
               };
 
               $scope.isValidating = true;
-              this.checkNewTags(callback, $scope.newTag, $scope.locale);
+              this.checkNewTags([ $scope.newTag ], $scope.locale, callback);
               return null;
             };
 
+            /**
+             * @function getLocalSuggestedTags
+             * @memberOf onm-tag
+             *
+             * @description
+             *   Return the suggested tags for the current locale.
+             *
+             * @param String   - Field from we retreave the suggested tags
+             *
+             * @return {Array} List of tags for the current locale
+             */
             $scope.getLocalSuggestedTags = function(tagName) {
               var suggestedTags = $scope.getSuggestedTags($scope.locale, tagName, $scope.ngModel);
 
               return suggestedTags;
             };
 
+            /**
+             * @function suggestedTagAccepted
+             * @memberOf onm-tag
+             *
+             * @description
+             *   Return the suggested tags for the current locale.
+             *
+             * @param String  $item - Add a new tag to the list of tags
+             */
             $scope.suggestedTagAccepted = function($item) {
               if (!($item.id in $scope.tagsList)) {
                 $scope.tagsList[$item.id] = $item;
@@ -143,9 +191,13 @@
             };
 
             /**
-             * Change the current language.
+             * @function removeTag
+             * @memberOf onm-tag
              *
-             * @param {Object} $event The language value.
+             * @description
+             *   Remove some tag from the tag list.
+             *
+             * @param {Object}  tag2delete - Tag to delete
              */
             $scope.removeTag = function(tag2delete) {
               for (var i = 0; i < $scope.ngModel.length; i++) {
@@ -173,6 +225,15 @@
               return null;
             };
 
+            /**
+             * @function addTag
+             * @memberOf onm-tag
+             *
+             * @description
+             *   Remove some tag from the tag list.
+             *
+             * @param {Object}  tag2delete - Tag to delete
+             */
             $scope.addTag = function(newTag) {
               for (var i = 0; i < $scope.suggestedTags.length; i++) {
                 // If delete tag and array position tag are new check if are the same
@@ -189,6 +250,40 @@
               return null;
             };
 
+            /**
+             * @function removeFromSuggested
+             * @memberOf onm-tag
+             *
+             * @description
+             *   Remove some tag from the tag list of suggested.
+             *
+             * @param {Object}  tag - Tag to delete
+             */
+            $scope.removeFromSuggested = function(tag) {
+              if (!$scope.suggestedTags) {
+                return null;
+              }
+              for (var i = 0; i < $scope.suggestedTags.length; i++) {
+                // If delete tag and array position tag are new check if are the same
+                if (
+                  tag.language_id === $scope.suggestedTags[i].language_id &&
+                  tag.name === $scope.suggestedTags[i].name
+                ) {
+                  $scope.suggestedTags.splice(i, 1);
+                  return null;
+                // If delete tag and array position tag have id, check if the ids are the same
+                }
+              }
+              return null;
+            };
+
+            /**
+             * @function getTagIdsList
+             * @memberOf onm-tag
+             *
+             * @description
+             *   Retrieve the list of tags as json
+             */
             $scope.getTagIdsList = function() {
               return JSON.stringify($scope.ngModel);
             };
