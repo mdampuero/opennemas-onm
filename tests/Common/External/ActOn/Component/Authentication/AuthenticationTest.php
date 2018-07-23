@@ -33,7 +33,8 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             ->setMethods([
                 'getAccessToken', 'getRefreshToken',
                 'hasAccessToken', 'hasRefreshToken',
-                'setAccessToken', 'setRefreshToken'
+                'setAccessToken', 'setNamespace',
+                'setRefreshToken'
             ])->getMock();
 
         $this->response = $this->getMockBuilder('Response')

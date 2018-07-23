@@ -20,6 +20,13 @@ interface TokenProvider
     public function getAccessToken();
 
     /**
+     * Returns the token provider namespace.
+     *
+     * @return mixed The token provider namespace.
+     */
+    public function getNamespace();
+
+    /**
      * Returns the refresh token.
      *
      * @return mixed The refresh token if token exists or null if token does not
@@ -50,6 +57,15 @@ interface TokenProvider
      * @return TokenProvider The current token provider.
      */
     public function setAccessToken($token, $ttl);
+
+    /**
+     * Sets the token provider namespace.
+     *
+     * @param string $namespace The token provider namespace.
+     *
+     * @return TokenProvider The current token provider.
+     */
+    public function setNamespace($token);
 
     /**
      * Sets the refresh token.

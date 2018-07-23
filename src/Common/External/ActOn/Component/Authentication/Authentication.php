@@ -57,6 +57,8 @@ class Authentication
         $this->url            = $url;
 
         $this->config = $this->configProvider->getConfiguration();
+
+        $this->tokenProvider->setNamespace(md5(json_encode($this->config)));
     }
 
     /**
