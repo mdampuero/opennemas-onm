@@ -218,12 +218,17 @@ class TagsController extends Controller
      *
      * @return array A list of advertisement positions and advertisements.
      */
-    public static function getInnerAds($category = 'home')
+    public function getInnerAds($category = 'home')
     {
         $category = !isset($category) || ($category == 'home') ? 0 : $category;
 
-        $positions      = getService('core.helper.advertisement')
-            ->getPositionsForGroup('article_inner', [ 7, 9 ]);
+        // Get article_inner and category_frontpage positions
+        $positionManager = $this->get('core.helper.advertisement');
+        $positions       = array_merge(
+            $positionManager->getPositionsForGroup('category_frontpage'),
+            $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ])
+        );
+
         $advertisements = getService('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
 
