@@ -118,9 +118,9 @@
                   $scope.invalidTag = true;
                   return null;
                 }
-                if ($scope.ngModel[i].id &&
-                  $scope.tagsList[$scope.ngModel[i].id].locale === $scope.locale &&
-                  $scope.tagsList[$scope.ngModel[i].id].locale === $scope.newTag
+                if (Number.isInteger($scope.ngModel[i]) &&
+                  $scope.tagsList[$scope.ngModel[i]].language_id === $scope.locale &&
+                  $scope.tagsList[$scope.ngModel[i]].name === $scope.newTag
                 ) {
                   $scope.invalidTag = true;
                   return null;
