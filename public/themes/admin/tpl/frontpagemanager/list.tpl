@@ -267,53 +267,58 @@
     <div id="content-provider" class="clearfix hidden-xs" title="{t}Available contents{/t}">
       <div class="content-provider-block-wrapper clearfix">
         <ul>
+          {if empty($version_id)}
+              {assign var="version_id_pro" value="null"}
+          {else}
+              {assign var="version_id_pro" value=$version_id}
+          {/if}
           {is_module_activated name="ARTICLE_MANAGER"}
           {if $category_id eq 0}
           <li>
-            <a href="{url name=admin_articles_content_provider_suggested category=$category_id frontpage_version_id=$version_id}">{t}Suggested{/t}</a>
+            <a href="{url name=admin_articles_content_provider_suggested category=$category_id frontpage_version_id=$version_id_pro}">{t}Suggested{/t}</a>
           </li>
           {else}
           <li>
-            <a href="{url name=admin_articles_content_provider_category category=$category_id frontpage_version_id=$version_id}">{t}Others in category{/t}</a>
+            <a href="{url name=admin_articles_content_provider_category category=$category_id frontpage_version_id=$version_id_pro}">{t}Others in category{/t}</a>
           </li>
           {/if}
           {/is_module_activated}
           <li>
-            <a href="{url name=admin_articles_content_provider_category category=$category_id frontpage_version_id=$version_id}">{t}Latest articles{/t}</a>
+            <a href="{url name=admin_articles_content_provider_category}">{t}Latest articles{/t}</a>
           </li>
           {is_module_activated name="WIDGET_MANAGER"}
           <li>
-            <a href="{url name=admin_widgets_content_provider category=$category_id frontpage_version_id=$version_id}">{t}Widgets{/t}</a>
+            <a href="{url name=admin_widgets_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Widgets{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="OPINION_MANAGER"}
           <li>
-            <a href="{url name=admin_opinions_content_provider category=$category_id frontpage_version_id=$version_id}">{t}Opinions{/t}</a>
+            <a href="{url name=admin_opinions_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Opinions{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="VIDEO_MANAGER"}
           <li>
-            <a href="{url name=admin_videos_content_provider category=$category_id frontpage_version_id=$version_id}">{t}Videos{/t}</a>
+            <a href="{url name=admin_videos_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Videos{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="ALBUM_MANAGER"}
           <li>
-            <a href="{url name=admin_albums_content_provider category=$category_id frontpage_version_id=$version_id}">{t}Albums{/t}</a>
+            <a href="{url name=admin_albums_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Albums{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="LETTER_MANAGER"}
           <li>
-            <a href="{url name=admin_letters_content_provider category=$category_id frontpage_version_id=$version_id}">{t}Letter{/t}</a>
+            <a href="{url name=admin_letters_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Letter{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="POLL_MANAGER"}
           <li>
-            <a href="{url name=admin_polls_content_provider category=$category_id frontpage_version_id=$version_id}">{t}Polls{/t}</a>
+            <a href="{url name=admin_polls_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Polls{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="ADS_MANAGER"}
           <li>
-            <a href="{url name=admin_ads_content_provider category=$category_id frontpage_version_id=$version_id}">{t}Advertisement{/t}</a>
+            <a href="{url name=admin_ads_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Advertisement{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="ADVANCED_SEARCH"}
