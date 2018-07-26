@@ -138,8 +138,6 @@ class TagsController extends Controller
             $locale = getService('core.locale')->getRequestLocale();
 
             $criteria = [
-                'content_status'  => [ [ 'value' => 1 ] ],
-                'in_litter'       => [ [ 'value' => 0 ] ],
                 'fk_content_type' => [
                     [ 'value' => 1 ],
                     // [ 'value' => 4 ],
@@ -150,7 +148,21 @@ class TagsController extends Controller
                 'exists' => 'EXISTS(SELECT 1 FROM tags' .
                     ' INNER JOIN contents_tags ON contents_tags.tag_id = tags.id' .
                     ' WHERE contents_tags.content_id = contents.pk_content AND' .
-                    " tags.language_id = '$locale' AND tags.slug = '$tagName')"
+                    " tags.language_id = '$locale' AND tags.slug = '$tagName')",
+                'content_status'    => [ [ 'value' => 1 ] ],
+                'in_litter'         => [ [ 'value' => 0 ] ],
+                'starttime'         => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'           => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ]
             ];
 
             $em       = $this->get('entity_repository');
