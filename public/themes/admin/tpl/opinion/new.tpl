@@ -4,10 +4,15 @@
   {javascripts}
     <script>
       jQuery(document).ready(function ($){
+        var localeAux = '{$smarty.const.CURRENT_LANGUAGE_SHORT|default:"en"}';
+        localeAux = moment.locales().includes(localeAux) ?
+          localeAux :
+          'en';
         $('#starttime, #endtime').datetimepicker({
           format: 'YYYY-MM-DD HH:mm:ss',
           useCurrent: false,
-          minDate: '{$opinion->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}'
+          minDate: '{$opinion->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}',
+          locale: localeAux
         });
 
         $("#starttime").on("dp.change",function (e) {
