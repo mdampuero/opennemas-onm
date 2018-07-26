@@ -30,8 +30,9 @@ function smarty_function_render_menu($params, &$smarty)
 
     $menu = getService('menu_repository')->findOneBy($criteria, null, 1, 1);
 
+    // If the menu doesnt exists the return inmediatly without changes.
     if (is_null($menu)) {
-        return $menu;
+        return $output;
     }
 
     $menu->items = $menu->localize($menu->getRawItems());
