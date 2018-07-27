@@ -282,8 +282,20 @@ class SitemapController extends Controller
                 ['value' => 'article'],
                 ['value' => 'opinion']
             ],
-            'content_status'    => [['value' => 1]],
-            'in_litter'         => [['value' => 1, 'operator' => '<>']],
+            'content_status'    => [[ 'value' => 1 ]],
+            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+            'starttime'         => [
+                'union' => 'OR',
+                [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+            ],
+            'endtime'         => [
+                'union' => 'OR',
+                [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+            ]
         ];
 
         if (!empty($criteria)) {
