@@ -64,8 +64,9 @@ class BlogsController extends Controller
             $filters = [
                 'content_type_name' => [[ 'value' => 'opinion' ]],
                 'type_opinion'      => [[ 'value' => 0 ]],
-                'content_status'    => [[ 'value' => 1 ]],
                 'blog'              => [[ 'value' => 1 ]],
+                'content_status'    => [[ 'value' => 1 ]],
+                'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
                 'starttime'         => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS' ],
