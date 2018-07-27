@@ -340,14 +340,11 @@ class VideosController extends Controller
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('video/video_inner.tpl', $video->id)
         ) {
-            // Load Video and categories
-            $video->category_name = $video->loadCategoryName($video->id);
-
             // Fetch video author
-            $ur            = getService('user_repository');
+            $ur            = $this->get('user_repository');
             $video->author = $ur->find($video->fk_author);
 
-            //Get other_videos for widget video most
+            // Get other_videos for widget video most
             $order   = [ 'starttime' => 'DESC' ];
             $filters = [
                 'pk_content'             => [[ 'value' => $video->id, 'operator' => '<>' ]],
@@ -369,7 +366,7 @@ class VideosController extends Controller
                 ]
             ];
 
-            $otherVideos = $this->get('entity_repository')->findBy($filters, $order, 4, 0);
+            $otherVideos = $this->get('entity_repository')->findBy($filters, $order, 4, 1);
 
             $this->view->assign(['others_videos' => $otherVideos]);
         }
