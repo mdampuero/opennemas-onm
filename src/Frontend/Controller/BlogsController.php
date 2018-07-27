@@ -189,7 +189,8 @@ class BlogsController extends Controller
             // Get the list articles for this author
             $blogs = $this->cm->getOpinionArticlesWithAuthorInfo(
                 $filter
-                . ' AND contents.content_status=1 AND starttime <= NOW()',
+                . ' AND contents.content_status=1 AND (starttime IS NULL OR starttime <= NOW())'
+                . ' AND (endtime IS NULL OR NOW() <= endtime) ',
                 'ORDER BY starttime DESC ' . $_limit
             );
 
