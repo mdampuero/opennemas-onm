@@ -56,9 +56,21 @@ class CategoryController extends Controller
         $order   = [ 'starttime' => 'DESC' ];
         $filters = [
             'category_name'     => [ [ 'value' => $category->name ] ],
-            'content_status'    => [ [ 'value' => 1 ] ],
             'fk_content_type'   => [ [ 'value' => [1, 7, 9], 'operator' => 'IN' ] ],
-            'in_litter'         => [ [ 'value' => 0 ] ],
+            'content_status'    => [ [ 'value' => 1 ] ],
+            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+            'starttime'         => [
+                'union' => 'OR',
+                [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+            ],
+            'endtime'         => [
+                'union' => 'OR',
+                [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+            ]
         ];
 
         $articles = $em->findBy($filters, $order, $epp, $page);
