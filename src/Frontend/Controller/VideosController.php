@@ -366,7 +366,7 @@ class VideosController extends Controller
                 ]
             ];
 
-            $otherVideos = $this->get('entity_repository')->findBy($filters, $order, 4, 1);
+            $otherVideos = $this->get('entity_repository')->findBy($filters, $order, 4);
 
             $this->view->assign(['others_videos' => $otherVideos]);
         }
