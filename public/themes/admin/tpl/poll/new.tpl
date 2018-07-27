@@ -3,11 +3,16 @@
 {block name="footer-js" append}
   {javascripts}
     <script type="text/javascript">
-      $(document).ready(function ($){
+      $(document).ready(function ($) {
+        var localeAux = '{$smarty.const.CURRENT_LANGUAGE_SHORT|default:"en"}';
+        localeAux = moment.locales().includes(localeAux) ?
+          localeAux :
+          'en';
         $('#closetime').datetimepicker({
           format: 'YYYY-MM-DD HH:mm:ss',
           useCurrent: false,
-          minDate: '{$poll->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}'
+          minDate: '{$poll->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}',
+          locale: localeAux
         });
       });
     </script>
