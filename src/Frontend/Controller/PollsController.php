@@ -67,45 +67,44 @@ class PollsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->page = $request->query->getDigits('page', 1);
+        $page = $request->query->getDigits('page', 1);
 
         // Setup templating cache layer
         $this->view->setConfig('poll-frontpage');
-        $cacheID = $this->view->getCacheId('frontpage', 'poll', $this->categoryName, $this->page);
+        $cacheID = $this->view->getCacheId('frontpage', 'poll', $this->categoryName, $page);
 
         if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('poll/poll_frontpage.tpl', $cacheID))
         ) {
+            $er = $this->get('entity_repository');
+
             $filter = [
                 'content_type_name' => [[ 'value' => 'poll']],
-                'content_status'    => [['value' => 1]],
-                'in_home'           => [['value' => 1]]
+                'in_home'           => [[ 'value' => 1 ]],
+                'content_status'    => [[ 'value' => 1 ]],
+                'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+                'starttime'         => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'         => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ]
             ];
 
             if (isset($this->category) && !empty($this->category)) {
-                $filter = [
-                    'content_type_name' => [[ 'value' => 'poll' ]],
-                    'content_status'    => [[ 'value' => 1 ]],
-                    'category_name'     => [[ 'value' => $this->categoryName ]],
-                ];
+                $filter['category_name'] = [[ 'value' => $this->categoryName ]];
             }
 
-            $polls = $this->get('entity_repository')->findBy(
-                $filter,
-                ['starttime' => 'DESC'],
-                2,
-                1
-            );
+            $polls = $er->findBy($filter, ['starttime' => 'DESC'], 2, 1);
 
-            $otherPolls = $this->get('entity_repository')->findBy(
-                [
-                    'content_type_name' => [[ 'value' => 'poll']],
-                    'content_status'    => [[ 'value' => 1 ]],
-                ],
-                ['starttime' => 'DESC'],
-                5,
-                1
-            );
+            unset($filter['category_name']);
+            $otherPolls = $er->findBy($filter, ['starttime' => 'DESC'], 5, 1);
 
             if (!empty($polls)) {
                 foreach ($polls as &$poll) {
@@ -173,6 +172,19 @@ class PollsController extends Controller
                 [
                     'content_type_name' => [[ 'value' => 'poll']],
                     'content_status'    => [[ 'value' => 1 ]],
+                    'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+                    'starttime'         => [
+                        'union' => 'OR',
+                        [ 'value' => '0000-00-00 00:00:00' ],
+                        [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                        [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    ],
+                    'endtime'         => [
+                        'union' => 'OR',
+                        [ 'value' => '0000-00-00 00:00:00' ],
+                        [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                        [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                    ]
                 ],
                 ['starttime' => 'DESC'],
                 5,
