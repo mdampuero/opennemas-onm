@@ -366,7 +366,7 @@ class VideosController extends Controller
                 ]
             ];
 
-            $otherVideos = $this->get('entity_repository')->findBy($filters, $order, 4);
+            $otherVideos = $this->get('entity_repository')->findBy($filters, $order, 4, 1);
 
             $this->view->assign(['others_videos' => $otherVideos]);
         }
@@ -426,7 +426,7 @@ class VideosController extends Controller
             ]
         ];
 
-        $videos2 = $this->get('entity_repository')->findBy($filters, $order, $limit, 0);
+        $videos = $this->get('entity_repository')->findBy($filters, $order, $limit, 0);
 
         if (count($videos) <= 0) {
             return new RedirectResponse(
