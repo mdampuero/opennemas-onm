@@ -227,7 +227,7 @@ class EntityManager extends BaseManager
         }
 
         $sql = 'SELECT COUNT(DISTINCT content_type_name, pk_content)'
-            . ' FROM ' . $fromSQL;
+            . ' FROM ' . $fromSQL . ' ';
 
         if (is_array($criteria) && array_key_exists('join', $criteria)) {
             $join = $criteria['join'];

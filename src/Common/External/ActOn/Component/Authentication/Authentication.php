@@ -57,6 +57,8 @@ class Authentication
         $this->url            = $url;
 
         $this->config = $this->configProvider->getConfiguration();
+
+        $this->tokenProvider->setNamespace(md5(json_encode($this->config)));
     }
 
     /**
@@ -148,6 +150,7 @@ class Authentication
         }
 
         $this->tokenProvider
-            ->setAccessToken($body['access_token'], $body['expires_in']);
+            ->setAccessToken($body['access_token'], $body['expires_in'])
+            ->setRefreshToken($body['refresh_token']);
     }
 }

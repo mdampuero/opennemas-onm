@@ -30,9 +30,6 @@ class AlbumsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->ccm = new \ContentCategoryManager();
-        $this->cm  = new \ContentManager();
-
         $this->categoryName = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
         $this->page         = $this->request->query->getDigits('page', 1);
 
@@ -93,11 +90,23 @@ class AlbumsController extends Controller
             $itemsPerPage  = isset($albumSettings['total_front']) ? $albumSettings['total_front'] : 8;
             $orderBy       = isset($albumSettings['orderFrontpage']) ? $albumSettings['orderFrontpage'] : 'created';
 
-            $order   = [];
+            $order   = [ 'starttime DESC' ];
             $filters = [
                 'content_type_name' => [[ 'value' => 'album' ]],
                 'content_status'    => [[ 'value' => 1 ]],
                 'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+                'starttime'         => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'         => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ]
             ];
 
             if ($this->category != 0) {
@@ -180,31 +189,34 @@ class AlbumsController extends Controller
             // Get the other albums for the albums widget
             $settings = s::get('album_settings');
             $total    = isset($settings['total_front']) ? ($settings['total_front']) : 2;
-            $days     = isset($settings['time_last']) ? ($settings['time_last']) : 4;
 
-            $otherAlbums = $this->cm->findAll(
-                'Album',
-                'content_status=1 AND pk_content !=' . $album->id
-                 . ' AND `contents_categories` . `pk_fk_content_category` =' . $this->category
-                 . ' AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ',
-                ' ORDER BY created DESC LIMIT ' . $total
-            );
+            $order   = 'starttime DESC';
+            $filters = [
+                'pk_content'             => [[ 'value' => $album->id, 'operator' => '!=']],
+                'pk_fk_content_category' => [[ 'value' => $this->category ]],
 
-            foreach ($otherAlbums as &$content) {
-                $content->cover_image    = $this->get('entity_repository')->find('Photo', $content->cover_id);
-                $content->category_name  = $content->loadCategoryName($content->id);
-                $content->category_title = $content->loadCategoryTitle($content->id);
+                'content_type_name'      => [[ 'value' => 'album' ]],
+                'content_status'         => [[ 'value' => 1 ]],
+                'in_litter'              => [[ 'value' => 1, 'operator' => '!=' ]],
+                'starttime'              => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'         => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ]
+            ];
 
-                $content->cover = is_object($content->cover_image) ?
-                    $content->cover_image->path_file . $content->cover_image->name : '';
-            }
+            $em          = $this->get('entity_repository');
+            $otherAlbums = $em->findBy($filters, $order, $total, $this->page);
 
             // Fetch album author
             $album->author = $this->get('user_repository')->find($album->fk_author);
-
-            // Load category and photos
-            $album->category_name  = $album->loadCategoryName($album->id);
-            $album->category_title = $album->loadCategoryTitle($album->id);
 
             // In order to make subscription module to work remove the attached
             // album photos when not cacheable
@@ -266,10 +278,8 @@ class AlbumsController extends Controller
         // Get the album from the id and increment the numviews for it
         $album = $this->get('entity_repository')->find('Album', $albumID);
 
-        $album->category_name  = $album->loadCategoryName($album->id);
-        $album->category_title = $album->loadCategoryTitle($album->id);
-        $albumPhotos           = $album->_getAttachedPhotos($album->id);
-        $albumPhotosPaged      = $album->getAttachedPhotosPaged($album->id, 8, $page);
+        $albumPhotos      = $album->_getAttachedPhotos($album->id);
+        $albumPhotosPaged = $album->getAttachedPhotosPaged($album->id, 8, $page);
 
         if (count($_albumArrayPaged) > $itemsPage) {
             array_pop($_albumArrayPaged);

@@ -371,6 +371,58 @@
             return i === a.indexOf(el);
           });
 
+          var successCallback = function(response) {
+            if (!response.data.items || response.data.items === null) {
+              return null;
+            }
+            var items                = response.data.items;
+            var newTagsInCurrentTags = [];
+
+            $scope.suggestedTags = [];
+
+            for (var j = 0; j < currentTags.length; j++) {
+              if (typeof currentTags[j] === 'object') {
+                newTagsInCurrentTags.push(currentTags[j].name);
+              }
+            }
+
+            var newTags = [];
+
+            for (var i = 0; i < items.length; i++) {
+              if (items[i].id) {
+                if (!(items[i].id in $scope.tags)) {
+                  $scope.tags[items[i].id] = items[i];
+                }
+                if (currentTags.indexOf(items[i].id) === -1) {
+                  newTags.push(items[i].id);
+                }
+              } else if (newTagsInCurrentTags.indexOf(items[i].name) === -1) {
+                $scope.suggestedTags.push(items[i]);
+              }
+            }
+
+            callback(newTags);
+            return null;
+          };
+
+          $scope.newAndExistingTagsFromTagList(tagsVal, locale, successCallback);
+          return null;
+        };
+
+        /**
+         * @function newAndExistingTagsFromTagList
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   From a list of words return the tag for this word or a new tag if not exist
+         *
+         * @param function - applyChanges to apply the needed changes for the response
+         * @param String   - tag2Check tag to check
+         * @param String   - locale tag language
+         *
+         * @return {Array} List of suggested tags
+         */
+        $scope.newAndExistingTagsFromTagList = function(tagsVal, locale, callback) {
           var route = {
             name: 'api_v1_backend_tags_auto_suggester',
             params: {
@@ -380,41 +432,8 @@
           };
 
           http.get(route).then(
-            function(response) {
-              if (!response.data.items || response.data.items === null) {
-                return null;
-              }
-              var items                = response.data.items;
-              var newTagsInCurrentTags = [];
-
-              $scope.suggestedTags = [];
-
-              for (var j = 0; j < currentTags.length; j++) {
-                if (typeof currentTags[j] === 'object') {
-                  newTagsInCurrentTags.push(currentTags[j].name);
-                }
-              }
-
-              var newTags = [];
-
-              for (var i = 0; i < items.length; i++) {
-                if (items[i].id) {
-                  if (!(items[i].id in $scope.tags)) {
-                    $scope.tags[items[i].id] = items[i];
-                  }
-                  if (currentTags.indexOf(items[i].id) === -1) {
-                    newTags.push(items[i].id);
-                  }
-                } else if (newTagsInCurrentTags.indexOf(items[i].name) === -1) {
-                  $scope.suggestedTags.push(items[i]);
-                }
-              }
-
-              callback(newTags);
-              return null;
-            }, $scope.errorCb
+            callback, $scope.errorCb
           );
-          return null;
         };
 
         /**

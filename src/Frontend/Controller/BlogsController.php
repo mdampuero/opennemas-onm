@@ -64,8 +64,9 @@ class BlogsController extends Controller
             $filters = [
                 'content_type_name' => [[ 'value' => 'opinion' ]],
                 'type_opinion'      => [[ 'value' => 0 ]],
-                'content_status'    => [[ 'value' => 1 ]],
                 'blog'              => [[ 'value' => 1 ]],
+                'content_status'    => [[ 'value' => 1 ]],
+                'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
                 'starttime'         => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS' ],
@@ -188,7 +189,8 @@ class BlogsController extends Controller
             // Get the list articles for this author
             $blogs = $this->cm->getOpinionArticlesWithAuthorInfo(
                 $filter
-                . ' AND contents.content_status=1 AND starttime <= NOW()',
+                . ' AND contents.content_status=1 AND (starttime IS NULL OR starttime <= NOW())'
+                . ' AND (endtime IS NULL OR NOW() <= endtime) ',
                 'ORDER BY starttime DESC ' . $_limit
             );
 

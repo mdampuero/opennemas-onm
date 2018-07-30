@@ -56,7 +56,7 @@ class TagService extends OrmService
     }
 
     /**
-     * Method for replace the parameter name by slug
+     * Method for replace the parameter name by slug in OQL query
      *
      * @param oql $oql to check and replace the field name by slug
      *
@@ -179,7 +179,6 @@ class TagService extends OrmService
         $slugs = $this->createSearchableWord($arr);
 
 
-        //return $this->getTagBySlug($slugs, $languageId, $limit);
         return \Tag::getTagsBySlug($slugs, $languageId, $limit);
     }
 

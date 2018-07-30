@@ -33,7 +33,7 @@
     <div class="form-group">
       <label for="metadata-{$photo->id}" class="form-label">{t}Keywords{/t}</label>
       <div class="controls">
-        <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="checkNewTags" get-suggested-tags="getSuggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
+        <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="newAndExistingTagsFromTagList" get-suggested-tags="getSuggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
         <div class="help-block">{t}Used for searches and automated suggestions.{/t}</div>
       </div>
     </div>
