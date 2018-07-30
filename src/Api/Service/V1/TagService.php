@@ -28,6 +28,31 @@ class TagService extends OrmService
     }
 
     /**
+     * Method to fetch the most used tag given the slug
+     *
+     * @param string $slug The slug of a tag
+     *
+     * @return Tag $tag The tag object
+     */
+    public function getMostUsedTagBySlug($slug)
+    {
+        $tags = $this->getList('slug = "' . $slug . '"');
+
+        if (empty($tags['items'])) {
+            return null;
+        }
+
+        $mostUsedTagId = array_search(
+            max($this->getNumContentsRel($tags['items'])),
+            $this->getNumContentsRel($tags['items'])
+        );
+
+        $tag = $this->getItem($mostUsedTagId);
+
+        return $tag;
+    }
+
+    /**
      * Method for retrieve the number of contents related with some tag
      *
      * @param array list with all number of related contents by tag

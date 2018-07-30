@@ -214,11 +214,13 @@ class TagsController extends Controller
 
         list($positions, $advertisements) = $this->getInnerAds();
 
+        $tag = $this->get('api.service.tag')->getMostUsedTagBySlug($tagName);
+
         return $this->render('frontpage/tags.tpl', [
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
             'cache_id'       => $cacheId,
-            'tagName'        => $tagName,
+            'tagName'        => (empty($tag)) ? $tagName : $tag->name,
             'x-tags'         => 'tag-page,' . $tagName,
         ]);
     }
