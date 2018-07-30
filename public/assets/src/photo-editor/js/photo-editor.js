@@ -867,7 +867,9 @@ window.OnmPhotoEditor.prototype.callCancel = function(e, newStatus) {
  *   Method to close the photoeditor and return the new canvas to save it
  */
 window.OnmPhotoEditor.prototype.callSave = function() {
-  this.conf.closeCallBack(this.canvas);
+  this.conf.closeCallBack(
+    this.getCanvas2Show(this.statusImage.canvasOriginal, this.statusImage, true).canvas
+  );
 };
 
 /**
@@ -1174,7 +1176,7 @@ window.OnmPhotoEditor.prototype.loadImageInCanvas = function(self, img) {
     imgSize.height
   );
 
-  imgSize = self.getAdaptCanvasSize(canvasOriginal);
+  imgSize = self.getAdaptCanvasSize(canvasOriginal, false);
 
   canvas.width  = imgSize.width;
   canvas.height = imgSize.height;
@@ -1229,15 +1231,16 @@ window.OnmPhotoEditor.prototype.contrast = function(canvasOriginal, canvasDest, 
   canvasDest.putImageData(pixels, 0, 0);
 };
 
-window.OnmPhotoEditor.prototype.getCanvas2Show = function(canvasOriginal, statusImage) {
-  var canvasAux = this.crop(canvasOriginal, statusImage);
+window.OnmPhotoEditor.prototype.getCanvas2Show = function(canvasOriginal, statusImage, fullSize) {
+  var fullSizeAux = typeof fullSize === 'undefined' ? false : fullSize;
+  var canvasAux   = this.crop(canvasOriginal, statusImage);
 
   canvasAux = this.mirror(canvasAux.canvas, statusImage);
   canvasAux = this.rotate(canvasAux.canvas, statusImage);
   this.brightness(canvasAux, canvasAux.ctx, statusImage.brightness);
   this.contrast(canvasAux, canvasAux.ctx, statusImage.contrast);
 
-  var sizeRotate  = this.getAdaptCanvasSize(canvasAux.canvas);
+  var sizeRotate  = this.getAdaptCanvasSize(canvasAux.canvas, fullSizeAux);
   var canvas2Show = { canvas: document.createElement('canvas') };
 
   canvas2Show.canvas.width  = sizeRotate.width;
@@ -1416,12 +1419,12 @@ window.OnmPhotoEditor.prototype.capitalizeFirstLetter = function(string) {
  * @description
  *   Calculates the size of the image to fit into the div
  *
- * @param {element} element   - element to resize
- * @param {element} container - element to contain the parent
+ * @param {element} element  - element to resize
+ * @param {boolean} fullsize - Respect original size
  *
  * @return {object} resize element
  */
-window.OnmPhotoEditor.prototype.getAdaptCanvasSize = function(element) {
+window.OnmPhotoEditor.prototype.getAdaptCanvasSize = function(element, fullsize) {
   var sizeElement = null;
 
   if (!element.tagName) {
@@ -1437,7 +1440,10 @@ window.OnmPhotoEditor.prototype.getAdaptCanvasSize = function(element) {
     width: this.divTopMenu.getBoundingClientRect().width
   };
 
-  if (sizeContainer.height >= sizeElement.height && sizeContainer.width >= sizeElement.width) {
+  if (fullsize ||
+    sizeContainer.height >= sizeElement.height &&
+    sizeContainer.width >= sizeElement.width
+  ) {
     return sizeElement;
   }
 
