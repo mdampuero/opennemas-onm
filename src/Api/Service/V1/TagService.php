@@ -34,22 +34,23 @@ class TagService extends OrmService
      *
      * @return Tag $tag The tag object
      */
-    public function getMostUsedTagBySlug($slug)
+    public function getMostUsedTagBySlug($slug, $languageId)
     {
-        $tags = $this->getList('slug = "' . $slug . '"');
+        $tags = $this->getTagBySlug($slug, $languageId);
 
-        if (empty($tags['items'])) {
-            return null;
+        if (count($tags['items']) < 2) {
+            return count($tags['items']) == 1 ? $tags['items'][0] : null;
         }
 
-        $mostUsedTagId = array_search(
-            max($this->getNumContentsRel($tags['items'])),
-            $this->getNumContentsRel($tags['items'])
-        );
+        $tagsCount   = $this->getNumContentsRel($tags['items']);
+        $mostUsedTag = $tags['items'][0];
+        for ($i = 1; $i < count($tags['items']); $i++) {
+            if ($tagsCount[$mostUsedTag->id] < $tagsCount[$tags['items'][$i]->id]) {
+                $mostUsedTag = $tags['items'][$i];
+            }
+        }
 
-        $tag = $this->getItem($mostUsedTagId);
-
-        return $tag;
+        return $mostUsedTag;
     }
 
     /**
