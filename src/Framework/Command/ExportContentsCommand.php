@@ -321,17 +321,17 @@ EOF
             $content->category_name  = $content->loadCategoryName($content->id);
             $content->category_title = $content->loadCategoryTitle($content->id);
 
-            $content->created_datetime =
+            $content->created_datetime   =
                 \DateTime::createFromFormat(
                     'Y-m-d H:i:s',
                     $content->created
                 );
-            $content->start_datetime   =
+            $content->starttime_datetime =
                 \DateTime::createFromFormat(
                     'Y-m-d H:i:s',
                     $content->starttime
                 );
-            $content->updated_datetime =
+            $content->updated_datetime   =
                 \DateTime::createFromFormat(
                     'Y-m-d H:i:s',
                     $content->changed

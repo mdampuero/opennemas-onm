@@ -25,7 +25,7 @@
       <FirstCreated>{$article->created_datetime->format('Ymd\THisP')}</FirstCreated>
       {if $article->start_datetime}
       <!--Published date.-->
-      <FirstPublished>{$article->start_datetime->format('Ymd\THisP')}</FirstPublished>
+      <FirstPublished>{$article->starttime_datetime->format('Ymd\THisP')}</FirstPublished>º
       {/if}
       <!--Last modification date.-->
       <ThisRevisionCreated>{$article->updated_datetime->format('Ymd\THisP')}</ThisRevisionCreated>
