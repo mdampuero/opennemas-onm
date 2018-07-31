@@ -135,7 +135,8 @@ class AmpController extends Controller
                 '@<(script|embed|object|frameset|frame|iframe|style|form)[^>]*>(?s).*?<\/\1>@',
                 '@<(link|meta|input)[^>]+>@',
                 '@<a\s+[^>]*href\s*=\s*"([^"]+)"[^>]*>@',
-                '@<(table|tbody|th|tr|td|ul|li|ol|dl|p|strong|br|span|div|b|pre|hr|col|h1|h2|h3|h4|h5|h6)[^>]*?(\/?)>@',
+                '@<(table|tbody|blockquote|th|tr|td|ul|li|ol|dl|p|strong|br|span'
+                    . '|div|b|pre|hr|col|h1|h2|h3|h4|h5|h6)[^>]*?(\/?)>@',
                 '@target="(.*?)"@',
             ];
 
