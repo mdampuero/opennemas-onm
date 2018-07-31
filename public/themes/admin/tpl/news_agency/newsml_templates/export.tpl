@@ -23,7 +23,7 @@
       <NewsItemType FormalName="News" />
       <!--Creation date.-->
       <FirstCreated>{$article->created_datetime->format('Ymd\THisP')}</FirstCreated>
-      {if $article->start_datetime}
+      {if $article->starttime_datetime}
       <!--Published date.-->
       <FirstPublished>{$article->starttime_datetime->format('Ymd\THisP')}</FirstPublished>º
       {/if}
