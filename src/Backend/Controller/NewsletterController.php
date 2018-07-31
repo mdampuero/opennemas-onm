@@ -169,6 +169,15 @@ class NewsletterController extends Controller
 
         $item = $this->get('api.service.newsletter')->getItem($id);
 
+        if (!empty($item->template_id)) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Unable to edit a newsletter already sent')
+            );
+
+            return $this->redirect($this->generateUrl('backend_newsletters_list'));
+        }
+
         foreach ($item->contents as &$container) {
             foreach ($container['items'] as &$element) {
                 $contentType = array_key_exists('content_type_name', $element)
