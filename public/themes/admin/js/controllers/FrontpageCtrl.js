@@ -273,30 +273,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
         window.moment.tz(new Date().getTime() - $scope.time.diff, 'UTC')
           .tz($scope.time.timezone).format('YYYY-MM-DD HH:mm:ss');
 
-      $uibModal.open({
-        backdrop:      true,
-        backdropClass: 'modal-backdrop-transparent',
-        controller:    'YesNoModalCtrl',
-        openedClass:   'modal-relative-open',
-        templateUrl:   'modal-publish-now',
-        windowClass:   'modal-right modal-small modal-top',
-        resolve: {
-          template: function() {
-            return {};
-          },
-          yes: function() {
-            return function(modalWindow) {
-              modalWindow.close({ response: false, success: true });
-              $scope.saveWithoutCheckPD();
-            };
-          },
-          no: function() {
-            return function(modalWindow) {
-              modalWindow.close({ response: false, success: true });
-            };
-          }
-        }
-      });
+      $scope.liveNowModal();
     };
 
     $scope.saveVersion = function() {
@@ -362,6 +339,23 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           $scope.frontpageInfo.publish_date,
           $scope.time.timezone
         ).toDate().getTime() - currentServerTime;
+
+      if (diffCurrToVer <= 0) {
+        var publishDateUTC = window.moment.tz(
+            $scope.frontpageInfo.publish_date,
+            $scope.time.timezone
+          ).toDate().getTime();
+
+        var currentVerTime = window.moment.tz(
+            $scope.getCurrentVersion().publish_date,
+            'UTC'
+          ).toDate().getTime();
+
+        if (publishDateUTC > currentVerTime) {
+          $scope.liveNowModal();
+          return null;
+        }
+      }
 
       if (diffCurrToVer <= 0 || diffCurrToVer > 3600000) {
         $scope.saveWithoutCheckPD();
@@ -634,6 +628,33 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           },
           success: function() {
             return null;
+          }
+        }
+      });
+    };
+
+    $scope.liveNowModal = function() {
+      $uibModal.open({
+        backdrop:      true,
+        backdropClass: 'modal-backdrop-transparent',
+        controller:    'YesNoModalCtrl',
+        openedClass:   'modal-relative-open',
+        templateUrl:   'modal-publish-now',
+        windowClass:   'modal-right modal-small modal-top',
+        resolve: {
+          template: function() {
+            return {};
+          },
+          yes: function() {
+            return function(modalWindow) {
+              modalWindow.close({ response: false, success: true });
+              $scope.saveWithoutCheckPD();
+            };
+          },
+          no: function() {
+            return function(modalWindow) {
+              modalWindow.close({ response: false, success: true });
+            };
           }
         }
       });
