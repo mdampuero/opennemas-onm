@@ -398,8 +398,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           }
           return null;
         }, function(response) {
-          $scope.showMessage(response.data.responseText, 'error', 5);
-
+          $scope.showMessage(response.data.message, 'error', 5);
           return null;
         });
       }
