@@ -45,7 +45,9 @@ class TagService extends OrmService
         $tagsCount   = $this->getNumContentsRel($tags['items']);
         $mostUsedTag = $tags['items'][0];
         for ($i = 1; $i < count($tags['items']); $i++) {
-            if ($tagsCount[$mostUsedTag->id] < $tagsCount[$tags['items'][$i]->id]) {
+            if (array_key_exists($tags['items'][$i]->id, $tagsCount)
+                && $tagsCount[$mostUsedTag->id] < $tagsCount[$tags['items'][$i]->id]
+            ) {
                 $mostUsedTag = $tags['items'][$i];
             }
         }
