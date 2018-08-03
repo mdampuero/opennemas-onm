@@ -27,6 +27,10 @@ class ContentViewsManagerTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'get', 'set' ])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->logger = $this->getMockBuilder('Logger' . uniqid())
+            ->setMethods([ 'error' ])
+            ->getMock();
     }
 
     /**
@@ -40,7 +44,12 @@ class ContentViewsManagerTest extends \PHPUnit_Framework_TestCase
         $this->dbConn->expects($this->any())->method('fetchAll')
             ->will($this->returnValue($dbValue));
 
-        $this->contentViewManager = new \Repository\ContentViewsManager($this->dbConn, $this->cache, 'prefix');
+        $this->contentViewManager = new \Repository\ContentViewsManager(
+            $this->dbConn,
+            $this->cache,
+            $this->logger,
+            'prefix'
+        );
 
         $this->assertEquals($returnValue, $this->contentViewManager->getViews($id));
     }
@@ -56,7 +65,12 @@ class ContentViewsManagerTest extends \PHPUnit_Framework_TestCase
         $this->dbConn->expects($this->any())->method('fetchAll')
             ->will($this->returnValue($dbValue));
 
-        $this->contentViewManager = new \Repository\ContentViewsManager($this->dbConn, $this->cache, 'prefix');
+        $this->contentViewManager = new \Repository\ContentViewsManager(
+            $this->dbConn,
+            $this->cache,
+            $this->logger,
+            'prefix'
+        );
 
         $this->assertEquals($returnValue, $this->contentViewManager->getViews($id));
     }
@@ -71,7 +85,12 @@ class ContentViewsManagerTest extends \PHPUnit_Framework_TestCase
         $dbValue     = [['views' => 300, 'pk_fk_content' => $id ]];
         $this->dbConn->expects($this->never())->method($this->anything());
 
-        $this->contentViewManager = new \Repository\ContentViewsManager($this->dbConn, $this->cache, 'prefix');
+        $this->contentViewManager = new \Repository\ContentViewsManager(
+            $this->dbConn,
+            $this->cache,
+            $this->logger,
+            'prefix'
+        );
 
         $this->assertEquals($returnValue, $this->contentViewManager->getViews($id));
     }
@@ -96,7 +115,12 @@ class ContentViewsManagerTest extends \PHPUnit_Framework_TestCase
         $this->dbConn->expects($this->any())->method('fetchAll')
             ->will($this->returnValue($dbValues));
 
-        $this->contentViewManager = new \Repository\ContentViewsManager($this->dbConn, $this->cache, 'prefix');
+        $this->contentViewManager = new \Repository\ContentViewsManager(
+            $this->dbConn,
+            $this->cache,
+            $this->logger,
+            'prefix'
+        );
 
         $this->assertEquals($returnValues, $this->contentViewManager->getViews($ids));
     }
@@ -113,7 +137,12 @@ class ContentViewsManagerTest extends \PHPUnit_Framework_TestCase
         $this->dbConn->expects($this->any())->method('fetchAll')
             ->will($this->returnValue($dbValue));
 
-        $this->contentViewManager = new \Repository\ContentViewsManager($this->dbConn, $this->cache, 'prefix');
+        $this->contentViewManager = new \Repository\ContentViewsManager(
+            $this->dbConn,
+            $this->cache,
+            $this->logger,
+            'prefix'
+        );
 
         $this->assertEquals($returnValue, $this->contentViewManager->getViews($id));
     }
@@ -126,14 +155,19 @@ class ContentViewsManagerTest extends \PHPUnit_Framework_TestCase
         $id          = 1;
         $returnValue = null;
         $dbValue     = [];
-        $sql         = 'INSERT INTO `content_views` (`pk_fk_content`, `views`) VALUES (?, ?) '
-            . 'ON DUPLICATE KEY UPDATE views = views + 1';
+        $sql         = 'UPDATE `content_views` SET views = views + 1'
+            . ' WHERE pk_fk_content = ?';
 
         $this->dbConn->expects($this->once())->method('executeUpdate')
-            ->with($this->equalTo($sql), $this->equalTo([$id, 1]))
+            ->with($this->equalTo($sql), $this->equalTo([$id]))
             ->will($this->returnValue(null));
 
-        $this->contentViewManager = new \Repository\ContentViewsManager($this->dbConn, $this->cache, 'prefix');
+        $this->contentViewManager = new \Repository\ContentViewsManager(
+            $this->dbConn,
+            $this->cache,
+            $this->logger,
+            'prefix'
+        );
 
         $this->assertEquals($returnValue, $this->contentViewManager->setViews($id));
     }
@@ -146,14 +180,19 @@ class ContentViewsManagerTest extends \PHPUnit_Framework_TestCase
         $id      = 1;
         $value   = 3;
         $dbValue = null;
-        $sql     = 'INSERT INTO `content_views` (`pk_fk_content`, `views`) VALUES (?, ?) '
-            . 'ON DUPLICATE KEY UPDATE views = ?';
+        $sql     = 'UPDATE `content_views` SET views = ?'
+            . ' WHERE pk_fk_content = ?';
 
         $this->dbConn->expects($this->once())->method('executeUpdate')
-            ->with($this->equalTo($sql), $this->equalTo([$id, $value, $value]))
+            ->with($this->equalTo($sql), $this->equalTo([$value, $id]))
             ->will($this->returnValue(null));
 
-        $this->contentViewManager = new \Repository\ContentViewsManager($this->dbConn, $this->cache, 'prefix');
+        $this->contentViewManager = new \Repository\ContentViewsManager(
+            $this->dbConn,
+            $this->cache,
+            $this->logger,
+            'prefix'
+        );
 
         $this->assertEquals(null, $this->contentViewManager->setViews($id, $value));
     }
@@ -170,7 +209,12 @@ class ContentViewsManagerTest extends \PHPUnit_Framework_TestCase
         $this->dbConn->expects($this->once())->method('executeUpdate')
             ->will($this->returnValue(null));
 
-        $this->contentViewManager = new \Repository\ContentViewsManager($this->dbConn, $this->cache, 'prefix');
+        $this->contentViewManager = new \Repository\ContentViewsManager(
+            $this->dbConn,
+            $this->cache,
+            $this->logger,
+            'prefix'
+        );
 
         $this->assertEquals($returnValue, $this->contentViewManager->setViews($id));
     }

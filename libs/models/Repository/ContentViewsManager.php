@@ -11,6 +11,8 @@
 
 namespace Repository;
 
+use \Exception;
+
 /**
  * This repository handles the content views operations for contents.
  */
@@ -63,15 +65,26 @@ class ContentViewsManager extends EntityManager
      */
     public function setViews($id, $views = null)
     {
-        $sql = 'INSERT INTO `content_views` (`pk_fk_content`, `views`) VALUES (?, ?)';
+        $sql = 'UPDATE `content_views` SET views =';
         if (is_null($views)) {
-            $sql   .= ' ON DUPLICATE KEY UPDATE views = views + 1';
-            $params = [$id, 1];
+            $sql   .= ' views + 1';
+            $params = [$id];
         } else {
-            $sql   .= ' ON DUPLICATE KEY UPDATE views = ?';
-            $params = [$id, $views, $views];
+            $sql   .= ' ?';
+            $params = [$views, $id];
         }
+        $sql .= ' WHERE pk_fk_content = ?';
 
-        $this->dbConn->executeUpdate($sql, $params);
+        try {
+            $updateRows = $this->dbConn->executeUpdate($sql, $params);
+            if ($updateRows === 0) {
+                $sql    = 'INSERT INTO `content_views` (`pk_fk_content`, `views`)'
+                    . ' VALUES (?, ?);';
+                $params = [$id, 1];
+                $this->dbConn->executeUpdate($sql, $params);
+            }
+        } catch (Exception $e) {
+            $this->error->error($e->getMessage());
+        }
     }
 }
