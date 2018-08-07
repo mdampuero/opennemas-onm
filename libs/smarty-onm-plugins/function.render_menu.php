@@ -19,14 +19,15 @@ function smarty_function_render_menu($params, &$smarty)
     }
 
     // Get menu from name or position
-    $criteria = [ 'position' => [ [ 'value' => $position ] ], ];
+    $criteria = [ 'position' => [ [ 'value' => $position ] ] ];
+
     if (!empty($menuName)) {
         $criteria = [ 'name' => [ [ 'value' => $menuName ] ], ];
     }
 
     $menu = getService('menu_repository')->findOneBy($criteria, null, 1, 1);
 
-    // Menu doesn't exists
+    // Menu does not exist
     if (is_null($menu)) {
         return $output;
     }
@@ -37,6 +38,7 @@ function smarty_function_render_menu($params, &$smarty)
         'menuItems'       => ((!empty($menu->items)) ? $menu->items : []),
         'actual_category' => $params['actual_category'],
     ]);
+
     // Disable caching for this partial
     $caching = $smarty->caching;
 
