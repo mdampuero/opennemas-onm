@@ -11,8 +11,6 @@
 
 namespace Repository;
 
-use \Exception;
-
 /**
  * This repository handles the content views operations for contents.
  */
@@ -83,8 +81,10 @@ class ContentViewsManager extends EntityManager
                 $params = [$id, 1];
                 $this->dbConn->executeUpdate($sql, $params);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->error->error($e->getMessage());
+
+            return false;
         }
     }
 }
