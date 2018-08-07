@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  CheckoutCtrl
@@ -126,7 +127,7 @@
          *
          * @return {Float} The item price.
          */
-        $scope.getPrice = function (item, type) {
+        $scope.getPrice = function(item, type) {
           if (!type) {
             type = 'monthly';
           }
@@ -183,8 +184,9 @@
          * @description
          *   Returns the invoice notes.
          */
-        $scope.getNotes = function () {
+        $scope.getNotes = function() {
           var notes = '';
+
           for (var i = 0; i < $scope.cart.length; i++) {
             if ($scope.cart[i].notes) {
               notes += $scope.cart[i].notes.split('\n').join('<br>') + '<hr>';
@@ -192,7 +194,7 @@
           }
 
           return notes.replace(/<hr>$/, '');
-        }
+        };
 
         /**
          * @function previous
@@ -240,8 +242,9 @@
          * @description
          *   Returns the invoice terms.
          */
-        $scope.getTerms = function () {
+        $scope.getTerms = function() {
           var terms = '';
+
           for (var i = 0; i < $scope.cart.length; i++) {
             if ($scope.cart[i].terms) {
               terms += $scope.cart[i].terms.split('\n').join('<br>') + '<hr>';
@@ -249,16 +252,16 @@
           }
 
           return terms.replace(/<hr>$/, '');
-        }
+        };
 
         // Get client after saving
-        $rootScope.$on('client-saved', function (event, args) {
+        $rootScope.$on('client-saved', function(event, args) {
           $scope.client = args;
           $scope.next();
         });
 
         // Get subtotal on change
-        $rootScope.$on('subtotal-changed', function (event, args) {
+        $rootScope.$on('subtotal-changed', function(event, args) {
           $scope.subtotal = args;
         });
 
@@ -274,18 +277,19 @@
           }
 
           if ($scope.taxes[nv.country] && (nv.country === 'ES' ||
-              (!nv.company && $scope.countries[nv.country]))) {
+              !nv.company && $scope.countries[nv.country])) {
             $scope.vatTax = $scope.taxes[nv.country].value;
           }
         }, true);
 
         // Update tax when vatTax or subtotal change
         $scope.$watch('[fee, subtotal, vatTax]', function() {
-          $scope.tax = +(($scope.subtotal + $scope.fee) * $scope.vatTax / 100).toFixed(2);
+          $scope.tax = Number((($scope.subtotal + $scope.fee) * $scope.vatTax /
+            100).toFixed(2));
         }, true);
 
         // Update total when fee, subtotal or tax change
-        $scope.$watch('[fee, subtotal, tax]', function () {
+        $scope.$watch('[fee, subtotal, tax]', function() {
           $scope.total = $scope.subtotal + $scope.tax + $scope.fee;
         }, true);
 
@@ -293,11 +297,10 @@
         $scope.$watch('payment', function(nv) {
           $scope.fee = 0;
 
-          if (nv) {
-            $scope.fee = +($scope.subtotal * 0.029 + 0.30).toFixed(2);
+          if (nv && $scope.subtotal > 0) {
+            $scope.fee = Number(($scope.subtotal * 0.029 + 0.30).toFixed(2));
           }
         }, true);
-
 
         if (webStorage.local.has('purchase')) {
           $scope.purchase = webStorage.local.get('purchase');
