@@ -6,10 +6,6 @@
  */
 function smarty_function_render_menu($params, &$smarty)
 {
-    // Disable caching for this partial
-    $caching = $smarty->caching;
-
-    $smarty->caching = 0;
     // Initializing parameters
     $tpl      = (isset($params['tpl']) ? $params['tpl'] : null);
     $menuName = (isset($params['name']) ? $params['name'] : null);
@@ -18,6 +14,7 @@ function smarty_function_render_menu($params, &$smarty)
 
     if (empty($menuName) && empty($position)) {
         $smarty->trigger_error("Menu doesn't exists");
+
         return $output;
     }
 
@@ -41,11 +38,15 @@ function smarty_function_render_menu($params, &$smarty)
         'menuItems'       => ((!empty($menu->items)) ? $menu->items : []),
         'actual_category' => $params['actual_category'],
     ]);
+    // Disable caching for this partial
+    $caching = $smarty->caching;
+
+    $smarty->caching = 0;
+
     $output .= "\n" . $smarty->fetch($tpl);
 
     // Restore previous caching value
     $smarty->caching = $caching;
 
-    // Render menu items
     return $output;
 }
