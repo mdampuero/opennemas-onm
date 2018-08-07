@@ -19,10 +19,9 @@ function smarty_function_render_menu($params, &$smarty)
     }
 
     // Get menu from name or position
+    $criteria = [ 'position' => [ [ 'value' => $position ] ], ];
     if (!empty($menuName)) {
         $criteria = [ 'name' => [ [ 'value' => $menuName ] ], ];
-    } else {
-        $criteria = [ 'position' => [ [ 'value' => $position ] ], ];
     }
 
     $menu = getService('menu_repository')->findOneBy($criteria, null, 1, 1);
