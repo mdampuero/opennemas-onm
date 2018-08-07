@@ -732,7 +732,8 @@ class ContentManager
         $author = 0,
         $days = 2,
         $num = 9,
-        $all = false
+        $all = false,
+        $page = 1
     ) {
         $em = getService('entity_repository');
 
@@ -788,13 +789,13 @@ class ContentManager
             $criteria['content_status'] = [['value' => 1]];
         }
 
-        $contents = $em->findBy($criteria, $order, $num, 1);
+        $contents = $em->findBy($criteria, $order, $num, $page);
 
         // Repeat with starttime filter changed
         if (count($contents) == 0) {
             $criteria['starttime'] = [['value' => $now, 'operator' => '<']];
 
-            $contents = $em->findBy($criteria, $order, $num, 1);
+            $contents = $em->findBy($criteria, $order, $num, $page);
         }
 
         return $contents;
@@ -825,8 +826,11 @@ class ContentManager
         $category = 0,
         $days = 2,
         $maxElements = 9,
-        $all = false
+        $all = false,
+        $page = 1
     ) {
+        $offset = ($page - 1) * $maxElements;
+
         try {
             $rs = getService('dbal_connection')->fetchAll(
                 "SELECT COUNT(comments.content_id) as num_comments, contents.*, articles.*
@@ -837,8 +841,8 @@ class ContentManager
                 AND starttime >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
                 GROUP BY contents.pk_content
                 ORDER BY num_comments DESC, contents.starttime DESC
-                LIMIT ?",
-                [ $days, $maxElements ]
+                LIMIT ? OFFSET ?",
+                [ $days, $maxElements, $offset ]
             );
 
             $contents = [];

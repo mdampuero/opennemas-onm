@@ -2,8 +2,9 @@
  * Controller to use in inner sections.
  */
 angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
-  '$controller', 'http', '$uibModal', '$scope', '$interval', 'routing', 'messenger',
-  function($controller, http, $uibModal, $scope, $interval, routing, messenger) {
+  '$controller', 'http', '$uibModal', '$scope', '$interval', 'routing',
+  'messenger', '$window',
+  function($controller, http, $uibModal, $scope, $interval, routing, messenger, $window) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -19,13 +20,14 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
     };
 
     $scope.frontpageInfo = {
-      lastSaved:       null,
-      publish_date:    window.moment.tz(new Date(), 'UTC'),
-      checkNewVersion: true
+      lastSaved:           null,
+      publish_date:        window.moment.tz(new Date(), 'UTC'),
+      checkNewVersion:     true,
+      originalVersionName: null
     };
 
-    $scope.init = function(frontpages, versions, categoryId, versionId, time, frontpageLastSaved,
-      layouts, layout) {
+    $scope.init = function(frontpages, versions, categoryId, versionId, time,
+        frontpageLastSaved, layouts, layout) {
       $scope.categoryId              = parseInt(categoryId);
       $scope.frontpages              = frontpages;
       $scope.frontpage               = frontpages[$scope.categoryId];
@@ -60,8 +62,17 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
         '' :
         window.moment.tz($scope.version.publish_date, 'UTC')
           .tz($scope.time.timezone).format('YYYY-MM-DD HH:mm:ss');
+
+      var copyVersionName = (' ' + $scope.version.name).slice(1);
+
+      $scope.frontpageInfo.originalVersionName = copyVersionName;
+
       $interval($scope.getReloadVersionStatus, 60000);
       $interval($scope.checkAvailableNewVersion, 10000);
+
+      $($window).bind('beforeunload', function() {
+        $scope.frontpageForm.$setPristine(true);
+      });
     };
 
     $scope.getReloadVersionStatus = function() {
@@ -262,35 +273,59 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
         window.moment.tz(new Date().getTime() - $scope.time.diff, 'UTC')
           .tz($scope.time.timezone).format('YYYY-MM-DD HH:mm:ss');
 
-      $uibModal.open({
-        backdrop:      true,
-        backdropClass: 'modal-backdrop-transparent',
-        controller:    'YesNoModalCtrl',
-        openedClass:   'modal-relative-open',
-        templateUrl:   'modal-publish-now',
-        windowClass:   'modal-right modal-small modal-top',
-        resolve: {
-          template: function() {
-            return {};
-          },
-          yes: function() {
-            return function(modalWindow) {
-              modalWindow.close({ response: false, success: true });
-              $scope.saveWithoutCheckPD();
-            };
-          },
-          no: function() {
-            return function(modalWindow) {
-              modalWindow.close({ response: false, success: true });
-            };
-          }
-        }
-      });
+      $scope.liveNowModal();
     };
 
     $scope.saveVersion = function() {
       $scope.version.id = null;
+
+      var date = window.moment.tz(
+        $scope.frontpageInfo.publish_date,
+        $scope.time.timezone
+      ).tz('UTC').format('YYYY-MM-DD HH:mm:ss');
+
+      if ($scope.frontpageInfo.originalVersionName === $scope.version.name) {
+        $scope.version.name = $scope.getAutoVersionName($scope.version.name);
+      }
+
+      if (date === $scope.version.publish_date) {
+        $scope.frontpageInfo.publish_date = '';
+      }
       $scope.save();
+    };
+
+    $scope.getAutoVersionName = function(versionName) {
+      var haveVersionRegex = /-v[0-9]+$/;
+
+      var number  = 0;
+      var newName = versionName;
+
+      if (haveVersionRegex.test(versionName)) {
+        var matchVersion = versionName.match(haveVersionRegex)[0];
+
+        number  = parseInt(matchVersion.slice(2));
+        newName = versionName.slice(0, -1 * matchVersion.length);
+      }
+
+      return $scope.getVersionForName(newName, number);
+    };
+
+    $scope.getVersionForName = function(versionName, versionNumber) {
+      var versionNames = [];
+
+      for (var i = 0; i < $scope.versions.length; i++) {
+        versionNames.push($scope.versions[i].name);
+      }
+
+      versionNumber++;
+      var newName = versionName + '-v' + versionNumber;
+
+      while (versionNames.indexOf(newName) > -1) {
+        versionNumber++;
+        newName = versionName + '-v' + versionNumber;
+      }
+
+      return newName;
     };
 
     $scope.save = function() {
@@ -304,6 +339,23 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           $scope.frontpageInfo.publish_date,
           $scope.time.timezone
         ).toDate().getTime() - currentServerTime;
+
+      if (diffCurrToVer <= 0) {
+        var publishDateUTC = window.moment.tz(
+            $scope.frontpageInfo.publish_date,
+            $scope.time.timezone
+          ).toDate().getTime();
+
+        var currentVerTime = window.moment.tz(
+            $scope.getCurrentVersion().publish_date,
+            'UTC'
+          ).toDate().getTime();
+
+        if (publishDateUTC > currentVerTime) {
+          $scope.liveNowModal();
+          return null;
+        }
+      }
 
       if (diffCurrToVer <= 0 || diffCurrToVer > 3600000) {
         $scope.saveWithoutCheckPD();
@@ -398,8 +450,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           }
           return null;
         }, function(response) {
-          $scope.showMessage(response.data.responseText, 'error', 5);
-
+          $scope.showMessage(response.data.message, 'error', 5);
           return null;
         });
       }
@@ -419,7 +470,6 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
 
     $scope.getContentsInFrontpage = function() {
       var els   = [];
-      var index = 0;
 
       $(document).find('div.placeholder').each(function(index, placeholderEle) {
         var placeholder = $(placeholderEle).data('placeholder');
@@ -578,6 +628,33 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           },
           success: function() {
             return null;
+          }
+        }
+      });
+    };
+
+    $scope.liveNowModal = function() {
+      $uibModal.open({
+        backdrop:      true,
+        backdropClass: 'modal-backdrop-transparent',
+        controller:    'YesNoModalCtrl',
+        openedClass:   'modal-relative-open',
+        templateUrl:   'modal-publish-now',
+        windowClass:   'modal-right modal-small modal-top',
+        resolve: {
+          template: function() {
+            return {};
+          },
+          yes: function() {
+            return function(modalWindow) {
+              modalWindow.close({ response: false, success: true });
+              $scope.saveWithoutCheckPD();
+            };
+          },
+          no: function() {
+            return function(modalWindow) {
+              modalWindow.close({ response: false, success: true });
+            };
           }
         }
       });

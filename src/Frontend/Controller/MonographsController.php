@@ -98,6 +98,18 @@ class MonographsController extends Controller
                 'content_type_name' => [[ 'value' => 'special' ]],
                 'content_status'    => [[ 'value' => 1 ]],
                 'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+                'starttime'         => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'         => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ]
             ];
 
             if ($this->category != 0) {
@@ -217,13 +229,13 @@ class MonographsController extends Controller
         }
 
         return $this->render('special/special.tpl', [
-            'special'   => $special,
-            'content'   => $special,
-            'contentId' => $special->id,
-            'cache_id'  => $cacheID,
+            'special'     => $special,
+            'content'     => $special,
+            'contentId'   => $special->id,
+            'cache_id'    => $cacheID,
             'x-tags'      => 'monograph,' . $special->id,
             'x-cache-for' => '+1 day',
-            'tags'            => $this->get('api.service.tag')
+            'tags'        => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($special->tag_ids)['items']
         ]);
     }

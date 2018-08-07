@@ -52,6 +52,18 @@ class LetterController extends Controller
                 'content_type_name' => [[ 'value' => 'letter' ]],
                 'content_status'    => [[ 'value' => 1 ]],
                 'in_litter'         => [[ 'value' => 0 ]],
+                'starttime'       => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'         => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ]
             ];
 
             $em           = $this->get('entity_repository');
@@ -122,12 +134,26 @@ class LetterController extends Controller
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('letter/letter.tpl', $cacheID)
         ) {
-            $cm           = new \ContentManager();
-            $otherLetters = $cm->find(
-                'Letter',
-                'content_status=1 ',
-                'ORDER BY created DESC LIMIT 5'
-            );
+            $order   = [ 'created' => 'DESC' ];
+            $filters = [
+                'content_type_name' => [[ 'value' => 'letter' ]],
+                'content_status'    => [[ 'value' => 1 ]],
+                'in_litter'         => [[ 'value' => 0 ]],
+                'starttime'       => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'         => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ],
+            ];
+
+            $otherLetters = $this->get('entity_repository')->findBy($filters, $order, 5, 1);
 
             $this->view->assign(['otherLetters' => $otherLetters]);
         }
