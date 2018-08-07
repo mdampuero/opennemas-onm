@@ -388,9 +388,11 @@ class ArticlesController extends Controller
                 4
             );
 
-        $article->tag_ids = array_filter($article->tag_ids, function ($tag) {
-            return !is_array($tag);
-        });
+        if (!is_null($article->tag_ids) && is_array($article->tag_ids)) {
+            $article->tag_ids = array_filter($article->tag_ids, function ($tag) {
+                return !is_array($tag);
+            });
+        }
 
         $this->view->assign([
             'ads_positions'         => $positions,
