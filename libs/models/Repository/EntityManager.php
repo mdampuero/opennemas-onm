@@ -30,12 +30,14 @@ class EntityManager extends BaseManager
      *
      * @param Connection     $dbConn      The custom DBAL wrapper.
      * @param CacheInterface $cache       The cache instance.
+     * @param Monolog        $error       The monolog error instance
      * @param string         $cachePrefix The cache prefix.
      */
-    public function __construct($dbConn, CacheInterface $cache, $cachePrefix)
+    public function __construct($dbConn, CacheInterface $cache, $error, $cachePrefix)
     {
         $this->dbConn      = $dbConn;
         $this->cache       = $cache;
+        $this->error       = $error;
         $this->cachePrefix = $cachePrefix;
     }
 
