@@ -33,7 +33,7 @@ class CheckoutHelper
     /**
      * Initializes the PurchaseManager.
      *
-     * @param ServiceContainer $contaienr The service container.
+     * @param ServiceContainer $container The service container.
      */
     public function __construct($container)
     {
@@ -184,7 +184,11 @@ class CheckoutHelper
 
         $this->purchase->notes = trim($notes, "\n");
         $this->purchase->terms = trim($terms, "\n");
-        $this->purchase->fee   = round($subtotal * 0.029 + 0.30, 2);
+        $this->purchase->fee   = 0;
+
+        if ($subtotal > 0) {
+            $this->purchase->fee = round($subtotal * 0.029 + 0.30, 2);
+        }
 
         $subtotal += $this->purchase->fee;
 
