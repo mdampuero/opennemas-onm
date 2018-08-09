@@ -716,6 +716,11 @@ class OpinionsController extends Controller
         ]);
     }
 
+    /**
+     * Returns the list of authors.
+     *
+     * @return array The list of authors.
+     */
     protected function getAuthors()
     {
         $response = $this->get('api.service.author')
