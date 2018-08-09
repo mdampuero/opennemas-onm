@@ -140,7 +140,7 @@
             {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
           </li>
           <li class="quicklinks hidden-xs hidden-sm ng-cloak">
-            {include file="ui/component/select/user.tpl" label="true" ngModel="criteria.fk_author"}
+            {include file="ui/component/select/author.tpl" label="true" ngModel="criteria.fk_author"}
           </li>
           <li class="quicklinks hidden-sm hidden-xs ng-cloak">
             {include file="ui/component/select/epp.tpl" label="true" ngModel="criteria.epp"}
@@ -225,7 +225,7 @@
                 <td class="hidden-xs">
                   <span ng-if="content.fk_author">
                     <a href="[% routing.generate('backend_author_show', { id: content.fk_author }) %]">
-                      [% data.extra.users[content.fk_author].name %]
+                      [% data.extra.authors[content.fk_author].name %]
                     </a>
                   </span>
                   <span ng-if="!content.fk_author && content.agency != ''">

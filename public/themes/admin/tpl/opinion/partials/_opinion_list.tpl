@@ -82,7 +82,7 @@
           {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
         </li>
         <li class="quicklinks hidden-xs hidden-sm ng-cloak">
-          {include file="ui/component/select/user.tpl" blog="true" label="true" ngModel="criteria.fk_author"}
+          {include file="ui/component/select/author.tpl" blog="true" label="true" ngModel="criteria.fk_author"}
         </li>
         <li class="quicklinks hidden-sm hidden-xs ng-cloak">
           {include file="ui/component/select/epp.tpl" label="true" ngModel="criteria.epp"}
@@ -155,8 +155,8 @@
               <td class="hidden-xs nowrap">
                 <span ng-if="content.fk_author && content.type_opinion == 0">
                   <a href="[% routing.generate('backend_author_show', { id: content.fk_author }) %]">
-                    [% data.extra.users[content.fk_author].name %]
-                    <span ng-if="data.extra.users[content.fk_author].is_blog == 1">(Blog)</span>
+                    [% data.extra.authors[content.fk_author].name %]
+                    <span ng-if="data.extra.authors[content.fk_author].is_blog == 1">(Blog)</span>
                   </a>
                 </span>
                 <span ng-if="!content.fk_author || content.fk_author == 0 || content.type_opinion != 0">

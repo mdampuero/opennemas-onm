@@ -931,7 +931,7 @@ class ContentController extends Controller
         $as       = $this->get('api.service.author');
         $response = $as->getList('order by name asc');
 
-        $extra['users'] = $as->responsify($this->get('data.manager.filter')
+        $extra['authors'] = $as->responsify($this->get('data.manager.filter')
             ->set($response['items'])
             ->filter('mapify', [ 'key' => 'id'])
             ->get());

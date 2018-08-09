@@ -240,7 +240,7 @@
                       {acl isAllowed="CONTENT_OTHER_UPDATE"}
                         <div class="form-group">
                           <div class="controls">
-                            {include file="ui/component/select/user.tpl" class="form-control" ngModel="article.fk_author" select="true"}
+                            {include file="ui/component/select/author.tpl" class="form-control" ngModel="article.fk_author" select="true"}
                           </div>
                         </div>
                       {aclelse}

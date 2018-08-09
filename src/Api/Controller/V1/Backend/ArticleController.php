@@ -154,7 +154,7 @@ class ArticleController extends Controller
         $response      = $as->getList('order by name asc');
 
         $extra['subscriptions'] = $ss->responsify($subscriptions['items']);
-        $extra['users']         = $as->responsify($this->get('data.manager.filter')
+        $extra['authors']       = $as->responsify($this->get('data.manager.filter')
             ->set($response['items'])
             ->filter('mapify', [ 'key' => 'id'])
             ->get());
