@@ -98,17 +98,11 @@ class AlbumsController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
-            $authorsComplete = \User::getAllUsersAuthors();
-            $authors         = [ '0' => _(' - Select one author - ') ];
-
-            foreach ($authorsComplete as $author) {
-                $authors[$author->id] = $author->name;
-            }
-            $ls = $this->get('core.locale');
             return $this->render('album/new.tpl', [
-                'authors' => $authors,
+                'authors'        => $this->getAuthors(),
                 'commentsConfig' => s::get('comments_config'),
-                'locale'         => $ls->getLocale('frontend'),
+                'locale'         => $this->get('core.locale')
+                    ->getLocale('frontend'),
                 'tags'           => []
             ]);
         }
@@ -238,21 +232,14 @@ class AlbumsController extends Controller
             ]));
         }
 
-        $photos          = $album->_getAttachedPhotos($id);
-        $authorsComplete = \User::getAllUsersAuthors();
-        $authors         = [ '0' => _(' - Select one author - ') ];
-        foreach ($authorsComplete as $author) {
-            $authors[$author->id] = $author->name;
-        }
-
-        $ls = $this->get('core.locale');
         return $this->render('album/new.tpl', [
             'category'       => $album->category,
-            'photos'         => $photos,
+            'photos'         => $album->_getAttachedPhotos($id),
             'album'          => $album,
-            'authors'        => $authors,
+            'authors'        => $this->getAuthors(),
             'commentsConfig' => s::get('comments_config'),
-            'locale'         => $ls->getRequestLocale('frontend'),
+            'locale'         => $this->get('core.locale')
+                ->getRequestLocale('frontend'),
             'tags'           => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($album->tag_ids)['items']
         ]);
@@ -521,5 +508,21 @@ class AlbumsController extends Controller
         );
 
         return $this->redirect($this->generateUrl('admin_albums_config'));
+    }
+
+    /**
+     * Returns the list of authors.
+     *
+     * @return array The list of authors.
+     */
+    protected function getAuthors()
+    {
+        $response = $this->get('api.service.author')
+            ->getList('order by name asc');
+
+        return $this->get('data.manager.filter')
+            ->set($response['items'])
+            ->filter('mapify', [ 'key' => 'id'])
+            ->get();
     }
 }
