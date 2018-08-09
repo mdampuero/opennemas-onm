@@ -136,35 +136,14 @@
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
-            <ui-select name="status" theme="select2" ng-model="criteria.content_status">
-              <ui-select-match>
-                <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
-              </ui-select-match>
-              <ui-select-choices repeat="item.value as item in status | filter: { name: $select.search }">
-                <div ng-bind-html="item.name | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
+          <li class="quicklinks hidden-xs ng-cloak">
+            {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
           </li>
           <li class="quicklinks hidden-xs hidden-sm ng-cloak">
-            <ui-select name="author" theme="select2" ng-model="criteria.fk_author">
-              <ui-select-match>
-                <strong>{t}Author{/t}:</strong> [% $select.selected.name %]
-              </ui-select-match>
-              <ui-select-choices repeat="item.id as item in data.extra.users | filter: { name: $select.search }">
-                <div ng-bind-html="item.name | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
+            {include file="ui/component/select/user.tpl" label="true" ngModel="criteria.fk_author"}
           </li>
           <li class="quicklinks hidden-sm hidden-xs ng-cloak">
-            <ui-select name="view" theme="select2" ng-model="criteria.epp">
-              <ui-select-match>
-                <strong>{t}View{/t}:</strong> [% $select.selected %]
-              </ui-select-match>
-              <ui-select-choices repeat="item in views  | filter: $select.search">
-                <div ng-bind-html="item | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
+            {include file="ui/component/select/epp.tpl" label="true" ngModel="criteria.epp"}
           </li>
         </ul>
         <ul class="nav quick-section pull-right ng-cloak" ng-if="items.length > 0">
@@ -215,7 +194,7 @@
                   </div>
                 </td>
                 <td>
-                  <span uib-tooltip="{t}Last editor{/t}: [% (data.extra.users | filter: { id: content.fk_user_last_editor }: true).length == 0 ? (data.extra.users | filter: { id: content.fk_author }: true)[0].name : (data.extra.users | filter: { id: content.fk_user_last_editor }: true)[0].name %]">[% content.title %]</span>
+                  [% content.title %]
                   <div class="small-text">
                     <strong>{t}Created{/t}: </strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
@@ -245,7 +224,7 @@
                 </td>
                 <td class="hidden-xs">
                   <span ng-if="content.fk_author">
-                    [% (data.extra.users | filter: { id: content.fk_author }: true)[0].name %]
+                    [% data.extra.users[content.fk_author].name %]
                   </span>
                   <span ng-if="!content.fk_author && content.agency != ''">
                     [% content.agency %]
