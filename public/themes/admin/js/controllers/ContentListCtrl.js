@@ -140,6 +140,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       $location.search('oql', oql);
 
       http.get(route).then(function(response) {
+        $scope.data  = response.data;
         $scope.total = parseInt(response.data.total);
 
         if (response.data.hasOwnProperty('extra')) {
