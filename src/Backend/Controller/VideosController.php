@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -117,28 +112,20 @@ class VideosController extends Controller
     {
         if ('POST' !== $request->getMethod()) {
             $type = $request->query->filter('type', null, FILTER_SANITIZE_STRING);
+
             if (empty($type)) {
                 return $this->render('video/selecttype.tpl');
-            } else {
-                $authorsComplete = \User::getAllUsersAuthors();
-                $authors         = ['0' => _(' - Select one author - ')];
-                foreach ($authorsComplete as $author) {
-                    $authors[$author->id] = $author->name;
-                }
-
-                $ls = $this->get('core.locale');
-                return $this->render(
-                    'video/new.tpl',
-                    [
-                        'type'           => $type,
-                        'authors'        => $authors,
-                        'enableComments' => $this->get('core.helper.comment')
-                            ->enableCommentsByDefault(),
-                        'locale'         => $ls->getLocale('frontend'),
-                        'tags'           => []
-                    ]
-                );
             }
+
+            return $this->render('video/new.tpl', [
+                'authors'        => $this->getAuthors(),
+                'type'           => $type,
+                'enableComments' => $this->get('core.helper.comment')
+                    ->enableCommentsByDefault(),
+                'locale'         => $this->get('core.locale')
+                    ->getLocale('frontend'),
+                'tags'           => []
+            ]);
         }
 
         $requestPost = $request->request;
@@ -362,26 +349,17 @@ class VideosController extends Controller
             }
         }
 
-        $authorsComplete = \User::getAllUsersAuthors();
-        $authors         = [ '0' => _(' - Select one author - ') ];
-        foreach ($authorsComplete as $author) {
-            $authors[$author->id] = $author->name;
-        }
-
-        $ls = $this->get('core.locale');
-        return $this->render(
-            'video/new.tpl',
-            [
-                'information'    => $video->information,
-                'video'          => $video,
-                'authors'        => $authors,
-                'enableComments' => $this->get('core.helper.comment')
-                    ->enableCommentsByDefault(),
-                'locale'         => $ls->getRequestLocale('frontend'),
-                'tags'           => $this->get('api.service.tag')
-                    ->getListByIdsKeyMapped($video->tag_ids)['items']
-            ]
-        );
+        return $this->render('video/new.tpl', [
+            'information'    => $video->information,
+            'video'          => $video,
+            'authors'        => $this->getAuthors(),
+            'enableComments' => $this->get('core.helper.comment')
+                ->enableCommentsByDefault(),
+            'locale'         => $this->get('core.locale')
+                ->getRequestLocale('frontend'),
+            'tags'           => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($video->tag_ids)['items']
+        ]);
     }
 
     /**
@@ -604,5 +582,21 @@ class VideosController extends Controller
                 'contentProviderUrl'    => $this->generateUrl('admin_videos_content_provider_related'),
             ]
         );
+    }
+
+    /**
+     * Returns the list of authors.
+     *
+     * @return array The list of authors.
+     */
+    protected function getAuthors()
+    {
+        $response = $this->get('api.service.author')
+            ->getList('order by name asc');
+
+        return $this->get('data.manager.filter')
+            ->set($response['items'])
+            ->filter('mapify', [ 'key' => 'id'])
+            ->get();
     }
 }
