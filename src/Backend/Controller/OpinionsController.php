@@ -10,30 +10,30 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class OpinionsController extends Controller
 {
-
+    /**
+     * The name of the setting to save extra field configuration.
+     *
+     * @var string
+     */
     const EXTRA_INFO_TYPE = 'extraInfoContents.OPINION_MANAGER';
 
     /**
      * Lists all the opinions.
      *
-     * @param  $blog    Blog flag for listing
      * @return Response The response object.
      *
      * @Security("hasExtension('OPINION_MANAGER')
      *     and hasPermission('OPINION_ADMIN')")
      */
-    public function listAction($blog)
+    public function listAction()
     {
-        return $this->render('opinion/list.tpl', [
-            'home' => false,
-        ]);
+        return $this->render('opinion/list.tpl', [ 'home' => false ]);
     }
 
     /**
@@ -47,34 +47,35 @@ class OpinionsController extends Controller
      */
     public function frontpageAction(Request $request)
     {
-        $this->loadCategories();
+        $page   = $request->query->getDigits('page', 1);
+        $config = $this->get('orm.manager')->getDataSet('Settings')
+            ->get([ 'opinion_settings', 'items_per_page']);
 
-        $page           = $request->query->getDigits('page', 1);
-        $configurations = s::get('opinion_settings');
-        $numEditorial   = $configurations['total_editorial'];
-        $numDirector    = $configurations['total_director'];
-        $numOpinions    = s::get('items_per_page');
+        $numEditorial = $config['opinion_settings']['total_editorial'];
+        $numDirector  = $config['opinion_settings']['total_director'];
+        $numOpinions  = $config['items_per_page'];
 
-        if (!empty($configurations) && array_key_exists('total_opinions', $configurations)) {
-            $numOpinions = $configurations['total_opinions'];
+        if (!empty($config['opinion_settings'])
+            && array_key_exists('total_opinions', $config['opinion_settings'])
+        ) {
+            $numOpinions = $config['opinion_settings']['total_opinions'];
         }
 
-        $authors    = $this->getAuthors();
+        $authors   = $this->getAuthors();
+        $cm        = new \ContentManager();
+        $director  = [];
+        $editorial = [];
+        $where     = '';
+
         $bloggerIds = array_map(function ($a) {
             return $a->id;
         }, array_filter($authors, function ($a) {
             return empty($a->is_blog);
         }));
 
-        $where = '';
-
         if (!empty($bloggerIds)) {
             $where .= ' AND opinions.fk_author NOT IN (' . implode(', ', $bloggerIds) . ") ";
         }
-
-        $cm        = new \ContentManager();
-        $editorial = [];
-        $director  = [];
 
         $opinions = $cm->find(
             'Opinion',
@@ -120,13 +121,13 @@ class OpinionsController extends Controller
         }
 
         return $this->render('opinion/list.tpl', [
-            'authors'    => $this->get('api.service.author')->responsify($authors),
-            'opinions'   => \Onm\StringUtils::convertToUtf8($opinions),
-            'director'   => \Onm\StringUtils::convertToUtf8($director),
-            'editorial'  => \Onm\StringUtils::convertToUtf8($editorial),
-            'type'       => 'frontpage',
-            'page'       => $page,
-            'home'       => true,
+            'authors'   => $this->get('api.service.author')->responsify($authors),
+            'opinions'  => \Onm\StringUtils::convertToUtf8($opinions),
+            'director'  => \Onm\StringUtils::convertToUtf8($director),
+            'editorial' => \Onm\StringUtils::convertToUtf8($editorial),
+            'type'      => 'frontpage',
+            'page'      => $page,
+            'home'      => true,
         ]);
     }
 
@@ -491,34 +492,33 @@ class OpinionsController extends Controller
      */
     public function contentProviderRelatedAction(Request $request)
     {
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
+        $page = $request->query->getDigits('page', 1);
+        $epp  = $this->get('orm.manager')->getDataSet('Settings')
+            ->get('items_per_page') ?: 20;
 
-        $filters = [
+        $total    = true;
+        $opinions = $this->get('entity_repository')->findBy([
             'content_type_name' => [ [ 'value' => 'opinion' ] ],
             'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ]
-        ];
-
-        $em            = $this->get('entity_repository');
-        $countOpinions = true;
-        $opinions      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countOpinions);
+        ], [ 'created' => 'desc' ], $epp, $page, 0, $total);
 
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
             'directional' => true,
-            'epp'         => $itemsPerPage,
+            'epp'         => $epp,
             'page'        => $page,
-            'total'       => $countOpinions,
+            'total'       => $total,
             'route'       => 'admin_opinions_content_provider_related',
         ]);
 
         return $this->render(
             'common/content_provider/_container-content-list.tpl',
             [
-                'contentType'           => 'Opinion',
-                'contents'              => $opinions,
-                'pagination'            => $pagination,
-                'contentProviderUrl'    => $this->generateUrl('admin_opinions_content_provider_related'),
+                'contentType'        => 'Opinion',
+                'contents'           => $opinions,
+                'pagination'         => $pagination,
+                'contentProviderUrl' => $this
+                    ->generateUrl('admin_opinions_content_provider_related'),
             ]
         );
     }
@@ -534,6 +534,8 @@ class OpinionsController extends Controller
      */
     public function configAction(Request $request)
     {
+        $ds = $this->get('orm.manager')->getDataSet('Settings');
+
         if ('POST' == $request->getMethod()) {
             $extra      = $request->request->get('extra-fields');
             $configsRAW = $request->request->get('opinion_settings');
@@ -550,21 +552,15 @@ class OpinionsController extends Controller
                 'extraInfoContents.OPINION_MANAGER' => json_decode($extra, true)
             ];
 
-            foreach ($configs as $key => $value) {
-                s::set($key, $value);
-            }
+            $ds->set($configs);
 
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Settings saved successfully.')
-            );
+            $this->get('session')->getFlashBag()
+                ->add('success', _('Settings saved successfully.'));
 
             return $this->redirect($this->generateUrl('admin_opinions_config'));
         } else {
-            $configurations = s::get([ 'opinion_settings' ]);
-
             return $this->render('opinion/config.tpl', [
-                'configs'      => $configurations,
+                'configs'      => $ds->get([ 'opinion_settings' ]),
                 'extra_fields' => $this->get('setting_repository')
                     ->get(OpinionsController::EXTRA_INFO_TYPE)
             ]);
