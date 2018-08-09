@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for managing opinions
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,11 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 
-/**
- * Handles the actions for managing opinions
- *
- * @package Backend_Controllers
- */
 class OpinionsController extends Controller
 {
 
@@ -33,44 +23,16 @@ class OpinionsController extends Controller
     /**
      * Lists all the opinions.
      *
-     * @param  $blog      Blog flag for listing
-     * @return Response   The response object.
+     * @param  $blog    Blog flag for listing
+     * @return Response The response object.
      *
      * @Security("hasExtension('OPINION_MANAGER')
      *     and hasPermission('OPINION_ADMIN')")
      */
     public function listAction($blog)
     {
-        $this->loadCategories();
-
-        // Fetch all authors
-        $allAuthors = \User::getAllUsersAuthors();
-
-        $authors = [
-            [ 'name' => _('All'), 'value' => null ],
-        ];
-
-        foreach ($allAuthors as $author) {
-            $blog = 0;
-            if (isset($author->params) &&
-                is_array($author->params) &&
-                array_key_exists('is_blog', $author->params) &&
-                $author->params['is_blog'] == 1
-            ) {
-                $blog         = 1;
-                $author->name = $author->name . ' (Blog)';
-            }
-
-            $authors[] = [
-                'name'   => $author->name,
-                'value'  => $author->id,
-            ];
-        }
-
         return $this->render('opinion/list.tpl', [
-            'authors' => $authors,
-            'blog'    => $blog,
-            'home'    => false,
+            'home' => false,
         ]);
     }
 
@@ -89,28 +51,30 @@ class OpinionsController extends Controller
 
         $page           = $request->query->getDigits('page', 1);
         $configurations = s::get('opinion_settings');
+        $numEditorial   = $configurations['total_editorial'];
+        $numDirector    = $configurations['total_director'];
+        $numOpinions    = s::get('items_per_page');
 
-        $numEditorial = $configurations['total_editorial'];
-        $numDirector  = $configurations['total_director'];
-        $numOpinions  = s::get('items_per_page');
         if (!empty($configurations) && array_key_exists('total_opinions', $configurations)) {
             $numOpinions = $configurations['total_opinions'];
         }
 
-        $cm         = new \ContentManager();
-        $allAuthors = \User::getAllUsersAuthors();
-
-        $authorsBlog = [];
-        foreach ($allAuthors as $authorData) {
-            if ($authorData->is_blog == 1) {
-                $authorsBlog[$authorData->id] = $authorData;
-            }
-        }
+        $authors    = $this->getAuthors();
+        $bloggerIds = array_map(function ($a) {
+            return $a->id;
+        }, array_filter($authors, function ($a) {
+            return empty($a->is_blog);
+        }));
 
         $where = '';
-        if (!empty($authorsBlog)) {
-            $where .= ' AND opinions.fk_author NOT IN (' . implode(', ', array_keys($authorsBlog)) . ") ";
+
+        if (!empty($bloggerIds)) {
+            $where .= ' AND opinions.fk_author NOT IN (' . implode(', ', $bloggerIds) . ") ";
         }
+
+        $cm        = new \ContentManager();
+        $editorial = [];
+        $director  = [];
 
         $opinions = $cm->find(
             'Opinion',
@@ -118,7 +82,6 @@ class OpinionsController extends Controller
             'ORDER BY position ASC , created DESC LIMIT ' . $numOpinions
         );
 
-        $editorial = [];
         if ($numEditorial > 0) {
             $editorial = $cm->find(
                 'Opinion',
@@ -127,7 +90,6 @@ class OpinionsController extends Controller
             );
         }
 
-        $director = [];
         if ($numDirector > 0) {
             $director = $cm->find(
                 'Opinion',
@@ -136,40 +98,29 @@ class OpinionsController extends Controller
             );
         }
 
-        if (($numOpinions > 0) && (count($opinions) > $numOpinions)) {
+        if ($numOpinions > 0 && count($opinions) > $numOpinions) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
                 sprintf(_("You must put %d opinions %s in the frontpage "), $numOpinions, 'opinions')
             );
         }
 
-        if (($numEditorial > 0) && (count($editorial) != $numEditorial)) {
+        if ($numEditorial > 0 && count($editorial) != $numEditorial) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
                 sprintf(_("You must put %d opinions %s in the frontpage "), $numEditorial, 'editorial')
             );
         }
 
-        if (($numDirector > 0) && (count($director) != $numDirector)) {
+        if ($numDirector > 0 && count($director) != $numDirector) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
                 sprintf(_("You must put %d opinions %s in the frontpage "), $numDirector, 'opinion del director')
             );
         }
 
-        if (isset($opinions) && is_array($opinions)) {
-            foreach ($opinions as &$opinion) {
-                $opinion->author = new \User($opinion->fk_author);
-            }
-        } else {
-            $opinions = [];
-        }
-
-        // Fetch all authors
-        $allAuthors = \User::getAllUsersAuthors();
-
         return $this->render('opinion/list.tpl', [
-            'autores'    => $allAuthors,
+            'authors'    => $this->get('api.service.author')->responsify($authors),
             'opinions'   => \Onm\StringUtils::convertToUtf8($opinions),
             'director'   => \Onm\StringUtils::convertToUtf8($director),
             'editorial'  => \Onm\StringUtils::convertToUtf8($editorial),
@@ -190,8 +141,7 @@ class OpinionsController extends Controller
      */
     public function showAction(Request $request)
     {
-        $id = $request->query->getDigits('id', null);
-
+        $id      = $request->query->getDigits('id', null);
         $opinion = $this->get('entity_repository')->find('Opinion', $id);
 
         // Check if opinion id exists
@@ -216,18 +166,7 @@ class OpinionsController extends Controller
             return $this->redirect($this->generateUrl('admin_opinions'));
         }
 
-        // Fetch categories to use them in the listing
-        $this->loadCategories();
-
-        // Fetch author data and allAuthors
-        $author     = $this->get('user_repository')->find($opinion->fk_author);
-        $allAuthors = \User::getAllUsersAuthors();
-
-        // Fetch associated photos with opinion
-        if (!empty($opinion->image)) {
-            $image = $this->get('entity_repository')->find('Photo', $opinion->image);
-            $this->view->assign('image', $image);
-        }
+        $authors = $this->getAuthors();
 
         if (!empty($opinion->img1)) {
             $photo1 = $this->get('entity_repository')->find('Photo', $opinion->img1);
@@ -246,16 +185,14 @@ class OpinionsController extends Controller
                 ->get(OpinionsController::EXTRA_INFO_TYPE);
         }
 
-        $ls = $this->get('core.locale');
-
         return $this->render('opinion/new.tpl', [
             'opinion'        => $opinion,
-            'all_authors'    => $allAuthors,
-            'author'         => $author,
+            'authors'        => $authors,
             'enableComments' => $this->get('core.helper.comment')
                 ->enableCommentsByDefault(),
             'extra_fields'   => $extraFields,
-            'locale'         => $ls->getRequestLocale('frontend'),
+            'locale'         => $this->get('core.locale')
+                ->getRequestLocale('frontend'),
             'tags'           => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($opinion->tag_ids)['items']
         ]);
@@ -276,9 +213,6 @@ class OpinionsController extends Controller
             // Fetch categories
             $this->loadCategories();
 
-            // Fetch all authors
-            $allAuthors = \User::getAllUsersAuthors();
-
             $extraFields = null;
 
             if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
@@ -286,13 +220,13 @@ class OpinionsController extends Controller
                     ->get('extraInfoContents.OPINION_MANAGER');
             }
 
-            $ls = $this->get('core.locale');
             return $this->render('opinion/new.tpl', [
-                'all_authors'    => $allAuthors,
+                'authors'        => $this->getAuthors(),
                 'enableComments' => $this->get('core.helper.comment')
                     ->enableCommentsByDefault(),
                 'extra_fields'   => $extraFields,
-                'locale'         => $ls->getLocale('frontend'),
+                'locale'         => $this->get('core.locale')
+                    ->getLocale('frontend'),
                 'tags'           => []
             ]);
         }
@@ -651,8 +585,8 @@ class OpinionsController extends Controller
         $opinion    = new \Opinion();
         $cm         = new \ContentManager();
         $this->view = $this->get('core.template');
-        $this->view->setCaching(0);
 
+        $this->view->setCaching(0);
         $this->get('core.locale')->setContext('frontend');
 
         $opinionContents = $request->request->filter('contents');
@@ -663,6 +597,7 @@ class OpinionsController extends Controller
                 $opinion->{$value['name']} = $value['value'];
             }
         }
+
         $opinion->tag_ids = json_decode($opinion->tag_ids);
 
         // Set a dummy Id for the opinion if doesn't exists
@@ -671,34 +606,33 @@ class OpinionsController extends Controller
             $opinion->id         = '-1';
         }
 
-        // Fetch information for Advertisements
         list($positions, $advertisements) =
             \Frontend\Controller\OpinionsController::getAds('inner');
 
-        $author          = new \User($opinion->fk_author);
-        $opinion->author = $author;
+        try {
+            $opinion->author = $this->get('api.service.author')
+                ->getItem($opinion->fk_author);
+        } catch (\Exception $e) {
+        }
 
         // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
         $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
 
-        // Machine suggested contents code -----------------------------
-        $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
-            'opinion',
-            " pk_content <>" . $opinion->id,
-            4
-        );
+        $machineSuggestedContents = $this->get('automatic_contents')
+            ->searchSuggestedContents('opinion', "pk_content <> $opinion->id", 4);
 
         // Get author slug for suggested opinions
         foreach ($machineSuggestedContents as &$suggest) {
             $element = new \Opinion($suggest['pk_content']);
+
+            $suggest['author_name_slug'] = "author";
+            $suggest['uri']              = $element->uri;
+
             if (!empty($element->author)) {
                 $suggest['author_name']      = $element->author;
-                $suggest['author_name_slug'] = \Onm\StringUtils::getTitle($element->author);
-            } else {
-                $suggest['author_name_slug'] = "author";
+                $suggest['author_name_slug'] =
+                    \Onm\StringUtils::getTitle($element->author);
             }
-
-            $suggest['uri'] = $element->uri;
         }
 
         // Associated media code --------------------------------------
@@ -726,12 +660,10 @@ class OpinionsController extends Controller
         );
 
         foreach ($otherOpinions as &$otOpinion) {
-            $otOpinion->author           = $author;
+            $otOpinion->author           = $opinion->author;
             $otOpinion->author_name_slug = $opinion->author_name_slug;
             $otOpinion->uri              = $otOpinion->uri;
         }
-
-        $session = $this->get('session');
 
         $this->view->assign([
             'ads_positions'  => $positions,
@@ -739,7 +671,7 @@ class OpinionsController extends Controller
             'opinion'        => $opinion,
             'content'        => $opinion,
             'other_opinions' => $otherOpinions,
-            'author'         => $author,
+            'author'         => $opinion->author,
             'contentId'      => $opinion->id,
             'photo'          => $photo,
             'suggested'      => $machineSuggestedContents,
@@ -747,7 +679,7 @@ class OpinionsController extends Controller
                 ->getListByIdsKeyMapped($opinion->tag_ids)['items']
         ]);
 
-        $session->set(
+        $this->get('session')->set(
             'last_preview',
             $this->view->fetch('opinion/opinion.tpl')
         );
@@ -758,7 +690,7 @@ class OpinionsController extends Controller
     /**
      * Description of this action.
      *
-     * @return Response  The response object.
+     * @return Response The response object.
      *
      * @Security("hasExtension('OPINION_MANAGER')
      *     and hasPermission('OPINION_ADMIN')")
@@ -766,8 +698,8 @@ class OpinionsController extends Controller
     public function getPreviewAction()
     {
         $session = $this->get('session');
-
         $content = $session->get('last_preview');
+
         $session->remove('last_preview');
 
         return new Response($content);
@@ -786,5 +718,16 @@ class OpinionsController extends Controller
         $this->view->assign([
             'allcategorys' => $this->parentCategories,
         ]);
+    }
+
+    protected function getAuthors()
+    {
+        $response = $this->get('api.service.author')
+            ->getList('order by name asc');
+
+        return $this->get('data.manager.filter')
+            ->set($response['items'])
+            ->filter('mapify', [ 'key' => 'id'])
+            ->get();
     }
 }
