@@ -13,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for the system information
@@ -100,7 +99,9 @@ class AlbumsController extends Controller
         if ('POST' !== $request->getMethod()) {
             return $this->render('album/new.tpl', [
                 'authors'        => $this->getAuthors(),
-                'commentsConfig' => s::get('comments_config'),
+                'commentsConfig' => $this->get('orm.manager')
+                    ->getDataSet('Settings')
+                    ->get('comments_config'),
                 'locale'         => $this->get('core.locale')
                     ->getLocale('frontend'),
                 'tags'           => []
@@ -237,7 +238,8 @@ class AlbumsController extends Controller
             'photos'         => $album->_getAttachedPhotos($id),
             'album'          => $album,
             'authors'        => $this->getAuthors(),
-            'commentsConfig' => s::get('comments_config'),
+            'commentsConfig' => $this->get('orm.manager')->getDataSet('Settings')
+                ->get('comments_config'),
             'locale'         => $this->get('core.locale')
                 ->getRequestLocale('frontend'),
             'tags'           => $this->get('api.service.tag')
@@ -423,7 +425,8 @@ class AlbumsController extends Controller
     {
         $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
+        $itemsPerPage = $this->get('orm.manager')->getDataSet('Settings')
+            ->get('items_per_page') ?: 20;
 
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
@@ -476,12 +479,11 @@ class AlbumsController extends Controller
      */
     public function configAction(Request $request)
     {
-        if ('POST' !== $this->request->getMethod()) {
-            $configurationsKeys = [ 'album_settings', ];
-            $configurations     = s::get($configurationsKeys);
+        $ds = $this->get('orm.manager')->getDataSet('Settings');
 
+        if ('POST' !== $this->request->getMethod()) {
             return $this->render('album/config.tpl', [
-                'configs'   => $configurations
+                'configs' => $ds->get([ 'album_settings' ])
             ]);
         }
 
@@ -498,9 +500,7 @@ class AlbumsController extends Controller
             ]
         ];
 
-        foreach ($settings as $key => $value) {
-            s::set($key, $value);
-        }
+        $ds->set($settings);
 
         $this->get('session')->getFlashBag()->add(
             'success',
