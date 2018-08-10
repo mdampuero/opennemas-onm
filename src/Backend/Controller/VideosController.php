@@ -13,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for the system information
@@ -80,23 +79,21 @@ class VideosController extends Controller
     /**
      * List videos available for widget.
      *
-     * @return void
+     * @return Response The response object.
      *
      * @Security("hasExtension('VIDEO_MANAGER')
      *     and hasPermission('VIDEO_ADMIN')")
      */
     public function widgetAction()
     {
-        $configurations = s::get('video_settings');
-        $numFavorites   = $configurations['total_widget'];
+        $configurations = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get('video_settings');
 
-        return $this->render(
-            'video/list.tpl',
-            [
-                'total_elements_widget' => $numFavorites,
-                'category'              => 'widget',
-            ]
-        );
+        return $this->render('video/list.tpl', [
+            'total_elements_widget' => $configurations['total_widget'],
+            'category'              => 'widget',
+        ]);
     }
 
     /**
@@ -129,9 +126,8 @@ class VideosController extends Controller
         }
 
         $requestPost = $request->request;
-
-        $type     = $requestPost->filter('type', null, FILTER_SANITIZE_STRING);
-        $category = $requestPost->getDigits('category');
+        $type        = $requestPost->filter('type', null, FILTER_SANITIZE_STRING);
+        $category    = $requestPost->getDigits('category');
 
         $videoData = [
             'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
@@ -412,23 +408,18 @@ class VideosController extends Controller
             unset($_POST['submit']);
 
             foreach ($_POST as $key => $value) {
-                s::set($key, $value);
+                $this->get('orm.manager')->getDataSet('Settings')
+                    ->set($key, $value);
             }
 
             $this->get('session')->getFlashBag()->add('success', _('Settings saved.'));
 
             return $this->redirect($this->generateUrl('admin_videos_config'));
         } else {
-            $configurationsKeys = [
-                'video_settings',
-            ];
-
-            $configurations = s::get($configurationsKeys);
-
-            return $this->render(
-                'video/config.tpl',
-                ['configs' => $configurations]
-            );
+            return $this->render('video/config.tpl', [
+                'configs' => $this->get('orm.manager')->getDataSet('Settings')
+                    ->get([ 'video_settings' ])
+            ]);
         }
     }
 
@@ -544,7 +535,8 @@ class VideosController extends Controller
     {
         $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
+        $itemsPerPage = $this->get('orm.manager')->getDataSet('Settings')
+            ->get('items_per_page') ?: 20;
 
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
