@@ -925,7 +925,7 @@ class ContentController extends Controller
      * @param  array $contents Array of contents.
      * @return array           Array of extra data.
      */
-    protected function loadExtraData($contents)
+    protected function loadExtraData($contents = [])
     {
         $extra    = [];
         $as       = $this->get('api.service.author');
