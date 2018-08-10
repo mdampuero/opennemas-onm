@@ -137,10 +137,6 @@ class NewsletterTemplateController extends Controller
             ->findBy('internal_category = 1');
 
         $extra['categories'] = $converter->responsify($categories);
-        array_unshift($extra['categories'], [
-            'pk_content_category' => "",
-            'title' => _('All')
-        ]);
 
         $extra['filters'] = [
             [ 'value' => '',          'title' => _('No filter') ],

@@ -74,6 +74,41 @@
         };
 
         /**
+         * @function parseItem
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Parses the response and adds information to the scope.
+         *
+         * @param {Object} data The data in the response.
+         */
+        $scope.parseItem = function(data) {
+          if (data.item) {
+            data.item.contents.map(function(item) {
+              item.items.map(function(content) {
+                if (content.content_type === 'list' &&
+                  typeof content.criteria.category === 'string') {
+                  content.criteria.category = [];
+                }
+
+                // If the element is a list then convert its category criteria to numbers
+                if (content.content_type === 'list') {
+                  content.criteria.category.map(function(item) {
+                    return parseInt(item);
+                  });
+                }
+
+                return content;
+              });
+
+              return item;
+            });
+
+            $scope.item = angular.extend($scope.item, data.item);
+          }
+        };
+
+        /**
          * @function loadHours
          * @memberOf NewsletterTemplateCtrl
          *
@@ -148,12 +183,32 @@
             content_type: 'list',
             criteria: {
               content_type: '',
-              category: '',
+              category: [],
               epp: 5,
               in_litter: 0,
               orderBy: { starttime:  'desc' }
             }
           });
+        };
+
+        /**
+         * @function addDynamicContent
+         * @memberOf NewsletterTemplateCtrl
+         *
+         * @description
+         *   Adds a dummy dynamic content.
+         *
+         * @param {Object} container The container where to remove.
+         * @param {Object} content The content to remove.
+         */
+        $scope.toggleCategory = function(content, categoryId) {
+          var position = content.criteria.category.indexOf(categoryId);
+
+          if (position < 0) {
+            content.criteria.category.push(categoryId);
+          } else {
+            content.criteria.category.splice(position, 1);
+          }
         };
 
         /**
