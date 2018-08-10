@@ -45,6 +45,7 @@ $(document).ready(function() {
     dropdownAutoWidth: true,
     closeOnSelect: false
   });
+
   $('.select2').select2({
     dropdownAutoWidth: true,
     formatSelection: function(state) {

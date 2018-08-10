@@ -256,40 +256,21 @@ var newsletterTemplateTranslations = {
               <button class="btn btn-white" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {t}Categories{/t}:
                 <strong>
-                  <span ng-show="content.criteria.category.length == data.extra.categories || content.criteria.category.length == 0">{t}All{/t}</span>
-                  <span ng-hide="content.criteria.category.length == data.extra.categories || content.criteria.category.length == 0">{t 1="[% content.criteria.category.length %]"}%1 selected{/t}</span>
+                  <span ng-show="content.criteria.category.length == data.extra.categories.length || content.criteria.category.length == 0">{t}All{/t}</span>
+                  <span ng-hide="content.criteria.category.length == data.extra.categories.length|| content.criteria.category.length == 0">{t 1="[% content.criteria.category.length %]"}%1 selected{/t}</span>
                 </strong>
                 <span class="caret"></span>
               </button>
               <div class="dropdown-menu dropdown-menu-left keepopen">
-                <div class="checkbox p-b-5">
-                  <input id="toggle-categories" name="toggle-categories" ng-change="areAllCategoriesSelected(content)" ng-model="selected.all.categories" type="checkbox">
-                  <label class="form-label" for="toggle-categories">
-                    {t}Select/deselect all{/t}
-                  </label>
-                </div>
+                <a class="select-all-categories p-b-5" ng-click="toggleAllCategories(content)">{t}Select/deselect all{/t}</a>
                 <div class="checkbox-list">
                   <ul class="checkbox">
-                    <li class="dropdown-element" ng-repeat="category in data.extra.categories" ng-class="{ active: content.criteria.category.indexOf(category.pk_content_category) >=0 }">
-                      <span ng-click="toggleCategory(content, category.pk_content_category)">[% category.title %]</span>
+                    <li class="dropdown-element" ng-repeat="category in data.extra.categories" ng-class="{ active: content.criteria.category.indexOf(category.pk_content_category) >=0 }" ng-click="toggleCategory(content, category.pk_content_category)">
+                      [% category.title %]
                     </li>
                   </ul>
-                  <div class="checkbox p-b-5" ng-repeat="category in (filteredCategories = (data.extra.categories | filter : { parent: 0 }))">
-                    <div class="dropdown-element" ng-repeat="subcategory in data.extra.categories | filter : { parent: category.id }">
-                      <input id="category-[% subcategory.id %]" name="category-[% subcategory.id %]" checklist-model="ui.categories" checklist-value="subcategory.id" type="checkbox">
-                      <label class="form-label" for="category-[% subcategory.id %]">
-                        &rarr; [% subcategory.name %]
-                      </label>
-                    </div>
-                  </div>
                 </div>
               </div>
-
-              {* <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="dLabel">
-                <li repeat="item in data.extra.categories">
-                  <a >[% item.title %]</a>
-                </li>
-              </ul> *}
             </div>
 
             {* <div style="display:inline-block" ng-dropdown-multiselect selected-model="content.criteria.category" options="data.extra.categories"  extra-settings="{ template: '[% getPropertyForObject(option, settings.displayProp) %]', scrollableHeight: '100px', displayProp: 'title', idProperty: 'id', scrollable: true}"

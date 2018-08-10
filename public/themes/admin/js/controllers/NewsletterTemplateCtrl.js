@@ -88,14 +88,12 @@
               item.items.map(function(content) {
                 if (content.content_type === 'list' &&
                   typeof content.criteria.category === 'string') {
-                  content.criteria.category = [];
+                  content.criteria.category = [ parseInt(content.criteria.category) ];
                 }
 
                 // If the element is a list then convert its category criteria to numbers
                 if (content.content_type === 'list') {
-                  content.criteria.category.map(function(item) {
-                    return parseInt(item);
-                  });
+                  content.criteria.category = content.criteria.category.map(Number);
                 }
 
                 return content;
@@ -196,10 +194,10 @@
          * @memberOf NewsletterTemplateCtrl
          *
          * @description
-         *   Adds a dummy dynamic content.
+         *   Adds/removes a categoryId from the content category criteria.
          *
-         * @param {Object} container The container where to remove.
-         * @param {Object} content The content to remove.
+         * @param {Object} content The content to change category criteria from.
+         * @param {Object} categoryId The categoryId to add/remove from the criteria.
          */
         $scope.toggleCategory = function(content, categoryId) {
           var position = content.criteria.category.indexOf(categoryId);
@@ -208,6 +206,25 @@
             content.criteria.category.push(categoryId);
           } else {
             content.criteria.category.splice(position, 1);
+          }
+        };
+
+        /**
+         * @function toggleAllCategories
+         * @memberOf NewsletterTemplateCtrl
+         *
+         * @description
+         *   Adds or removes all categories from the content criteria.
+         *
+         * @param {Object} content The content to change category criteria from.
+         */
+        $scope.toggleAllCategories = function(content) {
+          if (content.criteria.category.length !== $scope.data.extra.categories.length) {
+            content.criteria.category = $scope.data.extra.categories.map(function(item) {
+              return item.pk_content_category;
+            });
+          } else {
+            content.criteria.category = [];
           }
         };
 
