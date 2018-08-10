@@ -1,7 +1,7 @@
 {if $iframe}
   <iframe src="{$url}" style="width: 800px; max-width:100%; height:600px; overflow: hidden; border:none" scrolling="no"></iframe>
 {else}
-  <script type="text/javascript" data-id="{$id}">
+  <script data-id="{$id}">
     <!--// <![CDATA[
       OA_show('zone_{$id}');
     // ]]> -->

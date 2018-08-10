@@ -2,7 +2,7 @@
 
 {block name="footer-js" append}
   {javascripts src="@AdminTheme/js/onm/frontpagemanager.js" output="frontpagemanager"}
-  <script type="text/javascript">
+  <script>
     var frontpage_messages = {
       remember_save_positions: "{t}Please, remember save positions after finish.{/t}",
       error_tab_content_provider: "{t}Couldn't load this tab. We'll try to fix this as soon as possible.{/t}",

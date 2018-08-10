@@ -27,7 +27,7 @@
     {/stylesheets}
   {/block}
   {block name="header-js"}
-    <script type="text/javascript">
+    <script>
       var RecaptchaOptions = { theme : 'white', tabindex: 3, lang: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' };
     </script>
   {/block}
@@ -121,7 +121,7 @@
         @Common/components/bootstrap/dist/js/bootstrap.min.js,
         @Common/components/modernizr/modernizr.js,
         @Common/js/onm/md5.min.js" output="login"}
-      <script type="text/javascript">
+      <script>
         function connect(btn) {
           var win = window.open(
             btn.getAttribute('data-url'),

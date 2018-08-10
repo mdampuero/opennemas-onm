@@ -273,7 +273,7 @@
 
 {block name="footer-js" append}
   {javascripts}
-    <script type="text/javascript">
+    <script>
       jQuery(document).ready(function($) {
         $('.check-pass').on('click', function(e, ui){
           e.preventDefault();

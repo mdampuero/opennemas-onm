@@ -93,9 +93,9 @@
 {/block}
 
 {block name="footer-js" append}
-  <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
+  <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
   {javascripts src="@Common/components/gmaps/gmaps.js" output="image"}
-    <script type="text/javascript">
+    <script>
       var map, marker;
 
       jQuery(document).ready(function($) {

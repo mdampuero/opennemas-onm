@@ -2,7 +2,7 @@
 
 {block name="footer-js" append}
   {javascripts}
-    <script type="text/javascript">
+    <script>
       $(document).ready(function($) {
         $('.fileinput').fileinput({ name: 'path' });
       });
