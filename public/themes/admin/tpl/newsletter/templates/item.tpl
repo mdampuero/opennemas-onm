@@ -1,11 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-<script>
-
-</script>
-{/block}
-
 {block name="content"}
 <script>
 var newsletterTemplateTranslations = {
@@ -101,7 +95,7 @@ var newsletterTemplateTranslations = {
                   <div class="checkbox col-xs-6 p-b-10">
                     <input id="checkbox-days-[% $index %]" checklist-model="item.schedule.days" checklist-value="$index + 1" type="checkbox">
                     <label for="checkbox-days-[% $index %]">
-                      <strong>[% day %]</strong>
+                      [% day %]
                     </label>
                   </div>
                 </div>
@@ -148,7 +142,7 @@ var newsletterTemplateTranslations = {
                   <div class="checkbox">
                     <input id="checkbox-acton-[% $index %]" checklist-model="item.recipients" checklist-value="recipient" type="checkbox" load-on-empty="true">
                     <label for="checkbox-acton-[% $index %]">
-                      <strong>[% recipient.name %]</strong>
+                      [% recipient.name %]
                     </label>
                   </div>
                 </div>
@@ -196,7 +190,7 @@ var newsletterTemplateTranslations = {
                 </div>
               </div>
               <div class="newsletter-container-contents clearfix" ng-if="!container.hide" >
-                <ol class="newsletter-container-contents-list" ng-model="container.items" ui-sortable type="content">
+                <ol class="newsletter-container-contents-list" ng-model="container.items" ui-sortable="{ handle: '.sortable-handle'}" type="content">
                   <li ng-repeat="content in container.items" ng-include="'item'">
                   </li>
                 </ol>
@@ -228,6 +222,7 @@ var newsletterTemplateTranslations = {
   </div>
   <script type="text/ng-template" id="item">
   <div class="newsletter-item clearfix">
+    <div class="sortable-handle p-l-5"><i class="fa fa-align-justify"></i></div>
 
     <div ng-show="content.content_type !== 'list'" class="newsletter-item-wrapper">
       <div class="newsletter-item-title">[% content.content_type_l10n_name %]</div>
@@ -247,18 +242,18 @@ var newsletterTemplateTranslations = {
               <ui-select-match>
                 <strong>{t}Type{/t}: </strong> [% $select.selected.title %]
               </ui-select-match>
-              <ui-select-choices repeat="item.value as item in data.extra.content_types | filter: { title: $select.search }">
+              <ui-select-choices repeat="item.value as item in data.extra.content_types | filter: { title: $select.search }" position='down'>
                 <div ng-bind-html="item.title | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
 
             <div class="dropdown category">
               <button class="btn btn-white" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {t}Categories{/t}:
                 <strong>
-                  <span ng-show="content.criteria.category.length == data.extra.categories.length || content.criteria.category.length == 0">{t}All{/t}</span>
-                  <span ng-hide="content.criteria.category.length == data.extra.categories.length|| content.criteria.category.length == 0">{t 1="[% content.criteria.category.length %]"}%1 selected{/t}</span>
+                {t}Categories{/t}:
                 </strong>
+                <span ng-show="content.criteria.category.length == data.extra.categories.length || content.criteria.category.length == 0">{t}Any{/t}</span>
+                <span ng-hide="content.criteria.category.length == data.extra.categories.length|| content.criteria.category.length == 0">{t 1="[% content.criteria.category.length %]"}%1 selected{/t}</span>
                 <span class="caret"></span>
               </button>
               <div class="dropdown-menu dropdown-menu-left keepopen">
@@ -284,7 +279,7 @@ var newsletterTemplateTranslations = {
               <ui-select-match>
                 <strong>{t}Filter{/t}: </strong> [% $select.selected.title %]
               </ui-select-match>
-              <ui-select-choices repeat="item.value as item in data.extra.filters | filter: { title: $select.search }">
+              <ui-select-choices repeat="item.value as item in data.extra.filters | filter: { title: $select.search }" position='down'>
                 <div ng-bind-html="item.title | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
@@ -292,7 +287,7 @@ var newsletterTemplateTranslations = {
               <ui-select-match>
                 <strong>{t}Amount{/t}: </strong> [% $select.selected %]
               </ui-select-match>
-              <ui-select-choices repeat="item in numberOfElements  | filter: $select.search">
+              <ui-select-choices repeat="item in numberOfElements  | filter: $select.search" position='down'>
                 <div ng-bind-html="item | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>

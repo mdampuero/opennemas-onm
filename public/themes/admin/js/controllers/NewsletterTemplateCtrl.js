@@ -87,6 +87,15 @@
             data.item.contents.map(function(item) {
               item.items.map(function(content) {
                 if (content.content_type === 'list' &&
+                  content.criteria.category == '') {
+                  content.criteria.category = [];
+                }
+                if (content.content_type === 'list' &&
+                  typeof content.criteria.category === 'undefined') {
+                  content.criteria.category = [ ];
+                }
+
+                if (content.content_type === 'list' &&
                   typeof content.criteria.category === 'string') {
                   content.criteria.category = [ parseInt(content.criteria.category) ];
                 }
@@ -184,6 +193,7 @@
               category: [],
               epp: 5,
               in_litter: 0,
+              filter: '',
               orderBy: { starttime:  'desc' }
             }
           });
