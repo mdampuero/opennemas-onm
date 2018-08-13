@@ -54,13 +54,23 @@ var newsletterTemplateTranslations = {
       </div>
     </div>
 
-    <div class="grid simple ng-cloak">
+    {* <div class="grid simple ng-cloak">
       <div class="grid-title">
         <i class="fa fa-envelope-o m-r-10"></i>{t}Name{/t}
       </div>
 
       <div class="grid-body">
         <input type="text" class="form-control" name="title" id="title" ng-model="item.name"/>
+      </div>
+    </div> *}
+
+    <div class="grid simple ng-cloak">
+      <div class="grid-title">
+        <i class="fa fa-envelope-o m-r-10"></i>{t}Subject{/t}
+      </div>
+
+      <div class="grid-body">
+        <input type="text" class="form-control" name="title" id="title" ng-model="item.title"/>
       </div>
     </div>
 
@@ -187,16 +197,6 @@ var newsletterTemplateTranslations = {
           </div>
         </div>
         {/is_module_activated}
-      </div>
-    </div>
-
-    <div class="grid simple ng-cloak">
-      <div class="grid-title">
-        <i class="fa fa-envelope-o m-r-10"></i>{t}Subject{/t}
-      </div>
-
-      <div class="grid-body">
-        <input type="text" class="form-control" name="title" id="title" ng-model="item.title"/>
       </div>
     </div>
 
