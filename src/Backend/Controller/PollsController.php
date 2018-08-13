@@ -329,7 +329,7 @@ class PollsController extends Controller
             'directional' => true,
             'epp'         => $epp,
             'page'        => $page,
-            'total'       => $countPolls,
+            'total'       => $count,
             'route'       => [
                 'name'   => 'admin_polls_content_provider',
                 'params' => [ 'category' => $categoryId ]
@@ -373,7 +373,7 @@ class PollsController extends Controller
 
         $pagination = $this->get('paginator')->get([
             'epp'   => $epp,
-            'total' => $countPolls,
+            'total' => $count,
             'page'  => $page,
             'route' => [
                 'name'  => 'admin_polls_content_provider_related',
