@@ -17,6 +17,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Common\Core\Controller\Controller;
 use Onm\Settings as s;
 use Common\ORM\Entity\ContentPosition;
+use \Exception;
 
 class FrontpagesController extends Controller
 {
@@ -176,28 +177,39 @@ class FrontpagesController extends Controller
             return new JsonResponse([ 'message' => $message ]);
         }
 
-        $fvs      = $this->get('api.service.frontpage_version');
-        $version  =
-            $fvs->saveFrontPageVersion($request->request->get('version', null));
-        $contents = [];
+        $fvs = $this->get('api.service.frontpage_version');
 
-        // Iterate over each element and fetch its parameters to save.
-        foreach ($contentsPositions as $params) {
-            $contents[] = [
-                'id'                   => $params['id'],
-                'placeholder'          => $params['placeholder'],
-                'position'             => $params['position'],
-                'content_type'         => $params['content_type']
-            ];
-        }
+        try {
+            $version  =
+                $fvs->saveFrontPageVersion($request->request->get('version', null));
+            $contents = [];
 
-        // Save contents
-        $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $version->id, $contents);
+            // Iterate over each element and fetch its parameters to save.
+            foreach ($contentsPositions as $params) {
+                $contents[] = [
+                    'id'                   => $params['id'],
+                    'placeholder'          => $params['placeholder'],
+                    'position'             => $params['position'],
+                    'content_type'         => $params['content_type']
+                ];
+            }
 
+            // Save contents
+            $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $version->id, $contents);
 
-        if (!$savedProperly) {
-            $message = _("Unable to save content positions: Error while saving in database.");
-            return new JsonResponse([ 'message' => $message ]);
+            if (!$savedProperly) {
+                $message = _('Unable to save content positions: Error while saving in database.');
+                return new JsonResponse([ 'message' => $message ]);
+            }
+        } catch (Exception $e) {
+            return new JsonResponse(
+                [
+                    'message' => $e->getMessage()
+                ],
+                $e->getCode() != null ?
+                    $e->getCode() :
+                    500
+            );
         }
 
         // Notice log of this action
@@ -210,7 +222,7 @@ class FrontpagesController extends Controller
 
         $lastSaved = $fvs->getLastSaved($version->category_id, $version->id, true);
         return new JsonResponse([
-            'message'              => _("Content positions saved properly"),
+            'message'              => _('Content positions saved properly'),
             'versionId'            => $version->id,
             'frontpage_last_saved' => $lastSaved
         ]);

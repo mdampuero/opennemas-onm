@@ -31,6 +31,7 @@ class FrontpagesController extends Controller
     public function showAction(Request $request)
     {
         $categoryName  = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $page          = $request->query->get('page', 1);
         $categoryId    = 0;
         $categoryTitle = 0;
         $category      = null;
@@ -53,15 +54,17 @@ class FrontpagesController extends Controller
 
         // Setup templating cache layer
         $this->view->setConfig('frontpages');
+
         $systemDate = new \DateTime(null, new \DateTimeZone('UTC'));
         $lifetime   = $invalidationDt->getTimestamp() - $systemDate->getTimestamp();
+
         if (!empty($invalidationDt)) {
             if ($lifetime < $this->view->getCacheLifetime()) {
                 $this->view->setCacheLifetime($lifetime);
             }
         }
 
-        $cacheId = $this->view->getCacheId('frontpage', $categoryName, $lastSaved);
+        $cacheId = $this->view->getCacheId('frontpage', $categoryName, $lastSaved, $page);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheId)
@@ -78,8 +81,8 @@ class FrontpagesController extends Controller
                 'time'                  => $systemDate->getTimestamp()
             ]);
 
-            $relatedIds = [];
             $ids        = array_keys($contents);
+            $relatedIds = [];
 
             // Get photo and video ids
             foreach ($contents as $content) {
@@ -176,13 +179,16 @@ class FrontpagesController extends Controller
         }
 
         list($adsPositions, $advertisements) = $this->getAds($categoryId, $contents);
+
         $invalidationDt->setTimeZone($this->get('core.locale')->getTimeZone());
+
         return $this->render('frontpage/frontpage.tpl', [
             'advertisements'  => $advertisements,
             'ads_positions'   => $adsPositions,
             'cache_id'        => $cacheId,
             'category_name'   => $categoryName,
             'actual_category' => $categoryName,
+            'page'            => $page,
             'x-tags'          => 'frontpage-page,' . $categoryName,
             'x-cache-for'     => $invalidationDt->format('Y-m-d H:i:s')
         ]);

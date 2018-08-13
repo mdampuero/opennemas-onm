@@ -28,6 +28,34 @@ class TagService extends OrmService
     }
 
     /**
+     * Method to fetch the most used tag given the slug
+     *
+     * @param string $slug The slug of a tag
+     *
+     * @return Tag $tag The tag object
+     */
+    public function getMostUsedTagBySlug($slug, $languageId)
+    {
+        $tags = $this->getTagBySlug($slug, $languageId);
+
+        if (count($tags['items']) < 2) {
+            return count($tags['items']) == 1 ? $tags['items'][0] : null;
+        }
+
+        $tagsCount   = $this->getNumContentsRel($tags['items']);
+        $mostUsedTag = $tags['items'][0];
+        for ($i = 1; $i < count($tags['items']); $i++) {
+            if (array_key_exists($tags['items'][$i]->id, $tagsCount)
+                && $tagsCount[$mostUsedTag->id] < $tagsCount[$tags['items'][$i]->id]
+            ) {
+                $mostUsedTag = $tags['items'][$i];
+            }
+        }
+
+        return $mostUsedTag;
+    }
+
+    /**
      * Method for retrieve the number of contents related with some tag
      *
      * @param array list with all number of related contents by tag
@@ -56,7 +84,7 @@ class TagService extends OrmService
     }
 
     /**
-     * Method for replace the parameter name by slug
+     * Method for replace the parameter name by slug in OQL query
      *
      * @param oql $oql to check and replace the field name by slug
      *
@@ -179,7 +207,6 @@ class TagService extends OrmService
         $slugs = $this->createSearchableWord($arr);
 
 
-        //return $this->getTagBySlug($slugs, $languageId, $limit);
         return \Tag::getTagsBySlug($slugs, $languageId, $limit);
     }
 

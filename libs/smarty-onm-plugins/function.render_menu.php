@@ -6,10 +6,6 @@
  */
 function smarty_function_render_menu($params, &$smarty)
 {
-    // Disable caching for this partial
-    $caching = $smarty->caching;
-
-    $smarty->caching = 0;
     // Initializing parameters
     $tpl      = (isset($params['tpl']) ? $params['tpl'] : null);
     $menuName = (isset($params['name']) ? $params['name'] : null);
@@ -18,20 +14,22 @@ function smarty_function_render_menu($params, &$smarty)
 
     if (empty($menuName) && empty($position)) {
         $smarty->trigger_error("Menu doesn't exists");
+
         return $output;
     }
 
     // Get menu from name or position
+    $criteria = [ 'position' => [ [ 'value' => $position ] ] ];
+
     if (!empty($menuName)) {
         $criteria = [ 'name' => [ [ 'value' => $menuName ] ], ];
-    } else {
-        $criteria = [ 'position' => [ [ 'value' => $position ] ], ];
     }
 
     $menu = getService('menu_repository')->findOneBy($criteria, null, 1, 1);
 
+    // Menu does not exist
     if (is_null($menu)) {
-        return $menu;
+        return $output;
     }
 
     $menu->items = $menu->localize($menu->getRawItems());
@@ -40,11 +38,16 @@ function smarty_function_render_menu($params, &$smarty)
         'menuItems'       => ((!empty($menu->items)) ? $menu->items : []),
         'actual_category' => $params['actual_category'],
     ]);
+
+    // Disable caching for this partial
+    $caching = $smarty->caching;
+
+    $smarty->caching = 0;
+
     $output .= "\n" . $smarty->fetch($tpl);
 
     // Restore previous caching value
     $smarty->caching = $caching;
 
-    // Render menu items
     return $output;
 }

@@ -1,6 +1,11 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
+<script>
+      var newsletterTemplateTranslations = {
+        contenidosRequerido: '{t}Some content is required{/t}'
+      };
+</script>
 <form name="form" ng-controller="NewsletterTemplateCtrl" ng-init="getItem({$id});">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
@@ -30,7 +35,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks btn-group">
-              <button class="btn btn-loading btn-primary text-uppercase" ng-click="save()" ng-disabled="flags.http.saving || form.$invalid || (item.password && item.password !== rpassword)" type="button">
+              <button class="btn btn-loading btn-primary text-uppercase" ng-click="saveVal()" ng-disabled="flags.http.saving || form.$invalid || (item.password && item.password !== rpassword)" type="button">
                 <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                 {t}Save{/t}
               </button>
@@ -173,9 +178,9 @@
         </div>
       </div>
       <div class="grid-body">
-        <div ui-tree="options" id="newsletter-contents">
+        <div ui-tree id="newsletter-contents">
           <ol ui-tree-nodes ng-model="item.contents" type="container">
-            <li class="newsletter-container ng-cloak" ui-tree-node ng-repeat="container in item.contents" collapsed="false">
+            <li class="newsletter-container" ui-tree-node ng-repeat="container in item.contents">
               <div class="newsletter-container-title clearfix" ui-tree-handle>
                 <input ng-model="container.title" type="text" data-nodrag class="form-control title pull-left" placeholder="{t}Block title{/t}">
                 <div class="container-actions pull-right">
@@ -224,28 +229,42 @@
       <span class="item-title" data-nodrag>[% content.title %]</span>
     </div>
     <div ng-show="content.content_type === 'list'" class="item-list">
-      <span>{t}List of contents{/t}</span>
+      <span class="item-list-title">{t}List of contents{/t}</span>
       <span class="h-seperate" data-nodrag></span>
       <span class="item-title" data-nodrag>
-        <ui-select name="content_type" theme="select2" ng-model="content.criteria.content_type">
-          <ui-select-match>
-            <strong>{t}Type{/t}: </strong> [% $select.selected.title %]
-          </ui-select-match>
-          <ui-select-choices repeat="item.value as item in data.extra.content_types | filter: { title: $select.search }">
-            <div ng-bind-html="item.title | highlight: $select.search"></div>
-          </ui-select-choices>
-        </ui-select>
+        <div class="criteria clearfix">
+          <span class="item-list-icon fa fa-filter"></span>
 
-        <ui-select name="category" theme="select2" ng-model="content.criteria.category">
-          <ui-select-match>
-            <strong>{t}Category{/t}: </strong> [% $select.selected.title %]
-          </ui-select-match>
-          <ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in data.extra.categories | filter: { title: $select.search }">
-            <div ng-bind-html="item.title | highlight: $select.search"></div>
-          </ui-select-choices>
-        </ui-select>
+          <ui-select name="content_type" theme="select2" ng-model="content.criteria.content_type">
+            <ui-select-match>
+              <strong>{t}Type{/t}: </strong> [% $select.selected.title %]
+            </ui-select-match>
+            <ui-select-choices repeat="item.value as item in data.extra.content_types | filter: { title: $select.search }">
+              <div ng-bind-html="item.title | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
 
-        <ui-select name="view" theme="select2" ng-model="content.criteria.epp">
+          <ui-select name="category" theme="select2" ng-model="content.criteria.category">
+            <ui-select-match>
+              <strong>{t}Category{/t}: </strong> [% $select.selected.title %]
+            </ui-select-match>
+            <ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in data.extra.categories | filter: { title: $select.search }">
+              <div ng-bind-html="item.title | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+
+        <div class="limit clearfix">
+          <span class="item-list-icon fa fa-sort-amount-asc"></span>
+          <ui-select name="view" theme="select2" ng-model="content.criteria.filter">
+            <ui-select-match>
+              <strong>{t}Filter{/t}: </strong> [% $select.selected.title %]
+            </ui-select-match>
+            <ui-select-choices repeat="item.value as item in data.extra.filters | filter: { title: $select.search }">
+              <div ng-bind-html="item.title | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
+          <ui-select name="view" theme="select2" ng-model="content.criteria.epp">
           <ui-select-match>
             <strong>{t}Amount{/t}: </strong> [% $select.selected %]
           </ui-select-match>
@@ -253,6 +272,8 @@
             <div ng-bind-html="item | highlight: $select.search"></div>
           </ui-select-choices>
         </ui-select>
+
+        </div>
       </span>
     </div>
     <button class="btn btn-white pull-right" data-nodrag ng-click="removeContent(container, content)" type="button">

@@ -30,7 +30,6 @@ class PollsController extends Controller
 
         $request            = $this->get('request_stack')->getCurrentRequest();
         $this->categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
-        $this->em           = $this->get('entity_repository');
 
         if (!empty($this->categoryName)) {
             $this->ccm          = new \ContentCategoryManager();
@@ -81,14 +80,27 @@ class PollsController extends Controller
         ) {
             $filter = [
                 'content_type_name' => [[ 'value' => 'poll' ]],
-                'content_status'    => [[ 'value' => 1 ]]
+                'content_status'    => [[ 'value' => 1 ]],
+                'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+                'starttime'         => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'         => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ]
             ];
 
             if (isset($this->category) && !empty($this->category)) {
                 $filter['category_name'] = [[ 'value' => $this->categoryName ]];
             }
 
-            $polls = $this->em->findBy(
+            $polls = $this->get('entity_repository')->findBy(
                 $filter,
                 ['starttime' => 'DESC'],
                 $epp,
@@ -116,7 +128,7 @@ class PollsController extends Controller
                 }
             }
 
-            $countPolls = $this->em->countBy($filter);
+            $countPolls = $this->get('entity_repository')->countBy($filter);
             $pagination = $this->get('paginator')->get([
                 'boundary'    => false,
                 'directional' => true,
@@ -178,10 +190,23 @@ class PollsController extends Controller
             $items         = $poll->items;
             $poll->dirtyId = $dirtyID;
 
-            $otherPolls = $this->em->findBy(
+            $otherPolls = $this->get('entity_repository')->findBy(
                 [
                     'content_type_name' => [[ 'value' => 'poll']],
                     'content_status'    => [[ 'value' => 1 ]],
+                    'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+                    'starttime'         => [
+                        'union' => 'OR',
+                        [ 'value' => '0000-00-00 00:00:00' ],
+                        [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                        [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    ],
+                    'endtime'         => [
+                        'union' => 'OR',
+                        [ 'value' => '0000-00-00 00:00:00' ],
+                        [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                        [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                    ]
                 ],
                 ['starttime' => 'DESC'],
                 5,
@@ -258,7 +283,7 @@ class PollsController extends Controller
         $answer = $request->request->filter('answer', '', FILTER_SANITIZE_STRING);
         $pollID = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
 
-        $poll = $this->em->find('Poll', $pollID);
+        $poll = $this->get('entity_repository')->find('Poll', $pollID);
         if (is_null($poll)) {
             throw new ResourceNotFoundException();
         }

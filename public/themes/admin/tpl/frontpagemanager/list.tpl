@@ -38,7 +38,7 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="get" name="formulario" id="formulario" ng-controller="FrontpageCtrl" ng-init="init({json_encode($frontpages)|clear_json}, {json_encode($versions)|clear_json}, {json_encode($category_id)|clear_json}, {json_encode($version_id)|clear_json}, {json_encode($time)|clear_json}, {json_encode($frontpage_last_saved)|clear_json}, {json_encode($available_layouts)|clear_json}, {json_encode($layout_theme)|clear_json})" class="frontpagemanger-wrapper">
+<form action="#" method="get" name="frontpageForm" ng-controller="FrontpageCtrl" ng-init="init({json_encode($frontpages)|clear_json}, {json_encode($versions)|clear_json}, {json_encode($category_id)|clear_json}, {json_encode($version_id)|clear_json}, {json_encode($time)|clear_json}, {json_encode($frontpage_last_saved)|clear_json}, {json_encode($available_layouts)|clear_json}, {json_encode($layout_theme)|clear_json})" class="frontpagemanger-wrapper">
   <div>
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
@@ -72,7 +72,7 @@
                 </ui-select-choices>
               </ui-select>
             </li>
-          {is_module_activated name="es.openhost.theme.scheduleFrontpage"}
+          {is_module_activated name="es.openhost.module.scheduleFrontpage"}
             <li class="quicklinks hidden-xs m-l-5 m-r-5 ng-cloak">
               <h4>
                 <i class="fa fa-angle-right"></i>
@@ -135,7 +135,7 @@
                         {t}Preview{/t}
                       </a>
                     </li>
-                  {is_module_activated name="es.openhost.theme.scheduleFrontpage"}
+                  {is_module_activated name="es.openhost.module.scheduleFrontpage"}
                     <li class="divider"></li>
                     <li>
                       <a href="#" ng-click="saveVersion()">
@@ -208,7 +208,7 @@
         </div>
       </div>
     </div>
-    {is_module_activated name="es.openhost.theme.scheduleFrontpage"}
+    {is_module_activated name="es.openhost.module.scheduleFrontpage"}
     <div class="page-navbar filters-navbar hidden-xs ng-cloak" ng-if="publishVersionId !== versionId">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -245,13 +245,13 @@
     </div>
     {/is_module_activated}
 
-    <a class="{is_module_activated name="es.openhost.theme.scheduleFrontpage"}more-padding{/is_module_activated} btn btn-add btn-success hidden-xs btn-add-new-contents" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
+    <a class="{is_module_activated name="es.openhost.module.scheduleFrontpage"}more-padding{/is_module_activated} btn btn-add btn-success hidden-xs btn-add-new-contents" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
       <span class="fa fa-plus"></span>
       <span class='btn-add-new-contents-title'>{t}Add contents{/t}</span>
     </a>
   </div>
 
-  <div class="content">
+  <div class="content ng-cloak">
     <div id="warnings-validation"></div>
 
     <div class="grid simple visible-xs not-available-in-phone">
@@ -267,54 +267,58 @@
     <div id="content-provider" class="clearfix hidden-xs" title="{t}Available contents{/t}">
       <div class="content-provider-block-wrapper clearfix">
         <ul>
+          {if empty($version_id)}
+              {assign var="version_id_pro" value="null"}
+          {else}
+              {assign var="version_id_pro" value=$version_id}
+          {/if}
           {is_module_activated name="ARTICLE_MANAGER"}
           {if $category_id eq 0}
           <li>
-            <a href="{url name=admin_articles_content_provider_suggested category=$category_id}">{t}Suggested{/t}</a>
+            <a href="{url name=admin_articles_content_provider_suggested category=$category_id frontpage_version_id=$version_id_pro}">{t}Suggested{/t}</a>
           </li>
           {else}
           <li>
-            <a href="{url name=admin_articles_content_provider_category category=$category_id}">{t}Others in category{/t}</a>
+            <a href="{url name=admin_articles_content_provider_category category=$category_id frontpage_version_id=$version_id_pro}">{t}Others in category{/t}</a>
           </li>
           {/if}
           {/is_module_activated}
-          <li> {* filter_by_category param is to avoid category filter on latest articles provider *}
-            <a href="{url name=admin_articles_content_provider_category category=$category_id filter_by_category=0}">{t}Latest articles{/t}</a>
+          <li>
+            <a href="{url name=admin_articles_content_provider_category}">{t}Latest articles{/t}</a>
           </li>
-
           {is_module_activated name="WIDGET_MANAGER"}
           <li>
-            <a href="{url name=admin_widgets_content_provider category=$category_id}">{t}Widgets{/t}</a>
+            <a href="{url name=admin_widgets_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Widgets{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="OPINION_MANAGER"}
           <li>
-            <a href="{url name=admin_opinions_content_provider category=$category_id}">{t}Opinions{/t}</a>
+            <a href="{url name=admin_opinions_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Opinions{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="VIDEO_MANAGER"}
           <li>
-            <a href="{url name=admin_videos_content_provider category=$category_id}">{t}Videos{/t}</a>
+            <a href="{url name=admin_videos_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Videos{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="ALBUM_MANAGER"}
           <li>
-            <a href="{url name=admin_albums_content_provider category=$category_id}">{t}Albums{/t}</a>
+            <a href="{url name=admin_albums_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Albums{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="LETTER_MANAGER"}
           <li>
-            <a href="{url name=admin_letters_content_provider category=$category_id}">{t}Letter{/t}</a>
+            <a href="{url name=admin_letters_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Letter{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="POLL_MANAGER"}
           <li>
-            <a href="{url name=admin_polls_content_provider category=$category_id}">{t}Polls{/t}</a>
+            <a href="{url name=admin_polls_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Polls{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="ADS_MANAGER"}
           <li>
-            <a href="{url name=admin_ads_content_provider category=$category_id}">{t}Advertisement{/t}</a>
+            <a href="{url name=admin_ads_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Advertisement{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="ADVANCED_SEARCH"}

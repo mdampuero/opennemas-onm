@@ -54,13 +54,13 @@ orm:
                             type: array_json
                             options: { length: 65532, default: null, notnull: false }
                         created:
-                            type: datetime
+                            type: datetimetz
                             options: { notnull: false }
                         updated:
-                            type: datetime
+                            type: datetimetz
                             options: { notnull: false }
                         sent:
-                            type: datetime
+                            type: datetimetz
                             options: { default: CURRENT_TIMESTAMP, notnull: false }
                         sent_items:
                             type: integer

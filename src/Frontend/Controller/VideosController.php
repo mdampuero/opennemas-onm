@@ -64,101 +64,109 @@ class VideosController extends Controller
      *
      * @return Response The response object.
      */
-    public function frontpageAction()
+    public function frontpageAction(Request $request)
     {
+        $page         = $request->query->getDigits('page', 1);
+        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+
         // Setup templating cache layer
         $this->view->setConfig('video');
-        $cacheID = $this->view->getCacheId('frontpage', 'video', $this->category_name, $this->page);
+        $cacheID = $this->view->getCacheId('frontpage', 'video', $categoryName, $page);
 
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
-            // Fetch video settings
-            $videosSettings             = s::get('video_settings');
-            $totalVideosFrontpage       = isset($videosSettings['total_front']) ? $videosSettings['total_front'] : 2;
-            $totalVideosMoreFrontpage   = isset($videosSettings['total_front_more']) ?
-                $videosSettings['total_front_more'] :
-                12;
-            $totalVideosFrontpageOffset = isset($videosSettings['front_offset']) ? $videosSettings['front_offset'] : 3;
-            $totalVideosBlockInCategory = isset($videosSettings['block_in_category']) ?
-                $videosSettings['block_in_category'] :
-                0;
-            $totalVideosBlockOther      = isset($videosSettings['block_others']) ? $videosSettings['block_others'] : 6;
+            $settings = $this->get('setting_repository')
+                ->get(['video_settings', 'items_in_blog'], [ [], 10 ]);
 
-            if ($this->category_name != 'home') {
-                // Fetch total of videos for this category
-                $allVideos = $this->cm->findAll(
-                    'Video',
-                    'content_status=1 AND `contents_categories`.`pk_fk_content_category` ='
-                    . $this->category . '',
-                    'ORDER BY created DESC LIMIT ' . ($totalVideosFrontpage + $totalVideosBlockInCategory)
+            // Fetch video settings
+            $videoSettings              = $settings['video_settings'];
+            $totalVideosFrontpage       = isset($videoSettings['total_front']) ? $videoSettings['total_front'] : 2;
+            $totalVideosMoreFrontpage   = isset($videoSettings['total_front_more']) ? $videoSettings['total_front_more'] : 12;
+            $totalVideosFrontpageOffset = isset($videoSettings['front_offset']) ? $videoSettings['front_offset'] : 3;
+            $totalVideosBlockInCategory = isset($videoSettings['block_in_category']) ? $videoSettings['block_in_category'] : 0;
+            $totalVideosBlockOther      = isset($videoSettings['block_others']) ? $settings['video_settings']['block_others'] : 6;
+
+            $epp = isset($settings['items_in_blog']) ? $settings['items_in_blog'] : 10;
+
+            $baseCriteria = [
+                'fk_content_type' => [ [ 'value' => 9 ] ],
+                'content_status'  => [ [ 'value' => 1 ] ],
+                'in_litter'       => [ [ 'value' => 0 ] ],
+                'starttime'       => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'         => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ]
+            ];
+
+            $em = $this->get('entity_repository');
+
+            if ($categoryName != 'home') {
+                $categoryManager = $this->get('category_repository');
+                $category        = $categoryManager->findOneBy(
+                    [ 'name' => [['value' => $categoryName ]] ],
+                    'name ASC'
+                );
+
+                if (empty($category)) {
+                    throw new ResourceNotFoundException();
+                }
+
+                $criteria = array_merge(
+                    $baseCriteria,
+                    [ ['pk_fk_content_category' => [[ 'value' => $category->id ]] ] ]
+                );
+
+                $allVideos = $em->findBy(
+                    $criteria,
+                    'starttime DESC',
+                    (int) ($totalVideosFrontpage + $totalVideosBlockInCategory),
+                    (int) $page
                 );
 
                 // Videos on frontpage left column
-                $frontVideos = array_slice($allVideos, 0, $totalVideosFrontpage);
+                $frontVideos = array_slice($allVideos, 0, (int) $totalVideosFrontpage);
 
                 // Videos on more in category block
-                $videos = array_slice($allVideos, $totalVideosFrontpage, $totalVideosBlockInCategory);
+                $videos = array_slice($allVideos, (int) $totalVideosFrontpage, (int) $totalVideosBlockInCategory);
 
                 // Videos on others videos block
-                $othersVideos = $this->cm->findAll(
-                    'Video',
-                    'content_status=1 AND `contents_categories`.`pk_fk_content_category` <>'
-                    . $this->category . '',
-                    'ORDER BY created DESC LIMIT ' . $totalVideosMoreFrontpage
+                $otherVideos = $em->findBy(
+                    array_merge(
+                        $criteria,
+                        [ 'pk_fk_content_category' => [[ 'value' => $this->category, 'operator' => '<>' ]] ]
+                    ),
+                    'starttime DESC',
+                    $totalVideosMoreFrontpage,
+                    $page
                 );
 
-                if (count($frontVideos) > 0) {
-                    foreach ($frontVideos as &$video) {
-                        $video->thumb          = $video->getThumb();
-                        $video->category_name  = $video->loadCategoryName($video->id);
-                        $video->category_title = $video->loadCategoryTitle($video->id);
-                    }
-                }
-                $this->view->assign('front_videos', $frontVideos);
+                $this->view->assign(['front_videos'  => $frontVideos, ]);
             } else {
                 // Videos on top of the homepage
-                $videos = $this->cm->findAll(
-                    'Video',
-                    'content_status=1 ',
-                    'ORDER BY created DESC LIMIT ' . $totalVideosFrontpageOffset
-                );
+                $videos = $em->findBy($baseCriteria, 'starttime DESC', $totalVideosFrontpageOffset, $page);
 
-                $order   = ['created' => 'DESC'];
-                $filters = [
-                    'content_type_name' => [['value' => 'video']],
-                    'content_status'    => [['value' => '1']],
-                ];
-
-                $em           = $this->get('entity_repository');
-                $othersVideos = $em->findBy(
-                    $filters,
-                    $order,
+                // Videos at the bottom of the frontpage
+                $otherVideos = $em->findBy(
+                    $baseCriteria,
+                    'starttime DESC',
                     $totalVideosMoreFrontpage,
-                    $this->page,
+                    $page,
                     $totalVideosFrontpageOffset
                 );
             }
 
-            if (count($videos) > 0) {
-                foreach ($videos as &$video) {
-                    $video->thumb          = $video->getThumb();
-                    $video->category_name  = $video->loadCategoryName($video->id);
-                    $video->category_title = $video->loadCategoryTitle($video->id);
-                }
-            }
-
-            if (count($othersVideos) > 0) {
-                foreach ($othersVideos as &$video) {
-                    $video->thumb          = $video->getThumb();
-                    $video->category_name  = $video->loadCategoryName($video->id);
-                    $video->category_title = $video->loadCategoryTitle($video->id);
-                }
-            }
-
             // Pagination for block more videos (ajax)
             $url   = [ 'name' => 'frontend_video_ajax_paginated' ];
-            $total = count($othersVideos) + 1;
+            $total = count($otherVideos) + 1;
             if ($this->category != 0) {
                 $url   = [
                     'name'   => 'frontend_video_ajax_paginated',
@@ -166,6 +174,7 @@ class VideosController extends Controller
                 ];
                 $total = count($allVideos) + 1;
             }
+
             $pagination = $this->get('paginator')->get([
                 'boundary'    => false,
                 'directional' => true,
@@ -200,7 +209,7 @@ class VideosController extends Controller
 
             $this->view->assign([
                 'videos'        => $videos,
-                'others_videos' => $othersVideos,
+                'others_videos' => $otherVideos,
                 'page'          => '1',
                 'pager'         => $pager,
                 'pagination'    => $pagination,
@@ -209,22 +218,20 @@ class VideosController extends Controller
 
         list($positions, $advertisements) = $this->getAds($this->category);
 
+        $template = 'video/video_main_frontpage.tpl';
+        $params   = [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'cache_id'       => $cacheID,
+            'x-tags'         => 'video-frontpage,' . $this->category_name . ',' . $this->page
+        ];
+
         if ($this->category_name != 'home') {
-            return $this->render('video/video_frontpage.tpl', [
-                'ads_positions'  => $positions,
-                'advertisements' => $advertisements,
-                'cache_id'       => $cacheID,
-                'categoryName'   => $this->category_name,
-                'x-tags'         => 'video-frontpage,' . $this->category_name . ',' . $this->page
-            ]);
-        } else {
-            return $this->render('video/video_main_frontpage.tpl', [
-                'ads_positions'  => $positions,
-                'advertisements' => $advertisements,
-                'cache_id'       => $cacheID,
-                'x-tags'         => 'video-frontpage,' . $this->category_name . ',' . $this->page
-            ]);
+            $template               = 'video/video_frontpage.tpl';
+            $params['categoryName'] = $this->category_name;
         }
+
+        return $this->render($template, $params);
     }
 
     /**
@@ -245,11 +252,23 @@ class VideosController extends Controller
             $videosSettings = $this->get('setting_repository')->get('video_settings');
             $itemsPerPage   = isset($videosSettings['total_front_more']) ? $videosSettings['total_front_more'] : 12;
 
-            $order   = [ 'created' => 'DESC' ];
+            $order   = [ 'starttime' => 'DESC' ];
             $filters = [
                 'content_type_name' => [[ 'value' => 'video' ]],
                 'content_status'    => [[ 'value' => 1 ]],
                 'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+                'starttime'       => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'         => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ]
             ];
 
             $route = [ 'name' => 'frontend_video_page_frontpage' ];
@@ -321,28 +340,33 @@ class VideosController extends Controller
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('video/video_inner.tpl', $video->id)
         ) {
-            // Load Video and categories
-            $video->category_name = $video->loadCategoryName($video->id);
-
             // Fetch video author
-            $ur            = getService('user_repository');
+            $ur            = $this->get('user_repository');
             $video->author = $ur->find($video->fk_author);
 
-            //Get other_videos for widget video most
-            $otherVideos = $this->cm->findAll(
-                'Video',
-                ' content_status=1 AND `contents_categories`.`pk_fk_content_category` ='
-                . $this->category . ' AND pk_content <> ' . $video->id,
-                ' ORDER BY created DESC LIMIT 4'
-            );
+            // Get other_videos for widget video most
+            $order   = [ 'starttime' => 'DESC' ];
+            $filters = [
+                'pk_content'             => [[ 'value' => $video->id, 'operator' => '<>' ]],
+                'pk_fk_content_category' => [[ 'value' => $this->category ]],
+                'content_type_name'      => [[ 'value' => 'video' ]],
+                'content_status'         => [[ 'value' => 1 ]],
+                'in_litter'              => [[ 'value' => 1, 'operator' => '!=' ]],
+                'starttime'       => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'         => [
+                    'union' => 'OR',
+                    [ 'value' => '0000-00-00 00:00:00' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ]
+            ];
 
-            if (count($otherVideos) > 0) {
-                foreach ($otherVideos as &$otherVideo) {
-                    $otherVideo->thumb          = $otherVideo->getThumb();
-                    $otherVideo->category_name  = $otherVideo->loadCategoryName($otherVideo->id);
-                    $otherVideo->category_title = $otherVideo->loadCategoryTitle($otherVideo->id);
-                }
-            }
+            $otherVideos = $this->get('entity_repository')->findBy($filters, $order, 4, 1);
 
             $this->view->assign(['others_videos' => $otherVideos]);
         }
@@ -382,19 +406,29 @@ class VideosController extends Controller
 
         $limit = ($this->page - 1) * $totalVideosBlockOther . ', ' . $totalVideosBlockOther;
 
-        $videos = $this->cm->findAll(
-            'Video',
-            'content_status=1 AND `contents_categories`.`pk_fk_content_category` <> ' . $this->category . '',
-            'ORDER BY created DESC  LIMIT ' . $limit
-        );
+        $order   = [ 'starttime' => 'DESC' ];
+        $filters = [
+            'pk_fk_content_category' => [[ 'value' => $this->category, 'operator' => '<>' ]],
+            'content_type_name'      => [[ 'value' => 'video' ]],
+            'content_status'         => [[ 'value' => 1 ]],
+            'in_litter'              => [[ 'value' => 1, 'operator' => '!=' ]],
+            'starttime'       => [
+                'union' => 'OR',
+                [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+            ],
+            'endtime'         => [
+                'union' => 'OR',
+                [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+            ]
+        ];
 
-        if (count($videos) > 0) {
-            foreach ($videos as &$video) {
-                $video->thumb          = $video->getThumb();
-                $video->category_name  = $video->loadCategoryName($video->id);
-                $video->category_title = $video->loadCategoryTitle($video->id);
-            }
-        } else {
+        $videos = $this->get('entity_repository')->findBy($filters, $order, $limit, 0);
+
+        if (count($videos) <= 0) {
             return new RedirectResponse(
                 $this->generateUrl('frontend_video_ajax_more', ['category' => $this->category])
             );
@@ -426,19 +460,29 @@ class VideosController extends Controller
             $this->category = $request->query->getDigits('category', 0);
         }
 
-        $videos = $this->cm->findAll(
-            'Video',
-            'content_status=1 AND `contents_categories`.`pk_fk_content_category` =' . $this->category . '',
-            'ORDER BY created DESC LIMIT ' . $limit
-        );
+        $order   = [ 'starttime' => 'DESC' ];
+        $filters = [
+            'pk_fk_content_category' => [[ 'value' => $this->category ]],
+            'content_type_name'      => [[ 'value' => 'video' ]],
+            'content_status'         => [[ 'value' => 1 ]],
+            'in_litter'              => [[ 'value' => 1, 'operator' => '!=' ]],
+            'starttime'       => [
+                'union' => 'OR',
+                [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+            ],
+            'endtime'         => [
+                'union' => 'OR',
+                [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+            ]
+        ];
 
-        if (count($videos) > 0) {
-            foreach ($videos as &$video) {
-                $video->thumb          = $video->getThumb();
-                $video->category_name  = $video->loadCategoryName($video->id);
-                $video->category_title = $video->loadCategoryTitle($video->id);
-            }
-        } else {
+        $videos2 = $this->get('entity_repository')->findBy($filters, $order, $limit, 0);
+
+        if (count($videos) <= 0) {
             return new RedirectResponse(
                 $this->generateUrl('frontend_video_ajax_incategory', ['category' => $this->category])
             );
@@ -448,7 +492,6 @@ class VideosController extends Controller
             'videos'             => $videos,
             'actual_category_id' => $this->category,
             'page'               => $this->page,
-            // 'total_incategory'   => 9, commented on all templates
         ]);
     }
 

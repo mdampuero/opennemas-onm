@@ -136,26 +136,42 @@ class TagsController extends Controller
             $epp    = $this->get('setting_repository')->get('items_in_blog', 10);
             $epp    = (is_null($epp) || $epp <= 0) ? 10 : $epp;
             $locale = getService('core.locale')->getRequestLocale();
+            $tag    = $this->get('api.service.tag')->getMostUsedTagBySlug($tagName, $locale);
 
-            $criteria = [
-                'content_status'  => [ [ 'value' => 1 ] ],
-                'in_litter'       => [ [ 'value' => 0 ] ],
-                'fk_content_type' => [
-                    [ 'value' => 1 ],
-                    // [ 'value' => 4 ],
-                    // [ 'value' => 7 ],
-                    // [ 'value' => 9 ],
-                    'union' => 'OR'
-                ],
-                'exists' => 'EXISTS(SELECT 1 FROM tags' .
-                    ' INNER JOIN contents_tags ON contents_tags.tag_id = tags.id' .
-                    ' WHERE contents_tags.content_id = contents.pk_content AND' .
-                    " tags.language_id = '$locale' AND tags.slug = '$tagName')"
-            ];
+            $contents = [];
+            $total    = 1;
+            if (!empty($tag)) {
+                $criteria = [
+                    'fk_content_type' => [
+                        [ 'value' => 1 ],
+                        // [ 'value' => 4 ],
+                        // [ 'value' => 7 ],
+                        // [ 'value' => 9 ],
+                        'union' => 'OR'
+                    ],
+                    'exists' => 'EXISTS(SELECT 1 FROM contents_tags' .
+                        ' WHERE contents_tags.content_id = contents.pk_content AND' .
+                        ' contents_tags.tag_id = ' . $tag->id . ')',
+                    'content_status'    => [ [ 'value' => 1 ] ],
+                    'in_litter'         => [ [ 'value' => 0 ] ],
+                    'starttime'         => [
+                        'union' => 'OR',
+                        [ 'value' => '0000-00-00 00:00:00' ],
+                        [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                        [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    ],
+                    'endtime'           => [
+                        'union' => 'OR',
+                        [ 'value' => '0000-00-00 00:00:00' ],
+                        [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                        [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                    ]
+                ];
 
-            $em       = $this->get('entity_repository');
-            $contents = $em->findBy($criteria, 'starttime DESC', $epp, $page);
-            $total    = count($contents) + 1;
+                $em       = $this->get('entity_repository');
+                $contents = $em->findBy($criteria, 'starttime DESC', $epp, $page);
+                $total    = count($contents) + 1;
+            }
 
             // TODO: review this piece of CRAP
             $filteredContents = [];
@@ -206,7 +222,7 @@ class TagsController extends Controller
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
             'cache_id'       => $cacheId,
-            'tagName'        => $tagName,
+            'tagName'        => (empty($tag)) ? $tagName : $tag->name,
             'x-tags'         => 'tag-page,' . $tagName,
         ]);
     }
@@ -218,12 +234,17 @@ class TagsController extends Controller
      *
      * @return array A list of advertisement positions and advertisements.
      */
-    public static function getInnerAds($category = 'home')
+    public function getInnerAds($category = 'home')
     {
         $category = !isset($category) || ($category == 'home') ? 0 : $category;
 
-        $positions      = getService('core.helper.advertisement')
-            ->getPositionsForGroup('article_inner', [ 7, 9 ]);
+        // Get article_inner and category_frontpage positions
+        $positionManager = $this->get('core.helper.advertisement');
+        $positions       = array_merge(
+            $positionManager->getPositionsForGroup('category_frontpage'),
+            $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ])
+        );
+
         $advertisements = getService('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
 

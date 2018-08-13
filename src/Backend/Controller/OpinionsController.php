@@ -506,13 +506,18 @@ class OpinionsController extends Controller
      */
     public function contentProviderAction(Request $request)
     {
-        $categoryId   = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = 8;
+        $categoryId         = $request->query->getDigits('category', 0);
+        $page               = $request->query->getDigits('page', 1);
+        $itemsPerPage       = 8;
+        $frontpageVersionId =
+            $request->query->getDigits('frontpage_version_id', null);
+        $frontpageVersionId = $frontpageVersionId === '' ?
+            null :
+            $frontpageVersionId;
 
         $em  = $this->get('entity_repository');
-        $ids = $this->get('frontpage_repository')
-            ->getContentIdsForHomepageOfCategory((int) $categoryId);
+        $ids = $this->get('api.service.frontpage_version')
+            ->getContentIds((int) $categoryId, $frontpageVersionId, 'Opinion');
 
         $filters = [
             'content_type_name' => [ [ 'value' => 'opinion' ] ],

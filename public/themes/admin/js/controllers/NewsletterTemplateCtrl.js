@@ -19,8 +19,8 @@
      *   Check billing information when saving user.
      */
     .controller('NewsletterTemplateCtrl', [
-      '$controller', '$scope', 'oqlEncoder', 'oqlDecoder',
-      function($controller, $scope, oqlEncoder, oqlDecoder) {
+      '$controller', '$scope', 'oqlEncoder', 'oqlDecoder', 'messenger',
+      function($controller, $scope, oqlEncoder, oqlDecoder, messenger) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -154,6 +154,25 @@
               orderBy: { starttime:  'desc' }
             }
           });
+        };
+
+        /**
+         * @function save
+         * @memberOf NewsletterTemplateCtrl
+         *
+         * @description
+         *   save the newslettertemplate.
+         *
+         */
+        $scope.saveVal = function() {
+          if (!($scope.item.contents instanceof Array) ||
+            $scope.item.contents.length === 0
+          ) {
+            messenger.post(newsletterTemplateTranslations.contenidosRequerido);
+            return null;
+          }
+          $scope.save();
+          return null;
         };
       }
     ]);

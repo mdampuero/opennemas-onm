@@ -3,9 +3,14 @@
 {block name="footer-js" append}
   {javascripts}
     <script type="text/javascript">
+      var localeAux = '{$smarty.const.CURRENT_LANGUAGE_SHORT|default:"en"}';
+      localeAux = moment.locales().includes(localeAux) ?
+        localeAux :
+        'en';
       $('#date').datetimepicker({
         format: 'YYYY-MM-DD HH:mm:ss',
-        minDate: '{$book->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}'
+        minDate: '{$book->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}',
+        locale: localeAux
       });
     </script>
   {/javascripts}
@@ -139,7 +144,7 @@
               <label for="metadata" class="form-label">{t}Keywords{/t}</label>
               <span class="help">{t}Separated by comas{/t}</span>
               <div class="controls">
-                <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="checkNewTags" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
+                <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="newAndExistingTagsFromTagList" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
               </div>
             </div>
 

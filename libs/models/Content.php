@@ -2206,6 +2206,8 @@ class Content implements \JsonSerializable
             }
         }
 
+        $insertTags = array_unique($insertTags);
+
         self::deleteTags($this->id);
         self::saveTags($insertTags, $this->id);
         return $insertTags;

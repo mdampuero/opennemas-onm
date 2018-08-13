@@ -157,15 +157,12 @@
 
                   modalWindow.close({ response: true, success: true });
 
-                  if ($scope.article.starttime) {
-                    $scope.article.starttime = $window.moment($scope.article.starttime)
-                      .format('YYYY-MM-DD HH:mm:ss');
-                  }
-
-                  if ($scope.article.endtime) {
-                    $scope.article.endtime = $window.moment($scope.article.endtime)
-                      .format('YYYY-MM-DD HH:mm:ss');
-                  }
+                  [ 'starttime', 'endtime', 'created' ].forEach(function(dateField) {
+                    if ($scope.article[dateField]) {
+                      $scope.article[dateField] = $window.moment($scope.article[dateField])
+                        .format('YYYY-MM-DD HH:mm:ss');
+                    }
+                  });
                 };
               },
               no: function() {

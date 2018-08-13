@@ -30,9 +30,6 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
     }
 
-    /**
-     * @covers Common\Core\Component\Validator\Validator::__construct
-     */
     public function testConstructor()
     {
         $validator = new Validator\Validator($this->settingsManager, $this->symfonyValidator);
@@ -41,9 +38,6 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertAttributeEquals($this->symfonyValidator, 'validator', $validator);
     }
 
-    /**
-     * @covers Common\Core\Component\Validator\Validator::validate
-     */
     public function testValidate()
     {
         $this->settingsManager->expects($this->once())->method('get')->with('blacklist.comment')
@@ -56,7 +50,6 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Validator\Validator::validate
      * @expectedException InvalidArgumentException
      */
     public function testValidateWithInvalidSection()
@@ -67,9 +60,6 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([], $validator->validate($data, 'invalidsection'));
     }
 
-    /**
-     * @covers Common\Core\Component\Validator\Validator::validateComment
-     */
     public function testValidateComment()
     {
         $this->settingsManager->expects($this->once())->method('get')->with('blacklist.comment')
@@ -83,9 +73,6 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([], $validator->validate($data, Validator\Validator::BLACKLIST_RULESET_COMMENTS));
     }
 
-    /**
-     * @covers Common\Core\Component\Validator\Validator::validateComment
-     */
     public function testValidateCommentWithErrors()
     {
         $this->settingsManager->expects($this->once())->method('get')->with('blacklist.comment')
@@ -104,9 +91,6 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @covers Common\Core\Component\Validator\Validator::getConfig
-     */
     public function testGetConfig()
     {
         $rules = 'test@foo';
@@ -118,9 +102,6 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($rules, $validator->getConfig(Validator\Validator::BLACKLIST_RULESET_COMMENTS));
     }
 
-    /**
-     * @covers Common\Core\Component\Validator\Validator::setConfig
-     */
     public function testSetConfig()
     {
         $rules = 'test@foo';

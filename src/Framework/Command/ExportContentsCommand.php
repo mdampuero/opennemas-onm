@@ -234,7 +234,7 @@ EOF
     public function exportContents()
     {
         // Sql order, limit and filters
-        $order   = [ 'created' => 'DESC' ];
+        $order   = [ 'created' => 'ASC' ];
         $filters = [
             'content_type_name' => [
                 'union' => 'OR',
@@ -321,12 +321,17 @@ EOF
             $content->category_name  = $content->loadCategoryName($content->id);
             $content->category_title = $content->loadCategoryTitle($content->id);
 
-            $content->created_datetime =
+            $content->created_datetime   =
                 \DateTime::createFromFormat(
                     'Y-m-d H:i:s',
                     $content->created
                 );
-            $content->updated_datetime =
+            $content->starttime_datetime =
+                \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $content->starttime
+                );
+            $content->updated_datetime   =
                 \DateTime::createFromFormat(
                     'Y-m-d H:i:s',
                     $content->changed
@@ -506,6 +511,8 @@ EOF
             $content->author = $ur->find($content->fk_author);
             if (isset($content->author->name)) {
                 $content->author = $content->author->name;
+            } elseif (!empty($content->agency)) {
+                $content->author = $content->agency;
             } else {
                 $content->author = 'Redacción';
             }

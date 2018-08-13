@@ -44,8 +44,9 @@ class OpinionsController extends Controller
                 'in_litter'      => [['value' => 0]],
                 'starttime' => [
                     'union' => 'OR',
-                    [ 'value' => $date, 'operator' => '<' ],
+                    [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
                     [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => $date, 'operator' => '<=' ],
                 ],
                 'endtime' => [
                     'union'   => 'OR',
@@ -89,7 +90,7 @@ class OpinionsController extends Controller
                 $this->view->assign('editorial', $editorialContents);
             }
 
-            // Fetch last opinions from director
+            // Fetch lastest opinions from director
             $contents = [];
             if (!empty($configurations['total_director'])) {
                 $filters['type_opinion'] = [['value' => 2]];
@@ -380,6 +381,7 @@ class OpinionsController extends Controller
                 'starttime' => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS' ],
+                    [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
                     [ 'value' => $date, 'operator' => '<' ]
                 ],
                 'endtime' => [
@@ -417,7 +419,7 @@ class OpinionsController extends Controller
                 $numOpinions = $configurations['total_opinions'];
             }
 
-            // Get the number of total opinions for this author for pagination purpouses
+            // Get the number of total opinions for this author for pagination purposes
             $countOpinions = $this->get('opinion_repository')->countBy($filters);
             $opinions      = $this->get('opinion_repository')->findBy($filters, $orderBy, $numOpinions, $page);
 
@@ -701,20 +703,17 @@ class OpinionsController extends Controller
             // Fetch the other opinions for this author
             $criteria = [];
             if ($opinion->type_opinion == 1) {
-                $where                     = ' opinions.type_opinion = 1';
                 $opinion->name             = 'Editorial';
                 $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
                 $this->view->assign('actual_category', 'editorial');
 
                 $criteria = [ 'opinions`.`type_opinion' => [[ 'value' => 1]] ];
             } elseif ($opinion->type_opinion == 2) {
-                $where                     = ' opinions.type_opinion = 2';
                 $opinion->name             = 'Director';
                 $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
 
                 $criteria = [ 'opinions`.`type_opinion' => [[ 'value' => 2]] ];
             } else {
-                $where    = ' opinions.fk_author=' . ($opinion->fk_author);
                 $criteria = [ 'opinions`.`fk_author' => [[ 'value' => $opinion->fk_author ]] ];
             }
 
@@ -731,9 +730,10 @@ class OpinionsController extends Controller
                 $otOpinion->uri              = $otOpinion->uri;
             }
 
-            $this->view->assign(
-                [ 'other_opinions' => $otherOpinions, 'author' => $author]
-            );
+            $this->view->assign([
+                'other_opinions' => $otherOpinions,
+                'author'         => $author
+            ]);
         }
 
         list($positions, $advertisements) = $this->getAds('inner');

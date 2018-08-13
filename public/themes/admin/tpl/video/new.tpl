@@ -19,10 +19,16 @@
         get_information: '{url name=admin_videos_get_info}'
       }
 
+      var localeAux = '{$smarty.const.CURRENT_LANGUAGE_SHORT|default:"en"}';
+        localeAux = moment.locales().includes(localeAux) ?
+          localeAux :
+          'en';
+
       $('#starttime, #endtime').datetimepicker({
         format: 'YYYY-MM-DD HH:mm:ss',
         useCurrent: false,
-        minDate: '{$video->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}'
+        minDate: '{$video->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}',
+        locale: localeAux
       });
 
       $("#starttime").on("dp.change",function (e) {
@@ -149,7 +155,7 @@
             <div class="form-group">
               <label for="tag_ids" class="form-label">{t}Tags{/t}</label>
               <div class="controls">
-                <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="checkNewTags" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
+                <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="newAndExistingTagsFromTagList" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
               </div>
             </div>
             {if isset($video)}

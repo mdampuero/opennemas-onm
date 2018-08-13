@@ -30,12 +30,14 @@ class EntityManager extends BaseManager
      *
      * @param Connection     $dbConn      The custom DBAL wrapper.
      * @param CacheInterface $cache       The cache instance.
+     * @param Monolog        $error       The monolog error instance
      * @param string         $cachePrefix The cache prefix.
      */
-    public function __construct($dbConn, CacheInterface $cache, $cachePrefix)
+    public function __construct($dbConn, CacheInterface $cache, $error, $cachePrefix)
     {
         $this->dbConn      = $dbConn;
         $this->cache       = $cache;
+        $this->error       = $error;
         $this->cachePrefix = $cachePrefix;
     }
 
@@ -172,8 +174,8 @@ class EntityManager extends BaseManager
         $haveContentCategory = strpos($criteriaAux, 'pk_fk_content_category') !== false;
 
         if ($haveContentCategory) {
-            $sql .= 'LEFT JOIN contents_categories'
-            . ' ON pk_content = pk_fk_content ';
+            $sql .= ' LEFT JOIN contents_categories'
+            . ' ON contents.pk_content = contents_categories.pk_fk_content ';
         }
 
         if (strpos($criteriaAux, 'content_type_name') !== false) {
@@ -227,7 +229,7 @@ class EntityManager extends BaseManager
         }
 
         $sql = 'SELECT COUNT(DISTINCT content_type_name, pk_content)'
-            . ' FROM ' . $fromSQL;
+            . ' FROM ' . $fromSQL . ' ';
 
         if (is_array($criteria) && array_key_exists('join', $criteria)) {
             $join = $criteria['join'];
@@ -245,7 +247,7 @@ class EntityManager extends BaseManager
 
         if ($haveContentCategory) {
             $sql .= ' LEFT JOIN contents_categories'
-            . ' ON pk_content = pk_fk_content ';
+            . ' ON contents.pk_content = contents_categories.pk_fk_content ';
         }
 
         $sql .= " WHERE " . $this->getFilterSQL($criteria);
