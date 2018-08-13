@@ -301,7 +301,7 @@ class PollsController extends Controller
     {
         $categoryId         = $request->query->getDigits('category', 0);
         $page               = $request->query->getDigits('page', 1);
-        $epp       = 8;
+        $epp                = 8;
         $frontpageVersionId =
             $request->query->getDigits('frontpage_version_id', null);
         $frontpageVersionId = $frontpageVersionId === '' ?
@@ -355,9 +355,8 @@ class PollsController extends Controller
         $categoryId = $request->query->getDigits('category', 0);
         $page       = $request->query->getDigits('page', 1);
         $epp        = $this->get('setting_repository')->get('items_per_page') ?: 20;
-
-        $em       = $this->get('entity_repository');
-        $category = $this->get('category_repository')->find($categoryId);
+        $em         = $this->get('entity_repository');
+        $category   = $this->get('category_repository')->find($categoryId);
 
         $order   = [ 'created' => 'desc' ];
         $filters = [
