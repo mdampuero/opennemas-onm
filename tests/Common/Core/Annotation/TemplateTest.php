@@ -22,8 +22,9 @@ class TemplateTest extends KernelTestCase
      */
     public function testTemplate()
     {
-        $annotation = new Template([ 'name' => 'frog' ]);
+        $annotation = new Template([ 'name' => 'frog', 'file' => 'plugh' ]);
 
         $this->assertEquals('frog', $annotation->getName());
+        $this->assertEquals('plugh', $annotation->getFile());
     }
 }
