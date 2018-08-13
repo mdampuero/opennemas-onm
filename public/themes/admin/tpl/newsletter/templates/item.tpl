@@ -252,8 +252,8 @@ var newsletterTemplateTranslations = {
                 <strong>
                 {t}Categories{/t}:
                 </strong>
-                <span ng-show="content.criteria.category.length == data.extra.categories.length || content.criteria.category.length == 0">{t}Any{/t}</span>
-                <span ng-hide="content.criteria.category.length == data.extra.categories.length|| content.criteria.category.length == 0">{t 1="[% content.criteria.category.length %]"}%1 selected{/t}</span>
+                <span ng-show="content.criteria.category.length == 0">{t}Any{/t}</span>
+                <span ng-hide="content.criteria.category.length == 0">{t 1="[% content.criteria.category.length %]"}%1 selected{/t}</span>
                 <span class="caret"></span>
               </button>
               <div class="dropdown-menu dropdown-menu-left keepopen">
