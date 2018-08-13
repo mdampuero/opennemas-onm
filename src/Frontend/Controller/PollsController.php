@@ -44,8 +44,6 @@ class PollsController extends Controller
             $actual_category_id = 0;
         }
 
-        $pollSettings = $this->get('setting_repository')->get('poll_settings');
-
         $this->view->assign([
             'category_name'         => $this->categoryName,
             'category'              => $this->category,
@@ -53,12 +51,13 @@ class PollsController extends Controller
             'category_real_name'    => $category_real_name,
             'actual_category_title' => $category_real_name,
             'actual_category'       => $this->categoryName,
-            'settings'              => $pollSettings
+            'settings'              => $this->get('setting_repository')
+                ->get('poll_settings'),
         ]);
     }
 
     /**
-     * Renders the album frontpage.
+     * Renders the polls frontpage.
      *
      * @return Response The response object.
      */
@@ -68,8 +67,10 @@ class PollsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $page = $request->query->getDigits('page', 1);
-        $epp  = $this->get('setting_repository')->get('items_in_blog', 10);
+        $page     = $request->query->getDigits('page', 1);
+        $settings = $this->get('setting_repository')->get('poll_settings');
+        $epp      = is_array($settings) && array_key_exists('epp', $settings)
+            ? $settings['epp'] : 10;
 
         // Setup templating cache layer
         $this->view->setConfig('poll-frontpage');
@@ -94,26 +95,22 @@ class PollsController extends Controller
                 $page
             );
 
-            $otherPolls = $this->em->findBy(
-                $filter,
-                ['starttime' => 'DESC'],
-                5,
-                1
-            );
-
             if (!empty($polls)) {
                 foreach ($polls as &$poll) {
                     $poll->items   = $poll->getItems($poll->id);
-                    $poll->dirtyId = date('YmdHis', strtotime($poll->created)) . sprintf('%06d', $poll->id);
+                    $poll->dirtyId = date('YmdHis', strtotime($poll->created))
+                        . sprintf('%06d', $poll->id);
                     $poll->status  = 'opened';
                     if (is_string($poll->params)) {
                         $poll->params = unserialize($poll->params);
                     }
 
-                    if (is_array($poll->params) && array_key_exists('closetime', $poll->params)
+                    if (is_array($poll->params)
+                        && array_key_exists('closetime', $poll->params)
                         && (!empty($poll->params['closetime']))
                         && ($poll->params['closetime'] != '0000-00-00 00:00:00')
-                        && ($poll->params['closetime'] < date('Y-m-d H:i:s'))) {
+                        && ($poll->params['closetime'] < date('Y-m-d H:i:s'))
+                    ) {
                             $poll->status = 'closed';
                     }
                 }
@@ -131,15 +128,14 @@ class PollsController extends Controller
                     'name'   => 'frontend_poll_frontpage_category',
                     'params' => [
                         'category_name' => $this->categoryName,
-                        'component' => 'encuesta'
+                        'component'     => 'encuesta'
                     ]
                 ]
             ]);
 
             $this->view->assign([
-                'polls'      => array_slice($polls, 0, 2),
-                'otherPolls' => $otherPolls,
-                'allPolls'   => $polls,
+                'polls'      => $polls,
+                'page'       => $page,
                 'pagination' => $pagination
             ]);
         }
@@ -209,23 +205,28 @@ class PollsController extends Controller
             && ($poll->params['closetime'] < date('Y-m-d H:i:s'))
         ) {
             $poll->status = 'closed';
-            $message      = "<span class='closed'>" . _('You can\'t vote this poll, it is closed.') . "</span>";
+            $message      = "<span class='closed'>"
+                . _('You can\'t vote this poll, it is closed.') . "</span>";
         } else {
             $voted = (int) $request->query->getDigits('voted', 0);
             $valid = (int) $request->query->getDigits('valid', 3);
             if ($voted == 1) {
                 if ($voted == 1 && $valid === 1) {
                     $alreadyVoted = true;
-                    $message      = "<span class='thanks'>" . _('Thanks for participating.') . "</span>";
+                    $message      = "<span class='thanks'>"
+                        . _('Thanks for participating.') . "</span>";
                 } elseif ($voted == 1 && $valid === 0) {
-                    $message = "<span class='wrong'>" . _('Please select a valid poll answer.') . "</span>";
+                    $message = "<span class='wrong'>"
+                        . _('Please select a valid poll answer.') . "</span>";
                 }
             } elseif (isset($cookie)) {
                 $alreadyVoted = true;
-                $message      = "<span class='ok'>" . _('You have voted this poll previously.') . "</span>";
+                $message      = "<span class='ok'>"
+                    . _('You have voted this poll previously.') . "</span>";
             } elseif (($valid === 0) && ($voted == 0)) {
                 $alreadyVoted = true;
-                $message      = "<span class='ok'>" . _('You have voted this poll previously.') . "</span>";
+                $message      = "<span class='ok'>"
+                    . _('You have voted this poll previously.') . "</span>";
             }
         }
 
@@ -283,7 +284,10 @@ class PollsController extends Controller
             $voted = 1;
         }
 
-        $response = new RedirectResponse(SITE_URL . $poll->uri . '?voted=' . $voted . '&valid=' . $valid);
+        $response = new RedirectResponse(
+            SITE_URL . $poll->uri . '?voted=' . $voted . '&valid=' . $valid
+        );
+
         if (isset($cookieVoted)) {
             $response->headers->setCookie($cookieVoted);
         }
