@@ -12,7 +12,6 @@ function smarty_outputfilter_backend_analytics($output, $smarty)
 {
     $request = getService('request');
     $uri     = $request->getUri();
-    // $referer = $request->headers->get('referer');
 
     if (preg_match('/\/admin/', $uri)
         && getService('service_container')->getParameter('backend_analytics.enabled')
