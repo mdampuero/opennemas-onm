@@ -18,7 +18,6 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for the poll manager
@@ -81,29 +80,6 @@ class PollsController extends Controller
     }
 
     /**
-     * Lists all the polls in the widget.
-     *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('POLL_MANAGER')
-     *     and hasPermission('POLL_ADMIN')")
-     */
-    public function widgetAction()
-    {
-        $configurations = s::get('poll_settings');
-        $totalWidget    = 0;
-
-        if (array_key_exists('total_widget', $configurations)) {
-            $totalWidget = $configurations['total_widget'];
-        }
-
-        return $this->render('poll/list.tpl', [
-            'category'              => 'widget',
-            'total_elements_widget' => $totalWidget,
-        ]);
-    }
-
-    /**
      * Handles the form for create new polls.
      *
      * @param  Request  $request The request object.
@@ -135,7 +111,6 @@ class PollsController extends Controller
                 ->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'favorite'       => $request->request->getDigits('favorite', 0),
             'with_comment'   => $request->request->getDigits('with_comment', 0),
-            'visualization'  => $request->request->getDigits('visualization', 0),
             'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
             'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'item'           => json_decode($request->request->get('parsedAnswers')),
@@ -202,7 +177,7 @@ class PollsController extends Controller
         return $this->render('poll/new.tpl', [
             'poll'  => $poll,
             'items' => $poll->items,
-            'commentsConfig' => s::get('comments_config'),
+            'commentsConfig' => $this->get('setting_repository')->get('comments_config'),
             'locale'         => $ls->getRequestLocale('frontend'),
             'tags'           => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($poll->tag_ids)['items']
@@ -249,8 +224,6 @@ class PollsController extends Controller
                 ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $request->request
                 ->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'visualization'  => $request->request
-                ->filter('visualization', '', FILTER_SANITIZE_STRING),
             'favorite'       => $request->request->getDigits('favorite', 0),
             'with_comment'   => $request->request->getDigits('with_comment', 0),
             'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
@@ -326,14 +299,15 @@ class PollsController extends Controller
      */
     public function contentProviderAction(Request $request)
     {
-        $categoryId   = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = 8;
+        $categoryId = $request->query->getDigits('category', 0);
+        $page       = $request->query->getDigits('page', 1);
+        $epp        = 8;
 
         $em  = $this->get('entity_repository');
         $ids = $this->get('frontpage_repository')
             ->getContentIdsForHomepageOfCategory((int) $categoryId);
 
+        $order   = [ 'created' => 'desc' ];
         $filters = [
             'content_type_name' => [ [ 'value' => 'poll' ] ],
             'content_status'    => [ [ 'value' => 1 ] ],
@@ -341,14 +315,14 @@ class PollsController extends Controller
             'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
         ];
 
-        $countPolls = true;
-        $polls      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countPolls);
+        $count = true;
+        $polls = $em->findBy($filters, $order, $epp, $page, 0, $count);
 
         // Build the pagination
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
             'directional' => true,
-            'epp'         => $itemsPerPage,
+            'epp'         => $epp,
             'page'        => $page,
             'total'       => $countPolls,
             'route'       => [
@@ -373,13 +347,14 @@ class PollsController extends Controller
      */
     public function contentProviderRelatedAction(Request $request)
     {
-        $categoryId   = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
+        $categoryId = $request->query->getDigits('category', 0);
+        $page       = $request->query->getDigits('page', 1);
+        $epp        = $this->get('setting_repository')->get('items_per_page') ?: 20;
 
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
 
+        $order   = [ 'created' => 'desc' ];
         $filters = [
             'content_type_name' => [ [ 'value' => 'poll' ] ],
             'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ]
@@ -389,11 +364,11 @@ class PollsController extends Controller
             $filters['category_name'] = [ [ 'value' => $category->name ] ];
         }
 
-        $countPolls = true;
-        $polls      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countPolls);
+        $count = true;
+        $polls = $em->findBy($filters, $order, $epp, $page, 0, $count);
 
         $pagination = $this->get('paginator')->get([
-            'epp'   => $itemsPerPage,
+            'epp'   => $epp,
             'total' => $countPolls,
             'page'  => $page,
             'route' => [
@@ -410,7 +385,9 @@ class PollsController extends Controller
                 'contentTypeCategories' => $this->parentCategories,
                 'category'              => $categoryId,
                 'pagination'            => $pagination,
-                'contentProviderUrl'    => $this->generateUrl('admin_polls_content_provider_related'),
+                'contentProviderUrl'    => $this->generateUrl(
+                    'admin_polls_content_provider_related'
+                ),
             ]
         );
     }
@@ -428,33 +405,30 @@ class PollsController extends Controller
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $settingsRAW = $request->request->get('poll_settings');
+            $settings = $request->request->get('poll_settings');
 
             $data = [
                 'poll_settings' => [
-                    'typeValue'    => $settingsRAW['typeValue'] ?: 0,
-                    'heightPoll'   => $settingsRAW['heightPoll'] ?: 0,
-                    'widthPoll'    => $settingsRAW['widthPoll'] ?: 0,
-                    'total_widget' => $settingsRAW['total_widget'] ?: 0,
-                    'widthWidget'  => $settingsRAW['widthWidget'] ?: 0,
-                    'heightWidget' => $settingsRAW['heightWidget'] ?: 0,
+                    'epp'          => $settings['epp'] ?: 0,
+                    'highlighted'  => $settings['highlighted'] ?: 0,
+                    'typeValue'    => $settings['typeValue'] ?: 0,
                 ]
             ];
 
             foreach ($data as $key => $value) {
-                s::set($key, $value);
+                $this->get('setting_repository')->set($key, $value);
             }
 
-            $this->get('session')->getFlashBag()->add('success', _('Settings saved successfully.'));
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Settings saved successfully.')
+            );
 
             return $this->redirect($this->generateUrl('admin_polls_config'));
         }
 
-        $configurations = s::get([ 'poll_settings', ]);
+        $config = $this->get('setting_repository')->get('poll_settings');
 
-        return $this->render(
-            'poll/config.tpl',
-            [ 'configs' => $configurations, ]
-        );
+        return $this->render('poll/config.tpl', [ 'configs' => $config ]);
     }
 }

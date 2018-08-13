@@ -175,7 +175,6 @@ class Poll extends Content
                 'pk_poll'       => (int) $this->id,
                 'pretitle'      => $data['pretitle'],
                 'total_votes'   => 0,
-                'visualization' => $data['visualization'],
             ]);
 
             // Save poll items
@@ -220,7 +219,6 @@ class Poll extends Content
             // Update the poll info
             $conn->update('polls', [
                 'pretitle'      => $data['pretitle'],
-                'visualization' => $data['visualization'],
                 'total_votes'   => $total,
             ], [ 'pk_poll' => $data['id'] ]);
 
