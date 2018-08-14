@@ -177,7 +177,9 @@ class PollsController extends Controller
         return $this->render('poll/new.tpl', [
             'poll'  => $poll,
             'items' => $poll->items,
-            'commentsConfig' => $this->get('setting_repository')->get('comments_config'),
+            'commentsConfig' => $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('comments_config'),
             'locale'         => $ls->getRequestLocale('frontend'),
             'tags'           => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($poll->tag_ids)['items']
@@ -354,9 +356,11 @@ class PollsController extends Controller
     {
         $categoryId = $request->query->getDigits('category', 0);
         $page       = $request->query->getDigits('page', 1);
-        $epp        = $this->get('setting_repository')->get('items_per_page') ?: 20;
         $em         = $this->get('entity_repository');
         $category   = $this->get('category_repository')->find($categoryId);
+        $epp        = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_per_page') ?: 20;
 
         $order   = [ 'created' => 'desc' ];
         $filters = [
@@ -420,7 +424,9 @@ class PollsController extends Controller
             ];
 
             foreach ($data as $key => $value) {
-                $this->get('setting_repository')->set($key, $value);
+                $this->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')
+                    ->set($key, $value);
             }
 
             $this->get('session')->getFlashBag()->add(
@@ -431,7 +437,9 @@ class PollsController extends Controller
             return $this->redirect($this->generateUrl('admin_polls_config'));
         }
 
-        $config = $this->get('setting_repository')->get('poll_settings');
+        $config = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('poll_settings');
 
         return $this->render('poll/config.tpl', [ 'configs' => $config ]);
     }

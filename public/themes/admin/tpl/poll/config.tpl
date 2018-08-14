@@ -52,7 +52,7 @@
                 {t}Items per page{/t}
               </label>
               <div class="controls">
-                <input name="poll_settings[epp]" type="number" value="{$configs['poll_settings']['epp']|default:10}" required/>
+                <input name="poll_settings[epp]" type="number" value="{$configs['epp']|default:10}" required/>
               </div>
             </div>
             <div class="form-group">
@@ -60,7 +60,7 @@
                 {t}Highlighted{/t}
               </label>
               <div class="controls">
-                <input name="poll_settings[highlighted]" type="number" value="{$configs['poll_settings']['highlighted']|default:2}" required/>
+                <input name="poll_settings[highlighted]" type="number" value="{$configs['highlighted']|default:2}" required/>
               </div>
             </div>
             <div class="form-group">
@@ -69,8 +69,8 @@
               </label>
               <div class="controls">
                 <select name="poll_settings[typeValue]" id="poll_settings[typeValue]" class="required">
-                  <option value="percent" {if $configs['poll_settings']['typeValue'] eq 'percent'} selected {/if}>{t}Percents{/t}</option>
-                  <option value="vote" {if $configs['poll_settings']['typeValue'] eq 'vote'} selected {/if}>{t}Vote count{/t}</option>
+                  <option value="percent" {if $configs['typeValue'] eq 'percent'} selected {/if}>{t}Percents{/t}</option>
+                  <option value="vote" {if $configs['typeValue'] eq 'vote'} selected {/if}>{t}Vote count{/t}</option>
                 </select>
               </div>
             </div>

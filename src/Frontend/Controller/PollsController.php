@@ -50,7 +50,8 @@ class PollsController extends Controller
             'category_real_name'    => $category_real_name,
             'actual_category_title' => $category_real_name,
             'actual_category'       => $this->categoryName,
-            'settings'              => $this->get('setting_repository')
+            'settings'              => $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
                 ->get('poll_settings'),
         ]);
     }
@@ -67,7 +68,9 @@ class PollsController extends Controller
         }
 
         $page     = $request->query->getDigits('page', 1);
-        $settings = $this->get('setting_repository')->get('poll_settings');
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('poll_settings');
         $epp      = is_array($settings) && array_key_exists('epp', $settings)
             ? $settings['epp'] : 10;
 
