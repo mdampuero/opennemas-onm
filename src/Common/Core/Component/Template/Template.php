@@ -24,6 +24,13 @@ class Template extends \Smarty
     protected $container;
 
     /**
+     * The template file to use when rendering.
+     *
+     * @var string
+     */
+    protected $file = null;
+
+    /**
      * The list of filters.
      *
      * @var array
@@ -301,6 +308,22 @@ class Template extends \Smarty
 
             $this->setCacheLifetime($config['cache_lifetime']);
         }
+    }
+
+    /**
+     * Changes the template file to use when redering.
+     *
+     * @param string $file The template file.
+     *
+     * @return Template The current template service.
+     */
+    public function setFile($file)
+    {
+        if (!empty($file)) {
+            $this->file = $file;
+        }
+
+        return $this;
     }
 
     /**
