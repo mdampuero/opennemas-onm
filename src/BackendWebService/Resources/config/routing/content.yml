@@ -89,9 +89,11 @@ backend_ws_content_toggle_favorite:
         expose: true
 
 backend_ws_contents_list:
-    path:     /{contentType}s
-    defaults: { _controller: BackendWebServiceBundle:Content:list }
+    path:     /{contentType}s{format}
+    defaults: { _controller: BackendWebServiceBundle:Content:list, format: '.json' }
     methods:  [ GET ]
+    requirements:
+        format: '^.json$|.csv'
     options:
         expose: true
 
