@@ -322,6 +322,32 @@ class Content implements \JsonSerializable
     }
 
     /**
+     * Returns all content information when converted to CSV.
+     *
+     * @return array The content information.
+     */
+    public function csvSerialize()
+    {
+        $keys = [
+            'pk_content', 'pretitle', 'title', 'description', 'created',
+            'changed', 'starttime', 'content_status'
+        ];
+
+        $data = array_intersect_key(get_object_vars($this), array_flip($keys));
+        $data = array_merge(array_flip($keys), $data);
+
+        foreach ($this->getL10nKeys() as $key) {
+            if (!in_array($key, $keys)) {
+                continue;
+            }
+
+            $data[$key] = $this->__get($key);
+        }
+
+        return $data;
+    }
+
+    /**
      * Returns all content information when serialized.
      *
      * @return array The content information.
