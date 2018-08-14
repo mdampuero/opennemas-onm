@@ -313,7 +313,7 @@ class PollsController extends Controller
         }
 
         $response = new RedirectResponse(
-            SITE_URL . $poll->uri . '?voted=' . $voted . '&valid=' . $valid
+            '/' . $poll->uri . '?voted=' . $voted . '&valid=' . $valid
         );
 
         if (isset($cookieVoted)) {
