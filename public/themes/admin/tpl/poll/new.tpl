@@ -1,22 +1,22 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  {javascripts}
-    <script type="text/javascript">
-      $(document).ready(function ($) {
-        var localeAux = '{$smarty.const.CURRENT_LANGUAGE_SHORT|default:"en"}';
-        localeAux = moment.locales().includes(localeAux) ?
-          localeAux :
-          'en';
-        $('#closetime').datetimepicker({
-          format: 'YYYY-MM-DD HH:mm:ss',
-          useCurrent: false,
-          minDate: '{$poll->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}',
-          locale: localeAux
-        });
-      });
-    </script>
-  {/javascripts}
+{javascripts}
+<script type="text/javascript">
+$(document).ready(function($) {
+  var localeAux = '{$smarty.const.CURRENT_LANGUAGE_SHORT|default:"en"}';
+
+  localeAux = moment.locales().includes(localeAux) ? localeAux : 'en';
+
+  $('#closetime').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:ss',
+    useCurrent: false,
+    minDate: '{$poll->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}',
+    locale: localeAux
+  });
+});
+</script>
+{/javascripts}
 {/block}
 
 {block name="content"}
@@ -27,27 +27,23 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-pie-chart"></i>
-                {t}Polls{/t}
+                <i class="fa fa-pie-chart m-r-10"></i>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs">
-              <span class="h-seperate"></span>
+            <li class="quicklinks">
+              <h4>
+                <a class="no-padding" href="{url name=admin_polls}" title="{t}Go back to list{/t}">
+                  {t}Polls{/t}
+                </a>
+              </h4>
             </li>
+            <li class="quicklinks hidden-xs m-l-5 m-r-5"> <h4> <i class="fa fa-angle-right"></i> </h4> </li>
             <li class="quicklinks hidden-xs">
-              <h5>{if $poll->id}{t}Editing poll{/t}{else}{t}Creating a poll{/t}{/if}</h5>
+              <h4>{if $poll->id}{t}Editing{/t}{else}{t}Creating{/t}{/if}</h4>
             </li>
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
-              <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_polls}" title="{t}Go back{/t}">
-                  <i class="fa fa-reply"></i>
-                </a>
-              </li>
-              <li class="quicklinks">
-                <span class="h-seperate"></span>
-              </li>
               <li class="quicklinks">
                 <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
                   <i class="fa fa-save"></i>

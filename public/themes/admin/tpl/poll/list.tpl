@@ -8,8 +8,14 @@
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-pie-chart"></i>
-              {t}Polls{/t}
+              <i class="fa fa-pie-chart m-r-10"></i>
+            </h4>
+          </li>
+          <li class="quicklinks">
+            <h4>
+              <a class="no-padding" href="{url name=admin_polls}" title="{t}Go back to list{/t}">
+                {t}Polls{/t}
+              </a>
             </h4>
           </li>
         </ul>
@@ -187,12 +193,12 @@
                 </div>
                 <div class="listing-inline-actions">
                   {acl isAllowed="POLL_UPDATE"}
-                    <a class="link" href="[% edit(content.id, 'admin_poll_show') %]">
+                    <a class="btn btn-default btn-small" href="[% edit(content.id, 'admin_poll_show') %]">
                       <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                     </a>
                   {/acl}
                   {acl isAllowed="POLL_DELETE"}
-                    <button class="link link-danger" ng-click="sendToTrash(content)" type="button">
+                    <button class="btn btn-danger btn-small" ng-click="sendToTrash(content)" type="button">
                       <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                     </button>
                   {/acl}
