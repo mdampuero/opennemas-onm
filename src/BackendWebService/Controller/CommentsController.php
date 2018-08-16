@@ -258,6 +258,8 @@ class CommentsController extends ContentController
             $extra['contents'][$content->pk_content] = $content;
         }
 
+        $extra['dateTimezone'] = $this->container->get('core.locale')->getTimeZone();
+
         $this->get('core.locale')->setContext('frontend');
 
         return $extra;
