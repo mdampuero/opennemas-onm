@@ -69,6 +69,10 @@ class ResponseListener implements EventSubscriberInterface
      */
     protected function getJsonResponse($content)
     {
+        if (array_key_exists('o-filename', $content)) {
+            unset($content['o-filename']);
+        }
+
         return new JsonResponse($content);
     }
 
@@ -82,8 +86,8 @@ class ResponseListener implements EventSubscriberInterface
      */
     protected function getCsvResponse($content)
     {
-        $filename = (array_key_exists('filename', $content) ?
-            $content['filename'] : 'report') . '-' . date('YmdHis');
+        $filename = (array_key_exists('o-filename', $content) ?
+            $content['o-filename'] : 'report') . '-' . date('YmdHis');
         $contents = array_key_exists('results', $content) ?
             $content['results'] : [];
 
