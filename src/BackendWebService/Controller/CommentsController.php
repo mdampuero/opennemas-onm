@@ -127,11 +127,11 @@ class CommentsController extends ContentController
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($criteria);
 
-        return new JsonResponse([
+        return [
             'extra'   => $this->loadExtraData($results),
             'results' => $results,
             'total'   => $total
-        ]);
+        ];
     }
 
     /**

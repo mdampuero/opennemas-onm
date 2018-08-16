@@ -37,8 +37,10 @@ backend_ws_comments_patch:
         expose: true
 
 backend_ws_comments_list:
-    path:     /comments
-    defaults: { _controller: BackendWebServiceBundle:Comments:list }
+    path:     /comments{format}
+    defaults: { _controller: BackendWebServiceBundle:Comments:list, format: '.json' }
     methods:  [ GET ]
+    requirements:
+        format: '^.json$|.csv'
     options:
         expose: true
