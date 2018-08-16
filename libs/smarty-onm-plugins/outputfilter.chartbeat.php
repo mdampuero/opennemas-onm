@@ -84,7 +84,7 @@ function addChartBeatCode($output, $smarty, $type = null)
 <!-- End Chartbeat -->';
     } else {
         $code = '
-<script type="text/javascript">
+<script>
   var _sf_async_config = _sf_async_config || {};
   /** CONFIGURATION START **/
   _sf_async_config.sections = "' . $smarty->tpl_vars['category_name'] . '";
@@ -98,7 +98,6 @@ function addChartBeatCode($output, $smarty, $type = null)
           window._sf_endpt = (new Date()).getTime();
           var e = document.createElement("script");
           e.setAttribute("language", "javascript");
-          e.setAttribute("type", "text/javascript");
           e.setAttribute("src", "//static.chartbeat.com/js/chartbeat.js");
 
           document.body.appendChild(e);
@@ -113,7 +112,7 @@ function addChartBeatCode($output, $smarty, $type = null)
 </script>';
 
         $headCode = '
-<script type="text/javascript">
+<script>
     var _sf_async_config = _sf_async_config || {};
     /** CONFIGURATION START **/
     _sf_async_config.uid = ' . $config['id'] . '; // ACCOUNT NUMBER

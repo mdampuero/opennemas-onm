@@ -14,7 +14,7 @@
       <div class="input-append"></div>
       {if !$video}
         {javascripts}
-          <script type="text/javascript" defer="defer">
+          <script defer="defer">
             jQuery(document).ready(function($) {
               $('#video_url').popover({
                 placement: 'bottom',

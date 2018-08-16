@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
   <!--// <![CDATA[
     var OA_zones = {
       {foreach $zones as $zone}
@@ -7,4 +7,4 @@
     };
   // ]]> -->
 </script>
-<script type="text/javascript" src="{$config['url']}/www/delivery/spcjs.php?cat_name={$actual_category}"></script>
+<script src="{$config['url']}/www/delivery/spcjs.php?cat_name={$actual_category}"></script>

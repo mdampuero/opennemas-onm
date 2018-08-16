@@ -49,7 +49,7 @@ class SmartyCookieHintTest extends \PHPUnit\Framework\TestCase
             . "related to your preferences through the analysis of your navigation."
             . " <a target=\"_blank\" href=\"%s\">See details &gt; </a> "
             . "               </p>            </div>        </div>        "
-            . "<script type='text/javascript'>            function getCookie(name)"
+            . "<script>            function getCookie(name)"
             . " {                var cookies = document.cookie.split(';');    "
             . "            for (var i = 0; i < cookies.length; i++) {         "
             . "           var cookie = cookies[i].replace(/^\s+/,'').replace(/\s+$/,'');"
