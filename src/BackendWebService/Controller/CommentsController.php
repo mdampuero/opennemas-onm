@@ -128,9 +128,10 @@ class CommentsController extends ContentController
         $total   = $em->countBy($criteria);
 
         return [
-            'extra'   => $this->loadExtraData($results),
-            'results' => $results,
-            'total'   => $total
+            'extra'      => $this->loadExtraData($results),
+            'o-filename' => 'comments',
+            'results'    => $results,
+            'total'      => $total
         ];
     }
 

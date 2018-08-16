@@ -26,6 +26,12 @@
                   <i class="fa fa-gear fa-lg"></i>
                 </a>
               </li>
+              <li class="quicklinks">
+                <a class="btn btn-white" href="[% getExportUrl() %]">
+                  <span class="fa fa-download"></span>
+                  {t}Download{/t}
+                </a>
+              </li>
             </ul>
           </div>
         </div>
