@@ -115,7 +115,7 @@
     <script type="text/ng-template" id="item">
       <div class="newsletter-item clearfix" ui-tree-handle>
         <span></span>
-        <span>[% content.content_type_l10n_name %]</span>
+        <span class="newsletter-item-title">[% content.content_type_l10n_name %]</span>
         <span class="h-seperate"></span>
         <span class="item-title">[% content.title %]</span>
         <button class="btn btn-white pull-right" data-nodrag ng-click="removeContent(container, content)" type="button">

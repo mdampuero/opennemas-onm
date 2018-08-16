@@ -43,12 +43,14 @@ $(document).ready(function() {
   'use strict';
   $('.select2-multi').select2({
     dropdownAutoWidth: true,
-    closeOnSelect:false
+    closeOnSelect: false
   });
+
   $('.select2').select2({
     dropdownAutoWidth: true,
     formatSelection: function(state) {
       var element = state.element;
+
       if ($(element).parents('.select2').data('label') !== null) {
         return $(element).parents('.select2').data('label') + ': ' + state.text;
       }
@@ -58,3 +60,10 @@ $(document).ready(function() {
   });
   $('.select2-arrow').append('<i class="select2-arrow-down fa fa-angle-down"></i>');
 })($);
+
+// Do not close dropdowm-menus on click if they have the class .keepopen
+$(document).on('click', '.dropdown-menu.keepopen', function() {
+  event.stopPropagation();
+
+  return false;
+});

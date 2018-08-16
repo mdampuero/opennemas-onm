@@ -74,6 +74,48 @@
         };
 
         /**
+         * @function parseItem
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Parses the response and adds information to the scope.
+         *
+         * @param {Object} data The data in the response.
+         */
+        $scope.parseItem = function(data) {
+          if (data.item) {
+            data.item.contents.map(function(item) {
+              item.items.map(function(content) {
+                if (content.content_type === 'list' &&
+                  content.criteria.category == '') {
+                  content.criteria.category = [];
+                }
+                if (content.content_type === 'list' &&
+                  typeof content.criteria.category === 'undefined') {
+                  content.criteria.category = [ ];
+                }
+
+                if (content.content_type === 'list' &&
+                  typeof content.criteria.category === 'string') {
+                  content.criteria.category = [ parseInt(content.criteria.category) ];
+                }
+
+                // If the element is a list then convert its category criteria to numbers
+                if (content.content_type === 'list') {
+                  content.criteria.category = content.criteria.category.map(Number);
+                }
+
+                return content;
+              });
+
+              return item;
+            });
+
+            $scope.item = angular.extend($scope.item, data.item);
+          }
+        };
+
+        /**
          * @function loadHours
          * @memberOf NewsletterTemplateCtrl
          *
@@ -148,12 +190,52 @@
             content_type: 'list',
             criteria: {
               content_type: '',
-              category: '',
+              category: [],
               epp: 5,
               in_litter: 0,
+              filter: '',
               orderBy: { starttime:  'desc' }
             }
           });
+        };
+
+        /**
+         * @function addDynamicContent
+         * @memberOf NewsletterTemplateCtrl
+         *
+         * @description
+         *   Adds/removes a categoryId from the content category criteria.
+         *
+         * @param {Object} content The content to change category criteria from.
+         * @param {Object} categoryId The categoryId to add/remove from the criteria.
+         */
+        $scope.toggleCategory = function(content, categoryId) {
+          var position = content.criteria.category.indexOf(categoryId);
+
+          if (position < 0) {
+            content.criteria.category.push(categoryId);
+          } else {
+            content.criteria.category.splice(position, 1);
+          }
+        };
+
+        /**
+         * @function toggleAllCategories
+         * @memberOf NewsletterTemplateCtrl
+         *
+         * @description
+         *   Adds or removes all categories from the content criteria.
+         *
+         * @param {Object} content The content to change category criteria from.
+         */
+        $scope.toggleAllCategories = function(content) {
+          if (content.criteria.category.length !== $scope.data.extra.categories.length) {
+            content.criteria.category = $scope.data.extra.categories.map(function(item) {
+              return item.pk_content_category;
+            });
+          } else {
+            content.criteria.category = [];
+          }
         };
 
         /**

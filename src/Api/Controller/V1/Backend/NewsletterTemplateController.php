@@ -77,7 +77,7 @@ class NewsletterTemplateController extends Controller
             ];
         }
 
-        if (!empty($settings['newsletter_maillist'])) {
+        if (!empty($settings['newsletter_maillist']['email'])) {
             $extra['recipients'][] = [
                 'type' => 'external',
                 'name' => $settings['newsletter_maillist']['email'],
@@ -137,10 +137,6 @@ class NewsletterTemplateController extends Controller
             ->findBy('internal_category = 1');
 
         $extra['categories'] = $converter->responsify($categories);
-        array_unshift($extra['categories'], [
-            'pk_content_category' => "",
-            'title' => _('All')
-        ]);
 
         $extra['filters'] = [
             [ 'value' => '',          'title' => _('No filter') ],

@@ -2,9 +2,9 @@
 
 {block name="content"}
 <script>
-      var newsletterTemplateTranslations = {
-        contenidosRequerido: '{t}Some content is required{/t}'
-      };
+var newsletterTemplateTranslations = {
+  contenidosRequerido: '{t}Some content is required{/t}'
+};
 </script>
 <form name="form" ng-controller="NewsletterTemplateCtrl" ng-init="getItem({$id});">
   <div class="page-navbar actions-navbar">
@@ -95,7 +95,7 @@
                   <div class="checkbox col-xs-6 p-b-10">
                     <input id="checkbox-days-[% $index %]" checklist-model="item.schedule.days" checklist-value="$index + 1" type="checkbox">
                     <label for="checkbox-days-[% $index %]">
-                      <strong>[% day %]</strong>
+                      [% day %]
                     </label>
                   </div>
                 </div>
@@ -142,7 +142,7 @@
                   <div class="checkbox">
                     <input id="checkbox-acton-[% $index %]" checklist-model="item.recipients" checklist-value="recipient" type="checkbox" load-on-empty="true">
                     <label for="checkbox-acton-[% $index %]">
-                      <strong>[% recipient.name %]</strong>
+                      [% recipient.name %]
                     </label>
                   </div>
                 </div>
@@ -178,23 +178,23 @@
         </div>
       </div>
       <div class="grid-body">
-        <div ui-tree id="newsletter-contents">
-          <ol ui-tree-nodes ng-model="item.contents" type="container">
-            <li class="newsletter-container" ui-tree-node ng-repeat="container in item.contents">
-              <div class="newsletter-container-title clearfix" ui-tree-handle>
-                <input ng-model="container.title" type="text" data-nodrag class="form-control title pull-left" placeholder="{t}Block title{/t}">
+        <div id="newsletter-contents">
+          <ol ng-model="item.contents" type="container">
+            <li class="newsletter-container" ng-repeat="container in item.contents">
+              <div class="newsletter-container-title clearfix">
+                <input ng-model="container.title" type="text" class="form-control title pull-left" placeholder="{t}Block title{/t}">
                 <div class="container-actions pull-right">
-                  <button class="btn btn-white" data-nodrag ng-click="removeContainer(container)" type="button">
+                  <button class="btn btn-white" ng-click="removeContainer(container)" type="button">
                     <i class="fa fa-trash-o text-danger"></i>
                   </button>
                 </div>
               </div>
-              <div class="newsletter-container-contents clearfix" ng-if="!container.hide" ui-tree-handle>
-                <ol ui-tree-nodes="" ng-model="container.items" type="content">
-                  <li ng-repeat="content in container.items" ui-tree-node ng-include="'item'">
+              <div class="newsletter-container-contents clearfix" ng-if="!container.hide" >
+                <ol class="newsletter-container-contents-list" ng-model="container.items" ui-sortable="{ handle: '.sortable-handle'}" type="content">
+                  <li ng-repeat="content in container.items" ng-include="'item'">
                   </li>
                 </ol>
-                <div class="add-contents p-b-15" data-nodrag>
+                <div class="add-contents p-b-15">
                   <h5 class="text-center">{t}Add contents{/t}</h5>
                   <div class="row">
                     <div class="col-xs-4 col-sm-offset-2">
@@ -204,7 +204,7 @@
                       </a>
                     </div>
                     <div class="col-xs-4">
-                      <button type="button" class="btn btn-primary btn-block" data-nodrag content-picker content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="container.items" content-picker-type="album,article,attachment,opinion,poll,video,special">
+                      <button type="button" class="btn btn-primary btn-block" content-picker content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="container.items" content-picker-type="album,article,attachment,opinion,poll,video,special">
                         <i class="fa fa-hand-o-up"></i>
                         {t}Pick contents{/t}
                       </button>
@@ -221,62 +221,82 @@
     </div>
   </div>
   <script type="text/ng-template" id="item">
-  <div class="newsletter-item clearfix" ui-tree-handle>
-    <span></span>
-    <div ng-show="content.content_type !== 'list'">
-      <span>[% content.content_type_l10n_name %]</span>
-      <span class="h-seperate" data-nodrag></span>
-      <span class="item-title" data-nodrag>[% content.title %]</span>
+  <div class="newsletter-item clearfix">
+    <div class="sortable-handle p-l-5"><i class="fa fa-align-justify"></i></div>
+
+    <div ng-show="content.content_type !== 'list'" class="newsletter-item-wrapper">
+      <div class="newsletter-item-title">[% content.content_type_l10n_name %]</div>
+      <div class="newsletter-item-content">
+        <div class="newsletter-item-content-title">[% content.title %]</div>
+      </div>
     </div>
-    <div ng-show="content.content_type === 'list'" class="item-list">
-      <span class="item-list-title">{t}List of contents{/t}</span>
-      <span class="h-seperate" data-nodrag></span>
-      <span class="item-title" data-nodrag>
-        <div class="criteria clearfix">
-          <span class="item-list-icon fa fa-filter"></span>
 
-          <ui-select name="content_type" theme="select2" ng-model="content.criteria.content_type">
-            <ui-select-match>
-              <strong>{t}Type{/t}: </strong> [% $select.selected.title %]
-            </ui-select-match>
-            <ui-select-choices repeat="item.value as item in data.extra.content_types | filter: { title: $select.search }">
-              <div ng-bind-html="item.title | highlight: $select.search"></div>
-            </ui-select-choices>
-          </ui-select>
+    <div ng-show="content.content_type === 'list'" class="newsletter-item-wrapper item-list">
+      <div class="newsletter-item-title">{t}List of contents{/t}</div>
+      <div class="newsletter-item-content">
+        <div class="item-list-criteria">
+          <div class="criteria clearfix">
+            <span class="item-list-icon fa fa-filter"></span>
 
-          <ui-select name="category" theme="select2" ng-model="content.criteria.category">
-            <ui-select-match>
-              <strong>{t}Category{/t}: </strong> [% $select.selected.title %]
-            </ui-select-match>
-            <ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in data.extra.categories | filter: { title: $select.search }">
-              <div ng-bind-html="item.title | highlight: $select.search"></div>
-            </ui-select-choices>
-          </ui-select>
+            <ui-select name="content_type" theme="select2" ng-model="content.criteria.content_type">
+              <ui-select-match>
+                <strong>{t}Type{/t}: </strong> [% $select.selected.title %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in data.extra.content_types | filter: { title: $select.search }" position='down'>
+                <div ng-bind-html="item.title | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+
+            <div class="dropdown category">
+              <button class="btn btn-white" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <strong>
+                {t}Categories{/t}:
+                </strong>
+                <span ng-show="content.criteria.category.length == 0">{t}Any{/t}</span>
+                <span ng-hide="content.criteria.category.length == 0">{t 1="[% content.criteria.category.length %]"}%1 selected{/t}</span>
+                <span class="caret"></span>
+              </button>
+              <div class="dropdown-menu dropdown-menu-left keepopen">
+                <a class="select-all-categories p-b-5" ng-click="toggleAllCategories(content)">{t}Select/deselect all{/t}</a>
+                <div class="checkbox-list">
+                  <ul class="checkbox">
+                    <li class="dropdown-element" ng-repeat="category in data.extra.categories" ng-class="{ active: content.criteria.category.indexOf(category.pk_content_category) >=0 }" ng-click="toggleCategory(content, category.pk_content_category)">
+                      [% category.title %]
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {* <div style="display:inline-block" ng-dropdown-multiselect selected-model="content.criteria.category" options="data.extra.categories"  extra-settings="{ template: '[% getPropertyForObject(option, settings.displayProp) %]', scrollableHeight: '100px', displayProp: 'title', idProperty: 'id', scrollable: true}"
+            smartButtonTextProvider(selectionArray) { return selectionArray.length + 2; }
+            translation-texts="{ checkAll : "{t}Select all{/t}", uncheckAll: "{t}Deselect all{/t}", }" ></div> *}
+          </div>
+
+          <div class="limit clearfix">
+            <span class="item-list-icon fa fa-sort-amount-asc"></span>
+            <ui-select name="view" theme="select2" ng-model="content.criteria.filter">
+              <ui-select-match>
+                <strong>{t}Filter{/t}: </strong> [% $select.selected.title %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in data.extra.filters | filter: { title: $select.search }" position='down'>
+                <div ng-bind-html="item.title | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+            <ui-select name="view" theme="select2" ng-model="content.criteria.epp">
+              <ui-select-match>
+                <strong>{t}Amount{/t}: </strong> [% $select.selected %]
+              </ui-select-match>
+              <ui-select-choices repeat="item in numberOfElements  | filter: $select.search" position='down'>
+                <div ng-bind-html="item | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </div>
         </div>
-
-        <div class="limit clearfix">
-          <span class="item-list-icon fa fa-sort-amount-asc"></span>
-          <ui-select name="view" theme="select2" ng-model="content.criteria.filter">
-            <ui-select-match>
-              <strong>{t}Filter{/t}: </strong> [% $select.selected.title %]
-            </ui-select-match>
-            <ui-select-choices repeat="item.value as item in data.extra.filters | filter: { title: $select.search }">
-              <div ng-bind-html="item.title | highlight: $select.search"></div>
-            </ui-select-choices>
-          </ui-select>
-          <ui-select name="view" theme="select2" ng-model="content.criteria.epp">
-          <ui-select-match>
-            <strong>{t}Amount{/t}: </strong> [% $select.selected %]
-          </ui-select-match>
-          <ui-select-choices repeat="item in numberOfElements  | filter: $select.search">
-            <div ng-bind-html="item | highlight: $select.search"></div>
-          </ui-select-choices>
-        </ui-select>
-
-        </div>
-      </span>
+      </div>
     </div>
-    <button class="btn btn-white pull-right" data-nodrag ng-click="removeContent(container, content)" type="button">
+
+    <button class="btn btn-white pull-right button-remove" ng-click="removeContent(container, content)" type="button">
       <i class="fa fa-trash-o text-danger"></i>
     </button>
   </div>
