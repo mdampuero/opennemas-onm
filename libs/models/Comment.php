@@ -7,7 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-class Comment
+use Common\Data\Serialize\CsvSerializable;
+
+class Comment implements CsvSerializable
 {
     /**
      * The id of the comment
@@ -128,9 +130,7 @@ class Comment
     }
 
     /**
-     * Returns all content information when converted to CSV.
-     *
-     * @return array The content information.
+     * {@inheritdoc}
      */
     public function csvSerialize()
     {

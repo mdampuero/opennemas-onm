@@ -1,23 +1,16 @@
 <?php
 /**
- * Defines the Content class
+ * This file is part of the Onm package.
  *
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package    Model
  */
+use Common\Data\Serialize\CsvSerializable;
 use Onm\Settings as s;
 
-/**
- * Handles all the common actions in all the contents
- *
- * @package    Model
- */
-class Content implements \JsonSerializable
+class Content implements \JsonSerializable, CsvSerializable
 {
     const AVAILABLE     = 'available';
     const TRASHED       = 'trashed';
@@ -322,9 +315,7 @@ class Content implements \JsonSerializable
     }
 
     /**
-     * Returns all content information when converted to CSV.
-     *
-     * @return array The content information.
+     * {@inheritdoc}
      */
     public function csvSerialize()
     {
