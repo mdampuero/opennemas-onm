@@ -97,6 +97,32 @@ class Poll extends Content
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function csvSerialize()
+    {
+        $data   = parent::csvSerialize();
+        $ignore = [ 'pk_item', 'metadata' ];
+
+        $data['total_votes'] = $this->total_votes;
+
+        $i = 0;
+        foreach ($this->items as $item) {
+            foreach ($item as $key => $value) {
+                if (in_array($key, $ignore)) {
+                    continue;
+                }
+
+                $data[$key . $i] = $value;
+            }
+
+            $i++;
+        }
+
+        return $data;
+    }
+
+    /**
      * Loads a poll given its id
      *
      * @param int $id the poll id
