@@ -46,7 +46,7 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'findBy', 'find'])
+            ->setMethods([ 'countBy', 'findBy', 'find', 'getEntities'])
             ->getMock();
 
         $this->newsletter = new Entity([
@@ -123,7 +123,7 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
         $itemA = new Entity([ 'title' => 'wubble']);
         $itemB = new Entity([ 'title' => 'xyzzy' ]);
 
-        $this->repository->expects($this->once())->method('findBy')
+        $this->repository->expects($this->once())->method('getEntities')
             ->with('id in [1,2]')
             ->willReturn([ $itemA, $itemB ]);
         $this->em->expects($this->exactly(2))->method('remove');
@@ -149,7 +149,7 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
         $itemA = new Entity([ 'title' => 'wubble']);
         $itemB = new Entity([ 'title' => 'xyzzy' ]);
 
-        $this->repository->expects($this->once())->method('findBy')
+        $this->repository->expects($this->once())->method('getEntities')
             ->with('id in [1,2]')
             ->willReturn([ $itemA, $itemB ]);
         $this->em->expects($this->at(2))->method('remove');
@@ -168,11 +168,11 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
     */
     public function testDeleteListWhenErrorWhileSearching()
     {
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('id in [1,2]')
+        $this->repository->expects($this->once())->method('getEntities')
+            ->with([ 1, 2 ])
             ->will($this->throwException(new \Exception()));
 
-        $this->logger->expects($this->exactly(2))->method('error');
+        $this->logger->expects($this->exactly(1))->method('error');
 
         $this->service->deleteList([ 1, 2 ]);
     }

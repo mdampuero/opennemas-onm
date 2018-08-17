@@ -123,17 +123,17 @@ class OrmService extends Service
             throw new DeleteListException('Invalid ids', 400);
         }
 
-        $oql = $this->getOqlForIds($ids);
-
         try {
-            $response = $this->getList($oql);
+            $response = $this->container->get('orm.manager')
+                ->getRepository($this->entity, $this->origin)
+                ->getEntities($ids);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new DeleteListException($e->getMessage(), $e->getCode());
         }
 
         $deleted = 0;
-        foreach ($response['items'] as $item) {
+        foreach ($response as $item) {
             try {
                 $this->em->remove($item, $item->getOrigin());
                 $deleted++;
@@ -230,9 +230,10 @@ class OrmService extends Service
             throw new GetListException('Invalid ids', 400);
         }
 
-        $oql = $this->getOqlForIds($ids);
+        $contents = $this->container->get('orm.manager')
+            ->getRepository($this->entity, $this->origin)->getEntities($ids);
 
-        return $this->getList($oql);
+        return ['items' => $contents, 'total' => count($contents)];
     }
 
     /**
@@ -266,17 +267,18 @@ class OrmService extends Service
         }
 
         $data = $this->em->getConverter($this->entity)->objectify($data);
-        $oql  = $this->getOqlForIds($ids);
 
         try {
-            $response = $this->getList($oql);
+            $response = $this->container->get('orm.manager')
+                ->getRepository($this->entity, $this->origin)
+                ->getEntities($ids);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new PatchListException($e->getMessage());
         }
 
         $updated = 0;
-        foreach ($response['items'] as $item) {
+        foreach ($response as $item) {
             try {
                 $item->merge($data);
                 $this->validate($item);
@@ -349,22 +351,6 @@ class OrmService extends Service
             $this->container->get('error.log')->error($e->getMessage());
             throw new UpdateItemException($e->getMessage());
         }
-    }
-
-    /**
-     * Returns the OQL statement to find all entities with id in the list of
-     * ids.
-     *
-     * @param array $ids The list of ids.
-     *
-     * @return string The OQL statement.
-     */
-    protected function getOqlForIds($ids)
-    {
-        $keys = $this->em->getMetadata($this->entity)->getIdKeys();
-        $key  = array_pop($keys);
-
-        return sprintf('%s in [%s]', $key, implode(',', $ids));
     }
 
     /**

@@ -121,33 +121,13 @@ class BaseRepository extends Repository
             throw new \InvalidArgumentException();
         }
 
-        $entity  = null;
-        $id      = $this->metadata->normalizeId($id);
-        $cacheId = $this->metadata->getPrefix()
-            . implode($this->metadata->getSeparator(), $id);
+        $entities = $this->getEntities([$id]);
 
-        if ($this->hasCache() && $this->cache->exists($cacheId)) {
-            $entity = $this->cache->get($cacheId);
-        }
-
-        if (empty($entity)) {
-            $entity   = $this->miss;
-            $entities = $this->refresh([ $id ]);
-
-            if (!empty($entities)) {
-                $entity = array_pop($entities);
-            }
-
-            if ($this->hasCache()) {
-                $this->cache->set($cacheId, $entity);
-            }
-        }
-
-        if ($entity === $this->miss) {
+        if (empty($entities) || $entities[0] === $this->miss) {
             throw new EntityNotFoundException($this->metadata->name, $id);
         }
 
-        return $entity;
+        return $entities[0];
     }
 
     /**
@@ -211,6 +191,16 @@ class BaseRepository extends Repository
      */
     public function getEntities($ids)
     {
+        if (empty($ids)) {
+            return [];
+        }
+
+        if (!is_array($ids[0])) {
+            $ids = array_map(function ($id) {
+                return $this->metadata->normalizeId($id);
+            }, $ids);
+        }
+
         // Prefix ids
         $prefixedIds = array_map(function ($a) {
             return $this->metadata->getPrefixedId($a);

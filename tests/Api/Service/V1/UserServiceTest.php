@@ -54,7 +54,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'findBy', 'findOneBy'])
+            ->setMethods([ 'countBy', 'findBy', 'findOneBy', 'getEntities'])
             ->getMock();
 
         $this->user = new Entity([
@@ -363,16 +363,11 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteListWhenErrorWhileSearching()
     {
-        $this->fixer->expects($this->once())->method('fix');
-        $this->fixer->expects($this->once())->method('addCondition');
-        $this->fixer->expects($this->once())->method('getOql')
-            ->willReturn('type != 0 and id in [1,2]');
-
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('type != 0 and id in [1,2]')
+        $this->repository->expects($this->once())->method('getEntities')
+            ->with([ 1, 2 ])
             ->will($this->throwException(new \Exception()));
 
-        $this->logger->expects($this->exactly(2))->method('error');
+        $this->logger->expects($this->exactly(1))->method('error');
 
         $this->service->deleteList([ 1, 2 ]);
     }

@@ -269,10 +269,6 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindOneByForEmptyEntity()
     {
-        $this->cache->expects($this->once())->method('get')->willReturn([]);
-        $this->cache->expects($this->any())->method('set');
-        $this->conn->expects($this->at(0))->method('fetchAll')->willReturn([]);
-
         $this->repository->findOneBy();
     }
 
