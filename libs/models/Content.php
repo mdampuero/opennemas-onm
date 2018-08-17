@@ -330,7 +330,7 @@ class Content implements \JsonSerializable
     {
         $keys = [
             'pk_content', 'pretitle', 'title', 'description', 'created',
-            'changed', 'starttime', 'content_status'
+            'changed', 'starttime', 'content_status', 'body'
         ];
 
         $data = array_intersect_key(get_object_vars($this), array_flip($keys));
