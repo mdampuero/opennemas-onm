@@ -9,6 +9,7 @@
  */
 namespace Common\Core\Component\Helper;
 
+use Common\Data\Serialize\CsvSerializable;
 use League\Csv\Writer;
 
 class CsvHelper
@@ -64,7 +65,11 @@ class CsvHelper
     protected function parse($data)
     {
         return array_map(function ($a) {
-            return $a->csvSerialize();
+            if ($a instanceof CsvSerializable) {
+                return $a->csvSerialize();
+            }
+
+            return $a;
         }, $data);
     }
 }
