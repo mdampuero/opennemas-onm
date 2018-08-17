@@ -24,18 +24,9 @@ class CsvHelper
     public function getReport($data)
     {
         $writer = $this->getWriter();
+        $data   = $this->parse($data);
 
-        if (empty($filename)) {
-            $filename = 'report.csv';
-        }
-
-        $filename = trim($filename, '.csv') . '.csv';
-        $data     = $this->parse($data);
-
-        if (!empty($data)) {
-            $writer->insertOne(array_keys($data[0]));
-            $writer->insertAll($data);
-        }
+        $writer->insertAll($data);
 
         return $writer->__toString();
     }
@@ -64,6 +55,10 @@ class CsvHelper
      */
     protected function parse($data)
     {
+        if (!is_array($data)) {
+            return $data;
+        }
+
         return array_map(function ($a) {
             if ($a instanceof CsvSerializable) {
                 return $a->csvSerialize();
