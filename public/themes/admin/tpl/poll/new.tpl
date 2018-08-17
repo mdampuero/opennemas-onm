@@ -39,7 +39,7 @@ $(document).ready(function($) {
             </li>
             <li class="quicklinks hidden-xs m-l-5 m-r-5"> <h4> <i class="fa fa-angle-right"></i> </h4> </li>
             <li class="quicklinks hidden-xs">
-              <h4>{if $poll->id}{t}Editing{/t}{else}{t}Creating{/t}{/if}</h4>
+              <h4>{if $poll->id}{t}Edit{/t}{else}{t}Create{/t}{/if}</h4>
             </li>
           </ul>
           <div class="all-actions pull-right">
