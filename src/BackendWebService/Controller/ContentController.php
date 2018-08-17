@@ -40,9 +40,10 @@ class ContentController extends Controller
         $total   = $em->countBy($criteria);
 
         return [
-            'extra'   => $this->loadExtraData($results),
-            'results' => $results,
-            'total'   => $total,
+            'o-filename' => $contentType,
+            'extra'      => $this->loadExtraData($results),
+            'results'    => $results,
+            'total'      => $total,
         ];
     }
 
