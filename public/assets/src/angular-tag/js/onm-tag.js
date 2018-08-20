@@ -44,11 +44,11 @@
                   '</div>' +
                   '<input type="hidden" name="tag_ids" ng-value="getTagIdsList()">' +
                 '</div>' +
-                '<div class="autoSuggested" ng-show="loadAutoSuggestedTags">' +
+                '<div class="autoSuggested" ng-show="loadAutoSuggestedTags && suggestedTags && suggestedTags.length > 0">' +
                   '<span class="title">' + window.tagTranlations.suggestedTag + '</span>' +
                   '<ul class="onmTagList">' +
-                    '<li ng-repeat="suggestedTag in suggestedTags" class="newTag">' +
-                      '<span>[% suggestedTag.name %]</span><a href="#" ng-click="addSuggestedTag(suggestedTag)"><i class="fa fa-plus tagIcon" aria-hidden="true"></a>' +
+                    '<li ng-repeat="suggestedTag in suggestedTags" class="newTag" ng-click="addSuggestedTag(suggestedTag)">' +
+                      '<span>[% suggestedTag.name %]</span><a href="#"><i class="fa fa-plus tagIcon" aria-hidden="true"></a>' +
                     '</li>' +
                   '</ul>' +
                 '</div>' +
