@@ -24,8 +24,10 @@ class CsvHelper
     public function getReport($data)
     {
         $writer = $this->getWriter();
-        $data   = $this->parse($data);
 
+        list($headers, $data) = $this->parse($data);
+
+        $writer->insertOne($headers);
         $writer->insertAll($data);
 
         return $writer->__toString();
@@ -56,15 +58,24 @@ class CsvHelper
     protected function parse($data)
     {
         if (!is_array($data)) {
-            return $data;
+            return [ [], $data ];
         }
 
-        return array_map(function ($a) {
+        $data = array_map(function ($a) {
             if ($a instanceof CsvSerializable) {
                 return $a->csvSerialize();
             }
 
             return $a;
         }, $data);
+
+        $headers = [];
+        foreach ($data as $item) {
+            if (is_array($item)) {
+                $headers = array_merge($headers, array_keys($item));
+            }
+        }
+
+        return [ array_values(array_unique($headers)), $data ];
     }
 }
