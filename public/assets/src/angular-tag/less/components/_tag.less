@@ -21,9 +21,9 @@
       border-radius: 3px;
       color: #fff;
       display: inline-block;
-      margin: 0 4px 4px 0;
-      padding: 4px 5px;
-      padding-right:0px;
+      margin: 5px 0 0 5px;
+      padding: 5px;
+      padding-right: 0px;
 
       span {
         font-size: 15px;
@@ -40,6 +40,10 @@
       .tagIcon {
         font-size:.8em;
         line-height:.8em;
+      }
+
+      &.toDeleteTag {
+        background: #f35958;
       }
     }
 
@@ -62,31 +66,24 @@
   }
 
   .tag-input {
-    position:relative;
+    padding: 5px;
+    position: relative;
+  }
 
-    .loading-icon {
-      margin:0;
-      padding:0;
-      margin-top: -28px;
-      position: absolute !important;
-      right: 10px;
-    }
+  .tag-input-icon {
+    position: absolute;
+    right: 15px;
+    top: 16px;
   }
 
   // Customizations for the currentTags
   .currentTags {
     border-bottom: 1px solid #d1dade;
 
-    .onmTagList {
-      padding:5px;
-      padding-bottom:0;
-    }
-
     input {
-      border: 0;
+      border: 1px transparent;
       margin-top: 0;
-      margin: 3px;
-      width:98%;
+      width: 100%;
     }
 
     input.has-error {

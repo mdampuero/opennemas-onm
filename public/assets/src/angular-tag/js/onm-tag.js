@@ -40,7 +40,7 @@
                   '</ul>' +
                   '<div class="tag-input">' +
                     '<input type="text" ng-class=" invalidTag ? \'has-error \' : \'\'" ng-model="newTag" placeholder="[% placeholder %]" ng-keydown="inputTagKeyUp($event)" uib-typeahead="tagSuggested as tagSuggested.name for tagSuggested in getLocalSuggestedTags($viewValue)" typeahead-loading="isSuggesting" typeahead-wait-ms="500" typeahead-on-select="suggestedTagAccepted($item, $model, $label)" typeahead-min-length="2" typeahead-focus-first="false">' +
-                    '<i class="fa fa-circle-o-notch fa-spin loading-icon" ng-show="isSuggesting || isValidating"></i>' +
+                    '<i class="tag-input-icon fa fa-circle-o-notch fa-spin loading-icon" ng-show="isSuggesting || isValidating"></i>' +
                   '</div>' +
                   '<input type="hidden" name="tag_ids" ng-value="getTagIdsList()">' +
                 '</div>' +
