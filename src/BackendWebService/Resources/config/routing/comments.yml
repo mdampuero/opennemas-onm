@@ -41,6 +41,6 @@ backend_ws_comments_list:
     defaults: { _controller: BackendWebServiceBundle:Comments:list, format: '.json' }
     methods:  [ GET ]
     requirements:
-        format: '^.json$|.csv'
+        format: '.json|.csv'
     options:
         expose: true

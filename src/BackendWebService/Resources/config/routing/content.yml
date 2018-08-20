@@ -93,7 +93,7 @@ backend_ws_contents_list:
     defaults: { _controller: BackendWebServiceBundle:Content:list, format: '.json' }
     methods:  [ GET ]
     requirements:
-        format: '^.json$|.csv'
+        format: '.json|.csv'
     options:
         expose: true
 
