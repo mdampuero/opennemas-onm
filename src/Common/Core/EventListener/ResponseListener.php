@@ -9,12 +9,11 @@
  */
 namespace Common\Core\EventListener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class ResponseListener implements EventSubscriberInterface
+class ResponseListener
 {
     /**
      * The service container.
@@ -31,18 +30,6 @@ class ResponseListener implements EventSubscriberInterface
     public function __construct($container)
     {
         $this->container = $container;
-    }
-
-    /**
-     * Returns an array of event names this subscriber wants to listen to.
-     *
-     * @return array The event names to listen to.
-     */
-    public static function getSubscribedEvents()
-    {
-        return [
-            KernelEvents::VIEW => [ 'onKernelResponse', 100 ],
-        ];
     }
 
     /**
@@ -69,7 +56,7 @@ class ResponseListener implements EventSubscriberInterface
      */
     protected function getJsonResponse($content)
     {
-        if (array_key_exists('o-filename', $content)) {
+        if (is_array($content) && array_key_exists('o-filename', $content)) {
             unset($content['o-filename']);
         }
 
