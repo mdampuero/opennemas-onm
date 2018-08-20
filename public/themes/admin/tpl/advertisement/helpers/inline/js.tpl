@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
   var adint = setInterval(function () {
     var slots = document.getElementsByClassName('hidden-' + _onmaq.device);
 

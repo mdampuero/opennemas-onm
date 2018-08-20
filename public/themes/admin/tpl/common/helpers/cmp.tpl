@@ -1,10 +1,9 @@
 <!-- Quantcast Choice. Consent Manager Tag -->
-<script type='text/javascript' async=true>
+<script async=true>
 /* eslint-disable */
   var elem = document.createElement('script');
   elem.src = 'https://quantcast.mgr.consensu.org/cmp.js';
   elem.async = true;
-  elem.type = 'text/javascript';
   var scpt = document.getElementsByTagName('script')[0];
   scpt.parentNode.insertBefore(elem, scpt);
   (function() {

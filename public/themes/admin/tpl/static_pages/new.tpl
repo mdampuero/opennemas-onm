@@ -123,7 +123,7 @@
   {/block}
   {block name="footer-js" append}
     {javascripts}
-      <script type="text/javascript">
+      <script>
         /* <![CDATA[ */
         $(document).ready(function($){
           var previous = null;

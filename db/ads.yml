@@ -6,10 +6,10 @@ ad1:
   categories: 0
   script: |
       <!-- START Admeta Placement Holder Web site: 'Openhost', Web page 'http://opennemas.com/', Format: '728x90 (728x90)' Priority: 1 START -->
-      <script type='text/javascript'>
+      <script>
         var ADM_PL = {tp:'sp', wId:599741, pId:51506851, rank:1, width:728, height:90, pbId:173, clk:'[External click-tracking goes here (NOT URL-encoded)]'};
       </script>
-      <script type='text/javascript' src='//s.atemda.com/Admeta.js'></script>
+      <script src='//s.atemda.com/Admeta.js'></script>
       <noscript>
         <iframe src='//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51506851&rank=1&clk=[URL-encoded external clicktracking link goes here]' width='728' height='90' frameborder='0' marginheight='0' marginwidth='0' scrolling='no'></iframe>
       </noscript>
@@ -22,10 +22,10 @@ ad2:
   categories: 0
   script: |
       <!-- START Admeta Placement Holder Web site: 'Openhost', Web page 'http://opennemas.com/', Format: '728x90 (728x90)' Priority: 1 START -->
-      <script type='text/javascript'>
+      <script>
         var ADM_PL = {tp:'sp', wId:599741, pId:51506851, rank:1, width:728, height:90, pbId:173, clk:'[External click-tracking goes here (NOT URL-encoded)]'};
       </script>
-      <script type='text/javascript' src='//s.atemda.com/Admeta.js'></script>
+      <script src='//s.atemda.com/Admeta.js'></script>
       <noscript>
         <iframe src='//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51506851&rank=1&clk=[URL-encoded external clicktracking link goes here]' width='728' height='90' frameborder='0' marginheight='0' marginwidth='0' scrolling='no'></iframe>
       </noscript>
@@ -38,10 +38,10 @@ ad3:
   categories: 0
   script: |
       <!-- START Admeta Placement Holder Web site: 'Openhost', Web page 'http://opennemas.com/', Format: '728x90 (728x90)' Priority: 1 START -->
-      <script type='text/javascript'>
+      <script>
         var ADM_PL = {tp:'sp', wId:599741, pId:51506851, rank:1, width:728, height:90, pbId:173, clk:'[External click-tracking goes here (NOT URL-encoded)]'};
       </script>
-      <script type='text/javascript' src='//s.atemda.com/Admeta.js'></script>
+      <script src='//s.atemda.com/Admeta.js'></script>
       <noscript>
         <iframe src='//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51506851&rank=1&clk=[URL-encoded external clicktracking link goes here]' width='728' height='90' frameborder='0' marginheight='0' marginwidth='0' scrolling='no'></iframe>
       </noscript>
@@ -54,10 +54,10 @@ ad4:
   categories: 0
   script: |
       <!-- START Admeta Placement Holder Web site: 'Openhost', Web page 'http://opennemas.com/', Format: '468x60 (468x60)' Priority: 1 START -->
-      <script type='text/javascript'>
+      <script>
         var ADM_PL = {tp:'sp', wId:599741, pId:51506852, rank:1, width:468, height:60, pbId:173, clk:'[External click-tracking goes here (NOT URL-encoded)]'};
       </script>
-      <script type='text/javascript' src='//s.atemda.com/Admeta.js'></script>
+      <script src='//s.atemda.com/Admeta.js'></script>
       <noscript>
         <iframe src='//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51506852&rank=1&clk=[URL-encoded external clicktracking link goes here]' width='468' height='60' frameborder='0' marginheight='0' marginwidth='0' scrolling='no'></iframe>
       </noscript>
@@ -70,10 +70,10 @@ ad5:
   categories: 0
   script: |
       <!-- START Admeta Placement Holder Web site: 'Openhost', Web page 'http://opennemas.com/', Format: '728x90 (728x90)' Priority: 1 START -->
-      <script type='text/javascript'>
+      <script>
         var ADM_PL = {tp:'sp', wId:599741, pId:51506851, rank:1, width:728, height:90, pbId:173, clk:'[External click-tracking goes here (NOT URL-encoded)]'};
       </script>
-      <script type='text/javascript' src='//s.atemda.com/Admeta.js'></script>
+      <script src='//s.atemda.com/Admeta.js'></script>
       <noscript>
         <iframe src='//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51506851&rank=1&clk=[URL-encoded external clicktracking link goes here]' width='728' height='90' frameborder='0' marginheight='0' marginwidth='0' scrolling='no'></iframe>
       </noscript>
@@ -86,10 +86,10 @@ ad6:
   categories: 0
   script: |
       <!-- START Admeta Placement Holder Web site: 'Openhost', Web page 'http://opennemas.com/', Format: '120x600 (120x600)' Priority: 1 START -->
-      <script type='text/javascript'>
+      <script>
         var ADM_PL = {tp:'sp', wId:599741, pId:51506850, rank:1, width:120, height:600, pbId:173, clk:'[External click-tracking goes here (NOT URL-encoded)]'};
       </script>
-      <script type='text/javascript' src='//s.atemda.com/Admeta.js'></script>
+      <script src='//s.atemda.com/Admeta.js'></script>
       <noscript>
         <iframe src='//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51506850&rank=1&clk=[URL-encoded external clicktracking link goes here]' width='120' height='600' frameborder='0' marginheight='0' marginwidth='0' scrolling='no'></iframe>
       </noscript>
@@ -97,10 +97,10 @@ ad6:
 
 
       <!-- START Admeta Placement Holder Web site: 'Openhost', Web page 'http://opennemas.com/', Format: '120x600 (120x600)' Priority: 2 START -->
-      <script type='text/javascript'>
+      <script>
         var ADM_PL = {tp:'sp', wId:599741, pId:51506850, rank:2, width:120, height:600, pbId:173, clk:'[External click-tracking goes here (NOT URL-encoded)]'};
       </script>
-      <script type='text/javascript' src='//s.atemda.com/Admeta.js'></script>
+      <script src='//s.atemda.com/Admeta.js'></script>
       <noscript>
         <iframe src='//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51506850&rank=2&clk=[URL-encoded external clicktracking link goes here]' width='120' height='600' frameborder='0' marginheight='0' marginwidth='0' scrolling='no'></iframe>
       </noscript>
@@ -113,10 +113,10 @@ ad7:
   categories: 4
   script: |
       <!-- START Admeta Placement Holder Web site: 'Openhost', Web page 'http://opennemas.com/', Format: '728x90 (728x90)' Priority: 1 START -->
-      <script type='text/javascript'>
+      <script>
         var ADM_PL = {tp:'sp', wId:599741, pId:51506851, rank:1, width:728, height:90, pbId:173, clk:'[External click-tracking goes here (NOT URL-encoded)]'};
       </script>
-      <script type='text/javascript' src='//s.atemda.com/Admeta.js'></script>
+      <script src='//s.atemda.com/Admeta.js'></script>
       <noscript>
         <iframe src='//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51506851&rank=1&clk=[URL-encoded external clicktracking link goes here]' width='728' height='90' frameborder='0' marginheight='0' marginwidth='0' scrolling='no'></iframe>
       </noscript>
@@ -129,10 +129,10 @@ ad8:
   categories: 4
   script: |
       <!-- START Admeta Placement Holder Web site: 'Openhost', Web page 'http://opennemas.com/', Format: '728x90 (728x90)' Priority: 1 START -->
-      <script type='text/javascript'>
+      <script>
         var ADM_PL = {tp:'sp', wId:599741, pId:51506851, rank:1, width:728, height:90, pbId:173, clk:'[External click-tracking goes here (NOT URL-encoded)]'};
       </script>
-      <script type='text/javascript' src='//s.atemda.com/Admeta.js'></script>
+      <script src='//s.atemda.com/Admeta.js'></script>
       <noscript>
         <iframe src='//p173.atemda.com/nojsadserving.ashx?wId=599741&pId=51506851&rank=1&clk=[URL-encoded external clicktracking link goes here]' width='728' height='90' frameborder='0' marginheight='0' marginwidth='0' scrolling='no'></iframe>
       </noscript>

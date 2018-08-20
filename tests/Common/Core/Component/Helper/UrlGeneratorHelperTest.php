@@ -553,4 +553,28 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
             ''
         );
     }
+
+    /**
+     * Tests for created as object instead of string.
+     */
+    public function testCreatedAsObject()
+    {
+        $content = new \Video();
+
+        $date                       = new \DateTime();
+        $content->id                = 252;
+        $content->category_name     = 'actualidad';
+        $content->created           = $date->format('Y-m-d H:i:s');
+        $content->content_type_name = 'video';
+        $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+
+        $method = new \ReflectionMethod($this->urlGenerator, 'getUriForContent');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            'video/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/' .
+                $date->format('YmdHis') . '000252.html',
+            $method->invokeArgs($this->urlGenerator, [ $content ])
+        );
+    }
 }

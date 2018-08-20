@@ -26,7 +26,7 @@ function smarty_function_cookie_hint($params, &$smarty)
                 </p>
             </div>
         </div>
-        <script type='text/javascript'>
+        <script>
             function getCookie(name) {
                 var cookies = document.cookie.split(';');
                 for (var i = 0; i < cookies.length; i++) {

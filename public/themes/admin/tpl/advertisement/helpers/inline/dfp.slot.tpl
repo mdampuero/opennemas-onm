@@ -1,5 +1,5 @@
 <div id="zone_{$id}">
-  <script type="text/javascript">
+  <script>
     googletag.cmd.push(function() { googletag.display('zone_{$id}'); });
   </script>
 </div>

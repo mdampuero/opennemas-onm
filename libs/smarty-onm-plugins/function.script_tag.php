@@ -19,7 +19,6 @@ function smarty_function_script_tag($params, &$smarty)
     $src    = $params['src'];
     $mtime  = DEPLOYED_AT;
     $server = '';
-    $type   = "type=\"text/javascript\"";
     $escape = false;
 
     // Comprobar si es un link externo
@@ -31,10 +30,6 @@ function smarty_function_script_tag($params, &$smarty)
             $server   = DS . $smarty->getTheme()->path . DS . $basepath;
             $mtime    = THEMES_DEPLOYED_AT;
         }
-    }
-
-    if (isset($params['type'])) {
-        $type = "type=\"{$params['type']}\"";
     }
 
     if (isset($params['escape'])) {
@@ -59,7 +54,7 @@ function smarty_function_script_tag($params, &$smarty)
         $resource = str_replace('.js', '.' . $mtime . '.js', $resource);
     }
 
-    $output = "<script {$type} src=\"{$resource}\" {$properties} ></script>";
+    $output = "<script src=\"{$resource}\" {$properties}></script>";
 
     if ($escape) {
         $output = str_replace('</', '<\/', $output);

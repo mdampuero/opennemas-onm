@@ -51,7 +51,7 @@ class AdvertisementController extends Controller
         if ($advertisement->url) {
             return $this->redirect($advertisement->url);
         } else {
-            return new Response('<script type="text/javascript">window.close();</script>');
+            return new Response('<script>window.close();</script>');
         }
     }
 
