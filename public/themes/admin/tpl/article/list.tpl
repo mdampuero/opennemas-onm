@@ -225,7 +225,7 @@
                 <td class="hidden-xs">
                   <span ng-if="content.fk_author">
                     <a href="[% routing.generate('backend_author_show', { id: content.fk_author }) %]">
-                      [% data.extra.authors[content.fk_author].name %]
+                      [% (data.extra.authors | filter: { id: content.fk_author })[0].name %]
                     </a>
                   </span>
                   <span ng-if="!content.fk_author && content.agency != ''">
