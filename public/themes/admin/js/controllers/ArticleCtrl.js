@@ -588,7 +588,7 @@
           var category = '';
 
           // Get category name from category id
-          if ($scope.article.category) {
+          if ($scope.article.pk_fk_content_category) {
             var categories = $scope.data.extra.categories.filter(function(e) {
               return e.pk_content_category ===
                 $scope.article.pk_fk_content_category;
