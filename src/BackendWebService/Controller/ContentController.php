@@ -931,10 +931,7 @@ class ContentController extends Controller
         $as       = $this->get('api.service.author');
         $response = $as->getList('order by name asc');
 
-        $extra['authors'] = $as->responsify($this->get('data.manager.filter')
-            ->set($response['items'])
-            ->filter('mapify', [ 'key' => 'id'])
-            ->get());
+        $extra['authors'] = $as->responsify($response['items']);
 
         $ccm = \ContentCategoryManager::get_instance();
 

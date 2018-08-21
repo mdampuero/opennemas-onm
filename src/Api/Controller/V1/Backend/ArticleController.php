@@ -154,10 +154,7 @@ class ArticleController extends Controller
         $response      = $as->getList('order by name asc');
 
         $extra['subscriptions'] = $ss->responsify($subscriptions['items']);
-        $extra['authors']       = $as->responsify($this->get('data.manager.filter')
-            ->set($response['items'])
-            ->filter('mapify', [ 'key' => 'id'])
-            ->get());
+        $extra['authors']       = $as->responsify($response['items']);
         $extra['keys']          = \Article::getL10nKeys();
         $extra['multilanguage'] = in_array(
             'es.openhost.module.multilanguage',
