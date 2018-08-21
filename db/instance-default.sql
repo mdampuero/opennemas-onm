@@ -718,6 +718,7 @@ CREATE TABLE `newsletters` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `type` int(11) NOT NULL DEFAULT '0',
   `status` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(512) DEFAULT NULL,
   `title` varchar(512) NOT NULL,
   `contents` text,
   `recipients` text,
@@ -728,6 +729,7 @@ CREATE TABLE `newsletters` (
   `sent` datetime DEFAULT CURRENT_TIMESTAMP,
   `sent_items` int(11) NOT NULL DEFAULT '0',
   `template_id` bigint(20) unsigned DEFAULT NULL,
+  `params` text,
   PRIMARY KEY (`id`),
   KEY `newsletter_type` (`type`),
   KEY `newsletter_template_id` (`template_id`)
