@@ -45,7 +45,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'find', 'findBy', 'getEntities'])
+            ->setMethods([ 'countBy', 'find', 'findBy' ])
             ->getMock();
 
         $this->validator = $this->getMockBuilder('Validator' . uniqid())
