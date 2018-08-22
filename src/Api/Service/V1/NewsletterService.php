@@ -46,11 +46,11 @@ class NewsletterService extends OrmService
     }
 
     /**
-     * Count total mailing sends in current month
+     * Count total mailing sends in current month.
      *
-     * @param DateTime $lastInvoiceDate the DateTime object of the last invoice
+     * @param DateTime $lastInvoiceDate the DateTime object of the last invoice.
      *
-     * @return int Total number of mail sent in current mount
+     * @return int Total number of mail sent in current mount.
      */
     public function getSentNewslettersSinceLastInvoice($lastInvoiceDate)
     {
