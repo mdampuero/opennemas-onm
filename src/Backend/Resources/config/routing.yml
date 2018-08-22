@@ -97,10 +97,6 @@ admin_polls:
     path:     /polls
     defaults: { _controller  : BackendBundle:Polls:list }
 
-admin_polls_widget:
-    path:     /polls/widget
-    defaults: { _controller  : BackendBundle:Polls:widget }
-
 admin_poll_create:
     path:     /polls/create
     defaults: { _controller  : BackendBundle:Polls:create }
