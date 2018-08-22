@@ -151,16 +151,10 @@ class ArticleController extends Controller
         $as = $this->get('api.service.author');
 
         $subscriptions = $ss->getList('enabled = 1 order by name asc');
-        $authors       = $as->getList('order by name asc');
+        $response      = $as->getList('order by name asc');
 
         $extra['subscriptions'] = $ss->responsify($subscriptions['items']);
-        $extra['users']         = $as->responsify($authors['items']);
-
-        array_unshift($extra['users'], [
-            'id'   => null,
-            'name' => $all ? _('All') : _('Select an author...')
-        ]);
-
+        $extra['authors']       = $as->responsify($response['items']);
         $extra['keys']          = \Article::getL10nKeys();
         $extra['multilanguage'] = in_array(
             'es.openhost.module.multilanguage',

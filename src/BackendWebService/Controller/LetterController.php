@@ -51,7 +51,7 @@ class LetterController extends ContentController
      *
      * @return array The extra information.
      */
-    public function loadExtraData($results)
+    public function loadExtraData($results = [])
     {
         $data = parent::loadExtraData($results);
 
