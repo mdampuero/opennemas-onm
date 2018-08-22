@@ -258,6 +258,9 @@ class NewsletterRenderer
 
         // Implementation for: most_viewed
         if ($criteria->filter === 'most_viewed') {
+            $threeDaysAgo = new \DateTime(null, getService('core.locale')->getTimeZone('frontend'));
+            $threeDaysAgo->sub(new \DateInterval('P3D'));
+
             $searchCriteria = array_merge($searchCriteria, [
                 'join' => [
                     [
@@ -265,6 +268,10 @@ class NewsletterRenderer
                         'table'      => 'content_views',
                         'contents.pk_content' => [ [ 'value' => 'content_views.pk_fk_content', 'field' => true ] ]
                     ]
+                ],
+                'starttime' => [
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    [ 'value' => $threeDaysAgo->format('Y-m-d H:i:s'), 'operator' => '>=' ],
                 ],
             ]);
 
