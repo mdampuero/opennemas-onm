@@ -121,13 +121,16 @@ class BaseRepository extends Repository
             throw new \InvalidArgumentException();
         }
 
-        $entities = $this->getEntities([$id]);
+        $entities = $this->getEntities(is_array($id) ? $id : [ $id ]);
 
-        if (empty($entities) || $entities[0] === $this->miss) {
+        if (!is_array($id)
+            && (empty($entities[0])
+            || $entities[0] === $this->miss)
+        ) {
             throw new EntityNotFoundException($this->metadata->name, $id);
         }
 
-        return $entities[0];
+        return is_array($id) ? $entities : array_pop($entities);
     }
 
     /**
@@ -240,6 +243,12 @@ class BaseRepository extends Repository
                 }
 
                 $entities[$this->metadata->getPrefixedId($entity)] = $entity;
+            }
+
+            $missed = array_diff($missed, array_keys($entities));
+
+            if ($this->hasCache() && !empty($missed)) {
+                $this->cache->set(array_fill_keys($missed, $this->miss));
             }
         }
 
