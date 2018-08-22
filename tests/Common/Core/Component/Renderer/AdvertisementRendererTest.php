@@ -155,7 +155,7 @@ class AdvertisementRendererTest extends TestCase
 
         $url         = '/ads/get/123';
         $returnValue = '<iframe src="' . $url . '"></iframe>
-  <script type="text/javascript" data-id="{$id}">
+  <script data-id="{$id}">
     <!--// <![CDATA[
       OA_show(\'zone_' . $ad->pk_content . '\');
     // ]]> -->

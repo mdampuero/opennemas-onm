@@ -294,7 +294,7 @@ class NewsletterRenderer
         }
 
         if (!empty($criteria->category)) {
-            $searchCriteria['pk_fk_content_category'] = [[ 'value' => (int) $criteria->category, ]];
+            $searchCriteria['pk_fk_content_category'] = [[ 'value' => $criteria->category, 'operator' => 'IN' ]];
         }
 
         $contents = $this->er->findBy($searchCriteria, $orderBy, $total, 1);

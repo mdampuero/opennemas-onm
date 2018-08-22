@@ -1,20 +1,8 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets}
-    <style type="text/css">
-      .utilities-conf {
-        position:absolute;
-        right:0;
-        top:0;
-      }
-    </style>
-  {/stylesheets}
-{/block}
-
 {block name="footer-js" append}
   {javascripts src="@AdminTheme/js/onm/video.js" filters="uglifyjs" output="video"}
-    <script type="text/javascript">
+    <script>
       var video_manager_url = {
         get_information: '{url name=admin_videos_get_info}'
       }
@@ -138,15 +126,18 @@
               <label for="fk_author" class="form-label">{t}Author{/t}</label>
               <div class="controls">
                 {acl isAllowed="CONTENT_OTHER_UPDATE"}
-                  <select name="fk_author" id="fk_author">
-                    {html_options options=$authors selected=$video->fk_author}
+                  <select id="fk_author" name="fk_author" required>
+                    <option value="" {if empty($opinion->fk_author)}selected{/if}>{t}Select an author...{/t}</option>
+                    {foreach from=$authors item=author}
+                      <option value="{$author->id}" {if $video->fk_author eq $author->id}selected{/if}>{$author->name}</option>
+                    {/foreach}
                   </select>
                 {aclelse}
                   {if !isset($video->fk_author) || empty($video->fk_author)}
                     {$app.user->name}
                     <input type="hidden" name="fk_author" value="{$app.user->id}">
                   {else}
-                    {$authors[$video->fk_author]}
+                    {$authors[$video->fk_author]->name}
                     <input type="hidden" name="fk_author" value="{$video->fk_author}">
                   {/if}
                 {/acl}

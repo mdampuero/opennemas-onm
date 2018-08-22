@@ -99,17 +99,27 @@
          * @param {Object} obj      The map.
          * @param {String} property The name of the key when filtering in the
          *                          selector.
+         * @param {String} name     The label to use in the empty value.
          *
          * @return {Object} The map with the empty value.
          */
-        $scope.addEmptyValue = function(obj, property) {
-          if (!obj || obj[0]) {
+        $scope.addEmptyValue = function(obj, property, name) {
+          if (!angular.isArray(obj) && !angular.isObject(obj)) {
             return obj;
           }
 
-          obj[0] = { name: $scope.any };
+          var key   = property ? property : 'id';
+          var value = { name: name ? name : $scope.any };
 
-          obj[0][property ? property : 'id'] = null;
+          value[key] = null;
+
+          if (!obj[0] || obj[0][key] !== null) {
+            if (angular.isArray(obj)) {
+              obj.unshift(value);
+            } else {
+              obj[0] = value;
+            }
+          }
 
           return obj;
         };

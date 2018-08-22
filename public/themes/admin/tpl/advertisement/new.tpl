@@ -2,7 +2,7 @@
 
 {block name="footer-js" append}
 {javascripts}
-<script type="text/javascript">
+<script>
 jQuery(document).ready(function($) {
   $('#starttime, #endtime').datetimepicker({
     format: 'YYYY-MM-DD HH:mm:ss',
@@ -137,7 +137,7 @@ jQuery(document).ready(function($) {
                   {include file="advertisement/partials/advertisement_images.tpl"}
                 </div>
                 <div ng-show="with_script == 1">
-                  <textarea name="script" id="script" class="form-control" rows="10" ng-model="script">{$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
+                  <textarea name="script" id="script" class="form-control" rows="10" ng-model="script">{$advertisement->script|escape:'htmlall'|default:'&lt;script&gt;/* JS code */&lt;/script&gt;'}</textarea>
                 </div>
                 <div ng-show="'{$extra['openx_server_url']}' && with_script == 2">
                   <label for="openx_zone">{t}OpenX zone id{/t}</label>

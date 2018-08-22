@@ -24,12 +24,12 @@ function smarty_function_promotional_bar($params, &$smarty)
                     <div class="bar-left">
                         <a id="promotional-menu" href="#" class="left-content">
                             <i class="fa fa-bars"></i>
-                            <img src="'.$smarty->parent->image_dir.'logos/logo-opennemas-small.png" alt="Opennemas">
+                            <img src="' . $smarty->parent->image_dir . 'logos/logo-opennemas-small.png" alt="Opennemas">
                         </a>
                     </div>
                     <div class="bar-right">
                         <a href="http://www.opennemas.com/signup" class="right-content" target="_blank">
-                            '.$createNew.'
+                            ' . $createNew . '
                         </a>
                     </div>
                 </div>
@@ -43,7 +43,7 @@ function smarty_function_promotional_bar($params, &$smarty)
                             <a href="http://www.opennemas.com/">
                                 <i class="fa fa-home"></i>
                                 <div class="menu-name">
-                                    '.$goToWeb.'
+                                    ' . $goToWeb . '
                                 </div>
                             </a>
                         </li>
@@ -51,7 +51,7 @@ function smarty_function_promotional_bar($params, &$smarty)
                             <a href="http://www.opennemas.com/signup">
                                 <i class="fa fa-newspaper-o"></i>
                                 <div class="menu-name">
-                                    '.$createNew.'
+                                    ' . $createNew . '
                                 </div>
                             </a>
                         </li>
@@ -59,7 +59,7 @@ function smarty_function_promotional_bar($params, &$smarty)
                             <a href="http://help.opennemas.com/knowledgebase">
                                 <i class="fa fa-question"></i>
                                 <div class="menu-name">
-                                    '.$help.'
+                                    ' . $help . '
                                 </div>
                             </a>
                         </li>
@@ -67,7 +67,7 @@ function smarty_function_promotional_bar($params, &$smarty)
                             <a href="http://www.openhost.es/">
                                 <i class="fa fa-lightbulb-o"></i>
                                 <div class="menu-name">
-                                    '.$about.'
+                                    ' . $about . '
                                 </div>
                             </a>
                         </li>
@@ -117,16 +117,16 @@ function smarty_function_promotional_bar($params, &$smarty)
                             open<strong>nemas</strong>
                         </div>
                         <div class="text">
-                            '.$onmText.'
+                            ' . $onmText . '
                         </div>
                         <div class="sign-up">
                             <a href="http://www.opennemas.com" target="_blank">
-                                '.$createNew.'
+                                ' . $createNew . '
                             </a>
                         </div>
                     </div>
                 </div>
-                <script type="text/javascript">
+                <script>
                     $(document).ready(function() {
                         $("#onm-bar").on("click", function(){
                             window.open("http://www.opennemas.com","_blank");

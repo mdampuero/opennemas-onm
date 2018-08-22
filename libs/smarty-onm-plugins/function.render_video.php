@@ -33,7 +33,7 @@ function getInternalVideoOutput($params, $video)
         . $rand . '"></a>' . "\n";
 
     $output .= '
-    <script type="text/javascript" defer="defer">
+    <script defer="defer">
         flowplayer("flashplayer-' . $rand . '", "' . SITE_URL
         . 'media/common_assets/fplayer/flowplayer-3.2.7.swf",
             {

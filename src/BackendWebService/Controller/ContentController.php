@@ -39,7 +39,7 @@ class ContentController extends Controller
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($criteria);
         return new JsonResponse([
-            'extra'   => $this->loadExtraData($results),
+            'extra'   => $this->loadExtraData(),
             'results' => $results,
             'total'   => $total,
         ]);
@@ -70,7 +70,7 @@ class ContentController extends Controller
 
         return new JsonResponse(
             [
-                'extra'             => $this->loadExtraData($results),
+                'extra'             => $this->loadExtraData(),
                 'results'           => $results,
                 'total'             => $total,
             ]
@@ -925,56 +925,23 @@ class ContentController extends Controller
      * @param  array $contents Array of contents.
      * @return array           Array of extra data.
      */
-    protected function loadExtraData($contents)
+    protected function loadExtraData($contents = [])
     {
-        if (empty($contents)) {
-            return [];
-        }
+        $extra    = [];
+        $as       = $this->get('api.service.author');
+        $response = $as->getList('order by name asc');
 
-        $extra      = [];
-        $ids        = [];
-        $contentIds = [];
-
-        foreach ($contents as $content) {
-            $ids[] = $content->fk_author;
-            $ids[] = $content->fk_publisher;
-            $ids[] = $content->fk_user_last_editor;
-
-            $contentIds[] = $content->id;
-        }
-
-        $ids = array_unique($ids);
-
-        if (($key = array_search(0, $ids)) !== false) {
-            unset($ids[$key]);
-        }
-
-        if (($key = array_search(null, $ids)) !== false) {
-            unset($ids[$key]);
-        }
-
-        $extra['authors'] = [];
-        if (!empty($ids)) {
-            $converter = $this->get('orm.manager')->getConverter('User');
-            $users     = $this->get('orm.manager')->getRepository('User')
-                ->findBy(sprintf('id in [%s]', implode(',', $ids)));
-
-            foreach ($users as $user) {
-                $user->eraseCredentials();
-
-                $extra['authors'][$user->id] = $converter->responsify($user->getData());
-            }
-        }
+        $extra['authors'] = $as->responsify($response['items']);
 
         $ccm = \ContentCategoryManager::get_instance();
-        $fm  = $this->get('data.manager.filter');
 
         $categories          = $ccm->findAll();
         $extra['categories'] = [];
-        $categories          = $fm->set($categories)->filter('localize', [
-            'keys' => \ContentCategory::getL10nKeys(),
-            'locale' => $this->getLocaleData('frontend')['default']
-        ])->get();
+        $categories          = $this->get('data.manager.filter')
+            ->set($categories)->filter('localize', [
+                'keys' => \ContentCategory::getL10nKeys(),
+                'locale' => $this->getLocaleData('frontend')['default']
+            ])->get();
 
         foreach ($categories as $category) {
             $extra['categories'][$category->id] = $this->get('data.manager.filter')

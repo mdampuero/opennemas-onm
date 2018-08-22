@@ -154,15 +154,18 @@
                 </label>
                 <div class="controls">
                   {acl isAllowed="CONTENT_OTHER_UPDATE"}
-                    <select name="fk_author" id="fk_author">
-                      {html_options options=$authors selected=$album->fk_author}
+                    <select id="fk_author" name="fk_author" required>
+                      <option value="" {if empty($opinion->fk_author)}selected{/if}>{t}Select an author...{/t}</option>
+                      {foreach from=$authors item=author}
+                        <option value="{$author->id}" {if $album->fk_author eq $author->id}selected{/if}>{$author->name}</option>
+                      {/foreach}
                     </select>
                   {aclelse}
-                  {if !isset($album->fk_author) || empty($album->fk_author)}
+                    {if !isset($album->fk_author) || empty($album->fk_author)}
                       {$app.user->name}
                       <input type="hidden" name="fk_author" value="{$app.user->id}">
                     {else}
-                      {$authors[$album->fk_author]}
+                      {$authors[$album->fk_author]->name}
                       <input type="hidden" name="fk_author" value="{$album->fk_author}">
                     {/if}
                   {/acl}

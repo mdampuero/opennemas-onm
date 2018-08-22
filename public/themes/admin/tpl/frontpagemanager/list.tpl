@@ -2,7 +2,7 @@
 
 {block name="footer-js" append}
   {javascripts src="@AdminTheme/js/onm/frontpagemanager.js" output="frontpagemanager"}
-  <script type="text/javascript">
+  <script>
     var frontpage_messages = {
       remember_save_positions: "{t}Please, remember save positions after finish.{/t}",
       error_tab_content_provider: "{t}Couldn't load this tab. We'll try to fix this as soon as possible.{/t}",
@@ -38,7 +38,7 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="get" name="frontpageForm" ng-controller="FrontpageCtrl" ng-init="init({json_encode($frontpages)|clear_json}, {json_encode($versions)|clear_json}, {json_encode($category_id)|clear_json}, {json_encode($version_id)|clear_json}, {json_encode($time)|clear_json}, {json_encode($frontpage_last_saved)|clear_json}, {json_encode($available_layouts)|clear_json}, {json_encode($layout_theme)|clear_json})" class="frontpagemanger-wrapper">
+<form action="#" method="get" name="frontpageForm" ng-controller="FrontpageCtrl" ng-init="init({json_encode($frontpages)|clear_json}, {json_encode($versions)|clear_json}, {json_encode($category_id)|clear_json}, {json_encode($version_id)|clear_json}, {json_encode($time)|clear_json}, {json_encode($frontpage_last_saved)|clear_json}, {json_encode($available_layouts)|clear_json}, {json_encode($layout_theme)|clear_json})" class="frontpagemanager-wrapper">
   <div>
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">

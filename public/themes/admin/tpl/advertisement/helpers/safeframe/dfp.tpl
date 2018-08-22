@@ -22,7 +22,7 @@
         var googletag = googletag || {};
         googletag.cmd = googletag.cmd || [];
       </script>
-      <script type="text/javascript">
+      <script>
         googletag.cmd.push(function() {
           googletag.defineSlot('{{$dfpId}}', {{$sizes}}, 'zone_{{$id}}').addService(googletag.pubads());
           {{$targetingCode}}
@@ -33,7 +33,7 @@
         });
       </script>
       <div id="zone_{$id}">
-        <script type="text/javascript">
+        <script>
           googletag.cmd.push(function() { googletag.display('zone_{$id}'); });
         </script>
       </div>

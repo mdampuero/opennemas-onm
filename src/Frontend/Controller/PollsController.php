@@ -43,8 +43,6 @@ class PollsController extends Controller
             $actual_category_id = 0;
         }
 
-        $pollSettings = $this->get('setting_repository')->get('poll_settings');
-
         $this->view->assign([
             'category_name'         => $this->categoryName,
             'category'              => $this->category,
@@ -52,12 +50,14 @@ class PollsController extends Controller
             'category_real_name'    => $category_real_name,
             'actual_category_title' => $category_real_name,
             'actual_category'       => $this->categoryName,
-            'settings'              => $pollSettings
+            'settings'              => $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('poll_settings'),
         ]);
     }
 
     /**
-     * Renders the album frontpage.
+     * Renders the polls frontpage.
      *
      * @return Response The response object.
      */
@@ -67,7 +67,12 @@ class PollsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $page = $request->query->getDigits('page', 1);
+        $page     = $request->query->getDigits('page', 1);
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('poll_settings');
+        $epp      = is_array($settings) && array_key_exists('epp', $settings)
+            ? $settings['epp'] : 10;
 
         // Setup templating cache layer
         $this->view->setConfig('poll-frontpage');
@@ -76,11 +81,8 @@ class PollsController extends Controller
         if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('poll/poll_frontpage.tpl', $cacheID))
         ) {
-            $er = $this->get('entity_repository');
-
             $filter = [
-                'content_type_name' => [[ 'value' => 'poll']],
-                'in_home'           => [[ 'value' => 1 ]],
+                'content_type_name' => [[ 'value' => 'poll' ]],
                 'content_status'    => [[ 'value' => 1 ]],
                 'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
                 'starttime'         => [
@@ -101,32 +103,55 @@ class PollsController extends Controller
                 $filter['category_name'] = [[ 'value' => $this->categoryName ]];
             }
 
-            $polls = $er->findBy($filter, ['starttime' => 'DESC'], 2, 1);
-
-            unset($filter['category_name']);
-            $otherPolls = $er->findBy($filter, ['starttime' => 'DESC'], 5, 1);
+            $polls = $this->get('entity_repository')->findBy(
+                $filter,
+                ['starttime' => 'DESC'],
+                $epp,
+                $page
+            );
 
             if (!empty($polls)) {
                 foreach ($polls as &$poll) {
                     $poll->items   = $poll->getItems($poll->id);
-                    $poll->dirtyId = date('YmdHis', strtotime($poll->created)) . sprintf('%06d', $poll->id);
+                    $poll->dirtyId = date('YmdHis', strtotime($poll->created))
+                        . sprintf('%06d', $poll->id);
                     $poll->status  = 'opened';
                     if (is_string($poll->params)) {
                         $poll->params = unserialize($poll->params);
                     }
 
-                    if (is_array($poll->params) && array_key_exists('closetime', $poll->params)
+                    if (is_array($poll->params)
+                        && array_key_exists('closetime', $poll->params)
                         && (!empty($poll->params['closetime']))
                         && ($poll->params['closetime'] != '0000-00-00 00:00:00')
-                        && ($poll->params['closetime'] < date('Y-m-d H:i:s'))) {
+                        && ($poll->params['closetime'] < date('Y-m-d H:i:s'))
+                    ) {
                             $poll->status = 'closed';
                     }
                 }
             }
 
+            $countPolls = $this->get('entity_repository')->countBy($filter);
+            $pagination = $this->get('paginator')->get([
+                'boundary'    => false,
+                'directional' => true,
+                'maxLinks'    => 0,
+                'epp'         => $epp,
+                'page'        => $page,
+                'total'       => $countPolls,
+                'route'       => [
+                    'name'   => 'frontend_poll_frontpage_category',
+                    'params' => [
+                        'category_name' => $this->categoryName,
+                        'component'     => 'encuesta'
+                    ]
+                ]
+            ]);
+
             $this->view->assign([
                 'polls'      => $polls,
-                'otherPolls' => $otherPolls
+                'page'       => $page,
+                'pagination' => $pagination
             ]);
         }
 
@@ -208,22 +233,28 @@ class PollsController extends Controller
             && ($poll->params['closetime'] < date('Y-m-d H:i:s'))
         ) {
             $poll->status = 'closed';
-            $message      = "<span class='closed'>" . _('You can\'t vote this poll, it is closed.') . "</span>";
+            $message      = "<span class='closed'>"
+                . _('You can\'t vote this poll, it is closed.') . "</span>";
         } else {
             $voted = (int) $request->query->getDigits('voted', 0);
             $valid = (int) $request->query->getDigits('valid', 3);
             if ($voted == 1) {
                 if ($voted == 1 && $valid === 1) {
-                    $message = "<span class='thanks'>" . _('Thanks for participating.') . "</span>";
+                    $alreadyVoted = true;
+                    $message      = "<span class='thanks'>"
+                        . _('Thanks for participating.') . "</span>";
                 } elseif ($voted == 1 && $valid === 0) {
-                    $message = "<span class='wrong'>" . _('Please select a valid poll answer.') . "</span>";
+                    $message = "<span class='wrong'>"
+                        . _('Please select a valid poll answer.') . "</span>";
                 }
             } elseif (isset($cookie)) {
                 $alreadyVoted = true;
-                $message      = "<span class='ok'>" . _('You have voted this poll previously.') . "</span>";
+                $message      = "<span class='ok'>"
+                    . _('You have voted this poll previously.') . "</span>";
             } elseif (($valid === 0) && ($voted == 0)) {
                 $alreadyVoted = true;
-                $message      = "<span class='ok'>" . _('You have voted this poll previously.') . "</span>";
+                $message      = "<span class='ok'>"
+                    . _('You have voted this poll previously.') . "</span>";
             }
         }
 
@@ -281,7 +312,10 @@ class PollsController extends Controller
             $voted = 1;
         }
 
-        $response = new RedirectResponse(SITE_URL . $poll->uri . '?voted=' . $voted . '&valid=' . $valid);
+        $response = new RedirectResponse(
+            '/' . $poll->uri . '?voted=' . $voted . '&valid=' . $valid
+        );
+
         if (isset($cookieVoted)) {
             $response->headers->setCookie($cookieVoted);
         }

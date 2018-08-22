@@ -195,12 +195,23 @@ class NewsletterSenderHelper
                 'title'    => $newsletter->title,
                 'htmlbody' => $newsletter->html,
             ];
+
+            // Load general header and footer acton params
             if (!empty($settings['actOn.headerId'])) {
                 $messageParams['headerid'] = $settings['actOn.headerId'];
             }
 
             if (!empty($settings['actOn.footerId'])) {
                 $messageParams['footerid'] = $settings['actOn.footerId'];
+            }
+
+            // Overwrite header and footer params if the newsletter has custom ones.
+            if (!empty($newsletter->params['acton_headerid'])) {
+                $messageParams['headerid'] = $newsletter->params['acton_headerid'];
+            }
+
+            if (!empty($newsletter->params['acton_headerid'])) {
+                $messageParams['footerid'] = $newsletter->params['acton_footerid'];
             }
 
             $id = $endpoint->createMessage($messageParams);

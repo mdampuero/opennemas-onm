@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for the system information
@@ -85,23 +79,21 @@ class VideosController extends Controller
     /**
      * List videos available for widget.
      *
-     * @return void
+     * @return Response The response object.
      *
      * @Security("hasExtension('VIDEO_MANAGER')
      *     and hasPermission('VIDEO_ADMIN')")
      */
     public function widgetAction()
     {
-        $configurations = s::get('video_settings');
-        $numFavorites   = $configurations['total_widget'];
+        $configurations = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get('video_settings');
 
-        return $this->render(
-            'video/list.tpl',
-            [
-                'total_elements_widget' => $numFavorites,
-                'category'              => 'widget',
-            ]
-        );
+        return $this->render('video/list.tpl', [
+            'total_elements_widget' => $configurations['total_widget'],
+            'category'              => 'widget',
+        ]);
     }
 
     /**
@@ -117,34 +109,25 @@ class VideosController extends Controller
     {
         if ('POST' !== $request->getMethod()) {
             $type = $request->query->filter('type', null, FILTER_SANITIZE_STRING);
+
             if (empty($type)) {
                 return $this->render('video/selecttype.tpl');
-            } else {
-                $authorsComplete = \User::getAllUsersAuthors();
-                $authors         = ['0' => _(' - Select one author - ')];
-                foreach ($authorsComplete as $author) {
-                    $authors[$author->id] = $author->name;
-                }
-
-                $ls = $this->get('core.locale');
-                return $this->render(
-                    'video/new.tpl',
-                    [
-                        'type'           => $type,
-                        'authors'        => $authors,
-                        'enableComments' => $this->get('core.helper.comment')
-                            ->enableCommentsByDefault(),
-                        'locale'         => $ls->getLocale('frontend'),
-                        'tags'           => []
-                    ]
-                );
             }
+
+            return $this->render('video/new.tpl', [
+                'authors'        => $this->getAuthors(),
+                'type'           => $type,
+                'enableComments' => $this->get('core.helper.comment')
+                    ->enableCommentsByDefault(),
+                'locale'         => $this->get('core.locale')
+                    ->getLocale('frontend'),
+                'tags'           => []
+            ]);
         }
 
         $requestPost = $request->request;
-
-        $type     = $requestPost->filter('type', null, FILTER_SANITIZE_STRING);
-        $category = $requestPost->getDigits('category');
+        $type        = $requestPost->filter('type', null, FILTER_SANITIZE_STRING);
+        $category    = $requestPost->getDigits('category');
 
         $videoData = [
             'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
@@ -362,26 +345,17 @@ class VideosController extends Controller
             }
         }
 
-        $authorsComplete = \User::getAllUsersAuthors();
-        $authors         = [ '0' => _(' - Select one author - ') ];
-        foreach ($authorsComplete as $author) {
-            $authors[$author->id] = $author->name;
-        }
-
-        $ls = $this->get('core.locale');
-        return $this->render(
-            'video/new.tpl',
-            [
-                'information'    => $video->information,
-                'video'          => $video,
-                'authors'        => $authors,
-                'enableComments' => $this->get('core.helper.comment')
-                    ->enableCommentsByDefault(),
-                'locale'         => $ls->getRequestLocale('frontend'),
-                'tags'           => $this->get('api.service.tag')
-                    ->getListByIdsKeyMapped($video->tag_ids)['items']
-            ]
-        );
+        return $this->render('video/new.tpl', [
+            'information'    => $video->information,
+            'video'          => $video,
+            'authors'        => $this->getAuthors(),
+            'enableComments' => $this->get('core.helper.comment')
+                ->enableCommentsByDefault(),
+            'locale'         => $this->get('core.locale')
+                ->getRequestLocale('frontend'),
+            'tags'           => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($video->tag_ids)['items']
+        ]);
     }
 
     /**
@@ -434,23 +408,18 @@ class VideosController extends Controller
             unset($_POST['submit']);
 
             foreach ($_POST as $key => $value) {
-                s::set($key, $value);
+                $this->get('orm.manager')->getDataSet('Settings')
+                    ->set($key, $value);
             }
 
             $this->get('session')->getFlashBag()->add('success', _('Settings saved.'));
 
             return $this->redirect($this->generateUrl('admin_videos_config'));
         } else {
-            $configurationsKeys = [
-                'video_settings',
-            ];
-
-            $configurations = s::get($configurationsKeys);
-
-            return $this->render(
-                'video/config.tpl',
-                ['configs' => $configurations]
-            );
+            return $this->render('video/config.tpl', [
+                'configs' => $this->get('orm.manager')->getDataSet('Settings')
+                    ->get([ 'video_settings' ])
+            ]);
         }
     }
 
@@ -566,7 +535,8 @@ class VideosController extends Controller
     {
         $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
+        $itemsPerPage = $this->get('orm.manager')->getDataSet('Settings')
+            ->get('items_per_page') ?: 20;
 
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
@@ -604,5 +574,21 @@ class VideosController extends Controller
                 'contentProviderUrl'    => $this->generateUrl('admin_videos_content_provider_related'),
             ]
         );
+    }
+
+    /**
+     * Returns the list of authors.
+     *
+     * @return array The list of authors.
+     */
+    protected function getAuthors()
+    {
+        $response = $this->get('api.service.author')
+            ->getList('order by name asc');
+
+        return $this->get('data.manager.filter')
+            ->set($response['items'])
+            ->filter('mapify', [ 'key' => 'id'])
+            ->get();
     }
 }

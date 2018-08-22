@@ -267,7 +267,7 @@ function generatePiwikScriptCode($config)
     $httpsHost = preg_replace("/http:/", "https:", $config['server_url']);
 
     $code = '<!-- Piwik -->
-        <script type="text/javascript">
+        <script>
         var _paq = _paq || [];
         _paq.push([\'trackPageView\']);
         _paq.push([\'enableLinkTracking\']);
@@ -277,7 +277,6 @@ function generatePiwikScriptCode($config)
             _paq.push([\'setTrackerUrl\', u+\'piwik.php\']);
             _paq.push([\'setSiteId\', ' . $config['page_id'] . ']);
             var d=document, g=d.createElement(\'script\'), s=d.getElementsByTagName(\'script\')[0];
-            g.type=\'text/javascript\';
             g.async=true; g.defer=true;
             g.src=u+\'piwik.js\'; s.parentNode.insertBefore(g,s);
         })();
@@ -367,7 +366,7 @@ function generateGAScriptCode($config)
     $setCustomVar  = "_gaq.push(['%s_setCustomVar', %d, '%s', '%s', %d]);\n";
 
     $prefix = '';
-    $code   = "\n<script type=\"text/javascript\">\nvar _gaq = _gaq || [];\n";
+    $code   = "\n<script>\nvar _gaq = _gaq || [];\n";
     foreach ($config as $key => $account) {
         if (!is_array($account)
             || !array_key_exists('api_key', $account)
@@ -435,7 +434,7 @@ function generateGAScriptCode($config)
 
     // Load ga.js script
     $code .= "(function() {\n"
-        . "var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n"
+        . "var ga = document.createElement('script'); ga.async = true;\n"
         . "ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://')"
         . " + 'stats.g.doubleclick.net/dc.js';\n"
         . "(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);\n"
