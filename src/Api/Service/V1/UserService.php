@@ -94,8 +94,10 @@ class UserService extends OrmService
             throw new DeleteListException('Invalid ids', 400);
         }
 
+        $oql = $this->getOqlForIds($ids);
+
         try {
-            $response = $this->getListByIds($oql);
+            $response = parent::getList($oql);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new DeleteListException($e->getMessage(), $e->getCode());
