@@ -183,8 +183,8 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $itemA = new Entity([ 'name' => 'wubble']);
         $itemB = new Entity([ 'name' => 'xyzzy' ]);
 
-        $this->repository->expects($this->once())->method('getEntities')
-            ->with('id in [1,2]')
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);
         $this->em->expects($this->exactly(2))->method('remove');
 
@@ -209,11 +209,11 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $itemA = new Entity([ 'name' => 'wubble']);
         $itemB = new Entity([ 'name' => 'xyzzy' ]);
 
-        $this->repository->expects($this->once())->method('getEntities')
-            ->with('id in [1,2]')
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);
-        $this->em->expects($this->at(2))->method('remove');
-        $this->em->expects($this->at(3))->method('remove')
+        $this->em->expects($this->at(1))->method('remove');
+        $this->em->expects($this->at(2))->method('remove')
             ->will($this->throwException(new \Exception()));
 
         $this->logger->expects($this->once())->method('error');
@@ -228,7 +228,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteListWhenErrorWhileSearching()
     {
-        $this->repository->expects($this->once())->method('getEntities')
+        $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
             ->will($this->throwException(new \Exception()));
 
@@ -398,7 +398,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
             new Entity([ 'name' => 'mumble' ])
         ];
 
-        $this->repository->expects($this->once())->method('getEntities')
+        $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])->willReturn($items);
 
         $response = $this->service->getListByIds([ 1, 2 ]);
@@ -487,8 +487,8 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $itemB = new Entity([ 'name' => 'xyzzy', 'enabled' => false  ]);
         $data  = [ 'enabled' => true ];
 
-        $this->repository->expects($this->once())->method('getEntities')
-            ->with('id in [1,2]')
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);
         $this->converter->expects($this->once())->method('objectify')
             ->with($data)->willReturn($data);
@@ -518,11 +518,11 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $itemB = new Entity([ 'name' => 'xyzzy' ]);
         $data  = [ 'enabled' => true ];
 
-        $this->repository->expects($this->once())->method('getEntities')
-            ->with('id in [1,2]')
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);
-        $this->em->expects($this->at(3))->method('persist');
-        $this->em->expects($this->at(4))->method('persist')
+        $this->em->expects($this->at(1))->method('persist');
+        $this->em->expects($this->at(2))->method('persist')
             ->will($this->throwException(new \Exception()));
 
         $this->logger->expects($this->once())->method('error');
@@ -537,7 +537,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testPatchListWhenErrorWhileSearching()
     {
-        $this->repository->expects($this->once())->method('getEntities')
+        $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
             ->will($this->throwException(new \Exception()));
 
@@ -641,6 +641,20 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $this->logger->expects($this->once())->method('error');
 
         $this->service->updateItem(1, $data);
+    }
+
+    /**
+     * Tests getOqlForIds
+     */
+    public function testGetOqlForIds()
+    {
+        $method = new \ReflectionMethod($this->service, 'getOqlForIds');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            'id in [1,3,5]',
+            $method->invokeArgs($this->service, [ [ 1, 3, 5 ] ])
+        );
     }
 
     /**
