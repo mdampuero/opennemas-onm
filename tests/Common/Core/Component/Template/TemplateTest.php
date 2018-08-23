@@ -157,6 +157,22 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testSetFile()
+    {
+        $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->setMethods([ 'addTheme', 'setTemplateVars', 'setupCompiles', 'setupPlugins' ])
+            ->setConstructorArgs([ $this->container, [] ])
+            ->getMock();
+
+        $response = $template->setFile('qux');
+        $property = new \ReflectionProperty($template, 'file');
+
+        $property->setAccessible(true);
+
+        $this->assertEquals($template, $response);
+        $this->assertEquals('qux', $property->getValue($template));
+    }
+
     /**
      * @covers Common\Core\Component\Template\Template::generateCacheId
      */

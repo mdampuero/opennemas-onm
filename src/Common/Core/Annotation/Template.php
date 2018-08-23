@@ -20,11 +20,28 @@ use Doctrine\Common\Annotations\Annotation;
 class Template extends Annotation
 {
     /**
+     * The template filename.
+     *
+     * @var string
+     */
+    protected $file;
+
+    /**
      * The template service name.
      *
      * @var string
      */
     protected $name;
+
+    /**
+     * Returns the template filename.
+     *
+     * @return string The template filename.
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
 
     /**
      * Returns the template service name.

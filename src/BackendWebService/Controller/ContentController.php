@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace BackendWebService\Controller;
 
 use Common\Core\Annotation\Security;
@@ -20,9 +19,10 @@ class ContentController extends Controller
     /**
      * Returns a list of contents in JSON format.
      *
-     * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
-     * @return JsonResponse              The response object.
+     * @param  Request $request     The request object.
+     * @param  string  $contentType Content type name.
+     *
+     * @return array The list of contents.
      */
     public function listAction(Request $request, $contentType)
     {
@@ -38,11 +38,12 @@ class ContentController extends Controller
         $results = $em->findBy($criteria, $order, $epp, $page);
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($criteria);
-        return new JsonResponse([
+
+        return [
             'extra'   => $this->loadExtraData(),
             'results' => $results,
             'total'   => $total,
-        ]);
+        ];
     }
 
     /**
@@ -70,9 +71,9 @@ class ContentController extends Controller
 
         return new JsonResponse(
             [
-                'extra'             => $this->loadExtraData(),
-                'results'           => $results,
-                'total'             => $total,
+                'extra'   => $this->loadExtraData(),
+                'results' => $results,
+                'total'   => $total,
             ]
         );
     }

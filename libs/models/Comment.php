@@ -1,22 +1,15 @@
 <?php
 /**
- * Handles all the CRUD actions of Comments
+ * This file is part of the Onm package.
  *
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package    Model
  */
+use Common\Data\Serialize\CsvSerializable;
 
-/**
- * Handles all the CRUD actions of Comments
- *
- * @package    Model
- */
-class Comment
+class Comment implements CsvSerializable
 {
     /**
      * The id of the comment
@@ -137,6 +130,26 @@ class Comment
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function csvSerialize()
+    {
+        $keys = [
+            'id', 'parent_id', 'content_id', 'status', 'author', 'author_email',
+            'author_ip', 'date', 'body'
+        ];
+
+        $data = array_intersect_key(get_object_vars($this), array_flip($keys));
+        $data = array_merge(array_flip($keys), $data);
+
+        if (is_object($data['date'])) {
+            $data['date'] = $data['date']->format('Y-m-d H:i:s');
+        }
+
+        return $data;
+    }
+
+    /**
      * Loads comment information from array into the object instance
      *
      * @param array $data list of properties and values to get info from
@@ -210,7 +223,7 @@ class Comment
         }
 
         try {
-            $rs = getService('dbal_connection')->insert(
+            getService('dbal_connection')->insert(
                 'comments',
                 [
                     'content_id'   => $data['content_id'],
@@ -297,7 +310,7 @@ class Comment
         }
 
         try {
-            $rs = getService('dbal_connection')->update(
+            getService('dbal_connection')->update(
                 'comments',
                 [
                     'status' => $data['status'],
@@ -333,7 +346,7 @@ class Comment
         }
 
         try {
-            $rs = getService('dbal_connection')->delete(
+            getService('dbal_connection')->delete(
                 "comments",
                 [ 'id' => $id ]
             );
@@ -357,7 +370,8 @@ class Comment
     {
         try {
             $data = [ 'status' => $statusName ];
-            $rs   = getService('dbal_connection')->update(
+
+            getService('dbal_connection')->update(
                 "comments",
                 $data,
                 [ 'id' => (int) $this->id ]
@@ -476,7 +490,7 @@ class Comment
         }
 
         try {
-            $rs = getService('dbal_connection')->executeUpdate(
+            getService('dbal_connection')->executeUpdate(
                 "INSERT INTO commentsmeta (`fk_content`, `meta_name`, `meta_value`)"
                 . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?",
                 [ $this->id, $property, $value, $value ]
@@ -505,7 +519,7 @@ class Comment
         }
 
         try {
-            $rs = getService('dbal_connection')->update(
+            getService('dbal_connection')->update(
                 "comments",
                 [ 'parent_id' => $parentId ],
                 [ 'id' => (int) $this->id ]
