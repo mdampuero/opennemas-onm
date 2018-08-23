@@ -9,6 +9,7 @@
  */
 namespace Common\Core\Component\Helper;
 
+use Common\Data\Serialize\CsvSerializable;
 use League\Csv\Writer;
 
 class CsvHelper
@@ -24,17 +25,10 @@ class CsvHelper
     {
         $writer = $this->getWriter();
 
-        if (empty($filename)) {
-            $filename = 'report.csv';
-        }
+        list($headers, $data) = $this->parse($data);
 
-        $filename = trim($filename, '.csv') . '.csv';
-        $data     = $this->parse($data);
-
-        if (!empty($data)) {
-            $writer->insertOne(array_keys($data[0]));
-            $writer->insertAll($data);
-        }
+        $writer->insertOne($headers);
+        $writer->insertAll($data);
 
         return $writer->__toString();
     }
@@ -63,8 +57,25 @@ class CsvHelper
      */
     protected function parse($data)
     {
-        return array_map(function ($a) {
-            return $a->csvSerialize();
+        if (!is_array($data)) {
+            return [ [], $data ];
+        }
+
+        $data = array_map(function ($a) {
+            if ($a instanceof CsvSerializable) {
+                return $a->csvSerialize();
+            }
+
+            return $a;
         }, $data);
+
+        $headers = [];
+        foreach ($data as $item) {
+            if (is_array($item)) {
+                $headers = array_merge($headers, array_keys($item));
+            }
+        }
+
+        return [ array_values(array_unique($headers)), $data ];
     }
 }

@@ -321,11 +321,11 @@ class Content implements \JsonSerializable, CsvSerializable
     {
         $keys = [
             'pk_content', 'pretitle', 'title', 'description', 'created',
-            'changed', 'starttime', 'content_status'
+            'changed', 'starttime', 'content_status', 'body'
         ];
 
         $data = array_intersect_key(get_object_vars($this), array_flip($keys));
-        $data = array_merge(array_flip($keys), $data);
+        $data = array_merge(array_fill_keys($keys, null), $data);
 
         foreach ($this->getL10nKeys() as $key) {
             if (!in_array($key, $keys)) {
@@ -333,6 +333,12 @@ class Content implements \JsonSerializable, CsvSerializable
             }
 
             $data[$key] = $this->__get($key);
+        }
+
+        foreach ($data as &$value) {
+            if ($value instanceof \Datetime) {
+                $value = $value->format('Y-m-d H:i:s');
+            }
         }
 
         return $data;
