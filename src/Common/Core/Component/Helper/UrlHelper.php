@@ -15,6 +15,30 @@ namespace Common\Core\Component\Helper;
 class UrlHelper
 {
     /**
+     * Checks if the current URI is for frontend.
+     *
+     * @param string $uri The current URI.
+     *
+     * @return boolean True if the current URI is for frontend. False otherwise.
+     */
+    public function isFrontendUri($uri)
+    {
+        $ignore = [
+            '_profiler',
+            '_wdt',
+            'admin',
+            'api',
+            'asset',
+            'build\/assets',
+            'content\/share-by-email',
+            'manager',
+            'ws',
+        ];
+
+        return !preg_match('/^(' . implode('|', $ignore) . ')/', trim($uri, '/'));
+    }
+
+    /**
      * Parses and returns the list of parts from a URL.
      *
      * @param string $url The URL to parse.
