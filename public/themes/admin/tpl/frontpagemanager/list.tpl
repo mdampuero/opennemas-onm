@@ -332,17 +332,26 @@
   </div>
   <script type="text/ng-template" id="modal-layout">
     <div class="modal-header">
-    [% template.categoryId %]
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">&times;</button>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">
+        <i class="fa fa-times"></i>
+      </button>
       <h4 class="modal-title">
         {t}Change the layout of this frontpage{/t}
       </h4>
       </div>
       <div class="modal-body clearfix">
-        <a class="layout-type btn" ng-repeat="(layoutKey, layout) in template.layouts" ng-click="template.changeLayout(layoutKey)"> [% layout.name %]</a>
+        <div class="row">
+          <div class="col-sm-6" ng-class="{ 'm-b-15': $index < template.toArray(template.layouts).length - 2 }" ng-repeat="(layoutKey, layout) in template.layouts">
+            <a class="btn btn-block btn-white" ng-click="template.changeLayout(layoutKey)">
+              [% layout.name %]<span class="m-l-5 text-success" ng-if="layout.name == template.layout.name">({t}Active{/t})</span>
+            </a>
+          </div>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">{t}Close{/t}</button>
+      <div class="modal-footer no-padding">
+        <div class="p-b-15 p-l-15 p-r-15">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="close()">{t}Close{/t}</button>
+        </div>
       </div>
     </div>
   </script>
