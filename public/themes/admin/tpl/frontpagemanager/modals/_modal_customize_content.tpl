@@ -23,7 +23,7 @@
               <div class="col-sm-9">
                 <div class="input-group">
                   <span class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-style="{ 'background-color': bg_color }">
+                    <button type="button" class="btn-background btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-style="{ 'background-color': bg_color }">
                       &nbsp;&nbsp;&nbsp;&nbsp;
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right no-padding pull-right" style="min-width: 150px; overflow: hidden;">
@@ -60,12 +60,12 @@
                 </div>
               </div>
             </div>
-            <div class="form-group fontcolor">
+            <div class="form-group font-color">
               <label class="col-sm-3 form-label" for="font-color">{t}Title font color{/t}</label>
               <div class="col-sm-9">
                 <div class="input-group">
                   <span class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-style="{ 'background-color': font_color }">
+                    <button type="button" class="btn btn-font btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-style="{ 'background-color': font_color }">
                       &nbsp;&nbsp;&nbsp;&nbsp;
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right no-padding pull-right" style="min-width: 150px; overflow: hidden;">

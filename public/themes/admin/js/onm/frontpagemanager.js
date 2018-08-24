@@ -517,9 +517,9 @@ jQuery(function($) {
     modal.find('.modal-body #font-family').val('Auto');
     modal.find('.modal-body #font-style').val('Normal');
     modal.find('.modal-body #font-weight').val('Auto');
-    modal.find('.modal-body .fontcolor span.simplecolorpicker').css('background-color', '#000000');
+    modal.find('.modal-body .font-color .btn-font').css('background-color', '#000000');
     modal.find('.modal-body #font-color').val('#000000');
-    modal.find('.modal-body .background span.simplecolorpicker').css('background-color', '#ffffff');
+    modal.find('.modal-body .background .btn-background').css('background-color', '#ffffff');
     modal.find('.modal-body #bg-color').val('#ffffff');
     modal.find('.modal-body .radio input[value=""]').prop('checked', true);
 
