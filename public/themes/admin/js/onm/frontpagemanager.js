@@ -513,7 +513,8 @@ jQuery(function($) {
   $('#modal-element-customize-content').on('click', 'a.btn.reset', function(e) {
     var modal = $('#modal-element-customize-content');
 
-    modal.find('.modal-body #font-size option[value=""]').attr('selected', 'selected');
+    modal.find('.modal-body #font-size')
+      .val(modal.find('.modal-body #font-size option[value=""]').val());
     modal.find('.modal-body #font-family').val('Auto');
     modal.find('.modal-body #font-style').val('Normal');
     modal.find('.modal-body #font-weight').val('Auto');
@@ -521,7 +522,6 @@ jQuery(function($) {
     modal.find('.modal-body #font-color').val('#000000');
     modal.find('.modal-body .background .btn-background').css('background-color', '#ffffff');
     modal.find('.modal-body #bg-color').val('#ffffff');
-    modal.find('.modal-body .radio input[value=""]').prop('checked', true);
 
     e.preventDefault();
   });
