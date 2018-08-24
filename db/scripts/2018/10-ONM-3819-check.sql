@@ -1,1 +1,1 @@
-SELECT metadata from contents;
+DESC contents;
