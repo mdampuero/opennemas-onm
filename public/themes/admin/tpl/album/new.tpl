@@ -154,7 +154,7 @@
                 </label>
                 <div class="controls">
                   {acl isAllowed="CONTENT_OTHER_UPDATE"}
-                    <select id="fk_author" name="fk_author" required>
+                    <select id="fk_author" name="fk_author">
                       <option value="" {if empty($opinion->fk_author)}selected{/if}>{t}Select an author...{/t}</option>
                       {foreach from=$authors item=author}
                         <option value="{$author->id}" {if $album->fk_author eq $author->id}selected{/if}>{$author->name}</option>
