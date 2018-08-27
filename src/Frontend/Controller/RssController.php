@@ -38,12 +38,13 @@ class RssController extends Controller
         ) {
             $ccm = \ContentCategoryManager::get_instance();
 
-            $categoriesTree = $ccm->getCategoriesTreeMenu();
-            $opinionAuthors = \User::getAllUsersAuthors();
+            $categories = $ccm->getCategoriesTreeMenu();
+            $authors    = $this->get('api.service.author')
+                ->getList('order by name asc');
 
             $this->view->assign([
-                'categoriesTree' => $categoriesTree,
-                'opinionAuthors' => $opinionAuthors,
+                'categoriesTree' => $categories,
+                'opinionAuthors' => $authors['items'],
             ]);
         }
 
