@@ -300,11 +300,12 @@ class NewsAgencyController extends Controller
             [ 'name' => _('Photo'), 'value' => 'photo' ]
         ];
 
-        $authors = \User::getAllUsersAuthors();
+        $authors = $this->get('api.service.author')
+            ->getList('order by name asc');
 
         $params['authors'] = [];
 
-        foreach ($authors as $author) {
+        foreach ($authors['items'] as $author) {
             $params['authors'][] = [
                 'name' => $author->name,
                 'value' => $author->id
