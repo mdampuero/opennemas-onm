@@ -607,7 +607,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
     $scope.openLayoutModal = function() {
       $uibModal.open({
         templateUrl: 'modal-layout',
-        backdrop: 'static',
+        backdrop: true,
         controller: 'modalCtrl',
         resolve: {
           template: function() {
@@ -623,7 +623,10 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
                     layout:    layoutKey
                   }
                 );
-              }
+              },
+              toArray: function(obj) {
+                return $scope.toArray(obj);
+              },
             };
           },
           success: function() {
