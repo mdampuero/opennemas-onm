@@ -38,8 +38,7 @@ angular.module('BackendApp.controllers')
 
         oqlEncoder.configure({
           placeholder: {
-            title: '(title ~ "%[value]%" or metadata ~ "%[value]%" or' +
-              ' description ~ "%[value]%") ',
+            title: '(title ~ "%[value]%" or description ~ "%[value]%") ',
           }
         });
 
