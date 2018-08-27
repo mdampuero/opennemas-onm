@@ -25,6 +25,15 @@ class UrlHelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests isFrontendUri for frontend and backend URIs.
+     */
+    public function testIsFrontendUri()
+    {
+        $this->assertTrue($this->helper->isFrontendUri('/fubar'));
+        $this->assertFalse($this->helper->isFrontendUri('/admin'));
+    }
+
+    /**
      * Tests parseUrl with multiple URLs.
      */
     public function testParse()
