@@ -165,6 +165,7 @@ class SecurityListener implements EventSubscriberInterface
         }
 
         $userGroups = $this->container->get('api.service.user_group')
+            ->setOrigin($user->getOrigin())
             ->getListByIds(array_keys($user->user_groups));
 
         $permissions = [];

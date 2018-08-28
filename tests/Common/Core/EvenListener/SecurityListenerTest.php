@@ -78,7 +78,7 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->ugs = $this->getMockBuilder('UserGroupService')
-            ->setMethods([ 'getListByIds' ])
+            ->setMethods([ 'getListByIds', 'setOrigin' ])
             ->getMock();
 
         $this->user = $this->getMockBuilder('Common\ORM\Entity\User')
@@ -109,6 +109,9 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->session->expects($this->any())->method('getFlashBag')
             ->willReturn($this->fb);
+
+        $this->ugs->expects($this->any())->method('setOrigin')
+            ->willReturn($this->ugs);
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this,  'serviceContainerCallback' ]));
