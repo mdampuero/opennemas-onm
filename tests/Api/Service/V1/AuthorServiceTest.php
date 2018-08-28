@@ -91,8 +91,7 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
     public function testDeleteItem()
     {
         $item = new Entity([
-            'fk_user_group' => [ 3 ],
-            'user_groups'   => [ 3 => [ 'status' => 1 ] ]
+            'user_groups' => [ 3 => [ 'status' => 1 ] ]
         ]);
 
         $this->repository->expects($this->once())->method('findOneBy')
@@ -135,8 +134,7 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
     public function testDeleteItemWhenErrorWhileRemoving()
     {
         $item = new Entity([
-            'fk_user_group' => [ 3 ],
-            'user_groups'   => [ 3 => [ 'status' => 1 ] ]
+            'user_groups' => [ 3 => [ 'status' => 1 ] ]
         ]);
 
         $this->repository->expects($this->once())->method('findOneBy')
