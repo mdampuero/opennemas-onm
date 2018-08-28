@@ -90,7 +90,7 @@ class OrmService extends Service
             $item = new $this->class($data);
 
             $this->validate($item);
-            $this->em->persist($item, $this->origin);
+            $this->em->persist($item, $this->getOrigin());
 
             return $item;
         } catch (\Exception $e) {
@@ -236,6 +236,16 @@ class OrmService extends Service
     }
 
     /**
+     * Returns the current service origin.
+     *
+     * @return string The current service origin.
+     */
+    public function getOrigin()
+    {
+        return $this->origin;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function patchItem($id, $data)
@@ -249,7 +259,7 @@ class OrmService extends Service
             $item->merge($data);
 
             $this->validate($item);
-            $this->em->persist($item);
+            $this->em->persist($item, $this->getOrigin());
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new PatchItemException($e->getMessage(), $e->getCode());
@@ -280,7 +290,7 @@ class OrmService extends Service
             try {
                 $item->merge($data);
                 $this->validate($item);
-                $this->em->persist($item);
+                $this->em->persist($item, $this->getOrigin());
 
                 $updated++;
             } catch (\Exception $e) {

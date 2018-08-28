@@ -583,12 +583,9 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetOrigin()
     {
-        $property = new \ReflectionProperty($this->service, 'origin');
-        $property->setAccessible(true);
-
-        $this->assertEquals('instance', $property->getValue($this->service));
+        $this->assertEquals('instance', $this->service->getOrigin());
         $this->assertEquals($this->service, $this->service->setOrigin('wobble'));
-        $this->assertEquals('wobble', $property->getValue($this->service));
+        $this->assertEquals('wobble', $this->service->getOrigin());
     }
 
     /**
