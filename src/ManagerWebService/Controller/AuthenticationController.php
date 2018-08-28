@@ -83,11 +83,9 @@ class AuthenticationController extends Controller
         }
 
         $errors = $request->getSession()->getFlashbag()->get('error');
+
         if ($errors) {
-            $message = array(
-                'type' => 'error',
-                'text' => $errors[0]
-            );
+            $message = [ 'type' => 'error', 'text' => $errors[0] ];
         }
 
         $intention = time() . rand();
@@ -118,7 +116,8 @@ class AuthenticationController extends Controller
             'instance'    => $this->get('core.instance')->getData(),
             'instances'   => $this->get('core.security')->getInstances(),
             'permissions' => array_values($this->get('core.security')->getPermissions()),
-            'user'        => $this->get('core.user')->getData(),
+            'user'        => !empty($this->get('core.user')) ?
+                $this->get('core.user')->getData() : [],
         ]);
     }
 }
