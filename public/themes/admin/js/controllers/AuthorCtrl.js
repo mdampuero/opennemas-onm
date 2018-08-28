@@ -97,14 +97,10 @@
             data.avatar_img_id = data.avatar_img_id.pk_photo;
           }
 
-          data.fk_user_group = [];
           for (var key in data.user_groups) {
             if (!data.user_groups[key] || data.user_groups[key].status === 0) {
               delete data.user_groups[key];
-              continue;
             }
-
-            data.fk_user_group.push(key);
           }
 
           return data;
