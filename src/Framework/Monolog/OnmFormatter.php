@@ -44,6 +44,10 @@ class OnmFormatter
 
         // Ensure we have a request (maybe we're in a console command)
         if (empty($request)) {
+            $record['extra']['client_ip']  = php_sapi_name();
+            $record['extra']['user_agent'] = php_sapi_name();
+            $record['extra']['url']        = implode(' ', $_SERVER['argv']);
+
             return $record;
         }
 
