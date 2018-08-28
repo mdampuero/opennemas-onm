@@ -103,6 +103,7 @@ class RssController extends Controller
                 }
             );
 
+            $this->sortByPlaceholder($contents, $contentPositions, $categoryName);
             $this->getRelatedContents($contents);
 
             $this->view->assign([
@@ -418,7 +419,7 @@ class RssController extends Controller
      * @param array  $contents The list of contents to sort.
      * @param string $category The category name.
      */
-    protected function sortByPlaceholder(&$contents, $category)
+    protected function sortByPlaceholder(&$contents, $contentPositions, $category)
     {
         $order = $this->getPlaceholders($category);
 
@@ -426,15 +427,28 @@ class RssController extends Controller
             return;
         }
 
-        uasort($contents, function ($a, $b) use ($order) {
-            $positionA = array_search($a->placeholder, $order);
-            $positionB = array_search($b->placeholder, $order);
+        // Order contentPositions
+        uksort($contentPositions, function ($a, $b) use ($order) {
+            $positionA = array_search($a, $order);
+            $positionB = array_search($b, $order);
 
-            return $positionA < $positionB ? -1 :
-                (
-                    $positionA > $positionB ? 1 :
-                    ($a->position < $b->position ? -1 : 1)
-                );
+            return $positionA < $positionB ? -1 : 1;
+        });
+
+        // Set array with contents order
+        $contentOrder = [];
+        foreach ($contentPositions as $items) {
+            foreach ($items as $item) {
+                $contentOrder[] = $item->pk_fk_content;
+            }
+        }
+
+        // Order contents
+        uksort($contents, function ($a, $b) use ($contentOrder) {
+            $positionA = array_search($a, $contentOrder);
+            $positionB = array_search($b, $contentOrder);
+
+            return $positionA < $positionB ? -1 : 1;
         });
     }
 
