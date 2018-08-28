@@ -236,13 +236,12 @@ class UserController extends Controller
     public function updateAction(Request $request)
     {
         $data = array_merge(
-            [ 'fk_user_group' => [], 'user_groups' => [] ],
+            [ 'user_groups' => [] ],
             $request->request->all()
         );
 
         if (array_key_exists('user_groups', $data)) {
-            $data['fk_user_group'] = array_keys($data['user_groups']);
-            $data['user_groups']   =
+            $data['user_groups'] =
                 $this->parseSubscriptions($data['user_groups']);
         }
 
