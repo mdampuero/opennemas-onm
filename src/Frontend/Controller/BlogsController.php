@@ -84,6 +84,7 @@ class BlogsController extends Controller
             $em         = $this->get('opinion_repository');
             $blogs      = $em->findBy($filters, $order, $epp, $page);
             $countItems = $em->countBy($filters);
+            $photos     = $this->get('core.helper.user')->getPhotos($authors);
 
             $pagination = $this->get('paginator')->get([
                 'directional' => true,
@@ -98,8 +99,14 @@ class BlogsController extends Controller
                     $blog->name             = $blog->author->name;
                     $blog->author_name_slug = $blog->author->username;
 
+                    if (array_key_exists($blog->author->avatar_img_id, $photos)) {
+                        $blog->author->photo =
+                            $photos[$blog->author->avatar_img_id];
+                    }
+
                     if (isset($blog->img1) && !empty($blog->img1)) {
-                        $blog->img1 = $this->get('entity_repository')->find('Photo', $blog->img1);
+                        $blog->img1 = $this->get('entity_repository')
+                            ->find('Photo', $blog->img1);
                     }
 
                     $blog->author->uri = \Uri::generate(
