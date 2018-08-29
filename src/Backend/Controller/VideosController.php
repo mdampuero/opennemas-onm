@@ -404,10 +404,9 @@ class VideosController extends Controller
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            unset($_POST['action']);
-            unset($_POST['submit']);
+            $settings = $request->request;
 
-            foreach ($_POST as $key => $value) {
+            foreach ($settings as $key => $value) {
                 $this->get('orm.manager')->getDataSet('Settings')
                     ->set($key, $value);
             }
