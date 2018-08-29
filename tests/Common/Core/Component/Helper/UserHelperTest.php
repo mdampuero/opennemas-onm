@@ -30,7 +30,7 @@ class UserHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'filter', 'get', 'set' ])
             ->getMock();
 
-        $this->repository = $this->getMockBuilder('Repository')
+        $this->repository = $this->getMockBuilder('Repository' . uniqid())
             ->setMethods([ 'findBy' ])
             ->getMock();
 
