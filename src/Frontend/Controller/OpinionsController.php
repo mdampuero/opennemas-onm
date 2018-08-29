@@ -66,13 +66,11 @@ class OpinionsController extends Controller
             $order['starttime'] = 'DESC';
 
             // Fetch configurations for this frontpage
-            $configurations = $this->get('setting_repository')->get(
-                'opinion_settings',
-                [
+            $configurations = $this->get('setting_repository')
+                ->get('opinion_settings', [
                     'total_editorial' => 2,
                     'total_director'  => 1,
-                ]
-            );
+                ]);
 
             // Fetch last editorial opinions from editorial
             if ($configurations['total_editorial'] > 0) {
@@ -120,22 +118,17 @@ class OpinionsController extends Controller
                 $numOpinions = $configurations['total_opinions'];
             }
 
-             // Fetch all authors
-            $allAuthors = \User::getAllUsersAuthors();
-
-            $authorsBlog = [];
-            foreach ($allAuthors as $authorData) {
-                if ($authorData->is_blog == 1) {
-                    $authorsBlog[$authorData->id] = $authorData;
-                }
-            }
-
             $filters['type_opinion'] = [['value' => 0]];
-            if (!empty($authorsBlog)) {
-                // Must drop the blogs
+
+            $bloggers = $this->get('api.service.author')
+                ->getList('is_blog = 1 order by name asc');
+
+            if (!empty($bloggers['total'])) {
                 $filters = array_merge($filters, [
                     'opinions`.`fk_author' => [ [
-                        'value' => array_keys($authorsBlog),
+                        'value' => array_map(function ($a) {
+                            return $a->id;
+                        }, $bloggers['items']),
                         'operator' => 'NOT IN'
                     ] ]
                 ]);
