@@ -76,18 +76,14 @@ class VideosController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
-            $settings = $this->get('setting_repository')
-                ->get(['video_settings', 'items_in_blog'], [ [], 10 ]);
+            $settings = $this->get('orm.manager')->getDataSet('Settings')
+                ->get(['video_settings']);
 
             // Fetch video settings
-            $videoSettings              = $settings['video_settings'];
-            $totalVideosFrontpage       = isset($videoSettings['total_front']) ? $videoSettings['total_front'] : 2;
-            $totalVideosMoreFrontpage   = isset($videoSettings['total_front_more']) ? $videoSettings['total_front_more'] : 12;
-            $totalVideosFrontpageOffset = isset($videoSettings['front_offset']) ? $videoSettings['front_offset'] : 3;
-            $totalVideosBlockInCategory = isset($videoSettings['block_in_category']) ? $videoSettings['block_in_category'] : 0;
-            $totalVideosBlockOther      = isset($videoSettings['block_others']) ? $settings['video_settings']['block_others'] : 6;
-
-            $epp = isset($settings['items_in_blog']) ? $settings['items_in_blog'] : 10;
+            $settings                   = $settings['video_settings'];
+            $totalVideosFrontpage       = isset($settings['total_front']) ? $settings['total_front'] : 2;
+            $totalVideosMoreFrontpage   = isset($settings['total_front_more']) ? $settings['total_front_more'] : 12;
+            $totalVideosFrontpageOffset = isset($settings['front_offset']) ? $settings['front_offset'] : 3;
 
             $baseCriteria = [
                 'fk_content_type' => [ [ 'value' => 9 ] ],
@@ -122,13 +118,13 @@ class VideosController extends Controller
 
                 $criteria = array_merge(
                     $baseCriteria,
-                    [ ['pk_fk_content_category' => [[ 'value' => $category->id ]] ] ]
+                    ['pk_fk_content_category' => [[ 'value' => $category->id ]] ]
                 );
 
                 $allVideos = $em->findBy(
                     $criteria,
                     'starttime DESC',
-                    (int) ($totalVideosFrontpage + $totalVideosBlockInCategory),
+                    (int) ($totalVideosFrontpage),
                     (int) $page
                 );
 
@@ -136,7 +132,7 @@ class VideosController extends Controller
                 $frontVideos = array_slice($allVideos, 0, (int) $totalVideosFrontpage);
 
                 // Videos on more in category block
-                $videos = array_slice($allVideos, (int) $totalVideosFrontpage, (int) $totalVideosBlockInCategory);
+                $videos = array_slice($allVideos, (int) $totalVideosFrontpage);
 
                 // Videos on others videos block
                 $otherVideos = $em->findBy(
@@ -249,8 +245,11 @@ class VideosController extends Controller
             || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
             // Fetch video settings
-            $videosSettings = $this->get('setting_repository')->get('video_settings');
-            $itemsPerPage   = isset($videosSettings['total_front_more']) ? $videosSettings['total_front_more'] : 12;
+            $settings = $this->get('orm.manager')->getDataSet('Settings')
+                ->get(['video_settings']);
+            $settings = $settings['video_settings'];
+
+            $itemsPerPage = isset($settings['total_front_more']) ? $settings['total_front_more'] : 12;
 
             $order   = [ 'starttime' => 'DESC' ];
             $filters = [
@@ -398,13 +397,8 @@ class VideosController extends Controller
      */
     public function ajaxMoreAction()
     {
-        // Fetch video settings
-        $videosSettings        = s::get('video_settings');
-        $totalVideosBlockOther = isset($videosSettings['block_others']) ?
-            $videosSettings['block_others'] :
-            6;
-
-        $limit = ($this->page - 1) * $totalVideosBlockOther . ', ' . $totalVideosBlockOther;
+        $total = 6;
+        $limit = ($this->page - 1) * $total . ', ' . $total;
 
         $order   = [ 'starttime' => 'DESC' ];
         $filters = [
@@ -448,13 +442,8 @@ class VideosController extends Controller
      */
     public function ajaxInCategoryAction(Request $request)
     {
-        // Fetch video settings
-        $videosSettings             = s::get('video_settings');
-        $totalVideosBlockInCategory = isset($videosSettings['block_in_category']) ?
-            $videosSettings['block_in_category'] :
-            3;
-
-        $limit = ($this->page - 1) * $totalVideosBlockInCategory . ', ' . $totalVideosBlockInCategory;
+        $total = 3;
+        $limit = ($this->page - 1) * $total . ', ' . $total;
 
         if (empty($this->category)) {
             $this->category = $request->query->getDigits('category', 0);
@@ -480,7 +469,7 @@ class VideosController extends Controller
             ]
         ];
 
-        $videos2 = $this->get('entity_repository')->findBy($filters, $order, $limit, 0);
+        $videos = $this->get('entity_repository')->findBy($filters, $order, $limit, 0);
 
         if (count($videos) <= 0) {
             return new RedirectResponse(
@@ -504,11 +493,12 @@ class VideosController extends Controller
      */
     public function ajaxPaginatedAction(Request $request)
     {
-        $videosSettings = s::get('video_settings');
-        $epp            = isset($videosSettings['total_front_more']) ?
-            $videosSettings['total_front_more'] : 12;
-        $offset         = isset($videosSettings['front_offset']) ?
-            $videosSettings['front_offset'] : 3;
+        // Fetch video settings
+        $settings = $this->get('orm.manager')->getDataSet('Settings')
+            ->get(['video_settings']);
+        $settings = $settings['video_settings'];
+        $epp      = isset($settings['total_front_more']) ? $settings['total_front_more'] : 12;
+        $offset   = isset($settings['front_offset']) ? $settings['front_offset'] : 3;
 
         if (empty($this->category)) {
             $this->category = $request->query->getDigits('category', 0);
@@ -551,9 +541,9 @@ class VideosController extends Controller
         ]);
 
         return $this->render('video/partials/_widget_more_videos.tpl', [
-            'others_videos'      => $othersVideos,
-            'page'               => $this->page,
-            'pagination'         => $pagination,
+            'others_videos' => $othersVideos,
+            'page'          => $this->page,
+            'pagination'    => $pagination,
         ]);
     }
 
