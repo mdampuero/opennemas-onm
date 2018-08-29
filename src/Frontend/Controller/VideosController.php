@@ -77,10 +77,9 @@ class VideosController extends Controller
             || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
             $settings = $this->get('orm.manager')->getDataSet('Settings')
-                ->get(['video_settings']);
+                ->get('video_settings');
 
             // Fetch video settings
-            $settings                   = $settings['video_settings'];
             $totalVideosFrontpage       = isset($settings['total_front']) ? $settings['total_front'] : 2;
             $totalVideosMoreFrontpage   = isset($settings['total_front_more']) ? $settings['total_front_more'] : 12;
             $totalVideosFrontpageOffset = isset($settings['front_offset']) ? $settings['front_offset'] : 3;
@@ -246,8 +245,7 @@ class VideosController extends Controller
         ) {
             // Fetch video settings
             $settings = $this->get('orm.manager')->getDataSet('Settings')
-                ->get(['video_settings']);
-            $settings = $settings['video_settings'];
+                ->get('video_settings');
 
             $itemsPerPage = isset($settings['total_front_more']) ? $settings['total_front_more'] : 12;
 
@@ -495,8 +493,7 @@ class VideosController extends Controller
     {
         // Fetch video settings
         $settings = $this->get('orm.manager')->getDataSet('Settings')
-            ->get(['video_settings']);
-        $settings = $settings['video_settings'];
+            ->get('video_settings');
         $epp      = isset($settings['total_front_more']) ? $settings['total_front_more'] : 12;
         $offset   = isset($settings['front_offset']) ? $settings['front_offset'] : 3;
 
