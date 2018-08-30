@@ -162,22 +162,20 @@ class NewsAgencyServerController extends Controller
             $server = $servers[$id];
         }
 
-        $users   = \User::getAllUsersAuthors();
         $authors = [];
+        $users   = $this->get('api.service.author')
+            ->getList('order by name asc');
 
-        foreach ($users as $user) {
+        foreach ($users['items'] as $user) {
             $authors[$user->id] = $user->name;
         }
 
-        return $this->render(
-            'news_agency/config/new.tpl',
-            [
-                'authors'    => $authors,
-                'categories' => $categories,
-                'server'     => $server,
-                'sync_from'  => $this->syncFrom
-            ]
-        );
+        return $this->render('news_agency/config/new.tpl', [
+            'authors'    => $authors,
+            'categories' => $categories,
+            'server'     => $server,
+            'sync_from'  => $this->syncFrom
+        ]);
     }
 
     /**
