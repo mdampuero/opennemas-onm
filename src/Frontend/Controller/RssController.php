@@ -92,8 +92,6 @@ class RssController extends Controller
                 $this->get('api.service.frontpage_version')
                     ->getPublicFrontpageData($id);
 
-            $this->sortByPlaceholder($contents, $contentPositions, $categoryName);
-
             // Remove advertisements and widgets
             $contents = array_filter(
                 $contents,
@@ -105,6 +103,7 @@ class RssController extends Controller
                 }
             );
 
+            $this->sortByPlaceholder($contents, $contentPositions, $categoryName);
             $this->getRelatedContents($contents);
 
             $this->view->assign([
@@ -440,7 +439,10 @@ class RssController extends Controller
         $sorted = [];
         foreach ($contentPositions as $items) {
             foreach ($items as $item) {
-                $sorted[$item->pk_fk_content] = $contents[$item->pk_fk_content];
+                if (array_key_exists($item->pk_fk_content, $contents)) {
+                    $sorted[$item->pk_fk_content] =
+                        $contents[$item->pk_fk_content];
+                }
             }
         }
         // Reassign ordered contents
