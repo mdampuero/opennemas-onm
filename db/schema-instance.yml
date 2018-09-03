@@ -548,9 +548,6 @@ contents:
         body:
             type: text
             options: { length: 4294967295, default: null, notnull: false }
-        metadata:
-            type: string
-            options: { length: 512, default: null, notnull: false }
         starttime:
             type: datetime
             options: { default: CURRENT_TIMESTAMP, notnull: false }
@@ -669,12 +666,6 @@ contents:
             primary: false
             unique: false
             flags: {  }
-        -
-            name: metadata
-            columns: [metadata]
-            primary: false
-            unique: false
-            flags: { fulltext: true }
         -
             name: urn_source
             columns: [urn_source]
