@@ -44,12 +44,12 @@ class ErrorController extends Controller
 
             case 'ContentNotMigratedException':
             case 'ResourceNotFoundException':
-                $this->get('application.log')->info($name);
+                $this->get('application.log')->info($class->getShortName());
 
                 return $this->getNotFoundResponse();
 
             case 'NotFoundHttpException':
-                $this->get('application.log')->info($name);
+                $this->get('application.log')->info($class->getShortName());
 
                 // Redirect to redirectors URLs without /
                 $url = $this->generateUrl('frontend_redirect_content', [
