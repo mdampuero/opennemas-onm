@@ -218,6 +218,7 @@ class BaseDataSet extends DataSet
             try {
                 $data[$value[$keyName]] = unserialize($value[$valueName]);
             } catch (\Exception $e) {
+                $data[$value[$keyName]] = $value[$valueName];
             }
         }
 
