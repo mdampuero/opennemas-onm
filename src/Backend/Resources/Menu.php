@@ -338,7 +338,7 @@ $menuXml = [
                 'id'          => 'news_agency',
                 'title'       => _('News Agency'),
                 'icon'        => 'fa fa-microphone',
-                'link'        => url('admin_news_agency'),
+                'link'        => url('backend_news_agency'),
                 'module_name' => 'NEWS_AGENCY_IMPORTER',
                 'privilege'   => 'IMPORT_ADMIN',
             ],

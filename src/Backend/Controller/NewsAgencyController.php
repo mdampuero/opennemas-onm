@@ -99,16 +99,13 @@ class NewsAgencyController extends Controller
 
         // If something went wrong, redirect
         if ($article == 'redirect_list') {
-            return $this->redirect($this->generateUrl('admin_news_agency'));
+            return $this->redirect($this->generateUrl('backend_news_agency'));
         } elseif ($article == 'redirect_category') {
             return $this->redirect(
-                $this->generateUrl(
-                    'admin_news_agency_pickcategory',
-                    [
-                        'id'        => $id,
-                        'source_id' => $sourceId
-                    ]
-                )
+                $this->generateUrl('backend_news_agency_pickcategory', [
+                    'id'        => $id,
+                    'source_id' => $sourceId
+                ])
             );
         }
 
@@ -126,7 +123,7 @@ class NewsAgencyController extends Controller
                 sprintf('Unable to import the file "%s"', $id)
             );
 
-            return $this->redirect($this->generateUrl('admin_news_agency'));
+            return $this->redirect($this->generateUrl('backend_news_agency'));
         }
     }
 
@@ -188,7 +185,7 @@ class NewsAgencyController extends Controller
                 _('The article you want to import doesn\'t exists.')
             );
 
-            $this->redirect($this->generateUrl('admin_news_agency'));
+            $this->redirect($this->generateUrl('backend_news_agency'));
         }
 
         $repository = new \Onm\Import\Repository\LocalRepository();
@@ -202,7 +199,7 @@ class NewsAgencyController extends Controller
         $targetCategory = $this->getSimilarCategoryIdForElement($element);
         if (!empty($targetCategory)) {
             return $this->redirect($this->generateUrl(
-                'admin_news_agency_import',
+                'backend_news_agency_import',
                 [
                     'source_id' => $sourceId,
                     'id'        => $id,
@@ -287,7 +284,7 @@ class NewsAgencyController extends Controller
             $this->get('session')->getFlashBag()->add('error', $e->getMessage());
         }
 
-        return $this->redirect($this->generateUrl('admin_news_agency'));
+        return $this->redirect($this->generateUrl('backend_news_agency'));
     }
 
     /**
