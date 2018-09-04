@@ -606,8 +606,10 @@ class OpinionsController extends Controller
             \Frontend\Controller\OpinionsController::getAds('inner');
 
         try {
-            $opinion->author = $this->get('api.service.author')
-                ->getItem($opinion->fk_author);
+            if (!empty($opinion->fk_author)) {
+                $opinion->author = $this->get('api.service.author')
+                    ->getItem($opinion->fk_author);
+            }
         } catch (\Exception $e) {
         }
 
