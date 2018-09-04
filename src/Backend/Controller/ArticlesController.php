@@ -341,8 +341,8 @@ class ArticlesController extends Controller
 
         // Set a dummy Id for the article if doesn't exists
         if (empty($article->pk_article) && empty($article->id)) {
-            $article->pk_article = '-1';
-            $article->id         = '-1';
+            $article->pk_article = 0;
+            $article->id         = 0;
         }
 
         // Fetch article category name
