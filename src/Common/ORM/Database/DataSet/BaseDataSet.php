@@ -17,20 +17,6 @@ use Common\ORM\Core\Metadata;
 class BaseDataSet extends DataSet
 {
     /**
-     * The list of autoloaded values.
-     *
-     * @var array
-     */
-    protected $autoloaded = [];
-
-    /**
-     * The list of keys to have always loaded.
-     *
-     * @var array
-     */
-    protected $toAutoload;
-
-    /**
      * The cache service.
      *
      * @var Cache.
@@ -45,6 +31,13 @@ class BaseDataSet extends DataSet
     protected $conn;
 
     /**
+     * The information managed by the database
+     *
+     * @var array
+     */
+    protected $data = [];
+
+    /**
      * The DataSet metadata.
      *
      * @var Metadata
@@ -54,17 +47,15 @@ class BaseDataSet extends DataSet
     /**
      * Initializes the DataSet.
      *
-     * @param Connection $conn       The database connection.
-     * @param Metadata   $metadata   The DataSet metadata.
-     * @param Cache      $cache      The cache service.
-     * @param array      $toAutoload The list of keys to have always loaded.
+     * @param Connection $conn     The database connection.
+     * @param Metadata   $metadata The DataSet metadata.
+     * @param Cache      $cache    The cache service.
      */
-    public function __construct(Connection $conn, Metadata $metadata, Cache $cache = null, $toAutoload = [])
+    public function __construct(Connection $conn, Metadata $metadata, Cache $cache = null)
     {
-        $this->cache      = $cache;
-        $this->conn       = $conn;
-        $this->metadata   = $metadata;
-        $this->toAutoload = $toAutoload;
+        $this->cache    = $cache;
+        $this->conn     = $conn;
+        $this->metadata = $metadata;
 
         $this->autoload();
     }
@@ -79,20 +70,17 @@ class BaseDataSet extends DataSet
         }
 
         $key = is_array($key) ? $key : [ $key ];
-        $sql = sprintf(
-            'delete from %s where %s in (?)',
-            $this->metadata->getTable(),
-            $this->metadata->getDataSetKey()
-        );
 
-        $this->conn->executeQuery(
-            $sql,
-            [ $key ],
-            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
-        );
+        if (empty(array_intersect_key($this->data, array_flip($key)))) {
+            return;
+        }
+
+        $this->deleteFromDatabase($key);
+
+        $this->data = array_diff_key($this->data, array_flip($key));
 
         if ($this->hasCache()) {
-            $this->cache->remove($key);
+            $this->cache->set($this->getCacheId(), $this->data);
         }
     }
 
@@ -101,57 +89,20 @@ class BaseDataSet extends DataSet
      */
     public function get($key, $default = null)
     {
-        $needle = $key;
+        if (is_array($key)) {
+            $default = is_array($default) ?
+                array_combine($key, $default) : array_fill_keys($key, $default);
 
-        if (!is_array($key)) {
-            $needle  = [ $key ];
-            $default = [ $default ];
+            $data = array_intersect_key($this->data, array_flip($key));
+
+            return array_merge($default, $data);
         }
 
-        if (!is_array($default)) {
-            $default = array_fill(0, count($key), $default);
+        if (array_key_exists($key, $this->data)) {
+            return $this->data[$key];
         }
 
-        $data   = array_intersect_key($this->autoloaded, array_flip($needle));
-        $missed = array_diff($needle, array_keys($data));
-
-        // Data missing, search cache first
-        if (!empty($missed) && $this->hasCache()) {
-            $data   = array_merge($data, $this->cache->get($missed));
-            $missed = array_diff($needle, array_keys($data));
-        }
-
-        // Some data still missing, search database
-        if (!empty($missed)) {
-            $keyName   = $this->metadata->getDataSetKey();
-            $valueName = $this->metadata->getDataSetValue();
-
-            $sql = sprintf(
-                'select * from %s where %s in (?)',
-                $this->metadata->getTable(),
-                $keyName
-            );
-
-            $values = $this->conn->fetchAll(
-                $sql,
-                [ $missed ],
-                [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
-            );
-
-            foreach ($values as $value) {
-                $data[$value[$keyName]] = unserialize($value[$valueName]);
-                $this->cache->set($value[$keyName], $data[$value[$keyName]]);
-            }
-        }
-
-        $default = array_combine($needle, $default);
-        $data    = array_merge($default, $data);
-
-        if (!is_array($key)) {
-            return $data[$key];
-        }
-
-        return $data;
+        return $default;
     }
 
     /**
@@ -163,35 +114,24 @@ class BaseDataSet extends DataSet
             return;
         }
 
-        if (is_array($key)) {
-            $empty = array_filter($key, function ($a) {
-                return is_null($a) || $a === '';
-            });
-
-            foreach ($key as $k => $v) {
-                $this->set($k, $v);
-            }
-
-            $this->delete(array_keys($empty));
-
-            return;
+        if (!is_array($key)) {
+            $key = [ $key => $value ];
         }
 
-        $data  = [ $key, serialize($value), serialize($value) ];
-        $types = [ \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_STR ];
+        $toDelete = array_filter($key, function ($a) {
+            return is_null($a) || $a === '';
+        });
 
-        $sql = sprintf(
-            'insert into %s (%s, %s) values (?,?) on duplicate key update %s = ?',
-            $this->metadata->getTable(),
-            $this->metadata->getDataSetKey(),
-            $this->metadata->getDataSetValue(),
-            $this->metadata->getDataSetValue()
-        );
+        $toSave = array_diff_key($key, $toDelete);
 
-        $this->conn->executeQuery($sql, $data, $types);
+        $this->data = array_diff_key($this->data, $toDelete);
+        $this->data = array_merge($this->data, $toSave);
+
+        $this->saveToDatabase($toSave);
+        $this->deleteFromDatabase(array_keys($toDelete));
 
         if ($this->hasCache()) {
-            $this->cache->remove($key);
+            $this->cache->set($this->getCacheId(), $this->data);
         }
     }
 
@@ -200,25 +140,54 @@ class BaseDataSet extends DataSet
      */
     protected function autoload()
     {
-        if (empty($this->toAutoload)) {
+        if (!empty($this->data)) {
             return;
         }
 
         if ($this->hasCache()) {
-            $data = $this->cache->get($this->toAutoload);
+            $data = $this->cache->get($this->getCacheId());
 
             if (!empty($data) && is_array($data)) {
-                $this->autoloaded = array_merge($this->autoloaded, $data);
+                $this->data = $data;
+                return;
             }
         }
 
-        $missed = array_diff($this->toAutoload, array_keys($this->autoloaded));
+        $this->data = $this->load();
+    }
 
-        if (empty($missed)) {
+    /**
+     * Deletes values from database
+     *
+     * @param array $keys The list of values to delete.
+     */
+    protected function deleteFromDatabase($values)
+    {
+        if (empty($values)) {
             return;
         }
 
-        $this->autoloaded = array_merge($this->autoloaded, $this->get($missed));
+        $sql = sprintf(
+            'delete from %s where %s in (?)',
+            $this->metadata->getTable(),
+            $this->metadata->getDataSetKey()
+        );
+
+        $this->conn->executeQuery(
+            $sql,
+            [ $values ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+    }
+
+    /**
+     * Returns the cache id for the current dataset.
+     *
+     * @return string The cache id for the current dataset.
+     */
+    protected function getCacheId()
+    {
+        return \underscore($this->metadata->name);
     }
 
     /**
@@ -229,5 +198,65 @@ class BaseDataSet extends DataSet
     protected function hasCache()
     {
         return !empty($this->cache);
+    }
+
+    /**
+     * Loads all values from the database.
+     *
+     * @return array An array of all values in database.
+     */
+    protected function load()
+    {
+        $data      = [];
+        $sql       = sprintf('select * from %s', $this->metadata->getTable());
+        $keyName   = $this->metadata->getDataSetKey();
+        $valueName = $this->metadata->getDataSetValue();
+
+        $values = $this->conn->fetchAll($sql);
+
+        foreach ($values as $value) {
+            try {
+                $data[$value[$keyName]] = unserialize($value[$valueName]);
+            } catch (\Exception $e) {
+            }
+        }
+
+        if ($this->hasCache()) {
+            $this->cache->set($this->getCacheId(), $data);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Saves values to database.
+     *
+     * @param array $values The values to save.
+     */
+    protected function saveToDatabase($values)
+    {
+        if (empty($values)) {
+            return;
+        }
+
+        $data  = [];
+        $types = [];
+        foreach ($values as $key => $value) {
+            $data  = array_merge($data, [ $key, serialize($value) ]);
+            $types = array_merge($types, [ \PDO::PARAM_STR, \PDO::PARAM_STR ]);
+        }
+
+        $sql = sprintf(
+            'insert into %s (%s, %s) values '
+            . trim(str_repeat('(?,?),', count($values)), ',')
+            . ' on duplicate key update %s = values(%s)',
+            $this->metadata->getTable(),
+            $this->metadata->getDataSetKey(),
+            $this->metadata->getDataSetValue(),
+            $this->metadata->getDataSetValue(),
+            $this->metadata->getDataSetValue()
+        );
+
+        $this->conn->executeQuery($sql, $data, $types);
     }
 }
