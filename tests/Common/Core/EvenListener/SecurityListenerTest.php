@@ -78,7 +78,7 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->ugs = $this->getMockBuilder('UserGroupService')
-            ->setMethods([ 'getListByIds', 'setOrigin' ])
+            ->setMethods([ 'getListByIds', 'getOrigin', 'setOrigin' ])
             ->getMock();
 
         $this->user = $this->getMockBuilder('Common\ORM\Entity\User')
