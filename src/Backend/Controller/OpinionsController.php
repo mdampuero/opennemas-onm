@@ -598,8 +598,8 @@ class OpinionsController extends Controller
 
         // Set a dummy Id for the opinion if doesn't exists
         if (empty($opinion->pk_article) && empty($opinion->id)) {
-            $opinion->pk_article = '-1';
-            $opinion->id         = '-1';
+            $opinion->pk_opinion = 0;
+            $opinion->id         = 0;
         }
 
         list($positions, $advertisements) =
