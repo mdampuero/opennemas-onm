@@ -54,7 +54,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'findBy', 'findOneBy'])
+            ->setMethods([ 'countBy', 'findBy', 'findOneBy' ])
             ->getMock();
 
         $this->user = new Entity([
@@ -376,8 +376,6 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->service->deleteList([ 1, 2 ]);
     }
-
-
 
     /**
      * Tests getItem when no error.

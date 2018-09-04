@@ -46,7 +46,7 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'findBy', 'find'])
+            ->setMethods([ 'countBy', 'findBy', 'find', 'getEntities'])
             ->getMock();
 
         $this->newsletter = new Entity([
@@ -115,97 +115,8 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($data['title'], $item->title);
     }
 
-    /**
-     * Tests deleteList when no error.
-     */
-    public function testDeleteList()
-    {
-        $itemA = new Entity([ 'title' => 'wubble']);
-        $itemB = new Entity([ 'title' => 'xyzzy' ]);
-
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('id in [1,2]')
-            ->willReturn([ $itemA, $itemB ]);
-        $this->em->expects($this->exactly(2))->method('remove');
-
-        $this->assertEquals(2, $this->service->deleteList([ 1, 2 ]));
-    }
-
-    /**
-     * Tests deleteList when invalid list of ids provided.
-     *
-     * @expectedException Api\Exception\DeleteListException
-     */
-    public function testDeleteListWhenInvalidIds()
-    {
-        $this->service->deleteList('xyzzy');
-    }
-
-    /**
-     * Tests deleteList when one error happens while removing.
-     */
-    public function testDeleteListWhenOneErrorWhileRemoving()
-    {
-        $itemA = new Entity([ 'title' => 'wubble']);
-        $itemB = new Entity([ 'title' => 'xyzzy' ]);
-
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('id in [1,2]')
-            ->willReturn([ $itemA, $itemB ]);
-        $this->em->expects($this->at(2))->method('remove');
-        $this->em->expects($this->at(3))->method('remove')
-            ->will($this->throwException(new \Exception()));
-
-        $this->logger->expects($this->once())->method('error');
-
-        $this->assertEquals(1, $this->service->deleteList([ 1, 2 ]));
-    }
-
-    /**
-     * Tests deleteList when an error happens while searching.
-     *
-     * @expectedException Api\Exception\DeleteListException
-    */
-    public function testDeleteListWhenErrorWhileSearching()
-    {
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('id in [1,2]')
-            ->will($this->throwException(new \Exception()));
-
-        $this->logger->expects($this->exactly(2))->method('error');
-
-        $this->service->deleteList([ 1, 2 ]);
-    }
-
-    /**
-     * Tests getItem when no error.
-     */
-    public function testGetItem()
-    {
-        $item = new Entity([ 'type' => 2 ]);
-
-        $this->repository->expects($this->once())->method('find')
-            ->with(1)->willReturn($item);
-
-        $this->assertEquals($item, $this->service->getItem(1));
-    }
-
-    /**
-     * Tests getItem when the item has no user property to true.
-     *
-     * @expectedException Api\Exception\GetItemException
-     */
-    public function testGetItemWhenErrorWhenNoUser()
-    {
-        $this->repository->expects($this->once())->method('find')
-            ->with(1)
-            ->will($this->throwException(new \Exception()));
-
-        $this->service->getItem(1);
-    }
-
     /*
-     * Tests getOqlForList.
+     * Tests getSentNewslettersSinceLastInvoice.
      */
     public function testGetSentNewslettersSinceLastInvoice()
     {

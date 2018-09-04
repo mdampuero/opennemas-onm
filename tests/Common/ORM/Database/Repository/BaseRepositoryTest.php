@@ -113,8 +113,10 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindForEmptyEntityInCache()
     {
-        $this->cache->expects($this->once())->method('exists')->willReturn(true);
-        $this->cache->expects($this->once())->method('get')->willReturn('-miss-');
+        $this->cache->expects($this->once())->method('get')
+            ->with([ 'extension-1' ])
+            ->willReturn([ 'extension-1' => null ]);
+
         $this->repository->find(1);
     }
 
@@ -125,8 +127,12 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindForEmptyEntityInDatabase()
     {
-        $this->cache->expects($this->once())->method('exists')->willReturn(false);
-        $this->cache->expects($this->once())->method('set');
+        $this->cache->expects($this->once())->method('get')
+            ->with([ 'extension-1' ])
+            ->willReturn([]);
+
+        $this->cache->expects($this->once())->method('set')
+            ->with([ 'extension-1' => '-miss-' ]);
         $this->conn->expects($this->once())->method('fetchAll')->willReturn([]);
 
         $this->repository->find(1);
@@ -137,8 +143,13 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testFind()
     {
-        $this->cache->expects($this->once())->method('exists')->willReturn(false);
-        $this->cache->expects($this->once())->method('set');
+        $this->cache->expects($this->once())->method('get')
+            ->with([ 'extension-1' ])
+            ->willReturn([]);
+
+        $this->cache->expects($this->once())->method('set')
+            ->with('extension-1');
+
         $this->conn->expects($this->at(0))->method('fetchAll')->willReturn([
             [ 'foo' => 1, 'bar' => 'glork' ]
         ]);
@@ -269,10 +280,7 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindOneByForEmptyEntity()
     {
-        $this->cache->expects($this->once())->method('get')->willReturn([]);
-        $this->cache->expects($this->any())->method('set');
-        $this->conn->expects($this->at(0))->method('fetchAll')->willReturn([]);
-
+        $this->conn->expects($this->once())->method('fetchAll')->willReturn([]);
         $this->repository->findOneBy();
     }
 
