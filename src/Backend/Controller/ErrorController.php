@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,30 +12,24 @@ namespace Backend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
-/**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
 class ErrorController extends Controller
 {
     /**
-     * Displays an error
+     * Displays an error page basing on the current error.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return void
+     * @return Response The response object.
      */
     public function defaultAction(Request $request)
     {
         $error = $request->attributes->get('exception');
-        $name  = basename(str_replace('\\', '/', $error->getClass()));
+        $class = new \ReflectionClass($error->getClass());
 
         $this->view = $this->get('onm_templating')->getBackendTemplate();
 
-        switch ($name) {
+        switch ($class->getShortName()) {
             case 'InstanceNotFoundException':
                 return $this->getInstanceNotFoundResponse();
 

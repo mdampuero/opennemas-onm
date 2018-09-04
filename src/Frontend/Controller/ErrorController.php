@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ErrorController extends Controller
 {
     /**
-     * Shows the error page.
+     * Displays an error page basing on the current error.
      *
      * @param Request $request The request object.
      *
@@ -26,9 +26,9 @@ class ErrorController extends Controller
     public function defaultAction(Request $request)
     {
         $error = $request->attributes->get('exception');
-        $name  = basename(str_replace('\\', '/', $error->getClass()));
+        $class = new \ReflectionClass($error->getClass());
 
-        switch ($name) {
+        switch ($class->getShortName()) {
             case 'AccessDeniedException':
                 $this->get('application.log')
                     ->info('security.authorization.failure');
