@@ -352,8 +352,13 @@
             return;
           }
 
-          history.restore($location.path());
-          history.push($location.path(), $location.search());
+          var current = $location.search();
+
+          if ($location.search() === {}) {
+            history.restore($location.path());
+          }
+
+          history.push($location.path(), angular.merge($location.search(), current));
         });
 
         // Shows a modal to force page reload
