@@ -30,6 +30,7 @@ parameters:
                                     - when
                                 optional:
                                     - categoryid
+                                    - createcrmmsgsentnotes
                                     - footerid
                                     - headerid
                                     - htmlbody

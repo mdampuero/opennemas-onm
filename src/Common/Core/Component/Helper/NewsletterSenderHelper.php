@@ -217,14 +217,15 @@ class NewsletterSenderHelper
             $id = $endpoint->createMessage($messageParams);
 
             $sendingParams = [
-                'iscustom'    => 'Y',
-                'htmlbody' => $newsletter->html,
-                'textbody' => $newsletter->html,
-                'sendername'  => $settings['site_name'],
-                'senderemail' => $settings['newsletter_maillist']['sender'],
-                'subject'     => $newsletter->title,
-                'when'        => time(),
-                'sendtoids'   => $marketingList->id,
+                'iscustom'              => 'Y',
+                'htmlbody'              => $newsletter->html,
+                'textbody'              => $newsletter->html,
+                'sendername'            => $settings['site_name'],
+                'senderemail'           => $settings['newsletter_maillist']['sender'],
+                'subject'               => $newsletter->title,
+                'when'                  => time(),
+                'sendtoids'             => $marketingList->id,
+                'createcrmmsgsentnotes' => false,
             ];
 
             if (!empty($settings['actOn.headerId'])) {
