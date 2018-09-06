@@ -225,7 +225,7 @@ class NewsletterSenderHelper
                 'subject'               => $newsletter->title,
                 'when'                  => time(),
                 'sendtoids'             => $marketingList->id,
-                'createcrmmsgsentnotes' => "N",
+                'createcrmmsgsentnotes' => 'N',
             ];
 
             if (!empty($settings['actOn.headerId'])) {
