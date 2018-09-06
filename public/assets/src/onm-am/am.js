@@ -40,6 +40,7 @@
 
     // Initialize the advertisement manager on load
     that.addEventListener('load', load);
+    that.addEventListener('OAM.load', load);
   };
 
   /**
@@ -258,6 +259,11 @@
     // Display normal advertisements
     for (var i = 0; i < slots.length; i++) {
       var slot = slots[i];
+      
+      if (slot.childNodes.length !== 0) {
+        continue;
+      }
+
       var type = parseInt(slot.getAttribute('data-type'));
       var id   = parseInt(slot.getAttribute('data-id'));
 
