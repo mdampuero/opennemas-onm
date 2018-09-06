@@ -338,7 +338,8 @@ class TagService extends OrmService
 
         foreach ($tags['items'] as $tag) {
             if (!is_object($tag)) {
-                continue;
+                $this->container->get('error.log')
+                    ->error(sprintf('Tag not valid: %s, %s', json_encode($tag), json_encode($tags)));
             }
 
             if (is_null($locale) || $tag->language_id == $locale) {
