@@ -346,21 +346,6 @@
           });
         });
 
-        // Empties ng-view when route changes
-        $rootScope.$on('$routeChangeStart', function() {
-          if ($location.path().indexOf('framework') !== -1) {
-            return;
-          }
-
-          var current = $location.search();
-
-          if ($location.search() === {}) {
-            history.restore($location.path());
-          }
-
-          history.push($location.path(), angular.merge($location.search(), current));
-        });
-
         // Shows a modal to force page reload
         $scope.$on('application-need-upgrade', function() {
           $uibModal.open({
