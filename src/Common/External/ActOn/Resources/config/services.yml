@@ -47,7 +47,6 @@ parameters:
                                     - timezone
                                     - title
                                     - whenend
-
 services:
     external.act_on.provider.config:
         class:     'Common\External\ActOn\Component\Configuration\OrmConfigurationProvider'
