@@ -340,6 +340,8 @@ class TagService extends OrmService
             if (!is_object($tag)) {
                 $this->container->get('error.log')
                     ->error(sprintf('Tag not valid: %s, %s', json_encode($tag), json_encode($tags)));
+
+                continue;
             }
 
             if (is_null($locale) || $tag->language_id == $locale) {
