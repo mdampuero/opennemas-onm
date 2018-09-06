@@ -29,11 +29,23 @@ parameters:
                                     - subject
                                     - when
                                 optional:
+                                    - categoryid
                                     - footerid
                                     - headerid
                                     - htmlbody
-                                    - textbody
                                     - iscustom
+                                    - istextonly
+                                    - issuppressduplicates
+                                    - logoid
+                                    - replytoemail
+                                    - replytoname
+                                    - sendtoids
+                                    - sendtorecids
+                                    - suppressids
+                                    - textbody
+                                    - timezone
+                                    - title
+                                    - whenend
 
 services:
     external.act_on.provider.config:
