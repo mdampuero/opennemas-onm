@@ -9,6 +9,6 @@
  */
 namespace Common\Core\Component\Exception\Instance;
 
-class InstanceNotRegisteredException extends \Exception
+class InstanceNotFoundException extends \Exception
 {
 }

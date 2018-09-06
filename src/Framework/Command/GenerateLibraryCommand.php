@@ -9,6 +9,7 @@
  */
 namespace Framework\Command;
 
+use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,11 +23,9 @@ class GenerateLibraryCommand extends ContainerAwareCommand
     {
         $this
             ->setName('generate:library-cronicas')
-            ->setDefinition(
-                array(
-                    new InputArgument('internal_name', InputArgument::REQUIRED, 'user'),
-                )
-            )
+            ->setDefinition([
+                new InputArgument('internal_name', InputArgument::REQUIRED, 'user'),
+            ])
             ->setDescription('Cron task for generating the static library from cronicasdelaemigracion')
             ->setHelp(
                 <<<EOF
@@ -40,7 +39,7 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $_SERVER['REQUEST_URI']   = '/';
+        $_SERVER['REQUEST_URI'] = '/';
 
         $internalName = $input->getArgument('internal_name');
 
@@ -52,11 +51,11 @@ EOF
         if (is_object($instance)) {
             // If this instance is not activated throw an exception
             if ($instance->activated != '1') {
-                $message =_('Instance not activated');
+                $message = _('Instance not activated');
                 throw new \Onm\Instance\NotActivatedException($message);
             }
         } else {
-            throw new \Onm\Exception\InstanceNotFoundException(_('Instance not found'));
+            throw new InstanceNotFoundException();
         }
 
         $cache = $this->getContainer()->get('cache');
@@ -65,9 +64,10 @@ EOF
         $urlBase = "http://www.cronicasdelaemigracion.es/seccion/";
 
         $date          = new \DateTime();
+        $curly         = [];
         $directoryDate = $date->format("/Y/m/d/");
-        $basePath      = SITE_PATH."/media/".$instance->internal_name."/library".$directoryDate;
-        $curly         = array();
+        $basePath      = SITE_PATH . "/media/" . $instance->internal_name
+            . "/library" . $directoryDate;
 
         if (!file_exists($basePath)) {
             mkdir($basePath, 0777, true);
@@ -92,7 +92,7 @@ EOF
             if (!empty($category_name)) {
                 $curly[$category_name] = curl_init();
 
-                $url = $urlBase. $category_name.'/';
+                $url = $urlBase . $category_name . '/';
                 curl_setopt($curly[$category_name], CURLOPT_URL, $url);
                 curl_setopt($curly[$category_name], CURLOPT_HEADER, 0);
                 curl_setopt($curly[$category_name], CURLOPT_RETURNTRANSFER, 1);
@@ -109,11 +109,11 @@ EOF
 
 
         // change menu to stay in archive fronpages
-        $pattern     = array();
-        $replacement = array();
+        $pattern     = [];
+        $replacement = [];
 
         foreach ($menu->items as $item) {
-            $category = $item->link;
+            $category  = $item->link;
             $pattern[] = "@href=\"/seccion/{$category}\"@";
             //archive/digital/2013/02/02/home.html
             $replacement[] = "href=\"/archive/digital{$directoryDate}{$category}.html\"";
@@ -129,7 +129,7 @@ EOF
 
             $htmlOut = preg_replace($pattern, $replacement, $htmlOut);
 
-            $newFile = $basePath.$category_name.".html";
+            $newFile = $basePath . $category_name . ".html";
             file_put_contents($newFile, $htmlOut);
 
             curl_multi_remove_handle($mh, $c);
@@ -149,8 +149,8 @@ EOF
     {
         $menu = new \Menu();
 
-        $menu->name  ='archive';
-        $menu->items = array();
+        $menu->name  = 'archive';
+        $menu->items = [];
 
         $item       = new \stdClass();
         $item->link = 'home';
