@@ -21,17 +21,6 @@ use Common\Core\Component\Validator\Validator;
 class TagController extends Controller
 {
     /**
-     * Returns the data to create a new tag.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_CREATE')")
-     */
-    public function createAction()
-    {
-    }
-
-    /**
      * Deletes an tag.
      *
      * @param integer $id The tag id.
