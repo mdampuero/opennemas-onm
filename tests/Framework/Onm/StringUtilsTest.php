@@ -9,7 +9,7 @@
  */
 namespace Onm;
 
-class StringUtilsTest extends \PHPUnit_Framework_TestCase
+class StringUtilsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StringUtils
@@ -457,7 +457,6 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
             'Urna quam, congue vulputate',
             $this->object->removePunctuation('Urna quam, (-congue-) vulputate!?', [ ',' ])
         );
-
     }
 
     public function testCleanFileName()

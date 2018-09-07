@@ -11,7 +11,7 @@ namespace Framework\Tests\Import;
 
 use Framework\Import\ParserFactory;
 
-class ParserFactoryTest extends \PHPUnit_Framework_TestCase
+class ParserFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

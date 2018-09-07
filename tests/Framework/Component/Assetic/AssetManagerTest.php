@@ -4,7 +4,7 @@ namespace Tests\Framework\Component\Assetic;
 
 use Framework\Component\Assetic\AssetManager;
 
-abstract class AssetManagerTest extends \PHPUnit_Framework_TestCase
+abstract class AssetManagerTest extends \PHPUnit\Framework\TestCase
 {
     protected $port = 80;
 

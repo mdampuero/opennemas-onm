@@ -14,7 +14,7 @@ use Common\ORM\Core\Exception\InvalidRepositoryException;
 /**
  * Defines test cases for InvalidRepositoryException class.
  */
-class InvalidRepositoryExceptionTest extends \PHPUnit_Framework_TestCase
+class InvalidRepositoryExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests constructor for InvalidRepositoryException

@@ -12,7 +12,7 @@ namespace Framework\Tests\Import\Parser\NewsML;
 use Framework\Import\Parser\NewsML\NewsMLComponent\NewsMLComponentText;
 use Framework\Import\Resource\Resource;
 
-class NewsMLComponentTextTest extends \PHPUnit_Framework_TestCase
+class NewsMLComponentTextTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

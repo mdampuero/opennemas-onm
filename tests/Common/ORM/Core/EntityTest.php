@@ -12,7 +12,7 @@ namespace Tests\Common\ORM\Core;
 use Common\ORM\Core\Entity;
 use Framework\Fixture\FixtureLoader;
 
-class EntityTest extends \PHPUnit_Framework_TestCase
+class EntityTest extends \PHPUnit\Framework\TestCase
 {
     public function testExists()
     {

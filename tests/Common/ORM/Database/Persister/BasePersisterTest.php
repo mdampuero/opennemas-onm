@@ -13,7 +13,7 @@ use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Database\Persister\BasePersister;
 
-class BasePersisterTest extends \PHPUnit_Framework_TestCase
+class BasePersisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

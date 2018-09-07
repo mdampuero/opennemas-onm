@@ -12,7 +12,7 @@ namespace Tests\Common\ORM\Core\Oql;
 use Common\ORM\Core\Oql\Sql\SqlTranslator;
 use Common\ORM\Core\Metadata;
 
-class SqlTanslatorTest extends \PHPUnit_Framework_TestCase
+class SqlTanslatorTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

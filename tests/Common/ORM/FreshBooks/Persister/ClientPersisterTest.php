@@ -17,7 +17,7 @@ use Freshbooks\FreshBooksApi;
 /**
  * Defines test cases for ClientPersister class.
  */
-class ClientPersisterTest extends \PHPUnit_Framework_TestCase
+class ClientPersisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

@@ -12,7 +12,7 @@ namespace Tests\Common\ORM\Core\OQL\Php;
 use Common\ORM\Core\Oql\Php\PhpTranslator;
 use Common\ORM\Core\Metadata;
 
-class PhpTanslatorTest extends \PHPUnit_Framework_TestCase
+class PhpTanslatorTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

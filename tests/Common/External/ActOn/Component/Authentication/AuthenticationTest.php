@@ -14,7 +14,7 @@ use Common\External\ActOn\Component\Authentication\Authentication;
 /**
  * Defines test cases for Authentication class.
  */
-class AuthenticationTest extends \PHPUnit_Framework_TestCase
+class AuthenticationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

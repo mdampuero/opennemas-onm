@@ -12,7 +12,7 @@ namespace Framework\Tests\Import\Parser\EuropaPress;
 use Framework\Import\Parser\EuropaPress\EuropaPress;
 use Framework\Import\Resource\Resource;
 
-class EuropaPressTest extends \PHPUnit_Framework_TestCase
+class EuropaPressTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

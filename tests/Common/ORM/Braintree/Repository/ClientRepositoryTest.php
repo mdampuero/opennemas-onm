@@ -16,7 +16,7 @@ use Common\ORM\Braintree\Repository\ClientRepository;
 /**
  * Defines test cases for ClientRepository class.
  */
-class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
+class ClientRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

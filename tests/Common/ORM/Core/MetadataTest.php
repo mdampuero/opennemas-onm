@@ -12,7 +12,7 @@ namespace Tests\Common\ORM\Core;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
 
-class MetadataTest extends \PHPUnit_Framework_TestCase
+class MetadataTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

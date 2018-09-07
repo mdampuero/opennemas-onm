@@ -11,7 +11,7 @@ namespace Common\Core\Component\Helper;
 
 use Common\Data\Core\FilterManager;
 
-class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
+class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

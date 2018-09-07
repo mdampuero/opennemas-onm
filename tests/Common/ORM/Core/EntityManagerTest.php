@@ -23,7 +23,7 @@ use Common\ORM\Core\Exception\InvalidPersisterException;
 /**
  * Defines test cases for EntityManager class.
  */
-class EntityManagerTest extends \PHPUnit_Framework_TestCase
+class EntityManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

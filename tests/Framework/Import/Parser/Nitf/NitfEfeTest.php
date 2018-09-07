@@ -11,7 +11,7 @@ namespace Framework\Tests\Import\Parser\Nitf;
 
 use Framework\Import\Parser\Nitf\NitfEfe;
 
-class NitfEfeTest extends \PHPUnit_Framework_TestCase
+class NitfEfeTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

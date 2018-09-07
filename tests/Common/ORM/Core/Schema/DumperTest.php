@@ -16,7 +16,7 @@ use Common\ORM\Core\Metadata;
 /**
  * Defines test cases for Dumper class.
  */
-class DumperTest extends \PHPUnit_Framework_TestCase
+class DumperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

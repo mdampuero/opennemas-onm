@@ -12,7 +12,7 @@ namespace tests\Common\ORM\File\Repository;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Database\Repository\UserGroupRepository;
 
-class UserGroupRepositoryTest extends \PHPUnit_Framework_TestCase
+class UserGroupRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

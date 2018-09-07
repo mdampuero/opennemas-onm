@@ -15,7 +15,7 @@ use Common\ORM\Core\Entity;
 /**
  * Defines test cases for OrmService class.
  */
-class OrmServiceTest extends \PHPUnit_Framework_TestCase
+class OrmServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

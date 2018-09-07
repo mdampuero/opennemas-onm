@@ -14,7 +14,7 @@ use Common\ORM\Entity\UserGroup;
 use Common\ORM\Entity\Instance;
 use Common\ORM\Database\Persister\UserGroupPersister;
 
-class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
+class UserGroupPersisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

@@ -11,7 +11,7 @@ namespace Tests\Common\ORM\Core\Oql;
 
 use Common\ORM\Core\Oql\Tokenizer;
 
-class TokenizerTest extends \PHPUnit_Framework_TestCase
+class TokenizerTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

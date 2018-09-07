@@ -14,7 +14,7 @@ use Common\External\ActOn\Component\Authentication\Token\RedisTokenProvider;
 /**
  * Defines test cases for RedisTokenProvider class.
  */
-class RedisTokenProviderTest extends \PHPUnit_Framework_TestCase
+class RedisTokenProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

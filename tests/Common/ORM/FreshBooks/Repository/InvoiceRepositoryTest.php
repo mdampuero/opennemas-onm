@@ -14,7 +14,7 @@ use Common\ORM\Entity\Invoice;
 use Common\ORM\FreshBooks\Repository\InvoiceRepository;
 use Freshbooks\FreshBooksApi;
 
-class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
+class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

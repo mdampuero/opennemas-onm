@@ -16,7 +16,7 @@ use Common\ORM\Braintree\Persister\PaymentPersister;
 /**
  * Defines test cases for PaymentPersister class.
  */
-class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
+class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

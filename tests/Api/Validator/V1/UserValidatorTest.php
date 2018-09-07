@@ -15,7 +15,7 @@ use Common\ORM\Core\Entity;
 /**
  * Defines test cases for UserValidator class.
  */
-class UserValidatorTest extends \PHPUnit_Framework_TestCase
+class UserValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
