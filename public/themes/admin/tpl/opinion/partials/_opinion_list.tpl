@@ -155,8 +155,8 @@
               <td class="hidden-xs nowrap">
                 <span ng-if="content.fk_author && content.type_opinion == 0">
                   <a href="[% routing.generate('backend_author_show', { id: content.fk_author }) %]">
-                    [% (data.extra.authors | filter: { id: content.fk_author })[0].name %]
-                    <span ng-if="(data.extra.authors | filter: { id: content.fk_author })[0].is_blog == 1">(Blog)</span>
+                    [% (data.extra.authors | filter : { id: content.fk_author } : true)[0].name %]
+                    <span ng-if="(data.extra.authors | filter : { id: content.fk_author } : true)[0].is_blog == 1">(Blog)</span>
                   </a>
                 </span>
                 <span ng-if="!content.fk_author || content.fk_author == 0 || content.type_opinion != 0">
