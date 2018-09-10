@@ -46,12 +46,16 @@ class Test extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests smarty_function_include_onm_stats_code when there is no request.
+     * Tests smarty_function_include_onm_stats_code when the request refers to
+     * an external synchronized content.
      */
-    public function testIncludeOnmStatsCodeWhenNoRequest()
+    public function testIncludeOnmStatsCodeWhenBackend()
     {
-        $this->rs->expects($this->once())->method('getCurrentRequest')
-            ->willReturn(null);
+        $this->rs->expects($this->any())->method('getCurrentRequest')
+            ->willReturn($this->request);
+
+        $this->request->expects($this->once())->method('getRequestUri')
+            ->willReturn('/admin/foo');
 
         $this->assertEmpty(smarty_function_include_onm_stats_code([], $this->smarty));
     }
@@ -65,8 +69,19 @@ class Test extends \PHPUnit\Framework\TestCase
         $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
 
-        $this->request->expects($this->exactly(2))->method('getRequestUri')
+        $this->request->expects($this->exactly(3))->method('getRequestUri')
             ->willReturn('/ext/qux');
+
+        $this->assertEmpty(smarty_function_include_onm_stats_code([], $this->smarty));
+    }
+
+    /**
+     * Tests smarty_function_include_onm_stats_code when there is no request.
+     */
+    public function testIncludeOnmStatsCodeWhenNoRequest()
+    {
+        $this->rs->expects($this->once())->method('getCurrentRequest')
+            ->willReturn(null);
 
         $this->assertEmpty(smarty_function_include_onm_stats_code([], $this->smarty));
     }
@@ -80,7 +95,7 @@ class Test extends \PHPUnit\Framework\TestCase
         $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
 
-        $this->request->expects($this->once())->method('getRequestUri')
+        $this->request->expects($this->exactly(2))->method('getRequestUri')
             ->willReturn('/foobar/wobble/preview');
 
         $this->assertEmpty(smarty_function_include_onm_stats_code([], $this->smarty));
@@ -95,7 +110,7 @@ class Test extends \PHPUnit\Framework\TestCase
         $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
 
-        $this->request->expects($this->exactly(2))->method('getRequestUri')
+        $this->request->expects($this->exactly(3))->method('getRequestUri')
             ->willReturn('/foobar/wobble');
 
         $this->smarty->expects($this->any())->method('getTemplateVars')
@@ -113,7 +128,7 @@ class Test extends \PHPUnit\Framework\TestCase
         $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
 
-        $this->request->expects($this->exactly(2))->method('getRequestUri')
+        $this->request->expects($this->exactly(3))->method('getRequestUri')
             ->willReturn('/foobar/wobble');
 
         $this->smarty->expects($this->any())->method('getTemplateVars')
