@@ -2,19 +2,23 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use \Onm\Settings as s;
 
 function smarty_function_include_onm_stats_code($params, &$smarty)
 {
-    $output = "";
+    $output  = '';
+    $request = $smarty->getContainer()->get('request_stack')
+        ->getCurrentRequest();
 
-    // If comes from preview, don't render script
-    if (preg_match('@/admin/frontpages@', $_SERVER['HTTP_REFERER'])) {
+    // Don't render script for previews or synchronized articles
+    if (empty($request)
+        || preg_match('@/preview$@', $request->getRequestUri())
+        || preg_match('@^/ext@', $request->getRequestUri())
+    ) {
         return $output;
     }
 
@@ -33,7 +37,7 @@ function smarty_function_include_onm_stats_code($params, &$smarty)
         // Print the call to the plugin with the proper contentId
         $output .=
             '<script>
-                jQuery.onmStats({ content_id: \'' . $contentId . '\' });;
+                jQuery.onmStats({ content_id: \'' . $contentId . '\' });
             </script>';
     }
 
