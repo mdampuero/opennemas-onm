@@ -54,7 +54,6 @@ manager_ws_purchase_update:
         id: \d+
     options:
         expose: true
-    methods:  [ GET ]
 
 manager_ws_purchases_delete:
     path:     /purchases
