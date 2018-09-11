@@ -118,6 +118,8 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn([ 'extension-1' => null ]);
 
         $this->repository->find(1);
+
+        $this->addToAssertionCount(1);
     }
 
     /**

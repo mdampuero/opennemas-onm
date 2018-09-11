@@ -36,6 +36,8 @@ class UserValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->validator->validate(new Entity([]));
         $this->validator->validate(new Entity([ 'type' => 0 ]));
+
+        $this->addToAssertionCount(1);
     }
 
     /**

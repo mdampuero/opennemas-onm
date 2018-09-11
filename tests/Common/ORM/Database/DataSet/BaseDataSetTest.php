@@ -80,6 +80,8 @@ class BaseDataSetTest extends \PHPUnit\Framework\TestCase
         $dataset->delete([]);
         $dataset->delete(['foo']);
         $dataset->delete('foo');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -152,6 +154,8 @@ class BaseDataSetTest extends \PHPUnit\Framework\TestCase
         $dataset->set([]);
         $dataset->set('foo', 'bar');
         $dataset->set([ 'foo' => 'bar' ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**

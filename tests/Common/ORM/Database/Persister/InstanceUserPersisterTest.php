@@ -152,6 +152,8 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
         );
         $this->cache->expects($this->exactly(3))->method('remove');
         $this->persister->update($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -180,6 +182,8 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
         $this->cache->expects($this->exactly(2))->method('remove');
 
         $this->persister->remove($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -191,6 +195,8 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($this->persister, [ 1, [] ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -202,5 +208,7 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($this->persister, [ 1, [] ]);
+
+        $this->addToAssertionCount(1);
     }
 }

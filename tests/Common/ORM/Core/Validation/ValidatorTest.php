@@ -84,6 +84,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     public function testConstructor()
     {
         new Validator(false);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -92,6 +94,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     public function testLoadRulesAlreadySet()
     {
         $this->methods['loadValidation']->invokeArgs($this->validator, [ $this->validations[0] ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -102,6 +106,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     public function testValidateInvalidRuleset()
     {
         $this->validator->validate(new Entity([ 'corge' => 'flob' ]));
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -112,6 +118,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     public function testValidateInvalid()
     {
         $this->validator->validate(new Client([ 'corge' => 'flob' ]));
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -128,6 +136,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->validator->validate($this->client);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -266,6 +276,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $entity = new Client([ 'foo' => 1 ]);
         $this->methods['validateData']->invokeArgs($this->validator, [ 'client', $entity->getData() ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -274,6 +286,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     public function testValidateDataValid()
     {
         $this->methods['validateData']->invokeArgs($this->validator, [ 'client', $this->client->getData() ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -282,6 +296,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     public function testValidateRequired()
     {
         $this->methods['validateRequired']->invokeArgs($this->validator, [ 'client', $this->client->getData() ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -291,6 +307,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->properties['required']->setValue($this->validator, []);
         $this->methods['validateRequired']->invokeArgs($this->validator, [ 'client', $this->client->getData() ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -302,5 +320,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->properties['required']->setValue($this->validator, [ 'client' => [ 'norf' ] ]);
         $this->methods['validateRequired']->invokeArgs($this->validator, [ 'client', $this->client->getData() ]);
+
+        $this->addToAssertionCount(1);
     }
 }

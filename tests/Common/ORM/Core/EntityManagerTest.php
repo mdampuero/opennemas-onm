@@ -212,6 +212,8 @@ class EntityManagerTest extends \PHPUnit\Framework\TestCase
     public function testGetDataSetInvalidName()
     {
         $this->em->getDataSet('Entity', 'foo');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -343,6 +345,8 @@ class EntityManagerTest extends \PHPUnit\Framework\TestCase
         $property->setValue($entity, [ true ]);
 
         $this->em->persist($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -353,6 +357,8 @@ class EntityManagerTest extends \PHPUnit\Framework\TestCase
         $entity = new Entity([ 'id' => 1 ]);
 
         $this->em->persist($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -363,6 +369,8 @@ class EntityManagerTest extends \PHPUnit\Framework\TestCase
         $entity = new Entity([ 'id' => 1 ]);
 
         $this->em->remove($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**

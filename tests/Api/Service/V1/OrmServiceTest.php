@@ -694,5 +694,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($service, [ new Entity() ]);
+
+        $this->addToAssertionCount(1);
     }
 }

@@ -106,6 +106,8 @@ class BasePersisterTest extends \PHPUnit\Framework\TestCase
         $this->cache->expects($this->once())->method('remove');
 
         $this->persister->remove($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -133,6 +135,8 @@ class BasePersisterTest extends \PHPUnit\Framework\TestCase
 
         $this->cache->expects($this->once())->method('remove');
         $this->persister->update($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -151,6 +155,8 @@ class BasePersisterTest extends \PHPUnit\Framework\TestCase
         $this->conn->expects($this->never())->method($this->anything());
         $this->cache->expects($this->never())->method($this->anything());
         $this->persister->update($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -162,6 +168,8 @@ class BasePersisterTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($this->persister, [ [ 'foo' => 1 ], [] ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**

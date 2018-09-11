@@ -67,6 +67,8 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
     {
         $metadata = new Metadata([]);
         $metadata->getConverter();
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -77,6 +79,8 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
     public function testGetConverterInvalidName()
     {
         $this->metadata->getConverter('flob');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -86,6 +90,8 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
     {
         $this->metadata->getConverter();
         $this->metadata->getConverter('frog');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -131,6 +137,8 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
     {
         $metadata = new Metadata([]);
         $metadata->getDataSet();
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -141,6 +149,8 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
     public function testGetDataSetInvalidName()
     {
         $this->metadata->getDataSet('flob');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -150,6 +160,8 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
     {
         $this->metadata->getDataSet();
         $this->metadata->getDataSet('wibble');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -160,6 +172,8 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
         $entity = new Entity([ 'id' => 1, 'foo' => 'bar' ]);
         $this->assertEquals([ 'id' => 1 ], $this->metadata->getId($entity));
         $this->assertEmpty($this->metadata->getId(new Entity()));
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -264,6 +278,8 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
     {
         $metadata = new Metadata([]);
         $metadata->getPersister();
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -274,6 +290,8 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
     public function testGetPersisterInvalidName()
     {
         $this->metadata->getPersister('flob');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -283,6 +301,8 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
     {
         $this->metadata->getPersister();
         $this->metadata->getPersister('grault');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -399,6 +419,8 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
     {
         $this->metadata->getRepository();
         $this->metadata->getRepository('garply');
+
+        $this->addToAssertionCount(1);
     }
 
     /**

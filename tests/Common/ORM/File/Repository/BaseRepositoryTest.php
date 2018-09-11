@@ -91,6 +91,8 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($repository, []);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
