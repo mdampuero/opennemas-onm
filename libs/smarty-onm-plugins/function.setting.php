@@ -8,26 +8,27 @@
 */
 function smarty_function_setting($params, &$smarty)
 {
-    if (!array_key_exists('name', $params)) {
+    $request = $smarty->getContainer()->get('request_stack')
+        ->getCurrentRequest();
+
+    if (!array_key_exists('name', $params)
+        || ($params['name'] === 'refresh_interval'
+            && !empty($request)
+            && preg_match('@/admin@', $request->getRequestUri()))
+    ) {
         return '';
     }
 
-    $output = '';
-    $key    = $params['name'];
-    $sr     = $smarty->getContainer()->get('setting_repository');
+    $ds    = $smarty->getContainer()->get('orm.manager')->getDataSet('Settings');
+    $value = $ds->get($params['name']);
 
-    if (!array_key_exists('field', $params)) {
-        return $sr->get($key);
-    }
-
-    $keyValue = $sr->get($key);
-    if (is_array($keyValue)) {
-        foreach ($keyValue as $name => $value) {
-            if ($name == $params['field']) {
-                $output = $value;
-            }
+    if (array_key_exists('field', $params)) {
+        if (is_array($value) && array_key_exists($params['field'], $value)) {
+            return $value[$params['field']];
         }
+
+        return '';
     }
 
-    return $output;
+    return $value;
 }
