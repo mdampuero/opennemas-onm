@@ -483,7 +483,7 @@ jQuery(document).ready(function($) {
                     </label>
                   </div>
                   <div class="checkbox-list checkbox-list-user-groups">
-                    <div class="checkbox p-b-5" ng-repeat="category in (filteredCategories = (extra.categories | filter : { parent: 0 }))">
+                    <div class="checkbox p-b-5" ng-repeat="category in (filteredCategories = (extra.categories | filter : { parent: 0 } : true))">
                       <div class="m-t-15" ng-if="$index > 0 && category.type != filteredCategories[$index - 1].type">
                         <h5 ng-if="category.type == 1"><i class="fa fa-sticky-note m-r-5"></i>{t}Contents{/t}</h5>
                         <h5 ng-if="category.type == 7"><i class="fa fa-camera m-r-5"></i>{t}Albums{/t}</h5>
@@ -497,7 +497,7 @@ jQuery(document).ready(function($) {
                         </label>
                       </div>
                       <div ng-if="category.id != 0">
-                        <div ng-repeat="subcategory in extra.categories | filter : { parent: category.id }">
+                        <div ng-repeat="subcategory in extra.categories | filter : { parent: category.id } : filter">
                           <input id="category-[% subcategory.id %]" name="category-[% subcategory.id %]" checklist-model="ui.categories" checklist-value="subcategory.id" type="checkbox">
                           <label class="form-label" for="category-[% subcategory.id %]">
                             &rarr; [% subcategory.name %]
