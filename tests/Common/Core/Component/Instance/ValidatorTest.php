@@ -172,13 +172,13 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->exactly(2))->method('findOneBy')
             ->will($this->throwException(new \Exception()));
 
-        $instance = new \Common\ORM\Entity\Instance();
+        $instance                = new \Common\ORM\Entity\Instance();
         $instance->internal_name = 'foofubarnorf';
-        $instance->domains = [
-            'test.domain.com'
-        ];
-        $instance->contact_mail = 'test@opennemas.com';
+        $instance->domains       = [ 'test.domain.com' ];
+        $instance->contact_mail  = 'test@opennemas.com';
+
         $this->validator->validate($instance);
+
         $this->assertTrue(count($this->validator->getErrors()) === 0);
     }
 }

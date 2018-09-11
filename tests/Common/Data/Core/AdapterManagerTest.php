@@ -32,7 +32,9 @@ class AdapterManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testAdapter()
     {
-        $this->am->adapt('google_analytics', 'frog');
+        $returnValue = $this->am->adapt('google_analytics', 'frog');
+
+        $this->assertEquals([], $returnValue);
     }
 
     /**

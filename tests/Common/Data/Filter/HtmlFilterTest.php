@@ -32,7 +32,6 @@ class HtmlFilterTest extends \PHPUnit\Framework\TestCase
     public function testFilterWithHtmlEntities()
     {
         $str      = '<p>The string</p><p>to</p><p>parse</p>';
-
         $expected = '&lt;p&gt;The string&lt;/p&gt;&lt;p&gt;to&lt;/p&gt;&lt;p&gt'
             . ';parse&lt;/p&gt;';
 

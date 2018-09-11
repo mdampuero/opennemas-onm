@@ -245,7 +245,10 @@ class DumperTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->dumper, 'validateIndex');
         $method->setAccessible(true);
 
-        $method->invokeArgs($this->dumper, [ 'gorp', [ 'foo' ], [ 'name' => 'bar', 'columns' => [ 'foo' ], 'primary' => true ] ]);
+        $method->invokeArgs(
+            $this->dumper,
+            [ 'gorp', [ 'foo' ], [ 'name' => 'bar', 'columns' => [ 'foo' ], 'primary' => true ] ]
+        );
     }
 
     /**

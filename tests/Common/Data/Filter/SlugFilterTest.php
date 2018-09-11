@@ -29,14 +29,18 @@ class SlugFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilterWithNoParameters()
     {
-        $str = 'The string to convert';
+        $str    = 'The string to convert';
+        $output = 'the-string-to-convert';
 
-        $filter = new SlugFilter($this->container);
+        $filter        = new SlugFilter($this->container);
         $filter->utils = \Mockery::mock('\Onm\StringUtils_' . uniqid());
         $filter->utils->shouldReceive('generateSlug')->once()
-            ->with($str, true, '-');
+            ->with($str, true, '-')
+            ->andReturn($output);
 
-        $filter->filter($str);
+        $returnValue = $filter->filter($str);
+
+        $this->assertEquals($output, $returnValue);
     }
 
     /**
@@ -45,13 +49,17 @@ class SlugFilterTest extends \PHPUnit\Framework\TestCase
     public function testFilterWithParameters()
     {
         $str    = 'The string to convert';
+        $output = 'the-string-to-convert';
         $params = [ 'separator' => '', 'stop-list' => false ];
 
-        $filter = new SlugFilter($this->container, $params);
+        $filter        = new SlugFilter($this->container, $params);
         $filter->utils = \Mockery::mock('\Onm\StringUtils_' . uniqid());
         $filter->utils->shouldReceive('generateSlug')->once()
-            ->with($str, $params['stop-list'], $params['separator']);
+            ->with($str, $params['stop-list'], $params['separator'])
+            ->andReturn($output);
 
-        $filter->filter($str, $params);
+        $returnValue = $filter->filter($str, $params);
+
+        $this->assertEquals($output, $returnValue);
     }
 }

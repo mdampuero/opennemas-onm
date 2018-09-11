@@ -39,8 +39,10 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
     public function testNormalize()
     {
         // I have a lot of problems with char encoding
-        // $this->assertEquals('a marinha lucense na que c��mpre ir no d��a',
-        //     $this->object->normalize('Á marinha lucense na que cómpre ir no día'));
+        $this->assertEquals(
+            'a marinha lucense na que compre ir no dia',
+            $this->object->normalize('Á marinha lucense na que cómpre ir no día')
+        );
     }
 
     /**
