@@ -127,11 +127,12 @@ class CommentsController extends ContentController
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($criteria);
 
-        return new JsonResponse([
-            'extra'   => $this->loadExtraData($results),
-            'results' => $results,
-            'total'   => $total
-        ]);
+        return [
+            'extra'      => $this->loadExtraData($results),
+            'o-filename' => 'comments',
+            'results'    => $results,
+            'total'      => $total
+        ];
     }
 
     /**
@@ -240,7 +241,7 @@ class CommentsController extends ContentController
      * @param  array $contents Array of contents.
      * @return array           Array of extra data.
      */
-    protected function loadExtraData($comments)
+    protected function loadExtraData($comments = [])
     {
         $extra = [];
         $ids   = [];
@@ -257,6 +258,8 @@ class CommentsController extends ContentController
         foreach ($contents as $content) {
             $extra['contents'][$content->pk_content] = $content;
         }
+
+        $extra['dateTimezone'] = $this->container->get('core.locale')->getTimeZone();
 
         $this->get('core.locale')->setContext('frontend');
 

@@ -49,12 +49,13 @@ class BlogsController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/blog_frontpage.tpl', $cacheID)
         ) {
-            $authors = [];
-            foreach (\User::getAllUsersAuthors() as $author) {
-                if ($author->is_blog == 1) {
-                    $authors[$author->id] = $author;
-                }
-            }
+            $authors = $this->get('api.service.author')
+                ->getList('is_blog = 1 order by name asc');
+
+            $authors = $this->get('data.manager.filter')
+                ->set($authors['items'])
+                ->filter('mapify', [ 'key' => 'id' ])
+                ->get();
 
             $epp = $this->get('setting_repository')->get('items_in_blog', 10);
             $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
@@ -83,6 +84,7 @@ class BlogsController extends Controller
             $em         = $this->get('opinion_repository');
             $blogs      = $em->findBy($filters, $order, $epp, $page);
             $countItems = $em->countBy($filters);
+            $photos     = $this->get('core.helper.user')->getPhotos($authors);
 
             $pagination = $this->get('paginator')->get([
                 'directional' => true,
@@ -96,13 +98,15 @@ class BlogsController extends Controller
                     $blog->author           = $authors[$blog->fk_author];
                     $blog->name             = $blog->author->name;
                     $blog->author_name_slug = $blog->author->username;
-                    // ????
-                    $item = new \Content();
-                    $item->loadAllContentProperties($blog->pk_content);
-                    $blog->summary     = $item->summary;
-                    $blog->img1_footer = $item->img1_footer;
-                    if (isset($item->img1) && ($item->img1 > 0)) {
-                        $blog->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
+
+                    if (array_key_exists($blog->author->avatar_img_id, $photos)) {
+                        $blog->author->photo =
+                            $photos[$blog->author->avatar_img_id];
+                    }
+
+                    if (isset($blog->img1) && !empty($blog->img1)) {
+                        $blog->img1 = $this->get('entity_repository')
+                            ->find('Photo', $blog->img1);
                     }
 
                     $blog->author->uri = \Uri::generate(

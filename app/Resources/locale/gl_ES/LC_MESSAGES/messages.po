@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-18 14:11+0000\n"
-"PO-Revision-Date: 2018-07-18 16:10+0200\n"
+"POT-Creation-Date: 2018-08-16 08:52+0000\n"
+"PO-Revision-Date: 2018-08-16 10:53+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -558,6 +558,9 @@ msgstr "%d boletíns enviados desde o %s"
 #, php-format
 msgid "%s newsletter sent from %s (%d allowed)."
 msgstr "%s boletín enviado para %s (%d permitidos)."
+
+msgid "Unable to edit a newsletter already sent"
+msgstr "Non se pode editar un boletín xa enviado"
 
 msgid "There was an error while saving the newsletter "
 msgstr "Produciuse un erro ao gardar o boletín"
@@ -2177,6 +2180,9 @@ msgstr "Calquera"
 
 msgid "No filter"
 msgstr "Sin filtro"
+
+msgid "Blogs"
+msgstr "Blogs"
 
 msgid "Last in 24 hours"
 msgstr "Nas últimas 24 horas"
@@ -6430,6 +6436,15 @@ msgstr "Engadir contidos dinámicos"
 msgid "Pick contents"
 msgstr "Seleccionar contidos"
 
+msgid "%1 selected"
+msgstr "%1 seleccionados"
+
+msgid "Select all"
+msgstr "Seleccionar todo"
+
+msgid "Deselect all"
+msgstr "Deseleccionar todo"
+
 msgid "Filter"
 msgstr "Filtro"
 
@@ -7665,9 +7680,6 @@ msgstr "Iniciar"
 
 msgid "Display the advertisement if current date is in range"
 msgstr "Mostrar a publicidade se a data actual está dentro do rango"
-
-msgid "Select all"
-msgstr "Seleccionar todo"
 
 msgid ""
 "Display the advertisement if user belongs to one or more of the selected "
@@ -9299,9 +9311,6 @@ msgstr ""
 "'lucida sans unicode', 'lucida sans', tahoma, sans-serif; font-size: 14px; "
 "line-height: normal;\" target=\"_blank\">Opennemas</a>"
 
-#~ msgid "Blogs"
-#~ msgstr "Blogs"
-
 #~ msgid "New version available"
 #~ msgstr "Nova versión dispoñíbel"
 
@@ -9358,9 +9367,6 @@ msgstr ""
 
 #~ msgid "Newsletter deleted successfully."
 #~ msgstr "Boletín de novas eliminado correctamente."
-
-#~ msgid "Unable to delete the newsletter \"%s\""
-#~ msgstr "Non se puido eliminar o boletín «%s»"
 
 #~ msgid "You must provide an id for delete a newsletter."
 #~ msgstr "Debe fornecer un identificador para eliminar un boletín."

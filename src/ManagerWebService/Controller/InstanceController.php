@@ -9,7 +9,6 @@ use Onm\Exception\BackupException;
 use Onm\Exception\DatabaseNotDeletedException;
 use Onm\Exception\DatabaseNotRestoredException;
 use Onm\Exception\InstanceAlreadyExistsException;
-use Onm\Exception\InstanceNotFoundException;
 use Common\Core\Controller\Controller;
 use Onm\Instance\InstanceCreator;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -618,7 +617,7 @@ class InstanceController extends Controller
         $em->getDataSet('Settings', 'instance')->set($settings);
 
         // TODO: Fix clean caches
-        foreach ($settings as $key => $setting) {
+        foreach (array_keys($settings) as $key) {
             $this->get('setting_repository')
                 ->invalidate($key, $instance->internal_name);
         }

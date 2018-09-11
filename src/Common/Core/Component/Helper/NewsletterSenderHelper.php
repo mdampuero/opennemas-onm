@@ -195,6 +195,8 @@ class NewsletterSenderHelper
                 'title'    => $newsletter->title,
                 'htmlbody' => $newsletter->html,
             ];
+
+            // Load general header and footer acton params
             if (!empty($settings['actOn.headerId'])) {
                 $messageParams['headerid'] = $settings['actOn.headerId'];
             }
@@ -203,17 +205,27 @@ class NewsletterSenderHelper
                 $messageParams['footerid'] = $settings['actOn.footerId'];
             }
 
+            // Overwrite header and footer params if the newsletter has custom ones.
+            if (!empty($newsletter->params['acton_headerid'])) {
+                $messageParams['headerid'] = $newsletter->params['acton_headerid'];
+            }
+
+            if (!empty($newsletter->params['acton_headerid'])) {
+                $messageParams['footerid'] = $newsletter->params['acton_footerid'];
+            }
+
             $id = $endpoint->createMessage($messageParams);
 
             $sendingParams = [
-                'iscustom'    => 'Y',
-                'htmlbody' => $newsletter->html,
-                'textbody' => $newsletter->html,
-                'sendername'  => $settings['site_name'],
-                'senderemail' => $settings['newsletter_maillist']['sender'],
-                'subject'     => $newsletter->title,
-                'when'        => time(),
-                'sendtoids'   => $marketingList->id,
+                'iscustom'              => 'Y',
+                'htmlbody'              => $newsletter->html,
+                'textbody'              => $newsletter->html,
+                'sendername'            => $settings['site_name'],
+                'senderemail'           => $settings['newsletter_maillist']['sender'],
+                'subject'               => $newsletter->title,
+                'when'                  => time(),
+                'sendtoids'             => $marketingList->id,
+                'createcrmmsgsentnotes' => 'N',
             ];
 
             if (!empty($settings['actOn.headerId'])) {

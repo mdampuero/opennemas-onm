@@ -10,18 +10,16 @@
 namespace Common\Core\EventListener;
 
 use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
-use Common\Core\Component\Exception\Instance\InstanceNotRegisteredException;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * The CoreListener class configures the core with an instance and a theme
  * basing on the request.
  */
-class CoreListener implements EventSubscriberInterface
+class CoreListener
 {
     /**
      * The service container.
@@ -29,6 +27,24 @@ class CoreListener implements EventSubscriberInterface
      * @param ServiceContainer
      */
     protected $container;
+
+    /**
+     * The list of URLs that have to be ignored when evaluating a redirection.
+     *
+     * @var array
+     */
+    protected $ignoredUris = [
+        '_profiler',
+        '_wdt',
+        'api',
+        'asset',
+        'auth',
+        'build\/assets',
+        'content\/share-by-email',
+        'manager',
+        'oauth',
+        'ws',
+    ];
 
     /**
      * Initializes the instance loader.
@@ -39,8 +55,6 @@ class CoreListener implements EventSubscriberInterface
     {
         $this->container = $container;
         $this->security  = $container->get('core.security');
-
-        $container->get('cache_manager')->setNamespace('manager');
     }
 
     /**
@@ -62,7 +76,7 @@ class CoreListener implements EventSubscriberInterface
         try {
             $instance = $loader->loadInstanceFromUri($host, $uri);
         } catch (\Exception $e) {
-            throw new InstanceNotRegisteredException(_('Instance not found'));
+            throw new InstanceNotFoundException();
         }
 
         // If this instance is not activated throw an exception
@@ -74,18 +88,7 @@ class CoreListener implements EventSubscriberInterface
 
         $loader->init();
 
-        // Ignore requests
-        if (strpos($uri, '/_wdt') === 0
-            || strpos($uri, '/_profiler') === 0
-            || strpos($uri, '/api') === 0
-            || strpos($uri, '/asset') === 0
-            || strpos($uri, '/auth') === 0
-            || strpos($uri, '/oauth') === 0
-            || strpos($uri, '/build/assets') === 0
-            || strpos($uri, '/content/share-by-email') === 0
-            || strpos($uri, '/manager') === 0
-            || strpos($uri, '/ws') === 0
-        ) {
+        if ($this->isIgnored($uri)) {
             return;
         }
 
@@ -93,12 +96,8 @@ class CoreListener implements EventSubscriberInterface
         $expectedUri = $this->getExpectedUri($request, $instance);
 
         if ($originalUri !== $expectedUri) {
-            error_log(
-                sprintf(
-                    'Request redirected: %s URL found but %s URL expected',
-                    $originalUri,
-                    $expectedUri
-                )
+            $this->container->get('application.log')->info(
+                sprintf('core.listener.redirect: %s', $expectedUri)
             );
 
             $event->setResponse(new RedirectResponse($expectedUri, 301));
@@ -106,15 +105,45 @@ class CoreListener implements EventSubscriberInterface
     }
 
     /**
-     * Returns an array of event names this subscriber wants to listen to.
+     * Returns the expected host basing on the current request and the current
+     * instance.
      *
-     * @return array The event names to listen to.
+     * @param Request  $request  The current request.
+     * @param Instance $instance The current instance.
+     *
+     * @return string The expected host.
      */
-    public static function getSubscribedEvents()
+    protected function getExpectedHost($request, $instance)
     {
-        return [
-            KernelEvents::REQUEST => [ ['onKernelRequest', 100] ],
-        ];
+        if ($this->container->get('core.helper.url')
+            ->isFrontendUri($request->getRequestUri())
+        ) {
+            return $this->container->getParameter('opennemas.redirect_frontend')
+                ? $instance->getMainDomain() : $request->getHost();
+        }
+
+        return $instance->internal_name .
+                $this->container->getParameter('opennemas.base_domain');
+    }
+
+    /**
+     * Returns the expected scheme basing on the current request.
+     *
+     * @param Request $request The current requset.
+     *
+     * @return string The expected scheme.
+     */
+    protected function getExpectedScheme($request)
+    {
+        if ($this->container->get('core.helper.url')
+            ->isFrontendUri($request->getRequestUri())
+        ) {
+            return $this->security->hasExtension('es.openhost.module.frontendSsl')
+                ? 'https://' : 'http://';
+        }
+
+        return $this->container->getParameter('opennemas.backend_force_ssl')
+            ? 'https://' : 'http://';
     }
 
     /**
@@ -127,35 +156,12 @@ class CoreListener implements EventSubscriberInterface
      */
     protected function getExpectedUri($request, $instance)
     {
-        $host   = $request->getHost();
-        $port   = $request->getPort();
-        $scheme = 'http://';
-        $uri    = $request->getRequestUri();
+        $host   = $this->getExpectedHost($request, $instance);
+        $port   = in_array($request->getPort(), [ 80, 443 ]) ?
+            '' : ':' . $request->getPort();
+        $scheme = $this->getExpectedScheme($request);
 
-        $port = in_array($port, [ 80, 443 ]) ? '' : ':' . $port;
-
-        if (strpos($uri, '/admin') === 0) {
-            if ($this->container->getParameter('opennemas.backend_force_ssl')) {
-                $scheme = 'https://';
-            }
-
-            $host = $instance->internal_name .
-                $this->container->getParameter('opennemas.base_domain');
-        } elseif ($this->container->getParameter('opennemas.redirect_frontend')) {
-            if (!empty($instance->domains)) {
-                $host = $instance->getMainDomain();
-            }
-        }
-
-        if ($this->security->hasExtension('es.openhost.module.frontendSsl')
-            && strpos($uri, '/admin') !== 0
-            && strpos($uri, '/manager') !== 0
-            && strpos($uri, '/ws') !== 0
-        ) {
-            $scheme = 'https://';
-        }
-
-        return $scheme . strtolower($host) . $port . $uri;
+        return $scheme . strtolower($host) . $port . $request->getRequestUri();
     }
 
     /**
@@ -180,5 +186,22 @@ class CoreListener implements EventSubscriberInterface
         }
 
         return preg_replace('@^' . $request->getScheme() . '@', $scheme, $uri);
+    }
+
+    /**
+     * Check if the URI is in the list of ignored URIs and it should not be
+     * redirected.
+     *
+     * @param string $uri The current URI.
+     *
+     * @return boolean True if the URI is in the list of ignored URIs. False
+     *                 otherwise.
+     */
+    protected function isIgnored($uri)
+    {
+        return !!preg_match(
+            '/^(' . implode('|', $this->ignoredUris) . ')/',
+            trim($uri, '/')
+        );
     }
 }

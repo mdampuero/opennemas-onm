@@ -2,7 +2,7 @@
 
 {block name="footer-js" append}
   {javascripts}
-    <script type="text/javascript">
+    <script>
       var localeAux = '{$smarty.const.CURRENT_LANGUAGE_SHORT|default:"en"}';
       localeAux = moment.locales().includes(localeAux) ?
         localeAux :

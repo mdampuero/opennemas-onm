@@ -45,16 +45,20 @@ class TemplateAnnotationListener
         $controller = $event->getController();
         $object     = new \ReflectionObject($controller[0]);
         $method     = $object->getMethod($controller[1]);
-
-        $reader = $this->container->get('annotation_reader');
+        $reader     = $this->container->get('annotation_reader');
 
         foreach ($reader->getMethodAnnotations($method) as $annotation) {
-            if ($annotation instanceof Template) {
-                $controller[0]->view =
-                    $this->container->get($annotation->getName());
-
-                return;
+            if (!($annotation instanceof Template)) {
+                continue;
             }
+
+            $controller[0]->view = $this->container->get($annotation->getName());
+
+            if (!empty($annotation->getFile())) {
+                $controller[0]->view->setFile($annotation->getFile());
+            }
+
+            return;
         }
     }
 }

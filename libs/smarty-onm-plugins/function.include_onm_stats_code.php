@@ -26,14 +26,14 @@ function smarty_function_include_onm_stats_code($params, &$smarty)
 
         // Get the script tag for onm-stats jquery plugin
         $output .= smarty_function_script_tag(
-            array('common' => 1, 'src' => '/onm/jquery.onm-stats.js'),
+            [ 'common' => 1, 'src' => '/onm/jquery.onm-stats.js' ],
             $smarty
         );
 
         // Print the call to the plugin with the proper contentId
         $output .=
-            '<script type="text/javascript">
-                jQuery.onmStats({ content_id: \''.$contentId.'\' });;
+            '<script>
+                jQuery.onmStats({ content_id: \'' . $contentId . '\' });;
             </script>';
     }
 

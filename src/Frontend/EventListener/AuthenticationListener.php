@@ -59,7 +59,10 @@ class AuthenticationListener implements EventSubscriberInterface
         $user = $token->getUser();
         $uri  = $event->getRequest()->getRequestUri();
 
-        if ($user === 'anon.' || empty($user) || !$this->isFrontendUri($uri)) {
+        if ($user === 'anon.'
+            || empty($user)
+            || !$this->container->get('core.helper.url')->isFrontendUri($uri)
+        ) {
             $response->headers->clearCookie('__onm_user');
 
             return $response;
@@ -89,29 +92,5 @@ class AuthenticationListener implements EventSubscriberInterface
         return [
             KernelEvents::REQUEST => [ [ 'onKernelResponse', 100 ] ],
         ];
-    }
-
-    /**
-     * Checks if the current URI is for frontend.
-     *
-     * @param string $uri The current URI.
-     *
-     * @return boolean True if the current URI is for frontend. False otherwise.
-     */
-    protected function isFrontendUri($uri)
-    {
-        $ignore = [
-            '_profiler',
-            '_wdt',
-            'admin',
-            'api',
-            'asset',
-            'build\/assets',
-            'content\/share-by-email',
-            'manager',
-            'ws',
-        ];
-
-        return !preg_match('/^(' . implode('|', $ignore) . ')/', $uri);
     }
 }

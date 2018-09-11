@@ -2,7 +2,7 @@
 
 {block name="footer-js" append}
   {javascripts}
-    <script type="text/javascript">
+    <script>
       jQuery(document).ready(function($) {
         $('#date').datetimepicker({
           format: 'YYYY-MM-DD',

@@ -76,13 +76,22 @@
          * @return {Object} The map with the empty value.
          */
         $scope.addEmptyValue = function(obj, property) {
-          if (!obj || obj[0]) {
+          if (!angular.isArray(obj) && !angular.isObject(obj)) {
             return obj;
           }
 
-          obj[0] = { name: $scope.any };
+          var key   = property ? property : 'id';
+          var value = { name: name ? name : $scope.any };
 
-          obj[0][property ? property : 'id'] = null;
+          value[key] = null;
+
+          if (!obj[0] || obj[0][key] !== null) {
+            if (angular.isArray(obj)) {
+              obj.unshift(value);
+            } else {
+              obj[0] = value;
+            }
+          }
 
           return obj;
         };

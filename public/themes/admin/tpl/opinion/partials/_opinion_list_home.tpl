@@ -27,7 +27,7 @@
     <div class="grid-title">
       <h4>{t}Other Articles{/t}</h4>
     </div>
-    <div class="grid-body" ng-init="opinions = {json_encode($opinions)|clear_json}">
+    <div class="grid-body" ng-init="opinions = {json_encode($opinions)|clear_json}; authors = {json_encode($authors)|clear_json}">
       <div class="ng-cloak" ui-tree="treeOptions" data-max-depth="2">
         <ol ui-tree-nodes="" ng-model="opinions">
           <li ng-repeat="item in opinions" ui-tree-node ng-include="'opinion-item'"></li>
@@ -51,7 +51,7 @@
       <span class="item-author" ng-if="item.type_opinion == 2">{t}Director{/t}</span>
       <span class="item-author" ng-if="item.type_opinion == 0">
         <a data-nodrag ng-href="[% edit(item.author.id, 'backend_user_show') %]">
-          [% item.author.name %]
+          [% authors[item.fk_author].name %]
         </a>
       </span>
       <span class="h-seperate hidden-xs"></span>

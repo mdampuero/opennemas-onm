@@ -3,7 +3,7 @@
 {block name="footer-js" append}
   {javascripts}
     <script src="https://js.braintreegateway.com/v2/braintree.js"></script>
-    <script type="text/javascript">
+    <script>
       $(document).on('keydown', function (e) {
         if (e.which === 8 && !$(e.target).is('input, textarea')) {
           window.onbeforeunload = function() {

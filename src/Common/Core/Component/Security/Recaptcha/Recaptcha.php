@@ -104,7 +104,7 @@ class Recaptcha
             return _('ReCaptcha service is not configured');
         }
 
-        $html = '<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=%s"></script>'
+        $html = '<script src="https://www.google.com/recaptcha/api.js?hl=%s"></script>'
             . '<div class="g-recaptcha" data-sitekey="%s"></div>';
 
         return sprintf(

@@ -240,14 +240,7 @@
                       {acl isAllowed="CONTENT_OTHER_UPDATE"}
                         <div class="form-group">
                           <div class="controls">
-                            <ui-select class="form-control" name="author" theme="select2" ng-model="article.fk_author">
-                              <ui-select-match>
-                                [% $select.selected.name %]
-                              </ui-select-match>
-                              <ui-select-choices repeat="item.id as item in data.extra.users | filter: { name: $select.search }">
-                                <div ng-bind-html="item.name | highlight: $select.search"></div>
-                              </ui-select-choices>
-                            </ui-select>
+                            {include file="ui/component/select/author.tpl" class="form-control" ngModel="article.fk_author" select="true"}
                           </div>
                         </div>
                       {aclelse}

@@ -26,6 +26,12 @@
                   <i class="fa fa-gear fa-lg"></i>
                 </a>
               </li>
+              <li class="quicklinks">
+                <a class="btn btn-white" href="[% getExportUrl() %]">
+                  <span class="fa fa-download"></span>
+                  {t}Download{/t}
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -162,7 +168,7 @@
                           <strong>{t}Author:{/t}</strong> [% content.author %] <span ng-if="content.author_email">([% content.author_email %])</span>
                           - <span class="hidden-xs">[% content.author_ip %]</span>
                         </div>
-                        <div class="submitted-on"><strong>{t}Submitted on:{/t}</strong> [% content.date.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]</div>
+                        <div class="submitted-on"><strong>{t}Submitted on:{/t}</strong> [% content.date.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : extra.dateTimezone.timezone %]</div>
                         <div class="on-response-to"><strong>{t}In response to{/t}:</strong> <a ng-href="/[% extra.contents[content.content_id].uri %]" target="_blank">[% extra.contents[content.content_id].title | limitTo : 100 %]<span ng-if="extra.contents[content.content_id].title.length > 100">...</span></a></div>
                       </small>
                     </div>

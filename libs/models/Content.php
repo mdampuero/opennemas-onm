@@ -1,23 +1,16 @@
 <?php
 /**
- * Defines the Content class
+ * This file is part of the Onm package.
  *
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package    Model
  */
+use Common\Data\Serialize\CsvSerializable;
 use Onm\Settings as s;
 
-/**
- * Handles all the common actions in all the contents
- *
- * @package    Model
- */
-class Content implements \JsonSerializable
+class Content implements \JsonSerializable, CsvSerializable
 {
     const AVAILABLE     = 'available';
     const TRASHED       = 'trashed';
@@ -319,6 +312,36 @@ class Content implements \JsonSerializable
         }
 
         $this->{$name} = $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function csvSerialize()
+    {
+        $keys = [
+            'pk_content', 'pretitle', 'title', 'description', 'created',
+            'changed', 'starttime', 'content_status', 'body'
+        ];
+
+        $data = array_intersect_key(get_object_vars($this), array_flip($keys));
+        $data = array_merge(array_fill_keys($keys, null), $data);
+
+        foreach ($this->getL10nKeys() as $key) {
+            if (!in_array($key, $keys)) {
+                continue;
+            }
+
+            $data[$key] = $this->__get($key);
+        }
+
+        foreach ($data as &$value) {
+            if ($value instanceof \Datetime) {
+                $value = $value->format('Y-m-d H:i:s');
+            }
+        }
+
+        return $data;
     }
 
     /**
