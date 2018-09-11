@@ -153,7 +153,7 @@ class NewsletterRenderer
         $this->tpl->assign('conf', $configurations);
         $this->tpl->assign('render_params', ['ads-format' => 'inline']);
 
-        return $this->tpl->fetch('newsletter/newNewsletter.tpl');
+        return $this->tpl->fetch('newsletter/newsletter.tpl');
     }
 
     /**
