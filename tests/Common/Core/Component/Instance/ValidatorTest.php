@@ -10,12 +10,11 @@
 namespace Test\Common\Core\Component\Instance;
 
 use Common\Core\Component\Instance\Validator;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for Geo class.
  */
-class ValidatorTest extends KernelTestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -47,6 +46,7 @@ class ValidatorTest extends KernelTestCase
 
         // Check that getBadWords returns an array of strings.
         $result = $method->invoke($this->validator);
+
         $this->assertTrue(is_array($result));
     }
 
@@ -61,7 +61,6 @@ class ValidatorTest extends KernelTestCase
         // Test valid email
         $method->invokeArgs($this->validator, ['test@opennemas.com']);
         $this->assertFalse($this->validator->hasErrors());
-
 
         // Test invalid email
         $method->invokeArgs($this->validator, ['test_opennemas.com']);

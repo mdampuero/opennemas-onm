@@ -10,9 +10,8 @@
 namespace Test\Common\Core\Component\Security\Recaptcha;
 
 use Common\Core\Component\Security\Recaptcha\Recaptcha;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class RecaptchaTest extends KernelTestCase
+class RecaptchaTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

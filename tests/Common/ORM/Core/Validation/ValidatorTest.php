@@ -14,12 +14,11 @@ use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Client;
 use Common\ORM\Entity\Theme;
 use Common\ORM\Core\Validation\Validator;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for Validator class.
  */
-class ValidatorTest extends KernelTestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

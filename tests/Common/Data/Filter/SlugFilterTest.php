@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\SlugFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines tests cases for SlugFilter class.
  */
-class SlugFilterTest extends KernelTestCase
+class SlugFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

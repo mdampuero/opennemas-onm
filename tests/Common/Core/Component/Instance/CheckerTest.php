@@ -10,12 +10,11 @@
 namespace Test\Common\Core\Component\Instance;
 
 use Common\Core\Component\Instance\Checker;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for Geo class.
  */
-class CheckerTest extends KernelTestCase
+class CheckerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

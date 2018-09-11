@@ -10,12 +10,11 @@
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\ContentMediaHelper;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for ContentMediaHelper class.
  */
-class ContentMediaHelperTest extends KernelTestCase
+class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

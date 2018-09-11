@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Core\FilterManager;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for FilterManager class.
  */
-class FilterManagerTest extends KernelTestCase
+class FilterManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
