@@ -64,7 +64,7 @@ class PhpSerializer
      *
      * @return string The unserialized string.
      */
-    public function unserialize($data)
+    public static function unserialize($data)
     {
         while (self::isSerialized($data)) {
             $data = unserialize($data);
@@ -80,7 +80,7 @@ class PhpSerializer
      *
      * @return string The serialized string.
      */
-    public function serialize($data)
+    public static function serialize($data)
     {
         if (self::isSerialized($data)) {
             return $data;
