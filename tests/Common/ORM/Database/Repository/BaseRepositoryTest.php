@@ -11,6 +11,7 @@ namespace tests\Common\ORM\Database\Repository;
 
 use Common\ORM\Core\Metadata;
 use Common\ORM\Database\Repository\BaseRepository;
+use Common\ORM\Entity\Extension;
 
 class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -171,6 +172,42 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
             'wibble' => 'qux',
             'norf'   => [ 3 => [ 'norf_id' => 3 ] ]
         ], $entity->getData());
+    }
+
+    /**
+     * Tests find for multiple ids when some entity is missing.
+     */
+    public function testFindWhenSomeEntityMissing()
+    {
+        $this->cache->expects($this->at(0))->method('get')
+            ->with([ 'extension-1', 'extension-2', 'extension-3' ])
+            ->willReturn([
+                'extension-1' => new Extension([ 'foo' => 1, 'bar' => 'gorp' ])
+            ]);
+
+        $this->cache->expects($this->at(1))->method('set')
+            ->with('extension-2');
+
+        $this->conn->expects($this->at(0))->method('fetchAll')
+            ->with('select * from foobar where foo in ( ? , ? )')
+            ->willReturn([
+                [ 'foo' => 2, 'bar' => 'glork' ]
+            ]);
+
+        $this->conn->expects($this->at(1))->method('fetchAll')->willReturn([
+            [ 'foobar_foo' => 2, 'meta_key' => 'wibble', 'meta_value' => 'qux' ]
+        ]);
+        $this->conn->expects($this->at(2))->method('fetchAll')
+            ->with('select * from extension_norf where foo_id in (2)')
+            ->willReturn([
+                [ 'foo_id' => 2, 'norf_id' => 3 ],
+            ]);
+
+        $entities = $this->repository->find([ 1, 2, 3 ]);
+
+        $this->assertCount(2, $entities);
+        $this->assertInstanceOf('Common\ORM\Entity\Extension', $entities[0]);
+        $this->assertInstanceOf('Common\ORM\Entity\Extension', $entities[1]);
     }
 
     /**
