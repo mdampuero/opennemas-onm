@@ -9,6 +9,7 @@
  */
 namespace Framework\Command;
 
+use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -49,7 +50,6 @@ EOF
         $this->getContainer()->get('core.security')->setCliUser();
 
         $loader = $this->getContainer()->get('core.loader');
-        $logger = $this->getContainer()->get('logger');
 
         $instanceName = $input->getArgument('instance');
         $instance     = $loader->loadInstanceFromInternalName($instanceName);
@@ -70,7 +70,7 @@ EOF
         $this->newsletterRenderer = $this->getContainer()->get('core.renderer.newsletter');
 
         if (!is_object($instance)) {
-            throw new \Onm\Exception\InstanceNotFoundException(_('Instance not found'));
+            throw new InstanceNotFoundException();
         }
 
         if ($instance->activated != '1') {

@@ -10,9 +10,9 @@
 namespace Tests\Libs\Smarty;
 
 /**
- * Defines test cases for  class.
+ * Defines test cases for smarty_function_include_onm_stats_code function.
  */
-class Test extends \PHPUnit\Framework\TestCase
+class SmartyIncludeOnmStatsCodeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -22,7 +22,7 @@ class Test extends \PHPUnit\Framework\TestCase
         include_once './libs/smarty-onm-plugins/function.include_onm_stats_code.php';
         include_once './libs/smarty-onm-plugins/function.script_tag.php';
 
-        $this->container = $this->getMockBuilder('Container')
+        $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'get' ])
             ->getMock();
 
@@ -139,4 +139,5 @@ class Test extends \PHPUnit\Framework\TestCase
             smarty_function_include_onm_stats_code([], $this->smarty)
         );
     }
+
 }

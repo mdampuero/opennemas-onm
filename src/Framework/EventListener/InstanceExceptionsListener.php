@@ -1,18 +1,16 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Framework\EventListener;
 
 use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
-use Common\Core\Component\Exception\Instance\InstanceNotRegisteredException;
+use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -44,22 +42,21 @@ class InstanceExceptionsListener implements EventSubscriberInterface
         $handling = true;
 
         $exception = $event->getException();
-        $request = $event->getRequest();
+        $request   = $event->getRequest();
 
         // Only handle instance exceptions
-        if ($exception instanceof InstanceNotRegisteredException
+        if ($exception instanceof InstanceNotFoundException
             || $exception instanceof InstanceNotActivatedException
         ) {
-            $attributes = array(
+            $request = $request->duplicate(null, null, [
                 '_controller' => 'BackendBundle:Error:default',
                 'exception'   => FlattenException::create($exception),
                 // keep for BC -- as $format can be an argument of the controller callable
                 // see src/Symfony/Bundle/TwigBundle/Controller/ExceptionController.php
                 // @deprecated in 2.4, to be removed in 3.0
                 'format'      => $request->getRequestFormat(),
-            );
+            ]);
 
-            $request = $request->duplicate(null, null, $attributes);
             $request->setMethod('GET');
 
             try {
@@ -79,8 +76,8 @@ class InstanceExceptionsListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            KernelEvents::EXCEPTION => array('onKernelException', 100),
-        );
+        return [
+            KernelEvents::EXCEPTION => [ 'onKernelException', 100 ],
+        ];
     }
 }
