@@ -13,6 +13,7 @@ use Common\Cache\Core\Cache;
 use Common\ORM\Core\Connection;
 use Common\ORM\Core\DataSet;
 use Common\ORM\Core\Metadata;
+use Common\Data\Serialize\Serializer\PhpSerializer;
 
 class BaseDataSet extends DataSet
 {
@@ -215,11 +216,8 @@ class BaseDataSet extends DataSet
         $values = $this->conn->fetchAll($sql);
 
         foreach ($values as $value) {
-            try {
-                $data[$value[$keyName]] = unserialize($value[$valueName]);
-            } catch (\Exception $e) {
-                $data[$value[$keyName]] = $value[$valueName];
-            }
+            $data[$value[$keyName]] =
+                PhpSerializer::unserialize($value[$valueName]);
         }
 
         if ($this->hasCache()) {
@@ -243,7 +241,7 @@ class BaseDataSet extends DataSet
         $data  = [];
         $types = [];
         foreach ($values as $key => $value) {
-            $data  = array_merge($data, [ $key, serialize($value) ]);
+            $data  = array_merge($data, [ $key, PhpSerializer::serialize($value) ]);
             $types = array_merge($types, [ \PDO::PARAM_STR, \PDO::PARAM_STR ]);
         }
 
