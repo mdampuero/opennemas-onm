@@ -144,13 +144,11 @@ class EuropaPressIdealTest extends \PHPUnit\Framework\TestCase
 
     public function testParse()
     {
-        $date = \DateTime::createFromFormat('d/m/Y H:i:s', '21/09/2015 18:16:04', new \DateTimeZone('UTC'));
-
         $resource = new Resource();
 
-        $resource->agency_name  = 'Grupo Idealgallego';
-        $resource->type         = 'text';
-        $resource->urn          = 'urn:europapressideal:europapress::';
+        $resource->agency_name = 'Grupo Idealgallego';
+        $resource->type        = 'text';
+        $resource->urn         = 'urn:europapressideal:europapress::';
 
         $resources = $this->parser->parse($this->invalid);
 

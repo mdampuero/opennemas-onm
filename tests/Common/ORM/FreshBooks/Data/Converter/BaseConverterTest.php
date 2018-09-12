@@ -196,7 +196,6 @@ class BaseConverterTest extends \PHPUnit\Framework\TestCase
             [ 'type' => 'PayPal' ],
             $method->invokeArgs($this->converter, [ [ 'type' => 'PayPalAccount' ] ])
         );
-
     }
 
     /**
@@ -244,6 +243,5 @@ class BaseConverterTest extends \PHPUnit\Framework\TestCase
             [ 'type' => 'PayPalAccount' ],
             $method->invokeArgs($this->converter, [ [ 'type' => 'PayPal' ] ])
         );
-
     }
 }

@@ -157,8 +157,9 @@ class NitfTest extends \PHPUnit\Framework\TestCase
         ));
 
         $resource = new Resource();
+
         $resource->agency_name = 'Foobar Agency';
-        $resource->body = '<p>Paragraph 1</p><p>Paragraph 2</p>';
+        $resource->body        = '<p>Paragraph 1</p><p>Paragraph 2</p>';
 
         $resource->created_time =
             \DateTime::createFromFormat('Ymd\THisP', '20150921T080200+0000');

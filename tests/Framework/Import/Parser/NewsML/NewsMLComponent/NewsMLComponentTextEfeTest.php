@@ -25,7 +25,7 @@ class NewsMLComponentTextEfeTest extends \PHPUnit\Framework\TestCase
             </NewsComponent>")
         ];
 
-        $this->valid   = simplexml_load_string("<NewsComponent>
+        $this->valid = simplexml_load_string("<NewsComponent>
             <ContentItem>
                 <MediaType FormalName=\"Text\"/>
                 <Format FormalName=\"NITF\"/>

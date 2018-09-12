@@ -160,7 +160,10 @@ class PhpTanslatorTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->translator, 'getOrder');
         $method->setAccessible(true);
 
-        $this->assertEquals([ 'foo', 'asc' ], $method->invokeArgs($this->translator, [ [ [ 'orderBy' => [ 'foo', 'asc' ] ] ] ]));
+        $this->assertEquals(
+            [ 'foo', 'asc' ],
+            $method->invokeArgs($this->translator, [ [ [ 'orderBy' => [ 'foo', 'asc' ] ] ] ])
+        );
         $this->assertEmpty($method->invokeArgs($this->translator, [ [ [ 'offset' => [ 1 ] ] ] ]));
         $this->assertEmpty($method->invokeArgs($this->translator, [ [] ]));
     }

@@ -105,6 +105,7 @@ class ClientRepositoryTest extends \PHPUnit\Framework\TestCase
         $response = $this->getMockBuilder('\Braintree_Customer')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->id        = '1';
         $response->firstName = 'John';
         $response->lastName  = 'Doe';
@@ -125,7 +126,8 @@ class ClientRepositoryTest extends \PHPUnit\Framework\TestCase
         $factory->expects($this->once())->method('get')->with('customer');
 
         $repository = new ClientRepository('foo', $factory, $this->metadata);
-        $client = $repository->find('1');
+        $client     = $repository->find('1');
+
         $this->assertEquals($response->id, $client->id);
         $this->assertEquals($response->firstName, $client->first_name);
         $this->assertEquals($response->lastName, $client->last_name);
@@ -189,7 +191,7 @@ class ClientRepositoryTest extends \PHPUnit\Framework\TestCase
         $factory->expects($this->any())->method('get')->with('customer');
 
         $repository = new ClientRepository('foo', $factory, $this->metadata);
-        $clients = array_values($repository->findBy());
+        $clients    = array_values($repository->findBy());
 
         $this->assertEquals(1, count($clients));
         $this->assertEquals($fresponse->id, $clients[0]->id);
@@ -223,6 +225,7 @@ class ClientRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $repository = new ClientRepository('foo', $factory, $this->metadata);
         $reflection = new \ReflectionClass(get_class($repository));
+
         $method = $reflection->getMethod('arrayToCriteria');
         $method->setAccessible(true);
 
@@ -242,11 +245,13 @@ class ClientRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $repository = new ClientRepository('foo', $factory, $this->metadata);
         $reflection = new \ReflectionClass(get_class($repository));
+
         $method = $reflection->getMethod('arrayToCriteria');
         $method->setAccessible(true);
 
-        $source = [ 'id' => 1 ];
+        $source   = [ 'id' => 1 ];
         $criteria = $method->invokeArgs($repository, [ $source ]);
+
         $this->assertEquals(count($source), count($criteria));
     }
-  }
+}

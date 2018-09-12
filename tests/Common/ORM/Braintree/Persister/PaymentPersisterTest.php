@@ -35,9 +35,9 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
             ],
             'mapping' => [
                 'braintree' => [
-                    'client_id' => [ 'name'=> 'customerId', 'type'=> 'string' ],
-                    'amount'    => [ 'name'=> 'amount', 'type'=> 'string' ],
-                    'nonce'     => [ 'name'=> 'paymentMethodNonce', 'type'=> 'string' ],
+                    'client_id' => [ 'name' => 'customerId', 'type' => 'string' ],
+                    'amount'    => [ 'name' => 'amount', 'type' => 'string' ],
+                    'nonce'     => [ 'name' => 'paymentMethodNonce', 'type' => 'string' ],
                 ]
             ],
         ]);
@@ -62,11 +62,13 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
         $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->success = true;
 
         $response->transaction = $this->getMockBuilder('\Braintree_Transaction')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->transaction->id = '1';
 
         $bc = \Mockery::mock('Braintree_Transaction_' . uniqid());
@@ -98,6 +100,7 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
         $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->success = false;
         $response->message = 'Unable to save';
 
@@ -144,6 +147,7 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
         $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->success = true;
 
         $bc = \Mockery::mock('Braintree_Transaction_' . uniqid());
@@ -171,6 +175,7 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
         $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->success = false;
         $response->message = 'Unable to remove';
 

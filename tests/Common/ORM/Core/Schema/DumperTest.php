@@ -23,7 +23,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $schemas  = [
+        $schemas = [
             'Foobar' => new Schema([ 'name' => 'Foobar', 'entities' => [ 'Foo' ] ]),
             'Wibble' => new Schema([ 'name' => 'Wibble', 'entities' => [ 'Bar' ] ])
         ];
@@ -236,7 +236,10 @@ class DumperTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->dumper, 'validateIndex');
         $method->setAccessible(true);
 
-        $method->invokeArgs($this->dumper, [ 'gorp', [ 'foo' ], [ 'name' => 'bar', 'columns' => [ 'foo' ], 'primary' => 'baz' ] ]);
+        $method->invokeArgs(
+            $this->dumper,
+            [ 'gorp', [ 'foo' ], [ 'name' => 'bar', 'columns' => [ 'foo' ], 'primary' => 'baz' ] ]
+        );
     }
 
     /**
@@ -394,7 +397,10 @@ class DumperTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($dumper, 'validateTable');
         $method->setAccessible(true);
 
-        $method->invokeArgs($dumper, [ 'gorp', [ 'columns' => [ 'foo' => 'integer' ], 'index' => [ 'name' => 'PRIMARY' ] ] ]);
+        $method->invokeArgs(
+            $dumper,
+            [ 'gorp', [ 'columns' => [ 'foo' => 'integer' ], 'index' => [ 'name' => 'PRIMARY' ] ] ]
+        );
     }
 
     /**

@@ -21,7 +21,7 @@ class InvalidRepositoryExceptionTest extends \PHPUnit\Framework\TestCase
      */
     public function testInvalidRepositoryException()
     {
-        $class     = 'norf';
+        $class      = 'norf';
         $repository = 'foo';
 
         $e = new InvalidRepositoryException($class);

@@ -41,7 +41,8 @@ class NewsMLComponentListTest extends \PHPUnit\Framework\TestCase
         $parser->method('getBag')->willReturn([]);
 
         $photo = new Resource();
-        $photo->id = 'photo1';
+
+        $photo->id   = 'photo1';
         $photo->type = 'photo';
 
         $parser->method('parse')->will(

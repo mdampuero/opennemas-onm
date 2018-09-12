@@ -464,7 +464,6 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $content->frontpage = 0;
         $this->assertFalse($content->isSuggested());
-
     }
 
     /**

@@ -79,7 +79,10 @@ class UserGroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->repository, 'refresh');
         $method->setAccessible(true);
 
-        $userGroups = $method->invokeArgs($this->repository, [ [ [ 'pk_user_group' => 1 ] , [ 'pk_user_group' => 2 ] ] ]);
+        $userGroups = $method->invokeArgs(
+            $this->repository,
+            [ [ [ 'pk_user_group' => 1 ] , [ 'pk_user_group' => 2 ] ] ]
+        );
 
         $this->assertEquals(
             [ 'pk_user_group' => 1, 'name' => 'glork', 'privileges' => [ 1 ] ],

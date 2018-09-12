@@ -90,7 +90,10 @@ class InstanceRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testFindNotUsedInstances()
     {
         $this->conn->expects($this->at(0))->method('fetchAll')
-            ->with('SELECT id FROM `instances` WHERE last_login IS NULL OR last_login < DATE_SUB(NOW(), INTERVAL 1 MONTH)')
+            ->with(
+                'SELECT id FROM `instances` WHERE last_login IS NULL'
+                . ' OR last_login < DATE_SUB(NOW(), INTERVAL 1 MONTH)'
+            )
             ->willReturn([ [ 'id' => 1 ], [ 'id' => 2 ] ]);
 
         $this->repository->expects($this->once())->method('getEntities')

@@ -69,6 +69,7 @@ class ClientPersisterTest extends \PHPUnit\Framework\TestCase
         $response->customer = $this->getMockBuilder('\Braintree_Customer')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->customer->id = '1';
 
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());

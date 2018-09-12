@@ -18,6 +18,7 @@ class ParserFactoryTest extends \PHPUnit\Framework\TestCase
         $this->factory = new ParserFactory();
 
         $reflection = new \ReflectionClass(get_class($this->factory));
+
         $this->getParsers = $reflection->getMethod('getParsers');
         $this->getParsers->setAccessible(true);
     }

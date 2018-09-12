@@ -43,11 +43,11 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
             ],
             'mapping' => [
                 'freshbooks' => [
-                    'client_id' => [ 'name'=> 'customerId', 'type'=> 'string' ],
-                    'amount'    => [ 'name'=> 'amount', 'type'=> 'string' ],
-                    'date'      => [ 'name'=> 'date', 'type'=> 'string' ],
-                    'notes'     => [ 'name'=> 'notes', 'type'=> 'string' ],
-                    'type'      => [ 'name'=> 'type', 'type'=> 'string' ],
+                    'client_id' => [ 'name' => 'customerId', 'type' => 'string' ],
+                    'amount'    => [ 'name' => 'amount', 'type' => 'string' ],
+                    'date'      => [ 'name' => 'date', 'type' => 'string' ],
+                    'notes'     => [ 'name' => 'notes', 'type' => 'string' ],
+                    'type'      => [ 'name' => 'type', 'type' => 'string' ],
                 ]
             ],
         ]);
