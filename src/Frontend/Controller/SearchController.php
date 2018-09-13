@@ -29,8 +29,7 @@ class SearchController extends Controller
      */
     public function googleAction()
     {
-        list($positions, $advertisements) =
-            \Frontend\Controller\ArticlesController::getAds();
+        list($positions, $advertisements) = ArticlesController::getAds();
 
         return $this->render('search/search.tpl', [
             'ads_positions'  => $positions,

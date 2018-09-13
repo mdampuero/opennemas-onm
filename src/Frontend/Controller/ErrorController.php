@@ -72,8 +72,7 @@ class ErrorController extends Controller
      */
     protected function getAccessDeniedResponse()
     {
-        list($positions, $advertisements) =
-            \Frontend\Controller\ArticlesController::getAds();
+        list($positions, $advertisements) = ArticlesController::getAds();
 
         return new Response($this->renderView('static_pages/403.tpl', [
             'ads_positions'  => $positions,
@@ -117,8 +116,7 @@ class ErrorController extends Controller
      */
     protected function getNotFoundResponse()
     {
-        list($positions, $advertisements) =
-            \Frontend\Controller\ArticlesController::getAds();
+        list($positions, $advertisements) = ArticlesController::getAds();
 
         $this->view->setConfig('articles');
 

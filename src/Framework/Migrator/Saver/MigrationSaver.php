@@ -1628,7 +1628,7 @@ class MigrationSaver
      */
     protected function convertToSlug($string)
     {
-        return \Onm\StringUtils::getTitle($string);
+        return StringUtils::getTitle($string);
     }
 
     /**
@@ -1897,7 +1897,7 @@ class MigrationSaver
                     }
                     break;
                 case 'username':
-                    $field = \Onm\StringUtils::getTitle(
+                    $field = StringUtils::getTitle(
                         $field,
                         true,
                         $params['separator']
@@ -2127,6 +2127,8 @@ class MigrationSaver
      * @param array $values  Array of values to filter.
      * @param array $filters Array of filters to apply.
      * @param array $params  Array of parameters used to filter.
+     *
+     * @return array
      */
     private function filterItem($values, $filters, $params)
     {
@@ -2149,6 +2151,8 @@ class MigrationSaver
      *
      * @param  string  $title Content title.
      * @return integer        Content id.
+     *
+     * @return boolean|int
      */
     private function findContent($title)
     {

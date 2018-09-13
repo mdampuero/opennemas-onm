@@ -142,7 +142,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetConfig()
     {
-        $template = $this->createMock(\Common\Core\Component\Template\Template::class);
+        $template = $this->createMock(Template::class);
 
         $template->method('configLoad')
             ->willReturn(true);

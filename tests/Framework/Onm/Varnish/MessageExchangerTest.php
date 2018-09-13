@@ -17,7 +17,7 @@ class MessageExchangerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->message_exchanger = new \Onm\Varnish\MessageExchanger();
+        $this->message_exchanger = new MessageExchanger();
     }
 
     /**
