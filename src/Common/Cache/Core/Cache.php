@@ -191,6 +191,8 @@ abstract class Cache extends DataBuffer
      * Adds the namespace as prefix to the id.
      *
      * @param  mixed $id The cache id.
+     *
+     * @return string
      */
     protected function getNamespacedId($id)
     {

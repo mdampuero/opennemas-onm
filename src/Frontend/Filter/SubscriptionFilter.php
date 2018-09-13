@@ -90,7 +90,7 @@ class SubscriptionFilter
     /**
      * Replaces article body for unsubscribed users.
      *
-     * @return Article $content The article.
+     * @return null|\Article $content The article.
      */
     public function paywallHook(&$content)
     {
@@ -112,10 +112,12 @@ class SubscriptionFilter
     }
 
     /**
-     * undocumented function
+     * Replaces all the Contents in an article  with the string passed
+     *
+     * @param \Article $content the content to change
+     * @param string $restrictedContent the contents to insert into the Article
      *
      * @return void
-     * @author
      */
     private function replaceContent(&$content, $restrictedContent)
     {

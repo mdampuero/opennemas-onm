@@ -832,6 +832,8 @@ class OpinionsController extends Controller
      *
      * @param string $context the context to fetch ads from
      *
+     * @return array
+     *
      * TODO: Make this function non-static
      */
     public static function getAds($context = '')

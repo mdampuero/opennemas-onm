@@ -507,6 +507,8 @@ class Content implements \JsonSerializable, CsvSerializable
      * @param array $data array with data for create the article
      *
      * @return boolean true if the content was created
+     *
+     * @throws \Exception
      */
     public function create($data)
     {
@@ -1094,6 +1096,8 @@ class Content implements \JsonSerializable, CsvSerializable
      * Change current value of frontpage property
      *
      * @return boolean true if it was changed successfully
+     *
+     * @throws \Exception
      */
     public function toggleSuggested()
     {
@@ -2206,6 +2210,8 @@ class Content implements \JsonSerializable, CsvSerializable
      * This is crap and should be in the article service.
      *
      * @param Array $data
+     *
+     * @return array
      */
     public function addTags($tagIds)
     {
@@ -2241,6 +2247,8 @@ class Content implements \JsonSerializable, CsvSerializable
      *
      * @param mixed $contentIds a array with all the ids of the contents you want recover
      *  If you use a integer only recover this one.
+     *
+     * @throws \Exception
      */
     public function getContentTags($contentIds)
     {

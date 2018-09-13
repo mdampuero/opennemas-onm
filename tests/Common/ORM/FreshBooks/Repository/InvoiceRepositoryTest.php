@@ -63,7 +63,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests find when API call fails.
      *
-     * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testFindWithInvalidId()
     {
@@ -113,7 +113,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests findBy when the search criteria is invalid.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidCriteriaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidCriteriaException
      */
     public function testFindByWithInvalidCriteria()
     {
@@ -250,7 +250,7 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests getPdf when searched the entity is not found.
      *
-     * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testGetPdfWithInvalidId()
     {

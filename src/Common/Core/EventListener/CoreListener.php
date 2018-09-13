@@ -61,6 +61,8 @@ class CoreListener
      * Loads an instance basing on the request.
      *
      * @param GetResponseEvent $event The event object.
+     *
+     * @throws InstanceNotFoundException|InstanceNotActivatedException
      */
     public function onKernelRequest(GetResponseEvent $event)
     {

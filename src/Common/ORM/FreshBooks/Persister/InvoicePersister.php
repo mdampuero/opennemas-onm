@@ -23,7 +23,9 @@ class InvoicePersister extends BasePersister
      *
      * @param Entity $entity The invoice to save.
      *
-     * @throws RuntimeException If the the invoice can not be saved.
+     * @return InvoicePersister
+     *
+     * @throws \RuntimeException If the the invoice can not be saved.
      */
     public function create(Entity &$entity)
     {
@@ -50,7 +52,9 @@ class InvoicePersister extends BasePersister
      *
      * @param Entity $entity The invoice to update.
      *
-     * @throws InvoiceNotFoundException If the invoice does not exist.
+     * @return InvoicePersister
+     *
+     * @throws EntityNotFoundException If the invoice does not exist.
      */
     public function remove(Entity $entity)
     {
@@ -74,7 +78,9 @@ class InvoicePersister extends BasePersister
      *
      * @param Entity $entity The invoice to update.
      *
-     * @throws InvoiceNotFoundException If the invoice does not exist.
+     * @return InvoicePersister
+     *
+     * @throws EntityNotFoundException If the invoice does not exist.
      */
     public function update(Entity $entity)
     {

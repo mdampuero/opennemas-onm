@@ -19,6 +19,8 @@ class SidebarsController extends Controller
      * Handles the default action.
      *
      * @param Request $request The request object.
+     *
+     * @return string
      */
     public function listAction()
     {

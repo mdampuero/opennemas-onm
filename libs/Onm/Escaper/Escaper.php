@@ -93,7 +93,7 @@ class Escaper
      * is set for htmlspecialchars() calls.
      *
      * @param string $encoding
-     * @throws Exception\InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function __construct($encoding = null)
     {

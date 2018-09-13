@@ -75,6 +75,7 @@ abstract class AbstractCache implements CacheInterface
      * {@inheritdoc}
      *
      * @param  string $id cache id The id of the cache entry to fetch.
+     *
      * @return string The cached data or FALSE, if no cache entry
      *                exists for the given id.
      */
@@ -156,8 +157,8 @@ abstract class AbstractCache implements CacheInterface
     /**
      * {@inheritdoc}
      *
-     * @param string $id       The cache id.
-     * @param string $data     The cache entry/data.
+     * @param string|array $id       The cache id.
+     * @param string|array $data     The cache entry/data.
      * @param int    $lifeTime The lifetime. If != false, sets a specific
      *                         lifetime for this cache entry (null => infinite
      *                         lifeTime).

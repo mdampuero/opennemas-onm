@@ -205,6 +205,8 @@ EOF
      * Gets the list of repositories for themes from bitbucket.
      *
      * @param string $url The URL to get the themes from.
+     *
+     * @return null|array
      */
     protected function getThemes($url = 'https://api.bitbucket.org/2.0/repositories/opennemas?pagelen=100')
     {

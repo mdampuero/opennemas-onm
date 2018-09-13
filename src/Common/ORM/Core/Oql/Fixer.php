@@ -15,6 +15,8 @@ class Fixer
      * Initializes the OQL query to fix.
      *
      * @param string $oql The OQL query to fix.
+     *
+     * @return Fixer
      */
     public function fix($oql)
     {

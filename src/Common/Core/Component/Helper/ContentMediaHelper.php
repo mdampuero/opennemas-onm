@@ -28,16 +28,17 @@ class ContentMediaHelper
     /**
      * Get image url for a given content
      *
-     * @param Object $content The content object.
-     * @param Array $params An array with the image url passed from template.
+     * @param object $content The content object.
+     * @param array $params An array with the image url passed from template.
      *
-     * @return Object $mediaObject An object with image/video information
+     * @return object $mediaObject An object with image/video information
      */
     public function getContentMediaObject($content, $params = null)
     {
         // Generate method name with object content_type
         $method = 'getMediaObjectFor' . ucfirst($content->content_type_name);
 
+        $mediaObject = null;
         if (method_exists($this, $method)) {
             $mediaObject = $this->$method($content);
         }
@@ -164,10 +165,10 @@ class ContentMediaHelper
     /**
      * Returns default media object for content
      *
-     * @param Array $params An array with the image url passed from template.
-     * @param Object $mediaObject The media object.
+     * @param array $params An array with the image url passed from template.
+     * @param object $mediaObject The media object.
      *
-     * @return Object  $mediaObject The media object.
+     * @return object  $mediaObject The media object.
      */
     protected function getDefaultMediaObject($params, $mediaObject)
     {
@@ -189,10 +190,10 @@ class ContentMediaHelper
     /**
      * Returns default media object for content
      *
-     * @param Array $params An array with the image url passed from template.
-     * @param Object $mediaObject The media object.
+     * @param array $params An array with the image url passed from template.
+     * @param object $mediaObject The media object.
      *
-     * @return Object  $mediaObject The media object.
+     * @return object  $mediaObject The media object.
      */
     protected function getImageMediaObject($content)
     {

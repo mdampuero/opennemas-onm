@@ -42,6 +42,8 @@ class AuthenticationListener implements EventSubscriberInterface
      * Loads an instance basing on the request.
      *
      * @param FilterResponseEvent $event The event object.
+     *
+     * @return null
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {

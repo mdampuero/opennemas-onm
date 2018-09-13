@@ -102,6 +102,8 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
      * Return a mock basing on the service name.
      *
      * @param string $name The service name.
+     *
+     * @return mixed
      */
     public function serviceContainerCallback($name)
     {

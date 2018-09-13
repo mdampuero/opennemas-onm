@@ -71,8 +71,11 @@ class CorrectExifRotation implements FilterInterface
     }
 
     /**
+     * Returns the exif array data from an image object
      *
      * @param ImageInterface $image
+     *
+     * @return array
      */
     private function getExifFromImage(ImageInterface $image)
     {

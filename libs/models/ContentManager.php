@@ -110,6 +110,8 @@ class ContentManager
      * Filters and removes blocked contents from the list of contents.
      *
      * @param array $contents The list of contents.
+     *
+     * @return array
      */
     public function filterBlocked($contents)
     {
@@ -707,8 +709,8 @@ class ContentManager
      * This function returns an array of objects $contentType of the most viewed
      * in the last few days indicated.
      *
-     * @param string  $contentType type of content
-     * @param boolean $notEmpty    If there are no results regarding the days
+     * @param string $contentType type of content
+     * @param boolean $notEmpty If there are no results regarding the days
      *                             indicated, the query is performed on the
      *                             entire bd. For default is false
      * @param integer $category pk_content_category ok the contents. If value
@@ -723,7 +725,12 @@ class ContentManager
      *                             For default is 8.
      * @param boolean $all Get all the content regardless of content
      *                             status.
+     *
+     * @param int $page The page to show
+     *
      * @return array of objects $contentType
+     *
+     * @throws Exception
      */
     public function getMostViewedContent(
         $contentType,
@@ -1195,8 +1202,6 @@ class ContentManager
 
             return false;
         }
-
-        return $rs;
     }
 
     /**
@@ -1257,6 +1262,8 @@ class ContentManager
      */
     public function findHeadlines()
     {
+        $items = [];
+
         $sql = 'SELECT `contents`.`title`, `contents`.`pk_content` ,'
             . '       `contents`.`created` ,  `contents`.`slug` ,'
             . '       `contents`.`starttime` , `contents`.`endtime`,'
@@ -1294,7 +1301,7 @@ class ContentManager
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
 
-            return false;
+            return [];
         }
     }
 
@@ -1366,7 +1373,7 @@ class ContentManager
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
 
-            return false;
+            return [];
         }
     }
 

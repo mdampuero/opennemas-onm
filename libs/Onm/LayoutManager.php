@@ -40,8 +40,6 @@ class LayoutManager
 
     /**
      * The template service.
-     *
-     * @var TemplateAdmin
      */
     protected $tpl;
 
@@ -316,6 +314,8 @@ class LayoutManager
      * @param array $params the list of params to pass to the template
      *
      * @param array $params the params for rendering the layout
+     *
+     * @return string
      */
     public function render($params = [])
     {

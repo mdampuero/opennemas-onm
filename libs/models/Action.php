@@ -23,7 +23,7 @@ class Action
      *
      * @param int $id the order id
      *
-     * @return order the order object instance
+     * @return Action the order object instance
      */
     public function get($id)
     {

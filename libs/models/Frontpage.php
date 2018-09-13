@@ -72,7 +72,7 @@ class Frontpage
      *
      * @param int $id
      *
-     * @return void
+     * @return boolean|null|Frontpage
      */
     public function __construct($id = null)
     {
@@ -116,7 +116,7 @@ class Frontpage
      *
      * @param  int       $id Object ID
      *
-     * @return Frontpage the frontpage object instance
+     * @return boolean|null|Frontpage the frontpage object instance
      */
     public function read($id)
     {

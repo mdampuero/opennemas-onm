@@ -37,6 +37,8 @@ class CronActionSubscriber implements EventSubscriberInterface
      * Synchronizes all instances basing on news agencies configuration.
      *
      * @param Event $event The event to handle.
+     *
+     * @return boolean
      */
     public function updateNewsAgency(Event $event)
     {

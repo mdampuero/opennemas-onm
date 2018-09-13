@@ -119,7 +119,7 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $name The service name.
      *
-     * @param mixed The mocked service.
+     * @return mixed
      */
     public function serviceContainerCallback($name)
     {

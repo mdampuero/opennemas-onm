@@ -326,6 +326,8 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
      * Check if the video is already imported
      *
      * @param string Video url
+     *
+     * @return boolean
      */
     protected function isAlreadyImported($url)
     {

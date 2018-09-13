@@ -199,6 +199,8 @@ class HooksSubscriber implements EventSubscriberInterface
 
     /**
      * Resets the PHP Opcode if supported
+     *
+     * @return null
      */
     public function cleanOpcode()
     {
@@ -211,6 +213,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Mock action for hook events
      *
      * @param Event $event The event to handle.
+     *
+     * @return boolean
      */
     public function mockHookAction(Event $event)
     {
@@ -221,6 +225,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Removes the list of countries for manager from cache.
      *
      * @param Event $event The event object.
+     *
+     * @return null
      */
     public function removeObjectCacheCountries()
     {
@@ -232,6 +238,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Removes the instance from cache.
      *
      * @param Event $event The event object.
+     *
+     * @return null
      */
     public function removeObjectCacheForInstance(Event $event)
     {
@@ -245,6 +253,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Deletes the Smarty cache when an author is updated.
      *
      * @param Event $event The event to handle.
+     *
+     * @return null
      */
     public function removeObjectCacheMultiCacheAllAuthors(Event $event)
     {
@@ -287,6 +297,8 @@ class HooksSubscriber implements EventSubscriberInterface
 
     /**
      * Deletes cache for content_categories object
+     *
+     * @return null
      */
     public function removeObjectCacheCategoriesArray()
     {
@@ -297,6 +309,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Deletes a category from cache when it is updated.
      *
      * @param Event $event The event to handle.
+     *
+     * @return null
      */
     public function removeObjectCacheCategory(Event $event)
     {
@@ -318,6 +332,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Deletes the content metadata from cache after it is updated.
      *
      * @param Event $event The event to handle.
+     *
+     * @return null
      */
     public function removeObjectCacheContentMeta(Event $event)
     {
@@ -330,6 +346,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Deletes a content from cache after it is updated.
      *
      * @param Event $event The event to handle.
+     *
+     * @return null
      */
     public function removeObjectCacheForContent(Event $event)
     {
@@ -350,6 +368,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * positions are updated.
      *
      * @param Event $event The event to handle.
+     *
+     * @return null
      */
     public function removeObjectCacheFrontpageMap(Event $event)
     {
@@ -367,6 +387,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Deletes the user from cache when he is updated.
      *
      * @param Event $event The event to handle.
+     *
+     * @return void
      */
     public function removeObjectCacheUser(Event $event)
     {
@@ -398,6 +420,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Deletes Smarty caches when an opinion is created.
      *
      * @param Event $event The event to handle.
+     *
+     * @return void
      */
     public function removeSmartyCacheAuthorOpinion(Event $event)
     {
@@ -425,6 +449,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Deletes Smarty caches for a give author
      *
      * @param Event $event The event to handle.
+     *
+     * @return void
      */
     public function removeSmartyCacheAuthor(Event $event)
     {
@@ -452,6 +478,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Deletes a category from cache when it is updated.
      *
      * @param Event $event The event to handle.
+     *
+     * @return void
      */
     public function removeSmartyCacheCategories(Event $event)
     {
@@ -479,6 +507,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Deletes the Smarty cache when the updated content is an article.
      *
      * @param Event $event The event to handle.
+     *
+     * @return void
      */
     public function removeSmartyCacheForContent(Event $event)
     {
@@ -535,6 +565,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Cleans the category frontpage given its id.
      *
      * @param Event $event The event to handle.
+     *
+     * @return void
      */
     public function removeSmartyCacheForFrontpageOfCategory(Event $event)
     {
@@ -577,6 +609,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Deletes custom CSS from cache when a category is updated.
      *
      * @param Event $event The event to handle.
+     *
+     * @return void
      */
     public function removeSmartyCacheGlobalCss()
     {
@@ -594,6 +628,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Deletes Smarty caches when an opinion is updated.
      *
      * @param Event $event The event to handle.
+     *
+     * @return void|boolean
      */
     public function removeSmartyCacheOpinion(Event $event)
     {
@@ -628,6 +664,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Removes the Smarty cache for an instance.
      *
      * @param Event $event The event object.
+     *
+     * @return void|boolean
      */
     public function removeSmartyForInstance(Event $event)
     {
@@ -650,6 +688,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * updated or deleted.
      *
      * @param Event $event The event to handle.
+     *
+     * @return void
      */
     public function removeVarnishCacheForAdvertisement(Event $event)
     {
@@ -686,6 +726,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Queues a varnish ban request.
      *
      * @param Event $event The event to handle.
+     *
+     * @return void|boolean
      */
     public function removeVarnishCacheCurrentInstance()
     {
@@ -705,6 +747,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Queues a varnish ban request to delete the frontpage
      *
      * @param Event $event The event to handle.
+     *
+     * @return void
      */
     public function removeVarnishCacheFrontpage()
     {
@@ -722,6 +766,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Queues a varnish ban request.
      *
      * @param Event $event The event to handle.
+     *
+     * @return void
      */
     public function removeVarnishCacheFrontpageCSS()
     {
@@ -739,6 +785,8 @@ class HooksSubscriber implements EventSubscriberInterface
      * Queues a varnish ban request.
      *
      * @param Event $event The event to handle.
+     *
+     * @return void
      */
     public function removeVarnishInstanceCacheUsingInstance(Event $event)
     {

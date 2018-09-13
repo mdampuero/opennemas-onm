@@ -26,6 +26,8 @@ class InstanceExceptionsListener implements EventSubscriberInterface
      * Checks and handles an exception if it is related to instance load.
      *
      * @param GetResponseForExceptionEvent $event The event object.
+     *
+     * @return null|boolean
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
@@ -69,6 +71,8 @@ class InstanceExceptionsListener implements EventSubscriberInterface
      * Returns an array of event names this subscriber wants to listen to.
      *
      * @return array The event names to listen to.
+     *
+     * @return array
      */
     public static function getSubscribedEvents()
     {

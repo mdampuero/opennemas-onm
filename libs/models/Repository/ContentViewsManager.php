@@ -60,6 +60,8 @@ class ContentViewsManager extends EntityManager
      *
      * @param integer $id    The content id.
      * @param integer $views The amount of views.
+     *
+     * @return null|boolean
      */
     public function setViews($id, $views = null)
     {

@@ -215,9 +215,10 @@ class Article extends Content
             $data['starttime'] = null;
         }
 
+        $conn = getService('dbal_connection');
+
         try {
             // Start transaction
-            $conn = getService('dbal_connection');
             $conn->beginTransaction();
 
             parent::create($data);
@@ -294,7 +295,9 @@ class Article extends Content
                 'Error creating article (ID:' . $this->id . '): ' . $e->getMessage() .
                 ' Stack Trace: ' . $e->getTraceAsString()
             );
+
             $conn->rollback();
+
             return false;
         }
     }
@@ -346,9 +349,10 @@ class Article extends Content
                 ? null : $data['footer_video2'],
         ];
 
+        $conn = getService('dbal_connection');
+
         try {
             // Start transaction
-            $conn = getService('dbal_connection');
             $conn->beginTransaction();
             parent::update($data);
 
@@ -443,10 +447,10 @@ class Article extends Content
                 'Error deleting article (ID:' . $id . '): ' . $e->getMessage() .
                 ' Stack Trace: ' . $e->getTraceAsString()
             );
+
             return false;
         }
 
-        return true;
     }
 
     /**

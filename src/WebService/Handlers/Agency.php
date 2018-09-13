@@ -82,6 +82,10 @@ class Agency
      * Get an newsml given a content id.
      *
      * @param integer $id The content id.
+     *
+     * @return XmlFormat|null
+     *
+     * @throws RestException
      */
     protected function newsml($id = null)
     {

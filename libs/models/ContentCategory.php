@@ -213,6 +213,8 @@ class ContentCategory implements \JsonSerializable
      * Fetches all the information of a category into the object.
      *
      * @param string $id the category id.
+     *
+     * @return null|boolean
      */
     public function read($id)
     {

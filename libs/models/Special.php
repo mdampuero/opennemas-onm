@@ -330,6 +330,7 @@ class Special extends Content
         if ($id == null) {
             return $items;
         }
+
         try {
             $rs = getService('dbal_connection')->fetchAll(
                 'SELECT * FROM `special_contents` WHERE fk_special=? ORDER BY position ASC',
@@ -351,8 +352,6 @@ class Special extends Content
             error_log($e->getMessage());
             return false;
         }
-
-        return $items;
     }
 
     /**

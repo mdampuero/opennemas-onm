@@ -286,6 +286,8 @@ class Validator
      * @param string $ruleset  The ruleset to use.
      * @param string $property The property name.
      * @param mixed  $value    The property value.
+     *
+     * @return boolean
      */
     protected function validateProperty($ruleset, $property, $value)
     {

@@ -142,8 +142,6 @@ class Advertisement extends Content
      * Initializes the Advertisement class
      *
      * @param int $id ID of the Advertisement
-     *
-     * @return Advertisement the instance of the advertisement class
      */
     public function __construct($id = null)
     {
@@ -157,7 +155,7 @@ class Advertisement extends Content
      *
      * @param array $properties
      *
-     * @return void
+     * @return Advertisement
      */
     public function load($properties)
     {
@@ -212,7 +210,7 @@ class Advertisement extends Content
      *
      * @param int $id the ID of the Advertisement
      *
-     * @return Advertisement the instance for the Ad
+     * @return null|boolean|Advertisement the instance for the Ad
      */
     public function read($id)
     {
@@ -260,10 +258,10 @@ class Advertisement extends Content
         $this->load($rs);
 
         if (is_string($this->params)) {
-            $advertisement->params = unserialize($this->params);
+            $this->params = unserialize($this->params);
 
-            if (!is_array($advertisement->params)) {
-                $advertisement->params = [];
+            if (!is_array($this->params)) {
+                $this->params = [];
             }
         }
 
@@ -276,7 +274,7 @@ class Advertisement extends Content
      *
      * @param array $data the needed data for create a new ad.
      *
-     * @return Advertisement
+     * @return boolean|Advertisement
      */
     public function create($data)
     {
@@ -317,6 +315,7 @@ class Advertisement extends Content
         } catch (\Exception $e) {
             $conn->rollback();
             getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -326,7 +325,7 @@ class Advertisement extends Content
      *
      * @param array $data
      *
-     * @return Advertisement Return the instance to chaining method
+     * @return boolean|Advertisement Return the instance to chaining method
      */
     public function update($data)
     {
@@ -371,6 +370,7 @@ class Advertisement extends Content
         } catch (\Exception $e) {
             $conn->rollback();
             getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -380,7 +380,7 @@ class Advertisement extends Content
      *
      * @param string $id the id of the ad to delete from db.
      *
-     * @return void
+     * @return boolean
      *
      */
     public function remove($id)
@@ -411,7 +411,7 @@ class Advertisement extends Content
      *
      * @param int $id Advertisement Id
      *
-     * @return string
+     * @return null|string
      */
     public function getUrl($id)
     {
@@ -520,7 +520,7 @@ class Advertisement extends Content
      *
      * @param int $id the id of the advertisement to increase num_count
      *
-     * @return void
+     * @return boolean
      */
     public static function setNumClics($id)
     {
@@ -555,7 +555,6 @@ class Advertisement extends Content
      * Renders the advertisment given a set of parameters
      *
      * @param array $params list of parameters for rendering the advertisement
-     * @param Template $tpl the Template class instance
      *
      * @return string the final html for the ad
      */

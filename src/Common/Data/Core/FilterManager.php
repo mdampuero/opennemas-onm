@@ -41,6 +41,8 @@ class FilterManager
      * @param mixed  $args  The arguments for filter.
      *
      * @return mixed The filtered value.
+     *
+     * @throw InvalidFilterException
      */
     public function filter($name, $args = [])
     {
@@ -76,6 +78,8 @@ class FilterManager
      * Changes the current value to filter.
      *
      * @param mixed $value The current value to filter.
+     *
+     * @return mixed
      */
     public function set($value)
     {

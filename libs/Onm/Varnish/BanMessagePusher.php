@@ -34,6 +34,8 @@ class BanMessagePusher
      * Sends a ban command.
      *
      * @param string $banRequest
+     *
+     * @return array
      */
     public function ban($banRequest)
     {

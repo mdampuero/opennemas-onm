@@ -121,6 +121,8 @@ abstract class AssetManager
      * @param array  $filters The array of filters per file.
      * @param string $name    The name of the output file.
      *
+     * @return array|null
+     *
      * @codeCoverageIgnore
      */
     public function writeAssets($assets, $assetFilters, $name = 'default')
