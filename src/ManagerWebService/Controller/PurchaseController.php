@@ -338,7 +338,7 @@ class PurchaseController extends Controller
 
         $writer = Writer::createFromFileObject(new \SplTempFileObject());
         $writer->setDelimiter(';');
-        $writer->setEncodingFrom('utf-8');
+        $writer->setInputEncoding('utf-8');
         $writer->insertOne([
             'id', 'client', 'instance', 'client_email', 'instance_email',
             'items', 'created', 'updated', 'step'
