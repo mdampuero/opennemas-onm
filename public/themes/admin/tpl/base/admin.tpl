@@ -48,7 +48,6 @@
       @Common/src/angular-onm-pagination/less/main.less,
       @Common/src/angular-tag/less/main.less,
       @Common/src/sidebar/less/main.less,
-      @Common/src/opennemas-webarch/css/layout/*,
       @Common/src/photo-editor/css/photo-editor.css,
       @Common/src/opennemas-webarch/less/main.less" filters="cssrewrite,less" output="common"}
     {/stylesheets}
