@@ -232,10 +232,10 @@ class Attachment extends Content
 
         $filename = MEDIA_PATH . DS . FILE_DIR . $this->path;
 
-        parent::remove($id);
-
         try {
-            $rs = getService('dbal_connection')->delete(
+            parent::remove($id);
+
+            getService('dbal_connection')->delete(
                 'attachments',
                 [ 'pk_attachment' => $id ]
             );

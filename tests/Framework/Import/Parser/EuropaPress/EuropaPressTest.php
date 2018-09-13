@@ -84,15 +84,15 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
         $this->text->created_time =
             $this->text->created_time->format('Y-m-d H:i:s');
 
-        $this->text->id        = '20150921181604';
-        $this->text->pretitle  = 'Sample pretitle';
-        $this->text->priority  = 4;
-        $this->text->related   = [ '20150921181604.photo' ];
-        $this->text->summary   = 'Sample summary';
-        $this->text->tags      = '';
-        $this->text->title     = 'Sample title';
-        $this->text->type      = 'text';
-        $this->text->urn       = 'urn:europapress:europapress:20150921181604:text:20150921181604';
+        $this->text->id       = '20150921181604';
+        $this->text->pretitle = 'Sample pretitle';
+        $this->text->priority = 4;
+        $this->text->related  = [ '20150921181604.photo' ];
+        $this->text->summary  = 'Sample summary';
+        $this->text->tags     = '';
+        $this->text->title    = 'Sample title';
+        $this->text->type     = 'text';
+        $this->text->urn      = 'urn:europapress:europapress:20150921181604:text:20150921181604';
     }
 
     public function testCheckFormat()
@@ -190,9 +190,9 @@ class EuropaPressTest extends \PHPUnit_Framework_TestCase
     {
         $resource = new Resource();
 
-        $resource->agency_name  = 'EuropaPress';
-        $resource->type         = 'text';
-        $resource->urn          = 'urn:europapress:europapress::';
+        $resource->agency_name = 'EuropaPress';
+        $resource->type        = 'text';
+        $resource->urn         = 'urn:europapress:europapress::';
 
         $resources = $this->parser->parse($this->invalid);
 

@@ -168,19 +168,20 @@ class Album extends Content
      *
      * @param array $data the data of the album
      *
-     * @return bool true if the object was stored
+     * @return bool|\Album true if the object was stored
      */
     public function create($data)
     {
         $data['subtitle'] = (empty($data['subtitle'])) ? '' : $data['subtitle'];
 
-        parent::create($data);
 
         try {
+            parent::create($data);
+
             $this->pk_content = (int) $this->id;
             $this->pk_album   = (int) $this->id;
 
-            $rs = getService('dbal_connection')->insert(
+            getService('dbal_connection')->insert(
                 'albums',
                 [
                     'pk_album' => (int) $this->id,
@@ -364,9 +365,9 @@ class Album extends Content
     /**
      * Saves the photos attached to one album
      *
-     * @param arrray $data the new photos data
+     * @param array $data the new photos data
      *
-     * @return Album the object instance
+     * @return boolean|\Album the object instance
      */
     public function saveAttachedPhotos($data)
     {
@@ -433,8 +434,8 @@ class Album extends Content
     /**
      * Renders the album
      *
-     * @param arrray $params parameters for rendering the content
-     * @param Template $tpl the Template object instance
+     * @param array $params parameters for rendering the content
+     * @param null $tpl variable remaining for back compatability
      *
      * @return string the generated HTML
      */

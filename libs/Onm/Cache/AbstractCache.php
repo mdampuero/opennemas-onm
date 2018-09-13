@@ -363,7 +363,7 @@ abstract class AbstractCache implements CacheInterface
      * @return boolean TRUE if the entry was successfully stored in the
      *                         cache, FALSE otherwise.
      */
-    abstract protected function doSave($id, $data, $lifeTime = false);
+    abstract protected function doSave($id, $data, $lifeTime = null);
 
     /**
      * Deletes a cache entry.

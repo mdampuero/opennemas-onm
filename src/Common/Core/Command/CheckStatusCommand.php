@@ -38,16 +38,16 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("<info>==></> Checking <fg=blue>core</> status...");
+        $output->writeln("<info>==></info> Checking <fg=blue>core</fg> status...");
 
         $checker = $this->getContainer()->get('core.status.checker');
 
         $output->write('+ Checking NFS status... ');
-        $status = $checker->checkNfs() ? '<info>DONE</>' : '<error>FAIL</>';
+        $status = $checker->checkNfs() ? '<info>DONE</info>' : '<error>FAIL</error>';
         $output->writeln($status);
 
         $output->write('+ Checking database connection... ');
-        $status = $checker->checkDatabaseConnection() ? '<info>DONE</>' : '<error>FAIL</>';
+        $status = $checker->checkDatabaseConnection() ? '<info>DONE</info>' : '<error>FAIL</error>';
         $output->writeln($status);
 
         if ($output->isVerbose()) {
@@ -55,7 +55,7 @@ EOF
         }
 
         $output->write('+ Checking cache connection... ');
-        $status = $checker->checkCacheConnection() ? '<info>DONE</>' : '<error>FAIL</>';
+        $status = $checker->checkCacheConnection() ? '<info>DONE</info>' : '<error>FAIL</error>';
         $output->writeln($status);
 
         if ($output->isVerbose()) {

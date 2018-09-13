@@ -17,10 +17,10 @@ function smarty_function_renderStyleSheet($params, &$smarty)
     //content_id | title_catID | serialize(font-family:;font-size:;color:)
     if (is_array($items)) {
         foreach ($items as $k => $item) {
-            $element = 'bgcolor_'.$current;
+            $element = 'bgcolor_' . $current;
             $bgcolor = $item->getMetadata($element);
 
-            $element = 'title'."_".$current;
+            $element    = 'title' . "_" . $current;
             $properties = $item->getMetadata($element);
 
             if (!empty($properties)) {
@@ -28,7 +28,7 @@ function smarty_function_renderStyleSheet($params, &$smarty)
 
                 if (!empty($properties)) {
                     // article#content-81088.onm-new h3.onm-new-title a
-                    $rules .="article#content-{$item->pk_content} .nw-title a {\n";
+                    $rules .= "article#content-{$item->pk_content} .nw-title a {\n";
                     foreach ($properties as $property => $value) {
                         if (!empty($value)) {
                                 $rules .= "\t{$property}:{$value}; \n";
@@ -36,7 +36,7 @@ function smarty_function_renderStyleSheet($params, &$smarty)
                     }
                     $rules .= "}\n";
 
-                    $rules .="article#content-{$item->pk_content} {\n";
+                    $rules .= "article#content-{$item->pk_content} {\n";
                     if (!empty($bgcolor)) {
                             $rules .= "\tbackground-color:{$bgcolor}; \n";
                     }
@@ -44,12 +44,9 @@ function smarty_function_renderStyleSheet($params, &$smarty)
                 }
             }
         }
-
     }
 
-    $output ="<style type=\"text/css\"> {$rules} </style>";
+    $output = "<style type=\"text/css\"> {$rules} </style>";
 
     return $output;
-
 }
-

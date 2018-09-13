@@ -670,7 +670,7 @@ class StringUtils
     {
         if (is_array($text)) {
             return array_map(function ($a) use ($numWords) {
-                \Onm\StringUtils::getNumWords($a, $numWords);
+                self::getNumWords($a, $numWords);
             }, $text);
         }
 

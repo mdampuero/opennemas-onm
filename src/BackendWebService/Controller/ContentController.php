@@ -869,7 +869,7 @@ class ContentController extends Controller
      */
     protected function hasRoles($action, $contentType)
     {
-        $types[]     = $contentType;
+        $types[] = $contentType;
 
         // Add all admin permissions for generic list (trash,)
         if ($contentType == 'content') {

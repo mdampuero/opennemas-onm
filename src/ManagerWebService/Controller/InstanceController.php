@@ -291,7 +291,8 @@ class InstanceController extends Controller
             throw new AccessDeniedException(
                 '<p>' . _('You have reached the maximum number of instances.') . '</p><p>'
                 . sprintf(
-                    _('If you need to create more instances, please <a class="bold text-danger" href="mailto:%s">contact us</a>.'),
+                    _('If you need to create more instances, please '
+                        . '<a class="bold text-danger" href="mailto:%s">contact us</a>.'),
                     $this->getParameter('manager_webservice')['company_mail'],
                     $this->getParameter('manager_webservice')['company_mail']
                 )
@@ -423,7 +424,8 @@ class InstanceController extends Controller
             throw new AccessDeniedException(
                 '<p>' . _('You have reached the maximum number of instances.') . '</p><p>'
                 . sprintf(
-                    _('If you need to create more instances, please <a class="bold text-danger" href="mailto:%s">contact us</a>.'),
+                    _('If you need to create more instances, please '
+                        . '<a class="bold text-danger" href="mailto:%s">contact us</a>.'),
                     $this->getParameter('manager_webservice')['company_mail'],
                     $this->getParameter('manager_webservice')['company_mail']
                 )

@@ -19,10 +19,10 @@ class WidgetsController extends ContentController
      * Returns a list of contents in JSON format.
      *
      * @param  Request      $request     The request with the search parameters.
-     * @param  string       $contentType Content type name.
+     *
      * @return JsonResponse              The response in JSON format.
      */
-    public function listAction(Request $request, $contentType = null)
+    public function listAction(Request $request)
     {
         $oql = $request->query->get('oql', '');
         $em  = $this->get('widget_repository');

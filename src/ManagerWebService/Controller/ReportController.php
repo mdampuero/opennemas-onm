@@ -35,7 +35,7 @@ class ReportController extends Controller
             [
                 'id'          => 'not-used',
                 'title'       => _('Instances not used in last month'),
-                'description' =>  _('Generates a report listing instances that were not used in the last month.')
+                'description' => _('Generates a report listing instances that were not used in the last month.')
             ],
             [
                 'id'          => 'last-created',
@@ -95,13 +95,13 @@ class ReportController extends Controller
 
         $writer->insertAll($data);
 
-        $fileName = 'opennemas-instances-' . $id.'-'.date("Y_m_d_His").'.csv';
+        $fileName = 'opennemas-instances-' . $id . '-' . date("Y_m_d_His") . '.csv';
         $response = new Response();
         $response->setContent($writer);
         $response->setStatusCode(200);
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Description', 'Submissions Export');
-        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
+        $response->headers->set('Content-Disposition', 'attachment; filename=' . $fileName);
         $response->headers->set('Content-Transfer-Encoding', 'binary');
         $response->headers->set('Pragma', 'no-cache');
         $response->headers->set('Expires', '0');

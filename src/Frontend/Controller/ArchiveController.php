@@ -76,7 +76,7 @@ class ArchiveController extends Controller
             foreach ($contents as $content) {
                 // Create category group
                 if (!isset($library[$content->category])) {
-                    $library[$content->category] = $cr->find($content->category);
+                    $library[$content->category]           = $cr->find($content->category);
                     $library[$content->category]->contents = [];
                 }
 

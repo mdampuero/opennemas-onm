@@ -34,9 +34,9 @@ function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
             }
         }
 
-        $output = ($returnContent) ?  $content : "";
+        $output = ($returnContent) ? $content : "";
     } else {
-        $output = (getService('core.security')->hasExtension($params['name'])) ?  $content : "";
+        $output = (getService('core.security')->hasExtension($params['name'])) ? $content : "";
     }
 
     if (isset($params['deactivated']) && $params['deactivated'] == 1) {

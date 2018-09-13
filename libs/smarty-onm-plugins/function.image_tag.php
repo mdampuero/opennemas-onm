@@ -7,7 +7,7 @@
 function smarty_function_image_tag($params, &$smarty)
 {
     if (array_key_exists('id', $params) && !empty($params['id'])) {
-        $photo = getService('entity_repository')->find('Photo', $params['id']);
+        $photo         = getService('entity_repository')->find('Photo', $params['id']);
         $params['src'] = $photo->path_img;
     }
 
@@ -17,19 +17,18 @@ function smarty_function_image_tag($params, &$smarty)
 
     $src = $params['src'];
 
+    $baseUrl = INSTANCE_MEDIA . 'images';
     if (preg_match('@http(s)?://@', $src)) {
         $baseUrl = '';
     } elseif (array_key_exists('common', $params) && $params['common'] == "1") {
-        $baseUrl = SS."assets".SS."images".SS;
+        $baseUrl = SS . "assets" . SS . "images" . SS;
     } elseif (array_key_exists('bundle', $params)) {
-        $baseUrl = SS."bundles".SS.$params['bundle'].SS;
+        $baseUrl = SS . "bundles" . SS . $params['bundle'] . SS;
     } elseif (array_key_exists('base_url', $params)) {
-        $baseUrl = $params['base_url'].DS;
-    } else {
-        $baseUrl = INSTANCE_MEDIA.'images';
+        $baseUrl = $params['base_url'] . DS;
     }
 
-    $resource = $baseUrl.$src;
+    $resource = $baseUrl . $src;
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
     $lazyload = ($params['data-src'] == 'lazyload');
@@ -41,7 +40,7 @@ function smarty_function_image_tag($params, &$smarty)
     unset($params['data-src']);
 
     if ($lazyload) {
-        $params['class'] = "lazy ".(array_key_exists('class', $params)? $params['class']: '');
+        $params['class'] = "lazy " . (array_key_exists('class', $params) ? $params['class'] : '');
     }
 
     $properties = '';
@@ -49,10 +48,9 @@ function smarty_function_image_tag($params, &$smarty)
         $properties .= " {$key}=\"{$value}\"";
     }
 
+    $output = "<img src=\"{$resource}\" {$properties}>";
     if ($lazyload) {
         $output = "<img src=\"/assets/images/lazy-bg.png\" data-src=\"{$resource}\" {$properties}>";
-    } else {
-        $output = "<img src=\"{$resource}\" {$properties}>";
     }
 
     return $output;

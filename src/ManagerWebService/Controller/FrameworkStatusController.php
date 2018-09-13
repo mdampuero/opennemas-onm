@@ -81,9 +81,9 @@ class FrameworkStatusController extends Controller
      */
     public function getStatus($status)
     {
-        $statusKeyValues = array();
+        $statusKeyValues = [];
         if (!is_array($status)) {
-            $status = array();
+            $status = [];
         }
 
         foreach ($status as $key => &$value) {
@@ -102,7 +102,7 @@ class FrameworkStatusController extends Controller
 
                     if ($k === 'used_memory'
                         || $k === 'free_memory'
-                        || $k  ===  'wasted_memory'
+                        || $k === 'wasted_memory'
                     ) {
                         $v = $this->sizeForHumans($v);
                     }
@@ -150,13 +150,9 @@ class FrameworkStatusController extends Controller
      */
     public function getDirectives($config)
     {
-        $directivesKeyValues = array();
+        $directivesKeyValues = [];
         foreach ($config['directives'] as $key => $value) {
-            if ($value === false) {
-                $value = 'false';
-            } else {
-                $value = 'true';
-            }
+            $value = ($value === false) ? 'false' : 'true';
 
             if ($key == 'opcache.memory_consumption') {
                 $value = $this->sizeForHumans($value);
@@ -179,16 +175,16 @@ class FrameworkStatusController extends Controller
      */
     public function getNewDirs($scripts, $data)
     {
-        $dirs = array();
+        $dirs = [];
         foreach ($scripts as $key => $data) {
             $dirs[dirname($key)][basename($key)] = $data;
         }
         asort($dirs);
 
-        $newDirs = array();
+        $newDirs = [];
         foreach ($dirs as $dir => $files) {
             $memoryConsumption = 0;
-            $newFiles = array();
+            $newFiles          = [];
             foreach ($files as $data) {
                 $memoryConsumption += $data["memory_consumption"];
 
@@ -197,17 +193,17 @@ class FrameworkStatusController extends Controller
                 $newFile['memory_consumption_human_readable'] =
                     $this->sizeForHumans($data["memory_consumption"]);
 
-                $newFiles []= $newFile;
+                $newFiles[] = $newFile;
             }
 
-            $newDir = array(
+            $newDir = [
                 'name'                     => $dir,
                 'total_memory_consumption' => $this->sizeForHumans($memoryConsumption),
                 'count'                    => count($newFiles),
                 'files'                    => $newFiles
-            );
+            ];
 
-            $newDirs []= $newDir;
+            $newDirs[] = $newDir;
         }
 
         return $newDirs;

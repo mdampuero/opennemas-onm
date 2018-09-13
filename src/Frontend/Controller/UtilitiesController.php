@@ -32,17 +32,17 @@ class UtilitiesController extends Controller
      */
     public function sharrreAction(Request $request)
     {
-        $json = array(
-            'url'=> '',
+        $json = [
+            'url'   => '',
             'count' => 0
-        );
+        ];
 
         $cacheFor = 300;
 
-        $json['url'] = $request->query->filter('url', '', FILTER_SANITIZE_STRING);
+        $json['url']  = $request->query->filter('url', '', FILTER_SANITIZE_STRING);
         $json['time'] = time();
-        $url = urlencode($request->query->filter('url', '', FILTER_SANITIZE_STRING));
-        $type = urlencode($request->query->filter('type', '', FILTER_SANITIZE_STRING));
+        $url          = urlencode($request->query->filter('url', '', FILTER_SANITIZE_STRING));
+        $type         = urlencode($request->query->filter('type', '', FILTER_SANITIZE_STRING));
 
         // if ($json['url']) {
         //     if ($type == 'googlePlus') {
@@ -74,14 +74,14 @@ class UtilitiesController extends Controller
         // }
         $json['count'] = 0;
 
-        $content  = str_replace('\\/', '/', json_encode($json));
+        $content = str_replace('\\/', '/', json_encode($json));
 
         return new Response(
             $content,
             200,
             [
-                'x-tags'       => 'sharre,'.$type.','.$url,
-                'x-cache-for'  => $cacheFor.'s',
+                'x-tags'       => 'sharre,' . $type . ',' . $url,
+                'x-cache-for'  => $cacheFor . 's',
                 'Content-Type' => 'application/json',
             ]
         );
@@ -96,14 +96,14 @@ class UtilitiesController extends Controller
      */
     private function createCurlRequest($encUrl, $cacheTimeout = 300)
     {
-        $cache = $this->get('cache');
+        $cache       = $this->get('cache');
         $cachedValue = $cache->fetch($encUrl);
 
         if ($cachedValue !== false) {
             return $cachedValue;
         }
 
-        $options = array(
+        $options = [
             CURLOPT_RETURNTRANSFER => true, // return web page
             CURLOPT_HEADER         => false, // don't return headers
             CURLOPT_FOLLOWLOCATION => true, // follow redirects
@@ -115,7 +115,8 @@ class UtilitiesController extends Controller
             CURLOPT_MAXREDIRS      => 3, // stop after 10 redirects
             CURLOPT_SSL_VERIFYHOST => 0,
             CURLOPT_SSL_VERIFYPEER => false,
-        );
+        ];
+
         $ch = curl_init();
 
         $options[CURLOPT_URL] = $encUrl;
@@ -127,10 +128,10 @@ class UtilitiesController extends Controller
 
         curl_close($ch);
 
-        if ($errmsg != '' || $err != '') {
-            /*print_r($errmsg);
-            print_r($errmsg);*/
-        }
+        // if ($errmsg != '' || $err != '') {
+        //     print_r($errmsg);
+        //     print_r($errmsg);
+        // }
         $cache->save($encUrl, $content, $cacheTimeout);
 
         return $content;

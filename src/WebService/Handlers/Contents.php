@@ -34,7 +34,7 @@ class Contents
             array_key_exists('date', $matches) &&
             (
                 substr($matches['id'], 0, -6) === '' ||
-                substr((int)$matches['id'], 0, -6) > 0
+                substr((int) $matches['id'], 0, -6) > 0
             )
         ) {
             $refactorID = (int) $matches['id'];

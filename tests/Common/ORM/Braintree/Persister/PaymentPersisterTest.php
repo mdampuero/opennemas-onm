@@ -35,9 +35,9 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
             ],
             'mapping' => [
                 'braintree' => [
-                    'client_id' => [ 'name'=> 'customerId', 'type'=> 'string' ],
-                    'amount'    => [ 'name'=> 'amount', 'type'=> 'string' ],
-                    'nonce'     => [ 'name'=> 'paymentMethodNonce', 'type'=> 'string' ],
+                    'client_id' => [ 'name' => 'customerId', 'type' => 'string' ],
+                    'amount'    => [ 'name' => 'amount', 'type' => 'string' ],
+                    'nonce'     => [ 'name' => 'paymentMethodNonce', 'type' => 'string' ],
                 ]
             ],
         ]);
@@ -59,12 +59,12 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $response = $this->getMockBuilder('\Braintree_Response')
+        $response          = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
         $response->success = true;
 
-        $response->transaction = $this->getMockBuilder('\Braintree_Transaction')
+        $response->transaction     = $this->getMockBuilder('\Braintree_Transaction')
             ->disableOriginalConstructor()
             ->getMock();
         $response->transaction->id = '1';
@@ -95,7 +95,7 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateWithRuntimeError()
     {
-        $response = $this->getMockBuilder('\Braintree_Response')
+        $response          = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
         $response->success = false;
@@ -141,7 +141,7 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemove()
     {
-        $response = $this->getMockBuilder('\Braintree_Response')
+        $response          = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
         $response->success = true;
@@ -168,7 +168,7 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemoveWithErrors()
     {
-        $response = $this->getMockBuilder('\Braintree_Response')
+        $response          = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
         $response->success = false;

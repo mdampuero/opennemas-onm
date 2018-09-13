@@ -712,7 +712,6 @@ class Content implements \JsonSerializable, CsvSerializable
             'params'         => (!isset($data['params']) || empty($data['params'])) ? null : serialize($data['params']),
             'slug'           => $data['slug'],
             'starttime'      => (!isset($data['starttime'])) ? $this->starttime : $data['starttime'],
-            'title'          => $data['title'],
             'with_comment'   => (!isset($data['with_comment'])) ? $this->with_comment : $data['with_comment'],
         ];
 
@@ -1960,7 +1959,7 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         try {
-            $value = getService('dbal_connection')->executeUpdate(
+            getService('dbal_connection')->executeUpdate(
                 "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
                 . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?",
                 [ $this->id, $property, $value, $value ]
@@ -2010,7 +2009,7 @@ class Content implements \JsonSerializable, CsvSerializable
             $sql = 'DELETE FROM contentmeta WHERE fk_content = ? AND meta_name '
                 . (is_array($property) ? $propertyFilter : ' = ?');
 
-            $value = getService('dbal_connection')->executeUpdate($sql, $parameters);
+            getService('dbal_connection')->executeUpdate($sql, $parameters);
 
             return true;
         } catch (\Exception $e) {
@@ -2022,7 +2021,9 @@ class Content implements \JsonSerializable, CsvSerializable
     /**
      * Load content properties given the content id
      *
-     * @return array if it is in the contentmeta table
+     * @param int $id The id of the content
+     *
+     * @return boolean|Content if it is in the contentmeta table
      */
     public function loadAllContentProperties($id = null)
     {
@@ -2030,8 +2031,6 @@ class Content implements \JsonSerializable, CsvSerializable
         $contentProperties = $cache->fetch('content-meta-' . $this->id);
 
         if (!is_array($contentProperties)) {
-            $contentProperties = [];
-
             if ($this->id == null && $id == null) {
                 return false;
             }

@@ -136,7 +136,7 @@ class ContentsController extends Controller
     public function shareByEmailAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $errors  = [];
+            $errors = [];
 
             $response = $request->request->filter('g-recaptcha-response', '', FILTER_SANITIZE_STRING);
             $isValid  = $this->get('core.recaptcha')

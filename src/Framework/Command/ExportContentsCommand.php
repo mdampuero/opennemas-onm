@@ -124,7 +124,6 @@ EOF
         $this->getContainer()->get('dbal_connection')->selectDatabase(
             $instanceObject->getDatabaseName()
         );
-
         // Initialize internal constants for logger
         define('INSTANCE_UNIQUE_NAME', $instance);
 
@@ -148,7 +147,7 @@ EOF
     /**
      * Converts an Article, Opinion and album to NewsML.
      *
-     * @param  Content $content Content to convert.
+     * @param \Content $content Content to convert.
      * @return string           Content in NewsML format.
      */
     public function convertToNewsML($content)
@@ -170,7 +169,7 @@ EOF
     /**
      * Converts a Video to NewsML.
      *
-     * @param  Video $content Video to convert.
+     * @param  \Video $content Video to convert.
      * @return string         Video in NewsML format.
      */
     public function convertVideoToNewsML($content)
@@ -206,7 +205,7 @@ EOF
     /**
      * Writes an article in NewsML format to a file.
      *
-     * @param Article $content      Article to export.
+     * @param \Article $content      Article to export.
      * @param string  $newsMLString Article in NewsMML format.
      * @param string  $folder       Path where file will be created.
      */
@@ -234,15 +233,6 @@ EOF
     {
         // Sql order, limit and filters
         $order   = [ 'created' => 'ASC' ];
-        $filters = [
-            'content_type_name' => [
-                'union' => 'OR',
-                [ 'value' => 'article' ],
-                [ 'value' => 'opinion' ],
-                [ 'value' => 'album' ],
-                [ 'value' => 'video' ],
-            ],
-        ];
 
         // Get entity repository
         $this->er = getService('entity_repository');
@@ -296,14 +286,14 @@ EOF
             }
         }
 
-        $this->output->writeln(
-            "\n\nSaved contents with <info>$this->imagesCounter</info> images" .
-            " into '$this->targetDir'\n" .
-            "\tArticles -> <info>$this->articlesCounter</info>\n" .
-            "\tOpinions -> <info>$this->opinionsCounter</info>\n" .
-            "\tAlbums -> <info>$this->albumsCounter</info>\n" .
-            "\tVideos -> <info>$this->videosCounter</info>\n"
-        );
+
+        $this->output->writeln(implode(PHP_EOL, [
+            PHP_EOL . "Saved contents with <info>$this->imagesCounter</info> images into ". $this->targetDir . PHP_EOL,
+            "\tArticles -> <info>$this->articlesCounter</info>\n",
+            "\tOpinions -> <info>$this->opinionsCounter</info>\n",
+            "\tAlbums -> <info>$this->albumsCounter</info>\n",
+            "\tVideos -> <info>$this->videosCounter</info>\n",
+        ]));
     }
 
 

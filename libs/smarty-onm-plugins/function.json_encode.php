@@ -28,8 +28,8 @@ function smarty_function_json_encode($params, &$smarty)
         $output = $params['default'];
     } else {
         $output = json_encode($params['value']);
-    }        
-    
+    }
+
     if (isset($params['assign'])) {
         $smarty->assign($params['assign'], $output);
 

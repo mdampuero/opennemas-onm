@@ -146,9 +146,9 @@ class EuropaPressIdealTest extends \PHPUnit_Framework_TestCase
     {
         $resource = new Resource();
 
-        $resource->agency_name  = 'Grupo Idealgallego';
-        $resource->type         = 'text';
-        $resource->urn          = 'urn:europapressideal:europapress::';
+        $resource->agency_name = 'Grupo Idealgallego';
+        $resource->type        = 'text';
+        $resource->urn         = 'urn:europapressideal:europapress::';
 
         $resources = $this->parser->parse($this->invalid);
 

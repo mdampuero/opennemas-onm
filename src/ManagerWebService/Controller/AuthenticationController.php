@@ -40,7 +40,7 @@ class AuthenticationController extends Controller
     {
         $error   = null;
         $referer = $this->generateUrl('manager_welcome');
-        $message = array();
+        $message = [];
 
         if ($request->getSession()->get('_security.manager.target_path')) {
             $referer = $this->request->getSession()->get('_security.manager.target_path');
@@ -57,20 +57,20 @@ class AuthenticationController extends Controller
 
         if ($error) {
             if ($error instanceof BadCredentialsException) {
-                $message = array(
+                $message = [
                     'type' => 'error',
                     'text' => _('Username or password incorrect.')
-                );
+                ];
             } elseif ($error instanceof InvalidCsrfTokenException) {
-                $message = array(
+                $message = [
                     'type' => 'error',
                     'text' => _('Login token is not valid. Try to authenticate again.')
-                );
+                ];
             } else {
-                $message = array(
+                $message = [
                     'type' => 'error',
                     'text' => _($error)
-                );
+                ];
             }
 
             $attempts = $request->getSession()->get('failed_login_attempts');
@@ -83,10 +83,10 @@ class AuthenticationController extends Controller
 
         $errors = $request->getSession()->getFlashbag()->get('error');
         if ($errors) {
-            $message = array(
+            $message = [
                 'type' => 'error',
                 'text' => $errors[0]
-            );
+            ];
         }
 
         $intention = time() . rand();

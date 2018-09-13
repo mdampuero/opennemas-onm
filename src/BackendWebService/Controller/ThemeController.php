@@ -89,7 +89,8 @@ class ThemeController extends Controller
                 'thumbnail'        => 'theme-custom.jpg',
                 'name'             => _('Custom Template'),
                 'description'      => _(
-                    'Get a customized newspaper Web Site, with widgets included, so that everyone will recognize your brand and image.'
+                    'Get a customized newspaper Web Site, with widgets included, '
+                    . 'so that everyone will recognize your brand and image.'
                 ),
                 'long_description' => _(
                     '<p>Newspaper Web Site Template that can be customized to reflect better brand guidelines and customer preferences</p>
@@ -122,7 +123,7 @@ class ThemeController extends Controller
                     </ul>'
                 ),
                 'price' => [
-                    [ 'value' => 130, 'type' =>  'monthly' ],
+                    [ 'value' => 130, 'type' => 'monthly' ],
                     [ 'value' => 1450, 'type' => 'single' ]
                 ]
             ],
@@ -132,7 +133,8 @@ class ThemeController extends Controller
                 'thumbnail'        => 'theme-exclusive.jpg',
                 'name'             => _('Exclusive Template'),
                 'description'      => _(
-                    'Unique Newspaper Web Site  with many widgets, completely customizable and in exclusive development for the customer.'
+                    'Unique Newspaper Web Site  with many widgets, completely '
+                    . 'customizable and in exclusive development for the customer.'
                 ),
                 'long_description' => _(
                     '<ul>
@@ -187,7 +189,7 @@ class ThemeController extends Controller
                     </ul>'
                 ),
                 'price' => [
-                    [ 'value' => 350, 'type' =>  'monthly' ],
+                    [ 'value' => 350, 'type' => 'monthly' ],
                     [ 'value' => 3500, 'type' => 'single' ]
                 ]
             ],
@@ -196,7 +198,8 @@ class ThemeController extends Controller
                 'type'             => 'theme',
                 'thumbnail'        => 'theme-exclusiveplus.jpg',
                 'name'             => _('Custom Exclusive Template'),
-                'description'      => _('Newspaper web site developed from scratch by Opennemas team exclusively for you.'),
+                'description'      => _('Newspaper web site developed from scratch by '
+                    . 'Opennemas team exclusively for you.'),
                 'long_description' => _(
                     '<ul>
                         <li>Widgets: all required widgets included</li>
@@ -240,7 +243,7 @@ class ThemeController extends Controller
                     </ul>'
                 ),
                 'price' => [
-                    [ 'value' => 350, 'type' =>  'monthly' ],
+                    [ 'value' => 350, 'type' => 'monthly' ],
                     [ 'value' => 3500, 'type' => 'single' ]
                 ]
             ],

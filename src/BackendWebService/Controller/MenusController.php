@@ -23,10 +23,10 @@ class MenusController extends ContentController
      */
     public function batchDeleteAction(Request $request)
     {
-        $em = $this->get('menu_repository');
-        $errors  = array();
-        $success = array();
-        $updated = array();
+        $em      = $this->get('menu_repository');
+        $errors  = [];
+        $success = [];
+        $updated = [];
 
         $ids = $request->request->get('ids');
 
@@ -39,48 +39,46 @@ class MenusController extends ContentController
                         $content->delete($id);
                         $updated[] = $id;
                     } catch (Exception $e) {
-                        $errors[] = array(
+                        $errors[] = [
                             'id'      => $id,
                             'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
                             'type'    => 'error'
-                        );
+                        ];
                     }
                 } else {
-                    $errors[] = array(
+                    $errors[] = [
                         'id'      => $id,
                         'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                         'type'    => 'error'
-                    );
+                    ];
                 }
             }
         }
 
         if (count($updated) > 0) {
-            $success[] = array(
+            $success[] = [
                 'id'      => $updated,
                 'message' => sprintf(_('%d item(s) deleted successfully'), count($updated)),
                 'type'    => 'success'
-            );
+            ];
         }
 
-        return new JsonResponse(
-            array(
-                'messages' => array_merge($success, $errors)
-            )
-        );
+        return new JsonResponse([
+            'messages' => array_merge($success, $errors)
+        ]);
     }
 
     /**
      * Deletes a menu.
      *
-     * @param  Request      $request     The request object.
+     * @param  Request $request The request object.
      *
-     * @return JsonResponse              The response object.
+     * @return JsonResponse The response object.
      */
     public function deleteAction($id)
     {
         $em       = $this->get('menu_repository');
-        $messages = array();
+        $messages = [];
 
         $menu = $em->find($id);
 
@@ -89,30 +87,26 @@ class MenusController extends ContentController
                 $menu->delete($id);
                 $em->delete($id);
 
-                $messages[] = array(
+                $messages[] = [
                     'id'      => $id,
                     'message' => _('Item deleted successfully'),
                     'type'    => 'success'
-                );
+                ];
             } catch (Exception $e) {
-                $messages[] = array(
+                $messages[] = [
                     'id'      => $id,
                     'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
                     'type'    => 'error'
-                );
+                ];
             }
         } else {
-            $messages[] = array(
+            $messages[] = [
                 'id'      => $id,
                 'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
-            );
+            ];
         }
 
-        return new JsonResponse(
-            array(
-                'messages' => $messages,
-            )
-        );
+        return new JsonResponse([ 'messages' => $messages ]);
     }
 
     /**

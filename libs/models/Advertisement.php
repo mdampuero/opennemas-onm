@@ -286,7 +286,7 @@ class Advertisement extends Content
         $data['pk_advertisement'] = $data['id'] = $this->id;
 
         try {
-            $rs = getService('dbal_connection')->insert(
+            getService('dbal_connection')->insert(
                 'advertisements',
                 [
                     'pk_advertisement'      => $data['pk_advertisement'],
@@ -338,7 +338,7 @@ class Advertisement extends Content
         parent::update($data);
 
         try {
-            $rs = getService('dbal_connection')->update(
+            getService('dbal_connection')->update(
                 'advertisements',
                 [
                     'fk_content_categories' => $data['categories'],
@@ -355,7 +355,7 @@ class Advertisement extends Content
                 [ 'pk_advertisement' => (int) $data['id'] ]
             );
 
-            $rs = getService('dbal_connection')->delete(
+            getService('dbal_connection')->delete(
                 'advertisements_positions',
                 [ 'advertisement_id' => $data['id'] ]
             );
@@ -597,7 +597,7 @@ class Advertisement extends Content
         }
 
         $sql = 'INSERT INTO `advertisements_positions`(`advertisement_id`, `position_id`) VALUES %s';
-        $rs  = getService('dbal_connection')->executeUpdate(sprintf($sql, implode(', ', $positions)));
+        getService('dbal_connection')->executeUpdate(sprintf($sql, implode(', ', $positions)));
 
         return true;
     }

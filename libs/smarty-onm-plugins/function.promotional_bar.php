@@ -2,7 +2,7 @@
 
 function smarty_function_promotional_bar($params, &$smarty)
 {
-    $output  = '';
+    $output = '';
 
     $enabled = getService('core.security')->hasExtension('PROMOTIONAL_BAR');
 
@@ -108,7 +108,7 @@ function smarty_function_promotional_bar($params, &$smarty)
                 </script>';
 
         // Simple html promotional bar
-        $output  = '<link rel="stylesheet" type="text/css" href="/assets/css/promotional_bar.css">
+        $output = '<link rel="stylesheet" type="text/css" href="/assets/css/promotional_bar.css">
                 <div id="onm-bar">
                     <div class="content">
                         <div class="logo">

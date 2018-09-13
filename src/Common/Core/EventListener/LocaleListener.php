@@ -148,7 +148,6 @@ class LocaleListener implements EventSubscriberInterface
         if (!defined('CURRENT_LANGUAGE_SHORT')) {
             define('CURRENT_LANGUAGE_SHORT', $this->locale->getLocaleShort());
         }
-
     }
 
     /**

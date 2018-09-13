@@ -83,6 +83,8 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      *
      * @param InputInterface  $input  An InputInterface instance.
      * @param OutputInterface $output An OutputInterface instance.
+     *
+     * @return int|null
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -154,6 +156,8 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      *
      * @param  Instance $i       The instance.
      * @param  array    $options Whether to get the Alexa's rank.
+     *
+     * @return boolean
      */
     private function getInstanceInfo(&$i, $options)
     {
