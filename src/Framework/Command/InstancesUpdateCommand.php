@@ -130,7 +130,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
 
         if (count($instances) == 0) {
             $output->writeln('No instances');
-            return;
+            return 1;
         }
 
         foreach ($instances as $instance) {
@@ -149,6 +149,9 @@ class InstancesUpdateCommand extends ContainerAwareCommand
                 );
             }
         }
+
+        // No errors
+        return 0;
     }
 
     /**
