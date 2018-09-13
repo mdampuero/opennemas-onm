@@ -15,7 +15,6 @@ function smarty_function_script_tag($params, &$smarty)
         return;
     }
 
-    $output = '';
     $src    = $params['src'];
     $mtime  = DEPLOYED_AT;
     $server = '';

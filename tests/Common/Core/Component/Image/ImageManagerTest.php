@@ -9,7 +9,6 @@
  */
 namespace Tests\Common\Core\Component\Image;
 
-use Common\Core\Component\Image\ImageManager;
 use PHPUnit\Framework\TestCase;
 use Imagine\Image\ImageInterface;
 use Tests\Common\Core\Component\Image\BoxMockTest;

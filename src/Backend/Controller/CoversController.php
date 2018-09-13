@@ -322,8 +322,6 @@ class CoversController extends Controller
                     \Onm\FilesManager::createDirectory($path);
                 }
 
-                $uploadStatus = false;
-
                 $file = $request->files->get('cover');
 
                 $uploadStatus = $file->isValid() && $file->move(realpath($path), $data['name']);

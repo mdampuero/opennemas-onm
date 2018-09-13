@@ -14,7 +14,8 @@
  *
  * @param array $params  Parameters of smarty function
  * @param Smarty $smarty Object reference to Smarty class
- * @return string Return a HTML code of the message board
+ *
+ * @return null|string Return a HTML code of the message board
  */
 function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
 {
@@ -22,12 +23,7 @@ function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
         return;
     }
 
-    if (!isset($params['name'])) {
-        $output = '';
-    }
-
     $modules = explode(',', $params['name']);
-    $output  = '';
 
     if (count($modules) > 1) {
         $returnContent = false;

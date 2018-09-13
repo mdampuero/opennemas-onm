@@ -36,7 +36,7 @@ class WebServiceController extends Controller
 
         Defaults::$smartAutoRouting = false;
 
-        $r = new Restler();
+        $r            = new Restler();
         $r->container = $this->container;
         $r->setSupportedFormats('JsonFormat', 'XmlFormat');
         $r->addAPIClass('WebService\Handlers\Ads');
@@ -55,6 +55,5 @@ class WebServiceController extends Controller
         $r->addAuthenticationClass('Onm\Restler\OnmAuth');
 
         $r->handle();
-        return;
     }
 }

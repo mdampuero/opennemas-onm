@@ -63,40 +63,38 @@ class ClientRepository extends BaseRepository
         $this->api->post($criteria);
         $this->api->request();
 
-        $response = [];
-
-        if ($this->api->success()) {
-            $response = $this->api->getResponse();
-
-            if (empty($clients)) {
-                $clients = [];
-            }
-
-            if (array_key_exists('clients', $response)
-                && array_key_exists('client', $response['clients'])
-            ) {
-                if ($response['clients']['@attributes']['total'] == 1) {
-                    $id = $response['clients']['client']['client_id'];
-
-
-                    $response['clients']['client' ] = [
-                        $response['clients']['client' ]
-                    ];
-                }
-
-                $response = $response['clients']['client'];
-
-                foreach ($response as $data) {
-                    $id = $data['client_id'];
-
-                    $clients[] = new Client($this->converter->objectify($data));
-                }
-            }
-
-            return $clients;
+        if (!$this->api->success()) {
+            throw new InvalidCriteriaException($criteria);
         }
 
-        throw new InvalidCriteriaException($criteria);
+        $response = $this->api->getResponse();
+
+        if (empty($clients)) {
+            $clients = [];
+        }
+
+        if (array_key_exists('clients', $response)
+            && array_key_exists('client', $response['clients'])
+        ) {
+            if ($response['clients']['@attributes']['total'] == 1) {
+                $id = $response['clients']['client']['client_id'];
+
+
+                $response['clients']['client' ] = [
+                    $response['clients']['client' ]
+                ];
+            }
+
+            $response = $response['clients']['client'];
+
+            foreach ($response as $data) {
+                $id = $data['client_id'];
+
+                $clients[] = new Client($this->converter->objectify($data));
+            }
+        }
+
+        return $clients;
     }
 
     /**

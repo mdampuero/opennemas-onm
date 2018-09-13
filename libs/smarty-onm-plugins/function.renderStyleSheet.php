@@ -7,8 +7,6 @@
 
 function smarty_function_renderStyleSheet($params, &$smarty)
 {
-    $output = "";
-
      // Initialicing parameters
     $current = (isset($params['current']) ? $params['current'] : null);
     $items   = (isset($params['items']) ? $params['items'] : null);
@@ -49,22 +47,6 @@ function smarty_function_renderStyleSheet($params, &$smarty)
 
     }
 
-    /*
-    $file ="{$path}front-$current.css";
-    $mtime = '?';
-    if (file_exists($file)) {
-        $mtime .= filemtime($file);
-    }
-    $handle = fopen($resource, "a");
-    $output ="";
-    if ($handle) {
-        $datawritten = fwrite($handle, $rules);
-        fclose($handle);
-    } else {
-        echo "There was a problem while trying to log your message.";
-    }
-    $output ="media="screen,projection" href="{$file}{$mtime}\" type="text/css" rel="stylesheet">";
-    */
     $output ="<style type=\"text/css\"> {$rules} </style>";
 
     return $output;

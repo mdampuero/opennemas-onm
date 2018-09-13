@@ -10,7 +10,6 @@
 
 namespace BackendWebService\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -75,6 +74,7 @@ class MenusController extends ContentController
      * Deletes a menu.
      *
      * @param  Request      $request     The request object.
+     *
      * @return JsonResponse              The response object.
      */
     public function deleteAction($id)

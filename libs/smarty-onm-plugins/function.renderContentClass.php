@@ -9,7 +9,6 @@ function smarty_function_renderContentClass($params, &$smarty) {
         return;
     }
 
-    $item = $params['item'];
     if ($params['category'] == 'home') {
         $category = 0;
     } else {

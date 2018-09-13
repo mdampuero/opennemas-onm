@@ -391,7 +391,6 @@ class EntityManager extends BaseManager
             $criterias,
             $result
         );
-        $count = 0;
 
         for ($count = 0; $count < count($result[0]); $count++) {
             $value = $result[1][$count];

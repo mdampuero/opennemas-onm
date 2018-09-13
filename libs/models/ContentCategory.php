@@ -344,7 +344,7 @@ class ContentCategory implements \JsonSerializable
         $conn = getService('dbal_connection');
         try {
             $conn->beginTransaction();
-            $rs = $conn->update(
+            $conn->update(
                 'content_categories',
                 [
                     'title'               => $data['title'],
@@ -361,7 +361,7 @@ class ContentCategory implements \JsonSerializable
 
             if ($data['subcategory']) {
                 // We look at subcategories and wee add them to their parent
-                $rs = $conn->update(
+                $conn->update(
                     'content_categories',
                     [ 'fk_content_category' => $data['subcategory'] ],
                     [ 'fk_content_category' => $data['id'] ]
@@ -369,12 +369,15 @@ class ContentCategory implements \JsonSerializable
             }
 
             $conn->commit();
+
             dispatchEventWithParams('category.update', ['category' => $this]);
 
             return true;
         } catch (\Exception $e) {
             getService('error.log')->error($e->getTraceAsString());
+
             $conn->rollBack();
+
             return false;
         }
     }

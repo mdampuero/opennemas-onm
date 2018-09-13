@@ -9,7 +9,6 @@
  */
 namespace ManagerWebService\EventListener;
 
-use Common\Core\Component\Security\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;

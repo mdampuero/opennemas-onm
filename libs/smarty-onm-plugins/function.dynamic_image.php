@@ -1,8 +1,6 @@
 <?php
 function smarty_function_dynamic_image($params, &$smarty)
 {
-    $output = "";
-
     if (empty($params['src'])) {
         return;
     }

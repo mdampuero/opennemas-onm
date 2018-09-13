@@ -18,11 +18,10 @@
  */
 function smarty_function_json_decode($params, &$smarty)
 {
-    $output = '';
-    
     if(!isset($params['value'])) {
         $smarty->_trigger_fatal_error('[plugin] json_decode needs a "value" param');
-        return;
+
+        return '';
     }
     
     $json  = $params['value'];    

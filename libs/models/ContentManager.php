@@ -1170,11 +1170,9 @@ class ContentManager
         $table       = tableize($contentType);
         $contentType = underscore($contentType);
 
-        $whereSQL = '';
+        $whereSQL = 'AND in_litter=0';
         if (!is_null($filter)) {
             $whereSQL = ' AND ' . $filter;
-        } else {
-            $whereSQL = 'AND in_litter=0';
         }
 
         if (intval($categoryID) > 0) {
@@ -1610,7 +1608,7 @@ class ContentManager
      * @param int $id the content type id
      * @param string $ucfirst whether to apply the ucfirst function
      *
-     * @return string the content type name
+     * @return boolean|string the content type name
      */
     public static function getContentTypeNameFromId($id, $ucfirst = false)
     {
@@ -1618,9 +1616,7 @@ class ContentManager
             return false;
         }
 
-        if (!is_numeric($id)) {
-            $name = ($ucfirst === true) ? ucfirst($id) : strtolower($id);
-        } else {
+        if (is_numeric($id)) {
             $contentTypes = \ContentManager::getContentTypes();
             foreach ($contentTypes as $types) {
                 if ($types['pk_content_type'] == $id) {
@@ -1644,7 +1640,7 @@ class ContentManager
     public function getContents($contentIds)
     {
         $contents = [];
-        $content  = new Content();
+
         if (is_array($contentIds) && count($contentIds) > 0) {
             foreach ($contentIds as $contentId) {
                 if ($contentId <= 0) {

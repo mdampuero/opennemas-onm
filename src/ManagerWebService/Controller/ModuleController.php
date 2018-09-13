@@ -42,10 +42,6 @@ class ModuleController extends Controller
 
         $modules = array_map(function ($a) {
             return $a->uuid;
-            return [
-                'id'   => $a->uuid,
-                'name' => $a->uuid
-            ];
         }, $modules);
 
         return new JsonResponse([ 'extensions' => $modules ]);

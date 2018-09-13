@@ -1,7 +1,6 @@
 <?php
 function smarty_function_render_video($params, &$smarty)
 {
-    $output = '';
     $video  = $params['video'];
 
     if (isset($video->video_content_replaced)) {

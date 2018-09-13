@@ -740,8 +740,6 @@ class Content implements \JsonSerializable, CsvSerializable
                         'cat_name'   => $catName,
                     ]
                 );
-            } else {
-                $catName = $this->category_name;
             }
 
             $this->tag_ids = $this->addTags(is_array($data['tag_ids']) ? $data['tag_ids'] : []);
@@ -1581,16 +1579,14 @@ class Content implements \JsonSerializable, CsvSerializable
     */
     public function isScheduled($now = null)
     {
-        $now   = new \DateTime($now);
-        $start = new \DateTime($this->starttime);
-        $end   = new \DateTime($this->endtime);
-
         if (empty($this->starttime)) {
             return false;
         }
 
-        // If the starttime is equals to and endtime (wrong values), this is not
-        // scheduled
+        $start = new \DateTime($this->starttime);
+        $end   = new \DateTime($this->endtime);
+
+        // If the starttime is equals to and endtime (wrong values), this is not scheduled
         //
         // TODO: Remove this checking when values fixed in database
         if ($start->getTimeStamp() - $end->getTimeStamp() == 0) {
@@ -1788,7 +1784,6 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         if (count($relations) > 0) {
-            $relatedContents = [];
             $relatedContents = getService('entity_repository')->findMulti($relations);
 
             // Filter out not ready for publish contents.

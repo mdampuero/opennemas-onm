@@ -412,8 +412,8 @@ class FrontpageVersionService extends OrmService
         $cacheId    = empty($frontpageVersionId) ?
             'frontpage_elements_map_' . $categoryId :
             'frontpage_elements_map_' . $categoryId . '_' . $frontpageVersionId;
-        $cache      = $this->container->get('cache');
-        $contentIds = $cache->fetch($cacheId);
+
+        $contents = $this->container->get('cache')->fetch($cacheId);
     }
 
     private function setFrontpageDataFromCache($categoryId, $frontpageVersionId, $frontpageVersion)
@@ -422,7 +422,8 @@ class FrontpageVersionService extends OrmService
             'frontpage_elements_map_' . $categoryId :
             'frontpage_elements_map_' . $categoryId . '_' . $frontpageVersionId;
         $cache      = $this->container->get('cache');
-        $contentIds = $cache->save($cacheId, $frontpageVersion);
+
+        return $cache->save($cacheId, $frontpageVersion);
     }
 
     private function invalidationMethod($categoryId, $frontpageId)

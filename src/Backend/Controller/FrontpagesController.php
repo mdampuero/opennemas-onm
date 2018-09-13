@@ -113,8 +113,6 @@ class FrontpagesController extends Controller
      */
     public function savePositionsAction(Request $request)
     {
-        $savedProperly         = false;
-        $validReceivedData     = false;
         $dataPositionsNotValid = false;
 
         // Get application logger
@@ -274,12 +272,6 @@ class FrontpagesController extends Controller
                 'error',
                 _('Layout or category not valid.')
             );
-        }
-
-        if ($category == 0) {
-            $section = 'home';
-        } else {
-            $section = $category;
         }
 
         $this->get('core.dispatcher')->dispatch(

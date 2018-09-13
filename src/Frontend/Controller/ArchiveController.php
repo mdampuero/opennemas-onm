@@ -14,7 +14,6 @@
  */
 namespace Frontend\Controller;
 
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -152,7 +151,6 @@ class ArchiveController extends Controller
         $day          = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
         $path         = "{$year}/{$month}/{$day}";
-        $html         = '';
         $file         = MEDIA_PATH . "/library/{$path}/{$categoryName}.html";
         $url          = "/archive/content/{$path}/";
 

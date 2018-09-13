@@ -270,7 +270,6 @@ class ContentController extends Controller
     {
         $this->hasRoles(__FUNCTION__, 'trash');
 
-        $em      = $this->get('entity_repository');
         $errors  = [];
         $success = [];
         $updated = [];
@@ -384,7 +383,6 @@ class ContentController extends Controller
     {
         $this->hasRoles(__FUNCTION__, $contentType);
 
-        $em      = $this->get('entity_repository');
         $errors  = [];
         $success = [];
         $updated = [];
@@ -451,7 +449,6 @@ class ContentController extends Controller
      */
     public function emptyTrashAction()
     {
-        $em      = $this->get('entity_repository');
         $errors  = [];
         $success = [];
         $updated = [];
@@ -872,7 +869,6 @@ class ContentController extends Controller
      */
     protected function hasRoles($action, $contentType)
     {
-        $permissions = [];
         $types[]     = $contentType;
 
         // Add all admin permissions for generic list (trash,)

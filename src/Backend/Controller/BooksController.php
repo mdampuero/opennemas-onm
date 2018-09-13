@@ -165,7 +165,6 @@ class BooksController extends Controller
 
         if (!empty($id)) {
             $book->setPosition($data['position']);
-            $book = $book->read($id);
 
             $request->getSession()->getFlashBag()->add(
                 'success',

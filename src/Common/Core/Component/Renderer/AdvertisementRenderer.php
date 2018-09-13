@@ -428,10 +428,6 @@ class AdvertisementRenderer
             return $a['device'] === 'desktop';
         });
 
-        if (empty($size)) {
-            $size = $sizes;
-        }
-
         $size = array_shift($sizes);
 
         return sprintf(

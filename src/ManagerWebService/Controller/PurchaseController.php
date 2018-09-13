@@ -10,7 +10,6 @@
 namespace ManagerWebService\Controller;
 
 use Common\Core\Annotation\Security;
-use Framework\ORM\Entity\Purchase;
 use League\Csv\Writer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;

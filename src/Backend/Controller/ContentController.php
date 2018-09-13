@@ -14,7 +14,6 @@
  */
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
@@ -23,6 +22,8 @@ use Common\Core\Controller\Controller;
  * Handles common actions for contents.
  *
  * @package Backend_Controllers
+ *
+ * TODO: Maybe this class is deprecated as of now we are using the BackendWebService
  */
 class ContentController extends Controller
 {

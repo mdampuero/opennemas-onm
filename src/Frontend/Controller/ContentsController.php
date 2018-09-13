@@ -130,11 +130,12 @@ class ContentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * TODO: "Esto es infumable, moving on" Fran dixit at some point
      */
     public function shareByEmailAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $isValid = false;
             $errors  = [];
 
             $response = $request->request->filter('g-recaptcha-response', '', FILTER_SANITIZE_STRING);
@@ -187,9 +188,11 @@ class ContentsController extends Controller
             if (empty($senderEmail)) {
                 $errors [] = _('Fill your Email address');
             }
+
             if (empty($senderName)) {
                 $errors [] = _('Complete your name');
             }
+
             $cleanRecipients = [];
             foreach ($recipients as $recipient) {
                 if (filter_var($recipient, FILTER_VALIDATE_EMAIL)) {

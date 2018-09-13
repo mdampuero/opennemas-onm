@@ -30,13 +30,6 @@ class ArticleController extends Controller
     {
         $article = new \Article();
 
-        $postReq = $request->request;
-        $params  = $postReq->get('params', []);
-
-        if (empty($params)) {
-            $params = [];
-        }
-
         $data             = $request->request->all();
         $data['category'] = $data['pk_fk_content_category'];
         $msg              = $this->get('core.messenger');

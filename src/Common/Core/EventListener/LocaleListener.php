@@ -12,7 +12,6 @@ namespace Common\Core\EventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * The LocaleListener class configures the system locale basing on the request
@@ -73,7 +72,7 @@ class LocaleListener implements EventSubscriberInterface
     /**
      * Configures the Locale service basing on the current request.
      */
-    protected function configureRequestLocale($event)
+    protected function configureRequestLocale(GetResponseEvent $event)
     {
         $request = $event->getRequest();
         $slug    = null;

@@ -363,12 +363,13 @@ class Escaper
      * @param string $string
      * @param string $to
      * @param array|string $from
+     *
      * @throws Exception\RuntimeException
+     *
      * @return string
      */
     protected function convertEncoding($string, $to, $from)
     {
-        $result = '';
         if (function_exists('iconv')) {
             $result = iconv($from, $to, $string);
         } elseif (function_exists('mb_convert_encoding')) {
@@ -384,6 +385,7 @@ class Escaper
         if ($result === false) {
             return ''; // return non-fatal blank string on encoding errors from users
         }
+
         return $result;
     }
 }
