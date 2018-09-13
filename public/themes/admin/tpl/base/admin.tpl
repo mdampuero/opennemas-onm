@@ -95,7 +95,7 @@
     {block name="header"}
     <header class="header navbar navbar-inverse" ng-controller="NotificationCtrl" ng-init="{block name="ng-init"}{/block}getLatest()">
       <div class="navbar-inner">
-        {if !in_array('es.openhost.module.whiteLabel', $app.instance->activated_modules)}
+        {if is_array($app.instance->activated_modules) && !in_array('es.openhost.module.whiteLabel', $app.instance->activated_modules)}
         <div class="header-seperation">
           <a class="header-logo pull-left" href="{url name=admin_welcome}">
             <h1>
