@@ -100,14 +100,10 @@ EOF
                 return $value;
             };
 
-            $instance = $dialog->askHiddenResponseAndValidate(
+            $instance = $dialog->ask(
                 $output,
-                'From what instance do you want to create the backup ('
-                . implode(', ', $instanceNames)
-                . '): ',
-                $validator,
-                5,
-                true
+                'From what instance do you want to create the backup (' . implode(', ', $instanceNames) . '): ',
+                $validator
             );
         } elseif (!in_array($instance, $instanceNames)) {
             throw new \Exception('Instance name not valid');

@@ -38,9 +38,9 @@ class ClearConfigCommand extends ContainerAwareCommand
 
         try {
             $cache->remove('orm_' . DEPLOYED_AT);
-            $output->writeln('<info>[OK]</>   ORM configuration deleted from cache');
+            $output->writeln('<info>[OK]</info>   ORM configuration deleted from cache');
         } catch (\Exception $e) {
-            $output->writeln('<fg=red>[FAIL]</> Unable to delete the ORM configuration from cache');
+            $output->writeln('<fg=red>[FAIL]</fg> Unable to delete the ORM configuration from cache');
         }
     }
 }

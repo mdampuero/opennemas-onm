@@ -91,10 +91,10 @@ EOF
 
         if (empty($theme) && $remote) {
             $this->auth = $this->askCredentials($input, $output);
-            $output->writeln('Getting themes from <info>bitbucket</>...');
+            $output->writeln('Getting themes from <info>bitbucket</info>...');
 
             $this->themes = $this->getThemes();
-            $output->writeln('  <info>' . count($this->themes) . ' themes found</>');
+            $output->writeln('  <info>' . count($this->themes) . ' themes found</info>');
         }
 
         chdir($this->basePath);
@@ -104,16 +104,16 @@ EOF
         }
 
         if (empty($this->themes)) {
-            $this->output->writeln('<error>No themes to install</>');
+            $this->output->writeln('<error>No themes to install</error>');
             return;
         }
 
-        $this->output->write('Installing <info>' . count($this->themes) . '</> themes...');
+        $this->output->write('Installing <info>' . count($this->themes) . '</info> themes...');
         $this->installThemes();
 
         $this->output->write("\nGenerating <fg=blue>deploy number</>... ");
         $this->generateDeployFile();
-        $this->output->writeln('<info>DONE</>');
+        $this->output->writeln('<info>DONE</info>');
     }
 
     /**
@@ -125,7 +125,7 @@ EOF
     {
         $helper = $this->getHelper('question');
 
-        $this->output->writeln('Please enter your <info>bitbucket</> credentials...');
+        $this->output->writeln('Please enter your <info>bitbucket</info> credentials...');
 
         $question = new Question('  Username: ');
         $username = $helper->ask($this->input, $this->output, $question);
@@ -168,18 +168,18 @@ EOF
         $process->run(function ($type, $buffer) use ($output, $cmd) {
             if (Process::ERR === $type) {
                 if (!$output->isVerbose()) {
-                    $output->write('<error>FAIL</> ');
+                    $output->write('<error>FAIL</error> ');
                 }
 
                 if ($output->isVerbose()) {
-                    $output->write("\n\t<error>" . $buffer . "</>");
+                    $output->write("\n\t<error>" . $buffer . "</error>");
                 }
 
                 return Process::ERR;
             }
 
             if (!$output->isVerbose()) {
-                $output->write('<info>DONE</> ');
+                $output->write('<info>DONE</info> ');
             }
 
             if ($output->isVerbose()) {
@@ -195,10 +195,10 @@ EOF
      */
     protected function generateDeployFile()
     {
-        $time = time();
+        $time     = time();
         $contents = "<?php define('THEMES_DEPLOYED_AT', '$time');";
 
-        file_put_contents(APPLICATION_PATH.'/.deploy.themes.php', $contents);
+        file_put_contents(APPLICATION_PATH . '/.deploy.themes.php', $contents);
     }
 
     /**
@@ -245,9 +245,9 @@ EOF
     protected function installThemes()
     {
         foreach ($this->themes as $theme) {
-            $this->output->write("\n  - Installing <fg=blue>$theme</>... ");
+            $this->output->write("\n  - Installing <fg=blue>$theme</fg>... ");
 
-            if (file_exists($this->basePath.'/public/themes/' . $theme)) {
+            if (file_exists($this->basePath . '/public/themes/' . $theme)) {
                 $this->pullTheme($theme);
             } else {
                 $this->cloneTheme($theme);
@@ -262,7 +262,7 @@ EOF
      */
     protected function pullTheme($theme)
     {
-        chdir($this->basePath.'/public/themes/' . $theme);
+        chdir($this->basePath . '/public/themes/' . $theme);
         $this->execProcess('git pull');
         chdir($this->basePath);
     }

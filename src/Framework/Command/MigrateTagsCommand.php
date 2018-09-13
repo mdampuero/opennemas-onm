@@ -54,7 +54,7 @@ class MigrateTagsCommand extends ContainerAwareCommand
 
         $loader->loadInstanceFromInternalName($instance);
 
-        $output->write('Migrating instance <fg=blue>' . $instance . '</>...');
+        $output->write('Migrating instance <fg=blue>' . $instance . '</fg>...');
 
         $conn  = $this->getContainer()->get('orm.manager')->getConnection('instance');
         $cache = $this->getContainer()->get('cache.manager')->getConnection('instance');
@@ -62,7 +62,8 @@ class MigrateTagsCommand extends ContainerAwareCommand
         $sql = 'select id, name'
             . ' from tags'
             . ' where name regexp'
-            . ' "(á|à|ã|ä|â|Á|À|Ã|Ä|Â|é|è|ë|ê|É|È|Ë|Ê|í|ì|ï|î|Í|Ì|Ï|Î|ó|ò|õ|ö|ô|Ó|Ò|Õ|Ö|Ô|ú|ù|ü|û|Ú|Ù|Ü|Û)+"';
+            . ' "(á|à|ã|ä|â|Á|À|Ã|Ä|Â|é|è|ë|ê|É|È|Ë|Ê|í|ì|ï|î|Í|Ì|Ï|Î|ó|ò|õ|ö|ô|Ó|Ò'
+            . '|Õ|Ö|Ô|ú|ù|ü|û|Ú|Ù|Ü|Û)+"';
         $rs  = $conn->fetchAll($sql);
 
         $output->write("\nMigrating <info>" . count($rs) . '</> contents...');
@@ -80,13 +81,13 @@ class MigrateTagsCommand extends ContainerAwareCommand
             }
 
             if ($output->isVeryVerbose()) {
-                $output->writeln("    <fg=red>Before</>: {$r['name']}");
+                $output->writeln("    <fg=red>Before</fg>: {$r['name']}");
             }
 
             $name = \Onm\StringUtils::normalizeMetadata($r['name']);
 
             if ($output->isVeryVerbose()) {
-                $output->writeln("    <info>After</>:  $name\n");
+                $output->writeln("    <info>After</info>:  $name\n");
             }
 
             if (!$preview) {
@@ -102,9 +103,9 @@ class MigrateTagsCommand extends ContainerAwareCommand
         }
 
         if (!$output->isVerbose()) {
-            $output->writeln(" <info>DONE</>");
+            $output->writeln(" <info>DONE</info>");
         } else {
-            $output->writeln(sprintf('<info>%s contents updated successfully</>', $updated));
+            $output->writeln(sprintf('<info>%s contents updated successfully</info>', $updated));
         }
 
         if ($errors > 0) {
