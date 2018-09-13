@@ -10,7 +10,6 @@
 namespace Manager\Controller;
 
 use Common\Core\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Handles the actions for the manager welcome page

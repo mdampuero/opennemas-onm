@@ -12,7 +12,6 @@ namespace Tests\Framework\ORM\FreshBooks\Repository;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Client;
 use Common\ORM\FreshBooks\Persister\ClientPersister;
-use Freshbooks\FreshBooksApi;
 
 /**
  * Defines test cases for ClientPersister class.

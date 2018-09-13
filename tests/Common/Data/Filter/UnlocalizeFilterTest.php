@@ -10,7 +10,6 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\UnlocalizeFilter;
-use Common\ORM\Core\Entity;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**

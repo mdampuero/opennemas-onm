@@ -1,7 +1,6 @@
 <?php
 namespace Tests\Common\Core\Component\Collector;
 
-use Common\Core\Component\Collector\BrandCollector;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**

@@ -11,9 +11,6 @@ namespace Common\ORM\Core\Validation;
 
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Exception\InvalidEntityException;
-use Common\ORM\Core\Validation\Validable;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * The Validator class validates entities basing on the entity metadata.

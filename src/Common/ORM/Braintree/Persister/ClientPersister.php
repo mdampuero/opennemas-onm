@@ -10,7 +10,6 @@
 namespace Common\ORM\Braintree\Persister;
 
 use Common\ORM\Core\Entity;
-use Common\ORM\Core\Exception\EntityNotFoundException;
 
 /**
  * The ClientPersister class defines actions to create, update and remove

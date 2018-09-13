@@ -3,7 +3,6 @@
  * -------------------------------------------------------------
  * File:        function.meta_webmaster_bing.php
  */
-use \Onm\Settings as s;
 
 function smarty_function_meta_webmaster_bing($params, &$smarty) {
 

@@ -45,8 +45,6 @@ class ClientRepository extends BaseRepository
         } catch (\Exception $e) {
             throw new EntityNotFoundException($this->metadata->name, $id, $e->getMessage());
         }
-
-        throw new EntityNotFoundException($this->metadata->name, $id);
     }
 
     /**

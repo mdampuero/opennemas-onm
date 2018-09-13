@@ -10,7 +10,6 @@
 namespace Tests\Common\Cache\File;
 
 use Common\Cache\File\File;
-use Common\ORM\Core\Entity;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**

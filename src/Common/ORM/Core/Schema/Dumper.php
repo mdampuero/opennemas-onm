@@ -10,7 +10,6 @@
 namespace Common\ORM\Core\Schema;
 
 use Doctrine\DBAL\Schema\Schema as DoctrineSchema;
-use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Exception\InvalidSchemaException;
 
 /**

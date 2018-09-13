@@ -12,7 +12,6 @@ namespace Framework\Tests\ORM\FreshBooks\Repository;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Client;
 use Common\ORM\FreshBooks\Repository\ClientRepository;
-use Freshbooks\FreshBooksApi;
 
 /**
  * Defines test cases for ClientRepository class.

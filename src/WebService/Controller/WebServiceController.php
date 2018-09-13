@@ -11,9 +11,7 @@ namespace WebService\Controller;
 
 use Luracast\Restler\Restler;
 use Luracast\Restler\Defaults;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Restler\OnmAuth;
 
 /**
  * Handles the actions for the web service

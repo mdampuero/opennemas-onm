@@ -10,7 +10,6 @@
 namespace tests\Common\ORM\File\Repository;
 
 use Common\ORM\Core\Metadata;
-use Common\ORM\Database\Repository\InstanceRepository;
 
 class InstanceRepositoryTest extends \PHPUnit_Framework_TestCase
 {

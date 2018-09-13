@@ -11,8 +11,6 @@ namespace Frontend\Controller;
 
 use Common\Core\Annotation\BotDetector;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 

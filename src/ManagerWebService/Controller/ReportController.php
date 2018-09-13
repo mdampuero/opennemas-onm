@@ -77,7 +77,7 @@ class ReportController extends Controller
 
         $writer = Writer::createFromFileObject(new \SplTempFileObject());
         $writer->setDelimiter(';');
-        $writer->setEncodingFrom('utf-8');
+        $writer->setInputEncoding('utf-8');
         $headers = ['id', 'name', 'contact', 'domains', 'created', 'last_activity'];
         $writer->insertOne($headers);
 

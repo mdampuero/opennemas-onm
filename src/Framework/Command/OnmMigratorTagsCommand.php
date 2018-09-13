@@ -12,10 +12,7 @@ namespace Framework\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Parser;
-use Common\ORM\Entity\Tag;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class OnmMigratorTagsCommand extends ContainerAwareCommand

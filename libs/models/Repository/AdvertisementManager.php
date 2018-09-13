@@ -9,8 +9,6 @@
  */
 namespace Repository;
 
-use Onm\Cache\CacheInterface;
-use Onm\Database\DbalWrapper;
 
 /**
  * An EntityRepository serves as a repository for entities with generic as well

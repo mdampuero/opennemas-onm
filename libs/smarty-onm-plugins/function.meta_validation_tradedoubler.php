@@ -4,7 +4,6 @@
  * File: function.meta_validation_tradedoubler.php
  * -------------------------------------------------------------
  */
-use \Onm\Settings as s;
 
 function smarty_function_meta_validation_tradedoubler($params, &$smarty) {
 

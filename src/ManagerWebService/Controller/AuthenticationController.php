@@ -13,11 +13,9 @@ namespace ManagerWebService\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 use Common\Core\Controller\Controller;
 
@@ -48,6 +46,7 @@ class AuthenticationController extends Controller
             $referer = $this->request->getSession()->get('_security.manager.target_path');
         }
 
+        // TODO: SecurityContext class is deprecated
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $request->attributes
                 ->get(SecurityContext::AUTHENTICATION_ERROR);

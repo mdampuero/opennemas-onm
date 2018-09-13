@@ -12,7 +12,6 @@ namespace Tests\Framework\ORM\FreshBooks\Repository;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Payment;
 use Common\ORM\FreshBooks\Persister\PaymentPersister;
-use Freshbooks\FreshBooksApi;
 
 /**
  * Defines test cases for PaymentPersister class.

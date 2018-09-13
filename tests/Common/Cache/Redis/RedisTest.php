@@ -10,7 +10,6 @@
 namespace Tests\Common\Cache\Redis;
 
 use Common\Cache\Redis\Redis;
-use Common\ORM\Core\Entity;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**

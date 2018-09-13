@@ -13,8 +13,6 @@ use Common\Core\Annotation\Security;
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Intl\Intl;
 
 class AuthorController extends UserController
 {

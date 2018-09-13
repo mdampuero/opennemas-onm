@@ -10,7 +10,6 @@ namespace WebService\Handlers;
 
 use Luracast\Restler\Format\XmlFormat;
 use Luracast\Restler\RestException;
-use Luracast\Restler\Data\Object;
 
 /**
  * Handles REST actions for news agency.

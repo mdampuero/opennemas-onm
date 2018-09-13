@@ -9,9 +9,6 @@
  */
 namespace Framework\Migrator\Provider;
 
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\HttpFoundation\File\File;
-
 class EstrellaDigitalProvider extends JsonProvider
 {
 

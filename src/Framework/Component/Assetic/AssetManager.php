@@ -14,7 +14,6 @@ use Assetic\AssetManager as BaseAssetManager;
 use Assetic\AssetWriter;
 use Assetic\Cache\FilesystemCache;
 use Assetic\Factory\AssetFactory;
-use Symfony\Component\Yaml\Parser;
 
 /**
 * Base class for custom assets manager.

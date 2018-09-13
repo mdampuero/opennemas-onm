@@ -11,7 +11,6 @@ namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
-use Common\Core\Component\Validator\Validator;
 
 class TagController extends Controller
 {

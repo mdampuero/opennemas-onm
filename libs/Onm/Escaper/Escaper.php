@@ -9,8 +9,6 @@
  */
 namespace Onm\Escaper;
 
-use Onm\Escaper\Exception;
-
 /**
  * Context specific methods for use in secure output escaping
  */

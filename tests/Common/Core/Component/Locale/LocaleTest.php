@@ -9,7 +9,6 @@
  */
 namespace Tests\Common\Core\Component\Locale;
 
-use Common\Core\Component\Locale\Locale;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**

@@ -12,7 +12,6 @@ namespace Framework\Tests\ORM\FreshBooks\Repository;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Invoice;
 use Common\ORM\FreshBooks\Persister\InvoicePersister;
-use Freshbooks\FreshBooksApi;
 
 /**
  * Defines test cases for InvoicePersister class.

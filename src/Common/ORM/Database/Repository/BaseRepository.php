@@ -13,7 +13,6 @@ use Common\Cache\Core\Cache;
 use Common\ORM\Core\Oql\Sql\SqlTranslator;
 use Common\ORM\Database\Data\Converter\BaseConverter;
 use Common\ORM\Core\Connection;
-use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Repository;
 use Common\ORM\Core\Exception\EntityNotFoundException;

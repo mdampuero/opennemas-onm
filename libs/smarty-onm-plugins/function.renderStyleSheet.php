@@ -4,7 +4,6 @@
  * File:        function.renderStyleSheet.php
  * Get properties and render cascading style sheet in a file
  */
-use \Onm\Settings as s;
 
 function smarty_function_renderStyleSheet($params, &$smarty)
 {

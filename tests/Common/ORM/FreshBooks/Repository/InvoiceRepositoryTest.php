@@ -12,7 +12,6 @@ namespace Framework\Tests\ORM\FreshBooks\Repository;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Invoice;
 use Common\ORM\FreshBooks\Repository\InvoiceRepository;
-use Freshbooks\FreshBooksApi;
 
 class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
 {

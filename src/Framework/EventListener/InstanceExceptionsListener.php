@@ -11,15 +11,11 @@ namespace Framework\EventListener;
 
 use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
 use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 
 /**
  * Handles all instance-related exceptions.

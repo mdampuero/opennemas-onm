@@ -13,7 +13,6 @@ namespace Framework\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\Event;
-use Onm\Settings as s;
 
 /**
  * Handles all the events after content updates.

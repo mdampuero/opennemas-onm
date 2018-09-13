@@ -13,10 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Common\ORM\Entity\Instance;
-use Common\ORM\Entity\User;
 use Onm\Instance\InstanceCreator;
 use Common\Core\Controller\Controller;
-use Onm\Exception\InstanceNotConfiguredException;
 use Onm\Exception\DatabaseNotRestoredException;
 
 /**

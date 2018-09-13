@@ -3,7 +3,6 @@
  * -------------------------------------------------------------
  * File:        function.meta_webmaster_google.php
  */
-use \Onm\Settings as s;
 
 function smarty_function_meta_webmaster_google($params, &$smarty) {
 

@@ -2,10 +2,6 @@
 
 namespace BackendWebService\Controller;
 
-use Common\ORM\Entity\Client;
-use Common\ORM\Entity\Invoice;
-use Common\ORM\Entity\Payment;
-use Common\ORM\Entity\Purchase;
 use Common\Core\Controller\Controller;
 use Pdp\Parser;
 use Pdp\PublicSuffixListManager;

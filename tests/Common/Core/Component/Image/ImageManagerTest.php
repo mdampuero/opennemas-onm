@@ -11,10 +11,7 @@ namespace Tests\Common\Core\Component\Image;
 
 use Common\Core\Component\Image\ImageManager;
 use PHPUnit\Framework\TestCase;
-use Imagine\Image\Box;
-use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
-use Imagine\Imagick\Imagine;
 use Tests\Common\Core\Component\Image\BoxMockTest;
 use Tests\Common\Core\Component\Image\ImagineMockTest;
 

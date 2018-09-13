@@ -9,9 +9,7 @@
  */
 namespace Tests\Common\ORM\Core;
 
-use Common\Cache\Redis\Redis;
 use Common\Cache\Core\CacheManager;
-use Common\Cache\Core\Exception\InvalidConnectionException;
 
 /**
  * Defines test cases for CacheManager class.

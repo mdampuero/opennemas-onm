@@ -12,10 +12,8 @@ namespace Frontend\Controller;
 use Api\Exception\CreateExistingItemException;
 use Api\Exception\CreateItemException;
 use Api\Exception\GetItemException;
-use Api\Exception\GetListException;
 use Api\Exception\UpdateItemException;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

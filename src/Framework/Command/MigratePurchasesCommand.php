@@ -13,14 +13,8 @@
 namespace Framework\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Doctrine\DBAL\Schema\Schema;
-use Symfony\Component\Yaml\Yaml;
-
-use Common\ORM\Entity\Client;
 
 class MigratePurchasesCommand extends ContainerAwareCommand
 {
