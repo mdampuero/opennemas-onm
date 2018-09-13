@@ -158,11 +158,12 @@ function getUserRealIP()
 
         $entries = preg_split('@[, ]@', $_SERVER['HTTP_X_FORWARDED_FOR']);
 
-        reset($entries);
-        while (list(, $entry) = each($entries)) {
+
+        foreach ($entries as $entry) {
             $entry = trim($entry);
+
+            // http://www.faqs.org/rfcs/rfc1918.html
             if (preg_match("/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/", $entry, $ipList)) {
-                // http://www.faqs.org/rfcs/rfc1918.html
                 $privateIp = [
                     '/^0\./',
                     '/^127\.0\.0\.1/',
