@@ -2,3 +2,5 @@ Tasks To Do
 ===========
 
 - Remove ITEMS_PAGE constant (autoload.php and Opinion WS)
+- Move Themes description out of Themecontroller::getAvailableThemes action
+- Add php extensions in composer.json: gettext, json, curl, pdo, iconv
