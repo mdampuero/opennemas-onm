@@ -43,17 +43,10 @@ class BlacklistWordsValidator extends ConstraintValidator
         $value = (string) $value;
 
         if ($this->match($value, $constraint->words)) {
-            if ($this->context instanceof ExecutionContextInterface) {
-                $this->context->buildViolation($constraint->message)
-                    ->setParameter('{{ value }}', $this->formatValue($value))
-                    ->setCode(BlacklistWords::BLACKLIST_WORD_ERROR)
-                    ->addViolation();
-            } else {
-                $this->buildViolation($constraint->message)
-                    ->setParameter('{{ value }}', $this->formatValue($value))
-                    ->setCode(BlacklistWords::BLACKLIST_WORD_ERROR)
-                    ->addViolation();
-            }
+            $this->context->buildViolation($constraint->message)
+                ->setParameter('{{ value }}', $this->formatValue($value))
+                ->setCode(BlacklistWords::BLACKLIST_WORD_ERROR)
+                ->addViolation();
         }
     }
 
