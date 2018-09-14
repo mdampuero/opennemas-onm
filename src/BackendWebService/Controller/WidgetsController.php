@@ -22,7 +22,7 @@ class WidgetsController extends ContentController
      *
      * @return JsonResponse              The response in JSON format.
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request, $contentType = null)
     {
         $oql = $request->query->get('oql', '');
         $em  = $this->get('widget_repository');

@@ -112,6 +112,8 @@ class Entity extends DataObject implements Validable
 
     /**
      * Merge the current entity data with the given data.
+     *
+     * @return boolean
      */
     public function merge($data)
     {
@@ -122,10 +124,14 @@ class Entity extends DataObject implements Validable
         foreach ($data as $key => $value) {
             $this->{$key} = $value;
         }
+
+        return true;
     }
 
     /**
      * Initializes stored data to the current entity values.
+     *
+     * @return void
      */
     public function refresh()
     {
@@ -136,6 +142,8 @@ class Entity extends DataObject implements Validable
      * Removes a property from the list of changed properties.
      *
      * @param string $property The property to remove.
+     *
+     * @return void
      */
     public function setNotStored($property)
     {
@@ -146,6 +154,8 @@ class Entity extends DataObject implements Validable
      * Changes the origin for the user.
      *
      * @param string $origin The user's origin.
+     *
+     * @return void
      */
     public function setOrigin($origin)
     {

@@ -86,7 +86,7 @@ class NewsletterSubscribersController extends Controller
             } else {
                 $this->get('session')->getFlashBag()->add(
                     'error',
-                    sprintf(_('Unable to create the new subscriber: %s', $user->_errors))
+                    sprintf(_('Unable to create the new subscriber: %s'), $user->_errors)
                 );
             }
         }

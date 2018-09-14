@@ -90,7 +90,7 @@ EOF
         $theme  = $input->getArgument('theme');
 
         if (empty($theme) && $remote) {
-            $this->auth = $this->askCredentials($input, $output);
+            $this->auth = $this->askCredentials();
             $output->writeln('Getting themes from <info>bitbucket</info>...');
 
             $this->themes = $this->getThemes();

@@ -264,24 +264,26 @@ class VideosController extends Controller
         $id   = $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
 
-        if (!empty($id)) {
-            $video = new \Video($id);
-
-            // Delete related and relations
-            getService('related_contents')->deleteAll($id);
-
-            $video->delete($id, $this->getUser()->id);
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _("Video '{$video->title}' deleted successfully.")
-            );
-        } else {
+        if (empty($id)) {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 _('You must give an id to delete the video.')
             );
+
+            return new Response('failure', 404);
         }
+
+        $video = new \Video($id);
+
+        // Delete related and relations
+        getService('related_contents')->deleteAll($id);
+
+        $video->delete($id, $this->getUser()->id);
+
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            _("Video '{$video->title}' deleted successfully.")
+        );
 
         if (!$request->isXmlHttpRequest()) {
             return $this->redirect($this->generateUrl('admin_videos', [
@@ -435,6 +437,7 @@ class VideosController extends Controller
     {
         $positions = $request->request->get('positions');
         $result    = true;
+
         if (isset($positions)
             && is_array($positions)
             && count($positions) > 0
@@ -454,13 +457,13 @@ class VideosController extends Controller
             $cacheManager->delete('home|1');
         }
 
+
+        $msg = "<div class='alert alert-error'>"
+            . _("Unable to save the new positions. Please contact with your system administrator.")
+            . '<button data-dismiss="alert" class="close">×</button></div>';
         if ($msg) {
             $msg = "<div class='alert alert-success'>"
                 . _("Positions saved successfully.")
-                . '<button data-dismiss="alert" class="close">×</button></div>';
-        } else {
-            $msg = "<div class='alert alert-error'>"
-                . _("Unable to save the new positions. Please contact with your system administrator.")
                 . '<button data-dismiss="alert" class="close">×</button></div>';
         }
 

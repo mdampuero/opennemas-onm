@@ -72,7 +72,7 @@ class Special extends Content
             case 'uri':
                 if (empty($this->category_name)) {
                     $this->category_name =
-                        $this->loadCategoryName($this->pk_content);
+                        $this->loadCategoryName();
                 }
                 $uri = Uri::generate('special', [
                     'id'       => sprintf('%06d', $this->id),

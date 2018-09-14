@@ -203,7 +203,6 @@ class WebServiceController extends Controller
                     ],
                     $companyMail,
                     $params['base_domain'],
-                    $instance->external['site_language'],
                     $instance->plan
                 );
             }

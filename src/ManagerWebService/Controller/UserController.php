@@ -170,7 +170,7 @@ class UserController extends Controller
         return new JsonResponse([
             'results' => $users,
             'total'   => $total,
-            'extra'   => $this->getExtraData($users),
+            'extra'   => $this->getExtraData(),
         ]);
     }
 
