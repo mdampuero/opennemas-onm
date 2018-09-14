@@ -16,7 +16,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Tests the cache:redis command.
  */
-class CacheCommandTest extends \PHPUnit_Framework_TestCase
+class CacheCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
