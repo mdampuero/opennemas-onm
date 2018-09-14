@@ -15,7 +15,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Security;
+
 
 use Common\Core\Controller\Controller;
 
@@ -46,13 +47,12 @@ class AuthenticationController extends Controller
             $referer = $this->request->getSession()->get('_security.manager.target_path');
         }
 
-        // TODO: SecurityContext class is deprecated
-        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
+        if ($request->attributes->has(Security::AUTHENTICATION_ERROR)) {
             $error = $request->attributes
-                ->get(SecurityContext::AUTHENTICATION_ERROR);
+                ->get(Security::AUTHENTICATION_ERROR);
         } else {
             $error = $request->getSession()
-                ->get(SecurityContext::AUTHENTICATION_ERROR);
+                ->get(Security::AUTHENTICATION_ERROR);
         }
 
         if ($error) {
@@ -83,10 +83,7 @@ class AuthenticationController extends Controller
 
         $errors = $request->getSession()->getFlashbag()->get('error');
         if ($errors) {
-            $message = [
-                'type' => 'error',
-                'text' => $errors[0]
-            ];
+            $message = [ 'type' => 'error', 'text' => $errors[0] ];
         }
 
         $intention = time() . rand();
@@ -117,7 +114,8 @@ class AuthenticationController extends Controller
             'instance'    => $this->get('core.instance')->getData(),
             'instances'   => $this->get('core.security')->getInstances(),
             'permissions' => array_values($this->get('core.security')->getPermissions()),
-            'user'        => $this->get('core.user')->getData(),
+            'user'        => !empty($this->get('core.user')) ?
+                $this->get('core.user')->getData() : [],
         ]);
     }
 }

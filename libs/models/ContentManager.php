@@ -1726,11 +1726,11 @@ class ContentManager
     *
     * This is used for getting information from Onm Rest Api
     *
-    * @param $url the url we want to get contents from
+    * @param string $url the url we want to get contents from
     *
-    * @param $decodeJson if true apply json_decode before return content
+    * @param boolean $decodeJson if true apply json_decode before return content
     *
-    * @return false | the content retrieved by the url
+    * @return false the content retrieved by the url
     */
     public function getUrlContent($url, $decodeJson = false)
     {
