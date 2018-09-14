@@ -157,7 +157,7 @@ class DomainController extends Controller
      *
      * @param Request $request The request object.
      *
-     * @return JsonResponse The response object.
+     * @return null|JsonResponse The response object.
      */
     public function saveAction(Request $request)
     {
@@ -170,7 +170,7 @@ class DomainController extends Controller
             $ph->getPurchase($purchase);
 
             if (empty($nonce)) {
-                return;
+                return null;
             }
 
             $ph->pay($nonce);

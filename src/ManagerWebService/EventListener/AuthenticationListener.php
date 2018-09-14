@@ -24,14 +24,14 @@ class AuthenticationListener implements EventSubscriberInterface
     /**
      * The service container.
      *
-     * @param ServiceContainer
+     * @param \Symfony\Component\DependencyInjection\Container
      */
     protected $container;
 
     /**
      * Initializes the SecurityListener.
      *
-     * @param ServiceContainer $container The service container.
+     * @param \Symfony\Component\DependencyInjection\Container $container The service container.
      */
     public function __construct($container)
     {
@@ -49,7 +49,7 @@ class AuthenticationListener implements EventSubscriberInterface
     public function onKernelResponse(FilterResponseEvent $event)
     {
         if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
-            return;
+            return null;
         }
 
         $response = $event->getResponse();

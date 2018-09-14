@@ -32,7 +32,7 @@ function smarty_function_include_onm_stats_code($params, &$smarty)
         // Print the call to the plugin with the proper contentId
         $output .=
             '<script>
-                jQuery.onmStats({ content_id: \'' . $contentId . '\' });;
+                jQuery.onmStats({ content_id: \'' . $contentId . '\' });
             </script>';
     }
 

@@ -112,7 +112,7 @@ class Config
      *
      * @param string $configDir the directory
      *
-     * @return Config the clas
+     * @return Config the class
      */
     public function setConfigDir($configDir = '')
     {
@@ -218,7 +218,7 @@ class Config
      *
      * @param array $config the configuration to save
      *
-     * @return void
+     * @return boolean
      */
     public function save($config)
     {
@@ -242,6 +242,8 @@ class Config
 
     /**
      * Saves the default cache configuration.
+     *
+     * @return void
      */
     public function saveDefault()
     {

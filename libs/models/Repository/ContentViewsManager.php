@@ -61,7 +61,7 @@ class ContentViewsManager extends EntityManager
      * @param integer $id    The content id.
      * @param integer $views The amount of views.
      *
-     * @return null|boolean
+     * @return boolean
      */
     public function setViews($id, $views = null)
     {
@@ -83,6 +83,8 @@ class ContentViewsManager extends EntityManager
                 $params = [$id, 1];
                 $this->dbConn->executeUpdate($sql, $params);
             }
+
+            return true;
         } catch (\Exception $e) {
             $this->error->error($e->getMessage());
 

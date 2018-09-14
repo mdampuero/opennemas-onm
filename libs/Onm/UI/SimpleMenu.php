@@ -177,6 +177,7 @@ class SimpleMenu
     private function getClass($class, $dropdown = false)
     {
         if (isset($class) && !empty($class) || $dropdown) {
+            $dropdownClass = '';
             if ($dropdown) {
                 if ($this->nestingLevel > 1) {
                     $dropdownClass = ' dropdown-submenu';

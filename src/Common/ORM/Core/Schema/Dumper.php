@@ -393,7 +393,7 @@ class Dumper
      * @param array $name   The table name.
      * @param array $config The table definition to validate.
      *
-     * @return boolean True if the table is valid. Otherwise, returns false.
+     * @return void
      *
      * @throws InvalidSchemaException If the table is not valid.
      */

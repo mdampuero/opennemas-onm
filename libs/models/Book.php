@@ -51,7 +51,7 @@ class Book extends Content
      *
      * @param int $id the book id to load
      *
-     * @return Book The book object instance
+     * @return \Book The book object instance
      */
     public function __construct($id = null)
     {
@@ -119,12 +119,12 @@ class Book extends Content
      *
      * @param int $id the book id to load
      *
-     * @return Book the Book object instance
+     * @return null|boolean|\Book the Book object instance
      */
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) return null;
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(

@@ -53,6 +53,6 @@ class SlugFilterTest extends KernelTestCase
         $filter->utils->shouldReceive('generateSlug')->once()
             ->with($str, $params['stop-list'], $params['separator']);
 
-        $filter->filter($str, $params);
+        $filter->filter($str);
     }
 }

@@ -148,7 +148,7 @@ class Article extends Content
      *
      * @param array $properties
      *
-     * @return void
+     * @return \Article
      */
     public function load($data)
     {
@@ -164,13 +164,13 @@ class Article extends Content
      *
      * @param int $id the id to get its information
      *
-     * @return void
+     * @return null|boolean|Article
      */
     public function read($id)
     {
         // If no valid id then return
         if (((int) $id) <= 0) {
-            return;
+            return null;
         }
 
         try {
@@ -192,6 +192,7 @@ class Article extends Content
                 'Error fetching article (ID:' . $id . '): ' . $e->getMessage() .
                 ' Stack Trace: ' . $e->getTraceAsString()
             );
+
             return false;
         }
     }
@@ -201,8 +202,7 @@ class Article extends Content
      *
      * @param mixed $data array of properties for the article
      *
-     * @return null if the article was not created
-     * @return int  the id of the article
+     * @return boolean|int  the id of the article
      */
     public function create($data)
     {
@@ -412,7 +412,7 @@ class Article extends Content
      *
      * @param int $id the id of the article we want to delete
      *
-     * @return void
+     * @return boolean
      */
     public function remove($id)
     {

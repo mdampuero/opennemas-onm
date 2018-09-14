@@ -337,7 +337,7 @@ class ContentsController extends Controller
     /**
      * Alteres the article given the paywall module status
      *
-     * @return \Article the article
+     * @return void
      */
     public function paywallHook(&$content)
     {
@@ -372,10 +372,7 @@ class ContentsController extends Controller
                 if (!$hasSubscription) {
                     $newContent    = $this->renderView(
                         'paywall/partials/content_only_for_subscribers.tpl',
-                        [
-                            'logged' => $isLogged,
-                            'id'     => $content->id
-                        ]
+                        [ 'id'     => $content->id ]
                     );
                     $content->body = $newContent;
                 }

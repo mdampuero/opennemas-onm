@@ -32,7 +32,7 @@ class CompileAssetsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $themes = $this->getContainer()->getParameter('core.paths.themes');
-        $paths  = [ $themes . '/admin', $themes . '/manager' ] ;
+        $paths  = [ $themes . '/admin', $themes . '/manager' ];
         $step   = 1;
         $steps  = 1 + count($paths);
 
@@ -76,7 +76,7 @@ class CompileAssetsCommand extends ContainerAwareCommand
      *
      * @param string $file The file content.
      *
-     * @return array The array of paths to script files.
+     * @return void
      */
     protected function extractScripts($file)
     {
@@ -103,7 +103,7 @@ class CompileAssetsCommand extends ContainerAwareCommand
      *
      * @param string $file The file content.
      *
-     * @return array The array of paths to stylesheet files.
+     * @return void
      */
     protected function extractStyles($file)
     {
@@ -130,6 +130,8 @@ class CompileAssetsCommand extends ContainerAwareCommand
      * Finds templates in path and extracts scripts and stylesheets.
      *
      * @param string $path The path to admin theme.
+     *
+     * @return void
      */
     protected function find($path)
     {
@@ -149,11 +151,13 @@ class CompileAssetsCommand extends ContainerAwareCommand
      * Writes compiled files for scripts included in templates.
      *
      * @param OutputInterface $output The output object.
+     *
+     * @return void
      */
     protected function writeScripts($output)
     {
-        $am      = $this->getContainer()->get('core.service.assetic.javascript_manager');
-        $scripts = $this->bag->getScripts();
+        $am       = $this->getContainer()->get('core.service.assetic.javascript_manager');
+        $scripts  = $this->bag->getScripts();
         $progress = null;
 
         if ($output->isVeryVerbose()) {
@@ -169,6 +173,8 @@ class CompileAssetsCommand extends ContainerAwareCommand
      * Writes compiled files for stylesheets included in templates.
      *
      * @param OutputInterface $output The output object.
+     *
+     * @return void
      */
     protected function writeStyles($output)
     {

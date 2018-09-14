@@ -85,13 +85,13 @@ class Video extends Content
      *
      * @param int $id the video id to load
      *
-     * @return Video the video object instance
+     * @return null|Video the video object instance
      */
     public function read($id)
     {
         // If no valid id then return
         if ((int) $id <= 0) {
-            return;
+            return null;
         }
 
         try {
@@ -102,16 +102,15 @@ class Video extends Content
             );
 
             if (!$rs) {
-                return false;
+                return null;
             }
 
             $this->load($rs);
             $this->information = unserialize($rs['information']);
-            $this->thumb       = $this->getThumb();
 
             return $this;
         } catch (\Exception $e) {
-            return false;
+            return null;
         }
     }
 

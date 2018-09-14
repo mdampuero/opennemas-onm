@@ -216,7 +216,7 @@ class Advertisement extends Content
     {
         // If no valid id then return
         if (((int) $id) <= 0) {
-            return;
+            return null;
         }
 
         try {
@@ -417,7 +417,7 @@ class Advertisement extends Content
     {
         // If no valid id then return
         if (((int) $id) <= 0) {
-            return;
+            return null;
         }
 
         // Try to minimize the database overload if this object was preloaded
@@ -526,7 +526,7 @@ class Advertisement extends Content
     {
         // If no valid id then return
         if (((int) $id) <= 0) {
-            return;
+            return null;
         }
 
         try {

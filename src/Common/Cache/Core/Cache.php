@@ -185,6 +185,8 @@ abstract class Cache extends DataBuffer
     public function setNamespace($namespace)
     {
         $this->namespace = $namespace;
+
+        return $this;
     }
 
     /**

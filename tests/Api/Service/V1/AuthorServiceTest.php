@@ -83,6 +83,8 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
             case 'orm.oql.fixer':
                 return $this->fixer;
         }
+
+        return null;
     }
 
     /**

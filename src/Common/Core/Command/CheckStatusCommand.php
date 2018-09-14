@@ -38,7 +38,6 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("<info>==></info> Checking <fg=blue>core</fg> status...");
 
         $checker = $this->getContainer()->get('core.status.checker');
 

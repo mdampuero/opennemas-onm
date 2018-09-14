@@ -201,6 +201,8 @@ class Content implements \JsonSerializable, CsvSerializable
      * Initializes the content for a given id.
      *
      * @param string $id the content id to initialize.
+     *
+     * @return \Content|null
      */
     public function __construct($id = null)
     {
@@ -439,7 +441,7 @@ class Content implements \JsonSerializable, CsvSerializable
      *
      * @param integer $id content identifier
      *
-     * @return Content the content object with all the information
+     * @return null|Content the content object with all the information
      */
     public function read($id)
     {
@@ -455,7 +457,7 @@ class Content implements \JsonSerializable, CsvSerializable
             );
 
             if (!$rs) {
-                return;
+                return null;
             }
 
             // Load object properties
@@ -468,7 +470,8 @@ class Content implements \JsonSerializable, CsvSerializable
             return $this;
         } catch (\Exception $e) {
             error_log('Error fetching content with id' . $id . ': ' . $e->getMessage());
-            return;
+
+            return null;
         }
     }
 
@@ -494,9 +497,11 @@ class Content implements \JsonSerializable, CsvSerializable
             }
 
             $type = ucfirst($type);
+
             return new $type($contentId);
         } catch (\Exception $e) {
             error_log('Error on Content::get (ID:' . $contentId . ')' . $e->getMessage());
+
             return false;
         }
     }
@@ -820,6 +825,8 @@ class Content implements \JsonSerializable, CsvSerializable
                 $this->content_type_name . '.update',
                 [ $this->content_type_name => $this ]
             );
+
+            return true;
         } catch (\Exception $e) {
             error_log('Error Content:delete, aka sendToTrash (ID:' . $id . '):' . $e->getMessage());
             return false;
@@ -836,7 +843,7 @@ class Content implements \JsonSerializable, CsvSerializable
     public static function checkExists($id)
     {
         if (!isset($id)) {
-            return;
+            return false;
         }
 
         try {
@@ -848,6 +855,7 @@ class Content implements \JsonSerializable, CsvSerializable
             return count($contentNum) >= 1;
         } catch (\Exception $e) {
             error_log('Error on check exists on content (ID:' . $id . '):' . $e->getMessage());
+
             return false;
         }
     }
@@ -855,7 +863,7 @@ class Content implements \JsonSerializable, CsvSerializable
     /**
      * Returns the URI for this content
      *
-     * @return string the uri
+     * @return string|array the uri
      */
     public function getUri()
     {
@@ -897,7 +905,7 @@ class Content implements \JsonSerializable, CsvSerializable
     /**
      * Sets the state of this content to the trash
      *
-     * @return boolean true if all went well
+     * @return boolean|\Content true if all went well
      */
     public function setTrashed()
     {
@@ -1518,9 +1526,9 @@ class Content implements \JsonSerializable, CsvSerializable
             } elseif ($this->isPostponed($now)) {
                 return self::POSTPONED;
             }
-        } else {
-            return self::NOT_SCHEDULED;
         }
+
+        return self::NOT_SCHEDULED;
     }
 
     /**
@@ -1693,7 +1701,7 @@ class Content implements \JsonSerializable, CsvSerializable
     /**
      * Return the content type name for this content
      *
-     * @return void
+     * @return string
      */
     public function getContentTypeName()
     {

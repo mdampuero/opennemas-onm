@@ -28,6 +28,9 @@ class CleanSmartyCacheCommand extends Command
             );
     }
 
+    /**
+     * @return int|null
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $baseTmpInstancesPath = realpath(APP_PATH.'/../tmp/instances');
@@ -50,6 +53,7 @@ class CleanSmartyCacheCommand extends Command
                 $this->cleanCacheForTheme($output, $folder);
             }
         }
+
         $this->cleanCompileForTheme($output, $baseTmpInstancesPath);
     }
 

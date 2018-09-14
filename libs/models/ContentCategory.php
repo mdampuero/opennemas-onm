@@ -231,8 +231,11 @@ class ContentCategory implements \JsonSerializable
             $this->load($rs);
 
             $this->id = $this->pk_content_category;
+
+            return true;
         } catch (\Exception $e) {
             getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }

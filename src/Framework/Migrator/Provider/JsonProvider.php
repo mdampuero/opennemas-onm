@@ -27,7 +27,6 @@ class JsonProvider extends MigrationProvider
         $this->stats[$name]['already_imported'] = 0;
 
         // Read files
-        $files;
         if (is_dir($schema['source']['path'])) {
             $finder = new Finder();
 

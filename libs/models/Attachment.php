@@ -102,13 +102,13 @@ class Attachment extends Content
      *
      * @param integer $id the id of the attachment we want to get information
      *
-     * @return void
+     * @return null|boolean|Attachment
      */
     public function read($id)
     {
         // If no valid id then return
         if (((int) $id) <= 0) {
-            return;
+            return null;
         }
 
         try {
@@ -136,8 +136,7 @@ class Attachment extends Content
      *
      * @param array $data the data for create the new Attachment
      *
-     * @return bool if it is true all went well,
-     *              if it is false something went wrong
+     * @return boolean if it is true all went well, if it is false something went wrong
      */
     public function create($data)
     {
@@ -193,7 +192,7 @@ class Attachment extends Content
      *
      * @param array $data the array of data for the attachment
      *
-     * @return void
+     * @return boolean
      */
     public function update($data)
     {

@@ -262,8 +262,7 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
     public function importHTMLVideosFromCsv($videos)
     {
         $this->output->writeln(
-            "<fg=yellow>*** Importing count($videos) videos from csv "
-            . "<info>$file</info> ***</fg=yellow>\n"
+            "<fg=yellow>Importing count($videos) videos from csv </>"
         );
 
         $importedVideos = $notImportedVideos = $alreadyImported = 0;
@@ -347,7 +346,7 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
     {
         $this->output->writeln(
             '<fg=yellow>*** Videos import finished in ' . $time
-            . ' secs. ***</fg=yellow>'
+            . ' secs. ***</>'
         );
     }
 }

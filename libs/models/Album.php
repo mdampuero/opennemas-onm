@@ -132,13 +132,13 @@ class Album extends Content
      *
      * @param string $id the album id to get info from.
      *
-     * @return Album the object instance
+     * @return null|Album the object instance
      */
     public function read($id)
     {
         // If no valid id then return
         if (((int) $id) <= 0) {
-            return;
+            return null;
         }
 
         try {
@@ -149,7 +149,7 @@ class Album extends Content
             );
 
             if (!$rs) {
-                return;
+                return null;
             }
 
             $this->load($rs);
@@ -159,7 +159,8 @@ class Album extends Content
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
-            return;
+
+            return null;
         }
     }
 

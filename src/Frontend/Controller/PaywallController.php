@@ -342,6 +342,7 @@ class PaywallController extends Controller
         }
 
         $paymentInfo = $DoECResponse->DoExpressCheckoutPaymentResponseDetails->PaymentInfo[0];
+        $message     = '';
 
         // Payment done, let's update some registries in the app
         if (isset($DoECResponse) && $DoECResponse->Ack == 'Success') {

@@ -28,7 +28,9 @@ class CategoryController extends Controller
     /**
      * Shows the latest contents in a category given its name and page number
      *
-     * @return Response the response object
+     * @param \Symfony\Component\HttpFoundation\Request the request object
+     *
+     * @return \Symfony\Component\HttpFoundation\Response the response object
      * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException if the category is not available
      */
     public function categoryAction(Request $request)
@@ -176,7 +178,9 @@ class CategoryController extends Controller
     /**
      * Action for synchronized blog frontpage
      *
-     * @return Response the response object
+     * @param \Symfony\Component\HttpFoundation\Request the request object
+     *
+     * @return \Symfony\Component\HttpFoundation\Response the response object
      */
     public function extCategoryAction(Request $request)
     {
@@ -243,7 +247,7 @@ class CategoryController extends Controller
      *
      * @param string category the category identifier
      *
-     * @return void
+     * @return array
      */
     public function getInnerAds($category = 'home')
     {

@@ -67,6 +67,8 @@ class AdvertisementRendererTest extends TestCase
             case 'application.log':
                 return $this->logger;
         }
+
+        return null;
     }
 
     /**
@@ -201,6 +203,7 @@ class AdvertisementRendererTest extends TestCase
                 'device' => 'phone'
             ]
         ];
+
         $ad1->params['device'] = [ 'phone' => 1, 'desktop' => 1 ];
 
         $ads = [ $ad1 ];

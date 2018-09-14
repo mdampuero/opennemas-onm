@@ -52,6 +52,8 @@ abstract class AssetManagerTest extends \PHPUnit_Framework_TestCase
 
                 return $requestStack;
         }
+
+        return null;
     }
 
     public function testCreateAssetSrcWithAssetServersInvalidPattern()

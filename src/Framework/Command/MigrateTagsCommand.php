@@ -92,7 +92,7 @@ class MigrateTagsCommand extends ContainerAwareCommand
 
             if (!$preview) {
                 try {
-                    $conn->update('tags', [ 'name' => $metadata ], [ 'id' => $r['id'] ]);
+                    $conn->update('tags', [ 'name' => $name ], [ 'id' => $r['id'] ]);
                     $cache->delete('tag-' . $r['id']);
                     $updated++;
                 } catch (\Exception $e) {

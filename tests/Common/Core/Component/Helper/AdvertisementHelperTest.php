@@ -41,6 +41,8 @@ class AdvertisementHelperTest extends \PHPUnit_Framework_TestCase
             case 'orm.connection.instance':
                 return $this->instanceConnection;
         }
+
+        return null;
     }
 
     /**

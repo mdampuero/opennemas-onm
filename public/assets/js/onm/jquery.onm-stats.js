@@ -29,7 +29,7 @@
                         content_id: settings.content_id,
                     }
                 });
-            };
+            }
         }
     });
 })(jQuery);

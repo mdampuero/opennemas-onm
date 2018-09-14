@@ -52,7 +52,7 @@ class OpinionsController extends ContentController
      *
      * @param Request  $request The request object.
      *
-     * @return Response The response object.
+     * @return JsonResponse The response object.
      *
      * @Security("hasExtension('OPINION_MANAGER')
      *     and hasPermission('OPINION_ADMIN')")
@@ -77,25 +77,19 @@ class OpinionsController extends ContentController
         dispatchEventWithParams('frontpage.save_position', [ 'category' => 'opinion' ]);
 
         if (!$result) {
-            return new JsonResponse([
-                'messages' => [
-                    [
-                        'id'      => $id,
-                        'message' => _('Unable to save the positions.'),
-                        'type'    => 'error'
-                    ]
+            return new JsonResponse(['messages' => [
+                [
+                    'message' => _('Unable to save the positions.'),
+                    'type'    => 'error'
                 ]
-            ]);
+            ]]);
         }
 
-        return new JsonResponse([
-            'messages' => [
-                    [
-                        'id'      => $id,
-                        'message' => _('Positions saved successfully.'),
-                        'type'    => 'success'
-                    ]
-                ]
-        ]);
+        return new JsonResponse([ 'messages' => [
+            [
+                'message' => _('Positions saved successfully.'),
+                'type'    => 'success'
+            ]
+        ]]);
     }
 }

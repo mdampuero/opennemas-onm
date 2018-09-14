@@ -545,6 +545,8 @@ class ContentManager
             . ' (' . getService('core.user')->id
             . ') clear contents frontpage of category ' . $categoryID
         );
+
+        return true;
     }
 
     /**

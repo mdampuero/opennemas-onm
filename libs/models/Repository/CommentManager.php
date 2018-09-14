@@ -257,12 +257,10 @@ class CommentManager extends BaseManager
             return false;
         }
 
-        return $this->countBy(
-            [
-                'content_id' => [['value' => $contentID]],
-                'status' => [['value' => \Comment::STATUS_ACCEPTED]]
-            ]
-        );
+        return $this->countBy([
+            'content_id' => [['value' => $contentID]],
+            'status' => [['value' => \Comment::STATUS_ACCEPTED]]
+        ]);
     }
 
     /**
@@ -283,6 +281,8 @@ class CommentManager extends BaseManager
      * Deletes a comment from cache.
      *
      * @param integer $id Id of the comment to delete.
+     *
+     * @return void
      */
     public function delete($id)
     {
@@ -292,7 +292,9 @@ class CommentManager extends BaseManager
     /**
      * Deletes comments given a SQL filter
      *
-     * @return void
+     * @param array $filter the filter to use to remove comments
+     *
+     * @return boolean
      */
     public function deleteFromFilter($filter)
     {
@@ -302,6 +304,8 @@ class CommentManager extends BaseManager
             return true;
         } catch (\Exception $e) {
             error_log('Error while deleting comments from filter:' . $e->getMessage());
+
+            return false;
         }
     }
 }

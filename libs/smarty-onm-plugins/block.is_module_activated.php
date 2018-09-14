@@ -20,7 +20,7 @@
 function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
 {
     if ($repeat) {
-        return;
+        return null;
     }
 
     $modules = explode(',', $params['name']);

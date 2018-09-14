@@ -41,7 +41,7 @@ class AdvertisementController extends Controller
             if (empty($element->content_status)
                 || (!empty($element->endtime) && $element->endtime < $date)
             ) {
-                return;
+                return null;
             }
 
             return $this->normalizeAdObject($element);

@@ -98,6 +98,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
             'media_size'      => $input->getOption('media-size'),
             'created'         => $input->getOption('created'),
         ];
+
         $offset       = $input->getOption('offset');
         $this->input  = $input;
         $this->output = $output;
@@ -108,7 +109,8 @@ class InstancesUpdateCommand extends ContainerAwareCommand
             && !$options['media_size']
             && !$options['created']
         ) {
-            $this->output->writeln('<error>Please provide --instance-stats --alexa, --views, --media-size or --created</error>');
+            $this->output->writeln('<error>Please provide --instance-stats --alexa, '
+                . '--views, --media-size or --created</error>');
             return 1;
         }
 
@@ -135,7 +137,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
 
         foreach ($instances as $instance) {
             if ($output->isVerbose()) {
-                $output->writeln('Getting info about \''.$instance->internal_name.'\'');
+                $output->writeln('Getting info about \'' . $instance->internal_name . '\'');
             }
 
             try {
@@ -145,7 +147,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
                 error_log($e->getMessage());
                 $output->writeln(
                     '<error>Error while getting info about \''
-                    . $instance->internal_name.'\': ' . $e->getMessage() . '</>'
+                    . $instance->internal_name . '\': ' . $e->getMessage() . '</>'
                 );
             }
         }
@@ -213,7 +215,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
 
                 $message = "<fg=green>DONE</>";
             } else {
-                $message = "<error>FAILED</error>"."Piwik code not available";
+                $message = "<error>FAILED</>" . "Piwik code not available";
             }
 
             if ($this->output->isVeryVerbose()) {

@@ -911,6 +911,8 @@ class ContentController extends Controller
                 return new JsonResponse($msg->getMessages(), $msg->getCode());
             }
         }
+
+        return null;
     }
 
     /**

@@ -189,7 +189,7 @@ class Agency
 
             libxml_clear_errors();
 
-            return;
+            return null;
         }
 
         $xml = new XmlFormat();

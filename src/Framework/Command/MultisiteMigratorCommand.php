@@ -32,8 +32,8 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
             ->setName('multisite:migrate')
             ->setDescription('Migrate a multisite blog to Opennemas instances')
             ->setHelp(
-                "Migrates an existing database to a openenmas database.".
-                " and also creates the instance"
+                "Migrates an existing database to a openenmas database."
+                . " and also creates the instance"
             )
             ->addArgument(
                 'conf-file',
@@ -47,7 +47,6 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
                 'If set, the command will be run in debug mode.'
             );
     }
-
 
     /**
      * Executes the current command.
@@ -65,8 +64,8 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
         chdir($basePath);
         gc_enable();
 
-        $path = $this->input->getArgument('conf-file');
-        $yaml = new Parser();
+        $path           = $this->input->getArgument('conf-file');
+        $yaml           = new Parser();
         $this->settings = $yaml->parse(file_get_contents($path));
 
         $blogs = $this->getAllBlogs();
@@ -77,19 +76,21 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
                 continue;
             }
             // Update and replace contents on config file
-            $configFile = file_get_contents($path);
-            $patterns = ['/blog_number/', '/instance_name/', '/target_instance/'];
-            $replacements = [$id, $instance->internal_name, $instance->id];
-            $configFile = preg_replace($patterns, $replacements, $configFile);
+            $configFile   = file_get_contents($path);
+            $patterns     = ['/blog_number/', '/instance_name/', '/target_instance/'];
+            $replacements = [ $id, $instance->internal_name, $instance->id ];
+            $configFile   = preg_replace($patterns, $replacements, $configFile);
             file_put_contents('/tmp/config.yml', $configFile);
+
             // Call migrate:onm command
-            $command = $this->getApplication()->find('migrate:onm');
+            $command   = $this->getApplication()->find('migrate:onm');
             $arguments = [
                 'conf-file'  => '/tmp/config.yml',
                 '--debug'    => $this->debug,
                 '--no-debug' => true
             ];
-            $input = new ArrayInput($arguments);
+
+            $input      = new ArrayInput($arguments);
             $returnCode = $command->run($input, $output);
             gc_collect_cycles();
         }
@@ -109,8 +110,8 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
             !array_key_exists('siteurl', $data)
         ) {
             throw new \Exception(
-                "The instance data from blog is missing. Please provide at least:\n".
-                "'path', 'domain', 'siteurl', 'blogname'"
+                "The instance data from blog is missing. Please provide at least:\n"
+                . "'path', 'domain', 'siteurl', 'blogname'"
             );
         }
 
@@ -120,15 +121,15 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
             !array_key_exists('ext_domain', $this->settings['migration']['create'])
         ) {
             throw new \Exception(
-                "Missing new instance data. Please provide at least:\n".
-                "'template', 'contact_mail', 'ext_domain'"
+                "Missing new instance data. Please provide at least:\n"
+                . "'template', 'contact_mail', 'ext_domain'"
             );
         }
 
         $createData = $this->settings['migration']['create'];
 
         $this->output->writeln(
-            '<fg=green>*** Creating new instance: '.$data['blogname'].' ***</fg=green>'
+            '<fg=green>*** Creating new instance: ' . $data['blogname'] . ' ***</fg=green>'
         );
 
         $packProfesional = [
@@ -154,8 +155,8 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
             $prefix = $createData['prefix'];
         }
 
-        $internal_name = $prefix.substr($data['path'], 1, -1); # /ourense/
-        $domain = $internal_name.$createData['ext_domain']; # ourense.prod
+        $internal_name = $prefix . substr($data['path'], 1, -1); // /ourense/
+        $domain        = $internal_name . $createData['ext_domain']; // ourense.prod
 
         $instance = new Instance([
             'name'              => $data['blogname'],
@@ -183,7 +184,7 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
 
             $this->configureInstance($instance, $external);
         } catch (InstanceAlreadyExistsException $e) {
-            $helper = $this->getHelper('question');
+            $helper   = $this->getHelper('question');
             $question = new ConfirmationQuestion(
                 'Instance already exists!! Continue with this action?',
                 false
@@ -223,18 +224,18 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
         $this->originConnection->selectDatabase($db);
 
         // Find all active blogs
-        $sql = "SELECT `blog_id`, `domain`, `path` FROM `wp_blogs`"
+        $sql   = "SELECT `blog_id`, `domain`, `path` FROM `wp_blogs`"
             . " WHERE `blog_id` > 1 AND `public` = 1";
         $blogs = $this->originConnection->fetchAll($sql);
 
         // Get all blogs data
         $blogsData = [];
         foreach ($blogs as $blog) {
-            $sql = "SELECT `option_value`, `option_name` FROM `wp_".$blog['blog_id']
-                ."_options` WHERE `option_name` IN ('siteurl', 'blogname', 'blogdescription')";
+            $sql   = "SELECT `option_value`, `option_name` FROM `wp_" . $blog['blog_id']
+                . "_options` WHERE `option_name` IN ('siteurl', 'blogname', 'blogdescription')";
             $rsAux = $this->originConnection->fetchAll($sql);
 
-            $blogsData[$blog['blog_id']]['path'] = $blog['path'];
+            $blogsData[$blog['blog_id']]['path']   = $blog['path'];
             $blogsData[$blog['blog_id']]['domain'] = $blog['domain'];
             foreach ($rsAux as $value) {
                 $blogsData[$blog['blog_id']][$value['option_name']] = utf8_encode($value['option_value']);
@@ -280,14 +281,14 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
 
         if (!file_exists($default)) {
             throw new \Exception(
-                "cannot open ".$default.": No such file"
+                "cannot open " . $default . ": No such file"
             );
         }
 
         $cmd = "mysql -u{$dbconn->connectionParams['user']}"
             . " -p{$dbconn->connectionParams['password']}"
             . " -h{$dbconn->connectionParams['host']}"
-            . ($database ? " $database"  : '')
+            . ($database ? " $database" : '')
             . " < $default";
 
         exec($cmd, $output, $result);
