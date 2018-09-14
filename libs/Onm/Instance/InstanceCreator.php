@@ -307,13 +307,13 @@ class InstanceCreator
             );
         }
 
-        $dump = "mysql -u{$this->conn->user}"
+        $cmd = "mysql -u{$this->conn->user}"
             . " -p{$this->conn->password}"
             . " -h{$this->conn->host}"
             . " {$this->conn->dbname}"
             . " < " . $path . DS . "instance.sql";
 
-        exec($dump, $output, $result);
+        exec($cmd, $output, $result);
         $this->logCommand($cmd, $output, $result);
 
         if ($result != 0) {

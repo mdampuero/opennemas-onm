@@ -16,7 +16,7 @@ abstract class MigrationProvider
     /**
      * Database connection to use while getting data from source.
      *
-     * @var Onm\Database\DbalWrapper
+     * @var \Onm\Database\DbalWrapper
      */
     protected $connection;
 
@@ -30,7 +30,7 @@ abstract class MigrationProvider
     /**
      * Logger to use during migration process.
      *
-     * @var Monolog\Logger
+     * @var \Monolog\Logger
      */
     protected $logger;
 
@@ -68,6 +68,7 @@ abstract class MigrationProvider
      * Constructs a new Migration provider.
      *
      * @param Logger $logger
+     *
      * @param array  $settings
      * @param array  $translations Array of translations.
      * @param array  $stats

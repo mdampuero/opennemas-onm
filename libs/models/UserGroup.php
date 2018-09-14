@@ -144,8 +144,9 @@ class UserGroup
             return false;
         }
 
+        $conn = getService('dbal_connection');
+
         try {
-            $conn = getService('dbal_connection');
             $conn->beginTransaction();
 
             // Updating the user group data
@@ -192,8 +193,9 @@ class UserGroup
             return false;
         }
 
+        $conn = getService('dbal_connection');
+
         try {
-            $conn = getService('dbal_connection');
             $conn->beginTransaction();
             $rs = $conn->delete(
                 "user_groups",

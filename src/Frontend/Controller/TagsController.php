@@ -22,7 +22,7 @@ class TagsController extends Controller
     /**
      * Displays a list of tags.
      *
-     * @return Response The response object.
+     * @return \Symfony\Component\HttpFoundation\Response The response object.
      *
      * @BotDetector(bot="bingbot", route="frontend_frontpage")
      */
@@ -80,7 +80,7 @@ class TagsController extends Controller
     /**
      * Shows a paginated list of contents for a given tag name.
      *
-     * @return Response The response object.
+     * @return \Symfony\Component\HttpFoundation\Response The response object.
      *
      * @BotDetector(bot="bingbot", route="frontend_frontpage")
      */
@@ -128,6 +128,8 @@ class TagsController extends Controller
         $this->view->setConfig('frontpages');
         $cacheId = $this->view->getCacheId('frontpage', 'tag', $tagName, $page);
 
+        $em = $this->get('entity_repository');
+
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/tags.tpl', $cacheId)
         ) {
@@ -165,8 +167,6 @@ class TagsController extends Controller
                         [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
                     ]
                 ];
-
-                $em       = $this->get('entity_repository');
                 $contents = $em->findBy($criteria, 'starttime DESC', $epp, $page);
                 $total    = count($contents) + 1;
             }

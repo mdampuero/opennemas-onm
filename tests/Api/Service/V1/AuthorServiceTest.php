@@ -106,7 +106,7 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteItem when the item to delete is the current user.
      *
-     * @expectedException Api\Exception\DeleteItemException
+     * @expectedException \Api\Exception\DeleteItemException
      */
     public function testDeleteItemWhenEqualsToCurrentUser()
     {
@@ -116,7 +116,7 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteItem when no item found.
      *
-     * @expectedException Api\Exception\DeleteItemException
+     * @expectedException \Api\Exception\DeleteItemException
      */
     public function testDeleteItemWhenNoEntity()
     {
@@ -130,7 +130,7 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteItem when an error happens while removing object.
      *
-     * @expectedException Api\Exception\DeleteItemException
+     * @expectedException \Api\Exception\DeleteItemException
      */
     public function testDeleteItemWhenErrorWhileRemoving()
     {
@@ -165,7 +165,7 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests getItem when the item has no author property to true.
      *
-     * @expectedException Api\Exception\GetItemException
+     * @expectedException \Api\Exception\GetItemException
      */
     public function testGetItemWhenErrorWhenNoAuthor()
     {

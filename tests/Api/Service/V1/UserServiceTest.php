@@ -153,7 +153,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests createItem when no email provided.
      *
-     * @expectedException Api\Exception\CreateExistingItemException
+     * @expectedException \Api\Exception\CreateExistingItemException
      */
     public function testCreateItemWhenEmailInUseForSubscriberAndUser()
     {
@@ -174,7 +174,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests createItem when no email provided.
      *
-     * @expectedException Api\Exception\CreateItemException
+     * @expectedException \Api\Exception\CreateItemException
      */
     public function testCreateItemWhenNoEmail()
     {
@@ -201,7 +201,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteItem when the item to delete is the current user.
      *
-     * @expectedException Api\Exception\DeleteItemException
+     * @expectedException \Api\Exception\DeleteItemException
      */
     public function testDeleteItemWhenEqualsToCurrentUser()
     {
@@ -226,7 +226,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteItem when no item found.
      *
-     * @expectedException Api\Exception\DeleteItemException
+     * @expectedException \Api\Exception\DeleteItemException
      */
     public function testDeleteItemWhenNoEntity()
     {
@@ -240,7 +240,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteItem when an error happens while removing object.
      *
-     * @expectedException Api\Exception\DeleteItemException
+     * @expectedException \Api\Exception\DeleteItemException
      */
     public function testDeleteItemWhenErrorWhileRemoving()
     {
@@ -324,7 +324,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteList when invalid list of ids provided.
      *
-     * @expectedException Api\Exception\DeleteListException
+     * @expectedException \Api\Exception\DeleteListException
      */
     public function testDeleteListWhenInvalidIds()
     {
@@ -359,7 +359,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteList when an error happens while searching.
      *
-     * @expectedException Api\Exception\DeleteListException
+     * @expectedException \Api\Exception\DeleteListException
      */
     public function testDeleteListWhenErrorWhileSearching()
     {
@@ -393,7 +393,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests getItem when the item has no user property to true.
      *
-     * @expectedException Api\Exception\GetItemException
+     * @expectedException \Api\Exception\GetItemException
      */
     public function testGetItemWhenErrorWhenNoUser()
     {
@@ -511,7 +511,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests updateItem when no email provided.
      *
-     * @expectedException Api\Exception\UpdateItemException
+     * @expectedException \Api\Exception\UpdateItemException
      */
     public function testUpdateItemWhenEmailInUseForAnotherUser()
     {
@@ -564,7 +564,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests createItem when no email provided.
      *
-     * @expectedException Api\Exception\UpdateItemException
+     * @expectedException \Api\Exception\UpdateItemException
      */
     public function testUpdateItemWhenNoEmail()
     {

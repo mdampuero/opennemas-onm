@@ -41,7 +41,7 @@ class UserValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests validate when there are no changes in type.
      *
-     * @expectedException Api\Exception\InvalidArgumentException
+     * @expectedException \Api\Exception\InvalidArgumentException
      */
     public function testValidateWhenInvalid()
     {

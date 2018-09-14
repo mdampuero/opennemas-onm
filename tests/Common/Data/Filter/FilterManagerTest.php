@@ -39,7 +39,7 @@ class FilterManagerTest extends KernelTestCase
     /**
      * Tests filter when the filter to apply is invalid.
      *
-     * @expectedException Common\Core\Component\Exception\Filter\InvalidFilterException
+     * @expectedException \Common\Core\Component\Exception\Filter\InvalidFilterException
      */
     public function testFilterWhenInvalidFilter()
     {

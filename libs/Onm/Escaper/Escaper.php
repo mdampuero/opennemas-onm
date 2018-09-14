@@ -309,7 +309,9 @@ class Escaper
      * class' constructor.
      *
      * @param string $string
-     * @throws Exception\RuntimeException
+     *
+     * @throws \RuntimeException
+     *
      * @return string
      */
     protected function toUtf8($string)
@@ -321,7 +323,7 @@ class Escaper
         }
 
         if (!$this->isUtf8($result)) {
-            throw new Exception\RuntimeException(sprintf(
+            throw new \RuntimeException(sprintf(
                 'String to be escaped was not valid UTF-8 or could not be converted: %s',
                 $result
             ));
@@ -333,7 +335,9 @@ class Escaper
     /**
      * Converts a string from UTF-8 to the base encoding. The base encoding is set via this
      * class' constructor.
+     *
      * @param string $string
+     *
      * @return string
      */
     protected function fromUtf8($string)
@@ -349,6 +353,7 @@ class Escaper
      * Checks if a given string appears to be valid UTF-8 or not.
      *
      * @param string $string
+     *
      * @return bool
      */
     protected function isUtf8($string)
@@ -364,7 +369,7 @@ class Escaper
      * @param string $to
      * @param array|string $from
      *
-     * @throws Exception\RuntimeException
+     * @throws \RuntimeException
      *
      * @return string
      */
@@ -375,7 +380,7 @@ class Escaper
         } elseif (function_exists('mb_convert_encoding')) {
             $result = mb_convert_encoding($string, $to, $from);
         } else {
-            throw new Exception\RuntimeException(
+            throw new \RuntimeException(
                 get_class($this)
                 . ' requires either the iconv or mbstring extension to be installed'
                 . ' when escaping for non UTF-8 strings.'

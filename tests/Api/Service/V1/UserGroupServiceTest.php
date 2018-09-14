@@ -91,7 +91,7 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests getItem when the item has no user group property to true.
      *
-     * @expectedException Api\Exception\GetItemException
+     * @expectedException \Api\Exception\GetItemException
      */
     public function testGetItemWhenErrorWhenNoUserGroup()
     {

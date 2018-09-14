@@ -30,7 +30,7 @@ class MessageExchangerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\Varnish\MessageExchanger::addBanMessage
+     * @covers \Onm\Varnish\MessageExchanger::addBanMessage
      */
     public function testAddBanMessage()
     {
@@ -43,7 +43,7 @@ class MessageExchangerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\Varnish\MessageExchanger::getMessages
+     * @covers \Onm\Varnish\MessageExchanger::getMessages
      */
     public function testGetMessages()
     {

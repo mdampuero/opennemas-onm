@@ -295,7 +295,7 @@ function generatePiwikAmpCode($config)
 {
     $imgCode = '<amp-pixel src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=AMP" layout="nodisplay"></amp-pixel>';
 
-    $code .= sprintf(
+    $code = sprintf(
         $imgCode,
         preg_replace("/^https?:/", "", $config['server_url']),
         $config['page_id']
@@ -309,7 +309,7 @@ function generatePiwikImageCode($config)
     $imgCode = '<img src="%spiwik.php?idsite=%d&amp;rec=1&amp;'
         . 'action_name=Newsletter&amp;url=%s" style="border:0; height:0; width:0" alt="" />';
 
-    $code .= sprintf(
+    $code = sprintf(
         $imgCode,
         $config['server_url'],
         $config['page_id'],

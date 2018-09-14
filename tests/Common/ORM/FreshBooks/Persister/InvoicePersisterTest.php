@@ -124,7 +124,7 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests remove when API returns false.
      *
-     * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testRemoveWithError()
     {
@@ -159,7 +159,7 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
     /**
      * Test update when API returns false.
      *
-     * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testUpdateWithError()
     {

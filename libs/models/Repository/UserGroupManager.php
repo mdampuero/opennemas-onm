@@ -164,7 +164,7 @@ class UserGroupManager extends BaseManager
      */
     public function delete($id)
     {
-        $em->delete('user_groups', ['pk_user_group' => $id ]);
+        $this->dbConn->delete('user_groups', ['pk_user_group' => $id ]);
 
         $this->cache->delete('usergroup' . $this->cacheSeparator . $id);
     }

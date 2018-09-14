@@ -115,7 +115,7 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests find for an empty entity in cache.
      *
-     * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testFindForUnexistingEntity()
     {
@@ -146,7 +146,7 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests findOneBy when no entities found in database.
      *
-     * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testFindOneByForEmptyEntity()
     {

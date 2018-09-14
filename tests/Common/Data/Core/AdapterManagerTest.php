@@ -39,7 +39,7 @@ class AdapterManagerTest extends KernelTestCase
     /**
      * Tests filter when the filter to apply is invalid.
      *
-     * @expectedException Common\Data\Core\Exception\InvalidAdapterException
+     * @expectedException \Common\Data\Core\Exception\InvalidAdapterException
      */
     public function testAdapterWhenInvalidAdapter()
     {

@@ -21,7 +21,7 @@ class MigrationSaver
     /**
      * Database connection to use while getting data from source.
      *
-     * @var Common\ORM\Core\Connection
+     * @var \Common\ORM\Core\Connection
      */
     protected $conn;
 
@@ -35,7 +35,7 @@ class MigrationSaver
     /**
      * Logger to use during migration process.
      *
-     * @var Monolog\Logger
+     * @var \Monolog\Logger
      */
     protected $logger;
 
@@ -63,7 +63,7 @@ class MigrationSaver
     /**
      * Constructs a new Migration saver.
      *
-     * @param Logger $logger
+     * @param \Monolog\Logger $logger
      * @param array  $settings
      * @param array  $translations Array of translations.
      * @param array  $stats

@@ -49,7 +49,7 @@ class UserGroupValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests validate when valid type provided.
      *
-     * @expectedException Api\Exception\InvalidArgumentException
+     * @expectedException \Api\Exception\InvalidArgumentException
      */
     public function testValidateWhenInvalidType()
     {

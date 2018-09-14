@@ -97,7 +97,7 @@ class CoreListenerTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests onKernelRequest when the instance is disabled.
      *
-     * @expectedException Common\Core\Component\Exception\Instance\InstanceNotActivatedException
+     * @expectedException \Common\Core\Component\Exception\Instance\InstanceNotActivatedException
      */
     public function testOnKernelRequestWhenInstanceDisabled()
     {
@@ -230,7 +230,7 @@ class CoreListenerTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests onKernelRequest when the instance does not exist.
      *
-     * @expectedException Common\Core\Component\Exception\Instance\InstanceNotFoundException
+     * @expectedException \Common\Core\Component\Exception\Instance\InstanceNotFoundException
      */
     public function testOnKernelRequestWhenInstanceNotExist()
     {

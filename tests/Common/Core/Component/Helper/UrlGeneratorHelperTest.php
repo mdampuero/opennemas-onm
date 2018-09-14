@@ -82,7 +82,7 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Helper\UrlGeneratorHelper::__construct
+     * @covers \Common\Core\Component\Helper\UrlGeneratorHelper::__construct
      */
     public function testConstructor()
     {

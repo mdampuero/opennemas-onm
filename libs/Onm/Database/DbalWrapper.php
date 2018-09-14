@@ -25,7 +25,7 @@ class DbalWrapper
     /**
      * The database connection.
      *
-     * @var Doctrine\DBAL\Connection
+     * @var \Doctrine\DBAL\Connection
      */
     private $connection = null;
 
@@ -171,7 +171,7 @@ class DbalWrapper
     /**
      * Returns the current database connection.
      *
-     * @return Doctrine\DBAL\Connection The current database connection.
+     * @return \Doctrine\DBAL\Connection The current database connection.
      */
     public function getConnection()
     {

@@ -17,7 +17,7 @@ class DatabaseProvider extends MigrationProvider
     /**
      * Origin database connection.
      *
-     * @var Common\ORM\Core\Connection
+     * @var \Common\ORM\Core\Connection
      */
     protected $originConnection;
 
@@ -49,6 +49,7 @@ class DatabaseProvider extends MigrationProvider
      *
      * @param  string $name   Schema name.
      * @param  array  $schema Database schema.
+     *
      * @return array          Array of fields used to create new entities.
      */
     public function getSource($name, $schema)
