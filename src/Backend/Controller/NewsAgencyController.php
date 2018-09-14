@@ -166,63 +166,6 @@ class NewsAgencyController extends Controller
     }
 
     /**
-     * Shows the category form to pick a category under where to import the new
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
-     *     and hasPermission('IMPORT_ADMIN')")
-     */
-    public function selectCategoryWhereToImportAction(Request $request)
-    {
-        $id       = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
-        $sourceId = $request->query->getDigits('source_id');
-
-        if (empty($id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('The article you want to import doesn\'t exists.')
-            );
-
-            $this->redirect($this->generateUrl('admin_news_agency'));
-        }
-
-        $repository = new \Onm\Import\Repository\LocalRepository();
-        $element    = $repository->findByFileName($sourceId, $id);
-
-        $ccm              = \ContentCategoryManager::get_instance();
-        $parentCategories = $ccm->getArraysMenu();
-
-        // If the element has a original category that matches an existing category
-        // in the newspaper redirect it to the import action with that category
-        $targetCategory = $this->getSimilarCategoryIdForElement($element);
-        if (!empty($targetCategory)) {
-            return $this->redirect($this->generateUrl(
-                'admin_news_agency_import',
-                [
-                    'source_id' => $sourceId,
-                    'id'        => $id,
-                    'category'  => $targetCategory,
-                ]
-            ));
-        }
-
-        return $this->render(
-            'news_agency/import_select_category.tpl',
-            [
-                'id'           => $id,
-                'source_id'    => $sourceId,
-                'article'      => $element,
-                'subcat'       => $parentCategories[1],
-                'allcategorys' => $parentCategories[0],
-            ]
-        );
-    }
-
-    /**
      * Get the most similar category based on category metadata of element
      *
      * @param Object $element the element object
