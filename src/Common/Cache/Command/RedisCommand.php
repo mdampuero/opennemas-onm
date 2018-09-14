@@ -69,7 +69,7 @@ class RedisCommand extends ContainerAwareCommand
         $name   = empty($input->getOption('manager')) ?
             'instance' : 'manager';
 
-        if (!in_array($action, [ 'exists', 'get', 'remove', 'set'])) {
+        if (!in_array($action, [ 'exists', 'get', 'remove' ])) {
             throw new \InvalidArgumentException("Invalid action '$action'");
         }
 
