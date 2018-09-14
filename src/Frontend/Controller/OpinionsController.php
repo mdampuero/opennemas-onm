@@ -783,7 +783,7 @@ class OpinionsController extends Controller
             || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
         ) {
             $this->cm = new \ContentManager();
-            $opinion = $this->cm->getUrlContent($wsUrl . '/ws/opinions/complete/' . $dirtyID, true);
+            $opinion  = $this->cm->getUrlContent($wsUrl . '/ws/opinions/complete/' . $dirtyID, true);
 
             if (is_string($opinion)) {
                 $opinion = @unserialize($opinion);
