@@ -13,7 +13,7 @@ function smarty_function_humandate($params, &$smarty)
 
 
     if (array_key_exists('date', $params) && $params['date'] instanceof \DateTime) {
-        return humandate($date);
+        return humandate($params['date']);
     }
 
     if (!empty($starttime)) {

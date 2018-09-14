@@ -64,7 +64,7 @@ EOF
         $file = $this->getContainer()->getParameter('core.maintenance.file');
 
         if ($action != 'enable') {
-            $output->write('Disabling maintenance mode... ');
+            $output->write('Disabling maintenance mode...');
 
             if (file_exists($file)) {
                 unlink($file);

@@ -1383,9 +1383,9 @@ class MigrationSaver
                     $values[$schema['translation']['slug']] : '';
 
                 if ($this->matchTranslation(
-                    $values[$schema['translation']['field']],
-                    $schema['translation']['name']
-                ) === false
+                        $values[$schema['translation']['field']],
+                        $schema['translation']['name']
+                    ) === false
                 ) {
                     $videoId = $this->findVideo($values['video_url']);
 
@@ -1429,7 +1429,7 @@ class MigrationSaver
                 } else {
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
-                        $videoId,
+                        $videoId, // TODO: This variable is not available
                         $schema['translation']['name'],
                         $slug
                     );
@@ -2263,7 +2263,7 @@ class MigrationSaver
 
         $rs = $this->conn->fetchAll($sql);
 
-        if ($rss && count($rs) == 1 && array_key_exists('pk_video', $rs[0])) {
+        if ($rs && count($rs) == 1 && array_key_exists('pk_video', $rs[0])) {
             return $rs[0]['pk_video'];
         }
 
