@@ -79,7 +79,7 @@ class Attachment extends Content
         switch ($name) {
             case 'uri':
                 if (empty($this->category_name)) {
-                    $this->category_name = $this->loadCategoryName($this->pk_content);
+                    $this->category_name = $this->loadCategoryName();
                 }
 
                 $uri = "media" . DS . INSTANCE_UNIQUE_NAME . DS . FILE_DIR . $this->path;

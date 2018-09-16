@@ -868,7 +868,7 @@ class Content implements \JsonSerializable, CsvSerializable
     public function getUri()
     {
         if (empty($this->category_name)) {
-            $this->category_name = $this->loadCategoryName($this->pk_content);
+            $this->category_name = $this->loadCategoryName();
         }
 
         if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
@@ -2251,6 +2251,8 @@ class Content implements \JsonSerializable, CsvSerializable
      *  If you use a integer only recover this one.
      *
      * @throws \Exception
+     *
+     * @return array
      */
     public function getContentTags($contentIds)
     {

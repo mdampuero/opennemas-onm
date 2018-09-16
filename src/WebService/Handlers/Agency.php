@@ -73,7 +73,7 @@ class Agency
         XmlFormat::$importSettingsFromXml = true;
 
         $output = simplexml_load_string($output);
-        $xml    = new XmlFormat($output);
+        $xml    = new XmlFormat();
 
         return $xml->read($output);
     }

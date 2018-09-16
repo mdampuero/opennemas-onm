@@ -69,7 +69,7 @@ class Album extends Content
         switch ($name) {
             case 'uri':
                 if (empty($this->category_name)) {
-                    $this->category_name = $this->loadCategoryName($this->pk_content);
+                    $this->category_name = $this->loadCategoryName();
                 }
                 $uri = Uri::generate(
                     'album',
@@ -113,7 +113,7 @@ class Album extends Content
 
         if (array_key_exists('pk_album', $properties) && !is_null($properties['pk_album'])) {
             $this->pk_album       = $properties['pk_album'];
-            $this->category_title = $this->loadCategoryTitle($properties['pk_album']);
+            $this->category_title = $this->loadCategoryTitle();
         }
         if (array_key_exists('subtitle', $properties) && !is_null($properties['subtitle'])) {
             $this->subtitle = $properties['subtitle'];

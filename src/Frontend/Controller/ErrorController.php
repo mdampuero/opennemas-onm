@@ -33,14 +33,14 @@ class ErrorController extends Controller
                 $this->get('application.log')
                     ->info('security.authorization.failure');
 
-                return $this->getAccessDeniedResponse($request);
+                return $this->getAccessDeniedResponse();
 
             case 'ConnectionException':
                 $this->get('error.log')->error(
                     'database.connection.failure: ' . $error->getMessage()
                 );
 
-                return $this->getConnectionExceptionResponse($request);
+                return $this->getConnectionExceptionResponse();
 
             case 'ContentNotMigratedException':
             case 'ResourceNotFoundException':
