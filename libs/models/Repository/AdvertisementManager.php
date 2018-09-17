@@ -54,6 +54,8 @@ class AdvertisementManager extends EntityManager
      * @param  integer      $elementsPerPage The max number of elements.
      * @param  integer      $page            The current page.
      * @param  integer      $offset          The offset to start with.
+     * @param  integer      $count           Whether if fetch the total number of elements
+     *
      * @return array                         The matched elements.
      */
     public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0, &$count = null)
@@ -263,9 +265,10 @@ class AdvertisementManager extends EntityManager
     /**
      * Returns the list of default advertisements.
      *
-     * @param type variable Description
+     * @param array   $types    the list of types to fetch
+     * @param integer $category the category id
      *
-     * @return type Description
+     * @return array the list of ads
      */
     protected function findDefaultAdvertisements($types, $category)
     {

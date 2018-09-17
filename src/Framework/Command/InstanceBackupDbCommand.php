@@ -99,7 +99,7 @@ EOF
 
         try {
             $settings = $dbConn->fetchAll($sql, [ $value ]);
-        } catch (\Doctrine\DBAL\DBALException $e) {
+        } catch (\Exception $e) {
             throw new \InvalidArgumentException($e->getMessage());
         }
 

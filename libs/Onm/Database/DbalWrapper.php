@@ -41,6 +41,8 @@ class DbalWrapper
      *
      * @param string $params The array of parameters.
      * @param string $env    The current environment.
+     *
+     * @throws \Exception
      */
     public function __construct($params, $env)
     {
@@ -172,6 +174,8 @@ class DbalWrapper
      * Returns the current database connection.
      *
      * @return \Doctrine\DBAL\Connection The current database connection.
+     * 
+     * @throws \Exception
      */
     public function getConnection()
     {

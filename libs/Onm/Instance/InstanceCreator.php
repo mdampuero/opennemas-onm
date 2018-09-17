@@ -167,7 +167,7 @@ class InstanceCreator
      *
      * @param array $database The database name.
      *
-     * @throws DatabaseNotCreatedException If creation fails.
+     * @throws DatabaseNotCreatedException
      */
     public function createDatabase($database)
     {
@@ -274,6 +274,8 @@ class InstanceCreator
      *
      * @param string $source The path to the source.
      * @param string $target The target database.
+     *
+     * @throws DatabaseNotRestoredException
      */
     public function restoreDatabase($source, $target = null)
     {
@@ -298,6 +300,8 @@ class InstanceCreator
      * Restores instance reference data to the instances table.
      *
      * @param string $path Backup directory.
+     *
+     * @throws InstanceNotRestoredException
      */
     public function restoreInstance($path)
     {

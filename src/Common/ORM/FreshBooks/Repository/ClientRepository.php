@@ -33,7 +33,7 @@ class ClientRepository extends BaseRepository
      *
      * @return Client The client.
      *
-     * @throws EntityNotFoundException When the client id is invalid.
+     * @throws EntityNotFoundException
      */
     public function find($id)
     {
@@ -56,6 +56,8 @@ class ClientRepository extends BaseRepository
      * @param array $criteria The criteria.
      *
      * @return array The list of clients.
+     *
+     * @throws InvalidCriteriaException
      */
     public function findBy($criteria = null)
     {

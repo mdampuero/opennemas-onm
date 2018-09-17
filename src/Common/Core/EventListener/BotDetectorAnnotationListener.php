@@ -49,7 +49,9 @@ class BotDetectorAnnotationListener
     /**
      * This event will fire during any controller call
      *
-     * @param FilterResponseEvent $event A FilterResponseEvent instance
+     * @param FilterControllerEvent $event A FilterResponseEvent instance
+     *
+     * @throws BotDetectedException
      */
     public function onKernelController(FilterControllerEvent $event)
     {

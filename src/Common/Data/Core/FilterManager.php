@@ -42,7 +42,7 @@ class FilterManager
      *
      * @return mixed The filtered value.
      *
-     * @throw InvalidFilterException
+     * @throws InvalidFilterException
      */
     public function filter($name, $args = [])
     {

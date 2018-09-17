@@ -318,10 +318,11 @@ class NewsletterSenderHelper
     /**
      * Sends an email with the new subscription data
      *
-     * @param Array $data Data for subscription
+     * @param array $data Data for subscription
      *
-     * @return Array Message and class to show the user
-     * @throws Exception Thrown on any problem with the external service
+     * @return array Message and class to show the user
+     *
+     * @throws \Exception
      */
     public function sendSubscriptionMail($data)
     {

@@ -100,6 +100,8 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
      * Create instance on manager
      *
      * @return Instance The instace object
+     *
+     * @throws \Exception
      */
     protected function createInstance($data)
     {

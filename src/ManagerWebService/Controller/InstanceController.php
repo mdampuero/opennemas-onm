@@ -25,6 +25,8 @@ class InstanceController extends Controller
      * @return JsonResponse The response object.
      *
      * @Security("hasPermission('INSTANCE_DELETE')")
+     *
+     * @throws AccessDeniedException
      */
     public function deleteAction($id)
     {
@@ -100,6 +102,8 @@ class InstanceController extends Controller
      * @return JsonResponse The response object.
      *
      * @Security("hasPermission('INSTANCE_DELETE')")
+     *
+     * @throws AccessDeniedException
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -409,9 +413,11 @@ class InstanceController extends Controller
      *
      * @param Request $request The request object.
      *
-     * @return Response The response object.
+     * @return JsonResponse The response object.
      *
      * @Security("hasPermission('INSTANCE_CREATE')")
+     *
+     * @throws AccessDeniedException
      */
     public function saveAction(Request $request)
     {

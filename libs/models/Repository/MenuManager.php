@@ -199,6 +199,8 @@ class MenuManager extends BaseManager
      * Adds a new menu to the list of menus.
      *
      * @param array $menu The menu definition.
+     *
+     * @throws \Exception
      */
     public function addMenu($name, $menu)
     {

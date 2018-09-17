@@ -117,7 +117,7 @@ class DisqusSync
                 if (!empty($posts)) {
                     $params['since'] = $posts[count($posts)-1]->createdAt;
                 }
-            } catch (\DisqusAPIError $e) {
+            } catch (\Exception $e) {
                 $this->get('application.log')->notice(
                     "Unable to import disqus comment ".$e->getMessage()
                 );

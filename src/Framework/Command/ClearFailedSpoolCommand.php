@@ -56,7 +56,7 @@ class ClearFailedSpoolCommand extends ContainerAwareCommand
             try {
                 $transport->send($message);
                 $output->writeln('Sent!');
-            } catch (\Swift_TransportException $e) {
+            } catch (\Exception $e) {
                 $output->writeln('<error>Send failed - deleting spooled message</error>');
             }
 

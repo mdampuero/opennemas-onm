@@ -32,6 +32,8 @@ class HttpEfePhotos extends HttpEfe
      * Gets and returns the list of remote files.
      *
      * @return array The list of remote files.
+     *
+     * @throws \Exception
      */
     public function getRemoteFiles()
     {

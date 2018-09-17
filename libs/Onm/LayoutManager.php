@@ -302,7 +302,7 @@ class LayoutManager
             return $this->tpl->fetch(
                 $contentName . '/content-provider/' . $contentName . '.tpl'
             );
-        } catch (\SmartyException $e) {
+        } catch (\Exception $e) {
             error_log('Error in LayoutManager::renderContent: ' . $e->getMessage());
             return '';
         }

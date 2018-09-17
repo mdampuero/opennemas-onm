@@ -82,6 +82,8 @@ class MethodCacheManager
      * @param array  $args   the arguments to pass to the method
      *
      * @return mixed the result of the called
+     *
+     * @throws \Exception
      */
     public function __call($method, $args)
     {

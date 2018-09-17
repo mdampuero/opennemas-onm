@@ -113,6 +113,8 @@ class Importer
      * @param integer $enabled  The enabled flag value.
      *
      * @return integer The content id.
+     *
+     * @throws \Exception
      */
     public function import($resource, $category = null, $target = 'Article', $author = null, $enabled = 1)
     {

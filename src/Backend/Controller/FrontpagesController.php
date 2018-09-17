@@ -74,7 +74,6 @@ class FrontpagesController extends Controller
             'views'                => $views,
             'category'             => $categoryId,
             'contentPositionByPos' => $contentPositionByPos,
-            'contents'             => $contents
         ]);
         $this->get('core.locale')->setContext('backend');
 

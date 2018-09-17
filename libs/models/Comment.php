@@ -189,7 +189,9 @@ class Comment implements CsvSerializable
      *
      * @param  array $params the params to change function behaviour
      *
-     * @return bool  if it is true the comment was created
+     * @return boolean if it is true the comment was created
+     *
+     * @throws \Exception
      */
     public function create($params)
     {

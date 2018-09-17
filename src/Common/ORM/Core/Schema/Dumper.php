@@ -133,6 +133,8 @@ class Dumper
      * @param string $name The schema name.
      *
      * @return Schema The database schema.
+     *
+     * @throws \InvalidArgumentException
      */
     public function dump($name)
     {

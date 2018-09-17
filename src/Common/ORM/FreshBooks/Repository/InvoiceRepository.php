@@ -33,7 +33,7 @@ class InvoiceRepository extends BaseRepository
      *
      * @return array The invoice.
      *
-     * @throws EntityNotFoundException When the invoice id is invalid.
+     * @throws EntityNotFoundException
      */
     public function find($id)
     {
@@ -56,6 +56,8 @@ class InvoiceRepository extends BaseRepository
      * @param array $criteria The criteria.
      *
      * @return array The list of invoices.
+     *
+     * @throws InvalidCriteriaException
      */
     public function findBy($criteria = null)
     {
@@ -104,6 +106,8 @@ class InvoiceRepository extends BaseRepository
      * @param integer $id The invoice id.
      *
      * @return string The PDF content as string.
+     *
+     * @throws EntityNotFoundException
      */
     public function getPdf($id)
     {

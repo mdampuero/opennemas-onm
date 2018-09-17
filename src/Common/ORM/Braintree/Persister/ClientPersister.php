@@ -22,7 +22,7 @@ class ClientPersister extends BasePersister
      *
      * @param Entity $entity The client to save.
      *
-     * @throws RuntimeException If the the client can not be saved.
+     * @throws \RuntimeException If the the client can not be saved.
      */
     public function create(Entity &$entity)
     {
@@ -64,7 +64,7 @@ class ClientPersister extends BasePersister
      *
      * @param Entity $entity The client to update.
      *
-     * @throws RuntimeException If the client does not exist.
+     * @throws \RuntimeException If the client does not exist.
      */
     public function update(Entity $entity)
     {

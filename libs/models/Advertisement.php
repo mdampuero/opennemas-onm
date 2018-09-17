@@ -275,6 +275,8 @@ class Advertisement extends Content
      * @param array $data the needed data for create a new ad.
      *
      * @return boolean|Advertisement
+     *
+     * @throws \Exception
      */
     public function create($data)
     {
@@ -447,8 +449,6 @@ class Advertisement extends Content
     /**
      * Returns the list of sizes for Google DFP.
      *
-     * @param array $sizes The list of sizes for the current add.
-     *
      * @return string The list of sizes for Google DFP.
      */
     public function getSizes()
@@ -464,8 +464,6 @@ class Advertisement extends Content
 
     /**
      * Checks all parameters (old version) and returns the list of sizes.
-     *
-     * @param array $params The item parameters.
      *
      * @return array The list of sizes.
      */

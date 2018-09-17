@@ -164,7 +164,7 @@ class FormController extends Controller
 
                 $class   = 'success';
                 $message = _('The information has been sent');
-            } catch (\Swift_SwiftException $e) {
+            } catch (\Exception $e) {
                 $message = _('Sorry, we were unable to complete your request');
             }
         }

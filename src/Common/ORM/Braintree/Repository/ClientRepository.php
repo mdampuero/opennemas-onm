@@ -54,6 +54,8 @@ class ClientRepository extends BaseRepository
      * @param mixed   $clients  The clients from the previous repository.
      *
      * @return array The list of clients.
+     *
+     * @throws InvalidCriteriaException
      */
     public function findBy($criteria = null)
     {
