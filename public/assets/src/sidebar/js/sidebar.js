@@ -452,10 +452,10 @@
 
             $scope.ngModel = Sidebar.init({
               class:     attrs.class ? attrs.class : 'sidebar',
-              footer:    attrs.footer === 'true' ? true : false,
+              footer:    attrs.footer === 'true',
               id:        attrs.id ? attrs.id : null,
-              inverted:  attrs.inverted === 'true' ? true : false,
-              pinnable:  attrs.pinnable === 'true' ? true : true,
+              inverted:  attrs.inverted === 'true',
+              pinnable:  attrs.pinnable === 'true',
               position:  attrs.position && attrs.position === 'right' ? attrs.position : 'left',
               swipeable: attrs.swipeable === 'true' ? attrs.swipeable : true
             });

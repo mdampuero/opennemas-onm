@@ -27,7 +27,7 @@ class Categories
     {
         $this->validateInt(func_get_args());
 
-        list($frontpageVersion, $contentPositions, $categoryContents) =
+        list(, , $categoryContents) =
             getService('api.service.frontpage_version')
                 ->getPublicContentsForFrontpageData($n1);
 

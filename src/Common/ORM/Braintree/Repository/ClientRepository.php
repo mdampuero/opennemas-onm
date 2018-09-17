@@ -38,7 +38,7 @@ class ClientRepository extends BaseRepository
     public function find($id)
     {
         try {
-            $cr = $this->factory->get('customer');
+            $cr       = $this->factory->get('customer');
             $response = $cr::find($id);
 
             return new Client($this->converter->objectify($response));
@@ -62,7 +62,7 @@ class ClientRepository extends BaseRepository
         $bcriteria = $this->arrayToCriteria($criteria);
 
         try {
-            $cr = $this->factory->get('customer');
+            $cr       = $this->factory->get('customer');
             $response = $cr::search($bcriteria);
 
             $clients = [];

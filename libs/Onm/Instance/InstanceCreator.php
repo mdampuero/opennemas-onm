@@ -282,7 +282,7 @@ class InstanceCreator
         $cmd = "mysql -u{$this->conn->user}"
             . " -p{$this->conn->password}"
             . " -h{$this->conn->host}"
-            . ($target ? " $target"  : '')
+            . ($target ? " $target" : '')
             . " < $source";
 
         exec($cmd, $output, $result);
@@ -291,7 +291,7 @@ class InstanceCreator
         if ($result != 0) {
             throw new DatabaseNotRestoredException(
                 'Could not restore the database for the instance ('
-                . print_r($output) .  ')'
+                . print_r($output) . ')'
             );
         }
     }

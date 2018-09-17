@@ -65,7 +65,7 @@ class DbalWrapper
             $this->connectionParams['master'] = $params['dbal']['connections'][$default];
             unset($this->connectionParams['master']['slaves']);
 
-            $this->connectionParams['slaves'] = array();
+            $this->connectionParams['slaves']       = [];
             $this->connectionParams['wrapperClass'] = 'Doctrine\DBAL\Connections\MasterSlaveConnection';
 
             foreach ($params['dbal']['connections'][$default]['slaves'] as $slave) {
@@ -136,7 +136,7 @@ class DbalWrapper
 
         $this->addCallToBuffer($method, $params);
 
-        $rs = call_user_func_array(array($connection, $method), $params);
+        $rs = call_user_func_array([ $connection, $method ], $params);
 
         return $rs;
     }
@@ -156,6 +156,8 @@ class DbalWrapper
      *
      * @param string $method The called method.
      * @param mixed  $params The called params.
+     *
+     * @return void
      */
     public function addCallToBuffer($method, $params)
     {
@@ -174,13 +176,13 @@ class DbalWrapper
      * Returns the current database connection.
      *
      * @return \Doctrine\DBAL\Connection The current database connection.
-     * 
+     *
      * @throws \Exception
      */
     public function getConnection()
     {
         if (!is_object($this->connection)) {
-            $config = new \Doctrine\DBAL\Configuration();
+            $config           = new \Doctrine\DBAL\Configuration();
             $this->connection = \Doctrine\DBAL\DriverManager::getConnection($this->connectionParams, $config);
         }
 
@@ -189,6 +191,8 @@ class DbalWrapper
 
     /**
      * Closes and deletes the current connection.
+     *
+     * @return  void
      */
     public function resetConnection()
     {

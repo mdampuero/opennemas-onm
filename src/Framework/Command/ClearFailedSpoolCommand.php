@@ -23,8 +23,7 @@ class ClearFailedSpoolCommand extends ContainerAwareCommand
     {
         $this
             ->setName('swiftmailer:spool:clear-failures')
-            ->setDescription('Clears failures from the spool')
-        ;
+            ->setDescription('Clears failures from the spool');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -37,11 +36,11 @@ class ClearFailedSpoolCommand extends ContainerAwareCommand
 
         // Find all the spooled *.sending files
         $spoolPath = $this->getContainer()->getParameter('swiftmailer.spool.default.file.path');
-        $finder = Finder::create()->in($spoolPath)->name('*.sending');
+        $finder    = Finder::create()->in($spoolPath)->name('*.sending');
 
         foreach ($finder as $failedFile) {
             // Rename the file, so no other process tries to find it
-            $tmpFilename = $failedFile.'.finalretry';
+            $tmpFilename = $failedFile . '.finalretry';
             rename($failedFile, $tmpFilename);
 
             // Unserialize message

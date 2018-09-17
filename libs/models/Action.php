@@ -82,7 +82,7 @@ class Action
      *
      * @return array
      */
-    public static function find($filter = '', $config = array())
+    public static function find($filter = '', $config = [])
     {
         $config = array_merge(['order' => 'date DESC'], $config);
 

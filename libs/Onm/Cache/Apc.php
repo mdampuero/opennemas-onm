@@ -54,8 +54,8 @@ class Apc extends AbstractCache
      */
     public function getIds()
     {
-        $ci = apc_cache_info('user');
-        $keys = array();
+        $ci   = apc_cache_info('user');
+        $keys = [];
 
         foreach ($ci['cache_list'] as $entry) {
             $keys[] = $entry['info'];

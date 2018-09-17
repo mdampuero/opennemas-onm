@@ -201,7 +201,6 @@ class Agency
      * Validates a finite number
      *
      * This is used for checking the int parameters
-     *
      */
     private function validateInt($number)
     {

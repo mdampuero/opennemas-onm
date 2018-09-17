@@ -328,7 +328,7 @@ EOF
                     $this->output->writeln(
                         $this->albumsCounter . " of " . $this->total . '(id: ' . $content->id . ')'
                     );
-                    $photos = [];
+
                     $photos = $content->_getAttachedPhotos($content->id);
 
                     $content->all_photos = [];

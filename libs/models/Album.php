@@ -209,7 +209,7 @@ class Album extends Content
      *
      * @param array $data the new data to update the album
      *
-     * @return Album the object instance
+     * @return null|\Album the object instance
      */
     public function update($data)
     {
@@ -218,7 +218,7 @@ class Album extends Content
         $data['subtitle'] = (empty($data['subtitle'])) ? 0 : $data['subtitle'];
 
         try {
-            $rs = getService('dbal_connection')->update(
+            getService('dbal_connection')->update(
                 'albums',
                 [
                     'subtitle' => $data['subtitle'],
@@ -238,6 +238,7 @@ class Album extends Content
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
+
             return false;
         }
     }
@@ -254,7 +255,7 @@ class Album extends Content
         parent::remove($id);
 
         try {
-            $rs = getService('dbal_connection')->delete(
+            getService('dbal_connection')->delete(
                 "albums",
                 [ 'pk_album' => $id ]
             );
@@ -290,6 +291,7 @@ class Album extends Content
                     $albumID
                 ]
             );
+
             foreach ($rs as $photo) {
                 $photoObject = getService('entity_repository')
                     ->find('Photo', $photo['pk_photo']);

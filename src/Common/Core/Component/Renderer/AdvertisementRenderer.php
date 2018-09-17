@@ -784,7 +784,7 @@ class AdvertisementRenderer
     {
         if (empty($ad->img)) {
             $this->container->get('application.log')->info(
-                'The advertisement ' . $ad->id . ' is empty'
+                'The advertisement photo for the ad (' . $ad->id . ') is empty'
             );
 
             return null;

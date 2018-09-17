@@ -290,7 +290,7 @@ class Attachment extends Content
                 'SELECT path FROM attachments WHERE pk_attachment IN (' . $contents . ')'
             );
 
-            $rs = getService('dbal_connection')->executeUpdate(
+            getService('dbal_connection')->executeUpdate(
                 'DELETE FROM attachments WHERE `pk_attachment` IN (' . $contents . ')'
             );
 

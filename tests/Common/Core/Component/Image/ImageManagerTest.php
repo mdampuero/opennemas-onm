@@ -297,15 +297,16 @@ class ImageManagerTest extends TestCase
      */
     public function testGetImageFormat()
     {
-        $parameters = [];
         $imagick    = $this->getMocketImagick();
         $imagick->expects($this->once())
             ->method('getImageFormat')
             ->will($this->returnValue('HH'));
+
         $imagine = $this->getMocketImagine();
         $imagine->expects($this->once())
             ->method('getImagick')
             ->will($this->returnValue($imagick));
+
         $image = $this->getMocketImage();
         $this->assertSame($image->getImageFormat($imagine), 'hh');
     }
