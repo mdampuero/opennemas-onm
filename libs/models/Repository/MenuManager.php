@@ -9,8 +9,6 @@
  */
 namespace Repository;
 
-use Onm\Cache\CacheInterface;
-
 /**
  * An EntityRepository serves as a repository for entities with generic as well
  * as business specific methods for retrieving entities.
@@ -42,20 +40,6 @@ class MenuManager extends BaseManager
      * @var array
      */
     protected $menus = [];
-
-    /**
-     * Initializes the menu manager.
-     *
-     * @param Connection     $dbConn      The custom DBAL wrapper.
-     * @param CacheInterface $cache       The cache instance.
-     * @param string         $cachePrefix The cache prefix.
-     */
-    public function __construct($dbConn, CacheInterface $cache, $cachePrefix)
-    {
-        $this->dbConn      = $dbConn;
-        $this->cache       = $cache;
-        $this->cachePrefix = $cachePrefix;
-    }
 
     /**
      * Counts searched menus given a criteria.
