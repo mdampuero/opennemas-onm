@@ -14,7 +14,7 @@
  */
 namespace Frontend\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 
@@ -28,112 +28,24 @@ class UtilitiesController extends Controller
     /**
      * Integrates the sharrre jQuery plugin into ONM
      *
-     * @return Response the response object
+     * @return JsonResponse the response object
      */
     public function sharrreAction(Request $request)
     {
-        $json = [
-            'url'   => '',
-            'count' => 0
+        $content = [
+            'url'   => $request->query->filter('url', '', FILTER_SANITIZE_STRING),
+            'count' => 0,
+            'time'  => time(),
         ];
 
-        $cacheFor = 300;
-
-        $json['url']  = $request->query->filter('url', '', FILTER_SANITIZE_STRING);
-        $json['time'] = time();
-        $url          = urlencode($request->query->filter('url', '', FILTER_SANITIZE_STRING));
-        $type         = urlencode($request->query->filter('type', '', FILTER_SANITIZE_STRING));
-
-        // if ($json['url']) {
-        //     if ($type == 'googlePlus') {
-        //         //source http://www.helmutgranda.com/2011/11/01/get-a-url-google-count-via-php/
-        //         $content = $this->createCurlRequest(
-        //             "https://plusone.google.com/u/0/_/+1/fastbutton?url=".$url."&count=true",
-        //             $cacheFor
-        //         );
-
-        //         $dom = new \DOMDocument;
-        //         $dom->preserveWhiteSpace = false;
-        //         @$dom->loadHTML($content);
-        //         $domxpath = new \DOMXPath($dom);
-        //         $newDom = new \DOMDocument;
-        //         $newDom->formatOutput = true;
-
-        //         $filtered = $domxpath->query("//div[@id='aggregateCount']");
-        //         if (isset($filtered->item(0)->nodeValue)) {
-        //             $json['count'] = str_replace('>', '', $filtered->item(0)->nodeValue);
-        //         }
-        //     } elseif ($type == 'stumbleupon') {
-        //         $content = $this->createCurlRequest("http://www.stumbleupon.com/services/1.01/badge.getinfo?url=$url");
-
-        //         $result = json_decode($content);
-        //         if (isset($result->result->views)) {
-        //             $json['count'] = $result->result->views;
-        //         }
-        //     }
-        // }
-        $json['count'] = 0;
-
-        $content = str_replace('\\/', '/', json_encode($json));
-
-        return new Response(
+        return new JsonResponse(
             $content,
             200,
             [
                 'x-tags'       => 'sharre,' . $type . ',' . $url,
-                'x-cache-for'  => $cacheFor . 's',
+                'x-cache-for'  => '300s',
                 'Content-Type' => 'application/json',
             ]
         );
-    }
-
-    /**
-     * Function used in sharrre actoin
-     *
-     * @param string $encUrl the url to fetch
-     *
-     * @return string the HTML content of the url
-     */
-    private function createCurlRequest($encUrl, $cacheTimeout = 300)
-    {
-        $cache       = $this->get('cache');
-        $cachedValue = $cache->fetch($encUrl);
-
-        if ($cachedValue !== false) {
-            return $cachedValue;
-        }
-
-        $options = [
-            CURLOPT_RETURNTRANSFER => true, // return web page
-            CURLOPT_HEADER         => false, // don't return headers
-            CURLOPT_FOLLOWLOCATION => true, // follow redirects
-            CURLOPT_ENCODING       => "", // handle all encodings
-            CURLOPT_USERAGENT      => 'sharrre', // who am i
-            CURLOPT_AUTOREFERER    => true, // set referer on redirect
-            CURLOPT_CONNECTTIMEOUT => 5, // timeout on connect
-            CURLOPT_TIMEOUT        => 10, // timeout on response
-            CURLOPT_MAXREDIRS      => 3, // stop after 10 redirects
-            CURLOPT_SSL_VERIFYHOST => 0,
-            CURLOPT_SSL_VERIFYPEER => false,
-        ];
-
-        $ch = curl_init();
-
-        $options[CURLOPT_URL] = $encUrl;
-        curl_setopt_array($ch, $options);
-
-        $content = curl_exec($ch);
-        $err     = curl_errno($ch);
-        $errmsg  = curl_error($ch);
-
-        curl_close($ch);
-
-        // if ($errmsg != '' || $err != '') {
-        //     print_r($errmsg);
-        //     print_r($errmsg);
-        // }
-        $cache->save($encUrl, $content, $cacheTimeout);
-
-        return $content;
     }
 }
