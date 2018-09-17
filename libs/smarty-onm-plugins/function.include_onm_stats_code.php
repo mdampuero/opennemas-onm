@@ -7,13 +7,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 function smarty_function_include_onm_stats_code($params, &$smarty)
 {
     $request = $smarty->getContainer()->get('request_stack')
         ->getCurrentRequest();
 
     if (empty($request)
-        || preg_match('@/admin@', $request->getRequestUri())
+        || preg_match('@^/admin@', $request->getRequestUri())
+        || preg_match('@/preview$@', $request->getRequestUri())
+        || preg_match('@^/ext@', $request->getRequestUri())
         || !array_key_exists('contentId', $smarty->getTemplateVars())
     ) {
         return '';

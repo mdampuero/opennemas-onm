@@ -24,7 +24,7 @@
          *
          * @type {Object}
          */
-         $scope.smart = {};
+        $scope.smart = {};
 
         /**
          * The available smart tags format
@@ -46,10 +46,9 @@
             tagsFormat = 'onecall_async';
           }
 
-          $scope.smart.domain = domain;
+          $scope.smart.domain     = domain;
           $scope.smart.tagsFormat = tagsFormat;
         };
-
       }
     ]);
 })();

@@ -24,7 +24,7 @@ class NewsAgencyServerController extends Controller
      */
     public function init()
     {
-        $this->syncFrom = array(
+        $this->syncFrom = [
             '3600'         => sprintf(_('%d hour'), '1'),
             '10800'         => sprintf(_('%d hours'), '3'),
             '21600'         => sprintf(_('%d hours'), '6'),
@@ -38,7 +38,7 @@ class NewsAgencyServerController extends Controller
             '604800'        => sprintf(_('%d week'), '1'),
             '1209600'       => sprintf(_('%d weeks'), '2'),
             'no_limits'     => _('No limit'),
-        );
+        ];
 
         ini_set('memory_limit', '128M');
         ini_set('set_time_limit', '0');
@@ -76,7 +76,7 @@ class NewsAgencyServerController extends Controller
             $latestServerId = max(array_keys($servers));
         }
 
-        $server = array(
+        $server = [
             'id'             => $latestServerId + 1,
             'name'           => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
             'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
@@ -95,7 +95,7 @@ class NewsAgencyServerController extends Controller
             'target_author'  => $request->request->filter('target_author', '', FILTER_SANITIZE_STRING),
             'import_related' => $request->request->filter('import_related', '', FILTER_SANITIZE_STRING),
             'filters'        => $request->request->get('filters', []),
-        );
+        ];
 
         $servers[$server['id']] = $server;
 
@@ -106,12 +106,10 @@ class NewsAgencyServerController extends Controller
             _('News agency server added.')
         );
 
-        return $this->redirect(
-            $this->generateUrl(
-                'backend_news_agency_server_show',
-                array('id' => $server['id'])
-            )
-        );
+        return $this->redirect($this->generateUrl(
+            'backend_news_agency_server_show',
+            [ 'id' => $server['id'] ]
+        ));
     }
 
     /**
@@ -158,9 +156,16 @@ class NewsAgencyServerController extends Controller
         $id     = $request->query->getDigits('id');
         $server = [];
 
-        if (!empty($id)) {
-            $server = $servers[$id];
+        if (empty($id) || !array_key_exists($id, $servers)) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the news agency source with the id "%d"'), $id)
+            );
+
+            return $this->redirect($this->generateUrl('backend_news_agency_servers_list'));
         }
+
+        $server = $servers[$id];
 
         $authors = [];
         $users   = $this->get('api.service.author')
@@ -222,11 +227,9 @@ class NewsAgencyServerController extends Controller
             _('News agency server updated.')
         );
 
-        return $this->redirect(
-            $this->generateUrl(
-                'backend_news_agency_server_show',
-                [ 'id' => $id ]
-            )
-        );
+        return $this->redirect($this->generateUrl(
+            'backend_news_agency_server_show',
+            [ 'id' => $id ]
+        ));
     }
 }

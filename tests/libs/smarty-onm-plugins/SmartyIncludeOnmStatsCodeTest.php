@@ -9,10 +9,8 @@
  */
 namespace Tests\Libs\Smarty;
 
-use Libs\Smarty\SmartyIncludeOnmStatsCode;
-
 /**
- * Defines test cases for SmartyIncludeOnmStatsCode class.
+ * Defines test cases for smarty_function_include_onm_stats_code function.
  */
 class SmartyIncludeOnmStatsCodeTest extends \PHPUnit\Framework\TestCase
 {
@@ -48,67 +46,98 @@ class SmartyIncludeOnmStatsCodeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests smarty_function_include_onm_stats_code when there is a content id
-     * assigned to the template manager.
+     * Tests smarty_function_include_onm_stats_code when the request refers to
+     * an external synchronized content.
      */
-    public function testSmartyIncludeOnmStatsCodeWhenContent()
+    public function testIncludeOnmStatsCodeWhenBackend()
     {
-        $this->request->expects($this->once())->method('getRequestUri')
-            ->willReturn('/corge/glorp');
-
-        $this->rs->expects($this->once())->method('getCurrentRequest')
+        $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
 
-        $this->smarty->expects($this->any())->method('getTemplateVars')
-            ->willReturn([ 'contentId' => 123 ]);
-
-        $code = smarty_function_include_onm_stats_code([], $this->smarty);
-
-        $this->assertContains("content_id: '123'", $code);
-    }
-
-
-    /**
-     * Tests smarty_function_include_onm_stats_code when the current request if
-     * for a backend resource.
-     */
-    public function testSmartyIncludeOnmStatsCodeWhenBackendUrl()
-    {
         $this->request->expects($this->once())->method('getRequestUri')
-            ->willReturn('/admin/garply');
-
-        $this->rs->expects($this->once())->method('getCurrentRequest')
-            ->willReturn($this->request);
+            ->willReturn('/admin/foo');
 
         $this->assertEmpty(smarty_function_include_onm_stats_code([], $this->smarty));
     }
 
     /**
-     * Tests smarty_function_include_onm_stats_code when there is no content id
-     * assigned to the template manager.
+     * Tests smarty_function_include_onm_stats_code when the request refers to
+     * an external synchronized content.
      */
-    public function testSmartyIncludeOnmStatsCodeWhenNoContent()
+    public function testIncludeOnmStatsCodeWhenExternal()
     {
-        $this->request->expects($this->once())->method('getRequestUri')
-            ->willReturn('/corge/glorp');
-
-        $this->rs->expects($this->once())->method('getCurrentRequest')
+        $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
 
-        $this->smarty->expects($this->once())->method('getTemplateVars')
-            ->willReturn([]);
+        $this->request->expects($this->exactly(3))->method('getRequestUri')
+            ->willReturn('/ext/qux');
 
         $this->assertEmpty(smarty_function_include_onm_stats_code([], $this->smarty));
     }
 
     /**
-     * Tests smarty_function_include_onm_stats_code when there are no request.
+     * Tests smarty_function_include_onm_stats_code when there is no request.
      */
-    public function testSmartyIncludeOnmStatsCodeWhenNoRequest()
+    public function testIncludeOnmStatsCodeWhenNoRequest()
     {
         $this->rs->expects($this->once())->method('getCurrentRequest')
             ->willReturn(null);
 
         $this->assertEmpty(smarty_function_include_onm_stats_code([], $this->smarty));
     }
+
+    /**
+     * Tests smarty_function_include_onm_stats_code when the request refers to
+     * a content preview.
+     */
+    public function testIncludeOnmStatsCodeWhenPreview()
+    {
+        $this->rs->expects($this->any())->method('getCurrentRequest')
+            ->willReturn($this->request);
+
+        $this->request->expects($this->exactly(2))->method('getRequestUri')
+            ->willReturn('/foobar/wobble/preview');
+
+        $this->assertEmpty(smarty_function_include_onm_stats_code([], $this->smarty));
+    }
+
+    /**
+     * Tests smarty_function_include_onm_stats_code when the request does not
+     * refer to a content.
+     */
+    public function testIncludeOnmStatsCodeWhenNoContent()
+    {
+        $this->rs->expects($this->any())->method('getCurrentRequest')
+            ->willReturn($this->request);
+
+        $this->request->expects($this->exactly(3))->method('getRequestUri')
+            ->willReturn('/foobar/wobble');
+
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([]);
+
+        $this->assertEmpty(smarty_function_include_onm_stats_code([], $this->smarty));
+    }
+
+    /**
+     * Tests smarty_function_include_onm_stats_code when the request refers to a
+     * content.
+     */
+    public function testIncludeOnmStatsCodeWhenContent()
+    {
+        $this->rs->expects($this->any())->method('getCurrentRequest')
+            ->willReturn($this->request);
+
+        $this->request->expects($this->exactly(3))->method('getRequestUri')
+            ->willReturn('/foobar/wobble');
+
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([ 'contentId' => 1234 ]);
+
+        $this->assertContains(
+            "jQuery.onmStats({ content_id: '1234' });",
+            smarty_function_include_onm_stats_code([], $this->smarty)
+        );
+    }
+
 }
