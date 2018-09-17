@@ -11,6 +11,7 @@ namespace Frontend\EventListener;
 
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -43,7 +44,7 @@ class AuthenticationListener implements EventSubscriberInterface
      *
      * @param FilterResponseEvent $event The event object.
      *
-     * @return null
+     * @return Response
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {

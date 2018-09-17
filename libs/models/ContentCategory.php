@@ -489,6 +489,8 @@ class ContentCategory implements \JsonSerializable
      * Changes the menu status (shown, hidden) for the category.
      *
      * @param string $status the status to set to the category.
+     *
+     * @return boolean
      */
     public function setAvailable($status)
     {
@@ -508,10 +510,12 @@ class ContentCategory implements \JsonSerializable
             }
 
             dispatchEventWithParams('category.update', [ 'category' => $this ]);
+
             return true;
         } catch (\Exception $e) {
             $logger = getService('error.log');
             $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
+
             return false;
         }
     }
@@ -520,6 +524,8 @@ class ContentCategory implements \JsonSerializable
      * Changes the rss status (shown, hidden) for the category.
      *
      * @param string $status the status to set to the category rss.
+     *
+     * @return boolean
      */
     public function setInRss($status)
     {

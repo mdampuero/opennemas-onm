@@ -235,9 +235,11 @@ class NewsAgencyController extends Controller
     /**
      * Basic logic to import an element
      *
-     * @param Request $request the request object
+     * @param string $id the id of the content
+     * @param string $sourceId the id of the source
+     * @param string $id the category name
      *
-     * @return Response the response object
+     * @return string the response object
      */
     private function importElements($id = '', $sourceId = '', $category = null)
     {

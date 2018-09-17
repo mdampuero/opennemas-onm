@@ -10,6 +10,7 @@
 namespace Common\Core\Component\Loader;
 
 use Common\ORM\Entity\Instance;
+use Common\ORM\Entity\Theme;
 
 /**
  * Loads the opennemas core.
@@ -354,6 +355,8 @@ class Loader
      * Loads an instance basing on an QOL query.
      *
      * @param string $oql The OQL query.
+     *
+     * @return Instance
      */
     public function loadInstanceFromOql($oql)
     {
@@ -420,6 +423,8 @@ class Loader
      * Loads a theme basing on an QOL query.
      *
      * @param string $oql The OQL query.
+     *
+     * @return Theme
      */
     protected function loadThemeFromOql($oql)
     {

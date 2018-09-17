@@ -23,7 +23,7 @@ class Checker
     /**
      * Initializes the InstanceChecked.
      *
-     * @param EntityManager $em The EntityManager service.
+     * @param \Repository\EntityManager $em The EntityManager service.
      */
     public function __construct($em)
     {
@@ -33,7 +33,9 @@ class Checker
     /**
      * Validates an instance according to its class definition.
      *
-     * @param Instance $class The instance to validate.
+     * @param \Common\ORM\Entity\Instance $class The instance to validate.
+     *
+     * @return void
      */
     public function check(&$instance)
     {
@@ -75,7 +77,11 @@ class Checker
     /**
      * Validates the domains for the given instance.
      *
-     * @param Instance $instance The instance.
+     * @param \Common\ORM\Entity\Instance $instance The instance.
+     *
+     * @return void
+     *
+     * @throws InstanceAlreadyExistsException
      */
     public function validateDomains(&$instance)
     {

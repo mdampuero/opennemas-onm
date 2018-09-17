@@ -80,6 +80,9 @@ class Action
     /**
      * Returns the list of action_counters
      *
+     * @param string $filter The filter to search from
+     * @param array $config the list of configurations
+     *
      * @return array
      */
     public static function find($filter = '', $config = [])
@@ -125,6 +128,8 @@ class Action
 
     /**
      * Returns the total of counters
+     *
+     * @param string $filter The filter to search with
      *
      * @return int
      */

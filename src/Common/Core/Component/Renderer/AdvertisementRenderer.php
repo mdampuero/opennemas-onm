@@ -39,7 +39,7 @@ class AdvertisementRenderer
     /**
      * Returns the string that depicts the default mark shown alongside ads
      *
-     * @param Advertisement $ad the advertisement object where to search for the mark
+     * @param \Advertisement $ad the advertisement object where to search for the mark
      *
      * @return string The default mark for the advertisements
      */
@@ -66,7 +66,7 @@ class AdvertisementRenderer
     /**
      * Returns the list of CSS classes according to device restrictions for an Ad
      *
-     * @param Advertisement $ad the advertisement to get restrictions from
+     * @param \Advertisement $ad the advertisement to get restrictions from
      *
      * @return string the css classes to apply
      */
@@ -89,7 +89,7 @@ class AdvertisementRenderer
     /**
      * Renders an advertisement given some params
      *
-     * @param Advertisement $ad The advertisement to render.
+     * @param \Advertisement $ad The advertisement to render.
      * @param array $params an array of parameters to render the ad
      *
      * @return string the HTML content for the advertisement
@@ -117,7 +117,7 @@ class AdvertisementRenderer
     /**
      * Renders an advertisement.
      *
-     * @param Advertisement $ad The advertisement to render.
+     * @param \Advertisement $ad The advertisement to render.
      * @param string $format the render format to use 'amp' or 'inline'
      *
      * @return string The HTML for the slot.
@@ -146,9 +146,8 @@ class AdvertisementRenderer
     /**
      * Generates the HTML header section for the DFP ads.
      *
-     * @param array $ads    The list of advertisements to generate the header
-     *                      from.
-     * @param string $format the render format to use 'amp' or 'inline'
+     * @param array  $ads    The list of advertisements to generate the header from.
+     * @param string $format The render format to use 'amp' or 'inline'
      *
      * @return string the HTML content for the DFP slot.
      */
@@ -199,8 +198,8 @@ class AdvertisementRenderer
     /**
      * Renders a DFP advertisement slot.
      *
-     * @param Advertisement $ad The advertisement to render.
-     * @param string $format the render format to use 'amp' or 'inline'
+     * @param \Advertisement $ad     The advertisement to render.
+     * @param string         $format The render format to use 'amp' or 'inline'
      *
      * @return string The HTML content for the DFP advertisement slot.
      */
@@ -215,7 +214,7 @@ class AdvertisementRenderer
      * Renders an image/swf based advertisement.
      *
      * @param string $ad     The advertisement to render.
-     * @param Photo  $img    The image object.
+     * @param \Photo $img    The image object.
      * @param string $format The render format to use 'amp' or 'inline'
      *
      * @return string The HTML code for the advertisement.
@@ -251,8 +250,7 @@ class AdvertisementRenderer
     /**
      * Generates the HTML code to include in header for Revive advertisements.
      *
-     * @param array The list of advertisements.
-     * @param string $format the render format to use 'amp' or 'inline'
+     * @param array $ads The list of advertisements.
      *
      * @return string The HTML code to include in header.
      */
@@ -291,8 +289,7 @@ class AdvertisementRenderer
     /**
      * Renders a Revive advertisement.
      *
-     * @param Advertisement $ad the ad to render.
-     * @param string $format the render format to use 'amp' or 'inline'
+     * @param \Advertisement $ad the ad to render.
      *
      * @return string the HTML content for the DFP slot.
      */
@@ -314,8 +311,8 @@ class AdvertisementRenderer
     /**
      * Generates the HTML code to include in header for Smart advertisements.
      *
-     * @param array The list of advertisements.
-     * @param string $format the render format to use 'amp' or 'inline'
+     * @param array $ads     The list of advertisements.
+     * @param string $format The render format to use 'amp' or 'inline'
      *
      * @return string The HTML code to include in header.
      */
@@ -362,8 +359,7 @@ class AdvertisementRenderer
     /**
      * Renders a Smart advertisement.
      *
-     * @param Advertisement $ad the ad to render.
-     * @param string $format the render format to use 'amp' or 'inline'
+     * @param \Advertisement $ad the ad to render.
      *
      * @return string the HTML content for the Smart slot.
      */
@@ -424,6 +420,8 @@ class AdvertisementRenderer
             'top' : $ad->params['orientation'];
 
         $sizes = $ad->normalizeSizes($ad->params);
+
+        // This code block is not used, overwritten by the next array_shift
         $size  = array_filter($sizes, function ($a) {
             return $a['device'] === 'desktop';
         });
@@ -445,8 +443,8 @@ class AdvertisementRenderer
     /**
      * Returns the HTML for a safe frame ad slot
      *
-     * @param  Advertisement $ad The ad to render.
-     * @param array $params the list of parameters
+     * @param \Advertisement $ad     The ad to render.
+     * @param array          $params The list of parameters
      *
      * @return string the HTML generated
      */
@@ -477,8 +475,8 @@ class AdvertisementRenderer
     /**
      * Renders a SafeFrame document for an advertisement
      *
-     * @param  Advertisement $ad The ad to render.
-     * @param array $params the list of parameters
+     * @param \Advertisement $ad     The ad to render.
+     * @param array          $params The list of parameters
      *
      * @return string the HTML generated
      */
@@ -510,8 +508,8 @@ class AdvertisementRenderer
     /**
      * Returns the HTML code for a OpenX advertisement.
      *
-     * @param Advertisement $ad       The advertisement object.
-     * @param string        $category The current category.
+     * @param \Advertisement $ad       The advertisement object.
+     * @param string         $category The current category.
      *
      * @return string The HTML code for the OpenX advertisement.
      */
@@ -533,8 +531,8 @@ class AdvertisementRenderer
     /**
      * Returns the HTML code for a Google DFP advertisement.
      *
-     * @param Advertisement $ad       The advertisement object.
-     * @param string        $category The current category.
+     * @param \Advertisement $ad       The advertisement object.
+     * @param string         $category The current category.
      *
      * @return string The HTML code for the Google DFP advertisement.
      */
@@ -558,8 +556,8 @@ class AdvertisementRenderer
     /**
      * Returns the HTML code for a Smart advertisement.
      *
-     * @param Advertisement $ad       The advertisement object.
-     * @param string        $category The current category.
+     * @param \Advertisement $ad       The advertisement object.
+     * @param string         $category The current category.
      *
      * @return string The HTML code for the Smart advertisement.
      */
@@ -578,8 +576,8 @@ class AdvertisementRenderer
     /**
      * Returns the HTML code for a flash-based advertisement.
      *
-     * @param Advertisement $ad  The advertisement object.
-     * @param Photo         $img The flash object.
+     * @param \Advertisement $ad  The advertisement object.
+     * @param \Photo         $img The flash object.
      *
      * @return string The HTML code for a flash-based advertisement.
      */
@@ -605,7 +603,7 @@ class AdvertisementRenderer
     /**
      * Returns the HTML code for a HTML/JS advertisement.
      *
-     * @param Advertisement $ad The advertisement object.
+     * @param \Advertisement $ad The advertisement object.
      *
      * @return string The HTML code for the HTML/JS advertisement.
      */
@@ -622,8 +620,8 @@ class AdvertisementRenderer
     /**
      * Returns the HTML code for an image-based advertisement.
      *
-     * @param Advertisement $ad  The advertisement object.
-     * @param Photo         $img The image object.
+     * @param \Advertisement $ad  The advertisement object.
+     * @param \Photo         $img The image object.
      *
      * @return string The HTML code for the image-based advertisement.
      */
@@ -667,7 +665,9 @@ class AdvertisementRenderer
     /**
      * Returns the targeting-related JS code for google DFP.
      *
-     * @param string $category The current category.
+     * @param string  $category  The current category.
+     * @param string  $module    The current module.
+     * @param integer $contentId The id of the content current.
      *
      * @return string The targeting-related JS code.
      */
@@ -722,7 +722,9 @@ class AdvertisementRenderer
     /**
      * Returns the targeting-related JS code for google DFP.
      *
-     * @param string $category The current category.
+     * @param string  $category The current category.
+     * @param string  $module    The current module.
+     * @param integer $contentId The id of the content current.
      *
      * @return string The targeting-related JS code.
      */
@@ -758,7 +760,7 @@ class AdvertisementRenderer
     /**
      * Returns the advertisement script.
      *
-     * @param Advertisement $ad The advertisement object.
+     * @param \Advertisement $ad The advertisement object.
      *
      * @return string The advertisement script.
      */
@@ -776,9 +778,9 @@ class AdvertisementRenderer
     /**
      * Returns the image object for the advertisement.
      *
-     * @param Advertisement $ad The advertisement object.
+     * @param \Advertisement $ad The advertisement object.
      *
-     * @return Photo The image for the advertisement.
+     * @return \Photo The image for the advertisement.
      */
     protected function getImage($ad)
     {

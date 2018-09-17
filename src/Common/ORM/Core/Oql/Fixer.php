@@ -7,7 +7,7 @@ class Fixer
     /**
      * The OQL to fix.
      *
-     * @var type
+     * @var string
      */
     protected $oql = '';
 
@@ -43,6 +43,8 @@ class Fixer
      * Adds a filter condition to the current OQL query.
      *
      * @param string $condition The filter condition to add.
+     *
+     * @return Fixer
      */
     public function addCondition($condition)
     {
@@ -71,6 +73,8 @@ class Fixer
      * Adds a limit constraint to the current OQL query.
      *
      * @param integer $limit The maximum number of items.
+     *
+     * @return Fixer
      */
     public function addLimit($limit)
     {
@@ -88,6 +92,8 @@ class Fixer
      * Adds a offset constraint to the current OQL query.
      *
      * @param integer $offset The maximum number of items.
+     *
+     * @return Fixer
      */
     public function addOffset($offset)
     {
@@ -106,6 +112,8 @@ class Fixer
      *
      * @param string $field     The field to order by.
      * @param string $direction The order by direction.
+     *
+     * @return Fixer
      */
     public function addOrder($field, $direction)
     {
