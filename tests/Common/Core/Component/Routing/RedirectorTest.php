@@ -10,12 +10,11 @@
 namespace Tests\Common\Core\Component\Routing;
 
 use Common\Core\Component\Routing\Redirector;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for Redirector class.
  */
-class RedirectorTest extends KernelTestCase
+class RedirectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

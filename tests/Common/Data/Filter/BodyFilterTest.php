@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\BodyFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for BodyFilter class.
  */
-class BodyFilterTest extends KernelTestCase
+class BodyFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

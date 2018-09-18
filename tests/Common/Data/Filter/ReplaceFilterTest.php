@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\ReplaceFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for ReplaceFilter class.
  */
-class ReplaceFilterTest extends KernelTestCase
+class ReplaceFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests filter.

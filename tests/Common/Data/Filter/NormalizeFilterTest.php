@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\NormalizeFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines tests cases for NormalizeFilter class.
  */
-class NormalizeFilterTest extends KernelTestCase
+class NormalizeFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

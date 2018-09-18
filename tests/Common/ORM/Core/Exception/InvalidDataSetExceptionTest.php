@@ -14,7 +14,7 @@ use Common\ORM\Core\Exception\InvalidDataSetException;
 /**
  * Defines test cases for InvalidDataSetException class.
  */
-class InvalidDataSetExceptionTest extends \PHPUnit_Framework_TestCase
+class InvalidDataSetExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests constructor for InvalidDataSetException.

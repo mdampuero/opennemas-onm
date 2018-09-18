@@ -10,12 +10,11 @@
 namespace Tests\Common\Migration\Component\Persister;
 
 use Common\Migration\Component\Persister\DatabasePersister;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for DatabasePersister class.
  */
-class DatabasePersisterTest extends KernelTestCase
+class DatabasePersisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

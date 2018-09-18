@@ -15,7 +15,7 @@ use Common\ORM\Core\Entity;
 /**
  * Defines test cases for UserGroupService class.
  */
-class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
+class UserGroupServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

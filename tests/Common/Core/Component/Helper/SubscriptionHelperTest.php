@@ -16,7 +16,7 @@ use Common\ORM\Entity\UserGroup;
 /**
  * Defines test cases for class class.
  */
-class SubscriptionHelperTest extends \PHPUnit_Framework_TestCase
+class SubscriptionHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

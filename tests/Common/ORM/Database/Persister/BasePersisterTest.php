@@ -13,7 +13,7 @@ use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Database\Persister\BasePersister;
 
-class BasePersisterTest extends \PHPUnit_Framework_TestCase
+class BasePersisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -106,6 +106,8 @@ class BasePersisterTest extends \PHPUnit_Framework_TestCase
         $this->cache->expects($this->once())->method('remove');
 
         $this->persister->remove($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -133,6 +135,8 @@ class BasePersisterTest extends \PHPUnit_Framework_TestCase
 
         $this->cache->expects($this->once())->method('remove');
         $this->persister->update($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -151,6 +155,8 @@ class BasePersisterTest extends \PHPUnit_Framework_TestCase
         $this->conn->expects($this->never())->method($this->anything());
         $this->cache->expects($this->never())->method($this->anything());
         $this->persister->update($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -162,6 +168,8 @@ class BasePersisterTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($this->persister, [ [ 'foo' => 1 ], [] ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**

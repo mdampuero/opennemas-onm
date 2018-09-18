@@ -13,7 +13,7 @@ use Common\ORM\Core\Metadata;
 use Common\ORM\Database\Repository\BaseRepository;
 use Common\ORM\Entity\Extension;
 
-class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
+class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -119,6 +119,8 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn([ 'extension-1' => null ]);
 
         $this->repository->find(1);
+
+        $this->addToAssertionCount(1);
     }
 
     /**

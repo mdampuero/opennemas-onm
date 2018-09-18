@@ -16,7 +16,7 @@ use Common\ORM\FreshBooks\Data\Converter\BaseConverter;
 /**
  * Defines test cases for BaseConverter class.
  */
-class BaseConverterTest extends \PHPUnit_Framework_TestCase
+class BaseConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -196,7 +196,6 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
             [ 'type' => 'PayPal' ],
             $method->invokeArgs($this->converter, [ [ 'type' => 'PayPalAccount' ] ])
         );
-
     }
 
     /**
@@ -244,6 +243,5 @@ class BaseConverterTest extends \PHPUnit_Framework_TestCase
             [ 'type' => 'PayPalAccount' ],
             $method->invokeArgs($this->converter, [ [ 'type' => 'PayPal' ] ])
         );
-
     }
 }

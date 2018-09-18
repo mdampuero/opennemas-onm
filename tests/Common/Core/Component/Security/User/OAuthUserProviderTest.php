@@ -11,12 +11,11 @@ namespace Tests\Common\Core\Component\Security\User;
 
 use Common\ORM\Entity\User;
 use Common\Core\Component\Security\User\OAuthUserProvider;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for OAuthUserProvider class.
  */
-class OAuthUserProviderTest extends KernelTestCase
+class OAuthUserProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

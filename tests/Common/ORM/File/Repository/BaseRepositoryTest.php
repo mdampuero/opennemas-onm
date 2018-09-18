@@ -13,7 +13,7 @@ use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Entity;
 use Common\ORM\File\Repository\BaseRepository;
 
-class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
+class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -91,6 +91,8 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($repository, []);
+
+        $this->addToAssertionCount(1);
     }
 
     /**

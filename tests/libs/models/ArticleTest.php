@@ -15,7 +15,7 @@ use \Article;
 /**
  * Defines test cases for Article class.
  */
-class ArticleTest extends \PHPUnit_Framework_TestCase
+class ArticleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

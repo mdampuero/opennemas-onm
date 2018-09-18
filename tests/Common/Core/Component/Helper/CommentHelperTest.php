@@ -16,7 +16,7 @@ use Common\ORM\Entity\UserGroup;
 /**
  * Defines test cases for class class.
  */
-class CommentHelperTest extends \PHPUnit_Framework_TestCase
+class CommentHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

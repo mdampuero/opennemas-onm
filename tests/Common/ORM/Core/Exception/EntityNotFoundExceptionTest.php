@@ -4,7 +4,7 @@ namespace Framework\Tests\ORM\Core\Exception;
 
 use Common\ORM\Core\Exception\EntityNotFoundException;
 
-class EntityNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
+class EntityNotFoundExceptionTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetMessage()
     {

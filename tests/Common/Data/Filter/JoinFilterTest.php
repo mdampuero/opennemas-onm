@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\JoinFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines tests cases for JoinFilter class.
  */
-class JoinFilterTest extends KernelTestCase
+class JoinFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

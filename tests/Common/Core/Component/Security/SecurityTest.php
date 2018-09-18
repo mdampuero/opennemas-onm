@@ -16,7 +16,7 @@ use Common\Core\Component\Security\Security;
 /**
  * Defines test cases for Security class.
  */
-class SecurityTest extends \PHPUnit_Framework_TestCase
+class SecurityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
