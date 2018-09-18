@@ -132,7 +132,10 @@ class RedisCommand extends ContainerAwareCommand
      */
     protected function checkNamespace()
     {
-        if (empty($this->input->getOption('namespace'))) {
+        if (($this->input->getArgument('action') !== 'remove' ||
+            empty($this->input->getOption('pattern')))
+            && empty($this->input->getOption('namespace'))
+        ) {
             throw new \InvalidArgumentException("Missing argument 'namespace'");
         }
     }

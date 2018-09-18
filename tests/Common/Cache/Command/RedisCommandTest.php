@@ -211,14 +211,52 @@ class CacheCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests checkNamespace when key is missing.
+     * Tests checkNamespace when namespace is missing.
      *
      * @expectedException \InvalidArgumentException
      */
     public function testCheckNamespaceWhenNamespaceMissing()
     {
-        $this->input->expects($this->once())->method('getOption')
+        $this->input->expects($this->at(0))->method('getArgument')
+            ->with('action')->willReturn('wobble');
+        $this->input->expects($this->at(1))->method('getOption')
             ->with('namespace')->willReturn(false);
+
+        $method = new \ReflectionMethod($this->command, 'checkNamespace');
+        $method->setAccessible(true);
+
+        $method->invokeArgs($this->command, []);
+    }
+
+    /**
+     * Tests checkNamespace when namespace is missing for remove action with
+     * key argument.
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testCheckNamespaceWhenNamespaceMissingForRemoveWithKey()
+    {
+        $this->input->expects($this->at(0))->method('getArgument')
+            ->with('action')->willReturn('remove');
+        $this->input->expects($this->at(1))->method('getOption')
+            ->with('pattern')->willReturn(null);
+
+        $method = new \ReflectionMethod($this->command, 'checkNamespace');
+        $method->setAccessible(true);
+
+        $method->invokeArgs($this->command, []);
+    }
+
+    /**
+     * Tests checkNamespace when namespace is missing for remove action with
+     * pattern argument.
+     */
+    public function testCheckNamespaceWhenNamespaceMissingForRemoveWithPattern()
+    {
+        $this->input->expects($this->at(0))->method('getArgument')
+            ->with('action')->willReturn('remove');
+        $this->input->expects($this->at(1))->method('getOption')
+            ->with('pattern')->willReturn('*baz*');
 
         $method = new \ReflectionMethod($this->command, 'checkNamespace');
         $method->setAccessible(true);
