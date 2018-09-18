@@ -76,7 +76,7 @@ class NewsletterTemplateController extends Controller
             ];
         }
 
-        if (!empty($settings['newsletter_maillist']['email'])) {
+        if (!empty($settings['newsletter_maillist']) && isset($settings['newsletter_maillist']['email'])) {
             $extra['recipients'][] = [
                 'type' => 'external',
                 'name' => $settings['newsletter_maillist']['email'],

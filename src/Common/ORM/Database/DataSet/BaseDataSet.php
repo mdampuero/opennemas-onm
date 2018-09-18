@@ -139,7 +139,7 @@ class BaseDataSet extends DataSet
             );
 
             foreach ($values as $value) {
-                $data[$value[$keyName]] = unserialize($value[$valueName]);
+                $data[$value[$keyName]] = @unserialize($value[$valueName]);
                 $this->cache->set($value[$keyName], $data[$value[$keyName]]);
             }
         }

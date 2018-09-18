@@ -1,10 +1,3 @@
-api_v1_backend_tag_create:
-    path:     /tags/new
-    defaults: { _controller  : ApiBundle:V1/Backend/Tag:create }
-    methods:  [ GET ]
-    options:
-        expose: true
-
 api_v1_backend_tag_delete:
     path:     /tags/{id}
     defaults: { _controller: ApiBundle:V1/Backend/Tag:delete }

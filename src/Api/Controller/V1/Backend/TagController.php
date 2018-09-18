@@ -21,17 +21,6 @@ use Common\Core\Component\Validator\Validator;
 class TagController extends Controller
 {
     /**
-     * Returns the data to create a new tag.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_CREATE')")
-     */
-    public function createAction()
-    {
-    }
-
-    /**
      * Deletes an tag.
      *
      * @param integer $id The tag id.
@@ -116,18 +105,20 @@ class TagController extends Controller
      */
     public function saveAction(Request $request)
     {
-        $msg = $this->get('core.messenger');
-        $tag = $request->request->all();
+        $msg  = $this->get('core.messenger');
+        $data = $request->request->all();
 
-        if (array_key_exists('slug', $tag)) {
+        if (array_key_exists('slug', $data)) {
             $msg->add(_('Wrong parameter slug'), 'error');
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $ts          = $this->get('api.service.tag');
-        $tag['slug'] = $ts->createSearchableWord($tag['name']);
+        $ts = $this->get('api.service.tag');
 
-        $tag = $ts->createItem($tag);
+        $data['slug'] = $ts->createSearchableWord($data['name']);
+
+        $tag = $ts->createItem($data);
+
         $msg->add(_('Item saved successfully'), 'success', 201);
 
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -180,8 +171,10 @@ class TagController extends Controller
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $ts          = $this->get('api.service.tag');
+        $ts = $this->get('api.service.tag');
+
         $tag['slug'] = $ts->createSearchableWord($tag['name']);
+
         $ts->updateItem($id, $tag);
 
         $msg->add(_('Item saved successfully'), 'success');
@@ -323,9 +316,10 @@ class TagController extends Controller
             'es.openhost.module.multilanguage',
             $this->get('core.instance')->activated_modules
         );
-        $ls            = $this->get('core.locale');
-        $locale        = $ls->getLocale('frontend');
-        $locales       = $multilanguage ?
+
+        $ls      = $this->get('core.locale');
+        $locale  = $ls->getLocale('frontend');
+        $locales = $multilanguage ?
             $this->getLanguages($ls->getAvailableLocales('frontend')) :
             [['key' => $locale, 'value' => $ls->getSupportedLocales('frontend')[$locale]]];
 

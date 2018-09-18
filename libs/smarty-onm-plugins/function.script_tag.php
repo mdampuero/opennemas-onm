@@ -48,7 +48,7 @@ function smarty_function_script_tag($params, &$smarty)
 
     $resource = empty($server) ? $src : $server . DS . $src;
 
-    if ($params['external'] != 1) {
+    if (!array_key_exists('external', $params) || $params['external'] != 1) {
         $resource = preg_replace('/(\/+)/', '/', $resource);
         $resource = str_replace('.js', '.' . $mtime . '.js', $resource);
     }

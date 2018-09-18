@@ -342,8 +342,16 @@ class AdvertisementRenderer
             ];
         }
 
+        $template = 'smart.header.tpl';
+        if (is_array($config)
+            && array_key_exists('tags_format', $config)
+            && $config['tags_format'] == 'onecall_sync'
+        ) {
+            $template = 'smart.header.sync.tpl';
+        }
+
         return $this->tpl
-            ->fetch('advertisement/helpers/inline/smart.header.tpl', [
+            ->fetch('advertisement/helpers/inline/' . $template, [
                 'config'        => $config,
                 'page_id'       => $config['page_id'][$params['advertisementGroup']],
                 'zones'         => $zones,
@@ -365,8 +373,18 @@ class AdvertisementRenderer
      */
     public function renderInlineSmartSlot($ad)
     {
+        $config = $this->sm->get('smart_ad_server');
+
+        $template = 'smart.slot.tpl';
+        if (is_array($config)
+            && array_key_exists('tags_format', $config)
+            && $config['tags_format'] == 'onecall_sync'
+        ) {
+            $template = 'smart.slot.sync.tpl';
+        }
+
         return $this->tpl
-            ->fetch('advertisement/helpers/inline/smart.slot.tpl', [
+            ->fetch('advertisement/helpers/inline/' . $template, [
                 'id' => $ad->params['smart_format_id'],
             ]);
     }

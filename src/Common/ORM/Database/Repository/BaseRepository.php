@@ -251,8 +251,13 @@ class BaseRepository extends Repository
             }
         }
 
+        $index = array_flip($prefixedIds);
+
+        // Remove missing entities from index
+        $index = array_intersect_key($index, $entities);
+
         // Keep original order
-        return array_values(array_merge(array_flip($prefixedIds), $entities));
+        return array_values(array_merge($index, $entities));
     }
 
     /**

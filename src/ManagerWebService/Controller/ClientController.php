@@ -41,12 +41,14 @@ class ClientController extends Controller
         try {
             $em->remove($client, 'freshbooks');
         } catch (\Exception $e) {
+            $this->get('error.log')->error($e->getMessage());
             $msg->add($e->getMessage(), 'error');
         }
 
         try {
             $em->remove($client, 'braintree');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
+            $this->get('error.log')->error($e->getMessage());
             $msg->add($e->getMessage(), 'error');
         }
 

@@ -9,8 +9,8 @@
  */
 namespace Frontend\Controller;
 
-use Common\Core\Annotation\BotDetector;
 use Common\Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -23,8 +23,6 @@ class TagsController extends Controller
      * Displays a list of tags.
      *
      * @return \Symfony\Component\HttpFoundation\Response The response object.
-     *
-     * @BotDetector(bot="bingbot", route="frontend_frontpage")
      */
     public function indexAction()
     {
@@ -81,8 +79,6 @@ class TagsController extends Controller
      * Shows a paginated list of contents for a given tag name.
      *
      * @return \Symfony\Component\HttpFoundation\Response The response object.
-     *
-     * @BotDetector(bot="bingbot", route="frontend_frontpage")
      */
     public function tagsAction(Request $request)
     {
@@ -167,6 +163,7 @@ class TagsController extends Controller
                         [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
                     ]
                 ];
+
                 $contents = $em->findBy($criteria, 'starttime DESC', $epp, $page);
                 $total    = count($contents) + 1;
             }

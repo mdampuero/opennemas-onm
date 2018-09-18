@@ -1,39 +1,28 @@
 <?php
 /**
- * Defines the frontend controller for the content archives
- *
- * @package Frontend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 namespace Frontend\Controller;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Common\Core\Controller\Controller;
 
-/**
- * Handles the actions for newslibrary
- *
- * @package Frontend_Controllers
- */
 class ArchiveController extends Controller
 {
     /**
-     * Get news library from content table in database
+     * Get news library from content table in database.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return Response the response object
-     *
-     * @BotDetector(bot="bingbot", route="frontend_frontpage")
+     * @return Response The response object.
      */
     public function archiveAction(Request $request)
     {
@@ -76,7 +65,7 @@ class ArchiveController extends Controller
             foreach ($contents as $content) {
                 // Create category group
                 if (!isset($library[$content->category])) {
-                    $library[$content->category]           = $cr->find($content->category);
+                    $library[$content->category] = $cr->find($content->category);
                     $library[$content->category]->contents = [];
                 }
 
@@ -151,6 +140,7 @@ class ArchiveController extends Controller
         $day          = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
         $path         = "{$year}/{$month}/{$day}";
+        $html         = '';
         $file         = MEDIA_PATH . "/library/{$path}/{$categoryName}.html";
         $url          = "/archive/content/{$path}/";
 

@@ -215,6 +215,9 @@ class NewsAgencyController extends Controller
      */
     public function syncAction()
     {
+        ini_set('memory_limit', '128M');
+        ini_set('set_time_limit', '0');
+
         $servers = $this->get('setting_repository')->get('news_agency_config');
         $tpl     = $this->get('view')->getBackendTemplate();
         $path    = $this->getParameter('core.paths.cache') . DS
@@ -229,7 +232,7 @@ class NewsAgencyController extends Controller
             $this->get('session')->getFlashBag()->add('error', $e->getMessage());
         }
 
-        return $this->redirect($this->generateUrl('admin_news_agency'));
+        return $this->redirect($this->generateUrl('backend_news_agency'));
     }
 
     /**

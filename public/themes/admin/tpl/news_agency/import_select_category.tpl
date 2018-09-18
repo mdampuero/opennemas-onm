@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_news_agency_import source_id=$source_id id=$id}" method="POST">
+<form action="{url name=backend_news_agency_import source_id=$source_id id=$id}" method="POST">
 <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -22,7 +22,7 @@
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li>
-                        <a href="{url name=admin_news_agency}" class="btn btn-link" title="{t}Go back to list{/t}">
+                        <a href="{url name=backend_news_agency}" class="btn btn-link" title="{t}Go back to list{/t}">
                             <span class="fa fa-reply"></span>
                         </a>
                     </li>

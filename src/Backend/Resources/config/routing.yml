@@ -624,29 +624,6 @@ admin_paywall_purchases_list_export:
     path:     /paywall/purchases/list-export.csv
     defaults: { _controller  : BackendBundle:Paywall:purchasesListExport }
 
-# Agency importer controller routes
-admin_news_agency:
-    path:     /news-agency
-    defaults: { _controller  : BackendBundle:NewsAgency:list }
-
-admin_news_agency_unlock:
-    path:     /news-agency/unlock
-    defaults: { _controller  : BackendBundle:NewsAgency:unlock }
-
-admin_news_agency_sync:
-    path:     /news-agency/sync
-    defaults: { _controller  : BackendBundle:NewsAgency:sync }
-
-admin_news_agency_import:
-    path:     /news-agency/{source_id}/{id}/import
-    defaults: { _controller  : BackendBundle:NewsAgency:import }
-
-admin_news_agency_batch_import:
-    path:     /news-agency/batch-import
-    defaults: { _controller  : BackendBundle:NewsAgency:batchImport }
-    options:
-        expose: true
-
 # Importer XML file controller routes
 # Template cache controller routes
 admin_cache_manager:
@@ -747,6 +724,10 @@ backend_newsletter:
 backend_newsletter_template:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/newsletter_template.yml'
+
+backend_news_agency:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/news_agency.yml'
 
 backend_news_agency_server:
     prefix:   /

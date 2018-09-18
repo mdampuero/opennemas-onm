@@ -63,7 +63,7 @@ class BotDetectorAnnotationListener
 
         foreach ($this->reader->getMethodAnnotations($method) as $annotation) {
             if ($annotation instanceof BotDetectorAnnotation
-                && $this->detector->isBot($request)
+                && $this->detector->isBot($request, $annotation->getBot())
             ) {
                 throw new BotDetectedException($annotation->getRoute());
             }
