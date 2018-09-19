@@ -122,7 +122,7 @@ class NewsAgencyServerController extends Controller
             ->get('news_agency_config');
 
         return new JsonResponse([
-            'extra'   => [ 'sync_from' => $this->syncFrom ],
+            'extra'   => [ 'sync_from' => $this->getSyncFrom() ],
             'total'   => count($servers),
             'results' => array_values($servers),
         ]);
