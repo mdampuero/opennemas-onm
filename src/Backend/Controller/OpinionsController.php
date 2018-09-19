@@ -70,7 +70,7 @@ class OpinionsController extends Controller
         $bloggerIds = array_map(function ($a) {
             return $a->id;
         }, array_filter($authors, function ($a) {
-            return $a->is_blog == 1;
+            return !empty($a->is_blog);
         }));
 
         if (!empty($bloggerIds)) {
