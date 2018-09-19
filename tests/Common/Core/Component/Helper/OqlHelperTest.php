@@ -11,12 +11,11 @@ namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\OqlHelper;
 use Common\ORM\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for OqlHelper class.
  */
-class OqlHelperTest extends KernelTestCase
+class OqlHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

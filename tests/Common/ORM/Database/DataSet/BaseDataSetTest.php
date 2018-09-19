@@ -12,7 +12,7 @@ namespace tests\Common\ORM\Database\DataSet;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Database\DataSet\BaseDataSet;
 
-class BaseDataSetTest extends \PHPUnit_Framework_TestCase
+class BaseDataSetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -80,6 +80,8 @@ class BaseDataSetTest extends \PHPUnit_Framework_TestCase
         $dataset->delete([]);
         $dataset->delete(['foo']);
         $dataset->delete('foo');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -152,6 +154,8 @@ class BaseDataSetTest extends \PHPUnit_Framework_TestCase
         $dataset->set([]);
         $dataset->set('foo', 'bar');
         $dataset->set([ 'foo' => 'bar' ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**

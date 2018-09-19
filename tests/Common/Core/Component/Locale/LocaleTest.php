@@ -9,12 +9,12 @@
  */
 namespace Tests\Common\Core\Component\Locale;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Common\Core\Component\Locale\Locale;
 
 /**
  * Defines test cases for Locale class.
  */
-class LocaleTest extends KernelTestCase
+class LocaleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

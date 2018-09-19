@@ -4,7 +4,7 @@ namespace Tests\Common\ORM\Core\Data\Mapper;
 
 use Common\ORM\Core\Data\Mapper\EnumDataMapper;
 
-class EnumDataMapperTest extends \PHPUnit_Framework_TestCase
+class EnumDataMapperTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

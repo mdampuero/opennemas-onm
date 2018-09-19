@@ -15,7 +15,7 @@ use Common\ORM\Core\Entity;
 /**
  * Defines test cases for UserValidator class.
  */
-class UserValidatorTest extends \PHPUnit_Framework_TestCase
+class UserValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -36,6 +36,8 @@ class UserValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->validator->validate(new Entity([]));
         $this->validator->validate(new Entity([ 'type' => 0 ]));
+
+        $this->addToAssertionCount(1);
     }
 
     /**

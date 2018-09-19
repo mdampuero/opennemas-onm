@@ -10,9 +10,8 @@
 namespace Tests\Common\ORM\Core\Oql;
 
 use Common\ORM\Core\Oql\Fixer;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class FixerTest extends KernelTestCase
+class FixerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

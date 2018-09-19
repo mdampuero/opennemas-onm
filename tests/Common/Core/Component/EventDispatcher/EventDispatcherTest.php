@@ -11,7 +11,7 @@ namespace Tests\Common\Core\Component\EventDispatcher;
 
 use Common\Core\Component\EventDispatcher\EventDispatcher;
 
-class EventDispatcherTest extends \PHPUnit_Framework_TestCase
+class EventDispatcherTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

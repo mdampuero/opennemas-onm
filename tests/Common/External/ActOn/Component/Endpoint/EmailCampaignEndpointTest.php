@@ -14,7 +14,7 @@ use \Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint;
 /**
  * Defines test cases for EmailCampaignEndpoint class.
  */
-class EmailCampaignEndpointTest extends \PHPUnit_Framework_TestCase
+class EmailCampaignEndpointTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

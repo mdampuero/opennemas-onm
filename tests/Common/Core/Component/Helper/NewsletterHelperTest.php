@@ -14,7 +14,7 @@ use Common\Core\Component\Helper\NewsletterHelper;
 /**
  * Defines test cases for class class.
  */
-class NewsletterHelperTest extends \PHPUnit_Framework_TestCase
+class NewsletterHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\SlugFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines tests cases for SlugFilter class.
  */
-class SlugFilterTest extends KernelTestCase
+class SlugFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -30,14 +29,18 @@ class SlugFilterTest extends KernelTestCase
      */
     public function testFilterWithNoParameters()
     {
-        $str = 'The string to convert';
+        $str    = 'The string to convert';
+        $output = 'the-string-to-convert';
 
-        $filter = new SlugFilter($this->container);
+        $filter        = new SlugFilter($this->container);
         $filter->utils = \Mockery::mock('\Onm\StringUtils_' . uniqid());
         $filter->utils->shouldReceive('generateSlug')->once()
-            ->with($str, true, '-');
+            ->with($str, true, '-')
+            ->andReturn($output);
 
-        $filter->filter($str);
+        $returnValue = $filter->filter($str);
+
+        $this->assertEquals($output, $returnValue);
     }
 
     /**
@@ -46,13 +49,17 @@ class SlugFilterTest extends KernelTestCase
     public function testFilterWithParameters()
     {
         $str    = 'The string to convert';
+        $output = 'the-string-to-convert';
         $params = [ 'separator' => '', 'stop-list' => false ];
 
-        $filter = new SlugFilter($this->container, $params);
+        $filter        = new SlugFilter($this->container, $params);
         $filter->utils = \Mockery::mock('\Onm\StringUtils_' . uniqid());
         $filter->utils->shouldReceive('generateSlug')->once()
-            ->with($str, $params['stop-list'], $params['separator']);
+            ->with($str, $params['stop-list'], $params['separator'])
+            ->andReturn($output);
 
-        $filter->filter($str);
+        $returnValue = $filter->filter($str, $params);
+
+        $this->assertEquals($output, $returnValue);
     }
 }

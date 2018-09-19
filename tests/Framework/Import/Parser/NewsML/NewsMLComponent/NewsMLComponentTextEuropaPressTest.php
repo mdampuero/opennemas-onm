@@ -11,7 +11,7 @@ namespace Framework\Tests\Import\Parser\NewsML;
 
 use Framework\Import\Parser\NewsML\NewsMLComponent\NewsMLComponentTextEuropaPress;
 
-class NewsMLComponentTextEuropaPressTest extends \PHPUnit_Framework_TestCase
+class NewsMLComponentTextEuropaPressTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

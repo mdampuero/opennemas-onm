@@ -61,7 +61,7 @@ abstract class Cache extends DataBuffer
 
         unset($this->mru[$id]);
 
-        $this->delete($cacheId);
+        return $this->delete($cacheId);
     }
 
     /**

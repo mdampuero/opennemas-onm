@@ -52,7 +52,7 @@ class OpinionsController extends ContentController
      *
      * @param Request  $request The request object.
      *
-     * @return JsonResponse The response object.
+     * @return Response The response object.
      *
      * @Security("hasExtension('OPINION_MANAGER')
      *     and hasPermission('OPINION_ADMIN')")
@@ -64,6 +64,10 @@ class OpinionsController extends ContentController
 
         if (is_array($containers) && count($containers) > 0) {
             foreach ($containers as $ids) {
+                if (empty($ids)) {
+                    continue;
+                }
+
                 $position = 0;
 
                 foreach ($ids as $id) {
@@ -74,7 +78,10 @@ class OpinionsController extends ContentController
             }
         }
 
-        dispatchEventWithParams('frontpage.save_position', [ 'category' => 'opinion' ]);
+        $this->get('core.dispatcher')->dispatch('frontpage.save_position', [
+            'category'    => 'opinion',
+            'frontpageId' => null
+        ]);
 
         if (!$result) {
             return new JsonResponse(['messages' => [

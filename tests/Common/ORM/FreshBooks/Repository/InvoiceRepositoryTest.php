@@ -13,7 +13,7 @@ use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Invoice;
 use Common\ORM\FreshBooks\Repository\InvoiceRepository;
 
-class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
+class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

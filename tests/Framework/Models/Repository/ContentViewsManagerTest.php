@@ -12,7 +12,7 @@ namespace Tests\Framework\Models\Repository;
 /**
  * Defines test cases for ContentViewsManagerTest class.
  */
-class ContentViewsManagerTest extends \PHPUnit_Framework_TestCase
+class ContentViewsManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

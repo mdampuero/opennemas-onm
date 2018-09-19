@@ -11,7 +11,7 @@ namespace Tests\Common\ORM\Entity;
 
 use \Common\ORM\Entity\Theme;
 
-class ThemeTest extends \PHPUnit_Framework_TestCase
+class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @covers \Common\ORM\Entity\Theme::__construct

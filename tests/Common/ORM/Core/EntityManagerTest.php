@@ -20,7 +20,7 @@ use Common\ORM\FreshBooks\FreshBooksManager;
 /**
  * Defines test cases for EntityManager class.
  */
-class EntityManagerTest extends \PHPUnit_Framework_TestCase
+class EntityManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -209,6 +209,8 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetDataSetInvalidName()
     {
         $this->em->getDataSet('Entity', 'foo');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -340,6 +342,8 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $property->setValue($entity, [ true ]);
 
         $this->em->persist($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -350,6 +354,8 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $entity = new Entity([ 'id' => 1 ]);
 
         $this->em->persist($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -360,6 +366,8 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $entity = new Entity([ 'id' => 1 ]);
 
         $this->em->remove($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**

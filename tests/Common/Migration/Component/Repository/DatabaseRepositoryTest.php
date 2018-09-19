@@ -10,12 +10,11 @@
 namespace Tests\Common\Migration\Component\Repository;
 
 use Common\Migration\Component\Repository\DatabaseRepository;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for DatabaseRepository class.
  */
-class DatabaseRepositoryTest extends KernelTestCase
+class DatabaseRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

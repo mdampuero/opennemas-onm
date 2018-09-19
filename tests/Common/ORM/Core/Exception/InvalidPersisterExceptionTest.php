@@ -14,7 +14,7 @@ use Common\ORM\Core\Exception\InvalidPersisterException;
 /**
  * Defines test cases for InvalidPersisterException class.
  */
-class InvalidPersisterExceptionTest extends \PHPUnit_Framework_TestCase
+class InvalidPersisterExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests constructor for InvalidPersisterException.

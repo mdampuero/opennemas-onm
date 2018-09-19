@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\UnlocalizeFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for UnlocalizeFilter class.
  */
-class UnlocalizeFilterTest extends KernelTestCase
+class UnlocalizeFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

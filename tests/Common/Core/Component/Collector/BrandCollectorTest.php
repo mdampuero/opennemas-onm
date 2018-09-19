@@ -1,12 +1,12 @@
 <?php
 namespace Tests\Common\Core\Component\Collector;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Common\Core\Component\Collector\BrandCollector;
 
 /**
  * Defines test cases for BrandCollector class.
  */
-class BrandCollectorTest extends KernelTestCase
+class BrandCollectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

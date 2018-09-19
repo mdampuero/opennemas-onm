@@ -10,12 +10,12 @@
 namespace Tests\Common\Cache\File;
 
 use Common\Cache\File\File;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Common\ORM\Core\Entity;
 
 /**
  * Defines test cases for File class.
  */
-class FileTest extends KernelTestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

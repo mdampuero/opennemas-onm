@@ -15,7 +15,7 @@ use Common\ORM\Core\Entity;
 /**
  * Defines test cases for SubscriptionService class.
  */
-class SubscriptionServiceTest extends \PHPUnit_Framework_TestCase
+class SubscriptionServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

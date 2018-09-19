@@ -16,7 +16,7 @@ use Common\ORM\Braintree\Persister\PaymentPersister;
 /**
  * Defines test cases for PaymentPersister class.
  */
-class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
+class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -62,11 +62,13 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
         $response          = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->success = true;
 
         $response->transaction     = $this->getMockBuilder('\Braintree_Transaction')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->transaction->id = '1';
 
         $bc = \Mockery::mock('Braintree_Transaction_' . uniqid());
@@ -98,6 +100,7 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
         $response          = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->success = false;
         $response->message = 'Unable to save';
 
@@ -144,6 +147,7 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
         $response          = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->success = true;
 
         $bc = \Mockery::mock('Braintree_Transaction_' . uniqid());
@@ -171,6 +175,7 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
         $response          = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->success = false;
         $response->message = 'Unable to remove';
 

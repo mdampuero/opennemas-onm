@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Core;
 
 use Common\Data\Core\AdapterManager;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for AdapterManager class.
  */
-class AdapterManagerTest extends KernelTestCase
+class AdapterManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -33,7 +32,9 @@ class AdapterManagerTest extends KernelTestCase
      */
     public function testAdapter()
     {
-        $this->am->adapt('google_analytics', 'frog');
+        $returnValue = $this->am->adapt('google_analytics', 'frog');
+
+        $this->assertEquals([], $returnValue);
     }
 
     /**

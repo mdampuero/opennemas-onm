@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 /**
  * Defines test cases for AuthenticationFailureHandler class.
  */
-class AuthenticationFailureHandlerTest extends \PHPUnit_Framework_TestCase
+class AuthenticationFailureHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

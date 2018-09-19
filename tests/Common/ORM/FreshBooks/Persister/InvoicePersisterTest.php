@@ -16,7 +16,7 @@ use Common\ORM\FreshBooks\Persister\InvoicePersister;
 /**
  * Defines test cases for InvoicePersister class.
  */
-class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
+class InvoicePersisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

@@ -14,7 +14,7 @@ use Common\Core\Component\Security\Encoder\PasswordEncoder;
 /**
  * Defines test cases for PasswordEncode class.
  */
-class PasswordEncoderTest extends \PHPUnit_Framework_TestCase
+class PasswordEncoderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

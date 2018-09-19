@@ -9,13 +9,12 @@
  */
 namespace Tests\Common\Migration\Component;
 
-use \Common\Migration\Component\MigrationManager;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Common\Migration\Component\MigrationManager;
 
 /**
  * Defines test cases for MigrationManager class.
  */
-class MigrationManagerTest extends KernelTestCase
+class MigrationManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -124,7 +123,7 @@ class MigrationManagerTest extends KernelTestCase
     /**
      * Tests getPersister when the persister configuration is invalid.
      *
-     * @expectedException \Common\Migration\Component\Exception\InvalidPersisterException
+     * @expectedException Common\Migration\Component\Exception\InvalidPersisterException
      */
     public function testGetPersisterWhenInvalidConfiguration()
     {
@@ -136,7 +135,7 @@ class MigrationManagerTest extends KernelTestCase
     /**
      * Tests getPersister when no persister configured.
      *
-     * @expectedException \Common\Migration\Component\Exception\InvalidPersisterException
+     * @expectedException Common\Migration\Component\Exception\InvalidPersisterException
      */
     public function testGetPersisterWhenNoConfiguration()
     {
@@ -186,7 +185,7 @@ class MigrationManagerTest extends KernelTestCase
     /**
      * Tests getRepository when the repository configuration is invalid.
      *
-     * @expectedException \Common\Migration\Component\Exception\InvalidRepositoryException
+     * @expectedException Common\Migration\Component\Exception\InvalidRepositoryException
      */
     public function testGetRepositoryWhenInvalidConfiguration()
     {
@@ -198,7 +197,7 @@ class MigrationManagerTest extends KernelTestCase
     /**
      * Tests getRepository when no repository configured.
      *
-     * @expectedException \Common\Migration\Component\Exception\InvalidRepositoryException
+     * @expectedException Common\Migration\Component\Exception\InvalidRepositoryException
      */
     public function testGetRepositoryWhenNoConfiguration()
     {
@@ -239,7 +238,7 @@ class MigrationManagerTest extends KernelTestCase
     /**
      * Tests getRepository when the tracker configuration is invalid.
      *
-     * @expectedException \Common\Migration\Component\Exception\InvalidTrackerException
+     * @expectedException Common\Migration\Component\Exception\InvalidTrackerException
      */
     public function testGetRepositoryWhenNoTracker()
     {

@@ -14,7 +14,7 @@ use Common\Cache\Core\CacheManager;
 /**
  * Defines test cases for CacheManager class.
  */
-class CacheManagerTest extends \PHPUnit_Framework_TestCase
+class CacheManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

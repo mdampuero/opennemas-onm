@@ -15,7 +15,7 @@ use Common\ORM\Core\Entity;
 /**
  * Defines test cases for SubscriptionValidator class.
  */
-class SubscriptionValidatorTest extends \PHPUnit_Framework_TestCase
+class SubscriptionValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

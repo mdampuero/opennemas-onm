@@ -3,7 +3,7 @@ namespace Tests\Framework\Onm\Escaper;
 
 use \Onm\Escaper\Escaper;
 
-class EscaperTest extends \PHPUnit_Framework_TestCase
+class EscaperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Onm\Escaper\Escaper
@@ -41,8 +41,12 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     public function testEscapeHtml()
     {
         $this->assertEquals(
-            'Thank you, danke, gracias, merci, Σας ευχαριστούμε, gracie, ありがとう, dank u, obrigado, вы, 谢谢, 감사하십시오…',
-            $this->object->escapeHtml('Thank you, danke, gracias, merci, Σας ευχαριστούμε, gracie, ありがとう, dank u, obrigado, вы, 谢谢, 감사하십시오…')
+            'Thank you, danke, gracias, merci, Σας ευχαριστούμε, gracie, '
+            . 'ありがとう, dank u, obrigado, вы, 谢谢, 감사하십시오…',
+            $this->object->escapeHtml(
+                'Thank you, danke, gracias, merci, Σας ευχαριστούμε, gracie, '
+                . 'ありがとう, dank u, obrigado, вы, 谢谢, 감사하십시오…'
+            )
         );
     }
 
@@ -52,8 +56,17 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     public function testEscapeHtmlAttr()
     {
         $this->assertEquals(
-            'Thank&#x20;you,&#x20;danke,&#x20;gracias,&#x20;merci,&#x20;&#x03A3;&#x03B1;&#x03C2;&#x20;&#x03B5;&#x03C5;&#x03C7;&#x03B1;&#x03C1;&#x03B9;&#x03C3;&#x03C4;&#x03BF;&#x03CD;&#x03BC;&#x03B5;,&#x20;gracie,&#x20;&#x3042;&#x308A;&#x304C;&#x3068;&#x3046;,&#x20;dank&#x20;u,&#x20;obrigado,&#x20;&#x0432;&#x044B;,&#x20;&#x8C22;&#x8C22;,&#x20;&#xAC10;&#xC0AC;&#xD558;&#xC2ED;&#xC2DC;&#xC624;&#x2026;',
-            $this->object->escapeHtmlAttr('Thank you, danke, gracias, merci, Σας ευχαριστούμε, gracie, ありがとう, dank u, obrigado, вы, 谢谢, 감사하십시오…')
+            'Thank&#x20;you,&#x20;danke,&#x20;gracias,&#x20;merci,&#x20;'
+            . '&#x03A3;&#x03B1;&#x03C2;&#x20;&#x03B5;&#x03C5;&#x03C7;&#x03B1;'
+            . '&#x03C1;&#x03B9;&#x03C3;&#x03C4;&#x03BF;&#x03CD;&#x03BC;&#x03B5;'
+            . ',&#x20;gracie,&#x20;&#x3042;&#x308A;&#x304C;&#x3068;&#x3046;'
+            . ',&#x20;dank&#x20;u,&#x20;obrigado,&#x20;&#x0432;&#x044B;,&#x20;'
+            . '&#x8C22;&#x8C22;,&#x20;&#xAC10;&#xC0AC;&#xD558;&#xC2ED;&#xC2DC;'
+            . '&#xC624;&#x2026;',
+            $this->object->escapeHtmlAttr(
+                'Thank you, danke, gracias, merci, Σας ευχαριστούμε, gracie, '
+                . 'ありがとう, dank u, obrigado, вы, 谢谢, 감사하십시오…'
+            )
         );
     }
 

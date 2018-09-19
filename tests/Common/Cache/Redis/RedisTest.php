@@ -10,12 +10,11 @@
 namespace Tests\Common\Cache\Redis;
 
 use Common\Cache\Redis\Redis;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for Redis class.
  */
-class RedisTest extends KernelTestCase
+class RedisTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

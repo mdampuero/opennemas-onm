@@ -11,7 +11,7 @@ namespace Tests\Common\ORM\Core;
 
 use Common\ORM\Core\Entity;
 
-class EntityTest extends \PHPUnit_Framework_TestCase
+class EntityTest extends \PHPUnit\Framework\TestCase
 {
     public function testExists()
     {

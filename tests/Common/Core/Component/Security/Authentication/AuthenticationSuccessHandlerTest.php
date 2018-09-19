@@ -14,7 +14,7 @@ use Common\Core\Component\Security\Authentication\AuthenticationSuccessHandler;
 /**
  * Defines test cases for AuthenticationSuccessHandler class.
  */
-class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
+class AuthenticationSuccessHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

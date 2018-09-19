@@ -46,7 +46,9 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $validator = new Validator\Validator($this->settingsManager, $this->symfonyValidator);
         $data      = [];
 
-        $this->assertEquals([], $validator->validate($data, Validator\Validator::BLACKLIST_RULESET_COMMENTS));
+        $returnValue = $validator->validate($data, Validator\Validator::BLACKLIST_RULESET_COMMENTS);
+
+        $this->assertEquals([], $returnValue);
     }
 
     /**

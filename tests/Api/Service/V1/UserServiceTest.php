@@ -16,7 +16,7 @@ use Common\ORM\Core\Exception\EntityNotFoundException;
 /**
  * Defines test cases for UserService class.
  */
-class UserServiceTest extends \PHPUnit_Framework_TestCase
+class UserServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
