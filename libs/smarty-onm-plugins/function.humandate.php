@@ -1,7 +1,6 @@
 <?php
-/*
- * -------------------------------------------------------------
- * File:     	function.humandate.php
+/**
+ * Returns a representation of a human readable date
  */
 function smarty_function_humandate($params, &$smarty)
 {

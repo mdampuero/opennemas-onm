@@ -1,21 +1,22 @@
 <?php
-/*
- * -------------------------------------------------------------
- * File:        function.meta_webmaster_bing.php
+/**
+ * Returns the BING webmaster HTML meta tag
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
-use \Onm\Settings as s;
-
-function smarty_function_meta_webmaster_bing($params, &$smarty) {
-
+function smarty_function_meta_webmaster_bing($params, &$smarty)
+{
     $output = "";
 
     $webmasterBingConfig = getService('setting_repository')->get('webmastertools_bing');
 
     // Only return anything if the Ganalytics is setted in the configuration
-    if (!empty($webmasterBingConfig))
-    {
-        $output = "<meta name=\"msvalidate.01\" content=\"".$webmasterBingConfig."\" />";
+    if (!empty($webmasterBingConfig)) {
+        $output = "<meta name=\"msvalidate.01\" content=\"" . $webmasterBingConfig . "\" />";
     }
-    return $output;
 
+    return $output;
 }

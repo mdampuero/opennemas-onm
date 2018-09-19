@@ -1,6 +1,12 @@
 <?php
-use Onm\Settings as s;
-
+/**
+ * Returns the promotional bar html
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
+ */
 function smarty_function_promotional_bar($params, &$smarty)
 {
     $html = '';

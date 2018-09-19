@@ -1,12 +1,10 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     outputfilter.ojd.php
- * Type:     outputfilter
- * Name:     canonical_url
- * Purpose:  Prints OJD analytics code
- * -------------------------------------------------------------
+/**
+ * Prints OJD analytics code
+ *
+ * @param string
+ *
+ * @return string
  */
 function smarty_outputfilter_ojd($output, $smarty)
 {

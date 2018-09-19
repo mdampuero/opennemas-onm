@@ -25,12 +25,10 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
     $ads = getService('core.template')->getSmarty()
         ->tpl_vars['advertisements']->value;
 
-
     $slots = [];
     foreach ($ads as $ad) {
         $slots = array_merge($slots, $ad->positions);
     }
-
 
     $slots = array_unique(array_filter($slots, function ($a) use ($id) {
         return $a > $id && $a < $id + 100;

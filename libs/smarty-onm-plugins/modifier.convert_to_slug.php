@@ -1,13 +1,12 @@
 <?php
-/*
- * -------------------------------------------------------------
- * File:     	modifier.smarty_convert_to_slug.php
- * convert the value into a slug-slug
+/**
+ * Converts the value into a slug
  *
+ * @param string $value
+ *
+ * @return string
  */
 function smarty_modifier_convert_to_slug($value)
 {
-     $output = \Onm\StringUtils::getTitle($value);
-
-    return $output;
+    return \Onm\StringUtils::getTitle($value);
 }

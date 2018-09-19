@@ -5,6 +5,7 @@
  * @param array $params
  * @param Template $tpl Template class which extends of Smarty
 */
+// TODO: This file must be removed.
 function smarty_insert_intersticial($params, &$smarty)
 {
     return '';

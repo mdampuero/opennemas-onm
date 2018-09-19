@@ -1,12 +1,13 @@
 <?php
 /**
-* Output Filter for indent HTML code after sending it to the end user.
-*
-* @param string $output, the HTML code without proper indentation
-* @return string, the HTML code with proper indentation
-*/
+ * Output Filter for indent HTML code after sending it to the end user.
+ *
+ * @param string $output the HTML code without proper indentation
+ *
+ * @return string
+ */
 function smarty_outputfilter_indent_html($output, $smarty)
- {
+{
     $config = [
         'indent'                      => true,
         'output-xhtml'                => true,
@@ -28,4 +29,4 @@ function smarty_outputfilter_indent_html($output, $smarty)
 
     // Output the HTML code
     return $tidy;
- }
+}

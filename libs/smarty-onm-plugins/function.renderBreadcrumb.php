@@ -1,11 +1,12 @@
 <?php
 /**
- * -------------------------------------------------------------
- * File:        function.Breadcrumb.php
- * Check type of menu element and prepare link
+ * Returns the breadcrumb
  *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
-
 function smarty_function_renderBreadcrumb($params, &$smarty)
 {
     $output = '';
@@ -19,8 +20,8 @@ function smarty_function_renderBreadcrumb($params, &$smarty)
         $separator = $params['separator'];
     }
 
-    $actualCategory = $params['item']->category;
-    $actualCategoryName = $params['item']->category_name;
+    $actualCategory      = $params['item']->category;
+    $actualCategoryName  = $params['item']->category_name;
     $actualCategoryTitle = $params['item']->category_title;
 
     $ccm = \ContentCategoryManager::get_instance();
@@ -37,8 +38,8 @@ function smarty_function_renderBreadcrumb($params, &$smarty)
     } elseif (!empty($first->fk_content_category)) {
         $second = $ccm->categories[$first->fk_content_category];
         $output = ' <a href="/seccion/' . $second->name
-            .'" title="'. $second->title . '">' . $second->title . '</a>'
-            . $separator. $output;
+            . '" title="' . $second->title . '">' . $second->title . '</a>'
+            . $separator . $output;
     }
 
     return $output;

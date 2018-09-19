@@ -1,7 +1,14 @@
 <?php
-
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * Adds the meta amphtml to the page.
+ *
+ * @param string $output
+ * @param \Smarty $smarty
+ *
+ * @return string
+ */
 function smarty_outputfilter_meta_amphtml($output, $smarty)
 {
     $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();

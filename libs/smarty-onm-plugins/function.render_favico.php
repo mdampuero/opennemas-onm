@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * Returns the favicon meta tag
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
+ */
 function smarty_function_render_favico($params, &$smarty)
 {
     // Default favico
@@ -18,7 +25,7 @@ function smarty_function_render_favico($params, &$smarty)
         $favicoUrl = MEDIA_URL . MEDIA_DIR . '/sections/' . rawurlencode($favicoFileName);
     }
 
-    $output = "<link rel='shorcut icon' href='" . $favicoUrl . "'>\n";
+    $output  = "<link rel='shorcut icon' href='" . $favicoUrl . "'>\n";
     $output .= "\t<link rel='apple-touch-icon' href='" . $favicoUrl . "'>\n";
 
     $appleSizes = ['57x57', '60x60', '72x72', '76x76', '114x114', '120x120', '144x144', '152x152', '180x180'];

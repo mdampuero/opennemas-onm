@@ -1,13 +1,14 @@
 <?php
-/*
- * -------------------------------------------------------------
- * File: function.meta_validation_tradedoubler.php
- * -------------------------------------------------------------
+/**
+ * Returns the tradedoubler meta tag
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
-use \Onm\Settings as s;
-
-function smarty_function_meta_validation_tradedoubler($params, &$smarty) {
-
+function smarty_function_meta_validation_tradedoubler($params, &$smarty)
+{
     $output = '';
 
     $tradedoublerID = getService('setting_repository')->get('tradedoubler_id');

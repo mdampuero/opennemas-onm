@@ -1,12 +1,11 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     outputfilter.canonical_url.php
- * Type:     outputfilter
- * Name:     canonical_url
- * Purpose:  Prints the canonical url in a <link> tag
- * -------------------------------------------------------------
+/**
+ * Prints the canonical url in a <link> tag
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_outputfilter_canonical_url($output, $smarty)
 {

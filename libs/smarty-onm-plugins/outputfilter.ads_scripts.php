@@ -1,12 +1,11 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     outputfilter.ads_scripts.php
- * Type:     outputfilter
- * Name:     canonical_url
- * Purpose:  Prints scripts from instance settings
- * -------------------------------------------------------------
+/**
+ * Prints scripts from instance settings
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_outputfilter_ads_scripts($output, $smarty)
 {

@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * Renders the cookie hint
+ *
+ * @param array $params The list of parameters passed to the block.
+ * @param \Smarty $smarty The instance of smarty.
+ *
+ * @return null|string
+ */
 function smarty_function_cookie_hint($params, &$smarty)
 {
     if ($smarty->getContainer()->get('setting_repository')->get('cmp_script')) {

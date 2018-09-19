@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * -------------------------------------------------------------
  * File:        function.get_permalink.php
  * Returns the permalink for a given content
@@ -13,13 +13,12 @@ function smarty_function_get_permalink($params)
         || !is_object($params['item'])
         || empty($params['item']->id)
     ) {
-       return '';
+        return '';
     }
 
+    $absolute = UrlGeneratorInterface::ABSOLUTE_PATH;
     if (array_key_exists('absolute', $params) && $params['absolute']) {
         $absolute = UrlGeneratorInterface::ABSOLUTE_URL;
-    } else {
-        $absolute = UrlGeneratorInterface::ABSOLUTE_PATH;
     }
 
     $content = $params['item'];
