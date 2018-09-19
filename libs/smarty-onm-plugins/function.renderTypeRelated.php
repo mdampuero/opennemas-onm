@@ -13,7 +13,6 @@
  *
  * @return string
  */
- */
 function smarty_function_renderTypeRelated($params, &$smarty)
 {
     $content = $params['content'];
