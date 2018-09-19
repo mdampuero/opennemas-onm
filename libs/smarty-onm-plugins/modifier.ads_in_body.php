@@ -22,7 +22,7 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
     });
 
     $id  = $contentType === 'opinion' ? 3200 : 2200;
-    $ads = getService('core.template')->getSmarty()
+    $ads = getService('core.template')
         ->tpl_vars['advertisements']->value;
 
     $slots = [];
