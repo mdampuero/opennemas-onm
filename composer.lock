@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "28b9bfa33fe79e550d5c4d234d250c64",
+    "content-hash": "0d476e54c37a89b46bca9f20bfe571c0",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -4044,16 +4044,16 @@
         },
         {
             "name": "smarty/smarty",
-            "version": "v3.1.21",
+            "version": "v3.1.33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smarty-php/smarty.git",
-                "reference": "1f878e6d746ecc8ec8d00d9c75044cf7d23ad94a"
+                "reference": "dd55b23121e55a3b4f1af90a707a6c4e5969530f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/1f878e6d746ecc8ec8d00d9c75044cf7d23ad94a",
-                "reference": "1f878e6d746ecc8ec8d00d9c75044cf7d23ad94a",
+                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/dd55b23121e55a3b4f1af90a707a6c4e5969530f",
+                "reference": "dd55b23121e55a3b4f1af90a707a6c4e5969530f",
                 "shasum": ""
             },
             "require": {
@@ -4066,10 +4066,8 @@
                 }
             },
             "autoload": {
-                "classmap": [
-                    "libs/Smarty.class.php",
-                    "libs/SmartyBC.class.php",
-                    "libs/sysplugins/smarty_security.php"
+                "files": [
+                    "libs/bootstrap.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -4095,7 +4093,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2014-10-31T04:22:20+00:00"
+            "time": "2018-09-12T20:54:16+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -6419,6 +6417,7 @@
             "keywords": [
                 "phpdoc"
             ],
+            "abandoned": true,
             "time": "2016-06-07T16:36:49+00:00"
         },
         {
