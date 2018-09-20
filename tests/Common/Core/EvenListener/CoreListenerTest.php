@@ -230,7 +230,7 @@ class CoreListenerTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests onKernelRequest when the instance does not exist.
      *
-     * @expectedException Common\Core\Component\Exception\Instance\InstanceNotRegisteredException
+     * @expectedException Common\Core\Component\Exception\Instance\InstanceNotFoundException
      */
     public function testOnKernelRequestWhenInstanceNotExist()
     {

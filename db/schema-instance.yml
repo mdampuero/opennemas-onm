@@ -734,6 +734,12 @@ contents_tags:
             primary: true
             unique: true
             flags: {  }
+        -
+            name: content_tags_content_id
+            columns: [ content_id ]
+            primary: false
+            unique: false
+            flags: {  }
     foreign_keys:
         -
             name: content_tags_content_id

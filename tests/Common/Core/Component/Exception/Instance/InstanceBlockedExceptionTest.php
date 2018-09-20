@@ -14,7 +14,7 @@ use Common\Core\Component\Exception\Instance\InstanceBlockedException;
 /**
  * Defines test cases for InstanceBlockedException class.
  */
-class InstanceBlockedExceptionTest extends \PHPUnit_Framework_TestCase
+class InstanceBlockedExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests constructor for InstanceBlockedException.

@@ -8,30 +8,28 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-microphone fa-lg"></i>
+                <i class="fa fa-microphone m-r-10"></i>
                 <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/788682-opennemas-agencias-de-noticias" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                   <i class="fa fa-question"></i>
                 </a>
-                {t}News agency{/t}
               </h4>
             </li>
             <li class="quicklinks">
-              <span class="h-seperate"></span>
+              <h4>
+                <a class="no-padding" href="{url name=backend_news_agency}" title="{t}Go back to list{/t}">{t}News Agency{/t}</a>
+              </h4>
             </li>
-            <li class="quicklinks">
-              <h5>{t}Configuration{/t}</h5>
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
+                <i class="fa fa-angle-right"></i>
+              </h4>
+            </li>
+            <li class="quicklinks hidden-xs">
+              <h4><a class="no-padding" href="{url name=backend_news_agency_servers_list}" title="{t}Go back to list{/t}">{t}Sources{/t}</a></h4>
             </li>
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
-              <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_news_agency}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
-                  <span class="fa fa-reply"></span>
-                </a>
-              </li>
-              <li class="quicklinks">
-                <span class="h-seperate"></span>
-              </li>
               <li class="quicklinks">
                 <a class="btn btn-primary" href="{url name=backend_news_agency_server_new}" id="add-server-button">
                   <i class="fa fa-plus"></i>
@@ -66,17 +64,17 @@
                 <td class="server_name">
                   [% item.name %]
                   <div class="listing-inline-actions">
-                    <a class="link" href="[% edit(item.id, 'backend_news_agency_server_show') %]">
+                    <a class="btn btn-default btn-small" href="[% edit(item.id, 'backend_news_agency_server_show') %]">
                       <i class="fa fa-pencil"></i>
                       {t}Edit{/t}
                     </a>
                     {acl isAllowed="MASTER"}
-                      <button class="btn btn-link"  ng-click="clean($index, item.id)">
+                      <button class="btn btn-primary btn-small"  ng-click="clean($index, item.id)">
                         <i class="fa" ng-class="{ 'fa-fire': !item.cleaning, 'fa-circle-o-notch fa-spin': item.cleaning }"></i>
-                        {t}Remove local files{/t}
+                        {t}Clean files{/t}
                       </button>
                     {/acl}
-                    <button class="link link-danger" ng-click="delete(item, 'backend_ws_news_agency_server_delete')" type="button">
+                    <button class="btn btn-danger btn-small" ng-click="delete(item, 'backend_ws_news_agency_server_delete')" type="button">
                       <i class="fa fa-trash-o"></i>
                       {t}Remove{/t}
                     </button>

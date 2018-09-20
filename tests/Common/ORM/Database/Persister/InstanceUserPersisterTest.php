@@ -13,7 +13,7 @@ use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\User;
 use Common\ORM\Database\Persister\InstanceUserPersister;
 
-class InstanceUserPersisterTest extends \PHPUnit_Framework_TestCase
+class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -152,6 +152,8 @@ class InstanceUserPersisterTest extends \PHPUnit_Framework_TestCase
         );
         $this->cache->expects($this->exactly(3))->method('remove');
         $this->persister->update($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -180,6 +182,8 @@ class InstanceUserPersisterTest extends \PHPUnit_Framework_TestCase
         $this->cache->expects($this->exactly(2))->method('remove');
 
         $this->persister->remove($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -191,6 +195,8 @@ class InstanceUserPersisterTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($this->persister, [ 1, [] ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -202,5 +208,7 @@ class InstanceUserPersisterTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($this->persister, [ 1, [] ]);
+
+        $this->addToAssertionCount(1);
     }
 }

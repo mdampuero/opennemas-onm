@@ -17,7 +17,7 @@ use Common\ORM\Core\Data\Converter\Converter;
 /**
  * Defines test cases for Converter class.
  */
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

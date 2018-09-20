@@ -14,7 +14,7 @@ use Common\Core\Component\Exception\Security\InvalidRecaptchaException;
 /**
  * Defines test cases for InvalidRecaptchaException class.
  */
-class InvalidRecaptchaExceptionTest extends \PHPUnit_Framework_TestCase
+class InvalidRecaptchaExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

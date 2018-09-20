@@ -15,7 +15,7 @@ use Common\Data\Core\FilterManager;
 /**
  * Defines test cases for StructuredData class.
  */
-class StructuredDataTest extends \PHPUnit_Framework_TestCase
+class StructuredDataTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

@@ -527,7 +527,7 @@ DROP TABLE IF EXISTS `contents_tags`;
 CREATE TABLE `contents_tags` (
   `content_id` bigint(20) unsigned NOT NULL,
   `tag_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`tag_id`,`content_id`),
+  PRIMARY KEY (`content_id`, `tag_id`),
   KEY `content_tags_content_id` (`content_id`),
   CONSTRAINT `content_tags_content_id` FOREIGN KEY (`content_id`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `contents_tags_tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -726,6 +726,7 @@ CREATE TABLE `newsletters` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `type` int(11) NOT NULL DEFAULT '0',
   `status` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(512) DEFAULT NULL,
   `title` varchar(512) NOT NULL,
   `contents` text,
   `recipients` text,
@@ -736,6 +737,7 @@ CREATE TABLE `newsletters` (
   `sent` datetime DEFAULT CURRENT_TIMESTAMP,
   `sent_items` int(11) NOT NULL DEFAULT '0',
   `template_id` bigint(20) unsigned DEFAULT NULL,
+  `params` text,
   PRIMARY KEY (`id`),
   KEY `newsletter_type` (`type`),
   KEY `newsletter_template_id` (`template_id`)
@@ -1130,7 +1132,8 @@ CREATE TABLE `tags` (
   `language_id` varchar(5) NOT NULL,
   `slug` varchar(60) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `language_id` (`language_id`)
+  KEY `language_id` (`language_id`),
+  KEY `slug` (`slug`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1438 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1431,4 +1434,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-27 14:05:43
+-- Dump completed on 2018-09-07  7:00:41

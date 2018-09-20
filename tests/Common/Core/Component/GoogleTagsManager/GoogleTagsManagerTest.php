@@ -9,13 +9,12 @@
  */
 namespace Test\Common\Core\Component\GoogleTagsManager;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Common\Core\Component\GoogleTagsManager\GoogleTagsManager;
 
 /**
  * Defines test cases for GoogleTagsManager class.
  */
-class GoogleTagsManagerTest extends KernelTestCase
+class GoogleTagsManagerTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

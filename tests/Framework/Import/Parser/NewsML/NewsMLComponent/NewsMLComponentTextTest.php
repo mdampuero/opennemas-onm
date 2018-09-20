@@ -12,13 +12,13 @@ namespace Framework\Tests\Import\Parser\NewsML;
 use Framework\Import\Parser\NewsML\NewsMLComponent\NewsMLComponentText;
 use Framework\Import\Resource\Resource;
 
-class NewsMLComponentTextTest extends \PHPUnit_Framework_TestCase
+class NewsMLComponentTextTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
         $this->invalid = simplexml_load_string('<foo></foo>');
 
-        $this->miss   = simplexml_load_string("<NewsComponent>
+        $this->miss = simplexml_load_string("<NewsComponent>
             <ContentItem>
               <Format FormalName=\"bcNITF2.5\"/>
               <DataContent>
@@ -27,7 +27,7 @@ class NewsMLComponentTextTest extends \PHPUnit_Framework_TestCase
             </ContentItem>
         </NewsComponent>");
 
-        $this->valid   = simplexml_load_string("<NewsComponent>
+        $this->valid = simplexml_load_string("<NewsComponent>
             <ContentItem>
               <MediaType FormalName=\"Text\"/>
               <Format FormalName=\"bcNITF2.5\"/>
@@ -62,8 +62,8 @@ class NewsMLComponentTextTest extends \PHPUnit_Framework_TestCase
 
     public function testParse()
     {
-        $urn = 'urn:newsmlcomponenttext::'.date('YmdHis').
-               ':text:040729054956.xm61wen7';
+        $urn = 'urn:newsmlcomponenttext::' . date('YmdHis')
+            . ':text:040729054956.xm61wen7';
 
         $resource = new Resource([
             'body' => '<p>Paragraph 1</p>',

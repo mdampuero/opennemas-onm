@@ -74,7 +74,7 @@ class Validator
             $this->{$methodName}($entity) //getting the constrains to validate
         );
 
-        if (count($violations) > 0) {
+        if (!empty($violations) && count($violations) > 0) {
             $errors = [];
 
             $type = 'normal';

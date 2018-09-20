@@ -9,7 +9,7 @@
  */
 namespace Onm;
 
-class StringUtilsTest extends \PHPUnit_Framework_TestCase
+class StringUtilsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StringUtils
@@ -39,8 +39,10 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testNormalize()
     {
         // I have a lot of problems with char encoding
-        // $this->assertEquals('a marinha lucense na que c��mpre ir no d��a',
-        //     $this->object->normalize('Á marinha lucense na que cómpre ir no día'));
+        $this->assertEquals(
+            'a marinha lucense na que compre ir no dia',
+            $this->object->normalize('Á marinha lucense na que cómpre ir no día')
+        );
     }
 
     /**
@@ -457,7 +459,6 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
             'Urna quam, congue vulputate',
             $this->object->removePunctuation('Urna quam, (-congue-) vulputate!?', [ ',' ])
         );
-
     }
 
     public function testCleanFileName()

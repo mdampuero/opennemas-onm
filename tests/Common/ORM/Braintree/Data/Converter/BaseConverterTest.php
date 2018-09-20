@@ -16,7 +16,7 @@ use Common\ORM\Braintree\Data\Converter\BaseConverter;
 /**
  * Defines test cases for BaseConverter class.
  */
-class BaseConverterTest extends \PHPUnit_Framework_TestCase
+class BaseConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

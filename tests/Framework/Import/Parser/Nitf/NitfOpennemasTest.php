@@ -12,7 +12,7 @@ namespace Framework\Tests\Import\Parser\Nitf;
 use Framework\Import\Parser\Nitf\NitfOpennemas;
 use Framework\Import\Resource\Resource;
 
-class NitfOpennemasTest extends \PHPUnit_Framework_TestCase
+class NitfOpennemasTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

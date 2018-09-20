@@ -332,6 +332,7 @@ class TagService extends OrmService
         if (empty($ids)) {
             return ['items' => []];
         }
+
         $tags      = $this->getListByIds($ids);
         $returnArr = [];
 
@@ -341,6 +342,7 @@ class TagService extends OrmService
             }
         }
         $tags['items'] = $this->responsify($returnArr);
+
         return $tags;
     }
 

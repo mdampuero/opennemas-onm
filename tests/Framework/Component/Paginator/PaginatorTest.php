@@ -4,7 +4,7 @@ namespace Framework\Tests\Component\Paginator;
 
 use Framework\Component\Paginator\Paginator;
 
-class PaginatorTest extends \PHPUnit_Framework_TestCase
+class PaginatorTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

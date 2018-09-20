@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,160 +12,172 @@ namespace Backend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
-/**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
 class ErrorController extends Controller
 {
     /**
-     * Displays an error
+     * Displays an error page basing on the current error.
      *
-     * @param Request $request the request object
+     * @param Request $request The request object.
      *
-     * @return void
+     * @return Response The response object.
      */
     public function defaultAction(Request $request)
     {
-        if ($this->container->hasParameter('environment')) {
-            $environment = $this->container->getParameter('environment');
-        }
-
         $error = $request->attributes->get('exception');
-
-        $exceptionName = $error->getClass();
-
-        if (defined('INSTANCE_UNIQUE_NAME')) {
-            $errorID = strtoupper(INSTANCE_UNIQUE_NAME . '_' . uniqid());
-        } else {
-            $errorID = strtoupper('ONM_FRAMEWORK_' . uniqid());
-        }
-
-        if (!defined('CURRENT_LANGUAGE')) {
-            define('CURRENT_LANGUAGE', 'en_US');
-        }
+        $class = new \ReflectionClass($error->getClass());
 
         $this->view = $this->get('onm_templating')->getBackendTemplate();
 
-        $logMessage = '';
+        switch ($class->getShortName()) {
+            case 'InstanceNotFoundException':
+                return $this->getInstanceNotFoundResponse();
 
-        $requestAddress = $request->getSchemeAndHttpHost() . $request->getRequestUri();
-        switch ($exceptionName) {
-            case 'Common\Core\Component\Exception\Instance\InstanceNotRegisteredException':
-                $trace = $error->getTrace();
+            case 'InstanceNotActivatedException':
+                return $this->getInstanceNotActivatedResponse();
 
-                $logMessage = 'Backend instance not registered error at ' . $requestAddress;
-
-                $errorMessage = _('Instance not found');
-                $content      = $errorMessage;
-
-                if (!$this->request->isXmlHttpRequest()) {
-                    $content = $this->renderView('error/instance_not_found.tpl', [
-                        'server'        => $request->server,
-                        'error_message' => $errorMessage,
-                        'error'         => $error,
-                        'error_id'      => $errorID,
-                        'environment'   => $environment,
-                        'backtrace'     => $error->getTrace(),
-                    ]);
-                }
-
-                $response = new Response($content, 404);
-                $response->headers->set('x-cache-for', '5s');
-                break;
-            case 'Common\Core\Component\Exception\Instance\InstanceNotActivatedException':
-                $trace = $error->getTrace();
-
-                $logMessage = 'Backend instance not activated error at ' . $requestAddress;
-
-                $errorMessage = _('Instance not activated');
-                $content      = $errorMessage;
-
-                if (!$this->request->isXmlHttpRequest()) {
-                    $content = $this->renderView('error/instance_not_activated.tpl', [
-                        'server'        => $request->server,
-                        'error_message' => $errorMessage,
-                        'error'         => $error,
-                        'error_id'      => $errorID,
-                        'environment'   => $environment,
-                        'backtrace'     => $error->getTrace(),
-                    ]);
-                }
-
-                $instance = $this->get('core.instance')->internal_name;
-
-                $response = new Response($content, 404);
-                $response->headers->set('x-cache-for', '5s');
-                $response->headers->set('x-instance', $instance);
-                $response->headers->set('x-tags', 'instance-' . $instance . ',not-activated-error');
-                break;
             case 'ResourceNotFoundException':
-            case 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException':
-                $trace = $error->getTrace();
-                $path  = $request->getRequestUri();
+            case 'NotFoundHttpException':
+                return $this->getNotFoundResponse();
 
-                $logMessage = 'Backend page not found at: ' . $requestAddress;
+            case 'AccessDeniedException':
+                return $this->getAccessDeniedResponse();
 
-                $errorMessage = sprintf('Oups! We can\'t find anything at "%s".', $path);
-                $content      = $errorMessage;
-
-                if (!$this->request->isXmlHttpRequest()) {
-                    $content = $this->renderView('error/404.tpl', [
-                        'error_message' => $errorMessage,
-                        'error'         => $error,
-                        'environment'   => $environment,
-                        'backtrace'     => $error->getTrace(),
-                    ]);
-                }
-
-                $response = new Response($content, 404);
-                break;
-            case 'Symfony\Component\Security\Core\Exception\AccessDeniedException':
-                $errorMessage = _('You are not allowed to perform this action.');
-
-                $content = $errorMessage;
-                if (!$this->request->isXmlHttpRequest()) {
-                    $content = $this->renderView('error/404.tpl', [
-                        'error_message' => $errorMessage,
-                        'error'         => $error,
-                        'environment'   => $environment,
-                        'backtrace'     => $error->getTrace(),
-                    ]);
-                }
-
-                $response = new Response($content, 401);
-                break;
             default:
-                // Change this handle to a more generic error template
-                $errorMessage = _('Oups! Seems that we had an unknown problem while trying to run your request.');
+                return $this->getErrorResponse();
+        }
+    }
 
-                if ($environment == 'development') {
-                    $errorMessage = $error->getMessage();
-                }
+    /**
+     * Generates a response when the user is not authorized to access the
+     * requested resource.
+     *
+     * @return Response The response object.
+     */
+    protected function getAccessDeniedResponse()
+    {
+        $request = $this->get('request_stack')->getCurrentRequest();
+        $content = _('You are not allowed to perform this action.');
 
-                $logMessage = 'ERROR_ID: ' . $errorID . ' - '
-                    . $error->getMessage() . " " . json_encode($error->getTrace());
+        $this->get('application.log')->info('security.authorization.failure');
 
-                $content = $this->renderView('error/404.tpl', [
-                    'error_message' => $errorMessage,
-                    'error'         => $error,
-                    'error_id'      => $errorID,
-                    'environment'   => $environment,
-                    'backtrace'     => $error->getTrace(),
-                ]);
-
-                $response = new Response($content, 500);
-                break;
+        if (!$request->isXmlHttpRequest()) {
+            $content = $this->renderView('error/404.tpl', [
+                'error'   => $request->attributes->get('exception'),
+                'message' => $content,
+            ]);
         }
 
-        if (!empty($logMessage)) {
-            $logger = $this->container->get('error.log');
-            $logger->error($logMessage);
+        return new Response($content, 401);
+    }
+
+    /**
+     * Generates a response when an unknown error happens.
+     *
+     * @return Response The response object.
+     */
+    protected function getErrorResponse()
+    {
+        $request = $this->get('request_stack')->getCurrentRequest();
+        $content = _('Oups! Seems that we had an unknown problem while trying to run your request.');
+        $error   = $request->attributes->get('exception');
+
+        $this->get('error.log')->error(
+            $error->getMessage() . ' ' . json_encode($error->getTrace())
+        );
+
+        if (!$request->isXmlHttpRequest()) {
+            $content = $this->renderView('error/404.tpl', [
+                'environment' => $this->get('kernel')->getEnvironment(),
+                'error'       => $error,
+                'message'     => $content
+            ]);
         }
+
+        return new Response($content, 500);
+    }
+
+    /**
+     * Generates a response when the requested resource belongs to a disabled
+     * instance.
+     *
+     * @return Response The response object.
+     */
+    protected function getInstanceNotActivatedResponse()
+    {
+        $request = $this->get('request_stack')->getCurrentRequest();
+        $content = 'Instance not activated';
+
+        $this->get('application.log')->info($content);
+
+        if (!$request->isXmlHttpRequest()) {
+            $content = $this->renderView('error/instance_not_activated.tpl', [
+                'environment' => $this->get('kernel')->getEnvironment(),
+                'error'       => $request->attributes->get('exception'),
+                'host'        => $request->getHost()
+            ]);
+        }
+
+        $instance = $this->get('core.instance')->internal_name;
+
+        $response = new Response($content, 404);
+        $response->headers->set('x-cache-for', '5s');
+        $response->headers->set('x-instance', $instance);
+        $response->headers->set('x-tags', 'instance-' . $instance . ',not-activated-error');
 
         return $response;
+    }
+
+    /**
+     * Generates a response when the requested resource belongs to an unexsiting
+     * instance.
+     *
+     * @return Response The response object.
+     */
+    protected function getInstanceNotFoundResponse()
+    {
+        $request = $this->get('request_stack')->getCurrentRequest();
+        $content = 'Instance not found';
+
+        $this->get('application.log')->info($content);
+
+        if (!$request->isXmlHttpRequest()) {
+            $content = $this->renderView('error/instance_not_found.tpl', [
+                'environment' => $this->get('kernel')->getEnvironment(),
+                'error'       => $request->attributes->get('exception'),
+                'host'        => $request->getHost()
+            ]);
+        }
+
+        $response = new Response($content, 404);
+        $response->headers->set('x-cache-for', '5s');
+
+        return $response;
+    }
+
+    /**
+     * Generates a response when the requested resource was not found.
+     *
+     * @return Response The response object.
+     */
+    protected function getNotFoundResponse()
+    {
+        $request = $this->get('request_stack')->getCurrentRequest();
+        $content = sprintf(
+            'Oups! We can\'t find anything at "%s".',
+            $request->getRequestUri()
+        );
+
+        $this->get('application.log')->info('Page not found');
+
+        if (!$request->isXmlHttpRequest()) {
+            $content = $this->renderView('error/404.tpl', [
+                'environment' => $this->get('kernel')->getEnvironment(),
+                'error'       => $request->attributes->get('exception'),
+                'message'     => $content
+            ]);
+        }
+
+        return new Response($content, 404);
     }
 }

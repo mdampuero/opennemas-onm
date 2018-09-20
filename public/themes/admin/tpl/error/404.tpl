@@ -32,10 +32,10 @@
         <div class="source m-l-30">
           {$preview}
         </div>
-        {if is_array($backtrace)}
+        {if is_array($error->getTrace())}
           <div class="backtrace m-t-30">
             <h4 class="title">Backtrace:</h4>
-            {foreach from=$backtrace item=trace_step}
+            {foreach from=$error->getTrace() item=trace_step}
               <div class="m-t-30">
                 {if $trace_step['file']}
                   <p>
@@ -66,8 +66,8 @@
   {else}
     <div class="error-container">
       <div class="error-main">
-        <div class="error-number"> {$error->getStatusCode()} </div>
-        <div class="error-description-mini"> {$error_message|default:"Unknown error"}</div>
+        <div class="error-number">{if !empty($error->getCode())}{$error->getCode()}{else}{$error->getStatusCode()}{/if} </div>
+        <div class="error-description-mini"> {$message|default:"Unknown error"}</div>
       </div>
     </div>
   {/if}

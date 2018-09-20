@@ -4,7 +4,7 @@ namespace Tests\Common\ORM\Core\Data\Mapper;
 
 use Common\ORM\Core\Data\Mapper\NullDataMapper;
 
-class NullDataMapperTest extends \PHPUnit_Framework_TestCase
+class NullDataMapperTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

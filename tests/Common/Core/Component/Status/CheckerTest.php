@@ -10,12 +10,11 @@
 namespace Tests\Common\Core\Component\Status;
 
 use Common\Core\Component\Status\Checker;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for Checker class.
  */
-class CheckerTest extends KernelTestCase
+class CheckerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

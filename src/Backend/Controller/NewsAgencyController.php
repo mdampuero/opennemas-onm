@@ -48,9 +48,6 @@ class NewsAgencyController extends Controller
             'no_limits'     => _('No limit'),
         ];
 
-        ini_set('memory_limit', '128M');
-        ini_set('set_time_limit', '0');
-
         // Check if module is configured, if not redirect to configuration form
         if (is_null(s::get('news_agency_config'))) {
             $this->get('session')->getFlashBag()->add(
@@ -76,97 +73,6 @@ class NewsAgencyController extends Controller
     }
 
     /**
-     * Imports the article information given a newfile filename
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
-     *     and hasPermission('IMPORT_ADMIN')")
-     */
-    public function importAction(Request $request)
-    {
-        $id       = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $sourceId = $request->query->getDigits('source_id');
-        $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
-        if (empty($category)) {
-            $category = $request->request->filter('category', null, FILTER_SANITIZE_STRING);
-        }
-
-        // Import and create element
-        $article = $this->importElements($id, $sourceId, $category);
-
-        // If something went wrong, redirect
-        if ($article == 'redirect_list') {
-            return $this->redirect($this->generateUrl('admin_news_agency'));
-        } elseif ($article == 'redirect_category') {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_news_agency_pickcategory',
-                    [
-                        'id'        => $id,
-                        'source_id' => $sourceId
-                    ]
-                )
-            );
-        }
-
-        // TODO: change this redirection when creating the ported article controller
-        if (!empty($article)) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_article_show',
-                    ['id' => $article]
-                )
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf('Unable to import the file "%s"', $id)
-            );
-
-            return $this->redirect($this->generateUrl('admin_news_agency'));
-        }
-    }
-
-    /**
-     * Imports a list of articles given a list Ids
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
-     *     and hasPermission('IMPORT_ADMIN')")
-     */
-    public function batchImportAction(Request $request)
-    {
-        $selected = $request->request->get('ids', null);
-        $updated  = [];
-
-        if (is_array($selected) && count($selected) > 0) {
-            foreach ($selected as $value) {
-                $updated[] = $value[0];
-
-                // Import and create element - category unknown
-                $this->importElements($value[0], $value[1], 'GUESS');
-            }
-        }
-
-        return new JsonResponse(
-            [
-                'already_imported' => true,
-                'messages'        => [[
-                    'id'      => $updated,
-                    'message' => sprintf(_('%s item(s) imported successfully'), count($updated)),
-                    'type'    => 'success'
-                ]]
-            ]
-        );
-    }
-
-    /**
      * Shows the category form to pick a category under where to import the new
      *
      * @param Request $request the request object
@@ -188,7 +94,7 @@ class NewsAgencyController extends Controller
                 _('The article you want to import doesn\'t exists.')
             );
 
-            $this->redirect($this->generateUrl('admin_news_agency'));
+            $this->redirect($this->generateUrl('backend_news_agency'));
         }
 
         $repository = new \Onm\Import\Repository\LocalRepository();
@@ -202,7 +108,7 @@ class NewsAgencyController extends Controller
         $targetCategory = $this->getSimilarCategoryIdForElement($element);
         if (!empty($targetCategory)) {
             return $this->redirect($this->generateUrl(
-                'admin_news_agency_import',
+                'backend_news_agency_import',
                 [
                     'source_id' => $sourceId,
                     'id'        => $id,
@@ -273,6 +179,9 @@ class NewsAgencyController extends Controller
      */
     public function syncAction()
     {
+        ini_set('memory_limit', '128M');
+        ini_set('set_time_limit', '0');
+
         $servers = $this->get('setting_repository')->get('news_agency_config');
         $tpl     = $this->get('view')->getBackendTemplate();
         $path    = $this->getParameter('core.paths.cache') . DS
@@ -287,7 +196,7 @@ class NewsAgencyController extends Controller
             $this->get('session')->getFlashBag()->add('error', $e->getMessage());
         }
 
-        return $this->redirect($this->generateUrl('admin_news_agency'));
+        return $this->redirect($this->generateUrl('backend_news_agency'));
     }
 
     /**

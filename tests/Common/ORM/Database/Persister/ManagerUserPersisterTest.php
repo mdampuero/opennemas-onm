@@ -13,7 +13,7 @@ use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\User;
 use Common\ORM\Database\Persister\ManagerUserPersister;
 
-class ManagerUserPersisterTest extends \PHPUnit_Framework_TestCase
+class ManagerUserPersisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

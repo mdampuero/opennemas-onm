@@ -16,7 +16,7 @@ use Common\ORM\Braintree\Persister\ClientPersister;
 /**
  * Defines test cases for ClientPersister class.
  */
-class ClientPersisterTest extends \PHPUnit_Framework_TestCase
+class ClientPersisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -64,10 +64,12 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
-        $response->success = true;
+
+        $response->success  = true;
         $response->customer = $this->getMockBuilder('\Braintree_Customer')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->customer->id = '1';
 
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
@@ -99,6 +101,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->success = false;
         $response->message = 'Unable to create';
 
@@ -145,6 +148,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->success = true;
 
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
@@ -172,6 +176,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->success = false;
         $response->message = 'UnableToRemove';
 
@@ -218,6 +223,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->success = true;
 
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
@@ -245,6 +251,7 @@ class ClientPersisterTest extends \PHPUnit_Framework_TestCase
         $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
+
         $response->success = false;
         $response->message = 'Unable to update';
 

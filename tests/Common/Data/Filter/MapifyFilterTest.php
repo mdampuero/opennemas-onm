@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\MapifyFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for MapifyFilter class.
  */
-class MapifyFilterTest extends KernelTestCase
+class MapifyFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests filter.
