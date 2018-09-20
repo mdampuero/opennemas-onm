@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 use Common\Data\Serialize\Serializable\CsvSerializable;
-use Onm\Settings as s;
 
 class Content implements \JsonSerializable, CsvSerializable
 {
@@ -533,8 +532,12 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         if (!isset($data['with_comment'])) {
-            $config               = s::get('comments_config');
-            $data['with_comment'] = isset($config['with_comments']) ? intval($config['with_comments']) : 1;
+            $config = getService('orm.manager')
+                ->getDataSet('Settings')
+                ->get('comments_config');
+
+            $data['with_comment'] = isset($config['with_comments']) ?
+                intval($config['with_comments']) : 1;
         }
 
         $catName = '';
