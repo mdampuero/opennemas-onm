@@ -3,19 +3,15 @@
  * -------------------------------------------------------------
  * File:        function.meta_webmaster_bing.php
  */
-use \Onm\Settings as s;
+function smarty_function_meta_webmaster_bing($params, &$smarty)
+{
+    $settings = $smarty->getContainer()->get('orm.manager')
+        ->getDataSet('Settings')
+        ->get('webmastertools_bing');
 
-function smarty_function_meta_webmaster_bing($params, &$smarty) {
-
-    $output = "";
-
-    $webmasterBingConfig = getService('setting_repository')->get('webmastertools_bing');
-
-    // Only return anything if the Ganalytics is setted in the configuration
-    if (!empty($webmasterBingConfig))
-    {
-        $output = "<meta name=\"msvalidate.01\" content=\"".$webmasterBingConfig."\" />";
+    if (empty($settings)) {
+        return '';
     }
-    return $output;
 
+    return "<meta name=\"msvalidate.01\" content=\"" . $settings . "\" />";
 }
