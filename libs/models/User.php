@@ -342,34 +342,6 @@ class User
     }
 
     /**
-     * Deletes an user given its id
-     *
-     * @param int $id the user id
-     *
-     * @return boolean true if the user was deleted
-     */
-    public function delete($id)
-    {
-        try {
-            getService('orm.manager')->getConnection('instance')
-                ->delete('users', [ 'id' => intval($id)]);
-
-            if (!$this->deleteMeta($id)) {
-                return false;
-            }
-        } catch (\Exception $e) {
-            return false;
-        }
-
-        /* Notice log of this action */
-        logUserEvent(__METHOD__, $id);
-
-        dispatchEventWithParams('user.delete', [ 'id' => $this->id ]);
-
-        return true;
-    }
-
-    /**
      * Returns the Photo object that represents the user avatar
      *
      * @return Photo the photo object
@@ -436,32 +408,6 @@ class User
     }
 
     /**
-     * Check if the token for registration is same user token and get user data
-     *
-     * @param string $token the token
-     *
-     * @return user if exists false otherwise
-     */
-    public function findByToken($token)
-    {
-        if (empty($token)) {
-            return null;
-        }
-
-        $sql = 'SELECT * FROM users WHERE token=?';
-        $rs  = getService('orm.manager')->getConnection('instance')
-            ->fetchAll($sql, [ $token ]);
-
-        if (!$rs) {
-            return null;
-        }
-
-        $this->load($rs[0]);
-
-        return $this;
-    }
-
-    /**
      * Sets user configurations given a named array
      *
      * @param array  $userMeta a named array with settings and its values
@@ -483,24 +429,6 @@ class User
             dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
 
             return true;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        try {
-            $rs = getService('orm.manager')->getConnection('instance')->update(
-                "users",
-                [ 'password' => $password, 'token' => null ],
-                [ 'id'       => $this->id ]
-            );
-
-            dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
@@ -638,58 +566,6 @@ class User
             );
 
             return $rs['num'] > 0;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Generate new token and update user with it
-     *
-     * @param int $id the user id
-     * @param string $token the new user token
-     *
-     * @return boolen
-     */
-    public function updateUserToken($id, $token)
-    {
-        try {
-            $rs = getService('orm.manager')->getConnection('instance')->update(
-                "users",
-                [ 'token' => $token ],
-                [ 'id'    => (int) $id ]
-            );
-
-            dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
-
-            return true;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Updates the users password
-     *
-     * @param int $id the user id
-     * @param string $pass the new user password
-     *
-     * @return boolean true if the pass was updated
-     */
-    public function updateUserPassword($id, $pass)
-    {
-        try {
-            $rs = getService('orm.manager')->getConnection('instance')->update(
-                "users",
-                [ 'password' => md5($pass) ],
-                [ 'id' => (int) $id ]
-            );
-
-            dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
-
-            return true;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
