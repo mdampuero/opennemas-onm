@@ -10,12 +10,11 @@
 namespace Tests\Common\Core\Annotation;
 
 use Common\Core\Annotation\BotDetector;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for BotDetector class.
  */
-class BotDetectorTest extends KernelTestCase
+class BotDetectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests the annotation creation and getter methors.

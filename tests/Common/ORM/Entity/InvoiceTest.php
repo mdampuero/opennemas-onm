@@ -4,7 +4,7 @@ namespace Framework\Tests\ORM\Entity;
 
 use Common\ORM\Entity\Invoice;
 
-class InvoiceTest extends \PHPUnit_Framework_TestCase
+class InvoiceTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructor()
     {

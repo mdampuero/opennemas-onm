@@ -15,7 +15,7 @@ use Common\ORM\Core\Entity;
 /**
  * Defines test cases for AuthorService class.
  */
-class AuthorServiceTest extends \PHPUnit_Framework_TestCase
+class AuthorServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

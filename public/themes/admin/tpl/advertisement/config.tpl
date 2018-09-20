@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_ads_config}" method="POST">
+<form action="{url name=admin_ads_config}" method="POST" ng-controller="AdvertisementConfigCtrl" ng-init="init({json_encode($configs['smart_ad_server']['domain'])|clear_json}, {json_encode($configs['smart_ad_server']['tags_format'])|clear_json});">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -97,11 +97,20 @@
                   </div>
                 </div>
                 <h4>{t}Smart Ad server integration{/t}</h4>
-                <div class="form-group" ng-init="smart.domain = {json_encode($configs['smart_ad_server']['domain'])|clear_json}">
+                <div class="form-group">
                   <label for="smart_ad_server_domain" class="form-label">{t}Domain{/t}</label>
                   <div class="controls">
                     <input class="form-control" type="text" name="smart_ad_server_domain" ng-model="smart.domain" value="{$configs['smart_ad_server']['domain']}">
                     <div class="help">{t}The ad server Domain (i.e. https://www8.smartadserver.com/).{/t}</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="smart_ad_server_tags_format" class="form-label">{t}Tags format{/t}</label>
+                  <div class="controls">
+                    <select id="smart_ad_server_tags_format" name="smart_ad_server_tags_format" ng-required="smart.domain" ng-model="smart.tagsFormat">
+                      <option value="onecall_async">Asynchronous (One call)</option>
+                      <option value="onecall_sync">Synchronous (One call)</option>
+                    </select>
                   </div>
                 </div>
                 <div class="form-group">

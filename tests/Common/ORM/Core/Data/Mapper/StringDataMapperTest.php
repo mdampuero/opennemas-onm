@@ -4,7 +4,7 @@ namespace Tests\Common\ORM\Core\Data\Mapper;
 
 use Common\ORM\Core\Data\Mapper\StringDataMapper;
 
-class StringDataMapperTest extends \PHPUnit_Framework_TestCase
+class StringDataMapperTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

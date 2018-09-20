@@ -17,7 +17,7 @@ use Common\ORM\Entity\User;
 /**
  * Defines test cases for SecurityListener class.
  */
-class SecurityListenerTest extends \PHPUnit_Framework_TestCase
+class SecurityListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

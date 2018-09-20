@@ -16,14 +16,14 @@ use Common\ORM\Core\Metadata;
 /**
  * Defines test cases for Dumper class.
  */
-class DumperTest extends \PHPUnit_Framework_TestCase
+class DumperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
      */
     public function setUp()
     {
-        $schemas  = [
+        $schemas = [
             'Foobar' => new Schema([ 'name' => 'Foobar', 'entities' => [ 'Foo' ] ]),
             'Wibble' => new Schema([ 'name' => 'Wibble', 'entities' => [ 'Bar' ] ])
         ];
@@ -64,6 +64,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     public function testConstructWithoutArguments()
     {
         new Dumper();
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -234,7 +236,10 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($this->dumper, 'validateIndex');
         $method->setAccessible(true);
 
-        $method->invokeArgs($this->dumper, [ 'gorp', [ 'foo' ], [ 'name' => 'bar', 'columns' => [ 'foo' ], 'primary' => 'baz' ] ]);
+        $method->invokeArgs(
+            $this->dumper,
+            [ 'gorp', [ 'foo' ], [ 'name' => 'bar', 'columns' => [ 'foo' ], 'primary' => 'baz' ] ]
+        );
     }
 
     /**
@@ -245,7 +250,12 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($this->dumper, 'validateIndex');
         $method->setAccessible(true);
 
-        $method->invokeArgs($this->dumper, [ 'gorp', [ 'foo' ], [ 'name' => 'bar', 'columns' => [ 'foo' ], 'primary' => true ] ]);
+        $method->invokeArgs(
+            $this->dumper,
+            [ 'gorp', [ 'foo' ], [ 'name' => 'bar', 'columns' => [ 'foo' ], 'primary' => true ] ]
+        );
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -265,6 +275,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($dumper, [ 'gorp', [ 'quux' ], [ [ 'name' => 'id' ], [ 'name' => 'id' ] ] ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -282,6 +294,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($dumper, [ 'gorp', [ 'quux' ], [ [ 'name' => 'PRIMARY' ] ] ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -295,6 +309,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($this->dumper, [ 'gorp', 'quux', 'length', true ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -306,6 +322,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($this->dumper, [ 'gorp', 'quux', 'length', 10 ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -379,7 +397,10 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($dumper, 'validateTable');
         $method->setAccessible(true);
 
-        $method->invokeArgs($dumper, [ 'gorp', [ 'columns' => [ 'foo' => 'integer' ], 'index' => [ 'name' => 'PRIMARY' ] ] ]);
+        $method->invokeArgs(
+            $dumper,
+            [ 'gorp', [ 'columns' => [ 'foo' => 'integer' ], 'index' => [ 'name' => 'PRIMARY' ] ] ]
+        );
     }
 
     /**
@@ -404,5 +425,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($this->dumper, [ 'gorp', 'garply', 'integer' ]);
+
+        $this->addToAssertionCount(1);
     }
 }

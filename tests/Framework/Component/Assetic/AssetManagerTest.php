@@ -4,7 +4,7 @@ namespace Tests\Framework\Component\Assetic;
 
 use Framework\Component\Assetic\AssetManager;
 
-abstract class AssetManagerTest extends \PHPUnit_Framework_TestCase
+abstract class AssetManagerTest extends \PHPUnit\Framework\TestCase
 {
     protected $port = 80;
 
@@ -22,7 +22,7 @@ abstract class AssetManagerTest extends \PHPUnit_Framework_TestCase
     {
         $args = func_get_args();
 
-        switch($args[0]) {
+        switch ($args[0]) {
             case 'kernel':
                 $kernel = $this->getMockBuilder('Kernel')
                     ->setMethods([ 'getEnvironment' ])
@@ -31,14 +31,13 @@ abstract class AssetManagerTest extends \PHPUnit_Framework_TestCase
                 $kernel->method('getEnvironment')->willReturn('dev');
 
                 return $kernel;
-                break;
 
             case 'core.instance':
                 $instance = new \StdClass();
+
                 $instance->settings = [ 'TEMPLATE_USER' => 'foo' ];
 
                 return $instance;
-                break;
 
             case 'request_stack':
                 $headers = $this->getMockBuilder('HeadersBag')
@@ -48,6 +47,7 @@ abstract class AssetManagerTest extends \PHPUnit_Framework_TestCase
                 $headers->expects($this->any())->method('get')->willReturn($this->port);
 
                 $request = new \StdClass();
+
                 $request->headers = $headers;
 
                 $requestStack = $this->getMockBuilder('RequestStack')
@@ -57,7 +57,6 @@ abstract class AssetManagerTest extends \PHPUnit_Framework_TestCase
                 $requestStack->expects($this->any())->method('getCurrentRequest')->willReturn($request);
 
                 return $requestStack;
-                break;
         }
     }
 
@@ -104,7 +103,9 @@ abstract class AssetManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, preg_match('/\/\/media\d+\.opennemas\.net\/foo\.css/', $src));
 
         $this->port = 8080;
+
         $src = $method->invokeArgs($manager, [ 'foo.css' ]);
+
         $this->assertEquals(1, preg_match('/\/\/media\d+\.opennemas\.net:8080\/foo\.css/', $src));
     }
 

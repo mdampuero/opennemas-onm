@@ -48,9 +48,6 @@ class NewsAgencyController extends Controller
             'no_limits'     => _('No limit'),
         ];
 
-        ini_set('memory_limit', '128M');
-        ini_set('set_time_limit', '0');
-
         // Check if module is configured, if not redirect to configuration form
         if (is_null(s::get('news_agency_config'))) {
             $this->get('session')->getFlashBag()->add(
@@ -101,6 +98,6 @@ class NewsAgencyController extends Controller
             $this->get('session')->getFlashBag()->add('error', $e->getMessage());
         }
 
-        return $this->redirect($this->generateUrl('admin_news_agency'));
+        return $this->redirect($this->generateUrl('backend_news_agency'));
     }
 }

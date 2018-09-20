@@ -415,10 +415,11 @@ class AdvertisementsController extends Controller
                     'site_id' => $formValues->getDigits('revive_ad_server_site_id'),
                 ],
                 'smart_ad_server' => [
-                    'domain'     => $formValues->filter('smart_ad_server_domain', '', FILTER_SANITIZE_STRING),
-                    'network_id' => $formValues->getDigits('smart_ad_server_network_id'),
-                    'site_id'    => $formValues->getDigits('smart_ad_server_site_id'),
-                    'page_id'    => [
+                    'domain'      => $formValues->filter('smart_ad_server_domain', '', FILTER_SANITIZE_STRING),
+                    'tags_format' => $formValues->filter('smart_ad_server_tags_format', '', FILTER_SANITIZE_STRING),
+                    'network_id'  => $formValues->getDigits('smart_ad_server_network_id'),
+                    'site_id'     => $formValues->getDigits('smart_ad_server_site_id'),
+                    'page_id'     => [
                         'frontpage'         => $formValues->getDigits('smart_ad_server_page_id_frontpage'),
                         'article_inner'     => $formValues->getDigits('smart_ad_server_page_id_article_inner'),
                         'opinion_frontpage' => $formValues->getDigits('smart_ad_server_page_id_opinion_frontpage'),

@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\MapFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines tests cases for MapFilter class.
  */
-class MapFilterTest extends KernelTestCase
+class MapFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

@@ -10,12 +10,11 @@
 namespace Tests\Common\Core\Annotation;
 
 use Common\Core\Annotation\Template;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for Template class.
  */
-class TemplateTest extends KernelTestCase
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests the annotation creation and getter methors.

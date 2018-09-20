@@ -1,6 +1,6 @@
 backend_news_agency_server_create:
     path:     /news-agency/servers/create
-    defaults: { _controller  : BackendBundle:NewsAgencyServer:create }
+    defaults: { _controller  : BackendBundle:NewsAgencyServer:save }
 
 backend_news_agency_servers_list:
     path:     /news-agency/servers
@@ -8,7 +8,7 @@ backend_news_agency_servers_list:
 
 backend_news_agency_server_new:
     path:     /news-agency/servers/new
-    defaults: { _controller  : BackendBundle:NewsAgencyServer:show }
+    defaults: { _controller  : BackendBundle:NewsAgencyServer:create }
 
 backend_news_agency_server_show:
     path:     /news-agency/servers/{id}/show

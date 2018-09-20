@@ -14,12 +14,11 @@ use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Client;
 use Common\ORM\Entity\Theme;
 use Common\ORM\Core\Validation\Validator;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for Validator class.
  */
-class ValidatorTest extends KernelTestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -85,6 +84,8 @@ class ValidatorTest extends KernelTestCase
     public function testConstructor()
     {
         new Validator(false);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -93,6 +94,8 @@ class ValidatorTest extends KernelTestCase
     public function testLoadRulesAlreadySet()
     {
         $this->methods['loadValidation']->invokeArgs($this->validator, [ $this->validations[0] ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -103,6 +106,8 @@ class ValidatorTest extends KernelTestCase
     public function testValidateInvalidRuleset()
     {
         $this->validator->validate(new Entity([ 'corge' => 'flob' ]));
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -113,6 +118,8 @@ class ValidatorTest extends KernelTestCase
     public function testValidateInvalid()
     {
         $this->validator->validate(new Client([ 'corge' => 'flob' ]));
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -129,6 +136,8 @@ class ValidatorTest extends KernelTestCase
         ]);
 
         $this->validator->validate($this->client);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -267,6 +276,8 @@ class ValidatorTest extends KernelTestCase
     {
         $entity = new Client([ 'foo' => 1 ]);
         $this->methods['validateData']->invokeArgs($this->validator, [ 'client', $entity->getData() ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -275,6 +286,8 @@ class ValidatorTest extends KernelTestCase
     public function testValidateDataValid()
     {
         $this->methods['validateData']->invokeArgs($this->validator, [ 'client', $this->client->getData() ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -283,6 +296,8 @@ class ValidatorTest extends KernelTestCase
     public function testValidateRequired()
     {
         $this->methods['validateRequired']->invokeArgs($this->validator, [ 'client', $this->client->getData() ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -292,6 +307,8 @@ class ValidatorTest extends KernelTestCase
     {
         $this->properties['required']->setValue($this->validator, []);
         $this->methods['validateRequired']->invokeArgs($this->validator, [ 'client', $this->client->getData() ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -303,5 +320,7 @@ class ValidatorTest extends KernelTestCase
     {
         $this->properties['required']->setValue($this->validator, [ 'client' => [ 'norf' ] ]);
         $this->methods['validateRequired']->invokeArgs($this->validator, [ 'client', $this->client->getData() ]);
+
+        $this->addToAssertionCount(1);
     }
 }

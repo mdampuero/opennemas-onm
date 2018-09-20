@@ -13,7 +13,7 @@ use Common\ORM\Entity\Instance;
 use Common\ORM\Entity\User;
 use Framework\Monolog\OnmFormatter;
 
-class OnmFormatterTest extends \PHPUnit_Framework_TestCase
+class OnmFormatterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

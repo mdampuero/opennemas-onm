@@ -11,13 +11,14 @@ namespace Framework\Tests\Import;
 
 use Framework\Import\ParserFactory;
 
-class ParserFactoryTest extends \PHPUnit_Framework_TestCase
+class ParserFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
         $this->factory = new ParserFactory();
 
         $reflection = new \ReflectionClass(get_class($this->factory));
+
         $this->getParsers = $reflection->getMethod('getParsers');
         $this->getParsers->setAccessible(true);
     }

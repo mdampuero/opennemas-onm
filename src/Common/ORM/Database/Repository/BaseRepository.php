@@ -121,33 +121,16 @@ class BaseRepository extends Repository
             throw new \InvalidArgumentException();
         }
 
-        $entity  = null;
-        $id      = $this->metadata->normalizeId($id);
-        $cacheId = $this->metadata->getPrefix()
-            . implode($this->metadata->getSeparator(), $id);
+        $entities = $this->getEntities(is_array($id) ? $id : [ $id ]);
 
-        if ($this->hasCache() && $this->cache->exists($cacheId)) {
-            $entity = $this->cache->get($cacheId);
-        }
-
-        if (empty($entity)) {
-            $entity   = $this->miss;
-            $entities = $this->refresh([ $id ]);
-
-            if (!empty($entities)) {
-                $entity = array_pop($entities);
-            }
-
-            if ($this->hasCache()) {
-                $this->cache->set($cacheId, $entity);
-            }
-        }
-
-        if ($entity === $this->miss) {
+        if (!is_array($id)
+            && (empty($entities[0])
+            || $entities[0] === $this->miss)
+        ) {
             throw new EntityNotFoundException($this->metadata->name, $id);
         }
 
-        return $entity;
+        return is_array($id) ? $entities : array_pop($entities);
     }
 
     /**
@@ -211,6 +194,16 @@ class BaseRepository extends Repository
      */
     public function getEntities($ids)
     {
+        if (empty($ids)) {
+            return [];
+        }
+
+        if (!is_array($ids[0])) {
+            $ids = array_map(function ($id) {
+                return $this->metadata->normalizeId($id);
+            }, $ids);
+        }
+
         // Prefix ids
         $prefixedIds = array_map(function ($a) {
             return $this->metadata->getPrefixedId($a);
@@ -251,10 +244,21 @@ class BaseRepository extends Repository
 
                 $entities[$this->metadata->getPrefixedId($entity)] = $entity;
             }
+
+            $missed = array_diff($missed, array_keys($entities));
+
+            if ($this->hasCache() && !empty($missed)) {
+                $this->cache->set(array_fill_keys($missed, $this->miss));
+            }
         }
 
+        $index = array_flip($prefixedIds);
+
+        // Remove missing entities from index
+        $index = array_intersect_key($index, $entities);
+
         // Keep original order
-        return array_values(array_merge(array_flip($prefixedIds), $entities));
+        return array_values(array_merge($index, $entities));
     }
 
     /**
