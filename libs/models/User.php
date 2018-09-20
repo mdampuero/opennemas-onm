@@ -98,25 +98,11 @@ class User
     public $activated = null;
 
     /**
-     * The user group id
-     *
-     * @var id
-     */
-    public $id_user_group = null;
-
-    /**
      * The list of categories this user has access
      *
      * @var string
      */
     public $accesscategories = [];
-
-    /**
-     * The user group id
-     *
-     * @var int
-     */
-    public $fk_user_group = null;
 
     /**
      * Meta information for the user
@@ -154,9 +140,6 @@ class User
             );
         }
 
-        // Transform groups array to a string separated by comma
-        $data['id_user_group'] = implode(',', $data['id_user_group']);
-
         $values = [
             'username'      => $data['username'],
             'password'      => md5($data['password']),
@@ -168,7 +151,6 @@ class User
             'type'          => (int) $data['type'],
             'token'         => $data['token'],
             'activated'     => (int) $data['activated'],
-            'fk_user_group' => $data['id_user_group']
         ];
 
         try {
@@ -238,7 +220,6 @@ class User
         $this->type          = (int) $data['type'];
         $this->token         = $data['token'];
         $this->activated     = (int) $data['activated'];
-        $this->id_user_group = explode(',', $data['fk_user_group']);
 
         return $this;
     }
@@ -288,19 +269,10 @@ class User
             throw new \Exception(_('Already exists one user with that information'));
         }
 
-        if (!isset($data['id_user_group'])
-            || empty($data['id_user_group'])
-        ) {
-            $data['id_user_group'] = $this->id_user_group;
-        }
-
         // Init transaction
         $conn = getService('orm.manager')->getConnection('instance');
 
         $conn->beginTransaction();
-
-        // Transform groups array to a string separated by commas
-        $data['id_user_group'] = implode(',', $data['id_user_group']);
 
         $values = [
             'username'      => $data['username'],
@@ -310,7 +282,6 @@ class User
             'email'         => $data['email'],
             'name'          => $data['name'],
             'activated'     => (int) $data['activated'],
-            'id_user_group' => $data['id_user_group'],
             'type'          => (int) $data['type'],
         ];
 
