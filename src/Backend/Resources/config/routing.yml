@@ -629,23 +629,9 @@ admin_news_agency:
     path:     /news-agency
     defaults: { _controller  : BackendBundle:NewsAgency:list }
 
-admin_news_agency_unlock:
-    path:     /news-agency/unlock
-    defaults: { _controller  : BackendBundle:NewsAgency:unlock }
-
 admin_news_agency_sync:
     path:     /news-agency/sync
     defaults: { _controller  : BackendBundle:NewsAgency:sync }
-
-admin_news_agency_import:
-    path:     /news-agency/{source_id}/{id}/import
-    defaults: { _controller  : BackendBundle:NewsAgency:import }
-
-admin_news_agency_batch_import:
-    path:     /news-agency/batch-import
-    defaults: { _controller  : BackendBundle:NewsAgency:batchImport }
-    options:
-        expose: true
 
 # Importer XML file controller routes
 # Template cache controller routes
