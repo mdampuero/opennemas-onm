@@ -38,11 +38,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    kernel.listener.cron_actions:
-        class: Framework\EventListener\CronActionSubscriber
-        tags:
-            - {name: kernel.event_subscriber}
-
     kernel.subscriber.routing:
         class: Framework\EventListener\RouterListener
         arguments: [ '@router', '@request_stack', '@router.request_context', '@logger', '@service_container']
