@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for categories
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for categories
@@ -96,14 +90,18 @@ class CategoryController extends Controller
             $category      = new \ContentCategory($id);
         }
 
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('section_settings');
+
         return $this->render('category/new.tpl', [
             'category' => $this->categoryMapping($category),
             'extra_data' => [
-                'categories'    => $this->categoryMapping($allcategories),
-                'subcategories' => $this->categoryMapping($subcategories),
-                'modules'       => $this->getModules(),
-                'configurations'        => $this->get('setting_repository')->get('section_settings'),
-                'image_path'            => MEDIA_URL . MEDIA_DIR,
+                'categories'     => $this->categoryMapping($allcategories),
+                'subcategories'  => $this->categoryMapping($subcategories),
+                'modules'        => $this->getModules(),
+                'configurations' => $settings,
+                'image_path' => MEDIA_URL . MEDIA_DIR,
             ],
             'language_data'         => $languageData,
             'multilanguage_enable'  => in_array(
@@ -294,6 +292,8 @@ class CategoryController extends Controller
      */
     public function configAction(Request $request)
     {
+        $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
+
         if ('POST' == $request->getMethod()) {
             $sectionSettings = $request->request->get('section_settings');
             if ($sectionSettings['allowLogo'] == 1) {
@@ -301,13 +301,13 @@ class CategoryController extends Controller
                 \Onm\FilesManager::createDirectory($path);
             }
 
-            s::set('section_settings', $sectionSettings);
+            $ds->set('section_settings', $sectionSettings);
 
             $this->get('session')->getFlashBag()->add('success', _('Settings saved.'));
 
             return $this->redirect($this->generateUrl('admin_categories_config'));
         } else {
-            $configurations = s::get(['section_settings']);
+            $configurations = $ds->get(['section_settings']);
 
             return $this->render(
                 'category/config.tpl',
