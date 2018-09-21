@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for the instance synchronization manager
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +11,6 @@ namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -36,7 +30,9 @@ class InstanceSyncController extends Controller
      */
     public function listAction()
     {
-        $syncParameters = $this->get('setting_repository')->get('sync_params');
+        $syncParameters = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get('sync_params');
 
         return $this->render('instance_sync/list.tpl', [
             'elements' => $syncParameters
@@ -68,15 +64,19 @@ class InstanceSyncController extends Controller
             'categories' => $request->request->get('categories'),
         ];
 
+        $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
+
         // Get saved settings if exists (update action)
-        $siteData = [];
-        if ($syncParams = $this->get('setting_repository')->get('sync_params')) {
-            $siteData = array_merge($syncParams, [$data['site_url'] => $data]);
+        $siteData   = [];
+        $syncParams = $ds->get('sync_params');
+
+        if (!empty($syncParams)) {
+            $siteData = array_merge($syncParams, [ $data['site_url'] => $data ]);
         } else {
-            $siteData = [$data['site_url'] => $data];
+            $siteData = [ $data['site_url'] => $data ];
         }
 
-        if ($this->get('setting_repository')->set('sync_params', $siteData)) {
+        if ($ds->set('sync_params', $siteData)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Configuration saved successfully')
@@ -88,12 +88,10 @@ class InstanceSyncController extends Controller
             );
         }
 
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_instance_sync_show',
-                ['site_url' => $data['site_url']]
-            )
-        );
+        return $this->redirect($this->generateUrl(
+            'admin_instance_sync_show',
+            [ 'site_url' => $data['site_url'] ]
+        ));
     }
 
     /**
@@ -129,8 +127,12 @@ class InstanceSyncController extends Controller
             if (isset($result->error)) {
                 $authError = true;
             }
+
             // Fetch params from db
-            $syncParams = $this->get('setting_repository')->get('sync_params');
+            $syncParams = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('sync_params');
+
             // Get site values if exists
             if ($syncParams) {
                 foreach ($syncParams as $site => $values) {
@@ -163,7 +165,9 @@ class InstanceSyncController extends Controller
         $siteUrl = $request->query->filter('site_url', '', FILTER_VALIDATE_URL);
 
         // Fetch params from db
-        $syncParams = $this->get('setting_repository')->get('sync_params');
+        $syncParams = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('sync_params');
 
         // Get site values
         $element = $syncParams[$siteUrl];
@@ -212,8 +216,10 @@ class InstanceSyncController extends Controller
     {
         $siteUrl = $request->query->filter('site_url', '');
 
+        $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
+
         // Fetch params from db
-        $syncParams = $this->get('setting_repository')->get('sync_params');
+        $syncParams = $ds->get('sync_params');
 
         // Search the instance by site_url
         $index = false;
@@ -228,12 +234,14 @@ class InstanceSyncController extends Controller
             unset($syncParams[$siteUrl]);
         }
 
-        if ($this->get('setting_repository')->set('sync_params', $syncParams)) {
+        try {
+            $ds->set('sync_params', $syncParams);
+
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Site configuration deleted successfully')
             );
-        } else {
+        } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 _('There was an error while deleting this configuration')

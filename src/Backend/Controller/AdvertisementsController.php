@@ -400,6 +400,8 @@ class AdvertisementsController extends Controller
      */
     public function configAction(Request $request)
     {
+        $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
+
         if ('POST' == $this->request->getMethod()) {
             $formValues = $request->request;
 
@@ -452,15 +454,15 @@ class AdvertisementsController extends Controller
             if ($this->get('core.security')->hasPermission('MASTER')) {
                 $settings['ads_settings']['safe_frame'] =
                     empty($formValues->get('safe_frame')) ? 0 : 1;
+
                 $settings['dfp_custom_code'] =
                     base64_encode($formValues->get('dfp_custom_code'));
+
                 $settings['smart_custom_code'] =
                     base64_encode($formValues->get('smart_custom_code'));
             }
 
-            foreach ($settings as $key => $value) {
-                $this->get('setting_repository')->set($key, $value);
-            }
+            $ds->set($settings);
 
             $this->get('session')->getFlashBag()->add(
                 'success',
@@ -478,12 +480,9 @@ class AdvertisementsController extends Controller
                 'smart_ad_server', 'smart_custom_code', 'tradedoubler_id',
             ];
 
-            $configurations = $this->get('setting_repository')->get($keys);
-
-            return $this->render(
-                'advertisement/config.tpl',
-                [ 'configs' => $configurations ]
-            );
+            return $this->render('advertisement/config.tpl', [
+                'configs' => $ds->get($keys)
+            ]);
         }
     }
 
@@ -497,23 +496,26 @@ class AdvertisementsController extends Controller
     {
         $adsPositions = $this->container->get('core.helper.advertisement');
         $renderer     = $this->container->get('core.renderer.advertisement');
+        $settings     = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get([ 'revive_ad_server', 'smart_ad_server' ]);
 
         // OpenX
         $openxServerUrl = '';
-        $openxSettings  = $this->get('setting_repository')->get('revive_ad_server');
-        if (is_array($openxSettings)
-            && array_key_exists('url', $openxSettings)
+        if (!empty($settings['revive_ad_server'])
+            && is_array($settings['revive_ad_server'])
+            && array_key_exists('url', $settings['revive_ad_server'])
         ) {
-            $openxServerUrl = $openxSettings['url'];
+            $openxServerUrl = $settings['revive_ad_server']['url'];
         }
 
         // Smart+
         $smartServerUrl = '';
-        $smartSettings  = $this->get('setting_repository')->get('smart_ad_server');
-        if (is_array($smartSettings)
-            && array_key_exists('domain', $smartSettings)
-            && array_key_exists('network_id', $smartSettings)
-            && array_key_exists('site_id', $smartSettings)
+        if (!empty($settings['smart_ad_server'])
+            && is_array($settings['smart_ad_server'])
+            && array_key_exists('domain', $settings['smart_ad_server'])
+            && array_key_exists('network_id', $settings['smart_ad_server'])
+            && array_key_exists('site_id', $settings['smart_ad_server'])
         ) {
             $smartServerUrl = $smartSettings['domain'];
         }

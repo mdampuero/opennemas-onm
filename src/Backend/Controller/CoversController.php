@@ -13,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for handling the pdf covers
@@ -444,30 +443,23 @@ class CoversController extends Controller
      */
     public function configAction(Request $request)
     {
-        if ('POST' != $request->getMethod()) {
-            $configurationsKeys = [ 'kiosko_settings', ];
-            $configurations     = s::get($configurationsKeys);
+        $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
 
+        if ('POST' != $request->getMethod()) {
             return $this->render('covers/config.tpl', [
-                'configs' => $configurations
+                'configs' => $ds->get([ 'kiosko_settings' ])
             ]);
         }
 
         $settingsRAW = $request->request->get('kiosko_settings');
-        $settings    = [
-            'kiosko_settings' => [
-                'orderFrontpage' => filter_var($settingsRAW['orderFrontpage'], FILTER_SANITIZE_STRING),
-            ]
-        ];
+        $settings    = [ 'kiosko_settings' => [
+            'orderFrontpage' => filter_var($settingsRAW['orderFrontpage'], FILTER_SANITIZE_STRING),
+        ] ];
 
-        foreach ($settings as $key => $value) {
-            s::set($key, $value);
-        }
+        $ds->set($settings);
 
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            _('Settings saved successfully.')
-        );
+        $this->get('session')->getFlashBag()
+            ->add('success', _('Settings saved successfully.'));
 
         return $this->redirect($this->generateUrl('admin_kioskos_config'));
     }

@@ -182,7 +182,8 @@ class OpinionsController extends Controller
         $extraFields = null;
 
         if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
-            $extraFields = $this->get('setting_repository')
+            $extraFields = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
                 ->get(OpinionsController::EXTRA_INFO_TYPE);
         }
 
@@ -217,8 +218,9 @@ class OpinionsController extends Controller
             $extraFields = null;
 
             if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
-                $extraFields = $this->get('setting_repository')
-                    ->get('extraInfoContents.OPINION_MANAGER');
+                $extraFields = $this->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')
+                    ->get(OpinionsController::EXTRA_INFO_TYPE);
             }
 
             return $this->render('opinion/new.tpl', [
