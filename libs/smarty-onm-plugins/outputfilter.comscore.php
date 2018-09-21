@@ -30,9 +30,9 @@ function smarty_outputfilter_comscore($output, $smarty)
     ) {
         $isAmp = preg_match('@\.amp\.html$@', $uri);
         if ($isAmp) {
-            $code = addComScoreCode($output, 'amp');
+            $code = addComScoreCode($smarty, $output, 'amp');
         } else {
-            $code = addComScoreCode($output);
+            $code = addComScoreCode($smarty, $output);
         }
 
         return $code;
@@ -41,9 +41,11 @@ function smarty_outputfilter_comscore($output, $smarty)
     return $output;
 }
 
-function addComScoreCode($output, $type = null)
+function addComScoreCode($smarty, $output, $type = null)
 {
-    $config = getService('setting_repository')->get('comscore');
+    $config = $smarty->getContainer()->get('orm.manager')
+        ->getDataSet('Settings', 'instance')
+        ->get('comscore');
 
     if (!is_array($config)
         || !array_key_exists('page_id', $config)

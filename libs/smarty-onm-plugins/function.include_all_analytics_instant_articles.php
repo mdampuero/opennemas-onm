@@ -2,17 +2,22 @@
 
 function smarty_function_include_all_analytics_instant_articles($params, &$smarty)
 {
-    $codes = [];
+    $output   = '';
+    $codes    = [];
+    $settings = $smarty->getContainer()
+        ->get('orm.manager')
+        ->getDataSet('Settings', 'instance')
+        ->get([ 'charbeat', 'comscore', 'google_analytics', 'ojd' ]);
+
     // comScore
-    $comScoreConfig = getService('setting_repository')->get('comscore');
-    if (is_array($comScoreConfig)
-        && array_key_exists('page_id', $comScoreConfig)
-        && !empty(trim($comScoreConfig['page_id']))
+    if (is_array($settings['comscore'])
+        && array_key_exists('page_id', $settings['comscore'])
+        && !empty(trim($settings['comscore']['page_id']))
     ) {
         $codes[] = '<!-- BegincomScore Tag -->'
             . '<script>'
             . 'var _comscore = _comscore || [];'
-            . '_comscore.push({ c1: "2", c2: "' . $comScoreConfig['page_id'] . '",
+            . '_comscore.push({ c1: "2", c2: "' . $settings['comscore']['page_id'] . '",
                 options: {
                     url_append: "comscorekw=fbia"
                 }});'
@@ -25,21 +30,21 @@ function smarty_function_include_all_analytics_instant_articles($params, &$smart
             . '})();'
             . '</script>'
             . '<noscript>'
-            . '<img src="http://b.scorecardresearch.com/p?c1=2&c2=' . $comScoreConfig['page_id']
+            . '<img src="http://b.scorecardresearch.com/p?c1=2&c2=' . $settings['comscore']['page_id']
             . '&cv=2.0&cj=1&comscorekw=fbia" />'
             . '</noscript>'
             . '<!-- EndcomScore  Tag -->' . "\n";
     }
+
     // OJD
-    $OJDconfig = getService('setting_repository')->get('ojd');
-    if (is_array($OJDconfig)
-        && array_key_exists('page_id', $OJDconfig)
-        && !empty(trim($OJDconfig['page_id']))
+    if (is_array($settings['ojd'])
+        && array_key_exists('page_id', $settings['ojd'])
+        && !empty(trim($settings['ojd']['page_id']))
     ) {
         $codes[] = '<!-- START Nielsen//NetRatings SiteCensus V5.3 -->'
             . '<!-- COPYRIGHT 2007 Nielsen//NetRatings -->'
             . '<script>'
-            . 'var _rsCI="' . $OJDconfig['page_id'] . '";'
+            . 'var _rsCI="' . $settings['ojd']['page_id'] . '";'
             . 'var _rsCG="0";'
             . 'var _rsDN="//secure-uk.imrworldwide.com/";'
             . 'var _rsCC=0;'
@@ -47,17 +52,17 @@ function smarty_function_include_all_analytics_instant_articles($params, &$smart
             . '<script src="//secure-uk.imrworldwide.com/v53.js"></script>'
             . '<noscript>'
             . '<div><img src="//secure-uk.imrworldwide.com/cgi-bin/m?ci='
-            . $OJDconfig['page_id'] . '&amp;cg=0" alt=""/></div>'
+            . $settings['ojd']['page_id'] . '&amp;cg=0" alt=""/></div>'
             . '</noscript>'
             . '<!-- END Nielsen//NetRatings SiteCensus V5.3 -->' . "\n";
     }
+
     // Chartbeat
-    $ChartBeatconfig = getService('setting_repository')->get('chartbeat');
-    if (is_array($ChartBeatconfig)
-        && array_key_exists('id', $ChartBeatconfig)
-        && array_key_exists('domain', $ChartBeatconfig)
-        && !empty(trim($ChartBeatconfig['id']))
-        && !empty(trim($ChartBeatconfig['domain']))
+    if (is_array($settings['charbeat'])
+        && array_key_exists('id', $settings['charbeat'])
+        && array_key_exists('domain', $settings['charbeat'])
+        && !empty(trim($settings['charbeat']['id']))
+        && !empty(trim($settings['charbeat']['domain']))
     ) {
         // Get author if exists otherwise get agency
         $author = $category = '';
@@ -74,8 +79,8 @@ function smarty_function_include_all_analytics_instant_articles($params, &$smart
 
         $codes[] = '<script>'
             . 'var _sf_async_config = {};'
-            . '_sf_async_config.uid = ' . $ChartBeatconfig['id'] . ';'
-            . '_sf_async_config.domain = ' . $ChartBeatconfig['domain'] . ';'
+            . '_sf_async_config.uid = ' . $settings['charbeat']['id'] . ';'
+            . '_sf_async_config.domain = ' . $settings['charbeat']['domain'] . ';'
             . '_sf_async_config.title = "' . $title . '";'
             . '_sf_async_config.sections = "' . $category . '";'
             . '_sf_async_config.authors = "' . $author . '";'
@@ -86,15 +91,19 @@ function smarty_function_include_all_analytics_instant_articles($params, &$smart
     }
 
     // Google Analytics
-    $gaConfig = getService('setting_repository')->get('google_analytics');
-    $codes[]  = generateFiaGAScriptCode($gaConfig, $smarty->tpl_vars['item']->value);
+    $codes[] = generateFiaGAScriptCode(
+        $settings['google_analytics'],
+        $smarty->tpl_vars['item']->value
+    );
 
     // Piwik
     $codes[] = getPiwikCode();
 
-    $output = '';
+
     if (!empty($codes)) {
-        $output = '<figure class="op-tracker"><iframe>' . implode('<br>', $codes) . '</iframe></figure>';
+        $output = '<figure class="op-tracker"><iframe>'
+            . implode('<br>', $codes)
+            . '</iframe></figure>';
     }
 
     return $output;
@@ -102,7 +111,12 @@ function smarty_function_include_all_analytics_instant_articles($params, &$smart
 
 function generateFiaGAScriptCode($config, $content)
 {
-    $code = "\n<script>\n(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o), m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');\n";
+    $code = "\n<script>\n(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;"
+        . "i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*"
+        . "new Date();a=s.createElement(o), m=s.getElementsByTagName(o)[0];"
+        . "a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"
+        . "'script','https://www.google-analytics.com/analytics.js','ga');\n";
+
     foreach ($config as $key => $account) {
         if (is_array($account)
             && array_key_exists('api_key', $account)

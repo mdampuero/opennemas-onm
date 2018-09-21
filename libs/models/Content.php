@@ -2126,7 +2126,10 @@ class Content implements \JsonSerializable, CsvSerializable
             return;
         }
 
-        $metaDataFields = getService('setting_repository')->get($type);
+        $metaDataFields = getService('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get($type);
+
         if (!is_array($metaDataFields)) {
             return;
         }
