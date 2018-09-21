@@ -35,7 +35,9 @@ class CategoryController extends Controller
     {
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
-        $epp          = $this->get('setting_repository')->get('items_in_blog', 10);
+        $epp          = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_in_blog', 10);
         $epp          = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
         if ($page > 1) {

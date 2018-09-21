@@ -78,10 +78,11 @@ class ArticlesController extends Controller
         list($positions, $advertisements) =
             $this->getAds($category->pk_content_category);
 
-        $layout = $this->get('setting_repository')->get(
-            'frontpage_layout_' . $category->pk_content_category,
-            'default'
-        );
+        $layout = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+            ->get(
+                'frontpage_layout_' . $category->pk_content_category,
+                'default'
+            );
 
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('content', $article->id, $token);

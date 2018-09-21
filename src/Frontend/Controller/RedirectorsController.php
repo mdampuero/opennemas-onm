@@ -245,7 +245,9 @@ class RedirectorsController extends Controller
     protected function redirectNotMigratedContent($type)
     {
         $ignored     = [ 'article', 'category' ];
-        $redirection = $this->get('setting_repository')->get('redirection');
+        $redirection = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('redirection');
 
         if (empty($redirection)) {
             throw new ContentNotMigratedException();

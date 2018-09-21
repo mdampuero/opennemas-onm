@@ -56,7 +56,9 @@ class BlogsController extends Controller
                 ->filter('mapify', [ 'key' => 'id' ])
                 ->get();
 
-            $epp = $this->get('setting_repository')->get('items_in_blog', 10);
+            $epp = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('items_in_blog', 10);
             $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
             $order   = [ 'starttime' => 'DESC' ];
@@ -169,7 +171,9 @@ class BlogsController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/blog_author_index.tpl', $cacheID)
         ) {
-            $epp = $this->get('setting_repository')->get('items_per_page', 10);
+            $epp = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('items_per_page', 10);
             $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
             $author->slug  = $author->username;

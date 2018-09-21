@@ -65,8 +65,8 @@ class OpinionsController extends Controller
             $order['starttime'] = 'DESC';
 
             // Fetch configurations for this frontpage
-            $configurations = $this->get('setting_repository')
-                ->get('opinion_settings', [
+            $configurations = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')->get('opinion_settings', [
                     'total_editorial' => 2,
                     'total_director'  => 1,
                 ]);
@@ -110,7 +110,7 @@ class OpinionsController extends Controller
                 }
             }
 
-            $numOpinions = $this->get('setting_repository')->get('items_per_page');
+            $numOpinions = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('items_per_page');
             if (!empty($configurations)
                 && array_key_exists('total_opinions', $configurations)
             ) {
@@ -406,7 +406,9 @@ class OpinionsController extends Controller
             $orderBy = ['created' => 'DESC'];
 
             // Total opinions per page
-            $numOpinions = $this->get('setting_repository')->get('items_per_page');
+            $numOpinions = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('items_per_page');
             if (!empty($configurations)
                 && array_key_exists('total_opinions', $configurations)
             ) {
