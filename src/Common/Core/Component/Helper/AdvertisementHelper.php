@@ -167,7 +167,8 @@ class AdvertisementHelper
      */
     public function isSafeFrameEnabled()
     {
-        $settings = $this->container->get('setting_repository')
+        $settings = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
             ->get('ads_settings');
 
         if (is_array($settings)

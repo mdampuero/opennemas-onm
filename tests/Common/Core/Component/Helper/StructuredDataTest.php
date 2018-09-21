@@ -23,13 +23,14 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'hasParameter' ])
             ->getMock();
 
-        $this->fm = new FilterManager($this->container);
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getDataSet' ])
+            ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
             ->setMethods([ 'hasMultilanguage' ])
             ->getMock();
-
-        $this->instance->activated_modules = [];
 
         $this->kernel = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
@@ -40,10 +41,27 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getContext' ])
             ->getMock();
 
+        $this->ds = $this->getMockBuilder('DataSet')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->ts = $this->getMockBuilder('TagService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getTagsSepByCommas' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->em->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
+
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
+
+        $this->fm = new FilterManager($this->container);
+
+        $this->instance->activated_modules = [];
 
         $GLOBALS['kernel'] = $this->kernel;
 
@@ -82,17 +100,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $this->data['content']->metadata = [1,2,3,4,5];
         $this->data['content']->body     = "This is the body text";
 
-        $sm = $this->getMockBuilder('SettingManager')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'get' ])
-            ->getMock();
-
-        $ts = $this->getMockBuilder('TagService')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getTagsSepByCommas' ])
-            ->getMock();
-
-        $this->object = new StructuredData($sm, $ts);
+        $this->object = new StructuredData($this->em, $this->ts);
     }
 
     public function serviceContainerCallback($name)
@@ -160,9 +168,9 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             }
         }';
 
-        $this->object->sm->expects($this->once())->method('get')
+        $this->ds->expects($this->once())->method('get')
             ->willReturn('Site Name');
-        $this->object->ts->expects($this->once())->method('getTagsSepByCommas')
+        $this->ts->expects($this->once())->method('getTagsSepByCommas')
             ->willReturn('keywords,video,json,linking,data');
 
         $this->assertEquals($videoJson, $this->object->generateVideoJsonLDCode($this->data));
@@ -205,7 +213,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         // Gallery only with cover image
         $onlyCover = $galleryJson . '}';
-        $this->object->ts->expects($this->any())->method('getTagsSepByCommas')
+        $this->ts->expects($this->any())->method('getTagsSepByCommas')
             ->willReturn('keywords,object,json,linking,data');
         $this->assertEquals($onlyCover, $this->object->generateImageGalleryJsonLDCode($this->data));
 
@@ -276,7 +284,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         // Gallery with several photos
         $severalImages = $galleryJson . $albumPhotosJson . '}' . $albumPhotosObjectJson;
-        $this->object->ts->expects($this->any())->method('getTagsSepByCommas')
+        $this->ts->expects($this->any())->method('getTagsSepByCommas')
             ->willReturn('keywords,video,json,linking,data');
         $this->assertEquals($severalImages, $this->object->generateImageGalleryJsonLDCode($this->data));
     }
@@ -317,9 +325,9 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
                 "url": "' . SITE_URL . '"
             }';
 
-        $this->object->sm->expects($this->any())->method('get')
+        $this->ds->expects($this->any())->method('get')
             ->willReturn('Site Name');
-        $this->object->ts->expects($this->any())->method('getTagsSepByCommas')
+        $this->ts->expects($this->any())->method('getTagsSepByCommas')
             ->willReturn('');
 
         // Article with image

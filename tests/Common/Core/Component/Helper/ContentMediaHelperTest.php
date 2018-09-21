@@ -21,7 +21,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->sm = $this->getMockBuilder('SettingManager')
+        $this->ds = $this->getMockBuilder('DataSet')
             ->disableOriginalConstructor()
             ->setMethods([ 'get' ])
             ->getMock();
@@ -31,6 +31,13 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'find' ])
             ->getMock();
 
+        $this->orm = $this->getMockBuilder('OrmEntityManager')
+            ->setMethods([ 'getDataSet' ])
+            ->getMock();
+
+        $this->orm->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
+
         if (!defined('MEDIA_IMG_ABSOLUTE_URL')) {
             define('MEDIA_IMG_ABSOLUTE_URL', 'http://test.com/media/test/images');
         }
@@ -39,7 +46,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             define('MEDIA_DIR', 'test');
         }
 
-        $this->helper = new ContentMediaHelper($this->sm, $this->em);
+        $this->helper = new ContentMediaHelper($this->orm, $this->em);
     }
 
     /**
@@ -47,16 +54,15 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetContentMediaObjectNoSize()
     {
-        $mediaObject = $this->getMockBuilder(
-            'Common\Core\Component\Helper\ContentMediaHelper'
-        )
+        $mediaObject = $this
+            ->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
             ->setMethods([
                 'getMediaObjectForArticle',
                 'getMediaObjectForOpinion',
                 'getMediaObjectForAlbum',
                 'getMediaObjectForVideo'
             ])
-            ->setConstructorArgs([ $this->sm, $this->em ])
+            ->setConstructorArgs([ $this->orm, $this->em ])
             ->getMock();
 
         $mediaObject->expects($this->once())->method('getMediaObjectForArticle')
@@ -79,16 +85,15 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetContentMediaObjectWithSize()
     {
-        $mediaObject = $this->getMockBuilder(
-            'Common\Core\Component\Helper\ContentMediaHelper'
-        )
+        $mediaObject = $this
+            ->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
             ->setMethods([
                 'getMediaObjectForArticle',
                 'getMediaObjectForOpinion',
                 'getMediaObjectForAlbum',
                 'getMediaObjectForVideo'
             ])
-            ->setConstructorArgs([ $this->sm, $this->em ])
+            ->setConstructorArgs([ $this->orm, $this->em ])
             ->getMock();
 
         $mediaObject->expects($this->once())->method('getMediaObjectForArticle')
@@ -113,14 +118,13 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetContentMediaObjectNoUrl()
     {
-        $mediaObject = $this->getMockBuilder(
-            'Common\Core\Component\Helper\ContentMediaHelper'
-        )
+        $mediaObject = $this
+            ->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
             ->setMethods([
                 'getMediaObjectForArticle',
                 'getDefaultMediaObject'
             ])
-            ->setConstructorArgs([ $this->sm, $this->em ])
+            ->setConstructorArgs([ $this->orm, $this->em ])
             ->getMock();
 
         $mediaObject->expects($this->once())->method('getMediaObjectForArticle')
@@ -321,15 +325,15 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $mediaObject             = new \StdClass();
         $params['default_image'] = 'http://default/image.jpg';
 
-        $this->sm->expects($this->at(0))->method('get')->with('mobile_logo')
+        $this->ds->expects($this->at(0))->method('get')->with('mobile_logo')
             ->willReturn('mobile_logo.jpg');
-        $this->sm->expects($this->at(1))->method('get')->with('mobile_logo')
+        $this->ds->expects($this->at(1))->method('get')->with('mobile_logo')
             ->willReturn(null);
-        $this->sm->expects($this->at(2))->method('get')->with('site_logo')
+        $this->ds->expects($this->at(2))->method('get')->with('site_logo')
             ->willReturn('site_logo.jpg');
-        $this->sm->expects($this->at(3))->method('get')->with('mobile_logo')
+        $this->ds->expects($this->at(3))->method('get')->with('mobile_logo')
             ->willReturn(null);
-        $this->sm->expects($this->at(4))->method('get')->with('site_logo')
+        $this->ds->expects($this->at(4))->method('get')->with('site_logo')
             ->willReturn(null);
 
         $method = new \ReflectionMethod($this->helper, 'getDefaultMediaObject');

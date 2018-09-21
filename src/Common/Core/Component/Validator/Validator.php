@@ -19,11 +19,11 @@ class Validator
     const BLACKLIST_RULESET_TAGS     = 'tag';
 
     /**
-     * The settings repository
+     * The settings dataset
      *
-     * @var SettingRepository
+     * @var DataSet
      **/
-    private $sm = null;
+    private $ds = null;
 
     /**
      * The validator service
@@ -40,9 +40,9 @@ class Validator
      *
      * @return void
      */
-    public function __construct($settingsManager, $validator)
+    public function __construct($em, $validator)
     {
-        $this->sm        = $settingsManager;
+        $this->ds        = $em->getDataSet('Settings', 'instance');
         $this->validator = $validator;
     }
 
@@ -110,7 +110,7 @@ class Validator
      **/
     public function getConfig($ruleSet)
     {
-        return $this->sm->get('blacklist.' . $ruleSet);
+        return $this->ds->get('blacklist.' . $ruleSet);
     }
 
     /**
@@ -123,7 +123,7 @@ class Validator
      **/
     public function setConfig($ruleSet, $config)
     {
-        return $this->sm->set('blacklist.' . $ruleSet, $config);
+        return $this->ds->set('blacklist.' . $ruleSet, $config);
     }
 
     /**

@@ -86,8 +86,7 @@ class EntityManagerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ '__construct' ])
             ->getMock();
 
-        $this->dataset = $this->getMockBuilder('MockDataset')
-            ->setMockClassName('Dataset')
+        $this->dataset = $this->getMockBuilder('Dataset')
             ->disableOriginalConstructor()
             ->setMethods([ '__construct' ])
             ->getMock();
