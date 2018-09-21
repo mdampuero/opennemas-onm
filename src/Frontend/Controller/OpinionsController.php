@@ -10,7 +10,6 @@
 namespace Frontend\Controller;
 
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -287,7 +286,9 @@ class OpinionsController extends Controller
                 );
             }
 
-            $itemsPerPage = s::get('items_per_page');
+            $itemsPerPage = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('items_per_page');
             // Get external media url for author images
             $externalMediaUrl = $this->cm->getUrlContent($wsUrl . '/ws/instances/mediaurl/', true);
 
@@ -573,7 +574,9 @@ class OpinionsController extends Controller
 
             $this->cm = new \ContentManager();
 
-            $itemsPerPage = s::get('items_per_page');
+            $itemsPerPage = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('items_per_page');
             // Get external media url for author images
             $externalMediaUrl = $this->cm->getUrlContent($wsUrl . '/ws/instances/mediaurl/', true);
 

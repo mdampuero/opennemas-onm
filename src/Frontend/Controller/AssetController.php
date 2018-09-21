@@ -12,7 +12,6 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 use Imagine\Image\ImageInterface;
 
 /**
@@ -193,7 +192,9 @@ class AssetController extends Controller
 
             // RenderColorMenu
             $siteColor   = '#005689';
-            $configColor = s::get('site_color');
+            $configColor = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('site_color');
             if (!empty($configColor)) {
                 if (!preg_match('@^#@', $configColor)) {
                     $siteColor = '#' . $configColor;
