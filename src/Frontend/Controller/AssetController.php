@@ -260,10 +260,10 @@ class AssetController extends Controller
         // Default favico
         $favicoUrl = '/assets/images/favicon.png';
 
-        $settingsManager = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+        $settings = $this->get('orm.manager')->getDataSet('Settings', 'instance')
             ->get(['favico', 'section_settings', 'allowLogo']);
 
-        if ($settingsManager['allowLogo'] && !empty($settingsManager['favico'])) {
+        if ($settings['allowLogo'] && !empty($settings['favico'])) {
             $favicoUrl = MEDIA_URL . MEDIA_DIR . '/sections/' . $favicoFileName;
         }
 
