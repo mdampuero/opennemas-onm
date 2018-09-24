@@ -32,6 +32,7 @@ class RedirectorsController extends Controller
         $id       = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
         $slug     = $request->query->filter('slug', null, FILTER_SANITIZE_STRING);
         $type     = $request->query->filter('content_type', null, FILTER_SANITIZE_STRING);
+        $format   = $request->query->filter('format', null, FILTER_SANITIZE_STRING);
         $fragment = '';
         $content  = null;
 
@@ -64,6 +65,10 @@ class RedirectorsController extends Controller
         }
 
         $url = SITE_URL . $content->uri;
+
+        if ($format === 'amp' && $content->content_type_name === 'article') {
+            $url = str_replace('.html', '.amp.html', $url);
+        }
 
         // TODO: Remove when URI target="_blank"' not included for external
         $url = str_replace('" target="_blank', '', $url);
