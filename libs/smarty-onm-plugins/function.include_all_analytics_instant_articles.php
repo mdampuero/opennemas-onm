@@ -7,7 +7,7 @@ function smarty_function_include_all_analytics_instant_articles($params, &$smart
     $settings = $smarty->getContainer()
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance')
-        ->get([ 'charbeat', 'comscore', 'google_analytics', 'ojd' ]);
+        ->get([ 'chartbeat', 'comscore', 'google_analytics', 'ojd', 'site_name' ]);
 
     // comScore
     if (is_array($settings['comscore'])
@@ -58,34 +58,41 @@ function smarty_function_include_all_analytics_instant_articles($params, &$smart
     }
 
     // Chartbeat
-    if (is_array($settings['charbeat'])
-        && array_key_exists('id', $settings['charbeat'])
-        && array_key_exists('domain', $settings['charbeat'])
-        && !empty(trim($settings['charbeat']['id']))
-        && !empty(trim($settings['charbeat']['domain']))
+    if (is_array($settings['chartbeat'])
+        && array_key_exists('id', $settings['chartbeat'])
+        && array_key_exists('domain', $settings['chartbeat'])
+        && !empty(trim($settings['chartbeat']['id']))
+        && !empty(trim($settings['chartbeat']['domain']))
     ) {
         // Get author if exists otherwise get agency
         $author = $category = '';
         if (array_key_exists('item', $smarty->tpl_vars)) {
             $content = $smarty->tpl_vars['item']->value;
-            $user    = getService('user_repository')->find($content->fk_author);
-            $author  = (!is_null($user->name)) ? $user->name : $content->agency;
-            if (empty($author)) {
-                $author = getService('setting_repository')->get('site_name');
+
+            if (!empty($content->fk_author)) {
+                $user   = $smarty->getContainer()->get('orm.manager')
+                    ->getRepository('User', 'instance')
+                    ->find($content->fk_author);
+                $author = (!is_null($user->name)) ? $user->name : $content->agency;
             }
+
+            if (empty($author)) {
+                $author = $settings['site_name'];
+            }
+
             $category = $content->category_name;
             $title    = $content->title;
         }
 
         $codes[] = '<script>'
             . 'var _sf_async_config = {};'
-            . '_sf_async_config.uid = ' . $settings['charbeat']['id'] . ';'
-            . '_sf_async_config.domain = ' . $settings['charbeat']['domain'] . ';'
+            . '_sf_async_config.uid = ' . $settings['chartbeat']['id'] . ';'
+            . '_sf_async_config.domain = ' . $settings['chartbeat']['domain'] . ';'
             . '_sf_async_config.title = "' . $title . '";'
             . '_sf_async_config.sections = "' . $category . '";'
             . '_sf_async_config.authors = "' . $author . '";'
             . '_sf_async_config.useCanonical = true;'
-            . 'window._sf_endpt = (new Date()).getTime();'
+            . 'window._sf_endpt = (new Date())./Time();'
         . '</script>'
         . '<script defer src="//static.chartbeat.com/js/chartbeat_fia.js"></script>' . "\n";
     }
