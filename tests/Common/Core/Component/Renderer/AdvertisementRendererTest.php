@@ -71,9 +71,6 @@ class AdvertisementRendererTest extends TestCase
             case 'orm.manager':
                 return $this->em;
 
-            case 'setting_repository':
-                return $this->ds;
-
             case 'router':
                 return $this->router;
         }
@@ -211,6 +208,7 @@ class AdvertisementRendererTest extends TestCase
                 'device' => 'phone'
             ]
         ];
+
         $ad1->params['device'] = [ 'phone' => 1, 'desktop' => 1 ];
 
         $ads = [ $ad1 ];

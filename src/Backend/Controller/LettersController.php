@@ -46,12 +46,8 @@ class LettersController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
-            $ls = $this->get('core.locale');
             return $this->render('letter/new.tpl', [
-                'commentsConfig' => $this->get('orm.manager')
-                    ->getDataSet('Settings', 'instance')
-                    ->get('comments_config'),
-                'locale'         => $ls->getLocale('frontend'),
+                'locale'         => $this->get('core.locale')->getLocale('frontend'),
                 'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
                 'tags'           => []
             ]);

@@ -25,8 +25,8 @@ class CommentHelper
      */
     public function __construct($sm, $defaultConfigs)
     {
-        $this->sm             = $sm;
-        $this->configs        = $sm->get('comments_config', []);
+        $this->sm             = $sm->getDataSet('Settings', 'instance');
+        $this->configs        = $this->sm->get('comments_config', []);
         $this->defaultConfigs = $defaultConfigs;
     }
 

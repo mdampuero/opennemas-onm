@@ -69,7 +69,7 @@ services:
     core.helper.comment:
         class:     Common\Core\Component\Helper\CommentHelper
         arguments:
-            - '@setting_repository'
+            - '@orm.manager'
             - '%core.helper.comment.default_params%'
 
     core.helper.checkout:
