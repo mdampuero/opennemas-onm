@@ -7,7 +7,7 @@ function smarty_function_render_favico($params, &$smarty)
 
     // Check if favico is defined on site
     $settings = $smarty->getContainer()
-        ->get('orm.mananager')
+        ->get('orm.manager')
         ->getDataSet('Settings', 'instance')
         ->get([ 'favico', 'section_settings' ]);
 

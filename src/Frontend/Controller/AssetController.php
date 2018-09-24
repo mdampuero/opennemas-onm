@@ -260,16 +260,10 @@ class AssetController extends Controller
         // Default favico
         $favicoUrl = '/assets/images/favicon.png';
 
-        // Check if favico is defined on site
-        $favicoFileName  = getService('setting_repository')->get('favico');
-        $sectionSettings = getService('setting_repository')->get('section_settings');
+        $settingsManager = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+            ->get(['favico', 'section_settings', 'allowLogo']);
 
-        $allowLogo = false;
-        if (is_array($sectionSettings) && array_key_exists('allowLogo', $sectionSettings)) {
-            $allowLogo = $sectionSettings['allowLogo'];
-        }
-
-        if ($allowLogo && $favicoFileName) {
+        if ($settingsManager['allowLogo'] && !empty($settingsManager['favico'])) {
             $favicoUrl = MEDIA_URL . MEDIA_DIR . '/sections/' . $favicoFileName;
         }
 

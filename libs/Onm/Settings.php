@@ -83,6 +83,6 @@ class Settings
      */
     public static function invalidate($settingName, $instanceName = null)
     {
-        return getService('setting_repository')->invalidate($settingName, $instanceName);
+        return true;
     }
 }

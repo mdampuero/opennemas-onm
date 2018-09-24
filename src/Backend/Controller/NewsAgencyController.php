@@ -32,24 +32,26 @@ class NewsAgencyController extends Controller
     public function init()
     {
         $this->syncFrom = [
-            '3600'         => sprintf(_('%d hour'), '1'),
-            '10800'         => sprintf(_('%d hours'), '3'),
-            '21600'         => sprintf(_('%d hours'), '6'),
-            '43200'         => sprintf(_('%d hours'), '12'),
+            '3600'         => sprintf(_('%d hour'), 1),
+            '10800'         => sprintf(_('%d hours'), 3),
+            '21600'         => sprintf(_('%d hours'), 6),
+            '43200'         => sprintf(_('%d hours'), 12),
             '86400'         => _('1 day'),
-            '172800'        => sprintf(_('%d days'), '2'),
-            '259200'        => sprintf(_('%d days'), '3'),
-            '345600'        => sprintf(_('%d days'), '4'),
-            '432000'        => sprintf(_('%d days'), '5'),
-            '518400'        => sprintf(_('%d days'), '6'),
-            '604800'        => sprintf(_('%d week'), '1'),
-            '1209600'       => sprintf(_('%d weeks'), '2'),
+            '172800'        => sprintf(_('%d days'), 2),
+            '259200'        => sprintf(_('%d days'), 3),
+            '345600'        => sprintf(_('%d days'), 4),
+            '432000'        => sprintf(_('%d days'), 5),
+            '518400'        => sprintf(_('%d days'), 6),
+            '604800'        => sprintf(_('%d week'), 1),
+            '1209600'       => sprintf(_('%d weeks'), 2),
             'no_limits'     => _('No limit'),
         ];
 
         // Check if module is configured, if not redirect to configuration form
-        $servers = $this->get('orm.manager')->getDataSet('Settings')
+        $servers = $this->get('orm.manager')
+            ->getDataSet('Settings')
             ->get('news_agency_config');
+
         if (is_null($servers)) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
@@ -118,16 +120,13 @@ class NewsAgencyController extends Controller
             ));
         }
 
-        return $this->render(
-            'news_agency/import_select_category.tpl',
-            [
-                'id'           => $id,
-                'source_id'    => $sourceId,
-                'article'      => $element,
-                'subcat'       => $parentCategories[1],
-                'allcategorys' => $parentCategories[0],
-            ]
-        );
+        return $this->render('news_agency/import_select_category.tpl', [
+            'id'           => $id,
+            'source_id'    => $sourceId,
+            'article'      => $element,
+            'subcat'       => $parentCategories[1],
+            'allcategorys' => $parentCategories[0],
+        ]);
     }
 
     /**
@@ -183,7 +182,8 @@ class NewsAgencyController extends Controller
         ini_set('memory_limit', '128M');
         ini_set('set_time_limit', '0');
 
-        $servers = $this->get('orm.manager')->getDataSet('Settings')
+        $servers = $this->get('orm.manager')
+            ->getDataSet('Settings')
             ->get('news_agency_config');
         $tpl     = $this->get('view')->getBackendTemplate();
         $path    = $this->getParameter('core.paths.cache') . DS
@@ -452,7 +452,9 @@ class NewsAgencyController extends Controller
             }
         }
 
-        $commentsConfig = s::get('comments_config') ? s::get('comments_config') : [];
+        $commentsConfig = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('comments_config', []);
 
         $values = [
             'title'          => $element->getTitle(),

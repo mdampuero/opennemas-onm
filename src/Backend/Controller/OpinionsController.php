@@ -538,35 +538,36 @@ class OpinionsController extends Controller
     {
         $ds = $this->get('orm.manager')->getDataSet('Settings');
 
-        if ('POST' == $request->getMethod()) {
-            $extra      = $request->request->get('extra-fields');
-            $configsRAW = $request->request->get('opinion_settings');
-
-            $configs = [
-                'opinion_settings' => [
-                    'total_director'        => filter_var($configsRAW['total_director'], FILTER_VALIDATE_INT),
-                    'total_editorial'       => filter_var($configsRAW['total_editorial'], FILTER_VALIDATE_INT),
-                    'total_opinions'        => filter_var($configsRAW['total_opinions'], FILTER_VALIDATE_INT),
-                    'total_opinion_authors' => filter_var($configsRAW['total_opinion_authors'], FILTER_VALIDATE_INT),
-                    'blog_orderFrontpage'   => filter_var($configsRAW['blog_orderFrontpage'], FILTER_SANITIZE_STRING),
-                    'blog_itemsFrontpage'   => filter_var($configsRAW['blog_itemsFrontpage'], FILTER_VALIDATE_INT),
-                ],
-                'extraInfoContents.OPINION_MANAGER' => json_decode($extra, true)
-            ];
-
-            $ds->set($configs);
-
-            $this->get('session')->getFlashBag()
-                ->add('success', _('Settings saved successfully.'));
-
-            return $this->redirect($this->generateUrl('admin_opinions_config'));
-        } else {
+        if ('POST' !== $request->getMethod()) {
             return $this->render('opinion/config.tpl', [
                 'configs'      => $ds->get([ 'opinion_settings' ]),
-                'extra_fields' => $this->get('setting_repository')
+                'extra_fields' => $this->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')
                     ->get(OpinionsController::EXTRA_INFO_TYPE)
             ]);
         }
+
+        $extra      = $request->request->get('extra-fields');
+        $configsRAW = $request->request->get('opinion_settings');
+
+        $configs = [
+            'opinion_settings' => [
+                'total_director'        => filter_var($configsRAW['total_director'], FILTER_VALIDATE_INT),
+                'total_editorial'       => filter_var($configsRAW['total_editorial'], FILTER_VALIDATE_INT),
+                'total_opinions'        => filter_var($configsRAW['total_opinions'], FILTER_VALIDATE_INT),
+                'total_opinion_authors' => filter_var($configsRAW['total_opinion_authors'], FILTER_VALIDATE_INT),
+                'blog_orderFrontpage'   => filter_var($configsRAW['blog_orderFrontpage'], FILTER_SANITIZE_STRING),
+                'blog_itemsFrontpage'   => filter_var($configsRAW['blog_itemsFrontpage'], FILTER_VALIDATE_INT),
+            ],
+            'extraInfoContents.OPINION_MANAGER' => json_decode($extra, true)
+        ];
+
+        $ds->set($configs);
+
+        $this->get('session')->getFlashBag()
+            ->add('success', _('Settings saved successfully.'));
+
+        return $this->redirect($this->generateUrl('admin_opinions_config'));
     }
 
     /**
