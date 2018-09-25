@@ -31,7 +31,6 @@ parameters:
             - backend_analytics
     core.template.manager.filters:
         output:
-            - canonical_url
             - css_includes
             - js_includes
     core.helper.comment.default_params:
