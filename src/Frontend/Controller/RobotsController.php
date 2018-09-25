@@ -35,7 +35,6 @@ class RobotsController extends Controller
             . "Disallow: /harming/humans\n"
             . "Disallow: /ignoring/human/orders\n"
             . "Disallow: /harm/to/self\n"
-            . "Disallow: /content/print\n"
             . "Disallow: /content/share-by-email\n"
             . "Disallow: /api\n"
             . "Disallow: " . ($disableRobots ? "/" : "/admin") . "\n"

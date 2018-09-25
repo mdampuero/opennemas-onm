@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c) Openhost, S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,46 +17,8 @@ use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Handles the actions for the news agency module
- *
- * @package Backend_Controllers
- */
 class NewsAgencyServerController extends Controller
 {
-    /**
-     * Common code for all the actions.
-     */
-    public function init()
-    {
-        $this->syncFrom = [
-            '3600'         => sprintf(_('%d hour'), '1'),
-            '10800'         => sprintf(_('%d hours'), '3'),
-            '21600'         => sprintf(_('%d hours'), '6'),
-            '43200'         => sprintf(_('%d hours'), '12'),
-            '86400'         => _('1 day'),
-            '172800'        => sprintf(_('%d days'), '2'),
-            '259200'        => sprintf(_('%d days'), '3'),
-            '345600'        => sprintf(_('%d days'), '4'),
-            '432000'        => sprintf(_('%d days'), '5'),
-            '518400'        => sprintf(_('%d days'), '6'),
-            '604800'        => sprintf(_('%d week'), '1'),
-            '1209600'       => sprintf(_('%d weeks'), '2'),
-            'no_limits'     => _('No limit'),
-        ];
-
-        ini_set('memory_limit', '128M');
-        ini_set('set_time_limit', '0');
-
-        // Check if module is configured, if not redirect to configuration form
-        if (is_null($this->get('setting_repository')->get('news_agency_config'))) {
-            $this->get('session')->getFlashBag()->add(
-                'notice',
-                _('Please provide your source server configuration to start to use your Importer module')
-            );
-        }
-    }
-
     /**
      * Tries to connect to the server basing on the parameters.
      *
@@ -102,23 +64,21 @@ class NewsAgencyServerController extends Controller
      */
     public function cleanAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
-
-        $servers = $this->get('setting_repository')->get('news_agency_config');
+        $id      = $request->query->getDigits('id');
+        $servers = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get('news_agency_config');
 
         if (!array_key_exists($id, $servers)) {
-            return new JsonResponse(
-                [
-                    'messages' => [
-                        'message' => sprintf(
-                            _('Source identifier "%d" not valid'),
-                            $id
-                        ),
-                        'type' => 'error'
-                    ]
-                ],
-                400
-            );
+            return new JsonResponse([
+                'messages' => [
+                    'message' => sprintf(
+                        _('Source identifier "%d" not valid'),
+                        $id
+                    ),
+                    'type' => 'error'
+                ]
+            ], 400);
         }
 
         $messages = [];
@@ -157,10 +117,12 @@ class NewsAgencyServerController extends Controller
      */
     public function listAction()
     {
-        $servers = $this->get('setting_repository')->get('news_agency_config');
+        $servers = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get('news_agency_config');
 
         return new JsonResponse([
-            'extra'   => [ 'sync_from' => $this->syncFrom ],
+            'extra'   => [ 'sync_from' => $this->getSyncFrom() ],
             'total'   => count($servers),
             'results' => array_values($servers),
         ]);
@@ -179,7 +141,8 @@ class NewsAgencyServerController extends Controller
     public function toggleAction(Request $request, $id)
     {
         $status  = $request->request->get('activated');
-        $servers = $this->get('setting_repository')->get('news_agency_config');
+        $ds      = $this->get('orm.manager')->getDataSet('Settings');
+        $servers = $ds->get('news_agency_config');
 
         $servers[$id]['activated'] = $status;
 
@@ -187,9 +150,9 @@ class NewsAgencyServerController extends Controller
         $compiler   = new Compiler($repository->syncPath);
         $compiler->cleanCompileForServer($id);
 
-        $this->get('setting_repository')->set('news_agency_config', $servers);
+        $ds->set('news_agency_config', $servers);
 
-        return new JsonResponse( [
+        return new JsonResponse([
             'activated' => $status,
             'messages'       => [
                 [
@@ -213,7 +176,8 @@ class NewsAgencyServerController extends Controller
     public function deleteAction(Request $request)
     {
         $id      = $request->query->getDigits('id');
-        $servers = $this->get('setting_repository')->get('news_agency_config');
+        $ds      = $this->get('orm.manager')->getDataSet('Settings');
+        $servers = $ds->get('news_agency_config');
 
         if (!array_key_exists($id, $servers)) {
             return new JsonResponse([
@@ -237,7 +201,7 @@ class NewsAgencyServerController extends Controller
 
             unset($servers[$id]);
 
-            $this->get('setting_repository')->set('news_agency_config', $servers);
+            $ds->set('news_agency_config', $servers);
 
             $messages[] = [
                 'message' => _('News agency server deleted.'),
@@ -251,5 +215,29 @@ class NewsAgencyServerController extends Controller
         }
 
         return new JsonResponse([ 'messages' => $messages ]);
+    }
+
+    /**
+     * Returns the list of hours.
+     *
+     * @return array The list of hours.
+     */
+    protected function getSyncFrom()
+    {
+        return [
+            '3600'         => sprintf(_('%d hour'), '1'),
+            '10800'         => sprintf(_('%d hours'), '3'),
+            '21600'         => sprintf(_('%d hours'), '6'),
+            '43200'         => sprintf(_('%d hours'), '12'),
+            '86400'         => _('1 day'),
+            '172800'        => sprintf(_('%d days'), '2'),
+            '259200'        => sprintf(_('%d days'), '3'),
+            '345600'        => sprintf(_('%d days'), '4'),
+            '432000'        => sprintf(_('%d days'), '5'),
+            '518400'        => sprintf(_('%d days'), '6'),
+            '604800'        => sprintf(_('%d week'), '1'),
+            '1209600'       => sprintf(_('%d weeks'), '2'),
+            'no_limits'     => _('No limit'),
+        ];
     }
 }

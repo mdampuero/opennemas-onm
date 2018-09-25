@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for the news agency module
@@ -51,7 +50,9 @@ class NewsAgencyController extends Controller
         ini_set('set_time_limit', '0');
 
         // Check if module is configured, if not redirect to configuration form
-        if (is_null(s::get('news_agency_config'))) {
+        $servers = $this->get('orm.manager')->getDataSet('Settings')
+            ->get('news_agency_config');
+        if (is_null($servers)) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
                 _('Please provide your source server configuration to start to use your Importer module')
@@ -218,7 +219,8 @@ class NewsAgencyController extends Controller
         ini_set('memory_limit', '128M');
         ini_set('set_time_limit', '0');
 
-        $servers = $this->get('setting_repository')->get('news_agency_config');
+        $servers = $this->get('orm.manager')->getDataSet('Settings')
+            ->get('news_agency_config');
         $tpl     = $this->get('view')->getBackendTemplate();
         $path    = $this->getParameter('core.paths.cache') . DS
             . $this->get('core.instance')->internal_name;
@@ -286,10 +288,9 @@ class NewsAgencyController extends Controller
         }
 
         // Get server config
-        $servers = s::get('news_agency_config');
+        $servers = $this->get('orm.manager')->getDataSet('Settings')
+            ->get('news_agency_config');
         $server  = $servers[$sourceId];
-
-        $fm = $this->get('data.manager.filter');
 
         // If the new has photos import them
         if (count($element->getPhotos()) > 0) {
