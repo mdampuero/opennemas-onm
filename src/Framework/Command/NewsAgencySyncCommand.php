@@ -68,7 +68,7 @@ EOF
         $output->writeln("<fg=yellow>Start synchronizing {$instance->internal_name} instance...</>");
         $logger->info("Start synchronizing {$instance->internal_name} instance", [ 'cron' ]);
 
-        $servers = $this->getContainer()->get('setting_repository')
+        $servers = $this->getContainer()->get('orm.manager')->getDataSet('Settings')
             ->get('news_agency_config');
 
         $logger = $this->getContainer()->get('error.log');

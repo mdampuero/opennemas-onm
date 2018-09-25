@@ -46,7 +46,8 @@ class NewsAgencyController extends Controller
         }
 
         $importer = $this->get('news_agency.importer');
-        $servers  = $this->get('setting_repository')->get('news_agency_config');
+        $servers  = $this->get('orm.manager')->getDataSet('Settings')
+            ->get('news_agency_config');
 
         $em         = $this->get('entity_repository');
         $repository = new LocalRepository();
@@ -277,7 +278,8 @@ class NewsAgencyController extends Controller
         }, $categories);
 
         // Get servers
-        $params['servers'] = $this->get('setting_repository')->get('news_agency_config');
+        $params['servers'] = $this->get('orm.manager')->getDataSet('Settings')
+            ->get('news_agency_config');
 
         if (!is_array($params['servers'])) {
             $params['servers'] = [];
