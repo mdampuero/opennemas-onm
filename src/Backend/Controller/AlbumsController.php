@@ -513,13 +513,6 @@ class AlbumsController extends Controller
 
         $this->get('session')->getFlashBag()->add($type, $message);
 
-        $ds->set($settings);
-
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            _('Settings saved successfully.')
-        );
-
         return $this->redirect($this->generateUrl('admin_albums_config'));
     }
 
