@@ -9,34 +9,30 @@
  */
 function smarty_outputfilter_canonical_url($output, $smarty)
 {
-    $theme   = $smarty->getTheme();
-    $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+    $request = $smarty->getContainer()
+        ->get('request_stack')
+        ->getCurrentRequest();
 
     if (is_null($request)) {
         return $output;
     }
 
-    $uri = $request->getUri();
+    $uri = $request->getRequestUri();
 
-    if (empty($theme)
-        || $theme->uuid === 'es.openhost.theme.admin'
-        || $theme->uuid === 'es.openhost.theme.manager'
-        || preg_match('/\/fb\/instant-articles/', $uri)
-    ) {
+    if (preg_match('/\/fb\/instant-articles/', $uri)) {
         return $output;
     }
 
-    // Generate canonical url
-    $url = SITE_URL . substr(strtok($_SERVER["REQUEST_URI"], '?'), 1);
+    $tpl = '<link rel="canonical" href="%s"/>';
+    $url = SITE_URL . substr(strtok($uri, '?'), 1);
 
-    // Create tag <link> with the canonical url and check for amp
-    if (preg_match('/amp.html/', $url)) {
-        $url = preg_replace('/amp.html/', 'html', $url);
+    if (array_key_exists('content', $smarty->getTemplateVars())) {
+        $url = $smarty->getContainer()->get('core.helper.url_generator')
+            ->generate(
+                $smarty->getTemplateVars()['content'],
+                [ 'absolute' => true ]
+            );
     }
-    $canonical = '<link rel="canonical" href="' . $url . '"/>';
 
-    // Change output html
-    $output = str_replace('</head>', $canonical . '</head>', $output);
-
-    return $output;
+    return str_replace('</head>', sprintf($tpl, $url) . '</head>', $output);
 }

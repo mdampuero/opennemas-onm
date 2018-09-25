@@ -20,36 +20,36 @@ use Symfony\Component\HttpFoundation\Request;
 class NewsAgencyServerController extends Controller
 {
     /**
-     * Common code for all the actions.
+     * Displays a form to create a new news-agency server.
+     *
+     * @return Response The response object.
+     *
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_NEWS_AGENCY_CONFIG')")
      */
-    public function init()
+    public function createAction()
     {
-        $this->syncFrom = [
-            '3600'         => sprintf(_('%d hour'), '1'),
-            '10800'         => sprintf(_('%d hours'), '3'),
-            '21600'         => sprintf(_('%d hours'), '6'),
-            '43200'         => sprintf(_('%d hours'), '12'),
-            '86400'         => _('1 day'),
-            '172800'        => sprintf(_('%d days'), '2'),
-            '259200'        => sprintf(_('%d days'), '3'),
-            '345600'        => sprintf(_('%d days'), '4'),
-            '432000'        => sprintf(_('%d days'), '5'),
-            '518400'        => sprintf(_('%d days'), '6'),
-            '604800'        => sprintf(_('%d week'), '1'),
-            '1209600'       => sprintf(_('%d weeks'), '2'),
-            'no_limits'     => _('No limit'),
-        ];
+        return $this->render('news_agency/config/new.tpl', [
+            'authors'    => $this->getAuthors(),
+            'categories' => $this->getCategories(),
+            'server'     => [],
+            'sync_from'  => $this->getSyncFrom()
+        ]);
+    }
 
-        ini_set('memory_limit', '128M');
-        ini_set('set_time_limit', '0');
-
-        // Check if module is configured, if not redirect to configuration form
-        if (is_null($this->get('setting_repository')->get('news_agency_config'))) {
-            $this->get('session')->getFlashBag()->add(
-                'notice',
-                _('Please provide your source server configuration to start to use your Importer module')
-            );
-        }
+    /**
+     * Shows the list of downloaded newsfiles from Efe service
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     *
+     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
+     *     and hasPermission('IMPORT_ADMIN')")
+     */
+    public function listAction()
+    {
+        return $this->render('news_agency/config/list.tpl');
     }
 
     /**
@@ -62,19 +62,16 @@ class NewsAgencyServerController extends Controller
      * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
      *     and hasPermission('IMPORT_NEWS_AGENCY_CONFIG')")
      */
-    public function createAction(Request $request)
+    public function saveAction(Request $request)
     {
-        $servers = $this->get('setting_repository')->get('news_agency_config');
+        $ds      = $this->get('orm.manager')->getDataSet('Settings');
+        $servers = $ds->get('news_agency_config');
 
         if (!is_array($servers)) {
             $servers = [];
         }
 
-        if (count($servers) <= 0) {
-            $latestServerId = 0;
-        } else {
-            $latestServerId = max(array_keys($servers));
-        }
+        $latestServerId = count($servers) <= 0 ? 0 : max(array_keys($servers));
 
         $server = [
             'id'             => $latestServerId + 1,
@@ -99,32 +96,15 @@ class NewsAgencyServerController extends Controller
 
         $servers[$server['id']] = $server;
 
-        $this->get('setting_repository')->set('news_agency_config', $servers);
+        $ds->set('news_agency_config', $servers);
 
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            _('News agency server added.')
-        );
+        $this->get('session')->getFlashBag()
+            ->add('success', _('News agency server added.'));
 
         return $this->redirect($this->generateUrl(
             'backend_news_agency_server_show',
             [ 'id' => $server['id'] ]
         ));
-    }
-
-    /**
-     * Shows the list of downloaded newsfiles from Efe service
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('NEWS_AGENCY_IMPORTER')
-     *     and hasPermission('IMPORT_ADMIN')")
-     */
-    public function listAction()
-    {
-        return $this->render('news_agency/config/list.tpl');
     }
 
     /**
@@ -139,22 +119,10 @@ class NewsAgencyServerController extends Controller
      */
     public function showAction(Request $request)
     {
-        $servers = $this->get('setting_repository')->get('news_agency_config');
-        $items   = $this->get('category_repository')->findBy(
-            ['internal_category' => [ [ 'value' => 1  ]] ],
-            []
-        );
+        $id = $request->query->getDigits('id');
 
-        $categories = [];
-        foreach ($items as $category) {
-            $categories[$category->id] = $this->get('data.manager.filter')
-                ->set($category->title)->filter('localize')->get();
-        }
-
-        asort($categories);
-
-        $id     = $request->query->getDigits('id');
-        $server = [];
+        $servers = $this->get('orm.manager')->getDataSet('Settings')
+            ->get('news_agency_config');
 
         if (empty($id) || !array_key_exists($id, $servers)) {
             $this->get('session')->getFlashBag()->add(
@@ -165,21 +133,11 @@ class NewsAgencyServerController extends Controller
             return $this->redirect($this->generateUrl('backend_news_agency_servers_list'));
         }
 
-        $server = $servers[$id];
-
-        $authors = [];
-        $users   = $this->get('api.service.author')
-            ->getList('order by name asc');
-
-        foreach ($users['items'] as $user) {
-            $authors[$user->id] = $user->name;
-        }
-
         return $this->render('news_agency/config/new.tpl', [
-            'authors'    => $authors,
-            'categories' => $categories,
-            'server'     => $server,
-            'sync_from'  => $this->syncFrom
+            'authors'    => $this->getAuthors(),
+            'categories' => $this->getCategories(),
+            'server'     => $servers[$id],
+            'sync_from'  => $this->getSyncFrom()
         ]);
     }
 
@@ -196,7 +154,8 @@ class NewsAgencyServerController extends Controller
     public function updateAction(Request $request)
     {
         $id      = $request->query->getDigits('id');
-        $servers = $this->get('setting_repository')->get('news_agency_config');
+        $servers = $this->get('orm.manager')->getDataSet('Settings')
+            ->get('news_agency_config');
 
         $server = [
             'id'             => $id,
@@ -220,16 +179,79 @@ class NewsAgencyServerController extends Controller
 
         $servers[$id] = $server;
 
-        $this->get('setting_repository')->set('news_agency_config', $servers);
+        $this->get('orm.manager')->getDataSet('Settings')
+            ->set('news_agency_config', $servers);
 
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            _('News agency server updated.')
-        );
+        $this->get('session')->getFlashBag()
+            ->add('success', _('News agency server updated.'));
 
         return $this->redirect($this->generateUrl(
             'backend_news_agency_server_show',
             [ 'id' => $id ]
         ));
+    }
+
+    /**
+     * Returns the list of authors for the selector.
+     *
+     * @return array The list of authors.
+     */
+    protected function getAuthors()
+    {
+        $authors = [];
+        $users   = $this->get('api.service.author')
+            ->getList('order by name asc');
+
+        foreach ($users['items'] as $user) {
+            $authors[$user->id] = $user->name;
+        }
+
+        return $authors;
+    }
+
+    /**
+     * Returns the list of categories for the selector.
+     *
+     * @return array The list of categories.
+     */
+    protected function getCategories()
+    {
+        $items = $this->get('orm.manager')->getRepository('Category')
+            ->findBy('internal_category = 1 order by title asc');
+
+        $categories = [];
+        foreach ($items as $category) {
+            $categories[$category->pk_content_category] = $this
+                ->get('data.manager.filter')
+                ->set($category->title)
+                ->filter('localize')
+                ->get();
+        }
+
+        return $categories;
+    }
+
+    /**
+     * Returns the list of of hours for the selector.
+     *
+     * @return array The lisf of hours.
+     */
+    protected function getSyncFrom()
+    {
+        return [
+            '3600'         => sprintf(_('%d hour'), '1'),
+            '10800'         => sprintf(_('%d hours'), '3'),
+            '21600'         => sprintf(_('%d hours'), '6'),
+            '43200'         => sprintf(_('%d hours'), '12'),
+            '86400'         => _('1 day'),
+            '172800'        => sprintf(_('%d days'), '2'),
+            '259200'        => sprintf(_('%d days'), '3'),
+            '345600'        => sprintf(_('%d days'), '4'),
+            '432000'        => sprintf(_('%d days'), '5'),
+            '518400'        => sprintf(_('%d days'), '6'),
+            '604800'        => sprintf(_('%d week'), '1'),
+            '1209600'       => sprintf(_('%d weeks'), '2'),
+            'no_limits'     => _('No limit'),
+        ];
     }
 }

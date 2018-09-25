@@ -217,7 +217,7 @@ class User
      */
     public function __isset($name)
     {
-        return property_exists($this, $name);
+        return property_exists($this, $name) || !empty($this->__get($name));
     }
 
     /**
