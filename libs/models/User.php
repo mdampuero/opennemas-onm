@@ -10,14 +10,6 @@
  *
  * @package    Model
  */
-
-use Onm\Exception\UserAlreadyExistsException;
-
-/**
- * User
- *
- * @package    Model
- */
 class User
 {
     /**
@@ -126,52 +118,6 @@ class User
     }
 
     /**
-     * Creates a new user given an array of data
-     *
-     * @param array $data the user data
-     *
-     * @return boolean true if the user was created
-     */
-    public function create($data)
-    {
-        if ($this->checkIfUserExists($data)) {
-            throw new UserAlreadyExistsException(
-                _('Already exists one user with that information')
-            );
-        }
-
-        $values = [
-            'username'      => $data['username'],
-            'password'      => md5($data['password']),
-            'url'           => $data['url'],
-            'bio'           => $data['bio'],
-            'avatar_img_id' => (int) $data['avatar_img_id'],
-            'email'         => $data['email'],
-            'name'          => $data['name'],
-            'type'          => (int) $data['type'],
-            'token'         => $data['token'],
-            'activated'     => (int) $data['activated'],
-        ];
-
-        try {
-            $conn = getService('orm.manager')->getConnection('instance');
-            $conn->insert('users', $values);
-
-            $this->id = $conn->lastInsertId();
-        } catch (\Exception $e) {
-            error_log('Unable to create the user with the provided info: ' . json_encode($values));
-            return false;
-        }
-
-        /* Notice log of this action */
-        logUserEvent(__METHOD__, $this->id, $data);
-
-        dispatchEventWithParams('user.create', ['id' => $this->id]);
-
-        return true;
-    }
-
-    /**
      * Calculates dynamic properties for the object
      *
      * @param string $property The property name
@@ -257,62 +203,6 @@ class User
     }
 
     /**
-     * Updates the user information given an array of data
-     *
-     * @param array $data the new user data
-     *
-     * @return boolean true if the user was updated
-     */
-    public function update($data)
-    {
-        if ($this->checkIfUserExists($data)) {
-            throw new \Exception(_('Already exists one user with that information'));
-        }
-
-        // Init transaction
-        $conn = getService('orm.manager')->getConnection('instance');
-
-        $conn->beginTransaction();
-
-        $values = [
-            'username'      => $data['username'],
-            'url'           => $data['url'],
-            'bio'           => $data['bio'],
-            'avatar_img_id' => (int) $data['avatar_img_id'],
-            'email'         => $data['email'],
-            'name'          => $data['name'],
-            'activated'     => (int) $data['activated'],
-            'type'          => (int) $data['type'],
-        ];
-
-        if (isset($data['password'])
-            && (strlen($data['password']) > 0)
-            && $data['password'] === $data['passwordconfirm']
-        ) {
-            $values['password'] = md5($data['password']);
-        }
-
-        try {
-            $conn->update('users', $values, [ 'id' => intval($data['id']) ]);
-        } catch (\Exception $e) {
-            $conn->rollBack();
-            return false;
-        }
-
-        // Finish transaction
-        $conn->commit();
-
-        $this->id = $data['id'];
-
-        /* Notice log of this action */
-        logUserEvent(__METHOD__, $this->id, $data);
-
-        dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
-
-        return true;
-    }
-
-    /**
      * Returns the Photo object that represents the user avatar
      *
      * @return Photo the photo object
@@ -331,51 +221,6 @@ class User
         }
 
         return $photo;
-    }
-
-    /**
-     * Checks if a user exists given some information.
-     *
-     * @param array $data tuple with the username and email params
-     *
-     * @return boolean true if user exists
-     */
-    public function checkIfUserExists($data)
-    {
-        // FIXME: why username and email twice in different order?
-        $sql    = "SELECT id FROM users WHERE username=? OR email=? OR email=? OR username=?";
-        $values = [ $data['username'], $data['email'], $data['username'], $data['email'] ];
-
-        $rs = getService('orm.manager')->getConnection('instance')
-            ->fetchAll($sql, $values);
-
-        // If is update, check for more than 1 result
-        if (isset($data['id']) && count($rs) == 1 && $rs[0]['id'] == $data['id']) {
-            return false;
-        }
-
-        return !empty($rs);
-    }
-
-    /**
-     * Get user data by email
-     *
-     * @param  string     $email
-     * @return array|null
-     */
-    public function findByEmail($email)
-    {
-        $sql = 'SELECT * FROM users WHERE email=?';
-        $rs  = getService('orm.manager')->getConnection('instance')
-            ->fetchAll($sql, [ $email ]);
-
-        if (!$rs) {
-            return null;
-        }
-
-        $this->load($rs[0]);
-
-        return $this;
     }
 
     /**
@@ -494,49 +339,6 @@ class User
             dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
 
             return true;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Checks if an email is already in use by frontend users
-     *
-     * @param  email $email the email address to look for
-     *
-     * @return bool if is in use this email
-     */
-    public function checkIfExistsUserEmail($email)
-    {
-        try {
-            $rs = getService('orm.manager')->getConnection('instance')->fetchAssoc(
-                'SELECT count(*) AS num  FROM `users` WHERE email = ?',
-                [ $email ]
-            );
-
-            return $rs['num'] > 0;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Checks if an username is already in use by frontend users
-     *
-     * @param  $userName The user name to log in
-     * @return bool if is in use this username
-     */
-    public function checkIfExistsUserName($userName)
-    {
-        try {
-            $rs = getService('orm.manager')->getConnection('instance')->fetchAssoc(
-                'SELECT count(*) AS num FROM `users` WHERE username = ?',
-                [ $userName ]
-            );
-
-            return $rs['num'] > 0;
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
