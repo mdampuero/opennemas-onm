@@ -123,7 +123,13 @@ class Validator
      **/
     public function setConfig($ruleSet, $config)
     {
-        return $this->ds->set('blacklist.' . $ruleSet, $config);
+        try {
+            $this->ds->set('blacklist.' . $ruleSet, $config);
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**

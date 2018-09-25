@@ -83,6 +83,9 @@ services:
     core.helper.csv:
         class:     Common\Core\Component\Helper\CsvHelper
 
+    core.helper.http_fetcher:
+        class:     Common\Core\Component\Http\Fetcher
+
     core.helper.instance_sync:
         class:     Common\Core\Component\Helper\InstanceSyncHelper
         arguments: [ '@service_container' ]

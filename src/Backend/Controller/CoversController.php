@@ -456,10 +456,16 @@ class CoversController extends Controller
             'orderFrontpage' => filter_var($settingsRAW['orderFrontpage'], FILTER_SANITIZE_STRING),
         ] ];
 
-        $ds->set($settings);
+        try {
+            $ds->set($settings);
 
-        $this->get('session')->getFlashBag()
-            ->add('success', _('Settings saved successfully.'));
+            $this->get('session')->getFlashBag()
+                ->add('success', _('Settings saved successfully.'));
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()
+                ->add('success', _('Unable to save the settings.'));
+        }
+
 
         return $this->redirect($this->generateUrl('admin_kioskos_config'));
     }

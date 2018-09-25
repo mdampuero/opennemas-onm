@@ -294,19 +294,7 @@ class CategoryController extends Controller
     {
         $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
 
-        if ('POST' == $request->getMethod()) {
-            $sectionSettings = $request->request->get('section_settings');
-            if ($sectionSettings['allowLogo'] == 1) {
-                $path = MEDIA_PATH . '/sections';
-                \Onm\FilesManager::createDirectory($path);
-            }
-
-            $ds->set('section_settings', $sectionSettings);
-
-            $this->get('session')->getFlashBag()->add('success', _('Settings saved.'));
-
-            return $this->redirect($this->generateUrl('admin_categories_config'));
-        } else {
+        if ('POST' !== $request->getMethod()) {
             $configurations = $ds->get(['section_settings']);
 
             return $this->render(
@@ -314,6 +302,26 @@ class CategoryController extends Controller
                 ['configs'   => $configurations]
             );
         }
+
+        try {
+            $settings = $request->request->get('section_settings');
+            if ($settings['allowLogo'] == 1) {
+                $path = MEDIA_PATH . '/sections';
+                \Onm\FilesManager::createDirectory($path);
+            }
+
+            $ds->set('section_settings', $settings);
+
+            $type    = 'success';
+            $message = _('Settings saved successfully.');
+        } catch (\Exception $e) {
+            $type    = 'error';
+            $message = _('Unable to save the settings.');
+        }
+
+        $this->get('session')->getFlashBag()->add($type, $message);
+
+        return $this->redirect($this->generateUrl('admin_categories_config'));
     }
 
     /**

@@ -562,12 +562,19 @@ class OpinionsController extends Controller
             'extraInfoContents.OPINION_MANAGER' => json_decode($extra, true)
         ];
 
-        $ds->set($configs);
+        try {
+            $ds->set($configs);
 
-        $this->get('session')->getFlashBag()
-            ->add('success', _('Settings saved successfully.'));
+            $this->get('session')->getFlashBag()
+                ->add('success', _('Settings saved successfully.'));
 
-        return $this->redirect($this->generateUrl('admin_opinions_config'));
+            return $this->redirect($this->generateUrl('admin_opinions_config'));
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()
+                ->add('error', _('Unable to save the settings.'));
+
+            return $this->redirect($this->generateUrl('admin_opinions_config'));
+        }
     }
 
     /**
