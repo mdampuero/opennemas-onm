@@ -112,6 +112,22 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getDataSetName with valid and empty values in metadata.
+     */
+    public function testGetDataSetName()
+    {
+        $this->metadata->datasets = null;
+        $this->assertEmpty($this->metadata->getDataSetName());
+
+        $this->metadata->datasets = [];
+        $this->assertEmpty($this->metadata->getDataSetName());
+
+        $this->metadata->datasets['wibble'] = [];
+        $this->assertEquals('wibble', $this->metadata->getDataSetName());
+    }
+
+
+    /**
      * Tests getDataSetValue with valid and empty values in metadata.
      */
     public function testGetDataSetValue()
