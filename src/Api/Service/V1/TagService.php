@@ -14,7 +14,6 @@ use Common\Core\Component\Validator\Validator;
 
 class TagService extends OrmService
 {
-
     /**
      * Method to simplificate the tag word for enable a search system
      *
@@ -28,31 +27,35 @@ class TagService extends OrmService
     }
 
     /**
-     * Method to fetch the most used tag given the slug
+     * Returns the most used tag basing on the slug for a language.
      *
-     * @param string $slug The slug of a tag
+     * @param string $slug       The slug of a tag.
+     * @param string $languageId The language id.
      *
-     * @return Tag $tag The tag object
+     * @return Tag $tag The tag object.
      */
     public function getMostUsedTagBySlug($slug, $languageId)
     {
         $tags = $this->getTagBySlug($slug, $languageId);
 
-        if (count($tags['items']) < 2) {
-            return count($tags['items']) == 1 ? $tags['items'][0] : null;
+        if ($tags['total'] < 2) {
+            return $tags['total'] === 1 ? $tags['items'][0] : null;
         }
 
-        $tagsCount   = $this->getNumContentsRel($tags['items']);
-        $mostUsedTag = $tags['items'][0];
-        for ($i = 1; $i < count($tags['items']); $i++) {
-            if (array_key_exists($tags['items'][$i]->id, $tagsCount)
-                && $tagsCount[$mostUsedTag->id] < $tagsCount[$tags['items'][$i]->id]
-            ) {
-                $mostUsedTag = $tags['items'][$i];
+        $tagsCount = $this->getNumContentsRel($tags['items']);
+        $mostUses  = max($tagsCount);
+
+        foreach ($tagsCount as $id => $uses) {
+            if ($uses === $mostUses) {
+                $tag = array_filter($tags['items'], function ($a) use ($id) {
+                    return $a->id === $id;
+                });
+
+                return array_shift($tag);
             }
         }
 
-        return $mostUsedTag;
+        return null;
     }
 
     /**
