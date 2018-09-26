@@ -103,7 +103,7 @@ class SmartyCanonicalUrlTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->request);
 
         $this->smarty->expects($this->exactly(2))->method('getTemplateVars')
-            ->willReturn([ 'content' => 'grault' ]);
+            ->willReturn([ 'o_content' => 'grault' ]);
 
         $this->helper->expects($this->once())->method('generate')
             ->with('grault')->willReturn('http://console/grault');
