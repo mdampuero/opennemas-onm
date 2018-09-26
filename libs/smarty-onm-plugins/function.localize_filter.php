@@ -7,7 +7,7 @@
  *
  * @return string Return a HTML code of the message board
  */
-function smarty_function_localize_filter($params)
+function smarty_function_localize_filter($params, &$smarty)
 {
     if (!is_array($params)
         || !array_key_exists('field', $params)

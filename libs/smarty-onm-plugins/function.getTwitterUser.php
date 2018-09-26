@@ -7,7 +7,7 @@ use Onm\Settings as s;
  * i.e: http://twitter.com/#!/loquesea => loquesea
  * i.e: http://twitter.com/loquesea => loquesea
  */
-function smarty_function_getTwitterUser()
+function smarty_function_getTwitterUser($params, &$smarty)
 {
     $page = $smarty->getContainer()->get('orm.manager')
         ->getDataSet('Settings')

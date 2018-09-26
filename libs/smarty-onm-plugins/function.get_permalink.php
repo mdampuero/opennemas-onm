@@ -7,7 +7,7 @@
  */
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-function smarty_function_get_permalink($params)
+function smarty_function_get_permalink($params, &$smarty)
 {
     if (!array_key_exists('item', $params)
         || !is_object($params['item'])
