@@ -14,7 +14,7 @@ function smarty_outputfilter_canonical_url($output, $smarty)
         ->get('request_stack')
         ->getCurrentRequest();
 
-    if (is_null($request)) {
+    if (empty($request)) {
         return $output;
     }
 
