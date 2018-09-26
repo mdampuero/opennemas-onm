@@ -10,7 +10,9 @@
  */
 function smarty_outputfilter_adsense_validator($output, $smarty)
 {
-    $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+    $request = $smarty->getContainer()
+        ->get('request_stack')
+        ->getCurrentRequest();
 
     if (is_null($request)) {
         return $output;
@@ -27,7 +29,9 @@ function smarty_outputfilter_adsense_validator($output, $smarty)
         && !preg_match('/\/fb\/instant-articles/', $uri)
         && !preg_match('@\.amp\.html$@', $uri)
     ) {
-        $adsenseId = $smarty->getContainer()->get('setting_repository')->get('adsense_id');
+        $adsenseId = $smarty->getContainer()->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('adsense_id');
 
         // Check for activated module
         if (!$smarty->getContainer()->get('core.security')->hasExtension('ADS_MANAGER')) {

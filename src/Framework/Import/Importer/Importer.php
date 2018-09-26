@@ -310,7 +310,8 @@ class Importer
      */
     protected function getComments()
     {
-        $config = $this->container->get('setting_repository')
+        $config = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
             ->get('comments_config');
 
         if (!empty($config) && array_key_exists('with_comments', $config)) {

@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Displays an album or a list of albums.
@@ -86,7 +85,9 @@ class AlbumsController extends Controller
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('album/album_frontpage.tpl', $cacheID))
         ) {
-            $albumSettings = s::get('album_settings');
+            $albumSettings = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('album_settings');
             $itemsPerPage  = isset($albumSettings['total_front']) ? $albumSettings['total_front'] : 8;
             $orderBy       = isset($albumSettings['orderFrontpage']) ? $albumSettings['orderFrontpage'] : 'created';
 
@@ -187,7 +188,9 @@ class AlbumsController extends Controller
             || (!$this->view->isCached('album/album.tpl', $cacheID))
         ) {
             // Get the other albums for the albums widget
-            $settings = s::get('album_settings');
+            $settings = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('album_settings');
             $total    = isset($settings['total_front']) ? ($settings['total_front']) : 2;
 
             $order   = 'starttime DESC';

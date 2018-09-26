@@ -45,7 +45,9 @@ class Settings
      */
     public static function get($settingName, $default = null)
     {
-        return getService('setting_repository')->get($settingName, $default);
+        return getService('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get($settingName, $default);
     }
 
     /**
@@ -62,7 +64,9 @@ class Settings
      */
     public static function set($settingName, $settingValue)
     {
-        return getService('setting_repository')->set($settingName, $settingValue);
+        return getService('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->set($settingName, $settingValue);
     }
 
     /**
@@ -79,6 +83,6 @@ class Settings
      */
     public static function invalidate($settingName, $instanceName = null)
     {
-        return getService('setting_repository')->invalidate($settingName, $instanceName);
+        return true;
     }
 }

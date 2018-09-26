@@ -30,8 +30,12 @@ function smarty_function_renderTags($params, &$smarty)
     }
 
     if ($method == 'tags' && $content->fk_content_type != 1) {
-        $googleSearchKey = getService('setting_repository')->get('google_custom_search_api_key');
-        $method          = (!empty($googleSearchKey)) ? 'google' : 'tags';
+        $googleSearchKey = $smarty->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('google_custom_search_api_key');
+
+        $method = (!empty($googleSearchKey)) ? 'google' : 'tags';
     }
 
     // Get url generator

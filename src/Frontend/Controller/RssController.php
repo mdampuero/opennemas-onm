@@ -13,7 +13,6 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for the public RSS
@@ -151,7 +150,9 @@ class RssController extends Controller
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
             $rssTitle = $titles[$type];
-            $total    = $this->get('setting_repository')->get('elements_in_rss', 10);
+            $total    = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('elements_in_rss', 10);
             $contents = $this->getLatestContents($type, $category, $total);
 
             $this->getRelatedContents($contents);
@@ -475,7 +476,9 @@ class RssController extends Controller
         }
 
         // TODO: Use new repository when cache is unified
-        $layout = $this->get('setting_repository')->get($setting);
+        $layout = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get($setting);
         $theme  = $this->get('core.theme');
 
         if (empty($layout)) {

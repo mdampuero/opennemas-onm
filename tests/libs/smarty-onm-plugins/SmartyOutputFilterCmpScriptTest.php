@@ -29,16 +29,20 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->ds = $this->getMockBuilder('DataSet')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'getDataSet' ])
+            ->getMock();
+
         $this->requestStack = $this->getMockBuilder('RequestStack')
             ->setMethods([ 'getCurrentRequest' ])
             ->getMock();
 
         $this->request = $this->getMockBuilder('Request')
             ->setMethods([ 'getUri' ])
-            ->getMock();
-
-        $this->repository = $this->getMockBuilder('SettingManager')
-            ->setMethods([ 'get' ])
             ->getMock();
 
         $this->locale = $this->getMockBuilder('Locale')
@@ -53,11 +57,14 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
         $this->smarty->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
-        $this->requestStack->expects($this->any())
-            ->method('getCurrentRequest')->willReturn($this->request);
-
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->em->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
+
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
 
         $this->output = '<html><head>Hello World</head><body></body></html>';
     }
@@ -69,20 +76,18 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
      */
     public function serviceContainerCallback($name)
     {
-        if ($name === 'request_stack') {
-            return $this->requestStack;
-        }
+        switch ($name) {
+            case 'core.locale':
+                return $this->locale;
 
-        if ($name === 'setting_repository') {
-            return $this->repository;
-        }
+            case 'core.template.admin':
+                return $this->templateAdmin;
 
-        if ($name === 'core.template.admin') {
-            return $this->templateAdmin;
-        }
+            case 'orm.manager':
+                return $this->em;
 
-        if ($name === 'core.locale') {
-            return $this->locale;
+            case 'request_stack':
+                return $this->requestStack;
         }
 
         return null;
@@ -93,7 +98,7 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
      */
     public function testCmpNotActivated()
     {
-        $this->repository->expects($this->any())
+        $this->ds->expects($this->any())
             ->method('get')
             ->with('cmp_script')
             ->willReturn(0);
@@ -109,7 +114,7 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
      */
     public function testCmpActivated()
     {
-        $this->repository->expects($this->at(0))
+        $this->ds->expects($this->at(0))
             ->method('get')
             ->with('cmp_script')
             ->willReturn(1);
@@ -118,7 +123,7 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
             ->method('getLocaleShort')
             ->willReturn('en');
 
-        $this->repository->expects($this->at(1))
+        $this->ds->expects($this->at(1))
             ->method('get')
             ->with('site_name')
             ->willReturn('Opennemas');

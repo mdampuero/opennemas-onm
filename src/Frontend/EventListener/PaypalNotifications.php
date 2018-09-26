@@ -11,7 +11,6 @@ namespace Frontend\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\Event;
-use Onm\Settings as s;
 
 /**
  * Handles all the events after content updates
@@ -92,35 +91,38 @@ class PaypalNotifications implements EventSubscriberInterface
                 $user = new \User($ipnData['rp_invoice_id']);
                 $user->addSubscriptionLimit($newUserSubscriptionDate);
                 // Update user meta
-                $user->setMeta(array('recurring_payment_id' => $ipnData['recurring_payment_id']));
+                $user->setMeta([ 'recurring_payment_id' => $ipnData['recurring_payment_id'] ]);
                 $user->deleteMetaKey($ipnData['rp_invoice_id'], 'canceled_recurring_payment_id');
+
+                $settingsManager = $this->get('orm.manager')
+                    ->getDataSet('Settings', 'instance');
 
 
                 // Send mail to user notificating that subscription is activated
-                $tplMail = getService('view')->getBackendTemplate();
+                $tplMail          = getService('view')->getBackendTemplate();
                 $tplMail->caching = 0;
-                $mailBody = $tplMail->fetch('paywall/emails/payment_success.tpl');
-                $email = \Swift_Message::newInstance();
+                $mailBody         = $tplMail->fetch('paywall/emails/payment_success.tpl');
+                $email            = \Swift_Message::newInstance();
                 $email
-                    ->setSubject(sprintf(_('%s - Premium subscription activated'), s::get('site_title')))
+                    ->setSubject(sprintf(_('%s - Premium subscription activated'), $settingsManager->get('site_title')))
                     ->setBody($mailBody, 'text/plain')
                     ->setTo($ipnData['payer_email'])
-                    ->setFrom(array($ipnData['receiver_email'] => s::get('site_name')))
-                    ->setSender(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+                    ->setFrom([ $ipnData['receiver_email'] => $settingsManager->get('site_name') ])
+                    ->setSender([ 'no-reply@postman.opennemas.com' => $settingsManager->get('site_name') ]);
 
                 try {
                     $mailer = getService('mailer');
                     $mailer->send($email);
 
                     $this->get('application.log')->notice(
-                        "Email sent. Frontend Paypal IPN (to: ".$ipnData['payer_email'].")"
+                        "Email sent. Frontend Paypal IPN (to: " . $ipnData['payer_email'] . ")"
                     );
                 } catch (\Swift_SwiftException $e) {
                     // Write in log
                     $logger = getService('logger');
                     $logger->error(
-                        'Unable to send paywall activation mail to user id - '.$ipnData['rp_invoice_id'].
-                        '- with email - '.$ipnData['payer_email']
+                        'Unable to send paywall activation mail to user id - ' . $ipnData['rp_invoice_id'] .
+                        '- with email - ' . $ipnData['payer_email']
                     );
                 }
 
@@ -128,21 +130,17 @@ class PaypalNotifications implements EventSubscriberInterface
             case 'recurring_payment':
                 // Create recurring order registry
                 $order = new \Order();
-                $order->create(
-                    array(
-                        'user_id'        => $ipnData['rp_invoice_id'],
-                        'content_id'     => 0,
-                        'created'        => new \DateTime(),
-                        'payment_id'     => $ipnData['txn_id'],
-                        'payment_status' => $ipnData['payment_status'],
-                        'payment_amount' => (int) $ipnData['mc_gross'],
-                        'payment_method' => $ipnData['payment_type'],
-                        'type'           => 'paywall',
-                        'params'         => array(
-                            'recurring_payment_id' => $ipnData['recurring_payment_id'],
-                        ),
-                    )
-                );
+                $order->create([
+                    'user_id'        => $ipnData['rp_invoice_id'],
+                    'content_id'     => 0,
+                    'created'        => new \DateTime(),
+                    'payment_id'     => $ipnData['txn_id'],
+                    'payment_status' => $ipnData['payment_status'],
+                    'payment_amount' => (int) $ipnData['mc_gross'],
+                    'payment_method' => $ipnData['payment_type'],
+                    'type'           => 'paywall',
+                    'params'         => [ 'recurring_payment_id' => $ipnData['recurring_payment_id'] ],
+                ]);
 
                 // Update subscription date
                 $newUserSubscriptionDate = new \DateTime($ipnData['next_payment_date']);
@@ -155,7 +153,7 @@ class PaypalNotifications implements EventSubscriberInterface
                 break;
             case 'express_checkout':
                 if ($ipnData['test_ipn'] == '1' && $ipnData['mc_gross'] == '0.01') {
-                    s::set('valid_ipn', 'valid');
+                    $settingsManager->set('valid_ipn', 'valid');
                 }
 
                 break;

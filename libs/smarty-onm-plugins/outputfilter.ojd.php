@@ -29,15 +29,18 @@ function smarty_outputfilter_ojd($output, $smarty)
         && !preg_match('/\/comments/', $uri)
         && !preg_match('/\/fb\/instant-articles/', $uri)
     ) {
-        return addOJDCode($output);
+        return addOJDCode($smarty, $output);
     }
 
     return $output;
 }
 
-function addOJDCode($output)
+function addOJDCode($smarty, $output)
 {
-    $config = getService('setting_repository')->get('ojd');
+    $config = $smarty->getContainer()
+        ->get('orm.manager')
+        ->getDataSet('Settings', 'instance')
+        ->get('ojd');
 
     if (!is_array($config)
         || !array_key_exists('page_id', $config)

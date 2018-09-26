@@ -31,7 +31,10 @@ class AmpController extends Controller
 
         // RenderColorMenu
         $siteColor   = '#005689';
-        $configColor = getService('setting_repository')->get('site_color');
+        $configColor = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('site_color');
+
         if (!empty($configColor)) {
             if (!preg_match('@^#@', $configColor)) {
                 $siteColor = '#' . $configColor;
@@ -183,7 +186,9 @@ class AmpController extends Controller
         } // end if $this->view->is_cached
 
         // Get instance logo size
-        $logo = getService('setting_repository')->get('site_logo');
+        $logo = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('site_logo');
         if (!empty($logo)) {
             $logoUrl  = SITE_URL . MEDIA_DIR_URL . 'sections/' . rawurlencode($logo);
             $logoSize = @getimagesize($logoUrl);

@@ -29,16 +29,20 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->ds = $this->getMockBuilder('DataSet')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'getDataSet' ])
+            ->getMock();
+
         $this->requestStack = $this->getMockBuilder('RequestStack')
             ->setMethods([ 'getCurrentRequest' ])
             ->getMock();
 
         $this->request = $this->getMockBuilder('Request')
             ->setMethods([ 'getUri' ])
-            ->getMock();
-
-        $this->repository = $this->getMockBuilder('SettingManager')
-            ->setMethods([ 'get' ])
             ->getMock();
 
         $this->helper = $this->getMockBuilder('ContentMediaHelper')
@@ -57,6 +61,9 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
+        $this->em->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
+
         $this->request->expects($this->any())
             ->method('getUri')
             ->willReturn('http://route/to/content.html');
@@ -69,16 +76,15 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
      */
     public function serviceContainerCallback($name)
     {
-        if ($name === 'request_stack') {
-            return $this->requestStack;
-        }
+        switch ($name) {
+            case 'core.helper.content_media':
+                return $this->helper;
 
-        if ($name === 'setting_repository') {
-            return $this->repository;
-        }
+            case 'orm.manager':
+                return $this->em;
 
-        if ($name === 'core.helper.content_media') {
-            return $this->helper;
+            case 'request_stack':
+                return $this->requestStack;
         }
 
         return null;
@@ -119,7 +125,7 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
             false
         )];
 
-        $this->repository->expects($this->once())
+        $this->ds->expects($this->once())
             ->method('get')
             ->with('twitter_page')
             ->willReturn('https://twitter.com/');
@@ -154,7 +160,7 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
             false
         )];
 
-        $this->repository->expects($this->once())
+        $this->ds->expects($this->once())
             ->method('get')
             ->with('twitter_page')
             ->willReturn('https://twitter.com/twtuser');
@@ -197,7 +203,7 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
             false
         )];
 
-        $this->repository->expects($this->once())
+        $this->ds->expects($this->once())
             ->method('get')
             ->with('twitter_page')
             ->willReturn('https://twitter.com/twtuser');
@@ -241,7 +247,7 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
             false
         )];
 
-        $this->repository->expects($this->once())
+        $this->ds->expects($this->once())
             ->method('get')
             ->with('twitter_page')
             ->willReturn('https://twitter.com/twtuser');
@@ -285,7 +291,7 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
             false
         )];
 
-        $this->repository->expects($this->once())
+        $this->ds->expects($this->once())
             ->method('get')
             ->with('twitter_page')
             ->willReturn('https://twitter.com/twtuser');

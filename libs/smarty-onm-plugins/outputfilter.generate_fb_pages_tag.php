@@ -2,20 +2,27 @@
 
 function smarty_outputfilter_generate_fb_pages_tag($output, $smarty)
 {
-    if (getService('core.security')->hasExtension('FIA_MODULE')) {
-        // Get facebook settings
-        $facebookSettings = getService('setting_repository')->get('facebook');
-
-        // Check facebook instant articles config
-        if (!empty($facebookSettings) &&
-            array_key_exists('instant_articles_tag', $facebookSettings) &&
-            !empty($facebookSettings['instant_articles_tag'])
-        ) {
-            $value = trim($facebookSettings['instant_articles_tag']);
-            $tag = '<meta property="fb:pages" content="'.$value.'"/>';
-            $output = str_replace('</head>', $tag.'</head>', $output);
-        }
+    if (!$smarty->getContainer()->get('core.security')
+        ->hasExtension('FIA_MODULE')
+    ) {
+        return $output;
     }
 
-    return $output;
+    $settings = $smarty->getContainer()
+        ->get('orm.manager')
+        ->getDataSet('Settings')
+        ->get('facebook');
+
+    // Check facebook instant articles config
+    if (empty($settings)
+        || !array_key_exists('instant_articles_tag', $settings)
+        || empty($settings['instant_articles_tag'])
+    ) {
+        return $output;
+    }
+
+    $value = trim($settings['instant_articles_tag']);
+    $tag   = '<meta property="fb:pages" content="' . $value . '"/>';
+
+    return str_replace('</head>', $tag . '</head>', $output);
 }
