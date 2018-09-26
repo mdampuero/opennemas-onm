@@ -2,7 +2,7 @@
 /**
  * smarty_insert_time, Smarty insert plugin to generate the time string
  * <code>
- * {insert name="time"}
+ * {time}
  * </code>
  *
  * @param array $params  Parameters of smarty function
@@ -10,7 +10,7 @@
  *
  * @return string
  */
-function smarty_insert_time($params, &$smarty)
+function smarty_function_time($params, &$smarty)
 {
     $arrMonth = [
         "enero", "febrero", "marzo", "abril", "mayo",
