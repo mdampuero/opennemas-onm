@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Displays an album or a list of albums.

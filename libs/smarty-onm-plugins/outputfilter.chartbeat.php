@@ -42,7 +42,10 @@ function smarty_outputfilter_chartbeat($output, $smarty)
 
 function addChartBeatCode($output, $smarty, $type = null)
 {
-    $config = getService('setting_repository')->get('chartbeat');
+    $config = $smarty->getContainer()
+        ->get('orm.manager')
+        ->getDataSet('Settings', 'instance')
+        ->get('chartbeat');
 
     if (!is_array($config)
         || !array_key_exists('id', $config)
@@ -60,7 +63,10 @@ function addChartBeatCode($output, $smarty, $type = null)
         $user    = getService('user_repository')->find($content->fk_author);
         $author  = (!is_null($user->name)) ? $user->name : $content->agency;
         if (empty($author)) {
-            $author = getService('setting_repository')->get('site_name');
+            $author = $smarty->getContainer()
+                ->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('site_name');
         }
     }
 

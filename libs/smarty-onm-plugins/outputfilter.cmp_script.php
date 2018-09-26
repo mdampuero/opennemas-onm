@@ -9,17 +9,23 @@
  */
 function smarty_outputfilter_cmp_script($output, $smarty)
 {
-    $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+    $request = $smarty->getContainer()
+        ->get('request_stack')
+        ->getCurrentRequest();
+
+    $ds = $smarty->getContainer()
+        ->get('orm.manager')
+        ->getDataSet('Settings', 'instance');
 
     if (is_null($request)) {
         return $output;
     }
 
-    if (empty($smarty->getContainer()->get('setting_repository')->get('cmp_script'))) {
+    if (empty($ds->get('cmp_script'))) {
         return $output;
     }
 
-    $uri = $smarty->getContainer()->get('request_stack')->getCurrentRequest()->getUri();
+    $uri = $request->getUri();
 
     if (!preg_match('/\/manager/', $uri)
         && !preg_match('/\/managerws/', $uri)
@@ -34,7 +40,7 @@ function smarty_outputfilter_cmp_script($output, $smarty)
             'common/helpers/cmp.tpl',
             [
                 'lang' => $smarty->getContainer()->get('core.locale')->getLocaleShort(),
-                'site' => $smarty->getContainer()->get('setting_repository')->get('site_name')
+                'site' => $ds->get('site_name')
             ]
         );
 

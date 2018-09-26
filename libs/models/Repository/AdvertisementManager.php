@@ -190,7 +190,9 @@ class AdvertisementManager extends EntityManager
         }
 
         $generics = true;
-        $config   = getService('setting_repository')->get('ads_settings');
+        $config   = getService('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('ads_settings');
 
         if (isset($config['no_generics'])
             && ($config['no_generics'] == '1')

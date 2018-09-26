@@ -127,7 +127,9 @@ class TagsController extends Controller
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/tags.tpl', $cacheId)
         ) {
-            $epp    = $this->get('setting_repository')->get('items_in_blog', 10);
+            $epp    = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('items_in_blog', 10);
             $epp    = (is_null($epp) || $epp <= 0) ? 10 : $epp;
             $locale = getService('core.locale')->getRequestLocale();
             $tag    = $this->get('api.service.tag')->getMostUsedTagBySlug($tagName, $locale);

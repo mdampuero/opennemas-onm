@@ -48,23 +48,22 @@ class PaywallController extends Controller
             'vat_percentage'          => '0'
         ];
 
-        $this->times = array(
+        $this->times = [
             'Day'       => _('Day'),
             'Week'      => _('Week'),
             'SemiMonth' => _('SemiMonth'),
             'Month'     => _('Month'),
             'Year'      => _('Year'),
-        );
+        ];
 
-        $this->moneyUnits = array(
-            'EUR' => '€',
-            'USD' => '$',
-        );
+        $this->moneyUnits = [ 'EUR' => '€', 'USD' => '$' ];
 
-        if ($this->get('setting_repository')->get('paywall_settings')) {
+        $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
+
+        if ($ds->get('paywall_settings')) {
             $this->settings = array_merge(
                 $this->settings,
-                $this->get('setting_repository')->get('paywall_settings')
+                $ds->get('paywall_settings')
             );
         }
     }
@@ -102,17 +101,14 @@ class PaywallController extends Controller
             "type='paywall' AND created > '$time'"
         );
 
-        return $this->render(
-            'paywall/list.tpl',
-            array(
-                'users'                      => $users,
-                'count_users_paywall'        => $countUsersPaywall,
-                'purchases'                  => $purchases,
-                'count_purchases_last_month' => $purchasesLastMonth,
-                'settings'                   => $this->settings,
-                'money_units'                => $this->moneyUnits,
-            )
-        );
+        return $this->render('paywall/list.tpl', [
+            'users'                      => $users,
+            'count_users_paywall'        => $countUsersPaywall,
+            'purchases'                  => $purchases,
+            'count_purchases_last_month' => $purchasesLastMonth,
+            'settings'                   => $this->settings,
+            'money_units'                => $this->moneyUnits,
+        ]);
     }
 
     /**
@@ -132,7 +128,7 @@ class PaywallController extends Controller
         $order = $request->query->filter('order', 'username', FILTER_SANITIZE_STRING);
         $name  = $request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
 
-        $users = array();
+        $users = [];
         if ($type === '0') {
             $users = \User::getUsersWithSubscription();
         } elseif ($type === '1') {
@@ -145,7 +141,7 @@ class PaywallController extends Controller
                 }
             }
         } else {
-            $usersRegistered = \User::getUsersOnlyRegistered();
+            $usersRegistered       = \User::getUsersOnlyRegistered();
             $usersWithSubscription = \User::getUsersWithSubscription();
 
             $users = array_merge($usersRegistered, $usersWithSubscription);
@@ -171,9 +167,11 @@ class PaywallController extends Controller
             );
         }
 
-        $itemsPerPage = $this->sm->get('items_per_page') ?: 20;
+        $itemsPerPage = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_per_page') ?: 20;
 
-        $usersPage = array_slice($users, ($page-1)*$itemsPerPage, $itemsPerPage);
+        $usersPage = array_slice($users, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
         $pagination = $this->get('paginator')->get([
             'epp'   => $itemsPerPage,
@@ -189,15 +187,12 @@ class PaywallController extends Controller
             ],
         ]);
 
-        return $this->render(
-            'paywall/users.tpl',
-            array(
-                'users'       => $usersPage,
-                'settings'    => $this->settings,
-                'money_units' => $this->moneyUnits,
-                'pagination'  => $pagination,
-            )
-        );
+        return $this->render('paywall/users.tpl', [
+            'users'       => $usersPage,
+            'settings'    => $this->settings,
+            'money_units' => $this->moneyUnits,
+            'pagination'  => $pagination,
+        ]);
     }
 
     /**
@@ -216,7 +211,7 @@ class PaywallController extends Controller
         $order = $request->query->filter('order', 'name', FILTER_SANITIZE_STRING);
         $name  = $request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
 
-        $users = array();
+        $users = [];
         if ($type === '0') {
             $users = \User::getUsersWithSubscription();
         } elseif ($type === '1') {
@@ -229,7 +224,7 @@ class PaywallController extends Controller
                 }
             }
         } else {
-            $usersRegistered = \User::getUsersOnlyRegistered();
+            $usersRegistered       = \User::getUsersOnlyRegistered();
             $usersWithSubscription = \User::getUsersWithSubscription();
 
             $users = array_merge($usersRegistered, $usersWithSubscription);
@@ -253,19 +248,16 @@ class PaywallController extends Controller
             );
         }
 
-        $response = $this->render(
-            'paywall/partials/users_csv.tpl',
-            array(
-                'users'   => $users,
-            )
-        );
+        $response = $this->render('paywall/partials/users_csv.tpl', [
+            'users' => $users,
+        ]);
 
         $fileName = 'paywall_users.csv';
 
         $response->setStatusCode(200);
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Description', 'Submissions Export');
-        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
+        $response->headers->set('Content-Disposition', 'attachment; filename=' . $fileName);
         $response->headers->set('Content-Transfer-Encoding', 'binary');
         $response->headers->set('Pragma', 'no-cache');
         $response->headers->set('Expires', '0');
@@ -288,12 +280,7 @@ class PaywallController extends Controller
         $order = $request->query->filter('order', '', FILTER_SANITIZE_STRING);
         $name  = $request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
 
-        $purchases = \Order::find(
-            "type='paywall'",
-            array(
-                'limit' => 0
-            )
-        );
+        $purchases = \Order::find("type='paywall'", [ 'limit' => 0 ]);
 
         // Sort array of users by property
         if (isset($order) && !empty($order)) {
@@ -315,21 +302,18 @@ class PaywallController extends Controller
             );
         }
 
-        $response = $this->render(
-            'paywall/partials/purchases_csv.tpl',
-            array(
-                'purchases'   => $purchases,
-                'settings'    => $this->settings,
-                'money_units' => $this->moneyUnits,
-            )
-        );
+        $response = $this->render('paywall/partials/purchases_csv.tpl', [
+            'purchases'   => $purchases,
+            'settings'    => $this->settings,
+            'money_units' => $this->moneyUnits,
+        ]);
 
         $fileName = 'paywall_purchases.csv';
 
         $response->setStatusCode(200);
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Description', 'Submissions Export');
-        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
+        $response->headers->set('Content-Disposition', 'attachment; filename=' . $fileName);
         $response->headers->set('Content-Transfer-Encoding', 'binary');
         $response->headers->set('Pragma', 'no-cache');
         $response->headers->set('Expires', '0');
@@ -375,9 +359,11 @@ class PaywallController extends Controller
             );
         }
 
-        $itemsPerPage = $this->sm->get('items_per_page') ?: 20;
+        $itemsPerPage = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_per_page') ?: 20;
 
-        $purchasesPage = array_slice($purchases, ($page-1)*$itemsPerPage, $itemsPerPage);
+        $purchasesPage = array_slice($purchases, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
         $pagination = $this->get('paginator')->get([
             'epp'   => $itemsPerPage,
@@ -392,15 +378,12 @@ class PaywallController extends Controller
             ],
         ]);
 
-        return $this->render(
-            'paywall/purchases.tpl',
-            array(
-                'purchases'   => $purchasesPage,
-                'settings'    => $this->settings,
-                'money_units' => $this->moneyUnits,
-                'pagination'  => $pagination,
-            )
-        );
+        return $this->render('paywall/purchases.tpl', [
+            'purchases'   => $purchasesPage,
+            'settings'    => $this->settings,
+            'money_units' => $this->moneyUnits,
+            'pagination'  => $pagination,
+        ]);
     }
 
     /**
@@ -413,14 +396,11 @@ class PaywallController extends Controller
      */
     public function settingsAction()
     {
-        return $this->render(
-            'paywall/settings.tpl',
-            array(
-                'settings'    => $this->settings,
-                'times'       => $this->times,
-                'money_units' => $this->moneyUnits,
-            )
-        );
+        return $this->render('paywall/settings.tpl', [
+            'settings'    => $this->settings,
+            'times'       => $this->times,
+            'money_units' => $this->moneyUnits,
+        ]);
     }
 
     /**
@@ -443,14 +423,20 @@ class PaywallController extends Controller
         }
 
         if (!$this->settings['valid_credentials']) {
-            $this->get('session')->getFlashBag()->add('error', _("Paypal API authentication is incorrect."));
+            $this->get('session')->getFlashBag()
+                ->add('error', _("Paypal API authentication is incorrect."));
         } elseif ($this->settings['valid_ipn'] === 'waiting') {
-            $this->get('session')->getFlashBag()->add('notice', _("We are checking your IPN url. Please wait a minute."));
+            $this->get('session')->getFlashBag()
+                ->add('notice', _("We are checking your IPN url. Please wait a minute."));
         } elseif (!$this->settings['valid_ipn']) {
-            $this->get('session')->getFlashBag()->add('error', _("Paypal IPN configuration is incorrect. Please validate it."));
+            $this->get('session')->getFlashBag()
+                ->add('error', _("Paypal IPN configuration is incorrect. Please validate it."));
         } else {
-            $this->get('session')->getFlashBag()->add('success', _("Paywall settings saved."));
-            $this->sm->set('paywall_settings', $this->settings);
+            $this->get('session')->getFlashBag()
+                ->add('success', _("Paywall settings saved."));
+            $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->set('paywall_settings', $this->settings);
         }
 
         return $this->redirect($this->generateUrl('admin_paywall_settings'));
@@ -484,16 +470,18 @@ class PaywallController extends Controller
         $getBalanceRequest->ReturnAllCurrencies = 1;
 
         $getBalanceReq = new GetBalanceReq();
+
         $getBalanceReq->GetBalanceRequest = $getBalanceRequest;
 
-        $APICredentials = array(
+        $APICredentials = [
             "acct1.UserName"  => $userName,
             "acct1.Password"  => $password,
             "acct1.Signature" => $signature,
             "mode"            => $mode
-        );
+        ];
 
         $paypalService = new PayPalAPIInterfaceServiceService($APICredentials);
+
         try {
             /* wrap API method calls on the service object with a try catch */
             $getBalanceResponse = $paypalService->GetBalance($getBalanceReq);
@@ -504,12 +492,16 @@ class PaywallController extends Controller
         // Connection is ok return true
         if (isset($getBalanceResponse) && $getBalanceResponse->Ack == 'Success') {
             $this->settings['valid_credentials'] = 1;
-            $this->sm->set('paywall_settings', $this->settings);
+            $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->set('paywall_settings', $this->settings);
 
             return new Response('ok', '200');
         } else {
             $this->settings['valid_credentials'] = 0;
-            $this->sm->set('paywall_settings', $this->settings);
+            $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->set('paywall_settings', $this->settings);
 
             return new Response('fail', '404');
         }
@@ -533,37 +525,50 @@ class PaywallController extends Controller
         $mode      = $request->request->filter('mode', '', FILTER_SANITIZE_STRING);
 
         $itemDetails = new PaymentDetailsItemType();
-        $itemDetails->Name         = 'Test IPN url';
-        $itemDetails->Amount       = new BasicAmountType("EUR", '0.01');
-        $itemDetails->Quantity     = '1';
+
+        $itemDetails->Name     = 'Test IPN url';
+        $itemDetails->Amount   = new BasicAmountType("EUR", '0.01');
+        $itemDetails->Quantity = '1';
 
         $paymentDetails = new PaymentDetailsType();
+
         $paymentDetails->PaymentDetailsItem[0] = $itemDetails;
-        $paymentDetails->OrderTotal = new BasicAmountType("EUR", '0.01');
-        $paymentDetails->PaymentAction = "Sale";
+        $paymentDetails->OrderTotal            = new BasicAmountType("EUR", '0.01');
+        $paymentDetails->PaymentAction         = "Sale";
 
         $setECReqDetails = new SetExpressCheckoutRequestDetailsType();
+
         $setECReqDetails->PaymentDetails[0] = $paymentDetails;
-        $setECReqDetails->CancelURL = $this->generateUrl('admin_paywall_settings', array(), true);
-        $setECReqDetails->ReturnURL = $this->generateUrl(
+        $setECReqDetails->CancelURL         = $this->generateUrl('admin_paywall_settings', [], true);
+        $setECReqDetails->ReturnURL         = $this->generateUrl(
             'admin_paywall_do_validate_ipn',
-            array('username' => $userName, 'password' => $password, 'signature' => $signature, 'mode' => $mode),
+            [
+                'username' => $userName,
+                'password' => $password,
+                'signature' => $signature,
+                'mode' => $mode
+            ],
             true
         );
-        $setECReqDetails->BrandName = $this->sm->get('site_name');
+
+        $setECReqDetails->BrandName = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('site_name');
 
         $setECReqType = new SetExpressCheckoutRequestType();
+
         $setECReqType->SetExpressCheckoutRequestDetails = $setECReqDetails;
 
         $setECReq = new SetExpressCheckoutReq();
+
         $setECReq->SetExpressCheckoutRequest = $setECReqType;
 
-        $APICredentials = array(
+        $APICredentials = [
             "acct1.UserName"  => $userName,
             "acct1.Password"  => $password,
             "acct1.Signature" => $signature,
             "mode"            => $mode
-        );
+        ];
 
         $paypalService = new PayPalAPIInterfaceServiceService($APICredentials);
         try {
@@ -574,9 +579,9 @@ class PaywallController extends Controller
         }
 
         if (isset($setECResponse) && $setECResponse->Ack == 'Success') {
-            $service = new \Onm\Merchant\PaypalWrapper($APICredentials);
-            $token = $setECResponse->Token;
-            $paypalUrl = $service->getServiceUrl().'&token='.$token;
+            $service   = new \Onm\Merchant\PaypalWrapper($APICredentials);
+            $token     = $setECResponse->Token;
+            $paypalUrl = $service->getServiceUrl() . '&token=' . $token;
 
             return new Response($paypalUrl);
         } else {
@@ -603,45 +608,54 @@ class PaywallController extends Controller
         $mode      = $request->query->get('mode', '', FILTER_SANITIZE_STRING);
 
         $getExpressCheckoutDetailsRequest = new GetExpressCheckoutDetailsRequestType($token);
-        $getExpressCheckoutReq = new GetExpressCheckoutDetailsReq();
+        $getExpressCheckoutReq            = new GetExpressCheckoutDetailsReq();
+
         $getExpressCheckoutReq->GetExpressCheckoutDetailsRequest = $getExpressCheckoutDetailsRequest;
 
-        $APICredentials = array(
+        $APICredentials = [
             "acct1.UserName"  => $userName,
             "acct1.Password"  => $password,
             "acct1.Signature" => $signature,
             "mode"            => $mode
-        );
+        ];
 
         $paypalService = new PayPalAPIInterfaceServiceService($APICredentials);
         try {
             /* wrap API method calls on the service object with a try catch */
             $getECResponse = $paypalService->GetExpressCheckoutDetails($getExpressCheckoutReq);
         } catch (\Exception $ex) {
-            $this->get('application.log')->notice("Paywall: Error in getECResponse validate IPN API call.");
-            $this->get('session')->getFlashBag()->add('error', _("Paypal IPN configuration is incorrect. Please correct it and try again."));
+            $this->get('application.log')
+                ->notice("Paywall: Error in getECResponse validate IPN API call.");
+            $this->get('session')->getFlashBag()
+                ->add('error', _("Paypal IPN configuration is incorrect. Please correct it and try again."));
+
             return $this->redirect($this->generateUrl('admin_paywall_settings'));
         }
 
         $payerId = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerID;
 
         $orderTotal = new BasicAmountType();
-        $orderTotal->currencyID = 'EUR';
-        $orderTotal->value = '0.01';
 
-        $paymentDetails= new PaymentDetailsType();
+        $orderTotal->currencyID = 'EUR';
+        $orderTotal->value      = '0.01';
+
+        $paymentDetails = new PaymentDetailsType();
+
         $paymentDetails->OrderTotal = $orderTotal;
 
         $DoECRequestDetails = new DoExpressCheckoutPaymentRequestDetailsType();
-        $DoECRequestDetails->PayerID = $payerId;
-        $DoECRequestDetails->Token = $token;
-        $DoECRequestDetails->PaymentAction = "Sale";
+
+        $DoECRequestDetails->PayerID           = $payerId;
+        $DoECRequestDetails->Token             = $token;
+        $DoECRequestDetails->PaymentAction     = "Sale";
         $DoECRequestDetails->PaymentDetails[0] = $paymentDetails;
 
         $DoECRequest = new DoExpressCheckoutPaymentRequestType();
+
         $DoECRequest->DoExpressCheckoutPaymentRequestDetails = $DoECRequestDetails;
 
         $DoECReq = new DoExpressCheckoutPaymentReq();
+
         $DoECReq->DoExpressCheckoutPaymentRequest = $DoECRequest;
 
         try {
@@ -652,16 +666,19 @@ class PaywallController extends Controller
 
         // Payment done, let's update some registries in the app
         if (isset($DoECResponse) && $DoECResponse->Ack == 'Success') {
-            $this->sm->set('valid_ipn', 'waiting');
+            $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->set('valid_ipn', 'waiting');
 
             $paymentInfo = $DoECResponse->DoExpressCheckoutPaymentResponseDetails->PaymentInfo[0];
             // Do the refund of the transaction
             $refundReqest = new RefundTransactionRequestType();
 
-            $refundReqest->RefundType = 'Full';
+            $refundReqest->RefundType    = 'Full';
             $refundReqest->TransactionID = $paymentInfo->TransactionID;
 
             $refundReq = new RefundTransactionReq();
+
             $refundReq->RefundTransactionRequest = $refundReqest;
             try {
                 /* wrap API method calls on the service object with a try catch */
@@ -670,7 +687,8 @@ class PaywallController extends Controller
                 $this->get('application.log')->notice("Paywall: Error in refundResponse validate IPN API call.");
             }
         } else {
-            $this->get('session')->getFlashBag()->add('error', _("Paypal IPN configuration is incorrect. Please correct it and try again."));
+            $this->get('session')->getFlashBag()
+                ->add('error', _("Paypal IPN configuration is incorrect. Please correct it and try again."));
         }
 
         return $this->redirect($this->generateUrl('admin_paywall_settings'));

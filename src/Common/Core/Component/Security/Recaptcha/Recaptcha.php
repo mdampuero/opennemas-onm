@@ -38,8 +38,6 @@ class Recaptcha
      */
     protected $container;
 
-
-
     /**
      * Initializes the Recaptcha service.
      *
@@ -72,8 +70,11 @@ class Recaptcha
      */
     public function configureFromSettings()
     {
-        $instanceKeys = $this->container->get('setting_repository')->get('recaptcha');
-        $keys         = array_merge([
+        $instanceKeys = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('recaptcha');
+
+        $keys = array_merge([
             'public_key' => '',
             'private_key' => '',
         ], is_array($instanceKeys) ? $instanceKeys : []);

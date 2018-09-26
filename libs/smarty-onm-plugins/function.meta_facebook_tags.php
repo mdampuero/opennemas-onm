@@ -10,7 +10,9 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
 
     // Set content data for facebook tags
     $content = $smarty->tpl_vars['content']->value;
-    $sm      = $smarty->getContainer()->get('setting_repository');
+    $ds      = $smarty->getContainer()
+        ->get('orm.manager')
+        ->getDataSet('Settings', 'instance');
     $url     = $smarty->getContainer()->get('request_stack')
         ->getCurrentRequest()
         ->getUri();
@@ -38,7 +40,7 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
     $output[] = '<meta property="og:title" content="' . $title . '" />';
     $output[] = '<meta property="og:description" content="' . $summary . '" />';
     $output[] = '<meta property="og:url" content="' . $url . '" />';
-    $output[] = '<meta property="og:site_name" content="' . $sm->get('site_name') . '" />';
+    $output[] = '<meta property="og:site_name" content="' . $ds->get('site_name') . '" />';
 
     // Populate the media element if exists
     $image = $smarty->getContainer()->get('core.helper.content_media')

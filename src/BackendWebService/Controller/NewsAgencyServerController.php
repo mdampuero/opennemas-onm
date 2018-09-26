@@ -150,16 +150,27 @@ class NewsAgencyServerController extends Controller
         $compiler   = new Compiler($repository->syncPath);
         $compiler->cleanCompileForServer($id);
 
-        $ds->set('news_agency_config', $servers);
+        try {
+            $ds->set('news_agency_config', $servers);
 
-        return new JsonResponse([
-            'activated' => $status,
-            'messages'       => [
+            $messages = [
                 [
                     'message' => _('Server updated successfully'),
                     'type'    => 'success'
                 ]
-            ]
+            ];
+        } catch (\Exception $e) {
+            $messages = [
+                [
+                    'message' => _('Unable to save the server.'),
+                    'type'    => 'error'
+                ]
+            ];
+        }
+
+        return new JsonResponse([
+            'activated' => $status,
+            'messages'  => $messages,
         ]);
     }
 

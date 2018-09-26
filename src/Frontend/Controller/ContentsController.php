@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Cookie;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the generic actions for contents
@@ -175,13 +174,16 @@ class ContentsController extends Controller
                 throw new ResourceNotFoundException();
             }
 
+            $settingManager = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance');
+
             // Fetch information required for sending the mail
             $senderEmail = $request->request->filter('sender_email', null, FILTER_VALIDATE_EMAIL);
             $senderName  = $request->request->filter('sender_name', null, FILTER_SANITIZE_STRING);
             $mailSubject = sprintf(
                 _('%s has shared with you a content from %s.'),
                 $senderName,
-                s::get('site_name')
+                $settingManager->get('site_name')
             );
             $recipients  = explode(',', $request->request->get('recipients', []));
 
@@ -226,7 +228,7 @@ class ContentsController extends Controller
                 ->setBody($mailBodyPlain, 'text/plain')
                 ->setTo($recipients[0])
                 ->setFrom([$senderEmail => $senderName])
-                ->setSender(['no-reply@postman.opennemas.com' => s::get('site_name')])
+                ->setSender([ 'no-reply@postman.opennemas.com' => $settingManager->get('site_name') ])
                 ->setBcc($recipients);
 
             $headers = $message->getHeaders();

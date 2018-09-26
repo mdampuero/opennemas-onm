@@ -116,7 +116,7 @@ function smarty_function_promotional_bar($params, &$smarty)
                 </script>';
 
         // Simple html promotional bar
-        $htm  = '<link rel="stylesheet" type="text/css" href="/assets/css/promotional_bar.css">
+        $htm = '<link rel="stylesheet" type="text/css" href="/assets/css/promotional_bar.css">
                 <div id="onm-bar">
                     <div class="content">
                         <div class="logo">

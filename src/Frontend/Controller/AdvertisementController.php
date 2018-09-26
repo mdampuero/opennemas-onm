@@ -91,7 +91,9 @@ class AdvertisementController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $content      = $this->get('setting_repository')->get('ads_txt');
+        $content      = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('ads_txt');
         $instanceName = getService('core.instance')->internal_name;
 
         return new Response(trim($content), 200, [
@@ -146,7 +148,9 @@ class AdvertisementController extends Controller
      */
     private function checkRTBFileInConfigSettings($fileName)
     {
-        $configurations = $this->get('setting_repository')->get(['rtb_files']);
+        $configurations = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get(['rtb_files']);
 
         if (!is_array($configurations)
             || !array_key_exists('rtb_files', $configurations)

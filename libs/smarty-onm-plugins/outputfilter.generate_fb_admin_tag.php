@@ -1,16 +1,22 @@
 <?php
 function smarty_outputfilter_generate_fb_admin_tag($output, $smarty)
 {
-    // Get facebook settings
-    $facebookSettings = getService('setting_repository')->get('facebook');
-    $commentSystem    = getService('setting_repository')->get('comment_system');
+    $settings = $smarty->getContainer()
+        ->get('orm.manager')
+        ->getDataSet('Settings')
+        ->get([ 'facebook', 'comment_system' ]);
 
-    // Check facebook api_key
-    $value = trim($facebookSettings['api_key']);
-    if ($commentSystem == 'facebook' && !empty($value)) {
-        $tag    = '<meta property="fb:app_id" content="' . $facebookSettings['api_key'] . '"/>';
-        $output = str_replace('</head>', $tag . '</head>', $output);
+    if (empty($settings['comment_system'])
+        || $settings['comment_system'] !== 'facebook'
+        || empty($settings['facebook']['api_key'])
+    ) {
+        return $output;
     }
 
-    return $output;
+    $tag = sprintf(
+        '<meta property="fb:app_id" content="%s"/>',
+        $settings['facebook']['api_key']
+    );
+
+    return str_replace('</head>', $tag . '</head>', $output);
 }

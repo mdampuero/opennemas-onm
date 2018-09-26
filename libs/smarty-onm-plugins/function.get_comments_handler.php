@@ -1,6 +1,4 @@
 <?php
-use \Onm\Settings as s;
-
 /**
  * Returns the comments handler
  *
@@ -11,5 +9,8 @@ use \Onm\Settings as s;
  */
 function smarty_function_get_comments_handler($params, &$smarty)
 {
-    return s::get('comment_system');
+    return $smarty->getContainer()
+        ->get('orm.manager')
+        ->getDataSet('Settings', 'instance')
+        ->get('comment_system');
 }

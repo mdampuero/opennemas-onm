@@ -96,15 +96,24 @@ class NewsAgencyServerController extends Controller
 
         $servers[$server['id']] = $server;
 
-        $ds->set('news_agency_config', $servers);
+        try {
+            $ds->set('news_agency_config', $servers);
 
-        $this->get('session')->getFlashBag()
-            ->add('success', _('News agency server added.'));
+            $this->get('session')->getFlashBag()
+                ->add('success', _('News agency server added.'));
 
-        return $this->redirect($this->generateUrl(
-            'backend_news_agency_server_show',
-            [ 'id' => $server['id'] ]
-        ));
+            return $this->redirect($this->generateUrl(
+                'backend_news_agency_server_show',
+                [ 'id' => $server['id'] ]
+            ));
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()
+                ->add('error', _('Unable to save the news agency server.'));
+
+            return $this->redirect($this->generateUrl(
+                'backend_news_agency_server_new'
+            ));
+        }
     }
 
     /**

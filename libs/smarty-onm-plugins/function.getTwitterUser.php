@@ -9,8 +9,11 @@ use Onm\Settings as s;
  */
 function smarty_function_getTwitterUser()
 {
-    // Fetch twitter user from twitter page
-    $user = preg_split('@.com/[#!/]*@', s::get('twitter_page'));
+    $page = $smarty->getContainer()->get('orm.manager')
+        ->getDataSet('Settings')
+        ->get('twitter_page');
+
+    $user = preg_split('@.com/[#!/]*@', $page);
 
     return $user[1];
 }

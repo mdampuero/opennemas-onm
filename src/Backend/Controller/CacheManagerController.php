@@ -13,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 class CacheManagerController extends Controller
 {

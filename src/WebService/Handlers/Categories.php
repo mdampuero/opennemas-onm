@@ -8,7 +8,6 @@
  */
 namespace WebService\Handlers;
 
-use Onm\Settings as s;
 use Luracast\Restler\RestException;
 
 /**
@@ -94,7 +93,9 @@ class Categories
         $ccm              = new \ContentCategoryManager();
         $actualCategoryId = $ccm->get_id($actualCategory);
 
-        $layout = s::get('frontpage_layout_' . $actualCategoryId, 'default');
+        $layout = getService('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('frontpage_layout_' . $actualCategoryId, 'default');
 
         return $layout;
     }

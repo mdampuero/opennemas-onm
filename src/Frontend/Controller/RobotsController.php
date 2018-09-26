@@ -10,15 +10,8 @@
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
-/**
- * Generates the robots.txt file
- *
- * @package Frontend_Controllers
- */
 class RobotsController extends Controller
 {
     /**
@@ -28,10 +21,11 @@ class RobotsController extends Controller
      */
     public function indexAction()
     {
-        $disableRobots = $this->container->getParameter('disable_robots');
-        $rules         = $this->get('setting_repository')->get('robots_txt_rules');
-        $customRules   = (is_string($rules)) ? $rules : '';
-        $instanceName  = getService('core.instance')->internal_name;
+        $disableRobots = $this->getParameter('disable_robots');
+        $instanceName  = $this->get('core.instance')->internal_name;
+
+        $rules = $this->get('orm.manager')->getDataSet('Settings')
+            ->get('robots_txt_rules', '');
 
         $content = "User-Agent: *\n"
             . "Disallow: /harming/humans\n"
@@ -40,7 +34,7 @@ class RobotsController extends Controller
             . "Disallow: /content/share-by-email\n"
             . "Disallow: /api\n"
             . "Disallow: " . ($disableRobots ? "/" : "/admin") . "\n"
-            . (!empty($customRules) ? "\n" . $customRules : "") . "\n"
+            . (!empty($rules) ? "\n" . $rules : "") . "\n"
             . "\n"
             . "Sitemap: " . SITE_URL . "sitemapnews.xml.gz\n"
             . "Sitemap: " . SITE_URL . "sitemapweb.xml.gz\n"

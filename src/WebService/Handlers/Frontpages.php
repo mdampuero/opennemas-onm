@@ -8,7 +8,6 @@
  */
 namespace WebService\Handlers;
 
-use Onm\Settings as s;
 use Luracast\Restler\RestException;
 
 /**
@@ -147,7 +146,10 @@ class Frontpages
 
         $category = $category[0];
 
-        $epp = s::get('items_in_blog', 10);
+        $epp = getService('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_in_blog', 10);
+
         $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
         $order   = [ 'starttime' => 'DESC' ];
