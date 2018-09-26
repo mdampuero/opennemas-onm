@@ -86,8 +86,7 @@ class EntityManagerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ '__construct' ])
             ->getMock();
 
-        $this->dataset = $this->getMockBuilder('MockDataset')
-            ->setMockClassName('Dataset')
+        $this->dataset = $this->getMockBuilder('Dataset')
             ->disableOriginalConstructor()
             ->setMethods([ '__construct' ])
             ->getMock();
@@ -232,7 +231,13 @@ class EntityManagerTest extends \PHPUnit\Framework\TestCase
     public function testGetDataSetValid()
     {
         $this->assertNotEmpty($this->em->getDataSet('Entity'));
-        $this->assertNotEmpty($this->em->getDataSet('Entity', 'default'));
+
+        $ds1 = $this->em->getDataSet('Entity', null);
+        $ds2 = $this->em->getDataSet('Entity', 'default');
+
+        $this->assertNotEmpty($ds1);
+        $this->assertNotEmpty($ds2);
+        $this->assertEquals($ds1, $ds2);
     }
 
     /**

@@ -12,7 +12,6 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 use Imagine\Image\ImageInterface;
 
 /**
@@ -193,7 +192,9 @@ class AssetController extends Controller
 
             // RenderColorMenu
             $siteColor   = '#005689';
-            $configColor = s::get('site_color');
+            $configColor = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('site_color');
             if (!empty($configColor)) {
                 if (!preg_match('@^#@', $configColor)) {
                     $siteColor = '#' . $configColor;
@@ -259,16 +260,10 @@ class AssetController extends Controller
         // Default favico
         $favicoUrl = '/assets/images/favicon.png';
 
-        // Check if favico is defined on site
-        $favicoFileName  = getService('setting_repository')->get('favico');
-        $sectionSettings = getService('setting_repository')->get('section_settings');
+        $settings = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+            ->get(['favico', 'section_settings', 'allowLogo']);
 
-        $allowLogo = false;
-        if (is_array($sectionSettings) && array_key_exists('allowLogo', $sectionSettings)) {
-            $allowLogo = $sectionSettings['allowLogo'];
-        }
-
-        if ($allowLogo && $favicoFileName) {
+        if ($settings['allowLogo'] && !empty($settings['favico'])) {
             $favicoUrl = MEDIA_URL . MEDIA_DIR . '/sections/' . $favicoFileName;
         }
 

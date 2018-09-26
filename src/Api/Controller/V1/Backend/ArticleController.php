@@ -168,7 +168,8 @@ class ArticleController extends Controller
         $extra['locale'] = $ls->getRequestLocale('frontend');
 
         if ($this->get('core.security')->hasExtension('es.openhost.module.translation')) {
-            $translators = $this->get('setting_repository')->get('translators');
+            $translators = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')->get('translators');
         }
 
         if (empty($translators)) {
@@ -203,7 +204,8 @@ class ArticleController extends Controller
         $extra['tags'] = [];
 
         if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
-            $extra['moduleFields'] = $this->get('setting_repository')
+            $extra['moduleFields'] = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
                 ->get('extraInfoContents.ARTICLE_MANAGER');
         }
 

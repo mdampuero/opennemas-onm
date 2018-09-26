@@ -116,14 +116,14 @@
                 <div class="form-group">
                   <label for="smart_ad_server_network_id" class="form-label">{t}Network ID{/t}</label>
                   <div class="controls">
-                    <input class="form-control" type="text" name="smart_ad_server_network_id" ng-required="smart.domain" value="{$configs['smart_ad_server']['network_id']}">
+                    <input class="form-control" type="number" name="smart_ad_server_network_id" ng-required="smart.domain" value="{$configs['smart_ad_server']['network_id']}">
                     <div class="help">{t}The ad server network ID{/t}</div>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="smart_ad_server_site_id" class="form-label">{t}Site ID{/t}</label>
                   <div class="controls">
-                    <input class="form-control" type="text" name="smart_ad_server_site_id" ng-required="smart.domain" value="{$configs['smart_ad_server']['site_id']}">
+                    <input class="form-control" type="number" name="smart_ad_server_site_id" ng-required="smart.domain" value="{$configs['smart_ad_server']['site_id']}">
                     <div class="help">{t}The ad server site ID{/t}</div>
                   </div>
                 </div>
@@ -135,13 +135,13 @@
                     <div class="form-group col-md-6">
                       <label for="page_id_frontpage" class="col-sm-4 col-form-label">{t}Frontpages{/t}</label>
                       <div class="col-sm-8">
-                        <input class="form-control" id="page_id_frontpage" type="text" ng-required="smart.domain" name="smart_ad_server_page_id_frontpage" value="{$configs['smart_ad_server']['page_id']['frontpage']}">
+                        <input class="form-control" id="page_id_frontpage" type="number" ng-required="smart.domain" name="smart_ad_server_page_id_frontpage" value="{$configs['smart_ad_server']['page_id']['frontpage']}">
                       </div>
                     </div>
                     <div class="form-group col-md-6">
                       <label for="page_id_article_inner" class="col-sm-4 col-form-label">{t}Article: inner{/t}</label>
                       <div class="col-sm-8">
-                        <input class="form-control" id="page_id_article_inner" type="text" ng-required="smart.domain" name="smart_ad_server_page_id_article_inner" value="{$configs['smart_ad_server']['page_id']['article_inner']}">
+                        <input class="form-control" id="page_id_article_inner" type="number" ng-required="smart.domain" name="smart_ad_server_page_id_article_inner" value="{$configs['smart_ad_server']['page_id']['article_inner']}">
                       </div>
                     </div>
                   </div>
@@ -150,13 +150,13 @@
                     <div class="form-group col-md-6">
                       <label for="page_id_opinion_frontpage" class="col-sm-4 col-form-label">{t}Opinion: frontpage{/t}</label>
                       <div class="col-sm-8">
-                        <input class="form-control" id="page_id_opinion_frontpage" type="text" ng-required="smart.domain" name="smart_ad_server_page_id_opinion_frontpage" value="{$configs['smart_ad_server']['page_id']['opinion_frontpage']}">
+                        <input class="form-control" id="page_id_opinion_frontpage" type="number" ng-required="smart.domain" name="smart_ad_server_page_id_opinion_frontpage" value="{$configs['smart_ad_server']['page_id']['opinion_frontpage']}">
                       </div>
                     </div>
                     <div class="form-group col-md-6">
                       <label for="page_id_opinion_inner" class="col-sm-4 col-form-label">{t}Opinion: inner{/t}</label>
                       <div class="col-sm-8">
-                        <input class="form-control" id="page_id_opinion_inner" type="text" ng-required="smart.domain" name="smart_ad_server_page_id_opinion_inner" value="{$configs['smart_ad_server']['page_id']['opinion_inner']}">
+                        <input class="form-control" id="page_id_opinion_inner" type="number" ng-required="smart.domain" name="smart_ad_server_page_id_opinion_inner" value="{$configs['smart_ad_server']['page_id']['opinion_inner']}">
                       </div>
                     </div>
                   </div>
@@ -166,13 +166,13 @@
                     <div class="form-group col-md-6">
                       <label for="page_id_video_frontpage" class="col-sm-4 col-form-label">{t}Video: frontpages{/t}</label>
                       <div class="col-sm-8">
-                        <input class="form-control" id="page_id_video_frontpage" type="text" ng-required="smart.domain" name="smart_ad_server_page_id_video_frontpage" value="{$configs['smart_ad_server']['page_id']['video_frontpage']}">
+                        <input class="form-control" id="page_id_video_frontpage" type="number" ng-required="smart.domain" name="smart_ad_server_page_id_video_frontpage" value="{$configs['smart_ad_server']['page_id']['video_frontpage']}">
                       </div>
                     </div>
                     <div class="form-group col-md-6">
                       <label for="page_id_video_inner" class="col-sm-4 col-form-label">{t}Video: inner{/t}</label>
                       <div class="col-sm-8">
-                        <input class="form-control" id="page_id_video_inner" type="text" ng-required="smart.domain" name="smart_ad_server_page_id_video_inner" value="{$configs['smart_ad_server']['page_id']['video_inner']}">
+                        <input class="form-control" id="page_id_video_inner" type="number" ng-required="smart.domain" name="smart_ad_server_page_id_video_inner" value="{$configs['smart_ad_server']['page_id']['video_inner']}">
                       </div>
                     </div>
                   </div>
@@ -182,13 +182,13 @@
                     <div class="form-group col-md-6">
                       <label for="page_id_album_frontpage" class="col-sm-4 col-form-label">{t}Album: frontpages{/t}</label>
                       <div class="col-sm-8">
-                        <input class="form-control" id="page_id_album_frontpage" type="text" ng-required="smart.domain" name="smart_ad_server_page_id_album_frontpage" value="{$configs['smart_ad_server']['page_id']['album_frontpage']}">
+                        <input class="form-control" id="page_id_album_frontpage" type="number" ng-required="smart.domain" name="smart_ad_server_page_id_album_frontpage" value="{$configs['smart_ad_server']['page_id']['album_frontpage']}">
                       </div>
                     </div>
                     <div class="form-group col-md-6">
                       <label for="page_id_album_inner" class="col-sm-4 col-form-label">{t}Album: inner{/t}</label>
                       <div class="col-sm-8">
-                        <input class="form-control" id="page_id_album_inner" type="text" ng-required="smart.domain" name="smart_ad_server_page_id_album_inner" value="{$configs['smart_ad_server']['page_id']['album_inner']}">
+                        <input class="form-control" id="page_id_album_inner" type="number" ng-required="smart.domain" name="smart_ad_server_page_id_album_inner" value="{$configs['smart_ad_server']['page_id']['album_inner']}">
                       </div>
                     </div>
                   </div>
@@ -198,13 +198,13 @@
                     <div class="form-group col-md-6">
                       <label for="page_id_poll_frontpage" class="col-sm-4 col-form-label">{t}Poll: frontpage{/t}</label>
                       <div class="col-sm-8">
-                        <input class="form-control" id="page_id_poll_frontpage" type="text" ng-required="smart.domain" name="smart_ad_server_page_id_polls_frontpage" value="{$configs['smart_ad_server']['page_id']['polls_frontpage']}">
+                        <input class="form-control" id="page_id_poll_frontpage" type="number" ng-required="smart.domain" name="smart_ad_server_page_id_polls_frontpage" value="{$configs['smart_ad_server']['page_id']['polls_frontpage']}">
                       </div>
                     </div>
                     <div class="form-group col-md-6">
                       <label for="page_id_poll_inner" class="col-sm-4 col-form-label">{t}Poll: inner{/t}</label>
                       <div class="col-sm-8">
-                        <input class="form-control" id="page_id_poll_inner" type="text" ng-required="smart.domain" name="smart_ad_server_page_id_polls_inner" value="{$configs['smart_ad_server']['page_id']['polls_inner']}">
+                        <input class="form-control" id="page_id_poll_inner" type="number" ng-required="smart.domain" name="smart_ad_server_page_id_polls_inner" value="{$configs['smart_ad_server']['page_id']['polls_inner']}">
                       </div>
                     </div>
                   </div>

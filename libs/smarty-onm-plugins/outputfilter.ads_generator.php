@@ -32,7 +32,10 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     $category  = $smarty->parent->tpl_vars['actual_category']->value;
     $content   = $smarty->parent->tpl_vars['content']->value;
     $positions = [];
-    $settings  = getService('setting_repository')->get('ads_settings');
+    $settings  = $smarty->getContainer()
+        ->get('orm.manager')
+        ->getDataSet('Settings', 'instance')
+        ->get('ads_settings');
 
     $safeFrameEnabled = getService('core.helper.advertisement')->isSafeFrameEnabled();
 

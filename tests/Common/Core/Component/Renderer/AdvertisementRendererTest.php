@@ -30,24 +30,31 @@ class AdvertisementRendererTest extends TestCase
     {
         $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
 
-        $this->router = $this->getMockBuilder('Router')
-            ->setMethods([ 'generate' ])
-            ->getMock();
-
-        $this->sm = $this->getMockBuilder('SettingsManager')
+        $this->ds = $this->getMockBuilder('DataSet')
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->templateAdmin = $this->getMockBuilder('TemplateAdmin')
-            ->setMethods([ 'fetch' ])
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'getDataSet' ])
             ->getMock();
 
         $this->logger = $this->getMockBuilder('Logger')
             ->setMethods([ 'info' ])
             ->getMock();
 
+        $this->router = $this->getMockBuilder('Router')
+            ->setMethods([ 'generate' ])
+            ->getMock();
+
+        $this->templateAdmin = $this->getMockBuilder('TemplateAdmin')
+            ->setMethods([ 'fetch' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->em->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
 
         $this->renderer = new AdvertisementRenderer($this->container);
     }
@@ -55,17 +62,17 @@ class AdvertisementRendererTest extends TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'router':
-                return $this->router;
-
-            case 'setting_repository':
-                return $this->sm;
+            case 'application.log':
+                return $this->logger;
 
             case 'core.template.admin':
                 return $this->templateAdmin;
 
-            case 'application.log':
-                return $this->logger;
+            case 'orm.manager':
+                return $this->em;
+
+            case 'router':
+                return $this->router;
         }
     }
 
@@ -75,7 +82,7 @@ class AdvertisementRendererTest extends TestCase
     public function testConstruct()
     {
         $this->assertEquals($this->router, $this->renderer->router);
-        $this->assertEquals($this->sm, $this->renderer->sm);
+        $this->assertEquals($this->ds, $this->renderer->ds);
         $this->assertEquals($this->templateAdmin, $this->renderer->tpl);
     }
 
@@ -117,7 +124,7 @@ class AdvertisementRendererTest extends TestCase
         $ad         = new \Advertisement();
         $ad->params = [];
 
-        $this->sm->expects($this->any())->method('get')
+        $this->ds->expects($this->any())->method('get')
             ->with('ads_settings')
             ->willReturn([]);
 
@@ -136,7 +143,7 @@ class AdvertisementRendererTest extends TestCase
         $ad         = new \Advertisement();
         $ad->params = [];
 
-        $this->sm->expects($this->any())->method('get')
+        $this->ds->expects($this->any())->method('get')
             ->with('ads_settings')
             ->willReturn([ 'default_mark' => 'Custom mark']);
 
@@ -201,6 +208,7 @@ class AdvertisementRendererTest extends TestCase
                 'device' => 'phone'
             ]
         ];
+
         $ad1->params['device'] = [ 'phone' => 1, 'desktop' => 1 ];
 
         $ads = [ $ad1 ];

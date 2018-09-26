@@ -68,7 +68,9 @@ class AuthenticationController extends Controller
                 $time->setTimezone(new \DateTimeZone('UTC'));
                 $time = $time->format('Y-m-d H:i:s');
 
-                $this->get('setting_repository')->set('last_login', $time);
+                $this->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')
+                    ->set('last_login', $time);
             }
 
             return $this->redirect($this->generateUrl('admin_welcome'));

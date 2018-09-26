@@ -25,23 +25,30 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
-            ->setMethods([ 'getDeviceCssClasses', 'renderInline', 'getMark' ])
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'getDataSet' ])
             ->getMock();
 
-        $this->sm = $this->getMockBuilder('DataSet')
+        $this->ds = $this->getMockBuilder('DataSet')
             ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
+            ->setMethods([ 'getDeviceCssClasses', 'renderInline', 'getMark' ])
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')
             ->setMethods([ 'getContainer' ])
             ->getMock();
 
-        $this->smarty->expects($this->any())->method('getContainer')
-            ->willReturn($this->container);
+        $this->em->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->smarty->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
     }
 
     /**
@@ -53,12 +60,12 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
      */
     public function serviceContainerCallback($name)
     {
-        if ($name === 'setting_repository') {
-            return $this->sm;
-        }
+        switch ($name) {
+            case 'core.renderer.advertisement':
+                return $this->renderer;
 
-        if ($name === 'core.renderer.advertisement') {
-            return $this->renderer;
+            case 'orm.manager':
+                return $this->em;
         }
 
         return null;
@@ -87,7 +94,7 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderBannerWhenSafeFrameInSettings()
     {
-        $this->sm->expects($this->once())->method('get')->with('ads_settings')
+        $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 1 ]);
 
         $this->assertEquals(
@@ -113,7 +120,7 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
             'advertisements' => $ads
         ];
 
-        $this->sm->expects($this->once())->method('get')->with('ads_settings')
+        $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
 
         $this->assertEmpty(smarty_insert_renderbanner([ 'type' => 123 ], $this->smarty));
@@ -137,7 +144,7 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
             'advertisements' => $ads
         ];
 
-        $this->sm->expects($this->once())->method('get')->with('ads_settings')
+        $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
 
         $this->assertEmpty(smarty_insert_renderbanner([ 'type' => 123 ], $this->smarty));
@@ -173,7 +180,7 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
             ->with($ad)->willReturn('corge');
         $this->renderer->expects($this->once())->method('getMarK')
             ->with($ad)->willReturn('Advertisement');
-        $this->sm->expects($this->once())->method('get')->with('ads_settings')
+        $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 1 ]);
 
         $this->assertEquals(
@@ -212,7 +219,7 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
             ->with($ad)->willReturn('corge');
         $this->renderer->expects($this->once())->method('getMarK')
             ->with($ad)->willReturn('Sponsor');
-        $this->sm->expects($this->once())->method('get')->with('ads_settings')
+        $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 1 ]);
 
         $this->assertEquals(

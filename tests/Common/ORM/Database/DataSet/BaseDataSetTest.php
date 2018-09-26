@@ -68,8 +68,20 @@ class BaseDataSetTest extends \PHPUnit\Framework\TestCase
      */
     public function testDelete()
     {
-        $this->cache->expects($this->exactly(2))->method('remove')->with([ 'foo' ]);
-        $this->conn->expects($this->exactly(2))->method('executeQuery')->with(
+        $this->cache->expects($this->once())->method('get')
+            ->willReturn([ 'foo' => 'bar', 'wibble' => 'glorp' ]);
+
+        $this->cache->expects($this->at(1))->method('set')
+            ->with('foobar', [ 'foo' => 'bar' ]);
+        $this->cache->expects($this->at(2))->method('set')
+            ->with('foobar', []);
+
+        $this->conn->expects($this->at(0))->method('executeQuery')->with(
+            'delete from foobar where name in (?)',
+            [ [ 'wibble' ] ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+        $this->conn->expects($this->at(1))->method('executeQuery')->with(
             'delete from foobar where name in (?)',
             [ [ 'foo' ] ],
             [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
@@ -78,46 +90,42 @@ class BaseDataSetTest extends \PHPUnit\Framework\TestCase
         $dataset = new BaseDataSet($this->conn, $this->metadata, $this->cache);
 
         $dataset->delete([]);
-        $dataset->delete(['foo']);
-        $dataset->delete('foo');
+        $dataset->delete(['plugh']);
 
-        $this->addToAssertionCount(1);
+        $dataset->delete(['wibble']);
+        $this->assertEquals('bar', $dataset->get('foo'));
+        $this->assertEmpty($dataset->get('wibble'));
+        $dataset->delete('foo');
     }
 
     /**
      * Tests get method when all values are in cache.
      */
-    public function testGetFromCache()
+    public function testGet()
     {
-        $this->cache->expects($this->any())->method('get')
+        $this->cache->expects($this->once())->method('get')
             ->willReturn([ 'foo' => 'bar' ]);
-        $this->conn->expects($this->any())->method('fetchAll')
-            ->willReturn([ [ 'name' => 'fubar', 'value' => serialize('thud') ] ]);
 
         $dataset = new BaseDataSet($this->conn, $this->metadata, $this->cache);
 
         $this->assertEquals('bar', $dataset->get('foo'));
-        $this->assertEquals('bar', $dataset->get('foo', 'wubble'));
-        $this->assertEquals([ 'foo' => 'bar' ], $dataset->get([ 'foo' ]));
-        $this->assertEquals([ 'foo' => 'bar' ], $dataset->get([ 'foo' ], [ 'wubble' ]));
-    }
+        $this->assertEmpty($dataset->get('mumble'));
+        $this->assertEquals('flob', $dataset->get('mumble', 'flob'));
 
-    /**
-     * Tests get method when all values are in database.
-     */
-    public function testGetFromDatabase()
-    {
-        $this->cache->expects($this->any())->method('get')->willReturn([]);
-        $this->conn->expects($this->any())->method('fetchAll')
-            ->with('select * from foobar where name in (?)', [ [ 'qux' ] ], [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ])
-            ->willReturn([ [ 'name' => 'qux', 'value' => serialize('norf') ] ]);
+        $this->assertEquals(
+            [ 'mumble' => 'flob' ],
+            $dataset->get([ 'mumble' ], [ 'flob' ])
+        );
 
-        $dataset = new BaseDataSet($this->conn, $this->metadata, $this->cache);
+        $this->assertEquals(
+            [ 'mumble' => 'flob', 'gorp' => 'flob' ],
+            $dataset->get([ 'mumble', 'gorp' ], 'flob')
+        );
 
-        $this->assertEquals('norf', $dataset->get('qux'));
-        $this->assertEquals('norf', $dataset->get('qux', 'grault'));
-        $this->assertEquals([ 'qux' => 'norf' ], $dataset->get(['qux']));
-        $this->assertEquals([ 'qux' => 'norf' ], $dataset->get(['qux'], ['grault']));
+        $this->assertEquals(
+            [ 'foo' => 'bar', 'gorp' => 'flob' ],
+            $dataset->get([ 'foo', 'gorp' ], 'flob')
+        );
     }
 
     /**
@@ -141,19 +149,43 @@ class BaseDataSetTest extends \PHPUnit\Framework\TestCase
      */
     public function testSet()
     {
-        $this->cache->expects($this->any())->method('remove')->with('foo');
-        $this->conn->expects($this->any())->method('executeQuery')
+        $this->cache->expects($this->once())->method('get')
+            ->willReturn([ 'foo' => 'bar', 'wibble' => 'glorp' ]);
+
+        $this->cache->expects($this->exactly(3))->method('set')->with('foobar');
+
+        $this->conn->expects($this->at(0))->method('executeQuery')
             ->with(
-                'insert into foobar (name, value) values (?,?) on duplicate key update value = ?',
-                [ 'foo', serialize('bar'), serialize('bar') ],
-                [ \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_STR ]
+                'insert into foobar (name, value) values (?,?) on duplicate key update value = values(value)',
+                [ 'foo', serialize('bar') ],
+                [ \PDO::PARAM_STR, \PDO::PARAM_STR ]
             );
+        $this->conn->expects($this->at(1))->method('executeQuery')
+            ->with(
+                'insert into foobar (name, value) values (?,?),(?,?) on duplicate key update value = values(value)',
+                [ 'foo', serialize('bar'), 'baz', serialize('thud') ],
+                [ \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_STR ]
+            );
+        $this->conn->expects($this->at(2))->method('executeQuery')
+            ->with(
+                'delete from foobar where name in (?)',
+                [ [ 'wibble' ] ],
+                [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+            );
+        $this->conn->expects($this->at(3))->method('executeQuery')
+            ->with(
+                'delete from foobar where name in (?)',
+                [ [ 'baz' ] ],
+                [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+            );
+
 
         $dataset = new BaseDataSet($this->conn, $this->metadata, $this->cache);
 
         $dataset->set([]);
         $dataset->set('foo', 'bar');
-        $dataset->set([ 'foo' => 'bar' ]);
+        $dataset->set([ 'foo' => 'bar', 'wibble' => null, 'baz' => 'thud' ]);
+        $dataset->set('baz', null);
 
         $this->addToAssertionCount(1);
     }
@@ -168,10 +200,15 @@ class BaseDataSetTest extends \PHPUnit\Framework\TestCase
 
         $dataset = new BaseDataSet($this->conn, $this->metadata, $this->cache, [ 'foo' ]);
 
-        $property = new \ReflectionProperty($dataset, 'autoloaded');
+        $property = new \ReflectionProperty($dataset, 'data');
         $property->setAccessible(true);
 
+        $method = new \ReflectionMethod($dataset, 'autoload');
+        $method->setAccessible(true);
+
         $this->assertEquals([ 'foo' => 'bar' ], $property->getValue($dataset));
+
+        $method->invokeArgs($dataset, []);
     }
 
     /**
@@ -185,7 +222,7 @@ class BaseDataSetTest extends \PHPUnit\Framework\TestCase
 
         $dataset = new BaseDataSet($this->conn, $this->metadata, $this->cache, [ 'foo' ]);
 
-        $property = new \ReflectionProperty($dataset, 'autoloaded');
+        $property = new \ReflectionProperty($dataset, 'data');
         $property->setAccessible(true);
 
         $this->assertEquals([ 'foo' => 'bar' ], $property->getValue($dataset));
@@ -196,6 +233,9 @@ class BaseDataSetTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasCache()
     {
+        $this->conn->expects($this->any())->method('fetchAll')
+            ->willReturn([]);
+
         $dataset = new BaseDataSet($this->conn, $this->metadata, $this->cache);
         $method  = new \ReflectionMethod($dataset, 'hasCache');
         $method->setAccessible(true);

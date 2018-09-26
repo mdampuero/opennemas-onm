@@ -30,10 +30,11 @@ class AdvertisementRenderer
     public function __construct($container)
     {
         $this->container = $container;
+        $this->router    = $this->container->get('router');
+        $this->tpl       = $this->container->get('core.template.admin');
 
-        $this->router = $this->container->get('router');
-        $this->sm     = $this->container->get('setting_repository');
-        $this->tpl    = $this->container->get('core.template.admin');
+        $this->ds = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance');
     }
 
     /**
@@ -51,7 +52,7 @@ class AdvertisementRenderer
         }
 
         // If the mark is not valid then use the default one.
-        $settings    = $this->container->get('setting_repository')->get('ads_settings');
+        $settings    = $this->ds->get('ads_settings');
         $defaultMark = (
                 is_array($settings)
                 && array_key_exists('default_mark', $settings)
@@ -96,8 +97,7 @@ class AdvertisementRenderer
      */
     public function render(\Advertisement $ad, $params = [])
     {
-        $safeFrame = $this->container->get('setting_repository')
-            ->get('ads_settings')['safe_frame'];
+        $safeFrame = $this->ds->get('ads_settings')['safe_frame'];
 
         if ($safeFrame) {
             return $this->renderSafeFrameSlot($ad, $params);
@@ -183,7 +183,7 @@ class AdvertisementRenderer
             $params['content']->id
         );
 
-        $options    = $this->sm->get('dfp_options');
+        $options    = $this->ds->get('dfp_options');
         $customCode = $this->getDFPCustomCode();
 
         return $this->tpl->fetch('advertisement/helpers/inline/dfp.header.tpl', [
@@ -271,7 +271,7 @@ class AdvertisementRenderer
             return '';
         }
 
-        $config = $this->sm->get('revive_ad_server');
+        $config = $this->ds->get('revive_ad_server');
         $zones  = [];
 
         foreach ($ads as $ad) {
@@ -335,7 +335,7 @@ class AdvertisementRenderer
             return '';
         }
 
-        $config = $this->sm->get('smart_ad_server');
+        $config = $this->ds->get('smart_ad_server');
         $zones  = [];
 
         foreach ($ads as $ad) {
@@ -377,7 +377,7 @@ class AdvertisementRenderer
      */
     public function renderInlineSmartSlot($ad)
     {
-        $config = $this->sm->get('smart_ad_server');
+        $config = $this->ds->get('smart_ad_server');
 
         $template = 'smart.slot.tpl';
         if (is_array($config)
@@ -544,8 +544,7 @@ class AdvertisementRenderer
             'category'  => $params['category'],
             'extension' => $params['extension'],
             'openXId'   => $ad->params['openx_zone_id'],
-            'url'       => $this->container->get('setting_repository')
-                ->get('revive_ad_server')['url']
+            'url'       => $this->ds->get('revive_ad_server')['url']
         ];
 
         return $this->container->get('core.template.admin')
@@ -587,7 +586,7 @@ class AdvertisementRenderer
      */
     protected function renderSafeFrameSmart($ad, $params)
     {
-        $config = $this->sm->get('smart_ad_server');
+        $config = $this->ds->get('smart_ad_server');
         $params = [
             'config'        => $config,
             'page_id'       => $config['page_id'][$params['advertisementGroup']],
@@ -677,7 +676,7 @@ class AdvertisementRenderer
      */
     protected function getDFPCustomCode()
     {
-        $code = $this->sm->get('dfp_custom_code');
+        $code = $this->ds->get('dfp_custom_code');
 
         if (empty($code)) {
             return '';
@@ -695,7 +694,7 @@ class AdvertisementRenderer
      */
     protected function getDFPTargeting($category, $module, $contentId)
     {
-        $options = $this->container->get('setting_repository')->get('dfp_options');
+        $options = $this->ds->get('dfp_options');
 
         if (!is_array($options)) {
             return '';
@@ -732,7 +731,7 @@ class AdvertisementRenderer
      */
     protected function getSmartCustomCode()
     {
-        $code = $this->sm->get('smart_custom_code');
+        $code = $this->ds->get('smart_custom_code');
 
         if (empty($code)) {
             return '';
@@ -750,7 +749,7 @@ class AdvertisementRenderer
      */
     protected function getSmartTargeting($category, $module, $contentId)
     {
-        $config = $this->sm->get('smart_ad_server');
+        $config = $this->ds->get('smart_ad_server');
 
         $targetingCode = '';
         if (array_key_exists('category_targeting', $config)

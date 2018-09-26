@@ -500,12 +500,18 @@ class AlbumsController extends Controller
             ]
         ];
 
-        $ds->set($settings);
 
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            _('Settings saved successfully.')
-        );
+        try {
+            $ds->set($settings);
+
+            $type    = 'success';
+            $message = _('Settings saved successfully.');
+        } catch (\Exception $e) {
+            $type    = 'error';
+            $message = _('Unable to save the settings.');
+        }
+
+        $this->get('session')->getFlashBag()->add($type, $message);
 
         return $this->redirect($this->generateUrl('admin_albums_config'));
     }

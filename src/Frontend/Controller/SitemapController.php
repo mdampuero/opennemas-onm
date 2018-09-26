@@ -123,7 +123,8 @@ class SitemapController extends Controller
 
             $this->view->assign([
                 'contents'   => $contents,
-                'googleNews' => $this->get('setting_repository')
+                'googleNews' => $this->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')
                     ->get('google_news_name'),
                 'tags'       => $this->getTags($tags)
             ]);

@@ -89,7 +89,7 @@ class PasswordController extends Controller
 
         $mailSubject = sprintf(
             _('Password reminder for %s'),
-            $this->get('setting_repository')->get('site_title')
+            $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('site_title')
         );
 
         $mailBody = $this->renderView('user/emails/recoverpassword.tpl', [
@@ -109,7 +109,7 @@ class PasswordController extends Controller
             ->setTo($user->email)
             ->setFrom([
                 'no-reply@postman.opennemas.com' =>
-                    $this->get('setting_repository')->get('site_name')
+                    $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('site_name')
             ]);
 
         $headers = $message->getHeaders();

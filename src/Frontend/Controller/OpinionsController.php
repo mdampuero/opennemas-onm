@@ -10,7 +10,6 @@
 namespace Frontend\Controller;
 
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -66,8 +65,8 @@ class OpinionsController extends Controller
             $order['starttime'] = 'DESC';
 
             // Fetch configurations for this frontpage
-            $configurations = $this->get('setting_repository')
-                ->get('opinion_settings', [
+            $configurations = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')->get('opinion_settings', [
                     'total_editorial' => 2,
                     'total_director'  => 1,
                 ]);
@@ -111,7 +110,7 @@ class OpinionsController extends Controller
                 }
             }
 
-            $numOpinions = $this->get('setting_repository')->get('items_per_page');
+            $numOpinions = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('items_per_page');
             if (!empty($configurations)
                 && array_key_exists('total_opinions', $configurations)
             ) {
@@ -287,7 +286,9 @@ class OpinionsController extends Controller
                 );
             }
 
-            $itemsPerPage = s::get('items_per_page');
+            $itemsPerPage = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('items_per_page');
             // Get external media url for author images
             $externalMediaUrl = $this->cm->getUrlContent($wsUrl . '/ws/instances/mediaurl/', true);
 
@@ -405,7 +406,9 @@ class OpinionsController extends Controller
             $orderBy = ['created' => 'DESC'];
 
             // Total opinions per page
-            $numOpinions = $this->get('setting_repository')->get('items_per_page');
+            $numOpinions = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('items_per_page');
             if (!empty($configurations)
                 && array_key_exists('total_opinions', $configurations)
             ) {
@@ -573,7 +576,9 @@ class OpinionsController extends Controller
 
             $this->cm = new \ContentManager();
 
-            $itemsPerPage = s::get('items_per_page');
+            $itemsPerPage = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('items_per_page');
             // Get external media url for author images
             $externalMediaUrl = $this->cm->getUrlContent($wsUrl . '/ws/instances/mediaurl/', true);
 

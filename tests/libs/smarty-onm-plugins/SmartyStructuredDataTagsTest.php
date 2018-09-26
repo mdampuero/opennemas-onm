@@ -29,6 +29,10 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'getDataSet' ])
+            ->getMock();
+
         $this->requestStack = $this->getMockBuilder('RequestStack')
             ->setMethods([ 'getCurrentRequest' ])
             ->getMock();
@@ -37,7 +41,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getUri' ])
             ->getMock();
 
-        $this->sm = $this->getMockBuilder('SettingManager')
+        $this->ds = $this->getMockBuilder('Dataset')
             ->setMethods([ 'get' ])
             ->getMock();
 
@@ -66,29 +70,29 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->method('getContainer')
             ->willReturn($this->container);
 
-        $this->structuredData = $this->getMockBuilder(
-            'Common\Core\Component\Helper\StructuredData'
-        )
+        $this->structuredData = $this
+            ->getMockBuilder('Common\Core\Component\Helper\StructuredData')
             ->setMethods([
                 'generateImageGalleryJsonLDCode',
                 'generateVideoJsonLDCode',
                 'generateNewsArticleJsonLDCode',
                 'generateImageJsonLDCode'
             ])
-            ->setConstructorArgs([ $this->sm, $this->ts ])
+            ->setConstructorArgs([ $this->em, $this->ts ])
             ->getMock();
 
         $this->requestStack->expects($this->any())
             ->method('getCurrentRequest')
             ->willReturn($this->request);
 
-        $this->container->expects($this->any())
-            ->method('get')
+        $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
-        $this->cm->expects($this->any())
-            ->method('find')
+        $this->cm->expects($this->any())->method('find')
             ->willReturn(json_decode(json_encode([ 'title' => 'Mundo' ])));
+
+        $this->em->expects($this->any())->method('getDataset')
+            ->with('Settings', 'instance')->willReturn($this->ds);
 
         $this->request->expects($this->any())
             ->method('getUri')
@@ -105,28 +109,27 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function serviceContainerCallback($name)
     {
-        if ($name === 'request_stack') {
-            return $this->requestStack;
-        }
+        switch ($name) {
+            case 'category_repository':
+                return $this->cm;
 
-        if ($name === 'core.helper.structured_data') {
-            return $this->structuredData;
-        }
+            case 'core.helper.content_media':
+                return $this->helper;
 
-        if ($name === 'core.instance') {
-            return $this->instance;
-        }
+            case 'core.helper.structured_data':
+                return $this->structuredData;
 
-        if ($name === 'setting_repository') {
-            return $this->sm;
-        } elseif ($name === 'category_repository') {
-            return $this->cm;
-        } elseif ($name === 'user_repository') {
-            return $this->um;
-        }
+            case 'core.instance':
+                return $this->instance;
 
-        if ($name === 'core.helper.content_media') {
-            return $this->helper;
+            case 'orm.manager':
+                return $this->em;
+
+            case 'request_stack':
+                return $this->requestStack;
+
+            case 'user_repository':
+                return $this->um;
         }
 
         return null;
@@ -177,7 +180,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->method('find')
             ->willReturn(json_decode(json_encode([ 'name' => 'John Doe' ])));
 
-        $this->sm->expects($this->once())
+        $this->ds->expects($this->once())
             ->method('get')
             ->with('site_logo')
             ->willReturn('logo.png');
@@ -260,7 +263,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->method('find')
             ->willReturn(json_decode(json_encode([ 'name' => 'John Doe' ])));
 
-        $this->sm->expects($this->once())
+        $this->ds->expects($this->once())
             ->method('get')
             ->with('site_logo')
             ->willReturn('logo.png');
@@ -362,12 +365,12 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->method('find')
             ->willReturn(new \User());
 
-        $this->sm->expects($this->at(0))
+        $this->ds->expects($this->at(0))
             ->method('get')
             ->with('site_name')
             ->willReturn('Site Name');
 
-        $this->sm->expects($this->at(1))
+        $this->ds->expects($this->at(1))
             ->method('get')
             ->with('site_logo')
             ->willReturn('logo.png');
@@ -454,7 +457,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->method('find')
             ->willReturn(new \User());
 
-        $this->sm->expects($this->once())
+        $this->ds->expects($this->once())
             ->method('get')
             ->with('site_logo')
             ->willReturn(null);
@@ -541,7 +544,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->method('find')
             ->willReturn(json_decode(json_encode([ 'name' => 'John Doe' ])));
 
-        $this->sm->expects($this->once())
+        $this->ds->expects($this->once())
             ->method('get')
             ->with('site_logo')
             ->willReturn('logo.png');
@@ -632,7 +635,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->method('find')
             ->willReturn(json_decode(json_encode([ 'name' => 'John Doe' ])));
 
-        $this->sm->expects($this->once())
+        $this->ds->expects($this->once())
             ->method('get')
             ->with('site_logo')
             ->willReturn('logo.png');
