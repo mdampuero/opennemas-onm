@@ -43,7 +43,11 @@ class TagService extends OrmService
         }
 
         $tagsCount = $this->getNumContentsRel($tags['items']);
-        $mostUses  = max($tagsCount);
+        if (empty($tagsCount)) {
+            return null;
+        }
+
+        $mostUses = max($tagsCount);
 
         foreach ($tagsCount as $id => $uses) {
             if ($uses === $mostUses) {
