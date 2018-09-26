@@ -140,26 +140,47 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers Common\Core\Component\Template\Template::setConfig
      */
-    // TODO: I had to commment out this test as I was unable to fix it
-    // after 20 minutes looking into it. Dont wanna spend tons of time.
-    // This work well but this test so I will se it later.
-    // public function testSetConfig()
-    // {
-    //     $template = $this->createMock(\Common\Core\Component\Template\Template::class);
+    public function testSetConfigWithCacheEnabled()
+    {
+         $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+             ->disableOriginalConstructor()
+             ->setMethods([
+                 'configLoad', 'getConfigVars', 'setCaching', 'setCacheLifetime'
+             ])->getMock();
 
+         $template->expects($this->once())->method('configLoad')
+             ->willReturn(true);
 
-    //     $template->method('configLoad')
-    //         ->willReturn(true);
+         $template->expects($this->once())->method('getConfigVars')
+             ->willReturn([ 'caching' => true ]);
 
-    //     $template->method('getConfigVars')
-    //         ->willReturn([]);
+         $template->expects($this->once())->method('setCaching')
+             ->willReturn(true);
 
+         $template->expects($this->once())->method('setCacheLifetime')
+             ->with(86400)->willReturn(true);
 
-    //     $this->assertEquals(
-    //         null,
-    //         $template->setConfig('frontpage')
-    //     );
-    // }
+         $this->assertEquals(null, $template->setConfig('frontpage'));
+    }
+
+    /**
+     * @covers Common\Core\Component\Template\Template::setConfig
+     */
+    public function testSetConfigWithCacheDisabled()
+    {
+         $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+             ->disableOriginalConstructor()
+             ->setMethods([ 'configLoad', 'getConfigVars' ])
+             ->getMock();
+
+         $template->expects($this->once())->method('configLoad')
+             ->willReturn(true);
+
+         $template->expects($this->once())->method('getConfigVars')
+             ->willReturn([]);
+
+         $this->assertEquals(null, $template->setConfig('frontpage'));
+    }
 
     public function testSetFile()
     {
