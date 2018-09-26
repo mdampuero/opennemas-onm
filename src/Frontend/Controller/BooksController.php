@@ -137,6 +137,7 @@ class BooksController extends Controller
             'contentId'   => $content->id,
             'category'    => $content->category,
             'cache_id'    => $cacheID,
+            'o_content'   => $content,
             'x-tags'      => 'book,'.$content->id,
             'x-cache-for' => '+1 day',
         ]);

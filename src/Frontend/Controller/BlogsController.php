@@ -331,6 +331,7 @@ class BlogsController extends Controller
             'content'         => $blog,
             'contentId'       => $blog->id,
             'actual_category' => 'blog', // Used in renderMenu
+            'o_content'       => $blog,
             'x-tags'          => 'blog-inner,' . $blog->id,
             'x-cache-for'     => '+1 day',
             'x-cacheable'     => $cacheable,
