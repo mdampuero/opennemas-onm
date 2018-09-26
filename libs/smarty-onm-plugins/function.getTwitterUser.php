@@ -1,6 +1,4 @@
 <?php
-use Onm\Settings as s;
-
 /**
  * Get's twitter page from settings and returns only the user name
  *
