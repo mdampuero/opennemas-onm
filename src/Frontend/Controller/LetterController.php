@@ -166,6 +166,7 @@ class LetterController extends Controller
             'content'        => $letter,
             'contentId'      => $letter->id,
             'letter'         => $letter,
+            'o_content'      => $letter,
             'x-tags'         => 'letter,' . $letter->id,
             'x-cache-for'    => '+1 day',
             'tags'                   => $this->get('api.service.tag')

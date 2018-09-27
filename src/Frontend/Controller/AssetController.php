@@ -258,27 +258,26 @@ class AssetController extends Controller
     public function favicoAction()
     {
         // Default favico
-        $favicoUrl = '/assets/images/favicon.png';
+        $favicoRelativePath = '/assets/images/favicon.png';
 
         $settings = $this->get('orm.manager')->getDataSet('Settings', 'instance')
-            ->get(['favico', 'section_settings', 'allowLogo']);
+            ->get(['favico', 'section_settings', 'logo_enabled']);
 
-        if ($settings['allowLogo'] && !empty($settings['favico'])) {
-            $favicoUrl = MEDIA_URL . MEDIA_DIR . '/sections/' . $favicoFileName;
+        if ($settings['logo_enabled'] && !empty($settings['favico'])) {
+            $favicoRelativePath = MEDIA_URL . MEDIA_DIR . '/sections/' . $settings['favico'];
         }
 
-        $favicoUrl = realpath(SITE_PATH . '/' . $favicoUrl);
+        $favicoPath = realpath(SITE_PATH . '/' . $favicoRelativePath);
 
-        if (empty($favicoUrl)) {
-            // Default favico
-            $favicoUrl      = realpath(SITE_PATH . '/assets/images/favicon.png');
-            $favicoFileName = 'favicon.png';
+        // Default favico
+        if (empty($favicoPath)) {
+            $favicoPath = realpath(SITE_PATH . '/assets/images/favicon.png');
         }
 
         return new Response(
-            file_get_contents($favicoUrl),
+            file_get_contents($favicoPath),
             200,
-            [ 'Content-Type' => 'image/' . pathinfo($favicoFileName, PATHINFO_EXTENSION) ]
+            [ 'Content-Type' => 'image/' . pathinfo($favicoPath, PATHINFO_EXTENSION) ]
         );
     }
 }

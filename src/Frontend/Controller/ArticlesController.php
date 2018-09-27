@@ -123,6 +123,7 @@ class ArticlesController extends Controller
             'content'               => $article,
             'contentId'             => $article->id,
             'time'                  => '12345',
+            'o_content'             => $article,
             'o_token'               => $token,
             'x-cache-for'           => '+1 day',
             'x-cacheable'           => empty($token),
@@ -193,6 +194,7 @@ class ArticlesController extends Controller
             'relationed'            => $article->relatedContents,
             'suggested'             => $article->suggested,
             'videoInt'              => $article->videoInt,
+            'o_content'             => $article,
             'x-cache-for'           => '+1 day',
             'x-tags'                => 'ext-article,' . $article->id
         ]);
