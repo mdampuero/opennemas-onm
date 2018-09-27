@@ -122,10 +122,10 @@
 
           var data = angular.copy($scope.user);
 
-          if (data.fk_user_group) {
-            data.fk_user_group = data.fk_user_group.map(function(e) {
-              return e.pk_user_group;
-            });
+          for (var key in data.user_groups) {
+            if (!data.user_groups[key] || data.user_groups[key].status === 0) {
+              delete data.user_groups[key];
+            }
           }
 
           if (data.extensions) {
@@ -164,14 +164,10 @@
             params: { id: $scope.user.id }
           };
 
-          data.fk_user_group = [];
           for (var key in data.user_groups) {
             if (!data.user_groups[key] || data.user_groups[key].status === 0) {
               delete data.user_groups[key];
-              continue;
             }
-
-            data.fk_user_group.push(key);
           }
 
           if (data.extensions) {

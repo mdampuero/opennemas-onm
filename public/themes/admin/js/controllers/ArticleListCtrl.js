@@ -75,8 +75,7 @@
         $scope.init = function() {
           oqlEncoder.configure({
             placeholder: {
-              title: 'title ~ "%[value]%"',
-              fk_user_group: '[key] regexp "^[value],|^[value]$|,[value],|,[value]$"'
+              title: 'title ~ "%[value]%"'
             }
           });
 

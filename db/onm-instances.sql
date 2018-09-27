@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.7.22, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.21, for Linux (x86_64)
 --
 -- Host: mysql    Database: onm-instances
 -- ------------------------------------------------------
@@ -73,7 +73,7 @@ CREATE TABLE `extension` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uuid` (`uuid`),
   KEY `type` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -432,7 +432,7 @@ CREATE TABLE `usermeta` (
 
 LOCK TABLES `usermeta` WRITE;
 /*!40000 ALTER TABLE `usermeta` DISABLE KEYS */;
-INSERT INTO `usermeta` VALUES (5,'user_language','en_US');
+INSERT INTO `usermeta` VALUES (1,'user_language','default');
 /*!40000 ALTER TABLE `usermeta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -455,7 +455,6 @@ CREATE TABLE `users` (
   `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-backend, 1-frontend',
   `token` varchar(50) DEFAULT NULL,
   `activated` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 activated - 0 deactivated',
-  `fk_user_group` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -466,7 +465,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','b7592fd66feb65282791ab64685e4af4','',NULL,NULL,'support@opennemas.com','Administrator',0,NULL,1,'4');
+INSERT INTO `users` VALUES (1,'master','21f0e80a0401deaebce9df20a22cf98c','',NULL,NULL,'support@opennemas.com','Master',0,NULL,1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -479,4 +478,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-06-15  8:26:14
+-- Dump completed on 2018-08-29  8:24:39

@@ -77,15 +77,23 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getToken', 'setToken' ])
             ->getMock();
 
+        $this->ugs = $this->getMockBuilder('UserGroupService')
+            ->setMethods([ 'getListByIds', 'getOrigin', 'setOrigin' ])
+            ->getMock();
+
         $this->user = $this->getMockBuilder('Common\ORM\Entity\User')
             ->setMethods([ 'getOrigin', 'isEnabled'])
             ->getMock();
 
         $this->request->headers = $this->headers;
 
-        $this->user->categories    = [ 'flob', 'grault' ];
-        $this->user->id            = 1234;
-        $this->user->fk_user_group = [ 1, 2, 34 ];
+        $this->user->categories  = [ 'flob', 'grault' ];
+        $this->user->id          = 1234;
+        $this->user->user_groups = [
+            1  => [ 'status' => 1 ],
+            2  => [ 'status' => 1 ],
+            34 => [ 'status' => 1 ],
+        ];
 
         $this->em->expects($this->any())->method('getRepository')
             ->willReturn($this->repository);
@@ -101,6 +109,9 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
 
         $this->session->expects($this->any())->method('getFlashBag')
             ->willReturn($this->fb);
+
+        $this->ugs->expects($this->any())->method('setOrigin')
+            ->willReturn($this->ugs);
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this,  'serviceContainerCallback' ]));
@@ -124,6 +135,8 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'api.service.user_group':
+                return $this->ugs;
             case 'core.security':
                 return $this->security;
             case 'orm.manager':
@@ -345,9 +358,11 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
 
         $method->setAccessible(true);
 
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('pk_user_group in [1, 2, 34]')
-            ->willReturn([ json_decode(json_encode([ 'privileges' => [ 6 ] ])) ]);
+        $this->ugs->expects($this->once())->method('getListByIds')
+            ->with([ 1, 2, 34 ])
+            ->willReturn([ 'items' => [
+                json_decode(json_encode([ 'privileges' => [ 6 ] ])) ]
+            ]);
 
         $this->assertContains(
             'ARTICLE_ADMIN',

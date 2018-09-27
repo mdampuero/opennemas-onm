@@ -114,9 +114,9 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('fred', $record['extra']['instance']);
         $this->assertEquals('anon.', $record['extra']['user']);
-        $this->assertArrayNotHasKey('client_ip', $record['extra']);
-        $this->assertArrayNotHasKey('user_agent', $record['extra']);
-        $this->assertArrayNotHasKey('url', $record['extra']);
+        $this->assertArrayHasKey('client_ip', $record['extra']);
+        $this->assertArrayHasKey('user_agent', $record['extra']);
+        $this->assertArrayHasKey('url', $record['extra']);
     }
 
     /**

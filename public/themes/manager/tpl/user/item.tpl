@@ -4,22 +4,26 @@
       <ul class="nav quick-section">
         <li class="quicklinks">
           <h4>
+            <i class="fa fa-user m-r-10"></i>
+          </h4>
+        </li>
+        <li class="quicklinks">
+          <h4>
             <a class="no-padding" ng-href="[% routing.ngGenerate('manager_users_list') %]">
-              <i class="fa fa-user"></i>
               {t}Users{/t}
             </a>
           </h4>
         </li>
-        <li class="quicklinks hidden-xs ng-cloak" ng-if="!loading && user">
-          <div class="p-l-10 p-r-10 p-t-10">
+        <li class="quicklinks hidden-xs m-l-5 m-r-5 ng-cloak" ng-if="!loading && user">
+          <h4>
             <i class="fa fa-angle-right"></i>
-          </div>
+          </h4>
         </li>
         <li class="quicklinks hidden-xs ng-cloak" ng-if="!loading && user">
-          <h5 class="ng-cloak">
-            <strong ng-if="user.id">{t}Edit{/t}</strong>
-            <strong ng-if="!user.id">{t}Create{/t}</strong>
-          </h5>
+          <h4>
+            <span ng-if="user.id">{t}Edit{/t}</span>
+            <span ng-if="!user.id">{t}Create{/t}</span>
+          </h4>
         </li>
       </ul>
       <div class="all-actions pull-right">

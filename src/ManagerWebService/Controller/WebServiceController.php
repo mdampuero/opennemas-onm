@@ -156,7 +156,6 @@ class WebServiceController extends Controller
                 [
                     'activated'     => true,
                     'email'         => $instance->contact_mail,
-                    'fk_user_group' => [ 5 ],
                     'name'          => $instance->contact_mail,
                     'token'         => md5(uniqid(mt_rand(), true)),
                     'type'          => 0,

@@ -20,14 +20,6 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class OnmMigratorTagsCommand extends ContainerAwareCommand
 {
-
-    /**
-     * Provider to use during migration
-     *
-     * @var MigrationProvider
-     */
-    protected $provider;
-
     /**
      * Configures the current command.
      */

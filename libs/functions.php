@@ -93,7 +93,6 @@ function logUserEvent($action = null, $id = null, $data = null)
 
         if (!is_null($data)) {
             $message .= ' - username (' . $data['username'] . ')' .
-                        ' - user group (' . $data['id_user_group'] . ')' .
                         ' - activated flag (' . $data['activated'] . ')';
         }
 

@@ -41,7 +41,7 @@ class NitfOpennemasTest extends \PHPUnit\Framework\TestCase
                       <hl2>Headline2</hl2>
                     </hedline>
                     <rights>
-                      <rights.owner>{&quot;name&quot;:&quot;Editorial&quot;}</rights.owner>
+                      <rights.owner>Editorial</rights.owner>
                       <rights.owner.photo>author.png</rights.owner.photo>
                     </rights>
                     <dateline>
@@ -91,9 +91,10 @@ class NitfOpennemasTest extends \PHPUnit\Framework\TestCase
     {
         $parsed = $this->parser->parse($this->invalid);
 
-        $author        = new \StdClass();
-        $author->name  = 'Editorial';
-        $author->photo = 'author.png';
+        $author = [
+            'name'  => 'Editorial',
+            'photo' => 'author.png'
+        ];
 
         $resource               = new Resource();
         $resource->agency_name  = 'Opennemas';
@@ -130,9 +131,10 @@ class NitfOpennemasTest extends \PHPUnit\Framework\TestCase
         $method     = $reflection->getMethod('getAuthor');
         $method->setAccessible(true);
 
-        $author        = new \StdClass();
-        $author->name  = 'Editorial';
-        $author->photo = 'author.png';
+        $author = [
+            'name'  => 'Editorial',
+            'photo' => 'author.png'
+        ];
 
         $criteria = $method->invokeArgs($this->parser, [ $this->invalid ]);
         $this->assertEmpty($criteria);
