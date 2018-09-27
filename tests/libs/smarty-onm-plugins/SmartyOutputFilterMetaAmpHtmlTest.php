@@ -21,32 +21,32 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
     {
         include_once './libs/smarty-onm-plugins/outputfilter.meta_amphtml.php';
 
-        $this->security = $this->getMockBuilder('Security')
-            ->setMethods([ 'hasExtension' ])
-            ->getMock();
-
-        $this->requestStack = $this->getMockBuilder('RequestStack')
-            ->setMethods([ 'getCurrentRequest' ])
-            ->getMock();
-
-        $this->request = $this->getMockBuilder('Request')
-            ->setMethods([ 'getUri' ])
-            ->getMock();
-
-        $this->router = $this->getMockBuilder('Router')
-            ->setMethods([ 'generate' ])
+        $this->container = $this->getMockBuilder('Container')
+            ->setMethods([ 'get' ])
             ->getMock();
 
         $this->helper = $this->getMockBuilder('L10nRouteHelper')
             ->setMethods([ 'localizeUrl' ])
             ->getMock();
 
-        $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer' ])
+        $this->request = $this->getMockBuilder('Request')
+            ->setMethods([ 'getRequestUri' ])
             ->getMock();
 
-        $this->container = $this->getMockBuilder('Container')
-            ->setMethods([ 'get' ])
+        $this->rs = $this->getMockBuilder('RequestStack')
+            ->setMethods([ 'getCurrentRequest' ])
+            ->getMock();
+
+        $this->router = $this->getMockBuilder('Router')
+            ->setMethods([ 'generate' ])
+            ->getMock();
+
+        $this->security = $this->getMockBuilder('Security')
+            ->setMethods([ 'hasExtension' ])
+            ->getMock();
+
+        $this->smarty = $this->getMockBuilder('Smarty')
+            ->setMethods([ 'getContainer', 'getTemplateVars' ])
             ->getMock();
 
         $this->smarty->expects($this->any())->method('getContainer')
@@ -75,7 +75,7 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
             case 'router':
                 return $this->router;
             case 'request_stack':
-                return $this->requestStack;
+                return $this->rs;
         }
 
         return null;
@@ -87,8 +87,7 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaAmpHtmlWithoutAmp()
     {
-        $this->requestStack->expects($this->any())
-            ->method('getCurrentRequest')
+        $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
 
         $this->security->expects($this->once())->method('hasExtension')
@@ -105,17 +104,85 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaAmpHtmlWhenAlreadyInAmp()
     {
-        $this->requestStack->expects($this->any())
+        $this->rs->expects($this->any())->method('getCurrentRequest')
+            ->willReturn($this->request);
+
+        $this->security->expects($this->once())->method('hasExtension')
+            ->with('AMP_MODULE')->willReturn(true);
+
+        $this->request->expects($this->once())->method('getRequestUri')
+            ->willReturn('wibble.amp.html');
+
+        $output = '<html><head></head><body>Hello World!</body></html>';
+
+        $this->assertEquals($output, smarty_outputfilter_meta_amphtml($output, $this->smarty));
+    }
+
+    /**
+     * Tests smarty_outputfilter_meta_amphtml when there is a valid content in
+     * smarty.
+     */
+    public function testMetaAmpHtmlWhenContent()
+    {
+        $this->helper->expects($this->once())->method('localizeUrl')
+            ->willReturn('/wibble/wubble');
+
+        $this->request->expects($this->any())->method('getRequestUri')
+            ->willReturn('wibble.html');
+
+        $this->router->expects($this->any())->method('generate')
+            ->willReturn('/wibble/wubble');
+
+        $this->rs->expects($this->any())->method('getCurrentRequest')
+            ->willReturn($this->request);
+
+        $this->security->expects($this->once())->method('hasExtension')
+            ->with('AMP_MODULE')->willReturn(true);
+
+        $this->smarty->expects($this->exactly(3))->method('getTemplateVars')
+            ->willReturn([
+                'o_content' => json_decode(json_encode([
+                    'category_name'     => 'gorp',
+                    'pk_content'        => 145,
+                    'created'           => '1999-12-31 23:59:59',
+                    'content_type_name' => 'article',
+                    'slug'              => 'foobar-thud'
+                ]), false)
+            ]);
+
+        $this->assertEquals(
+            '<html><head><link rel="amphtml" href="/wibble/wubble"/></head><body>Hello World!</body></html>',
+            smarty_outputfilter_meta_amphtml(
+                '<html><head></head><body>Hello World!</body></html>',
+                $this->smarty
+            )
+        );
+    }
+
+    /**
+     * Tests smarty_outputfilter_meta_amphtml when there is a content but it is
+     * not an article.
+     */
+    public function testMetaAmpHtmlWhenNoArticle()
+    {
+        $this->rs->expects($this->any())
             ->method('getCurrentRequest')
             ->willReturn($this->request);
 
         $this->security->expects($this->once())->method('hasExtension')
             ->with('AMP_MODULE')->willReturn(true);
 
-        $this->request->expects($this->once())->method('getUri')
-            ->willReturn('wibble.amp.html');
+        $this->request->expects($this->any())->method('getRequestUri')
+            ->willReturn('http://t.co/wibble.html');
 
         $output = '<html><head></head><body>Hello World!</body></html>';
+
+        $this->smarty->expects($this->exactly(2))->method('getTemplateVars')
+            ->willReturn([
+                'o_content' => json_decode(json_encode([
+                    'content_type_name' => 'opinion'
+                ]), false)
+            ]);
 
         $this->assertEquals($output, smarty_outputfilter_meta_amphtml($output, $this->smarty));
     }
@@ -126,87 +193,34 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaAmpHtmlWhenNoContent()
     {
-        $this->requestStack->expects($this->any())
+        $this->rs->expects($this->any())
             ->method('getCurrentRequest')
             ->willReturn($this->request);
 
-        $this->security->expects($this->any())->method('hasExtension')
+        $this->security->expects($this->once())->method('hasExtension')
             ->with('AMP_MODULE')->willReturn(true);
 
-        $this->request->expects($this->any())->method('getUri')
+        $this->request->expects($this->any())->method('getRequestUri')
             ->willReturn('http://t.co/wibble.html');
 
         $output = '<html><head></head><body>Hello World!</body></html>';
 
-        $this->assertEquals($output, smarty_outputfilter_meta_amphtml($output, $this->smarty));
-
-        $this->smarty->tpl_vars = [ 'content' => json_decode(json_encode([ 'value' => null ]), false) ];
-        $this->assertEquals($output, smarty_outputfilter_meta_amphtml($output, $this->smarty));
-
-        $this->smarty->tpl_vars = [ 'content' => json_decode(json_encode([
-            'value' => json_decode(json_encode([ 'content_type_name' => 'opinion' ]), false)
-        ]), false) ];
-        $this->assertEquals($output, smarty_outputfilter_meta_amphtml($output, $this->smarty));
-    }
-
-    /**
-     * Tests smarty_outputfilter_meta_amphtml when there is a valid content in
-     * smarty.
-     */
-    public function testMetaAmpHtmlWhenContent()
-    {
-        $this->requestStack->expects($this->any())
-            ->method('getCurrentRequest')
-            ->willReturn($this->request);
-
-        $this->security->expects($this->any())->method('hasExtension')
-            ->with('AMP_MODULE')->willReturn(true);
-
-        $this->request->expects($this->any())->method('getUri')
-            ->willReturn('wibble.html');
-
-        $this->router->expects($this->any())->method('generate')
-            ->willReturn('/wibble/wubble');
-
-        $this->helper->expects($this->at(0))->method('localizeUrl')
-            ->willReturn('/wibble/wubble');
-
-        $this->helper->expects($this->at(1))->method('localizeUrl')
-            ->willReturn('/es/wibble/wubble');
-
-        $this->smarty->tpl_vars = [ 'content' => json_decode(json_encode([
-            'value' => json_decode(json_encode([
-                    'category_name'     => 'gorp',
-                    'pk_content'        => 145,
-                    'created'           => '1999-12-31 23:59:59',
-                    'content_type_name' => 'article',
-                    'slug'              => 'foobar-thud'
-            ]), false)
-        ]), false) ];
+        $this->smarty->expects($this->once())->method('getTemplateVars')
+            ->willReturn([]);
 
         $this->assertEquals(
-            '<html><head><link rel="amphtml" href="/wibble/wubble"/></head><body>Hello World!</body></html>',
-            smarty_outputfilter_meta_amphtml(
-                '<html><head></head><body>Hello World!</body></html>',
-                $this->smarty
-            )
-        );
-
-        $this->assertEquals(
-            '<html><head><link rel="amphtml" href="/es/wibble/wubble"/></head><body>Hello World!</body></html>',
-            smarty_outputfilter_meta_amphtml(
-                '<html><head></head><body>Hello World!</body></html>',
-                $this->smarty
-            )
+            $output,
+            smarty_outputfilter_meta_amphtml($output, $this->smarty)
         );
     }
 
     /**
-     * Test plugin with no currentRequest
+     * Test smarty_outputfilter_meta_amphtml when there is no request in
+     * progress.
      */
-    public function testEmptyResturnIfNoRequest()
+    public function testMetaAmpHtmlWhenNoRequest()
     {
-        $this->requestStack->expects($this->any())
+        $this->rs->expects($this->any())
             ->method('getCurrentRequest')->willReturn(null);
 
         $output = '<html><head></head><body>Hello World!</body></html>';

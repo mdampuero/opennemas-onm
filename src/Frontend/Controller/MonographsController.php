@@ -232,6 +232,7 @@ class MonographsController extends Controller
             'content'     => $special,
             'contentId'   => $special->id,
             'cache_id'    => $cacheID,
+            'o_content'   => $special,
             'x-tags'      => 'monograph,' . $special->id,
             'x-cache-for' => '+1 day',
             'tags'        => $this->get('api.service.tag')

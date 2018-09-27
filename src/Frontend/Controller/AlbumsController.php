@@ -251,6 +251,7 @@ class AlbumsController extends Controller
             'page'           => $this->page,
             'cache_id'       => $cacheID,
             'contentId'      => $album->id,
+            'o_content'      => $album,
             'x-tags'         => 'album,' . $album->id,
             'x-cache-for'    => '+1 day',
             'x-cacheable'    => $cacheable,

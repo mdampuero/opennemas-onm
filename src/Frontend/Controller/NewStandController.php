@@ -243,6 +243,7 @@ class NewStandController extends Controller
             'content'        => $content,
             'cache_id'       => $cacheID,
             'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
+            'o_content'      => $content,
             'x-tags'         => 'newsstand,' . $content->pk_content,
             'tags'           => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($content->tag_ids)['items']
