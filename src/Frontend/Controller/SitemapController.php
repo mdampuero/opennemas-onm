@@ -10,7 +10,6 @@
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 
 /**
@@ -21,206 +20,119 @@ class SitemapController extends Controller
     /**
      * Renders the index sitemap
      *
-     * @param Request $request the request object
+     * @param string $action The sitemap action.
+     * @param string $format The sitemap format.
      *
      * @return Response the response object
      */
-    public function indexAction(Request $request)
+    public function indexAction($action, $format)
     {
-        $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
+        $action  = empty($action) ? 'index' : $action;
+        $cacheId = $this->view->getCacheId('sitemap', $action);
+        $method  = 'generate' . $action . 'Sitemap';
 
-        // Setup templating cache layer
         $this->view->setConfig('sitemap');
-        $cacheID = $this->view->getCacheId('sitemap', 'index');
 
-        return $this->buildResponse($format, $cacheID, null);
+        if (method_exists($this, $method)
+            && (empty($this->view->getCaching())
+                || !$this->view->isCached('sitemap/sitemap.tpl', $cacheId)
+            )
+        ) {
+            $this->{$method}();
+        }
+
+        return $this->buildResponse($format, $cacheId, $action);
     }
 
     /**
-     * Renders the sitemap web
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * Generates and assigns the information for the image sitemap to template.
      */
-    public function webAction(Request $request)
+    protected function generateImageSitemap()
     {
-        $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
+        $contents = $this->getContents([
+            'join' => [
+                [
+                    'table'      => 'articles',
+                    'pk_content' => [ [ 'value' => 'pk_article', 'field' => true ] ]
+                ]
+            ],
+            'content_type_name' => [['value' => 'article']],
+            'img2'              => [['value' => 'NULL', 'operator' => '<>']],
+        ]);
 
-        // Setup templating cache layer
-        $this->view->setConfig('sitemap');
-        $cacheID = $this->view->getCacheId('sitemap', 'web');
+        $em = getService('entity_repository');
 
-        if (($this->view->getCaching() === 0)
-            || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
-        ) {
-            // Fetch contents
-            $contents = $this->fetchContents([]);
-            $tags     = [];
-
-            // Remove external articles
-            foreach ($contents as $key => &$content) {
-                if (!empty($content->params['bodyLink'])) {
-                    unset($contents[$key]);
-                } else {
-                    $tags = array_merge($content->tag_ids, $tags);
-                }
+        foreach ($contents as &$content) {
+            if (!empty($content->img2)) {
+                $content->image = $em->find('Photo', $content->img2);
             }
-            $this->view->assign([
-                'contents' => $contents,
-                'tags'     => $this->getTags($tags)
-            ]);
         }
 
-        return $this->buildResponse($format, $cacheID, 'web');
+        $this->view->assign(['contents' => $contents]);
     }
 
     /**
-     * Renders the news sitemap
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * Generates and assigns the information for the news sitemap to template.
      */
-    public function newsAction(Request $request)
+    protected function generateNewsSitemap()
     {
-        $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
+        $tags     = [];
+        $contents = $this->getContents();
+        $em       = $this->get('entity_repository');
 
-        // Setup templating cache layer
-        $this->view->setConfig('sitemap');
-        $cacheID = $this->view->getCacheId('sitemap', 'news');
-
-        if (($this->view->getCaching() === 0)
-            || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
-        ) {
-            // Fetch contents
-            $contents = $this->fetchContents([]);
-
-            // Fetch images and videos from contents
-            $er   = getService('entity_repository');
-            $tags = [];
-            foreach ($contents as $key => &$content) {
-                if (!empty($content->params['bodyLink'])) {
-                    unset($contents[$key]);
-                    continue;
-                }
-
-                // Get content image
-                if (!empty($content->img1)) {
-                    $content->image = $er->find('Photo', $content->img2);
-                } elseif (!empty($content->img2)) {
-                    $content->image = $er->find('Photo', $content->img2);
-                }
-
-                // Get content video
-                if (!empty($content->fk_video)) {
-                    $content->video = $er->find('Video', $content->fk_video);
-                } elseif (!empty($content->fk_video2)) {
-                    $content->video = $er->find('Video', $content->fk_video2);
-                }
-                $tags = array_merge($content->tag_ids, $tags);
+        foreach ($contents as &$content) {
+            if (!empty($content->img1)) {
+                $content->image = $em->find('Photo', $content->img2);
+            } elseif (!empty($content->img2)) {
+                $content->image = $em->find('Photo', $content->img2);
             }
 
-            $this->view->assign([
-                'contents'   => $contents,
-                'googleNews' => $this->get('orm.manager')
-                    ->getDataSet('Settings', 'instance')
-                    ->get('google_news_name'),
-                'tags'       => $this->getTags($tags)
-            ]);
+            if (!empty($content->fk_video)) {
+                $content->video = $em->find('Video', $content->fk_video);
+            } elseif (!empty($content->fk_video2)) {
+                $content->video = $em->find('Video', $content->fk_video2);
+            }
+
+            $tags = array_merge($content->tag_ids, $tags);
         }
 
-        return $this->buildResponse($format, $cacheID, 'news');
+        $this->view->assign([
+            'contents'   => $contents,
+            'googleNews' => $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('google_news_name'),
+            'tags'       => $this->getTags($tags)
+        ]);
     }
 
     /**
-     * Renders the image sitemap
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * Generates and assigns the information for the video sitemap to template.
      */
-    public function imageAction(Request $request)
+    protected function generateVideoSitemap()
     {
-        $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
+        $tags     = [];
+        $contents = $this->getContents([
+            'content_type_name' => [ ['value' => 'video'] ]
+        ]);
 
-        // Setup templating cache layer
-        $this->view->setConfig('sitemap');
-        $cacheID = $this->view->getCacheId('sitemap', 'image');
-
-        if (($this->view->getCaching() === 0)
-            || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
-        ) {
-            // Set sql filters for articles with inner image
-            $filters = [
-                'join' => [
-                    [
-                        'table'      => 'articles',
-                        'pk_content' => [ [ 'value' => 'pk_article', 'field' => true ] ]
-                    ]
-                ],
-                'content_type_name' => [['value' => 'article']],
-                'img2'              => [['value' => 'NULL', 'operator' => '<>']],
-            ];
-
-            // Fetch contents
-            $contents = $this->fetchContents($filters);
-
-            // Fetch images and videos from contents
-            $er = getService('entity_repository');
-            foreach ($contents as $key => &$content) {
-                if (!empty($content->params['bodyLink'])) {
-                    // Remove external articles
-                    unset($contents[$key]);
-                    continue;
-                }
-
-                // Get content image
-                if (!empty($content->img2)) {
-                    $content->image = $er->find('Photo', $content->img2);
-                }
-            }
-
-            $this->view->assign(['contents' => $contents]);
+        foreach ($contents as $content) {
+            $tags = array_merge($content->tag_ids, $tags);
         }
 
-        return $this->buildResponse($format, $cacheID, 'image');
+        $this->view->assign([
+            'contents' => $contents,
+            'tags'     => $this->getTags($tags)
+        ]);
     }
 
     /**
-     * Renders the video sitemap
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * Generates and assigns the information for the web sitemap to template.
      */
-    public function videoAction(Request $request)
+    protected function generateWebSitemap()
     {
-        $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
+        $contents = $this->getContents();
 
-        // Setup templating cache layer
-        $this->view->setConfig('sitemap');
-        $cacheID = $this->view->getCacheId('sitemap', 'video');
-
-        if (($this->view->getCaching() === 0)
-            || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
-        ) {
-            // Fetch contents
-            $contents = $this->fetchContents([
-                'content_type_name' => [['value' => 'video']]
-            ]);
-            $tags     = [];
-            foreach ($contents as $content) {
-                $tags = array_merge($content->tag_ids, $tags);
-            }
-
-            $this->view->assign([
-                'contents' => $contents,
-                'tags'     => $this->getTags($tags)
-            ]);
-        }
-
-        return $this->buildResponse($format, $cacheID, 'video');
+        $this->view->assign([ 'contents' => $contents ]);
     }
 
     /**
@@ -232,49 +144,46 @@ class SitemapController extends Controller
      *
      * @return Response the response object
      */
-    public function buildResponse($format, $cacheID, $action)
+    public function buildResponse($format, $cacheId, $action)
     {
+        $headers  = [ 'Content-Type' => 'application/xml; charset=utf-8' ];
+        $instance = $this->get('core.instance')->internal_name;
+
         $contents = $this->renderView('sitemap/sitemap.tpl', [
             'action'   => $action,
-            'cache_id' => $cacheID
+            'cache_id' => $cacheId
         ]);
 
-        if ($format == 'xml.gz') {
-            // disable ZLIB output compression
-            // ini_set('zlib.output_compression', 'Off');
-            // compress data
-            $contents = gzencode($contents, 9);
-
+        if ($format === 'xml.gz') {
             $headers = [
                 'Content-Type'        => 'application/x-gzip',
                 'Content-Length'      => strlen($contents),
-                'Content-Disposition' => 'attachment; filename="sitemap' . $action . '.xml.gz"'
+                'Content-Disposition' => 'attachment; filename="sitemap'
+                    . $action . '.xml.gz"'
             ];
-        } else {
-            // Return the output as xml
-            $headers = ['Content-Type' => 'application/xml; charset=utf-8'];
+
+            $contents = gzencode($contents, 9);
         }
 
-        $instanceName = getService('core.instance')->internal_name;
-
         $headers = array_merge($headers, [
-            'x-cache-for'  => '1d',
-            'x-cacheable'  => true,
-            'x-instance'   => $instanceName,
-            'x-tags'       => 'instance-' . $instanceName . ',sitemap,' . $action,
+            'x-cache-for' => '1d',
+            'x-cacheable' => true,
+            'x-instance'  => $instance,
+            'x-tags'      => sprintf('instance-%s,sitemap,%s', $instance, $action)
         ]);
 
         return new Response($contents, 200, $headers);
     }
 
     /**
-     * Fetch articles and opinions contents
+     * Returns the list of contents basing on a criteria.
      *
-     * @param int Max number of contents
+     * @param array   $criteria The criteria to search by.
+     * @param integer $limit    The maximum number of contents to return.
      *
-     * @return Array all contents
+     * @return Array The list of contents
      */
-    public function fetchContents($criteria = [], $limit = 100)
+    public function getContents($criteria = [], $limit = 100)
     {
         // Set search filters
         $filters = [
@@ -304,13 +213,18 @@ class SitemapController extends Controller
         }
 
         // Fetch contents
-        $er       = getService('entity_repository');
-        $contents = $er->findBy($filters, ['created' => 'desc'], $limit, 1);
+        $em       = $this->get('entity_repository');
+        $contents = $em->findBy($filters, ['created' => 'desc'], $limit, 1);
 
         // Filter by scheduled
         $cm       = new \ContentManager();
         $contents = $cm->getInTime($contents);
         $contents = $cm->filterBlocked($contents);
+
+        $contents = array_filter($contents, function ($a) {
+            return !array_key_exists('bodyLink', $a->params)
+                || empty($a->params['bodyLink']);
+        });
 
         return $contents;
     }
@@ -322,7 +236,7 @@ class SitemapController extends Controller
      *
      * @return array List of tags for the contents
      */
-    public function getTags($tagIds)
+    protected function getTags($tagIds)
     {
         $tagIds = array_unique($tagIds);
         return $this->get('api.service.tag')
