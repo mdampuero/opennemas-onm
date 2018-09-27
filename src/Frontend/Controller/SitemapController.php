@@ -9,8 +9,9 @@
  */
 namespace Frontend\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use Common\Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Displays contents as sitemaps.
@@ -32,6 +33,19 @@ class SitemapController extends Controller
     ];
 
     /**
+     * The list of needed extensions per action.
+     *
+     * @var array
+     */
+    const EXTENSIONS = [
+        'image' => [ 'IMAGE_MANAGER' ],
+        'news'  => [ 'ARTICLE_MANAGER' ],
+        'tag'   => [ 'es.openhost.module.tagSitemap' ],
+        'video' => [ 'VIDEO_MANAGER' ],
+        'web'   => [ 'ARTICLE_MANAGER', 'OPINION_MANAGER' ],
+    ];
+
+    /**
      * Renders the index sitemap
      *
      * @param string $action The sitemap action.
@@ -47,15 +61,18 @@ class SitemapController extends Controller
 
         $this->view->setConfig('sitemap');
 
+        if (!$this->isActionAvailable($action)) {
+            throw new ResourceNotFoundException();
+        }
+
         if (method_exists($this, $method)
             && (empty($this->view->getCaching())
-                || !$this->view->isCached('sitemap/sitemap.tpl', $cacheId)
-            )
+                || !$this->view->isCached('sitemap/sitemap.tpl', $cacheId))
         ) {
             $this->{$method}();
         }
 
-        return $this->getResponse($format, $action);
+        return $this->getResponse($format, $action, $cacheId);
     }
 
     /**
@@ -171,13 +188,21 @@ class SitemapController extends Controller
      */
     public function getContents($criteria = [], $limit = 100)
     {
+        $types = [];
+
+        if ($this->get('core.security')->hasExtension('ARTICLE_MANAGER')) {
+            $types[] = [ 'value' => 'article' ];
+        }
+
+        if ($this->get('core.security')->hasExtension('OPINION_MANAGER')) {
+            $types[] = [ 'value' => 'opinion' ];
+        }
+
         // Set search filters
         $filters = [
-            'content_type_name' => [
+            'content_type_name' => array_merge([
                 'union' => 'OR',
-                ['value' => 'article'],
-                ['value' => 'opinion']
-            ],
+            ], $types),
             'content_status'    => [[ 'value' => 1 ]],
             'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
             'starttime'         => [
@@ -198,7 +223,6 @@ class SitemapController extends Controller
             $filters = array_merge($filters, $criteria);
         }
 
-        // Fetch contents
         $em       = $this->get('entity_repository');
         $contents = $em->findBy($filters, ['created' => 'desc'], $limit, 1);
 
@@ -218,18 +242,20 @@ class SitemapController extends Controller
     /**
      * Generates a response basing on the format and the action.
      *
-     * @param string $format whether compress the sitemap or not
-     * @param string $action The type of sitemap
+     * @param string $format  Whether compress the sitemap or not
+     * @param string $action  The type of sitemap
+     * @param string $cacheId The template cache id.
      *
      * @return Response The response object.
      */
-    protected function getResponse($format, $action)
+    protected function getResponse($format, $action, $cacheId)
     {
         $headers  = [ 'Content-Type' => 'application/xml; charset=utf-8' ];
         $instance = $this->get('core.instance')->internal_name;
 
         $contents = $this->renderView('sitemap/sitemap.tpl', [
-            'action' => $action
+            'action'   => $action,
+            'cache_id' => $cacheId
         ]);
 
         if ($format === 'xml.gz') {
@@ -265,5 +291,32 @@ class SitemapController extends Controller
         $tagIds = array_unique($tagIds);
         return $this->get('api.service.tag')
             ->getListByIdsKeyMapped($tagIds)['items'];
+    }
+
+    /**
+     * Checks if the action is available basing on the current activated
+     * extensions.
+     *
+     * @param string $action The action name.
+     *
+     * @return boolean True if the action is avaiable. False otherwise.
+     */
+    protected function isActionAvailable($action)
+    {
+        if ($action === 'index'
+            || !array_key_exists($action, self::EXTENSIONS)
+        ) {
+            return true;
+        }
+
+        $available = false;
+
+        foreach (self::EXTENSIONS[$action] as $extension) {
+            if ($this->get('core.security')->hasExtension($extension)) {
+                $available = true;
+            }
+        }
+
+        return $available;
     }
 }
