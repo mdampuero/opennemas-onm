@@ -3,4 +3,4 @@ frontend_sitemap:
     defaults: { _controller: FrontendBundle:Sitemap:index, format: 'xml' }
     requirements:
         format: 'xml|xml.gz'
-        action: '|image|news|video|web'
+        action: '|image|news|tag|video|web'

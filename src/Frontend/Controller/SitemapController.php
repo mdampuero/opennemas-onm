@@ -13,10 +13,24 @@ use Symfony\Component\HttpFoundation\Response;
 use Common\Core\Controller\Controller;
 
 /**
- * Handles the actions for sitemaps
+ * Displays contents as sitemaps.
  */
 class SitemapController extends Controller
 {
+    /**
+     * The list of expire times for actions.
+     *
+     * @const array
+     */
+    const EXPIRE = [
+        'image' => '1d',
+        'index' => '1d',
+        'news'  => '1d',
+        'tag'   => '1d',
+        'video' => '1d',
+        'web'   => '1h',
+    ];
+
     /**
      * Renders the index sitemap
      *
@@ -41,7 +55,7 @@ class SitemapController extends Controller
             $this->{$method}();
         }
 
-        return $this->buildResponse($format, $cacheId, $action);
+        return $this->getResponse($format, $action);
     }
 
     /**
@@ -106,6 +120,18 @@ class SitemapController extends Controller
     }
 
     /**
+     * Generates and assigns the information for the tag sitemap to template.
+     */
+    protected function generateTagSitemap()
+    {
+        $tags = $this->get('api.service.tag')->getList(
+            'name regexp "^[a-zA-Z0-9]{1}.{1,29}$" order by name asc limit 10000'
+        );
+
+        $this->view->assign([ 'tags' => $tags['items'] ]);
+    }
+
+    /**
      * Generates and assigns the information for the video sitemap to template.
      */
     protected function generateVideoSitemap()
@@ -133,46 +159,6 @@ class SitemapController extends Controller
         $contents = $this->getContents();
 
         $this->view->assign([ 'contents' => $contents ]);
-    }
-
-    /**
-     * Formats the response
-     *
-     * @param string format whether compress the sitemap or not
-     * @param string $cacheID the identifier for this cache
-     * @param string $action the type of sitemap: news, web, image or video
-     *
-     * @return Response the response object
-     */
-    public function buildResponse($format, $cacheId, $action)
-    {
-        $headers  = [ 'Content-Type' => 'application/xml; charset=utf-8' ];
-        $instance = $this->get('core.instance')->internal_name;
-
-        $contents = $this->renderView('sitemap/sitemap.tpl', [
-            'action'   => $action,
-            'cache_id' => $cacheId
-        ]);
-
-        if ($format === 'xml.gz') {
-            $headers = [
-                'Content-Type'        => 'application/x-gzip',
-                'Content-Length'      => strlen($contents),
-                'Content-Disposition' => 'attachment; filename="sitemap'
-                    . $action . '.xml.gz"'
-            ];
-
-            $contents = gzencode($contents, 9);
-        }
-
-        $headers = array_merge($headers, [
-            'x-cache-for' => '1d',
-            'x-cacheable' => true,
-            'x-instance'  => $instance,
-            'x-tags'      => sprintf('instance-%s,sitemap,%s', $instance, $action)
-        ]);
-
-        return new Response($contents, 200, $headers);
     }
 
     /**
@@ -227,6 +213,44 @@ class SitemapController extends Controller
         });
 
         return $contents;
+    }
+
+    /**
+     * Generates a response basing on the format and the action.
+     *
+     * @param string $format whether compress the sitemap or not
+     * @param string $action The type of sitemap
+     *
+     * @return Response The response object.
+     */
+    protected function getResponse($format, $action)
+    {
+        $headers  = [ 'Content-Type' => 'application/xml; charset=utf-8' ];
+        $instance = $this->get('core.instance')->internal_name;
+
+        $contents = $this->renderView('sitemap/sitemap.tpl', [
+            'action' => $action
+        ]);
+
+        if ($format === 'xml.gz') {
+            $headers = [
+                'Content-Type'        => 'application/x-gzip',
+                'Content-Length'      => strlen($contents),
+                'Content-Disposition' => 'attachment; filename="sitemap'
+                    . $action . '.xml.gz"'
+            ];
+
+            $contents = gzencode($contents, 9);
+        }
+
+        $headers = array_merge($headers, [
+            'x-cache-for' => self::EXPIRE[$action],
+            'x-cacheable' => true,
+            'x-instance'  => $instance,
+            'x-tags'      => sprintf('instance-%s,sitemap,%s', $instance, $action)
+        ]);
+
+        return new Response($contents, 200, $headers);
     }
 
     /**
