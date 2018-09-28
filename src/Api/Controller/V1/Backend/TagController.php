@@ -9,8 +9,7 @@
  */
 namespace Api\Controller\V1\Backend;
 
-use Common\Core\Annotation\Security;
-use Common\Core\Controller\Controller;
+use Api\Controller\V1\ApiController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Component\Validator\Validator;
@@ -18,150 +17,61 @@ use Common\Core\Component\Validator\Validator;
 /**
  * Lists and displays tags.
  */
-class TagController extends Controller
+class TagController extends ApiController
 {
     /**
-     * Deletes an tag.
-     *
-     * @param integer $id The tag id.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_DELETE')")
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.tag';
+
+    /**
+     * {@inheritdoc}
      */
     public function deleteAction($id)
     {
-        $msg = $this->get('core.messenger');
+        $this->checkSecurity(null, 'TAG_DELETE');
 
-        $this->get('api.service.tag')->deleteItem($id);
-        $msg->add(_('Item deleted successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
+        return parent::deleteAction($id);
     }
 
     /**
-     * Deletes the selected tags.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_DELETE')")
+     * {@inheritdoc}
      */
     public function deleteSelectedAction(Request $request)
     {
-        $ids     = $request->request->get('ids', []);
-        $msg     = $this->get('core.messenger');
-        $deleted = $this->get('api.service.tag')->deleteList($ids);
+        $this->checkSecurity(null, 'TAG_DELETE');
 
-        if ($deleted > 0) {
-            $msg->add(
-                sprintf(_('%s items deleted successfully'), $deleted),
-                'success'
-            );
-        }
-
-        if ($deleted !== count($ids)) {
-            $msg->add(sprintf(
-                _('%s items could not be deleted successfully'),
-                count($ids) - $deleted
-            ), 'error');
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
+        return parent::deleteSelectedACtion($request);
     }
 
     /**
-     * Returns a list of contents in JSON format.
-     *
-     * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
-     * @return JsonResponse              The response object.
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
+     * {@inheritdoc}
      */
     public function listAction(Request $request)
     {
-        $ts  = $this->get('api.service.tag');
-        $oql = $request->query->get('oql', '');
+        $this->checkSecurity(null, 'TAG_ADMIN');
 
-        $response = $ts->getList($ts->replaceSearchBySlug($oql));
-
-        return new JsonResponse([
-            'items' => $ts->responsify($response['items']),
-            'total' => $response['total'],
-            'extra' => $this->getExtraData($response['items'])
-        ]);
+        return parent::listAction($request);
     }
 
     /**
-     * Saves a new tag.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_CREATE')")
-     */
-    public function saveAction(Request $request)
-    {
-        $msg  = $this->get('core.messenger');
-        $data = $request->request->all();
-
-        $tag = $this->get('api.service.tag')->createItem($data);
-
-        $msg->add(_('Item saved successfully'), 'success', 201);
-
-        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
-        $response->headers->set(
-            'Location',
-            $this->generateUrl(
-                'api_v1_backend_tags_list',
-                [ 'id' => $tag->id ]
-            )
-        );
-
-        return $response;
-    }
-
-    /**
-     * Returns an tag.
-     *
-     * @param integer $id the tag id.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
+     * {@inheritdoc}
      */
     public function showAction($id)
     {
-        $ss   = $this->get('api.service.tag');
-        $item = $ss->getItem($id);
+        $this->checkSecurity(null, 'TAG_ADMIN');
 
-        return new JsonResponse([
-            'item'  => $ss->responsify($item)
-        ]);
+        return parent::showAction($id);
     }
 
     /**
-     * Updates the tag information given its id and the new information.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
+     * {@inheritdoc}
      */
     public function updateAction(Request $request, $id)
     {
-        $msg  = $this->get('core.messenger');
-        $data = $request->request->all();
+        $this->checkSecurity(null, 'TAG_ADMIN');
 
-        $this->get('api.service.tag')->updateItem($id, $data);
-
-        $msg->add(_('Item saved successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
+        return parent::updateAction($request, $id);
     }
 
     /**
@@ -232,11 +142,11 @@ class TagController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
      */
     public function showConfAction()
     {
+        $this->checkSecurity(null, 'TAG_ADMIN');
+
         return new JsonResponse([
             'blacklist_tag' => $this->get('core.validator')
                 ->getConfig(Validator::BLACKLIST_RULESET_TAGS)
@@ -249,11 +159,11 @@ class TagController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
      */
     public function updateConfAction(Request $request)
     {
+        $this->checkSecurity(null, 'TAG_ADMIN');
+
         $blacklistConf = $request->request->all();
 
         if (!is_array($blacklistConf) ||
@@ -281,13 +191,9 @@ class TagController extends Controller
     }
 
     /**
-     * Loads extra data related to the given contents.
-     *
-     * @param boolean $all Whether to use 'All' or 'Select...' option.
-     *
-     * @return array Array of extra data.
+     * {@inheritdoc}
      */
-    private function getExtraData($tagList)
+    protected function getExtraData($items = [])
     {
         $multilanguage = in_array(
             'es.openhost.module.multilanguage',
@@ -301,7 +207,7 @@ class TagController extends Controller
             [['key' => $locale, 'value' => $ls->getSupportedLocales('frontend')[$locale]]];
 
         $extraData = [
-            'numberOfContents' => $this->get('api.service.tag')->getNumContentsRel($tagList),
+            'numberOfContents' => $this->get('api.service.tag')->getNumContentsRel($items),
             'locales'          => $locales
         ];
 
@@ -315,7 +221,7 @@ class TagController extends Controller
      *
      * @return array Array with the languages.
      */
-    private function getLanguages($languages)
+    protected function getLanguages($languages)
     {
         $arrayLanguages = [];
         foreach ($languages as $key => $value) {
