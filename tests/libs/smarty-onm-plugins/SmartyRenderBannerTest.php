@@ -19,7 +19,7 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        include_once './libs/smarty-onm-plugins/insert.renderbanner.php';
+        include_once './libs/smarty-onm-plugins/function.renderbanner.php';
 
         $this->container = $this->getMockBuilder('Container')
             ->setMethods([ 'get' ])
@@ -72,7 +72,7 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests smarty_insert_renderbanner when type is not in ads_position.
+     * Tests smarty_function_renderbanner when type is not in ads_position.
      */
     public function testRenderBannerWhenTypeIsNotInAdsPosition()
     {
@@ -85,12 +85,12 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->assertEmpty(
-            smarty_insert_renderbanner([ 'type' => 123 ], $this->smarty)
+            smarty_function_renderbanner([ 'type' => 123 ], $this->smarty)
         );
     }
 
     /**
-     * Tests smarty_insert_renderbanner when safeframe is enabled.
+     * Tests smarty_function_renderbanner when safeframe is enabled.
      */
     public function testRenderBannerWhenSafeFrameInSettings()
     {
@@ -99,12 +99,12 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             '<div class="ad-slot oat" data-type="123"></div>',
-            smarty_insert_renderbanner([ 'type' => 123 ], $this->smarty)
+            smarty_function_renderbanner([ 'type' => 123 ], $this->smarty)
         );
     }
 
     /**
-     * Tests smarty_insert_renderbanner when safeframe is disabled and no
+     * Tests smarty_function_renderbanner when safeframe is disabled and no
      * advertisements in list.
      */
     public function testRenderBannerWhenInlineAndEmpty()
@@ -123,11 +123,11 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
 
-        $this->assertEmpty(smarty_insert_renderbanner([ 'type' => 123 ], $this->smarty));
+        $this->assertEmpty(smarty_function_renderbanner([ 'type' => 123 ], $this->smarty));
     }
 
     /**
-     * Tests smarty_insert_renderbanner when safeframe is disabled and no
+     * Tests smarty_function_renderbanner when safeframe is disabled and no
      * enabled advertisements in list.
      */
     public function testRenderBannerWhenInlineAndNoEnabledAdvertisement()
@@ -147,11 +147,11 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
 
-        $this->assertEmpty(smarty_insert_renderbanner([ 'type' => 123 ], $this->smarty));
+        $this->assertEmpty(smarty_function_renderbanner([ 'type' => 123 ], $this->smarty));
     }
 
     /**
-     * Tests smarty_insert_renderbanner when safeframe is enabled but inline is
+     * Tests smarty_function_renderbanner when safeframe is enabled but inline is
      * forced in template and enabled advertisements in list.
      */
     public function testRenaderBannerWhenInlineForced()
@@ -185,12 +185,12 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             '<div class="ad-slot oat oat-visible oat-left corge" data-mark="Advertisement">foo garply</div>',
-            smarty_insert_renderbanner([ 'format' => 'inline', 'type' => 123 ], $this->smarty)
+            smarty_function_renderbanner([ 'format' => 'inline', 'type' => 123 ], $this->smarty)
         );
     }
 
     /**
-     * Tests smarty_insert_renderbanner when safeframe is enabled but inline is
+     * Tests smarty_function_renderbanner when safeframe is enabled but inline is
      * forced in template and enabled advertisements in list.
      */
     public function testRenderBannerWhenInlineForcedWithCustomMark()
@@ -224,7 +224,7 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             '<div class="ad-slot oat oat-visible oat-left corge" data-mark="Sponsor">foo garply</div>',
-            smarty_insert_renderbanner([ 'format' => 'inline', 'type' => 123 ], $this->smarty)
+            smarty_function_renderbanner([ 'format' => 'inline', 'type' => 123 ], $this->smarty)
         );
     }
 }
