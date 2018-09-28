@@ -192,22 +192,17 @@ class TagController extends Controller
     /**
      * Get suggested tags for some word.
      *
-     * @param Request $request The request object.
+     * @param string $languageId The tag language.
+     * @param string $tag        The partial tag language.
      *
      * @return JsonResponse The response object.
      */
-    public function suggesterAction(Request $request, $languageId, $tag)
+    public function suggesterAction($languageId, $tag)
     {
-        $ts     = $this->get('api.service.tag');
-        $tagAux = $ts->createSearchableWord($tag);
+        $ts  = $this->get('api.service.tag');
+        $oql = 'language_id = "%s" and name ~ "%s%" limit 25';
 
-        $msg = $this->get('core.messenger');
-        if (empty($tagAux)) {
-            $msg->add(_('Invalid tag'), 'error');
-            return new JsonResponse($msg->getMessages(), $msg->getCode());
-        }
-
-        $response = $ts->getList('language_id = "' . $languageId . '" and slug ~ "' . $tagAux . '%" limit 25');
+        $response = $ts->getList(sprintf($oql, $languageId, $tag));
 
         return new JsonResponse([
             'items' => $ts->responsify($response['items'])
