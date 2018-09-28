@@ -80,59 +80,29 @@ class TagsController extends Controller
      *
      * @return Response The response object.
      */
-    public function tagsAction(Request $request)
+    public function tagsAction(Request $request, $tag)
     {
-        $tagName = strip_tags($request->query->filter('tag_name', '', FILTER_SANITIZE_STRING));
-        $tagName = $this->get('api.service.tag')->createSearchableWord($tagName);
-        $page    = $request->query->getDigits('page', 1);
+        $page = $request->query->getDigits('page', 1);
+        $page = $page > 1 ? 2 : 1;
 
-        if ($page > 1) {
-            $page = 2;
-        }
+        $slug = $this->get('data.manager.filter')
+            ->set($tag)
+            ->filter('slug')
+            ->get();
 
-        $cacheId = $this->view->getCacheId('frontpage', 'tag', $tagName, $page);
+        $cacheId = $this->view->getCacheId('frontpage', 'tag', $slug, $page);
 
-        if (empty($tagName)) {
-            list($positions, $advertisements) = $this->getInnerAds();
-
-            $this->view->assign('contents', []);
-
-            $pagination = $this->get('paginator')->get([
-                'directional' => true,
-                'epp'         => 10,
-                'maxLinks'    => 0,
-                'page'        => $page,
-                'total'       => 0,
-                'route'       => [
-                    'name'   => 'tag_frontpage',
-                    'params' => [ 'tag_name' => $tagName ]
-                ]
-            ]);
-
-            $this->view->assign([ 'pagination' => $pagination ]);
-
-            return $this->render('frontpage/tags.tpl', [
-                'ads_positions'  => $positions,
-                'advertisements' => $advertisements,
-                'cache_id'       => $cacheId,
-                'tagName'        => $tagName,
-                'x-tags'         => 'tag-page,' . $tagName,
-            ]);
-        }
-
-        // Setup templating cache layer
         $this->view->setConfig('frontpages');
-        $cacheId = $this->view->getCacheId('frontpage', 'tag', $tagName, $page);
 
-        if ($this->view->getCaching() === 0
+        if (empty($this->view->getCaching())
             || !$this->view->isCached('frontpage/tags.tpl', $cacheId)
         ) {
             $epp    = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('items_in_blog', 10);
-            $epp    = (is_null($epp) || $epp <= 0) ? 10 : $epp;
+            $epp    = empty($epp) ? 10 : $epp;
             $locale = getService('core.locale')->getRequestLocale();
-            $tag    = $this->get('api.service.tag')->getMostUsedTagBySlug($tagName, $locale);
+            $tag    = $this->get('api.service.tag')->getMostUsedTagBySlug($slug, $locale);
 
             $contents = [];
             $total    = 1;
@@ -170,7 +140,6 @@ class TagsController extends Controller
             }
 
             // TODO: review this piece of CRAP
-            $filteredContents = [];
             foreach ($contents as &$item) {
                 if (isset($item->img1) && ($item->img1 > 0)) {
                     $image = $em->find('Photo', $item->img1);
@@ -190,22 +159,19 @@ class TagsController extends Controller
                 if (isset($item->fk_video) && ($item->fk_video > 0)) {
                     $item->video = $em->find('Video', $item->fk_video2);
                 }
-
-                // Add item to final array
-                $filteredContents[] = $item;
             }
 
-            $this->view->assign('contents', $filteredContents);
+            $this->view->assign('contents', $contents);
 
             $pagination = $this->get('paginator')->get([
                 'directional' => true,
                 'epp'         => $epp,
                 'maxLinks'    => 0,
                 'page'        => $page,
-                'total'       => $total + 1,
+                'total'       => $total,
                 'route'       => [
-                    'name'   => 'tag_frontpage',
-                    'params' => [ 'tag_name' => $tagName ]
+                    'name'   => 'frontend_tag_frontpage',
+                    'params' => [ 'slug' => $slug ]
                 ]
             ]);
 
@@ -218,8 +184,8 @@ class TagsController extends Controller
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
             'cache_id'       => $cacheId,
-            'tagName'        => (empty($tag)) ? $tagName : $tag->name,
-            'x-tags'         => 'tag-page,' . $tagName,
+            'tagName'        => (empty($tag)) ? $slug : $tag->name,
+            'x-tags'         => 'tag-page,' . $slug,
         ]);
     }
 
