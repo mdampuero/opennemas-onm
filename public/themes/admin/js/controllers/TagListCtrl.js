@@ -42,11 +42,10 @@
          * @description
          *   Configures the controller.
          */
-        $scope.init = function(locale) {
-          $scope.columns.key          = 'tag-columns';
-          $scope.criteria.language_id = locale;
-          $scope.backup.criteria      = $scope.criteria;
-          $scope.enableUpdate         = false;
+        $scope.init = function() {
+          $scope.columns.key     = 'tag-columns';
+          $scope.backup.criteria = $scope.criteria;
+          $scope.enableUpdate    = false;
 
           oqlEncoder.configure({ placeholder: { name: '[key] ~ "[value]"' } });
           $scope.list();
@@ -77,6 +76,22 @@
         $scope.createTag = function() {
           $scope.enableUpdate = false;
           $scope.editedTag = { name: '', language_id: $scope.criteria.language_id };
+        };
+
+        /**
+         * @function parseList
+         * @memberOf TagListCtrl
+         *
+         * @description
+         *   Parses the response and adds information to the scope.
+         *
+         * @param {Object} data The data in the response.
+         */
+        $scope.parseList = function(data) {
+          data.extra.locales = $scope.addEmptyValue(
+            $scope.toArray(data.extra.locales, 'id', 'name'));
+
+          return data;
         };
 
         /**

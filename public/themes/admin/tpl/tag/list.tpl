@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div ng-app="BackendApp" ng-controller="TagListCtrl" ng-init="init({json_encode($locale)|clear_json})">
+  <div ng-app="BackendApp" ng-controller="TagListCtrl" ng-init="init()">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -81,13 +81,13 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="data.extra.locales.length > 1">
+            <li class="quicklinks hidden-xs ng-cloak" ng-if="data.extra.locales.length > 2">
               <ui-select name="language" theme="select2" ng-model="criteria.language_id">
                 <ui-select-match>
-                  <strong>{t}Language{/t}:</strong> [% $select.selected.value %]
+                  <strong>{t}Language{/t}:</strong> [% $select.selected.name %]
                 </ui-select-match>
-                <ui-select-choices repeat="item.key as item in data.extra.locales | filter: { value: $select.search }">
-                  <div ng-bind-html="item.value"></div>
+                <ui-select-choices repeat="item.id as item in data.extra.locales | filter: { name: $select.search }">
+                  <div ng-bind-html="item.name"></div>
                 </ui-select-choices>
               </ui-select>
             </li>

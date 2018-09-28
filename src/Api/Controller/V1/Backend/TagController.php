@@ -195,38 +195,23 @@ class TagController extends ApiController
      */
     protected function getExtraData($items = [])
     {
+        $ls      = $this->get('core.locale');
+        $locales = [ $ls->getLocale('frontend') => $ls->getLocaleName('frontend') ];
+
         $multilanguage = in_array(
             'es.openhost.module.multilanguage',
             $this->get('core.instance')->activated_modules
         );
 
-        $ls      = $this->get('core.locale');
-        $locale  = $ls->getLocale('frontend');
-        $locales = $multilanguage ?
-            $this->getLanguages($ls->getAvailableLocales('frontend')) :
-            [['key' => $locale, 'value' => $ls->getSupportedLocales('frontend')[$locale]]];
+        if ($multilanguage) {
+            $locales = $ls->getAvailableLocales('frontend');
+        }
 
         $extraData = [
-            'numberOfContents' => $this->get('api.service.tag')->getNumContentsRel($items),
-            'locales'          => $locales
+            'stats'   => $this->get('api.service.tag')->getNumContentsRel($items),
+            'locales' => $locales
         ];
 
         return $extraData;
-    }
-
-    /**
-     * Transform the language object in a array
-     *
-     * @param object $languages Transform the object languages in a array
-     *
-     * @return array Array with the languages.
-     */
-    protected function getLanguages($languages)
-    {
-        $arrayLanguages = [];
-        foreach ($languages as $key => $value) {
-            $arrayLanguages[] = ['key' => $key, 'value' => $value];
-        }
-        return $arrayLanguages;
     }
 }
