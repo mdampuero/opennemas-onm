@@ -12,14 +12,14 @@ namespace Tests\Libs\Smarty;
 /**
  * Defines test cases for SmartyUrl class.
  */
-class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
+class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
      */
     public function setUp()
     {
-        include_once './libs/smarty-onm-plugins/insert.renderbanner.php';
+        include_once './libs/smarty-onm-plugins/function.render_ad_slot.php';
 
         $this->container = $this->getMockBuilder('Container')
             ->setMethods([ 'get' ])
@@ -72,9 +72,9 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests smarty_insert_renderbanner when type is not in ads_position.
+     * Tests smarty_function_render_slot when type is not in ads_position.
      */
-    public function testRenderBannerWhenTypeIsNotInAdsPosition()
+    public function testRenderAdSlotWhenTypeIsNotInAdsPosition()
     {
         $params = new \StdClass();
 
@@ -85,29 +85,29 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->assertEmpty(
-            smarty_insert_renderbanner([ 'type' => 123 ], $this->smarty)
+            smarty_function_render_slot([ 'position' => 123 ], $this->smarty)
         );
     }
 
     /**
-     * Tests smarty_insert_renderbanner when safeframe is enabled.
+     * Tests smarty_function_render_slot when safeframe is enabled.
      */
-    public function testRenderBannerWhenSafeFrameInSettings()
+    public function testRenderAdSlotWhenSafeFrameInSettings()
     {
         $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 1 ]);
 
         $this->assertEquals(
             '<div class="ad-slot oat" data-type="123"></div>',
-            smarty_insert_renderbanner([ 'type' => 123 ], $this->smarty)
+            smarty_function_render_slot([ 'position' => 123 ], $this->smarty)
         );
     }
 
     /**
-     * Tests smarty_insert_renderbanner when safeframe is disabled and no
+     * Tests smarty_function_render_slot when safeframe is disabled and no
      * advertisements in list.
      */
-    public function testRenderBannerWhenInlineAndEmpty()
+    public function testRenderAdSlotWhenInlineAndEmpty()
     {
         $params = new \StdClass();
         $ads    = new \StdClass();
@@ -123,14 +123,14 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
 
-        $this->assertEmpty(smarty_insert_renderbanner([ 'type' => 123 ], $this->smarty));
+        $this->assertEmpty(smarty_function_render_slot([ 'position' => 123 ], $this->smarty));
     }
 
     /**
-     * Tests smarty_insert_renderbanner when safeframe is disabled and no
+     * Tests smarty_function_render_slot when safeframe is disabled and no
      * enabled advertisements in list.
      */
-    public function testRenderBannerWhenInlineAndNoEnabledAdvertisement()
+    public function testRenderAdSlotWhenInlineAndNoEnabledAdvertisement()
     {
         $params = new \StdClass();
         $ads    = new \StdClass();
@@ -147,11 +147,11 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
 
-        $this->assertEmpty(smarty_insert_renderbanner([ 'type' => 123 ], $this->smarty));
+        $this->assertEmpty(smarty_function_render_slot([ 'position' => 123 ], $this->smarty));
     }
 
     /**
-     * Tests smarty_insert_renderbanner when safeframe is enabled but inline is
+     * Tests smarty_function_render_slot when safeframe is enabled but inline is
      * forced in template and enabled advertisements in list.
      */
     public function testRenaderBannerWhenInlineForced()
@@ -185,15 +185,15 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             '<div class="ad-slot oat oat-visible oat-left corge" data-mark="Advertisement">foo garply</div>',
-            smarty_insert_renderbanner([ 'format' => 'inline', 'type' => 123 ], $this->smarty)
+            smarty_function_render_slot([ 'format' => 'inline', 'position' => 123 ], $this->smarty)
         );
     }
 
     /**
-     * Tests smarty_insert_renderbanner when safeframe is enabled but inline is
+     * Tests smarty_function_render_slot when safeframe is enabled but inline is
      * forced in template and enabled advertisements in list.
      */
-    public function testRenderBannerWhenInlineForcedWithCustomMark()
+    public function testRenderAdSlotWhenInlineForcedWithCustomMark()
     {
         $params = new \StdClass();
         $ads    = new \StdClass();
@@ -224,7 +224,7 @@ class SmartyRenderBannerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             '<div class="ad-slot oat oat-visible oat-left corge" data-mark="Sponsor">foo garply</div>',
-            smarty_insert_renderbanner([ 'format' => 'inline', 'type' => 123 ], $this->smarty)
+            smarty_function_render_slot([ 'format' => 'inline', 'position' => 123 ], $this->smarty)
         );
     }
 }
