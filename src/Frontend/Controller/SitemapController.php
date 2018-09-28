@@ -24,11 +24,11 @@ class SitemapController extends Controller
      * @const array
      */
     const EXPIRE = [
-        'image' => '1d',
+        'image' => '1h',
         'index' => '1d',
-        'news'  => '1d',
+        'news'  => '1h',
         'tag'   => '1d',
-        'video' => '1d',
+        'video' => '1h',
         'web'   => '1h',
     ];
 
