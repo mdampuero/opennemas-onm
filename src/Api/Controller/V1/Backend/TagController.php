@@ -108,16 +108,7 @@ class TagController extends Controller
         $msg  = $this->get('core.messenger');
         $data = $request->request->all();
 
-        if (array_key_exists('slug', $data)) {
-            $msg->add(_('Wrong parameter slug'), 'error');
-            return new JsonResponse($msg->getMessages(), $msg->getCode());
-        }
-
-        $ts = $this->get('api.service.tag');
-
-        $data['slug'] = $ts->createSearchableWord($data['name']);
-
-        $tag = $ts->createItem($data);
+        $tag = $this->get('api.service.tag')->createItem($data);
 
         $msg->add(_('Item saved successfully'), 'success', 201);
 
@@ -163,19 +154,10 @@ class TagController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $msg = $this->get('core.messenger');
-        $tag = $request->request->all();
+        $msg  = $this->get('core.messenger');
+        $data = $request->request->all();
 
-        if (array_key_exists('slug', $tag)) {
-            $msg->add(_('Wrong parameter slug'), 'error');
-            return new JsonResponse($msg->getMessages(), $msg->getCode());
-        }
-
-        $ts = $this->get('api.service.tag');
-
-        $tag['slug'] = $ts->createSearchableWord($tag['name']);
-
-        $ts->updateItem($id, $tag);
+        $this->get('api.service.tag')->updateItem($id, $data);
 
         $msg->add(_('Item saved successfully'), 'success');
 
