@@ -80,13 +80,13 @@ class TagsController extends Controller
      *
      * @return Response The response object.
      */
-    public function tagsAction(Request $request, $tag)
+    public function tagsAction(Request $request, $slug)
     {
         $page = $request->query->getDigits('page', 1);
         $page = $page > 1 ? 2 : 1;
 
         $slug = $this->get('data.manager.filter')
-            ->set($tag)
+            ->set($slug)
             ->filter('slug')
             ->get();
 
@@ -101,12 +101,18 @@ class TagsController extends Controller
                 ->getDataSet('Settings', 'instance')
                 ->get('items_in_blog', 10);
             $epp    = empty($epp) ? 10 : $epp;
-            $locale = getService('core.locale')->getRequestLocale();
-            $tag    = $this->get('api.service.tag')->getMostUsedTagBySlug($slug, $locale);
+            $locale = $this->get('core.locale')->getRequestLocale();
+            $tags   = $this->get('api.service.tag')
+                ->getList(sprintf('language_id = "%s" and slug = "%s"', $locale, $slug));
 
             $contents = [];
             $total    = 1;
-            if (!empty($tag)) {
+
+            if ($tags['total'] > 0) {
+                $ids = array_map(function ($a) {
+                    return $a->id;
+                }, $tags['items']);
+
                 $criteria = [
                     'fk_content_type' => [
                         [ 'value' => 1 ],
@@ -117,7 +123,7 @@ class TagsController extends Controller
                     ],
                     'exists' => 'EXISTS(SELECT 1 FROM contents_tags' .
                         ' WHERE contents_tags.content_id = contents.pk_content AND' .
-                        ' contents_tags.tag_id = ' . $tag->id . ')',
+                        ' contents_tags.tag_id IN (' . implode(',', $ids) . '))',
                     'content_status'    => [ [ 'value' => 1 ] ],
                     'in_litter'         => [ [ 'value' => 0 ] ],
                     'starttime'         => [
