@@ -110,7 +110,7 @@ class TagController extends ApiController
     public function suggesterAction($languageId, $tag)
     {
         $ts  = $this->get('api.service.tag');
-        $oql = 'language_id = "%s" and name ~ "%s%" limit 25';
+        $oql = 'language_id = "%s" and name ~ "%s%%" limit 25';
 
         $response = $ts->getList(sprintf($oql, $languageId, $tag));
 
