@@ -15,8 +15,8 @@
      *   Handles all actions in tag list.
      */
     .controller('TagListCtrl', [
-      '$controller', '$scope', 'oqlEncoder', 'http', 'messenger',
-      function($controller, $scope, oqlEncoder, http, messenger) {
+      '$controller', '$scope', '$timeout', 'oqlEncoder', 'http', 'messenger',
+      function($controller, $scope, $timeout, oqlEncoder, http, messenger) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -42,10 +42,10 @@
          * @description
          *   Configures the controller.
          */
-        $scope.init = function() {
+        $scope.init = function(locale) {
+          $scope.locale          = locale;
           $scope.columns.key     = 'tag-columns';
           $scope.backup.criteria = $scope.criteria;
-          $scope.enableUpdate    = false;
 
           oqlEncoder.configure({ placeholder: { name: '[key] ~ "[value]"' } });
           $scope.list();
@@ -59,7 +59,6 @@
          *   Makes some tag editable.
          */
         $scope.editTag = function(tag) {
-          $scope.enableUpdate = false;
           $scope.editedTag = tag ? {
             id: tag.id, name: tag.name, language_id: tag.language_id
           } :
@@ -74,8 +73,7 @@
          *   Show form for tags.
          */
         $scope.createTag = function() {
-          $scope.enableUpdate = false;
-          $scope.editedTag = { name: '', language_id: $scope.criteria.language_id };
+          $scope.editedTag = { name: '', language_id: $scope.locale };
         };
 
         /**
@@ -134,25 +132,34 @@
         };
 
         /**
-         * @function validateTag
-         * @memberOf TagListCtrl
+         * @function getUsername
+         * @memberOf UserCtrl
          *
          * @description
-         *   Method for the tag validation. This method check the text added with the DB
+         *   Generates an username basing on the name.
          */
-        $scope.validateTag = function() {
-          var locale = $scope.editedTag.language_id ?
-            $scope.editedTag.language_id :
-            $scope.criteria.language_id;
-          var callback = function(response) {
-            if (typeof response === 'object') {
-              $scope.enableUpdate = false;
-            } else {
-              $scope.enableUpdate = response;
-            }
+        $scope.isValid = function() {
+          if (!$scope.editedTag.name) {
+            return;
+          }
+
+          $scope.flags.http.validating = 1;
+
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+          }
+
+          var route = {
+            name: 'api_v1_backend_tags_valid_new_tag',
+            params: { text: $scope.editedTag.name, languageId: $scope.locale }
           };
 
-          return this.checkNewTags(callback, $scope.editedTag.name, locale, $scope.editedTag.id);
+          $scope.tm = $timeout(function() {
+            http.get(route).then(function(response) {
+              $scope.disableFlags('http');
+              $scope.form.name.$setValidity('exists', response.data.valid);
+            });
+          }, 500);
         };
       }
     ]);
