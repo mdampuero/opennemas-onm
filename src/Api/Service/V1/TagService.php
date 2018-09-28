@@ -24,7 +24,7 @@ class TagService extends OrmService
             ->filter('slug')
             ->get();
 
-        parent::createItem($data);
+        return parent::createItem($data);
     }
 
     /**
@@ -408,13 +408,13 @@ class TagService extends OrmService
     /**
      * {@inheritdoc}
      */
-    public function updateItem($data)
+    public function updateItem($id, $data)
     {
         $data['slug'] = $this->container->get('data.manager.filter')
             ->set($data['name'])
             ->filter('slug')
             ->get();
 
-        parent::updateItem($data);
+        parent::updateItem($id, $data);
     }
 }
