@@ -8,7 +8,11 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-tags"></i>
+                <i class="fa fa-tags m-r-10"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
                 {t}Tags{/t}
               </h4>
             </li>
@@ -16,17 +20,17 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=backend_tags_config}" class="admin_add" title="{t}Config tag module{/t}">
+                <a class="btn btn-link" href="{url name=backend_tags_config}" title="{t}Config tag module{/t}">
                   <span class="fa fa-cog fa-lg"></span>
                 </a>
               </li>
               <li class="quicklinks"><span class="h-seperate"></span></li>
               {acl isAllowed="TAG_CREATE"}
                 <li>
-                  <a class="btn btn-primary text-uppercase" ng-click="createTag()">
+                  <button class="btn btn-primary text-uppercase" ng-click="createTag()" ng-disabled="editedTag && !editedTag.id" type="button">
                     <i class="fa fa-plus"></i>
                     {t}Create{/t}
-                  </a>
+                  </button>
                 </li>
               {/acl}
             </ul>
@@ -54,9 +58,6 @@
           </ul>
           <ul class="nav quick-section pull-right">
             {acl isAllowed="TAG_DELETE"}
-              <li class="quicklinks hidden-xs">
-                <span class="h-seperate"></span>
-              </li>
               <li class="quicklinks">
                 <button class="btn btn-link" href="#" ng-click="deleteSelected('backend_ws_tag_delete')">
                   <i class="fa fa-trash-o fa-lg"></i>
@@ -183,7 +184,7 @@
                     </button>
                   </td>
                   <td class="text-center">
-                    [% data.extra.numberOfContents[item.id] %]
+                    [% data.extra.numberOfContents[item.id] ? data.extra.numberOfContents[item.id] : 0 %]
                   </td>
                   <td class="text-right">
                     <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
