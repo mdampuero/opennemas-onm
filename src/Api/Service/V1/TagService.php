@@ -104,28 +104,6 @@ class TagService extends OrmService
     }
 
     /**
-     * Method for replace the parameter name by slug in OQL query
-     *
-     * @param oql $oql to check and replace the field name by slug
-     *
-     * @return String new oql with the field name replace
-     */
-    public function replaceSearchBySlug($oql)
-    {
-        $oqlAux = $oql;
-        if (preg_match('/and\s*name\s*~\s*"?[^"]*"?/', $oql, $matches)) {
-            $oqlNameAux = explode('"', $matches[0]);
-            if (count($oqlNameAux) == 3) {
-                $oqlNameAux[0] = str_replace("name", 'slug', $oqlNameAux[0]);
-                $oqlNameAux[1] = '"' . $this->createSearchableWord($oqlNameAux[1]) . '"';
-                $oqlNameAux    = implode($oqlNameAux);
-                $oqlAux        = str_replace($matches[0], $oqlNameAux, $oql);
-            }
-        }
-        return $oqlAux;
-    }
-
-    /**
      * Method to validate a text as tags
      *
      * @param mixed $text       Text with all tags
