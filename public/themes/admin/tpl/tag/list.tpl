@@ -184,7 +184,7 @@
                     </button>
                   </td>
                   <td class="text-center">
-                    [% data.extra.numberOfContents[item.id] ? data.extra.numberOfContents[item.id] : 0 %]
+                    [% data.extra.stats[item.id] ? data.extra.stats[item.id] : 0 %]
                   </td>
                   <td class="text-right">
                     <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
