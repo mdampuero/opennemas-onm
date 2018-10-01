@@ -98,7 +98,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->willReturn([ 'safe_frame' => 1 ]);
 
         $this->assertEquals(
-            '<div class="ad-slot oat" data-type="123"></div>',
+            '<div class="ad-slot oat" data-position="123"></div>',
             smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty)
         );
     }

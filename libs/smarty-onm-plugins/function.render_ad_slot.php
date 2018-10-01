@@ -13,7 +13,7 @@ function smarty_function_render_ad_slot($params, $smarty)
         ->get('ads_settings')['safe_frame'];
 
     $tpl    = '<div class="ad-slot oat%s">%s</div>';
-    $class  = '" data-position="' . $params['slotId'];
+    $class  = '" data-position="' . $params['position'];
     $format = 'safeframe';
 
     // Filter advertisement by position
