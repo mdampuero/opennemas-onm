@@ -72,7 +72,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests smarty_function_render_slot when type is not in ads_position.
+     * Tests smarty_function_render_ad_slot when type is not in ads_position.
      */
     public function testRenderAdSlotWhenTypeIsNotInAdsPosition()
     {
@@ -85,12 +85,12 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->assertEmpty(
-            smarty_function_render_slot([ 'position' => 123 ], $this->smarty)
+            smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty)
         );
     }
 
     /**
-     * Tests smarty_function_render_slot when safeframe is enabled.
+     * Tests smarty_function_render_ad_slot when safeframe is enabled.
      */
     public function testRenderAdSlotWhenSafeFrameInSettings()
     {
@@ -99,12 +99,12 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             '<div class="ad-slot oat" data-type="123"></div>',
-            smarty_function_render_slot([ 'position' => 123 ], $this->smarty)
+            smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty)
         );
     }
 
     /**
-     * Tests smarty_function_render_slot when safeframe is disabled and no
+     * Tests smarty_function_render_ad_slot when safeframe is disabled and no
      * advertisements in list.
      */
     public function testRenderAdSlotWhenInlineAndEmpty()
@@ -123,11 +123,11 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
 
-        $this->assertEmpty(smarty_function_render_slot([ 'position' => 123 ], $this->smarty));
+        $this->assertEmpty(smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty));
     }
 
     /**
-     * Tests smarty_function_render_slot when safeframe is disabled and no
+     * Tests smarty_function_render_ad_slot when safeframe is disabled and no
      * enabled advertisements in list.
      */
     public function testRenderAdSlotWhenInlineAndNoEnabledAdvertisement()
@@ -147,11 +147,11 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
 
-        $this->assertEmpty(smarty_function_render_slot([ 'position' => 123 ], $this->smarty));
+        $this->assertEmpty(smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty));
     }
 
     /**
-     * Tests smarty_function_render_slot when safeframe is enabled but inline is
+     * Tests smarty_function_render_ad_slot when safeframe is enabled but inline is
      * forced in template and enabled advertisements in list.
      */
     public function testRenaderBannerWhenInlineForced()
@@ -185,12 +185,12 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             '<div class="ad-slot oat oat-visible oat-left corge" data-mark="Advertisement">foo garply</div>',
-            smarty_function_render_slot([ 'format' => 'inline', 'position' => 123 ], $this->smarty)
+            smarty_function_render_ad_slot([ 'format' => 'inline', 'position' => 123 ], $this->smarty)
         );
     }
 
     /**
-     * Tests smarty_function_render_slot when safeframe is enabled but inline is
+     * Tests smarty_function_render_ad_slot when safeframe is enabled but inline is
      * forced in template and enabled advertisements in list.
      */
     public function testRenderAdSlotWhenInlineForcedWithCustomMark()
@@ -224,7 +224,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             '<div class="ad-slot oat oat-visible oat-left corge" data-mark="Sponsor">foo garply</div>',
-            smarty_function_render_slot([ 'format' => 'inline', 'position' => 123 ], $this->smarty)
+            smarty_function_render_ad_slot([ 'format' => 'inline', 'position' => 123 ], $this->smarty)
         );
     }
 }

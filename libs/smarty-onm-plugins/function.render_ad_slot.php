@@ -5,7 +5,7 @@
  * @param array    $params The list of parameters.
  * @param Template $tpl    The template object.
  */
-function smarty_function_renderbanner($params, $smarty)
+function smarty_function_render_ad_slot($params, $smarty)
 {
     $safeframeEnabled = $smarty->getContainer()
         ->get('orm.manager')
