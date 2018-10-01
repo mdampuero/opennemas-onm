@@ -156,17 +156,17 @@
                             <span class="icon right ng-cloak">
                               <span class="fa fa-circle-o-notch fa-spin" ng-if="flags.http.validating"></span>
                               <span class="fa fa-check text-success" ng-if="!flags.http.validating && form.name.$dirty && form.name.$valid"></span>
-                              <span class="fa fa-info-circle text-info" ng-if="!flags.http.validating && !form.name.$dirty && form.name.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
-                              <span class="fa fa-times text-error" ng-if="!flags.http.validating && form.name.$dirty && form.name.$invalid" uib-tooltip="{t}The tag already exist or is invalid{/t}"></span>
+                              <span class="fa fa-info-circle text-info" ng-if="!flags.http.validating && !form.name.$dirty && form.name.$invalid" uib-tooltip-html="'<ul><li>{t}Tags should start by letter or number{/t}</li><li>{t}The maximum length for a tag is 60 chars (recommended: 30 chars or less){/t}</li></ul>'"></span>
+                              <span class="fa fa-times text-error text-left" ng-if="!flags.http.validating && form.name.$dirty && form.name.$invalid" uib-tooltip-html="error"></span>
                             </span>
                           </div>
                         </div>
-                        <div class="col-lg-4 col-sm-6 form-group no-margin">
+                        <div class="col-lg-4 col-sm-6 form-group no-margin" ng-if="data.extra.locales.length > 2">
                           <label class="form-label" for="locale">
                             {t}Language{/t}
                           </label>
                           <div class="controls">
-                            <select class="form-control" name="locale" ng-model="editedTag.language_id" ng-if="data.extra.locales.length > 2">
+                            <select class="form-control" name="locale" ng-model="editedTag.language_id">
                               <option value="[% locale.id %]" ng-repeat="locale in data.extra.locales">[% locale.name %]</option>
                             </select>
                           </div>

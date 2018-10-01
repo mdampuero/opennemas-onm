@@ -139,25 +139,33 @@
          *   Generates an username basing on the name.
          */
         $scope.isValid = function() {
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+            $scope.disableFlags('http');
+          }
+
           if (!$scope.editedTag.name) {
             return;
           }
 
           $scope.flags.http.validating = 1;
 
-          if ($scope.tm) {
-            $timeout.cancel($scope.tm);
-          }
-
           var route = {
-            name: 'api_v1_backend_tags_valid_new_tag',
+            name: 'api_v1_backend_tags_validate',
             params: { text: $scope.editedTag.name, languageId: $scope.locale }
           };
 
           $scope.tm = $timeout(function() {
-            http.get(route).then(function(response) {
+            http.get(route).then(function() {
               $scope.disableFlags('http');
-              $scope.form.name.$setValidity('exists', response.data.valid);
+              $scope.form.name.$setValidity('exists', true);
+            }, function(response) {
+              $scope.disableFlags('http');
+              $scope.form.name.$setValidity('exists', false);
+
+              $scope.error = '<ul><li>' + response.data.map(function(e) {
+                return e.message;
+              }).join('</li><li>') + '</li></ul>';
             });
           }, 500);
         };
