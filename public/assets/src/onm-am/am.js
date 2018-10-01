@@ -258,7 +258,13 @@
     // Display normal advertisements
     for (var i = 0; i < slots.length; i++) {
       var slot = slots[i];
-      var type = parseInt(slot.getAttribute('data-type'));
+      var type = parseInt(slot.getAttribute('data-position'));
+
+      // If data-position is not available just go for data-type
+      if (!type) {
+        var type = parseInt(slot.getAttribute('data-type'));
+      }
+
       var id   = parseInt(slot.getAttribute('data-id'));
 
       var available = ads.filter(function(e) { // eslint-disable-line no-loop-func

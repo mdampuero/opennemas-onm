@@ -15,7 +15,7 @@ function smarty_insert_renderbanner($params, $smarty)
         ->get('ads_settings')['safe_frame'];
 
     $tpl    = '<div class="ad-slot oat%s">%s</div>';
-    $class  = '" data-type="' . $params['type'];
+    $class  = '" data-position="' . $params['type'];
     $format = 'safeframe';
 
     // Filter advertisement by type/position
