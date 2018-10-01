@@ -312,7 +312,7 @@
               return false;
             }
             var route = {
-              name: 'api_v1_backend_tags_valid_new_tag',
+              name: 'api_v1_backend_tags_validate',
               params: {
                 text: tag2Check,
                 languageId: locale
