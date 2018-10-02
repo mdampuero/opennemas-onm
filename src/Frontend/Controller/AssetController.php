@@ -12,7 +12,6 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 use Imagine\Image\ImageInterface;
 
 /**
@@ -193,7 +192,9 @@ class AssetController extends Controller
 
             // RenderColorMenu
             $siteColor   = '#005689';
-            $configColor = s::get('site_color');
+            $configColor = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('site_color');
             if (!empty($configColor)) {
                 if (!preg_match('@^#@', $configColor)) {
                     $siteColor = '#' . $configColor;
@@ -257,33 +258,26 @@ class AssetController extends Controller
     public function favicoAction()
     {
         // Default favico
-        $favicoUrl = '/assets/images/favicon.png';
+        $favicoRelativePath = '/assets/images/favicon.png';
 
-        // Check if favico is defined on site
-        $favicoFileName  = getService('setting_repository')->get('favico');
-        $sectionSettings = getService('setting_repository')->get('section_settings');
+        $settings = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+            ->get(['favico', 'section_settings', 'logo_enabled']);
 
-        $allowLogo = false;
-        if (is_array($sectionSettings) && array_key_exists('allowLogo', $sectionSettings)) {
-            $allowLogo = $sectionSettings['allowLogo'];
+        if ($settings['logo_enabled'] && !empty($settings['favico'])) {
+            $favicoRelativePath = MEDIA_URL . MEDIA_DIR . '/sections/' . $settings['favico'];
         }
 
-        if ($allowLogo && $favicoFileName) {
-            $favicoUrl = MEDIA_URL . MEDIA_DIR . '/sections/' . $favicoFileName;
-        }
+        $favicoPath = realpath(SITE_PATH . '/' . $favicoRelativePath);
 
-        $favicoUrl = realpath(SITE_PATH . '/' . $favicoUrl);
-
-        if (empty($favicoUrl)) {
-            // Default favico
-            $favicoUrl      = realpath(SITE_PATH . '/assets/images/favicon.png');
-            $favicoFileName = 'favicon.png';
+        // Default favico
+        if (empty($favicoPath)) {
+            $favicoPath = realpath(SITE_PATH . '/assets/images/favicon.png');
         }
 
         return new Response(
-            file_get_contents($favicoUrl),
+            file_get_contents($favicoPath),
             200,
-            [ 'Content-Type' => 'image/' . pathinfo($favicoFileName, PATHINFO_EXTENSION) ]
+            [ 'Content-Type' => 'image/' . pathinfo($favicoPath, PATHINFO_EXTENSION) ]
         );
     }
 }

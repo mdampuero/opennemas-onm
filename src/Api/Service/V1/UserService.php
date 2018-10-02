@@ -51,7 +51,11 @@ class UserService extends OrmService
             throw new CreateItemException($e->getMessage(), $e->getCode());
         }
 
-        if (array_key_exists('password', $data) && !empty($data['password'])) {
+        if (array_key_exists('password', $data) && empty($data['password'])) {
+            unset($data['password']);
+        }
+
+        if (array_key_exists('password', $data)) {
             $data['password'] = $this->container
                 ->get('core.security.encoder.password')
                 ->encodePassword($data['password'], null);
@@ -189,7 +193,11 @@ class UserService extends OrmService
             throw new UpdateItemException($e->getMessage(), $e->getCode());
         }
 
-        if (array_key_exists('password', $data) && !empty($data['password'])) {
+        if (array_key_exists('password', $data) && empty($data['password'])) {
+            unset($data['password']);
+        }
+
+        if (array_key_exists('password', $data)) {
             $data['password'] = $this->container
                 ->get('core.security.encoder.password')
                 ->encodePassword($data['password'], null);

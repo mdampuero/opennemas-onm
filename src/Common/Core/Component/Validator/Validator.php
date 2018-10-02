@@ -19,11 +19,11 @@ class Validator
     const BLACKLIST_RULESET_TAGS     = 'tag';
 
     /**
-     * The settings repository
+     * The settings dataset
      *
-     * @var \SettingRepository
+     * @var DataSet
      **/
-    private $sm = null;
+    private $ds = null;
 
     /**
      * The validator service
@@ -35,12 +35,12 @@ class Validator
     /**
      * Initializes the validator object with dependencies
      *
-     * @param \SettingsRepository $settingsManager the settings repository object
-     * @param Validator          $validator       the validator service
+     * @param DataSet    $settingsManager the settings repository object
+     * @param Validator  $validator       the validator service
      */
-    public function __construct($settingsManager, $validator)
+    public function __construct($em, $validator)
     {
-        $this->sm        = $settingsManager;
+        $this->ds        = $em->getDataSet('Settings', 'instance');
         $this->validator = $validator;
     }
 
@@ -91,16 +91,23 @@ class Validator
         }
 
         return [];
+
+
+
+        foreach ($violations as $el) {
+            $errors[] = $el->getMessage();
+        }
+
+        return $errors;
     }
 
     /**
      * Returns the blacklist config for a given ruleSet
      *
-     * @return mixed
      **/
     public function getConfig($ruleSet)
     {
-        return $this->sm->get('blacklist.' . $ruleSet);
+        return $this->ds->get('blacklist.' . $ruleSet);
     }
 
     /**
@@ -108,12 +115,16 @@ class Validator
      *
      * @param string $ruleSet the name of the rule set
      * @param mixed  $config  the configuration to save
-     *
-     * @return mixed
      **/
     public function setConfig($ruleSet, $config)
     {
-        return $this->sm->set('blacklist.' . $ruleSet, $config);
+        try {
+            $this->ds->set('blacklist.' . $ruleSet, $config);
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**

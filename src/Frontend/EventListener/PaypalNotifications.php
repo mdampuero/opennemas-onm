@@ -11,7 +11,6 @@ namespace Frontend\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\Event;
-use Onm\Settings as s;
 
 /**
  * Handles all the events after content updates
@@ -86,8 +85,11 @@ class PaypalNotifications implements EventSubscriberInterface
                 $user = new \User($ipnData['rp_invoice_id']);
                 $user->addSubscriptionLimit($newUserSubscriptionDate);
                 // Update user meta
-                $user->setMeta(['recurring_payment_id' => $ipnData['recurring_payment_id']]);
+                $user->setMeta([ 'recurring_payment_id' => $ipnData['recurring_payment_id'] ]);
                 $user->deleteMetaKey($ipnData['rp_invoice_id'], 'canceled_recurring_payment_id');
+
+                $settingsManager = $this->get('orm.manager')
+                    ->getDataSet('Settings', 'instance');
 
 
                 // Send mail to user notificating that subscription is activated
@@ -100,8 +102,8 @@ class PaypalNotifications implements EventSubscriberInterface
                     ->setSubject(sprintf(_('%s - Premium subscription activated'), s::get('site_title')))
                     ->setBody($mailBody, 'text/plain')
                     ->setTo($ipnData['payer_email'])
-                    ->setFrom([ $ipnData['receiver_email'] => s::get('site_name') ])
-                    ->setSender([ 'no-reply@postman.opennemas.com' => s::get('site_name') ]);
+                    ->setFrom([ $ipnData['receiver_email'] => $settingsManager->get('site_name') ])
+                    ->setSender([ 'no-reply@postman.opennemas.com' => $settingsManager->get('site_name') ]);
 
                 try {
                     $mailer = getService('mailer');
@@ -148,7 +150,7 @@ class PaypalNotifications implements EventSubscriberInterface
                 break;
             case 'express_checkout':
                 if ($ipnData['test_ipn'] == '1' && $ipnData['mc_gross'] == '0.01') {
-                    s::set('valid_ipn', 'valid');
+                    $settingsManager->set('valid_ipn', 'valid');
                 }
 
                 break;

@@ -283,8 +283,9 @@ class MenusController extends Controller
      */
     private function getSyncSites()
     {
-        // Fetch synchronized elements if exists
-        $syncSites = $this->get('setting_repository')->get('sync_params');
+        $syncSites = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('sync_params');
 
         if (empty($syncSites)) {
             return [];

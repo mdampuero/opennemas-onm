@@ -21,9 +21,18 @@ class CommentHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->settingsManager = $this->getMockBuilder('SettingsManager' . uniqid())
+        $this->ormManager = $this->getMockBuilder('OrmManager' . uniqid())
+            ->setMethods([ 'getDataSet' ])
+            ->getMock();
+
+        $this->dataSet = $this->getMockBuilder('DataSet')
             ->setMethods([ 'get' ])
             ->getMock();
+
+        $this->ormManager->expects($this->any())
+            ->method('getDataSet')
+            ->with('Settings', 'instance')
+            ->willReturn($this->dataSet);
 
         $this->defaultConfigs = [
             'disable_comments'      => false,
@@ -34,7 +43,7 @@ class CommentHelperTest extends \PHPUnit\Framework\TestCase
             'moderation_autoaccept' => false,
         ];
 
-        $this->helper = new CommentHelper($this->settingsManager, $this->defaultConfigs);
+        $this->helper = new CommentHelper($this->ormManager, $this->defaultConfigs);
     }
 
     /**
@@ -42,11 +51,11 @@ class CommentHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstructor()
     {
-        $this->settingsManager->expects($this->any())->method('get')
-            // ->with('comments_config', [])
+        $this->dataSet->expects($this->any())->method('get')
+            ->with('comments_config', [])
             ->willReturn([]);
 
-        $this->assertAttributeEquals($this->settingsManager, 'sm', $this->helper);
+        $this->assertAttributeEquals($this->dataSet, 'ds', $this->helper);
         $this->assertAttributeEquals($this->defaultConfigs, 'defaultConfigs', $this->helper);
     }
 
@@ -57,10 +66,10 @@ class CommentHelperTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(false, $this->helper->autoReject());
 
-        $this->settingsManager->expects($this->any())->method('get')
+        $this->dataSet->expects($this->any())->method('get')
             ->willReturn([ 'moderation_autoreject' => true ]);
 
-        $this->helper = new CommentHelper($this->settingsManager, $this->defaultConfigs);
+        $this->helper = new CommentHelper($this->ormManager, $this->defaultConfigs);
         $this->assertEquals(true, $this->helper->autoReject());
     }
 
@@ -71,10 +80,10 @@ class CommentHelperTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(false, $this->helper->autoAccept());
 
-        $this->settingsManager->expects($this->any())->method('get')
+        $this->dataSet->expects($this->any())->method('get')
             ->willReturn([ 'moderation_autoaccept' => true ]);
 
-        $this->helper = new CommentHelper($this->settingsManager, $this->defaultConfigs);
+        $this->helper = new CommentHelper($this->ormManager, $this->defaultConfigs);
         $this->assertEquals(true, $this->helper->autoAccept());
     }
 
@@ -86,10 +95,10 @@ class CommentHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->defaultConfigs, $this->helper->getConfigs());
 
         $answer = [ 'moderation_autoaccept' => true ];
-        $this->settingsManager->expects($this->any())->method('get')
+        $this->dataSet->expects($this->any())->method('get')
             ->willReturn($answer);
 
-        $this->helper = new CommentHelper($this->settingsManager, $this->defaultConfigs);
+        $this->helper = new CommentHelper($this->ormManager, $this->defaultConfigs);
         $this->assertEquals(
             array_merge($this->defaultConfigs, $answer),
             $this->helper->getConfigs()
@@ -111,10 +120,10 @@ class CommentHelperTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(true, $this->helper->enableCommentsByDefault());
 
-        $this->settingsManager->expects($this->any())->method('get')
+        $this->dataSet->expects($this->any())->method('get')
             ->willReturn([ 'with_comments' => false ]);
 
-        $this->helper = new CommentHelper($this->settingsManager, $this->defaultConfigs);
+        $this->helper = new CommentHelper($this->ormManager, $this->defaultConfigs);
         $this->assertEquals(false, $this->helper->enableCommentsByDefault());
     }
 
@@ -125,10 +134,10 @@ class CommentHelperTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(true, $this->helper->moderateManually());
 
-        $this->settingsManager->expects($this->any())->method('get')
+        $this->dataSet->expects($this->any())->method('get')
             ->willReturn([ 'moderation_manual' => false ]);
 
-        $this->helper = new CommentHelper($this->settingsManager, $this->defaultConfigs);
+        $this->helper = new CommentHelper($this->ormManager, $this->defaultConfigs);
 
         $this->assertEquals(false, $this->helper->moderateManually());
     }

@@ -118,18 +118,20 @@ class AuthenticationListener implements EventSubscriberInterface
      */
     protected function getPermissions(UserInterface $user)
     {
-        if (empty($user->fk_user_group)) {
+        if (empty($user->user_groups)) {
             return [];
         }
 
-        $oql = sprintf('pk_user_group in [%s]', implode(',', $user->fk_user_group));
+        $ugs    = $this->container->get('api.service.user_group');
+        $origin = $ugs->getOrigin();
 
-        $userGroups = $this->container->get('orm.manager')
-            ->getRepository('UserGroup', $user->getOrigin())
-            ->findBy($oql);
+        $userGroups = $ugs->setOrigin('manager')
+            ->getListByIds(array_keys($user->user_groups));
+
+        $ugs->setOrigin($origin);
 
         $permissions = [];
-        foreach ($userGroups as $userGroup) {
+        foreach ($userGroups['items'] as $userGroup) {
             $permissions = array_merge($permissions, $userGroup->privileges);
         }
 

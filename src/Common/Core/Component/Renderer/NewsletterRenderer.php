@@ -43,7 +43,7 @@ class NewsletterRenderer
         EntityManager $entityManager,
         CategoryManager $categoryManager,
         AuthorService $authorService,
-        $settingManager,
+        $em,
         $adsHelper,
         $adsRepository,
         $instance
@@ -52,7 +52,7 @@ class NewsletterRenderer
         $this->er       = $entityManager;
         $this->cr       = $categoryManager;
         $this->as       = $authorService;
-        $this->sr       = $settingManager;
+        $this->ds       = $em->getDataSet('Settings', 'instance');
         $this->adHelper = $adsHelper;
         $this->ar       = $adsRepository;
         $this->instance = $instance;
@@ -146,7 +146,7 @@ class NewsletterRenderer
         $this->tpl->assign('URL_PUBLIC', 'http://' . $publicUrl);
 
         // Fetch and assign settings
-        $configurations = $this->sr->get([
+        $configurations = $this->ds->get([
             'newsletter_maillist',
             'newsletter_subscriptionType',
         ]);

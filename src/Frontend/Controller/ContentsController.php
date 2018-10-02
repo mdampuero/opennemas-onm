@@ -19,7 +19,6 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the generic actions for contents
@@ -73,10 +72,11 @@ class ContentsController extends Controller
         $cacheID = $this->view->getCacheId('content', $contentID, 'print');
 
         return $this->render('article/article_printer.tpl', [
-            'cache_id' => $cacheID,
-            'content'  => $content,
-            'article'  => $content,
-            'x-tags'   => 'content-print,' . $contentID
+            'cache_id'  => $cacheID,
+            'content'   => $content,
+            'article'   => $content,
+            'o_content' => $content,
+            'x-tags'    => 'content-print,' . $contentID
         ]);
     }
 
@@ -117,10 +117,11 @@ class ContentsController extends Controller
         $cacheID = $this->view->getCacheId('sync', 'content', $contentID, 'print');
 
         return $this->render('article/article_printer.tpl', [
-            'cache_id' => $cacheID,
-            'content'  => $content,
-            'article'  => $content,
-            'x-tags'   => 'ext-content-print,' . $contentID
+            'cache_id'  => $cacheID,
+            'content'   => $content,
+            'article'   => $content,
+            'o_content' => $content,
+            'x-tags'    => 'ext-content-print,' . $contentID
         ]);
     }
 
@@ -175,13 +176,16 @@ class ContentsController extends Controller
                 throw new ResourceNotFoundException();
             }
 
+            $settingManager = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance');
+
             // Fetch information required for sending the mail
             $senderEmail = $request->request->filter('sender_email', null, FILTER_VALIDATE_EMAIL);
             $senderName  = $request->request->filter('sender_name', null, FILTER_SANITIZE_STRING);
             $mailSubject = sprintf(
                 _('%s has shared with you a content from %s.'),
                 $senderName,
-                s::get('site_name')
+                $settingManager->get('site_name')
             );
             $recipients  = explode(',', $request->request->get('recipients', []));
 
@@ -228,7 +232,7 @@ class ContentsController extends Controller
                 ->setBody($mailBodyPlain, 'text/plain')
                 ->setTo($recipients[0])
                 ->setFrom([$senderEmail => $senderName])
-                ->setSender(['no-reply@postman.opennemas.com' => s::get('site_name')])
+                ->setSender([ 'no-reply@postman.opennemas.com' => $settingManager->get('site_name') ])
                 ->setBcc($recipients);
 
             $headers = $message->getHeaders();

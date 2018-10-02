@@ -16,7 +16,6 @@ namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for Paypal IPN - Instant Payment notifications
@@ -33,7 +32,9 @@ class PaypalNotificationsController extends Controller
     public function paywallAction()
     {
         // Get paypal developer mode settings
-        $databaseSettings = s::get('paywall_settings');
+        $databaseSettings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('paywall_settings');
 
         $config = [
             'mode'            => ($databaseSettings['developer_mode'] == false) ? 'sandbox' : 'live',
@@ -50,7 +51,7 @@ class PaypalNotificationsController extends Controller
             // Get ipn data
             $ipnData = $ipnMessage->getRawData();
 
-            $this->get('core.dispatcher')->dispatch('paywall.recurring', array('ipnData' => $ipnData));
+            $this->get('core.dispatcher')->dispatch('paywall.recurring', [ 'ipnData' => $ipnData ]);
         } else {
             // Write in log
             $logger = getService('logger');

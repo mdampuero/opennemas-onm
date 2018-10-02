@@ -109,8 +109,11 @@ class InstancesUpdateCommand extends ContainerAwareCommand
             && !$options['media_size']
             && !$options['created']
         ) {
-            $this->output->writeln('<error>Please provide --instance-stats --alexa, '
-                . '--views, --media-size or --created</error>');
+            $this->output->writeln(
+                '<error>Please provide --instance-stats '
+                    . '--alexa, --views, --media-size or --created</error>'
+            );
+
             return 1;
         }
 
@@ -144,7 +147,9 @@ class InstancesUpdateCommand extends ContainerAwareCommand
                 $this->getInstanceInfo($instance, $options);
                 $this->em->persist($instance);
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                $this->getContainer()->get('error.log')
+                    ->error($e->getMessage());
+
                 $output->writeln(
                     '<error>Error while getting info about \''
                     . $instance->internal_name . '\': ' . $e->getMessage() . '</>'
@@ -215,7 +220,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
 
                 $message = "<fg=green>DONE</>";
             } else {
-                $message = "<error>FAILED</>" . "Piwik code not available";
+                $message = "<error>FAILED</error>" . "Piwik code not available";
             }
 
             if ($this->output->isVeryVerbose()) {
@@ -270,13 +275,14 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         }
 
         $sql = 'SELECT content_type_name as type, count(*) as total '
-            .'FROM contents WHERE in_litter != 1 GROUP BY `fk_content_type`, `content_type_name`';
+            . 'FROM contents WHERE in_litter != 1 '
+            . 'GROUP BY `fk_content_type`, `content_type_name`';
 
         $rs = $conn->fetchAll($sql);
 
         if (!empty($rs)) {
             foreach ($rs as $value) {
-                $allowedContentTypes = array(
+                $allowedContentTypes = [
                     'advertisement',
                     'attachment',
                     'album',
@@ -288,20 +294,20 @@ class InstancesUpdateCommand extends ContainerAwareCommand
                     'static_page',
                     'video',
                     'widget'
-                );
+                ];
 
                 if (!in_array($value['type'], $allowedContentTypes)) {
                     continue;
                 }
 
                 $type = $value['type'] . 's';
+
                 $i->{$type} = $value['total'];
             }
         }
 
         // Count users
-        $sql = "SELECT COUNT(id) FROM users WHERE type = 0 and activated = 1 and
-            fk_user_group NOT REGEXP '^4$|^4,|,4,|,4$'";
+        $sql = "SELECT COUNT(id) FROM users WHERE activated = 1 AND type IN (0,2)";
         $rs  = $conn->fetchArray($sql);
 
         if ($rs !== false && !empty($rs)) {
@@ -383,8 +389,9 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         $mediaPath = realpath(SITE_PATH . "media" . DS . $i->internal_name);
 
         if ($mediaPath) {
-            $size = (int) shell_exec('du -s '.$mediaPath.'/ | awk \'{ print $1}\'');
+            $size = (int) shell_exec('du -s ' . $mediaPath . '/ | awk \'{ print $1}\'');
         }
+
         $i->media_size = $size / 1024;
     }
 

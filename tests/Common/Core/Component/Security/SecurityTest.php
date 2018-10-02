@@ -29,8 +29,7 @@ class SecurityTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->user = new User([
-            'fk_user_group' => [],
-            'user_groups'   => []
+            'user_groups' => []
         ]);
 
         $this->security = new Security();

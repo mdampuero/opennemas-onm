@@ -160,9 +160,6 @@ class Agency
             }
         }
 
-        // Encode author in json format
-        $article->author = json_encode($article->author);
-
         $locale = getService('core.locale')->getRequestLocale();
 
         $output = $tpl->fetch('news_agency/newsml_templates/base.tpl', [

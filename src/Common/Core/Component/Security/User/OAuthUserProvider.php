@@ -151,7 +151,6 @@ class OAuthUserProvider extends BaseOAuthUserProvider
             'email'         => $response->getEmail(),
             'activated'     => true,
             'type'          => 1,
-            'fk_user_group' => [],
 
             $resource . '_email'    => $response->getEmail(),
             $resource . '_id'       => $response->getUserName(),

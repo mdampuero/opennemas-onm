@@ -18,8 +18,8 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
 
     $uri = $request->getUri();
 
-    // !preg_match('/\/admin\/frontpages/', $referer) &&
-    if (!preg_match('/\/manager/', $uri)
+    if (!preg_match('/\/admin\/frontpages/', $uri)
+        && !preg_match('/\/manager/', $uri)
         && !preg_match('/\/managerws/', $uri)
         && !preg_match('/\/share-by-email/', $uri)
         && !preg_match('/\/sharrre/', $uri)
@@ -28,7 +28,10 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
         && !preg_match('/\/fb\/instant-articles/', $uri)
         && !preg_match('@\.amp\.html$@', $uri)
     ) {
-        $settings = getService('setting_repository')->get([ 'header_script', 'body_start_script', 'body_end_script' ]);
+        $settings = $smarty->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get([ 'header_script', 'body_start_script', 'body_end_script' ]);
 
         if (array_key_exists('header_script', $settings)
             && !empty($settings['header_script'])

@@ -15,12 +15,12 @@ class ContentMediaHelper
     /**
      * Initializes ContentMedia
      *
-     * @param SettingManager $sm The setting service.
+     * @param SettingManager $em The entity manager.
      * @param EntityManager  $er The entity repository service.
      */
-    public function __construct($sm, $er)
+    public function __construct($em, $er)
     {
-        $this->sm       = $sm;
+        $this->ds       = $em->getDataSet('Settings', 'instance');
         $this->er       = $er;
         $this->mediaUrl = MEDIA_IMG_ABSOLUTE_URL;
     }
@@ -176,10 +176,10 @@ class ContentMediaHelper
         if (!is_null($params) && array_key_exists('default_image', $params)) {
             // Default on template
             $mediaObject->url = $params['default_image'];
-        } elseif ($mobileLogo = $this->sm->get('mobile_logo')) {
+        } elseif ($mobileLogo = $this->ds->get('mobile_logo')) {
             // Mobile logo
             $mediaObject->url = $baseUrl . $mobileLogo;
-        } elseif ($siteLogo = $this->sm->get('site_logo')) {
+        } elseif ($siteLogo = $this->ds->get('site_logo')) {
             // Logo
             $mediaObject->url = $baseUrl . $siteLogo;
         }

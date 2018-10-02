@@ -64,7 +64,8 @@ class NitfOpennemas extends Nitf
         $resource = parent::parse($data);
 
         $author = $this->getAuthor($data);
-        if (is_object($author)) {
+
+        if (is_array($author)) {
             $resource->author = $author;
         }
 
@@ -109,16 +110,11 @@ class NitfOpennemas extends Nitf
     {
         $author = $data->xpath('//rights/rights.owner');
 
-        if (!empty($author)) {
-            $author = json_decode((string) $author[0]);
-
-            if (!$author) {
-                return null;
-            }
-
-            $author->photo = $this->getAuthorPhoto($data);
-
-            return $author;
+        if (!empty($author) && !empty($author[0])) {
+            return [
+                'name'  => (string) $author[0],
+                'photo' => $this->getAuthorPhoto($data)
+            ];
         }
 
         return null;

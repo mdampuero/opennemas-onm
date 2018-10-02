@@ -161,7 +161,9 @@ class FrontpagesController extends Controller
                 }
             }
 
-            $layout = $this->get('setting_repository')->get('frontpage_layout_' . $categoryId, 'default');
+            $layout = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('frontpage_layout_' . $categoryId, 'default');
             if (empty($layout)) {
                 $layout = 'default';
             }

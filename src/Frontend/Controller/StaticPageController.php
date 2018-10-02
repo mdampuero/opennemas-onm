@@ -62,6 +62,7 @@ class StaticPageController extends Controller
             'content_id'         => $content->id,
             'page'               => $content,
             'cache_id'           => $cacheID,
+            'o_content'          => $content,
             'x-tags'             => 'static-page,' . $content->id,
             'tags'               => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($content->tag_ids)['items']

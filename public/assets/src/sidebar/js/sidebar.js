@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   /**
@@ -12,7 +12,8 @@
    *   The `onm.sidebar` module provides a factory and a directive to create and
    *   manipulate page sidebars.
    */
-  angular.module('onm.sidebar', ['onm.routing', 'onm.security'])
+  angular.module('onm.sidebar', [ 'onm.routing', 'onm.security' ])
+
     /**
      * @ngdoc factory
      * @name  Sidebar
@@ -26,8 +27,8 @@
      * @description
      *   Factory to create and configure new sidebar instances.
      */
-    .factory(
-      'Sidebar', ['$http', '$location', '$window', 'routing', 'security',
+    .factory('Sidebar', [
+      '$http', '$location', '$window', 'routing', 'security',
       function($http, $location, $window, routing, security) {
         /**
          * Default template for the sidebar.
@@ -63,7 +64,7 @@
          *
          * @type {String}
          */
-        var sidebarTpl = '<div class="sidebar [% ngModel.class %]" ng-class="{ \'sidebar-right\': ngModel.position === \'right\'\, \'inverted\': ngModel.inverted }" ng-show="ngModel.security.user" [id][ngAttrs][swipeable] ng-mouseleave="ngModel.mouseLeave()">' +
+        var sidebarTpl = '<div class="sidebar [% ngModel.class %]" ng-class="{ \'sidebar-right\': ngModel.position === \'right\', \'inverted\': ngModel.inverted }" ng-show="ngModel.security.user" [id][ngAttrs][swipeable] ng-mouseleave="ngModel.mouseLeave()">' +
           '<div class="overlay" ng-click="ngModel.open()" ng-mouseenter="ngModel.mouseEnter()"></div>' +
           '<div class="sidebar-wrapper">' +
             '<scrollable>' +
@@ -156,6 +157,7 @@
 
             for (var key in attrs) {
               var newKey = key.replace(/([A-Z]{1})/, '-$1'.toLowerCase());
+
               ngAttrs += ' ' + newKey + '="' + attrs[key] + '"';
             }
 
@@ -216,7 +218,7 @@
                 url = '/';
               }
 
-              return $location.path() === url;
+              return $location.path().indexOf(url) === 0;
             }
 
             var active = false;
@@ -337,6 +339,7 @@
 
             for (var key in attrs) {
               var newKey = key.replace(/([A-Z]{1})/, '-$1'.toLowerCase());
+
               ngAttrs += ' ' + newKey + '="' + attrs[key] + '"';
             }
 
@@ -364,7 +367,7 @@
            */
           sidebar.swipeClose = function() {
             if (!$('html').hasClass('touch')) {
-              return false;
+              return;
             }
 
             sidebar.close();
@@ -375,7 +378,7 @@
            */
           sidebar.swipeOpen = function() {
             if (!$('html').hasClass('touch')) {
-              return false;
+              return;
             }
 
             sidebar.open();
@@ -427,8 +430,8 @@
      * <!-- Create a sidebar at the left  -->
      * <sidebar class="sidebar" footer="true" ng-model="sidebar" position="left" src="manager_ws_sidebar_list" pinnable="true"></sidebar>
      */
-    .directive('sidebar', ['$compile', '$filter', '$http', '$rootScope', '$window',
-      'routing', 'security', 'Sidebar',
+    .directive('sidebar', [
+      '$compile', '$filter', '$http', '$rootScope', '$window', 'routing', 'security', 'Sidebar',
       function($compile, $filter, $http, $rootScope, $window, routing, security, Sidebar) {
         return {
           restrict: 'E',
@@ -436,13 +439,13 @@
             ngModel: '='
           },
           link: function($scope, elm, attrs) {
-
             if (!attrs.src) {
               return;
             }
 
             // Get angular attributes (ng-class, ng-show, ...)
             var angularAttrs = {};
+
             for (var key in attrs) {
               if (key !== 'ngModel' && key !== 'ng-show' &&
                   /ng([A-Z][a-x]*)+/.test(key)) {
@@ -461,10 +464,11 @@
             });
 
             var dft = $compile($scope.ngModel.default(angularAttrs))($scope);
+            var url = routing.generate(attrs.src);
+
             elm.replaceWith(dft);
 
-            var url = routing.generate(attrs.src);
-            return $http.get(url).then(function(response) {
+            $http.get(url).then(function(response) {
               $scope.ngModel.data = response.data;
 
               // Updates sidebar status when window width changes
@@ -487,8 +491,8 @@
                 $scope.$apply();
               });
 
-              $('body').on('click', '.sidebar li > a', function (e) {
-                var item = $(this).parent();
+              $('body').on('click', '.sidebar li > a', function(e) {
+                var item    = $(this).parent();
                 var visible = item.hasClass('open');
                 var submenu = $(this).next();
 
@@ -499,7 +503,7 @@
                 });
 
                 if ($(this).next().hasClass('sub-menu') === false) {
-                    return;
+                  return;
                 }
 
                 if (!visible) {
@@ -521,4 +525,3 @@
       }
     ]);
 })();
-

@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for advertisements
- *
- * @package Frontend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,15 +13,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 
-/**
- * Handles the actions for advertisements
- *
- * @package Frontend_Controllers
- */
 class UtilitiesController extends Controller
 {
     /**
-     * Integrates the sharrre jQuery plugin into ONM
+     * Integrates the sharrre jQuery plugin into ONM.
      *
      * @return JsonResponse the response object
      */

@@ -14,7 +14,7 @@ function smarty_outputfilter_canonical_url($output, $smarty)
         ->get('request_stack')
         ->getCurrentRequest();
 
-    if (is_null($request)) {
+    if (empty($request)) {
         return $output;
     }
 
@@ -27,10 +27,10 @@ function smarty_outputfilter_canonical_url($output, $smarty)
     $tpl = '<link rel="canonical" href="%s"/>';
     $url = SITE_URL . substr(strtok($uri, '?'), 1);
 
-    if (array_key_exists('content', $smarty->getTemplateVars())) {
+    if (array_key_exists('o_content', $smarty->getTemplateVars())) {
         $url = $smarty->getContainer()->get('core.helper.url_generator')
             ->generate(
-                $smarty->getTemplateVars()['content'],
+                $smarty->getTemplateVars()['o_content'],
                 [ 'absolute' => true ]
             );
     }

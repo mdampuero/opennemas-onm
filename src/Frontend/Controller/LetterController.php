@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for letters
@@ -167,6 +166,7 @@ class LetterController extends Controller
             'content'        => $letter,
             'contentId'      => $letter->id,
             'letter'         => $letter,
+            'o_content'      => $letter,
             'x-tags'         => 'letter,' . $letter->id,
             'x-cache-for'    => '+1 day',
             'tags'                   => $this->get('api.service.tag')
@@ -268,9 +268,13 @@ class LetterController extends Controller
         if ($letter->create($data)) {
             $msg = "Su carta ha sido guardada y está pendiente de publicación.";
 
-            $recipient = s::get('contact_email');
+            $settings = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get(['contact_email', 'mail_sender', 'site_name']);
+
+            $recipient = $settings['contact_email'];
             if (!empty($recipient)) {
-                $mailSender = s::get('mail_sender');
+                $mailSender = $settings['mail_sender'];
                 if (empty($mailSender)) {
                     $mailSender = "no-reply@postman.opennemas.com";
                 }
@@ -281,7 +285,7 @@ class LetterController extends Controller
                     ->setBody($data['body'], 'text/html')
                     ->setTo([ $recipient => $recipient ])
                     ->setFrom([ $email => $name ])
-                    ->setSender([ $mailSender => s::get('site_name') ]);
+                    ->setSender([ $mailSender => $settings['site_name'] ]);
 
                 $headers = $text->getHeaders();
                 $headers->addParameterizedHeader(

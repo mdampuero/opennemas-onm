@@ -29,6 +29,14 @@ class SmartyAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->ds = $this->getMockBuilder('DataSet')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'getDataSet' ])
+            ->getMock();
+
         $this->requestStack = $this->getMockBuilder('RequestStack')
             ->setMethods([ 'getCurrentRequest' ])
             ->getMock();
@@ -37,13 +45,12 @@ class SmartyAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getUri' ])
             ->getMock();
 
-        $this->repository = $this->getMockBuilder('SettingManager')
-            ->setMethods([ 'get' ])
-            ->getMock();
-
         $this->security = $this->getMockBuilder('Security')
             ->setMethods([ 'hasExtension' ])
             ->getMock();
+
+        $this->em->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
 
         $this->smarty->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
@@ -63,16 +70,15 @@ class SmartyAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function serviceContainerCallback($name)
     {
-        if ($name === 'request_stack') {
-            return $this->requestStack;
-        }
+        switch ($name) {
+            case 'core.security':
+                return $this->security;
 
-        if ($name === 'setting_repository') {
-            return $this->repository;
-        }
+            case 'orm.manager':
+                return $this->em;
 
-        if ($name === 'core.security') {
-            return $this->security;
+            case 'request_stack':
+                return $this->requestStack;
         }
 
         return null;
@@ -159,7 +165,7 @@ class SmartyAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
         $this->requestStack->expects($this->any())
             ->method('getCurrentRequest')->willReturn($this->request);
 
-        $this->repository->expects($this->once())
+        $this->ds->expects($this->once())
             ->method('get')
             ->with('adsense_id')
             ->willReturn('ca-pub-999999999999999');
@@ -192,7 +198,7 @@ class SmartyAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
         $this->requestStack->expects($this->any())
             ->method('getCurrentRequest')->willReturn($this->request);
 
-        $this->repository->expects($this->once())
+        $this->ds->expects($this->once())
             ->method('get')
             ->with('adsense_id')
             ->willReturn('ca-pub-999999999999999');
@@ -224,7 +230,7 @@ class SmartyAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
         $this->requestStack->expects($this->any())
             ->method('getCurrentRequest')->willReturn($this->request);
 
-        $this->repository->expects($this->once())
+        $this->ds->expects($this->once())
             ->method('get')
             ->with('adsense_id')
             ->willReturn('');
@@ -248,7 +254,7 @@ class SmartyAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
         $this->requestStack->expects($this->any())
             ->method('getCurrentRequest')->willReturn($this->request);
 
-        $this->repository->expects($this->once())
+        $this->ds->expects($this->once())
             ->method('get')
             ->with('adsense_id')
             ->willReturn('ca-pub-999999999999999');

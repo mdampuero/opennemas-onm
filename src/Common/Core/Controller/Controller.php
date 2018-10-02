@@ -196,7 +196,9 @@ class Controller extends SymfonyController
             && $this->get('core.security')
                 ->hasPermission('es.openhost.module.translation')
         ) {
-            $translators = $this->get('setting_repository')->get('translators');
+            $translators = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('translators');
 
             if (empty($translators)) {
                 $translators = [];
@@ -233,8 +235,10 @@ class Controller extends SymfonyController
         }
 
         // If I don't have the extension, I don't check the settings
-        $groups = $this->get('setting_repository')
+        $groups = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
             ->get($type);
+
         if (!is_array($groups)) {
             return $data;
         }

@@ -29,6 +29,14 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->ds = $this->getMockBuilder('DataSet')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'getDataSet' ])
+            ->getMock();
+
         $this->requestStack = $this->getMockBuilder('RequestStack')
             ->setMethods([ 'getCurrentRequest' ])
             ->getMock();
@@ -37,13 +45,12 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getUri' ])
             ->getMock();
 
-        $this->repository = $this->getMockBuilder('SettingManager')
-            ->setMethods([ 'get' ])
-            ->getMock();
-
         $this->helper = $this->getMockBuilder('ContentMediaHelper')
             ->setMethods([ 'getContentMediaObject' ])
             ->getMock();
+
+        $this->em->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
 
         $this->smarty->expects($this->any())
             ->method('getContainer')
@@ -57,7 +64,7 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
-        $this->repository->expects($this->any())
+        $this->ds->expects($this->any())
             ->method('get')
             ->with('site_name')
             ->willReturn('Site Name');
@@ -76,16 +83,15 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function serviceContainerCallback($name)
     {
-        if ($name === 'request_stack') {
-            return $this->requestStack;
-        }
+        switch ($name) {
+            case 'core.helper.content_media':
+                return $this->helper;
 
-        if ($name === 'setting_repository') {
-            return $this->repository;
-        }
+            case 'orm.manager':
+                return $this->em;
 
-        if ($name === 'core.helper.content_media') {
-            return $this->helper;
+            case 'request_stack':
+                return $this->requestStack;
         }
 
         return null;

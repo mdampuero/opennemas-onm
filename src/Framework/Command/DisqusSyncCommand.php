@@ -2,7 +2,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,21 +13,19 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Onm\Settings as s;
 
 class DisqusSyncCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setDefinition(
-                array(
-                    new InputArgument('database', InputArgument::REQUIRED, 'database'),
-                )
-            )
             ->setName('disqus:import')
             ->setDescription('Executes comments import action with Disqus Api')
-            ->setHelp(
+            ->addArgument(
+                'database',
+                InputArgument::REQUIRED,
+                'database'
+            )->setHelp(
                 <<<EOF
 The <info>disqus:import</info> executes acomments import action with Disqus Api.
 
@@ -64,21 +62,22 @@ EOF
 
     protected function fetchDisqusPosts()
     {
-        // Get cache service and save disqus_last_sync cache time and uuid
-        $cache = getService('cache');
-        $cache->save(
-            CACHE_PREFIX.'disqus_last_sync',
-            array('time' => time(), 'uuid' => uniqid()),
+        $this->getContainer()->get('cache')->save(
+            CACHE_PREFIX . 'disqus_last_sync',
+            [ 'time' => time(), 'uuid' => uniqid() ],
             300
         );
 
-
-        // Get disqus shortname and secretkey
-        $disqusShortName = s::get('disqus_shortname');
-        $disqusSecretKey = s::get('disqus_secret_key');
+        $settings = $this->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get([ 'disqus_shortname', 'disqus_secret_key' ]);
 
         $disqusSyncher = new \Onm\DisqusSync();
-        $disqusSyncher->setConfig($disqusShortName, $disqusSecretKey);
+        $disqusSyncher->setConfig(
+            $settings['disqus_shortname'],
+            $settings['disqus_secret_key']
+        );
 
         // Save disqus comments to database
         $disqusSyncher->saveDisqusCommentsToDatabase();

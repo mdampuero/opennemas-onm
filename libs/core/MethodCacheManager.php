@@ -15,6 +15,7 @@
  * @subpackage Cache
  * @author     Fran Dieguez <fran@openhost.es>
  */
+use Common\Data\Serialize\Serializer\PhpSerializer;
 
 class MethodCacheManager
 {
@@ -107,7 +108,7 @@ class MethodCacheManager
             return $result;
         }
 
-        return unserialize($result);
+        return PhpSerializer::unserialize($result);
     }
 
     /**

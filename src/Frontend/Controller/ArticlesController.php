@@ -77,10 +77,11 @@ class ArticlesController extends Controller
         list($positions, $advertisements) =
             $this->getAds($category->pk_content_category);
 
-        $layout = $this->get('setting_repository')->get(
-            'frontpage_layout_' . $category->pk_content_category,
-            'default'
-        );
+        $layout = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+            ->get(
+                'frontpage_layout_' . $category->pk_content_category,
+                'default'
+            );
 
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('content', $article->id, $token);
@@ -121,6 +122,7 @@ class ArticlesController extends Controller
             'content'               => $article,
             'contentId'             => $article->id,
             'time'                  => '12345',
+            'o_content'             => $article,
             'o_token'               => $token,
             'x-cache-for'           => '+1 day',
             'x-cacheable'           => empty($token),
@@ -191,6 +193,7 @@ class ArticlesController extends Controller
             'relationed'            => $article->relatedContents,
             'suggested'             => $article->suggested,
             'videoInt'              => $article->videoInt,
+            'o_content'             => $article,
             'x-cache-for'           => '+1 day',
             'x-tags'                => 'ext-article,' . $article->id
         ]);

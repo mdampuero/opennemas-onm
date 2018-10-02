@@ -15,9 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 use Common\ORM\Entity\ContentPosition;
-use \Exception;
 
 class FrontpagesController extends Controller
 {
@@ -51,9 +49,11 @@ class FrontpagesController extends Controller
             ->getCategoriesWithManualFrontpage();
 
         $versions = $fvs->responsify($versions);
+
         // Get theme layout
-        $layoutTheme =
-            s::get('frontpage_layout_' . $categoryId, 'default');
+        $layoutTheme = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('frontpage_layout_' . $categoryId, 'default');
 
         // Check if layout is valid,if not use the default value
         if (!file_exists(SITE_PATH . "/themes/" . TEMPLATE_USER . "/layouts/" . $layoutTheme . ".xml")) {
@@ -198,7 +198,7 @@ class FrontpagesController extends Controller
                 $message = _('Unable to save content positions: Error while saving in database.');
                 return new JsonResponse([ 'message' => $message ]);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return new JsonResponse(
                 [
                     'message' => $e->getMessage()
@@ -257,7 +257,9 @@ class FrontpagesController extends Controller
             && !is_null($layout)
             && $layoutValid
         ) {
-            $this->get('setting_repository')->set('frontpage_layout_' . $category, $layout);
+            $this->get('orm.manager')->getDataSet('Settings', 'instance')
+                ->set('frontpage_layout_' . $category, $layout);
+
             $this->get('core.dispatcher')->dispatch(
                 'frontpage.pick_layout',
                 [ 'category' => $category, 'frontpageId' => $frontpageVersionId ]
@@ -394,11 +396,12 @@ class FrontpagesController extends Controller
         $categoryID       = ($categoryName == 'home') ? 0 : $actualCategoryId;
 
         // Fetch category layout
-        $layout     = s::get('frontpage_layout_' . $categoryID, 'default');
-        $layoutFile = 'layouts/' . $layout . '.tpl';
+        $layout = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('frontpage_layout_' . $categoryID, 'default');
 
         $this->view->assign([
-            'layoutFile'         => $layoutFile,
+            'layoutFile'         => 'layouts/' . $layout . '.tpl',
             'actual_category_id' => $categoryID,
         ]);
 

@@ -10,14 +10,6 @@
  *
  * @package    Model
  */
-
-use Onm\Exception\UserAlreadyExistsException;
-
-/**
- * User
- *
- * @package    Model
- */
 class User
 {
     /**
@@ -98,25 +90,11 @@ class User
     public $activated = null;
 
     /**
-     * The user group id
-     *
-     * @var id
-     */
-    public $id_user_group = null;
-
-    /**
      * The list of categories this user has access
      *
      * @var string
      */
     public $accesscategories = [];
-
-    /**
-     * The user group id
-     *
-     * @var int
-     */
-    public $fk_user_group = null;
 
     /**
      * Meta information for the user
@@ -135,56 +113,6 @@ class User
         if (!is_null($id)) {
             $this->read($id);
         }
-    }
-
-    /**
-     * Creates a new user given an array of data
-     *
-     * @param array $data the user data
-     *
-     * @return boolean true if the user was created
-     */
-    public function create($data)
-    {
-        if ($this->checkIfUserExists($data)) {
-            throw new UserAlreadyExistsException(
-                _('Already exists one user with that information')
-            );
-        }
-
-        // Transform groups array to a string separated by comma
-        $data['id_user_group'] = implode(',', $data['id_user_group']);
-
-        $values = [
-            'username'      => $data['username'],
-            'password'      => md5($data['password']),
-            'url'           => $data['url'],
-            'bio'           => $data['bio'],
-            'avatar_img_id' => (int) $data['avatar_img_id'],
-            'email'         => $data['email'],
-            'name'          => $data['name'],
-            'type'          => (int) $data['type'],
-            'token'         => $data['token'],
-            'activated'     => (int) $data['activated'],
-            'fk_user_group' => $data['id_user_group']
-        ];
-
-        try {
-            $conn = getService('orm.manager')->getConnection('instance');
-            $conn->insert('users', $values);
-
-            $this->id = $conn->lastInsertId();
-        } catch (\Exception $e) {
-            error_log('Unable to create the user with the provided info: ' . json_encode($values));
-            return false;
-        }
-
-        /* Notice log of this action */
-        logUserEvent(__METHOD__, $this->id, $data);
-
-        dispatchEventWithParams('user.create', ['id' => $this->id]);
-
-        return true;
     }
 
     /**
@@ -236,7 +164,6 @@ class User
         $this->type          = (int) $data['type'];
         $this->token         = $data['token'];
         $this->activated     = (int) $data['activated'];
-        $this->id_user_group = explode(',', $data['fk_user_group']);
 
         return $this;
     }
@@ -274,100 +201,6 @@ class User
     }
 
     /**
-     * Updates the user information given an array of data
-     *
-     * @param array $data the new user data
-     *
-     * @return boolean true if the user was updated
-     */
-    public function update($data)
-    {
-        if ($this->checkIfUserExists($data)) {
-            throw new \Exception(_('Already exists one user with that information'));
-        }
-
-        if (!isset($data['id_user_group'])
-            || empty($data['id_user_group'])
-        ) {
-            $data['id_user_group'] = $this->id_user_group;
-        }
-
-        // Init transaction
-        $conn = getService('orm.manager')->getConnection('instance');
-
-        $conn->beginTransaction();
-
-        // Transform groups array to a string separated by commas
-        $data['id_user_group'] = implode(',', $data['id_user_group']);
-
-        $values = [
-            'username'      => $data['username'],
-            'url'           => $data['url'],
-            'bio'           => $data['bio'],
-            'avatar_img_id' => (int) $data['avatar_img_id'],
-            'email'         => $data['email'],
-            'name'          => $data['name'],
-            'activated'     => (int) $data['activated'],
-            'id_user_group' => $data['id_user_group'],
-            'type'          => (int) $data['type'],
-        ];
-
-        if (isset($data['password'])
-            && (strlen($data['password']) > 0)
-            && $data['password'] === $data['passwordconfirm']
-        ) {
-            $values['password'] = md5($data['password']);
-        }
-
-        try {
-            $conn->update('users', $values, [ 'id' => intval($data['id']) ]);
-        } catch (\Exception $e) {
-            $conn->rollBack();
-            return false;
-        }
-
-        // Finish transaction
-        $conn->commit();
-
-        $this->id = $data['id'];
-
-        /* Notice log of this action */
-        logUserEvent(__METHOD__, $this->id, $data);
-
-        dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
-
-        return true;
-    }
-
-    /**
-     * Deletes an user given its id
-     *
-     * @param int $id the user id
-     *
-     * @return boolean true if the user was deleted
-     */
-    public function delete($id)
-    {
-        try {
-            getService('orm.manager')->getConnection('instance')
-                ->delete('users', [ 'id' => intval($id)]);
-
-            if (!$this->deleteMeta($id)) {
-                return false;
-            }
-        } catch (\Exception $e) {
-            return false;
-        }
-
-        /* Notice log of this action */
-        logUserEvent(__METHOD__, $id);
-
-        dispatchEventWithParams('user.delete', [ 'id' => $this->id ]);
-
-        return true;
-    }
-
-    /**
      * Returns the Photo object that represents the user avatar
      *
      * @return Photo the photo object
@@ -386,77 +219,6 @@ class User
         }
 
         return $photo;
-    }
-
-    /**
-     * Checks if a user exists given some information.
-     *
-     * @param array $data tuple with the username and email params
-     *
-     * @return boolean true if user exists
-     */
-    public function checkIfUserExists($data)
-    {
-        // FIXME: why username and email twice in different order?
-        $sql    = "SELECT id FROM users WHERE username=? OR email=? OR email=? OR username=?";
-        $values = [ $data['username'], $data['email'], $data['username'], $data['email'] ];
-
-        $rs = getService('orm.manager')->getConnection('instance')
-            ->fetchAll($sql, $values);
-
-        // If is update, check for more than 1 result
-        if (isset($data['id']) && count($rs) == 1 && $rs[0]['id'] == $data['id']) {
-            return false;
-        }
-
-        return !empty($rs);
-    }
-
-    /**
-     * Get user data by email
-     *
-     * @param  string     $email
-     * @return array|null
-     */
-    public function findByEmail($email)
-    {
-        $sql = 'SELECT * FROM users WHERE email=?';
-        $rs  = getService('orm.manager')->getConnection('instance')
-            ->fetchAll($sql, [ $email ]);
-
-        if (!$rs) {
-            return null;
-        }
-
-        $this->load($rs[0]);
-
-        return $this;
-    }
-
-    /**
-     * Check if the token for registration is same user token and get user data
-     *
-     * @param string $token the token
-     *
-     * @return user if exists false otherwise
-     */
-    public function findByToken($token)
-    {
-        if (empty($token)) {
-            return null;
-        }
-
-        $sql = 'SELECT * FROM users WHERE token=?';
-        $rs  = getService('orm.manager')->getConnection('instance')
-            ->fetchAll($sql, [ $token ]);
-
-        if (!$rs) {
-            return null;
-        }
-
-        $this->load($rs[0]);
-
-        return $this;
     }
 
     /**
@@ -481,24 +243,6 @@ class User
             dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
 
             return true;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        try {
-            $rs = getService('orm.manager')->getConnection('instance')->update(
-                "users",
-                [ 'password' => $password, 'token' => null ],
-                [ 'id'       => $this->id ]
-            );
-
-            dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;
@@ -600,101 +344,6 @@ class User
     }
 
     /**
-     * Checks if an email is already in use by frontend users
-     *
-     * @param  email $email the email address to look for
-     *
-     * @return bool if is in use this email
-     */
-    public function checkIfExistsUserEmail($email)
-    {
-        try {
-            $rs = getService('orm.manager')->getConnection('instance')->fetchAssoc(
-                'SELECT count(*) AS num  FROM `users` WHERE email = ?',
-                [ $email ]
-            );
-
-            return $rs['num'] > 0;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Checks if an username is already in use by frontend users
-     *
-     * @param  $userName The user name to log in
-     * @return bool if is in use this username
-     */
-    public function checkIfExistsUserName($userName)
-    {
-        try {
-            $rs = getService('orm.manager')->getConnection('instance')->fetchAssoc(
-                'SELECT count(*) AS num FROM `users` WHERE username = ?',
-                [ $userName ]
-            );
-
-            return $rs['num'] > 0;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Generate new token and update user with it
-     *
-     * @param int $id the user id
-     * @param string $token the new user token
-     *
-     * @return boolen
-     */
-    public function updateUserToken($id, $token)
-    {
-        try {
-            $rs = getService('orm.manager')->getConnection('instance')->update(
-                "users",
-                [ 'token' => $token ],
-                [ 'id'    => (int) $id ]
-            );
-
-            dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
-
-            return true;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Updates the users password
-     *
-     * @param int $id the user id
-     * @param string $pass the new user password
-     *
-     * @return boolean true if the pass was updated
-     */
-    public function updateUserPassword($id, $pass)
-    {
-        try {
-            $rs = getService('orm.manager')->getConnection('instance')->update(
-                "users",
-                [ 'password' => md5($pass) ],
-                [ 'id' => (int) $id ]
-            );
-
-            dispatchEventWithParams('user.update', [ 'id' => $this->id ]);
-
-            return true;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
      * Increases the paywall subscription time given the subscription name
      *
      * @param string $planTime the name of the plan
@@ -755,61 +404,5 @@ class User
 
         return getService('orm.manager')->getRepository('User', 'instance')
             ->countBy($oql);
-    }
-
-    /**
-     * Process an uploaded photo for user
-     *
-     * @param Symfony\Component\HttpFoundation\File\UploadedFile $file the uploaded file
-     * @param string $userName the user real name
-     *
-     * @return Response the response object
-     */
-    public function uploadUserAvatar($file, $userName)
-    {
-        // Generate image path and upload directory
-        $relativeAuthorImagePath = "/authors/" . $userName;
-        $uploadDirectory         = MEDIA_IMG_PATH . $relativeAuthorImagePath;
-
-        // Get original information of the uploaded/local image
-        $originalFileName = $file->getBaseName();
-        $fileExtension    = $file->guessExtension();
-
-        // Generate new file name
-        $currentTime = gettimeofday();
-        $microTime   = intval(substr($currentTime['usec'], 0, 5));
-        $newFileName = date("YmdHis") . $microTime . "." . $fileExtension;
-
-        // Check upload directory
-        if (!is_dir($uploadDirectory)) {
-            \Onm\FilesManager::createDirectory($uploadDirectory);
-        }
-
-        // Upload file
-        $file->move($uploadDirectory, $newFileName);
-
-        // Get all necessary data for the photo
-        $infor = new \MediaItem($uploadDirectory . '/' . $newFileName);
-        $data  = [
-            'title'       => $originalFileName,
-            'name'        => $newFileName,
-            'user_name'   => $newFileName,
-            'path_file'   => $relativeAuthorImagePath,
-            'nameCat'     => $userName,
-            'category'    => '',
-            'created'     => $infor->atime,
-            'changed'     => $infor->mtime,
-            'size'        => round($infor->size / 1024, 2),
-            'width'       => $infor->width,
-            'height'      => $infor->height,
-            'type'        => $infor->type,
-            'author_name' => '',
-        ];
-
-        // Create new photo
-        $photo   = new \Photo();
-        $photoId = $photo->create($data);
-
-        return $photoId;
     }
 }

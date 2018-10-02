@@ -170,6 +170,40 @@ class Importer
     }
 
     /**
+     * Downloads and create a photo form URL for the given author.
+     *
+     * @param string $url    The photo URL.
+     * @param User   $author The author object.
+     *
+     * @return integer The photo id.
+     */
+    protected function createPhoto($url, $author)
+    {
+        $cm       = new \ContentManager();
+        $photoRaw = $cm->getUrlContent($url);
+        $name     = substr($url, strrpos($url, '/') + 1);
+
+        if (!$photoRaw) {
+            return $author->id;
+        }
+
+        $tmp  = tmpfile();
+        $path = stream_get_meta_data($tmp)['uri'];
+
+        file_put_contents($path, $photoRaw);
+
+        $data = [
+            'description'       => $author->name,
+            'local_file'        => $path,
+            'original_filename' => $name,
+        ];
+
+        $photo = new \Photo();
+
+        return $photo->createFromLocalFile($data);
+    }
+
+    /**
      * Returns the author id for a resource.
      *
      * @param Resource $resource The resource.
@@ -200,109 +234,48 @@ class Importer
             return 0;
         }
 
-        // Resource has author
-        $author = $resource->author;
-
-        if (!is_object($author)) {
+        if (!is_array($resource->author)) {
             return 0;
         }
 
-        $data = get_object_vars($author);
+        $as     = $this->container->get('api.service.author');
+        $author = null;
 
-        if (array_key_exists('email', $data)) {
-            $um   = $this->container->get('user_repository');
-            $user = $um->findOneBy([
-                'union'    => 'or',
-                'email'    => [ [ 'value' => $data['email'] ] ],
-                'username' => [ [ 'value' => $data['email'] ] ]
-            ]);
+        try {
+            $response = $as->getList("name = '{$resource->author['name']}'");
+            $author   = array_pop($response['items']);
 
-            if (!empty($user)) {
-                return $user->id;
+            if (empty($author)) {
+                $author = $as->createItem([
+                    'name'        => $resource->author['name'],
+                    'email'       => $resource->author['name'],
+                    'user_groups' => [ [ 'user_group_id' => 3, 'status' => 1 ] ],
+                    'type'        => 0
+                ]);
             }
-        }
-
-        // Set user as deactivated author without privileges
-        $data['activated']        = 0;
-        $data['id_user_group']    = [ 3 ];
-        $data['accesscategories'] = [];
-
-        // Create author
-        $user = new \User();
-
-        if (!$user->create($data)) {
+        } catch (\Exception $e) {
+            $this->container->get('error.log')->error($e->getMessage());
             return 0;
         }
 
-        // Write in log
-        $logger = $this->container->get('application.log');
-        $logger->info(
-            'User ' . $data['username'] . ' was created from importer by user '
-            . $this->container->get('core.user')->username
-            . ' (' . $this->container->get('core.user')->id . ')'
-        );
-
-        // Set user meta if exists
-        if ($author->meta) {
-            $meta = get_object_vars($author->meta);
-            $user->setMeta($meta);
-        }
-
-        if (!$author->photo) {
-            return $user->id;
-        }
-
-        $cm       = new \ContentManager();
-        $photoRaw = $cm->getUrlContent($author->photo);
-
-        if (!$photoRaw) {
+        // Do not import photo if missing or author already has a photo
+        if (empty($resource->author['photo'])
+            || !empty($author->avatar_img_id)
+        ) {
             return $author->id;
         }
 
-        // Create author photo
-        $localImageDir  = MEDIA_IMG_PATH . $author->photo->path_file;
-        $localImagePath = MEDIA_IMG_PATH . $author->photo->path_img;
+        try {
+            $photoId = $this->createPhoto($resource->author['photo'], $author);
 
-        if (!is_dir($localImageDir)) {
-            \Onm\FilesManager::createDirectory($localImageDir);
+            if (!empty($photoId)) {
+                $as->patchItem($author->id, [ 'avatar_img_id' => $photoId ]);
+            }
+        } catch (\Exception $e) {
+            $this->container->get('error.log')->error($e->getMessage());
         }
 
-        if (file_exists($localImagePath)) {
-            unlink($localImagePath);
-        }
-
-        file_put_contents($localImagePath, $photoRaw);
-
-        // Get all necessary data for the photo
-        $info = new \MediaItem($localImagePath);
-        $data = [
-            'title'       => $author->photo->name,
-            'name'        => $author->photo->name,
-            'user_name'   => $author->photo->name,
-            'path_file'   => $author->photo->path_file,
-            'namecat'     => $author->username,
-            'category'    => '',
-            'created'     => $info->atime,
-            'changed'     => $info->mtime,
-            'date'        => $info->mtime,
-            'size'        => round($info->size / 1024, 2),
-            'width'       => $info->width,
-            'height'      => $info->height,
-            'type'        => $info->type,
-            'type_img'    => substr($author->photo->name, -3),
-            'media_type'  => 'image',
-            'author_name' => $author->username,
-        ];
-
-        $photo   = new \Photo();
-        $photoId = $photo->create($data);
-
-        $data['avatar_img_id'] = $photoId;
-        unset($data['password']);
-
-        $user->update($data);
-
-        return $user->id;
+        return $author->id;
     }
 
     /**
@@ -312,7 +285,8 @@ class Importer
      */
     protected function getComments()
     {
-        $config = $this->container->get('setting_repository')
+        $config = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
             ->get('comments_config');
 
         if (!empty($config) && array_key_exists('with_comments', $config)) {

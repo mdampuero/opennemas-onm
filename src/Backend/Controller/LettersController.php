@@ -13,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for the letters content
@@ -47,11 +46,8 @@ class LettersController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
-            $ls = $this->get('core.locale');
             return $this->render('letter/new.tpl', [
-                'commentsConfig' => $this->get('setting_repository')
-                    ->get('comments_config'),
-                'locale'         => $ls->getLocale('frontend'),
+                'locale'         => $this->get('core.locale')->getLocale('frontend'),
                 'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
                 'tags'           => []
             ]);
@@ -253,7 +249,9 @@ class LettersController extends Controller
     {
         $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
+        $itemsPerPage = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_per_page', 20);
 
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);

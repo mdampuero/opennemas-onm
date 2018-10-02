@@ -82,6 +82,7 @@ class AuthenticationController extends Controller
         }
 
         $errors = $request->getSession()->getFlashbag()->get('error');
+
         if ($errors) {
             $message = [ 'type' => 'error', 'text' => $errors[0] ];
         }

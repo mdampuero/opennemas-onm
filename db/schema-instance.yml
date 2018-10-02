@@ -1673,9 +1673,6 @@ users:
         activated:
             type: integer
             options: { unsigned: true, default: 0, notnull: true, comment: '1 activated - 0 deactivated' }
-        fk_user_group:
-            type: string
-            options: { length: 100, default: null, notnull: false }
     index:
         -
             name: PRIMARY

@@ -52,7 +52,8 @@ class CommentSubscriber implements EventSubscriberInterface
      */
     public function getNotifications(Event $event)
     {
-        $system = $this->container->get('setting_repository')
+        $system = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
             ->get('comment_system');
 
         if (empty($system) || $system !== 'onm') {

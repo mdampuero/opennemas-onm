@@ -93,7 +93,6 @@ function logUserEvent($action = null, $id = null, $data = null)
 
         if (!is_null($data)) {
             $message .= ' - username (' . $data['username'] . ')' .
-                        ' - user group (' . $data['id_user_group'] . ')' .
                         ' - activated flag (' . $data['activated'] . ')';
         }
 
@@ -240,7 +239,9 @@ function dispatchEventWithParams($eventName, $params = [])
 
 function getPiwikCode($type = false)
 {
-    $config = getService('setting_repository')->get('piwik');
+    $config = getService('orm.manager')
+        ->getDataSet('Settings', 'instance')
+        ->get('piwik');
 
     if (!is_array($config)
         || !array_key_exists('page_id', $config)
@@ -321,7 +322,9 @@ function generatePiwikImageCode($config)
 
 function getGoogleAnalyticsCode($params = [])
 {
-    $config = getService('setting_repository')->get('google_analytics');
+    $config = getService('orm.manager')
+        ->getDataSet('Settings', 'instance')
+        ->get('google_analytics');
 
     // Keep compatibility with old analytics store format
     if (is_array($config)

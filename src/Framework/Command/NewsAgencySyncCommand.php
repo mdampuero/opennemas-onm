@@ -66,7 +66,8 @@ EOF
         $output->writeln("<fg=yellow>Start synchronizing {$instance->internal_name} instance...</>");
         $logger->info("Start synchronizing {$instance->internal_name} instance", [ 'cron' ]);
 
-        $servers = $this->getContainer()->get('orm.manager')->getDataSet('Settings')
+        $servers = $this->getContainer()->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
             ->get('news_agency_config');
 
         $logger = $this->getContainer()->get('error.log');
@@ -99,7 +100,10 @@ EOF
                     $logger->info("{$synchronizer->stats['contents']} contents found", [ 'cron' ]);
 
                     if (array_key_exists('auto_import', $server) && $server['auto_import']) {
-                        $timezone = $this->getContainer()->get('setting_repository')->get('time_zone');
+                        $timezone = $this->getContainer()->get('orm.manager')
+                            ->getDataSet('Settings', 'instance')
+                            ->get('time_zone');
+
                         $this->getContainer()->get('core.locale')->setTimeZone($timezone);
                         $importer = $this->getContainer()->get('news_agency.importer');
                         $importer->configure($server);

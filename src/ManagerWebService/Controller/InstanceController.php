@@ -623,12 +623,6 @@ class InstanceController extends Controller
         $this->get('core.loader')->configureInstance($instance);
         $em->getDataSet('Settings', 'instance')->set($settings);
 
-        // TODO: Fix clean caches
-        foreach (array_keys($settings) as $key) {
-            $this->get('setting_repository')
-                ->invalidate($key, $instance->internal_name);
-        }
-
         $this->get('core.dispatcher')
             ->dispatch('instance.update', [ 'instance' => $instance ]);
 

@@ -11,7 +11,6 @@ namespace Frontend\Controller;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Common\Core\Controller\Controller;
 
 /**
@@ -169,34 +168,25 @@ class AuthorController extends Controller
         if ($this->view->getCaching() === 0
            || !$this->view->isCached('user/frontpage_author.tpl', $cacheID)
         ) {
-            $sql = "SELECT count(pk_content) as total_contents, users.id FROM contents, users "
-                . " WHERE users.fk_user_group  LIKE '%3%' "
-                . " AND contents.fk_author = users.id  AND fk_content_type IN (1, 4, 7, 9) "
-                . " AND available = 1 AND in_litter!= 1 GROUP BY users.id ORDER BY total_contents DESC";
+            $response = $this->get('api.service.author')->getList();
+            $authors  = $this->get('data.manager.filter')
+                ->set($response['items'])
+                ->filter('mapify', [ 'key' => 'id' ])
+                ->get();
 
-            $authors = $this->get('dbal_connection')->fetchAll($sql);
+            $sql = "SELECT contents.fk_author as id, count(pk_content) as total FROM contents"
+                . " WHERE contents.fk_author IN (" . implode(',', array_keys($authors)) . ")"
+                . " AND fk_content_type IN (1, 4, 7, 9)  AND available = 1 AND in_litter!= 1"
+                . " GROUP BY contents.fk_author ORDER BY total DESC";
 
-            $total   = count($authors);
-            $authors = array_slice($authors, ($page - 1) * $itemsPerPage, $itemsPerPage);
+            $items = $this->get('dbal_connection')->fetchAll($sql);
+            $items = array_slice($items, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
-            $ids = array_map(function ($a) {
-                return $a['id'];
-            }, $authors);
+            foreach ($items as &$item) {
+                $authors[$item['id']]->total_contents = $item['total'];
 
-            // Get user by slug
-            $oql   = sprintf('id in [%s]', implode(',', $ids));
-            $users = $this->get('orm.manager')->getRepository('User')->findBy($oql);
+                $item = $authors[$item['id']];
 
-            // Map to keep original order
-            $map = [];
-            foreach ($users as $user) {
-                $map[$user->id] = $user;
-            }
-
-            foreach ($authors as &$item) {
-                $user                 = $map[$item['id']];
-                $user->total_contents = $item['total_contents'];
-                $item                 = $user;
                 // Fetch user avatar if exists
                 if (!empty($item->avatar_img_id)) {
                     $item->photo = $this->get('entity_repository')->find(
@@ -211,7 +201,7 @@ class AuthorController extends Controller
                 'directional' => true,
                 'epp'         => $itemsPerPage,
                 'page'        => $page,
-                'total'       => $total,
+                'total'       => $response['total'],
                 'route'       => 'frontend_frontpage_authors'
             ]);
 

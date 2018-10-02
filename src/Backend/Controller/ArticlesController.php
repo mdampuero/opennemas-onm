@@ -13,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for managing articles
@@ -47,10 +46,11 @@ class ArticlesController extends Controller
     public function createAction(Request $request)
     {
         return $this->render('article/new.tpl', [
-            'commentsConfig' => $this->get('setting_repository')
+            'commentsConfig' => $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
                 ->get('comments_config'),
-            'locale' => $request->query->get('locale'),
-            'timezone' => $this->container->get('core.locale')
+            'locale'         => $request->query->get('locale'),
+            'timezone'       => $this->container->get('core.locale')
                 ->getTimeZone()->getName()
         ]);
     }
@@ -69,11 +69,12 @@ class ArticlesController extends Controller
     public function showAction(Request $request, $id)
     {
         return $this->render('article/new.tpl', [
-            'commentsConfig' => $this->get('setting_repository')
+            'commentsConfig' => $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
                 ->get('comments_config'),
-            'id' => $id,
-            'locale' => $request->query->get('locale'),
-            'timezone' => $this->container->get('core.locale')
+            'id'             => $id,
+            'locale'         => $request->query->get('locale'),
+            'timezone'       => $this->container->get('core.locale')
                 ->getTimeZone()->getName()
         ]);
     }
@@ -90,7 +91,9 @@ class ArticlesController extends Controller
     {
         $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = $this->get('settings_repository')->get('items_per_page') ?: 20;
+        $itemsPerPage = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_per_page', 20);
 
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
@@ -259,7 +262,9 @@ class ArticlesController extends Controller
     {
         $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
+        $itemsPerPage = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_per_page', 20);
 
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
@@ -447,7 +452,8 @@ class ArticlesController extends Controller
     public function configAction()
     {
         return $this->render('article/config.tpl', [
-            'extra_fields' => $this->get('setting_repository')
+            'extra_fields' => $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
                 ->get('extraInfoContents.ARTICLE_MANAGER')
         ]);
     }

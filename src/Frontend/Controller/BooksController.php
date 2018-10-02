@@ -115,8 +115,8 @@ class BooksController extends Controller
 
             $content->category_title = $content->loadCategoryTitle($content->id);
 
-            $contentManager  = new \ContentManager();
-            $books = $contentManager->find_by_category(
+            $contentManager = new \ContentManager();
+            $books          = $contentManager->find_by_category(
                 'Book',
                 $content->category,
                 'content_status=1',
@@ -137,7 +137,8 @@ class BooksController extends Controller
             'contentId'   => $content->id,
             'category'    => $content->category,
             'cache_id'    => $cacheID,
-            'x-tags'      => 'book,'.$content->id,
+            'o_content'   => $content,
+            'x-tags'      => 'book,' . $content->id,
             'x-cache-for' => '+1 day',
         ]);
     }
@@ -151,31 +152,34 @@ class BooksController extends Controller
      */
     public function ajaxPaginationListAction(Request $request)
     {
-        $contentManager   = new \ContentManager();
-        $category   = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
-        $this->page = $request->query->getDigits('page', 1);
-        $last       = false;
+        $contentManager = new \ContentManager();
+        $category       = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
+        $this->page     = $request->query->getDigits('page', 1);
+        $last           = false;
+
         if ($this->page < 1) {
             $this->page = 1;
         }
 
-        $limit = 'LIMIT '.(($this->page - 1) * 5).',  5';
+        $limit = 'LIMIT ' . (($this->page - 1) * 5) . ',  5';
         $books = $contentManager->find_by_category(
             'Book',
             $category,
             'content_status=1',
-            'ORDER BY position ASC, created DESC '. $limit
+            'ORDER BY position ASC, created DESC ' . $limit
         );
 
         if (count($books) == 0) {
             $this->page = $this->page - 1;
-            $limit = 'LIMIT '.(($this->page - 1) * 5).',  5';
-            $books  = $contentManager->find_by_category(
+
+            $limit = 'LIMIT ' . (($this->page - 1) * 5) . ',  5';
+            $books = $contentManager->find_by_category(
                 'Book',
                 $category,
                 'content_status=1',
-                'ORDER BY position ASC, created DESC '. $limit
+                'ORDER BY position ASC, created DESC ' . $limit
             );
+
             $last = true;
         }
 

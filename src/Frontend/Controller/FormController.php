@@ -105,7 +105,9 @@ class FormController extends Controller
             $subject   = $request->request->filter('subject', null, FILTER_SANITIZE_STRING);
             $recipient = trim($request->request->filter('recipient', null, FILTER_SANITIZE_STRING));
 
-            $settings = $this->get('setting_repository')->get([ 'mail_sender', 'site_name', 'contact_email' ]);
+            $settings = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get([ 'mail_sender', 'site_name', 'contact_email' ]);
 
             if (!array_key_exists('mail_sender', $settings)
                 || empty($settings['mail_sender'])
