@@ -146,7 +146,7 @@ class LettersController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $id     = $request->query->getDigits('id');
+        $id = $request->query->getDigits('id');
 
         // Check empty data
         if (count($request->request) < 1) {

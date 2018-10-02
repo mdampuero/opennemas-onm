@@ -177,7 +177,7 @@ class FilesController extends Controller
                         if ($v->pk_content_category != $this->ccm->get_id($this->ccm->getFather($value->catName))) {
                             continue;
                         }
-                        if ($this->ccm->get_id($ccm->getFather($value->catName))) {
+                        if ($this->ccm->get_id($this->ccm->getFather($value->catName))) {
                             $sub_size[$k][$ind] += filesize(MEDIA_PATH . '/' . FILE_DIR . '/' . $value->path);
                         }
                     }
