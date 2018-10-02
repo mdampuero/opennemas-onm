@@ -614,8 +614,6 @@ class HooksSubscriber implements EventSubscriberInterface
      * Deletes Smarty caches when an opinion is updated.
      *
      * @param Event $event The event to handle.
-     *
-     * @return void|boolean
      */
     public function removeSmartyCacheOpinion(Event $event)
     {
@@ -650,8 +648,6 @@ class HooksSubscriber implements EventSubscriberInterface
      * Removes the Smarty cache for an instance.
      *
      * @param Event $event The event object.
-     *
-     * @return void|boolean
      */
     public function removeSmartyForInstance(Event $event)
     {
@@ -710,8 +706,6 @@ class HooksSubscriber implements EventSubscriberInterface
      * Queues a varnish ban request.
      *
      * @param Event $event The event to handle.
-     *
-     * @return void|boolean
      */
     public function removeVarnishCacheCurrentInstance()
     {

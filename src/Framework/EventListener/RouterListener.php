@@ -146,7 +146,6 @@ class RouterListener implements EventSubscriberInterface
      * Action dispatched on kernel.request event
      *
      * @param GetResponseEvent $event the event object
-     * @return void
      **/
     public function onKernelRequest(GetResponseEvent $event)
     {

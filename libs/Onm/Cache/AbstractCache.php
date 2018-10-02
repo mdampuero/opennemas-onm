@@ -44,7 +44,6 @@ abstract class AbstractCache implements CacheInterface
      * Set the namespace to prefix all cache ids with
      *
      * @param  string $namespace
-     * @return void
      */
     public function setNamespace($namespace)
     {

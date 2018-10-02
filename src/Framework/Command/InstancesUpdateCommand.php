@@ -357,7 +357,6 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      * Fetches the date of creation of the instance
      *
      * @param Instance $i The instance to get stats from
-     * @return void
      */
     public function getCreatedDate(&$i)
     {
