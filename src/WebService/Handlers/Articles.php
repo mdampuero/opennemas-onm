@@ -141,8 +141,6 @@ class Articles
      *
      * @param type $number the number to validate
      *
-     * @return void
-     *
      * @throws RestException
      */
     private function validateInt($number)

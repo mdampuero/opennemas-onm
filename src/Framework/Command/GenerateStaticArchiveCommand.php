@@ -61,8 +61,6 @@ EOF
 
     /**
      * Read articles data and insert in new database
-     *
-     * @return void
      */
     protected function generateStatics($output)
     {

@@ -66,8 +66,6 @@ class NewsletterSenderHelper
      * @param SettingsRepository $settingsRepository The settings repository service.
      * @param NewsletterManager  $newsletterManager The newsletter manager service.
      * @param string             $noReplyAddress The no-reply address parameter.
-     *
-     * @return void
      */
     public function __construct(
         $settingsRepository,

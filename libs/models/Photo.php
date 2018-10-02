@@ -95,8 +95,6 @@ class Photo extends Content
      * Overloads the object properties with an array of the new ones
      *
      * @param array $properties the list of properties to load
-     *
-     * @return void
      */
     public function load($properties)
     {

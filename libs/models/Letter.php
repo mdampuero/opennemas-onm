@@ -35,8 +35,6 @@ class Letter extends Content
      * Initializes Letter object instance
      *
      * @param int $id the letter id
-     *
-     * @return void
      */
     public function __construct($id = null)
     {

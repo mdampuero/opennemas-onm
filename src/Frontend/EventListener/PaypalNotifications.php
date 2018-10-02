@@ -22,8 +22,6 @@ class PaypalNotifications implements EventSubscriberInterface
 {
     /**
      * Register the content event handler
-     *
-     * @return void
      */
     public static function getSubscribedEvents()
     {
@@ -38,8 +36,6 @@ class PaypalNotifications implements EventSubscriberInterface
      * Perform the actions to process paypal ipn for recurring payments
      *
      * @param Event $event The event to handle
-     *
-     * @return void
      */
     public function paywallRecurring(Event $event)
     {
@@ -98,8 +94,8 @@ class PaypalNotifications implements EventSubscriberInterface
                 $tplMail          = getService('view')->getBackendTemplate();
                 $tplMail->caching = 0;
 
-                $mailBody         = $tplMail->fetch('paywall/emails/payment_success.tpl');
-                $email            = \Swift_Message::newInstance();
+                $mailBody = $tplMail->fetch('paywall/emails/payment_success.tpl');
+                $email    = \Swift_Message::newInstance();
                 $email
                     ->setSubject(sprintf(_('%s - Premium subscription activated'), s::get('site_title')))
                     ->setBody($mailBody, 'text/plain')

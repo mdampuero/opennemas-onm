@@ -115,8 +115,6 @@ class Article extends Content
      * Initializes the Article object from an ID
      *
      * @param int $id the id of the article we want to initialize
-     *
-     * @return void
      */
     public function __construct($id = null)
     {
@@ -482,8 +480,6 @@ class Article extends Content
      * @param string $data   list of related content IDs
      * @param int    $id     the id of the content we want to relate other contents
      * @param string $method the method to bind related contents
-     *
-     * @return void
      */
     public function saveRelated($data, $id, $method)
     {

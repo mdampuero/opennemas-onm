@@ -75,8 +75,6 @@ class CompileAssetsCommand extends ContainerAwareCommand
      * Extracts all paths to script files from file content.
      *
      * @param string $file The file content.
-     *
-     * @return void
      */
     protected function extractScripts($file)
     {
@@ -102,8 +100,6 @@ class CompileAssetsCommand extends ContainerAwareCommand
      * Extracts paths to stylesheet files from file content.
      *
      * @param string $file The file content.
-     *
-     * @return void
      */
     protected function extractStyles($file)
     {
@@ -130,8 +126,6 @@ class CompileAssetsCommand extends ContainerAwareCommand
      * Finds templates in path and extracts scripts and stylesheets.
      *
      * @param string $path The path to admin theme.
-     *
-     * @return void
      */
     protected function find($path)
     {
@@ -151,8 +145,6 @@ class CompileAssetsCommand extends ContainerAwareCommand
      * Writes compiled files for scripts included in templates.
      *
      * @param OutputInterface $output The output object.
-     *
-     * @return void
      */
     protected function writeScripts($output)
     {
@@ -173,8 +165,6 @@ class CompileAssetsCommand extends ContainerAwareCommand
      * Writes compiled files for stylesheets included in templates.
      *
      * @param OutputInterface $output The output object.
-     *
-     * @return void
      */
     protected function writeStyles($output)
     {

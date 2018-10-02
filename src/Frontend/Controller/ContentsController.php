@@ -336,8 +336,6 @@ class ContentsController extends Controller
 
     /**
      * Alteres the article given the paywall module status
-     *
-     * @return void
      */
     public function paywallHook(&$content)
     {

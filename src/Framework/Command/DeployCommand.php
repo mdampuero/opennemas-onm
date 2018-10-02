@@ -87,8 +87,6 @@ EOF
 
     /**
      * Saves a file with a deploy version with the actual timestamp
-     *
-     * @return void
      */
     public function generateDeployFile($time = null)
     {
@@ -97,7 +95,7 @@ EOF
         }
         $contents = "<?php define('DEPLOYED_AT', '$time');";
 
-        file_put_contents(APPLICATION_PATH.'/.deploy.php', $contents);
+        file_put_contents(APPLICATION_PATH . '/.deploy.php', $contents);
     }
 
     /**
@@ -108,10 +106,10 @@ EOF
     public function executeMaintenance($action)
     {
         $command = $this->getApplication()->find('app:maintenance');
-        $arguments = array(
+        $arguments = [
             'command' => 'app:maintenance',
             'action'  => $action,
-        );
+        ];
 
         $input = new ArrayInput($arguments);
         $command->run($input, $this->output);
@@ -144,10 +142,10 @@ EOF
     public function compileTranslations()
     {
         $command = $this->getApplication()->find('translation:core');
-        $arguments = array(
-            'command'      => 'translation:core',
+        $arguments = [
+            'command'        => 'translation:core',
             '--only-compile' => true,
-        );
+        ];
 
         $input = new ArrayInput($arguments);
         $command->run($input, $this->output);
@@ -165,9 +163,9 @@ EOF
                 continue;
             }
             chdir($theme);
-            $this->output->writeln("\t* ".basename($theme));
+            $this->output->writeln("\t* " . basename($theme));
             $output = exec("git pull");
-            $this->output->writeln("\t\t".$output);
+            $this->output->writeln("\t\t" . $output);
             chdir($this->basePath);
         }
         $this->output->writeln('');
@@ -179,10 +177,10 @@ EOF
     public function cleanCache()
     {
         try {
-            $command = $this->getApplication()->find('clean:smarty-cache');
-            $arguments = array(
+            $command   = $this->getApplication()->find('clean:smarty-cache');
+            $arguments = [
                 'command' => 'clean:smarty-cache',
-            );
+            ];
 
             $input = new ArrayInput($arguments);
             $command->run($input, $this->output);
@@ -196,10 +194,8 @@ EOF
      */
     public function cleanSymfonyCache()
     {
-        $command = $this->getApplication()->find('cache:clear');
-        $arguments = array(
-            'command' => 'cache:clear',
-        );
+        $command   = $this->getApplication()->find('cache:clear');
+        $arguments = [ 'command' => 'cache:clear' ];
 
         $input = new ArrayInput($arguments);
         $command->run($input, $this->output);
@@ -207,15 +203,11 @@ EOF
 
     /**
      * Cleans the Zend Opcode Cache
-     *
-     * @return void
      */
     public function cleanOpcodeCache()
     {
         $command = $this->getApplication()->find('cache:clean:opcode');
-        $arguments = array(
-            'command' => 'cache:clean:opcode',
-        );
+        $arguments = [ 'command' => 'cache:clean:opcode' ];
 
         $input = new ArrayInput($arguments);
         $command->run($input, $this->output);
@@ -223,12 +215,10 @@ EOF
 
     /**
      * Executes in a shell the provided command line
-     *
-     * @return void
      */
     public function execProcess($processLine)
     {
-        $output = $this->output;
+        $output  = $this->output;
         $process = new Process($processLine);
         $process->run(function ($type, $buffer) use ($output) {
             if (Process::ERR === $type) {
@@ -241,8 +231,6 @@ EOF
 
     /**
      * Installs npm and grunt dependencies
-     *
-     * @return void
      */
     public function installNpmAndBowerDeps()
     {
@@ -253,16 +241,14 @@ EOF
 
     /**
      * Generate exposed routes file to use that routes in javascript.
-     *
-     * @return void
      */
     public function generateRoutes()
     {
-        $command = $this->getApplication()->find('fos:js-routing:dump');
-        $arguments = array(
-            'command' => 'fos:js-routing:dump',
+        $command   = $this->getApplication()->find('fos:js-routing:dump');
+        $arguments = [
+            'command'  => 'fos:js-routing:dump',
             '--target' => 'public/assets/js/routes.js'
-        );
+        ];
 
         $input = new ArrayInput($arguments);
         $command->run($input, $this->output);

@@ -38,8 +38,6 @@ class SimpleMenu
      *
      * @param string $menuArray the array with menu contents
      * @param string $baseUrl the base url for the links
-     *
-     * @return void
      */
     public function __construct($menuArray, $baseUrl = null)
     {
@@ -277,10 +275,7 @@ class SimpleMenu
     }
 
     /**
-     * undocumented function
-     *
-     * @return void
-     * @author
+     * Renders a separator
      */
     public function renderSeparator()
     {

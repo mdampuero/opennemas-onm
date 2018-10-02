@@ -99,8 +99,6 @@ class Config
      * Initializes the Config class
      *
      * @param string $configDir the config dir where the config.ini file is located in
-     *
-     * @return void
      */
     public function __construct($configDir = '')
     {
@@ -242,8 +240,6 @@ class Config
 
     /**
      * Saves the default cache configuration.
-     *
-     * @return void
      */
     public function saveDefault()
     {

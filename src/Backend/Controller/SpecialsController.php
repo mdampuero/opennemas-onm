@@ -18,8 +18,6 @@ class SpecialsController extends Controller
 {
     /**
      * Common code for all the actions
-     *
-     * @return void
      */
     public function init()
     {
@@ -42,8 +40,6 @@ class SpecialsController extends Controller
 
     /**
      * List all the specials in a category
-     *
-     * @return void
      *
      * @Security("hasExtension('SPECIAL_MANAGER')
      *     and hasPermission('SPECIAL_ADMIN')")
@@ -73,8 +69,6 @@ class SpecialsController extends Controller
 
     /**
      * List all the specials selected for the widget
-     *
-     * @return void
      *
      * @Security("hasExtension('SPECIAL_MANAGER')
      *     and hasPermission('SPECIAL_ADMIN')")

@@ -25,8 +25,6 @@ class Redis extends AbstractCache
 
     /**
      * Initializes the backend layer connection
-     *
-     * @return void
      */
     public function __construct($options)
     {

@@ -114,8 +114,6 @@ EOF
 
     /**
      * Returns the mysqldump command with all its parameters
-     *
-     * @return void
      */
     public function getMysqlDumpCommand($databaseName, $outputFile)
     {
@@ -129,8 +127,6 @@ EOF
 
     /**
      * undocumented function
-     *
-     * @return void
      * @author
      */
     public function executeDatabaseDump($dumpCommand, $output)

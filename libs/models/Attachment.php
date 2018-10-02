@@ -57,8 +57,6 @@ class Attachment extends Content
      * Constructor for the Attachment class
      *
      * @param  integer $id the id of the Attachment
-     *
-     * @return void
      */
     public function __construct($id = null)
     {

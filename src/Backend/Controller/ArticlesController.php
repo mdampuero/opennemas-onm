@@ -454,8 +454,6 @@ class ArticlesController extends Controller
 
     /**
      * Common code for all the actions
-     *
-     * @return void
      */
     public function loadCategories(Request $request)
     {

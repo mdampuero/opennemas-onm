@@ -57,8 +57,6 @@ class Manager
      * Deletes all the caches of a group
      *
      * @param string $cacheGroup Name of group
-     *
-     * @return void
      */
     public function deleteGroup($cacheGroup)
     {
@@ -72,8 +70,6 @@ class Manager
 
     /**
      * Deletes all the caches
-     *
-     * @return void
      */
     public function deleteAll()
     {

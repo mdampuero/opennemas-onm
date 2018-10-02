@@ -64,8 +64,6 @@ EOF
 
     /**
      * Extract translations from a list of modules
-     *
-     * @return void
      */
     private function extractTrans($output)
     {
@@ -121,8 +119,6 @@ EOF
 
     /**
      * Updates the translation files
-     *
-     * @return void
      */
     private function updateTrans($output)
     {
@@ -147,8 +143,6 @@ EOF
 
     /**
      * Compiles the translation files
-     *
-     * @return void
      */
     private function compileTrans($output)
     {

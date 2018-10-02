@@ -795,8 +795,6 @@ class PaywallController extends Controller
 
     /**
      * Description of the action
-     *
-     * @return void
      */
     public function returnCancelPaymentAction()
     {
@@ -819,8 +817,6 @@ class PaywallController extends Controller
 
     /**
      * undocumented function
-     *
-     * @return void
      * @author
      */
     private function getPaypalService()

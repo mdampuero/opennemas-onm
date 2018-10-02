@@ -265,8 +265,6 @@ class CommentManager extends BaseManager
      * Deletes a comment from cache.
      *
      * @param integer $id Id of the comment to delete.
-     *
-     * @return void
      */
     public function delete($id)
     {

@@ -36,8 +36,6 @@ class Apc extends AbstractCache
      *
      * @param array $options the optiosn to initialize the cache layer
      *
-     * @return void
-     *
      * @throws \Exception
      */
     public function initialize()

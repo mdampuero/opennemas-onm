@@ -59,8 +59,6 @@ class CleanSmartyCacheCommand extends Command
 
     /**
      * Cleans compile files for a theme
-     *
-     * @return void
      */
     private function cleanCompileForTheme($output, $baseTmpInstancesPath)
     {
@@ -77,8 +75,6 @@ class CleanSmartyCacheCommand extends Command
 
     /**
      * Cleans cache files for a theme
-     *
-     * @return void
      */
     private function cleanCacheForTheme($output, $themePath)
     {

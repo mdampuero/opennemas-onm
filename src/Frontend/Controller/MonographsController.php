@@ -28,8 +28,6 @@ class MonographsController extends Controller
 {
     /**
      * Common code for all the actions
-     *
-     * @return void
      */
     public function init()
     {

@@ -55,8 +55,6 @@ class ContentManager
      * some particular database tables
      *
      * @param string $contentType the content type to work with
-     *
-     * @return void
      */
     public function __construct($contentType = null)
     {
@@ -72,8 +70,6 @@ class ContentManager
      * Initializes the table and content_type properties from a content type name
      *
      * @param string $contentType the content type name
-     *
-     * @return void
      */
     public function init($contentType)
     {

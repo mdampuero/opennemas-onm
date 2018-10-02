@@ -156,8 +156,6 @@ class DbalWrapper
      *
      * @param string $method The called method.
      * @param mixed  $params The called params.
-     *
-     * @return void
      */
     public function addCallToBuffer($method, $params)
     {

@@ -63,8 +63,6 @@ class Vote
      * Initializes the vote given an content id
      *
      * @param int $id the content id to fetch the votes
-     *
-     * @return void
      */
     public function __construct($id = null)
     {

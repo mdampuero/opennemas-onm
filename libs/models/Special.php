@@ -49,8 +49,6 @@ class Special extends Content
      * Initializes the Special class.
      *
      * @param string $id the id of the album.
-     *
-     * @return void
      */
     public function __construct($id = null)
     {
@@ -140,8 +138,6 @@ class Special extends Content
      * Overloads the object properties with an array of the new ones
      *
      * @param array $properties the list of properties to load
-     *
-     * @return void
      */
     public function load($properties)
     {
@@ -276,8 +272,6 @@ class Special extends Content
      * Saves the items for the current special
      *
      * @param array $data the data of the special
-     *
-     * @return void
      */
     public function saveItems($data)
     {

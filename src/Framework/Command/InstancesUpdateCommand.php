@@ -204,7 +204,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
                 $this->output->write("\t- Getting page num views ");
             }
             $sql = 'SELECT value FROM settings WHERE name=\'piwik\'';
-            $rs = $conn->fetchAll($sql);
+            $rs  = $conn->fetchAll($sql);
 
             if ($rs !== false && !empty($rs)) {
                 $piwik = unserialize($rs[0]['value']);
@@ -256,16 +256,14 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      * Fetches the instance stats ()
      *
      * @param Instance $i The instance to get stats from
-     *
-     * @return void
      */
     public function getInstanceStats(&$i)
     {
-        $conn  = $this->getContainer()->get('orm.manager')->getConnection('instance');
+        $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
 
         // Count contents
         $sql = 'SELECT count(*) as total FROM contents';
-        $rs = $conn->fetchAll($sql);
+        $rs  = $conn->fetchAll($sql);
 
         if (!empty($rs)) {
             $i->contents = $rs[0]['total'];
@@ -379,13 +377,12 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      * Caculates the amount of Mb that an instance has
      *
      * @param Instance $i The instance to get stats from
-     *
-     * @return void
      */
     public function getMediaSize(&$i)
     {
-        $size = 0;
-        $mediaPath = realpath(SITE_PATH."media".DS.$i->internal_name);
+        $size      = 0;
+        $mediaPath = realpath(SITE_PATH . "media" . DS . $i->internal_name);
+
         if ($mediaPath) {
             $size = (int) shell_exec('du -s '.$mediaPath.'/ | awk \'{ print $1}\'');
         }

@@ -310,8 +310,6 @@ class FrontpagesController extends Controller
      *
      * @param Request $request the request object
      *
-     * @return void
-     *
      * @Security("hasExtension('FRONTPAGE_MANAGER')
      *     and hasPermission('ARTICLE_FRONTPAGE')")
      */

@@ -93,8 +93,6 @@ EOF
      * as parameter
      *
      * @param array $instances the list of Instance objects to show infor for
-     *
-     * @return void
      **/
     private function printInstanceInfo($instances = [])
     {

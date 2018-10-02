@@ -395,8 +395,6 @@ class Dumper
      * @param array $name   The table name.
      * @param array $config The table definition to validate.
      *
-     * @return void
-     *
      * @throws InvalidSchemaException If the table is not valid.
      */
     protected function validateTable($name, $config)

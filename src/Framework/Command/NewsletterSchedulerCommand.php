@@ -237,8 +237,6 @@ EOF
      * Writes the provided line into the output
      *
      * @param string $line The line to write in the output
-     *
-     * @return void
      **/
     private function outputLine($line)
     {

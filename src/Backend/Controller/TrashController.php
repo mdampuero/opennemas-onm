@@ -17,8 +17,6 @@ class TrashController extends Controller
     /**
      * Lists all the trashed elements
      *
-     * @return void
-     *
      * @Security("hasExtension('TRASH_MANAGER')
      *     and hasPermission('TRASH_ADMIN')")
      */

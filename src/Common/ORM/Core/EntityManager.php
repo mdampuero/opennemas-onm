@@ -224,8 +224,6 @@ class EntityManager
      *
      * @param Entity $entity    The entity to remove.
      * @param string $persister The persister name.
-     *
-     * @return void|boolean
      */
     public function persist(Entity $entity, $persister = null)
     {
@@ -245,8 +243,6 @@ class EntityManager
      *
      * @param Entity $entity    The entity to remove.
      * @param string $persister The persister name.
-     *
-     * @return void
      */
     public function remove(Entity $entity, $persister = null)
     {

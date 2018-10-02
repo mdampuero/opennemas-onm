@@ -130,8 +130,6 @@ class Entity extends DataObject implements Validable
 
     /**
      * Initializes stored data to the current entity values.
-     *
-     * @return void
      */
     public function refresh()
     {
@@ -142,8 +140,6 @@ class Entity extends DataObject implements Validable
      * Removes a property from the list of changed properties.
      *
      * @param string $property The property to remove.
-     *
-     * @return void
      */
     public function setNotStored($property)
     {
@@ -154,8 +150,6 @@ class Entity extends DataObject implements Validable
      * Changes the origin for the user.
      *
      * @param string $origin The user's origin.
-     *
-     * @return void
      */
     public function setOrigin($origin)
     {

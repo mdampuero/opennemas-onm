@@ -72,8 +72,6 @@ class PaywallController extends Controller
     /**
      * Shows a list of purchases for the paywall module
      *
-     * @return void
-     *
      * @Security("hasExtension('PAYWALL')
      *     and hasPermission('PAYWALL_ADMIN')")
      */
@@ -405,8 +403,6 @@ class PaywallController extends Controller
 
     /**
      * Description of the action
-     *
-     * @return void
      *
      * @Security("hasExtension('PAYWALL')
      *     and hasPermission('PAYWALL_ADMIN')")

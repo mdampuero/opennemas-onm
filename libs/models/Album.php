@@ -47,8 +47,6 @@ class Album extends Content
      * Initializes the Album class.
      *
      * @param string $id the id of the album
-     *
-     * @return void
      */
     public function __construct($id = null)
     {

@@ -20,8 +20,6 @@ class WelcomeController extends Controller
 {
     /**
      * Shows the welcome page of the manager
-     *
-     * @return void
      */
     public function defaultAction()
     {

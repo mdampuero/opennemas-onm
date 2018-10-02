@@ -114,8 +114,6 @@ abstract class Translator
      *
      * @param string The property name.
      * @param mixed  The property value.
-     *
-     * @return void
      */
     public function __set($name, $value)
     {

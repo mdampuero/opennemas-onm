@@ -50,8 +50,6 @@ class VideosController extends Controller
     /**
      * List videos.
      *
-     * @return void
-     *
      * @Security("hasExtension('VIDEO_MANAGER')
      *     and hasPermission('VIDEO_ADMIN')")
      */

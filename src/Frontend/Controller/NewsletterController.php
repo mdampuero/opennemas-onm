@@ -174,8 +174,6 @@ class NewsletterController extends Controller
 
     /**
      * Returns the advertisements for the subscription page
-     *
-     * @return void
      */
     public function getAds()
     {

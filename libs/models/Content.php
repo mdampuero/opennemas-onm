@@ -369,8 +369,6 @@ class Content implements \JsonSerializable, CsvSerializable
      * Overloads the object properties with an array of the new ones
      *
      * @param array $properties the list of properties to load
-     *
-     * @return void
      */
     public function load($properties)
     {
@@ -2186,8 +2184,6 @@ class Content implements \JsonSerializable, CsvSerializable
      * Removes all tags associated with a content given its id
      *
      * @param mixed $contentId The id of the content
-     *
-     * @return void
      */
     public static function deleteTags($contentId)
     {

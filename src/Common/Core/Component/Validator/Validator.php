@@ -37,8 +37,6 @@ class Validator
      *
      * @param \SettingsRepository $settingsManager the settings repository object
      * @param Validator          $validator       the validator service
-     *
-     * @return void
      */
     public function __construct($settingsManager, $validator)
     {

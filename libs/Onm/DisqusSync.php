@@ -38,8 +38,6 @@ class DisqusSync
     }
     /**
      * Fetch disqus comments from a forum and stores them in database
-     *
-     * @return void
      */
     public function saveDisqusCommentsToDatabase()
     {
