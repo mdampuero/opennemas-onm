@@ -131,7 +131,7 @@ class MultisiteMigratorCommand extends ContainerAwareCommand
         $createData = $this->settings['migration']['create'];
 
         $this->output->writeln(
-            '<fg=green>*** Creating new instance: ' . $data['blogname'] . ' ***</fg=green>'
+            '<fg=green>*** Creating new instance: ' . $data['blogname'] . ' ***</>'
         );
 
         $packProfesional = [

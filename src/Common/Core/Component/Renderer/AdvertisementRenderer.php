@@ -438,8 +438,6 @@ class AdvertisementRenderer
             'top' : $ad->params['orientation'];
 
         $sizes = $ad->normalizeSizes($ad->params);
-
-        // This code block is not used, overwritten by the next array_shift
         $size  = array_filter($sizes, function ($a) {
             return $a['device'] === 'desktop';
         });

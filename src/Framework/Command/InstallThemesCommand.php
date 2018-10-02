@@ -62,17 +62,17 @@ class InstallThemesCommand extends Command
             ->setDescription('Deploys or installs themes to the latest version')
             ->setHelp(
                 <<<EOF
-The <info>themes:install</info> updates or installs themes code by executing
+The <info>themes:install</> updates or installs themes code by executing
 and updates the .deploy.php file.
 
 - Install all themes
-<info>php app/console themes:install</info>
+<info>php app/console themes:install</>
 
 - Install all themes in bitbucket.org
-<info>php app/console themes:install -r</info>
+<info>php app/console themes:install -r</>
 
 - Install a theme
-<info>php app/console themes:install THEME_NAME</info>
+<info>php app/console themes:install THEME_NAME</>
 EOF
             );
     }
@@ -91,10 +91,10 @@ EOF
 
         if (empty($theme) && $remote) {
             $this->auth = $this->askCredentials();
-            $output->writeln('Getting themes from <info>bitbucket</info>...');
+            $output->writeln('Getting themes from <info>bitbucket</>...');
 
             $this->themes = $this->getThemes();
-            $output->writeln('  <info>' . count($this->themes) . ' themes found</info>');
+            $output->writeln('  <info>' . count($this->themes) . ' themes found</>');
         }
 
         chdir($this->basePath);
@@ -104,16 +104,16 @@ EOF
         }
 
         if (empty($this->themes)) {
-            $this->output->writeln('<error>No themes to install</error>');
+            $this->output->writeln('<error>No themes to install</>');
             return;
         }
 
-        $this->output->write('Installing <info>' . count($this->themes) . '</info> themes...');
+        $this->output->write('Installing <info>' . count($this->themes) . '</> themes...');
         $this->installThemes();
 
         $this->output->write("\nGenerating <fg=blue>deploy number</>... ");
         $this->generateDeployFile();
-        $this->output->writeln('<info>DONE</info>');
+        $this->output->writeln('<info>DONE</>');
     }
 
     /**
@@ -125,7 +125,7 @@ EOF
     {
         $helper = $this->getHelper('question');
 
-        $this->output->writeln('Please enter your <info>bitbucket</info> credentials...');
+        $this->output->writeln('Please enter your <info>bitbucket</> credentials...');
 
         $question = new Question('  Username: ');
         $username = $helper->ask($this->input, $this->output, $question);
@@ -168,18 +168,18 @@ EOF
         $process->run(function ($type, $buffer) use ($output, $cmd) {
             if (Process::ERR === $type) {
                 if (!$output->isVerbose()) {
-                    $output->write('<error>FAIL</error> ');
+                    $output->write('<error>FAIL</> ');
                 }
 
                 if ($output->isVerbose()) {
-                    $output->write("\n\t<error>" . $buffer . "</error>");
+                    $output->write("\n\t<error>" . $buffer . "</>");
                 }
 
                 return Process::ERR;
             }
 
             if (!$output->isVerbose()) {
-                $output->write('<info>DONE</info> ');
+                $output->write('<info>DONE</> ');
             }
 
             if ($output->isVerbose()) {
@@ -245,7 +245,7 @@ EOF
     protected function installThemes()
     {
         foreach ($this->themes as $theme) {
-            $this->output->write("\n  - Installing <fg=blue>$theme</fg>... ");
+            $this->output->write("\n  - Installing <fg=blue>$theme</>... ");
 
             if (file_exists($this->basePath . '/public/themes/' . $theme)) {
                 $this->pullTheme($theme);

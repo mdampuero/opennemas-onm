@@ -54,7 +54,7 @@ class MigrateTagsCommand extends ContainerAwareCommand
 
         $loader->loadInstanceFromInternalName($instance);
 
-        $output->write('Migrating instance <fg=blue>' . $instance . '</fg>...');
+        $output->write('Migrating instance <fg=blue>' . $instance . '</>...');
 
         $conn  = $this->getContainer()->get('orm.manager')->getConnection('instance');
         $cache = $this->getContainer()->get('cache.manager')->getConnection('instance');
@@ -81,13 +81,13 @@ class MigrateTagsCommand extends ContainerAwareCommand
             }
 
             if ($output->isVeryVerbose()) {
-                $output->writeln("    <fg=red>Before</fg>: {$r['name']}");
+                $output->writeln("    <fg=red>Before</>: {$r['name']}");
             }
 
             $name = \Onm\StringUtils::normalizeMetadata($r['name']);
 
             if ($output->isVeryVerbose()) {
-                $output->writeln("    <info>After</info>:  $name\n");
+                $output->writeln("    <info>After</>:  $name\n");
             }
 
             if (!$preview) {
@@ -103,9 +103,9 @@ class MigrateTagsCommand extends ContainerAwareCommand
         }
 
         if (!$output->isVerbose()) {
-            $output->writeln(" <info>DONE</info>");
+            $output->writeln(" <info>DONE</>");
         } else {
-            $output->writeln(sprintf('<info>%s contents updated successfully</info>', $updated));
+            $output->writeln(sprintf('<info>%s contents updated successfully</>', $updated));
         }
 
         if ($errors > 0) {

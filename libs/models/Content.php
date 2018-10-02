@@ -200,8 +200,6 @@ class Content implements \JsonSerializable, CsvSerializable
      * Initializes the content for a given id.
      *
      * @param string $id the content id to initialize.
-     *
-     * @return \Content|null
      */
     public function __construct($id = null)
     {

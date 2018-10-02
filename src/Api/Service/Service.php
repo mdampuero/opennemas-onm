@@ -21,7 +21,7 @@ abstract class Service
     /**
      * Initializes the Service.
      *
-     * @param \Api\Exception\ServiceContainer $container The service container.
+     * @param ServiceContainer $container The service container.
      */
     public function __construct($container)
     {

@@ -25,9 +25,9 @@ class CheckStatusCommand extends ContainerAwareCommand
             ->setDescription('Checks the core application status')
             ->setHelp(
                 <<<EOF
-The <info>core:status:check</info> checks if the application can be executed with current configuration values.
+The <info>core:status:check</> checks if the application can be executed with current configuration values.
 
-<info>php app/console core:status:check</info>
+<info>php app/console core:status:check</>
 
 EOF
             );
@@ -42,11 +42,11 @@ EOF
         $checker = $this->getContainer()->get('core.status.checker');
 
         $output->write('+ Checking NFS status... ');
-        $status = $checker->checkNfs() ? '<info>DONE</info>' : '<error>FAIL</error>';
+        $status = $checker->checkNfs() ? '<info>DONE</>' : '<error>FAIL</>';
         $output->writeln($status);
 
         $output->write('+ Checking database connection... ');
-        $status = $checker->checkDatabaseConnection() ? '<info>DONE</info>' : '<error>FAIL</error>';
+        $status = $checker->checkDatabaseConnection() ? '<info>DONE</>' : '<error>FAIL</>';
         $output->writeln($status);
 
         if ($output->isVerbose()) {
@@ -54,7 +54,7 @@ EOF
         }
 
         $output->write('+ Checking cache connection... ');
-        $status = $checker->checkCacheConnection() ? '<info>DONE</info>' : '<error>FAIL</error>';
+        $status = $checker->checkCacheConnection() ? '<info>DONE</>' : '<error>FAIL</>';
         $output->writeln($status);
 
         if ($output->isVerbose()) {

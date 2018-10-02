@@ -59,10 +59,10 @@ class MigratePurchasesCommand extends ContainerAwareCommand
             }
         }
 
-        $output->writeln(sprintf('<info>[OK]</info>   %s purchases updated successfully', $updated));
+        $output->writeln(sprintf('<info>[OK]</>   %s purchases updated successfully', $updated));
 
         if ($errors > 0) {
-            $output->writeln(sprintf('<fg=red>[FAIL]</fg> There were %s errors while updating. '
+            $output->writeln(sprintf('<fg=red>[FAIL]</> There were %s errors while updating. '
                 . 'For more information, check error log.', $updated));
         }
     }
