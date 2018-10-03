@@ -141,11 +141,16 @@ class SitemapController extends Controller
      */
     protected function generateTagSitemap()
     {
-        $tags = $this->get('api.service.tag')->getList(
-            'name regexp "^[a-zA-Z0-9]{1}.{1,29}$" order by name asc limit 10000'
-        );
+        $sql = 'SELECT DISTINCT(slug) FROM tags'
+            . ' WHERE slug REGEXP "^[a-zA-Z0-9]{1}.{1,29}$"'
+            . ' ORDER BY slug ASC';
 
-        $this->view->assign([ 'tags' => $tags['items'] ]);
+        $tags = $this->get('orm.connection.instance')->fetchAll($sql);
+        $tags = array_map(function ($a) {
+            return $a['slug'];
+        }, $tags);
+
+        $this->view->assign([ 'tags' => $tags ]);
     }
 
     /**
