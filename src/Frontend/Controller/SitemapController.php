@@ -264,14 +264,13 @@ class SitemapController extends Controller
         ]);
 
         if ($format === 'xml.gz') {
-            $headers = [
+            $contents = gzencode($contents, 9);
+            $headers  = [
                 'Content-Type'        => 'application/x-gzip',
                 'Content-Length'      => strlen($contents),
                 'Content-Disposition' => 'attachment; filename="sitemap'
                     . $action . '.xml.gz"'
             ];
-
-            $contents = gzencode($contents, 9);
         }
 
         $headers = array_merge($headers, [
