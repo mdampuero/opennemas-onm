@@ -1,0 +1,3 @@
+SET names 'utf8';
+INSERT INTO `extension` VALUES (80,'es.openhost.module.tagsSitemap','a:3:{s:2:\"en\";s:15:\"Sitemap of tags\";s:2:\"es\";s:20:\"Sitemap de etiquetas\";s:2:\"gl\";s:20:\"Sitemap de etiquetas\";}','module','Openhost, S.L.','a:3:{s:2:\"en\";s:0:\"\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}','a:3:{s:2:\"en\";s:0:\"\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}',NULL,'2018-10-03 09:57:33','2018-10-03 09:57:33',0,'http://www.openhost.es');
+INSERT INTO `extension_meta` VALUES (80,'category','module'),(80,'notes','a:3:{s:2:\"en\";s:0:\"\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}'),(80,'price','a:1:{i:0;a:2:{s:5:\"value\";i:0;s:4:\"type\";s:7:\"monthly\";}}'),(80,'terms','a:3:{s:2:\"en\";s:0:\"\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}');
