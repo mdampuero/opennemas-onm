@@ -40,7 +40,7 @@ class SitemapController extends Controller
     const EXTENSIONS = [
         'image' => [ 'IMAGE_MANAGER' ],
         'news'  => [ 'ARTICLE_MANAGER' ],
-        'tag'   => [ 'es.openhost.module.tagSitemap' ],
+        'tag'   => [ 'es.openhost.module.tagsSitemap' ],
         'video' => [ 'VIDEO_MANAGER' ],
         'web'   => [ 'ARTICLE_MANAGER', 'OPINION_MANAGER' ],
     ];
