@@ -78,10 +78,13 @@ class TagsController extends Controller
     /**
      * Shows a paginated list of contents for a given tag name.
      *
+     * @param Request $request The request object.
+     *
      * @return Response The response object.
      */
-    public function tagsAction(Request $request, $slug)
+    public function tagsAction(Request $request)
     {
+        $slug = $request->get('slug', null);
         $page = $request->query->getDigits('page', 1);
         $page = $page > 1 ? 2 : 1;
 
