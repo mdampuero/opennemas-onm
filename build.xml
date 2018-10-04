@@ -37,7 +37,7 @@
 
     <target name="build" depends="prepare,phplint,eslint,phpunit-ci,tools-parallel"/>
 
-    <target name="build-sequential" depends="prepare,phplint,eslint,karma,phpunit-ci,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,sami-ci,apidoc-ci,jsdoc-ci" />
+    <target name="build-sequential" depends="prepare,phplint,eslint,karma,phpunit-ci,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,apidoc-ci,jsdoc-ci" />
 
     <target name="tools-parallel" description="Run tools in parallel">
         <parallel>
@@ -46,7 +46,6 @@
             <antcall target="phploc-ci"/>
             <antcall target="phpcs-ci"/>
             <antcall target="phpcpd"/>
-            <antcall target="sami-ci"/>
             <antcall target="apidoc-ci"/>
             <antcall target="jsdoc-ci"/>
         </parallel>
@@ -204,13 +203,6 @@
             <arg value="${basedir}/.eslintrc" />
             <arg line="--format=checkstyle" />
             <arg line="${project.paths.js.space-separated}" />
-        </exec>
-    </target>
-
-    <target name="sami-ci" description="Generate internal API documentation">
-        <exec executable="${toolsdir}/sami.php" failonerror="false">
-            <arg line="update" />
-            <arg line="${basedir}/sami.php" />
         </exec>
     </target>
 
