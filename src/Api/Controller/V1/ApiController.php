@@ -1,0 +1,301 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Api\Controller\V1;
+
+use Common\Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+class ApiController extends Controller
+{
+    /**
+     * The extension name to work with @Security annotation when using
+     * [extension] placeholder in permissions.
+     *
+     * @var string
+     */
+    protected $extension = null;
+
+    /**
+     * The filename to include in the CSV report.
+     *
+     * @var type
+     */
+    protected $filename = null;
+
+    /**
+     * The route name to generate URL from when creating a new item.
+     *
+     * @var string
+     */
+    protected $getItemRoute = null;
+
+    /**
+     * The API service name.
+     *
+     * @var string
+     */
+    protected $service = null;
+
+    /**
+     * Returns the list of paramters needed to create a new item.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function createAction()
+    {
+        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
+    }
+
+    /**
+     * Deletes an item.
+     *
+     * @param integer $id The subscriber id.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function deleteAction($id)
+    {
+        $msg = $this->get('core.messenger');
+
+        $this->get($this->service)->deleteItem($id);
+
+        $msg->add(_('Item deleted successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Deletes the selected items.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function deleteSelectedAction(Request $request)
+    {
+        $ids     = $request->request->get('ids', []);
+        $msg     = $this->get('core.messenger');
+        $deleted = $this->get($this->service)->deleteList($ids);
+
+        if ($deleted > 0) {
+            $msg->add(
+                sprintf(_('%s items deleted successfully'), $deleted),
+                'success'
+            );
+        }
+
+        if ($deleted !== count($ids)) {
+            $msg->add(sprintf(
+                _('%s items could not be deleted successfully'),
+                count($ids) - $deleted
+            ), 'error');
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Returns the controller extension.
+     *
+     * @return string The controller extension.
+     */
+    public function getExtension()
+    {
+        return $this->extension;
+    }
+
+    /**
+     * Returns a list of items.
+     *
+     * @param Request $request The request object.
+     *
+     * @return array The list of items and all extra information.
+     */
+    public function listAction(Request $request)
+    {
+        $us  = $this->get($this->service);
+        $oql = $request->query->get('oql', '');
+
+        $response = $us->getList($oql);
+
+        return [
+            'items'      => $us->responsify($response['items']),
+            'total'      => $response['total'],
+            'extra'      => $this->getExtraData($response['items']),
+            'o-filename' => $this->filename,
+        ];
+    }
+
+    /**
+     * Updates some instance properties.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function patchAction(Request $request, $id)
+    {
+        $msg = $this->get('core.messenger');
+
+        $this->get($this->service)
+            ->patchItem($id, $request->request->all());
+        $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Updates some properties for a list of items.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function patchSelectedAction(Request $request)
+    {
+        $params = $request->request->all();
+        $ids    = $params['ids'];
+        $msg    = $this->get('core.messenger');
+
+        unset($params['ids']);
+
+        $updated = $this->get($this->service)
+            ->patchList($ids, $params);
+
+        if ($updated > 0) {
+            $msg->add(
+                sprintf(_('%s items updated successfully'), $updated),
+                'success'
+            );
+        }
+
+        if ($updated !== count($ids)) {
+            $msg->add(sprintf(
+                _('%s items could not be updated successfully'),
+                count($ids) - $updated
+            ), 'error');
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Saves a new item.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveAction(Request $request)
+    {
+        $msg = $this->get('core.messenger');
+
+        $item = $this->get($this->service)
+            ->createItem($request->request->all());
+        $msg->add(_('Item saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+
+        if (!empty($this->getItemRoute)) {
+            $response->headers->set('Location', $this->generateUrl(
+                $this->getItemRoute,
+                [ 'id' => $this->getItemId($item) ]
+            ));
+        }
+
+        return $response;
+    }
+
+    /**
+     * Returns an item.
+     *
+     * @param integer $id The item id.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function showAction($id)
+    {
+        $ss = $this->get($this->service);
+
+        return new JsonResponse([
+            'item'  => $ss->responsify($ss->getItem($id)),
+            'extra' => $this->getExtraData()
+        ]);
+    }
+
+    /**
+     * Updates the item information given its id and the new information.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $msg = $this->get('core.messenger');
+
+        $this->get($this->service)
+            ->updateItem($id, $request->request->all());
+
+        $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Checks if the action can be executed basing on the extension and action
+     * to execute.
+     *
+     * @param string $extension  The required extension.
+     * @param string $permission The required permission.
+     *
+     * @throws AccessDeniedException If the action can not be executed.
+     */
+    protected function checkSecurity($extension, $permission = null)
+    {
+        if (!empty($extension)
+            && !$this->get('core.security')->hasExtension($extension)
+        ) {
+            throw new AccessDeniedException();
+        }
+
+        if (!empty($permission)
+            && !$this->get('core.security')->hasPermission($permission)
+        ) {
+            throw new AccessDeniedException();
+        }
+    }
+
+    /**
+     * Returns a list of extra data.
+     *
+     * @param array $items The array of items.
+     *
+     * @return array The extra data.
+     */
+    protected function getExtraData($items = [])
+    {
+        return [];
+    }
+
+    /**
+     * Returns the item id.
+     *
+     * @param mixed $item The item.
+     *
+     * @return integer The item id.
+     */
+    protected function getItemId($item)
+    {
+        return $item->id;
+    }
+}
