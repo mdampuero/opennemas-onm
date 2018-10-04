@@ -178,6 +178,8 @@
           $location.search('oql', oql);
 
           return http.get(route).then(function(response) {
+            response.data = $scope.parseList(response.data);
+
             $scope.data  = response.data;
             $scope.items = response.data.items;
 
@@ -255,6 +257,19 @@
                 messenger.post(response.data);
               });
             });
+        };
+
+        /**
+         * @function parseList
+         * @memberOf RestListCtrl
+         *
+         * @description
+         *   Parses the response and adds information to the scope.
+         *
+         * @param {Object} data The data in the response.
+         */
+        $scope.parseList = function(data) {
+          return data;
         };
 
         /**

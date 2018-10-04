@@ -7,25 +7,27 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-home fa-lg"></i>
-                {t}Tags{/t}
+                <i class="fa fa-tags m-r-10"></i>
               </h4>
             </li>
-            <li class="quicklinks"><span class="h-seperate"></span></li>
             <li class="quicklinks">
-              <h5>{t}Settings{/t}</h5>
+              <h4>
+                <a class="no-padding" href="[% routing.generate('backend_tags_list') %]">
+                  {t}Tags{/t}
+                </a>
+              </h4>
+            </li>
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
+                <i class="fa fa-angle-right"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>{t}Settings{/t}</h4>
             </li>
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
-              <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_articles}" title="{t}Go back to list{/t}">
-                  <i class="fa fa-reply"></i>
-                </a>
-              </li>
-              <li class="quicklinks">
-                <span class="h-seperate"></span>
-              </li>
               <li class="quicklinks">
                 <button class="btn btn-primary" type="button" ng-click="saveConf($event)">
                   <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
@@ -36,14 +38,14 @@
         </div>
       </div>
     </div>
-    <div class="content ng-cloak no-animate" ng-if="loading">
-      <div class="spinner-wrapper">
-        <div class="loading-spinner"></div>
-        <div class="spinner-text">{t}Loading{/t}...</div>
+    <div class="content">
+      <div class="listing-no-contents" ng-hide="!flags.http.loading">
+        <div class="text-center p-b-15 p-t-15">
+          <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
+          <h3 class="spinner-text">{t}Loading{/t}...</h3>
+        </div>
       </div>
-    </div>
-    <div class="content panel"  ng-show="!loading">
-      <div class="grid simple">
+      <div class="grid simple ng-cloak" ng-show="!flags.http.loading">
         <div class="grid-body">
           <div class="row">
             <div class="col-xs-12">

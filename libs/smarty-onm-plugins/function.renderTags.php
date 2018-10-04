@@ -68,9 +68,8 @@ function smarty_function_renderTags($params, &$smarty)
                 break;
             case 'tags':
                 if (strpos($tag, '#') !== 0) {
-                    $url = $generator->generate('tag_frontpage', [
-                        'resource' => 'tags',
-                        'tag_name' => $tags[$tagId]['slug']
+                    $url = $generator->generate('frontend_tag_frontpage', [
+                        'slug' => $tags[$tagId]['slug']
                     ]);
                 }
                 break;
