@@ -266,12 +266,12 @@
                       </li>
                       <li>
                         <a href="{url name=admin_cache_manager_clearcache}">
-                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove cache</span>
+                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove smarty cache</span>
                         </a>
                       </li>
                       <li>
                         <a href="{url name=admin_cache_manager_clearcompiled}">
-                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove compiles</span>
+                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove smarty compiles</span>
                         </a>
                       </li>
                       <li>
