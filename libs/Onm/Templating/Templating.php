@@ -139,7 +139,8 @@ class Templating
      */
     protected function getBundleName()
     {
-        $controller = $this->container->get('request')->get('_controller');
+        $controller = $this->container->get('request_stack')
+            ->getCurrentRequest()->get('_controller');
         $controller = explode('\\', $controller);
 
         return $controller[0];
