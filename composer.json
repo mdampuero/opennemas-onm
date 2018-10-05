@@ -52,7 +52,7 @@
         "cometcult/braintree-bundle": "dev-master",
         "drak/native-session": "*",
         "drexarj/disqus-php": "dev-master",
-        "econea/nusoap": "~0.9.5.1",
+        "econea/nusoap": "0.9.*",
         "frandieguez/panorama-php": "1.0.*",
         "friendsofsymfony/jsrouting-bundle": "1.6.*",
         "giggsey/libphonenumber-for-php": "^7.2",
