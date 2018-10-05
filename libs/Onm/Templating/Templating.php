@@ -63,7 +63,7 @@ class Templating
      */
     public function getBackendTemplate()
     {
-        $template =  $this->container->get('core.template.admin');
+        $template = $this->container->get('core.template.admin');
 
         if (empty($template->getTheme())) {
             $theme = $this->container->get('orm.manager')
