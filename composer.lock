@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb71a7f3c377e7f7a693f7fd1140295a",
+    "content-hash": "50cdd21d937e2159cfcd17cad616c1ce",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -3630,52 +3630,6 @@
                 "psr-3"
             ],
             "time": "2016-10-10T12:19:37+00:00"
-        },
-        {
-            "name": "recaptcha/php5",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/AlekseyKorzun/reCaptcha-PHP-5.git",
-                "reference": "a38938e881a1cb3647271f666f13a01b0c1687f3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/AlekseyKorzun/reCaptcha-PHP-5/zipball/a38938e881a1cb3647271f666f13a01b0c1687f3",
-                "reference": "a38938e881a1cb3647271f666f13a01b0c1687f3",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Captcha": "Package"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD"
-            ],
-            "authors": [
-                {
-                    "name": "Aleksey Korzun",
-                    "email": "al.ko@webfoundation.net",
-                    "homepage": "http://www.alekseykorzun.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A properly coded PHP 5 reCaptcha class that will allow you to interact with Google's reCaptcha API.",
-            "homepage": "https://github.com/AlekseyKorzun/reCaptcha-PHP-5",
-            "keywords": [
-                "api",
-                "captcha",
-                "google",
-                "php",
-                "recaptcha"
-            ],
-            "time": "2014-07-07T17:21:13+00:00"
         },
         {
             "name": "ronanguilloux/isocodes",

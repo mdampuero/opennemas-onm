@@ -70,7 +70,6 @@
         "paypal/adaptivepayments-sdk-php": "v3.9.2",
         "paypal/merchant-sdk-php": "v3.9.1",
         "php-ffmpeg/php-ffmpeg": "0.6.*",
-        "recaptcha/php5": "1.1.0",
         "ronanguilloux/isocodes": "^1.2",
         "rtconner/freshbooks-api": "dev-master",
         "smarty-gettext/smarty-gettext": "@stable",
