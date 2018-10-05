@@ -649,11 +649,11 @@ admin_cache_manager_clearrediscache:
     defaults: { _controller  : BackendBundle:CacheManager:clearRedisCacheForInstance }
 
 admin_system_settings:
-    path:     /system/settings
+    path:     /settings
     defaults: { _controller  : BackendBundle:SystemSettings:default }
 
 admin_system_settings_save:
-    path:     /system/settings/save
+    path:     /settings/save
     defaults: { _controller  : BackendBundle:SystemSettings:save }
     methods:  [POST]
 
