@@ -65,7 +65,7 @@ class ArticleController extends Controller
                 && $request->get('locale') !==
                     $this->get('core.locale')->getLocale('frontend')
             ) {
-                $params['locale'] = $this->request->get('locale');
+                $params['locale'] = $request->get('locale');
             }
 
             $url = $this->generateUrl('admin_article_show', $params);

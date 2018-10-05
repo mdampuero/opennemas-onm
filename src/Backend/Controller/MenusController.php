@@ -159,7 +159,7 @@ class MenusController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $id   = $this->request->query->getDigits('id');
+        $id   = $request->query->getDigits('id');
         $menu = new \Menu($id);
 
         if ($menu->pk_menu == null) {

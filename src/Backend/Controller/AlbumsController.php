@@ -481,7 +481,7 @@ class AlbumsController extends Controller
     {
         $ds = $this->get('orm.manager')->getDataSet('Settings');
 
-        if ('POST' !== $this->request->getMethod()) {
+        if ('POST' !== $request->getMethod()) {
             return $this->render('album/config.tpl', [
                 'configs' => $ds->get([ 'album_settings' ])
             ]);

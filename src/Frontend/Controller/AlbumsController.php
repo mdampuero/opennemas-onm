@@ -29,8 +29,9 @@ class AlbumsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->categoryName = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $this->page         = $this->request->query->getDigits('page', 1);
+        $request             = $this->get('request_stack')->getCurrentRequest();
+        $this->categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $this->page         = $request->query->getDigits('page', 1);
 
         if (!empty($this->categoryName) && $this->categoryName != 'home') {
             $category = $this->get('category_repository')->findBy(

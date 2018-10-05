@@ -45,7 +45,7 @@ class AuthenticationController extends Controller
         $message = [];
 
         if ($request->getSession()->get('_security.manager.target_path')) {
-            $referer = $this->request->getSession()->get('_security.manager.target_path');
+            $referer = $request->getSession()->get('_security.manager.target_path');
         }
 
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {

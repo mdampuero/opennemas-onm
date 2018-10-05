@@ -32,7 +32,8 @@ class PollsController extends Controller
     public function init()
     {
         $contentType = \ContentManager::getContentTypeIdFromName('poll');
-        $category    = $this->request->query->filter(INPUT_GET, 0, FILTER_SANITIZE_STRING);
+        $category    = $this->get('request_stack')->getCurrentRequest()
+            ->query->filter(INPUT_GET, 0, FILTER_SANITIZE_STRING);
         $ccm         = \ContentCategoryManager::get_instance();
 
         list($this->parentCategories, $this->subcat, $this->categoryData) =
