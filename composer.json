@@ -37,15 +37,17 @@
     },
     "require": {
         "php": ">=5.5.9",
-        "symfony/symfony": "2.8.*",
-        "doctrine/orm": "^2.4.8",
-        "doctrine/doctrine-bundle": "~1.4",
+        "symfony/symfony": "3.0.*",
+        "doctrine/orm": "^2.5",
+        "doctrine/doctrine-bundle": "~1.6",
+        "doctrine/doctrine-cache-bundle": "^1.2",
         "symfony/swiftmailer-bundle": "~2.3",
-        "symfony/monolog-bundle": "~2.4",
+        "symfony/monolog-bundle": "~2.8",
         "sensio/distribution-bundle": "~5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
-        "twig/twig": "^1.0||^2.0",
+
+        "twig/twig": "^1.0",
 
         "cometcult/braintree-bundle": "dev-master",
         "drak/native-session": "*",
@@ -90,7 +92,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url":  "https://github.com/openhost/jwt-authentication-bundle"
+            "url":  "https://github.com/frandieguez/jwt-authentication-bundle"
         },
         {
             "type": "git",
@@ -127,6 +129,7 @@
         "symfony-assets-install": "relative",
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
-        }
+        },
+        "branch-alias": null
     }
 }
