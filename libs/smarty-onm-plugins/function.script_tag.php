@@ -26,7 +26,8 @@ function smarty_function_script_tag($params, &$smarty)
         $server = DS . 'assets' . DS . 'js' . DS;
 
         if (!array_key_exists('common', $params)) {
-            $basepath = $params['basepath'] ? : DS . 'js';
+            $basepath = (array_key_exists('basepath', $params)
+                && $params['basepath']) ? : DS . 'js';
             $server   = DS . $smarty->getTheme()->path . DS . $basepath;
             $mtime    = THEMES_DEPLOYED_AT;
         }
