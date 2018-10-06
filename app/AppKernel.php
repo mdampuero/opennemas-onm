@@ -68,27 +68,26 @@ class AppKernel extends Kernel
         return 'Opennemas';
     }
 
+    public function getRootDir()
+    {
+        return __DIR__;
+    }
+
+    public function getCacheDir()
+    {
+        return dirname(__DIR__) . '/tmp/cache/' . $this->getEnvironment();
+    }
+
+    public function getLogDir()
+    {
+        return dirname(__DIR__) . '/tmp/logs';
+    }
+
     /**
      * {@inheritdoc}
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load($this->getRootDir() . '/config/config_' . $this->getEnvironment() . '.yml');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCacheDir()
-    {
-        return realpath($this->getRootDir() . '/../tmp/cache') . '/' . $this->getEnvironment();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLogDir()
-    {
-        return realpath($this->getRootDir() . '/../tmp/logs');
     }
 }
