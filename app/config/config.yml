@@ -35,6 +35,7 @@ framework:
         handler_id:      %session_handler_id%
     fragments:       ~
     http_method_override: true
+    assets: ~
 
 sensio_framework_extra:
     router:   { annotations: false }
