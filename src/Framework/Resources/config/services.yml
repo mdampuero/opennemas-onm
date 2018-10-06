@@ -17,7 +17,7 @@ services:
 
     varnish_cleaner:
         class: Onm\Varnish\BanMessagePusher
-        arguments: [ %varnish% ]
+        arguments: [ "%varnish%" ]
 
     varnish_ban_message_exchanger:
         class: Onm\Varnish\MessageExchanger

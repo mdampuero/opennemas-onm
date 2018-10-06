@@ -16,30 +16,30 @@ services:
 
     kernel.listener.webservice_exceptions:
         class: Framework\EventListener\WebServiceExceptionsListener
-        arguments: [ '@service_container' ]
+        arguments: [ "@service_container" ]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
 
     kernel.listener.general_exceptions:
         class: Framework\EventListener\GeneralExceptionsListener
-        arguments: [ '@service_container' ]
+        arguments: [ "@service_container" ]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 98 }
 
     kernel.listener.varnish_cleaner:
         class: Framework\EventListener\VarnishCleanerListener
-        arguments: [ %varnish%, '@varnish_cleaner', '@varnish_ban_message_exchanger', '@application.log' ]
+        arguments: [ "%varnish%", "@varnish_cleaner", "@varnish_ban_message_exchanger", "@application.log" ]
         tags:
             - { name: kernel.event_listener, event: kernel.terminate, method: onKernelTerminate, priority: 100 }
 
     kernel.listener.hooks_subscriber:
         class: Framework\EventListener\HooksSubscriber
-        arguments: [ '@service_container', '@cache', '@logger' ]
+        arguments: [ "@service_container", "@cache", "@logger" ]
         tags:
             - { name: kernel.event_subscriber }
 
     kernel.subscriber.routing:
         class: Framework\EventListener\RouterListener
-        arguments: [ '@router', '@request_stack', '@router.request_context', '@logger', '@service_container']
+        arguments: [ "@router", "@request_stack", "@router.request_context", "@logger", "@service_container"]
         tags:
             - { name: kernel.event_subscriber, logger: request }
