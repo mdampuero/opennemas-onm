@@ -1,12 +1,11 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     outputfilter.noindex.php
- * Type:     outputfilter
- * Name:     noindex
- * Purpose:  Adds the noindex directive when needed
- * -------------------------------------------------------------
+/**
+ * Adds the noindex directive when needed
+ *
+ * @param string $output
+ * @param \Smarty $smarty
+ *
+ * @return string
  */
 function smarty_outputfilter_noindex($output, $smarty)
 {

@@ -1,12 +1,11 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     outputfilter.adsense_validator.php
- * Type:     outputfilter
- * Name:     adsense_validator
- * Purpose:  Prints adsense validation script
- * -------------------------------------------------------------
+/**
+ * Prints adsense validation script
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_outputfilter_adsense_validator($output, $smarty)
 {

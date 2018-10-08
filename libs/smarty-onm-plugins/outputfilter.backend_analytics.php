@@ -1,12 +1,11 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     outputfilter.backend_analytics.php
- * Type:     outputfilter
- * Name:     backend_analytics
- * Purpose:  Prints Piwik and Google Analytics codes
- * -------------------------------------------------------------
+/**
+ * Prints Piwik and Google Analytics codes
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_outputfilter_backend_analytics($output, $smarty)
 {

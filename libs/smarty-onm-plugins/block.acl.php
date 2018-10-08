@@ -1,13 +1,18 @@
 <?php
 /**
- * Smarty plugin
- * Check if this block is allow display your content
+ * Check if user is allowed to display the block content
  *
  * {acl isAllowed="PRIVILEGE" hasCategoryAccess="10"}
  *    {* If user from session has access to the category then show this content *}
  *    ...smarty content...
  * {/acl}
  *
+ * @param array $params The list of parameters passed to the block.
+ * @param string $content The content inside the block.
+ * @param \Smarty $smarty The instance of smarty.
+ * @param boolean $open Whether if we are in the open of the tag of in the close.
+ *
+ * @return null|string
 */
 function smarty_block_acl($params, $content, Smarty_Internal_Template $smarty, $open)
 {

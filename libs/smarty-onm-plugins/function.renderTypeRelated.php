@@ -1,14 +1,17 @@
 <?php
 /**
- * -------------------------------------------------------------
- * File:        function.typecontent.php
- * Comprueba el tipo y escribe el class adecuado
+ * Returns the css class property adecuate to the content type passed
  *
  * Ejemplo:
  *   <li class="res-file"><a href="#">El viaje al sol, un sueño olvidado (PDF)</a></li>
  *   <li class="res-image"><a href="#">Fototeca: El viaje al sol, un sueño olvidado</a></li>
  *   <li class="res-link"><a href="#">Los grandes pelígros de la humanidad</a></li>
  *   <li class="res-video"><a href="#">Descubre el sistema planetario en este vídeo</a></li>
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_function_renderTypeRelated($params, &$smarty)
 {
@@ -59,7 +62,7 @@ function smarty_function_renderTypeRelated($params, &$smarty)
             break;
     }
 
-    $patterns     = [ '/"/', '/\'/', '/“/'];
+    $patterns     = [ '/"/', '/\'/', '/“/' ];
     $replace      = [ '', '', '' ];
     $titleCleaned = preg_replace($patterns, $replace, $content->title);
 

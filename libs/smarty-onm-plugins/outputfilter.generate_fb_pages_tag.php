@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * Adds the FB page tags to the head of the page
+ *
+ * @param string $output
+ * @param \Smarty $smarty
+ *
+ * @return string
+ **/
 function smarty_outputfilter_generate_fb_pages_tag($output, $smarty)
 {
     if (!$smarty->getContainer()->get('core.security')

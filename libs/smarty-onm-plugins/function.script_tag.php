@@ -1,12 +1,11 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     function.script_tag.php
- * Type:     function
- * Name:     script_tag
- * Purpose:  Returns the URL for a script.
- * -------------------------------------------------------------
+/**
+ * Returns the URL for a script.
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_function_script_tag($params, &$smarty)
 {

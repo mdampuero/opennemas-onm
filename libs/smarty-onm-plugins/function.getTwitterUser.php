@@ -1,12 +1,9 @@
 <?php
-/*
- * -------------------------------------------------------------
- * File:     	function.getTwitterUser.php
+/**
  * Get's twitter page from settings and returns only the user name
  *
  * i.e: http://twitter.com/#!/loquesea => loquesea
  * i.e: http://twitter.com/loquesea => loquesea
- * -------------------------------------------------------------
  */
 function smarty_function_getTwitterUser($params, &$smarty)
 {
