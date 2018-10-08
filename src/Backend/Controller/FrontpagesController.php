@@ -45,7 +45,7 @@ class FrontpagesController extends Controller
         list($frontpages, $versions, $contentPositionByPos, $contents, $versionId) =
             $fvs->getFrontpageData($categoryId, $versionId);
 
-        $this->container->get('api.service.contentposition')
+        $this->container->get('api.service.content_position')
             ->getCategoriesWithManualFrontpage();
 
         $versions = $fvs->responsify($versions);

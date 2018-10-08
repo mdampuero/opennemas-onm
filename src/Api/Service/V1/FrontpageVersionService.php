@@ -186,7 +186,7 @@ class FrontpageVersionService extends OrmService
 
         if (is_null($contentPositions)) {
             $contentPositions =
-                $this->container->get('api.service.contentposition')
+                $this->container->get('api.service.content_position')
                     ->getContentPositions($categoryId, $versionId);
 
             $this->setFrontpageDataFromCache($categoryId, $versionId, $contentPositions);
@@ -245,7 +245,7 @@ class FrontpageVersionService extends OrmService
         $categories         = $ccm->findAll();
         $catFrontpagesRel   = $this->getCatFrontpagesRel();
         $catWithFrontpage   = $this->container
-            ->get('api.service.contentposition')
+            ->get('api.service.content_position')
             ->getCategoriesWithManualFrontpage();
         $frontpages         = null;
         $existMainFrontPage = array_key_exists(0, $catFrontpagesRel);
