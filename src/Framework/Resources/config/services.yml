@@ -10,7 +10,7 @@ imports:
 services:
     automatic_contents:
         class: Onm\MachineSearcher
-        arguments: [ '@orm.connection.instance', '@entity_repository', '@cache', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@entity_repository', '@cache', '%cache_prefix%' ]
 
     acl_checker:
         class: Onm\Security\Acl
@@ -47,7 +47,7 @@ services:
 
     related_contents:
         class: RelatedContent
-        arguments: [ '@orm.connection.instance', '@entity_repository', '@cache', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@entity_repository', '@cache', '%cache_prefix%' ]
 
     core.messenger:
         class: Framework\Messenger\Messenger

@@ -1,5 +1,5 @@
 parameters:
-    cache.config_path: %kernel.root_dir%/../src/Common/Cache/Resources/config/cache
+    cache.config_path: '%kernel.root_dir%/../src/Common/Cache/Resources/config/cache'
 
 services:
     cache.loader:

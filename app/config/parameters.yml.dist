@@ -83,7 +83,7 @@ parameters:
         file:
             name:      internal
             namespace: internal
-            path:      %kernel.root_dir%/../tmp/cache/%kernel.environment%/file
+            path:      '%kernel.root_dir%/../tmp/cache/%kernel.environment%/file'
         redis:
             server:    127.0.0.1
             port:      6379
