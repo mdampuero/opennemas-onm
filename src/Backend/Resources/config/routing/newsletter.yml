@@ -1,44 +1,44 @@
 backend_newsletters_config:
     path:     /newsletters/config
-    defaults: { _controller  : BackendBundle:Newsletter:config }
+    defaults: { _controller: BackendBundle:Newsletter:config }
     options:
         expose: true
 
 backend_newsletters_list:
     path:     /newsletters
-    defaults: { _controller  : BackendBundle:Newsletter:list }
+    defaults: { _controller: BackendBundle:Newsletter:list }
     options:
         expose: true
 
 backend_newsletters_create:
     path:     /newsletters/create
-    defaults: { _controller  : BackendBundle:Newsletter:create }
+    defaults: { _controller: BackendBundle:Newsletter:create }
 
 backend_newsletters_show_contents:
     path:     /newsletters/{id}/contents
-    defaults: { _controller  : BackendBundle:Newsletter:showContents }
+    defaults: { _controller: BackendBundle:Newsletter:showContents }
     options:
         expose: true
 
 backend_newsletters_save_contents:
     path:     /newsletters/save-contents
-    defaults: { _controller  : BackendBundle:Newsletter:saveContents }
+    defaults: { _controller: BackendBundle:Newsletter:saveContents }
     methods:  [POST]
 
 backend_newsletters_preview:
     path:     /newsletters/{id}/preview
-    defaults: { _controller  : BackendBundle:Newsletter:preview }
+    defaults: { _controller: BackendBundle:Newsletter:preview }
     options:
         expose: true
 
 backend_newsletters_save_html:
     path:     /newsletters/{id}/save-html
-    defaults: { _controller  : BackendBundle:Newsletter:saveHtmlContent }
+    defaults: { _controller: BackendBundle:Newsletter:saveHtmlContent }
 
 backend_newsletters_pick_recipients:
     path:     /newsletters/{id}/pick-recipients
-    defaults: { _controller  : BackendBundle:Newsletter:pickRecipients }
+    defaults: { _controller: BackendBundle:Newsletter:pickRecipients }
 
 backend_newsletters_send:
     path:     /newsletters/{id}/send
-    defaults: { _controller  : BackendBundle:Newsletter:send }
+    defaults: { _controller: BackendBundle:Newsletter:send }

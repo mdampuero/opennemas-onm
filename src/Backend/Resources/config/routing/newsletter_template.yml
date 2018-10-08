@@ -1,9 +1,9 @@
 backend_newsletter_template_create:
     path:     /newsletters/templates/create
-    defaults: { _controller  : BackendBundle:NewsletterTemplate:create }
+    defaults: { _controller: BackendBundle:NewsletterTemplate:create }
 
 backend_newsletter_template_show:
     path:     /newsletters/template/{id}
-    defaults: { _controller  : BackendBundle:NewsletterTemplate:show }
+    defaults: { _controller: BackendBundle:NewsletterTemplate:show }
     options:
         expose: true

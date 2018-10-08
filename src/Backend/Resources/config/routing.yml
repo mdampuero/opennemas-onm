@@ -1,687 +1,687 @@
 admin_content_set_available:
     path:     /content/set-available
-    defaults: { _controller  : BackendBundle:Content:setAvailable }
+    defaults: { _controller: BackendBundle:Content:setAvailable }
 
 admin_content_set_draft:
     path:     /content/set-draft
-    defaults: { _controller  : BackendBundle:Content:setDraft }
+    defaults: { _controller: BackendBundle:Content:setDraft }
 
 admin_content_toggle_available:
     path:     /content/toggle-available
-    defaults: { _controller  : BackendBundle:Content:toggleAvailable }
+    defaults: { _controller: BackendBundle:Content:toggleAvailable }
 
 admin_content_toggle_suggested:
     path:     /content/toggle-suggested
-    defaults: { _controller  : BackendBundle:Content:toggleSuggested }
+    defaults: { _controller: BackendBundle:Content:toggleSuggested }
 
 admin_content_quick_info:
     path:     /content/quick-info
-    defaults: { _controller  : BackendBundle:Content:quickInfo }
+    defaults: { _controller: BackendBundle:Content:quickInfo }
 
 admin_content_send_to_trash:
     path:     /content/send-to-trash
-    defaults: { _controller  : BackendBundle:Content:sendToTrash }
+    defaults: { _controller: BackendBundle:Content:sendToTrash }
 
 admin_content_update_property:
     path:     /content/update-property
-    defaults: { _controller  : BackendBundle:Content:updateProperty }
+    defaults: { _controller: BackendBundle:Content:updateProperty }
 
 # Widget manager routes
 admin_widgets:
     path:     /widgets
-    defaults: { _controller  : BackendBundle:Widgets:list }
+    defaults: { _controller: BackendBundle:Widgets:list }
 
 admin_widget_show:
     path:     /widgets/{id}/show
-    defaults: { _controller  : BackendBundle:Widgets:show }
+    defaults: { _controller: BackendBundle:Widgets:show }
     options:
         expose: true
 
 admin_widget_create:
     path:     /widgets/create
-    defaults: { _controller  : BackendBundle:Widgets:create }
+    defaults: { _controller: BackendBundle:Widgets:create }
 
 admin_widget_update:
     path:     /widget/{id}/update
-    defaults: { _controller  : BackendBundle:Widgets:update }
+    defaults: { _controller: BackendBundle:Widgets:update }
 
 admin_widgets_content_provider:
     path:     /widget/content-provider
-    defaults: { _controller  : BackendBundle:Widgets:contentProvider }
+    defaults: { _controller: BackendBundle:Widgets:contentProvider }
 # Sidebar manager routes
 admin_sidebars:
     path:     /sidebars
-    defaults: { _controller  : BackendBundle:Sidebars:list }
+    defaults: { _controller: BackendBundle:Sidebars:list }
 
 # Menu manager routes
 admin_menus:
     path:     /menus
-    defaults: { _controller  : BackendBundle:Menus:list }
+    defaults: { _controller: BackendBundle:Menus:list }
 
 admin_menu_show:
     path:     /menus/{id}/show
-    defaults: { _controller  : BackendBundle:Menus:show }
+    defaults: { _controller: BackendBundle:Menus:show }
     options:
         expose: true
 
 admin_menu_create:
     path:     /menus/create
-    defaults: { _controller  : BackendBundle:Menus:create }
+    defaults: { _controller: BackendBundle:Menus:create }
 
 admin_menu_update:
     path:     /menu/{id}/update
-    defaults: { _controller  : BackendBundle:Menus:update }
+    defaults: { _controller: BackendBundle:Menus:update }
 
 admin_instance_sync:
     path:     /instance-sync
-    defaults: { _controller  : BackendBundle:InstanceSync:list }
+    defaults: { _controller: BackendBundle:InstanceSync:list }
 
 admin_instance_sync_create:
     path:     /instance-sync/create
-    defaults: { _controller  : BackendBundle:InstanceSync:create }
+    defaults: { _controller: BackendBundle:InstanceSync:create }
 
 admin_instance_sync_fetch_categories:
     path:     /instance-sync/fetch-categories
-    defaults: { _controller  : BackendBundle:InstanceSync:fetchCategories }
+    defaults: { _controller: BackendBundle:InstanceSync:fetchCategories }
 
 admin_instance_sync_show:
     path:     /instance-sync/show
-    defaults: { _controller  : BackendBundle:InstanceSync:show }
+    defaults: { _controller: BackendBundle:InstanceSync:show }
 
 admin_instance_sync_delete:
     path:     /instance-sync/delete
-    defaults: { _controller  : BackendBundle:InstanceSync:delete }
+    defaults: { _controller: BackendBundle:InstanceSync:delete }
 
 # Polls manager routes
 admin_polls:
     path:     /polls
-    defaults: { _controller  : BackendBundle:Polls:list }
+    defaults: { _controller: BackendBundle:Polls:list }
 
 admin_poll_create:
     path:     /polls/create
-    defaults: { _controller  : BackendBundle:Polls:create }
+    defaults: { _controller: BackendBundle:Polls:create }
 
 admin_poll_show:
     path:     /polls/{id}/show
-    defaults: { _controller  : BackendBundle:Polls:show }
+    defaults: { _controller: BackendBundle:Polls:show }
     options:
         expose: true
 
 admin_poll_update:
     path:     /polls/{id}/update
-    defaults: { _controller  : BackendBundle:Polls:update }
+    defaults: { _controller: BackendBundle:Polls:update }
 
 admin_polls_config:
     path:     /polls/config
-    defaults: { _controller  : BackendBundle:Polls:config }
+    defaults: { _controller: BackendBundle:Polls:config }
 
 admin_polls_content_provider:
     path:     /polls/content-provider
-    defaults: { _controller  : BackendBundle:Polls:contentProvider }
+    defaults: { _controller: BackendBundle:Polls:contentProvider }
 
 admin_polls_content_provider_related:
     path:     /polls/content-provider-related
-    defaults: { _controller  : BackendBundle:Polls:contentProviderRelated }
+    defaults: { _controller: BackendBundle:Polls:contentProviderRelated }
 
 # Ads manager routes
 admin_ads:
     path:     /ads
-    defaults: { _controller  : BackendBundle:Advertisements:list }
+    defaults: { _controller: BackendBundle:Advertisements:list }
 
 admin_ad_create:
     path:     /ads/create
-    defaults: { _controller  : BackendBundle:Advertisements:create }
+    defaults: { _controller: BackendBundle:Advertisements:create }
 
 admin_ad_show:
     path:     /ads/{id}/show
-    defaults: { _controller  : BackendBundle:Advertisements:show }
+    defaults: { _controller: BackendBundle:Advertisements:show }
 
 admin_advertisement_show:
     path:     /ads/{id}/show
-    defaults: { _controller  : BackendBundle:Advertisements:show }
+    defaults: { _controller: BackendBundle:Advertisements:show }
     options:
         expose: true
 
 admin_ad_update:
     path:     /ad/{id}/update
-    defaults: { _controller  : BackendBundle:Advertisements:update }
+    defaults: { _controller: BackendBundle:Advertisements:update }
 
 admin_ads_content_provider:
     path:     /ads/content-provider
-    defaults: { _controller  : BackendBundle:Advertisements:contentProvider }
+    defaults: { _controller: BackendBundle:Advertisements:contentProvider }
 
 admin_ads_config:
     path:     /ads/config
-    defaults: { _controller  : BackendBundle:Advertisements:config }
+    defaults: { _controller: BackendBundle:Advertisements:config }
 
 # Special manager routes
 admin_specials:
     path:     /specials
-    defaults: { _controller  : BackendBundle:Specials:list }
+    defaults: { _controller: BackendBundle:Specials:list }
 
 admin_specials_widget:
     path:     /specials/widget
-    defaults: { _controller  : BackendBundle:Specials:widget }
+    defaults: { _controller: BackendBundle:Specials:widget }
 
 admin_special_create:
     path:     /specials/create
-    defaults: { _controller  : BackendBundle:Specials:create }
+    defaults: { _controller: BackendBundle:Specials:create }
 
 admin_special_show:
     path:     /specials/{id}/show
-    defaults: { _controller  : BackendBundle:Specials:show }
+    defaults: { _controller: BackendBundle:Specials:show }
     options:
         expose: true
 
 admin_special_update:
     path:     /specials/{id}/update
-    defaults: { _controller  : BackendBundle:Specials:update }
+    defaults: { _controller: BackendBundle:Specials:update }
 
 admin_special_widget_save_positions:
     path:     /specials/widget/save-positions
-    defaults: { _controller  : BackendBundle:Specials:savePositions }
+    defaults: { _controller: BackendBundle:Specials:savePositions }
 
 admin_specials_config:
     path:     /specials/config
-    defaults: { _controller  : BackendBundle:Specials:config }
+    defaults: { _controller: BackendBundle:Specials:config }
 
 # Letter manager routes
 admin_letters:
     path:     /letters
-    defaults: { _controller  : BackendBundle:Letters:list }
+    defaults: { _controller: BackendBundle:Letters:list }
 
 admin_letter_create:
     path:     /letters/create
-    defaults: { _controller  : BackendBundle:Letters:create }
+    defaults: { _controller: BackendBundle:Letters:create }
 
 admin_letter_show:
     path:     /letters/{id}/show
-    defaults: { _controller  : BackendBundle:Letters:show }
+    defaults: { _controller: BackendBundle:Letters:show }
     options:
         expose: true
 
 admin_letter_update:
     path:     /letter/{id}/update
-    defaults: { _controller  : BackendBundle:Letters:update }
+    defaults: { _controller: BackendBundle:Letters:update }
 
 admin_letters_content_provider:
     path:     /letters/content-provider
-    defaults: { _controller  : BackendBundle:Letters:contentProvider }
+    defaults: { _controller: BackendBundle:Letters:contentProvider }
 
 admin_letters_content_provider_related:
     path:     /letters/content-provider-related
-    defaults: { _controller  : BackendBundle:Letters:contentProviderRelated }
+    defaults: { _controller: BackendBundle:Letters:contentProviderRelated }
 # Image manager routes
 admin_images:
     path:     /images
-    defaults: { _controller  : BackendBundle:Images:list }
+    defaults: { _controller: BackendBundle:Images:list }
 
 admin_image_new:
     path:     /images/new
-    defaults: { _controller  : BackendBundle:Images:new }
+    defaults: { _controller: BackendBundle:Images:new }
 
 admin_image_show:
     path:     /images/show
-    defaults: { _controller  : BackendBundle:Images:show }
+    defaults: { _controller: BackendBundle:Images:show }
 
 admin_photo_show:
     path:     /images/{id}/show
-    defaults: { _controller  : BackendBundle:Images:show }
+    defaults: { _controller: BackendBundle:Images:show }
     options:
         expose: true
 
 admin_image_create:
     path:     /images/create
-    defaults: { _controller  : BackendBundle:Images:create }
+    defaults: { _controller: BackendBundle:Images:create }
     options:
         expose: true
 
 admin_image_update:
     path:     /image/update
-    defaults: { _controller  : BackendBundle:Images:update }
+    defaults: { _controller: BackendBundle:Images:update }
 
 # Videos controller routes
 admin_videos:
     path:     /videos
-    defaults: { _controller  : BackendBundle:Videos:list }
+    defaults: { _controller: BackendBundle:Videos:list }
 
 admin_videos_create:
     path:     /videos/create
-    defaults: { _controller  : BackendBundle:Videos:create }
+    defaults: { _controller: BackendBundle:Videos:create }
 
 admin_videos_get_info:
     path:     /videos/get-video-information
-    defaults: { _controller  : BackendBundle:Videos:videoInformation }
+    defaults: { _controller: BackendBundle:Videos:videoInformation }
     options:
         expose: true
 
 admin_video_show:
     path:     /videos/{id}/show
-    defaults: { _controller  : BackendBundle:Videos:show }
+    defaults: { _controller: BackendBundle:Videos:show }
     options:
         expose: true
 
 admin_videos_update:
     path:     /videos/{id}/update
-    defaults: { _controller  : BackendBundle:Videos:update }
+    defaults: { _controller: BackendBundle:Videos:update }
 
 admin_videos_widget:
     path:     /videos/widget
-    defaults: { _controller  : BackendBundle:Videos:widget }
+    defaults: { _controller: BackendBundle:Videos:widget }
 
 admin_videos_config:
     path:     /videos/config
-    defaults: { _controller  : BackendBundle:Videos:config }
+    defaults: { _controller: BackendBundle:Videos:config }
 
 admin_video_save_positions:
     path:     /videos/save-positions
-    defaults: { _controller  : BackendBundle:Videos:savePositions }
+    defaults: { _controller: BackendBundle:Videos:savePositions }
 
 admin_video_get_relations:
     path:     /videos/{id}/relations
-    defaults: { _controller  : BackendBundle:Videos:relations }
+    defaults: { _controller: BackendBundle:Videos:relations }
 
 admin_videos_content_provider:
     path:     /videos/content-provider
-    defaults: { _controller  : BackendBundle:Videos:contentProvider }
+    defaults: { _controller: BackendBundle:Videos:contentProvider }
 
 admin_videos_content_provider_related:
     path:     /videos/content-provider-related
-    defaults: { _controller  : BackendBundle:Videos:contentProviderRelated }
+    defaults: { _controller: BackendBundle:Videos:contentProviderRelated }
 
 # Album controller routes
 admin_albums:
     path:     /albums
-    defaults: { _controller  : BackendBundle:Albums:list }
+    defaults: { _controller: BackendBundle:Albums:list }
 
 admin_albums_config:
     path:     /albums/config
-    defaults: { _controller  : BackendBundle:Albums:config }
+    defaults: { _controller: BackendBundle:Albums:config }
 
 admin_albums_widget:
     path:     /albums/widget
-    defaults: { _controller  : BackendBundle:Albums:widget }
+    defaults: { _controller: BackendBundle:Albums:widget }
 
 admin_album_create:
     path:     /albums/create
-    defaults: { _controller  : BackendBundle:Albums:create }
+    defaults: { _controller: BackendBundle:Albums:create }
 
 admin_album_update:
     path:     /album/{id}/update
-    defaults: { _controller  : BackendBundle:Albums:update }
+    defaults: { _controller: BackendBundle:Albums:update }
 
 admin_album_show:
     path:     /albums/{id}/show
-    defaults: { _controller  : BackendBundle:Albums:show }
+    defaults: { _controller: BackendBundle:Albums:show }
     options:
         expose: true
 
 admin_albums_savepositions:
     path:     /albums/save-positions
-    defaults: { _controller  : BackendBundle:Albums:savePositions }
+    defaults: { _controller: BackendBundle:Albums:savePositions }
 
 admin_albums_content_provider:
     path:     /albums/content-provider
-    defaults: { _controller  : BackendBundle:Albums:contentProvider }
+    defaults: { _controller: BackendBundle:Albums:contentProvider }
 
 admin_albums_content_provider_related:
     path:     /albums/content-provider-related
-    defaults: { _controller  : BackendBundle:Albums:contentProviderRelated }
+    defaults: { _controller: BackendBundle:Albums:contentProviderRelated }
 
 # Covers controller routes
 admin_kioskos:
     path:     /covers
-    defaults: { _controller  : BackendBundle:Covers:list }
+    defaults: { _controller: BackendBundle:Covers:list }
 
 admin_kiosko_create:
     path:     /covers/create
-    defaults: { _controller  : BackendBundle:Covers:create }
+    defaults: { _controller: BackendBundle:Covers:create }
 
 admin_kiosko_show:
     path:     /covers/{id}/show
-    defaults: { _controller  : BackendBundle:Covers:show }
+    defaults: { _controller: BackendBundle:Covers:show }
     options:
         expose: true
 
 admin_kiosko_update:
     path:     /cover/{id}/update
-    defaults: { _controller  : BackendBundle:Covers:update }
+    defaults: { _controller: BackendBundle:Covers:update }
 
 admin_kioskos_savepositions:
     path:     /covers/save-positions
-    defaults: { _controller  : BackendBundle:Covers:savePositions }
+    defaults: { _controller: BackendBundle:Covers:savePositions }
 
 admin_kiosko_delete:
     path:     /cover/{id}/delete
-    defaults: { _controller  : BackendBundle:Covers:delete }
+    defaults: { _controller: BackendBundle:Covers:delete }
 
 admin_kioskos_widget:
     path:     /cover/widget
-    defaults: { _controller  : BackendBundle:Covers:widget }
+    defaults: { _controller: BackendBundle:Covers:widget }
 
 admin_kioskos_config:
     path:     /covers/config
-    defaults: { _controller  : BackendBundle:Covers:config }
+    defaults: { _controller: BackendBundle:Covers:config }
 
 # Books controller routes
 admin_books:
     path:     /books
-    defaults: { _controller  : BackendBundle:Books:list }
+    defaults: { _controller: BackendBundle:Books:list }
 
 admin_books_widget:
     path:     /books/widget
-    defaults: { _controller  : BackendBundle:Books:widget, category  : widget }
+    defaults: { _controller: BackendBundle:Books:widget, category  : widget }
 
 admin_books_create:
     path:     /books/create
-    defaults: { _controller  : BackendBundle:Books:create }
+    defaults: { _controller: BackendBundle:Books:create }
 
 admin_book_show:
     path:     /books/{id}/show
-    defaults: { _controller  : BackendBundle:Books:show }
+    defaults: { _controller: BackendBundle:Books:show }
     options:
         expose: true
 
 admin_books_update:
     path:     /books/{id}/update
-    defaults: { _controller  : BackendBundle:Books:update }
+    defaults: { _controller: BackendBundle:Books:update }
 
 admin_books_save_positions:
     path:     /books/save-positions
-    defaults: { _controller  : BackendBundle:Books:savePositions }
+    defaults: { _controller: BackendBundle:Books:savePositions }
 
 # Files controller routes
 admin_files:
     path:     /files
-    defaults: { _controller  : BackendBundle:Files:list }
+    defaults: { _controller: BackendBundle:Files:list }
 
 admin_files_statistics:
     path:     /files/statistics
-    defaults: { _controller  : BackendBundle:Files:statistics }
+    defaults: { _controller: BackendBundle:Files:statistics }
 
 admin_files_widget:
     path:     /files/widget
-    defaults: { _controller  : BackendBundle:Files:widget }
+    defaults: { _controller: BackendBundle:Files:widget }
 
 admin_files_create:
     path:     /files/create
-    defaults: { _controller  : BackendBundle:Files:create }
+    defaults: { _controller: BackendBundle:Files:create }
 
 admin_file_show:
     path:     /files/{id}/show
-    defaults: { _controller  : BackendBundle:Files:show }
+    defaults: { _controller: BackendBundle:Files:show }
     options:
         expose: true
 
 admin_attachment_show:
     path:     /files/{id}/show
-    defaults: { _controller  : BackendBundle:Files:show }
+    defaults: { _controller: BackendBundle:Files:show }
     options:
         expose: true
 
 admin_files_update:
     path:     /files/{id}/update
-    defaults: { _controller  : BackendBundle:Files:update }
+    defaults: { _controller: BackendBundle:Files:update }
 
 admin_file_save_positions:
     path:     /files/save-positions
-    defaults: { _controller  : BackendBundle:Files:savePositions }
+    defaults: { _controller: BackendBundle:Files:savePositions }
 
 admin_files_content_provider_related:
     path:     /files/content-provider-related
-    defaults: { _controller  : BackendBundle:Files:contentProviderRelated }
+    defaults: { _controller: BackendBundle:Files:contentProviderRelated }
 
 # Search controller routes
 admin_search:
     path:     /search
-    defaults: { _controller  : BackendBundle:Search:default }
+    defaults: { _controller: BackendBundle:Search:default }
 
 admin_search_content_provider:
     path:     /search/content-provider
-    defaults: { _controller  : BackendBundle:Search:contentProvider }
+    defaults: { _controller: BackendBundle:Search:contentProvider }
 
 # Keywork controller routes
 admin_keywords:
     path:     /keywords
-    defaults: { _controller  : BackendBundle:Keywords:list }
+    defaults: { _controller: BackendBundle:Keywords:list }
 
 admin_keyword_create:
     path:     /keywords/create
-    defaults: { _controller  : BackendBundle:Keywords:create }
+    defaults: { _controller: BackendBundle:Keywords:create }
 
 admin_keyword_show:
     path:     /keywords/{id}/show
-    defaults: { _controller  : BackendBundle:Keywords:show }
+    defaults: { _controller: BackendBundle:Keywords:show }
     options:
         expose: true
 
 admin_keyword_update:
     path:     /keywords/{id}/update
-    defaults: { _controller  : BackendBundle:Keywords:update }
+    defaults: { _controller: BackendBundle:Keywords:update }
 
 admin_keyword_autolink:
     path:     /keywords/autolink
-    defaults: { _controller  : BackendBundle:Keywords:autolink }
+    defaults: { _controller: BackendBundle:Keywords:autolink }
 
 # Article controller routes
 admin_articles:
     path:     /articles
-    defaults: { _controller  : BackendBundle:Articles:list }
+    defaults: { _controller: BackendBundle:Articles:list }
 
 admin_article_create:
     path:     /articles/create
-    defaults: { _controller  : BackendBundle:Articles:create }
+    defaults: { _controller: BackendBundle:Articles:create }
 
 admin_article_show:
     path:     /articles/{id}/show
-    defaults: { _controller  : BackendBundle:Articles:show }
+    defaults: { _controller: BackendBundle:Articles:show }
     options:
         expose: true
 
 admin_article_update:
     path:     /articles/{id}/update
-    defaults: { _controller  : BackendBundle:Articles:update }
+    defaults: { _controller: BackendBundle:Articles:update }
 
 admin_article_preview:
     path:     /articles/preview
-    defaults: { _controller  : BackendBundle:Articles:preview }
+    defaults: { _controller: BackendBundle:Articles:preview }
     options:
         expose: true
 
 admin_article_get_preview:
     path:     /articles/get-preview
-    defaults: { _controller  : BackendBundle:Articles:getPreview }
+    defaults: { _controller: BackendBundle:Articles:getPreview }
     options:
         expose: true
 
 admin_articles_content_provider_suggested:
     path:     /articles/content-provider-suggested
-    defaults: { _controller  : BackendBundle:Articles:contentProviderSuggested }
+    defaults: { _controller: BackendBundle:Articles:contentProviderSuggested }
 
 admin_articles_content_provider_category:
     path:     /articles/content-provider-category
-    defaults: { _controller  : BackendBundle:Articles:contentProviderCategory }
+    defaults: { _controller: BackendBundle:Articles:contentProviderCategory }
 
 admin_articles_content_provider_related:
     path:     /articles/content-provider-related
-    defaults: { _controller  : BackendBundle:Articles:contentProviderRelated }
+    defaults: { _controller: BackendBundle:Articles:contentProviderRelated }
 
 admin_articles_content_provider_in_frontpage:
     path:     /articles/content-provider-in-frontpage
-    defaults: { _controller  : BackendBundle:Articles:contentProviderInFrontpage }
+    defaults: { _controller: BackendBundle:Articles:contentProviderInFrontpage }
 
 admin_articles_config:
     path:     /articles/config
-    defaults: { _controller  : BackendBundle:Articles:config }
+    defaults: { _controller: BackendBundle:Articles:config }
 
 # Opinion controller routes
 admin_opinions:
     path:     /opinions
-    defaults: { _controller  : BackendBundle:Opinions:list, blog  : 0 }
+    defaults: { _controller: BackendBundle:Opinions:list, blog  : 0 }
 
 admin_blogs:
     path:     /opinions/blog
-    defaults: { _controller  : BackendBundle:Opinions:list, blog  : 1 }
+    defaults: { _controller: BackendBundle:Opinions:list, blog  : 1 }
 
 admin_opinions_frontpage:
     path:     /opinions/frontpage
-    defaults: { _controller  : BackendBundle:Opinions:frontpage }
+    defaults: { _controller: BackendBundle:Opinions:frontpage }
 
 admin_opinion_create:
     path:     /opinions/create
-    defaults: { _controller  : BackendBundle:Opinions:create }
+    defaults: { _controller: BackendBundle:Opinions:create }
 
 admin_opinion_show:
     path:     /opinions/{id}/show
-    defaults: { _controller  : BackendBundle:Opinions:show }
+    defaults: { _controller: BackendBundle:Opinions:show }
     options:
         expose: true
 
 admin_opinion_preview:
     path:     /opinion/preview
-    defaults: { _controller  : BackendBundle:Opinions:preview }
+    defaults: { _controller: BackendBundle:Opinions:preview }
     options:
         expose: true
 
 admin_opinion_get_preview:
     path:     /opinion/get-preview
-    defaults: { _controller  : BackendBundle:Opinions:getPreview }
+    defaults: { _controller: BackendBundle:Opinions:getPreview }
     options:
         expose: true
 
 admin_opinion_update:
     path:     /opinion/{id}/update
-    defaults: { _controller  : BackendBundle:Opinions:update }
+    defaults: { _controller: BackendBundle:Opinions:update }
 
 admin_opinion_toggleinhome:
     path:     /opinion/{id}/toggle-in-home
-    defaults: { _controller  : BackendBundle:Opinions:toggleInHome }
+    defaults: { _controller: BackendBundle:Opinions:toggleInHome }
 
 
 admin_opinions_savepositions:
     path:     /opinions/save-positions
-    defaults: { _controller  : BackendBundle:Opinions:savePositions }
+    defaults: { _controller: BackendBundle:Opinions:savePositions }
 
 admin_opinions_content_provider:
     path:     /opinions/content-provider
-    defaults: { _controller  : BackendBundle:Opinions:contentProvider }
+    defaults: { _controller: BackendBundle:Opinions:contentProvider }
 
 admin_opinions_content_provider_related:
     path:     /opinions/content-provider-related
-    defaults: { _controller  : BackendBundle:Opinions:contentProviderRelated }
+    defaults: { _controller: BackendBundle:Opinions:contentProviderRelated }
 
 admin_opinions_config:
     path:     /opinions/config
-    defaults: { _controller  : BackendBundle:Opinions:config }
+    defaults: { _controller: BackendBundle:Opinions:config }
 
 # Trash controller routes
 admin_trash:
     path:     /trash
-    defaults: { _controller  : BackendBundle:Trash:default }
+    defaults: { _controller: BackendBundle:Trash:default }
 
 # Paywall controller routes
 admin_paywall:
     path:     /paywall
-    defaults: { _controller  : BackendBundle:Paywall:default }
+    defaults: { _controller: BackendBundle:Paywall:default }
 
 admin_paywall_users:
     path:     /paywall/users
-    defaults: { _controller  : BackendBundle:Paywall:users }
+    defaults: { _controller: BackendBundle:Paywall:users }
 
 admin_paywall_purchases:
     path:     /paywall/purchases
-    defaults: { _controller  : BackendBundle:Paywall:purchases }
+    defaults: { _controller: BackendBundle:Paywall:purchases }
 
 admin_paywall_settings:
     path:     /paywall/settings
-    defaults: { _controller  : BackendBundle:Paywall:settings }
+    defaults: { _controller: BackendBundle:Paywall:settings }
 
 admin_paywall_settings_save:
     path:     /paywall/settings/save
-    defaults: { _controller  : BackendBundle:Paywall:settingsSave }
+    defaults: { _controller: BackendBundle:Paywall:settingsSave }
 
 admin_paywall_validate_api:
     path:     /paywall/settings/validate/api
-    defaults: { _controller  : BackendBundle:Paywall:validateCredentials }
+    defaults: { _controller: BackendBundle:Paywall:validateCredentials }
     options:
         expose: true
 
 admin_paywall_set_validate_ipn:
     path:     /paywall/settings/set/validate/ipn
-    defaults: { _controller  : BackendBundle:Paywall:setValidateIpn }
+    defaults: { _controller: BackendBundle:Paywall:setValidateIpn }
     options:
         expose: true
 
 admin_paywall_do_validate_ipn:
     path:     /paywall/settings/do/validate/ipn
-    defaults: { _controller  : BackendBundle:Paywall:doValidateIpn }
+    defaults: { _controller: BackendBundle:Paywall:doValidateIpn }
 
 admin_paywall_users_list_export:
     path:     /paywall/users/list-export.csv
-    defaults: { _controller  : BackendBundle:Paywall:userListExport }
+    defaults: { _controller: BackendBundle:Paywall:userListExport }
 
 admin_paywall_purchases_list_export:
     path:     /paywall/purchases/list-export.csv
-    defaults: { _controller  : BackendBundle:Paywall:purchasesListExport }
+    defaults: { _controller: BackendBundle:Paywall:purchasesListExport }
 
 admin_cache_manager:
     path:     /system/cachemanager
-    defaults: { _controller  : BackendBundle:CacheManager:index }
+    defaults: { _controller: BackendBundle:CacheManager:index }
 
 admin_cache_manager_config:
     path:     /system/cachemanager/config
-    defaults: { _controller  : BackendBundle:CacheManager:config }
+    defaults: { _controller: BackendBundle:CacheManager:config }
 
 admin_cache_manager_clearcache:
     path:     /system/cachemanager/clearcache
-    defaults: { _controller  : BackendBundle:CacheManager:clearCache }
+    defaults: { _controller: BackendBundle:CacheManager:clearCache }
 
 admin_cache_manager_clearcompiled:
     path:     /system/cachemanager/clear-compiled-templates
-    defaults: { _controller  : BackendBundle:CacheManager:clearCompiledTemplates }
+    defaults: { _controller: BackendBundle:CacheManager:clearCompiledTemplates }
 
 admin_cache_manager_banvarnishcache:
     path:     /system/cachemanager/ban-varnish-cache
-    defaults: { _controller  : BackendBundle:CacheManager:clearVarnishCache }
+    defaults: { _controller: BackendBundle:CacheManager:clearVarnishCache }
 
 admin_cache_manager_clearrediscache:
     path:     /system/cachemanager/clear-redis-cache
-    defaults: { _controller  : BackendBundle:CacheManager:clearRedisCacheForInstance }
+    defaults: { _controller: BackendBundle:CacheManager:clearRedisCacheForInstance }
 
 admin_system_settings:
     path:     /settings
-    defaults: { _controller  : BackendBundle:SystemSettings:default }
+    defaults: { _controller: BackendBundle:SystemSettings:default }
 
 admin_system_settings_save:
     path:     /settings/save
-    defaults: { _controller  : BackendBundle:SystemSettings:save }
+    defaults: { _controller: BackendBundle:SystemSettings:save }
     methods:  [POST]
 
 # Getting started routes
 admin_getting_started:
     path:     /getting-started
-    defaults: { _controller  : BackendBundle:GettingStarted:gettingStarted }
+    defaults: { _controller: BackendBundle:GettingStarted:gettingStarted }
 
 admin_getting_started_accept_terms:
     path:     /getting-started/accept-terms
-    defaults: { _controller  : BackendBundle:GettingStarted:acceptTerms }
+    defaults: { _controller: BackendBundle:GettingStarted:acceptTerms }
     options:
         expose: true
 
 admin_getting_started_finish:
     path:     /getting-started/finish
-    defaults: { _controller  : BackendBundle:GettingStarted:finishWizard }
+    defaults: { _controller: BackendBundle:GettingStarted:finishWizard }
 
 admin_menu_sidebar_set:
     path: /sidebar
-    defaults: { _controller  : BackendBundle:MenuSidebar:set }
+    defaults: { _controller: BackendBundle:MenuSidebar:set }
     methods:  [ PUT ]
     options:
         expose: true
 
 admin_menu_sidebar_get:
     path: /sidebar
-    defaults: { _controller  : BackendBundle:MenuSidebar:get }
+    defaults: { _controller: BackendBundle:MenuSidebar:get }
     methods:  [ GET ]
     options:
         expose: true

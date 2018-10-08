@@ -1,12 +1,12 @@
 backend_ws_news_agency_server_check:
     path:     /news-agency/servers/check
-    defaults: { _controller  : BackendWebServiceBundle:NewsAgencyServer:check }
+    defaults: { _controller: BackendWebServiceBundle:NewsAgencyServer:check }
     options:
         expose: true
 
 backend_ws_news_agency_server_clean:
     path:     /news-agency/servers/{id}/clean
-    defaults: { _controller  : BackendWebServiceBundle:NewsAgencyServer:clean }
+    defaults: { _controller: BackendWebServiceBundle:NewsAgencyServer:clean }
     requirements:
         id: \d+
     options:
@@ -14,7 +14,7 @@ backend_ws_news_agency_server_clean:
 
 backend_ws_news_agency_server_delete:
     path:     /news-agency/servers/{id}/delete
-    defaults: { _controller  : BackendWebServiceBundle:NewsAgencyServer:delete }
+    defaults: { _controller: BackendWebServiceBundle:NewsAgencyServer:delete }
     requirements:
         id: \d+
     options:
@@ -22,13 +22,13 @@ backend_ws_news_agency_server_delete:
 
 backend_ws_news_agency_servers_list:
     path:     /news-agency/servers
-    defaults: { _controller  : BackendWebServiceBundle:NewsAgencyServer:list }
+    defaults: { _controller: BackendWebServiceBundle:NewsAgencyServer:list }
     options:
         expose: true
 
 backend_ws_news_agency_server_toggle:
     path:     /news-agency/servers/{id}/toggle
-    defaults: { _controller  : BackendWebServiceBundle:NewsAgencyServer:toggle }
+    defaults: { _controller: BackendWebServiceBundle:NewsAgencyServer:toggle }
     requirements:
         id: \d+
     options:
