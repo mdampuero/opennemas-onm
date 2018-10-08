@@ -131,8 +131,6 @@ class ContentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * TODO: "Esto es infumable, moving on" Fran dixit at some point
      */
     public function shareByEmailAction(Request $request)
     {

@@ -59,13 +59,13 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $response          = $this->getMockBuilder('\Braintree_Response')
+        $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
 
         $response->success = true;
 
-        $response->transaction     = $this->getMockBuilder('\Braintree_Transaction')
+        $response->transaction = $this->getMockBuilder('\Braintree_Transaction')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -97,7 +97,7 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateWithRuntimeError()
     {
-        $response          = $this->getMockBuilder('\Braintree_Response')
+        $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -144,7 +144,7 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testRemove()
     {
-        $response          = $this->getMockBuilder('\Braintree_Response')
+        $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -172,7 +172,7 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testRemoveWithErrors()
     {
-        $response          = $this->getMockBuilder('\Braintree_Response')
+        $response = $this->getMockBuilder('\Braintree_Response')
             ->disableOriginalConstructor()
             ->getMock();
 

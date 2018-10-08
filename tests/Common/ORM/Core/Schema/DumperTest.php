@@ -9,9 +9,9 @@
  */
 namespace Tests\Common\ORM\Core\Schema;
 
-use\Common\ORM\Core\Schema\Dumper;
-use\Common\ORM\Core\Schema\Schema;
-use\Common\ORM\Core\Metadata;
+use \Common\ORM\Core\Schema\Dumper;
+use \Common\ORM\Core\Schema\Schema;
+use \Common\ORM\Core\Metadata;
 
 /**
  * Defines test cases for Dumper class.
