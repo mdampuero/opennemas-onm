@@ -12,6 +12,7 @@ namespace Backend\Controller;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Intl;
+use Common\Core\Annotation\Security;
 
 class AccountController extends Controller
 {
