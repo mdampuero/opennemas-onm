@@ -12,4 +12,4 @@ services:
 
     dbal_connection:
         class: Onm\Database\DbalWrapper
-        arguments: [ %database%, %kernel.environment% ]
+        arguments: [ '%database%', '%kernel.environment%' ]
