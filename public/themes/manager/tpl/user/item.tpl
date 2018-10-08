@@ -4,22 +4,26 @@
       <ul class="nav quick-section">
         <li class="quicklinks">
           <h4>
+            <i class="fa fa-user m-r-10"></i>
+          </h4>
+        </li>
+        <li class="quicklinks">
+          <h4>
             <a class="no-padding" ng-href="[% routing.ngGenerate('manager_users_list') %]">
-              <i class="fa fa-user"></i>
               {t}Users{/t}
             </a>
           </h4>
         </li>
-        <li class="quicklinks hidden-xs ng-cloak" ng-if="!loading && user">
-          <div class="p-l-10 p-r-10 p-t-10">
+        <li class="quicklinks hidden-xs m-l-5 m-r-5 ng-cloak" ng-if="!loading && user">
+          <h4>
             <i class="fa fa-angle-right"></i>
-          </div>
+          </h4>
         </li>
         <li class="quicklinks hidden-xs ng-cloak" ng-if="!loading && user">
-          <h5 class="ng-cloak">
-            <strong ng-if="user.id">{t}Edit{/t}</strong>
-            <strong ng-if="!user.id">{t}Create{/t}</strong>
-          </h5>
+          <h4>
+            <span ng-if="user.id">{t}Edit{/t}</span>
+            <span ng-if="!user.id">{t}Create{/t}</span>
+          </h4>
         </li>
       </ul>
       <div class="all-actions pull-right">
@@ -44,7 +48,7 @@
         <div class="grid simple">
           <div class="grid-body">
             <div class="form-group">
-              <label class="control-label" for="name">{t}Display name{/t}</label>
+              <label class="form-label" for="name">{t}Display name{/t}</label>
               <div class="controls input-with-icon right">
                 <input class="form-control" id="name" name="name" ng-model="user.name" ng-maxlength="50" required type="text"/>
                 <span class="icon right">
@@ -55,7 +59,7 @@
               </div>
             </div>
             <div class="form-group" ng-class="{ 'has-error': userForm.username.$dirty && userForm.username.$invalid }">
-              <label class="control-label" for="username">{t}User name{/t}</label>
+              <label class="form-label" for="username">{t}User name{/t}</label>
               <div class="controls input-with-icon right">
                 <input class="form-control" id="username" name="username" ng-model="user.username"  ng-maxlength="20" required type="text"/>
                 <span class="icon right">
@@ -66,7 +70,7 @@
               </div>
             </div>
             <div class="form-group" ng-class="{ 'has-error': userForm.email.$dirty && userForm.email.$invalid }">
-              <label class="control-label" for="email">{t}Email{/t}</label>
+              <label class="form-label" for="email">{t}Email{/t}</label>
               <div class="controls input-with-icon right">
                 <span class="icon right">
                   <span class="fa fa-check text-success" ng-if="userForm.email.$dirty && userForm.email.$valid"></span>
@@ -77,19 +81,19 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label" for="url">{t}Blog Url{/t}</label>
+              <label class="form-label" for="url">{t}Blog Url{/t}</label>
               <div class="controls">
                 <input class="form-control" id="url" name="url" placeholder="http://" ng-model="user.url" type="text">
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label" for="bio">{t}Biography{/t}</label>
+              <label class="form-label" for="bio">{t}Biography{/t}</label>
               <div class="controls">
                 <textarea class="form-control" id="bio" name="bio" ng-model="user.bio" rows="3"></textarea>
               </div>
             </div>
             <div class="form-group" ng-class="{ 'has-error': userForm.password.$dirty && userForm.password.$invalid }">
-              <label class="control-label" for="password">{t}Password{/t}</label>
+              <label class="form-label" for="password">{t}Password{/t}</label>
               <div class="controls">
                 <div class="input-group">
                   <span class="input-group-addon pointer" ng-click="passwordUnlocked = !passwordUnlocked">
@@ -100,7 +104,7 @@
               </div>
             </div>
             <div class="form-group" ng-class="{ 'has-error': userForm.password.$valid && user.password && user.password !== rpassword }">
-              <label class="control-label" for="rpassword">{t}Confirm password{/t}</label>
+              <label class="form-label" for="rpassword">{t}Confirm password{/t}</label>
               <div class="controls">
                 <div class="input-group">
                   <span class="input-group-addon pointer" ng-click="rpasswordUnlocked = !rpasswordUnlocked">

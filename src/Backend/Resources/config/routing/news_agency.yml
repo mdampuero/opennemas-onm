@@ -2,20 +2,6 @@ backend_news_agency:
     path:     /news-agency
     defaults: { _controller  : BackendBundle:NewsAgency:list }
 
-backend_news_agency_unlock:
-    path:     /news-agency/unlock
-    defaults: { _controller  : BackendBundle:NewsAgency:unlock }
-
 backend_news_agency_sync:
     path:     /news-agency/sync
     defaults: { _controller  : BackendBundle:NewsAgency:sync }
-
-backend_news_agency_import:
-    path:     /news-agency/{source_id}/{id}/import
-    defaults: { _controller  : BackendBundle:NewsAgency:import }
-
-backend_news_agency_batch_import:
-    path:     /news-agency/batch-import
-    defaults: { _controller  : BackendBundle:NewsAgency:batchImport }
-    options:
-        expose: true

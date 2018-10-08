@@ -624,8 +624,6 @@ admin_paywall_purchases_list_export:
     path:     /paywall/purchases/list-export.csv
     defaults: { _controller  : BackendBundle:Paywall:purchasesListExport }
 
-# Importer XML file controller routes
-# Template cache controller routes
 admin_cache_manager:
     path:     /system/cachemanager
     defaults: { _controller  : BackendBundle:CacheManager:index }

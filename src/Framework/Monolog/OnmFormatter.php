@@ -39,11 +39,21 @@ class OnmFormatter
     {
         $record['extra']['instance'] = $this->getInstance();
         $record['extra']['user']     = $this->getUser();
+        $record['extra']['url']      = null;
 
         $request = $this->container->get('request_stack')->getCurrentRequest();
 
-        // Ensure we have a request (maybe we're in a console command)
+        // Check if request (maybe it is a console command)
         if (empty($request)) {
+            $record['extra']['client_ip']  = php_sapi_name();
+            $record['extra']['user_agent'] = php_sapi_name();
+
+            if (array_key_exists('argv', $_SERVER)
+                && is_array($_SERVER['argv'])
+            ) {
+                $record['extra']['url'] = implode(' ', $_SERVER['argv']);
+            }
+
             return $record;
         }
 
