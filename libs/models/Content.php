@@ -2228,7 +2228,6 @@ class Content implements \JsonSerializable, CsvSerializable
 
         foreach ($tagIds as $tag) {
             if (is_array($tag)) {
-                $tag['slug']  = $ts->createSearchableWord($tag['name']);
                 $tag          = $ts->createItem($tag);
                 $insertTags[] = $tag->id;
                 $newTags[]    = $tag;

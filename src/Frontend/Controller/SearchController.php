@@ -45,9 +45,14 @@ class SearchController extends Controller
      *
      * @return Response The response object.
      */
-    public function internalAction()
+    public function internalAction(Request $request)
     {
-        // TODO: Implement
-        return new Response('Not implemented', 501);
+        return $this->forward(
+            'Frontend\Controller\TagsController::tagsAction',
+            [
+                'resource' => 'tags',
+                'slug'     => $request->get('tag_name')
+            ]
+        );
     }
 }

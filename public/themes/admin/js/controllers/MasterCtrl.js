@@ -492,11 +492,20 @@
          *
          * @return {Array} The array.
          */
-        $scope.toArray = function(obj) {
+        $scope.toArray = function(obj, keyName, valueName) {
           var arr = [];
 
           for (var key in obj) {
-            arr.push(obj[key]);
+            var value = obj[key];
+
+            if (keyName && valueName) {
+              value = {};
+
+              value[keyName]   = key;
+              value[valueName] = obj[key];
+            }
+
+            arr.push(value);
           }
 
           return arr;

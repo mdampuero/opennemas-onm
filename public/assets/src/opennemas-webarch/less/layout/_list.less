@@ -36,22 +36,15 @@
 .table {
   td.editable {
     cursor: text;
-    a {
+
+    .fa {
       opacity: 0;
     }
-  }
 
-  td.editing {
-    input {
-      display: inline;
-      width: 40%
-    }
-  }
+    &:hover
 
-  td.editable:hover {
-    a {
+    .fa {
       opacity: 1;
-      cursor: pointer;
     }
   }
 }
