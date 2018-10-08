@@ -46,7 +46,7 @@
         "symfony/monolog-bundle": "~3.0.2",
         "symfony/polyfill-apcu": "^1.0",
         "symfony/swiftmailer-bundle": "~2.3.10",
-        "symfony/symfony": "3.2.*",
+        "symfony/symfony": "3.3.*",
         "twig/twig": "^1.0||^2.0",
 
         "drak/native-session": "*",
@@ -55,7 +55,7 @@
         "giggsey/libphonenumber-for-php": "^7.2",
         "guzzlehttp/guzzle": "^6.3",
         "hwi/oauth-bundle": "^0.6.3",
-        "imagine/imagine": "0.6.*",
+        "imagine/imagine": "0.7.*",
         "jagandecapri/symfony-parallel-process": "*",
         "jdorn/sql-formatter": "1.2.16",
         "jeremykendall/php-domain-parser": "~2.0",

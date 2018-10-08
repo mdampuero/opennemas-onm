@@ -14,6 +14,9 @@ if (file_exists(__DIR__ . '/../tmp/restart.txt')) {
  * @var Composer\Autoload\ClassLoader
  */
 $loader = include __DIR__ . '/../app/autoload.php';
+if (PHP_VERSION_ID < 70000) {
+    include_once __DIR__.'/../var/bootstrap.php.cache';
+}
 
 // Little hack to allow final slashes in the url
 $_SERVER['REQUEST_URI'] = \Onm\StringUtils::normalizeUrl($_SERVER['REQUEST_URI']);
@@ -26,7 +29,9 @@ if (file_exists(APPLICATION_PATH . '/.development')
 } else {
     $kernel = new AppKernel('prod', false);
 }
-$kernel->loadClassCache();
+if (PHP_VERSION_ID < 70000) {
+    $kernel->loadClassCache();
+}
 //$kernel = new AppCache($kernel);
 
 // When using the HttpCache, you need to call the method in your front controller
@@ -35,8 +40,7 @@ $kernel->loadClassCache();
 $request = Request::createFromGlobals();
 // As the LB ip's change, let's trust on all FORWARDED request headers that comes from them
 // See more: https://symfony.com/doc/2.8/deployment/proxies.html
-Request::setTrustedHeaderName(Request::HEADER_FORWARDED, null);
-Request::setTrustedProxies([ '127.0.0.1', $request->server->get('REMOTE_ADDR') ]);
+Request::setTrustedProxies([ '127.0.0.1', $request->server->get('REMOTE_ADDR') ], Request::HEADER_X_FORWARDED_ALL);
 $response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);
