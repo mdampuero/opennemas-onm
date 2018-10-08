@@ -3,23 +3,23 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
 
-# Put parameters here that don"t need to change on each machine where the app is deployed
+# Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     cache_prefix:            onm
-    core.paths.cache:        "%kernel.root_dir%/../tmp/instances"
-    core.paths.cache.common: "%kernel.root_dir%/../tmp/compiles"
-    core.paths.public:       "%kernel.root_dir%/../public"
-    core.paths.themes:       "%core.paths.public%/themes"
-    core.paths.spool:        "%kernel.root_dir%/../tmp/spool"
-    core.paths.spool.files:  "%core.paths.spool%/files"
+    core.paths.cache:        '%kernel.root_dir%/../tmp/instances'
+    core.paths.cache.common: '%kernel.root_dir%/../tmp/compiles'
+    core.paths.public:       '%kernel.root_dir%/../public'
+    core.paths.themes:       '%core.paths.public%/themes'
+    core.paths.spool:        '%kernel.root_dir%/../tmp/spool'
+    core.paths.spool.files:  '%core.paths.spool%/files'
 
 framework:
     #esi:             ~
-    translator:      { fallback: ["%locale%"] }
-    secret:          "%framework.secret%"
+    translator:      { fallback: ['%locale%'] }
+    secret:          '%framework.secret%'
     router:
-        resource: "%kernel.root_dir%/config/routing.yml"
+        resource: '%kernel.root_dir%/config/routing.yml'
         strict_requirements: ~
     form:            ~
     csrf_protection: ~
@@ -28,14 +28,14 @@ framework:
     templating:
         engines: ['twig', 'php']
         #assets_version: SomeVersionScheme
-    default_locale:  "%locale%"
-    trusted_proxies: "%framework.trusted_proxies%"
+    default_locale:  '%locale%'
+    trusted_proxies: '%framework.trusted_proxies%'
     trusted_hosts:   ~
     session:
         name:            __onm_sess
         cookie_httponly: false
-        gc_maxlifetime:  "%session.gc_maxlifetime%"
-        handler_id:      "%session_handler_id%"
+        gc_maxlifetime:  '%session.gc_maxlifetime%'
+        handler_id:      '%session_handler_id%'
     fragments:       ~
     http_method_override: true
     assets: ~
@@ -52,10 +52,10 @@ opennemas:
         extensions_assets_path: /media/core/extensions
     assetic:
         # Force compilation
-        asset_compilation_in_dev: "%opennemas.assetic.asset_compilation_in_dev%"
+        asset_compilation_in_dev: '%opennemas.assetic.asset_compilation_in_dev%'
 
         # Assetic folders
-        cache_path:  "%kernel.cache_dir%/assetic"
+        cache_path:  '%kernel.cache_dir%/assetic'
         build_path:  build/assets
         output_path: build/assets/dist
 
@@ -63,19 +63,19 @@ opennemas:
         asset_url: asset_url
 
         # Asset servers
-        use_asset_servers: "%opennemas.assetic.use_asset_servers%"
-        asset_servers:     "%opennemas.assetic.asset_servers%"
-        asset_domain:      "%opennemas.assetic.asset_domain%"
+        use_asset_servers: '%opennemas.assetic.use_asset_servers%'
+        asset_servers:     '%opennemas.assetic.asset_servers%'
+        asset_domain:      '%opennemas.assetic.asset_domain%'
 
         # Filters configuration
         filters:
             uglifyjs:
-                bin:  "%kernel.root_dir%/../node_modules/.bin/uglifyjs"
+                bin:  '%kernel.root_dir%/../node_modules/.bin/uglifyjs'
                 node: /usr/bin/nodejs
                 options:
                     mangle: true
             uglifycss:
-                bin:  "%kernel.root_dir%/../node_modules/.bin/uglifycss"
+                bin:  '%kernel.root_dir%/../node_modules/.bin/uglifycss'
                 node: /usr/bin/nodejs
             less:
                 node:  /usr/bin/nodejs
@@ -86,37 +86,37 @@ opennemas:
 
 # Twig Configuration
 twig:
-    debug:            "%kernel.debug%"
-    strict_variables: "%kernel.debug%"
+    debug:            '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
 
 # Swiftmailer Configuration
 swiftmailer:
     default_mailer: default
-    transport: "%mailer_transport%"
-    host:      "%mailer_host%"
-    username:  "%mailer_user%"
-    password:  "%mailer_password%"
+    transport: '%mailer_transport%'
+    host:      '%mailer_host%'
+    username:  '%mailer_user%'
+    password:  '%mailer_password%'
     spool:
         type: file
-        path: "%core.paths.spool%"
-    logging:  "%kernel.debug%"
+        path: '%core.paths.spool%'
+    logging:  '%kernel.debug%'
 
 monolog:
     channels: ['main', 'applog', 'errorlog']
     handlers:
         main:
             type:  stream
-            path:  "%kernel.logs_dir%/%kernel.environment%.log"
+            path:  '%kernel.logs_dir%/%kernel.environment%.log'
             level: error
         applog:
             type:  stream
-            path:  "%kernel.logs_dir%/application.log"
+            path:  '%kernel.logs_dir%/application.log'
             level: info
             channels: applog
             formatter: monolog.formatter.standard
         errorlog:
             type:  stream
-            path:  "%kernel.logs_dir%/opennemas-error.log"
+            path:  '%kernel.logs_dir%/opennemas-error.log'
             level: error
             channels: errorlog
             formatter: monolog.formatter.standard
@@ -126,23 +126,23 @@ hwi_oauth:
     resource_owners:
         facebook:
             type:          facebook
-            client_id:     "%api.facebook.client_id%"
-            client_secret: "%api.facebook.client_secret%"
+            client_id:     '%api.facebook.client_id%'
+            client_secret: '%api.facebook.client_secret%'
             scope:         email
             options:
                 display: popup #dialog is optimized for popup window
         twitter:
             type:          twitter
-            client_id:     "%api.twitter.client_id%"
-            client_secret: "%api.twitter.client_secret%"
+            client_id:     '%api.twitter.client_id%'
+            client_secret: '%api.twitter.client_secret%'
 
 lexik_jwt_authentication:
-    token_ttl:       "%session.gc_maxlifetime%"
+    token_ttl:       '%session.gc_maxlifetime%'
     encoder_service: shared_key_jwt_encoder
 
 # Braintree configuration
 comet_cult_braintree:
-    environment: "%braintree.environment%"
-    merchant_id: "%braintree.merchant_id%"
-    public_key:  "%braintree.public_key%"
-    private_key: "%braintree.private_key%"
+    environment: '%braintree.environment%'
+    merchant_id: '%braintree.merchant_id%'
+    public_key:  '%braintree.public_key%'
+    private_key: '%braintree.private_key%'
