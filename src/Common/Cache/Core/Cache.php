@@ -185,12 +185,16 @@ abstract class Cache extends DataBuffer
     public function setNamespace($namespace)
     {
         $this->namespace = $namespace;
+
+        return $this;
     }
 
     /**
      * Adds the namespace as prefix to the id.
      *
      * @param  mixed $id The cache id.
+     *
+     * @return string
      */
     protected function getNamespacedId($id)
     {
@@ -225,6 +229,8 @@ abstract class Cache extends DataBuffer
      * Removes the namespace from the namespaced id.
      *
      * @param mixed $id The namespaced cache id.
+     *
+     * @return string
      */
     protected function getUnNamespacedId($id)
     {

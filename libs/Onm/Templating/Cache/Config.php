@@ -99,8 +99,6 @@ class Config
      * Initializes the Config class
      *
      * @param string $configDir the config dir where the config.ini file is located in
-     *
-     * @return void
      */
     public function __construct($configDir = '')
     {
@@ -112,7 +110,7 @@ class Config
      *
      * @param string $configDir the directory
      *
-     * @return Config the clas
+     * @return Config the class
      */
     public function setConfigDir($configDir = '')
     {
@@ -218,7 +216,7 @@ class Config
      *
      * @param array $config the configuration to save
      *
-     * @return void
+     * @return boolean
      */
     public function save($config)
     {

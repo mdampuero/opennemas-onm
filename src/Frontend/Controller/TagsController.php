@@ -22,7 +22,7 @@ class TagsController extends Controller
     /**
      * Displays a list of tags.
      *
-     * @return Response The response object.
+     * @return \Symfony\Component\HttpFoundation\Response The response object.
      */
     public function indexAction()
     {
@@ -78,7 +78,7 @@ class TagsController extends Controller
     /**
      * Shows a paginated list of contents for a given tag name.
      *
-     * @param Request $request The request object.
+     * @return \Symfony\Component\HttpFoundation\Response The response object.
      *
      * @return Response The response object.
      */

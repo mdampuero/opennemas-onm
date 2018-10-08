@@ -391,7 +391,6 @@ class EntityManager extends BaseManager
             $criterias,
             $result
         );
-        $count = 0;
 
         for ($count = 0; $count < count($result[0]); $count++) {
             $value = $result[1][$count];
@@ -456,6 +455,8 @@ class EntityManager extends BaseManager
      *
      * @param array $saveInCacheIds list of contents ids to load extra data
      * @param array $contents       List of contents where load the extra data
+     *
+     * @return array
      */
     private function loadExtraDataToContents($saveInCacheIds, &$contents)
     {

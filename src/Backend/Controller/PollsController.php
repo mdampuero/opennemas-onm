@@ -208,14 +208,14 @@ class PollsController extends Controller
 
         $poll = new \Poll($id);
         // Check empty data
-        if ($poll->id == null) {
+        if (empty($poll->id)) {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 sprintf(_('Unable to find a poll with the id "%s".'), $id)
             );
 
             return $this->redirect(
-                $this->generateUrl('admin_polls', [ 'category' => $data['category'] ])
+                $this->generateUrl('admin_polls')
             );
         }
 

@@ -12,10 +12,7 @@ namespace Framework\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Parser;
-use Common\ORM\Entity\Tag;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class OnmMigratorTagsCommand extends ContainerAwareCommand
@@ -46,6 +43,8 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
      *
      * @param InputInterface  $input  An InputInterface instance
      * @param OutputInterface $output An OutputInterface instance
+     *
+     * @return int|void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -128,10 +127,12 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
      *  Method to get all tags for the contents
      *
      * @param Object $content        The content from where retrieve the tags
-     * @param Array  $tags           List with all created tags
+     * @param array  $tags           List with all created tags
      * @param mixed  $newTagsInBatch List of new tags in the last batch and his contents
-     * @param Array  $contentTagRel  List with the relations of between contents and tags
+     * @param array  $contentTagRel  List with the relations of between contents and tags
      * @param Object $tagService     Service for the tags operations
+     *
+     * @return array
      */
     private function getContentTags($content, $tags, $newTagsInBatch, $contentTagRel, $tagService)
     {
@@ -171,6 +172,8 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
      *
      * @param Object $conn   Database connection
      * @param String $locale The locale for the tag search
+     *
+     * @return array
      */
     private function getTags($conn, $locale)
     {
@@ -186,10 +189,12 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
      * Insert new tags and content tag relations
      *
      * @param mixed  $newTagsInBatch List of new tags in the last batch and his contents
-     * @param Array  $contentTagRel  List with the relations of between contents and tags
+     * @param array  $contentTagRel  List with the relations of between contents and tags
      * @param String $locale         Default language for the instance
-     * @param Array  $tags           List with all created tags
-     * @param Array  $contentsId     List of all contents to insert
+     * @param array  $tags           List with all created tags
+     * @param array  $contentsId     List of all contents to insert
+     *
+     * @return array
      */
     private function insertData($newTagsInBatch, $contentTagRel, $locale, $tags, $contentsId)
     {
@@ -229,7 +234,7 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
     /**
      * Insert a new tag in the database
      *
-     * @param Array @tag List with all values for a tag
+     * @param array @tag List with all values for a tag
      *
      * @return Integer Return the tag id
      */
@@ -250,9 +255,9 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
     /**
      *  Method to retrieve tags from a string
      *
-     * @param Array @content String with all tags
+     * @param array @content String with all tags
      *
-     * @return Array List with all the different tags
+     * @return array List with all the different tags
      *
      */
     private function getTagsFromString($content)
@@ -283,7 +288,7 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
      * @param String  $realTag tag to fix
      * @param boolean $isImg if the tags belong to an image
      *
-     * @return return the tag fixed or null if is invalid
+     * @return null|string The tag fixed or null if is invalid
      */
     private function fixTag($realTag, $isImg)
     {

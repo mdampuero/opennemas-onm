@@ -11,7 +11,6 @@ namespace Framework\Controller;
 
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Handles all the request for Welcome actions

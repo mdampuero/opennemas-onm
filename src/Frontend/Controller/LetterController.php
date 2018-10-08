@@ -299,7 +299,7 @@ class LetterController extends Controller
                     $this->get('application.log')->notice(
                         "Email sent. Frontend letter (sender:" . $email . ", to: " . $recipient . ")"
                     );
-                } catch (\Swift_SwiftException $e) {
+                } catch (\Exception $e) {
                     $this->get('application.log')->notice(
                         "Email NOT sent. Frontend letter (sender:" . $email . ", to: " . $recipient . "):"
                         . $e->getMessage()

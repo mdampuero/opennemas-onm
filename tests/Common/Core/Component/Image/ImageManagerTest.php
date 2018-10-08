@@ -9,12 +9,8 @@
  */
 namespace Tests\Common\Core\Component\Image;
 
-use Common\Core\Component\Image\ImageManager;
 use PHPUnit\Framework\TestCase;
-use Imagine\Image\Box;
-use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
-use Imagine\Imagick\Imagine;
 use Tests\Common\Core\Component\Image\BoxMockTest;
 use Tests\Common\Core\Component\Image\ImagineMockTest;
 
@@ -301,15 +297,16 @@ class ImageManagerTest extends TestCase
      */
     public function testGetImageFormat()
     {
-        $parameters = [];
         $imagick    = $this->getMocketImagick();
         $imagick->expects($this->once())
             ->method('getImageFormat')
             ->will($this->returnValue('HH'));
+
         $imagine = $this->getMocketImagine();
         $imagine->expects($this->once())
             ->method('getImagick')
             ->will($this->returnValue($imagick));
+
         $image = $this->getMocketImage();
         $this->assertSame($image->getImageFormat($imagine), 'hh');
     }

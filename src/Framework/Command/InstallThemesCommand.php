@@ -13,7 +13,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Process\Process;
@@ -63,17 +62,17 @@ class InstallThemesCommand extends Command
             ->setDescription('Deploys or installs themes to the latest version')
             ->setHelp(
                 <<<EOF
-The <info>themes:install</info> updates or installs themes code by executing
+The <info>themes:install</> updates or installs themes code by executing
 and updates the .deploy.php file.
 
 - Install all themes
-<info>php app/console themes:install</info>
+<info>php app/console themes:install</>
 
 - Install all themes in bitbucket.org
-<info>php app/console themes:install -r</info>
+<info>php app/console themes:install -r</>
 
 - Install a theme
-<info>php app/console themes:install THEME_NAME</info>
+<info>php app/console themes:install THEME_NAME</>
 EOF
             );
     }
@@ -91,7 +90,7 @@ EOF
         $theme  = $input->getArgument('theme');
 
         if (empty($theme) && $remote) {
-            $this->auth = $this->askCredentials($input, $output);
+            $this->auth = $this->askCredentials();
             $output->writeln('Getting themes from <info>bitbucket</>...');
 
             $this->themes = $this->getThemes();
@@ -196,16 +195,18 @@ EOF
      */
     protected function generateDeployFile()
     {
-        $time = time();
+        $time     = time();
         $contents = "<?php define('THEMES_DEPLOYED_AT', '$time');";
 
-        file_put_contents(APPLICATION_PATH.'/.deploy.themes.php', $contents);
+        file_put_contents(APPLICATION_PATH . '/.deploy.themes.php', $contents);
     }
 
     /**
      * Gets the list of repositories for themes from bitbucket.
      *
      * @param string $url The URL to get the themes from.
+     *
+     * @return null|array
      */
     protected function getThemes($url = 'https://api.bitbucket.org/2.0/repositories/opennemas?pagelen=100')
     {
@@ -246,7 +247,7 @@ EOF
         foreach ($this->themes as $theme) {
             $this->output->write("\n  - Installing <fg=blue>$theme</>... ");
 
-            if (file_exists($this->basePath.'/public/themes/' . $theme)) {
+            if (file_exists($this->basePath . '/public/themes/' . $theme)) {
                 $this->pullTheme($theme);
             } else {
                 $this->cloneTheme($theme);
@@ -261,7 +262,7 @@ EOF
      */
     protected function pullTheme($theme)
     {
-        chdir($this->basePath.'/public/themes/' . $theme);
+        chdir($this->basePath . '/public/themes/' . $theme);
         $this->execProcess('git pull');
         chdir($this->basePath);
     }

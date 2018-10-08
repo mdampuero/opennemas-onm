@@ -49,6 +49,8 @@ class AdvertisementHelper
      *
      * @param array $positions Positions to add.
      * @param string $themeName The theme name.
+     *
+     * @return AdvertisementHelper
      */
     public function addPositions($positions, $themeName)
     {
@@ -109,6 +111,7 @@ class AdvertisementHelper
      * Returns the list of positions for a group.
      *
      * @param string $groupName The name of a group.
+     * @param array $positions The list of positions.
      *
      * @return array The list of positions for a group.
      */

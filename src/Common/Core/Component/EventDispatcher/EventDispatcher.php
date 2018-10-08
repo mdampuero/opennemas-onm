@@ -9,7 +9,6 @@
  */
 namespace Common\Core\Component\EventDispatcher;
 
-use Common\Core\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class EventDispatcher

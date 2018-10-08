@@ -40,7 +40,7 @@ class AdapterManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests filter when the filter to apply is invalid.
      *
-     * @expectedException Common\Data\Core\Exception\InvalidAdapterException
+     * @expectedException \Common\Data\Core\Exception\InvalidAdapterException
      */
     public function testAdapterWhenInvalidAdapter()
     {

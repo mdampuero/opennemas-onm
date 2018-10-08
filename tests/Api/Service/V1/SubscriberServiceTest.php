@@ -100,7 +100,7 @@ class SubscriberServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests getItem when the item has no subscriber property to true.
      *
-     * @expectedException Api\Exception\GetItemException
+     * @expectedException \Api\Exception\GetItemException
      */
     public function testGetItemWhenErrorWhenNoSubscriber()
     {

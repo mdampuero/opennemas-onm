@@ -9,9 +9,9 @@
  */
 namespace Tests\Common\ORM\Core\Schema;
 
-use Common\ORM\Core\Schema\Dumper;
-use Common\ORM\Core\Schema\Schema;
-use Common\ORM\Core\Metadata;
+use \Common\ORM\Core\Schema\Dumper;
+use \Common\ORM\Core\Schema\Schema;
+use \Common\ORM\Core\Metadata;
 
 /**
  * Defines test cases for Dumper class.
@@ -103,7 +103,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests dump for an schema without database mapping information.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testDumpNoDatabaseInformation()
     {
@@ -121,7 +121,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests validate for a schema without table name.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateWithoutTableName()
     {
@@ -131,7 +131,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests validate for a schema for a invalid table name.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateInvalidTableName()
     {
@@ -155,7 +155,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests validateField for a field without type.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateFieldWithoutType()
     {
@@ -203,7 +203,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests validateIndex for an index without name.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateIndexWithoutName()
     {
@@ -216,7 +216,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests validateIndex for an index without columns.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateIndexWithUnknownColumns()
     {
@@ -229,7 +229,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests validateIndex for an index with invalid flags.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateIndexWithInvalidFlags()
     {
@@ -261,7 +261,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests validateIndex with an already validated index.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateIndexesDuplicated()
     {
@@ -301,7 +301,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests validateOption for an invalid option.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateOptionInvalid()
     {
@@ -329,7 +329,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests validateOptions with unrecognized options.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateOptionsInvalid()
     {
@@ -359,7 +359,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests validateTable for a table without columns.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateTableNoColumns()
     {
@@ -372,7 +372,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests validateTable for a table without indexes.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateTableNoIndexes()
     {
@@ -406,7 +406,7 @@ class DumperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests validateType with an invalid type.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateTypeInvalid()
     {

@@ -9,9 +9,6 @@
  */
 namespace Api\Service\V1;
 
-use Common\ORM\Entity\FrontpageVersion;
-use Api\Exception\CreateItemException;
-
 class ContentPositionService extends OrmService
 {
 

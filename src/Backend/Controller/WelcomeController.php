@@ -9,8 +9,6 @@
  */
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 
@@ -25,8 +23,6 @@ class WelcomeController extends Controller
      * Handles the default action
      *
      * @param Request $request the request object
-     *
-     * @return void
      */
     public function defaultAction()
     {

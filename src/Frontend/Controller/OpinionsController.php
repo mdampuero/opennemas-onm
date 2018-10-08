@@ -96,10 +96,11 @@ class OpinionsController extends Controller
 
                 if (count($contents) > 0) {
                     foreach ($contents as &$opinion) {
-                        if (isset($item->img1) && ($item->img1 > 0)) {
+                        // Little mess with $item and $opinion variables (undefined)
+                        if (isset($opinion->img1) && ($opinion->img1 > 0)) {
                             $contents[0]->img1 = $this
                                 ->get('entity_repository')
-                                ->find('Photo', $item->img1);
+                                ->find('Photo', $opinion->img1);
                         }
                     }
 
@@ -788,7 +789,7 @@ class OpinionsController extends Controller
             || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
         ) {
             $this->cm = new \ContentManager();
-             $opinion = $this->cm->getUrlContent($wsUrl . '/ws/opinions/complete/' . $dirtyID, true);
+            $opinion  = $this->cm->getUrlContent($wsUrl . '/ws/opinions/complete/' . $dirtyID, true);
 
             if (is_string($opinion)) {
                 $opinion = @unserialize($opinion);
@@ -838,6 +839,8 @@ class OpinionsController extends Controller
      * Fetches the advertisement
      *
      * @param string $context the context to fetch ads from
+     *
+     * @return array
      *
      * TODO: Make this function non-static
      */

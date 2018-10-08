@@ -12,7 +12,6 @@ namespace Frontend\Controller;
 use Common\Core\Controller\Controller;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Displays static pages.

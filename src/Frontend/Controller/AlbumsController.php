@@ -92,7 +92,6 @@ class AlbumsController extends Controller
             $itemsPerPage  = isset($albumSettings['total_front']) ? $albumSettings['total_front'] : 8;
             $orderBy       = isset($albumSettings['orderFrontpage']) ? $albumSettings['orderFrontpage'] : 'created';
 
-            $order   = [ 'starttime DESC' ];
             $filters = [
                 'content_type_name' => [[ 'value' => 'album' ]],
                 'content_status'    => [[ 'value' => 1 ]],
@@ -286,7 +285,7 @@ class AlbumsController extends Controller
         $albumPhotos      = $album->_getAttachedPhotos($album->id);
         $albumPhotosPaged = $album->getAttachedPhotosPaged($album->id, 8, $page);
 
-        if (count($_albumArrayPaged) > $itemsPage) {
+        if (count($albumPhotosPaged) > $itemsPage) {
             array_pop($_albumArrayPaged);
         }
 

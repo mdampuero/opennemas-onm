@@ -24,7 +24,9 @@ class MenusController extends Controller
     /**
      * Lists all the available menus
      *
-     * @return void
+     * @param Request $request the request object
+     *
+     * @return Response
      *
      * @Security("hasExtension('MENU_MANAGER')
      *     and hasPermission('MENU_ADMIN')")
@@ -130,20 +132,24 @@ class MenusController extends Controller
             ]));
         }
 
-        $params = $this->getCategoriesByType();
+        $categories = $this->getCategoriesByType();
 
         return $this->render('menues/new.tpl', [
             'menu'             => new \Menu(),
-            'categories'       => $params['categories'],
-            'categories_album' => $params['categories_album'],
-            'categories_album' => $params['categories_video'],
-            'categories_poll'  => $params['categories_poll'],
-            'language_data'    => $this->getLocaleData($request),
+            'categories'       => $categories['categories'],
+            'categories_album' => $categories['categories_album'],
+            'categories_poll'  => $categories['categories_poll'],
+            'categories_video' => $categories['categories_video'],
+            'language_data'    => $this->getLocaleData('frontend', $request),
             'menu_positions'   => $this->getMenuPositions(),
             'pages'            => $this->getModulePages(),
-            'staticPages'      => $this->getStaticPages(),
-            'subcat'           => $params['subcategories'],
+            'static_pages'     => $this->getStaticPages(),
+            'subcat'           => $categories['subcategories'],
             'sync_sites'       => $this->getSyncSites(),
+            'multilanguage'    => in_array(
+                'es.openhost.module.multilanguage',
+                $this->get('core.instance')->activated_modules
+            )
         ]);
     }
 

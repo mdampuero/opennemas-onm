@@ -10,7 +10,6 @@
 namespace Framework\Tests\Import\Parser\NewsML;
 
 use Framework\Import\Parser\NewsML\NewsMLComponent\NewsMLComponentTextEuropaPress;
-use Framework\Import\Resource\Resource;
 
 class NewsMLComponentTextEuropaPressTest extends \PHPUnit\Framework\TestCase
 {

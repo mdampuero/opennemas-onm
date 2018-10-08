@@ -34,7 +34,7 @@ class ModuleController extends Controller
         $oql  = 'limit 10';
 
         if (!empty($uuid)) {
-            $oql  = sprintf('uuid ~ "%s" ', $uuid) . $oql;
+            $oql = sprintf('uuid ~ "%s" ', $uuid) . $oql;
         }
 
         $modules = $this->get('orm.manager')->getRepository('Extension')
@@ -42,10 +42,6 @@ class ModuleController extends Controller
 
         $modules = array_map(function ($a) {
             return $a->uuid;
-            return [
-                'id'   => $a->uuid,
-                'name' => $a->uuid
-            ];
         }, $modules);
 
         return new JsonResponse([ 'extensions' => $modules ]);
@@ -66,13 +62,12 @@ class ModuleController extends Controller
     public function checkAction(Request $request, $uuid)
     {
         $msg = $this->get('core.messenger');
-        $oql = sprintf('uuid = "%s"', $uuid);
         $id  = $request->query->get('id');
 
         try {
             $module = $this->get('orm.manager')
                 ->getRepository('Extension')
-                ->findOneBy($oql);
+                ->findOneBy(sprintf('uuid = "%s"', $uuid));
 
             if ($module->id !== (int) $id) {
                 $text = _('A module with the uuid \'%s\' already exists');

@@ -10,7 +10,6 @@
 namespace Tests\Common\ORM\Core;
 
 use Common\ORM\Core\Entity;
-use Framework\Fixture\FixtureLoader;
 
 class EntityTest extends \PHPUnit\Framework\TestCase
 {
@@ -48,9 +47,9 @@ class EntityTest extends \PHPUnit\Framework\TestCase
         $data   = [ 'foo' => 'bar' ];
         $entity = new Entity($data);
 
-        $this->assertFalse($entity->merge(null));
-        $this->assertFalse($entity->merge(1));
-        $this->assertFalse($entity->merge('foo'));
+        $this->assertNull($entity->merge(null));
+        $this->assertNull($entity->merge(1));
+        $this->assertNull($entity->merge('foo'));
 
         $entity->merge([ 'foo' => 'norf', 'baz' => 'qux' ]);
         $this->assertEquals('norf', $entity->foo);

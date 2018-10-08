@@ -16,7 +16,7 @@
  * @param  Smarty_Internal_Template $template Current template
  * @param  boolean                  $repeat   Current extension call number.
  *
- * @return string Result HTML.
+ * @return null
  */
 function smarty_block_stylesheets($params, $content, $template, &$repeat)
 {
@@ -40,4 +40,6 @@ function smarty_block_stylesheets($params, $content, $template, &$repeat)
     if (!empty($content)) {
         $bag->addLiteralStyle($content);
     }
+
+    return null;
 }

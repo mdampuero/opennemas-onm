@@ -36,21 +36,18 @@ class HttpRssAtom extends HttpRss
      * Gets and returns the list of remote files.
      *
      * @return array The list of remote files.
+     *
+     * @throws \Exception
      */
     public function getRemoteFiles()
     {
         $content = $this->getContentFromUrl($this->params['url']);
 
         if (!$content) {
-            throw new \Exception(
-                sprintf(
-                    _(
-                        'Can\'t connect to server %s. Please check your'
-                        . ' connection details.'
-                    ),
-                    $this->params['name']
-                )
-            );
+            throw new \Exception(sprintf(
+                _('Can\'t connect to server %s. Please check your connection details.'),
+                $this->params['name']
+            ));
         }
 
         $xml = simplexml_load_string($content);
@@ -86,14 +83,11 @@ class HttpRssAtom extends HttpRss
         $article->created_datetime = new \DateTime($content->published);
         $article->updated_datetime = new \DateTime($content->updated);
 
-        $newsMLString = $this->tpl->fetch(
-            'news_agency/newsml_templates/base.tpl',
-            [
-                'article' => $article,
-                'tags'    => $this->get('api.service.tag')
-                    ->getListByIdsKeyMapped($article->tag_ids)['items']
-            ]
-        );
+        $newsMLString = $this->tpl->fetch('news_agency/newsml_templates/base.tpl', [
+            'article' => $article,
+            'tags'    => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($article->tag_ids)['items']
+        ]);
 
         file_put_contents($path, $newsMLString);
 

@@ -85,13 +85,13 @@ class Video extends Content
      *
      * @param int $id the video id to load
      *
-     * @return Video the video object instance
+     * @return null|Video the video object instance
      */
     public function read($id)
     {
         // If no valid id then return
         if ((int) $id <= 0) {
-            return;
+            return null;
         }
 
         try {
@@ -102,16 +102,15 @@ class Video extends Content
             );
 
             if (!$rs) {
-                return false;
+                return null;
             }
 
             $this->load($rs);
             $this->information = unserialize($rs['information']);
-            $this->thumb       = $this->getThumb();
 
             return $this;
         } catch (\Exception $e) {
-            return false;
+            return null;
         }
     }
 
@@ -123,10 +122,6 @@ class Video extends Content
     public function load($properties)
     {
         parent::load($properties);
-
-        if (array_key_exists('pk_video', $properties)) {
-            $this->category_title = $this->loadCategoryTitle($properties['pk_video']);
-        }
 
         $this->thumb = $this->getThumb();
     }
@@ -483,7 +478,7 @@ class Video extends Content
     public function getUri()
     {
         if (empty($this->category_name)) {
-            $this->category_name = $this->loadCategoryName($this->pk_content);
+            $this->category_name = $this->loadCategoryName();
         }
 
         $uri = Uri::generate('video', [

@@ -9,7 +9,6 @@
  */
 namespace Common\Cache\Core;
 
-use Common\Cache\File\File;
 use Common\Cache\Core\Exception\InvalidConnectionException;
 
 /**

@@ -25,6 +25,8 @@ class Articles
      * @param $id the id of the requested article
      *
      * @return $article
+     *
+     * @throws RestException
      */
     public function complete($id = null)
     {
@@ -139,7 +141,7 @@ class Articles
      *
      * @param type $number the number to validate
      *
-     * @return void
+     * @throws RestException
      */
     private function validateInt($number)
     {

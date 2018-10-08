@@ -9,8 +9,6 @@
  */
 namespace Tests\Libs\Smarty;
 
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
-
 /**
  * Defines test cases for SmartyUrl class.
  */

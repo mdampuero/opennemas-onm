@@ -6,12 +6,7 @@ function smarty_function_renderplaceholder($params, &$smarty)
 
     // Get all the parameters passed to the function
     $items       = $params['items'];
-    $tpl         = $params['tpl'];
     $placeholder = $params['placeholder'];
-    $cssclass    = $params['cssclass'];
-    $order       = (array_key_exists('order', $params)) ?
-        $params['order'] :
-        'normal';
     unset($params['items']);
 
     if (!array_key_exists('tags', $params) || empty($params['tags'])) {

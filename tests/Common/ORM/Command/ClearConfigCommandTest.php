@@ -10,7 +10,6 @@
 namespace Test\Common\ORM\Command;
 
 use Common\ORM\Command\ClearConfigCommand;
-use Doctrine\DBAL\Schema\Schema as DoctrineSchema;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 

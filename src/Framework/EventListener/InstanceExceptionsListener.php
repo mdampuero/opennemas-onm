@@ -11,15 +11,11 @@ namespace Framework\EventListener;
 
 use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
 use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 
 /**
  * Handles all instance-related exceptions.
@@ -30,6 +26,8 @@ class InstanceExceptionsListener implements EventSubscriberInterface
      * Checks and handles an exception if it is related to instance load.
      *
      * @param GetResponseForExceptionEvent $event The event object.
+     *
+     * @return null|boolean
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
@@ -73,6 +71,8 @@ class InstanceExceptionsListener implements EventSubscriberInterface
      * Returns an array of event names this subscriber wants to listen to.
      *
      * @return array The event names to listen to.
+     *
+     * @return array
      */
     public static function getSubscribedEvents()
     {
