@@ -2162,12 +2162,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/frandieguez/jwt-authentication-bundle.git",
-                "reference": "ceeaf3814abd5c2b8367a23b986d57020de1e197"
+                "reference": "51a453dc32c2a0e0fb3d9e0f2e1ecff011c7952a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/frandieguez/jwt-authentication-bundle/zipball/ceeaf3814abd5c2b8367a23b986d57020de1e197",
-                "reference": "ceeaf3814abd5c2b8367a23b986d57020de1e197",
+                "url": "https://api.github.com/repos/frandieguez/jwt-authentication-bundle/zipball/51a453dc32c2a0e0fb3d9e0f2e1ecff011c7952a",
+                "reference": "51a453dc32c2a0e0fb3d9e0f2e1ecff011c7952a",
                 "shasum": ""
             },
             "require": {
@@ -2226,7 +2226,7 @@
             "support": {
                 "source": "https://github.com/frandieguez/jwt-authentication-bundle/tree/master"
             },
-            "time": "2018-10-04T13:52:06+00:00"
+            "time": "2018-10-08T21:47:40+00:00"
         },
         {
             "name": "luracast/restler",
