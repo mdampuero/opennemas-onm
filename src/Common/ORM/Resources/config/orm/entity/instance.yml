@@ -138,7 +138,7 @@ orm:
                             options: { default: 0, unsigned: true, notnull: false }
                         media_size:
                             type:    float
-                            options: { default: 0, notnull: false, notnull: false }
+                            options: { default: 0, unsigned: false, notnull: false }
                         alexa:
                             type:    integer
                             options: { default: 1000000, unsigned: true, notnull: false }

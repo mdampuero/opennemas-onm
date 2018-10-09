@@ -9,7 +9,6 @@
  */
 namespace BackendWebService\Controller;
 
-use Common\ORM\Entity\Purchase;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

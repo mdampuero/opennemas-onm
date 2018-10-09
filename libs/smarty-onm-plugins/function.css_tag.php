@@ -14,7 +14,6 @@ function smarty_function_css_tag($params, &$smarty)
         return;
     }
 
-    $output = '';
     $href   = $params['href'];
     $server = DS . 'assets' . DS . 'css' . DS;
     $mtime  = DEPLOYED_AT;

@@ -4,6 +4,8 @@
  *
  * @param array    $params The list of parameters.
  * @param Template $tpl    The template object.
+ *
+ * @return string
  */
 function smarty_insert_renderbanner($params, $smarty)
 {

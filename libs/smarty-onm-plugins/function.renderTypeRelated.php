@@ -24,11 +24,12 @@ function smarty_function_renderTypeRelated($params, &$smarty)
             break;
         case 3:
             // Attachments
-            if ((preg_match("/.+\.jpeg|jpg|gif/", $ext))) {
+            if ((preg_match("/.+\.jpeg|jpg|gif/", $content->path))) {
                 $class = 'class="res-image" ';
             } else {
                 $class = 'class="res-file" ';
             }
+
             // Generate correct attachment uri
             if ($content->fullFilePath) {
                 $content->uri = $content->fullFilePath;

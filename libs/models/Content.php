@@ -366,8 +366,6 @@ class Content implements \JsonSerializable, CsvSerializable
      * Overloads the object properties with an array of the new ones
      *
      * @param array $properties the list of properties to load
-     *
-     * @return void
      */
     public function load($properties)
     {
@@ -438,7 +436,7 @@ class Content implements \JsonSerializable, CsvSerializable
      *
      * @param integer $id content identifier
      *
-     * @return Content the content object with all the information
+     * @return null|Content the content object with all the information
      */
     public function read($id)
     {
@@ -454,7 +452,7 @@ class Content implements \JsonSerializable, CsvSerializable
             );
 
             if (!$rs) {
-                return;
+                return null;
             }
 
             // Load object properties
@@ -467,7 +465,8 @@ class Content implements \JsonSerializable, CsvSerializable
             return $this;
         } catch (\Exception $e) {
             error_log('Error fetching content with id' . $id . ': ' . $e->getMessage());
-            return;
+
+            return null;
         }
     }
 
@@ -493,9 +492,11 @@ class Content implements \JsonSerializable, CsvSerializable
             }
 
             $type = ucfirst($type);
+
             return new $type($contentId);
         } catch (\Exception $e) {
             error_log('Error on Content::get (ID:' . $contentId . ')' . $e->getMessage());
+
             return false;
         }
     }
@@ -506,6 +507,8 @@ class Content implements \JsonSerializable, CsvSerializable
      * @param array $data array with data for create the article
      *
      * @return boolean true if the content was created
+     *
+     * @throws \Exception
      */
     public function create($data)
     {
@@ -713,7 +716,6 @@ class Content implements \JsonSerializable, CsvSerializable
             'params'         => (!isset($data['params']) || empty($data['params'])) ? null : serialize($data['params']),
             'slug'           => $data['slug'],
             'starttime'      => (!isset($data['starttime'])) ? $this->starttime : $data['starttime'],
-            'title'          => $data['title'],
             'with_comment'   => (!isset($data['with_comment'])) ? $this->with_comment : $data['with_comment'],
         ];
 
@@ -741,8 +743,6 @@ class Content implements \JsonSerializable, CsvSerializable
                         'cat_name'   => $catName,
                     ]
                 );
-            } else {
-                $catName = $this->category_name;
             }
 
             $this->tag_ids = $this->addTags(is_array($data['tag_ids']) ? $data['tag_ids'] : []);
@@ -824,6 +824,8 @@ class Content implements \JsonSerializable, CsvSerializable
                 $this->content_type_name . '.update',
                 [ $this->content_type_name => $this ]
             );
+
+            return true;
         } catch (\Exception $e) {
             error_log('Error Content:delete, aka sendToTrash (ID:' . $id . '):' . $e->getMessage());
             return false;
@@ -840,7 +842,7 @@ class Content implements \JsonSerializable, CsvSerializable
     public static function checkExists($id)
     {
         if (!isset($id)) {
-            return;
+            return false;
         }
 
         try {
@@ -852,6 +854,7 @@ class Content implements \JsonSerializable, CsvSerializable
             return count($contentNum) >= 1;
         } catch (\Exception $e) {
             error_log('Error on check exists on content (ID:' . $id . '):' . $e->getMessage());
+
             return false;
         }
     }
@@ -859,12 +862,12 @@ class Content implements \JsonSerializable, CsvSerializable
     /**
      * Returns the URI for this content
      *
-     * @return string the uri
+     * @return string|array the uri
      */
     public function getUri()
     {
         if (empty($this->category_name)) {
-            $this->category_name = $this->loadCategoryName($this->pk_content);
+            $this->category_name = $this->loadCategoryName();
         }
 
         if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
@@ -901,7 +904,7 @@ class Content implements \JsonSerializable, CsvSerializable
     /**
      * Sets the state of this content to the trash
      *
-     * @return boolean true if all went well
+     * @return boolean|\Content true if all went well
      */
     public function setTrashed()
     {
@@ -1097,6 +1100,8 @@ class Content implements \JsonSerializable, CsvSerializable
      * Change current value of frontpage property
      *
      * @return boolean true if it was changed successfully
+     *
+     * @throws \Exception
      */
     public function toggleSuggested()
     {
@@ -1520,9 +1525,9 @@ class Content implements \JsonSerializable, CsvSerializable
             } elseif ($this->isPostponed($now)) {
                 return self::POSTPONED;
             }
-        } else {
-            return self::NOT_SCHEDULED;
         }
+
+        return self::NOT_SCHEDULED;
     }
 
     /**
@@ -1580,16 +1585,14 @@ class Content implements \JsonSerializable, CsvSerializable
     */
     public function isScheduled($now = null)
     {
-        $now   = new \DateTime($now);
-        $start = new \DateTime($this->starttime);
-        $end   = new \DateTime($this->endtime);
-
         if (empty($this->starttime)) {
             return false;
         }
 
-        // If the starttime is equals to and endtime (wrong values), this is not
-        // scheduled
+        $start = new \DateTime($this->starttime);
+        $end   = new \DateTime($this->endtime);
+
+        // If the starttime is equals to and endtime (wrong values), this is not scheduled
         //
         // TODO: Remove this checking when values fixed in database
         if ($start->getTimeStamp() - $end->getTimeStamp() == 0) {
@@ -1697,7 +1700,7 @@ class Content implements \JsonSerializable, CsvSerializable
     /**
      * Return the content type name for this content
      *
-     * @return void
+     * @return string
      */
     public function getContentTypeName()
     {
@@ -1787,7 +1790,6 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         if (count($relations) > 0) {
-            $relatedContents = [];
             $relatedContents = getService('entity_repository')->findMulti($relations);
 
             // Filter out not ready for publish contents.
@@ -1964,7 +1966,7 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         try {
-            $value = getService('dbal_connection')->executeUpdate(
+            getService('dbal_connection')->executeUpdate(
                 "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
                 . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?",
                 [ $this->id, $property, $value, $value ]
@@ -2014,7 +2016,7 @@ class Content implements \JsonSerializable, CsvSerializable
             $sql = 'DELETE FROM contentmeta WHERE fk_content = ? AND meta_name '
                 . (is_array($property) ? $propertyFilter : ' = ?');
 
-            $value = getService('dbal_connection')->executeUpdate($sql, $parameters);
+            getService('dbal_connection')->executeUpdate($sql, $parameters);
 
             return true;
         } catch (\Exception $e) {
@@ -2026,7 +2028,9 @@ class Content implements \JsonSerializable, CsvSerializable
     /**
      * Load content properties given the content id
      *
-     * @return array if it is in the contentmeta table
+     * @param int $id The id of the content
+     *
+     * @return boolean|Content if it is in the contentmeta table
      */
     public function loadAllContentProperties($id = null)
     {
@@ -2034,8 +2038,6 @@ class Content implements \JsonSerializable, CsvSerializable
         $contentProperties = $cache->fetch('content-meta-' . $this->id);
 
         if (!is_array($contentProperties)) {
-            $contentProperties = [];
-
             if ($this->id == null && $id == null) {
                 return false;
             }
@@ -2186,8 +2188,6 @@ class Content implements \JsonSerializable, CsvSerializable
      * Removes all tags associated with a content given its id
      *
      * @param mixed $contentId The id of the content
-     *
-     * @return void
      */
     public static function deleteTags($contentId)
     {
@@ -2212,6 +2212,8 @@ class Content implements \JsonSerializable, CsvSerializable
      * This is crap and should be in the article service.
      *
      * @param Array $data
+     *
+     * @return array
      */
     public function addTags($tagIds)
     {
@@ -2246,6 +2248,10 @@ class Content implements \JsonSerializable, CsvSerializable
      *
      * @param mixed $contentIds a array with all the ids of the contents you want recover
      *  If you use a integer only recover this one.
+     *
+     * @throws \Exception
+     *
+     * @return array
      */
     public function getContentTags($contentIds)
     {

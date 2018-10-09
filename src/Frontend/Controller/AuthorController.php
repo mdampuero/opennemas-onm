@@ -143,7 +143,7 @@ class AuthorController extends Controller
         }
 
         if (empty($wsUrl)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
 
         return $this->redirect($wsUrl . '/author/' . $slug);

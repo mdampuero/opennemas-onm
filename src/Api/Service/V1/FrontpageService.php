@@ -9,8 +9,6 @@
  */
 namespace Api\Service\V1;
 
-use Common\ORM\Entity\Frontpage;
-
 class FrontpageService extends OrmService
 {
 

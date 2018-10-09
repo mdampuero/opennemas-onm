@@ -11,7 +11,6 @@
 
 namespace Framework\EventListener;
 
-use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 

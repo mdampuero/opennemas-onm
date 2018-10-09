@@ -9,7 +9,7 @@
  */
 namespace Tests\Common\Core\Component\Template;
 
-use Common\Core\Component\Template\Template;
+use \Common\Core\Component\Template\Template;
 
 class TemplateTest extends \PHPUnit\Framework\TestCase
 {
@@ -199,7 +199,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::generateCacheId
+     * @covers \Common\Core\Component\Template\Template::generateCacheId
      */
     public function testGenerateCacheId()
     {
@@ -227,7 +227,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::getContainer
+     * @covers \Common\Core\Component\Template\Template::getContainer
      */
     public function testGetContainer()
     {
@@ -240,7 +240,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::getInstance
+     * @covers \Common\Core\Component\Template\Template::getInstance
      */
     public function testGetInstanceWithNoInstance()
     {
@@ -250,7 +250,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::getTheme
+     * @covers \Common\Core\Component\Template\Template::getTheme
      */
     public function testGetThemeWithNoTheme()
     {
@@ -260,7 +260,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::getTheme
+     * @covers \Common\Core\Component\Template\Template::getTheme
      */
     public function testGetThemeWithTheme()
     {
@@ -280,7 +280,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::getThemeSkinName
+     * @covers \Common\Core\Component\Template\Template::getThemeSkinName
      */
     public function testGetThemeSkinName()
     {
@@ -315,7 +315,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::getThemeSkinProperty
+     * @covers \Common\Core\Component\Template\Template::getThemeSkinProperty
      */
     public function testGetThemeVariantProperty()
     {

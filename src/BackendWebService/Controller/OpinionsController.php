@@ -84,23 +84,19 @@ class OpinionsController extends ContentController
         ]);
 
         if (!$result) {
-            return new JsonResponse([
-                'messages' => [
-                    [
-                        'message' => _('Unable to save the positions.'),
-                        'type'    => 'error'
-                    ]
+            return new JsonResponse(['messages' => [
+                [
+                    'message' => _('Unable to save the positions.'),
+                    'type'    => 'error'
                 ]
-            ]);
+            ]]);
         }
 
-        return new JsonResponse([
-            'messages' => [
-                    [
-                        'message' => _('Positions saved successfully.'),
-                        'type'    => 'success'
-                    ]
-                ]
-        ]);
+        return new JsonResponse([ 'messages' => [
+            [
+                'message' => _('Positions saved successfully.'),
+                'type'    => 'success'
+            ]
+        ]]);
     }
 }

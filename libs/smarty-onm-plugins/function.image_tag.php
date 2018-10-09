@@ -4,19 +4,18 @@
  */
 function smarty_function_image_tag($params, &$smarty)
 {
-    $output = "";
-
     if (array_key_exists('id', $params) && !empty($params['id'])) {
         $photo         = getService('entity_repository')->find('Photo', $params['id']);
         $params['src'] = $photo->path_img;
     }
 
     if (empty($params['src'])) {
-        return;
+        return '';
     }
 
     $src = $params['src'];
 
+    $baseUrl = INSTANCE_MEDIA . 'images';
     if (preg_match('@http(s)?://@', $src)) {
         $baseUrl = '';
     } elseif (array_key_exists('common', $params) && $params['common'] == "1") {
@@ -25,8 +24,6 @@ function smarty_function_image_tag($params, &$smarty)
         $baseUrl = SS . "bundles" . SS . $params['bundle'] . SS;
     } elseif (array_key_exists('base_url', $params)) {
         $baseUrl = $params['base_url'] . DS;
-    } else {
-        $baseUrl = INSTANCE_MEDIA . 'images';
     }
 
     $resource = $baseUrl . $src;

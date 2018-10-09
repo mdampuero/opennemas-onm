@@ -74,7 +74,6 @@ class FrontpagesController extends Controller
             'views'                => $views,
             'category'             => $categoryId,
             'contentPositionByPos' => $contentPositionByPos,
-            'contents'             => $contents
         ]);
         $this->get('core.locale')->setContext('backend');
 
@@ -113,8 +112,6 @@ class FrontpagesController extends Controller
      */
     public function savePositionsAction(Request $request)
     {
-        $savedProperly         = false;
-        $validReceivedData     = false;
         $dataPositionsNotValid = false;
 
         // Get application logger
@@ -278,12 +275,6 @@ class FrontpagesController extends Controller
             );
         }
 
-        if ($category == 0) {
-            $section = 'home';
-        } else {
-            $section = $category;
-        }
-
         $this->get('core.dispatcher')->dispatch(
             'frontpage.save_position',
             [ 'category' => $category, 'frontpageId' => $frontpageVersionId ]
@@ -320,8 +311,6 @@ class FrontpagesController extends Controller
      * Generates a preview for a particular frontpage given the required information
      *
      * @param Request $request the request object
-     *
-     * @return void
      *
      * @Security("hasExtension('FRONTPAGE_MANAGER')
      *     and hasPermission('ARTICLE_FRONTPAGE')")

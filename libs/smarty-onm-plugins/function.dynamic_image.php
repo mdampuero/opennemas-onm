@@ -9,25 +9,23 @@
  */
 function smarty_function_dynamic_image($params, &$smarty)
 {
-    $output = "";
-
     if (empty($params['src'])) {
         return;
     }
 
     $src = $params['src'];
 
+    $baseUrl = $params['base_url'] . DS;
     if (preg_match('@http(s)?://@', $src)) {
         $baseUrl = '';
     } elseif (!array_key_exists('base_url', $params)) {
         $baseUrl = INSTANCE_MEDIA . 'images';
-    } else {
-        $baseUrl = $params['base_url'] . DS;
     }
 
     $resource = $baseUrl . $src;
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
+    $resource = $baseUrl . $src;
     if (array_key_exists('transform', $params)) {
         getService('router');
 
@@ -35,6 +33,7 @@ function smarty_function_dynamic_image($params, &$smarty)
             'real_path'  => $baseUrl . $src,
             'parameters' => urlencode($params['transform']),
         ];
+
         try {
             $generator = getService('router');
             $resource  = $generator->generate('asset_image', $urlParams);
@@ -42,8 +41,6 @@ function smarty_function_dynamic_image($params, &$smarty)
             $resource = '#failed';
             trigger_error($e->getMessage());
         }
-    } else {
-        $resource = $baseUrl . $src;
     }
 
     $resource = preg_replace('@(?<!:)//@', '/', $resource);

@@ -11,7 +11,6 @@ namespace Framework\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Common\Core\Component\EventDispatcher\Event;
-use Common\ORM\Entity\Notification;
 
 class CommentSubscriber implements EventSubscriberInterface
 {

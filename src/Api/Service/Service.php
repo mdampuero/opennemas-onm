@@ -42,7 +42,7 @@ abstract class Service
      *
      * @param integer $id The item id.
      *
-     * @throws DeleteItemException If the item could not be deleted.
+     * @throws \Api\Exception\DeleteItemException If the item could not be deleted.
      */
     abstract public function deleteItem($ids);
 
@@ -62,7 +62,7 @@ abstract class Service
      *
      * @return mixed The item.
      *
-     * @throws GetItemException If the item was not found.
+     * @throws \Api\Exception\GetItemException If the item was not found.
      */
     abstract public function getItem($id);
 
@@ -73,7 +73,7 @@ abstract class Service
      *
      * @return array The list of items.
      *
-     * @throws GetListException If there was a problem to find items.
+     * @throws \Api\Exception\GetListException If there was a problem to find items.
      */
     abstract public function getList($oql = '');
 
@@ -83,7 +83,7 @@ abstract class Service
      * @param integer $id   The item id.
      * @param array   $data The new item information.
      *
-     * @throws PatchItemException If the item could not be patched.
+     * @throws \Api\Exception\PatchItemException If the item could not be patched.
      */
     abstract public function patchItem($id, $data);
 
@@ -103,7 +103,7 @@ abstract class Service
      * @param integer $id   The item id.
      * @param array   $data The item information.
      *
-     * @throws UpdateItemException If the item could not be updated.
+     * @throws \Api\Exception\UpdateItemException If the item could not be updated.
      */
     abstract public function updateItem($id, $data);
 }

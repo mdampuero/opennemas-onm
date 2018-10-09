@@ -103,6 +103,8 @@ class VideosController extends Controller
 
             $em = $this->get('entity_repository');
 
+            $allVideos = [];
+
             if ($categoryName != 'home') {
                 $categoryManager = $this->get('category_repository');
                 $category        = $categoryManager->findOneBy(

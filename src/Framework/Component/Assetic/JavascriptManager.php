@@ -10,8 +10,6 @@
 namespace Framework\Component\Assetic;
 
 use Assetic\FilterManager;
-use Assetic\Exception\FilterException;
-use Assetic\Filter\UglifyJsFilter;
 use Assetic\Filter\UglifyJs2Filter;
 
 /**

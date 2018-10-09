@@ -11,10 +11,8 @@ namespace Framework\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Process\Process;
 
 class InstanceBackupDbCommand extends ContainerAwareCommand
@@ -22,33 +20,30 @@ class InstanceBackupDbCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setDefinition(
-                array(
-                    new InputOption(
-                        'name',
-                        null,
-                        InputOption::VALUE_OPTIONAL,
-                        'Then instance internal name'
-                    ),
-                    new InputOption(
-                        'id',
-                        null,
-                        InputOption::VALUE_OPTIONAL,
-                        'Then instance id'
-                    ),
-                    new InputOption(
-                        'output_file',
-                        null,
-                        InputOption::VALUE_REQUIRED,
-                        'The output file where to generate the database dump.'
-                    ),
-                )
-            )
+            ->setDefinition([
+                new InputOption(
+                    'name',
+                    null,
+                    InputOption::VALUE_OPTIONAL,
+                    'Then instance internal name'
+                ),
+                new InputOption(
+                    'id',
+                    null,
+                    InputOption::VALUE_OPTIONAL,
+                    'Then instance id'
+                ),
+                new InputOption(
+                    'output_file',
+                    null,
+                    InputOption::VALUE_REQUIRED,
+                    'The output file where to generate the database dump.'
+                ),
+            ])
             ->setName('instance:backup-db')
             ->setDescription('Creates a database backup from an instance internal name of id.')
             ->setHelp(
                 <<<EOF
-The <info>instances:list</info> command creates a database backup from an instance internal name of id.
 
 <info>php bin/console instance:backup-db</info>
 
@@ -76,10 +71,10 @@ EOF
 
         $dumpCommand = $this->getMysqlDumpCommand($databaseName, $outputFile);
 
-        $output->writeln('Executing command: `'.$dumpCommand.'`');
+        $output->writeln('Executing command: `' . $dumpCommand . '`');
         $this->executeDatabaseDump($dumpCommand, $output);
 
-        $output->writeln('Dump for instance generated to file: '.$outputFile);
+        $output->writeln('Dump for instance generated to file: ' . $outputFile);
     }
 
     /**
@@ -95,7 +90,7 @@ EOF
         $dbConn = $this->getContainer()->get('orm.manager')->getConnection('instance');
 
         if (!empty($instanceName)) {
-            $sql    = 'SELECT settings FROM instances WHERE internal_name=?';
+            $sql   = 'SELECT settings FROM instances WHERE internal_name=?';
             $value = $instanceName;
         } else {
             $sql   = 'SELECT settings FROM instances WHERE id=?';
@@ -103,8 +98,8 @@ EOF
         }
 
         try {
-            $settings = $dbConn->fetchAll($sql, array($value));
-        } catch (\Doctrine\DBAL\DBALException $e) {
+            $settings = $dbConn->fetchAll($sql, [ $value ]);
+        } catch (\Exception $e) {
             throw new \InvalidArgumentException($e->getMessage());
         }
 
@@ -119,22 +114,19 @@ EOF
 
     /**
      * Returns the mysqldump command with all its parameters
-     *
-     * @return void
      */
     public function getMysqlDumpCommand($databaseName, $outputFile)
     {
         $dbConfigurations = $this->getContainer()->getParameter('database');
         $dbUser           = $dbConfigurations['dbal']['connections']['default']['user'];
         $dbPass           = $dbConfigurations['dbal']['connections']['default']['password'];
+        $dbHost           = $dbConfigurations['dbal']['connections']['default']['host'];
 
-        return "mysqldump -u{$dbUser} -p{$dbPass} {$databaseName} > {$outputFile}";
+        return "mysqldump -h{$dbHost} -u{$dbUser} -p{$dbPass} {$databaseName} > {$outputFile}";
     }
 
     /**
      * undocumented function
-     *
-     * @return void
      * @author
      */
     public function executeDatabaseDump($dumpCommand, $output)
@@ -142,9 +134,9 @@ EOF
         $process = new Process($dumpCommand);
         $process->run(function ($type, $buffer) use ($output) {
             if (Process::ERR === $type) {
-                $output->write("\t<error>".$buffer. "<error>");
+                $output->write("\t<error>" . $buffer . "<error>");
             } else {
-                $output->write("\t".$buffer. 'DONE');
+                $output->write("\t" . $buffer . 'DONE');
             }
         });
     }

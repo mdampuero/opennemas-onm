@@ -9,8 +9,6 @@
  */
 namespace Repository;
 
-use Onm\Cache\CacheInterface;
-
 /**
  * An EntityRepository serves as a repository for entities with generic as well
  * as business specific methods for retrieving entities.
@@ -23,20 +21,6 @@ use Onm\Cache\CacheInterface;
  */
 class CategoryManager extends BaseManager
 {
-    /**
-     * Initializes the entity manager.
-     *
-     * @param Connection     $dbConn      The database connection.
-     * @param CacheInterface $cache       The cache service.
-     * @param string         $cachePrefix The cache prefix.
-     */
-    public function __construct($dbConn, CacheInterface $cache, $cachePrefix)
-    {
-        $this->dbConn      = $dbConn;
-        $this->cache       = $cache;
-        $this->cachePrefix = $cachePrefix;
-    }
-
     /**
      * Finds one category from the given category id.
      *

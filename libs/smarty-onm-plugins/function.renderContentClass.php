@@ -14,15 +14,12 @@ function smarty_function_renderContentClass($params, &$smarty)
         return;
     }
 
-    $item = $params['item'];
+    $category = $params['category'];
     if ($params['category'] == 'home') {
         $category = 0;
-    } else {
-        $category = $params['category'];
     }
 
-    $item = $params['item'];
-
+    $item       = $params['item'];
     $element    = 'format_' . $category;
     $properties = $item->getMetadata($element);
 

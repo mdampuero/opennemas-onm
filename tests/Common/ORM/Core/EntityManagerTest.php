@@ -15,10 +15,7 @@ use Common\ORM\Entity\Client;
 use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\EntityManager;
-use Common\ORM\Core\Metadata;
-use Common\ORM\Entity\Payment;
 use Common\ORM\FreshBooks\FreshBooksManager;
-use Common\ORM\Core\Exception\InvalidPersisterException;
 
 /**
  * Defines test cases for EntityManager class.

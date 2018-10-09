@@ -17,7 +17,6 @@ namespace Frontend\Controller;
 use PayPal\CoreComponentTypes\BasicAmountType;
 use PayPal\EBLBaseComponents\DoExpressCheckoutPaymentRequestDetailsType;
 use PayPal\EBLBaseComponents\ActivationDetailsType;
-use PayPal\EBLBaseComponents\AddressType;
 use PayPal\EBLBaseComponents\BillingAgreementDetailsType;
 use PayPal\EBLBaseComponents\PaymentDetailsItemType;
 use PayPal\EBLBaseComponents\PaymentDetailsType;
@@ -350,6 +349,7 @@ class PaywallController extends Controller
         }
 
         $paymentInfo = $DoECResponse->DoExpressCheckoutPaymentResponseDetails->PaymentInfo[0];
+        $message     = '';
 
         // Payment done, let's update some registries in the app
         if (isset($DoECResponse) && $DoECResponse->Ack == 'Success') {
@@ -808,8 +808,6 @@ class PaywallController extends Controller
 
     /**
      * Description of the action
-     *
-     * @return void
      */
     public function returnCancelPaymentAction()
     {
@@ -834,8 +832,6 @@ class PaywallController extends Controller
 
     /**
      * undocumented function
-     *
-     * @return void
      * @author
      */
     private function getPaypalService()

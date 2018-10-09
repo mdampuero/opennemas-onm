@@ -10,6 +10,7 @@
 namespace Common\Core\Component\Loader;
 
 use Common\ORM\Entity\Instance;
+use Common\ORM\Entity\Theme;
 
 /**
  * Loads the opennemas core.
@@ -168,6 +169,8 @@ class Loader
      * Returns an instance by internal name.
      *
      * @param string $internalName The instance internal name.
+     *
+     * @return void|Instance
      */
     public function loadInstanceFromInternalName($internalName)
     {
@@ -230,6 +233,8 @@ class Loader
      * Loads a theme basing on a theme UUID.
      *
      * @param string $uuid The theme UUID.
+     *
+     * @return Theme
      */
     public function loadThemeFromUuid($uuid)
     {
@@ -252,7 +257,7 @@ class Loader
      **/
     protected function checkInstanceData($instance, $host)
     {
-        return $instance instanceof \Common\ORM\Entity\Instance
+        return $instance instanceof Instance
             && in_array($host, $instance->domains);
     }
 
@@ -350,6 +355,8 @@ class Loader
      * Loads an instance basing on an QOL query.
      *
      * @param string $oql The OQL query.
+     *
+     * @return Instance
      */
     public function loadInstanceFromOql($oql)
     {
@@ -416,6 +423,8 @@ class Loader
      * Loads a theme basing on an QOL query.
      *
      * @param string $oql The OQL query.
+     *
+     * @return Theme
      */
     protected function loadThemeFromOql($oql)
     {

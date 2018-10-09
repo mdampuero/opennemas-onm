@@ -23,6 +23,8 @@ class Apc extends AbstractCache
      * Initilizes the APCCache
      *
      * @param $options
+     *
+     * @throws \Exception
      */
     public function __construct()
     {
@@ -34,7 +36,7 @@ class Apc extends AbstractCache
      *
      * @param array $options the optiosn to initialize the cache layer
      *
-     * @return void
+     * @throws \Exception
      */
     public function initialize()
     {
@@ -50,8 +52,8 @@ class Apc extends AbstractCache
      */
     public function getIds()
     {
-        $ci = apc_cache_info('user');
-        $keys = array();
+        $ci   = apc_cache_info('user');
+        $keys = [];
 
         foreach ($ci['cache_list'] as $entry) {
             $keys[] = $entry['info'];

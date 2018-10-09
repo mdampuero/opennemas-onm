@@ -128,7 +128,7 @@ class SqlTanslatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException Common\ORM\Core\Exception\InvalidTokenException
+     * @expectedException \Common\ORM\Core\Exception\InvalidTokenException
      */
     public function testTranslateInvalidToken()
     {

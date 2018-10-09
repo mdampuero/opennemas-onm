@@ -96,7 +96,6 @@ class XcacheCache extends AbstractCache
      * Checks that xcache.admin.enable_auth is Off
      *
      * @throws \BadMethodCallException When xcache.admin.enable_auth is On
-     * @return void
      */
     protected function checkAuth()
     {

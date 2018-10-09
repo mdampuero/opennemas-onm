@@ -47,8 +47,6 @@ class Album extends Content
      * Initializes the Album class.
      *
      * @param string $id the id of the album
-     *
-     * @return void
      */
     public function __construct($id = null)
     {
@@ -69,7 +67,7 @@ class Album extends Content
         switch ($name) {
             case 'uri':
                 if (empty($this->category_name)) {
-                    $this->category_name = $this->loadCategoryName($this->pk_content);
+                    $this->category_name = $this->loadCategoryName();
                 }
                 $uri = Uri::generate(
                     'album',
@@ -113,7 +111,7 @@ class Album extends Content
 
         if (array_key_exists('pk_album', $properties) && !is_null($properties['pk_album'])) {
             $this->pk_album       = $properties['pk_album'];
-            $this->category_title = $this->loadCategoryTitle($properties['pk_album']);
+            $this->category_title = $this->loadCategoryTitle();
         }
         if (array_key_exists('subtitle', $properties) && !is_null($properties['subtitle'])) {
             $this->subtitle = $properties['subtitle'];
@@ -132,13 +130,13 @@ class Album extends Content
      *
      * @param string $id the album id to get info from.
      *
-     * @return Album the object instance
+     * @return null|Album the object instance
      */
     public function read($id)
     {
         // If no valid id then return
         if (((int) $id) <= 0) {
-            return;
+            return null;
         }
 
         try {
@@ -149,7 +147,7 @@ class Album extends Content
             );
 
             if (!$rs) {
-                return;
+                return null;
             }
 
             $this->load($rs);
@@ -159,7 +157,8 @@ class Album extends Content
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
-            return;
+
+            return null;
         }
     }
 
@@ -168,19 +167,20 @@ class Album extends Content
      *
      * @param array $data the data of the album
      *
-     * @return bool true if the object was stored
+     * @return bool|\Album true if the object was stored
      */
     public function create($data)
     {
         $data['subtitle'] = (empty($data['subtitle'])) ? '' : $data['subtitle'];
 
-        parent::create($data);
 
         try {
+            parent::create($data);
+
             $this->pk_content = (int) $this->id;
             $this->pk_album   = (int) $this->id;
 
-            $rs = getService('dbal_connection')->insert(
+            getService('dbal_connection')->insert(
                 'albums',
                 [
                     'pk_album' => (int) $this->id,
@@ -207,7 +207,7 @@ class Album extends Content
      *
      * @param array $data the new data to update the album
      *
-     * @return Album the object instance
+     * @return null|\Album the object instance
      */
     public function update($data)
     {
@@ -216,7 +216,7 @@ class Album extends Content
         $data['subtitle'] = (empty($data['subtitle'])) ? 0 : $data['subtitle'];
 
         try {
-            $rs = getService('dbal_connection')->update(
+            getService('dbal_connection')->update(
                 'albums',
                 [
                     'subtitle' => $data['subtitle'],
@@ -236,6 +236,7 @@ class Album extends Content
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
+
             return false;
         }
     }
@@ -252,7 +253,7 @@ class Album extends Content
         parent::remove($id);
 
         try {
-            $rs = getService('dbal_connection')->delete(
+            getService('dbal_connection')->delete(
                 "albums",
                 [ 'pk_album' => $id ]
             );
@@ -288,6 +289,7 @@ class Album extends Content
                     $albumID
                 ]
             );
+
             foreach ($rs as $photo) {
                 $photoObject = getService('entity_repository')
                     ->find('Photo', $photo['pk_photo']);
@@ -364,9 +366,9 @@ class Album extends Content
     /**
      * Saves the photos attached to one album
      *
-     * @param arrray $data the new photos data
+     * @param array $data the new photos data
      *
-     * @return Album the object instance
+     * @return boolean|\Album the object instance
      */
     public function saveAttachedPhotos($data)
     {
@@ -433,8 +435,8 @@ class Album extends Content
     /**
      * Renders the album
      *
-     * @param arrray $params parameters for rendering the content
-     * @param Template $tpl the Template object instance
+     * @param array $params parameters for rendering the content
+     * @param null $tpl variable remaining for back compatability
      *
      * @return string the generated HTML
      */

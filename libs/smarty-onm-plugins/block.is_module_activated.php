@@ -1,9 +1,16 @@
 <?php
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 /**
  * Prints the content if the module is enabled
  *
- * @param array $params The list of parameters passed to the block.
- * @param string $content The content inside the block.
+ * @param array   $params The list of parameters passed to the block.
+ * @param string  $content The content inside the block.
  * @param \Smarty $smarty The instance of smarty.
  * @param boolean $open Whether if we are in the open of the tag of in the close.
  *
@@ -20,7 +27,6 @@ function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
     }
 
     $modules = explode(',', $params['name']);
-    $output  = '';
 
     if (count($modules) > 1) {
         $returnContent = false;

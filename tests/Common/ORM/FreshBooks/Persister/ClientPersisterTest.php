@@ -12,7 +12,6 @@ namespace Tests\Framework\ORM\FreshBooks\Repository;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Client;
 use Common\ORM\FreshBooks\Persister\ClientPersister;
-use Freshbooks\FreshBooksApi;
 
 /**
  * Defines test cases for ClientPersister class.
@@ -125,7 +124,7 @@ class ClientPersisterTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests remove when API returns false.
      *
-     * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testRemoveWithError()
     {
@@ -159,7 +158,7 @@ class ClientPersisterTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests update when API returns false.
      *
-     * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testUpdateWithError()
     {

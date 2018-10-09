@@ -115,8 +115,6 @@ class Article extends Content
      * Initializes the Article object from an ID
      *
      * @param int $id the id of the article we want to initialize
-     *
-     * @return void
      */
     public function __construct($id = null)
     {
@@ -148,7 +146,7 @@ class Article extends Content
      *
      * @param array $properties
      *
-     * @return void
+     * @return \Article
      */
     public function load($data)
     {
@@ -164,13 +162,13 @@ class Article extends Content
      *
      * @param int $id the id to get its information
      *
-     * @return void
+     * @return null|boolean|Article
      */
     public function read($id)
     {
         // If no valid id then return
         if (((int) $id) <= 0) {
-            return;
+            return null;
         }
 
         try {
@@ -192,6 +190,7 @@ class Article extends Content
                 'Error fetching article (ID:' . $id . '): ' . $e->getMessage() .
                 ' Stack Trace: ' . $e->getTraceAsString()
             );
+
             return false;
         }
     }
@@ -201,8 +200,7 @@ class Article extends Content
      *
      * @param mixed $data array of properties for the article
      *
-     * @return null if the article was not created
-     * @return int  the id of the article
+     * @return boolean|int  the id of the article
      */
     public function create($data)
     {
@@ -215,9 +213,10 @@ class Article extends Content
             $data['starttime'] = null;
         }
 
+        $conn = getService('dbal_connection');
+
         try {
             // Start transaction
-            $conn = getService('dbal_connection');
             $conn->beginTransaction();
 
             parent::create($data);
@@ -294,7 +293,9 @@ class Article extends Content
                 'Error creating article (ID:' . $this->id . '): ' . $e->getMessage() .
                 ' Stack Trace: ' . $e->getTraceAsString()
             );
+
             $conn->rollback();
+
             return false;
         }
     }
@@ -346,9 +347,10 @@ class Article extends Content
                 ? null : $data['footer_video2'],
         ];
 
+        $conn = getService('dbal_connection');
+
         try {
             // Start transaction
-            $conn = getService('dbal_connection');
             $conn->beginTransaction();
             parent::update($data);
 
@@ -390,7 +392,7 @@ class Article extends Content
             }
 
             $this->saveMetadataFields($data, Article::EXTRA_INFO_TYPE);
-            $this->category_name = $this->loadCategoryName($this->id);
+            $this->category_name = $this->loadCategoryName();
 
             return true;
         } catch (\Exception $e) {
@@ -408,7 +410,7 @@ class Article extends Content
      *
      * @param int $id the id of the article we want to delete
      *
-     * @return void
+     * @return boolean
      */
     public function remove($id)
     {
@@ -443,10 +445,10 @@ class Article extends Content
                 'Error deleting article (ID:' . $id . '): ' . $e->getMessage() .
                 ' Stack Trace: ' . $e->getTraceAsString()
             );
+
             return false;
         }
 
-        return true;
     }
 
     /**
@@ -478,8 +480,6 @@ class Article extends Content
      * @param string $data   list of related content IDs
      * @param int    $id     the id of the content we want to relate other contents
      * @param string $method the method to bind related contents
-     *
-     * @return void
      */
     public function saveRelated($data, $id, $method)
     {

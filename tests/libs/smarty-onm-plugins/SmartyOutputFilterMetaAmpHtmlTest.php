@@ -60,6 +60,8 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
      * Return a mock basing on the service name.
      *
      * @param string $name The service name.
+     *
+     * @return mixed
      */
     public function serviceContainerCallback($name)
     {
@@ -72,8 +74,6 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
                 return $this->helper;
             case 'core.security':
                 return $this->security;
-            case 'router':
-                return $this->router;
             case 'request_stack':
                 return $this->rs;
         }

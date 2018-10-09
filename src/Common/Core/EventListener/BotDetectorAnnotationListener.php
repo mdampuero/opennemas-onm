@@ -13,11 +13,7 @@ use Common\Core\Annotation\BotDetector as BotDetectorAnnotation;
 use Common\Core\Component\Exception\BotDetectedException;
 use Common\Core\Component\Http\BotDetector;
 use Doctrine\Common\Annotations\Reader;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\Routing\Router;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * The BotDetectorAnnotationListener class defines an event listener to check
@@ -53,7 +49,9 @@ class BotDetectorAnnotationListener
     /**
      * This event will fire during any controller call
      *
-     * @param FilterResponseEvent $event A FilterResponseEvent instance
+     * @param FilterControllerEvent $event A FilterResponseEvent instance
+     *
+     * @throws BotDetectedException
      */
     public function onKernelController(FilterControllerEvent $event)
     {

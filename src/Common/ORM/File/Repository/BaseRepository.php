@@ -73,7 +73,7 @@ class BaseRepository extends Repository
      */
     public function countBy($oql = '')
     {
-        list($filter, $order, $size, $offset) = $this->translator->translate($oql);
+        list($filter, , ,) = $this->translator->translate($oql);
 
         $entities = $this->entities;
 

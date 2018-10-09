@@ -9,8 +9,6 @@
  */
 namespace Repository;
 
-use Onm\Cache\CacheInterface;
-
 /**
  * An EntityRepository serves as a repository for entities with generic as well
  * as business specific methods for retrieving entities.

@@ -70,7 +70,7 @@ class Poll extends Content
         switch ($name) {
             case 'uri':
                 if (empty($this->category_name)) {
-                    $this->category_name = $this->loadCategoryName($this->pk_content);
+                    $this->category_name = $this->loadCategoryName();
                 }
 
                 $uri = Uri::generate('poll', [
@@ -152,8 +152,6 @@ class Poll extends Content
      * Overloads the object properties with an array of the new ones
      *
      * @param array $properties the list of properties to load
-     *
-     * @return void
      */
     public function load($properties)
     {

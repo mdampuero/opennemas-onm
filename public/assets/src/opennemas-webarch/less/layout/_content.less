@@ -80,3 +80,142 @@
     padding-left: @sidebar-width-collapsed;
   }
 }
+
+
+.content .content-wrapper {
+  padding-right: 250px;
+}
+
+.content .content-sidebar {
+  border-left: 1px solid #ccc;
+  height: 100%;
+  left: auto;
+  padding: 0 15px 15px;
+  position: absolute;
+  right: 0;
+  top: 100px;
+  width: 250px;
+  z-index: 260;
+}
+
+.content .content-sidebar.scrolled {
+  position: fixed;
+  top: 85px;
+}
+
+.content-grid .notification-list {
+  padding-right: 250px;
+}
+
+.content-sidebar .thumbnail-wrapper {
+  height: 200px;
+  text-align: center;
+}
+
+.content-sidebar .media-information {
+  border-top: 1px solid #ccc;
+  list-style: none;
+  margin: 15px 0 0;
+  padding: 15px 0 0;
+}
+
+.content-sidebar .media-information li {
+  padding: 0 0 8px;
+}
+
+.content-sidebar .media-information li {
+  font-size: 14px;
+}
+
+.content-sidebar .media-information .btn-primary {
+  width: 90%;
+}
+
+.content-sidebar textarea {
+  width: 100%;
+}
+
+.grid {
+  margin-bottom: 15px;
+}
+
+.grid-footer {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-top: 0;
+  padding: 15px;
+}
+
+.page-content .content .row > [class^=col-],
+.page-content .content .row > [class*= col-] {
+  padding-left: 8px;
+  padding-right: 7px;
+}
+
+.page-content .content .row > [class^=col-]:first-child,
+.page-content .content .row > [class*= col-]:first-child {
+  padding-left: 15px;
+}
+
+.page-content .content .row > [class^=col-]:last-child,
+.page-content .content .row > [class*= col-]:last-child {
+  padding-right: 15px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  position: relative;
+  white-space: nowrap;
+}
+
+@media (max-width: 991px) and (min-width: 768px){
+  .page-content .content .row > [class^=col-],
+  .page-content .content .row > [class*= col-] {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+@media (max-width: 767px) {
+  .content > .grid {
+    border:0;
+  }
+
+  .content .content-wrapper {
+    padding-right: 0;
+  }
+
+  .content .content-sidebar {
+    display: none;
+  }
+
+  .content-grid {
+    .notification-list {
+      padding-right: 0;
+    }
+  }
+
+  .page-content .content .row > [class^=col-],
+  .page-content .content .row > [class*= col-] {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+@media (max-width: 991px) {
+  .content .content-wrapper {
+    padding-right: 0;
+  }
+
+  .content-grid {
+    .notification-list {
+      padding-right: 0;
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  .row .col-lg-1-25 {
+    width: 12.5%;
+  }
+}

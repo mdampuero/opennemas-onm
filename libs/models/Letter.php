@@ -35,8 +35,6 @@ class Letter extends Content
      * Initializes Letter object instance
      *
      * @param int $id the letter id
-     *
-     * @return void
      */
     public function __construct($id = null)
     {
@@ -145,8 +143,7 @@ class Letter extends Content
      *
      * @param array $data The letter data.
      *
-     * @return mixed The letter if it was store successfully. Otherwise, returns
-     *               false.
+     * @return mixed The letter if it was store successfully
      */
     public function create($data)
     {

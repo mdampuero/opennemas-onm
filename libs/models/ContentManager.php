@@ -55,8 +55,6 @@ class ContentManager
      * some particular database tables
      *
      * @param string $contentType the content type to work with
-     *
-     * @return void
      */
     public function __construct($contentType = null)
     {
@@ -72,8 +70,6 @@ class ContentManager
      * Initializes the table and content_type properties from a content type name
      *
      * @param string $contentType the content type name
-     *
-     * @return void
      */
     public function init($contentType)
     {
@@ -110,6 +106,8 @@ class ContentManager
      * Filters and removes blocked contents from the list of contents.
      *
      * @param array $contents The list of contents.
+     *
+     * @return array
      */
     public function filterBlocked($contents)
     {
@@ -543,6 +541,8 @@ class ContentManager
             . ' (' . getService('core.user')->id
             . ') clear contents frontpage of category ' . $categoryID
         );
+
+        return true;
     }
 
     /**
@@ -707,8 +707,8 @@ class ContentManager
      * This function returns an array of objects $contentType of the most viewed
      * in the last few days indicated.
      *
-     * @param string  $contentType type of content
-     * @param boolean $notEmpty    If there are no results regarding the days
+     * @param string $contentType type of content
+     * @param boolean $notEmpty If there are no results regarding the days
      *                             indicated, the query is performed on the
      *                             entire bd. For default is false
      * @param integer $category pk_content_category ok the contents. If value
@@ -723,7 +723,12 @@ class ContentManager
      *                             For default is 8.
      * @param boolean $all Get all the content regardless of content
      *                             status.
+     *
+     * @param int $page The page to show
+     *
      * @return array of objects $contentType
+     *
+     * @throws Exception
      */
     public function getMostViewedContent(
         $contentType,
@@ -1163,11 +1168,9 @@ class ContentManager
         $table       = tableize($contentType);
         $contentType = underscore($contentType);
 
-        $whereSQL = '';
+        $whereSQL = 'AND in_litter=0';
         if (!is_null($filter)) {
             $whereSQL = ' AND ' . $filter;
-        } else {
-            $whereSQL = 'AND in_litter=0';
         }
 
         if (intval($categoryID) > 0) {
@@ -1195,8 +1198,6 @@ class ContentManager
 
             return false;
         }
-
-        return $rs;
     }
 
     /**
@@ -1257,6 +1258,8 @@ class ContentManager
      */
     public function findHeadlines()
     {
+        $items = [];
+
         $sql = 'SELECT `contents`.`title`, `contents`.`pk_content` ,'
             . '       `contents`.`created` ,  `contents`.`slug` ,'
             . '       `contents`.`starttime` , `contents`.`endtime`,'
@@ -1294,7 +1297,7 @@ class ContentManager
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
 
-            return false;
+            return [];
         }
     }
 
@@ -1366,7 +1369,7 @@ class ContentManager
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
 
-            return false;
+            return [];
         }
     }
 
@@ -1603,7 +1606,7 @@ class ContentManager
      * @param int $id the content type id
      * @param string $ucfirst whether to apply the ucfirst function
      *
-     * @return string the content type name
+     * @return boolean|string the content type name
      */
     public static function getContentTypeNameFromId($id, $ucfirst = false)
     {
@@ -1611,9 +1614,7 @@ class ContentManager
             return false;
         }
 
-        if (!is_numeric($id)) {
-            $name = ($ucfirst === true) ? ucfirst($id) : strtolower($id);
-        } else {
+        if (is_numeric($id)) {
             $contentTypes = \ContentManager::getContentTypes();
             foreach ($contentTypes as $types) {
                 if ($types['pk_content_type'] == $id) {
@@ -1637,7 +1638,7 @@ class ContentManager
     public function getContents($contentIds)
     {
         $contents = [];
-        $content  = new Content();
+
         if (is_array($contentIds) && count($contentIds) > 0) {
             foreach ($contentIds as $contentId) {
                 if ($contentId <= 0) {
@@ -1721,11 +1722,11 @@ class ContentManager
     *
     * This is used for getting information from Onm Rest Api
     *
-    * @param $url the url we want to get contents from
+    * @param string $url the url we want to get contents from
     *
-    * @param $decodeJson if true apply json_decode before return content
+    * @param boolean $decodeJson if true apply json_decode before return content
     *
-    * @return false | the content retrieved by the url
+    * @return false the content retrieved by the url
     */
     public function getUrlContent($url, $decodeJson = false)
     {

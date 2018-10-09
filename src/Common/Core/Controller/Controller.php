@@ -10,10 +10,7 @@
 namespace Common\Core\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as SymfonyController;
 
 /**
@@ -180,7 +177,7 @@ class Controller extends SymfonyController
      * @param String    $context    Locale context
      * @param Request   $request    User request.
      *
-     * @return Array all info related with locale information for the instance and request
+     * @return array all info related with locale information for the instance and request
      */
     protected function getLocaleData($context = null, $request = null, $translation = false)
     {
@@ -228,6 +225,8 @@ class Controller extends SymfonyController
      * @param mixed   $data Data where load the metadata fields.
      * @param Request $postReq Request where the metadata are.
      * @param string  $type type of the extra field
+     *
+     * @return array
      */
     protected function loadMetaDataFields($data, $postReq, $type)
     {

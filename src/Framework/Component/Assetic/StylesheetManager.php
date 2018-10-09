@@ -10,7 +10,6 @@
 namespace Framework\Component\Assetic;
 
 use Assetic\FilterManager;
-use Assetic\Exception\FilterException;
 use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\LessFilter;
 use Assetic\Filter\UglifyCssFilter;

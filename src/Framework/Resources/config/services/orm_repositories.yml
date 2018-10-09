@@ -39,10 +39,6 @@ services:
         class: Repository\WidgetManager
         arguments: [ '@orm.connection.instance', '@cache', '@error.log', %cache_prefix% ]
 
-    usergroup_repository:
-        class: Repository\UserGroupManager
-        arguments: [ '@orm.connection.instance', '@cache', '@error.log', %cache_prefix% ]
-
     setting_repository:
         class: Repository\SettingManager
         arguments: [ '@orm.connection.instance', '@cache', '@error.log', %cache_prefix% ]

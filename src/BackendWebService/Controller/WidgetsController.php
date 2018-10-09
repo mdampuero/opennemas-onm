@@ -9,11 +9,9 @@
  */
 namespace BackendWebService\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Core\Controller\Controller;
 
 class WidgetsController extends ContentController
 {
@@ -21,7 +19,7 @@ class WidgetsController extends ContentController
      * Returns a list of contents in JSON format.
      *
      * @param  Request      $request     The request with the search parameters.
-     * @param  string       $contentType Content type name.
+     *
      * @return JsonResponse              The response in JSON format.
      */
     public function listAction(Request $request, $contentType = null)

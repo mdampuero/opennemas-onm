@@ -9,7 +9,6 @@
  */
 function smarty_function_admin_menu($params, &$smarty)
 {
-    $htmlOutput = '';
     if (array_key_exists('file', $params)
         && file_exists($params['base'] . $params['file'])
     ) {

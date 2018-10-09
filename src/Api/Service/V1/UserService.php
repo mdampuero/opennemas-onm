@@ -241,6 +241,8 @@ class UserService extends OrmService
      * Converts an subscriber + user when deleting.
      *
      * @param Entity $item The item to convert.
+     *
+     * @return Entity
      */
     protected function convert($item, $type = null)
     {

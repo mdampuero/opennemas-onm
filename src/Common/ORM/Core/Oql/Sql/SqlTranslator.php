@@ -213,7 +213,7 @@ class SqlTranslator
      *
      * @param string $str The field to translate.
      *
-     * @return array An array with the translation.
+     * @return null|array An array with the translation.
      */
     protected function translateField($str)
     {
@@ -229,7 +229,7 @@ class SqlTranslator
             && in_array($str, $this->metadata->getRelationColumns())
         ) {
             $this->translateFieldInRelation($str);
-            return;
+            return null;
         }
 
         // Search by field in meta table

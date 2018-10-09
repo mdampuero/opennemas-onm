@@ -108,9 +108,7 @@ class ImagesController extends Controller
             if ($ids <= 0) {
                 $this->get('session')->getFlashBag()->add('error', _('Please provide a image id for show it.'));
 
-                return $this->redirect(
-                    $this->generateUrl('admin_images', ['category' => $category])
-                );
+                return $this->redirect($this->generateUrl('admin_images'));
             }
 
             $ids = [$ids];

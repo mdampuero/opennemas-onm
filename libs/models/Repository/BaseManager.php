@@ -10,7 +10,6 @@
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
-use Onm\Database\DbalWrapper;
 
 /**
  * Default BaseManager contains common functions to the rest of Entity Managers
@@ -36,9 +35,9 @@ abstract class BaseManager
     /**
      * Initializes the menu manager
      *
-     * @param Onm\Database\DbalWrapper $dbConn      The database connection.
-     * @param CacheInterface           $cache       The cache instance.
-     * @param string                   $cachePrefix The cache prefix.
+     * @param \Onm\Database\DbalWrapper $dbConn      The database connection.
+     * @param CacheInterface            $cache       The cache instance.
+     * @param string                    $cachePrefix The cache prefix.
      */
     public function __construct($dbConn, $cache, $cachePrefix)
     {

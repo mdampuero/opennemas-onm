@@ -28,17 +28,15 @@ class Validator
     /**
      * The validator service
      *
-     * @var Symfony\Component\Validator
+     * @var \Symfony\Component\Validator\ConstraintValidator
      **/
     private $validator = null;
 
     /**
      * Initializes the validator object with dependencies
      *
-     * @param SettingsRepository $settingsManager the settings repository object
-     * @param Validator          $validator       the validator service
-     *
-     * @return void
+     * @param DataSet    $settingsManager the settings repository object
+     * @param Validator  $validator       the validator service
      */
     public function __construct($em, $validator)
     {
@@ -106,7 +104,6 @@ class Validator
     /**
      * Returns the blacklist config for a given ruleSet
      *
-     * @return void
      **/
     public function getConfig($ruleSet)
     {
@@ -118,8 +115,6 @@ class Validator
      *
      * @param string $ruleSet the name of the rule set
      * @param mixed  $config  the configuration to save
-     *
-     * @return void
      **/
     public function setConfig($ruleSet, $config)
     {
@@ -135,7 +130,7 @@ class Validator
     /**
      * Get the constrains for comments
      *
-     * @return Collection Assert collection for comments
+     * @return Assert\Collection Assert collection for comments
      **/
     private function getCommentConstraint($data)
     {

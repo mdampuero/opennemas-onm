@@ -86,7 +86,7 @@ class StaticPageController extends Controller
      *
      * @param Request $request the request object
      *
-     * @return Symfony\Component\HttpFoundation\Response the response object
+     * @return \Symfony\Component\HttpFoundation\Response the response object
      *
      * @Security("hasExtension('STATIC_PAGES_MANAGER')
      *     and hasPermission('STATIC_PAGE_CREATE')")
@@ -137,9 +137,9 @@ class StaticPageController extends Controller
     /**
      * Shows the form to update a static page.
      *
-     * @param Request $request The request object.
+     * @param \Symfony\Component\HttpFoundation\Request $request The request object.
      *
-     * @return Response The response object.
+     * @return \Symfony\Component\HttpFoundation\Response The response object.
      *
      * @Security("hasExtension('STATIC_PAGES_MANAGER')
      *     and hasPermission('STATIC_PAGE_UPDATE')")
@@ -181,7 +181,7 @@ class StaticPageController extends Controller
      *
      * @param Request $request The request object.
      *
-     * @return Response The response object.
+     * @return \Symfony\Component\HttpFoundation\Response The response object.
      *
      * @Security("hasExtension('STATIC_PAGES_MANAGER')
      *     and hasPermission('STATIC_PAGE_UPDATE')")
