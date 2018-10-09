@@ -32,7 +32,7 @@ class UtilitiesController extends Controller
             $content,
             200,
             [
-                'x-tags'       => 'sharre,' . $type . ',' . $url,
+                'x-tags'       => 'sharre,' . $content['url'],
                 'x-cache-for'  => '300s',
                 'Content-Type' => 'application/json',
             ]
