@@ -71,8 +71,6 @@ class Subscriber
      * Constructor
      *
      * @param int $id the subscriptor id
-     *
-     * @return void
      */
     public function __construct($id = null)
     {

@@ -9,7 +9,7 @@
  */
 namespace Frontend\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 
@@ -18,25 +18,24 @@ class UtilitiesController extends Controller
     /**
      * Integrates the sharrre jQuery plugin into ONM.
      *
-     * @return Response The response object.
+     * @return JsonResponse the response object
      */
     public function sharrreAction(Request $request)
     {
-        $url  = $request->query->filter('url', '', FILTER_SANITIZE_STRING);
-        $type = urlencode($request->query->filter('type', '', FILTER_SANITIZE_STRING));
-
-        $json = [
+        $content = [
+            'url'   => $request->query->filter('url', '', FILTER_SANITIZE_STRING),
             'count' => 0,
             'time'  => time(),
-            'url'   => $url
         ];
 
-        $content = str_replace('\\/', '/', json_encode($json));
-
-        return new Response($content, 200, [
-            'x-tags'       => 'sharre,' . $type . ',' . $url,
-            'x-cache-for'  => '300s',
-            'Content-Type' => 'application/json',
-        ]);
+        return new JsonResponse(
+            $content,
+            200,
+            [
+                'x-tags'       => 'sharre,' . $type . ',' . $url,
+                'x-cache-for'  => '300s',
+                'Content-Type' => 'application/json',
+            ]
+        );
     }
 }

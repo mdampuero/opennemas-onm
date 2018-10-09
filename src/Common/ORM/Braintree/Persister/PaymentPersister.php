@@ -10,7 +10,6 @@
 namespace Common\ORM\Braintree\Persister;
 
 use Common\ORM\Core\Entity;
-use Common\ORM\Core\Exception\EntityNotFoundException;
 
 /**
  * The PaymentPersister class defines actions to create and remove Payments
@@ -23,7 +22,7 @@ class PaymentPersister extends BasePersister
      *
      * @param Entity $entity The payment to save.
      *
-     * @throws RuntimeException If the the payment can not be saved.
+     * @throws \RuntimeException If the the payment can not be saved.
      */
     public function create(Entity &$entity)
     {
@@ -49,7 +48,7 @@ class PaymentPersister extends BasePersister
      *
      * @param Entity $entity The payment to void.
      *
-     * @throws RuntimeException If the payment does not exist.
+     * @throws \RuntimeException If the payment does not exist.
      */
     public function remove(Entity $entity)
     {

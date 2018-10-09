@@ -216,6 +216,8 @@ class CheckoutHelper
      * Pays a purchase by using a payment method nonce.
      *
      * @param string $nonce The payment method nonce.
+     *
+     * @throws \Exception
      */
     public function pay($nonce)
     {

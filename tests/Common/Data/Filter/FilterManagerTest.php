@@ -38,7 +38,7 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests filter when the filter to apply is invalid.
      *
-     * @expectedException Common\Core\Component\Exception\Filter\InvalidFilterException
+     * @expectedException \Common\Core\Component\Exception\Filter\InvalidFilterException
      */
     public function testFilterWhenInvalidFilter()
     {

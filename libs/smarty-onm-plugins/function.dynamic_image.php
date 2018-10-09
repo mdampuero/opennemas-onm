@@ -1,47 +1,44 @@
 <?php
 function smarty_function_dynamic_image($params, &$smarty)
 {
-    $output = "";
-
     if (empty($params['src'])) {
         return;
     }
 
     $src = $params['src'];
 
+    $baseUrl = $params['base_url'] . DS;
     if (preg_match('@http(s)?://@', $src)) {
         $baseUrl = '';
     } elseif (!array_key_exists('base_url', $params)) {
-        $baseUrl = INSTANCE_MEDIA.'images';
-    } else {
-        $baseUrl = $params['base_url'].DS;
+        $baseUrl = INSTANCE_MEDIA . 'images';
     }
 
-    $resource = $baseUrl.$src;
+    $resource = $baseUrl . $src;
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
+    $resource = $baseUrl . $src;
     if (array_key_exists('transform', $params)) {
         getService('router');
 
-        $urlParams = array(
-            'real_path'  => $baseUrl.$src,
+        $urlParams = [
+            'real_path'  => $baseUrl . $src,
             'parameters' => urlencode($params['transform']),
-        );
+        ];
+
         try {
             $generator = getService('router');
-            $resource = $generator->generate('asset_image', $urlParams);
+            $resource  = $generator->generate('asset_image', $urlParams);
         } catch (\Exception $e) {
             $resource = '#failed';
             trigger_error($e->getMessage());
         }
-    } else {
-        $resource = $baseUrl.$src;
     }
 
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
     if (array_key_exists('site_url', $params)) {
-        $resource = $params['site_url'].$resource;
+        $resource = $params['site_url'] . $resource;
     }
 
     $lazyload = ($params['data-src'] == 'lazyload');
@@ -53,7 +50,7 @@ function smarty_function_dynamic_image($params, &$smarty)
     unset($params['data-src']);
 
     if ($lazyload) {
-        $params['class'] = "lazy ".(array_key_exists('class', $params)? $params['class']: '');
+        $params['class'] = "lazy " . (array_key_exists('class', $params) ? $params['class'] : '');
     }
 
     $properties = '';
@@ -61,10 +58,9 @@ function smarty_function_dynamic_image($params, &$smarty)
         $properties .= " {$key}=\"{$value}\"";
     }
 
+    $output = "<img src=\"{$resource}\" {$properties}>";
     if ($lazyload) {
         $output = "<img src=\"/assets/images/lazy-bg.png\" data-src=\"{$resource}\" {$properties}>";
-    } else {
-        $output = "<img src=\"{$resource}\" {$properties}>";
     }
 
     return $output;

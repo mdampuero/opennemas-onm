@@ -20,7 +20,7 @@ class Connection extends DataBuffer implements Validable
     /**
      * The database connection.
      *
-     * @var Doctrine\DBAL\Connection
+     * @var \Doctrine\DBAL\Connection
      */
     protected $conn = null;
 
@@ -54,7 +54,7 @@ class Connection extends DataBuffer implements Validable
     /**
      * Returns the current database connection.
      *
-     * @return Doctrine\DBAL\Connection The current database connection.
+     * @return \Doctrine\DBAL\Connection The current database connection.
      */
     public function getConnection()
     {

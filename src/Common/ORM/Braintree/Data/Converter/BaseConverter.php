@@ -24,6 +24,8 @@ class BaseConverter extends Converter
      * @param array $source The entity data.
      *
      * @return array The converted data.
+     *
+     * @throws \Exception
      */
     public function braintreefy($source)
     {

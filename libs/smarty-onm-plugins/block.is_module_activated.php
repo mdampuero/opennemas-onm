@@ -14,20 +14,16 @@
  *
  * @param array $params  Parameters of smarty function
  * @param Smarty $smarty Object reference to Smarty class
- * @return string Return a HTML code of the message board
+ *
+ * @return null|string Return a HTML code of the message board
  */
 function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
 {
     if ($repeat) {
-        return;
-    }
-
-    if (!isset($params['name'])) {
-        $output = '';
+        return null;
     }
 
     $modules = explode(',', $params['name']);
-    $output  = '';
 
     if (count($modules) > 1) {
         $returnContent = false;
@@ -38,9 +34,9 @@ function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
             }
         }
 
-        $output = ($returnContent) ?  $content : "";
+        $output = ($returnContent) ? $content : "";
     } else {
-        $output = (getService('core.security')->hasExtension($params['name'])) ?  $content : "";
+        $output = (getService('core.security')->hasExtension($params['name'])) ? $content : "";
     }
 
     if (isset($params['deactivated']) && $params['deactivated'] == 1) {

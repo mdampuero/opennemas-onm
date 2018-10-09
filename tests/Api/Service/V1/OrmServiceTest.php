@@ -101,7 +101,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests createItem when an error happens while converting data.
      *
-     * @expectedException Api\Exception\CreateItemException
+     * @expectedException \Api\Exception\CreateItemException
      */
     public function testCreateWhenErrorWhileConverting()
     {
@@ -115,7 +115,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests createItem when an error happens while persisting object.
      *
-     * @expectedException Api\Exception\CreateItemException
+     * @expectedException \Api\Exception\CreateItemException
      */
     public function testCreateWhenErrorWhilePersisting()
     {
@@ -145,7 +145,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests deleteItem when no item found.
      *
-     * @expectedException Api\Exception\DeleteItemException
+     * @expectedException \Api\Exception\DeleteItemException
      */
     public function testDeleteItemWhenNoEntity()
     {
@@ -159,7 +159,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests deleteItem when an error happens while removing object.
      *
-     * @expectedException Api\Exception\DeleteItemException
+     * @expectedException \Api\Exception\DeleteItemException
      */
     public function testDeleteItemWhenErrorWhileRemoving()
     {
@@ -194,7 +194,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests deleteList when invalid list of ids provided.
      *
-     * @expectedException Api\Exception\DeleteListException
+     * @expectedException \Api\Exception\DeleteListException
      */
     public function testDeleteListWhenInvalidIds()
     {
@@ -224,7 +224,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests deleteList when an error happens while searching.
      *
-     * @expectedException Api\Exception\DeleteListException
+     * @expectedException \Api\Exception\DeleteListException
      */
     public function testDeleteListWhenErrorWhileSearching()
     {
@@ -253,7 +253,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests getItem when an error happens while converting data.
      *
-     * @expectedException Api\Exception\GetItemException
+     * @expectedException \Api\Exception\GetItemException
      */
     public function testGetItemWhenErrorWhileSearching()
     {
@@ -285,7 +285,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests getItemBy when error while searching.
      *
-     * @expectedException Api\Exception\GetItemException
+     * @expectedException \Api\Exception\GetItemException
      */
     public function testGetItemByWhenErrorWhileSearching()
     {
@@ -298,7 +298,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests getItemBy when the criteria returns more than one result.
      *
-     * @expectedException Api\Exception\GetItemException
+     * @expectedException \Api\Exception\GetItemException
      */
     public function testGetItemByWhenMoreThanOneResult()
     {
@@ -361,7 +361,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests getList when there is an error while counting contents.
      *
-     * @expectedException Api\Exception\GetListException
+     * @expectedException \Api\Exception\GetListException
      */
     public function testGetListWhenErrorWhileCounting()
     {
@@ -377,7 +377,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests getList when there is an error while searching contents.
      *
-     * @expectedException Api\Exception\GetListException
+     * @expectedException \Api\Exception\GetListException
      */
     public function testGetListWhenErrorWhileSearching()
     {
@@ -412,7 +412,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests getListByIds when invalid list of ids provided .
      *
-     * @expectedException Api\Exception\GetListException
+     * @expectedException \Api\Exception\GetListException
      */
     public function testGetListByIdsWhenInvalidIds()
     {
@@ -442,7 +442,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests patchItem when there is an error while searching.
      *
-     * @expectedException Api\Exception\PatchItemException
+     * @expectedException \Api\Exception\PatchItemException
      */
     public function testPatchItemWhenErrorWhileSearching()
     {
@@ -460,7 +460,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests patchItem when there is an error while persisting.
      *
-     * @expectedException Api\Exception\PatchItemException
+     * @expectedException \Api\Exception\PatchItemException
      */
     public function testPatchItemWhenErrorWhilePersisting()
     {
@@ -502,7 +502,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests patchList when invalid list of ids provided.
      *
-     * @expectedException Api\Exception\PatchListException
+     * @expectedException \Api\Exception\PatchListException
      */
     public function testPatchListWhenInvalidIds()
     {
@@ -533,7 +533,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests patchList when an error happens while searching.
      *
-     * @expectedException Api\Exception\PatchListException
+     * @expectedException \Api\Exception\PatchListException
      */
     public function testPatchListWhenErrorWhileSearching()
     {
@@ -604,7 +604,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests updateItem when there is an error while searching.
      *
-     * @expectedException Api\Exception\UpdateItemException
+     * @expectedException \Api\Exception\UpdateItemException
      */
     public function testUpdateItemWhenErrorWhileSearching()
     {
@@ -622,7 +622,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests updateItem when there is an error while persisting.
      *
-     * @expectedException Api\Exception\UpdateItemException
+     * @expectedException \Api\Exception\UpdateItemException
      */
     public function testUpdateItemWhenErrorWhilePersisting()
     {

@@ -12,7 +12,6 @@ namespace Tests\Common\ORM\Core\Validation;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Client;
-use Common\ORM\Entity\Theme;
 use Common\ORM\Core\Validation\Validator;
 
 /**

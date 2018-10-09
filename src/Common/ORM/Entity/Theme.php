@@ -9,8 +9,6 @@
  */
 namespace Common\ORM\Entity;
 
-use Common\ORM\Core\Entity;
-
 /**
  * The Theme class represents themes that change the Opennemas templates.
  */

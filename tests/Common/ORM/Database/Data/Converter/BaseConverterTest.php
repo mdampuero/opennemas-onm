@@ -9,7 +9,6 @@
  */
 namespace Tests\Common\ORM\Database\Data\Converter;
 
-use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Database\Data\Converter\BaseConverter;
 

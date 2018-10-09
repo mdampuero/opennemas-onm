@@ -74,10 +74,12 @@ class AdvertisementRendererTest extends TestCase
             case 'router':
                 return $this->router;
         }
+
+        return null;
     }
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::__construct
+     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::__construct
      */
     public function testConstruct()
     {
@@ -87,7 +89,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::getDeviceCSSClasses
+     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::getDeviceCSSClasses
      */
     public function testGetDeviceCSSClasses()
     {
@@ -117,7 +119,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::getMark
+     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::getMark
      */
     public function testGetMark()
     {
@@ -136,7 +138,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::getMark
+     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::getMark
      */
     public function testGetMarkWithCustomDefaultMark()
     {
@@ -151,7 +153,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineReviveSlot
+     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineReviveSlot
      */
     public function testRenderInlineReviveSlot()
     {
@@ -185,7 +187,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineInterstitial
+     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineInterstitial
      */
     public function testRenderInlineInterstitial()
     {
@@ -227,7 +229,7 @@ class AdvertisementRendererTest extends TestCase
 
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineInterstitial
+     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineInterstitial
      */
     public function testRenderInlineInterstitialWithNoInterstitials()
     {
@@ -247,7 +249,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::renderSafeFrameSlot
+     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderSafeFrameSlot
      * @todo   Implement testRenderSafeFrameSlot().
      */
     public function testRenderSafeFrameSlot()

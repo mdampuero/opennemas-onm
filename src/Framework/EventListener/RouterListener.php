@@ -118,8 +118,6 @@ class RouterListener implements EventSubscriberInterface
      * Sets the current request in the context
      *
      * @param Request $request the request to set
-     *
-     * @return void
      **/
     private function setCurrentRequest(Request $request = null)
     {
@@ -134,8 +132,6 @@ class RouterListener implements EventSubscriberInterface
      * Action dispatched on kernel.finish event
      *
      * @param FinishRequestEvent $event the event object
-     *
-     * @return void
      **/
     public function onKernelFinishRequest(FinishRequestEvent $event)
     {
@@ -150,7 +146,6 @@ class RouterListener implements EventSubscriberInterface
      * Action dispatched on kernel.request event
      *
      * @param GetResponseEvent $event the event object
-     * @return void
      **/
     public function onKernelRequest(GetResponseEvent $event)
     {

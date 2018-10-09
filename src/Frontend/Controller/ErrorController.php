@@ -33,14 +33,14 @@ class ErrorController extends Controller
                 $this->get('application.log')
                     ->info('security.authorization.failure');
 
-                return $this->getAccessDeniedResponse($request);
+                return $this->getAccessDeniedResponse();
 
             case 'ConnectionException':
                 $this->get('error.log')->error(
                     'database.connection.failure: ' . $error->getMessage()
                 );
 
-                return $this->getConnectionExceptionResponse($request);
+                return $this->getConnectionExceptionResponse();
 
             case 'ContentNotMigratedException':
             case 'ResourceNotFoundException':
@@ -72,8 +72,7 @@ class ErrorController extends Controller
      */
     protected function getAccessDeniedResponse()
     {
-        list($positions, $advertisements) =
-            \Frontend\Controller\ArticlesController::getAds();
+        list($positions, $advertisements) = ArticlesController::getAds();
 
         return new Response($this->renderView('static_pages/403.tpl', [
             'ads_positions'  => $positions,
@@ -117,8 +116,7 @@ class ErrorController extends Controller
      */
     protected function getNotFoundResponse()
     {
-        list($positions, $advertisements) =
-            \Frontend\Controller\ArticlesController::getAds();
+        list($positions, $advertisements) = ArticlesController::getAds();
 
         $this->view->setConfig('articles');
 

@@ -167,7 +167,7 @@ class InstanceCreator
      *
      * @param array $database The database name.
      *
-     * @throws DatabaseNotCreatedException If creation fails.
+     * @throws DatabaseNotCreatedException
      */
     public function createDatabase($database)
     {
@@ -274,13 +274,15 @@ class InstanceCreator
      *
      * @param string $source The path to the source.
      * @param string $target The target database.
+     *
+     * @throws DatabaseNotRestoredException
      */
     public function restoreDatabase($source, $target = null)
     {
         $cmd = "mysql -u{$this->conn->user}"
             . " -p{$this->conn->password}"
             . " -h{$this->conn->host}"
-            . ($target ? " $target"  : '')
+            . ($target ? " $target" : '')
             . " < $source";
 
         exec($cmd, $output, $result);
@@ -289,7 +291,7 @@ class InstanceCreator
         if ($result != 0) {
             throw new DatabaseNotRestoredException(
                 'Could not restore the database for the instance ('
-                . print_r($output) .  ')'
+                . print_r($output) . ')'
             );
         }
     }
@@ -298,6 +300,8 @@ class InstanceCreator
      * Restores instance reference data to the instances table.
      *
      * @param string $path Backup directory.
+     *
+     * @throws InstanceNotRestoredException
      */
     public function restoreInstance($path)
     {
@@ -307,13 +311,13 @@ class InstanceCreator
             );
         }
 
-        $dump = "mysql -u{$this->conn->user}"
+        $cmd = "mysql -u{$this->conn->user}"
             . " -p{$this->conn->password}"
             . " -h{$this->conn->host}"
             . " {$this->conn->dbname}"
             . " < " . $path . DS . "instance.sql";
 
-        exec($dump, $output, $result);
+        exec($cmd, $output, $result);
         $this->logCommand($cmd, $output, $result);
 
         if ($result != 0) {

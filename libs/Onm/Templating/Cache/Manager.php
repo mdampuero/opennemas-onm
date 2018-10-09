@@ -29,9 +29,7 @@ class Manager
     /**
      * Initializes the object instance, assigns the theme dir and smarty instance
      *
-     * @param Smarty $smarty   Smarty class
-     *
-     * @return TemplateCacheManager the object initialized
+     * @param Smarty $smarty Smarty class
      */
     public function __construct($smarty = null)
     {
@@ -59,8 +57,6 @@ class Manager
      * Deletes all the caches of a group
      *
      * @param string $cacheGroup Name of group
-     *
-     * @return void
      */
     public function deleteGroup($cacheGroup)
     {
@@ -74,8 +70,6 @@ class Manager
 
     /**
      * Deletes all the caches
-     *
-     * @return void
      */
     public function deleteAll()
     {

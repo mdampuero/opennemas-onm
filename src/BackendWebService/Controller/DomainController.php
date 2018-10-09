@@ -2,10 +2,6 @@
 
 namespace BackendWebService\Controller;
 
-use Common\ORM\Entity\Client;
-use Common\ORM\Entity\Invoice;
-use Common\ORM\Entity\Payment;
-use Common\ORM\Entity\Purchase;
 use Common\Core\Controller\Controller;
 use Pdp\Parser;
 use Pdp\PublicSuffixListManager;
@@ -161,7 +157,7 @@ class DomainController extends Controller
      *
      * @param Request $request The request object.
      *
-     * @return JsonResponse The response object.
+     * @return null|JsonResponse The response object.
      */
     public function saveAction(Request $request)
     {
@@ -174,7 +170,7 @@ class DomainController extends Controller
             $ph->getPurchase($purchase);
 
             if (empty($nonce)) {
-                return;
+                return null;
             }
 
             $ph->pay($nonce);

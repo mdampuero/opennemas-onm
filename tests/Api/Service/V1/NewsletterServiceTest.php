@@ -11,7 +11,6 @@ namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\NewsletterService;
 use Common\ORM\Core\Entity;
-use Common\ORM\Core\Exception\EntityNotFoundException;
 
 /**
  * Defines test cases for UserService class.

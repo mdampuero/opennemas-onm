@@ -22,8 +22,6 @@ class NewsletterHelper
      * Initializes the NewsletterHelper.
      *
      * @param SettingsRepository $settingsRepository The settings repository service.
-     *
-     * @return void
      */
     public function __construct($ormManager)
     {

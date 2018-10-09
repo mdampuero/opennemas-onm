@@ -9,12 +9,12 @@
  */
 namespace Tests\Common\ORM\Entity;
 
-use Common\ORM\Entity\Theme;
+use \Common\ORM\Entity\Theme;
 
 class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @covers Common\ORM\Entity\Theme::__construct
+     * @covers \Common\ORM\Entity\Theme::__construct
      */
     public function testConstructor()
     {
@@ -48,7 +48,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\ORM\Entity\Theme::getSkins
+     * @covers \Common\ORM\Entity\Theme::getSkins
      */
     public function testGetSkinsWithOneSkin()
     {
@@ -80,7 +80,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\ORM\Entity\Theme::getSkins
+     * @covers \Common\ORM\Entity\Theme::getSkins
      */
     public function testGetSkinsWithNoSkins()
     {
@@ -90,7 +90,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\ORM\Entity\Theme::getSkins
+     * @covers \Common\ORM\Entity\Theme::getSkins
      */
     public function testGetDefaultSkinWithNoSkins()
     {
@@ -100,7 +100,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\ORM\Entity\Theme::getDefaultSkin
+     * @covers \Common\ORM\Entity\Theme::getDefaultSkin
      */
     public function testGetDefaultSkinWithSkins()
     {
@@ -140,7 +140,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\ORM\Entity\Theme::getDefaultSkin
+     * @covers \Common\ORM\Entity\Theme::getDefaultSkin
      */
     public function testGetDefaultSkinWithSkinsButNoDefault()
     {
@@ -178,7 +178,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\ORM\Entity\Theme::getDefaultSkin
+     * @covers \Common\ORM\Entity\Theme::getDefaultSkin
      */
     public function testGetCurrentSkinWithValidSelected()
     {
@@ -218,7 +218,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\ORM\Entity\Theme::getCurrentSkin
+     * @covers \Common\ORM\Entity\Theme::getCurrentSkin
      */
     public function testGetCurrentSkinWithInValidSelected()
     {
@@ -260,7 +260,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\ORM\Entity\Theme::getCurrentSkin
+     * @covers \Common\ORM\Entity\Theme::getCurrentSkin
      */
     public function testGetCurrentSkinWithInValidSelectedAndNoSkins()
     {
@@ -274,7 +274,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\ORM\Entity\Theme::getCurrentSkinName
+     * @covers \Common\ORM\Entity\Theme::getCurrentSkinName
      */
     public function testgetCurrentSkinNameWithInValidSelectedAndNoSkins()
     {
@@ -288,7 +288,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\ORM\Entity\Theme::getCurrentSkinName
+     * @covers \Common\ORM\Entity\Theme::getCurrentSkinName
      */
     public function testgetCurrentSkinNameWithValidSelected()
     {
@@ -320,7 +320,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\ORM\Entity\Theme::getCurrentSkinProperty
+     * @covers \Common\ORM\Entity\Theme::getCurrentSkinProperty
      */
     public function testgetCurrentSkinPropertyWithInValidSelectedAndNoSkins()
     {
@@ -334,7 +334,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\ORM\Entity\Theme::getCurrentSkinProperty
+     * @covers \Common\ORM\Entity\Theme::getCurrentSkinProperty
      */
     public function testgetCurrentSkinPropertyWithValidSelected()
     {

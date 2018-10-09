@@ -13,7 +13,6 @@ use Common\Core\Controller\Controller;
 use Onm\Instance\InstanceCreator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Intl;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class InstanceController extends Controller
@@ -26,6 +25,8 @@ class InstanceController extends Controller
      * @return JsonResponse The response object.
      *
      * @Security("hasPermission('INSTANCE_DELETE')")
+     *
+     * @throws AccessDeniedException
      */
     public function deleteAction($id)
     {
@@ -101,6 +102,8 @@ class InstanceController extends Controller
      * @return JsonResponse The response object.
      *
      * @Security("hasPermission('INSTANCE_DELETE')")
+     *
+     * @throws AccessDeniedException
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -292,7 +295,8 @@ class InstanceController extends Controller
             throw new AccessDeniedException(
                 '<p>' . _('You have reached the maximum number of instances.') . '</p><p>'
                 . sprintf(
-                    _('If you need to create more instances, please <a class="bold text-danger" href="mailto:%s">contact us</a>.'),
+                    _('If you need to create more instances, please '
+                        . '<a class="bold text-danger" href="mailto:%s">contact us</a>.'),
                     $this->getParameter('manager_webservice')['company_mail'],
                     $this->getParameter('manager_webservice')['company_mail']
                 )
@@ -409,9 +413,11 @@ class InstanceController extends Controller
      *
      * @param Request $request The request object.
      *
-     * @return Response The response object.
+     * @return JsonResponse The response object.
      *
      * @Security("hasPermission('INSTANCE_CREATE')")
+     *
+     * @throws AccessDeniedException
      */
     public function saveAction(Request $request)
     {
@@ -424,7 +430,8 @@ class InstanceController extends Controller
             throw new AccessDeniedException(
                 '<p>' . _('You have reached the maximum number of instances.') . '</p><p>'
                 . sprintf(
-                    _('If you need to create more instances, please <a class="bold text-danger" href="mailto:%s">contact us</a>.'),
+                    _('If you need to create more instances, please '
+                        . '<a class="bold text-danger" href="mailto:%s">contact us</a>.'),
                     $this->getParameter('manager_webservice')['company_mail'],
                     $this->getParameter('manager_webservice')['company_mail']
                 )

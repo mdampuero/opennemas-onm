@@ -25,4 +25,3 @@ function smarty_insert_time($params, &$smarty)
 
     return   '<span class="hour">'.date ('G:i'). ' h.</span> <span class="day">'. $arrDay[date("w")].', '.date ("d"). ' de ' .$arrMonth[date("n")-1]. ' de ' .date("Y").'</span>';
 }
-?>

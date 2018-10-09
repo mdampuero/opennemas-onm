@@ -279,7 +279,9 @@ class NewsML extends Parser
     /**
      * Parses a NewsComponent.
      *
-     * @param SimpleXMLObject $data The component to parse.
+     * @param \SimpleXMLObject $data The component to parse.
+     *
+     * @return array
      */
     public function parseComponent($data)
     {
@@ -303,6 +305,8 @@ class NewsML extends Parser
      * Parses a NewsItem.
      *
      * @param SimpleXMLObject $item The item to parse.
+     *
+     * @return array
      */
     public function parseItem($item)
     {

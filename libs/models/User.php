@@ -107,8 +107,6 @@ class User
      * Initializes the object instance
      *
      * @param int $id User Id
-     *
-     * @return void
      */
     public function __construct($id = null)
     {
@@ -349,8 +347,6 @@ class User
      * Increases the paywall subscription time given the subscription name
      *
      * @param string $planTime the name of the plan
-     *
-     * @return void
      */
     public function addSubscriptionLimit($planTime = 0)
     {
@@ -361,8 +357,6 @@ class User
 
     /**
      * Returns a list of User objects where the users has paywall subscription
-     *
-     * @return void
      */
     public static function getUsersWithSubscription($config = [])
     {
@@ -383,8 +377,6 @@ class User
 
     /**
      * Returns a list of User objects where the users are only registered not subscribed
-     *
-     * @return void
      */
     public static function getUsersOnlyRegistered()
     {

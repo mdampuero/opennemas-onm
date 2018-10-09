@@ -10,7 +10,6 @@
 namespace Tests\Common\ORM\FreshBooks\Data\Converter;
 
 use Common\ORM\Core\Metadata;
-use Common\ORM\Entity\Client;
 use Common\ORM\FreshBooks\Data\Converter\BaseConverter;
 
 /**

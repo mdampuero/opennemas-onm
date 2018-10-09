@@ -3,23 +3,21 @@
  * -------------------------------------------------------------
  * File:     	function.humandate.php
  */
-function smarty_function_renderContentClass($params, &$smarty) {
+function smarty_function_renderContentClass($params, &$smarty)
+{
     if (!isset($params['item'])) {
         $smarty->trigger_error("get_property: missing 'item' parameter");
         return;
     }
 
-    $item = $params['item'];
+    $category = $params['category'];
     if ($params['category'] == 'home') {
         $category = 0;
-    } else {
-        $category = $params['category'];
     }
 
-    $item = $params['item'];
-
-    $element = 'format_'.$category;
+    $item       = $params['item'];
+    $element    = 'format_' . $category;
     $properties = $item->getMetadata($element);
 
-    return  "type-{$item->content_type} category-{$item->category} $properties";
+    return "type-{$item->content_type} category-{$item->category} $properties";
 }

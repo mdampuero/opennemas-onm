@@ -18,7 +18,6 @@ use Common\Core\Annotation\BotDetector;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Cookie;
 use Common\Core\Controller\Controller;
 
 /**
@@ -136,8 +135,7 @@ class ContentsController extends Controller
     public function shareByEmailAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $isValid = false;
-            $errors  = [];
+            $errors = [];
 
             $response = $request->request->filter('g-recaptcha-response', '', FILTER_SANITIZE_STRING);
             $isValid  = $this->get('core.recaptcha')
@@ -192,9 +190,11 @@ class ContentsController extends Controller
             if (empty($senderEmail)) {
                 $errors [] = _('Fill your Email address');
             }
+
             if (empty($senderName)) {
                 $errors [] = _('Complete your name');
             }
+
             $cleanRecipients = [];
             foreach ($recipients as $recipient) {
                 if (filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
@@ -338,8 +338,6 @@ class ContentsController extends Controller
 
     /**
      * Alteres the article given the paywall module status
-     *
-     * @return Article the article
      */
     public function paywallHook(&$content)
     {
@@ -374,10 +372,7 @@ class ContentsController extends Controller
                 if (!$hasSubscription) {
                     $newContent    = $this->renderView(
                         'paywall/partials/content_only_for_subscribers.tpl',
-                        [
-                            'logged' => $isLogged,
-                            'id'     => $content->id
-                        ]
+                        [ 'id'     => $content->id ]
                     );
                     $content->body = $newContent;
                 }

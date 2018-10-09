@@ -9,10 +9,10 @@
  */
 namespace Backend\Controller;
 
-use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
+use Common\Core\Annotation\Security;
 
 /**
  * Handles the actions for the system information

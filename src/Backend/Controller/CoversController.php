@@ -23,8 +23,6 @@ class CoversController extends Controller
 {
     /**
      * Common code for all the actions
-     *
-     * @return void
      */
     public function init()
     {
@@ -320,8 +318,6 @@ class CoversController extends Controller
                 if (!file_exists($path)) {
                     \Onm\FilesManager::createDirectory($path);
                 }
-
-                $uploadStatus = false;
 
                 $file = $request->files->get('cover');
 

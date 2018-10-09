@@ -270,7 +270,6 @@ class ContentController extends Controller
     {
         $this->hasRoles(__FUNCTION__, 'trash');
 
-        $em      = $this->get('entity_repository');
         $errors  = [];
         $success = [];
         $updated = [];
@@ -384,7 +383,6 @@ class ContentController extends Controller
     {
         $this->hasRoles(__FUNCTION__, $contentType);
 
-        $em      = $this->get('entity_repository');
         $errors  = [];
         $success = [];
         $updated = [];
@@ -419,7 +417,6 @@ class ContentController extends Controller
                 }
             } else {
                 $errors[] = [
-                    'id'      => $id,
                     'message' => sprintf(_('Unable to find the item with id "%d"'), $content->id),
                     'type'    => 'error'
                 ];
@@ -452,7 +449,6 @@ class ContentController extends Controller
      */
     public function emptyTrashAction()
     {
-        $em      = $this->get('entity_repository');
         $errors  = [];
         $success = [];
         $updated = [];
@@ -818,7 +814,7 @@ class ContentController extends Controller
      * Save positions for widget.
      *
      * @param  Request $request the request object
-     * @return Response the response object
+     * @return JsonResponse the response object
      */
     public function savePositionsAction(Request $request, $contentType)
     {
@@ -854,17 +850,14 @@ class ContentController extends Controller
 
         if ($updated > 0) {
             $success[] = [
-                'id'      => $id,
                 'message' => _('Positions saved successfully'),
                 'type'    => 'success'
             ];
         }
 
-        return new JsonResponse(
-            [
-                'messages'  => array_merge($success, $errors)
-            ]
-        );
+        return new JsonResponse([
+            'messages'  => array_merge($success, $errors)
+        ]);
     }
 
     /**
@@ -872,12 +865,11 @@ class ContentController extends Controller
      *
      * @param  string  $action      Required action.
      * @param  string  $contentType Content type name.
-     * @return boolean              [description]
+     * @return null|JsonResponse
      */
     protected function hasRoles($action, $contentType)
     {
-        $permissions = [];
-        $types[]     = $contentType;
+        $types[] = $contentType;
 
         // Add all admin permissions for generic list (trash,)
         if ($contentType == 'content') {
@@ -919,12 +911,15 @@ class ContentController extends Controller
                 return new JsonResponse($msg->getMessages(), $msg->getCode());
             }
         }
+
+        return null;
     }
 
     /**
      * Loads extra data related to the given contents.
      *
      * @param  array $contents Array of contents.
+     *
      * @return array           Array of extra data.
      */
     protected function loadExtraData($contents = [])

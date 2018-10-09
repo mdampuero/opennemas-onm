@@ -10,7 +10,6 @@
 namespace Framework\Import\Parser\NewsML\EuropaPress;
 
 use Framework\Import\Parser\NewsML\NewsML;
-use Framework\Import\Resource\Resource;
 
 /**
  * Parses XML files in NewsML custom format for EuropaPress.
