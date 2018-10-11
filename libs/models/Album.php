@@ -173,8 +173,8 @@ class Album extends Content
     {
         $data['subtitle'] = (empty($data['subtitle'])) ? '' : $data['subtitle'];
 
-
         try {
+            $conn->beginTransaction();
             parent::create($data);
 
             $this->pk_content = (int) $this->id;
@@ -193,11 +193,16 @@ class Album extends Content
 
             $this->saveAttachedPhotos($data);
 
+            $conn->commit();
+
             return $this;
         } catch (\Exception $e) {
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
+
+            $conn->rollback();
+
             return false;
         }
     }
@@ -211,11 +216,13 @@ class Album extends Content
      */
     public function update($data)
     {
-        parent::update($data);
-
         $data['subtitle'] = (empty($data['subtitle'])) ? 0 : $data['subtitle'];
 
         try {
+            $conn->beginTransaction();
+
+            parent::update($data);
+
             getService('dbal_connection')->update(
                 'albums',
                 [
@@ -229,6 +236,8 @@ class Album extends Content
             $this->removeAttachedImages($data['id']);
             $this->saveAttachedPhotos($data);
 
+            $conn->commit();
+
             $this->load($data);
 
             return $this;
@@ -236,6 +245,8 @@ class Album extends Content
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
+
+            $conn->rollback();
 
             return false;
         }
@@ -250,15 +261,22 @@ class Album extends Content
      */
     public function remove($id)
     {
-        parent::remove($id);
-
         try {
+            $conn->beginTransaction();
+
+            parent::remove($id);
+
             getService('dbal_connection')->delete(
                 "albums",
                 [ 'pk_album' => $id ]
             );
 
-            return $this->removeAttachedImages($id);
+
+            $this->removeAttachedImages($id);
+
+            $conn->commit();
+
+            return true;
         } catch (\Exception $e) {
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
