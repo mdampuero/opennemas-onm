@@ -16,9 +16,16 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 class DatabaseCollector extends DataCollector
 {
     /**
+     * The service container
+     *
+     * @var \Symfony\Component\DependencyInjection\Container
+     **/
+    public $container;
+
+    /**
      * Initializes the DatabaseCollector
      *
-     * @param ServiceContainer $container The service container.
+     * @param \Symfony\Component\DependencyInjection\Container $container The service container.
      */
     public function __construct($container)
     {
@@ -30,11 +37,11 @@ class DatabaseCollector extends DataCollector
      */
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
-        $connections['orm.connection.manager'] =
+        $connections['orm.connection.manager']  =
             $this->container->get('orm.manager')->getConnection('manager');
-        $connections['orm.connection.instance']  =
+        $connections['orm.connection.instance'] =
             $this->container->get('orm.manager')->getConnection('instance');
-        $connections['dbal_connection'] =
+        $connections['dbal_connection']         =
             $this->container->get('dbal_connection');
 
         foreach ($connections as $key => $connection) {
@@ -65,8 +72,8 @@ class DatabaseCollector extends DataCollector
      */
     public function getData()
     {
-        usort($this->data, function ($a, $b) {
-            return $a['time'] > $b['time'];
+        usort($this->data, function ($elemA, $elemB) {
+            return $elemA['time'] > $elemB['time'];
         });
 
         return $this->data;
@@ -100,5 +107,13 @@ class DatabaseCollector extends DataCollector
     public function getName()
     {
         return 'database_collector';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reset()
+    {
+        $this->data = [];
     }
 }
