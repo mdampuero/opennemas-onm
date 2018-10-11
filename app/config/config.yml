@@ -30,6 +30,7 @@ framework:
     default_locale:  '%locale%'
     trusted_hosts:   ~
     session:
+        # https://symfony.com/doc/current/reference/configuration/framework.html#handler-id
         name:            __onm_sess
         cookie_httponly: false
         gc_maxlifetime:  '%session.gc_maxlifetime%'
@@ -37,6 +38,8 @@ framework:
     fragments:       ~
     http_method_override: true
     assets: ~
+    php_errors:
+        log: true
 
 sensio_framework_extra:
     router:   { annotations: false }
