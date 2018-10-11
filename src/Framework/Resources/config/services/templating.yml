@@ -5,7 +5,8 @@ services:
 
     onm_templating:
         class: Onm\Templating\Templating
-        arguments: [ '@service_container' ]
+        arguments: [ '@service_container', '@debug.stopwatch' ]
+        public: true
 
     template_cache_manager:
         class: Onm\Templating\Cache\Manager

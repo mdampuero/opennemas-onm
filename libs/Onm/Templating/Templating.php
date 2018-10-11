@@ -23,9 +23,10 @@ class Templating
      *
      * @param ServiceContainer $container The service container.
      */
-    public function __construct($container)
+    public function __construct($container, $debugStopwatch)
     {
         $this->container = $container;
+        $this->debugStopwatch = $debugStopwatch;
     }
 
     /**
@@ -40,17 +41,15 @@ class Templating
     {
         $bundleName = $this->getBundleName();
 
-        if ($method === 'fetch' && $this->container->has('debug.stopwatch')) {
-            $stopwatch = $this->container->get('debug.stopwatch');
-            $stopwatch->start("template ({$bundleName} {$params[0]})");
+        if ($method === 'fetch' && $this->debugStopwatch) {
+            $this->debugStopwatch->start("template ({$bundleName} {$params[0]})");
         }
 
         $template = $this->getTemplate($bundleName);
         $response = call_user_func_array([ $template, $method ], $params);
 
-        if ($method === 'fetch' && $this->container->has('debug.stopwatch')) {
-            $stopwatch = $this->container->get('debug.stopwatch');
-            $stopwatch->stop("template ({$bundleName} {$params[0]})");
+        if ($method === 'fetch' && $this->debugStopwatch) {
+            $this->debugStopwatch->stop("template ({$bundleName} {$params[0]})");
         }
 
         return $response;
