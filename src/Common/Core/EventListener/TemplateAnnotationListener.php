@@ -23,16 +23,16 @@ class TemplateAnnotationListener
      *
      * @var ServiceContainer
      */
-    protected $container;
+    protected $annotationReader;
 
     /**
      * Initializes the TemplateAnnotationListener.
      *
      * @param ServiceContainer $container The service container.
      */
-    public function __construct($container)
+    public function __construct($annotationReader)
     {
-        $this->container = $container;
+        $this->annotationReader = $annotationReader;
     }
 
     /**
@@ -45,7 +45,7 @@ class TemplateAnnotationListener
         $controller = $event->getController();
         $object     = new \ReflectionObject($controller[0]);
         $method     = $object->getMethod($controller[1]);
-        $reader     = $this->container->get('annotation_reader');
+        $reader     = $this->annotationReader;
 
         foreach ($reader->getMethodAnnotations($method) as $annotation) {
             if (!($annotation instanceof Template)) {
