@@ -173,6 +173,7 @@ class Album extends Content
     {
         $data['subtitle'] = (empty($data['subtitle'])) ? '' : $data['subtitle'];
 
+        $conn = getService('dbal_connection');
         try {
             $conn->beginTransaction();
             parent::create($data);
@@ -180,7 +181,7 @@ class Album extends Content
             $this->pk_content = (int) $this->id;
             $this->pk_album   = (int) $this->id;
 
-            getService('dbal_connection')->insert(
+            $conn->insert(
                 'albums',
                 [
                     'pk_album' => (int) $this->id,
@@ -218,12 +219,13 @@ class Album extends Content
     {
         $data['subtitle'] = (empty($data['subtitle'])) ? 0 : $data['subtitle'];
 
+        $conn = getService('dbal_connection');
         try {
             $conn->beginTransaction();
 
             parent::update($data);
 
-            getService('dbal_connection')->update(
+            $conn->update(
                 'albums',
                 [
                     'subtitle' => $data['subtitle'],
@@ -261,6 +263,7 @@ class Album extends Content
      */
     public function remove($id)
     {
+        $conn = getService('dbal_connection');
         try {
             $conn->beginTransaction();
 
@@ -281,6 +284,9 @@ class Album extends Content
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
+
+            $conn->rollbck();
+
             return false;
         }
     }
