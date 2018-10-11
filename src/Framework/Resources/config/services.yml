@@ -11,50 +11,64 @@ services:
     automatic_contents:
         class: Onm\MachineSearcher
         arguments: [ '@orm.connection.instance', '@entity_repository', '@cache', '%cache_prefix%' ]
+        public: true
 
     acl_checker:
         class: Onm\Security\Acl
+        public: true
 
     varnish_cleaner:
         class: Onm\Varnish\BanMessagePusher
         arguments: [ "%varnish%" ]
+        public: true
 
     varnish_ban_message_exchanger:
         class: Onm\Varnish\MessageExchanger
+        public: true
 
     content_url_matcher:
         class: Framework\Component\Routing\ContentUrlMatcher
         arguments: [ '@entity_repository' ]
+        public: true
 
     content_cache:
         class: Framework\Cache\ContentCache
+        public: true
 
     onm.event.authentication_success_listener:
         class: Framework\EventListener\AuthenticationSuccessListener
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
+        public: true
 
     onm.validator:
         class: Onm\Validator\Validator
+        public: true
 
     onm.braintree.factory:
         class: Framework\Braintree\BraintreeFactory
         arguments: [ '@comet_cult_braintree.factory' ]
+        public: true
 
     paginator:
         class: Framework\Component\Paginator\Paginator
         arguments: [ '@router' ]
+        public: true
 
     related_contents:
         class: RelatedContent
         arguments: [ '@orm.connection.instance', '@entity_repository', '@cache', '%cache_prefix%' ]
+        public: true
 
     core.messenger:
         class: Framework\Messenger\Messenger
+        public: true
 
     news_agency.importer:
         class:     Framework\Import\Importer\Importer
         arguments: [ '@service_container' ]
+        public: true
 
     vat:
         class: Framework\VAT\VATService
+        public: true

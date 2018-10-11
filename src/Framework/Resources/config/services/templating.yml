@@ -2,6 +2,7 @@ services:
     core.manager.layout:
         class:     Onm\LayoutManager
         arguments: [ '@onm_templating' ]
+        public: true
 
     onm_templating:
         class: Onm\Templating\Templating
@@ -10,9 +11,13 @@ services:
 
     template_cache_manager:
         class: Onm\Templating\Cache\Manager
+        public: true
 
     template_cache_config_manager:
         class: Onm\Templating\Cache\Config
+        public: true
 
     view:
         alias: onm_templating
+        public: true
+

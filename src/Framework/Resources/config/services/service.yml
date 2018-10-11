@@ -2,15 +2,19 @@ services:
     core.service.assetic.asset_bag:
         class: Framework\Component\Assetic\AssetBag
         arguments: [ '%assetic%', '@core.instance' ]
+        public: true
 
     core.service.assetic.stylesheet_manager:
         class: Framework\Component\Assetic\StylesheetManager
         arguments: [ '@service_container', '%assetic%' ]
+        public: true
 
     core.service.assetic.javascript_manager:
         class: Framework\Component\Assetic\JavascriptManager
         arguments: [ '@service_container', '%assetic%' ]
+        public: true
 
     core.service.notification:
         class: Framework\Service\NotificationService
         arguments: [ '@service_container' ]
+        public: true

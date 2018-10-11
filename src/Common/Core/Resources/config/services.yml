@@ -56,47 +56,58 @@ services:
     core.dispatcher:
         class:     Common\Core\Component\EventDispatcher\EventDispatcher
         arguments: [ '@event_dispatcher' ]
+        public: true
 
     core.geo:
         class:     Common\Core\Component\Geo\Geo
         arguments: [ '@core.locale' ]
+        public: true
 
     core.helper.advertisement:
         class:     Common\Core\Component\Helper\AdvertisementHelper
         arguments: [ '@service_container' ]
+        public: true
 
     core.helper.comment:
         class:     Common\Core\Component\Helper\CommentHelper
         arguments:
             - '@orm.manager'
             - '%core.helper.comment.default_params%'
+        public: true
 
     core.helper.checkout:
         class:     Common\Core\Component\Helper\CheckoutHelper
         arguments: [ '@service_container' ]
+        public: true
 
     core.helper.content_media:
         class:     Common\Core\Component\Helper\ContentMediaHelper
         arguments: [ '@orm.manager', '@entity_repository' ]
+        public: true
 
     core.helper.csv:
         class:     Common\Core\Component\Helper\CsvHelper
+        public: true
 
     core.helper.http_fetcher:
         class:     Common\Core\Component\Http\Fetcher
+        public: true
 
     core.helper.instance_sync:
         class:     Common\Core\Component\Helper\InstanceSyncHelper
         arguments: [ '@service_container' ]
+        public: true
 
     core.helper.l10n_route:
         class:     Common\Core\Component\Helper\L10nRouteHelper
         arguments: [ '@service_container' ]
+        public: true
 
     core.helper.newsletter:
         class:     Common\Core\Component\Helper\NewsletterHelper
         arguments:
             - '@orm.manager'
+        public: true
 
     core.helper.newsletter_sender:
         class:     Common\Core\Component\Helper\NewsletterSenderHelper
@@ -110,130 +121,157 @@ services:
             - '@external.act_on.factory'
             - '@api.service.newsletter'
             - '%mailer_no_reply_address%'
+        public: true
 
     core.helper.oql:
         class:     Common\Core\Component\Helper\OqlHelper
         arguments: [ '@service_container' ]
+        public: true
 
     core.helper.structured_data:
         class:     Common\Core\Component\Helper\StructuredData
         arguments: [ '@orm.manager', '@api.service.tag' ]
+        public: true
 
     core.helper.subscription:
         class:     Common\Core\Component\Helper\SubscriptionHelper
         arguments: [ '@core.security', '@api.service.subscription' ]
+        public: true
 
     core.helper.url:
         class:     Common\Core\Component\Helper\UrlHelper
+        public: true
 
     core.helper.url_generator:
         class:     Common\Core\Component\Helper\UrlGeneratorHelper
         arguments: [ '@service_container' ]
+        public: true
 
     core.helper.user:
         class:     Common\Core\Component\Helper\UserHelper
         arguments: [ '@service_container' ]
+        public: true
 
     core.image.image:
         class:     Common\Core\Component\Image\ImageManager
+        public: true
 
     core.instance:
         class:     Common\ORM\Entity\Instance
         factory:   [ '@core.loader', 'getInstance' ]
+        public: true
 
     core.recaptcha:
         class:     Common\Core\Component\Security\Recaptcha\Recaptcha
         arguments: [ '@service_container' ]
+        public: true
 
     core.redirector:
         class:     Common\Core\Component\Routing\Redirector
         arguments: [ '@service_container' ]
+        public: true
 
     core.instance.checker:
         class:     Common\Core\Component\Instance\Checker
         arguments: [ '@orm.manager' ]
+        public: true
 
     core.instance.validator:
         class:     Common\Core\Component\Instance\Validator
         arguments: [ '@orm.manager' ]
+        public: true
 
     backend.listener.access_denied.exception:
         class:     Common\Core\EventListener\AccessDeniedExceptionListener
         arguments: [ '@service_container' ]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+        public: true
 
     core.listener.controller:
         class:     Common\Core\EventListener\ControllerListener
         arguments: [ '@core.globals', '@core.locale' ]
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 0 }
+        public: true
 
     core.listener.core:
         class:     Common\Core\EventListener\CoreListener
         arguments: [ '@service_container' ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 99 }
+        public: true
 
     core.listener.locale:
         class:     Common\Core\EventListener\LocaleListener
         arguments: [ '@service_container' ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
+        public: true
 
     core.listener.maintenance:
         class:     Common\Core\EventListener\MaintenanceListener
         arguments: [ '%core.maintenance.file%' ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 100 }
+        public: true
 
     core.listener.response:
         class:     Common\Core\EventListener\ResponseListener
         arguments: [ '@service_container' ]
         tags:
             - { name: kernel.event_listener, event: kernel.view, method: onKernelView, priority: 0 }
+        public: true
 
     core.listener.security:
         class:     Common\Core\EventListener\SecurityListener
         arguments: [ '@service_container' ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 5 }
+        public: true
 
     core.listener.security.annotation:
         class:     Common\Core\EventListener\SecurityAnnotationListener
         arguments: [ '@annotation_reader', '@core.security' ]
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 0 }
+        public: true
 
     core.listener.bot_detector.annotation:
         class:     Common\Core\EventListener\BotDetectorAnnotationListener
         arguments: [ '@annotation_reader', '@router' ]
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 0 }
+        public: true
 
     kernel.listener.bot_detector.exception:
         class: Common\Core\EventListener\BotDetectorExceptionListener
         arguments: [ '@router' ]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+        public: true
 
     core.listener.template.annotation:
         class:     Common\Core\EventListener\TemplateAnnotationListener
         arguments: [ '@annotation_reader' ]
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+        public: true
 
     core.loader:
         class:     Common\Core\Component\Loader\Loader
         arguments: [ '@service_container' ]
+        public: true
 
     core.locale:
         class:     Common\Core\Component\Locale\Locale
         arguments: [ '%core.locale.available%', '%core.locale.path%' ]
+        public: true
 
     core.renderer.advertisement:
         class:     Common\Core\Component\Renderer\AdvertisementRenderer
         arguments: [ '@service_container' ]
+        public: true
 
     core.renderer.newsletter:
         class:     Common\Core\Component\Renderer\NewsletterRenderer
@@ -246,77 +284,97 @@ services:
             - '@core.helper.advertisement'
             - '@advertisement_repository'
             - '@core.instance'
+        public: true
 
     core.status.checker:
         class:     Common\Core\Component\Status\Checker
         arguments: [ '@service_container' ]
+        public: true
 
     core.security:
         class:     Common\Core\Component\Security\Security
+        public: true
 
     core.security.authentication:
         class:     Common\Core\Component\Security\Authentication\Authentication
         arguments: [ '@service_container' ]
+        public: true
 
     core.security.authentication.success:
         class:     Common\Core\Component\Security\Authentication\AuthenticationSuccessHandler
         arguments: [ '@core.security.authentication', '@application.log', '@router', '@security.token_storage' ]
+        public: true
 
     core.security.authentication.failure:
         class:     Common\Core\Component\Security\Authentication\AuthenticationFailureHandler
         arguments: [ '@core.security.authentication', '@application.log', '@router' ]
+        public: true
 
     core.security.authentication.oauth.success:
         class:     Common\Core\Component\Security\Authentication\OAuthAuthenticationSuccessHandler
         arguments: [ '@service_container' ]
+        public: true
 
     core.security.encoder.password:
         class:     Common\Core\Component\Security\Encoder\PasswordEncoder
+        public: true
 
     core.security.http.logout.failure:
         class:     Common\Core\Component\Security\Http\Logout\LogoutSuccessHandler
         arguments: [ '@router' ]
+        public: true
 
     core.security.user:
         class:     Common\ORM\Entity\User
         factory:   [ '@core.security', 'getUser' ]
+        public: true
 
     core.security.user.provider:
         class:     Common\Core\Component\Security\User\UserProvider
         arguments: [ '@orm.manager', [ 'instance', 'manager' ] ]
+        public: true
 
     core.security.user.oauth_provider:
         class:     Common\Core\Component\Security\User\OAuthUserProvider
         arguments: [ '@orm.manager', '@security.token_storage', [ 'instance', 'manager' ] ]
+        public: true
 
     core.template:
         class:     Common\Core\Component\Template\Template
         arguments: [ '@service_container', '%core.template.filters%' ]
+        public: true
 
     core.globals:
         class:     Common\Core\Component\Core\GlobalVariables
         arguments: [ '@service_container' ]
+        public: true
 
     core.template.admin:
         class:     Common\Core\Component\Template\Template
         arguments: [ '@service_container', '%core.template.admin.filters%' ]
+        public: true
 
     core.template.manager:
         class:     Common\Core\Component\Template\Template
         arguments: [ '@service_container', '%core.template.manager.filters%' ]
+        public: true
 
     core.theme:
         class:     Common\ORM\Entity\Extension
         factory:   [ '@core.loader', 'getTheme' ]
+        public: true
 
     core.factory.translator:
         class:     Common\Core\Component\Translator\TranslatorFactory
+        public: true
 
     core.user:
         alias:     'core.security.user'
+        public: true
 
     core.validator:
         class:      Common\Core\Component\Validator\Validator
         arguments:
             - '@orm.manager'
             - '@validator'
+        public: true
