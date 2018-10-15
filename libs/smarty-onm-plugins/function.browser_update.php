@@ -1,10 +1,12 @@
 <?php
-/*
- * -------------------------------------------------------------
- * File:        function.script_tag.php
- * Comprueba el tipo y escribe el nombre o la imag
+/**
+ * Renders the browser-update.org script
+ *
+ * @param array $params The list of parameters passed to the block.
+ * @param \Smarty $smarty The instance of smarty.
+ *
+ * @return null|string
  */
-
 function smarty_function_browser_update($params, &$smarty)
 {
     $output = "<script>

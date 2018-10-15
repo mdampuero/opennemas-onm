@@ -1,7 +1,11 @@
 <?php
-/*
- * -------------------------------------------------------------
- * File:     	function.humandate.php
+/**
+ * Renders the CSS classes for a given content
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_function_renderContentClass($params, &$smarty)
 {

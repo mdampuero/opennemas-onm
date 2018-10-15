@@ -1,18 +1,7 @@
 <?php
 /**
- * Smarty plugin
- * @package Smarty
- * @subpackage plugins
- */
-
-
-/**
- * Smarty json_decode function plugin
+ * Decodes a json string
  *
- * Type:     function<br>
- * Name:     json_decode<br>
- * Purpose:  json_decode
- * @author   Tomás Vilariño <vifito at gmail dot com>
  * @param string
  * @return string
  */

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Renders the admin menu given a file and base
+ *
+ * @param array $params The list of parameters passed to the block.
+ * @param \Smarty $smarty The instance of smarty.
+ *
+ * @return null|string
+ */
 function smarty_function_admin_menu($params, &$smarty)
 {
     if (array_key_exists('file', $params)

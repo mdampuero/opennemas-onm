@@ -4,10 +4,8 @@
  *
  * @param array    $params The list of parameters.
  * @param Template $tpl    The template object.
- *
- * @return string
  */
-function smarty_insert_renderbanner($params, $smarty)
+function smarty_function_renderbanner($params, $smarty)
 {
     $safeframeEnabled = $smarty->getContainer()
         ->get('orm.manager')
@@ -15,7 +13,7 @@ function smarty_insert_renderbanner($params, $smarty)
         ->get('ads_settings')['safe_frame'];
 
     $tpl    = '<div class="ad-slot oat%s">%s</div>';
-    $class  = '" data-position="' . $params['type'];
+    $class  = '" data-type="' . $params['type'];
     $format = 'safeframe';
 
     // Filter advertisement by type/position

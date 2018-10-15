@@ -1,12 +1,11 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     outputfilter.chartbeat.php
- * Type:     outputfilter
- * Name:     chartbeat
- * Purpose:  Prints chartbeat analytics code
- * -------------------------------------------------------------
+/**
+ * Prints chartbeat analytics code
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_outputfilter_chartbeat($output, $smarty)
 {

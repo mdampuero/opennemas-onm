@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Returns the localized date string from a normalized date string
  *
  * @param array $params the list of smarty parameters

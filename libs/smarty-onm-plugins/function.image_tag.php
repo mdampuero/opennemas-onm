@@ -1,7 +1,5 @@
 <?php
-/*
- * -------------------------------------------------------------
- * File:     	function.image_tag.php
+/**
  * Prints an img html tag gitven src url file.
  */
 function smarty_function_image_tag($params, &$smarty)

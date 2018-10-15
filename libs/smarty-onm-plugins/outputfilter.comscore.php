@@ -1,12 +1,11 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     outputfilter.comscore.php
- * Type:     outputfilter
- * Name:     canonical_url
- * Purpose:  Prints ComScore analytics code
- * -------------------------------------------------------------
+/**
+ * Prints ComScore analytics code
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_outputfilter_comscore($output, $smarty)
 {

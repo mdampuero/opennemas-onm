@@ -1,12 +1,11 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     function.css_tag.php
- * Type:     function
- * Name:     css_tag
- * Purpose:  Returns the URL for a stylesheet.
- * -------------------------------------------------------------
+/**
+ * Returns the URL for a stylesheet.
+ *
+ * @param array $params The list of parameters passed to the block.
+ * @param \Smarty $smarty The instance of smarty.
+ *
+ * @return null|string
  */
 function smarty_function_css_tag($params, &$smarty)
 {

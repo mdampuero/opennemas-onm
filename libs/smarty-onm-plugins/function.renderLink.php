@@ -1,9 +1,11 @@
 <?php
-/*
- * -------------------------------------------------------------
- * File:     	function.renderLink.php
+/**
  * Check type of menu element and prepare link
  *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_function_renderLink($params, &$smarty)
 {
