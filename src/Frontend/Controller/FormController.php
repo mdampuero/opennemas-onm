@@ -161,9 +161,6 @@ class FormController extends Controller
                     "Email sent. Frontend form (sender: $email, to: $recipient)"
                 );
 
-                $action = new \Action();
-                $action->set([ 'action_name' => 'form_1', 'counter' => 1 ]);
-
                 $class   = 'success';
                 $message = _('The information has been sent');
             } catch (\Exception $e) {
