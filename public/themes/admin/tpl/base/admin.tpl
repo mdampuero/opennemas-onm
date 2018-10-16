@@ -566,6 +566,7 @@
       @Common/src/fablock/fablock.js,
       @Common/src/angular-autoform/js/*,
       @Common/src/angular-bootstrap-multiselect/template.js,
+      @Common/src/angular-category-selector/js/onm-category-selector.js,
       @Common/src/angular-fly-to-cart/js/fly-to-cart.js,
       @Common/src/angular-image-preview/js/image-preview.js,
       @Common/src/angular-localize/localize.js,

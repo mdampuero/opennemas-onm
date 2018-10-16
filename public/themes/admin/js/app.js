@@ -14,6 +14,7 @@ angular.module(
     'onm.autoform',
     'onm.autoformEditor',
     'onm.gravatar',
+    'onm.categorySelector',
     'onm.cleaner',
     'onm.editor',
     'onm.datetimepicker',
