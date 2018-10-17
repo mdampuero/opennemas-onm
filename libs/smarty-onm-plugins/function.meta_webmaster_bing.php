@@ -1,7 +1,11 @@
 <?php
-/*
- * -------------------------------------------------------------
- * File:        function.meta_webmaster_bing.php
+/**
+ * Returns the BING webmaster HTML meta tag
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_function_meta_webmaster_bing($params, &$smarty)
 {

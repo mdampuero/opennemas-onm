@@ -327,6 +327,20 @@ class Template extends \Smarty
     }
 
     /**
+     * Changes the value of the locale flag.
+     *
+     * @param boolean $locale The locale flag value.
+     *
+     * @return Template The current template.
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
      * Registers the required smarty filters.
      *
      * @param array $filters The list of filters.
@@ -378,20 +392,6 @@ class Template extends \Smarty
             '_template' => $this,
             'params'    => [ 'IMAGE_DIR' => $this->image_dir ]
         ]);
-    }
-
-    /**
-     * Changes the value of the locale flag.
-     *
-     * @param boolean $locale The locale flag value.
-     *
-     * @return Template The current template.
-     */
-    protected function setLocale($locale)
-    {
-        $this->locale = $locale;
-
-        return $this;
     }
 
     /**

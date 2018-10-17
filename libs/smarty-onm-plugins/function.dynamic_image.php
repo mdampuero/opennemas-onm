@@ -1,4 +1,12 @@
 <?php
+/**
+ * Renders a dynamic image given some parameters (base_url, real_path, transform)
+ *
+ * @param array $params The list of parameters passed to the block.
+ * @param \Smarty $smarty The instance of smarty.
+ *
+ * @return null|string
+ */
 function smarty_function_dynamic_image($params, &$smarty)
 {
     if (empty($params['src'])) {

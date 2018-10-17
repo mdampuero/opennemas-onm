@@ -1,12 +1,11 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     outputfilter.cmp_script.php
- * Type:     outputfilter
- * Name:     cmp_script
- * Purpose:  Prints CMP code (Consent Management Platform)
- * -------------------------------------------------------------
+/**
+ * Prints CMP code (Consent Management Platform)
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_outputfilter_cmp_script($output, $smarty)
 {

@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * Returns the favicon meta tag
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
+ */
 function smarty_function_render_favico($params, &$smarty)
 {
     // Default favico
