@@ -22,7 +22,7 @@
             labelString: '='
           },
           template: function() {
-            return '<ui-select name="category" ng-model="$parent.ngModel" theme="select2">' +
+            return '<ui-select class="form-control" name="category" ng-model="$parent.ngModel" theme="select2">' +
                 '<ui-select-match>' +
                 '  <strong ng-if="labelString">[% labelString %]</strong>[% $select.selected.title %]' +
                 '</ui-select-match>' +

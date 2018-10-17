@@ -1,0 +1,34 @@
+# Covers controller routes
+backend_covers:
+    path:     /covers
+    defaults: { _controller  : BackendBundle:Covers:list }
+
+backend_cover_create:
+    path:     /covers/create
+    defaults: { _controller  : BackendBundle:Covers:create }
+
+backend_cover_show:
+    path:     /covers/{id}/show
+    defaults: { _controller  : BackendBundle:Covers:show }
+    options:
+        expose: true
+
+backend_cover_update:
+    path:     /cover/{id}/update
+    defaults: { _controller  : BackendBundle:Covers:update }
+
+backend_covers_savepositions:
+    path:     /covers/save-positions
+    defaults: { _controller  : BackendBundle:Covers:savePositions }
+
+backend_cover_delete:
+    path:     /cover/{id}/delete
+    defaults: { _controller  : BackendBundle:Covers:delete }
+
+backend_covers_widget:
+    path:     /cover/widget
+    defaults: { _controller  : BackendBundle:Covers:widget }
+
+backend_covers_config:
+    path:     /covers/config
+    defaults: { _controller  : BackendBundle:Covers:config }

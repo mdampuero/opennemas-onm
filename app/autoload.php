@@ -67,6 +67,7 @@ define('IMG_DIR', 'images');
 define('FILE_DIR', 'files');
 define('ADS_DIR', 'advertisements');
 define('OPINION_DIR', 'opinions');
+define('KIOSKO_DIR', "kiosko" . SS);
 
 define('TEMPLATE_MANAGER', 'manager');
 

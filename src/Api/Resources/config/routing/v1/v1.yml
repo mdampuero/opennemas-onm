@@ -6,6 +6,10 @@ api_v1_backend_article:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/article.yml'
     prefix:   /backend
 
+api_v1_backend_cover:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/cover.yml'
+    prefix:   /backend
+
 api_v1_backend_file:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/file.yml'
     prefix:   /backend

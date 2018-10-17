@@ -78,10 +78,10 @@
         <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|clear_json}">
           <ui-select name="author" theme="select2" ng-model="criteria.pk_fk_content_category">
             <ui-select-match>
-              <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
+              <strong>{t}Category{/t}:</strong> [% $select.selected.title %]
             </ui-select-match>
-            <ui-select-choices repeat="item.value as item in categories | filter: { name: $select.search }">
-              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            <ui-select-choices repeat="item.value as item in categories | filter: { title: $select.search }">
+              <div ng-bind-html="item.title | highlight: $select.search"></div>
             </ui-select-choices>
           </ui-select>
         </li>
@@ -169,7 +169,7 @@
                 <span uib-tooltip="{t}Last editor{/t} [% shvs.extra.authors[content.fk_user_last_editor].name %]">[% content.title%]</span>
                 <div class="listing-inline-actions">
                   {acl isAllowed="VIDEO_UPDATE"}
-                    <a class="link" href="[% edit(content.id, 'admin_kiosko_show') %]">
+                    <a class="link" href="[% edit(content.id, 'backend_cover_show') %]">
                       <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                     </a>
                   {/acl}
