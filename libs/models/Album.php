@@ -285,7 +285,7 @@ class Album extends Content
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
 
-            $conn->rollbck();
+            $conn->rollback();
 
             return false;
         }
