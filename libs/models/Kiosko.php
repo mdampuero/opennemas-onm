@@ -151,8 +151,6 @@ class Kiosko extends Content
         parent::create($data);
 
         try {
-            $this->createThumb($data['name'], $data['path']);
-
             getService('dbal_connection')->insert(
                 'kioskos',
                 [

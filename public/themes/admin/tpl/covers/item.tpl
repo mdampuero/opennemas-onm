@@ -99,7 +99,7 @@ jQuery(document).ready(function($) {
                       <h3 class="spinner-text">{t}Generating thumbnail{/t}...</h3>
                     </div>
 
-                    <img id="thumbnail" ng-src="[% item.thumbnail_url %]" class="thumbnail" ng-show="!thumbnailLoading && item.thumbnail_url">
+                    <img id="thumbnail" ng-src="[% item.thumbnail_url %]" class="thumbnail" ng-show="!thumbnailLoading && item.thumbnail_url" style="max-height:200px">
 
                     <div>
                       <span class="btn btn-file">

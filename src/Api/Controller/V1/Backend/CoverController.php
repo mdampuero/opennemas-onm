@@ -22,35 +22,16 @@ use Common\Core\Controller\Controller;
 class CoverController extends Controller
 {
     /**
-     * Shows the list of the
+     * Returns the data to create a new newsletter.
      *
-     * @return Response the response object
+     * @return JsonResponse The response object.
      *
-     * @Security("hasExtension('KIOSKO_MANAGER')
-     *     and hasPermission('KIOSKO_ADMIN')")
+     * @Security("hasExtension('NEWSLETTER_MANAGER')
+     *     and hasPermission('NEWSLETTER_ADMIN')")
      */
-    public function listAction()
+    public function createAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
-
-        foreach ($this->parentCategories as $key => $category) {
-            $categories[] = [
-                'name' => $category->title,
-                'value' => $category->pk_content_category
-            ];
-
-            foreach ($this->subcat[$key] as $subcategory) {
-                $categories[] = [
-                    'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->pk_content_category
-                ];
-            }
-        }
-
-        return $this->render('covers/list.tpl', [
-            'categories' => $categories,
-            'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR
-        ]);
+        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
     }
 
     /**
@@ -113,27 +94,16 @@ class CoverController extends Controller
      * @Security("hasExtension('KIOSKO_MANAGER')
      *     and hasPermission('KIOSKO_CREATE')")
      */
-    public function createAction(Request $request)
+    public function saveAction(Request $request)
     {
-        if ('POST' !== $request->getMethod()) {
-            $extra = $this->getExtraData();
-
-            return new JsonResponse([
-                'extra' => array_merge($extra, [
-                    'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
-                    'locale'         => $this->get('core.locale')->getRequestLocale('frontend'),
-                    'tags'           => []
-                ])
-            ]);
-        }
-
+        $msg      = $this->get('core.messenger');
         $postInfo = $request->request;
 
-        $coverData = [
+        $data = [
             'title'          => $postInfo->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'description'          => $postReq->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'description'          => $postInfo->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'type'           => (int) $postInfo->getDigits('type', 0),
-            'category'       => (int) $postInfo->getDigits('category'),
+            'category'       => (int) $postInfo->getDigits('category', 0),
             'content_status' => (int) $postInfo->getDigits('content_status', 1),
             'favorite'       => (int) $postInfo->getDigits('favorite', 1),
             'date'           => $postInfo->filter('date', null, FILTER_SANITIZE_STRING),
@@ -142,51 +112,60 @@ class CoverController extends Controller
             'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
-        $dateTime = new \DateTime($coverData['date']);
-
-        $coverData['name'] = $dateTime->format('Ymd') . date('His') . '-'
-            . $coverData['category'] . '.pdf';
-        $coverData['path'] = $dateTime->format('Y/m/d') . '/';
-
-        $path = INSTANCE_MEDIA_PATH . KIOSKO_DIR . $coverData['path'];
+        $content = new \Kiosko();
 
         try {
-            // Create folder if it doesn't exist
-            if (!file_exists($path)) {
-                \Onm\FilesManager::createDirectory($path);
+            // Handle new file
+            if ($request->files->get('cover') && $request->files->get('thumbnail')) {
+                $dateTime = new \DateTime($data['date']);
+
+                $data['name'] = $dateTime->format('Ymd') . date('His') . '-' . $data['category'] . '.pdf';
+                $data['path'] = $dateTime->format('Y/m/d') . '/';
+
+                $path = INSTANCE_MEDIA_PATH . KIOSKO_DIR . $data['path'];
+
+                // Create folder if it doesn't exist
+                if (!file_exists($path)) {
+                    \Onm\FilesManager::createDirectory($path);
+                }
+
+                $file = $request->files->get('cover');
+
+                $uploadStatus = $file->isValid() && $file->move(realpath($path), $data['name']);
+
+                if (!$uploadStatus) {
+                    throw new \Exception(
+                        sprintf(
+                            _('Unable to upload the file. Try to upload a file smaller than %d MB'),
+                            (int) ini_get('upload_max_filesize')
+                        )
+                    );
+                }
+
+                $content->saveThumbnail($path, $data['name'], $request->files->get('thumbnail'));
             }
 
-            $uploadStatus = false;
-
-            foreach ($request->files as $file) {
-                // Move uploaded file
-                $uploadStatus = $file->isValid() && $file->move(realpath($path), $coverData['name']);
-            }
-
-            if (!$uploadStatus) {
-                throw new \Exception(
-                    sprintf(
-                        _('Unable to upload the file. Try to upload a file smaller than %d MB'),
-                        (int) ini_get('upload_max_filesize')
-                    )
-                );
-            }
-
-            $kiosko = new \Kiosko();
-            if (!$kiosko->create($coverData)) {
+            if (!$content->create($data)) {
                 throw new \Exception(_('Unable to create the file. Try again'));
             }
 
-            return $this->redirect(
-                $this->generateUrl('backend_cover_show', [ 'id' => $kiosko->id ])
-            );
-        } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add('error', $e->getMessage());
+            $msg->add(_('Item saved successfully'), 'success', 201);
 
-            return $this->redirect($this->generateUrl('backend_covers', [
-                'category' => $postInfo->getDigits('category'),
-            ]));
+            $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+            $response->headers->set(
+                'Location',
+                $this->generateUrl(
+                    'api_v1_backend_cover_show',
+                    [ 'id' => $content->id ]
+                )
+            );
+
+            return $response;
+        } catch (\Exception $e) {
+            $msg->add($e->getMessage(), 'error');
         }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
@@ -330,6 +309,37 @@ class CoverController extends Controller
             'category' => $cover->category,
             'page'     => $page
         ]));
+    }
+    /**
+     * Shows the list of the
+     *
+     * @return Response the response object
+     *
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_ADMIN')")
+     */
+    public function listAction()
+    {
+        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name' => $category->title,
+                'value' => $category->pk_content_category
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name' => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->pk_content_category
+                ];
+            }
+        }
+
+        return $this->render('covers/list.tpl', [
+            'categories' => $categories,
+            'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR
+        ]);
     }
 
     /**

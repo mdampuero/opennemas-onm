@@ -46,8 +46,12 @@
             $scope.groupCategories = function() {
               var item = $scope.ngModel;
 
+              if (!item) {
+                return '';
+              }
+
               var category = $scope.categories.filter(function(e) {
-                return e.pk_content_category === item.fk_content_category;
+                return e.pk_content_category === item.category;
               });
 
               if (category.length > 0 && category[0].pk_content_category) {
