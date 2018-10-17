@@ -180,8 +180,9 @@
 
                     $scope.item.thumbnail = convertBase64ImageToFile(dataUrl);
                     $scope.item.thumbnail_url = dataUrl;
-
                     $scope.thumbnailLoading = false;
+
+                    $scope.$apply();
                   });
                 });
               })
