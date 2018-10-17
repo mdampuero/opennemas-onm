@@ -53,7 +53,6 @@
   <rule ref="PEAR.Files.IncludingFile"/>
   <rule ref="PEAR.Functions.FunctionDeclaration"/>
   <rule ref="PEAR.WhiteSpace.ObjectOperatorIndent"/>
-  <rule ref="Squiz.PHP.DisallowObEndFlush"/>
   <rule ref="Squiz.PHP.DiscouragedFunctions"/>
   <rule ref="Squiz.PHP.EmbeddedPhp"/>
   <rule ref="Squiz.PHP.GlobalKeyword"/>

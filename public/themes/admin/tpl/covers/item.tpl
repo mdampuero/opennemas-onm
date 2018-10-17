@@ -83,9 +83,6 @@ jQuery(document).ready(function($) {
           <div class="grid simple">
             <div class="grid-body">
 
-
-
-
               <div class="form-group">
                 <label for="date" class="form-label">{t}File{/t}</label>
                 <div class="controls">
@@ -143,14 +140,14 @@ jQuery(document).ready(function($) {
 
                 <div class="form-group">
                   <div class="checkbox">
-                    <input ng-model="item.content_status" type="checkbox" value="1" id="content_status" name="content_status">
+                    <input ng-model="item.content_status" type="checkbox" value="1" id="content_status" name="content_status" ng-false-value="0" ng-true-value="1">
                     <label for="content_status">{t}Published{/t}</label>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <div class="checkbox">
-                    <input ng-model="item.favorite" type="checkbox" value="1" id="favorite" name="favorite">
+                    <input ng-model="item.favorite" type="checkbox" value="1" id="favorite" name="favorite" ng-false-value="0" ng-true-value="1">
                     <label for="favorite">{t}Favorite{/t}</label>
                   </div>
                 </div>

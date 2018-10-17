@@ -99,9 +99,7 @@
             return;
           }
 
-          data.item.content_status = Number(data.item.content_status);
-          data.item.favorite       = Number(data.item.favorite);
-          data.item.type           = Number(data.item.type);
+          data.item.type = Number(data.item.type);
           if (data.item.thumb_url.length > 0) {
             data.item.thumbnail_url = data.extra.KIOSKO_IMG_URL + data.item.path + '/' + data.item.thumb_url;
           }
