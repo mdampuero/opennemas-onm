@@ -4,12 +4,11 @@
   angular.module('onm.categorySelector', [ 'ui.select' ])
 
     /**
-     * $scope.categories
      * @ngdoc directive
-     * @name  onmTag
+     * @name  onmCategorySelector
      *
      * @description
-     *   Directive to create forms dynamically.
+     *   Directive to create show a category selector dynamically.
      */
     .directive('onmCategorySelector', [
       function() {
@@ -34,7 +33,7 @@
           link: function($scope) {
             /**
              * @function groupCategories
-             * @memberOf ArticleListCtrl
+             * @memberOf onmCategorySelector
              *
              * @description
              *   Groups categories in the ui-select.
