@@ -238,7 +238,7 @@ class CoverController extends Controller
                 'tag_ids'        => $request->request->get('tag_ids', '')
             ];
 
-            if (!$request->request->get('cover') && !empty($cover->name)) {
+            if (!$request->request->get('thumb_url') && empty($cover->name)) {
                 $coverFile  = $cover->kiosko_path . $cover->path . $cover->name;
                 $coverThumb = $cover->kiosko_path . $cover->path . $cover->thumb_url;
 
@@ -256,7 +256,7 @@ class CoverController extends Controller
             }
 
             // Handle new file
-            if ($request->files->get('cover')) {
+            if ($request->files->get('cover') && $request->files->get('thumbnail')) {
                 $data['name'] = date('His') . '-' . $data['category'] . '.pdf';
 
                 $path = $cover->kiosko_path . $cover->path;
@@ -279,7 +279,7 @@ class CoverController extends Controller
                     );
                 }
 
-                $cover->createThumb($data['name'], $cover->path);
+                $cover->saveThumbnail($path, $data['name'], $request->files->get('thumbnail'));
             }
 
             $cover->update($data);

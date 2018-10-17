@@ -42,7 +42,8 @@
           price: 0,
           type: 0,
           file: '',
-          thumbnail: '',
+          thumbnail: null,
+          cover: null,
         };
 
         $scope.files = [];
@@ -64,29 +65,24 @@
         };
 
         /**
-         * @function getData
-         * @memberOf SubscriberCtrl
+         * @function convertBase64ImageToFile
+         * @memberOf CoverCtrl
          *
          * @description
-         *   Returns the data to send when saving/updating an item.
+         *  Method to method to convert a base64 encoded image to a File object
          */
-        $scope.getData = function() {
-          // Do not use angular.copy as it doesnt copy some keys in the object
-          var eltoClean = angular.extend({}, $scope.item);
+        var convertBase64ImageToFile = function(dataUrl) {
+          var blobBin = atob(dataUrl.split(',')[1]);
+          var array = [];
 
-          var data = cleaner.clean(eltoClean);
+          for (var i = 0; i < blobBin.length; i++) {
+            array.push(blobBin.charCodeAt(i));
+          }
 
-          var formData = new FormData();
-
-          angular.forEach(data, function(value, key) {
-            formData.append(key, value);
-          });
-
-          angular.forEach($scope.files, function(value, key) {
-            formData.append('file' + key, value);
-          });
-
-          return formData;
+          return new File(
+            [ new Blob([ new Uint8Array(array) ], { type: 'image/jpg' }) ],
+            'image.jpg'
+          );
         };
 
         /**
@@ -106,6 +102,9 @@
           data.item.content_status = Number(data.item.content_status);
           data.item.favorite       = Number(data.item.favorite);
           data.item.type           = Number(data.item.type);
+          if (data.item.thumb_url.length > 0) {
+            data.item.thumbnail_url = data.extra.KIOSKO_IMG_URL + data.item.path + '/' + data.item.thumb_url;
+          }
 
           $scope.item = angular.extend($scope.item, data.item);
         };
@@ -115,16 +114,37 @@
          * @memberOf CoverCtrl
          *
          * @description
-         *  Method to method to retrieve th title for the autosuggested words
+         *  Method to retrieve text to calculate tags from
          */
         $scope.getTagsAutoSuggestedFields = function() {
           return $scope.title;
         };
 
+        /**
+         * @function unsetCover
+         * @memberOf CoverCtrl
+         *
+         * @description
+         *  Method to unset the cover information
+         */
+        $scope.unsetCover = function() {
+          $scope.item.cover = null;
+          $scope.item.thumbnail = null;
+          $scope.item.thumbnail_url = null;
+          $scope.item.thumb_url = null;
+        };
+
+        /**
+         * @function generateThumbnailFromPDF
+         * @memberOf CoverCtrl
+         *
+         * @description
+         *  Method to generate a thumbnail from a pdf
+         */
         $scope.generateThumbnailFromPDF = function() {
           var file = document.getElementById('cover-file-input').files[0];
 
-          $scope.files.push(file);
+          $scope.item.cover = file;
 
           if (!file) {
             document.getElementById('thumbnail').src = null;
@@ -149,7 +169,7 @@
                   var viewport = page.getViewport(1.0);
                   var context = canvas.getContext('2d');
 
-                  viewport = page.getViewport(300 / viewport.width);
+                  // viewport = page.getViewport(300 / viewport.width);
 
                   canvas.height = viewport.height;
                   canvas.width = viewport.width;
@@ -158,12 +178,11 @@
                     canvasContext: context,
                     viewport: viewport
                   }).then(function() {
-                    var info = canvas.toDataURL();
+                    var dataUrl = canvas.toDataURL();
 
-                    $scope.thumbnailLoading = false;
-                    $scope.item.thumbnail = info;
-                    document.getElementById('thumbnail').src = info;
-                  }).catch(function() {
+                    $scope.item.thumbnail = convertBase64ImageToFile(dataUrl);
+                    $scope.item.thumbnail_url = dataUrl;
+
                     $scope.thumbnailLoading = false;
                   });
                 });

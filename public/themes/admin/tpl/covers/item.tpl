@@ -90,7 +90,6 @@ jQuery(document).ready(function($) {
                 <label for="date" class="form-label">{t}File{/t}</label>
                 <div class="controls">
                   <div class="fileinput" ng-class="{ 'fileinput-exists': item.name, 'fileinput-new': !item.name }" data-trigger="fileinput">
-
                     <div class="fileinput-new thumbnail text-center" style="padding: 5px 60px">
                       {t}Pick a file{/t}
                     </div>
@@ -100,7 +99,7 @@ jQuery(document).ready(function($) {
                       <h3 class="spinner-text">{t}Generating thumbnail{/t}...</h3>
                     </div>
 
-                    <img id="thumbnail" class="thumbnail" ng-show="!thumbnailLoading || item.thumbnail.length > 0">
+                    <img id="thumbnail" ng-src="[% item.thumbnail_url %]" class="thumbnail" ng-show="!thumbnailLoading && item.thumbnail_url">
 
                     <div>
                       <span class="btn btn-file">
@@ -110,7 +109,7 @@ jQuery(document).ready(function($) {
                         {* <input type="hidden" name="cover" class="file-input" id="cover-file" value="1" ng-model="item.cover_thumbnail"> *}
                         <input type="file" class="hidden" name="thumbnail" ng-model="item.cover_thumbnail">
                       </span>
-                      <a href="#" class="btn btn-danger fileinput-exists delete" data-dismiss="fileinput" ng-click="item.thumbnail = null">
+                      <a href="#" class="btn btn-danger fileinput-exists delete" data-dismiss="fileinput" ng-click="unsetCover()">
                         <i class="fa fa-trash-o"></i>
                         {t}Remove{/t}
                       </a>
@@ -134,9 +133,74 @@ jQuery(document).ready(function($) {
                   <textarea name="body" id="body" ng-model="item.description" onm-editor onm-editor-preset="simple"  class="form-control" rows="15"></textarea>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="row">
+            <div class="grid simple">
+              <div class="grid-body">
 
-              <div class="row">
-                <div class="form-group col-xs-12 col-sm-6">
+                <div class="form-group">
+                  <div class="checkbox">
+                    <input ng-model="item.content_status" type="checkbox" value="1" id="content_status" name="content_status">
+                    <label for="content_status">{t}Published{/t}</label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="checkbox">
+                    <input ng-model="item.favorite" type="checkbox" value="1" id="favorite" name="favorite">
+                    <label for="favorite">{t}Favorite{/t}</label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="category" class="form-label">{t}Category{/t}</label>
+                  <div class="controls">
+                    <onm-category-selector ng-model="item.category" categories="data.extra.categories" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="metadata" class="form-label">{t}Keywords{/t}</label>
+                  <span class="help">{t}List of words separated by commas{/t}.</span>
+                  <div class="controls">
+                    <onm-tag ng-model="item.tag_ids" locale="data.extra.locale" tags-list="data.extra.tags" check-new-tags="newAndExistingTagsFromTagList" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="slug">
+                    {t}Slug{/t}
+                  </label>
+                  <span class="m-t-2 pull-right" ng-if="item.id">
+                    <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/[% item.uri %]" target="_blank">
+                      <i class="fa fa-external-link"></i>
+                      {t}Link{/t}
+                    </a>
+                  </span>
+                  <div class="controls">
+                    <input class="form-control" id="slug" name="slug" ng-model="item.slug" type="text" ng-disabled="item.content_status != '0'">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid simple">
+              <div class="grid-body">
+
+                <div class="form-group">
+                  <label for="date" class="form-label">{t}Date{/t}</label>
+                  <div class="controls">
+                    <div class="input-group">
+                        <input class="form-control" datetime-picker datetime-picker-format="YYYY-MM-DD" id="date" name="date" ng-model="item.date" type="datetime" required>
+                      <span class="input-group-addon" id="basic-addon2"><span class="fa fa-calendar"></span></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
                   <label for="price" class="form-label">{t}Price{/t}</label>
                   <span class="help">{t}Split decimals with a dot{/t}.</span>
                   <div class="controls">
@@ -144,59 +208,13 @@ jQuery(document).ready(function($) {
                   </div>
                 </div>
 
-                <div class="form-group col-xs-12 col-sm-6">
+                <div class="form-group">
                   <label for="type" class="form-label">{t}Type{/t}</label>
                   <div class="controls">
                     <select name="type" id="type" required ng-model="item.type">
                       <option ng-value="0" ng-selected="item.type == false">{t}Item{/t}</option>
                       <option ng-value="1" ng-selected="item.type == true">{t}Subscription{/t}</option>
                     </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="grid simple">
-            <div class="grid-body">
-
-              <div class="form-group">
-                <div class="checkbox">
-                  <input ng-model="item.content_status" type="checkbox" value="1" id="content_status" name="content_status">
-                  <label for="content_status">{t}Published{/t}</label>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <div class="checkbox">
-                  <input ng-model="item.favorite" type="checkbox" value="1" id="favorite" name="favorite">
-                  <label for="favorite">{t}Favorite{/t}</label>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="category" class="form-label">{t}Category{/t}</label>
-                <div class="controls">
-                  <onm-category-selector ng-model="item.category" categories="data.extra.categories" />
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="metadata" class="form-label">{t}Keywords{/t}</label>
-                <span class="help">{t}List of words separated by commas{/t}.</span>
-                <div class="controls">
-                  <onm-tag ng-model="item.tag_ids" locale="data.extra.locale" tags-list="data.extra.tags" check-new-tags="newAndExistingTagsFromTagList" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="date" class="form-label">{t}Date{/t}</label>
-                <div class="controls">
-                  <div class="input-group">
-                      <input class="form-control" datetime-picker datetime-picker-format="YYYY-MM-DD" id="date" name="date" ng-model="item.date" type="datetime" required>
-                    {* <input class="form-control" ng-model="item.date" type="text" id="date" name="date" required placeholder="{t}Click here to pick a date{/t}" aria-describedby="basic-addon2"> *}
-                    <span class="input-group-addon" id="basic-addon2"><span class="fa fa-calendar"></span></span>
                   </div>
                 </div>
               </div>

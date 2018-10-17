@@ -23,49 +23,49 @@ class Kiosko extends Content
      *
      * @var int
      */
-    public $pk_kiosko   = null;
+    public $pk_kiosko = null;
 
     /**
      * The name of the kiosko
      *
      * @var string
      */
-    public $name        = null;
+    public $name = null;
 
     /**
      * The path to the kiosko file
      *
      * @var string
      */
-    public $path        = null;
+    public $path = null;
 
     /**
      * The publishing date of the kiosko
      *
      * @var string
      */
-    public $date        = null;
+    public $date = null;
 
     /**
      * Whether if this kiosko is marked as favorite or not
      *
      * @var boolean
      */
-    public $favorite    = 0;
+    public $favorite = 0;
 
     /**
      * The price of this kiosko
      *
      * @var int
      */
-    public $price       = 0;
+    public $price = 0;
 
     /**
      * The type of kiosko
      *
      * @var string
      */
-    public $type        = 0;
+    public $type = 0;
 
     /**
      * The path to the kiosko
@@ -82,7 +82,7 @@ class Kiosko extends Content
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Cover');
-        $this->kiosko_path = INSTANCE_MEDIA_PATH . 'kiosko' . DS;
+        $this->kiosko_path            = INSTANCE_MEDIA_PATH . 'kiosko' . DS;
 
         parent::__construct($id);
     }
@@ -119,7 +119,7 @@ class Kiosko extends Content
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
-                .'LEFT JOIN kioskos ON pk_content = pk_kiosko WHERE pk_content = ?',
+                . 'LEFT JOIN kioskos ON pk_content = pk_kiosko WHERE pk_content = ?',
                 [ $id ]
             );
 
@@ -131,7 +131,7 @@ class Kiosko extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error while fetching Kiosko: '.$e->getMessage());
+            error_log('Error while fetching Kiosko: ' . $e->getMessage());
             return false;
         }
     }
@@ -167,7 +167,7 @@ class Kiosko extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error while creating Kiosko: '.$e->getMessage());
+            error_log('Error while creating Kiosko: ' . $e->getMessage());
             return false;
         }
     }
@@ -197,7 +197,7 @@ class Kiosko extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error while updating Kiosko: '.$e->getMessage());
+            error_log('Error while updating Kiosko: ' . $e->getMessage());
             return false;
         }
     }
@@ -229,57 +229,26 @@ class Kiosko extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error while removing Kiosko: '.$e->getMessage());
+            error_log('Error while removing Kiosko: ' . $e->getMessage());
             return false;
         }
     }
 
     /**
-     * Creates the PDF thumbnail for the kiosko.
+     * Saves a  the PDF thumbnail for the kiosko.
      *
      * @param string $file_pdf The filename to the pdf file.
      * @param string $path     The path to the pdf file.
      */
-    public function createThumb($file_pdf, $path)
+    public function saveThumbnail($path, $fileName, $file)
     {
-        $imageFileName = basename($file_pdf, '.pdf') . '.jpg';
-        $tmpName       = '/tmp/' . basename($file_pdf, '.pdf') . '.png';
-
-        // Thumbnail first page (see [0])
-        if (!file_exists($this->kiosko_path . $path . $file_pdf)) {
+        if (!file_exists($path . $fileName)) {
             return;
         }
 
-        try {
-            $imagick = new \Imagick($this->kiosko_path . $path . $file_pdf . '[0]');
-            $imagick->setImageBackgroundColor('white');
-            $imagick->thumbnailImage(650, 0);
+        $finalName = $path . basename($fileName, '.pdf') . '.jpg';
 
-            // Deprecated: $imagick = $imagick->flattenImages();
-            // $imagick->setImageAlphaChannel(imagick::ALPHACHANNEL_REMOVE);
-            // This constant used above is not supported for all versions of Imagick
-            // Use number (11) to solve problem
-            // http://php.net/manual/en/imagick.flattenimages.php#116956
-            $imagick->setImageAlphaChannel(11);
-            $imagick->mergeImageLayers(imagick::LAYERMETHOD_FLATTEN);
-            $imagick->setFormat('png');
-
-            // First, save to PNG (*.pdf => /tmp/xxx.png)
-            $imagick->writeImage($tmpName);
-
-            // Finally, save to jpg (/tmp/xxx.png => *.jpg) to avoid
-            // problems with image
-            $imagick = new \Imagick($tmpName);
-            $imagick->writeImage($this->kiosko_path . $path . '650-' . $imageFileName);
-            $imagick->thumbnailImage(180, 0);
-
-            // Write the new image to a file
-            $imagick->writeImage($this->kiosko_path.$path.$imageFileName);
-
-            //remove temp image
-            unlink($tmpName);
-        } catch (\Exception $e) {
-        }
+        return $file->isValid() && $file->move(realpath($path), $finalName);
     }
 
     /**
@@ -291,7 +260,7 @@ class Kiosko extends Content
     {
         $items = [];
         $sql   = 'SELECT DISTINCT MONTH(date) as month, YEAR(date) as year'
-            .  ' FROM `kioskos` ORDER BY year DESC, month DESC';
+            . ' FROM `kioskos` ORDER BY year DESC, month DESC';
 
         $rs = getService('dbal_connection')->fetchAll($sql);
 
