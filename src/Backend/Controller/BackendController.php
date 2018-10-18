@@ -42,7 +42,7 @@ class BackendController extends Controller
      */
     public function createAction()
     {
-        $this->checkSecurity($this->extension, $this->permissions['create']);
+        $this->checkSecurity($this->extension, $this->getPermission('create'));
 
         return $this->render($this->resource . '/item.tpl');
     }
@@ -54,7 +54,7 @@ class BackendController extends Controller
      */
     public function listAction()
     {
-        $this->checkSecurity($this->extension, $this->permissions['list']);
+        $this->checkSecurity($this->extension, $this->getPermission('list'));
 
         return $this->render($this->resource . '/list.tpl');
     }
@@ -68,8 +68,21 @@ class BackendController extends Controller
      */
     public function showAction($id)
     {
-        $this->checkSecurity($this->extension, $this->permissions['update']);
+        $this->checkSecurity($this->extension, $this->getPermission('update'));
 
         return $this->render($this->resource . '/item.tpl', [ 'id' => $id ]);
+    }
+
+    /**
+     * Returns the permission basing on the action name.
+     *
+     * @param string $action The action name.
+     *
+     * @return mixed The permission name, if present. Null otherwise.
+     */
+    protected function getPermission($action)
+    {
+        return array_key_exists($action, $this->permissions) ?
+            $this->permissions[$action] : null;
     }
 }
