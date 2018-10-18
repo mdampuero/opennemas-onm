@@ -9,9 +9,10 @@
  */
 namespace Common\Core\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as SymfonyController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Controller is a simple implementation of a Controller.
@@ -30,6 +31,30 @@ class Controller extends SymfonyController
     public function __get($name)
     {
         return $this->container->get($name);
+    }
+
+    /**
+     * Checks if the action can be executed basing on the extension and action
+     * to execute.
+     *
+     * @param string $extension  The required extension.
+     * @param string $permission The required permission.
+     *
+     * @throws AccessDeniedException If the action can not be executed.
+     */
+    protected function checkSecurity($extension, $permission = null)
+    {
+        if (!empty($extension)
+            && !$this->get('core.security')->hasExtension($extension)
+        ) {
+            throw new AccessDeniedException();
+        }
+
+        if (!empty($permission)
+            && !$this->get('core.security')->hasPermission($permission)
+        ) {
+            throw new AccessDeniedException();
+        }
     }
 
     /**

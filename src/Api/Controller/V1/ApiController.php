@@ -12,7 +12,6 @@ namespace Api\Controller\V1;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ApiController extends Controller
 {
@@ -249,30 +248,6 @@ class ApiController extends Controller
         $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Checks if the action can be executed basing on the extension and action
-     * to execute.
-     *
-     * @param string $extension  The required extension.
-     * @param string $permission The required permission.
-     *
-     * @throws AccessDeniedException If the action can not be executed.
-     */
-    protected function checkSecurity($extension, $permission = null)
-    {
-        if (!empty($extension)
-            && !$this->get('core.security')->hasExtension($extension)
-        ) {
-            throw new AccessDeniedException();
-        }
-
-        if (!empty($permission)
-            && !$this->get('core.security')->hasPermission($permission)
-        ) {
-            throw new AccessDeniedException();
-        }
     }
 
     /**
