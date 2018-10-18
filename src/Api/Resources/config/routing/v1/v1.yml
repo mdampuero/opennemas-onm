@@ -1,9 +1,9 @@
-api_v1_backend_author:
-    resource: '@ApiBundle/Resources/config/routing/v1/backend/author.yml'
-    prefix:   /backend
-
 api_v1_backend_article:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/article.yml'
+    prefix:   /backend
+
+api_v1_backend_author:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/author.yml'
     prefix:   /backend
 
 api_v1_backend_file:
@@ -38,12 +38,12 @@ api_v1_backend_user_group:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/user_group.yml'
     prefix:   /backend
 
-api_v1_frontend_tool:
-    resource: '@ApiBundle/Resources/config/routing/v1/backend/tool.yml'
-    prefix:   /
-
 api_v1_frontend_advertisement:
     resource: '@ApiBundle/Resources/config/routing/v1/frontend/advertisement.yml'
 
 api_v1_frontend_tag:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/tag.yml'
+
+api_v1_frontend_tool:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/tool.yml'
+    prefix:   /
