@@ -747,6 +747,10 @@ backend_static_pages:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/static_page.yml'
 
+backend_store:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/store.yml'
+
 backend_subscriber:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/subscriber.yml'
@@ -755,9 +759,9 @@ backend_subscription:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/subscription.yml'
 
-backend_store:
+backend_tag:
     prefix:   /
-    resource: '@BackendBundle/Resources/config/routing/store.yml'
+    resource: '@BackendBundle/Resources/config/routing/tag.yml'
 
 backend_theme:
     prefix:   /
@@ -770,7 +774,3 @@ backend_user:
 backend_user_group:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/user_group.yml'
-
-backend_tag:
-    prefix:   /
-    resource: '@BackendBundle/Resources/config/routing/tag.yml'
