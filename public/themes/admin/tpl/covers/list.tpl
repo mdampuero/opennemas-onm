@@ -215,12 +215,12 @@
                   <span uib-tooltip="{t}Last editor{/t} [% shvs.extra.authors[content.fk_user_last_editor].name %]">[% content.title%]</span>
                   <div class="listing-inline-actions">
                     {acl isAllowed="VIDEO_UPDATE"}
-                      <a class="link" href="[% edit(content.id, 'backend_cover_show') %]">
+                      <a class="btn btn-small" href="[% edit(content.id, 'backend_cover_show') %]">
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
                     {/acl}
                     {acl isAllowed="VIDEO_DELETE"}
-                      <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
+                      <button class="btn btn-danger btn-small" ng-click="sendToTrash(content)" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                       </button>
                     {/acl}
