@@ -15,11 +15,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 
 /**
- * Handles the actions for handling the pdf covers
+ * Handles the actions for handling the newstand
  *
  * @package Backend_Controllers
  */
-class CoverController extends Controller
+class NewsstandController extends Controller
 {
     /**
      * Returns the data to create a new newsletter.
@@ -35,7 +35,7 @@ class CoverController extends Controller
     }
 
     /**
-     * Displays the cover information form
+     * Displays the kiosko information form
      *
      * @param Request $request the request object
      *
@@ -154,7 +154,7 @@ class CoverController extends Controller
             $response->headers->set(
                 'Location',
                 $this->generateUrl(
-                    'api_v1_backend_cover_show',
+                    'api_v1_backend_newsstand_show',
                     [ 'id' => $content->id ]
                 )
             );
@@ -168,7 +168,7 @@ class CoverController extends Controller
     }
 
     /**
-     * Updates the cover information provided by POST request
+     * Updates the kiosko information provided by POST request
      *
      * @param Request $request the request object
      *
@@ -184,14 +184,14 @@ class CoverController extends Controller
         $id = $request->query->getDigits('id');
 
         try {
-            $cover = new \Kiosko($id);
+            $content = new \Kiosko($id);
 
-            if ($cover->id == null) {
+            if ($content->id == null) {
                 throw new \Exception(_('Cover id not valid.'));
             }
 
             if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
-                && !$cover->isOwner($this->getUser()->id)
+                && !$content->isOwner($this->getUser()->id)
             ) {
                 throw new \Exception(_("You can't modify this cover because you don't have enough privileges."));
             }
@@ -210,15 +210,15 @@ class CoverController extends Controller
                 'type'           => $postReq->getDigits('type', 0),
                 'favorite'       => $postReq->getDigits('favorite', 0),
                 'category'       => $postReq->getDigits('category', 0),
-                'name'           => $cover->name,
-                'thumb_url'      => $cover->thumb_url,
+                'name'           => $content->name,
+                'thumb_url'      => $content->thumb_url,
                 'fk_user_last_editor' => $this->getUser()->id,
                 'tag_ids'        => $request->request->get('tag_ids', '')
             ];
 
-            if (!$request->request->get('thumb_url') && empty($cover->name)) {
-                $coverFile  = $cover->kiosko_path . $cover->path . $cover->name;
-                $coverThumb = $cover->kiosko_path . $cover->path . $cover->thumb_url;
+            if (!$request->request->get('thumb_url') && empty($content->name)) {
+                $coverFile  = $content->kiosko_path . $content->path . $content->name;
+                $coverThumb = $content->kiosko_path . $content->path . $content->thumb_url;
 
                 // Remove old files if fileinput changed
                 if (file_exists($coverFile)) {
@@ -237,7 +237,7 @@ class CoverController extends Controller
             if ($request->files->get('cover') && $request->files->get('thumbnail')) {
                 $data['name'] = date('His') . '-' . $data['category'] . '.pdf';
 
-                $path = $cover->kiosko_path . $cover->path;
+                $path = $content->kiosko_path . $content->path;
 
                 // Create folder if it doesn't exist
                 if (!file_exists($path)) {
@@ -257,10 +257,10 @@ class CoverController extends Controller
                     );
                 }
 
-                $cover->saveThumbnail($path, $data['name'], $request->files->get('thumbnail'));
+                $content->saveThumbnail($path, $data['name'], $request->files->get('thumbnail'));
             }
 
-            $cover->update($data);
+            $content->update($data);
 
             $msg->add(_('Item saved successfully'), 'success');
         } catch (\Exception $e) {
@@ -286,16 +286,16 @@ class CoverController extends Controller
         $page = $request->query->getDigits('page', 1);
 
         if (!empty($id)) {
-            $cover = new \Kiosko($id);
+            $content = new \Kiosko($id);
 
             // Delete related and relations
             getService('related_contents')->deleteAll($id);
 
-            $cover->delete($id, $this->getUser()->id);
+            $content->delete($id, $this->getUser()->id);
 
             $this->get('session')->getFlashBag()->add(
                 'successs',
-                sprintf(_("Cover %s deleted successfully."), $cover->title)
+                sprintf(_("Cover %s deleted successfully."), $content->title)
             );
         } else {
             $this->get('session')->getFlashBag()->add(
@@ -305,7 +305,7 @@ class CoverController extends Controller
         }
 
         return $this->redirect($this->generateUrl('backend_covers', [
-            'category' => $cover->category,
+            'category' => $content->category,
             'page'     => $page
         ]));
     }
@@ -336,46 +336,9 @@ class CoverController extends Controller
         }
 
         return $this->render('covers/list.tpl', [
-            'categories' => $categories,
+            'categories'     => $categories,
             'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR
         ]);
-    }
-
-    /**
-     * Save positions for widget
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('KIOSKO_MANAGER')
-     *     and hasPermission('KIOSKO_ADMIN')")
-     */
-    public function savePositionsAction(Request $request)
-    {
-        $positions = $request->query->get('positions');
-
-        $result = true;
-        if (isset($positions)
-            && is_array($positions)
-            && count($positions) > 0
-        ) {
-            $pos = 1;
-
-            foreach ($positions as $id) {
-                $cover  = new \Kiosko($id);
-                $result = $result && $cover->setPosition($pos);
-                $pos++;
-            }
-        }
-
-        if ($result) {
-            $msg = _("Positions saved successfully.");
-        } else {
-            $msg = _("Unable to save the new positions. Please contact with your system administrator.");
-        }
-
-        return new Response($msg);
     }
 
     /**
@@ -408,17 +371,5 @@ class CoverController extends Controller
         $extra['locale'] = $this->get('core.locale')->getRequestLocale('frontend');
 
         return $extra;
-    }
-
-    /**
-     * Cleans and formats the newsletter template values
-     *
-     * @param array $values the RAW values to clean
-     *
-     * @return array the cleaned values
-     **/
-    public function parseValues($values)
-    {
-        return $values;
     }
 }

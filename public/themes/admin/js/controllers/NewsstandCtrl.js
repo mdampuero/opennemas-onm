@@ -18,7 +18,7 @@
      * @description
      *   Check billing information when saving user.
      */
-    .controller('CoverCtrl', [
+    .controller('NewsstandCtrl', [
       '$controller', '$scope', 'oqlEncoder', 'oqlDecoder', 'messenger', 'cleaner',
       function($controller, $scope, oqlEncoder, oqlDecoder, messenger, cleaner) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
@@ -58,11 +58,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          create:   'api_v1_backend_cover_create',
-          redirect: 'backend_cover_show',
-          save:     'api_v1_backend_cover_save',
-          show:     'api_v1_backend_cover_show',
-          update:   'api_v1_backend_cover_update'
+          create:   'api_v1_backend_newsstand_create',
+          redirect: 'backend_newsstand_show',
+          save:     'api_v1_backend_newsstand_save',
+          show:     'api_v1_backend_newsstand_show',
+          update:   'api_v1_backend_newsstand_update'
         };
 
         /**

@@ -668,9 +668,9 @@ backend_category:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/category.yml'
 
-backend_cover:
+backend_newsstand:
     prefix:   /
-    resource: '@BackendBundle/Resources/config/routing/cover.yml'
+    resource: '@BackendBundle/Resources/config/routing/newsstand.yml'
 
 backend_comment:
     prefix:   /

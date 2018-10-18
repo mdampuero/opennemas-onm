@@ -207,10 +207,10 @@ $menuXml = [
                 'privilege'   => 'ALBUM_ADMIN',
             ],
             [
-                'id'          => 'cover_manager',
+                'id'          => 'newsstand_manager',
                 'title'       => _('News Stand'),
                 'icon'        => 'fa fa-newspaper-o',
-                'link'        => url('backend_covers'),
+                'link'        => url('backend_newsstands'),
                 'module_name' => 'KIOSKO_MANAGER',
                 'privilege'   => 'KIOSKO_ADMIN',
             ],

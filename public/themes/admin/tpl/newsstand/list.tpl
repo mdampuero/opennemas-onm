@@ -33,7 +33,7 @@
             <li class="quicklinks"><span class="h-seperate"></span></li>
             {acl isAllowed="KIOSKO_CREATE"}
             <li class="m-l-10">
-              <a class="btn btn-primary" href="{url name=backend_cover_create}" title="{t}New cover{/t}" id="create-button">
+              <a class="btn btn-primary" href="{url name=backend_newsstand_create}" title="{t}New cover{/t}" id="create-button">
                 <i class="fa fa-plus m-r-5"></i>{t}Create{/t}
               </a>
             </li>
@@ -215,7 +215,7 @@
                   <span uib-tooltip="{t}Last editor{/t} [% shvs.extra.authors[content.fk_user_last_editor].name %]">[% content.title%]</span>
                   <div class="listing-inline-actions">
                     {acl isAllowed="VIDEO_UPDATE"}
-                      <a class="btn btn-small" href="[% edit(content.id, 'backend_cover_show') %]">
+                      <a class="btn btn-small" href="[% edit(content.id, 'backend_newsstand_show') %]">
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
                     {/acl}

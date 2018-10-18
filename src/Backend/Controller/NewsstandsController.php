@@ -19,7 +19,7 @@ use Common\Core\Controller\Controller;
  *
  * @package Backend_Controllers
  */
-class CoversController extends Controller
+class NewsstandsController extends Controller
 {
     /**
      * Shows the list of the
@@ -31,13 +31,13 @@ class CoversController extends Controller
      */
     public function listAction()
     {
-        return $this->render('covers/list.tpl', array_merge($this->getExtraData(), [
+        return $this->render('newsstand/list.tpl', array_merge($this->getExtraData(), [
             'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
         ]));
     }
 
     /**
-     * Show the list of the covers with favorite flag enabled
+     * Show the list of the kiosko with favorite flag enabled
      *
      * @return Response the response object
      *
@@ -48,7 +48,7 @@ class CoversController extends Controller
     {
         $category = 'widget';
 
-        return $this->render('covers/list.tpl', [
+        return $this->render('newsstand/list.tpl', [
             'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
         ]);
     }
@@ -63,7 +63,7 @@ class CoversController extends Controller
      */
     public function createAction()
     {
-        return $this->render('covers/item.tpl');
+        return $this->render('newsstand/item.tpl');
     }
 
     /**
@@ -75,11 +75,11 @@ class CoversController extends Controller
      */
     public function showAction($id)
     {
-        return $this->render('covers/item.tpl', [ 'id' => $id ]);
+        return $this->render('newsstand/item.tpl', [ 'id' => $id ]);
     }
 
     /**
-     * Handles the configuration of the covers module
+     * Handles the configuration of the kiosko module
      *
      * @param Request $request the request object
      *
@@ -93,7 +93,7 @@ class CoversController extends Controller
         $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
 
         if ('POST' != $request->getMethod()) {
-            return $this->render('covers/config.tpl', [
+            return $this->render('newsstand/config.tpl', [
                 'configs' => $ds->get([ 'kiosko_settings' ])
             ]);
         }
@@ -114,7 +114,7 @@ class CoversController extends Controller
         }
 
 
-        return $this->redirect($this->generateUrl('backend_covers_config'));
+        return $this->redirect($this->generateUrl('backend_newsstand_config'));
     }
 
     /**

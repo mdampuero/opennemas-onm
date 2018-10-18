@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
 {/block}
 
 {block name="content"}
-<form name="form" method="POST" ng-controller="CoverCtrl"  ng-controller="NewsletterTemplateCtrl" ng-init="getItem({$id});" enctype="multipart/form-data">
+<form name="form" method="POST" ng-controller="NewsstandCtrl" ng-init="getItem({$id});" enctype="multipart/form-data">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
