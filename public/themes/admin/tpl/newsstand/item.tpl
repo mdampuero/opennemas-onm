@@ -36,7 +36,7 @@ jQuery(document).ready(function($) {
           <li class="quicklinks">
             <a class="no-padding" href="{url name=backend_newsstands}" title="{t}Go back to list{/t}">
               <h4>
-                {t}Newsstand{/t}
+                {t}Newsstands{/t}
               </h4>
             </a>
           </li>
@@ -86,7 +86,7 @@ jQuery(document).ready(function($) {
                 <div class="col-md-4">
                   <div class="thumbnail-wrapper">
                     <div>
-                      <div class="fileinput" ng-class="{ 'fileinput-exists': item.name, 'fileinput-new': !item.name }" data-trigger="fileinput" style="width:100%;">
+                      <div class="fileinput" ng-class="{ 'fileinput-exists': item.name, 'fileinput-new': !item.name }" data-trigger="fileinput" style="width:80%; margin:0 auto; display:block">
 
                         <div class="thumbnail" style="width:100%;">
                           <div class="fileinput-new text-center" style="padding: 60px; background: #eee;" >
@@ -139,6 +139,16 @@ jQuery(document).ready(function($) {
                     </div>
                   </div>
 
+                  <div class="form-group">
+                    <label for="date" class="form-label">{t}Date{/t}</label>
+                    <div class="controls">
+                      <div class="input-group">
+                          <input class="form-control" datetime-picker datetime-picker-format="YYYY-MM-DD" id="date" name="date" ng-model="item.date" type="datetime" required>
+                        <span class="input-group-addon" id="basic-addon2"><span class="fa fa-calendar"></span></span>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
@@ -188,7 +198,7 @@ jQuery(document).ready(function($) {
                 <div class="form-group">
                   <label for="category" class="form-label">{t}Category{/t}</label>
                   <div class="controls">
-                    <onm-category-selector ng-model="item.category" categories="data.extra.categories" />
+                    <onm-category-selector ng-model="item.category" categories="data.extra.categories" placeholder-string="{t}Select a category{/t}" required />
                   </div>
                 </div>
 
@@ -212,20 +222,6 @@ jQuery(document).ready(function($) {
                   </span>
                   <div class="controls">
                     <input class="form-control" id="slug" name="slug" ng-model="item.slug" type="text" ng-disabled="item.content_status != '0'">
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="grid simple">
-              <div class="grid-body">
-                <div class="form-group">
-                  <label for="date" class="form-label">{t}Date{/t}</label>
-                  <div class="controls">
-                    <div class="input-group">
-                        <input class="form-control" datetime-picker datetime-picker-format="YYYY-MM-DD" id="date" name="date" ng-model="item.date" type="datetime" required>
-                      <span class="input-group-addon" id="basic-addon2"><span class="fa fa-calendar"></span></span>
-                    </div>
                   </div>
                 </div>
               </div>

@@ -108,7 +108,7 @@ class NewsstandController extends Controller
             'date'           => $postInfo->filter('date', null, FILTER_SANITIZE_STRING),
             'price'          => $postInfo->filter('price', 0.0, FILTER_SANITIZE_NUMBER_FLOAT),
             'fk_publisher'   => (int) $this->getUser()->id,
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tag_ids'        => $request->request->get('tag_ids', '')
         ];
 
         $content = new \Kiosko();
@@ -346,7 +346,7 @@ class NewsstandController extends Controller
      *
      * @return array
      **/
-    private function getExtraData()
+    private function getExtraData($allCategories)
     {
         $extra = [];
 
@@ -362,8 +362,8 @@ class NewsstandController extends Controller
 
         $extra['categories'] = $converter->responsify($categories);
         array_unshift($extra['categories'], [
-            'pk_content_category' => null,
-            'title'               => _('Select a category...')
+            'pk_content_category' => '',
+            'title'               => $allCategories ? _('All') : _('Select a category...')
         ]);
 
         $extra['tags'] = [];
