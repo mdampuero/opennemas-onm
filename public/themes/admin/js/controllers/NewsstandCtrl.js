@@ -168,7 +168,8 @@
                   var viewport = page.getViewport(1.0);
                   var context = canvas.getContext('2d');
 
-                  // viewport = page.getViewport(300 / viewport.width);
+                  // Limit the size of the thumbnail
+                  viewport = page.getViewport(650 / viewport.width);
 
                   canvas.height = viewport.height;
                   canvas.width = viewport.width;
