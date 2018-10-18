@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=backend_covers_config}" method="POST">
+<form action="{url name=backend_newsstands_config}" method="POST">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -12,7 +12,7 @@
             </h4>
           </li>
           <li class="quicklinks">
-            <a class="no-padding" href="{url name=backend_covers}" title="{t}Go back to list{/t}">
+            <a class="no-padding" href="{url name=backend_newsstands}" title="{t}Go back to list{/t}">
               <h4>
                 {t}Covers{/t}
               </h4>

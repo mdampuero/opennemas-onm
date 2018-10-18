@@ -13,7 +13,7 @@
           </li>
           <li class="quicklinks">
             <h4>
-              <a class="no-padding" href="{url name=backend_covers}" title="{t}Go back to list{/t}">
+              <a class="no-padding" href="{url name=backend_newsstands}" title="{t}Go back to list{/t}">
                 {t}Covers{/t}
               </a>
             </h4>
@@ -24,7 +24,7 @@
             <li class="quicklinks">
               {acl isAllowed="KIOSKO_ADMIN"}
               <li>
-                <a class="btn btn-link" href="{url name=backend_covers_config}" title="{t}Config covers module{/t}">
+                <a class="btn btn-link" href="{url name=backend_newsstands_config}" title="{t}Config covers module{/t}">
                   <span class="fa fa-cog fa-lg"></span>
                 </a>
               </li>

@@ -304,7 +304,7 @@ class NewsstandController extends Controller
             );
         }
 
-        return $this->redirect($this->generateUrl('backend_covers', [
+        return $this->redirect($this->generateUrl('backend_newsstands', [
             'category' => $content->category,
             'page'     => $page
         ]));
