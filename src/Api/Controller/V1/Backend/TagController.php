@@ -25,61 +25,6 @@ class TagController extends ApiController
     protected $service = 'api.service.tag';
 
     /**
-     * {@inheritdoc}
-     */
-    public function deleteAction($id)
-    {
-        // TODO: Uncomment when support for tag permissions
-        //$this->checkSecurity(null, 'TAG_DELETE');
-
-        return parent::deleteAction($id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteSelectedAction(Request $request)
-    {
-        // TODO: Uncomment when support for tag permissions
-        //$this->checkSecurity(null, 'TAG_DELETE');
-
-        return parent::deleteSelectedACtion($request);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function listAction(Request $request)
-    {
-        // TODO: Uncomment when support for tag permissions
-        //$this->checkSecurity(null, 'TAG_ADMIN');
-
-        return parent::listAction($request);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function showAction($id)
-    {
-        // TODO: Uncomment when support for tag permissions
-        //$this->checkSecurity(null, 'TAG_ADMIN');
-
-        return parent::showAction($id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateAction(Request $request, $id)
-    {
-        // TODO: Uncomment when support for tag permissions
-        //$this->checkSecurity(null, 'TAG_ADMIN');
-
-        return parent::updateAction($request, $id);
-    }
-
-    /**
      * Get suggested word.
      *
      * @param Request $request The request object.
