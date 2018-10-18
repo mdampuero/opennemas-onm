@@ -178,7 +178,7 @@
                     canvasContext: context,
                     viewport: viewport
                   }).then(function() {
-                    var dataUrl = canvas.toDataURL();
+                    var dataUrl = canvas.toDataURL('image/jpeg', 0.65);
 
                     $scope.item.thumbnail = convertBase64ImageToFile(dataUrl);
                     $scope.item.thumbnail_url = dataUrl;
