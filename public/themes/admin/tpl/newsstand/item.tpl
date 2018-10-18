@@ -124,7 +124,7 @@ jQuery(document).ready(function($) {
 
               <div class="form-group">
                 <label class="form-label clearfix" for="body">
-                  <div class="pull-left">{t}Summary{/t}</div>
+                  <div class="pull-left">{t}Description{/t}</div>
                 </label>
                 <div class="controls">
                   <textarea name="body" id="body" ng-model="item.description" onm-editor onm-editor-preset="simple"  class="form-control" rows="15"></textarea>
@@ -201,7 +201,7 @@ jQuery(document).ready(function($) {
                   <label for="price" class="form-label">{t}Price{/t}</label>
                   <span class="help">{t}Split decimals with a dot{/t}.</span>
                   <div class="controls">
-                    <input ng-model="item.price" type="number" step="any" id="price" name="price" required />
+                    <input ng-model="item.price" min="0" type="number" step="0.01" id="price" name="price" required />
                   </div>
                 </div>
 

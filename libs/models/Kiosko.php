@@ -148,10 +148,14 @@ class Kiosko extends Content
         $data['price'] = isset($data['price']) ? $data['price'] : 0;
         $data['type']  = isset($data['type']) ? $data['type'] : 0;
 
-        parent::create($data);
+        $conn = getService('dbal_connection');
+
+        $conn->beginTransaction();
 
         try {
-            getService('dbal_connection')->insert(
+            parent::create($data);
+
+            $conn->insert(
                 'kioskos',
                 [
                     'pk_kiosko' => (int) $this->id,
@@ -163,9 +167,14 @@ class Kiosko extends Content
                 ]
             );
 
+            $conn->commit();
+
             return $this;
         } catch (\Exception $e) {
             error_log('Error while creating Kiosko: ' . $e->getMessage());
+
+            $conn->beginTransaction();
+
             return false;
         }
     }

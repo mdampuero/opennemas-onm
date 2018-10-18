@@ -106,7 +106,7 @@ class NewsstandController extends Controller
             'content_status' => (int) $postInfo->getDigits('content_status', 1),
             'favorite'       => (int) $postInfo->getDigits('favorite', 1),
             'date'           => $postInfo->filter('date', null, FILTER_SANITIZE_STRING),
-            'price'          => $postInfo->filter('price', null, FILTER_SANITIZE_NUMBER_FLOAT),
+            'price'          => $postInfo->filter('price', 0.0, FILTER_SANITIZE_NUMBER_FLOAT),
             'fk_publisher'   => (int) $this->getUser()->id,
             'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
@@ -145,7 +145,7 @@ class NewsstandController extends Controller
             }
 
             if (!$content->create($data)) {
-                throw new \Exception(_('Unable to create the file. Try again'));
+                throw new \Exception(_('Unable to create the cover. Try again'));
             }
 
             $msg->add(_('Item saved successfully'), 'success', 201);
