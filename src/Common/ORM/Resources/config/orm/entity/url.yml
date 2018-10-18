@@ -1,0 +1,63 @@
+orm:
+    metadata:
+        -
+            name: Url
+            required:
+                - content_type
+                - enabled
+                - redirect
+                - source
+                - target
+                - type
+            properties:
+                content_type: string
+                enabled:      boolean
+                id:           integer
+                redirect:     boolean
+                source:       string
+                target:       string
+                type:         string
+            converters:
+                default:
+                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.url' ]
+            repositories:
+                instance:
+                    class:     Common\ORM\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.url', '@cache.connection.instance' ]
+            persisters:
+                instance:
+                    class:     Common\ORM\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.url', '@cache.connection.instance' ]
+            mapping:
+                database:
+                    table: urls
+                    columns:
+                        id:
+                            type: integer
+                            options: { default: null, unsigned: true, autoincrement: true }
+                        type:
+                            type:    integer
+                            options: { default: 0, unsigned: true, notnull: true }
+                        source:
+                            type:    string
+                            options: { default: null, length: 1024, notnull: true }
+                        target:
+                            type:    string
+                            options: { default: null, length: 1024, notnull: true }
+                        content_type:
+                            type:    string
+                            options: { default: null, length: 30, notnull: false }
+                        redirect:
+                            type:    boolean
+                            options: { default: 0, notnull: true }
+                        enabled:
+                            type:    boolean
+                            options: { default: 0, notnull: true }
+                    index:
+                        -
+                            name:    PRIMARY
+                            columns: [ id ]
+                            primary: true
+                            unique:  true
+                            flags:   {  }
