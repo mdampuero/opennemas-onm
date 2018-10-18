@@ -19,8 +19,8 @@
      *   Check billing information when saving user.
      */
     .controller('NewsstandCtrl', [
-      '$controller', '$scope', 'oqlEncoder', 'oqlDecoder', 'messenger', 'cleaner',
-      function($controller, $scope, oqlEncoder, oqlDecoder, messenger, cleaner) {
+      '$controller', '$scope', 'oqlEncoder', 'oqlDecoder', 'messenger', 'cleaner', '$timeout',
+      function($controller, $scope, oqlEncoder, oqlDecoder, messenger, cleaner, $timeout) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -182,9 +182,12 @@
 
                     $scope.item.thumbnail = convertBase64ImageToFile(dataUrl);
                     $scope.item.thumbnail_url = dataUrl;
-                    $scope.thumbnailLoading = false;
-
                     $scope.$apply();
+
+                    $timeout(function() {
+                      $scope.thumbnailLoading = false;
+                      $scope.$apply();
+                    }, 100);
                   });
                 });
               })

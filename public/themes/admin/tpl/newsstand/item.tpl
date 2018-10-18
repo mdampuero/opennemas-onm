@@ -36,7 +36,7 @@ jQuery(document).ready(function($) {
           <li class="quicklinks">
             <a class="no-padding" href="{url name=backend_newsstands}" title="{t}Go back to list{/t}">
               <h4>
-                {t}Covers{/t}
+                {t}Newsstand{/t}
               </h4>
             </a>
           </li>
@@ -82,56 +82,85 @@ jQuery(document).ready(function($) {
         <div class="col-md-8">
           <div class="grid simple">
             <div class="grid-body">
-
-              <div class="form-group">
-                <label for="date" class="form-label">{t}File{/t}</label>
-                <div class="controls">
-                  <div class="fileinput" ng-class="{ 'fileinput-exists': item.name, 'fileinput-new': !item.name }" data-trigger="fileinput">
-                    <div class="fileinput-new thumbnail text-center" style="padding: 5px 60px">
-                      {t}Pick a file{/t}
-                    </div>
-
-                    <div class="text-center p-b-15 p-t-15" ng-show="thumbnailLoading">
-                      <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
-                      <h3 class="spinner-text">{t}Generating thumbnail{/t}...</h3>
-                    </div>
-
-                    <img id="thumbnail" ng-src="[% item.thumbnail_url %]" class="thumbnail" ng-show="!thumbnailLoading && item.thumbnail_url" style="max-width:35%">
-
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="thumbnail-wrapper">
                     <div>
-                      <span class="btn btn-file">
-                        <span class="fileinput-new">{t}Add PDF{/t}</span>
-                        <span class="fileinput-exists">{t}Change{/t}</span>
-                        <input type="file" accept="application/pdf" id="cover-file-input" name="cover" onchange="angular.element(this).scope().generateThumbnailFromPDF()"/>
-                        {* <input type="hidden" name="cover" class="file-input" id="cover-file" value="1" ng-model="item.cover_thumbnail"> *}
-                        <input type="file" class="hidden" name="thumbnail" ng-model="item.cover_thumbnail">
-                      </span>
-                      <a href="#" class="btn btn-danger fileinput-exists delete" data-dismiss="fileinput" ng-click="unsetCover()">
-                        <i class="fa fa-trash-o"></i>
-                        {t}Remove{/t}
-                      </a>
-                      <a ng-show="item.name" ng-href="[% data.extra.KIOSKO_IMG_URL + item.path +  item.name %]" class="btn btn-white fileinput-exists delete" target="_blank">
-                        <span class="fa fa-download"></span>
-                        {t}Download{/t}
-                      </a>
+                      <div class="fileinput" ng-class="{ 'fileinput-exists': item.name, 'fileinput-new': !item.name }" data-trigger="fileinput" style="width:100%;">
+
+                        <div class="thumbnail" style="width:100%;">
+                          <div class="fileinput-new text-center" style="padding: 60px; background: #eee;" >
+                            <i class="fa fa-picture-o fa-3x"></i>
+                          </div>
+
+                          <div class="text-center p-b-15 p-t-15" ng-show="thumbnailLoading">
+                            <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
+                            <h3 class="spinner-text">{t}Generating thumbnail{/t}...</h3>
+                          </div>
+
+                          <img id="thumbnail" ng-src="[% item.thumbnail_url %]" ng-show="!thumbnailLoading && item.thumbnail_url" style="max-width:100%">
+                        </div>
+
+                        <div>
+                          <span class="btn btn-file btn-block m-b-10">
+                            <span class="fileinput-new">{t}Add PDF{/t}</span>
+                            <span class="fileinput-exists">{t}Change{/t}</span>
+                            <input type="file" accept="application/pdf" id="cover-file-input" name="cover" onchange="angular.element(this).scope().generateThumbnailFromPDF()"/>
+                            {* <input type="hidden" name="cover" class="file-input" id="cover-file" value="1" ng-model="item.cover_thumbnail"> *}
+                            <input type="file" class="hidden" name="thumbnail" ng-model="item.cover_thumbnail">
+                          </span>
+                          <a href="#" class="btn btn-danger btn-block fileinput-exists delete" data-dismiss="fileinput" ng-click="unsetCover()">
+                            <i class="fa fa-trash-o"></i>
+                            {t}Remove{/t}
+                          </a>
+                          <a ng-show="item.name" ng-href="[% data.extra.KIOSKO_IMG_URL + item.path +  item.name %]" class="btn btn-white btn-block fileinput-exists delete" target="_blank">
+                            <span class="fa fa-download"></span>
+                            {t}Download{/t}
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+                <div class="col-md-8">
+                  <div class="form-group">
+                    <label for="title" class="form-label">{t}Title{/t}</label>
+                    <div class="controls">
+                      <input type="text" id="title" name="title" ng-model="item.title" value="{$cover->title|default:""}" required class="form-control"/>
+                    </div>
+                  </div>
 
-              <div class="form-group">
-                <label for="title" class="form-label">{t}Title{/t}</label>
-                <div class="controls">
-                  <input type="text" id="title" name="title" ng-model="item.title" value="{$cover->title|default:""}" required class="form-control"/>
-                </div>
-              </div>
+                  <div class="form-group">
+                    <label class="form-label clearfix" for="body">
+                      <div class="pull-left">{t}Description{/t}</div>
+                    </label>
+                    <div class="controls">
+                      <textarea name="body" id="body" ng-model="item.description" onm-editor onm-editor-preset="simple"  class="form-control" rows="15"></textarea>
+                    </div>
+                  </div>
 
-              <div class="form-group">
-                <label class="form-label clearfix" for="body">
-                  <div class="pull-left">{t}Description{/t}</div>
-                </label>
-                <div class="controls">
-                  <textarea name="body" id="body" ng-model="item.description" onm-editor onm-editor-preset="simple"  class="form-control" rows="15"></textarea>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="price" class="form-label">{t}Price{/t}</label>
+                        <span class="help">{t}Split decimals with a dot{/t}.</span>
+                        <div class="controls">
+                          <input ng-model="item.price" min="0" type="number" step="0.01" id="price" name="price" required />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="type" class="form-label">{t}Type{/t}</label>
+                        <div class="controls">
+                          <select name="type" id="type" required ng-model="item.type">
+                            <option ng-value="0" ng-selected="item.type == false">{t}Item{/t}</option>
+                            <option ng-value="1" ng-selected="item.type == true">{t}Subscription{/t}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -190,7 +219,6 @@ jQuery(document).ready(function($) {
 
             <div class="grid simple">
               <div class="grid-body">
-
                 <div class="form-group">
                   <label for="date" class="form-label">{t}Date{/t}</label>
                   <div class="controls">
@@ -198,24 +226,6 @@ jQuery(document).ready(function($) {
                         <input class="form-control" datetime-picker datetime-picker-format="YYYY-MM-DD" id="date" name="date" ng-model="item.date" type="datetime" required>
                       <span class="input-group-addon" id="basic-addon2"><span class="fa fa-calendar"></span></span>
                     </div>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="price" class="form-label">{t}Price{/t}</label>
-                  <span class="help">{t}Split decimals with a dot{/t}.</span>
-                  <div class="controls">
-                    <input ng-model="item.price" min="0" type="number" step="0.01" id="price" name="price" required />
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="type" class="form-label">{t}Type{/t}</label>
-                  <div class="controls">
-                    <select name="type" id="type" required ng-model="item.type">
-                      <option ng-value="0" ng-selected="item.type == false">{t}Item{/t}</option>
-                      <option ng-value="1" ng-selected="item.type == true">{t}Subscription{/t}</option>
-                    </select>
                   </div>
                 </div>
               </div>
