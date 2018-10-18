@@ -33,7 +33,7 @@
          */
         $scope.item = {
           content_status: 0,
-          favorite: '',
+          favorite: 0,
           category: null,
           tags: [],
 
