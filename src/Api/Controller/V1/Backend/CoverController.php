@@ -77,7 +77,6 @@ class CoverController extends Controller
             'item' => $content,
             'extra' => array_merge($extra, [
                 'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
-                'locale'         => $this->get('core.locale')->getRequestLocale('frontend'),
                 'tags'           => $this->get('api.service.tag')
                     ->getListByIdsKeyMapped($content->tag_ids)['items']
             ])
@@ -403,6 +402,10 @@ class CoverController extends Controller
             'pk_content_category' => null,
             'title'               => _('Select a category...')
         ]);
+
+        $extra['tags'] = [];
+
+        $extra['locale'] = $this->get('core.locale')->getRequestLocale('frontend');
 
         return $extra;
     }

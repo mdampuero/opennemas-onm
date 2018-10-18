@@ -44,6 +44,7 @@
           file: '',
           thumbnail: null,
           cover: null,
+          tag_ids: [],
         };
 
         $scope.files = [];
