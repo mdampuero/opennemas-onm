@@ -17,13 +17,14 @@
           scope: {
             ngModel:    '=',
             categories: '=',
-            class:      '=',
-            labelString: '='
+            cssClass:      '@',
+            labelString: '@',
+            placeholderString: '@'
           },
           template: function() {
-            return '<ui-select class="form-control" name="category" ng-model="$parent.ngModel" theme="select2">' +
-                '<ui-select-match>' +
-                '  <strong ng-if="labelString">[% labelString %]</strong>[% $select.selected.title %]' +
+            return '<ui-select class="[% $parent.cssClass %]" name="category" ng-model="$parent.ngModel" theme="select2">' +
+                '<ui-select-match placeholder="[% $parent.placeholderString %]">' +
+                '  <strong ng-if="labelString">[% labelString %]: </strong>[% $select.selected.title %]' +
                 '</ui-select-match>' +
                 '<ui-select-choices group-by="groupCategories()" repeat="item.pk_content_category as item in categories| filter: { name: $select.search }">' +
                 '  <div ng-bind-html="item.title | highlight: $select.search"></div>' +
@@ -31,6 +32,10 @@
               '</ui-select>';
           },
           link: function($scope) {
+            if (!$scope.cssClass) {
+              $scope.cssClass = 'form-control';
+            }
+
             /**
              * @function groupCategories
              * @memberOf onmCategorySelector
