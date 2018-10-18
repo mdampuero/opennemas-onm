@@ -22,6 +22,28 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class Controller extends SymfonyController
 {
     /**
+     * The extension name to work with @Security annotation when using
+     * [extension] placeholder in permissions.
+     *
+     * @var string
+     */
+    protected $extension = null;
+
+    /**
+     * The list of permissions for every action.
+     *
+     * @var type
+     */
+    protected $permissions = [];
+
+    /**
+     * The resource name.
+     *
+     * @var string
+     */
+    protected $resource = null;
+
+    /**
      * Returns services from the service container.
      *
      * @param string $name The service name.
@@ -31,6 +53,29 @@ class Controller extends SymfonyController
     public function __get($name)
     {
         return $this->container->get($name);
+    }
+
+    /**
+     * Returns the permission basing on the action name.
+     *
+     * @param string $action The action name.
+     *
+     * @return mixed The permission name, if present. Null otherwise.
+     */
+    protected function getActionPermission($action)
+    {
+        return array_key_exists($action, $this->permissions) ?
+            $this->permissions[$action] : null;
+    }
+
+    /**
+     * Returns the controller extension.
+     *
+     * @return string The controller extension.
+     */
+    public function getExtension()
+    {
+        return $this->extension;
     }
 
     /**

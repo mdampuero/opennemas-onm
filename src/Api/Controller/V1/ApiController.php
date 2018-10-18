@@ -16,14 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 class ApiController extends Controller
 {
     /**
-     * The extension name to work with @Security annotation when using
-     * [extension] placeholder in permissions.
-     *
-     * @var string
-     */
-    protected $extension = null;
-
-    /**
      * The filename to include in the CSV report.
      *
      * @var type
@@ -51,6 +43,8 @@ class ApiController extends Controller
      */
     public function createAction()
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('create'));
+
         return new JsonResponse([ 'extra' => $this->getExtraData() ]);
     }
 
@@ -63,6 +57,8 @@ class ApiController extends Controller
      */
     public function deleteAction($id)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('delete'));
+
         $msg = $this->get('core.messenger');
 
         $this->get($this->service)->deleteItem($id);
@@ -81,6 +77,8 @@ class ApiController extends Controller
      */
     public function deleteSelectedAction(Request $request)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('delete'));
+
         $ids     = $request->request->get('ids', []);
         $msg     = $this->get('core.messenger');
         $deleted = $this->get($this->service)->deleteList($ids);
@@ -103,16 +101,6 @@ class ApiController extends Controller
     }
 
     /**
-     * Returns the controller extension.
-     *
-     * @return string The controller extension.
-     */
-    public function getExtension()
-    {
-        return $this->extension;
-    }
-
-    /**
      * Returns a list of items.
      *
      * @param Request $request The request object.
@@ -121,6 +109,8 @@ class ApiController extends Controller
      */
     public function listAction(Request $request)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
+
         $us  = $this->get($this->service);
         $oql = $request->query->get('oql', '');
 
@@ -143,6 +133,8 @@ class ApiController extends Controller
      */
     public function patchAction(Request $request, $id)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('patch'));
+
         $msg = $this->get('core.messenger');
 
         $this->get($this->service)
@@ -161,6 +153,8 @@ class ApiController extends Controller
      */
     public function patchSelectedAction(Request $request)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('patch'));
+
         $params = $request->request->all();
         $ids    = $params['ids'];
         $msg    = $this->get('core.messenger');
@@ -196,6 +190,8 @@ class ApiController extends Controller
      */
     public function saveAction(Request $request)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('save'));
+
         $msg = $this->get('core.messenger');
 
         $item = $this->get($this->service)
@@ -223,6 +219,8 @@ class ApiController extends Controller
      */
     public function showAction($id)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('show'));
+
         $ss = $this->get($this->service);
 
         return new JsonResponse([
@@ -240,6 +238,8 @@ class ApiController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('update'));
+
         $msg = $this->get('core.messenger');
 
         $this->get($this->service)
