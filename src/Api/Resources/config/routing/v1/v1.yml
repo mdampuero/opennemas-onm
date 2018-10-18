@@ -30,6 +30,10 @@ api_v1_backend_subscription:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/subscription.yml'
     prefix:   /backend
 
+api_v1_backend_tag:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/tag.yml'
+    prefix:   /backend
+
 api_v1_backend_url:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/url.yml'
     prefix:   /backend
@@ -44,9 +48,7 @@ api_v1_backend_user_group:
 
 api_v1_frontend_advertisement:
     resource: '@ApiBundle/Resources/config/routing/v1/frontend/advertisement.yml'
-
-api_v1_frontend_tag:
-    resource: '@ApiBundle/Resources/config/routing/v1/backend/tag.yml'
+    prefix:   /
 
 api_v1_frontend_tool:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/tool.yml'
