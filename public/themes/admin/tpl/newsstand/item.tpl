@@ -34,7 +34,7 @@ jQuery(document).ready(function($) {
             </h4>
           </li>
           <li class="quicklinks">
-            <a class="no-padding" href="{url name=backend_covers}" title="{t}Go back to list{/t}">
+            <a class="no-padding" href="{url name=backend_newsstands}" title="{t}Go back to list{/t}">
               <h4>
                 {t}Covers{/t}
               </h4>
@@ -96,7 +96,7 @@ jQuery(document).ready(function($) {
                       <h3 class="spinner-text">{t}Generating thumbnail{/t}...</h3>
                     </div>
 
-                    <img id="thumbnail" ng-src="[% item.thumbnail_url %]" class="thumbnail" ng-show="!thumbnailLoading && item.thumbnail_url" style="max-height:200px">
+                    <img id="thumbnail" ng-src="[% item.thumbnail_url %]" class="thumbnail" ng-show="!thumbnailLoading && item.thumbnail_url" style="max-width:35%">
 
                     <div>
                       <span class="btn btn-file">
