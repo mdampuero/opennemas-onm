@@ -110,6 +110,10 @@ jQuery(document).ready(function($) {
                         <i class="fa fa-trash-o"></i>
                         {t}Remove{/t}
                       </a>
+                      <a ng-show="item.name" ng-href="[% data.extra.KIOSKO_IMG_URL + item.path +  item.name %]" class="btn btn-white fileinput-exists delete" target="_blank">
+                        <span class="fa fa-download"></span>
+                        {t}Download{/t}
+                      </a>
                     </div>
                   </div>
                 </div>
