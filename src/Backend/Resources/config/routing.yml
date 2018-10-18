@@ -767,6 +767,10 @@ backend_theme:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/theme.yml'
 
+backend_url:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/url.yml'
+
 backend_user:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/user.yml'
