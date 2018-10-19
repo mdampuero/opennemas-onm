@@ -1,9 +1,21 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Common\Core\Component\Routing;
 
+use AppKernel;
 use Api\Service\Service;
 use Common\Cache\Core\Cache;
+use Common\ORM\Entity\Url;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class Redirector
 {
@@ -13,6 +25,13 @@ class Redirector
      * @var Cache
      */
     protected $cache;
+
+    /**
+     * The service container.
+     *
+     * @var ServiceContainer
+     */
+    protected $container;
 
     /**
      * The API service.
@@ -33,6 +52,22 @@ class Redirector
         $this->cache     = $cache;
         $this->container = $container;
         $this->service   = $service;
+    }
+
+    /**
+     * Returns a response basing on the current request and the Url object.
+     *
+     * @param Request $request The current request.
+     * @param Url     $url     The Url object.
+     *
+     * @return mixed The redirect response if the Url has redirection enabled.
+     *               The result of forwarding the action in the Url has the
+     *               redirection disabled.
+     */
+    public function getResponse(Request $request, Url $url)
+    {
+        return $url->redirection ? $this->getRedirectResponse($url) :
+            $this->getForwardResponse($request, $url);
     }
 
     /**
@@ -84,6 +119,35 @@ class Redirector
         }
 
         return $translation;
+    }
+
+    /**
+     * Checks if there is an URL rule that matches the URI parameter.
+     *
+     * @param string $uri The URI to match.
+     *
+     * @return mixed The URL rule that matches the URI parameter. Null
+     *               otherwise.
+     */
+    public function getUrl($uri)
+    {
+        $cacheId = $this->getCacheId($uri, null, null);
+
+        if ($this->hasCache() && $this->cache->exists($cacheId)) {
+            return $this->cache->get($cacheId);
+        }
+
+        $url = $this->getLiteralUrl($uri);
+
+        if (empty($url)) {
+            $url = $this->getRegExpUrl($uri);
+        }
+
+        if ($this->hasCache()) {
+            $this->cache->set($cacheId, $url);
+        }
+
+        return $url;
     }
 
     /**
@@ -161,6 +225,58 @@ class Redirector
         return $this->container->get('entity_repository')
             ->find($contentType, $url->target);
     }
+
+    /**
+     * Returns the result of forwarding the current request basing on the Url
+     * object.
+     *
+     * @param Request $request The current request.
+     * @param Url     $url     The Url object.
+     *
+     * @return Response The result of forwarding the request.
+     */
+    protected function getForwardResponse($request, $url)
+    {
+        $content = $this->getContent($url);
+
+        if (empty($content)) {
+            throw new \Exception();
+        }
+
+        $target = $this->container->get('core.helper.url_generator')
+            ->generate($content);
+
+        $params  = $this->container->get('router')->match($target);
+        $forward = $request->duplicate([], null, $params);
+
+        return $this->container->get('kernel')
+            ->handle($forward, HttpKernelInterface::SUB_REQUEST);
+    }
+
+    /**
+     * Returns an URL with source value equals to the URI.
+     *
+     * @param string $uri The URI.
+     *
+     * @return mixed The Url that matches the URI. Null otherwise.
+     */
+    protected function getLiteralUrl($uri)
+    {
+        $oql = sprintf(
+            'type in [%s] and source = "%s" limit 1',
+            implode(',', [ 1, 2 ]),
+            $uri
+        );
+
+        $items = $this->service->getList($oql);
+
+        if ($items['total'] === 1) {
+            return $items['items'][0];
+        }
+
+        return null;
+    }
+
     /**
      * Returns an opinion by id.
      *
@@ -174,6 +290,29 @@ class Redirector
             ->find('Opinion', $id);
     }
 
+    /**
+     * Returns a RedirectReponse basing on the Url object.
+     *
+     * @param Url $url The Url object.
+     *
+     * @return RedirectResponse The redirect response.
+     */
+    protected function getRedirectResponse($url)
+    {
+        if (!in_array($url->type, [ 0, 1, 3 ])) {
+            return new RedirectResponse($url->target, 301);
+        }
+
+        $content = $this->getContent($url);
+
+        if (empty($content)) {
+            throw new \Exception();
+        }
+
+        $target = $this->container->get('core.helper.url_generator')
+            ->generate($content);
+
+        return new RedirectResponse($target, 301);
     }
 
     /**
