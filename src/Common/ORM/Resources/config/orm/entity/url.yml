@@ -16,7 +16,7 @@ orm:
                 redirect:     boolean
                 source:       string
                 target:       string
-                type:         string
+                type:         integer
             converters:
                 default:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter
