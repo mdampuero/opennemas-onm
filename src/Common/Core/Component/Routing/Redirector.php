@@ -24,13 +24,15 @@ class Redirector
     /**
      * Initializes the Redirector.
      *
-     * @param Service    $service The API service for URLs.
-     * @param Connection $cache   The cache connection.
+     * @param ServiceContainer $container  The service container.
+     * @param Service          $service    The API service for URLs.
+     * @param Connection       $cache      The cache connection.
      */
-    public function __construct(Service $service, Cache $cache)
+    public function __construct($container, Service $service, Cache $cache)
     {
-        $this->cache   = $cache;
-        $this->service = $service;
+        $this->cache     = $cache;
+        $this->container = $container;
+        $this->service   = $service;
     }
 
     /**
@@ -96,6 +98,82 @@ class Redirector
     protected function getCacheId($slug, $type, $id)
     {
         return implode('-', [ 'redirector', $slug, $type, $id ]);
+    }
+
+    /**
+     * Returns an category by id.
+     *
+     * @param integer $id The category id.
+     *
+     * @return Category The category.
+     */
+    protected function getCategory($id)
+    {
+        try {
+            $content = $this->container->get('orm.manager')
+                ->getRepository('Category')
+                ->find($id);
+        } catch (\Exception $e) {
+            return null;
+        }
+
+        return $content;
+    }
+
+    /**
+     * Returns an comment by id.
+     *
+     * @param integer $id The comment id.
+     *
+     * @return Comment The comment.
+     */
+    protected function getComment($id)
+    {
+        $comment = new \Comment($id);
+
+        if (empty($comment->content_id)) {
+            return null;
+        }
+
+        return new \Content($comment->content_id);
+    }
+
+    /**
+     * Returns a content from a translation value.
+     *
+     * @param array $translation The translation value.
+     *
+     * @return Content The content.
+     */
+    protected function getContent($url)
+    {
+        if (empty($url)) {
+            return null;
+        }
+
+        $contentType = \classify($url->content_type);
+        $method      = 'get' . $contentType;
+
+        if (method_exists($this, $method)) {
+            return $this->{$method}($url->target);
+        }
+
+        return $this->container->get('entity_repository')
+            ->find($contentType, $url->target);
+    }
+    /**
+     * Returns an opinion by id.
+     *
+     * @param integer $id The opinion id.
+     *
+     * @return Opinion The opinion.
+     */
+    protected function getOpinion($id)
+    {
+        return $this->container->get('opinion_repository')
+            ->find('Opinion', $id);
+    }
+
     }
 
     /**

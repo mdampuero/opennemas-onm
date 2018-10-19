@@ -30,12 +30,48 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
                 'set'
             ])->getMock();
 
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'getRepository' ])
+            ->getMock();
+
+        $this->repository = $this->getMockBuilder('Repository' . uniqid())
+            ->setMethods([ 'find' ])
+            ->getMock();
+
         $this->service = $this->getMockBuilder('Api\Service\V1\OrmService')
             ->disableOriginalConstructor()
             ->setMethods([ 'getList' ])
             ->getMock();
 
-        $this->redirector = new Redirector($this->service, $this->cache);
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->em->expects($this->any())->method('getRepository')
+            ->willReturn($this->repository);
+
+        $this->redirector = new Redirector($this->container, $this->service, $this->cache);
+    }
+
+    /**
+     * Returns mocks basing on arguments when calling get method of
+     * ServiceContainer mock.
+     */
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'entity_repository':
+            case 'opinion_repository':
+                return $this->er;
+
+            case 'orm.manager':
+                return $this->em;
+        }
+
+        return null;
     }
 
     /**
