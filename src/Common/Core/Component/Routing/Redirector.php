@@ -2,6 +2,9 @@
 
 namespace Common\Core\Component\Routing;
 
+use Api\Service\Service;
+use Common\Cache\Core\Cache;
+
 class Redirector
 {
     /**
@@ -12,61 +15,67 @@ class Redirector
     protected $cache;
 
     /**
-     * The database connection.
+     * The API service.
      *
-     * @var Connection
+     * @var Service
      */
-    protected $conn;
-
-    /**
-     * The service container.
-     *
-     * @var ServiceContainer
-     */
-    protected $container;
+    protected $service;
 
     /**
      * Initializes the Redirector.
      *
-     * @param ServiceContainer $container The service container.
+     * @param Service    $service The API service for URLs.
+     * @param Connection $cache   The cache connection.
      */
-    public function __construct($container)
+    public function __construct(Service $service, Cache $cache)
     {
-        $this->container = $container;
-
-        if ($container->get('cache.manager')->hasConnection('instance')) {
-            $this->cache = $container->get('cache.manager')
-                ->getConnection('instance');
-        }
-
-        $this->conn = $container->get('orm.manager')->getConnection('instance');
+        $this->cache   = $cache;
+        $this->service = $service;
     }
 
     /**
      * Returns a translation given the content slug, type and/or id.
      *
-     * @param string  $slug The content slug.
-     * @param string  $type The content type.
-     * @param integer $id   The content id.
+     * @param string  $slug        The content slug.
+     * @param string  $contentType The content type.
+     * @param integer $id          The content id.
      *
      * @return array The translation values.
      *
      * @throws \InvalidArgumentException When no slug or id provided.
      */
-    public function getTranslation($slug, $type = null, $id = null)
+    public function getTranslation($slug, $contentType = null, $id = null)
     {
         if (empty($slug) && empty($id)) {
             throw new \InvalidArgumentException();
         }
 
-        $cacheId = $this->getCacheId($slug, $type, $id);
+        $cacheId = $this->getCacheId($slug, $contentType, $id);
 
         if ($this->hasCache() && $this->cache->exists($cacheId)) {
             return $this->cache->get($cacheId);
         }
 
-        $translation = !empty($id) ? $this->getTranslationById($id, $type) :
-            $this->getTranslationBySlug($slug, $type);
+        $type   = [ 1, 2 ];
+        $source = $slug;
+
+        if (!empty($id)) {
+            $type   = [ 0 ];
+            $source = $id;
+        }
+
+        $oql = sprintf(
+            'type in [%s] and source = "%s" limit 1',
+            implode(',', $type),
+            $source
+        );
+
+        if (!empty($contentType)) {
+            $oql = sprintf('content_type = "%s"', $contentType) . ' and ' . $oql;
+        }
+
+        $items       = $this->service->getList($oql);
+        $translation = $items['total'] === 1 ? $items['items'][0] : [];
 
         if ($this->hasCache()) {
             $this->cache->set($cacheId, $translation);
@@ -87,52 +96,6 @@ class Redirector
     protected function getCacheId($slug, $type, $id)
     {
         return implode('-', [ 'redirector', $slug, $type, $id ]);
-    }
-
-    /**
-     * Returns a translation by id.
-     *
-     * @param integer $id   The content id.
-     * @param string  $type The content type.
-     *
-     * @return array The content translation values.
-     */
-    protected function getTranslationById($id, $type = null)
-    {
-        $sql    = 'SELECT * FROM `translation_ids` WHERE `pk_content_old` = ? LIMIT 1';
-        $params = [ $id ];
-
-        if (!empty($type)) {
-            $params[] = $type;
-
-            $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old` = ?'
-                . ' AND `type` = ? LIMIT 1';
-        }
-
-        return $this->conn->fetchAssoc($sql, $params);
-    }
-
-    /**
-     * Returns a translation by slug and type.
-     *
-     * @param string $slug The content slug.
-     * @param string $type The content type.
-     *
-     * @return array The content translation values.
-     */
-    protected function getTranslationBySlug($slug, $type)
-    {
-        $sql    = 'SELECT * FROM `translation_ids` WHERE `slug` = ?';
-        $params = [ $slug ];
-
-        if (!empty($type)) {
-            $sql     .= ' AND `type` = ?';
-            $params[] = $type;
-        }
-
-        $sql .= ' LIMIT 1';
-
-        return $this->conn->fetchAssoc($sql, $params);
     }
 
     /**

@@ -147,7 +147,7 @@ services:
 
     core.redirector:
         class:     Common\Core\Component\Routing\Redirector
-        arguments: [ '@service_container' ]
+        arguments: [ '@api.service.url', '@cache.connection.instance' ]
 
     core.instance.checker:
         class:     Common\Core\Component\Instance\Checker

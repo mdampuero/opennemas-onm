@@ -10,6 +10,7 @@
 namespace Tests\Common\Core\Component\Routing;
 
 use Common\Core\Component\Routing\Redirector;
+use Common\ORM\Entity\Url;
 
 /**
  * Defines test cases for Redirector class.
@@ -21,56 +22,20 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->cache = $this->getMockBuilder('Cache')
-            ->setMethods([ 'exists', 'get', 'set' ])
+        $this->cache = $this->getMockBuilder('Common\Cache\Core\Cache')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'contains', 'delete', 'deleteByPattern', 'deleteMulti',
+                'exists', 'fetch', 'fetchMulti', 'get', 'save', 'saveMulti',
+                'set'
+            ])->getMock();
+
+        $this->service = $this->getMockBuilder('Api\Service\V1\OrmService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getList' ])
             ->getMock();
 
-        $this->connection = $this->getMockBuilder('Connection')
-            ->setMethods([ 'fetchAssoc' ])
-            ->getMock();
-
-        $this->cm = $this->getMockBuilder('CacheManager')
-            ->setMethods([ 'getConnection', 'hasConnection' ])
-            ->getMock();
-
-        $this->em = $this->getMockBuilder('EntityManager')
-            ->setMethods([ 'getConnection' ])
-            ->getMock();
-
-        $this->container = $this->getMockBuilder('ServiceContainer')
-            ->setMethods([ 'get' ])
-            ->getMock();
-
-        $this->cm->expects($this->any())->method('hasConnection')
-            ->with('instance')->willReturn(true);
-        $this->cm->expects($this->any())->method('getConnection')
-            ->with('instance')->willReturn($this->cache);
-
-        $this->em->expects($this->any())->method('getConnection')
-            ->with('instance')->willReturn($this->connection);
-
-        $this->container->expects($this->any())->method('get')
-            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
-
-        $this->redirector = new Redirector($this->container);
-    }
-
-    /**
-     * Returns mocks basing on arguments when calling get method of
-     * ServiceContainer mock.
-     */
-    public function serviceContainerCallback()
-    {
-        $args = func_get_args();
-
-        switch ($args[0]) {
-            case 'cache.manager':
-                return $this->cm;
-            case 'orm.manager':
-                return $this->em;
-            default:
-                throw new \Exception();
-        }
+        $this->redirector = new Redirector($this->service, $this->cache);
     }
 
     /**
@@ -78,43 +43,16 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstructor()
     {
-        $container = new \ReflectionProperty($this->redirector, 'container');
-        $container->setAccessible(true);
+        $service = new \ReflectionProperty($this->redirector, 'service');
+        $service->setAccessible(true);
 
         $cache = new \ReflectionProperty($this->redirector, 'cache');
         $cache->setAccessible(true);
 
-        $connection = new \ReflectionProperty($this->redirector, 'conn');
-        $connection->setAccessible(true);
-
         $this->assertInstanceOf('Common\Core\Component\Routing\Redirector', $this->redirector);
 
-        $this->assertEquals($this->container, $container->getValue($this->redirector));
+        $this->assertEquals($this->service, $service->getValue($this->redirector));
         $this->assertEquals($this->cache, $cache->getValue($this->redirector));
-        $this->assertEquals($this->connection, $connection->getValue($this->redirector));
-    }
-
-    /**
-     * Tests getTranslation when entry not in cache with multiple values.
-     */
-    public function testGetTranslation()
-    {
-        $redirector = $this->getMockBuilder('Common\Core\Component\Routing\Redirector')
-            ->setMethods([ 'getTranslationById', 'getTranslationBySlug' ])
-            ->setConstructorArgs([ $this->container ])
-            ->getMock();
-
-        $this->cache->expects($this->exactly(5))->method('exists')->willReturn(false);
-        $this->cache->expects($this->exactly(5))->method('set');
-
-        $redirector->expects($this->exactly(3))->method('getTranslationById');
-        $redirector->expects($this->exactly(2))->method('getTranslationBySlug');
-
-        $redirector->getTranslation('plugh-xyzzy-bar', null, null);
-        $redirector->getTranslation('plugh-xyzzy-bar', 'article', null);
-        $redirector->getTranslation('plugh-xyzzy-bar', null, 3145);
-        $redirector->getTranslation(null, 'bar', 3145);
-        $redirector->getTranslation(null, null, 3145);
     }
 
     /**
@@ -122,13 +60,14 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTranslationWithCacheHit()
     {
-        $translation = [
-            'pk_content'     => 1467,
-            'pk_content_old' => 4796,
-            'slug'           => 'garply',
-            'type'           => 'norf',
-            'domain'         => 'frog.com'
-        ];
+        $translation = new Url([
+            'content_type' => 'norf',
+            'enabled'      => true,
+            'redirection'  => true,
+            'source'       => 4796,
+            'target'       => 1467,
+            'type'         => 0
+        ]);
 
         $this->cache->expects($this->once())->method('exists')
             ->with('redirector-garply-norf-')->willReturn(true);
@@ -153,33 +92,25 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTranslationById()
     {
-        $translation = [
-            'pk_content'     => 1467,
-            'pk_content_old' => 4796,
-            'slug'           => 'garply',
-            'type'           => 'norf',
-            'domain'         => 'frog.com'
-        ];
+        $translation = new Url([
+            'content_type' => 'norf',
+            'enabled'      => true,
+            'redirection'  => true,
+            'source'       => 4796,
+            'target'       => 1467,
+            'type'         => 0
+        ]);
 
-        $method = new \ReflectionMethod($this->redirector, 'getTranslationById');
-        $method->setAccessible(true);
+        $this->service->expects($this->at(0))->method('getList')
+            ->with('content_type = "norf" and type in [0] and source = "4796" limit 1')
+            ->willReturn([ 'items' => [ $translation ], 'total' => 1 ]);
 
-        $this->connection->expects($this->at(0))->method('fetchAssoc')
-            ->with(
-                'SELECT * FROM `translation_ids` WHERE `pk_content_old` = ? AND `type` = ? LIMIT 1',
-                [ 4796, 'norf' ]
-            )
-            ->willReturn($translation);
+        $this->service->expects($this->at(1))->method('getList')
+            ->with('type in [0] and source = "4796" limit 1')
+            ->willReturn([ 'items' => [ $translation ], 'total' => 1 ]);
 
-        $this->connection->expects($this->at(1))->method('fetchAssoc')
-            ->with(
-                'SELECT * FROM `translation_ids` WHERE `pk_content_old` = ? LIMIT 1',
-                [ 4796 ]
-            )
-            ->willReturn($translation);
-
-        $this->assertEquals($translation, $method->invokeArgs($this->redirector, [ 4796, 'norf' ]));
-        $this->assertEquals($translation, $method->invokeArgs($this->redirector, [ 4796 ]));
+        $this->assertEquals($translation, $this->redirector->getTranslation(null, 'norf', 4796));
+        $this->assertEquals($translation, $this->redirector->getTranslation(null, null, 4796));
     }
 
     /**
@@ -187,30 +118,25 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTranslationBySlug()
     {
-        $translation = [
-            'pk_content'     => 1467,
-            'pk_content_old' => 4796,
-            'slug'           => 'garply',
-            'type'           => 'norf',
-            'domain'         => 'frog.com'
-        ];
+        $translation = new Url([
+            'content_type' => 'norf',
+            'enabled'      => true,
+            'redirection'  => true,
+            'source'       => 'garply',
+            'target'       => 4796,
+            'type'         => 0
+        ]);
 
-        $method = new \ReflectionMethod($this->redirector, 'getTranslationBySlug');
-        $method->setAccessible(true);
+        $this->service->expects($this->at(0))->method('getList')
+            ->with('type in [1,2] and source = "garply" limit 1')
+            ->willReturn([ 'items' => [ $translation ], 'total' => 1 ]);
 
-        $this->connection->expects($this->at(0))->method('fetchAssoc')
-            ->with(
-                'SELECT * FROM `translation_ids` WHERE `slug` = ? LIMIT 1',
-                [ 'garply' ]
-            )->willReturn($translation);
-        $this->connection->expects($this->at(1))->method('fetchAssoc')
-            ->with(
-                'SELECT * FROM `translation_ids` WHERE `slug` = ? AND `type` = ? LIMIT 1',
-                [ 'garply', 'norf' ]
-            )->willReturn($translation);
+        $this->service->expects($this->at(1))->method('getList')
+            ->with('content_type = "norf" and type in [1,2] and source = "garply" limit 1')
+            ->willReturn([ 'items' => [ $translation ], 'total' => 1 ]);
 
-        $this->assertEquals($translation, $method->invokeArgs($this->redirector, [ 'garply', null ]));
-        $this->assertEquals($translation, $method->invokeArgs($this->redirector, [ 'garply', 'norf' ]));
+        $this->assertEquals($translation, $this->redirector->getTranslation('garply'));
+        $this->assertEquals($translation, $this->redirector->getTranslation('garply', 'norf'));
     }
 
     /**
