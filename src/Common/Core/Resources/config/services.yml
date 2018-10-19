@@ -187,6 +187,12 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 100 }
 
+    core.listener.not_found_http_exception:
+        class:     Common\Core\EventListener\NotFoundHttpExceptionListener
+        arguments: [ '@core.redirector' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 99 }
+
     core.listener.response:
         class:     Common\Core\EventListener\ResponseListener
         arguments: [ '@service_container' ]
