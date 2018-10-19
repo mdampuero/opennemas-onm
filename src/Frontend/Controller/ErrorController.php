@@ -66,7 +66,7 @@ class ErrorController extends Controller
 
     /**
      * Generates a response when the error is caused by an unauthorized access
-     * to a protected resolurce.
+     * to a protected resource.
      *
      * @return Response The response object.
      */
