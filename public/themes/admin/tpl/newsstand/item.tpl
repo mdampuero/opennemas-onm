@@ -36,7 +36,7 @@ jQuery(document).ready(function($) {
           <li class="quicklinks">
             <a class="no-padding" href="{url name=backend_newsstands}" title="{t}Go back to list{/t}">
               <h4>
-                {t}Newsstands{/t}
+                {t}Newsstand{/t}
               </h4>
             </a>
           </li>
