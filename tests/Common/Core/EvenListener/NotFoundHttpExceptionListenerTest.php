@@ -34,7 +34,7 @@ class NotFoundHttpExceptionListenerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getResponse', 'getUrl'])
             ->getMock();
 
-        $this->request = $this->getMockBuilder('Request')
+        $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
             ->setMethods([ 'getRequestUri' ])
             ->getMock();
 
@@ -58,7 +58,7 @@ class NotFoundHttpExceptionListenerTest extends \PHPUnit\Framework\TestCase
             ->willReturn('/bar/corge');
 
         $this->redirector->expects($this->once())->method('getUrl')
-            ->with('/bar/corge')->willReturn(null);
+            ->with('bar/corge')->willReturn(null);
 
         $this->listener->onKernelException($this->event);
     }
@@ -97,10 +97,10 @@ class NotFoundHttpExceptionListenerTest extends \PHPUnit\Framework\TestCase
             ->willReturn('/bar/corge');
 
         $this->redirector->expects($this->once())->method('getUrl')
-            ->with('/bar/corge')->willReturn($url);
+            ->with('bar/corge')->willReturn($url);
 
         $this->redirector->expects($this->once())->method('getResponse')
-            ->with($url)->willReturn($response);
+            ->with($this->request, $url)->willReturn($response);
 
         $this->listener->onKernelException($this->event);
     }

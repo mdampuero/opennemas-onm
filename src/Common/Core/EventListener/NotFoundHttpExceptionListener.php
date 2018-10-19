@@ -44,10 +44,10 @@ class NotFoundHttpExceptionListener
 
         $request = $event->getRequest();
         $uri     = $request->getRequestUri();
-        $url     = $this->redirector->getUrl($uri);
+        $url     = $this->redirector->getUrl(trim($uri, '/'));
 
         if (!empty($url)) {
-            $event->setResponse($this->redirector->getResponse($url));
+            $event->setResponse($this->redirector->getResponse($request, $url));
         }
     }
 }
