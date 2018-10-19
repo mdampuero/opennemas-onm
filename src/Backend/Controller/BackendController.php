@@ -15,34 +15,13 @@ use Common\Core\Controller\Controller;
 class BackendController extends Controller
 {
     /**
-     * The extension name required by this controller.
-     *
-     * @var string
-     */
-    protected $extension = null;
-
-    /**
-     * The list of permissions for every action.
-     *
-     * @var type
-     */
-    protected $permisions = [];
-
-    /**
-     * The resource name.
-     *
-     * @var string
-     */
-    protected $resource = null;
-
-    /**
      * Displays the form to create an item.
      *
      * @return Response The response object.
      */
     public function createAction()
     {
-        $this->checkSecurity($this->extension, $this->getPermission('create'));
+        $this->checkSecurity($this->extension, $this->getActionPermission('create'));
 
         return $this->render($this->resource . '/item.tpl');
     }
@@ -54,7 +33,7 @@ class BackendController extends Controller
      */
     public function listAction()
     {
-        $this->checkSecurity($this->extension, $this->getPermission('list'));
+        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
 
         return $this->render($this->resource . '/list.tpl');
     }
@@ -68,21 +47,8 @@ class BackendController extends Controller
      */
     public function showAction($id)
     {
-        $this->checkSecurity($this->extension, $this->getPermission('update'));
+        $this->checkSecurity($this->extension, $this->getActionPermission('update'));
 
         return $this->render($this->resource . '/item.tpl', [ 'id' => $id ]);
-    }
-
-    /**
-     * Returns the permission basing on the action name.
-     *
-     * @param string $action The action name.
-     *
-     * @return mixed The permission name, if present. Null otherwise.
-     */
-    protected function getPermission($action)
-    {
-        return array_key_exists($action, $this->permissions) ?
-            $this->permissions[$action] : null;
     }
 }
