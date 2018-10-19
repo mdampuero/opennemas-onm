@@ -8,8 +8,6 @@
  */
 function smarty_function_json_encode($params, &$smarty)
 {
-    $output = '';
-
     if (!isset($params['value']) && !isset($params['default'])) {
         $smarty->_trigger_fatal_error('[plugin] json_encode needs a "value" param');
 

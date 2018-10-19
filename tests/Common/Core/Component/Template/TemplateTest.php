@@ -138,7 +138,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Template\Template::setConfig
+     * @covers Common\Core\Component\Template\Template::setConfig
      */
     public function testSetConfigWithCacheEnabled()
     {

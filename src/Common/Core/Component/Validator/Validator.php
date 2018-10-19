@@ -157,7 +157,7 @@ class Validator
                 ]),
                 new OnmAssert\BlacklistWords([
                     'words'   => $config,
-                    'message' => _('Your comment has invalid words')
+                    'message' => _('Your comment has words under discussion.')
                 ]),
             ],
             'content_id' => new Assert\Range(['min' => 1]),
