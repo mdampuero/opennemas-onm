@@ -220,9 +220,6 @@ class Content implements \JsonSerializable, CsvSerializable
     public function __get($name)
     {
         switch ($name) {
-            case 'category_name':
-                return $this->category_name = $this->loadCategoryName();
-
             case 'category_title':
                 return $this->category_title = $this->loadCategoryTitle();
 
