@@ -48,6 +48,8 @@
              * @return {String} The group name.
              */
             $scope.groupCategories = function() {
+            console.log($scope.categories);
+
               var item = $scope.ngModel;
 
               if (!item) {

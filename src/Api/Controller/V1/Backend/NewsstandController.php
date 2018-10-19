@@ -282,71 +282,142 @@ class NewsstandController extends Controller
      */
     public function deleteAction(Request $request)
     {
-        $id   = $request->query->getDigits('id');
-        $page = $request->query->getDigits('page', 1);
+        $id = $request->query->getDigits('id');
 
-        if (!empty($id)) {
-            $content = new \Kiosko($id);
+        $msg = $this->get('core.messenger');
 
-            // Delete related and relations
-            getService('related_contents')->deleteAll($id);
+        $content = new \Kiosko($id);
+        if (empty($content->id)) {
+            $msg->add(_('Content not found'), 'error');
 
-            $content->delete($id, $this->getUser()->id);
-
-            $this->get('session')->getFlashBag()->add(
-                'successs',
-                sprintf(_("Cover %s deleted successfully."), $content->title)
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('You must give an id to delete the cover.')
-            );
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        return $this->redirect($this->generateUrl('backend_newsstands', [
-            'category' => $content->category,
-            'page'     => $page
-        ]));
+        if ($content->delete($id, $this->getUser()->id)) {
+            $msg->add(_('Item sent to trash successfully'), 'success');
+        } else {
+            $msg->add(_('Unable to send to trash the content'), 'error');
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
+
     /**
-     * Shows the list of the
+     * Returns a list of contents in JSON format.
      *
-     * @return Response the response object
+     * @param Request $request     The request object.
+     * @param string  $contentType Content type name.
      *
-     * @Security("hasExtension('KIOSKO_MANAGER')
-     *     and hasPermission('KIOSKO_ADMIN')")
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('KIOSKO_ADMIN')")
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
-        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
+        $oql = $request->query->get('oql', '');
 
-        foreach ($this->parentCategories as $key => $category) {
-            $categories[] = [
-                'name' => $category->title,
-                'value' => $category->pk_content_category
-            ];
+        list($criteria, $order, $epp, $page) =
+            $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
-            foreach ($this->subcat[$key] as $subcategory) {
-                $categories[] = [
-                    'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->pk_content_category
-                ];
+        $em      = $this->get('entity_repository');
+        $total   = true;
+        $results = $em->findBy($criteria, $order, $epp, $page, 0, $total);
+
+        $results = \Onm\StringUtils::convertToUtf8($results);
+
+        return new JsonResponse([
+            'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
+            'extra'          => $this->getExtraData(true),
+            'items'          => $results,
+            'total'          => $total,
+        ]);
+    }
+
+    /**
+     * Updates some properties for an user.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasExtension('KIOSKO_MANAGER')")
+     */
+    public function patchAction(Request $request, $id)
+    {
+        $msg = $this->get('core.messenger');
+
+        $content = new \Kiosko($id);
+        if (empty($content->id)) {
+            $msg->add(_('Content not valid'), 'error');
+
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
+        }
+
+        if ($content->patch($request->request->all())) {
+            $msg->add(_('Item saved successfully'), 'success');
+        } else {
+            $msg->add(_('Unable to update the content'), 'error');
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Updates some user group properties.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('GROUP_UPDATE')")
+     */
+    public function patchSelectedAction(Request $request)
+    {
+        $params = $request->request->all();
+        $ids    = $params['ids'];
+        $msg    = $this->get('core.messenger');
+
+        unset($params['ids']);
+
+        $updated = 0;
+        foreach ($ids as $id) {
+            $content = new \Kiosko($id);
+            if (empty($content->id)) {
+                $msg->add(_('Content not valid'), 'error');
+
+                return new JsonResponse($msg->getMessages(), $msg->getCode());
+            }
+
+            if ($content->patch($params)) {
+                $updated++;
             }
         }
 
-        return $this->render('covers/list.tpl', [
-            'categories'     => $categories,
-            'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR
-        ]);
+        if ($updated > 0) {
+            $msg->add(
+                sprintf(_('%s items updated successfully'), $updated),
+                'success'
+            );
+        }
+
+        if ($updated !== count($ids)) {
+            $msg->add(sprintf(
+                _('%s items could not be updated successfully'),
+                count($ids) - $updated
+            ), 'error');
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
      * Returns a list of extra data to use in  the create/edit item form
      *
+     * @param boolean $allCategories Whether to include an All option in the categories list
+     *
      * @return array
      **/
-    private function getExtraData($allCategories)
+    private function getExtraData($allCategories = false)
     {
         $extra = [];
 
