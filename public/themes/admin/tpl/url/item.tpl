@@ -71,18 +71,18 @@
                     </label>
                   </div>
                 </div>
-                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.redirect }" ng-click="expanded.redirect = !expanded.redirect">
+                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.redirection }" ng-click="expanded.redirection = !expanded.redirection">
                   <i class="fa fa-retweet m-r-10"></i>{t}Redirection{/t}
-                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.redirect }"></i>
-                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.redirect">
-                    <span ng-show="item.redirect">{t}Enabled{/t}</span>
-                    <span ng-show="!item.redirect">{t}Disabled{/t}</span>
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.redirection }"></i>
+                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.redirection">
+                    <span ng-show="item.redirection">{t}Enabled{/t}</span>
+                    <span ng-show="!item.redirection">{t}Disabled{/t}</span>
                   </span>
                 </div>
-                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.redirect }">
+                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.redirection }">
                   <div class="form-group no-margin">
                     <div class="checkbox">
-                      <input class="form-control" id="redirection" name="redirection" ng-false-value="0" ng-model="item.redirect" ng-true-value="1" type="checkbox">
+                      <input class="form-control" id="redirection" name="redirection" ng-false-value="0" ng-model="item.redirection" ng-true-value="1" type="checkbox">
                       <label for="redirection" class="form-label">
                         {t}Redirection{/t}
                       </label>

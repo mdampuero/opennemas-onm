@@ -5,7 +5,7 @@ orm:
             required:
                 - content_type
                 - enabled
-                - redirect
+                - redirection
                 - source
                 - target
                 - type
@@ -13,7 +13,7 @@ orm:
                 content_type: string
                 enabled:      boolean
                 id:           integer
-                redirect:     boolean
+                redirection:  boolean
                 source:       string
                 target:       string
                 type:         integer
@@ -48,7 +48,7 @@ orm:
                         content_type:
                             type:    string
                             options: { default: null, length: 30, notnull: false }
-                        redirect:
+                        redirection:
                             type:    boolean
                             options: { default: 0, notnull: true }
                         enabled:
