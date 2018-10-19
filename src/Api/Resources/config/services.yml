@@ -39,6 +39,10 @@ services:
         class:     Api\Service\V1\TagService
         arguments: [ '@service_container', 'Common\ORM\Entity\Tag' ]
 
+    api.service.url:
+        class:     Api\Service\V1\OrmService
+        arguments: [ '@service_container', 'Common\ORM\Entity\Url' ]
+
     api.validator.subscriber:
         class:     Api\Validator\V1\SubscriberValidator
         arguments: [ '@service_container' ]
