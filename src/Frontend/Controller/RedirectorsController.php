@@ -44,14 +44,11 @@ class RedirectorsController extends Controller
             ->getTranslation($slug, $type, $id);
 
         // Redirect content migrated to another domain
-        if (!empty($translation)
-            && array_key_exists('domain', $translation)
-            && !empty($translation['domain'])
-        ) {
-            return $this->redirect($translation['domain'] . $this->generateUrl(
-                'frontend_redirect_content',
-                [ 'content_id' => $id ]
-            ));
+        if (!empty($translation) && $translation->type === 2) {
+            return $this->redirect(
+                (preg_match('/http(s)?:\/\//', $translation->target) ? '' : '/')
+                . $translation->target
+            );
         }
 
         $content = $this->get('core.redirector')->getContent($translation);
@@ -64,7 +61,7 @@ class RedirectorsController extends Controller
             $fragment = '#comentarios';
         }
 
-        $url = SITE_URL . $content->uri;
+        $url = $this->get('core.helper.url_generator')->generate($content);
 
         if ($format === 'amp' && $content->content_type_name === 'article') {
             $url = str_replace('.html', '.amp.html', $url);
