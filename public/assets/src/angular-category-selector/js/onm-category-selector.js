@@ -26,7 +26,7 @@
                 '<ui-select-match placeholder="[% $parent.placeholderString %]">' +
                 '  <strong ng-if="labelString">[% labelString %]: </strong>[% $select.selected.title %]' +
                 '</ui-select-match>' +
-                '<ui-select-choices group-by="groupCategories()" repeat="item.pk_content_category as item in categories| filter: { name: $select.search }">' +
+                '<ui-select-choices group-by="groupCategories()" repeat="item.pk_content_category as item in categories| filter: { title: $select.search }">' +
                 '  <div ng-bind-html="item.title | highlight: $select.search"></div>' +
                 '</ui-select-choices>' +
               '</ui-select>';
@@ -47,13 +47,9 @@
              *
              * @return {String} The group name.
              */
-            $scope.groupCategories = function() {
-            console.log($scope.categories);
-
-              var item = $scope.ngModel;
-
+            $scope.groupCategories = function(item) {
               if (!item) {
-                return '';
+                return;
               }
 
               var category = $scope.categories.filter(function(e) {
