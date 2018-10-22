@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="NewsstandListCtrl">
+<div ng-app="BackendApp" ng-controller="NewsstandListCtrl" ng-init="init()">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -33,7 +33,7 @@
             <li class="quicklinks"><span class="h-seperate"></span></li>
             {acl isAllowed="KIOSKO_CREATE"}
             <li class="m-l-10">
-              <a class="btn btn-primary" href="{url name=backend_newsstand_create}" title="{t}New cover{/t}" id="create-button">
+              <a class="btn btn-success" href="{url name=backend_newsstand_create}" title="{t}New cover{/t}" id="create-button">
                 <i class="fa fa-plus m-r-5"></i>{t}Create{/t}
               </a>
             </li>
@@ -136,19 +136,22 @@
     </div>
   </div>
 
-  <div class="content" ng-init="init()">
+  <div class="content">
+      <div class="listing-no-contents" ng-hide="!flags.http.loading">
+        <div class="text-center p-b-15 p-t-15">
+          <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
+          <h3 class="spinner-text">{t}Loading{/t}...</h3>
+        </div>
+      </div>
+      <div class="listing-no-contents ng-cloak" ng-if="!flags.http.loading && items.length == 0">
+        <div class="text-center p-b-15 p-t-15">
+          <i class="fa fa-4x fa-warning text-warning"></i>
+          <h3>{t}Unable to find any item that matches your search.{/t}</h3>
+          <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
+        </div>
+      </div>
     <div class="grid simple">
       <div class="grid-body no-padding">
-        <div class="spinner-wrapper" ng-if="loading">
-          <div class="loading-spinner"></div>
-          <div class="spinner-text">{t}Loading{/t}...</div>
-        </div>
-        <div class="listing-no-contents ng-cloak" ng-if="!loading && items.length == 0">
-          <div class="center">
-            <h4>{t}Unable to find any cover that matches your search.{/t}</h4>
-            <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
-          </div>
-        </div>
         <div class="table-wrapper ng-cloak" ng-if="!loading && items.length > 0">
           <table class="table table-hover no-margin">
             <thead>
