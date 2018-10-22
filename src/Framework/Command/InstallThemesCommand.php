@@ -78,10 +78,6 @@ EOF
 
         $this->output->writeln('Installing <info>' . count($this->themes) . '</> themes...');
         $this->installThemes();
-
-        $this->output->write("\nGenerating <fg=blue>deploy number</>... ");
-        $this->generateDeployFile();
-        $this->output->writeln('<info>DONE</>');
     }
 
     /**
@@ -146,13 +142,17 @@ EOF
 
     /**
      * Saves a file with a deploy version with the actual timestamp
+     *
+     * @param string $theme The theme name.
      */
-    protected function generateDeployFile()
+    protected function generateDeployFile($theme)
     {
-        $time     = time();
-        $contents = "<?php define('THEMES_DEPLOYED_AT', '$time');";
+        $date     = date('YmdHis');
+        $contents = "<?php define('THEMES_DEPLOYED_AT', '$date');";
+        $path     = APPLICATION_PATH . '/public/themes/' . $theme
+            . '/.deploy.themes.php';
 
-        file_put_contents(APPLICATION_PATH . '/.deploy.themes.php', $contents);
+        return file_put_contents($path, $contents);
     }
 
     /**
@@ -203,13 +203,19 @@ EOF
     protected function installThemes()
     {
         foreach ($this->themes as $theme) {
-            $this->output->write("\n  - Installing <fg=blue>$theme</>... ");
+            $this->output->writeln("- Installing <fg=blue>$theme</>... ");
+            $this->output->write("  - Updating repository... ");
 
             if (file_exists($this->basePath . '/public/themes/' . $theme)) {
                 $this->pullTheme($theme);
             } else {
                 $this->cloneTheme($theme);
             }
+
+            $this->output->write("  - Generating deploy number... ");
+            $this->generateDeployFile($theme)
+                ? $this->output->writeln('<info>DONE</>')
+                : $this->output->writeln('<fg=red>FAIL</>');
         }
     }
 
