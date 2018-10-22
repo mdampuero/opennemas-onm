@@ -107,13 +107,9 @@ class FormController extends Controller
 
             $settings = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
-                ->get([ 'mail_sender', 'site_name', 'contact_email' ]);
+                ->get([ 'site_name', 'contact_email' ]);
 
-            if (!array_key_exists('mail_sender', $settings)
-                || empty($settings['mail_sender'])
-            ) {
-                $settings['mail_sender'] = "no-reply@postman.opennemas.com";
-            }
+            $mailSender = $this->getParameter('mailer_no_reply_address');
 
             //  Build the message
             $text = \Swift_Message::newInstance();
@@ -122,7 +118,7 @@ class FormController extends Controller
                 ->setBody($body, 'text/html')
                 ->setTo([ $recipient => $recipient ])
                 ->setFrom([ $email => $name ])
-                ->setSender([ $settings['mail_sender'] => $settings['site_name'] ]);
+                ->setSender([ $mailSender => $settings['site_name'] ]);
 
             $headers = $text->getHeaders();
             $headers->addParameterizedHeader(
