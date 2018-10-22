@@ -20,22 +20,6 @@ use Symfony\Component\Process\Process;
 class InstallThemesCommand extends Command
 {
     /**
-     * The list of themes.
-     *
-     * @var array
-     */
-    protected $themes = [
-        'anemoi', 'base', 'basic', 'bastet', 'bragi', 'cplandora', 'cronicas',
-        'dryads', 'estrelladigital', 'fivex', 'flashnews', 'forseti',
-        'galatea', 'gerion', 'hathor', 'horus', 'idealgallego', 'juno',
-        'kalliope', 'khepri', 'kratos', 'laregion', 'lavozdelanzarote',
-        'layin', 'lrinternacional', 'marruecosnegocios', 'mihos', 'moura',
-        'nemty', 'notus', 'odin', 'olympus', 'orfeo', 'prontoar', 'retrincos',
-        'selket', 'sercoruna', 'simplo', 'slido', 'sobek', 'stilo',
-        'tecnofisis', 'televisionlr', 'verbeia', 'vidar', 'zisa'
-    ];
-
-    /**
      * {@inheritdoc}
      */
     protected function configure()
@@ -46,18 +30,6 @@ class InstallThemesCommand extends Command
                 InputArgument::OPTIONAL,
                 'What theme do you want to install'
             )
-            ->addOption(
-                'all',
-                'a',
-                InputOption::VALUE_NONE,
-                'If set, it will install all themes'
-            )
-            ->addOption(
-                'remote',
-                'r',
-                InputOption::VALUE_NONE,
-                'If set, it will get the list of themes from bitbucket.org'
-            )
             ->setName('themes:install')
             ->setDescription('Deploys or installs themes to the latest version')
             ->setHelp(
@@ -66,13 +38,10 @@ The <info>themes:install</> updates or installs themes code by executing
 and updates the .deploy.php file.
 
 - Install all themes
-<info>php app/console themes:install</>
-
-- Install all themes in bitbucket.org
-<info>php app/console themes:install -r</>
+<info>php bin/console themes:install</>
 
 - Install a theme
-<info>php app/console themes:install THEME_NAME</>
+<info>php bin/console themes:install THEME_NAME</>
 EOF
             );
     }
@@ -86,10 +55,9 @@ EOF
         $this->input    = $input;
         $this->output   = $output;
 
-        $remote = $this->input->getOption('remote');
-        $theme  = $input->getArgument('theme');
+        $theme = $input->getArgument('theme');
 
-        if (empty($theme) && $remote) {
+        if (empty($theme)) {
             $this->auth = $this->askCredentials();
             $output->writeln('Getting themes from <info>bitbucket</>...');
 
@@ -108,7 +76,7 @@ EOF
             return;
         }
 
-        $this->output->write('Installing <info>' . count($this->themes) . '</> themes...');
+        $this->output->writeln('Installing <info>' . count($this->themes) . '</> themes...');
         $this->installThemes();
 
         $this->output->write("\nGenerating <fg=blue>deploy number</>... ");
@@ -165,29 +133,15 @@ EOF
         $process = new Process($cmd);
 
         $process->setTimeout(3600);
-        $process->run(function ($type, $buffer) use ($output, $cmd) {
-            if (Process::ERR === $type) {
-                if (!$output->isVerbose()) {
-                    $output->write('<error>FAIL</> ');
-                }
+        $process->run();
 
-                if ($output->isVerbose()) {
-                    $output->write("\n\t<error>" . $buffer . "</>");
-                }
+        $process->isSuccessful() ?
+            $output->writeln('<info>DONE</>') :
+            $output->writeln('<fg=red>FAIL</>');
 
-                return Process::ERR;
-            }
-
-            if (!$output->isVerbose()) {
-                $output->write('<info>DONE</> ');
-            }
-
-            if ($output->isVerbose()) {
-                $output->write("\n\t" . $buffer);
-            }
-
-            return 0;
-        });
+        if ($output->isVerbose()) {
+            $output->write($process->getOutput());
+        }
     }
 
     /**
