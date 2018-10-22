@@ -100,7 +100,7 @@ class NewsstandController extends Controller
 
         $data = [
             'title'          => $postInfo->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'description'          => $postInfo->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'description'    => $postInfo->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'type'           => (int) $postInfo->getDigits('type', 0),
             'category'       => (int) $postInfo->getDigits('category', 0),
             'content_status' => (int) $postInfo->getDigits('content_status', 1),
@@ -201,7 +201,7 @@ class NewsstandController extends Controller
             $data = [
                 'id'             => $postReq->getDigits('id', 0),
                 'title'          => $postReq->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'description'          => $postReq->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'description'    => $postReq->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'date'           => $postReq->filter('date', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'cover'          => $postReq->filter('cover', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'price'          => (float) $postReq
@@ -216,7 +216,10 @@ class NewsstandController extends Controller
                 'tag_ids'        => $request->request->get('tag_ids', '')
             ];
 
-            if (!$request->request->get('thumb_url') && empty($content->name)) {
+            // If the user doesnt send a new cover and unsets the old, then remove the old file
+            if ((!$request->files->get('cover') && empty($request->request->get('name')))
+                || ($request->request->get('name') != $content->name)
+            ) {
                 $coverFile  = $content->kiosko_path . $content->path . $content->name;
                 $coverThumb = $content->kiosko_path . $content->path . $content->thumb_url;
 
@@ -233,11 +236,13 @@ class NewsstandController extends Controller
                 $data['thumb_url'] = '';
             }
 
-            // Handle new file
             if ($request->files->get('cover') && $request->files->get('thumbnail')) {
-                $data['name'] = date('His') . '-' . $data['category'] . '.pdf';
+                $dateTime = new \DateTime($data['date']);
 
-                $path = $content->kiosko_path . $content->path;
+                $data['name'] = $dateTime->format('Ymd') . date('His') . '-' . $data['category'] . '.pdf';
+                $data['path'] = $dateTime->format('Y/m/d') . '/';
+
+                $path = $content->kiosko_path . $data['path'];
 
                 // Create folder if it doesn't exist
                 if (!file_exists($path)) {

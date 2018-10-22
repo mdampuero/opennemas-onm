@@ -127,6 +127,7 @@
          *  Method to unset the cover information
          */
         $scope.unsetCover = function() {
+          $scope.item.name = null;
           $scope.item.cover = null;
           $scope.item.thumbnail = null;
           $scope.item.thumbnail_url = null;
@@ -182,6 +183,7 @@
 
                     $scope.item.thumbnail = convertBase64ImageToFile(dataUrl);
                     $scope.item.thumbnail_url = dataUrl;
+                    $scope.item.name = null;
                     $scope.$apply();
 
                     $timeout(function() {
