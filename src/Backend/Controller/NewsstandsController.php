@@ -46,8 +46,6 @@ class NewsstandsController extends Controller
      */
     public function widgetAction()
     {
-        $category = 'widget';
-
         return $this->render('newsstand/list.tpl', [
             'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
         ]);
@@ -114,7 +112,7 @@ class NewsstandsController extends Controller
         }
 
 
-        return $this->redirect($this->generateUrl('backend_newsstand_config'));
+        return $this->redirect($this->generateUrl('backend_newsstands_config'));
     }
 
     /**
