@@ -190,7 +190,11 @@ EOF
             $themes = array_merge($themes, $this->getThemes($resp['next']));
         }
 
-        return array_values($themes);
+        $themes = array_values($themes);
+
+        sort($themes);
+
+        return $themes;
     }
 
     /**
