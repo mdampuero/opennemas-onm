@@ -84,11 +84,10 @@ jQuery(document).ready(function($) {
             <div class="grid-body">
               <div class="row">
                 <div class="col-md-4">
-                  <div class="thumbnail-wrapper">
+                  <div class="thumbnail-wrapper p-l-30 p-r-30">
                     <div>
                       <div class="fileinput" ng-class="{ 'fileinput-exists': item.name, 'fileinput-new': !item.name }" data-trigger="fileinput" style="width:80%; margin:0 auto; display:block">
-
-                        <div class="thumbnail" style="width:100%;">
+                        <div class="thumbnail no-margin" style="width:100%;">
                           <div class="fileinput-new text-center" style="padding: 60px; background: #eee;" >
                             <i class="fa fa-picture-o fa-3x"></i>
                           </div>
@@ -100,20 +99,19 @@ jQuery(document).ready(function($) {
 
                           <img id="thumbnail" ng-src="[% item.thumbnail_url %]" ng-show="!thumbnailLoading && item.thumbnail_url" style="max-width:100%">
                         </div>
-
                         <div>
-                          <span class="btn btn-file btn-block m-b-10">
-                            <span class="fileinput-new">{t}Add PDF{/t}</span>
+                          <span class="btn btn-white btn-file btn-block m-b-15 m-t-15">
+                            <i class="fa fa-newspaper-o"></i>
+                            <span class="fileinput-new">{t}Add{/t} PDF</span>
                             <span class="fileinput-exists">{t}Change{/t}</span>
                             <input type="file" accept="application/pdf" id="cover-file-input" name="cover" onchange="angular.element(this).scope().generateThumbnailFromPDF()"/>
-                            {* <input type="hidden" name="cover" class="file-input" id="cover-file" value="1" ng-model="item.cover_thumbnail"> *}
                             <input type="file" class="hidden" name="thumbnail" ng-model="item.cover_thumbnail">
                           </span>
-                          <a href="#" class="btn btn-danger btn-block fileinput-exists delete" data-dismiss="fileinput" ng-click="unsetCover()">
+                          <a class="btn btn-danger btn-block fileinput-exists delete no-margin m-b-15" data-dismiss="fileinput" href="#" ng-click="unsetCover()">
                             <i class="fa fa-trash-o"></i>
                             {t}Remove{/t}
                           </a>
-                          <a ng-show="item.name" ng-href="[% data.extra.KIOSKO_IMG_URL + item.path +  item.name %]" class="btn btn-white btn-block fileinput-exists delete" target="_blank">
+                          <a class="btn btn-default btn-block fileinput-exists no-margin" ng-show="item.name" ng-href="[% data.extra.KIOSKO_IMG_URL + item.path +  item.name %]" target="_blank">
                             <span class="fa fa-download"></span>
                             {t}Download{/t}
                           </a>

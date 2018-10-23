@@ -33,7 +33,7 @@
             <li class="quicklinks"><span class="h-seperate"></span></li>
             {acl isAllowed="KIOSKO_CREATE"}
             <li class="m-l-10">
-              <a class="btn btn-success" href="{url name=backend_newsstand_create}" title="{t}New cover{/t}" id="create-button">
+              <a class="btn btn-success text-uppercase" href="{url name=backend_newsstand_create}" title="{t}New cover{/t}" id="create-button">
                 <i class="fa fa-plus m-r-5"></i>{t}Create{/t}
               </a>
             </li>
@@ -150,9 +150,9 @@
           <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
         </div>
       </div>
-    <div class="grid simple">
+    <div class="grid simple ng-cloak" ng-if="!flags.http.loading && items.length > 0">
       <div class="grid-body no-padding">
-        <div class="table-wrapper ng-cloak" ng-if="!loading && items.length > 0">
+        <div class="table-wrapper ng-cloak">
           <table class="table table-hover no-margin">
             <thead>
               <tr>
