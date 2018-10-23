@@ -30,6 +30,10 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
                 'set'
             ])->getMock();
 
+        $this->conn = $this->getMockBuilder('Connection')
+            ->setMethods([ 'fetchAssoc' ])
+            ->getMock();
+
         $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'get' ])
             ->getMock();
@@ -38,14 +42,37 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getRepository' ])
             ->getMock();
 
+        $this->kernel = $this->getMockBuilder('AppKernel')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getContainer', 'handle' ])
+            ->getMock();
+
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
             ->setMethods([ 'find' ])
+            ->getMock();
+
+        $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
+            ->setMethods([ 'duplicate' ])
+            ->getMock();
+
+        $this->router = $this->getMockBuilder('Router')
+            ->setMethods([ 'match' ])
             ->getMock();
 
         $this->service = $this->getMockBuilder('Api\Service\V1\OrmService')
             ->disableOriginalConstructor()
             ->setMethods([ 'getList' ])
             ->getMock();
+
+        $this->ugh = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'generate' ])
+            ->getMock();
+
+        $GLOBALS['kernel'] = $this->kernel;
+
+        $this->kernel->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
@@ -63,12 +90,24 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.helper.url_generator':
+                return $this->ugh;
+
             case 'entity_repository':
             case 'opinion_repository':
-                return $this->er;
+                return $this->repository;
+
+            case 'dbal_connection':
+                return $this->conn;
+
+            case 'kernel':
+                return $this->kernel;
 
             case 'orm.manager':
                 return $this->em;
+
+            case 'router':
+                return $this->router;
         }
 
         return null;
@@ -92,11 +131,144 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getTranslationBySlug when entry in cache.
+     * Tests getResponse when the Url provided has redirection disabled and the
+     * target is a not valid content.
+     *
+     * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
      */
-    public function testGetTranslationWithCacheHit()
+    public function testGetResponseWhenForwardingInvalidContent()
     {
-        $translation = new Url([
+        $url = new Url([
+            'content_type' => 'article',
+            'enabled'      => true,
+            'redirection'  => false,
+            'source'       => 4796,
+            'target'       => 1467,
+            'type'         => 0
+        ]);
+
+        $this->repository->expects($this->once())->method('find')
+            ->with('Article', 1467)->willReturn(null);
+
+        $this->redirector->getResponse($this->request, $url);
+    }
+
+    /**
+     * Tests getResponse when the Url provided has redirection disabled and the
+     * target is a valid content.
+     */
+    public function testGetResponseWhenForwardingValidContent()
+    {
+        $url = new Url([
+            'content_type' => 'article',
+            'enabled'      => true,
+            'redirection'  => false,
+            'source'       => 4796,
+            'target'       => 1467,
+            'type'         => 0
+        ]);
+
+        $this->kernel->expects($this->once())->method('handle');
+
+        $this->repository->expects($this->once())->method('find')
+            ->with('Article', 1467)->willReturn('corge');
+
+        $this->request->expects($this->once())->method('duplicate')
+            ->with([], null, [ 'slug' => 'glork', 'id' => 'xyzzy' ])
+            ->willReturn($this->request);
+
+        $this->router->expects($this->once())->method('match')
+            ->with('/glork/xyzzy')->willReturn([
+                'slug' => 'glork',
+                'id'   => 'xyzzy'
+            ]);
+
+        $this->ugh->expects($this->once())->method('generate')
+            ->with('corge')->willReturn('/glork/xyzzy');
+
+        $this->redirector->getResponse($this->request, $url);
+    }
+
+    /**
+     * Tests getResponse when the Url provided has redirection enabled and the
+     * content is valid.
+     */
+    public function testGetResponseWhenRedirectingForSlug()
+    {
+        $url = new Url([
+            'content_type' => 'article',
+            'enabled'      => true,
+            'redirection'  => true,
+            'source'       => '/plugh/wubble',
+            'target'       => '/foobar',
+            'type'         => 2
+        ]);
+
+        $response = $this->redirector->getResponse($this->request, $url);
+        $this->assertInstanceOf(
+            'Symfony\Component\HttpFoundation\RedirectResponse',
+            $response
+        );
+
+        $this->assertEquals('/foobar', $response->getTargetUrl());
+    }
+
+    /**
+     * Tests getResponse when the Url provided has redirection enabled and the
+     * target is a not valid content.
+     *
+     * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
+     */
+    public function testGetResponseWhenRedirectingForInvalidContent()
+    {
+        $url = new Url([
+            'content_type' => 'article',
+            'enabled'      => true,
+            'redirection'  => true,
+            'source'       => 4796,
+            'target'       => 1467,
+            'type'         => 0
+        ]);
+
+        $this->repository->expects($this->once())->method('find')
+            ->with('Article', 1467)->willReturn(null);
+
+        $this->redirector->getResponse($this->request, $url);
+    }
+
+    /**
+     * Tests getResponse when the Url provided has redirection enabled and the
+     * target is a valid.
+     */
+    public function testGetResponseWhenRedirectingForValidContent()
+    {
+        $url = new Url([
+            'content_type' => 'article',
+            'enabled'      => true,
+            'redirection'  => true,
+            'source'       => 4796,
+            'target'       => 1467,
+            'type'         => 0
+        ]);
+
+        $this->repository->expects($this->once())->method('find')
+            ->with('Article', 1467)->willReturn('corge');
+
+        $this->ugh->expects($this->once())->method('generate')
+            ->with('corge')->willReturn('/glork/xyzzy');
+
+        $this->assertInstanceOf(
+            'Symfony\Component\HttpFoundation\RedirectResponse',
+            $this->redirector->getResponse($this->request, $url)
+        );
+    }
+
+    /**
+     * Tests getUrlBySlug when entry in cache.
+     */
+    public function testGetUrlWhenCacheHit()
+    {
+        $url = new Url([
             'content_type' => 'norf',
             'enabled'      => true,
             'redirection'  => true,
@@ -106,55 +278,99 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->cache->expects($this->once())->method('exists')
-            ->with('redirector-garply-norf-')->willReturn(true);
+            ->with('redirector-garply-norf')->willReturn(true);
         $this->cache->expects($this->once())->method('get')
-            ->with('redirector-garply-norf-')->willReturn($translation);
+            ->with('redirector-garply-norf')->willReturn($url);
 
-        $this->assertEquals($translation, $this->redirector->getTranslation('garply', 'norf'));
+        $this->assertEquals($url, $this->redirector->getUrl('garply', 'norf'));
     }
 
     /**
-     * Tests getTranslation when no parameters provided.
+     * Tests getUrl when invalid source parameter provided.
      *
      * @expectedException \InvalidArgumentException
      */
-    public function testGetTranslationInvalid()
+    public function testGetUrlWhenInvalidSource()
     {
-        $this->redirector->getTranslation(null, null, null);
+        $this->redirector->getUrl(null, 'flob');
     }
 
     /**
-     * Tests getTranslationById.
+     * Tests getUrl when no Url found.
      */
-    public function testGetTranslationById()
+    public function testGetUrlWhenNoUrlFound()
     {
-        $translation = new Url([
+        $this->service->expects($this->at(0))->method('getList')
+            ->with('type in [0,1,2] and source = "garply" limit 1')
+            ->willReturn([ 'items' => [], 'total' => 0 ]);
+
+        $this->service->expects($this->at(1))->method('getList')
+            ->with('type in [3,4]')
+            ->willReturn([ 'items' => [], 'total' => 0 ]);
+
+        $this->assertEmpty($this->redirector->getUrl('garply'));
+    }
+
+    /**
+     * Tests getUrl when regexp Urls found but no one matches the source.
+     */
+    public function testGetUrlWhenNoRegExpMatches()
+    {
+        $url = new Url([
             'content_type' => 'norf',
             'enabled'      => true,
             'redirection'  => true,
-            'source'       => 4796,
-            'target'       => 1467,
+            'source'       => '^f.*r$',
+            'target'       => 4796,
             'type'         => 0
         ]);
 
         $this->service->expects($this->at(0))->method('getList')
-            ->with('content_type = "norf" and type in [0] and source = "4796" limit 1')
-            ->willReturn([ 'items' => [ $translation ], 'total' => 1 ]);
+            ->with('type in [0,1,2] and source = "garply" limit 1')
+            ->willReturn([ 'items' => [], 'total' => 0 ]);
 
         $this->service->expects($this->at(1))->method('getList')
-            ->with('type in [0] and source = "4796" limit 1')
-            ->willReturn([ 'items' => [ $translation ], 'total' => 1 ]);
+            ->with('type in [3,4]')
+            ->willReturn([ 'items' => [ $url ], 'total' => 1 ]);
 
-        $this->assertEquals($translation, $this->redirector->getTranslation(null, 'norf', 4796));
-        $this->assertEquals($translation, $this->redirector->getTranslation(null, null, 4796));
+        $this->assertEmpty($this->redirector->getUrl('garply'));
     }
 
     /**
-     * Tests getTranslationBySlug.
+     * Tests getUrl when no Url with exact source value found but a regexp Url
+     * matches the source value.
      */
-    public function testGetTranslationBySlug()
+    public function testGetUrlWhenRegExpFound()
     {
-        $translation = new Url([
+        $url = new Url([
+            'content_type' => 'norf',
+            'enabled'      => true,
+            'redirection'  => true,
+            'source'       => '^g.*y$',
+            'target'       => 4796,
+            'type'         => 0
+        ]);
+
+        $this->cache->expects($this->once())->method('set')
+            ->with('redirector-garply-norf', $url);
+
+        $this->service->expects($this->at(0))->method('getList')
+            ->with('content_type = "norf" and type in [0,1,2] and source = "garply" limit 1')
+            ->willReturn([ 'items' => [], 'total' => 0 ]);
+
+        $this->service->expects($this->at(1))->method('getList')
+            ->with('content_type = "norf" and type in [3,4]')
+            ->willReturn([ 'items' => [ $url ], 'total' => 1 ]);
+
+        $this->assertEquals($url, $this->redirector->getUrl('garply', 'norf'));
+    }
+
+    /**
+     * Tests getUrl when Url with exact source value found.
+     */
+    public function testGetUrlWhenSourceFound()
+    {
+        $url = new Url([
             'content_type' => 'norf',
             'enabled'      => true,
             'redirection'  => true,
@@ -163,16 +379,22 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             'type'         => 0
         ]);
 
+        $this->cache->expects($this->at(1))->method('set')
+            ->with('redirector-garply-', $url);
+
+        $this->cache->expects($this->at(3))->method('set')
+            ->with('redirector-garply-norf', $url);
+
         $this->service->expects($this->at(0))->method('getList')
-            ->with('type in [1,2] and source = "garply" limit 1')
-            ->willReturn([ 'items' => [ $translation ], 'total' => 1 ]);
+            ->with('type in [0,1,2] and source = "garply" limit 1')
+            ->willReturn([ 'items' => [ $url ], 'total' => 1 ]);
 
         $this->service->expects($this->at(1))->method('getList')
-            ->with('content_type = "norf" and type in [1,2] and source = "garply" limit 1')
-            ->willReturn([ 'items' => [ $translation ], 'total' => 1 ]);
+            ->with('content_type = "norf" and type in [0,1,2] and source = "garply" limit 1')
+            ->willReturn([ 'items' => [ $url ], 'total' => 1 ]);
 
-        $this->assertEquals($translation, $this->redirector->getTranslation('garply'));
-        $this->assertEquals($translation, $this->redirector->getTranslation('garply', 'norf'));
+        $this->assertEquals($url, $this->redirector->getUrl('garply'));
+        $this->assertEquals($url, $this->redirector->getUrl('garply', 'norf'));
     }
 
     /**
@@ -184,29 +406,146 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $this->assertEquals(
-            'redirector---4325',
-            $method->invokeArgs($this->redirector, [ null, null, 4325 ])
+            'redirector--',
+            $method->invokeArgs($this->redirector, [ null, null ])
         );
 
         $this->assertEquals(
-            'redirector-mumble--',
-            $method->invokeArgs($this->redirector, [ 'mumble', null, null ])
+            'redirector-mumble-',
+            $method->invokeArgs($this->redirector, [ 'mumble', null ])
         );
 
         $this->assertEquals(
-            'redirector-mumble-flob-',
-            $method->invokeArgs($this->redirector, [ 'mumble', 'flob', null ])
+            'redirector-mumble-flob',
+            $method->invokeArgs($this->redirector, [ 'mumble', 'flob' ])
         );
+    }
 
-        $this->assertEquals(
-            'redirector-mumble--4325',
-            $method->invokeArgs($this->redirector, [ 'mumble', null, 4325 ])
-        );
+    /**
+     * Tests getContent for a category.
+     */
+    public function testGetContentForExistingCategory()
+    {
+        $url = new Url([
+            'content_type' => 'category',
+            'enabled'      => true,
+            'redirection'  => false,
+            'source'       => 4796,
+            'target'       => 1467,
+            'type'         => 0
+        ]);
 
-        $this->assertEquals(
-            'redirector-mumble-foobar-4325',
-            $method->invokeArgs($this->redirector, [ 'mumble', 'foobar', 4325 ])
-        );
+        $method = new \ReflectionMethod($this->redirector, 'getContent');
+        $method->setAccessible(true);
+
+        $this->em->expects($this->once())->method('getRepository')
+            ->with('Category')->willReturn($this->repository);
+
+        $this->repository->expects($this->once())->method('find')
+            ->with(1467);
+
+        $method->invokeArgs($this->redirector, [ $url ]);
+    }
+
+    /**
+     * Tests getContent for a category when category does not exists.
+     */
+    public function testGetContentForUnexistingCategory()
+    {
+        $url = new Url([
+            'content_type' => 'category',
+            'enabled'      => true,
+            'redirection'  => false,
+            'source'       => 4796,
+            'target'       => 1467,
+            'type'         => 0
+        ]);
+
+        $method = new \ReflectionMethod($this->redirector, 'getContent');
+        $method->setAccessible(true);
+
+        $this->em->expects($this->once())->method('getRepository')
+            ->with('Category')->willReturn($this->repository);
+
+        $this->repository->expects($this->once())->method('find')
+            ->with(1467)->will($this->throwException(new \Exception()));
+
+        $method->invokeArgs($this->redirector, [ $url ]);
+    }
+
+    /**
+     * Tests getContent for comment when the content linked to the content
+     * exists.
+     */
+    public function testGetContentForCommentWhenContentExists()
+    {
+        $url = new Url([
+            'content_type' => 'comment',
+            'enabled'      => true,
+            'redirection'  => false,
+            'source'       => 4796,
+            'target'       => 2345,
+            'type'         => 0
+        ]);
+
+        $method = new \ReflectionMethod($this->redirector, 'getContent');
+        $method->setAccessible(true);
+
+        $this->conn->expects($this->at(0))->method('fetchAssoc')
+            ->with('SELECT * FROM comments WHERE id=?', [ 2345 ])
+            ->willReturn([ 'content_id' => 1467 ]);
+
+        $this->conn->expects($this->at(1))->method('fetchAssoc');
+
+        $method->invokeArgs($this->redirector, [ $url ]);
+    }
+
+    /**
+     * Tests getContent for comment when the content linked to the comment does
+     * not exist.
+     */
+    public function testGetContentForCommentWhenContentNotExists()
+    {
+        $url = new Url([
+            'content_type' => 'comment',
+            'enabled'      => true,
+            'redirection'  => false,
+            'source'       => 4796,
+            'target'       => 2345,
+            'type'         => 0
+        ]);
+
+        $method = new \ReflectionMethod($this->redirector, 'getContent');
+        $method->setAccessible(true);
+
+        $this->conn->expects($this->at(0))->method('fetchAssoc')
+            ->with('SELECT * FROM comments WHERE id=?', [ 2345 ])
+            ->willReturn([ 'content_id' => null ]);
+
+        $this->assertEmpty($method->invokeArgs($this->redirector, [ $url ]));
+    }
+
+    /**
+     * Tests getContent for an opinion.
+     */
+    public function testGetContentForOpinion()
+    {
+        $url = new Url([
+            'content_type' => 'opinion',
+            'enabled'      => true,
+            'redirection'  => false,
+            'source'       => 4796,
+            'target'       => 1467,
+            'type'         => 0
+        ]);
+
+        $method = new \ReflectionMethod($this->redirector, 'getContent');
+        $method->setAccessible(true);
+
+        $this->repository->expects($this->once())->method('find')
+            ->with('Opinion', 1467);
+
+        $method->invokeArgs($this->redirector, [ $url ]);
     }
 
     /**

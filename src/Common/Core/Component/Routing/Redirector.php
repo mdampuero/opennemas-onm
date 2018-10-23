@@ -9,13 +9,13 @@
  */
 namespace Common\Core\Component\Routing;
 
-use AppKernel;
 use Api\Service\Service;
 use Common\Cache\Core\Cache;
 use Common\ORM\Entity\Url;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class Redirector
 {
@@ -71,79 +71,34 @@ class Redirector
     }
 
     /**
-     * Returns a translation given the content slug, type and/or id.
+     * Returns an Url basing on the source value and the content type.
      *
-     * @param string  $slug        The content slug.
-     * @param string  $contentType The content type.
-     * @param integer $id          The content id.
+     * @param string $source      The source value.
+     * @param string $contentType The content type.
      *
-     * @return array The translation values.
+     * @return mixed The Url object, if found. Null otherwise.
      *
-     * @throws \InvalidArgumentException When no slug or id provided.
+     * @throws \InvalidArgumentException When no source value provided.
      */
-    public function getTranslation($slug, $contentType = null, $id = null)
+    public function getUrl($source, $contentType = null)
     {
-        if (empty($slug) && empty($id)) {
+        if (empty($source)) {
             throw new \InvalidArgumentException();
         }
 
-        $cacheId = $this->getCacheId($slug, $contentType, $id);
+        $cacheId = $this->getCacheId($source, $contentType);
 
         if ($this->hasCache() && $this->cache->exists($cacheId)) {
             return $this->cache->get($cacheId);
         }
 
-        $type   = [ 1, 2 ];
-        $source = $slug;
-
-        if (!empty($id)) {
-            $type   = [ 0 ];
-            $source = $id;
-        }
-
-        $oql = sprintf(
-            'type in [%s] and source = "%s" limit 1',
-            implode(',', $type),
-            $source
-        );
-
-        if (!empty($contentType)) {
-            $oql = sprintf('content_type = "%s"', $contentType) . ' and ' . $oql;
-        }
-
-        $items       = $this->service->getList($oql);
-        $translation = $items['total'] === 1 ? $items['items'][0] : [];
-
-        if ($this->hasCache()) {
-            $this->cache->set($cacheId, $translation);
-        }
-
-        return $translation;
-    }
-
-    /**
-     * Checks if there is an URL rule that matches the URI parameter.
-     *
-     * @param string $uri The URI to match.
-     *
-     * @return mixed The URL rule that matches the URI parameter. Null
-     *               otherwise.
-     */
-    public function getUrl($uri)
-    {
-        $cacheId = $this->getCacheId($uri, null, null);
-
-        if ($this->hasCache() && $this->cache->exists($cacheId)) {
-            return $this->cache->get($cacheId);
-        }
-
-        $url = $this->getLiteralUrl($uri);
+        $url = $this->getLiteralUrl($source, $contentType);
 
         if (empty($url)) {
-            $url = $this->getRegExpUrl($uri);
+            $url = $this->getRegExpUrl($source, $contentType);
         }
 
-        if ($this->hasCache()) {
+        if (!empty($url) && $this->hasCache()) {
             $this->cache->set($cacheId, $url);
         }
 
@@ -153,15 +108,14 @@ class Redirector
     /**
      * Returns the cache id basing on the parameters.
      *
-     * @param string  $slug The content slug.
-     * @param string  $type The content type.
-     * @param integer $id   The content id.
+     * @param string $slug The source value.
+     * @param string $type The content type.
      *
      * @return string The cache id.
      */
-    protected function getCacheId($slug, $type, $id)
+    protected function getCacheId($slug, $type)
     {
-        return implode('-', [ 'redirector', $slug, $type, $id ]);
+        return implode('-', [ 'redirector', $slug, $type ]);
     }
 
     /**
@@ -203,18 +157,14 @@ class Redirector
     }
 
     /**
-     * Returns a content from a translation value.
+     * Returns a content basing on a Url.
      *
-     * @param array $translation The translation value.
+     * @param Url $url The Url object.
      *
      * @return Content The content.
      */
-    protected function getContent($url)
+    protected function getContent(Url $url)
     {
-        if (empty($url)) {
-            return null;
-        }
-
         $contentType = \classify($url->content_type);
         $method      = 'get' . $contentType;
 
@@ -240,7 +190,7 @@ class Redirector
         $content = $this->getContent($url);
 
         if (empty($content)) {
-            throw new \Exception();
+            throw new ResourceNotFoundException();
         }
 
         $target = $this->container->get('core.helper.url_generator')
@@ -254,19 +204,24 @@ class Redirector
     }
 
     /**
-     * Returns an URL with source value equals to the URI.
+     * Returns an URL with source value equals to provided paramter.
      *
-     * @param string $uri The URI.
+     * @param string $source The source value.
      *
      * @return mixed The Url that matches the URI. Null otherwise.
      */
-    protected function getLiteralUrl($uri)
+    protected function getLiteralUrl($source, $contentType = null)
     {
         $oql = sprintf(
             'type in [%s] and source = "%s" limit 1',
-            implode(',', [ 1, 2 ]),
-            $uri
+            implode(',', [ 0, 1, 2 ]),
+            $source
         );
+
+        if (!empty($contentType)) {
+            $oql = sprintf('content_type = "%s"', $contentType)
+                . ' and ' . $oql;
+        }
 
         $items = $this->service->getList($oql);
 
@@ -297,7 +252,7 @@ class Redirector
      *
      * @return RedirectResponse The redirect response.
      */
-    protected function getRedirectResponse($url)
+    protected function getRedirectResponse(Url $url)
     {
         if (!in_array($url->type, [ 0, 1, 3 ])) {
             return new RedirectResponse($url->target, 301);
@@ -306,13 +261,46 @@ class Redirector
         $content = $this->getContent($url);
 
         if (empty($content)) {
-            throw new \Exception();
+            throw new ResourceNotFoundException();
         }
 
         $target = $this->container->get('core.helper.url_generator')
             ->generate($content);
 
         return new RedirectResponse($target, 301);
+    }
+
+    /**
+     * Returns an Url that matches the URI.
+     *
+     * @param string $uri The URI to match.
+     *
+     * @return mixed The Url that matches the URI. Null otherwise.
+     */
+    protected function getRegExpUrl($uri, $contentType = null)
+    {
+        $oql = sprintf('type in [%s]', implode(',', [ 3, 4 ]));
+
+        if (!empty($contentType)) {
+            $oql = sprintf('content_type = "%s"', $contentType)
+                . ' and ' . $oql;
+        }
+
+        $urls = $this->service->getList($oql);
+
+        if ($urls['total'] === 0) {
+            return null;
+        }
+
+        foreach ($urls['items'] as $url) {
+            $pattern = preg_replace('/\//', '\\/', $url->source);
+
+            if (preg_match('/' . $pattern . '/', $uri)) {
+                return $url;
+            }
+        }
+
+        return null;
     }
 
     /**
