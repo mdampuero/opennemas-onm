@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 /**
  * Redirects unofficial URLs to real contents.
  */
-class RedirectorsController extends Controller
+class RedirectorController extends Controller
 {
     /**
      * Handles the redirections for all the contents.
@@ -41,7 +41,7 @@ class RedirectorsController extends Controller
         }
 
         $translation = $this->get('core.redirector')
-            ->getTranslation($slug, $type, $id);
+            ->getUrl($slug, $type, $id);
 
         // Redirect content migrated to another domain
         if (!empty($translation) && $translation->type === 2) {
