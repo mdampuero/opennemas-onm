@@ -97,6 +97,7 @@ class NewsstandController extends Controller
     {
         $msg      = $this->get('core.messenger');
         $postInfo = $request->request;
+        $dateTime = new \DateTime();
 
         $data = [
             'title'          => $postInfo->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
@@ -108,29 +109,24 @@ class NewsstandController extends Controller
             'date'           => $postInfo->filter('date', null, FILTER_SANITIZE_STRING),
             'price'          => $postInfo->filter('price', 0.0, FILTER_SANITIZE_NUMBER_FLOAT),
             'fk_publisher'   => (int) $this->getUser()->id,
-            'tag_ids'        => $request->request->get('tag_ids', '')
+            'tag_ids'        => $request->request->get('tag_ids', ''),
+            'name'           => '',
         ];
 
         $content = new \Kiosko();
 
         try {
-            // Handle new file
-            if ($request->files->get('cover') && $request->files->get('thumbnail')) {
-                $dateTime = new \DateTime($data['date']);
+            $cover     = $request->files->get('cover');
+            $thumbnail = $request->files->get('thumbnail');
 
-                $data['name'] = $dateTime->format('Ymd') . date('His') . '-' . $data['category'] . '.pdf';
+            // Handle new file
+            if ($cover && $thumbnail) {
+                $dateTime = new \DateTime();
+
+                $data['name'] = $dateTime->format('YmdHis') . '.pdf';
                 $data['path'] = $dateTime->format('Y/m/d') . '/';
 
-                $path = INSTANCE_MEDIA_PATH . KIOSKO_DIR . $data['path'];
-
-                // Create folder if it doesn't exist
-                if (!file_exists($path)) {
-                    \Onm\FilesManager::createDirectory($path);
-                }
-
-                $file = $request->files->get('cover');
-
-                $uploadStatus = $file->isValid() && $file->move(realpath($path), $data['name']);
+                $uploadStatus = $content->saveFiles($data['path'], $data['name'], $cover, $thumbnail);
 
                 if (!$uploadStatus) {
                     throw new \Exception(
@@ -140,8 +136,6 @@ class NewsstandController extends Controller
                         )
                     );
                 }
-
-                $content->saveThumbnail($path, $data['name'], $request->files->get('thumbnail'));
             }
 
             if (!$content->create($data)) {
@@ -216,42 +210,26 @@ class NewsstandController extends Controller
                 'tag_ids'        => $request->request->get('tag_ids', '')
             ];
 
-            // If the user doesnt send a new cover and unsets the old, then remove the old file
-            if ((!$request->files->get('cover') && empty($request->request->get('name')))
-                || ($request->request->get('name') != $content->name)
-            ) {
-                $coverFile  = $content->kiosko_path . $content->path . $content->name;
-                $coverThumb = $content->kiosko_path . $content->path . $content->thumb_url;
+            $cover     = $request->files->get('cover');
+            $thumbnail = $request->files->get('thumbnail');
 
-                // Remove old files if fileinput changed
-                if (file_exists($coverFile)) {
-                    unlink($coverFile);
-                }
-
-                if (file_exists($coverThumb)) {
-                    unlink($coverThumb);
-                }
+            // If the user doesnt send a new cover and unsets the old,
+            // then remove the old file
+            if ((!$cover && empty($request->request->get('name')))) {
+                $content->removeFiles();
 
                 $data['name']      = '';
                 $data['thumb_url'] = '';
             }
 
-            if ($request->files->get('cover') && $request->files->get('thumbnail')) {
+            // If the user uploads a new cover and a thumbnail
+            // then save them
+            if ($cover && $thumbnail) {
                 $dateTime = new \DateTime($data['date']);
 
-                $data['name'] = $dateTime->format('Ymd') . date('His') . '-' . $data['category'] . '.pdf';
-                $data['path'] = $dateTime->format('Y/m/d') . '/';
+                $data['name'] = $dateTime->format('Ymdhis') . '.pdf';
 
-                $path = $content->kiosko_path . $data['path'];
-
-                // Create folder if it doesn't exist
-                if (!file_exists($path)) {
-                    \Onm\FilesManager::createDirectory($path);
-                }
-
-                $file = $request->files->get('cover');
-
-                $uploadStatus = $file->isValid() && $file->move(realpath($path), $data['name']);
+                $uploadStatus = $content->saveFiles($content->path, $data['name'], $cover, $thumbnail);
 
                 if (!$uploadStatus) {
                     throw new \Exception(
@@ -261,8 +239,6 @@ class NewsstandController extends Controller
                         )
                     );
                 }
-
-                $content->saveThumbnail($path, $data['name'], $request->files->get('thumbnail'));
             }
 
             $content->update($data);

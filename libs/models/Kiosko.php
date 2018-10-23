@@ -173,7 +173,7 @@ class Kiosko extends Content
         } catch (\Exception $e) {
             error_log('Error while creating Kiosko: ' . $e->getMessage());
 
-            $conn->beginTransaction();
+            $conn->rollback();
 
             return false;
         }
@@ -188,10 +188,14 @@ class Kiosko extends Content
      */
     public function update($data)
     {
-        parent::update($data);
+        $conn = getService('dbal_connection');
+
+        $conn->beginTransaction();
 
         try {
-            getService('dbal_connection')->update(
+            parent::update($data);
+
+            $conn->update(
                 'kioskos',
                 [
                     'name'      => $data['name'],
@@ -202,8 +206,12 @@ class Kiosko extends Content
                 [ 'pk_kiosko' => (int) $data['id'] ]
             );
 
+            $conn->commit();
+
             return $this;
         } catch (\Exception $e) {
+            $conn->rollback();
+
             error_log('Error while updating Kiosko: ' . $e->getMessage());
             return false;
         }
@@ -218,27 +226,47 @@ class Kiosko extends Content
      */
     public function remove($id)
     {
-        parent::remove($this->id);
+        $conn = getService('dbal_connection');
 
         try {
-            $paperPdf      = $this->kiosko_path . $this->path . $this->name;
-            $paperImage    = $this->kiosko_path . $this->path
-                . preg_replace("/.pdf$/", ".jpg", $this->name);
-            $bigPaperImage = $this->kiosko_path . $this->path .
-                preg_replace('/.pdf$/', '.jpg', '650-' . $this->name);
+            $conn->beginTransaction();
 
-            unlink($paperPdf);
-            unlink($paperImage);
-            unlink($bigPaperImage);
+            parent::remove($this->id);
 
-            getService('dbal_connection')
-                ->delete('kioskos', [ 'pk_kiosko' => $id ]);
+            $conn->delete('kioskos', [ 'pk_kiosko' => $id ]);
+
+            $conn->commit();
+
+            $this->removeFiles();
 
             return true;
         } catch (\Exception $e) {
+            $conn->rollback();
             error_log('Error while removing Kiosko: ' . $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Removes the files assigned to the newsstand
+     *
+     * @return void
+     **/
+    public function removeFiles()
+    {
+        $coverFile  = $this->kiosko_path . $this->path . $this->name;
+        $coverThumb = $this->kiosko_path . $this->path . $this->thumb_url;
+
+        // Remove old files if fileinput changed
+        if (file_exists($coverFile) && is_file($coverFile)) {
+            unlink($coverFile);
+        }
+
+        if (file_exists($coverThumb) && is_file($coverThumb)) {
+            unlink($coverThumb);
+        }
+
+        return;
     }
 
     /**
@@ -247,15 +275,22 @@ class Kiosko extends Content
      * @param string $file_pdf The filename to the pdf file.
      * @param string $path     The path to the pdf file.
      */
-    public function saveThumbnail($path, $fileName, $file)
+    public function saveFiles($targetPath, $targetFileName, $cover, $thumbnail)
     {
-        if (!file_exists($path . $fileName)) {
-            return;
+        $absolutePath      = $this->kiosko_path . $targetPath;
+        $thumbnailFileName = basename($targetFileName, '.pdf') . '.jpg';
+
+        // Create folder if it doesn't exist
+        if (!file_exists($absolutePath)) {
+            \Onm\FilesManager::createDirectory($absolutePath);
         }
 
-        $finalName = $path . basename($fileName, '.pdf') . '.jpg';
+        $uploadStatus = (
+            $cover->isValid() && $cover->move($absolutePath, $targetFileName)
+            && $thumbnail->isValid() && $thumbnail->move($absolutePath, $thumbnailFileName)
+        );
 
-        return $file->isValid() && $file->move(realpath($path), $finalName);
+        return $uploadStatus;
     }
 
     /**
