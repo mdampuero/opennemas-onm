@@ -32,19 +32,18 @@
          * @type {Object}
          */
         $scope.item = {
-          content_status: 0,
-          favorite: 0,
           category: null,
-          tags: [],
-
-          title: '',
-          date: '',
-          price: 0,
-          type: 0,
-          file: '',
-          thumbnail: null,
+          content_status: 0,
           cover: null,
+          date: '',
+          favorite: 0,
+          file: '',
+          price: 0,
           tag_ids: [],
+          tags: [],
+          thumbnail: null,
+          title: '',
+          type: 0,
         };
 
         $scope.files = [];

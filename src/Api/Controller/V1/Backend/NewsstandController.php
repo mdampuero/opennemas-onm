@@ -437,10 +437,6 @@ class NewsstandController extends Controller
         });
 
         $extra['categories'] = $converter->responsify($categories);
-        array_unshift($extra['categories'], [
-            'pk_content_category' => null,
-            'title'               => $allCategories ? _('All') : _('Select a category...')
-        ]);
 
         $extra['tags'] = [];
 
