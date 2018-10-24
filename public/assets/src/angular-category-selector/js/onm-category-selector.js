@@ -19,12 +19,12 @@
             ngModel:    '=',
             categories: '=',
             labelText: '@',
-            placeholderText: '@',
+            placeholder: '@',
             defaultValueText: '@'
           },
           template: function() {
             return '<ui-select ng-required="required" class="[% cssClass %]" name="category" ng-model="$parent.ngModel" theme="select2">' +
-                '<ui-select-match placeholder="[% $parent.placeholderText %]">' +
+                '<ui-select-match placeholder="[% $parent.placeholder %]">' +
                 '  <strong ng-if="labelText">[% labelText %]: </strong>[% $select.selected.title %]' +
                 '</ui-select-match>' +
                 '<ui-select-choices group-by="groupCategories()" ' +
@@ -35,8 +35,8 @@
           },
           link: function($scope, elem, $attrs) {
             $scope.categories = [];
-            $scope.cssClass = $attrs.class ? $attrs.class : 'form-control';
-            $scope.required = $attrs.required ? $attrs.required : false;
+            $scope.cssClass   = $attrs.class ? $attrs.class : 'form-control';
+            $scope.required   = $attrs.required ? $attrs.required : false;
 
             /**
              * @function loadCategories
