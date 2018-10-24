@@ -223,7 +223,7 @@ class NewsstandController extends Controller
             // If the user uploads a new cover and a thumbnail
             // then save them
             if ($cover && $thumbnail) {
-                $dateTime = new \DateTime($data['date']);
+                $dateTime = new \DateTime();
 
                 $data['name'] = $dateTime->format('Ymdhis') . '.pdf';
 
