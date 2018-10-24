@@ -111,6 +111,7 @@ class NewsstandController extends Controller
             'fk_publisher'   => (int) $this->getUser()->id,
             'tag_ids'        => $request->request->get('tag_ids', ''),
             'name'           => '',
+            'path'           => $dateTime->format('Y/m/d') . '/',
         ];
 
         $content = new \Kiosko();
@@ -121,10 +122,7 @@ class NewsstandController extends Controller
 
             // Handle new file
             if ($cover && $thumbnail) {
-                $dateTime = new \DateTime();
-
                 $data['name'] = $dateTime->format('YmdHis') . '.pdf';
-                $data['path'] = $dateTime->format('Y/m/d') . '/';
 
                 $uploadStatus = $content->saveFiles($data['path'], $data['name'], $cover, $thumbnail);
 
