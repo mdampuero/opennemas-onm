@@ -59,10 +59,17 @@ EOF
 
         if (empty($theme)) {
             $this->auth = $this->askCredentials();
-            $output->writeln('Getting themes from <info>bitbucket</>...');
+            $output->write('Getting themes from <fg=blue>bitbucket</>...');
 
-            $this->themes = $this->getThemes();
-            $output->writeln('  <info>' . count($this->themes) . ' themes found</>');
+            try {
+                $this->themes = $this->getThemes();
+
+                if (!empty($this->themes)) {
+                    $output->writeln(' <info>DONE</>');
+                }
+            } catch (\Exception $e) {
+                $this->output->writeln('<fg=red>FAIL (' . $e->getMessage() . ')</>');
+            }
         }
 
         chdir($this->basePath);
@@ -89,7 +96,7 @@ EOF
     {
         $helper = $this->getHelper('question');
 
-        $this->output->writeln('Please enter your <info>bitbucket</> credentials...');
+        $this->output->writeln('Please enter your <fg=blue>bitbucket</> credentials...');
 
         $question = new Question('  Username: ');
         $username = $helper->ask($this->input, $this->output, $question);
@@ -125,18 +132,25 @@ EOF
      */
     protected function execProcess($cmd)
     {
-        $output  = $this->output;
         $process = new Process($cmd);
 
         $process->setTimeout(3600);
         $process->run();
 
-        $process->isSuccessful() ?
-            $output->writeln('<info>DONE</>') :
-            $output->writeln('<fg=red>FAIL</>');
+        if ($process->isSuccessful()) {
+            $this->output->writeln('<info>DONE</>');
 
-        if ($output->isVerbose()) {
-            $output->write($process->getOutput());
+            if ($this->output->isVerbose()) {
+                $this->output->writeln($process->getOutput());
+            }
+
+            return;
+        }
+
+        $this->output->writeln('<fg=red>FAIL</>');
+
+        if ($this->output->isVerbose()) {
+            $this->output->write($process->getErrorOutput());
         }
     }
 
@@ -156,6 +170,26 @@ EOF
     }
 
     /**
+     * Returns the error message basing on the HTTP error code.
+     *
+     * @param integer $code The error code.
+     *
+     * @return string The error message.
+     */
+    protected function getError($code)
+    {
+        $errors = [
+            401 => 'Authentication failure'
+        ];
+
+        if (array_key_exists($code, $errors)) {
+            $code .= ": {$errors[$code]}";
+        }
+
+        return $code;
+    }
+
+    /**
      * Gets the list of repositories for themes from bitbucket.
      *
      * @param string $url The URL to get the themes from.
@@ -170,9 +204,10 @@ EOF
         curl_setopt($ch, CURLOPT_USERPWD, $this->auth);
 
         $resp = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        if (!$resp) {
-            return;
+        if ($code !== 200 || !$resp) {
+            throw new \RuntimeException($this->getError($code));
         }
 
         $resp   = json_decode($resp, true);
