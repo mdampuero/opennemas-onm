@@ -22,6 +22,28 @@ class FrontpageVersionService extends OrmService
     const MAX_NUMBER_OF_VERSIONS = 10;
 
     /**
+     * Initializes the BaseService.
+     *
+     * @param ServiceContainer $container The service container.
+     * @param string           $entity    The entity fully qualified class name.
+     * @param string           $entity    The validator service name.
+     */
+    public function __construct($container, $entity, $validator = null)
+    {
+        parent::__construct($container, $entity, $validator);
+
+        $this->contentPositionService = $this->container->get('api.service.contentposition');
+        $this->entityRepository       = $this->container->get('entity_repository');
+        $this->ormManager             = $this->container->get('orm.manager');
+        $this->instanceTimezone       = $this->container->get('core.locale')->getTimeZone();
+        $this->dispatcher             = $this->container->get('core.dispatcher');
+        $this->cache                  = $this->container->get('cache');
+        $this->filterManager          = $this->container->geT('data.manager.filter');
+
+        $this->frontpagesRepository = $this->ormManager->getRepository($this->entity, $this->origin);
+    }
+
+    /**
      * Returns the contents positions, contents, invalidationtime and last saved time
      * for the current frontpage given a category id
      *
