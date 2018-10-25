@@ -316,6 +316,7 @@ class FrontpageVersionService extends OrmService
         $dt = new \DateTime();
         $dt->setTimezone(new \DateTimeZone($this->instanceTimezone->getName()));
         $dt->setTimestamp(empty($timestamp) ? time() : $timestamp);
+
         return $dt->format('Y-m-d H:i');
     }
 
@@ -389,7 +390,8 @@ class FrontpageVersionService extends OrmService
         if (!empty($versionId)) {
             $this->deleteItem($versionId);
         }
-        $this->invalidationMethod($categoryId, $versionId);
+
+        return $this->invalidationMethod($categoryId, $versionId);
     }
 
     /**
@@ -408,15 +410,14 @@ class FrontpageVersionService extends OrmService
             $lastSavedCacheId .= '_' . $frontpageVersionId;
         }
 
-        $cache     = $this->container->get('cache');
-        $lastSaved = $cache->fetch($lastSavedCacheId);
+        $lastSaved = $this->cache->fetch($lastSavedCacheId);
         if ($lastSaved == false) {
-            // Save the actual date for
             $date      = new \Datetime("now");
-            $dateForDB = $date->format(\DateTime::ISO8601);
-            $cache->save($lastSavedCacheId, $dateForDB);
-            $lastSaved = $dateForDB;
+            $lastSaved = $date->format(\DateTime::ISO8601);
+
+            $this->cache->save($lastSavedCacheId, $dateForDB);
         }
+
         return $lastSaved;
     }
 
