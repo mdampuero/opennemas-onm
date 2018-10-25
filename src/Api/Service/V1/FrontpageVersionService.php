@@ -82,52 +82,6 @@ class FrontpageVersionService extends OrmService
         return [$frontpageVersion, $contentPositions, $filteredContents];
     }
 
-    public function getInvalidationTime($contents, $categoryId)
-    {
-        $invalidationTime   = null;
-        $frontpageVersionId = $this->getNextVerForCat($categoryId);
-        $tz                 =
-            $this->container->get('core.locale')->getTimeZone();
-        $systemDateTz       = new \DateTime(null, $tz);
-        $systemDateTz       = $systemDateTz->format('Y-m-d H:i:s');
-        if (empty($frontpageVersionId)) {
-            $invalidationTime = new \DateTime(null, $tz);
-            // Add 1 year to the current timestamp
-            $timestamp = $invalidationTime->getTimestamp() + 31536000;
-            $invalidationTime->setTimestamp($timestamp);
-            $invalidationTime = $invalidationTime->format('Y-m-d H:i:s');
-        } else {
-            $frontpageVersion = $this->getItem($frontpageVersionId);
-            if (!empty($frontpageVersion->publish_date)) {
-                $invalidationTime = $frontpageVersion->publish_date
-                    ->format('Y-m-d H:i:s');
-            }
-        }
-
-        foreach ($contents as $content) {
-            if (!empty($content->starttime) &&
-                $content->starttime > $systemDateTz &&
-                $content->starttime < $invalidationTime
-            ) {
-                $invalidationTime = $content->starttime;
-                continue;
-            }
-
-            if (!empty($content->endtime) &&
-                $content->endtime > $systemDateTz &&
-                $content->endtime < $invalidationTime
-            ) {
-                $invalidationTime = $content->endtime;
-                continue;
-            }
-        }
-
-        $invalidationTime =
-            \DateTime::createFromFormat('Y-m-d H:i:s', $invalidationTime, $tz);
-        $invalidationTime->setTimeZone(new \DateTimeZone('UTC'));
-        return $invalidationTime;
-    }
-
     public function getOnlyPublishContents($contents)
     {
         $tz           = $this->container->get('core.locale')->getTimeZone();
@@ -578,5 +532,63 @@ class FrontpageVersionService extends OrmService
             $versionAux->created->setTimezone(new \DateTimeZone('UTC'));
         }
         return is_array($versions) ? $versionsAux : $versionsAux[0];
+    }
+
+    /**
+     * Returns the invalidation time for a frontpage given the category id and a
+     * list of contents.
+     * The category id is used to check the next version invalidation time
+     * The contetns are used to get the min value invalidation time form them
+     *
+     * So the result will be the minor datetime among them
+     *
+     * @param array $contents the list of contents
+     * @param int $categoryId the category id
+     *
+     * @return \DateTime
+     **/
+    private function getInvalidationTime($contents, $categoryId)
+    {
+        $invalidationTime = null;
+
+        $frontpageVersionId = $this->getNextVersionForCategory($categoryId);
+
+        $systemDateTz = (new \DateTime(null, $this->instanceTimezone))->format('Y-m-d H:i:s');
+        if (empty($frontpageVersionId)) {
+            $invalidationTime = new \DateTime(null, $this->instanceTimezone);
+            // Add 1 year to the current timestamp
+            $timestamp = $invalidationTime->getTimestamp() + 31536000;
+            $invalidationTime->setTimestamp($timestamp);
+            $invalidationTime = $invalidationTime->format('Y-m-d H:i:s');
+        } else {
+            $frontpageVersion = $this->getItem($frontpageVersionId);
+            if (!empty($frontpageVersion->publish_date)) {
+                $invalidationTime = $frontpageVersion->publish_date
+                    ->format('Y-m-d H:i:s');
+            }
+        }
+
+        foreach ($contents as $content) {
+            if (!empty($content->starttime) &&
+                $content->starttime > $systemDateTz &&
+                $content->starttime < $invalidationTime
+            ) {
+                $invalidationTime = $content->starttime;
+                continue;
+            }
+
+            if (!empty($content->endtime) &&
+                $content->endtime > $systemDateTz &&
+                $content->endtime < $invalidationTime
+            ) {
+                $invalidationTime = $content->endtime;
+                continue;
+            }
+        }
+
+        $invalidationTime = \DateTime::createFromFormat('Y-m-d H:i:s', $invalidationTime, $this->instanceTimezone);
+        $invalidationTime->setTimeZone(new \DateTimeZone('UTC'));
+
+        return $invalidationTime;
     }
 }

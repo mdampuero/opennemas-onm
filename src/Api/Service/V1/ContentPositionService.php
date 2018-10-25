@@ -11,7 +11,6 @@ namespace Api\Service\V1;
 
 class ContentPositionService extends OrmService
 {
-
     /**
      * See: Common\ORM\Entity\ContentPosition\ContentPositionRepository::getContentPositions
      *
