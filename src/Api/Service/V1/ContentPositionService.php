@@ -12,6 +12,22 @@ namespace Api\Service\V1;
 class ContentPositionService extends OrmService
 {
     /**
+     * Initializes the BaseService.
+     *
+     * @param ServiceContainer $container The service container.
+     * @param string           $entity    The entity fully qualified class name.
+     * @param string           $entity    The validator service name.
+     */
+    public function __construct($container, $entity, $validator = null)
+    {
+        parent::__construct($container, $entity, $validator);
+
+        $this->ormManager     = $this->container->get('orm.manager');
+        $this->applicationLog = $this->container->get('application.log');
+        $this->user           = $this->container->get('core.user');
+    }
+
+    /**
      * See: Common\ORM\Entity\ContentPosition\ContentPositionRepository::getContentPositions
      *
      * Returns a list of content positions for a given category and frontpage id
@@ -126,7 +142,7 @@ class ContentPositionService extends OrmService
     */
     public function clearContentPositionsForHomePageOfCategory($categoryID, $frontpageVersionId, $conn = false)
     {
-        $conn = $this->container->get('orm.manager')->getConnection('instance');
+        $conn = $this->ormManager->getConnection('instance');
 
         // clean actual contents for the homepage of this category
         $sql  = 'DELETE FROM content_positions WHERE ';
@@ -134,13 +150,15 @@ class ContentPositionService extends OrmService
             '`fk_category` = ' . $categoryID :
             '`fk_category` = ' . $categoryID . ' AND frontpage_version_id IN (' .
             $frontpageVersionId . ', 0)';
+
         $conn->executeUpdate($sql);
 
-        getService('application.log')->info(
-            'User ' . getService('core.user')->username
-            . ' (' . getService('core.user')->id
-            . ') clear contents frontpage of category ' . $categoryID
-        );
+        $this->applicationLog->info(sprintf(
+            'User %s (%d) clear contents frontpage of category %d',
+            $this->user->username,
+            $this->user->id,
+            $categoryID
+        ));
 
         return true;
     }
