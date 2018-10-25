@@ -114,6 +114,8 @@ class FrontpagesController extends Controller
     {
         $dataPositionsNotValid = false;
 
+        $cps = $this->get('api.service.content_position');
+
         // Get application logger
         $logger = $this->get('application.log');
 
@@ -192,7 +194,7 @@ class FrontpagesController extends Controller
             }
 
             // Save contents
-            $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $version->id, $contents);
+            $savedProperly = $cps->saveContentPositionsForHomePage($categoryID, $version->id, $contents);
 
             if (!$savedProperly) {
                 $message = _('Unable to save content positions: Error while saving in database.');
