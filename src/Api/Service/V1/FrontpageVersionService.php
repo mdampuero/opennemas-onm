@@ -227,9 +227,7 @@ class FrontpageVersionService extends OrmService
         $ccm                = \ContentCategoryManager::get_instance();
         $categories         = $ccm->findAll();
         $catFrontpagesRel   = $this->getCatFrontpagesRel();
-        $catWithFrontpage   = $this->container
-            ->get('api.service.contentposition')
-            ->getCategoriesWithManualFrontpage();
+        $catWithFrontpage   = $this->contentPositionService->getCategoriesWithManualFrontpage();
         $frontpages         = null;
         $existMainFrontPage = array_key_exists(0, $catFrontpagesRel);
         $mainFrontpage      = [
@@ -254,8 +252,9 @@ class FrontpageVersionService extends OrmService
                     'manual'       => true
                 ];
             } else {
-                $name = $this->container->get('data.manager.filter')
-                    ->set($category->title)->filter('localize')->get();
+                $name = $this->filterManager
+                    ->set($category->title)
+                    ->filter('localize')->get();
 
                 $frontpagesAut[$category->id] = [
                     'id'     => $category->id,
@@ -276,11 +275,9 @@ class FrontpageVersionService extends OrmService
 
     public function getCatFrontpagesRel()
     {
-        return $this->container->get('orm.manager')
-            ->getRepository($this->entity, $this->origin)->getCatFrontpageRel();
+        return $this->frontpagesRepository->getCatFrontpageRel();
     }
 
-    public function getCurrentVersionDB($categoryId)
     /**
      * Returns the id of the next frontpage version for a given category
      *
@@ -288,9 +285,9 @@ class FrontpageVersionService extends OrmService
      *
      * @return int
      **/
+    public function getCurrentVersionFromDB($categoryId)
     {
-        return $this->container->get('orm.manager')
-            ->getRepository($this->entity, $this->origin)->getCurrentVerForCat($categoryId);
+        return $this->frontpagesRepository->getCurrentVersionForCategory($categoryId);
     }
 
     public function getNextVerForCat($categoryId)
@@ -302,8 +299,7 @@ class FrontpageVersionService extends OrmService
      * @return int
      **/
     {
-        return $this->container->get('orm.manager')
-            ->getRepository($this->entity, $this->origin)->getNextVerForCat($categoryId);
+        return $this->frontpagesRepository->getNextVersionForCategory($categoryId);
     }
 
     /**
@@ -318,8 +314,7 @@ class FrontpageVersionService extends OrmService
     public function getDefaultNameFV($timestamp)
     {
         $dt = new \DateTime();
-        $dt->setTimezone(new \DateTimeZone($this->container->get('core.locale')
-            ->getTimeZone()->getName()));
+        $dt->setTimezone(new \DateTimeZone($this->instanceTimezone->getName()));
         $dt->setTimestamp(empty($timestamp) ? time() : $timestamp);
         return $dt->format('Y-m-d H:i');
     }
@@ -339,10 +334,8 @@ class FrontpageVersionService extends OrmService
     {
         $fvc = null;
         if (empty($frontpageVersion['id'])) {
-            $repository       = $this->container->get('orm.manager')
-                ->getRepository($this->entity, $this->origin);
-            $numberOfVersions = $repository->countBy(
-                'frontpage_id = \'' . $frontpageVersion['frontpage_id'] . '\''
+            $numberOfVersions = $this->frontpagesRepository->countBy(
+                "frontpage_id = {$frontpageVersion['frontpage_id']}"
             );
 
             //TODO This shouldn't be here, when the frontpage part is done it should be changed to that driver
@@ -479,9 +472,8 @@ class FrontpageVersionService extends OrmService
         $cacheId = empty($versionId) ?
             'frontpage_elements_map_' . $categoryId :
             'frontpage_elements_map_' . $categoryId . '_' . $frontpageVersionId;
-        $cache   = $this->container->get('cache');
 
-        return $cache->save($cacheId, $frontpageVersion);
+        return $this->cache->save($cacheId, $frontpageVersion);
     }
 
     /**
@@ -494,18 +486,16 @@ class FrontpageVersionService extends OrmService
      **/
     private function invalidationMethod($categoryId, $frontpageId)
     {
-        $this->container->get('core.dispatcher')->dispatch(
+        $this->dispatcher->dispatch(
             'frontpage.save_position',
             [ 'category' => $categoryId, 'frontpageId' => $frontpageId ]
         );
 
-        $lastSavedCacheId = 'frontpage_last_saved_' . $categoryId;
-        if (!empty($lastSavedCacheId)) {
-            $lastSavedCacheId .= '_' . $frontpageId;
-        }
-        $date      = new \Datetime("now");
-        $dateForDB = $date->format(\DateTime::ISO8601);
-        $this->container->get('cache')->save($lastSavedCacheId, $dateForDB);
+        $lastSavedCacheId = 'frontpage_last_saved_' . $categoryId . '_' . $frontpageId;
+
+        $date = new \Datetime("now");
+
+        return $this->cache->save($lastSavedCacheId, $date->format(\DateTime::ISO8601));
     }
 
     /**
