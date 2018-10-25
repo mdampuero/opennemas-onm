@@ -12,13 +12,22 @@ namespace Common\Core\Component\Routing;
 use Api\Service\Service;
 use Common\Cache\Core\Cache;
 use Common\ORM\Entity\Url;
+use Framework\Component\MIME\MimeTypeTool;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class Redirector
 {
+    /**
+     * The list of media types that can be directly served by the application.
+     *
+     * @var array
+     */
+    const MEDIA_TYPES = [ 'attachment', 'photo' ];
+
     /**
      * The cache connection.
      *
@@ -196,6 +205,10 @@ class Redirector
         $target = $this->container->get('core.helper.url_generator')
             ->generate($content);
 
+        if ($this->isMediaFile($content)) {
+            return $this->serveMediaFile($target);
+        }
+
         $params  = $this->container->get('router')->match($target);
         $forward = $request->duplicate([], null, $params);
 
@@ -311,5 +324,41 @@ class Redirector
     protected function hasCache()
     {
         return !empty($this->cache);
+    }
+
+    /**
+     * Checks if the content is a media file that can be directly served.
+     *
+     * @param Content $content The content to check.
+     *
+     * @return boolean True if the content is a media file. False otherwise.
+     */
+    protected function isMediaFile($content)
+    {
+        return !empty($content)
+            && in_array($content->content_type_name, self::MEDIA_TYPES);
+    }
+
+    /**
+     * Returns a response with the content of a file.
+     *
+     * @param string $path The path to the file to serve.
+     *
+     * @return Response The response with the content of the file.
+     */
+    protected function serveMediaFile($path)
+    {
+        $path = $this->container->getParameter('core.paths.public') . $path;
+
+        $content  = file_get_contents($path);
+        $mimetype = MimeTypeTool::getMimeType($path);
+
+        $response = new Response($content, 200);
+
+        $response->headers->set('Content-Type', $mimetype);
+        $response->headers->set('X-Status-Code', 200);
+        $response->headers->set('Content-Length', strlen($content));
+
+        return $response;
     }
 }

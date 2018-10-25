@@ -171,7 +171,9 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $this->kernel->expects($this->once())->method('handle');
 
         $this->repository->expects($this->once())->method('find')
-            ->with('Article', 1467)->willReturn('corge');
+            ->with('Article', 1467)->willReturn(json_decode(json_encode([
+                'content_type_name' => 'article'
+            ])));
 
         $this->request->expects($this->once())->method('duplicate')
             ->with([], null, [ 'slug' => 'glork', 'id' => 'xyzzy' ])
@@ -184,7 +186,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $this->ugh->expects($this->once())->method('generate')
-            ->with('corge')->willReturn('/glork/xyzzy');
+            ->willReturn('/glork/xyzzy');
 
         $this->redirector->getResponse($this->request, $url);
     }
@@ -563,5 +565,23 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $cache->setValue($this->redirector, null);
 
         $this->assertFalse($method->invokeArgs($this->redirector, []));
+    }
+
+    /**
+     * Tests isMediaFile for media and non-media contents.
+     */
+    public function testIsMediaFile()
+    {
+        $method = new \ReflectionMethod($this->redirector, 'isMediaFile');
+        $method->setAccessible(true);
+
+        $this->assertFalse($method->invokeArgs($this->redirector, [ null ]));
+        $this->assertFalse($method->invokeArgs($this->redirector, [
+            json_decode(json_encode([ 'content_type_name' => 'article' ]))
+        ]));
+
+        $this->assertTrue($method->invokeArgs($this->redirector, [
+            json_decode(json_encode([ 'content_type_name' => 'photo' ]))
+        ]));
     }
 }
