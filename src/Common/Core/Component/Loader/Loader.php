@@ -344,8 +344,6 @@ class Loader
         // TODO: delete from application
         define('MEDIA_IMG_PATH_WEB', MEDIA_URL . MEDIA_DIR . '/' . IMG_DIR);
 
-        define('KIOSKO_DIR', 'kiosko' . DS);
-
         // Template settings
         define('TEMPLATE_USER_PATH', SITE_PATH . DS . "themes" . DS . TEMPLATE_USER . DS);
         define('TEMPLATE_USER_URL', "/themes" . '/' . TEMPLATE_USER . '/');
