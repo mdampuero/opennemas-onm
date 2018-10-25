@@ -25,7 +25,7 @@ class FrontpageVersionRepository extends BaseRepository
 
         $rs = $this->conn->fetchAll($sql);
 
-        $categoryFrontpageMap= [];
+        $categoryFrontpageMap = [];
 
         foreach ($rs as $value) {
             $categoryFrontpageMap[$value['category_id']] = (int) $value['frontpage_id'];
@@ -42,7 +42,7 @@ class FrontpageVersionRepository extends BaseRepository
      *
      * @return array The array of categories.
      */
-    public function getCurrentVerForCat($categoryId)
+    public function getCurrentVersionForCategory($categoryId)
     {
         $sql = 'SELECT id FROM frontpage_versions'
             . ' WHERE category_id = ? AND publish_date <= ?'
@@ -52,8 +52,6 @@ class FrontpageVersionRepository extends BaseRepository
             $categoryId,
             $this->getCurrentTimestampForDatabase()
         ]);
-
-        $frontpageVersionId = null;
 
         if (empty($rs)) {
             return null;
@@ -69,7 +67,7 @@ class FrontpageVersionRepository extends BaseRepository
      *
      * @return array The array of categories.
      */
-    public function getNextVerForCat($categoryId)
+    public function getNextVersionForCategory($categoryId)
     {
         $sql = 'SELECT id FROM frontpage_versions'
             . ' WHERE category_id = ? AND publish_date > ?'

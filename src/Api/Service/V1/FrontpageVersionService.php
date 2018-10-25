@@ -79,7 +79,7 @@ class FrontpageVersionService extends OrmService
     public function getContentsInCurrentVersionforCategory($categoryId)
     {
         $categoryIdAux      = empty($categoryId) ? 0 : $categoryId;
-        $frontpageVersionId = $this->getCurrentVersionDB($categoryIdAux);
+        $frontpageVersionId = $this->getCurrentVersionFromDB($categoryIdAux);
         $frontpageVersion   = null;
 
         if (!empty($frontpageVersionId)) {
@@ -266,7 +266,6 @@ class FrontpageVersionService extends OrmService
         return $this->frontpagesRepository->getCurrentVersionForCategory($categoryId);
     }
 
-    public function getNextVerForCat($categoryId)
     /**
      * Returns the id of the next frontpage version for a given category
      *
@@ -274,6 +273,7 @@ class FrontpageVersionService extends OrmService
      *
      * @return int
      **/
+    public function getNextVersionForCategory($categoryId)
     {
         return $this->frontpagesRepository->getNextVersionForCategory($categoryId);
     }

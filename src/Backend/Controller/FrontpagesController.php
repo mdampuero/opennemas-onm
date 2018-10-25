@@ -181,8 +181,7 @@ class FrontpagesController extends Controller
         $fvs = $this->get('api.service.frontpage_version');
 
         try {
-            $version  =
-                $fvs->saveFrontPageVersion($request->request->get('version', null));
+            $version  = $fvs->saveFrontPageVersion($request->request->get('version', null));
             $contents = [];
 
             // Iterate over each element and fetch its parameters to save.
