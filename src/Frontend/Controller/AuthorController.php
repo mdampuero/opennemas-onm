@@ -160,53 +160,69 @@ class AuthorController extends Controller
     {
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 16;
+        $offset       = ($page - 1) * $itemsPerPage;
 
         // Setup templating cache layer
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('frontpage', 'authors', $page);
 
-        if ($this->view->getCaching() === 0
+        if ($this->view->getCaching() === 1
            || !$this->view->isCached('user/frontpage_author.tpl', $cacheID)
         ) {
-            $response = $this->get('api.service.author')->getList();
+            $sql = "SELECT SQL_CALC_FOUND_ROWS contents.fk_author as id, count(pk_content) as total FROM contents"
+                . " WHERE contents.fk_author IN (SELECT users.id FROM users)"
+                . " AND fk_content_type IN (1, 4, 7, 9)  AND available = 1 AND in_litter!= 1"
+                . " GROUP BY contents.fk_author ORDER BY total DESC"
+                . " LIMIT $itemsPerPage OFFSET $offset";
+
+            $items = $this->get('dbal_connection')->fetchAll($sql);
+
+            $sql = 'SELECT FOUND_ROWS()';
+
+            $total = $this->get('dbal_connection')->fetchAssoc($sql);
+            $total = array_pop($total);
+
+            // Use id as array key
+            $items = $this->get('data.manager.filter')
+                ->set($items)
+                ->filter('mapify', [ 'key' => 'id' ])
+                ->get();
+
+            $response = $this->get('api.service.author')->getListByIds(array_keys($items));
             $authors  = $this->get('data.manager.filter')
                 ->set($response['items'])
                 ->filter('mapify', [ 'key' => 'id' ])
                 ->get();
 
-            $sql = "SELECT contents.fk_author as id, count(pk_content) as total FROM contents"
-                . " WHERE contents.fk_author IN (" . implode(',', array_keys($authors)) . ")"
-                . " AND fk_content_type IN (1, 4, 7, 9)  AND available = 1 AND in_litter!= 1"
-                . " GROUP BY contents.fk_author ORDER BY total DESC";
-
-            $items = $this->get('dbal_connection')->fetchAll($sql);
-            $items = array_slice($items, ($page - 1) * $itemsPerPage, $itemsPerPage);
-
             foreach ($items as &$item) {
-                $authors[$item['id']]->total_contents = $item['total'];
-
-                $item = $authors[$item['id']];
+                $author = $authors[$item['id']];
 
                 // Fetch user avatar if exists
-                if (!empty($item->avatar_img_id)) {
-                    $item->photo = $this->get('entity_repository')->find(
-                        'Photo',
-                        $item->avatar_img_id
-                    );
+                if (!empty($author->avatar_img_id)) {
+                    $author->photo = $this->get('entity_repository')
+                        ->find('Photo', $author->avatar_img_id);
                 }
+
+                $author->total_contents = $item['total'];
+
+                $item = $author;
             }
+
+            $items = array_filter($items, function ($a) {
+                return !is_array($a);
+            });
 
             // Build the pagination
             $pagination = $this->get('paginator')->get([
                 'directional' => true,
                 'epp'         => $itemsPerPage,
                 'page'        => $page,
-                'total'       => $response['total'],
+                'total'       => $total,
                 'route'       => 'frontend_frontpage_authors'
             ]);
 
             $this->view->assign([
-                'authors_contents' => $authors,
+                'authors_contents' => $items,
                 'pagination'       => $pagination,
             ]);
         }
