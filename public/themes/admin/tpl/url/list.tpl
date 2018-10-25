@@ -208,7 +208,12 @@
                     </div>
                   </td>
                   <td>
-                    [% item.target %]([% item.content_type %])
+                    <a href="[% routing.generate('admin_' + item.content_type + '_show', { id: item.target }) %]" ng-if="[0, 1, 3].indexOf(item.type) !== -1">
+                      [% item.target %] ([% item.content_type %])
+                    </a>
+                    <span ng-if="[0, 1, 3].indexOf(item.type) === -1">
+                      [% item.target %] ([% item.content_type %])
+                    </span>
                   </td>
                   <td class="text-center">
                     <i class="fa" ng-class="{ 'fa-file-text-o': item.type == 0, 'fa-code': item.type == 1 || item.type == 3, 'fa-asterisk': item.type == 2 }"></i>
