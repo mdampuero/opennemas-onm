@@ -56,7 +56,7 @@ class FrontpageVersionService extends OrmService
         $categoryIdAux = empty($categoryId) ? 0 : $categoryId;
 
         list($frontpageVersion, $contentPositions, $contents) =
-            $this->getPublicContentsForFrontpageData($categoryIdAux);
+            $this->getContentsInCurrentVersionforCategory($categoryIdAux);
 
         $invalidationDt = $this->getInvalidationTime($contents, $categoryIdAux);
         $contents       = $this->filterPublishedContents($contents);
