@@ -408,14 +408,11 @@ class FrontpageVersionService extends OrmService
      **/
     public function checkLastSaved($categoryId, $frontpageVersionId, $date)
     {
-        $newVersionAvailable = false;
-        if (!empty($date)) {
-            $lastSaved           =
-                $this->getLastSaved($categoryId, $frontpageVersionId);
-            $newVersionAvailable = $lastSaved != $date;
+        if (empty($date)) {
+            return false;
         }
 
-        return $newVersionAvailable;
+        return ($this->getLastSaved($categoryId, $frontpageVersionId) != $date);
     }
 
     /**
