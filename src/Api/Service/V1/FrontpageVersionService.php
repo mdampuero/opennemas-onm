@@ -37,7 +37,7 @@ class FrontpageVersionService extends OrmService
             $this->getPublicContentsForFrontpageData($categoryIdAux);
 
         $invalidationDt = $this->getInvalidationTime($contents, $categoryIdAux);
-        $contents       = $this->getOnlyPublishContents($contents);
+        $contents       = $this->filterPublishedContents($contents);
         $lastSaved      = $this->getLastSaved(
             $categoryIdAux,
             $frontpageVersion == null ? null : $frontpageVersion->id
@@ -80,28 +80,6 @@ class FrontpageVersionService extends OrmService
         }
 
         return [$frontpageVersion, $contentPositions, $filteredContents];
-    }
-
-    public function getOnlyPublishContents($contents)
-    {
-        $tz           = $this->container->get('core.locale')->getTimeZone();
-        $systemDateTz = new \DateTime(null, $tz);
-        $systemDateTz = $systemDateTz->format('Y-m-d H:i:s');
-
-        $filteredContents = [];
-        foreach ($contents as $key => $content) {
-            if (!empty($content->starttime) && $content->starttime > $systemDateTz) {
-                continue;
-            }
-
-            if (!empty($content->endtime) && $content->endtime < $systemDateTz) {
-                continue;
-            }
-
-            $filteredContents[$key] = $content;
-        }
-
-        return $filteredContents;
     }
 
     /**
@@ -372,7 +350,9 @@ class FrontpageVersionService extends OrmService
             $this->updateItem($frontpageVersion['id'], $frontpageVersion);
             $fvc = new FrontpageVersion($frontpageVersion);
         }
+
         $this->invalidationMethod($fvc->category_id, $fvc->id);
+
         return $fvc;
     }
 
@@ -532,6 +512,34 @@ class FrontpageVersionService extends OrmService
             $versionAux->created->setTimezone(new \DateTimeZone('UTC'));
         }
         return is_array($versions) ? $versionsAux : $versionsAux[0];
+    }
+
+    /**
+     * Removes contents out of time from an array of contents
+     *
+     * @param array $contents the lit of contents to filter
+     *
+     * @return array
+     **/
+    private function filterPublishedContents($contents)
+    {
+        $systemDateTz = new \DateTime(null, $this->instanceTimezone);
+        $systemDateTz = $systemDateTz->format('Y-m-d H:i:s');
+
+        $filteredContents = [];
+        foreach ($contents as $key => $content) {
+            if (!empty($content->starttime) && $content->starttime > $systemDateTz) {
+                continue;
+            }
+
+            if (!empty($content->endtime) && $content->endtime < $systemDateTz) {
+                continue;
+            }
+
+            $filteredContents[$key] = $content;
+        }
+
+        return $filteredContents;
     }
 
     /**
