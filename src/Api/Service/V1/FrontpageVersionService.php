@@ -44,6 +44,24 @@ class FrontpageVersionService extends OrmService
     }
 
     /**
+     * Checks if a given date string matches the latest version
+     * for a given categoy and frontpage version ids
+     *
+     * @param int $categoryId the category id to search for
+     * @param int $frontpageVersionId the frontpage version id
+     *
+     * @return boolean
+     **/
+    public function checkLastSaved($categoryId, $frontpageVersionId, $date)
+    {
+        if (empty($date)) {
+            return false;
+        }
+
+        return ($this->getLastSaved($categoryId, $frontpageVersionId) != $date);
+    }
+
+    /**
      * Returns the contents positions, contents, invalidationtime and last saved time
      * for the current frontpage given a category id
      *
@@ -395,24 +413,6 @@ class FrontpageVersionService extends OrmService
         }
 
         return $lastSaved;
-    }
-
-    /**
-     * Checks if a given date string matches the latest version
-     * for a given categoy and frontpage version ids
-     *
-     * @param int $categoryId the category id to search for
-     * @param int $frontpageVersionId the frontpage version id
-     *
-     * @return boolean
-     **/
-    public function checkLastSaved($categoryId, $frontpageVersionId, $date)
-    {
-        if (empty($date)) {
-            return false;
-        }
-
-        return ($this->getLastSaved($categoryId, $frontpageVersionId) != $date);
     }
 
     /**
