@@ -140,30 +140,6 @@ class FrontpageVersionService extends OrmService
         return [$frontpages, $versions, $contentPositions, $contents, $versionId];
     }
 
-    public function getContentPositionsAndContents($categoryId, $versionId)
-    {
-        $contentPositions = $this->getContentPositions($categoryId, $versionId);
-        $contentsMap      = [];
-        foreach ($contentPositions as $contentpositionOfPosition) {
-            foreach ($contentpositionOfPosition as $contentposition) {
-                if (array_key_exists($contentposition->pk_fk_content, $contentsMap)) {
-                    continue;
-                }
-                $contentsMap[$contentposition->pk_fk_content] =
-                    [$contentposition->content_type, $contentposition->pk_fk_content];
-            }
-        }
-        $contentsAux =
-            $this->container->get('entity_repository')->findMulti($contentsMap);
-
-        $contents = [];
-        foreach ($contentsAux as $content) {
-            $contents[$content->id] = $content;
-        }
-
-        return [$contentPositions, $contents];
-    }
-
     public function getContentPositions($categoryId, $versionId)
     {
         $contentPositions = $this->getFrontpageDataFromCache($categoryId, $versionId);
@@ -611,5 +587,37 @@ class FrontpageVersionService extends OrmService
         $invalidationTime->setTimeZone(new \DateTimeZone('UTC'));
 
         return $invalidationTime;
+    }
+
+    /**
+     * Returns an array where the first element is the list of content positions
+     * and the second is the list of contents for a given frontpage ()
+     *
+     * @param int $categoryId the category id to search for
+     * @param int $versionId the frontpage version id
+     *
+     * @return array
+     **/
+    private function getContentPositionsAndContents($categoryId, $versionId)
+    {
+        $contentPositions = $this->getContentPositions($categoryId, $versionId);
+        $contentsMap      = [];
+        foreach ($contentPositions as $contentpositionOfPosition) {
+            foreach ($contentpositionOfPosition as $contentposition) {
+                if (array_key_exists($contentposition->pk_fk_content, $contentsMap)) {
+                    continue;
+                }
+                $contentsMap[$contentposition->pk_fk_content] =
+                    [$contentposition->content_type, $contentposition->pk_fk_content];
+            }
+        }
+        $contentsAux = $this->entityRepository->findMulti($contentsMap);
+
+        $contents = [];
+        foreach ($contentsAux as $content) {
+            $contents[$content->id] = $content;
+        }
+
+        return [$contentPositions, $contents];
     }
 }
