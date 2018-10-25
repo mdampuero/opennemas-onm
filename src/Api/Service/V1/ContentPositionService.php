@@ -12,6 +12,16 @@ namespace Api\Service\V1;
 class ContentPositionService extends OrmService
 {
 
+    /**
+     * See: Common\ORM\Entity\ContentPosition\ContentPositionRepository::getContentPositions
+     *
+     * Returns a list of content positions for a given category and frontpage id
+     *
+     * @param int $categoryId the category id to get contents from
+     * @param int $frontpageVersionId the category id to get contents from
+     *
+     * @return array
+     */
 
     public function getContentPositions($categoryId, $frontpageId)
     {
@@ -19,6 +29,13 @@ class ContentPositionService extends OrmService
         return $repository->getContentPositions($categoryId, $frontpageId);
     }
 
+    /**
+     * See: Common\ORM\Entity\ContentPosition\ContentPositionRepository::getCategoriesWithManualFrontpage
+     *
+     * Returns the list of categories that have a manual frontpage already saved
+     *
+     * @return array
+     */
     public function getCategoriesWithManualFrontpage()
     {
         $repository = $this->container->get('orm.manager')

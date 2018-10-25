@@ -15,8 +15,21 @@ use Api\Exception\CreateItemException;
 class FrontpageVersionService extends OrmService
 {
 
+    /**
+     * The number of versions to keep
+     *
+     * @var int
+     **/
     const MAX_NUMBER_OF_VERSIONS = 10;
 
+    /**
+     * Returns the contents positions, contents, invalidationtime and last saved time
+     * for the current frontpage given a category id
+     *
+     * @param int $categoryId the category id to
+     *
+     * @return void
+     **/
     public function getPublicFrontpageData($categoryId)
     {
         $categoryIdAux = empty($categoryId) ? 0 : $categoryId;
@@ -33,7 +46,15 @@ class FrontpageVersionService extends OrmService
         return [$contentPositions, $contents, $invalidationDt, $lastSaved];
     }
 
-    public function getPublicContentsForFrontpageData($categoryId)
+    /**
+     * Returns the contents positions, contents, invalidationtime and last saved time
+     * for the current frontpage version given a category id
+     *
+     * @param int $categoryId the category id to
+     *
+     * @return void
+     **/
+    public function getContentsInCurrentVersionforCategory($categoryId)
     {
         $categoryIdAux      = empty($categoryId) ? 0 : $categoryId;
         $frontpageVersionId = $this->getCurrentVersionDB($categoryIdAux);
@@ -129,6 +150,15 @@ class FrontpageVersionService extends OrmService
         return $filteredContents;
     }
 
+    /**
+     * Returns the data (frontpages, vesrions, content positions, contents and vesrion id)
+     * used to render a frontpage given a category id and frontpage version id
+     *
+     * @param int $categoryId the category id to get contents from
+     * @param int $frontpageVersionId the category id to get contents from
+     *
+     * @return array
+     **/
     public function getFrontpageData($categoryId, $frontpageVersionId)
     {
         list($frontpages, $versions) =
@@ -302,6 +332,13 @@ class FrontpageVersionService extends OrmService
     }
 
     public function getCurrentVersionDB($categoryId)
+    /**
+     * Returns the id of the next frontpage version for a given category
+     *
+     * @param int $categoryId the category id to search for
+     *
+     * @return int
+     **/
     {
         return $this->container->get('orm.manager')
             ->getRepository($this->entity, $this->origin)->getCurrentVerForCat($categoryId);
@@ -313,6 +350,15 @@ class FrontpageVersionService extends OrmService
             ->getRepository($this->entity, $this->origin)->getNextVerForCat($categoryId);
     }
 
+    /**
+     * Returns a frontpage version name that will be used as default value.
+     *
+     * It uses the current instance timezone
+     *
+     * @param int $timestamp the timestamp to use
+     *
+     * @return void
+     **/
     public function getDefaultNameFV($timestamp)
     {
         $dt = new \DateTime();
@@ -322,6 +368,17 @@ class FrontpageVersionService extends OrmService
         return $dt->format('Y-m-d H:i');
     }
 
+    /**
+     * Saves a frontpage version given an array with its properties
+     *     - frontpage_id
+     *     - id
+     *     - category_id
+     *     - MORE PROPERTIES TO COMPLETE HERE
+     *
+     * @param array $frontpageVersion the frontpage data to save
+     *
+     * @return \Common\ORM\Entity\FrontpageVersion|null
+     **/
     public function saveFrontPageVersion($frontpageVersion)
     {
         $fvc = null;
@@ -363,6 +420,14 @@ class FrontpageVersionService extends OrmService
         return $fvc;
     }
 
+    /**
+     * Removes an specific version (contents and item) and invalidates its cache
+     *
+     * @param int $categoryId the category id to search for
+     * @param int $versionId the frontpage version id
+     *
+     * @return void
+     **/
     public function deleteVersionItem($categoryId, $versionId)
     {
         \ContentManager::clearContentPositionsForHomePageOfCategory(
@@ -376,6 +441,15 @@ class FrontpageVersionService extends OrmService
         $this->invalidationMethod($categoryId, $versionId);
     }
 
+    /**
+     * Returns the datetime string of the latest version
+     * for a given category and frontpage version id
+     *
+     * @param int $categoryId the category id to search for
+     * @param int $frontpageVersionId the frontpage version id
+     *
+     * @return string
+     **/
     public function getLastSaved($categoryId, $frontpageVersionId)
     {
         $lastSavedCacheId = 'frontpage_last_saved_' . $categoryId;
@@ -395,6 +469,15 @@ class FrontpageVersionService extends OrmService
         return $lastSaved;
     }
 
+    /**
+     * Checks if a given date string matches the latest version
+     * for a given categoy and frontpage version ids
+     *
+     * @param int $categoryId the category id to search for
+     * @param int $frontpageVersionId the frontpage version id
+     *
+     * @return boolean
+     **/
     public function checkLastSaved($categoryId, $frontpageVersionId, $date)
     {
         $newVersionAvailable = false;
@@ -407,6 +490,14 @@ class FrontpageVersionService extends OrmService
         return $newVersionAvailable;
     }
 
+    /**
+     * Returns from cache the list of contents for a given category and frontpage ids
+     *
+     * @param int $categoryId the category id to search for
+     * @param int $frontpageVersionId the frontpage version id
+     *
+     * @return array
+     **/
     private function getFrontpageDataFromCache($categoryId, $frontpageVersionId)
     {
         $cacheId = empty($frontpageVersionId) ?
@@ -416,6 +507,15 @@ class FrontpageVersionService extends OrmService
         $contents = $this->container->get('cache')->fetch($cacheId);
     }
 
+    /**
+     * Saves into cache the list of contents given a category and frontpage version id
+     *
+     * @param int $categoryId the category id to search for
+     * @param int $frontpageVersionId the frontpage version id
+     * @param int $frontpageVersion the contents of the frontpage version
+     *
+     * @return boolean
+     **/
     private function setFrontpageDataFromCache($categoryId, $frontpageVersionId, $frontpageVersion)
     {
         $cacheId = empty($versionId) ?
@@ -426,6 +526,14 @@ class FrontpageVersionService extends OrmService
         return $cache->save($cacheId, $frontpageVersion);
     }
 
+    /**
+     * Invalidates the cache for a given category and frontpage version id
+     *
+     * @param int $categoryId the category id to search for
+     * @param int $frontpageId the frontpage id
+     *
+     * @return boolean
+     **/
     private function invalidationMethod($categoryId, $frontpageId)
     {
         $this->container->get('core.dispatcher')->dispatch(
@@ -442,6 +550,13 @@ class FrontpageVersionService extends OrmService
         $this->container->get('cache')->save($lastSavedCacheId, $dateForDB);
     }
 
+    /**
+     * Changes the publish_date property to UTC on each item in a given list of frontpage versions
+     *
+     * @param array $versions the list of frontpage versions
+     *
+     * @return array
+     **/
     private function changeToUTC($versions)
     {
         if (empty($versions)) {
