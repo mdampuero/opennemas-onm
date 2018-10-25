@@ -120,4 +120,17 @@ class ContentPositionServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($this->service->clearContentPositionsForHomePageOfCategory(0, 0));
     }
+
+    /**
+     * Tests clearContentPositionsForHomePageOfCategory.
+     */
+    public function testClearContentPositionsForHomePageOfCategoryWithoutVersionId()
+    {
+        $this->em->expects($this->once())->method('getConnection')
+            ->willReturn($this->connection);
+        $this->logger->expects($this->once())->method('info')
+            ->willReturn($this->connection);
+
+        $this->assertTrue($this->service->clearContentPositionsForHomePageOfCategory(0, 1));
+    }
 }
