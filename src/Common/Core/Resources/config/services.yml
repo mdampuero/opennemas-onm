@@ -291,6 +291,12 @@ services:
         class:     Common\Core\Component\Security\User\UserProvider
         arguments: [ '@orm.manager', [ 'instance', 'manager' ] ]
 
+    core.subscriber.redirector:
+        class: Common\Core\EventSubscriber\RedirectorSubscriber
+        arguments: [ '@cache.connection.instance', '@core.instance' ]
+        tags:
+            - { name: kernel.event_subscriber }
+
     core.security.user.oauth_provider:
         class:     Common\Core\Component\Security\User\OAuthUserProvider
         arguments: [ '@orm.manager', '@security.token_storage', [ 'instance', 'manager' ] ]
