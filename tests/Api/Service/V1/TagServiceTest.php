@@ -30,13 +30,21 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'objectify', 'responsify' ])
             ->getMock();
 
+        $this->dispatcher = $this->getMockBuilder('EventDispatcher')
+            ->setMethods([ 'dispatch' ])
+            ->getMock();
+
         $this->em = $this->getMockBuilder('EntityManager' . uniqid())
             ->setMethods([
-                'getConverter', 'getRepository', 'persist'
+                'getConverter', 'getMetadata', 'getRepository', 'persist'
             ])->getMock();
 
         $this->fm = $this->getMockBuilder('FilterManager')
             ->setMethods([ 'filter', 'get', 'set' ])
+            ->getMock();
+
+        $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
+            ->setMethods([ 'getId', 'getIdKeys' ])
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
@@ -48,6 +56,8 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->em->expects($this->any())->method('getConverter')
             ->willReturn($this->converter);
+        $this->em->expects($this->any())->method('getMetadata')
+            ->willReturn($this->metadata);
         $this->em->expects($this->any())->method('getRepository')
             ->willReturn($this->repository);
 
@@ -63,6 +73,9 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.dispatcher':
+                return $this->dispatcher;
+
             case 'data.manager.filter':
                 return $this->fm;
 
