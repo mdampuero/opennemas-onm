@@ -11,8 +11,6 @@ namespace Common\ORM\Database\Repository;
 
 class FrontpageVersionRepository extends BaseRepository
 {
-
-
     /**
      * Returns an array of categories grouped by entity id.
      *
@@ -27,14 +25,13 @@ class FrontpageVersionRepository extends BaseRepository
 
         $rs = $this->conn->fetchAll($sql);
 
-        $catFrontpageRel = [];
+        $categoryFrontpageMap= [];
 
         foreach ($rs as $value) {
-            $catFrontpageRel[$value['category_id']] =
-                (int) $value['frontpage_id'];
+            $categoryFrontpageMap[$value['category_id']] = (int) $value['frontpage_id'];
         }
 
-        return $catFrontpageRel;
+        return $categoryFrontpageMap;
     }
 
 
@@ -92,6 +89,11 @@ class FrontpageVersionRepository extends BaseRepository
         return $rs[0]['id'];
     }
 
+    /**
+     * Returns a formatted string (Y-m-d H:i) of the current date
+     *
+     * @return string
+     */
     private function getCurrentTimestampForDatabase()
     {
         $dt = new \DateTime();

@@ -14,7 +14,6 @@ use Api\Exception\CreateItemException;
 
 class FrontpageVersionService extends OrmService
 {
-
     /**
      * The number of versions to keep
      *
@@ -43,7 +42,8 @@ class FrontpageVersionService extends OrmService
             $categoryIdAux,
             $frontpageVersion == null ? null : $frontpageVersion->id
         );
-        return [$contentPositions, $contents, $invalidationDt, $lastSaved];
+
+        return [ $contentPositions, $contents, $invalidationDt, $lastSaved ];
     }
 
     /**
@@ -214,10 +214,9 @@ class FrontpageVersionService extends OrmService
     {
         $contentPositions = $this->getFrontpageDataFromCache($categoryId, $versionId);
 
-        if (is_null($contentPositions)) {
-            $contentPositions =
-                $this->container->get('api.service.contentposition')
-                    ->getContentPositions($categoryId, $versionId);
+        if (empty($contentPositions)) {
+            $contentPositions = $this->contentPositionService
+                ->getContentPositions($categoryId, $versionId);
 
             $this->setFrontpageDataFromCache($categoryId, $versionId, $contentPositions);
         }
@@ -227,9 +226,9 @@ class FrontpageVersionService extends OrmService
 
     public function getContentIds($categoryId, $versionId, $contentType = null)
     {
-        $versionIdAux = $versionId === null ?
-            $this->getCurrentVersionDB($categoryId) :
-            $versionId;
+        $versionIdAux = $versionId === null
+            ? $this->getCurrentVersionFromDB($categoryId)
+            : $versionId;
 
         $contentPositions = $this->getContentPositions($categoryId, $versionIdAux);
         $contentsIds      = [];
@@ -313,13 +312,9 @@ class FrontpageVersionService extends OrmService
         }
         $frontpages = array_merge($frontpages, $frontpagesAut);
 
-        $oql = 'category_id = ' . $categoryIdAux .
-            ' order by publish_date desc';
+        $oql = 'category_id = ' . $categoryIdAux . ' order by publish_date desc';
 
-        $versions = $this->getList(
-            $oql
-        )['items'];
-
+        $versions = $this->getList($oql)['items'];
         $versions = $this->changeToUTC($versions);
 
         return [$frontpages, $versions];
@@ -345,6 +340,13 @@ class FrontpageVersionService extends OrmService
     }
 
     public function getNextVerForCat($categoryId)
+    /**
+     * Returns the id of the next frontpage version for a given category
+     *
+     * @param int $categoryId the category id to search for
+     *
+     * @return int
+     **/
     {
         return $this->container->get('orm.manager')
             ->getRepository($this->entity, $this->origin)->getNextVerForCat($categoryId);

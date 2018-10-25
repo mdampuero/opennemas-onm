@@ -25,8 +25,9 @@ class ContentPositionService extends OrmService
 
     public function getContentPositions($categoryId, $frontpageId)
     {
-        $repository = $this->container->get('orm.manager')->getRepository('ContentPosition');
-        return $repository->getContentPositions($categoryId, $frontpageId);
+        return $this->container->get('orm.manager')
+            ->getRepository('ContentPosition')
+            ->getContentPositions($categoryId, $frontpageId);
     }
 
     /**
@@ -38,9 +39,9 @@ class ContentPositionService extends OrmService
      */
     public function getCategoriesWithManualFrontpage()
     {
-        $repository = $this->container->get('orm.manager')
-            ->getRepository('ContentPosition');
-        return $repository->getCategoriesWithManualFrontpage();
+        return $this->container->get('orm.manager')
+            ->getRepository('ContentPosition')
+            ->getCategoriesWithManualFrontpage();
     }
 
     /**
