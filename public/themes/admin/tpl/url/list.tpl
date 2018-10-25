@@ -110,12 +110,12 @@
                 </ui-select-choices>
               </ui-select>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-init="redirect = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Yes{/t}', value: 1}, { name: '{t}No{/t}', value: 0 } ]">
-              <ui-select name="redirect" theme="select2" ng-model="criteria.redirect">
+            <li class="quicklinks hidden-xs ng-cloak" ng-init="redirection = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Yes{/t}', value: 1}, { name: '{t}No{/t}', value: 0 } ]">
+              <ui-select name="redirection" theme="select2" ng-model="criteria.redirection">
                 <ui-select-match>
                   <strong>{t}Redirection{/t}:</strong> [% $select.selected.name %]
                 </ui-select-match>
-                <ui-select-choices repeat="item.value as item in redirect | filter: $select.search">
+                <ui-select-choices repeat="item.value as item in redirection | filter: $select.search">
                   <div ng-bind-html="item.name | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
@@ -221,8 +221,8 @@
                     <strong ng-if="isHelpEnabled() && item.type == 3">{t}Slug{/t}/{t}URL{/t}</strong>
                   </td>
                   <td class="text-center">
-                    <button class="btn btn-white" ng-click="patch(item, 'redirect', item.redirect != 1 ? 1 : 0)" type="button" uib-tooltip="[% !item.redirect ? '{t}Serve{/t}' : '{t}Redirect{/t}' %]">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.redirectLoading, 'fa-exchange fa-rotate-90 text-error' : !item.redirectLoading && item.redirect == 0, 'fa-retweet text-success': !item.redirectLoading && item.redirect == 1 }"></i>
+                    <button class="btn btn-white" ng-click="patch(item, 'redirection', item.redirection != 1 ? 1 : 0)" type="button" uib-tooltip="[% !item.redirection ? '{t}Serve{/t}' : '{t}Redirect{/t}' %]">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.redirectionLoading, 'fa-exchange fa-rotate-90 text-error' : !item.redirectionLoading && item.redirection == 0, 'fa-retweet text-success': !item.redirectionLoading && item.redirection == 1 }"></i>
                     </button>
                   </td>
                   <td class="text-center">
