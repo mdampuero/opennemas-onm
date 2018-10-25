@@ -158,9 +158,16 @@ class AuthorController extends Controller
      */
     public function frontpageAuthorsAction(Request $request)
     {
-        $page         = $request->query->getDigits('page', 1);
+        $page         = (int) $request->get('page', 1);
         $itemsPerPage = 16;
         $offset       = ($page - 1) * $itemsPerPage;
+
+        // Redirect to first page
+        if ($page < 1) {
+            return $this->redirectToRoute('frontend_frontpage_authors', [
+                'page' => 1
+            ]);
+        }
 
         // Setup templating cache layer
         $this->view->setConfig('articles');
@@ -181,6 +188,15 @@ class AuthorController extends Controller
 
             $total = $this->get('dbal_connection')->fetchAssoc($sql);
             $total = array_pop($total);
+
+            // Redirect to last page
+            if (ceil($total / $itemsPerPage) < $page) {
+                $page = ceil($total / $itemsPerPage);
+
+                return $this->redirectToRoute('frontend_frontpage_authors', [
+                    'page' => $page
+                ]);
+            }
 
             // Use id as array key
             $items = $this->get('data.manager.filter')
