@@ -42,10 +42,11 @@ class FrontpagesController extends Controller
             throw new AccessDeniedException();
         }
 
+        $fs  = $this->get('api.service.frontpage');
         $fvs = $this->get('api.service.frontpage_version');
 
         list($frontpages, $versions, $contentPositionByPos, $contents, $versionId) =
-            $fvs->getFrontpageData($categoryId, $versionId);
+            $fs->getDataForCategoryAndVersion($categoryId, $versionId);
 
         $this->container->get('api.service.contentposition')
             ->getCategoriesWithManualFrontpage();
