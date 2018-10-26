@@ -32,7 +32,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-loading btn-success text-uppercase" ng-click="save()">
+                <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="form.$invalid">
                   <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                   {t}Save{/t}
                 </button>
@@ -98,10 +98,15 @@
           </div>
           <div class="col-md-8 col-md-pull-4">
             <div class="grid simple">
-              <div class="grid-body">
+              <div class="grid-title">
                 <div class="form-group no-margin">
-                  <label class="form-label">{t}Mode{/t}</label>
+                  <h4>
+                    <i class="fa fa-cog"></i>
+                    {t}Mode{/t}
+                  </h4>
                 </div>
+              </div>
+              <div class="grid-body">
                 <div class="row">
                   <div class="col-sm-12 form-group no-margin">
                     <div class="radio">
@@ -109,7 +114,7 @@
                       <label class="form-label" for="type-content-content">
                         <i class="fa fa-file-text-o"></i>
                         <strong>{t}Content{/t}</strong>
-                        {t}to{/t}
+                        -
                         <i class="fa fa-file-text-o"></i>
                         <strong>{t}Content{/t}</strong>
                         ({t}Migrations only{/t})
@@ -132,7 +137,7 @@
                       <label for="type-slug-content">
                         <i class="fa fa-code"></i>
                         <strong>{t}Slug{/t}</strong>
-                        {t}to{/t}
+                        -
                         <i class="fa fa-file-text-o"></i>
                         <strong>{t}Content{/t}</strong>
                       </label>
@@ -148,7 +153,7 @@
                       <label for="type-slug-slug">
                         <i class="fa fa-code"></i>
                         <strong>{t}Slug{/t}</strong>
-                        {t}to{/t}
+                        -
                         <i class="fa fa-code"></i>
                         <strong>{t}Slug{/t}/{t}URL{/t}</strong>
                       </label>
@@ -166,7 +171,7 @@
                       <label for="type-regex-content">
                         <i class="fa fa-asterisk"></i>
                         <strong>{t}Regex{/t}</strong>
-                        {t}to{/t}
+                        -
                         <i class="fa fa-file-text-o"></i>
                         <strong>{t}Content{/t}</strong>
                       </label>
@@ -182,7 +187,7 @@
                       <label for="type-regex-slug">
                         <i class="fa fa-asterisk"></i>
                         <strong>{t}Regex{/t}</strong>
-                        {t}to{/t}
+                        -
                         <i class="fa fa-code"></i>
                         <strong>{t}Slug{/t}/{t}URL{/t}</strong>
                       </label>
@@ -193,37 +198,86 @@
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div class="grid simple">
+              <div class="grid-title">
+                <h4>
+                  <i class="fa fa-plane"></i>
+                  {t}Source{/t} - {t}Target{/t}
+                </h4>
+              </div>
+              <div class="grid-body">
                 <div class="row">
-                  <div class="col-sm-6">
-                    <div class="form-group">
+                  <div class="col-sm-4">
+                    <div class="form-group no-margin">
                       <label for="name" class="form-label">
-                        <span ng-if="item.type < 3">{t}Source{/t}</span>
+                        <span ng-if="item.type === 0">{t}Content{/t}</span>
+                        <span ng-if="item.type === 1 || item.type === 2">{t}Slug{/t}</span>
                         <span ng-if="item.type >= 3">{t}Pattern{/t}</span>
                       </label>
                       <div class="controls">
                         <input class="form-control" id="name" name="name" ng-model="item.source" placeholder="[% item.type == 0 ? '1234' : (item.type == 1 || item.type == 2 ? 'qux/thud/norf': '^[a-z]+/([0-9]+)$') %]" required type="text">
                       </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="form-group">
-                      <label for="name" class="form-label">
-                        <span ng-if="item.type < 3">{t}Target{/t}</span>
-                        <span ng-if="item.type === 3">{t}Match{/t}</span>
-                        <span ng-if="item.type > 3">{t}Replacement{/t}</span>
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" id="name" name="name" ng-model="item.target" placeholder="[% item.type == 0 || item.type == 1 ? '4685' : (item.type === 2 ? 'http://www.qux.org/thud/norf' : (item.type === 3 ? '$1' : 'http://www.qux.org/$1')) %]" required type="text">
+                      <div class="help m-t-5">
+                        <strong>{t}Examples{/t}</strong>
+                        <ul class="no-style" ng-if="item.type === 0">
+                          <li class="p-l-10">1324</li>
+                          <li class="p-l-10">575</li>
+                          <li class="p-l-10">45677</li>
+                        </ul>
+                        <span class="no-style" ng-if="item.type === 1 || item.type === 2">
+                          <li class="p-l-10">glorp</li>
+                          <li class="p-l-10">wibble/grault</li>
+                          <li class="p-l-10">flob-fubar/garply/1</li>
+                        </span>
+                        <ul class="no-style" ng-if="item.type === 3 || item.type === 4">
+                          <li class="p-l-10">^[a-z]+/[0-9]+</li>
+                          <li class="p-l-10">^([a-z]+)/([0-9]+)</li>
+                          <li class="p-l-10">^glorp-(.*)$</li>
+                        </ul>
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-6" ng-if="item.type === 0 || item.type === 1 || item.type === 3">
-                    <div class="form-group">
+                  <div class="col-sm-4">
+                    <div class="form-group no-margin">
+                      <label for="name" class="form-label">
+                        <span ng-if="item.type === 0 || item.type === 1 || item.type === 3">{t}Content{/t}</span>
+                        <span ng-if="item.type === 2 || item.type === 4">{t}Slug{/t}</span>
+                      </label>
+                      <div class="controls">
+                        <input class="form-control" id="name" name="name" ng-model="item.target" placeholder="[% item.type == 0 || item.type == 1 ? '4685' : (item.type === 2 ? 'http://www.qux.org/thud/norf' : (item.type === 3 ? '$1' : 'http://www.qux.org/$1')) %]" type="text">
+                      </div>
+                      <div class="help m-t-5">
+                        <strong>{t}Examples{/t}</strong>
+                        <ul class="no-style" ng-if="item.type === 0 || item.type === 1 || item.type === 3">
+                          <li class="p-l-10">1324</li>
+                          <li class="p-l-10">575</li>
+                          <li class="p-l-10">45677</li>
+                        </ul>
+                        <ul class="no-style" ng-if="item.type === 2">
+                          <li class="p-l-10">glorp</li>
+                          <li class="p-l-10">mumble/foobar</li>
+                        </ul>
+                        <ul class="no-style" ng-if="item.type === 4">
+                          <li class="p-l-10">glorp</li>
+                          <li class="p-l-10">$2/$1</li>
+                          <li class="p-l-10">flob-$1</li>
+                        </ul>
+                        <div class="m-t-10" ng-if="item.type === 2">
+                          <i class="fa fa-warning text-warning m-r-5"></i>
+                          {t}An empty slug equals to frontpage{/t}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4" ng-if="item.type === 0 || item.type === 1 || item.type === 3">
+                    <div class="form-group no-margin">
                       <label for="name" class="form-label">{t}Content type{/t}</label>
                       <div class="controls">
-                        <input class="form-control" id="name" name="name" ng-model="item.content_type" required type="text">
+                        <div class="content-placeholder" content-picker content-picker-selection="true" content-picker-max-size="1" content-picker-target="contentsRight" content-picker-type="album,article,opinion,poll,video" content-picker-view="list-item">
+                          <input class="form-control" id="name" name="name" ng-model="item.content_type" required type="text">
+                        </div>
                       </div>
                     </div>
                   </div>
