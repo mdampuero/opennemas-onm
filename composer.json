@@ -91,7 +91,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url":  "https://github.com/frandieguez/jwt-authentication-bundle"
+            "url":  "https://github.com/openhost/jwt-authentication-bundle"
         },
         {
             "type": "git",
