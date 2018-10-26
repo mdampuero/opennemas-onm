@@ -159,8 +159,11 @@ class AuthorController extends Controller
     public function frontpageAuthorsAction(Request $request)
     {
         $page         = (int) $request->get('page', 1);
-        $itemsPerPage = 16;
-        $offset       = ($page - 1) * $itemsPerPage;
+        $itemsPerPage = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_in_blog', 10);
+
+        $offset = ($page - 1) * $itemsPerPage;
 
         // Redirect to first page
         if ($page < 1) {
