@@ -221,11 +221,12 @@ class ApiController extends Controller
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('show'));
 
-        $ss = $this->get($this->service);
+        $ss   = $this->get($this->service);
+        $item = $ss->getItem($id);
 
         return new JsonResponse([
-            'item'  => $ss->responsify($ss->getItem($id)),
-            'extra' => $this->getExtraData()
+            'item'  => $ss->responsify($item),
+            'extra' => $this->getExtraData($item)
         ]);
     }
 
@@ -253,11 +254,12 @@ class ApiController extends Controller
     /**
      * Returns a list of extra data.
      *
-     * @param array $items The array of items.
+     * @param mixed $items The item when called in a single-item action or the
+     *                     array of items when called in a list-of-items action.
      *
      * @return array The extra data.
      */
-    protected function getExtraData($items = [])
+    protected function getExtraData($items = null)
     {
         return [];
     }
