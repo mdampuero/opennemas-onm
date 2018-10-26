@@ -50,10 +50,10 @@ class Controller extends SymfonyController
         }
 
         if (!empty($parameters)) {
-            $this->get('view')->assign($parameters);
+            $this->view->assign($parameters);
         }
 
-        return $this->get('view')->fetch($template, $cacheId);
+        return $this->view->fetch($template, $cacheId);
     }
 
     /**
@@ -66,14 +66,14 @@ class Controller extends SymfonyController
         $data = null;
 
         // If the template is cached, fetch the dates from it
-        if ($this->get('view')->caching && $this->get('view')->cache_lifetime) {
-            $templateObject = array_shift($this->get('view')->template_objects);
+        if ($this->view->caching && $this->view->cache_lifetime) {
+            $templateObject = array_shift($this->view->template_objects);
 
             $creationDate = new \DateTime();
             $creationDate->setTimeStamp($templateObject->cached->timestamp);
             $creationDate->setTimeZone(new \DateTimeZone('UTC'));
 
-            $expires    = $templateObject->cached->timestamp + $this->get('view')->cache_lifetime;
+            $expires    = $templateObject->cached->timestamp + $this->view->cache_lifetime;
             $expireDate = new \DateTime();
             $expireDate->setTimeStamp($expires);
             $expireDate->setTimeZone(new \DateTimeZone('UTC'));

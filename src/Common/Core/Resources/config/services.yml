@@ -253,7 +253,7 @@ services:
 
     core.listener.template.annotation:
         class:     Common\Core\EventListener\TemplateAnnotationListener
-        arguments: [ '@annotation_reader' ]
+        arguments: [ '@service_container', '@annotation_reader' ]
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
         public: true

@@ -23,6 +23,13 @@ class TemplateAnnotationListener
      *
      * @var ServiceContainer
      */
+    protected $container;
+
+    /**
+     * The service container.
+     *
+     * @var ServiceContainer
+     */
     protected $annotationReader;
 
     /**
@@ -30,8 +37,9 @@ class TemplateAnnotationListener
      *
      * @param ServiceContainer $container The service container.
      */
-    public function __construct($annotationReader)
+    public function __construct($container, $annotationReader)
     {
+        $this->container        = $container;
         $this->annotationReader = $annotationReader;
     }
 
