@@ -16,6 +16,7 @@ use Framework\Component\MIME\MimeTypeTool;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -75,7 +76,7 @@ class Redirector
      */
     public function getResponse(Request $request, Url $url)
     {
-        return $url->redirection ? $this->getRedirectResponse($url) :
+        return $url->redirection ? $this->getRedirectResponse($request, $url) :
             $this->getForwardResponse($request, $url);
     }
 
@@ -96,6 +97,7 @@ class Redirector
         }
 
         $cacheId = $this->getCacheId($source, $contentType);
+        $url     = null;
 
         if ($this->hasCache() && $this->cache->exists($cacheId)) {
             return $this->cache->get($cacheId);
@@ -137,14 +139,12 @@ class Redirector
     protected function getCategory($id)
     {
         try {
-            $content = $this->container->get('orm.manager')
+            return $this->container->get('orm.manager')
                 ->getRepository('Category')
                 ->find($id);
         } catch (\Exception $e) {
             return null;
         }
-
-        return $content;
     }
 
     /**
@@ -166,23 +166,24 @@ class Redirector
     }
 
     /**
-     * Returns a content basing on a Url.
+     * Returns a content basing on an id and a content type.
      *
-     * @param Url $url The Url object.
+     * @param integer $id          The content id.
+     * @param string  $contentType The content type.
      *
      * @return Content The content.
      */
-    protected function getContent(Url $url)
+    protected function getContent($id, $contentType)
     {
-        $contentType = \classify($url->content_type);
+        $contentType = \classify($contentType);
         $method      = 'get' . $contentType;
 
         if (method_exists($this, $method)) {
-            return $this->{$method}($url->target);
+            return $this->{$method}($id);
         }
 
         return $this->container->get('entity_repository')
-            ->find($contentType, $url->target);
+            ->find($contentType, $id);
     }
 
     /**
@@ -192,21 +193,25 @@ class Redirector
      * @param Request $request The current request.
      * @param Url     $url     The Url object.
      *
-     * @return Response The result of forwarding the request.
+     * @return mixed A Response with the result of forwarding the request if the
+     *               target is not a media file. A BinaryFileResponse if the
+     *               target is a media file.
      */
     protected function getForwardResponse($request, $url)
     {
-        $content = $this->getContent($url);
+        $target = $this->getTarget($request, $url);
 
-        if (empty($content)) {
+        if (!$this->isTargetValid($request, $target)) {
             throw new ResourceNotFoundException();
         }
 
-        $target = $this->container->get('core.helper.url_generator')
-            ->generate($content);
+        if (is_object($target)) {
+            if ($this->isMediaFile($target)) {
+                return $this->getMediaFileResponse($target);
+            }
 
-        if ($this->isMediaFile($content)) {
-            return $this->serveMediaFile($target);
+            $target = $this->container->get('core.helper.url_generator')
+                ->generate($target);
         }
 
         $params  = $this->container->get('router')->match($target);
@@ -226,7 +231,7 @@ class Redirector
     protected function getLiteralUrl($source, $contentType = null)
     {
         $oql = sprintf(
-            'type in [%s] and source = "%s" limit 1',
+            'type in [%s] and source = "%s" and enabled = 1 limit 1',
             implode(',', [ 0, 1, 2 ]),
             $source
         );
@@ -236,13 +241,31 @@ class Redirector
                 . ' and ' . $oql;
         }
 
-        $items = $this->service->getList($oql);
-
-        if ($items['total'] === 1) {
-            return $items['items'][0];
+        try {
+            return $this->service->getItemBy($oql);
+        } catch (\Exception $e) {
+            return null;
         }
+    }
 
-        return null;
+    /**
+     * Returns a response with the content of a file.
+     *
+     * @param Content $content The content object of the file to serve.
+     *
+     * @return BinaryFileResponse The response with the content of the file.
+     */
+    protected function getMediaFileResponse($content)
+    {
+        $path  = $this->container->getParameter('core.paths.public');
+        $path .= $this->container->get('core.helper.url_generator')
+            ->generate($content);
+
+        $response = new BinaryFileResponse($path);
+
+        $response->headers->set('X-Status-Code', 200);
+
+        return $response;
     }
 
     /**
@@ -261,24 +284,23 @@ class Redirector
     /**
      * Returns a RedirectReponse basing on the Url object.
      *
-     * @param Url $url The Url object.
+     * @param Request $request The request object.
+     * @param Url     $url     The Url object.
      *
      * @return RedirectResponse The redirect response.
      */
-    protected function getRedirectResponse(Url $url)
+    protected function getRedirectResponse(Request $request, Url $url)
     {
-        if (!in_array($url->type, [ 0, 1, 3 ])) {
-            return new RedirectResponse($url->target, 301);
-        }
+        $target = $this->getTarget($request, $url);
 
-        $content = $this->getContent($url);
-
-        if (empty($content)) {
+        if (!$this->isTargetValid($request, $target)) {
             throw new ResourceNotFoundException();
         }
 
-        $target = $this->container->get('core.helper.url_generator')
-            ->generate($content);
+        if (is_object($target)) {
+            $target = $this->container->get('core.helper.url_generator')
+                ->generate($target);
+        }
 
         return new RedirectResponse($target, 301);
     }
@@ -292,7 +314,7 @@ class Redirector
      */
     protected function getRegExpUrl($uri, $contentType = null)
     {
-        $oql = sprintf('type in [%s]', implode(',', [ 3, 4 ]));
+        $oql = sprintf('type in [%s] and enabled = 1', implode(',', [ 3, 4 ]));
 
         if (!empty($contentType)) {
             $oql = sprintf('content_type = "%s"', $contentType)
@@ -314,6 +336,73 @@ class Redirector
         }
 
         return null;
+    }
+
+    /**
+     * Returns the target basing on the Url.
+     *
+     * @param Request $request The current request.
+     * @param Url     $url     The Url object.
+     *
+     * @return mixed A content if Url has type 0, 1 or 3 or a string.
+     */
+    protected function getTarget(Request $request, Url $url)
+    {
+        // Content, slug or regExp to content
+        if (in_array($url->type, [ 0, 1, 3 ])) {
+            $target = $url->target;
+
+            // RegExp to content
+            if ($url->type === 3) {
+                $target = $this->getTargetForRegExpUrl($request, $url);
+            }
+
+            return $this->getContent($target, $url->content_type);
+        }
+
+        // Slug to slug/URL
+        if ($url->type === 2) {
+            return $url->target;
+        }
+
+        // RegExp to slug/URL
+        return $this->getTargetForRegExpUrl($request, $url);
+    }
+
+    /**
+     * Returns the target for an Url of type 4 basing on the current request.
+     *
+     * @param Request $request The current request.
+     * @param Url     $url     The Url object.
+     *
+     * @return string The target.
+     */
+    protected function getTargetForRegExpUrl(Request $request, Url $url)
+    {
+        $uri = trim($request->getRequestUri(), '/');
+
+        preg_match_all(
+            '/' . preg_replace('/\//', '\\\/', $url->source) . '/',
+            $uri,
+            $matches
+        );
+
+        $replacements = [];
+        if (!empty($matches[0])) {
+            foreach ($matches as $key => $match) {
+                $replacements['$' . $key] = $match[0];
+            }
+        }
+
+        if (!empty($replacements)) {
+            return str_replace(
+                array_keys($replacements),
+                array_values($replacements),
+                $url->target
+            );
+        }
+
+        return $uri;
     }
 
     /**
@@ -340,25 +429,17 @@ class Redirector
     }
 
     /**
-     * Returns a response with the content of a file.
+     * Checks if the target is valid basing on the current request.
      *
-     * @param string $path The path to the file to serve.
+     * @param Request $request The current request.
+     * @param string  $target  The target to check.
      *
-     * @return Response The response with the content of the file.
+     * @return boolean True if the target is valid. False otherwise.
      */
-    protected function serveMediaFile($path)
+    protected function isTargetValid($request, $target)
     {
-        $path = $this->container->getParameter('core.paths.public') . $path;
-
-        $content  = file_get_contents($path);
-        $mimetype = MimeTypeTool::getMimeType($path);
-
-        $response = new Response($content, 200);
-
-        $response->headers->set('Content-Type', $mimetype);
-        $response->headers->set('X-Status-Code', 200);
-        $response->headers->set('Content-Length', strlen($content));
-
-        return $response;
+        return is_object($target)
+            || (!empty($target)
+                && $target !== trim($request->getRequestUri(), '/'));
     }
 }
