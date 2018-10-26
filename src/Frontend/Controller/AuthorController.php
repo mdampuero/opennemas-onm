@@ -181,7 +181,7 @@ class AuthorController extends Controller
         ) {
             $sql = "SELECT SQL_CALC_FOUND_ROWS contents.fk_author as id, count(pk_content) as total FROM contents"
                 . " WHERE contents.fk_author IN (SELECT users.id FROM users)"
-                . " AND fk_content_type IN (1, 4, 7, 9)  AND available = 1 AND in_litter!= 1"
+                . " AND fk_content_type IN (1, 4, 7, 9)  AND content_status = 1 AND in_litter!= 1"
                 . " GROUP BY contents.fk_author ORDER BY total DESC"
                 . " LIMIT $itemsPerPage OFFSET $offset";
 
