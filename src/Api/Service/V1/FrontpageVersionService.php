@@ -380,7 +380,7 @@ class FrontpageVersionService extends OrmService
      **/
     public function deleteVersionItem($categoryId, $versionId)
     {
-        \ContentManager::clearContentPositionsForHomePageOfCategory(
+        $this->contentPositionService->clearContentPositionsForHomePageOfCategory(
             $categoryId,
             $versionId
         );
