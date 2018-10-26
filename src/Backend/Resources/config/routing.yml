@@ -328,41 +328,6 @@ admin_albums_content_provider_related:
     path:     /albums/content-provider-related
     defaults: { _controller: BackendBundle:Albums:contentProviderRelated }
 
-# Covers controller routes
-admin_kioskos:
-    path:     /covers
-    defaults: { _controller: BackendBundle:Covers:list }
-
-admin_kiosko_create:
-    path:     /covers/create
-    defaults: { _controller: BackendBundle:Covers:create }
-
-admin_kiosko_show:
-    path:     /covers/{id}/show
-    defaults: { _controller: BackendBundle:Covers:show }
-    options:
-        expose: true
-
-admin_kiosko_update:
-    path:     /cover/{id}/update
-    defaults: { _controller: BackendBundle:Covers:update }
-
-admin_kioskos_savepositions:
-    path:     /covers/save-positions
-    defaults: { _controller: BackendBundle:Covers:savePositions }
-
-admin_kiosko_delete:
-    path:     /cover/{id}/delete
-    defaults: { _controller: BackendBundle:Covers:delete }
-
-admin_kioskos_widget:
-    path:     /cover/widget
-    defaults: { _controller: BackendBundle:Covers:widget }
-
-admin_kioskos_config:
-    path:     /covers/config
-    defaults: { _controller: BackendBundle:Covers:config }
-
 # Books controller routes
 admin_books:
     path:     /books
@@ -702,6 +667,10 @@ backend_account:
 backend_category:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/category.yml'
+
+backend_newsstand:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/newsstand.yml'
 
 backend_comment:
     prefix:   /

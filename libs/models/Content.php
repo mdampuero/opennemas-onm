@@ -762,6 +762,37 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
+     * Updates a property in the content and persist it into database
+     *
+     * @param array $properties the list of properties to update
+     *
+     * @return void
+     **/
+    public function patch($properties)
+    {
+        try {
+            $conn = getService('dbal_connection');
+            $rs   = $conn->update(
+                'contents',
+                $properties,
+                [ 'pk_content' => $this->pk_content ]
+            );
+
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ 'content' => $this ]
+            );
+
+            return true;
+        } catch (\Exception $e) {
+            error_log('Error patching property in content (ID:' . $this->pk_content . '):' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Permanently removes one content given its id
      *
      * @param integer $id

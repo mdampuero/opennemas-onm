@@ -270,14 +270,12 @@ class LetterController extends Controller
 
             $settings = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
-                ->get(['contact_email', 'mail_sender', 'site_name']);
+                ->get(['contact_email', 'site_name']);
 
             $recipient = $settings['contact_email'];
             if (!empty($recipient)) {
-                $mailSender = $settings['mail_sender'];
-                if (empty($mailSender)) {
-                    $mailSender = "no-reply@postman.opennemas.com";
-                }
+                $mailSender = $this->getParameter('mailer_no_reply_address');
+
                 //  Build the message
                 $text = \Swift_Message::newInstance();
                 $text

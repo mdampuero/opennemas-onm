@@ -101,69 +101,68 @@ class FormController extends Controller
                 }
             }
 
-            $name      = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
-            $subject   = $request->request->filter('subject', null, FILTER_SANITIZE_STRING);
-            $recipient = trim($request->request->filter('recipient', null, FILTER_SANITIZE_STRING));
-
+            $name     = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
+            $subject  = $request->request->filter('subject', null, FILTER_SANITIZE_STRING);
             $settings = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
-                ->get([ 'mail_sender', 'site_name', 'contact_email' ]);
+                ->get([ 'site_name', 'contact_email' ]);
 
-            if (!array_key_exists('mail_sender', $settings)
-                || empty($settings['mail_sender'])
-            ) {
-                $settings['mail_sender'] = "no-reply@postman.opennemas.com";
-            }
+            $mailSender = $this->getParameter('mailer_no_reply_address');
 
-            //  Build the message
-            $text = \Swift_Message::newInstance();
-            $text
-                ->setSubject($subject)
-                ->setBody($body, 'text/html')
-                ->setTo([ $recipient => $recipient ])
-                ->setFrom([ $email => $name ])
-                ->setSender([ $settings['mail_sender'] => $settings['site_name'] ]);
+            if (!empty($settings['contact_email'])) {
+                //  Build the message
+                $text = \Swift_Message::newInstance();
+                $text
+                    ->setSubject($subject)
+                    ->setBody($body, 'text/html')
+                    ->setTo([ $settings['contact_email'] => $settings['contact_email'] ])
+                    ->setFrom([ $email => $name ])
+                    ->setSender([ $mailSender => $settings['site_name'] ]);
 
-            $headers = $text->getHeaders();
-            $headers->addParameterizedHeader(
-                'ACUMBAMAIL-SMTPAPI',
-                $this->get('core.instance')->internal_name . ' - Form'
-            );
-
-            $path  = $this->getParameter('core.paths.spool.files');
-            $file1 = $request->files->get('image1');
-
-            if ($file1) {
-                $file1->move($path, $file1->getClientOriginalName());
-
-                $text->attach(\Swift_Attachment::fromPath(
-                    $path . '/' . $file1->getClientOriginalName(),
-                    $file1->getClientMimeType()
-                )->setFilename($file1->getClientOriginalName()));
-            }
-
-            $file2 = $request->files->get('image2');
-
-            if ($file2) {
-                $file2->move($path, $file2->getClientOriginalName());
-
-                $text->attach(\Swift_Attachment::fromPath(
-                    $path . '/' . $file2->getClientOriginalName(),
-                    $file2->getClientMimeType()
-                )->setFilename($file2->getClientOriginalName()));
-            }
-
-            try {
-                $mailer = $this->get('mailer');
-                $mailer->send($text);
-
-                $this->get('application.log')->notice(
-                    "Email sent. Frontend form (sender: $email, to: $recipient)"
+                $headers = $text->getHeaders();
+                $headers->addParameterizedHeader(
+                    'ACUMBAMAIL-SMTPAPI',
+                    $this->get('core.instance')->internal_name . ' - Form'
                 );
 
-                $class   = 'success';
-                $message = _('The information has been sent');
-            } catch (\Exception $e) {
+                $path  = $this->getParameter('core.paths.spool.files');
+                $file1 = $request->files->get('image1');
+
+                if ($file1) {
+                    $file1->move($path, $file1->getClientOriginalName());
+
+                    $text->attach(\Swift_Attachment::fromPath(
+                        $path . '/' . $file1->getClientOriginalName(),
+                        $file1->getClientMimeType()
+                    )->setFilename($file1->getClientOriginalName()));
+                }
+
+                $file2 = $request->files->get('image2');
+
+                if ($file2) {
+                    $file2->move($path, $file2->getClientOriginalName());
+
+                    $text->attach(\Swift_Attachment::fromPath(
+                        $path . '/' . $file2->getClientOriginalName(),
+                        $file2->getClientMimeType()
+                    )->setFilename($file2->getClientOriginalName()));
+                }
+
+                try {
+                    $mailer = $this->get('mailer');
+                    $mailer->send($text);
+
+                    $this->get('application.log')->notice(
+                        "Email sent. Frontend form (sender: " . $email . ", to: "
+                        . $settings['contact_email']
+                    );
+
+                    $class   = 'success';
+                    $message = _('The information has been sent');
+                } catch (\Exception $e) {
+                    $message = _('Sorry, we were unable to complete your request');
+                }
+            } else {
                 $message = _('Sorry, we were unable to complete your request');
             }
         }

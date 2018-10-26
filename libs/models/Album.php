@@ -173,14 +173,15 @@ class Album extends Content
     {
         $data['subtitle'] = (empty($data['subtitle'])) ? '' : $data['subtitle'];
 
-
+        $conn = getService('dbal_connection');
         try {
+            $conn->beginTransaction();
             parent::create($data);
 
             $this->pk_content = (int) $this->id;
             $this->pk_album   = (int) $this->id;
 
-            getService('dbal_connection')->insert(
+            $conn->insert(
                 'albums',
                 [
                     'pk_album' => (int) $this->id,
@@ -193,11 +194,16 @@ class Album extends Content
 
             $this->saveAttachedPhotos($data);
 
+            $conn->commit();
+
             return $this;
         } catch (\Exception $e) {
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
+
+            $conn->rollback();
+
             return false;
         }
     }
@@ -211,12 +217,15 @@ class Album extends Content
      */
     public function update($data)
     {
-        parent::update($data);
-
         $data['subtitle'] = (empty($data['subtitle'])) ? 0 : $data['subtitle'];
 
+        $conn = getService('dbal_connection');
         try {
-            getService('dbal_connection')->update(
+            $conn->beginTransaction();
+
+            parent::update($data);
+
+            $conn->update(
                 'albums',
                 [
                     'subtitle' => $data['subtitle'],
@@ -229,6 +238,8 @@ class Album extends Content
             $this->removeAttachedImages($data['id']);
             $this->saveAttachedPhotos($data);
 
+            $conn->commit();
+
             $this->load($data);
 
             return $this;
@@ -236,6 +247,8 @@ class Album extends Content
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
+
+            $conn->rollback();
 
             return false;
         }
@@ -250,19 +263,30 @@ class Album extends Content
      */
     public function remove($id)
     {
-        parent::remove($id);
-
+        $conn = getService('dbal_connection');
         try {
+            $conn->beginTransaction();
+
+            parent::remove($id);
+
             getService('dbal_connection')->delete(
                 "albums",
                 [ 'pk_album' => $id ]
             );
 
-            return $this->removeAttachedImages($id);
+
+            $this->removeAttachedImages($id);
+
+            $conn->commit();
+
+            return true;
         } catch (\Exception $e) {
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
+
+            $conn->rollback();
+
             return false;
         }
     }
