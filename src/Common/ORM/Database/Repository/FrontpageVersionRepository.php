@@ -34,8 +34,7 @@ class FrontpageVersionRepository extends BaseRepository
         return $categoryFrontpageMap;
     }
 
-
-     /**
+    /**
      * Returns an array of categories grouped by entity id.
      *
      * @param array $ids The entity ids.

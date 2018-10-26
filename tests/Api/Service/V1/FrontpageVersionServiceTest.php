@@ -47,28 +47,25 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
         $this->locale = $this->getMockBuilder('Locale' . uniqid())
             ->setMethods([ 'getTimeZone' ])->getMock();
 
-        $this->dispatcher =
-            $this->getMockBuilder('Dispatcher' . uniqid())
+        $this->dispatcher = $this->getMockBuilder('Dispatcher' . uniqid())
             ->disableOriginalConstructor()
             ->setMethods([ 'dispatch' ])
             ->getMock();
 
-        $this->cache =
-            $this->getMockBuilder('Cache' . uniqid())
+        $this->cache = $this->getMockBuilder('Cache' . uniqid())
             ->disableOriginalConstructor()
             ->setMethods([ 'fetch', 'save' ])
             ->getMock();
 
 
-        $this->filterManager =
-            $this->getMockBuilder('FilterManager' . uniqid())
+        $this->filterManager = $this->getMockBuilder('FilterManager' . uniqid())
             ->disableOriginalConstructor()
             ->setMethods([ 'set' ])
             ->getMock();
 
 
-        $this->frontpageRepository =
-            $this->getMockBuilder('FrontpageRepository' . uniqid())
+        $this->frontpageVersionsRepository = $this->getMockBuilder('FrontpageVersionRepository' . uniqid())
+            ->disableOriginalConstructor()
             ->setMethods([
                 'getCatFrontpageRel', 'getCurrentVersionForCategory',
                 'getNextVersionForCategory', 'countBy'
@@ -77,6 +74,8 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+        $this->ormManager->expects($this->any())->method('getRepository')
+            ->willReturn($this->frontpageVersionsRepository);
 
         $this->service = new FrontpageVersionService(
             $this->container,
@@ -124,6 +123,7 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
             'dispatcher',
             'cache',
             'filterManager',
+            'frontpageVersionsRepository'
         ];
         foreach ($services as $serviceName) {
             $this->assertAttributeEquals($this->{$serviceName}, $serviceName, $this->service);
