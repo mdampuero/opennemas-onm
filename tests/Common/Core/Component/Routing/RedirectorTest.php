@@ -379,11 +379,14 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
         $redirector = $this->getMockBuilder('Common\Core\Component\Routing\Redirector')
             ->setConstructorArgs([ $this->container, $this->service, $this->cache ])
-            ->setMethods([ 'getTarget' ])
+            ->setMethods([ 'isTargetValid', 'getTarget' ])
             ->getMock();
 
         $redirector->expects($this->once())->method('getTarget')
             ->willReturn(null);
+
+        $redirector->expects($this->once())->method('isTargetValid')
+            ->willReturn(false);
 
         $method = new \ReflectionMethod($redirector, 'getForwardResponse');
         $method->setAccessible(true);
@@ -575,11 +578,14 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
         $redirector = $this->getMockBuilder('Common\Core\Component\Routing\Redirector')
             ->setConstructorArgs([ $this->container, $this->service, $this->cache ])
-            ->setMethods([ 'getTarget' ])
+            ->setMethods([ 'isTargetValid', 'getTarget' ])
             ->getMock();
 
         $redirector->expects($this->once())->method('getTarget')
             ->willReturn(null);
+
+        $redirector->expects($this->once())->method('isTargetValid')
+            ->willReturn(false);
 
         $method = new \ReflectionMethod($redirector, 'getRedirectResponse');
         $method->setAccessible(true);
@@ -944,11 +950,19 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->willReturn('/flob/plugh');
 
         $this->request->expects($this->at(1))->method('getRequestUri')
+            ->willReturn('/flob/plugh');
+
+        $this->request->expects($this->at(2))->method('getRequestUri')
             ->willReturn('/waldo/wubble');
 
         $this->assertTrue($method->invokeArgs($this->redirector, [
             $this->request,
             json_decode(json_encode([ 'content_type_name' => 'photo' ]))
+        ]));
+
+        $this->assertTrue($method->invokeArgs($this->redirector, [
+            $this->request,
+            ''
         ]));
 
         $this->assertFalse($method->invokeArgs($this->redirector, [

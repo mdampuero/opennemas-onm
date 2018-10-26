@@ -302,7 +302,7 @@ class Redirector
                 ->generate($target);
         }
 
-        return new RedirectResponse($target, 301);
+        return new RedirectResponse(empty($target) ? '/' : $target, 301);
     }
 
     /**
@@ -439,7 +439,6 @@ class Redirector
     protected function isTargetValid($request, $target)
     {
         return is_object($target)
-            || (!empty($target)
-                && $target !== trim($request->getRequestUri(), '/'));
+            || $target !== trim($request->getRequestUri(), '/');
     }
 }
