@@ -25,6 +25,9 @@ class ContentPositionService extends OrmService
         $this->ormManager     = $this->container->get('orm.manager');
         $this->applicationLog = $this->container->get('application.log');
         $this->user           = $this->container->get('core.user');
+
+        $this->contentPositionRepository = $this->ormManager
+            ->getRepository('ContentPosition');
     }
 
     /**
@@ -40,8 +43,7 @@ class ContentPositionService extends OrmService
 
     public function getContentPositions($categoryId, $frontpageId)
     {
-        return $this->container->get('orm.manager')
-            ->getRepository('ContentPosition')
+        return $this->contentPositionRepository
             ->getContentPositions($categoryId, $frontpageId);
     }
 
@@ -54,8 +56,7 @@ class ContentPositionService extends OrmService
      */
     public function getCategoriesWithManualFrontpage()
     {
-        return $this->container->get('orm.manager')
-            ->getRepository('ContentPosition')
+        return $this->contentPositionRepository
             ->getCategoriesWithManualFrontpage();
     }
 
@@ -65,19 +66,18 @@ class ContentPositionService extends OrmService
      * @param int $categoryID the id of the category we want to save positions into
      * @param array $elements an array with the id, placeholder, position
      *
-     * @return boolean, if all went good this will be true and viceversa
+     * @return boolean
      */
     public function saveContentPositionsForHomePage($categoryID, $frontpageVersionId, $elements = [])
     {
         $positions   = [];
         $contentIds  = [];
-        $returnValue = false;
 
         if (empty($elements)) {
-            return $returnValue;
+            return false;
         }
 
-        $conn = $this->container->get('orm.manager')->getConnection('instance');
+        $conn = $this->ormManager->getConnection('instance');
 
         // Foreach element setup the sql values statement part
         foreach ($elements as $element) {
@@ -96,7 +96,6 @@ class ContentPositionService extends OrmService
             $conn->beginTransaction();
 
             // Clean all the contents for this category after insert the new ones
-
             $this->clearContentPositionsForHomePageOfCategory($categoryID, $frontpageVersionId, $conn);
 
             // construct the final sql statement and execute it
@@ -118,19 +117,21 @@ class ContentPositionService extends OrmService
             }
 
             $conn->commit();
-            $returnValue = true;
+
+            return true;
         } catch (\Exception $e) {
             $conn->rollback();
 
-            getService('application.log')->error(
-                'User ' . getService('core.user')->username
-                . ' (' . getService('core.user')->id
-                . ') updated frontpage of category ' . $categoryID . ' with error message: '
-                . $e->getMessage()
-            );
-        }
+            $this->applicationLog->error(spritnf(
+                'User %d (%s) updated frontpage of category %s with error message: %s',
+                $this->user->username,
+                $this->user->id,
+                $categoryID,
+                $e->getMessage()
+            ));
 
-        return $returnValue;
+            return false;
+        }
     }
 
     /**
