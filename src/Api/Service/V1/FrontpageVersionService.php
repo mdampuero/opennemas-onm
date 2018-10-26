@@ -365,7 +365,7 @@ class FrontpageVersionService extends OrmService
             $fvc = new FrontpageVersion($frontpageVersion);
         }
 
-        $this->invalidationMethod($fvc->category_id, $fvc->id);
+        $this->purgeCacheForCategoryIdAndVersionId($fvc->category_id, $fvc->id);
 
         return $fvc;
     }
@@ -389,7 +389,7 @@ class FrontpageVersionService extends OrmService
             $this->deleteItem($versionId);
         }
 
-        return $this->invalidationMethod($categoryId, $versionId);
+        return $this->purgeCacheForCategoryIdAndVersionId($categoryId, $versionId);
     }
 
     /**
@@ -462,7 +462,7 @@ class FrontpageVersionService extends OrmService
      *
      * @return boolean
      **/
-    private function invalidationMethod($categoryId, $frontpageId)
+    private function purgeCacheForCategoryIdAndVersionId($categoryId, $frontpageId)
     {
         $this->dispatcher->dispatch(
             'frontpage.save_position',
