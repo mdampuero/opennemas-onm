@@ -40,7 +40,8 @@ class FrontpageVersionService extends OrmService
         $this->cache                  = $this->container->get('cache');
         $this->filterManager          = $this->container->geT('data.manager.filter');
 
-        $this->frontpagesRepository = $this->ormManager->getRepository($this->entity, $this->origin);
+        $this->frontpageVersionsRepository = $this->ormManager
+            ->getRepository($this->entity, $this->origin);
     }
 
     /**
@@ -269,7 +270,8 @@ class FrontpageVersionService extends OrmService
 
     public function getCatFrontpagesRel()
     {
-        return $this->frontpagesRepository->getCatFrontpageRel();
+        return $this->frontpageVersionsRepository
+            ->getCatFrontpageRel();
     }
 
     /**
@@ -281,7 +283,8 @@ class FrontpageVersionService extends OrmService
      **/
     public function getCurrentVersionFromDB($categoryId)
     {
-        return $this->frontpagesRepository->getCurrentVersionForCategory($categoryId);
+        return $this->frontpageVersionsRepository
+            ->getCurrentVersionForCategory($categoryId);
     }
 
     /**
@@ -293,7 +296,8 @@ class FrontpageVersionService extends OrmService
      **/
     public function getNextVersionForCategory($categoryId)
     {
-        return $this->frontpagesRepository->getNextVersionForCategory($categoryId);
+        return $this->frontpageVersionsRepository
+            ->getNextVersionForCategory($categoryId);
     }
 
     /**
