@@ -342,14 +342,14 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
 
       if (diffCurrToVer <= 0) {
         var publishDateUTC = window.moment.tz(
-            $scope.frontpageInfo.publish_date,
-            $scope.time.timezone
-          ).toDate().getTime();
+          $scope.frontpageInfo.publish_date,
+          $scope.time.timezone
+        ).toDate().getTime();
 
         var currentVerTime = window.moment.tz(
-            $scope.getCurrentVersion().publish_date,
-            'UTC'
-          ).toDate().getTime();
+          $scope.getCurrentVersion().publish_date,
+          'UTC'
+        ).toDate().getTime();
 
         if (publishDateUTC > currentVerTime) {
           $scope.liveNowModal();
