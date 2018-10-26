@@ -176,7 +176,7 @@ class AuthorController extends Controller
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('frontpage', 'authors', $page);
 
-        if ($this->view->getCaching() === 1
+        if ($this->view->getCaching() === 0
            || !$this->view->isCached('user/frontpage_author.tpl', $cacheID)
         ) {
             $sql = "SELECT SQL_CALC_FOUND_ROWS contents.fk_author as id, count(pk_content) as total FROM contents"
