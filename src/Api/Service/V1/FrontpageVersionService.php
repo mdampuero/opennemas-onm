@@ -35,7 +35,7 @@ class FrontpageVersionService extends OrmService
         $this->contentPositionService = $this->container->get('api.service.contentposition');
         $this->entityRepository       = $this->container->get('entity_repository');
         $this->ormManager             = $this->container->get('orm.manager');
-        $this->instanceTimezone       = $this->container->get('core.locale')->getTimeZone();
+        $this->locale                 = $this->container->get('core.locale');
         $this->dispatcher             = $this->container->get('core.dispatcher');
         $this->cache                  = $this->container->get('cache');
         $this->filterManager          = $this->container->geT('data.manager.filter');
@@ -308,7 +308,7 @@ class FrontpageVersionService extends OrmService
     public function getDefaultNameFV($timestamp)
     {
         $dt = new \DateTime();
-        $dt->setTimezone(new \DateTimeZone($this->instanceTimezone->getName()));
+        $dt->setTimezone(new \DateTimeZone($this->locale->getTimeZone()->getName()));
         $dt->setTimestamp(empty($timestamp) ? time() : $timestamp);
 
         return $dt->format('Y-m-d H:i');
@@ -509,7 +509,7 @@ class FrontpageVersionService extends OrmService
      **/
     private function filterPublishedContents($contents)
     {
-        $systemDateTz = new \DateTime(null, $this->instanceTimezone);
+        $systemDateTz = new \DateTime(null, $this->locale->getTimeZone());
         $systemDateTz = $systemDateTz->format('Y-m-d H:i:s');
 
         $filteredContents = [];
@@ -547,9 +547,9 @@ class FrontpageVersionService extends OrmService
 
         $frontpageVersionId = $this->getNextVersionForCategory($categoryId);
 
-        $systemDateTz = (new \DateTime(null, $this->instanceTimezone))->format('Y-m-d H:i:s');
+        $systemDateTz = (new \DateTime(null, $this->locale->getTimeZone()))->format('Y-m-d H:i:s');
         if (empty($frontpageVersionId)) {
-            $invalidationTime = new \DateTime(null, $this->instanceTimezone);
+            $invalidationTime = new \DateTime(null, $this->locale->getTimeZone());
             // Add 1 year to the current timestamp
             $timestamp = $invalidationTime->getTimestamp() + 31536000;
             $invalidationTime->setTimestamp($timestamp);
@@ -580,7 +580,7 @@ class FrontpageVersionService extends OrmService
             }
         }
 
-        $invalidationTime = \DateTime::createFromFormat('Y-m-d H:i:s', $invalidationTime, $this->instanceTimezone);
+        $invalidationTime = \DateTime::createFromFormat('Y-m-d H:i:s', $invalidationTime, $this->locale->getTimeZone());
         $invalidationTime->setTimeZone(new \DateTimeZone('UTC'));
 
         return $invalidationTime;
