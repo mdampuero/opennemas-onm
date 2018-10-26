@@ -413,7 +413,7 @@ class FrontpageVersionService extends OrmService
             $date      = new \Datetime("now");
             $lastSaved = $date->format(\DateTime::ISO8601);
 
-            $this->cache->save($lastSavedCacheId, $dateForDB);
+            $this->cache->save($lastSavedCacheId, $lastSaved);
         }
 
         return $lastSaved;
