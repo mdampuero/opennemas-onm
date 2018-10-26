@@ -56,8 +56,8 @@ class NewsstandsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("hasExtension('NEWSLETTER_MANAGER')
-     *     and hasPermission('NEWSLETTER_ADMIN')")
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_ADMIN')")
      */
     public function createAction()
     {
