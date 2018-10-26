@@ -333,8 +333,8 @@ class FrontpageVersionService extends OrmService
     {
         $fvc = null;
         if (empty($frontpageVersion['id'])) {
-            $numberOfVersions = $this->frontpagesRepository->countBy(
-                "frontpage_id = {$frontpageVersion['frontpage_id']}"
+            $numberOfVersions = $this->frontpageVersionsRepository->countBy(
+                "frontpage_id = '{$frontpageVersion['frontpage_id']}'"
             );
 
             //TODO This shouldn't be here, when the frontpage part is done it should be changed to that driver
