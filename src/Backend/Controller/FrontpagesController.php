@@ -299,9 +299,10 @@ class FrontpagesController extends Controller
         $category    = (int) $request->query->filter('category', '', FILTER_SANITIZE_STRING);
         $versionId   = (int) $request->query->filter('versionId', '', FILTER_SANITIZE_STRING);
 
-        $newVersionAvailable = $this->get('api.service.frontpage_version')
-            ->checkLastSaved($category, $versionId, $dateRequest);
-        return new Response(json_encode($newVersionAvailable));
+        return new JsonResponse(
+            $this->get('api.service.frontpage_version')
+                ->checkLastSaved($category, $versionId, $dateRequest)
+        );
     }
 
     /**
