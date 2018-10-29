@@ -15,7 +15,7 @@ if (file_exists(__DIR__ . '/../tmp/restart.txt')) {
  */
 $loader = include __DIR__ . '/../app/autoload.php';
 if (PHP_VERSION_ID < 70000) {
-    include_once __DIR__.'/../var/bootstrap.php.cache';
+    include_once __DIR__ . '/../tmp/bootstrap.php.cache';
 }
 
 // Little hack to allow final slashes in the url
