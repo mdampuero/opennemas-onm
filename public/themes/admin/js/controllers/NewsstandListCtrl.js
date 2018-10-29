@@ -15,8 +15,8 @@
      *   Handles all actions in user groups list.
      */
     .controller('NewsstandListCtrl', [
-      '$controller', '$scope', 'oqlEncoder',
-      function($controller, $scope, oqlEncoder) {
+      '$controller', '$scope', 'oqlEncoder', 'linker', 'localizer',
+      function($controller, $scope, oqlEncoder, linker, localizer) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -62,6 +62,34 @@
 
           oqlEncoder.configure({ placeholder: { title: '[key] ~ "%[value]%"' } });
           $scope.list();
+        };
+
+        /**
+         * @function parseList
+         * @memberOf RestListCtrl
+         *
+         * @description
+         *   Parses the response and adds information to the scope.
+         *
+         * @param {Object} data The data in the response.
+         */
+        $scope.parseList = function(data) {
+          var lz = localizer.get({
+            default: data.extra.default,
+            available: data.extra.available,
+            translators: data.extra.translators
+          });
+
+          $scope.categories = lz.localize(data.extra.categories,
+            [ 'title' ], $scope.locale);
+
+          $scope.config.linkers.categories =
+            linker.get('categories', $scope, false, 'title');
+
+          $scope.config.linkers.categories.setKey($scope.locale);
+          $scope.config.linkers.categories.link(data.extra.categories, $scope.categories);
+
+          return data;
         };
 
         /**

@@ -196,7 +196,7 @@ jQuery(document).ready(function($) {
                 <div class="form-group">
                   <label for="category" class="form-label">{t}Category{/t}</label>
                   <div class="controls">
-                    <onm-category-selector ng-model="item.category" categories="data.extra.categories" placeholder="{t}Select a category{/t}" default-value-text="{t}Select a category...{/t}" required />
+                    <onm-category-selector ng-model="item.category" categories="categories" placeholder="{t}Select a category{/t}" default-value-text="{t}Select a category...{/t}" required />
                   </div>
                 </div>
 

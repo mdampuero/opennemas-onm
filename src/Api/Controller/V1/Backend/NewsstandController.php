@@ -398,8 +398,6 @@ class NewsstandController extends Controller
      **/
     private function getExtraData($allCategories = false)
     {
-        $extra = [];
-
         $security   = $this->get('core.security');
         $converter  = $this->get('orm.manager')->getConverter('Category');
         $categories = $this->get('orm.manager')
@@ -410,12 +408,11 @@ class NewsstandController extends Controller
             return $security->hasCategory($a->pk_content_category);
         });
 
-        $extra['categories'] = $converter->responsify($categories);
+        $extra = [
+            'tags'       => [],
+            'categories' => $converter->responsify($categories),
+        ];
 
-        $extra['tags'] = [];
-
-        $extra['locale'] = $this->get('core.locale')->getRequestLocale('frontend');
-
-        return $extra;
+        return array_merge($extra, $this->getLocaleData('frontend'));
     }
 }
