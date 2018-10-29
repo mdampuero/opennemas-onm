@@ -57,7 +57,7 @@ class NewsstandsController extends Controller
      * @return Response The response object.
      *
      * @Security("hasExtension('KIOSKO_MANAGER')
-     *     and hasPermission('KIOSKO_ADMIN')")
+     *     and hasPermission('KIOSKO_CREATE')")
      */
     public function createAction()
     {
@@ -70,6 +70,9 @@ class NewsstandsController extends Controller
      * @param integer $id The user id.
      *
      * @return Response The response object.
+     *
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_UPDATE')")
      */
     public function showAction($id)
     {
