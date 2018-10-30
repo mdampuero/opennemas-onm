@@ -181,8 +181,8 @@
               types: {
                 enabled:   [ ],
                 available: [
-                  'album', 'article', 'attachment', 'opinion', 'photo', 'poll',
-                  'video', 'special'
+                  'album', 'article', 'attachment', 'letter', 'opinion',
+                  'photo', 'poll', 'video', 'special'
                 ]
               },
 
