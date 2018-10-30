@@ -20,15 +20,17 @@ class OpinionsController extends Controller
     /**
      * Renders the opinion frontpage.
      *
+     * @param Request $request The request object.
+     *
      * @return Response The response object.
      */
-    public function frontpageAction()
+    public function frontpageAction(Request $request)
     {
         if (!$this->get('core.security')->hasExtension('OPINION_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
-        $page = $this->request->query->getDigits('page', 1);
+        $page = $request->get('page', 1);
 
         // Setup templating cache layer
         $this->view->setConfig('opinion');
@@ -206,15 +208,17 @@ class OpinionsController extends Controller
     /**
      * Renders the opinion frontpage
      *
+     * @param Request $request The request object.
+     *
      * @return Response the response object
      */
-    public function extFrontpageAction()
+    public function extFrontpageAction(Request $request)
     {
         if (!$this->get('core.security')->hasExtension('OPINION_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
-        $page         = $this->request->query->getDigits('page', 1);
+        $page         = $request->get('page', 1);
         $categoryName = 'opinion';
 
         // Setup templating cache layer
@@ -337,8 +341,8 @@ class OpinionsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $authorID = (int) $request->query->getDigits('author_id', null);
-        $page     = $this->request->query->getDigits('page', 1);
+        $authorID = (int) $request->get('author_id', null);
+        $page     = $request->get('page', 1);
 
         if (empty($authorID)) {
             throw new ResourceNotFoundException();
@@ -484,9 +488,9 @@ class OpinionsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $authorID     = $request->query->getDigits('author_id', null);
-        $authorSlug   = $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING);
-        $page         = $request->query->getDigits('page', 1);
+        $authorID     = $request->get('author_id', null);
+        $authorSlug   = $request->get('author_slug', null, FILTER_SANITIZE_STRING);
+        $page         = $request->get('page', 1);
         $categoryName = 'opinion';
 
         if (empty($authorID)) {
@@ -631,8 +635,8 @@ class OpinionsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $dirtyID = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
-        $urlSlug = $request->query->filter('opinion_title', '', FILTER_SANITIZE_STRING);
+        $dirtyID = $request->get('opinion_id', '', FILTER_SANITIZE_STRING);
+        $urlSlug = $request->get('opinion_title', '', FILTER_SANITIZE_STRING);
 
         $opinion = $this->get('content_url_matcher')
             ->matchContentUrl('opinion', $dirtyID, $urlSlug);
@@ -767,7 +771,7 @@ class OpinionsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $dirtyID      = $request->query->getDigits('opinion_id');
+        $dirtyID      = $request->get('opinion_id');
         $categoryName = 'opinion';
 
         // Redirect to opinion frontpage if opinion_id wasn't provided

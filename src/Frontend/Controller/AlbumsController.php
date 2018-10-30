@@ -29,8 +29,8 @@ class AlbumsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->categoryName = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $this->page         = $this->request->query->getDigits('page', 1);
+        $this->categoryName = $this->request->get('category_name', 'home', FILTER_SANITIZE_STRING);
+        $this->page         = $this->request->get('page', 1);
 
         if (!empty($this->categoryName) && $this->categoryName != 'home') {
             $category = $this->get('category_repository')->findBy(
@@ -163,9 +163,9 @@ class AlbumsController extends Controller
      */
     public function showAction(Request $request)
     {
-        $this->page   = $request->query->getDigits('page', 1);
-        $dirtyID      = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
-        $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $this->page   = $request->get('page', 1);
+        $dirtyID      = $request->get('album_id');
+        $urlSlug      = $request->get('slug', '');
         $itemsPerPage = 8; // Items_page refers to the widget
 
         $album = $this->get('content_url_matcher')
