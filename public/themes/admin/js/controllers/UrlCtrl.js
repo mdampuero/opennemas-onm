@@ -62,6 +62,22 @@
           $scope.item.target       = nv.pk_content;
           $scope.item.content_type = nv.content_type_name;
         }, true);
+
+        // Updates item when item type changes
+        $scope.$watch('item.type', function(nv, ov) {
+          if (!nv || nv === ov) {
+            return;
+          }
+
+          // Remove selected content when slug or regex to slug
+          if ([ 0, 1, 3 ].indexOf(nv) === -1) {
+            if ($scope.data.extra.content) {
+              delete $scope.data.extra.content;
+            }
+
+            $scope.item.content_type = null;
+          }
+        }, true);
       }
     ]);
 })();
