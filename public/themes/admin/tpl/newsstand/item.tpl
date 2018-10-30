@@ -84,7 +84,7 @@ jQuery(document).ready(function($) {
             <div class="grid-body">
               <div class="row">
                 <div class="col-md-4">
-                  <div class="thumbnail-wrapper p-l-30 p-r-30">
+                  <div class="thumbnail-wrapper">
                     <div>
                       <div class="fileinput" ng-class="{ 'fileinput-exists': item.name, 'fileinput-new': !item.name }" data-trigger="fileinput" style="width:80%; margin:0 auto; display:block">
                         <div class="thumbnail no-margin" style="width:100%;">
@@ -148,7 +148,7 @@ jQuery(document).ready(function($) {
                   </div>
 
                   <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-xs-12">
                       <div class="form-group">
                         <label for="price" class="form-label">{t}Price{/t}</label>
                         <span class="help">{t}Split decimals with a dot{/t}.</span>
@@ -157,7 +157,7 @@ jQuery(document).ready(function($) {
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-xs-12">
                       <div class="form-group">
                         <label for="type" class="form-label">{t}Type{/t}</label>
                         <div class="controls">
