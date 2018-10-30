@@ -26,8 +26,8 @@ class NewsstandController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasExtension('NEWSLETTER_MANAGER')
-     *     and hasPermission('NEWSLETTER_ADMIN')")
+     * @Security("hasExtension('KIOSKO_MANAGER')
+     *     and hasPermission('KIOSKO_CREATE')")
      */
     public function createAction()
     {
@@ -348,7 +348,7 @@ class NewsstandController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('GROUP_UPDATE')")
+     * @Security("hasExtension('KIOSKO_MANAGER')")
      */
     public function patchSelectedAction(Request $request)
     {
@@ -392,14 +392,10 @@ class NewsstandController extends Controller
     /**
      * Returns a list of extra data to use in  the create/edit item form
      *
-     * @param boolean $allCategories Whether to include an All option in the categories list
-     *
      * @return array
      **/
-    private function getExtraData($allCategories = false)
+    private function getExtraData()
     {
-        $extra = [];
-
         $security   = $this->get('core.security');
         $converter  = $this->get('orm.manager')->getConverter('Category');
         $categories = $this->get('orm.manager')
@@ -410,12 +406,11 @@ class NewsstandController extends Controller
             return $security->hasCategory($a->pk_content_category);
         });
 
-        $extra['categories'] = $converter->responsify($categories);
+        $extra = [
+            'tags'       => [],
+            'categories' => $converter->responsify($categories),
+        ];
 
-        $extra['tags'] = [];
-
-        $extra['locale'] = $this->get('core.locale')->getRequestLocale('frontend');
-
-        return $extra;
+        return array_merge($extra, $this->getLocaleData('frontend'));
     }
 }

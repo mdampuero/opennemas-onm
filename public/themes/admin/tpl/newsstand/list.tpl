@@ -104,7 +104,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks hidden-xs ng-cloak">
-            <onm-category-selector ng-model="criteria.pk_fk_content_category" categories="data.extra.categories" label-text="{t}Category{/t}" default-value-text="{t}Any{/t}" placeholder="{t}Select a category{/t}" required />
+            <onm-category-selector ng-model="criteria.pk_fk_content_category" categories="categories" label-text="{t}Category{/t}" default-value-text="{t}Any{/t}" placeholder="{t}Select a category{/t}" required />
           </li>
           <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
             <ui-select name="status" theme="select2" ng-model="criteria.content_status">

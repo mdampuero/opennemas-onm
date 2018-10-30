@@ -19,8 +19,8 @@
      *   Check billing information when saving user.
      */
     .controller('NewsstandCtrl', [
-      '$controller', '$scope', 'oqlEncoder', 'oqlDecoder', 'messenger', 'cleaner', '$timeout',
-      function($controller, $scope, oqlEncoder, oqlDecoder, messenger, cleaner, $timeout) {
+      '$controller', '$scope', 'oqlEncoder', 'oqlDecoder', 'messenger', 'cleaner', 'linker', 'localizer', '$timeout',
+      function($controller, $scope, oqlEncoder, oqlDecoder, messenger, cleaner, linker, localizer, $timeout) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -95,6 +95,21 @@
          * @param {Object} data The data in the response.
          */
         $scope.parseItem = function(data) {
+          var lz = localizer.get({
+            default: data.extra.default,
+            available: data.extra.available,
+            translators: data.extra.translators
+          });
+
+          $scope.categories = lz.localize(data.extra.categories,
+            [ 'title' ], $scope.config.locale);
+
+          $scope.config.linkers.categories =
+            linker.get('categories', $scope, false, 'title');
+
+          $scope.config.linkers.categories.setKey($scope.config.locale);
+          $scope.config.linkers.categories.link($scope.data.extra.categories, $scope.categories);
+
           if (!data.item) {
             return;
           }
