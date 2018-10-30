@@ -52,6 +52,16 @@
           show:     'api_v1_backend_url_show',
           update:   'api_v1_backend_url_update'
         };
+
+        // Updates item target when selected content from content picker changes
+        $scope.$watch('data.extra.content', function(nv, ov) {
+          if (!nv || nv === ov) {
+            return;
+          }
+
+          $scope.item.target       = nv.pk_content;
+          $scope.item.content_type = nv.content_type_name;
+        }, true);
       }
     ]);
 })();
