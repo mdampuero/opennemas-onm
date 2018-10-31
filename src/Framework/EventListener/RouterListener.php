@@ -237,6 +237,7 @@ class RouterListener implements EventSubscriberInterface
                     ->getResponse($request, $url);
 
                 $event->setResponse($response);
+                return;
             }
 
             throw new NotFoundHttpException($message, $e);
