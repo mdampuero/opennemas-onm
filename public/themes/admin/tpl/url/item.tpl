@@ -108,7 +108,7 @@
               </div>
               <div class="grid-body">
                 <div class="row">
-                  <div class="col-sm-12 form-group no-margin">
+                  <div class="col-md-12 form-group no-margin">
                     <div class="radio">
                       <input id="type-content-content" ng-model="item.type" ng-value="0" type="radio">
                       <label class="form-label" for="type-content-content">
@@ -131,7 +131,7 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-sm-6 form-group no-margin">
+                  <div class="col-md-6 form-group no-margin">
                     <div class="radio">
                       <input id="type-slug-content" ng-model="item.type" ng-value="1" type="radio">
                       <label for="type-slug-content">
@@ -147,7 +147,7 @@
                       {t}Redirects a slug to a content id{/t}
                     </div>
                   </div>
-                  <div class="col-sm-6 form-group no-margin">
+                  <div class="col-md-6 form-group no-margin">
                     <div class="radio">
                       <input id="type-slug-slug" ng-model="item.type" ng-value="2" type="radio">
                       <label for="type-slug-slug">
@@ -165,7 +165,7 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-sm-6 form-group">
+                  <div class="col-md-6 form-group">
                     <div class="radio">
                       <input id="type-regex-content" ng-model="item.type" ng-value="3" type="radio">
                       <label for="type-regex-content">
@@ -181,7 +181,7 @@
                       {t}Redirects slugs to captured content ids basing on a regular expression{/t}
                     </div>
                   </div>
-                  <div class="col-sm-6 form-group">
+                  <div class="col-md-6 form-group">
                     <div class="radio">
                       <input id="type-regex-slug" ng-model="item.type" ng-value="4" type="radio">
                       <label for="type-regex-slug">
@@ -209,8 +209,8 @@
               </div>
               <div class="grid-body">
                 <div class="row">
-                  <div class="col-sm-4">
-                    <div class="form-group no-margin">
+                  <div ng-class="{ 'col-md-4': item.type !== 2 && item.type !== 4, 'col-md-6': item.type === 2 || item.type === 4 }">
+                    <div class="form-group">
                       <label for="name" class="form-label">
                         <span ng-if="item.type === 0">{t}Content{/t}</span>
                         <span ng-if="item.type === 1 || item.type === 2">{t}Slug{/t}</span>
@@ -221,28 +221,28 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-8">
+                  <div ng-class="{ 'col-md-8': item.type !== 2 && item.type !== 4, 'col-md-6': item.type === 2 || item.type === 4 }">
                     <div class="row">
-                      <div class="col-sm-6">
-                        <div class="form-group no-margin">
+                      <div ng-class="{ 'col-md-6': item.type !== 2 && item.type !== 4, 'col-md-12': item.type === 2 || item.type === 4 }">
+                        <div class="form-group">
                           <label for="name" class="form-label">
                             <span ng-if="item.type === 0 || item.type === 1 || item.type === 3">{t}Content{/t}</span>
                             <span ng-if="item.type === 2 || item.type === 4">{t}Slug{/t}/{t}URL{/t}</span>
                           </label>
                           <span class="help m-l-5" ng-if="item.type === 2 || item.type === 4">
                             <i class="fa fa-warning text-warning"></i>
-                            {t}An empty slug equals to frontpage{/t}
+                            {t}Empty equals to frontpage{/t}
                           </span>
                           <div class="controls">
-                            <div class="input-group">
-                              <span class="input-group-btn">
+                            <div ng-class="{ 'input-group': item.type !== 2 && item.type !== 4 }">
+                              <span class="input-group-btn" ng-show="item.type !== 2 && item.type !== 4">
                                 <button class="btn btn-default" content-picker content-picker-selection="true" content-picker-max-size="1" content-picker-target="data.extra.content" content-picker-type="attachment,album,article,letter,opinion,poll,photo,video" content-picker-view="list-item" uib-tooltip="{t}Select a content{/t}" type="button">
                                   <i class="fa fa-search"></i>
                                 </button>
                               </span>
                               <input class="form-control" id="name" name="name" ng-disabled="data.extra.content" ng-model="item.target" ng-required="item.type !== 2 && item.type !== 4" placeholder="[% item.type == 0 || item.type == 1 ? '4685' : (item.type === 2 ? 'http://www.qux.org/thud/norf' : (item.type === 3 ? '$1' : 'http://www.qux.org/$1')) %]" type="text">
-                              <span class="input-group-btn">
-                                <button class="btn btn-danger" ng-click="data.extra.content = null; item.content_type = null; item.target = null;" ng-if="data.extra.content" uib-tooltip="{t}Delete{/t}" type="button">
+                              <span class="input-group-btn" ng-if="data.extra.content">
+                                <button class="btn btn-danger" ng-click="data.extra.content = null; item.content_type = null; item.target = null;" uib-tooltip="{t}Delete{/t}" type="button">
                                   <i class="fa fa-trash-o"></i>
                                 </button>
                               </span>
@@ -250,8 +250,8 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-sm-6" ng-if="item.type === 0 || item.type === 1 || item.type === 3">
-                        <div class="form-group no-margin">
+                      <div class="col-md-6" ng-if="item.type === 0 || item.type === 1 || item.type === 3">
+                        <div class="form-group">
                           <label for="name" class="form-label">{t}Content type{/t}</label>
                           <div class="controls">
                             <div class="content-placeholder">
@@ -262,22 +262,22 @@
                       </div>
                     </div>
                     <div class="m-b-15 m-t-5 row" ng-show="data.extra.content">
-                      <div class="col-sm-12">
+                      <div class="col-md-12">
                         <strong>{t}Title{/t}:</strong>
                         <i>[% data.extra.content.title %]</i>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="m-t-15 row" ng-show="isHelpEnabled()">
-                  <div class="col-sm-12 text-center">
+                <div class="row" ng-show="isHelpEnabled()">
+                  <div class="col-md-12 text-center">
                     <a href="#" ng-click="examples = !examples">
                       <strong>{t}Examples{/t}</strong>
                     </a>
                   </div>
                 </div>
                 <div class="m-t-15 row" ng-if="examples">
-                  <div class="col-sm-4">
+                  <div class="col-md-4">
                     <div class="form-group no-margin">
                       <label for="name" class="form-label">
                         <span ng-if="item.type === 0">{t}Content{/t}</span>
@@ -291,7 +291,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-4">
+                  <div class="col-md-4">
                     <div class="form-group no-margin">
                       <label for="name" class="form-label">
                         <span ng-if="item.type === 0 || item.type === 1 || item.type === 3">{t}Content{/t}</span>
@@ -303,7 +303,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-4" ng-if="item.type !== 2 && item.type !== 4">
+                  <div class="col-md-4" ng-if="item.type !== 2 && item.type !== 4">
                     <div class="form-group no-margin">
                       <label for="name" class="form-label">{t}Content type{/t}</label>
                       <div class="controls">
@@ -312,8 +312,9 @@
                     </div>
                   </div>
                 </div>
+                <div class="p-b-15 p-t-15 visible-sm visible-xs" ng-if="examples"></div>
                 <div class="m-t-15 row" ng-if="examples">
-                  <div class="col-sm-4">
+                  <div class="col-md-4">
                     <div class="form-group no-margin">
                       <label for="name" class="form-label">
                         <span ng-if="item.type === 0">{t}Content{/t}</span>
@@ -327,7 +328,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-4">
+                  <div class="col-md-4">
                     <div class="form-group no-margin">
                       <label for="name" class="form-label">
                         <span ng-if="item.type === 0 || item.type === 1 || item.type === 3">{t}Content{/t}</span>
@@ -341,7 +342,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-4" ng-if="item.type !== 2 && item.type !== 4">
+                  <div class="col-md-4" ng-if="item.type !== 2 && item.type !== 4">
                     <div class="form-group no-margin">
                       <label for="name" class="form-label">{t}Content type{/t}</label>
                       <div class="controls">
@@ -350,8 +351,9 @@
                     </div>
                   </div>
                 </div>
+                <div class="p-b-15 p-t-15 visible-sm visible-xs" ng-if="examples"></div>
                 <div class="m-t-15 row" ng-if="examples">
-                  <div class="col-sm-4">
+                  <div class="col-md-4">
                     <div class="form-group no-margin">
                       <label for="name" class="form-label">
                         <span ng-if="item.type === 0">{t}Content{/t}</span>
@@ -365,7 +367,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-4">
+                  <div class="col-md-4">
                     <div class="form-group no-margin">
                       <label for="name" class="form-label">
                         <span ng-if="item.type === 0 || item.type === 1 || item.type === 3">{t}Content{/t}</span>
@@ -379,7 +381,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-4" ng-if="item.type !== 2 && item.type !== 4">
+                  <div class="col-md-4" ng-if="item.type !== 2 && item.type !== 4">
                     <div class="form-group no-margin">
                       <label for="name" class="form-label">{t}Content type{/t}</label>
                       <div class="controls">
