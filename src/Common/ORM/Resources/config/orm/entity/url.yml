@@ -31,7 +31,7 @@ orm:
                     arguments: [ '@orm.connection.instance', '@orm.metadata.url', '@cache.connection.instance' ]
             mapping:
                 database:
-                    table: urls
+                    table: url
                     columns:
                         id:
                             type: integer
