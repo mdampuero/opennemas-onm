@@ -33,7 +33,7 @@
          * @type {Object}
          */
         $scope.item = {
-          redirect: 1,
+          redirection: 1,
           type: 0
         };
 
