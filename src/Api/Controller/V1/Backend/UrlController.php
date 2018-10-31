@@ -31,4 +31,14 @@ class UrlController extends ApiController
      * @var string
      */
     protected $service = 'api.service.url';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getExtraData($items = null)
+    {
+        return [
+            'content_types' => \ContentManager::getContentTypes()
+        ];
+    }
 }

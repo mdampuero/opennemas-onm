@@ -261,7 +261,7 @@
                           <label for="name" class="form-label">{t}Content type{/t}</label>
                           <div class="controls">
                             <div class="content-placeholder">
-                              <input class="form-control" id="name" name="name" ng-disabled="data.extra.content" ng-model="item.content_type" required type="text">
+                              <input autocomplete="off" class="form-control" id="name" name="name" ng-disabled="data.extra.content" ng-model="item.content_type" required type="text" typeahead-on-select="item.content_type = $item.name" uib-typeahead="type.pk_content as type.name for type in data.extra.content_types | filter : { name: $viewValue }" type="text">
                             </div>
                           </div>
                         </div>
