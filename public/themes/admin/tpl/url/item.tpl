@@ -78,13 +78,19 @@
                     <span ng-show="item.redirection">{t}Enabled{/t}</span>
                     <span ng-show="!item.redirection">{t}Disabled{/t}</span>
                   </span>
+                  <span class="badge m-r-5 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-class="{ 'badge-success': !item.redirection, 'badge-warning text-black': item.redirection }" ng-show="!expanded.redirection" uib-tooltip="{t}HTTP code{/t}">
+                    [% item.redirection ? '301' : '200' %]
+                  </span>
                 </div>
                 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.redirection }">
                   <div class="form-group no-margin">
                     <div class="checkbox">
                       <input class="form-control" id="redirection" name="redirection" ng-false-value="0" ng-model="item.redirection" ng-true-value="1" type="checkbox">
-                      <label for="redirection" class="form-label">
+                      <label class="form-label" for="redirection">
                         {t}Redirection{/t}
+                        <span class="badge m-l-5 m-t-2 ng-cloak text-uppercase text-bold" ng-class="{ 'badge-success': !item.redirection, 'badge-warning text-black': item.redirection }" uib-tooltip="{t}HTTP code{/t}">
+                          [% item.redirection ? '301' : '200' %]
+                        </span>
                       </label>
                     </div>
                     <div class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
