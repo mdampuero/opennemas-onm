@@ -328,7 +328,11 @@ class Redirector
         }
 
         foreach ($urls['items'] as $url) {
-            $pattern = preg_replace('/\//', '\\/', $url->source);
+            $pattern = preg_replace(
+                [ '/\//', '/\?/'],
+                [ '\\/', '\\?' ],
+                $url->source
+            );
 
             if (preg_match('/' . $pattern . '/', $uri)) {
                 return $url;
