@@ -1606,25 +1606,29 @@ class Privilege
                 'pk_privilege' => 243,
                 'name'         => 'TAG_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'TAG',
+                'module'       => 'es.openhost.module.tags',
+                'enabled'      => 1
             ],
             244 => [
                 'pk_privilege' => 244,
                 'name'         => 'TAG_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'TAG',
+                'module'       => 'es.openhost.module.tags',
+                'enabled'      => 1
             ],
             245 => [
                 'pk_privilege' => 245,
                 'name'         => 'TAG_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'TAG',
+                'module'       => 'es.openhost.module.tags',
+                'enabled'      => 1
             ],
             246 => [
                 'pk_privilege' => 246,
                 'name'         => 'TAG_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'TAG',
+                'module'       => 'es.openhost.module.tags',
+                'enabled'      => 1
             ],
         ];
 
