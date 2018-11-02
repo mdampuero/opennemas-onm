@@ -740,13 +740,6 @@ class Privilege
                 'module'       => 'NEWSLETTER',
                 'enabled'      => 1
             ],
-            113 => [
-                'pk_privilege' => 113,
-                'name'         => 'BACKEND_ADMIN',
-                'description'  => _('Backend manager'),
-                'module'       => 'BACKEND',
-                'enabled'      => 1
-            ],
             114 => [
                 'pk_privilege' => 114,
                 'name'         => 'CACHE_TPL_ADMIN',
@@ -992,20 +985,6 @@ class Privilege
                 'module'       => 'SPECIAL',
                 'enabled'      => 1
             ],
-            153 => [
-                'pk_privilege' => 153,
-                'name'         => 'SCHEDULE_SETTINGS',
-                'description'  => _('Manage module settings'),
-                'module'       => 'SCHEDULE',
-                'enabled'      => 1
-            ],
-            154 => [
-                'pk_privilege' => 154,
-                'name'         => 'SCHEDULE_ADMIN',
-                'description'  => _('Manage agenda'),
-                'module'       => 'SCHEDULE',
-                'enabled'      => 1
-            ],
             155 => [
                 'pk_privilege' => 155,
                 'name'         => 'VIDEO_HOME',
@@ -1081,13 +1060,6 @@ class Privilege
                 'name'         => 'MENU_DELETE',
                 'description'  => _('Delete'),
                 'module'       => 'MENU',
-                'enabled'      => 1
-            ],
-            165 => [
-                'pk_privilege' => 165,
-                'name'         => 'IMPORT_EFE_FILE',
-                'description'  => _('Import EFE articles file'),
-                'module'       => 'IMPORT',
                 'enabled'      => 1
             ],
             166 => [
@@ -1167,18 +1139,11 @@ class Privilege
                 'module'       => 'IMPORT',
                 'enabled'      => 1
             ],
-            178 => [
-                'pk_privilege' => 178,
-                'name'         => 'SYNC_ADMIN',
-                'description'  => _('Administer synchronization between Opennemas'),
-                'module'       => 'SYNC_MANAGER',
-                'enabled'      => 1
-            ],
             180 => [
                 'pk_privilege' => 180,
                 'name'         => 'INSTANCE_SYNC_ADMIN',
-                'description'  => _('Administer instances'),
-                'module'       => 'INSTANCE_SYNC',
+                'description'  => _('Administer synchronization between Opennemas'),
+                'module'       => 'SYNC_MANAGER',
                 'enabled'      => 1
             ],
             181 => [
