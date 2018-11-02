@@ -744,7 +744,7 @@ class Privilege
                 'pk_privilege' => 114,
                 'name'         => 'CACHE_TPL_ADMIN',
                 'description'  => _('Manage caches'),
-                'module'       => 'CACHE',
+                'module'       => 'CACHE_MANAGER',
                 'enabled'      => 1
             ],
             115 => [
