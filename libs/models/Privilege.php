@@ -831,20 +831,6 @@ class Privilege
                 'module'       => 'XML_IMPORT',
                 'enabled'      => 1
             ],
-            130 => [
-                'pk_privilege' => 130,
-                'name'         => 'ONM_CONFIG',
-                'description'  => _('Manage global settings'),
-                'module'       => 'ONM',
-                'enabled'      => 1
-            ],
-            131 => [
-                'pk_privilege' => 131,
-                'name'         => 'ONM_MANAGER',
-                'description'  => _('Access instance manager'),
-                'module'       => 'ONM',
-                'enabled'      => 1
-            ],
             132 => [
                 'pk_privilege' => 132,
                 'name'         => 'CONTENT_OTHER_UPDATE',
