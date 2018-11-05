@@ -120,11 +120,11 @@ class Validator
     }
 
     /**
-     * Get the constrains for comments
+     * Get the constrains for comments.
      *
-     * @return BaseConstraints\Collection BaseConstraints collection for comments
-     **/
-    private function getCommentConstraint($data)
+     * @return BaseConstraints\Collection BaseConstraints collection for comments.
+     */
+    protected function getCommentConstraint($data)
     {
         $config = $this->getConfig(self::BLACKLIST_RULESET_COMMENTS);
 
@@ -172,11 +172,11 @@ class Validator
 
 
     /**
-     * Get the constrains for tags
+     * Get the constrains for tags.
      *
-     * @return Collection BaseConstraints collection for tags
-     **/
-    private function getTagConstraint($data)
+     * @return Collection BaseConstraints collection for tags.
+     */
+    protected function getTagConstraint($data)
     {
         $config = $this->getConfig(self::BLACKLIST_RULESET_TAGS);
 
