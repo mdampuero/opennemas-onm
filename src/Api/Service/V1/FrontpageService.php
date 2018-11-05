@@ -27,16 +27,16 @@ class FrontpageService extends OrmService
     }
 
     /**
-     * Returns the data (frontpages, vesrions, content positions, contents and vesrion id)
-     * used to render a frontpage given a frontpage version id
+     * Returns the data (frontpages, vesrions, content positions, contents and version id)
+     * used to render a frontpage given category id
      *
-     * @param int $versionId the category id to get contents from
+     * @param int $categoryId the category id to get contents from
      *
      * @return array
      **/
-    public function getCurrentVersionForCategory($versionId)
+    public function getCurrentVersionForCategory($categoryId)
     {
         return $this->container->get('api.service.frontpage_version')
-            ->getPublicFrontpageData($versionId);
+            ->getPublicFrontpageData($categoryId);
     }
 }

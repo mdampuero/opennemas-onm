@@ -40,7 +40,6 @@ class ContentPositionService extends OrmService
      *
      * @return array
      */
-
     public function getContentPositions($categoryId, $frontpageId)
     {
         return $this->contentPositionRepository
@@ -70,8 +69,8 @@ class ContentPositionService extends OrmService
      */
     public function saveContentPositionsForHomePage($categoryID, $frontpageVersionId, $elements = [])
     {
-        $positions   = [];
-        $contentIds  = [];
+        $positions  = [];
+        $contentIds = [];
 
         if (empty($elements)) {
             return false;
