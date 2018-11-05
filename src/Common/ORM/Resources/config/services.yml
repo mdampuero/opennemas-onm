@@ -1,5 +1,5 @@
 parameters:
-    orm.config_path: "%kernel.root_dir%/../src/Common/ORM/Resources/config/orm"
+    orm.config_path: '%kernel.root_dir%/../src/Common/ORM/Resources/config/orm'
 
 services:
     orm.loader:

@@ -20,7 +20,7 @@ services:
     monolog.formatter.standard:
         class: Monolog\Formatter\LineFormatter
         arguments:
-            - "%%datetime%% | %%level_name%% | %%extra.user_agent%% | %%extra.client_ip%% | %%extra.url%% | %%extra.instance%% | %%extra.user%% | %%message%% %%context%%\n"
+            - '%%datetime%% | %%level_name%% | %%extra.user_agent%% | %%extra.client_ip%% | %%extra.url%% | %%extra.instance%% | %%extra.user%% | %%message%% %%context%%\n'
         public: true
 
     monolog.processor.onm:
@@ -32,15 +32,15 @@ services:
 
     session.handler.drak.redis:
         class: Drak\NativeSession\NativeRedisSessionHandler
-        arguments: ["%session_handler_savepath%"]
+        arguments: ['%session_handler_savepath%']
         public: true
 
     session.handler.drak.memcached:
         class: Drak\NativeSession\NativeMemcachedSessionHandler
-        arguments: ["%session_handler_savepath%", "%session_handler_options%"]
+        arguments: ['%session_handler_savepath%', '%session_handler_options%']
         public: true
 
     shared_key_jwt_encoder:
         class: Lexik\Bundle\JWTAuthenticationBundle\Encoder\SharedKeyJWTEncoder
-        arguments: [ "%shared_key_algorithm%", "%shared_key%" ]
+        arguments: [ '%shared_key_algorithm%', '%shared_key%' ]
         public: true

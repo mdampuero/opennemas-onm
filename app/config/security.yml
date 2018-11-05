@@ -111,8 +111,8 @@ security:
                     __onm_user: { path: null, domain: null }
             oauth:
                 resource_owners:
-                    facebook: "/oauth/login/check-facebook"
-                    twitter:  "/oauth/login/check-twitter"
+                    facebook: '/oauth/login/check-facebook'
+                    twitter:  '/oauth/login/check-twitter'
                 login_path:          frontend_authentication_login
                 default_target_path: frontend_authentication_login
                 check_path:          core_authentication_check

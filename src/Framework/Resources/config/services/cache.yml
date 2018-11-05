@@ -1,12 +1,12 @@
 services:
     cache:
-        class: "%cache_handler%"
-        arguments: [ "%cache_handler_params%" ]
+        class: '%cache_handler%'
+        arguments: [ '%cache_handler_params%' ]
         public: true
 
     cache_manager:
-        class: "%cache_handler%"
-        arguments: [ "%cache_handler_params%" ]
+        class: '%cache_handler%'
+        arguments: [ '%cache_handler_params%' ]
         public: true
 
     collector.cache:

@@ -19,7 +19,7 @@ services:
 
     varnish_cleaner:
         class: Onm\Varnish\BanMessagePusher
-        arguments: [ "%varnish%" ]
+        arguments: [ '%varnish%' ]
         public: true
 
     varnish_ban_message_exchanger:
