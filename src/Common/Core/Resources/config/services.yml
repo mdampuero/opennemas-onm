@@ -75,6 +75,13 @@ services:
             - '%core.helper.comment.default_params%'
         public: true
 
+    core.helper.hwi_oauth:
+        class: Common\Core\Component\Helper\HwiOauthHelper
+        arguments:
+            - '@router'
+            - '@hwi_oauth.templating.helper.oauth'
+        public: true
+
     core.helper.checkout:
         class:     Common\Core\Component\Helper\CheckoutHelper
         arguments: [ '@service_container' ]

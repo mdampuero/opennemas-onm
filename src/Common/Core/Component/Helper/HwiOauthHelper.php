@@ -9,6 +9,9 @@
  */
 namespace Common\Core\Component\Helper;
 
+use HWI\Bundle\OAuthBundle\Templating\Helper\OAuthHelper;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+
 class HwiOauthHelper
 {
     /**
@@ -28,10 +31,11 @@ class HwiOauthHelper
     /**
      * Initializes the AdvertisementHelper.
      *
-     * @param Router $router The router service.
-     * @param \HWI\Bundle\OAuthBundle\Templating\Helper\OAuthHelper $hwiOauthTemplate The template header from the HWI OAuth.
+     * @param \Symfony\Bundle\FrameworkBundle\Routing\Router $router The router service.
+     * @param \HWI\Bundle\OAuthBundle\Templating\Helper\OAuthHelper
+     *            $hwiOauthTemplate The template header from the HWI OAuth.
      */
-    public function __construct($router, $hwiOauthTemplate)
+    public function __construct(Router $router, OauthHelper $hwiOauthTemplate)
     {
         $this->router      = $router;
         $this->hwiTemplate = $hwiOauthTemplate;

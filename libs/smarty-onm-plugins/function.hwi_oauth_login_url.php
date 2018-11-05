@@ -8,7 +8,8 @@
  */
 function smarty_function_hwi_oauth_login_url($params, &$smarty)
 {
-    $helper = getService('hwi_oauth.templating.helper.oauth');
-
-    return $helper->getLoginUrl($params['name']);
+    return $smarty
+        ->getContainer()
+        ->get('core.helper.hwi_oauth')
+        ->getLoginUrl($params['name']);
 }
