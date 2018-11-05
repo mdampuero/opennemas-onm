@@ -56,7 +56,7 @@ class BlacklistWordsValidator extends ConstraintValidator
      * @param array|string $blacklist the list of regexp to validate against
      *
      * @return boolean true if the value matches against the list of regextp
-     **/
+     */
     public function match($value, $blacklist)
     {
         if (empty($blacklist)) {

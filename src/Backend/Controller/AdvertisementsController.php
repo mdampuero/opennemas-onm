@@ -490,7 +490,7 @@ class AdvertisementsController extends Controller
      * while showing the advertisement form
      *
      * @return array the list of extra parameters to use in the tempalte
-     **/
+     */
     public function getExtraParameters()
     {
         $adsPositions = $this->container->get('core.helper.advertisement');

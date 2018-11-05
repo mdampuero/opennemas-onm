@@ -19,7 +19,7 @@ class Theme extends Extension
      * If no available styles it returns an empty array.
      *
      * @return array|null the list of available styles
-     **/
+     */
     public function getSkins()
     {
         if (array_key_exists('parameters', $this->data)
@@ -41,7 +41,7 @@ class Theme extends Extension
      * If no styles it returns null.
      *
      * @return array|null the defeault style
-     **/
+     */
     public function getDefaultSkin()
     {
         $skins = $this->getSkins();
@@ -75,7 +75,7 @@ class Theme extends Extension
      * @param string $name the style name
      *
      * @return array|null the defeault style
-     **/
+     */
     public function getCurrentSkin($name)
     {
         $skins = $this->getSkins();
@@ -98,7 +98,7 @@ class Theme extends Extension
      * @param string $internalName the internal name of the skin
      *
      * @return string|null the skin name
-     **/
+     */
     public function getCurrentSkinName($internalName)
     {
         $skin = $this->getCurrentSkin($internalName);
@@ -120,7 +120,7 @@ class Theme extends Extension
      *
      * @return string|null the property value
      * @author
-     **/
+     */
     public function getCurrentSkinProperty($internalName, $propertyName)
     {
         $skin = $this->getCurrentSkin($internalName);

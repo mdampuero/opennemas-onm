@@ -254,7 +254,7 @@ class Loader
      * @param string $host the host that we are looking for
      *
      * @return boolean true if the instance is valid
-     **/
+     */
     protected function checkInstanceData($instance, $host)
     {
         return $instance instanceof Instance

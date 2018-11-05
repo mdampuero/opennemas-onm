@@ -19,7 +19,7 @@ class DatabaseCollector extends DataCollector
      * The service container
      *
      * @var \Symfony\Component\DependencyInjection\Container
-     **/
+     */
     public $container;
 
     /**

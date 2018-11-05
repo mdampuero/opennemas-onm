@@ -230,7 +230,7 @@ class NewsletterTemplateController extends Controller
      * @param array $values the RAW values to clean
      *
      * @return array the cleaned values
-     **/
+     */
     public function parseValues($values)
     {
         if (!is_array($values['schedule']['hours'])) {

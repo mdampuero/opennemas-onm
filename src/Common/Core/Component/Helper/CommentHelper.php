@@ -56,7 +56,7 @@ class CommentHelper
      * Returns the complete configs merged with the default
      *
      * @return array the list of configs
-     **/
+     */
     public function getConfigs()
     {
         if (!is_array($this->configs)) {
@@ -70,7 +70,7 @@ class CommentHelper
      * Returns a list of configurations for the comments module
      *
      * @return array the list of default configurations
-     **/
+     */
     public function getDefaultConfigs()
     {
         return $this->defaultConfigs;
@@ -80,7 +80,7 @@ class CommentHelper
      * Whether comments must be enabled by default in comments or not
      *
      * @return boolean true if comments are enabled by default on contents
-     **/
+     */
     public function enableCommentsByDefault()
     {
         return $this->getConfigs()['with_comments'] == 1;

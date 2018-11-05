@@ -19,7 +19,7 @@ class CacheCollector extends DataCollector
      * The service container
      *
      * @var \Symfony\Component\DependencyInjection\Container
-     **/
+     */
     public $container;
 
     /**

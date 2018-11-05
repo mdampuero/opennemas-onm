@@ -22,7 +22,7 @@ class BrandCollector extends DataCollector
      * The path to the json file to read
      *
      * @var string
-     **/
+     */
     public $path;
 
     /**

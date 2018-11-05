@@ -22,14 +22,14 @@ class Validator
      * The settings dataset
      *
      * @var DataSet
-     **/
+     */
     private $ds = null;
 
     /**
      * The validator service
      *
      * @var \Symfony\Component\Validator\ConstraintValidator
-     **/
+     */
     private $validator = null;
 
     /**
@@ -51,7 +51,7 @@ class Validator
      * @param string       $paramname description
      *
      * @return mixed the array of violations
-     **/
+     */
     public function validate($entity, $ruleName)
     {
         $classReflection = new \ReflectionClass(__CLASS__);
@@ -104,7 +104,7 @@ class Validator
     /**
      * Returns the blacklist config for a given ruleSet
      *
-     **/
+     */
     public function getConfig($ruleSet)
     {
         return $this->ds->get('blacklist.' . $ruleSet);
@@ -115,7 +115,7 @@ class Validator
      *
      * @param string $ruleSet the name of the rule set
      * @param mixed  $config  the configuration to save
-     **/
+     */
     public function setConfig($ruleSet, $config)
     {
         try {
@@ -131,7 +131,7 @@ class Validator
      * Get the constrains for comments
      *
      * @return Assert\Collection Assert collection for comments
-     **/
+     */
     private function getCommentConstraint($data)
     {
         $config = $this->getConfig(self::BLACKLIST_RULESET_COMMENTS);
@@ -183,7 +183,7 @@ class Validator
      * Get the constrains for tags
      *
      * @return Collection Assert collection for tags
-     **/
+     */
     private function getTagConstraint($data)
     {
         $config = $this->getConfig(self::BLACKLIST_RULESET_TAGS);

@@ -41,7 +41,7 @@ class HwiOauthHelper
      * Returns the authorization url from a service name and the redirection url
      *
      * @return void
-     **/
+     */
     public function getAuthorizationUrl($name, $redirectUrl = null, $extra = null)
     {
         if (!is_null($redirectUrl)) {
@@ -57,7 +57,7 @@ class HwiOauthHelper
      * @param string $name the name of the service
      *
      * @return string
-     **/
+     */
     public function getLoginUrl($name)
     {
         return $this->hwiTemplate->getLoginUrl($name);
@@ -68,7 +68,7 @@ class HwiOauthHelper
      * Returns the resourceOwners
      *
      * @return void
-     **/
+     */
     public function getResourceOwners()
     {
         return $this->hwiTemplate->getResourceOwners();

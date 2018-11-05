@@ -40,27 +40,27 @@ class RouterListener implements EventSubscriberInterface
 {
     /**
      * @var UrlMatcherInterface|RequestMatcherInterface
-     **/
+     */
     private $matcher;
 
     /**
      * @var RequestContext
-     **/
+     */
     private $context;
 
     /**
      * @var RequestContext
-     **/
+     */
     private $logger;
 
     /**
      * @var Request
-     **/
+     */
     private $request;
 
     /**
      * @var RequestStack
-     **/
+     */
     private $requestStack;
 
     /**
@@ -137,7 +137,7 @@ class RouterListener implements EventSubscriberInterface
      * Sets the current request in the context
      *
      * @param Request $request the request to set
-     **/
+     */
     private function setCurrentRequest(Request $request = null)
     {
         if (null !== $request && $this->request !== $request) {
@@ -151,7 +151,7 @@ class RouterListener implements EventSubscriberInterface
      * Action dispatched on kernel.finish event
      *
      * @param FinishRequestEvent $event the event object
-     **/
+     */
     public function onKernelFinishRequest(FinishRequestEvent $event)
     {
         if (null === $this->requestStack) {
@@ -165,7 +165,7 @@ class RouterListener implements EventSubscriberInterface
      * Action dispatched on kernel.request event
      *
      * @param GetResponseEvent $event the event object
-     **/
+     */
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
@@ -265,7 +265,7 @@ class RouterListener implements EventSubscriberInterface
      * Creates a new request object removing the language part if available
      *
      * @return array an array containing the new request and the locale from the uri
-     **/
+     */
     public function removeLanguageFromRequest()
     {
         $request = $this->requestStack->getCurrentRequest();
