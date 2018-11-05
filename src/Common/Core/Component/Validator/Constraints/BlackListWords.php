@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Common\Core\Component\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
@@ -18,7 +17,7 @@ use Symfony\Component\Validator\Constraint;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class BlacklistWords extends Constraint
+class BlackListWords extends Constraint
 {
     const BLACKLIST_WORD_ERROR = '9f0865f1-8bee-4bc6-b936-15ef0f33ca7c';
 
