@@ -91,14 +91,6 @@ class Validator
         }
 
         return [];
-
-
-
-        foreach ($violations as $el) {
-            $errors[] = $el->getMessage();
-        }
-
-        return $errors;
     }
 
     /**
