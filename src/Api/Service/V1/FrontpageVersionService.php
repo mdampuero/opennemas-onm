@@ -32,7 +32,7 @@ class FrontpageVersionService extends OrmService
     {
         parent::__construct($container, $entity, $validator);
 
-        $this->contentPositionService = $this->container->get('api.service.contentposition');
+        $this->contentPositionService = $this->container->get('api.service.content_position');
         $this->entityRepository       = $this->container->get('entity_repository');
         $this->ormManager             = $this->container->get('orm.manager');
         $this->locale                 = $this->container->get('core.locale');
