@@ -96,6 +96,6 @@ class FrontpageVersionRepository extends BaseRepository
         $dt = new \DateTime();
         $dt->setTimezone(new \DateTimeZone('UTC'));
         $dt->setTimestamp(time());
-        return $dt->format('Y-m-d H:i');
+        return $dt->format('Y-m-d H:i:s');
     }
 }
