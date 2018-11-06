@@ -824,13 +824,6 @@ class Privilege
                 'module'       => 'NEWS_AGENCY_IMPORTER',
                 'enabled'      => 1
             ],
-            127 => [
-                'pk_privilege' => 127,
-                'name'         => 'IMPORT_XML',
-                'description'  => _('Import XML files'),
-                'module'       => 'XML_IMPORT',
-                'enabled'      => 1
-            ],
             132 => [
                 'pk_privilege' => 132,
                 'name'         => 'CONTENT_OTHER_UPDATE',
