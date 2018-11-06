@@ -20,6 +20,6 @@ grep -q "extension: 1" $output_path/out \
     && echo "OK"   >> $output_path/result \
     || echo "FAIL" >> $output_path/result
 
-bin/console cache:redis remove --pattern="*extension-54*"
+console cache:redis remove --pattern="*extension-54*"
 
 [ -f $output_path/out ] && rm $output_path/out
