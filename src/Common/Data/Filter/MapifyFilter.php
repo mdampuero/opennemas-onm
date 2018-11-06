@@ -25,6 +25,12 @@ class MapifyFilter extends Filter
         $map      = [];
 
         foreach ($list as $item) {
+            if (is_array($item)) {
+                $map[$item[$property]] = $item;
+
+                continue;
+            }
+
             $map[$item->{$property}] = $item;
         }
 

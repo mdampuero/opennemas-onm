@@ -40,10 +40,6 @@ class NewStandController extends Controller
         $this->category_name = $this->request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
         $this->view->assign([ 'actual_category' => $this->category_name, ]);
-
-        if (!defined('KIOSKO_DIR')) {
-            define('KIOSKO_DIR', "kiosko" . SS);
-        }
     }
 
     /**

@@ -18,6 +18,10 @@ api_v1_backend_newsletter_templates:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/newsletter_template.yml'
     prefix:   /backend
 
+api_v1_backend_newsstand:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/newsstand.yml'
+    prefix:   /backend
+
 api_v1_backend_setting:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/setting.yml'
     prefix:   /backend
@@ -52,4 +56,6 @@ api_v1_frontend_advertisement:
 
 api_v1_frontend_tool:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/tool.yml'
-    prefix:   /
+
+api_v1_frontend_tag:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/tag.yml'

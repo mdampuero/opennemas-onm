@@ -219,7 +219,7 @@
                       {is_module_activated name="KIOSKO_MANAGER"}
                         {acl isAllowed="KIOSKO_CREATE"}
                           <div class="quick-item">
-                            <a href="{url name=admin_kiosko_create}">
+                            <a href="{url name=backend_newsstand_create}">
                               <i class="fa fa-newspaper-o"></i>
                               <span class="title">{t}News Stand{/t}</span>
                             </a>
@@ -533,6 +533,7 @@
       @Common/src/fablock/fablock.js,
       @Common/src/angular-autoform/js/*,
       @Common/src/angular-bootstrap-multiselect/template.js,
+      @Common/src/angular-category-selector/js/onm-category-selector.js,
       @Common/src/angular-fly-to-cart/js/fly-to-cart.js,
       @Common/src/angular-image-preview/js/image-preview.js,
       @Common/src/angular-localize/localize.js,

@@ -32,10 +32,10 @@ var newsletterTemplateTranslations = {
             <h4>{t}Template{/t}</h4>
           </li>
         </ul>
-        <div class="all-actions pull-right">
+        <div class="all-actions pull-right" ng-if="!flags.http.loading && item">
           <ul class="nav quick-section">
             <li class="quicklinks btn-group">
-              <button class="btn btn-loading btn-primary text-uppercase" ng-click="saveVal()" ng-disabled="flags.http.saving || form.$invalid || (item.password && item.password !== rpassword)" type="button">
+              <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.saving || form.$invalid" type="button">
                 <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                 {t}Save{/t}
               </button>
