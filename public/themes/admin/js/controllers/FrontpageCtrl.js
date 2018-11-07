@@ -499,6 +499,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       if (!$scope.frontpageInfo.checkNewVersion) {
         return null;
       }
+
       http.get({
         name:   'admin_frontpage_last_version',
         params: {
@@ -507,34 +508,33 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           date:      $scope.frontpageInfo.lastSaved
         }
       }).then(function(response) {
-        if (response.data !== 'true') {
+        if (response.data !== true) {
           return null;
         }
+
         $scope.frontpageInfo.checkNewVersion = false;
 
-        $uibModal.open({
-          backdrop:      true,
-          backdropClass: 'modal-backdrop-transparent',
-          controller:    'YesNoModalCtrl',
-          openedClass:   'modal-relative-open',
-          templateUrl:   'modal-new-version',
-          windowClass:   'modal-right modal-small modal-top',
+        var modal = $uibModal.open({
+          templateUrl: 'modal-new-version',
+          backdrop: 'static',
+          controller: 'modalCtrl',
           resolve: {
             template: function() {
-              return {};
-            },
-            yes: function() {
-              return function() {
-                location.reload();
+              return {
               };
             },
-            no: function() {
-              return function(modalWindow) {
-                modalWindow.close({ response: false, success: true });
-              };
+            success: function() {
+              return null;
             }
           }
         });
+
+        modal.result.then(function(response) {
+          if (response) {
+            location.reload();
+          }
+        });
+
         return null;
       }, function() {
         return null;
