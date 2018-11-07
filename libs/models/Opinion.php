@@ -409,9 +409,8 @@ class Opinion extends Content
 
         $category = 0;
 
-        list(, $contentsSuggestedInFrontpage, , ) =
-                getService('api.service.frontpageVersion')
-                    ->getPublicFrontpageData($category);
+        list(, $contentsSuggestedInFrontpage, , ) = getService('api.service.frontpage')
+            ->getCurrentVersionForCategory($category);
 
         $excludedContents = [];
         foreach ($contentsSuggestedInFrontpage as $content) {
