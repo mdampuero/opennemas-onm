@@ -44,9 +44,7 @@ class LocaleListener implements EventSubscriberInterface
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if (!$event->isMasterRequest()
-            || strpos($event->getRequest()->getRequestUri(), '/framework') === 0
-        ) {
+        if (strpos($event->getRequest()->getRequestUri(), '/framework') === 0) {
             return;
         }
 
