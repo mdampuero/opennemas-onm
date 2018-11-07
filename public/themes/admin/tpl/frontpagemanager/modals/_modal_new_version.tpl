@@ -7,7 +7,7 @@
     <div class="col-xs-12">
       <button type="button" class="btn btn-block btn-success btn-loading" ng-click="confirm()">
         <h4 class="bold text-uppercase text-white">
-          <i class="fa fa-check m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': loading }"></i>
+          <i class="fa fa-refresh m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': loading }"></i>
           {t}Reload frontpage{/t}
         </h4>
       </button>
