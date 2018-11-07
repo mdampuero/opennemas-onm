@@ -946,33 +946,31 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->redirector, 'isTargetValid');
         $method->setAccessible(true);
 
-        $this->request->expects($this->at(0))->method('getRequestUri')
+        $this->request->expects($this->any())->method('getRequestUri')
             ->willReturn('/flob/plugh');
-
-        $this->request->expects($this->at(1))->method('getRequestUri')
-            ->willReturn('/flob/plugh');
-
-        $this->request->expects($this->at(2))->method('getRequestUri')
-            ->willReturn('/waldo/wubble');
 
         $this->assertTrue($method->invokeArgs($this->redirector, [
             $this->request,
-            json_decode(json_encode([ 'content_type_name' => 'photo' ]))
+            new Url([ 'target' => null ]),
+            ''
         ]));
 
         $this->assertTrue($method->invokeArgs($this->redirector, [
             $this->request,
-            ''
+            new Url(),
+            json_decode(json_encode([ 'content_type_name' => 'photo' ]))
         ]));
 
         $this->assertFalse($method->invokeArgs($this->redirector, [
             $this->request,
+            new Url(),
             'flob/plugh'
         ]));
 
         $this->assertTrue($method->invokeArgs($this->redirector, [
             $this->request,
-            'flob/plugh'
+            new Url(),
+            'flob/garply'
         ]));
     }
 }

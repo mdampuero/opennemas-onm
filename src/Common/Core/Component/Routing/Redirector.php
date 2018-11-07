@@ -201,7 +201,7 @@ class Redirector
     {
         $target = $this->getTarget($request, $url);
 
-        if (!$this->isTargetValid($request, $target)) {
+        if (!$this->isTargetValid($request, $url, $target)) {
             throw new ResourceNotFoundException();
         }
 
@@ -293,7 +293,7 @@ class Redirector
     {
         $target = $this->getTarget($request, $url);
 
-        if (!$this->isTargetValid($request, $target)) {
+        if (!$this->isTargetValid($request, $url, $target)) {
             throw new ResourceNotFoundException();
         }
 
@@ -436,12 +436,17 @@ class Redirector
      * Checks if the target is valid basing on the current request.
      *
      * @param Request $request The current request.
+     * @param Url     $url     The Url object.
      * @param string  $target  The target to check.
      *
      * @return boolean True if the target is valid. False otherwise.
      */
-    protected function isTargetValid($request, $target)
+    protected function isTargetValid($request, $url, $target)
     {
+        if (empty($target)) {
+            return empty($url->target);
+        }
+
         return is_object($target)
             || $target !== trim($request->getRequestUri(), '/');
     }
