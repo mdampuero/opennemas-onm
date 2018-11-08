@@ -259,8 +259,8 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             $frontObject->url
         );
 
-        $this->assertNull($method->invokeArgs($this->helper, [ '' ]), null);
-        $this->assertNull($method->invokeArgs($this->helper, [ null ]), null);
+        $this->assertNull($method->invokeArgs($this->helper, [ '' ]));
+        $this->assertNull($method->invokeArgs($this->helper, [ null ]));
     }
 
     /**
@@ -281,8 +281,8 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             $mediaObject->url
         );
 
-        $this->assertNull($method->invokeArgs($this->helper, [ '' ]), null);
-        $this->assertNull($method->invokeArgs($this->helper, [ null ]), null);
+        $this->assertNull($method->invokeArgs($this->helper, [ '' ]));
+        $this->assertNull($method->invokeArgs($this->helper, [ null ]));
     }
 
     /**
@@ -313,8 +313,8 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             $extMediaObject->url
         );
 
-        $this->assertNull($method->invokeArgs($this->helper, [ '' ]), null);
-        $this->assertNull($method->invokeArgs($this->helper, [ null ]), null);
+        $this->assertNull($method->invokeArgs($this->helper, [ '' ]));
+        $this->assertNull($method->invokeArgs($this->helper, [ null ]));
     }
 
     /**
@@ -401,7 +401,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             $frontMediaObject->url
         );
 
-        $this->assertNull($method->invokeArgs($this->helper, [ '' ]), null);
-        $this->assertNull($method->invokeArgs($this->helper, [ null ]), null);
+        $this->assertNull($method->invokeArgs($this->helper, [ '' ]));
+        $this->assertNull($method->invokeArgs($this->helper, [ null ]));
     }
 }

@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
-
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 use Common\Core\Controller\Controller;
 
@@ -44,7 +44,7 @@ class AuthenticationController extends Controller
         $message = [];
 
         if ($request->getSession()->get('_security.manager.target_path')) {
-            $referer = $this->request->getSession()->get('_security.manager.target_path');
+            $referer = $request->getSession()->get('_security.manager.target_path');
         }
 
         if ($request->attributes->has(Security::AUTHENTICATION_ERROR)) {

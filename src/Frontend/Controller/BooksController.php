@@ -36,7 +36,7 @@ class BooksController extends Controller
     public function frontpageAction(Request $request)
     {
         $page         = $request->query->getDigits('page', 1);
-        $categoryName = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
         // Setup templating cache layer
         $this->view->setConfig('articles');
@@ -93,9 +93,9 @@ class BooksController extends Controller
      */
     public function showAction(Request $request)
     {
-        $categoryName = $this->request->query->get('category_name', null);
-        $dirtyID      = $request->query->get('id', null);
-        $urlSlug      = $request->query->get('slug', null);
+        $categoryName = $request->get('category_name', null);
+        $dirtyID      = $request->get('id', null);
+        $urlSlug      = $request->get('slug', null);
 
         $content = $this->get('content_url_matcher')
             ->matchContentUrl('book', $dirtyID, $urlSlug, $categoryName);

@@ -30,9 +30,9 @@ class ArticlesController extends Controller
      */
     public function showAction(Request $request)
     {
-        $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
-        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $dirtyID      = $request->get('article_id', '');
+        $categoryName = $request->get('category_name', 'home');
+        $urlSlug      = $request->get('slug', '');
 
         $article = $this->get('content_url_matcher')
             ->matchContentUrl('article', $dirtyID, $urlSlug, $categoryName);

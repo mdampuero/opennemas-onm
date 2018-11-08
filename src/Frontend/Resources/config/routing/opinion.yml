@@ -32,7 +32,7 @@ frontend_opinion_show_with_author_slug:
 
 frontend_opinion_show_with_author_slug_and_date:
     path: /opinion/{author_name}/{date}/{opinion_title}/{opinion_id}.{_format}
-    defaults: { _controller: FrontendBundle:Opinions:show, author_name:author, _format: html }
+    defaults: { _controller: FrontendBundle:Opinions:show, author_name: author, _format: html }
     requirements:
         author_name  : '[^/]+'
         opinion_title: '[^/]+'
@@ -52,7 +52,7 @@ frontend_opinion_show:
 
 frontend_opinion_external_show_with_author_slug:
     path: /extopinion/{author_name}/{opinion_title}/{opinion_id}.{_format}
-    defaults: { _controller: FrontendBundle:Opinions:extShow, author_name:author, _format: html }
+    defaults: { _controller: FrontendBundle:Opinions:extShow, author_name: author, _format: html }
     requirements:
         author_name   : '[^/]+'
         opinion_title : '[^/]+'

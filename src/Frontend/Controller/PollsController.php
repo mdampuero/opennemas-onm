@@ -173,8 +173,8 @@ class PollsController extends Controller
      */
     public function showAction(Request $request)
     {
-        $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
-        $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $dirtyID = $request->get('id', '', FILTER_SANITIZE_STRING);
+        $urlSlug = $request->get('slug', '', FILTER_SANITIZE_STRING);
 
         $poll = $this->get('content_url_matcher')
             ->matchContentUrl('poll', $dirtyID, $urlSlug, $this->categoryName);

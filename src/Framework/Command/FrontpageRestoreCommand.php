@@ -71,7 +71,7 @@ EOF
         if (empty($frontpageVersionId)) {
             $frontpageVersionId = $this->getContainer()
                 ->get('api.service.frontpage_version')
-                ->getCurrentVersionDB($category);
+                ->getCurrentVersionFromDB($category);
         }
 
         $done = \ContentManager::saveContentPositionsForHomePage($category, $frontpageVersionId, $positions);

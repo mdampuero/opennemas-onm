@@ -1,13 +1,9 @@
-api_v1_backend_author:
-    resource: '@ApiBundle/Resources/config/routing/v1/backend/author.yml'
-    prefix:   /backend
-
 api_v1_backend_article:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/article.yml'
     prefix:   /backend
 
-api_v1_backend_newsstand:
-    resource: '@ApiBundle/Resources/config/routing/v1/backend/newsstand.yml'
+api_v1_backend_author:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/author.yml'
     prefix:   /backend
 
 api_v1_backend_file:
@@ -22,6 +18,10 @@ api_v1_backend_newsletter_templates:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/newsletter_template.yml'
     prefix:   /backend
 
+api_v1_backend_newsstand:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/newsstand.yml'
+    prefix:   /backend
+
 api_v1_backend_setting:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/setting.yml'
     prefix:   /backend
@@ -34,6 +34,14 @@ api_v1_backend_subscription:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/subscription.yml'
     prefix:   /backend
 
+api_v1_backend_tag:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/tag.yml'
+    prefix:   /backend
+
+api_v1_backend_url:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/url.yml'
+    prefix:   /backend
+
 api_v1_backend_user:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/user.yml'
     prefix:   /backend
@@ -42,12 +50,12 @@ api_v1_backend_user_group:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/user_group.yml'
     prefix:   /backend
 
-api_v1_frontend_tool:
-    resource: '@ApiBundle/Resources/config/routing/v1/backend/tool.yml'
-    prefix:   /
-
 api_v1_frontend_advertisement:
     resource: '@ApiBundle/Resources/config/routing/v1/frontend/advertisement.yml'
+    prefix:   /
+
+api_v1_frontend_tool:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/tool.yml'
 
 api_v1_frontend_tag:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/tag.yml'

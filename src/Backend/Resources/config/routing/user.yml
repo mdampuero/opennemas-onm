@@ -1,27 +1,27 @@
 backend_user_create:
     path:     /users/new
-    defaults: { _controller  : BackendBundle:User:create }
+    defaults: { _controller: BackendBundle:User:create }
     options:
         expose: true
 
 backend_user_show:
     path:     /users/{id}
-    defaults: { _controller  : BackendBundle:User:show }
+    defaults: { _controller: BackendBundle:User:show }
     options:
         expose: true
 
 backend_user_social:
     path:     /user/{id}/{resource}
-    defaults: { _controller  : BackendBundle:User:social }
+    defaults: { _controller: BackendBundle:User:social }
     requirements:
         resource: facebook|twitter
 
 backend_user_social_disconnect:
     path:     /user/{id}/{resource}/disconnect
-    defaults: { _controller  : BackendBundle:User:disconnect }
+    defaults: { _controller: BackendBundle:User:disconnect }
 
 backend_users_list:
     path:     /users
-    defaults: { _controller  : BackendBundle:User:list }
+    defaults: { _controller: BackendBundle:User:list }
     options:
         expose: true

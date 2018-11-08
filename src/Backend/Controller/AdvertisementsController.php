@@ -402,7 +402,7 @@ class AdvertisementsController extends Controller
     {
         $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
 
-        if ('POST' !== $this->request->getMethod()) {
+        if ('POST' !== $request->getMethod()) {
             $keys = [
                 'adsense_id', 'ads_settings', 'ads_txt','dfp_custom_code',
                 'dfp_options', 'iadbox_id', 'revive_ad_server',
@@ -467,7 +467,6 @@ class AdvertisementsController extends Controller
             $settings['dfp_custom_code']            = base64_encode($formValues->get('dfp_custom_code'));
             $settings['smart_custom_code']          = base64_encode($formValues->get('smart_custom_code'));
         }
-
         try {
             $ds->set($settings);
 
@@ -491,7 +490,7 @@ class AdvertisementsController extends Controller
      * while showing the advertisement form
      *
      * @return array the list of extra parameters to use in the tempalte
-     **/
+     */
     public function getExtraParameters()
     {
         $adsPositions = $this->container->get('core.helper.advertisement');

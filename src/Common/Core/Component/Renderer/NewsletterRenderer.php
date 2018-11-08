@@ -163,7 +163,7 @@ class NewsletterRenderer
      * @param Content $content the content from the repository
      *
      * @return Content the item completed
-     **/
+     */
     public function hydrateContent($content)
     {
         $content->cat    = $content->category_name;
@@ -209,7 +209,7 @@ class NewsletterRenderer
      * @param array $criteria the list of properties required to find contents
      *
      * @return array the list of contents
-     **/
+     */
     public function getContents($criteria)
     {
         $contents = [];

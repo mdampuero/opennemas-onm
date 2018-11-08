@@ -88,9 +88,8 @@ class RssController extends Controller
                 $rssTitle = $category->title;
             }
 
-            list($contentPositions, $contents, $invalidationDt, $lastSaved) =
-                $this->get('api.service.frontpage_version')
-                    ->getPublicFrontpageData($id);
+            list($contentPositions, $contents, $invalidationDt, $lastSaved) = $this->get('api.service.frontpage')
+                ->getCurrentVersionForCategory($id);
 
             // Remove advertisements and widgets
             $contents = array_filter(

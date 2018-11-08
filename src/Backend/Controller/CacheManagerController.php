@@ -47,7 +47,7 @@ class CacheManagerController extends Controller
         $configManager     = $configContainer->setConfigDir($configDir);
 
         // If the request is post then save the configuration with the data provided
-        if ($this->request->getMethod() == 'POST') {
+        if ($request->getMethod() == 'POST') {
             $config              = [];
             $cacheGroups         = $request->request->get('groups');
             $cacheGroupsEnabled  = $request->request->get('enabled');

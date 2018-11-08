@@ -26,6 +26,13 @@ class UrlGeneratorHelper
     protected $instance;
 
     /**
+     * The locale service
+     *
+     * @var Locale
+     */
+    protected $locale;
+
+    /**
      * Whether to force HTTP when absolute URLs and no request present.
      *
      * @var boolean
@@ -41,6 +48,7 @@ class UrlGeneratorHelper
     {
         $this->container = $container;
         $this->instance  = $this->container->get('core.instance');
+        $this->locale    = $this->container->get('core.locale');
     }
 
     /**
@@ -113,7 +121,15 @@ class UrlGeneratorHelper
             }
         }
 
-        return $url . '/' . $this->getUriForContent($content);
+        // Force frontend context for multilanguage
+        $context = $this->locale->getContext();
+        $this->locale->setContext('frontend');
+
+        $uri = $url . '/' . $this->getUriForContent($content);
+
+        $this->locale->setContext($context);
+
+        return $uri;
     }
 
     /**
@@ -189,6 +205,7 @@ class UrlGeneratorHelper
         $created = (is_object($content->created)) ?
             $content->created->format('Y-m-d H:i:s') :
             $content->created;
+
         return $this->generateUriFromConfig(strtolower($content->content_type_name), [
             'id'       => sprintf('%06d', $content->id),
             'date'     => date('YmdHis', strtotime($created)),

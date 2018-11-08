@@ -89,7 +89,7 @@
     </script>
   {/block}
 </head>
-<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session._sf2_attributes.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}', '{t}Any{/t}')" >
+<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if array_key_exists('sidebar_pinned', $smarty.session) && $smarty.session._sf2_attributes.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}', '{t}Any{/t}')" >
   {block name="body"}
     <div class="overlay"></div>
     {block name="header"}
@@ -248,39 +248,6 @@
                       {/is_module_activated}
                     </div>
                   </li>
-                {/block}
-                {block name="master_actions_block"}
-                {acl isAllowed="MASTER" hasExtension="CACHE_MANAGER"}
-                  <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                  </li>
-                  <li class="quicklinks sysops-actions dropdown">
-                    <a href="#" data-toggle="dropdown">
-                      <i class="fa fa-rebel text-danger master-user"></i>
-                      {t}Sysops{/t}
-                    </a>
-                    <ul  class="dropdown-menu on-left" role="menu">
-                      <li>
-                        <a href="{url name=admin_cache_manager}"><i class="fa fa-database"></i>Cache manager</a>
-                      </li>
-                      <li>
-                        <a href="{url name=admin_cache_manager_clearcache}">
-                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove cache</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="{url name=admin_cache_manager_clearcompiled}">
-                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove compiles</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="{url name=admin_cache_manager_banvarnishcache}">
-                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Ban varnish caches</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                {/acl}
                 {/block}
               </ul>
             </div>

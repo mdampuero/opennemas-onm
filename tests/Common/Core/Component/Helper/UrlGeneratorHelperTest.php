@@ -36,6 +36,10 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getContainer' ])
             ->getMock();
 
+        $this->locale = $this->getMockBuilder('Locale')
+            ->setMethods([ 'getContext', 'setContext' ])
+            ->getMock();
+
         $this->request = $this->getMockBuilder('Request')
             ->setMethods(['getSchemeAndHttpHost'])->getMock();
 
@@ -62,20 +66,21 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
     public function serviceContainerCallback($name)
     {
-        if ($name === 'data.manager.filter') {
-            return $this->fm;
-        }
+        switch ($name) {
+            case 'data.manager.filter':
+                return $this->fm;
 
-        if ($name === 'user_repository') {
-            return $this->um;
-        }
+            case 'user_repository':
+                return $this->um;
 
-        if ($name === 'core.instance') {
-            return $this->instance;
-        }
+            case 'core.instance':
+                return $this->instance;
 
-        if ($name === 'request_stack') {
-            return $this->requestStack;
+            case 'core.locale':
+                return $this->locale;
+
+            case 'request_stack':
+                return $this->requestStack;
         }
 
         return null;

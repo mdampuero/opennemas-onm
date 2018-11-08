@@ -393,7 +393,7 @@ class NewsstandController extends Controller
      * Returns a list of extra data to use in  the create/edit item form
      *
      * @return array
-     **/
+     */
     private function getExtraData()
     {
         $security   = $this->get('core.security');

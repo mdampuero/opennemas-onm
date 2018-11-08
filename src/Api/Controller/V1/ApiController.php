@@ -12,18 +12,9 @@ namespace Api\Controller\V1;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ApiController extends Controller
 {
-    /**
-     * The extension name to work with @Security annotation when using
-     * [extension] placeholder in permissions.
-     *
-     * @var string
-     */
-    protected $extension = null;
-
     /**
      * The filename to include in the CSV report.
      *
@@ -52,6 +43,8 @@ class ApiController extends Controller
      */
     public function createAction()
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('create'));
+
         return new JsonResponse([ 'extra' => $this->getExtraData() ]);
     }
 
@@ -64,6 +57,8 @@ class ApiController extends Controller
      */
     public function deleteAction($id)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('delete'));
+
         $msg = $this->get('core.messenger');
 
         $this->get($this->service)->deleteItem($id);
@@ -82,6 +77,8 @@ class ApiController extends Controller
      */
     public function deleteSelectedAction(Request $request)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('delete'));
+
         $ids     = $request->request->get('ids', []);
         $msg     = $this->get('core.messenger');
         $deleted = $this->get($this->service)->deleteList($ids);
@@ -104,16 +101,6 @@ class ApiController extends Controller
     }
 
     /**
-     * Returns the controller extension.
-     *
-     * @return string The controller extension.
-     */
-    public function getExtension()
-    {
-        return $this->extension;
-    }
-
-    /**
      * Returns a list of items.
      *
      * @param Request $request The request object.
@@ -122,6 +109,8 @@ class ApiController extends Controller
      */
     public function listAction(Request $request)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
+
         $us  = $this->get($this->service);
         $oql = $request->query->get('oql', '');
 
@@ -144,6 +133,8 @@ class ApiController extends Controller
      */
     public function patchAction(Request $request, $id)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('patch'));
+
         $msg = $this->get('core.messenger');
 
         $this->get($this->service)
@@ -162,6 +153,8 @@ class ApiController extends Controller
      */
     public function patchSelectedAction(Request $request)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('patch'));
+
         $params = $request->request->all();
         $ids    = $params['ids'];
         $msg    = $this->get('core.messenger');
@@ -197,6 +190,8 @@ class ApiController extends Controller
      */
     public function saveAction(Request $request)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('save'));
+
         $msg = $this->get('core.messenger');
 
         $item = $this->get($this->service)
@@ -224,11 +219,14 @@ class ApiController extends Controller
      */
     public function showAction($id)
     {
-        $ss = $this->get($this->service);
+        $this->checkSecurity($this->extension, $this->getActionPermission('show'));
+
+        $ss   = $this->get($this->service);
+        $item = $ss->getItem($id);
 
         return new JsonResponse([
-            'item'  => $ss->responsify($ss->getItem($id)),
-            'extra' => $this->getExtraData()
+            'item'  => $ss->responsify($item),
+            'extra' => $this->getExtraData($item)
         ]);
     }
 
@@ -241,6 +239,8 @@ class ApiController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('update'));
+
         $msg = $this->get('core.messenger');
 
         $this->get($this->service)
@@ -252,37 +252,14 @@ class ApiController extends Controller
     }
 
     /**
-     * Checks if the action can be executed basing on the extension and action
-     * to execute.
-     *
-     * @param string $extension  The required extension.
-     * @param string $permission The required permission.
-     *
-     * @throws AccessDeniedException If the action can not be executed.
-     */
-    protected function checkSecurity($extension, $permission = null)
-    {
-        if (!empty($extension)
-            && !$this->get('core.security')->hasExtension($extension)
-        ) {
-            throw new AccessDeniedException();
-        }
-
-        if (!empty($permission)
-            && !$this->get('core.security')->hasPermission($permission)
-        ) {
-            throw new AccessDeniedException();
-        }
-    }
-
-    /**
      * Returns a list of extra data.
      *
-     * @param array $items The array of items.
+     * @param mixed $items The item when called in a single-item action or the
+     *                     array of items when called in a list-of-items action.
      *
      * @return array The extra data.
      */
-    protected function getExtraData($items = [])
+    protected function getExtraData($items = null)
     {
         return [];
     }

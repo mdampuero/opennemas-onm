@@ -1,4 +1,4 @@
-<div data-content-id="{$content->id}" data-class="Opinion" {getProperty item=$content category=$params['category'] property='bgcolor, title' style='true'}
+<div data-content-id="{$content->id}" data-class="{get_class($content)}" {getProperty item=$content category=$params['category'] property='bgcolor, title' style='true'} class="content-provider-element clearfix"
     data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
     data-title='{getProperty item=$content category=$params['category'] property='title'}'
     data-format ='{getProperty item=$content category=$params['category'] property='format'}'
@@ -10,11 +10,11 @@
         </div>
         <div class="title">
             {if $content->author_object->meta['is_blog'] neq 1}
-                <span class="type">{t}Opinion{/t}</span>
-                {$content->author_object->name} - {$content->title}
+              <span class="type">{$content->content_type_l10n_name}</span>
             {else}
-                <strong>{t}Blog{/t}</strong> {$content->author_object->name} - {$content->title}
+              <strong>{t}Blog{/t}</strong>
             {/if}
+              {$content->author_object->name} - {$content->title}
         </div>
     </div>
     <div class="content-action-buttons btn-group">
@@ -25,7 +25,7 @@
             <i class="fa fa-cog"></i>
             <span class="caret"></span>
         </a>
-        <ul class="dropdown-menu pull-right">
+        <ul class="dropdown-menu pull-right dropdown-menu-right no-padding">
             <li>
                 <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=admin_opinion_show id=$content->id}">
                     <i class="fa fa-pencil"></i> {t}Edit{/t}

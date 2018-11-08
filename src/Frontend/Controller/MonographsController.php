@@ -152,9 +152,9 @@ class MonographsController extends Controller
      */
     public function showAction(Request $request)
     {
-        $dirtyID      = $request->query->get('special_id', '');
-        $urlSlug      = $request->query->get('slug', '');
-        $categoryName = $request->query->get('category_name', '');
+        $dirtyID      = $request->get('special_id', '');
+        $urlSlug      = $request->get('slug', '');
+        $categoryName = $request->get('category_name', '');
 
         $special = $this->get('content_url_matcher')
             ->matchContentUrl('special', $dirtyID, $urlSlug, $categoryName);

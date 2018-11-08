@@ -32,7 +32,7 @@ class NewsletterHelper
      * Returns the subscription type name configured in backend
      *
      * @return string the subscription type configured
-     **/
+     */
     public function getSubscriptionType()
     {
         return $this->sm->getDataSet('Settings', 'instance')->get('newsletter_subscriptionType');

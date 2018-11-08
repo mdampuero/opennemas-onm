@@ -1,17 +1,17 @@
 backend_author_create:
     path:     /authors/new
-    defaults: { _controller  : BackendBundle:Author:create }
+    defaults: { _controller: BackendBundle:Author:create }
     options:
         expose: true
 
 backend_author_show:
     path:     /authors/{id}
-    defaults: { _controller  : BackendBundle:Author:show }
+    defaults: { _controller: BackendBundle:Author:show }
     options:
         expose: true
 
 backend_authors_list:
     path:     /authors
-    defaults: { _controller  : BackendBundle:Author:list }
+    defaults: { _controller: BackendBundle:Author:list }
     options:
         expose: true

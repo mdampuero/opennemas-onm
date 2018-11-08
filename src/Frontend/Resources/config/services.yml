@@ -4,9 +4,11 @@ services:
         arguments: [ '@service_container' ]
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 99 }
+        public: true
 
     frontend.listener.share_by_email:
         class:     Frontend\EventListener\ShareByEmailListener
         arguments: [ '@service_container' ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 98 }
+        public: true

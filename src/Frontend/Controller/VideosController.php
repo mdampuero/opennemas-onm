@@ -25,8 +25,9 @@ class VideosController extends Controller
      */
     public function init()
     {
-        $this->page          = $this->request->query->getDigits('page', 1);
-        $this->category_name = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $request             = $this->get('request_stack')->getCurrentRequest();
+        $this->page          = $request->query->getDigits('page', 1);
+        $this->category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
         if (!empty($this->category_name) && $this->category_name != 'home') {
             $categoryManager = $this->get('category_repository');
@@ -318,8 +319,8 @@ class VideosController extends Controller
      */
     public function showAction(Request $request)
     {
-        $dirtyID = $request->query->filter('video_id', '', FILTER_SANITIZE_STRING);
-        $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $dirtyID = $request->get('video_id', '', FILTER_SANITIZE_STRING);
+        $urlSlug = $request->get('slug', '', FILTER_SANITIZE_STRING);
 
         $video = $this->get('content_url_matcher')
             ->matchContentUrl('video', $dirtyID, $urlSlug, $this->category_name);

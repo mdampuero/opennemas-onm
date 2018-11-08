@@ -220,9 +220,6 @@ class Content implements \JsonSerializable, CsvSerializable
     public function __get($name)
     {
         switch ($name) {
-            case 'category_name':
-                return $this->category_name = $this->loadCategoryName();
-
             case 'category_title':
                 return $this->category_title = $this->loadCategoryTitle();
 
@@ -770,10 +767,9 @@ class Content implements \JsonSerializable, CsvSerializable
      **/
     public function patch($properties)
     {
-
         try {
             $conn = getService('dbal_connection');
-            $rs = $conn->update(
+            $rs   = $conn->update(
                 'contents',
                 $properties,
                 [ 'pk_content' => $this->pk_content ]

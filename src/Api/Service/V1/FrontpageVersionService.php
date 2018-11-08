@@ -14,29 +14,91 @@ use Api\Exception\CreateItemException;
 
 class FrontpageVersionService extends OrmService
 {
-
+    /**
+     * The number of versions to keep
+     *
+     * @var int
+     **/
     const MAX_NUMBER_OF_VERSIONS = 10;
 
+    /**
+     * Initializes the BaseService.
+     *
+     * @param ServiceContainer $container The service container.
+     * @param string           $entity    The entity fully qualified class name.
+     * @param string           $entity    The validator service name.
+     */
+    public function __construct($container, $entity, $validator = null)
+    {
+        parent::__construct($container, $entity, $validator);
+
+        $this->contentPositionService = $this->container->get('api.service.content_position');
+        $this->entityRepository       = $this->container->get('entity_repository');
+        $this->ormManager             = $this->container->get('orm.manager');
+        $this->locale                 = $this->container->get('core.locale');
+        $this->dispatcher             = $this->container->get('core.dispatcher');
+        $this->cache                  = $this->container->get('cache');
+        $this->filterManager          = $this->container->geT('data.manager.filter');
+
+        $this->frontpageVersionsRepository = $this->ormManager
+            ->getRepository($this->entity, $this->origin);
+    }
+
+    /**
+     * Checks if a given date string matches the latest version
+     * for a given categoy and frontpage version ids
+     *
+     * @param int $categoryId the category id to search for
+     * @param int $frontpageVersionId the frontpage version id
+     *
+     * @return boolean
+     **/
+    public function checkLastSaved($categoryId, $frontpageVersionId, $date)
+    {
+        if (empty($date)) {
+            return false;
+        }
+
+        return ($this->getLastSaved($categoryId, $frontpageVersionId) != $date);
+    }
+
+    /**
+     * Returns the contents positions, contents, invalidationtime and last saved time
+     * for the current frontpage given a category id
+     *
+     * @param int $categoryId the category id to
+     *
+     * @return void
+     **/
     public function getPublicFrontpageData($categoryId)
     {
         $categoryIdAux = empty($categoryId) ? 0 : $categoryId;
 
         list($frontpageVersion, $contentPositions, $contents) =
-            $this->getPublicContentsForFrontpageData($categoryIdAux);
+            $this->getContentsInCurrentVersionforCategory($categoryIdAux);
 
         $invalidationDt = $this->getInvalidationTime($contents, $categoryIdAux);
-        $contents       = $this->getOnlyPublishContents($contents);
+        $contents       = $this->filterPublishedContents($contents);
         $lastSaved      = $this->getLastSaved(
             $categoryIdAux,
             $frontpageVersion == null ? null : $frontpageVersion->id
         );
-        return [$contentPositions, $contents, $invalidationDt, $lastSaved];
+
+        return [ $contentPositions, $contents, $invalidationDt, $lastSaved ];
     }
 
-    public function getPublicContentsForFrontpageData($categoryId)
+    /**
+     * Returns the contents positions, contents, invalidationtime and last saved time
+     * for the current frontpage version given a category id
+     *
+     * @param int $categoryId the category id to
+     *
+     * @return void
+     **/
+    public function getContentsInCurrentVersionforCategory($categoryId)
     {
         $categoryIdAux      = empty($categoryId) ? 0 : $categoryId;
-        $frontpageVersionId = $this->getCurrentVersionDB($categoryIdAux);
+        $frontpageVersionId = $this->getCurrentVersionFromDB($categoryIdAux);
         $frontpageVersion   = null;
 
         if (!empty($frontpageVersionId)) {
@@ -61,74 +123,15 @@ class FrontpageVersionService extends OrmService
         return [$frontpageVersion, $contentPositions, $filteredContents];
     }
 
-    public function getInvalidationTime($contents, $categoryId)
-    {
-        $invalidationTime   = null;
-        $frontpageVersionId = $this->getNextVerForCat($categoryId);
-        $tz                 =
-            $this->container->get('core.locale')->getTimeZone();
-        $systemDateTz       = new \DateTime(null, $tz);
-        $systemDateTz       = $systemDateTz->format('Y-m-d H:i:s');
-        if (empty($frontpageVersionId)) {
-            $invalidationTime = new \DateTime(null, $tz);
-            // Add 1 year to the current timestamp
-            $timestamp = $invalidationTime->getTimestamp() + 31536000;
-            $invalidationTime->setTimestamp($timestamp);
-            $invalidationTime = $invalidationTime->format('Y-m-d H:i:s');
-        } else {
-            $frontpageVersion = $this->getItem($frontpageVersionId);
-            if (!empty($frontpageVersion->publish_date)) {
-                $invalidationTime = $frontpageVersion->publish_date
-                    ->format('Y-m-d H:i:s');
-            }
-        }
-
-        foreach ($contents as $content) {
-            if (!empty($content->starttime) &&
-                $content->starttime > $systemDateTz &&
-                $content->starttime < $invalidationTime
-            ) {
-                $invalidationTime = $content->starttime;
-                continue;
-            }
-
-            if (!empty($content->endtime) &&
-                $content->endtime > $systemDateTz &&
-                $content->endtime < $invalidationTime
-            ) {
-                $invalidationTime = $content->endtime;
-                continue;
-            }
-        }
-
-        $invalidationTime =
-            \DateTime::createFromFormat('Y-m-d H:i:s', $invalidationTime, $tz);
-        $invalidationTime->setTimeZone(new \DateTimeZone('UTC'));
-        return $invalidationTime;
-    }
-
-    public function getOnlyPublishContents($contents)
-    {
-        $tz           = $this->container->get('core.locale')->getTimeZone();
-        $systemDateTz = new \DateTime(null, $tz);
-        $systemDateTz = $systemDateTz->format('Y-m-d H:i:s');
-
-        $filteredContents = [];
-        foreach ($contents as $key => $content) {
-            if (!empty($content->starttime) && $content->starttime > $systemDateTz) {
-                continue;
-            }
-
-            if (!empty($content->endtime) && $content->endtime < $systemDateTz) {
-                continue;
-            }
-
-            $filteredContents[$key] = $content;
-        }
-
-        return $filteredContents;
-    }
-
+    /**
+     * Returns the data (frontpages, vesrions, content positions, contents and vesrion id)
+     * used to render a frontpage given a category id and frontpage version id
+     *
+     * @param int $categoryId the category id to get contents from
+     * @param int $frontpageVersionId the category id to get contents from
+     *
+     * @return array
+     **/
     public function getFrontpageData($categoryId, $frontpageVersionId)
     {
         list($frontpages, $versions) =
@@ -156,38 +159,13 @@ class FrontpageVersionService extends OrmService
         return [$frontpages, $versions, $contentPositions, $contents, $versionId];
     }
 
-    public function getContentPositionsAndContents($categoryId, $versionId)
-    {
-        $contentPositions = $this->getContentPositions($categoryId, $versionId);
-        $contentsMap      = [];
-        foreach ($contentPositions as $contentpositionOfPosition) {
-            foreach ($contentpositionOfPosition as $contentposition) {
-                if (array_key_exists($contentposition->pk_fk_content, $contentsMap)) {
-                    continue;
-                }
-                $contentsMap[$contentposition->pk_fk_content] =
-                    [$contentposition->content_type, $contentposition->pk_fk_content];
-            }
-        }
-        $contentsAux =
-            $this->container->get('entity_repository')->findMulti($contentsMap);
-
-        $contents = [];
-        foreach ($contentsAux as $content) {
-            $contents[$content->id] = $content;
-        }
-
-        return [$contentPositions, $contents];
-    }
-
     public function getContentPositions($categoryId, $versionId)
     {
         $contentPositions = $this->getFrontpageDataFromCache($categoryId, $versionId);
 
-        if (is_null($contentPositions)) {
-            $contentPositions =
-                $this->container->get('api.service.contentposition')
-                    ->getContentPositions($categoryId, $versionId);
+        if (empty($contentPositions)) {
+            $contentPositions = $this->contentPositionService
+                ->getContentPositions($categoryId, $versionId);
 
             $this->setFrontpageDataFromCache($categoryId, $versionId, $contentPositions);
         }
@@ -197,9 +175,9 @@ class FrontpageVersionService extends OrmService
 
     public function getContentIds($categoryId, $versionId, $contentType = null)
     {
-        $versionIdAux = $versionId === null ?
-            $this->getCurrentVersionDB($categoryId) :
-            $versionId;
+        $versionIdAux = $versionId === null
+            ? $this->getCurrentVersionFromDB($categoryId)
+            : $versionId;
 
         $contentPositions = $this->getContentPositions($categoryId, $versionIdAux);
         $contentsIds      = [];
@@ -244,9 +222,7 @@ class FrontpageVersionService extends OrmService
         $ccm                = \ContentCategoryManager::get_instance();
         $categories         = $ccm->findAll();
         $catFrontpagesRel   = $this->getCatFrontpagesRel();
-        $catWithFrontpage   = $this->container
-            ->get('api.service.contentposition')
-            ->getCategoriesWithManualFrontpage();
+        $catWithFrontpage   = $this->contentPositionService->getCategoriesWithManualFrontpage();
         $frontpages         = null;
         $existMainFrontPage = array_key_exists(0, $catFrontpagesRel);
         $mainFrontpage      = [
@@ -271,8 +247,9 @@ class FrontpageVersionService extends OrmService
                     'manual'       => true
                 ];
             } else {
-                $name = $this->container->get('data.manager.filter')
-                    ->set($category->title)->filter('localize')->get();
+                $name = $this->filterManager
+                    ->set($category->title)
+                    ->filter('localize')->get();
 
                 $frontpagesAut[$category->id] = [
                     'id'     => $category->id,
@@ -283,13 +260,9 @@ class FrontpageVersionService extends OrmService
         }
         $frontpages = array_merge($frontpages, $frontpagesAut);
 
-        $oql = 'category_id = ' . $categoryIdAux .
-            ' order by publish_date desc';
+        $oql = 'category_id = ' . $categoryIdAux . ' order by publish_date desc';
 
-        $versions = $this->getList(
-            $oql
-        )['items'];
-
+        $versions = $this->getList($oql)['items'];
         $versions = $this->changeToUTC($versions);
 
         return [$frontpages, $versions];
@@ -297,39 +270,71 @@ class FrontpageVersionService extends OrmService
 
     public function getCatFrontpagesRel()
     {
-        return $this->container->get('orm.manager')
-            ->getRepository($this->entity, $this->origin)->getCatFrontpageRel();
+        return $this->frontpageVersionsRepository
+            ->getCatFrontpageRel();
     }
 
-    public function getCurrentVersionDB($categoryId)
+    /**
+     * Returns the id of the next frontpage version for a given category
+     *
+     * @param int $categoryId the category id to search for
+     *
+     * @return int
+     **/
+    public function getCurrentVersionFromDB($categoryId)
     {
-        return $this->container->get('orm.manager')
-            ->getRepository($this->entity, $this->origin)->getCurrentVerForCat($categoryId);
+        return $this->frontpageVersionsRepository
+            ->getCurrentVersionForCategory($categoryId);
     }
 
-    public function getNextVerForCat($categoryId)
+    /**
+     * Returns the id of the next frontpage version for a given category
+     *
+     * @param int $categoryId the category id to search for
+     *
+     * @return int
+     **/
+    public function getNextVersionForCategory($categoryId)
     {
-        return $this->container->get('orm.manager')
-            ->getRepository($this->entity, $this->origin)->getNextVerForCat($categoryId);
+        return $this->frontpageVersionsRepository
+            ->getNextVersionForCategory($categoryId);
     }
 
+    /**
+     * Returns a frontpage version name that will be used as default value.
+     *
+     * It uses the current instance timezone
+     *
+     * @param int $timestamp the timestamp to use
+     *
+     * @return void
+     **/
     public function getDefaultNameFV($timestamp)
     {
         $dt = new \DateTime();
-        $dt->setTimezone(new \DateTimeZone($this->container->get('core.locale')
-            ->getTimeZone()->getName()));
+        $dt->setTimezone(new \DateTimeZone($this->locale->getTimeZone()->getName()));
         $dt->setTimestamp(empty($timestamp) ? time() : $timestamp);
+
         return $dt->format('Y-m-d H:i');
     }
 
+    /**
+     * Saves a frontpage version given an array with its properties
+     *     - frontpage_id
+     *     - id
+     *     - category_id
+     *     - MORE PROPERTIES TO COMPLETE HERE
+     *
+     * @param array $frontpageVersion the frontpage data to save
+     *
+     * @return \Common\ORM\Entity\FrontpageVersion|null
+     **/
     public function saveFrontPageVersion($frontpageVersion)
     {
         $fvc = null;
         if (empty($frontpageVersion['id'])) {
-            $repository       = $this->container->get('orm.manager')
-                ->getRepository($this->entity, $this->origin);
-            $numberOfVersions = $repository->countBy(
-                'frontpage_id = \'' . $frontpageVersion['frontpage_id'] . '\''
+            $numberOfVersions = $this->frontpageVersionsRepository->countBy(
+                "frontpage_id = '{$frontpageVersion['frontpage_id']}'"
             );
 
             //TODO This shouldn't be here, when the frontpage part is done it should be changed to that driver
@@ -359,13 +364,23 @@ class FrontpageVersionService extends OrmService
             $this->updateItem($frontpageVersion['id'], $frontpageVersion);
             $fvc = new FrontpageVersion($frontpageVersion);
         }
-        $this->invalidationMethod($fvc->category_id, $fvc->id);
+
+        $this->purgeCacheForCategoryIdAndVersionId($fvc->category_id, $fvc->id);
+
         return $fvc;
     }
 
+    /**
+     * Removes an specific version (contents and item) and invalidates its cache
+     *
+     * @param int $categoryId the category id to search for
+     * @param int $versionId the frontpage version id
+     *
+     * @return void
+     **/
     public function deleteVersionItem($categoryId, $versionId)
     {
-        \ContentManager::clearContentPositionsForHomePageOfCategory(
+        $this->contentPositionService->clearContentPositionsForHomePageOfCategory(
             $categoryId,
             $versionId
         );
@@ -373,9 +388,19 @@ class FrontpageVersionService extends OrmService
         if (!empty($versionId)) {
             $this->deleteItem($versionId);
         }
-        $this->invalidationMethod($categoryId, $versionId);
+
+        return $this->purgeCacheForCategoryIdAndVersionId($categoryId, $versionId);
     }
 
+    /**
+     * Returns the datetime string of the latest version
+     * for a given category and frontpage version id
+     *
+     * @param int $categoryId the category id to search for
+     * @param int $frontpageVersionId the frontpage version id
+     *
+     * @return string
+     **/
     public function getLastSaved($categoryId, $frontpageVersionId)
     {
         $lastSavedCacheId = 'frontpage_last_saved_' . $categoryId;
@@ -383,65 +408,81 @@ class FrontpageVersionService extends OrmService
             $lastSavedCacheId .= '_' . $frontpageVersionId;
         }
 
-        $cache     = $this->container->get('cache');
-        $lastSaved = $cache->fetch($lastSavedCacheId);
+        $lastSaved = $this->cache->fetch($lastSavedCacheId);
         if ($lastSaved == false) {
-            // Save the actual date for
             $date      = new \Datetime("now");
-            $dateForDB = $date->format(\DateTime::ISO8601);
-            $cache->save($lastSavedCacheId, $dateForDB);
-            $lastSaved = $dateForDB;
+            $lastSaved = $date->format(\DateTime::ISO8601);
+
+            $this->cache->save($lastSavedCacheId, $lastSaved);
         }
+
         return $lastSaved;
     }
 
-    public function checkLastSaved($categoryId, $frontpageVersionId, $date)
-    {
-        $newVersionAvailable = false;
-        if (!empty($date)) {
-            $lastSaved           =
-                $this->getLastSaved($categoryId, $frontpageVersionId);
-            $newVersionAvailable = $lastSaved != $date;
-        }
-
-        return $newVersionAvailable;
-    }
-
+    /**
+     * Returns from cache the list of contents for a given category and frontpage ids
+     *
+     * @param int $categoryId the category id to search for
+     * @param int $frontpageVersionId the frontpage version id
+     *
+     * @return array
+     **/
     private function getFrontpageDataFromCache($categoryId, $frontpageVersionId)
     {
         $cacheId = empty($frontpageVersionId) ?
             'frontpage_elements_map_' . $categoryId :
             'frontpage_elements_map_' . $categoryId . '_' . $frontpageVersionId;
 
-        $contents = $this->container->get('cache')->fetch($cacheId);
+        return $this->container->get('cache')->fetch($cacheId);
     }
 
+    /**
+     * Saves into cache the list of contents given a category and frontpage version id
+     *
+     * @param int $categoryId the category id to search for
+     * @param int $frontpageVersionId the frontpage version id
+     * @param int $frontpageVersion the contents of the frontpage version
+     *
+     * @return boolean
+     **/
     private function setFrontpageDataFromCache($categoryId, $frontpageVersionId, $frontpageVersion)
     {
-        $cacheId = empty($versionId) ?
+        $cacheId = empty($frontpageVersionId) ?
             'frontpage_elements_map_' . $categoryId :
             'frontpage_elements_map_' . $categoryId . '_' . $frontpageVersionId;
-        $cache   = $this->container->get('cache');
 
-        return $cache->save($cacheId, $frontpageVersion);
+        return $this->cache->save($cacheId, $frontpageVersion);
     }
 
-    private function invalidationMethod($categoryId, $frontpageId)
+    /**
+     * Invalidates the cache for a given category and frontpage version id
+     *
+     * @param int $categoryId the category id to search for
+     * @param int $frontpageId the frontpage id
+     *
+     * @return boolean
+     **/
+    private function purgeCacheForCategoryIdAndVersionId($categoryId, $frontpageId)
     {
-        $this->container->get('core.dispatcher')->dispatch(
+        $this->dispatcher->dispatch(
             'frontpage.save_position',
             [ 'category' => $categoryId, 'frontpageId' => $frontpageId ]
         );
 
-        $lastSavedCacheId = 'frontpage_last_saved_' . $categoryId;
-        if (!empty($lastSavedCacheId)) {
-            $lastSavedCacheId .= '_' . $frontpageId;
-        }
-        $date      = new \Datetime("now");
-        $dateForDB = $date->format(\DateTime::ISO8601);
-        $this->container->get('cache')->save($lastSavedCacheId, $dateForDB);
+        $lastSavedCacheId = 'frontpage_last_saved_' . $categoryId . '_' . $frontpageId;
+
+        $date = new \Datetime("now");
+
+        return $this->cache->save($lastSavedCacheId, $date->format(\DateTime::ISO8601));
     }
 
+    /**
+     * Changes the publish_date property to UTC on each item in a given list of frontpage versions
+     *
+     * @param array $versions the list of frontpage versions
+     *
+     * @return array
+     **/
     private function changeToUTC($versions)
     {
         if (empty($versions)) {
@@ -461,5 +502,123 @@ class FrontpageVersionService extends OrmService
             $versionAux->created->setTimezone(new \DateTimeZone('UTC'));
         }
         return is_array($versions) ? $versionsAux : $versionsAux[0];
+    }
+
+    /**
+     * Removes contents out of time from an array of contents
+     *
+     * @param array $contents the lit of contents to filter
+     *
+     * @return array
+     **/
+    private function filterPublishedContents($contents)
+    {
+        $systemDateTz = new \DateTime(null, $this->locale->getTimeZone());
+        $systemDateTz = $systemDateTz->format('Y-m-d H:i:s');
+
+        $filteredContents = [];
+        foreach ($contents as $key => $content) {
+            if (!empty($content->starttime) && $content->starttime > $systemDateTz) {
+                continue;
+            }
+
+            if (!empty($content->endtime) && $content->endtime < $systemDateTz) {
+                continue;
+            }
+
+            $filteredContents[$key] = $content;
+        }
+
+        return $filteredContents;
+    }
+
+    /**
+     * Returns the invalidation time for a frontpage given the category id and a
+     * list of contents.
+     * The category id is used to check the next version invalidation time
+     * The contetns are used to get the min value invalidation time form them
+     *
+     * So the result will be the minor datetime among them
+     *
+     * @param array $contents the list of contents
+     * @param int $categoryId the category id
+     *
+     * @return \DateTime
+     **/
+    private function getInvalidationTime($contents, $categoryId)
+    {
+        $invalidationTime = null;
+
+        $frontpageVersionId = $this->getNextVersionForCategory($categoryId);
+
+        $systemDateTz = (new \DateTime(null, $this->locale->getTimeZone()))->format('Y-m-d H:i:s');
+        if (empty($frontpageVersionId)) {
+            $invalidationTime = new \DateTime(null, $this->locale->getTimeZone());
+            // Add 1 year to the current timestamp
+            $timestamp = $invalidationTime->getTimestamp() + 31536000;
+            $invalidationTime->setTimestamp($timestamp);
+            $invalidationTime = $invalidationTime->format('Y-m-d H:i:s');
+        } else {
+            $frontpageVersion = $this->getItem($frontpageVersionId);
+            if (!empty($frontpageVersion->publish_date)) {
+                $invalidationTime = $frontpageVersion->publish_date
+                    ->format('Y-m-d H:i:s');
+            }
+        }
+
+        foreach ($contents as $content) {
+            if (!empty($content->starttime) &&
+                $content->starttime > $systemDateTz &&
+                $content->starttime < $invalidationTime
+            ) {
+                $invalidationTime = $content->starttime;
+                continue;
+            }
+
+            if (!empty($content->endtime) &&
+                $content->endtime > $systemDateTz &&
+                $content->endtime < $invalidationTime
+            ) {
+                $invalidationTime = $content->endtime;
+                continue;
+            }
+        }
+
+        $invalidationTime = \DateTime::createFromFormat('Y-m-d H:i:s', $invalidationTime, $this->locale->getTimeZone());
+        $invalidationTime->setTimeZone(new \DateTimeZone('UTC'));
+
+        return $invalidationTime;
+    }
+
+    /**
+     * Returns an array where the first element is the list of content positions
+     * and the second is the list of contents for a given frontpage ()
+     *
+     * @param int $categoryId the category id to search for
+     * @param int $versionId the frontpage version id
+     *
+     * @return array
+     **/
+    private function getContentPositionsAndContents($categoryId, $versionId)
+    {
+        $contentPositions = $this->getContentPositions($categoryId, $versionId);
+        $contentsMap      = [];
+        foreach ($contentPositions as $contentpositionOfPosition) {
+            foreach ($contentpositionOfPosition as $contentposition) {
+                if (array_key_exists($contentposition->pk_fk_content, $contentsMap)) {
+                    continue;
+                }
+                $contentsMap[$contentposition->pk_fk_content] =
+                    [$contentposition->content_type, $contentposition->pk_fk_content];
+            }
+        }
+        $contentsAux = $this->entityRepository->findMulti($contentsMap);
+
+        $contents = [];
+        foreach ($contentsAux as $content) {
+            $contents[$content->id] = $content;
+        }
+
+        return [$contentPositions, $contents];
     }
 }
