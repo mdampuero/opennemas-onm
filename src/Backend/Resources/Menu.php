@@ -332,7 +332,7 @@ $menuXml = [
                 'icon'        => 'fa fa-exchange',
                 'link'        => url('admin_instance_sync'),
                 'module_name' => 'SYNC_MANAGER',
-                'privilege'   => 'SYNC_ADMIN',
+                'privilege'   => 'INSTANCE_SYNC_ADMIN',
             ],
             [
                 'id'          => 'news_agency',

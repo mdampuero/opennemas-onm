@@ -83,39 +83,41 @@
         $scope.sections = [
           {
             title: 'Opennemas',
-            rows: [ [ 'SECURITY', 'INTERNAL' ] ]
+            rows: [ [ 'SECURITY', 'INTERNAL', 'ONM' ] ]
           },
           {
             title: 'Web',
-            rows: [ [ 'ADVERTISEMENT', 'WIDGET', 'MENU' ] ]
+            rows: [
+              [ 'ADS_MANAGER', 'WIDGET_MANAGER', 'MENU_MANAGER', 'AUTHOR' ],
+              [ 'es.openhost.module.tags' ]
+            ]
           },
           {
             title: 'Contents',
             rows: [
-              [ 'ARTICLE', 'OPINION', 'AUTHOR', 'COMMENT' ],
-              [ 'POLL', 'STATIC', 'SPECIAL', 'LETTER' ],
-              [ 'CATEGORY', 'CONTENT' ]
+              [ 'CATEGORY_MANAGER', 'CONTENT' ],
+              [ 'ARTICLE_MANAGER', 'OPINION_MANAGER', 'COMMENT_MANAGER' ],
+              [ 'POLL_MANAGER', 'STATIC_PAGES_MANAGER', 'SPECIAL_MANAGER', 'LETTER_MANAGER' ]
             ]
           },
           {
             title: 'Multimedia',
             rows: [
-              [ 'IMAGE', 'FILE', 'VIDEO', 'ALBUM' ],
-              [ 'KIOSKO', 'BOOK' ],
+              [ 'IMAGE_MANAGER', 'FILE_MANAGER', 'VIDEO_MANAGER', 'ALBUM_MANAGER' ],
+              [ 'KIOSKO_MANAGER', 'BOOK_MANAGER' ],
             ]
           },
           {
             title: 'Utils',
             rows: [
-              [ 'SEARCH', 'NEWSLETTER', 'PCLAVE', 'PAYWALL' ],
-              [ 'INSTANCE_SYNC', 'SYNC_MANAGER', 'IMPORT', 'SCHEDULE' ],
+              [ 'ADVANCED_SEARCH', 'NEWSLETTER_MANAGER', 'KEYWORD_MANAGER', 'PAYWALL' ],
+              [ 'SYNC_MANAGER', 'NEWS_AGENCY_IMPORTER' ],
             ]
           },
           {
             title: 'System',
             rows: [
-              [ 'BACKEND', 'USER', 'GROUP', 'CACHE' ],
-              [ 'ONM' ]
+              [ 'USER_MANAGER', 'USER_GROUP_MANAGER', 'CACHE_MANAGER' ],
             ]
           }
         ];
