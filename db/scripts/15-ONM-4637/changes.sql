@@ -1,0 +1,3 @@
+SET names 'utf8';
+INSERT INTO `extension` VALUES (82,'es.openhost.module.events','a:3:{s:2:\"en\";s:6:\"Events\";s:2:\"es\";s:7:\"Eventos\";s:2:\"gl\";s:7:\"Eventos\";}','module','Openhost S.L.','a:3:{s:2:\"en\";s:0:\"\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}','a:3:{s:2:\"en\";s:0:\"\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}',NULL,'2018-11-08 17:01:24','2018-11-08 17:01:24',1,'http://www.openhost.es');
+INSERT INTO `extension_meta` VALUES (82,'category','module'),(82,'notes','a:3:{s:2:\"en\";s:0:\"\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}'),(82,'price','a:1:{i:0;a:2:{s:5:\"value\";i:0;s:4:\"type\";s:7:\"monthly\";}}'),(82,'terms','a:3:{s:2:\"en\";s:0:\"\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}');
