@@ -9,6 +9,7 @@
  */
 namespace Backend\Controller;
 
+use Common\Core\Annotation\Template;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;

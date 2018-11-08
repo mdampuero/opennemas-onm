@@ -9,8 +9,8 @@
  */
 namespace Common\Core\Component\Validator;
 
-use Symfony\Component\Validator\Constraints as Assert;
-use Common\Core\Component\Validator\Constraints as OnmAssert;
+use Symfony\Component\Validator\Constraints as BaseConstraints;
+use Common\Core\Component\Validator\Constraints as Constraints;
 
 class Validator
 {
@@ -77,7 +77,7 @@ class Validator
 
             $type = 'normal';
             foreach ($violations as $el) {
-                if ($el->getCode() !== OnmAssert\BlacklistWords::BLACKLIST_WORD_ERROR) {
+                if ($el->getCode() !== Constraints\BlackListWords::BLACKLIST_WORD_ERROR) {
                     $type = 'fatal';
                 }
 
@@ -91,14 +91,6 @@ class Validator
         }
 
         return [];
-
-
-
-        foreach ($violations as $el) {
-            $errors[] = $el->getMessage();
-        }
-
-        return $errors;
     }
 
     /**
@@ -128,76 +120,76 @@ class Validator
     }
 
     /**
-     * Get the constrains for comments
+     * Get the constrains for comments.
      *
-     * @return Assert\Collection Assert collection for comments
-     **/
-    private function getCommentConstraint($data)
+     * @return BaseConstraints\Collection BaseConstraints collection for comments.
+     */
+    protected function getCommentConstraint($data)
     {
         $config = $this->getConfig(self::BLACKLIST_RULESET_COMMENTS);
 
         $constraintMap = [
             'author' => [
-                new Assert\NotBlank([
+                new BaseConstraints\NotBlank([
                     'message' => _('Please provide a valid author name')
                 ]),
-                new OnmAssert\BlacklistWords([
+                new Constraints\BlackListWords([
                     'words'   => $config,
                     'message' => _('Your name has invalid words')
                 ]),
             ],
-            'author_ip'    => new Assert\NotBlank([
+            'author_ip'    => new BaseConstraints\NotBlank([
                 'message' => _('Your IP address is not valid.')
             ]),
-            'author_email' => new Assert\Blank(),
+            'author_email' => new BaseConstraints\Blank(),
             'body'         => [
-                new Assert\Length([
+                new BaseConstraints\Length([
                     'min'        => 5,
                     'minMessage' => _('Your comment is too short')
                 ]),
-                new OnmAssert\BlacklistWords([
+                new Constraints\BlackListWords([
                     'words'   => $config,
                     'message' => _('Your comment has words under discussion.')
                 ]),
             ],
-            'content_id' => new Assert\Range(['min' => 1]),
+            'content_id' => new BaseConstraints\Range(['min' => 1]),
         ];
 
         if (array_key_exists('author_email', $data) && !empty($data['author_email'])) {
             $constraintMap['author_email'] = [
-                new Assert\Email([
+                new BaseConstraints\Email([
                     'message' => _('Please provide a valid email address')
                 ]),
-                new OnmAssert\BlacklistWords([
+                new Constraints\BlackListWords([
                     'words'   => $config,
                     'message' => _('Your email is not allowed')
                 ]),
             ];
         }
 
-        return new Assert\Collection($constraintMap);
+        return new BaseConstraints\Collection($constraintMap);
     }
 
 
     /**
-     * Get the constrains for tags
+     * Get the constrains for tags.
      *
-     * @return Collection Assert collection for tags
-     **/
-    private function getTagConstraint($data)
+     * @return Collection BaseConstraints collection for tags.
+     */
+    protected function getTagConstraint($data)
     {
         $config = $this->getConfig(self::BLACKLIST_RULESET_TAGS);
 
-        return new Assert\Collection([
+        return new BaseConstraints\Collection([
             'name' => [
-                new Assert\NotBlank([
+                new BaseConstraints\NotBlank([
                     'message' => _('Please provide a valid tag')
                 ]),
-                new OnmAssert\BlacklistWords([
+                new Constraints\BlackListWords([
                     'words'   => $config,
                     'message' => _('Your tag has invalid words')
                 ]),
-                new Assert\Length([
+                new BaseConstraints\Length([
                     'min'        => 2,
                     'minMessage' => _('Your tag is too short')
                 ])

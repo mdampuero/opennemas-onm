@@ -34,7 +34,7 @@
         <a class="btn btn-white" data-nodrag class="pull-right"  ng-click="showForm = !showForm">
           <i class="fa" ng-class="(showForm === false) ? 'fa-caret-down' : 'fa-caret-up'"></i>
         </a>
-        <button data-nodrag class="btn btn-white" ng-click="removeItem($index{if $subitem}, parentIndex{/if})" type="button">
+        <button data-nodrag class="btn btn-white" ng-click="removeItem($index{if isset($subitem) && $subitem}, parentIndex{/if})" type="button">
           <i class="fa fa-trash-o text-danger"></i>
         </button>
       </div>

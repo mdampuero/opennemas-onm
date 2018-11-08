@@ -259,7 +259,7 @@ class Template extends \Smarty
      * Returns the theme name for the variant selected
      *
      * @return string the name of the variant
-     **/
+     */
     public function getThemeSkinName()
     {
         return $this->theme->getCurrentSkinName(
@@ -273,7 +273,7 @@ class Template extends \Smarty
      * Returns the theme file name for the variant selected
      *
      * @return string the file name of the variant
-     **/
+     */
     public function getThemeSkinProperty($propertyName)
     {
         return $this->theme->getCurrentSkinProperty(

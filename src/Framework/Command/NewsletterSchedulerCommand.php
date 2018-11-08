@@ -115,7 +115,7 @@ EOF
      * @return array an array with two keys:
      *                  the first with a boolean: true, we can send, false, we cannot
      *                  the second is the reason why we cant send
-     **/
+     */
     public function canWeSendTemplate($template, $time)
     {
         // Check if it is the right day of the week to send the newsletter
@@ -187,7 +187,7 @@ EOF
      * @param DateTime $time the current DateTime
      *
      * @return Newsletter the created newsletter
-     **/
+     */
     public function sendScheduledTemplate($template, $output, $time)
     {
         // Render the template
@@ -237,7 +237,7 @@ EOF
      * Writes the provided line into the output
      *
      * @param string $line The line to write in the output
-     **/
+     */
     private function outputLine($line)
     {
         $fullLine = sprintf('[Instance %s] %s', $this->instanceName, $line);

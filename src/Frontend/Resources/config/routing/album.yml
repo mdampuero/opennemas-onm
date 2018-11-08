@@ -6,7 +6,7 @@ frontend_album_ajax:
 
 frontend_album_frontpage:
     path: /album/{page}
-    defaults: { _controller: FrontendBundle:Albums:frontpage, page : 1 }
+    defaults: { _controller: FrontendBundle:Albums:frontpage, page: 1 }
     requirements:
         page: '([0-9]+)?'
     options:
@@ -22,7 +22,7 @@ frontend_album_frontpage_category:
 
 frontend_album_show_with_date_slug:
     path: /album/{category_name}/{date}/{slug}/{album_id}.{_format}
-    defaults: { _controller: FrontendBundle:Albums:show, _format : html, page :1 }
+    defaults: { _controller: FrontendBundle:Albums:show, _format : html, page: 1 }
     requirements:
         category_name: '[^/]+'
         date         : '([0-9]{4})-([0-1][0-9])-([0-3][0-9])'

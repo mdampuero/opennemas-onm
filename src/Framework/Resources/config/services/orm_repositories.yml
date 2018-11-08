@@ -1,49 +1,61 @@
 services:
     category_repository:
         class: Repository\CategoryManager
-        arguments: [ '@orm.connection.instance', '@cache', '@error.log', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
+        public: true
 
     comment_repository:
         class: Repository\CommentManager
-        arguments: [ '@orm.connection.instance', '@cache', '@error.log', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
+        public: true
 
     content_views_repository:
         class: Repository\ContentViewsManager
-        arguments: [ '@orm.connection.instance', '@cache', '@error.log', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
+        public: true
 
     entity_repository:
         class: Repository\EntityManager
-        arguments: [ '@orm.connection.instance', '@cache', '@error.log', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
+        public: true
 
     frontpage_repository:
         class: Repository\FrontpageManager
-        arguments: [ '@orm.connection.instance', '@cache', '@error.log', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
+        public: true
 
     user_repository:
         class: Repository\UserManager
-        arguments: [ '@orm.connection.instance', '@cache', '@error.log', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
+        public: true
 
     menu_repository:
         class: Repository\MenuManager
-        arguments: [ '@orm.connection.instance', '@cache', '@error.log', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
+        public: true
 
     advertisement_repository:
         class: Repository\AdvertisementManager
-        arguments: [ '@orm.connection.instance', '@cache', '@error.log', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
+        public: true
 
     opinion_repository:
         class: Repository\OpinionManager
-        arguments: [ '@orm.connection.instance', '@cache', '@error.log', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
+        public: true
 
     widget_repository:
         class: Repository\WidgetManager
-        arguments: [ '@orm.connection.instance', '@cache', '@error.log', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
+        public: true
 
     setting_repository:
         class: Repository\SettingManager
-        arguments: [ '@orm.connection.instance', '@cache', '@error.log', %cache_prefix% ]
+        arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
+        public: true
 
     # TODO: Remove arguments when new ORM repositories replace search features
     core.manager.menu:
         class: Repository\MenuManager
-        arguments: [ '@dbal_connection', '@cache', '@error.log', %cache_prefix% ]
+        arguments: [ '@dbal_connection', '@cache', '@error.log', '%cache_prefix%' ]
+        public: true

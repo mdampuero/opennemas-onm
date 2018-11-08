@@ -40,8 +40,8 @@ class Frontpages
             }
 
             list($contentPositions, $contentsInHomepage, $invalidationDt, $lastSaved) =
-                getService('api.service.frontpage_version')
-                    ->getPublicFrontpageData($actualCategoryId);
+                getService('api.service.frontpage')
+                    ->getCurrentVersionForCategory($actualCategoryId);
 
             // Get all frontpages images
             $imageIdsList = [];

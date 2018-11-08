@@ -28,7 +28,7 @@ class Categories
 
         list(, , $categoryContents) =
             getService('api.service.frontpage_version')
-                ->getPublicContentsForFrontpageData($n1);
+                ->getContentsInCurrentVersionforCategory($n1);
 
         return $categoryContents;
     }

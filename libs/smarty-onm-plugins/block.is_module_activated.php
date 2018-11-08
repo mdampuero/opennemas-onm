@@ -26,6 +26,10 @@ function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
         $output = '';
     }
 
+    if (!isset($params['name'])) {
+        $output = '';
+    }
+
     $modules = explode(',', $params['name']);
 
     if (count($modules) > 1) {

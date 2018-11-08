@@ -165,7 +165,7 @@ class MenusController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $id   = $this->request->query->getDigits('id');
+        $id   = $request->query->getDigits('id');
         $menu = new \Menu($id);
 
         if ($menu->pk_menu == null) {
@@ -217,7 +217,7 @@ class MenusController extends Controller
      * Returns the category listings by content type
      *
      * @return array the list of category listings
-     **/
+     */
     private function getCategoriesByType()
     {
         $ccm = \ContentCategoryManager::get_instance();
@@ -254,7 +254,7 @@ class MenusController extends Controller
      * Returns a list of static pages and their slugs
      *
      * @return array the list of static pages
-     **/
+     */
     private function getStaticPages()
     {
         $oql = 'content_type_name = "static_page" and in_litter = "0"'
@@ -298,7 +298,7 @@ class MenusController extends Controller
      * Returns a list of activated module pages
      *
      * @return array the list of module pages
-     **/
+     */
     private function getModulePages()
     {
         $pages = [['title' => _("Frontpage"),'link' => "/"]];
@@ -350,7 +350,7 @@ class MenusController extends Controller
      * Returns the list of menu positions
      *
      * @return array the list of menu positions
-     **/
+     */
     private function getMenuPositions()
     {
         return array_merge(

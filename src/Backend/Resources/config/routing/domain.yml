@@ -1,11 +1,11 @@
 backend_domains_list:
     path: /domains
-    defaults: { _controller  : BackendBundle:Domain:list }
+    defaults: { _controller: BackendBundle:Domain:list }
     options:
         expose: true
 
 backend_domain_add:
     path: /domains/add
-    defaults: { _controller  : BackendBundle:Domain:add }
+    defaults: { _controller: BackendBundle:Domain:add }
     options:
         expose: true

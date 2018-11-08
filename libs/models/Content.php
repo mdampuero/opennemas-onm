@@ -767,10 +767,9 @@ class Content implements \JsonSerializable, CsvSerializable
      **/
     public function patch($properties)
     {
-
         try {
             $conn = getService('dbal_connection');
-            $rs = $conn->update(
+            $rs   = $conn->update(
                 'contents',
                 $properties,
                 [ 'pk_content' => $this->pk_content ]

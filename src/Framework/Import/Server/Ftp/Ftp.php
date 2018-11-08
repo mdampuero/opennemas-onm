@@ -238,7 +238,7 @@ class Ftp extends Server
      * @param string $rawfile the FTP rawfile info
      *
      * @return array the properties extracted for the element
-     **/
+     */
     private function getFileInfoWindows($rawfile)
     {
         $lineRegexp = "@([0-9]{2})-([0-9]{2})-([0-9]{2}) "
@@ -267,7 +267,7 @@ class Ftp extends Server
      * @param string $rawfile the FTP rawfile info
      *
      * @return array the properties extracted for the element
-     **/
+     */
     private function getFileInfoLinux($rawfile)
     {
         $info = preg_split("/[\s]+/", $rawfile, 9);
