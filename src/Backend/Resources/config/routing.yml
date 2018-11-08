@@ -668,10 +668,6 @@ backend_category:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/category.yml'
 
-backend_newsstand:
-    prefix:   /
-    resource: '@BackendBundle/Resources/config/routing/newsstand.yml'
-
 backend_comment:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/comment.yml'
@@ -691,6 +687,10 @@ backend_newsletter:
 backend_newsletter_template:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/newsletter_template.yml'
+
+backend_newsstand:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/newsstand.yml'
 
 backend_news_agency:
     prefix:   /
