@@ -21,7 +21,8 @@ function smarty_function_css_tag($params, &$smarty)
     $rel    = 'rel="stylesheet"';
 
     if (!array_key_exists('common', $params)) {
-        $basepath = $params['basepath'] ? : DS . 'css';
+        $basepath = (array_key_exists('basepath', $params)
+            && $params['basepath']) ? : DS . 'css';
         $server   = DS . $smarty->getTheme()->path . DS . $basepath;
         $mtime    = THEMES_DEPLOYED_AT;
     }
@@ -47,7 +48,7 @@ function smarty_function_css_tag($params, &$smarty)
 
     $resource = $server . DS . $href;
 
-    if ($params['external'] != 1) {
+    if (!array_key_exists('external', $params) || $params['external'] != 1) {
         $resource = preg_replace('/(\/+)/', '/', $resource);
         $resource = str_replace('.css', '.' . $mtime . '.css', $resource);
     }

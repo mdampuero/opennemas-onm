@@ -25,8 +25,9 @@ class VideosController extends Controller
      */
     public function init()
     {
-        $this->page          = $this->request->query->getDigits('page', 1);
-        $this->category_name = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $request             = $this->get('request_stack')->getCurrentRequest();
+        $this->page          = $request->query->getDigits('page', 1);
+        $this->category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
         if (!empty($this->category_name) && $this->category_name != 'home') {
             $categoryManager = $this->get('category_repository');

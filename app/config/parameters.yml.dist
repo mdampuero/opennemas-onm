@@ -1,7 +1,6 @@
 parameters:
     environment: development
     framework.secret: test
-    framework.trusted_proxies: ~
     locale: en
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
@@ -83,7 +82,7 @@ parameters:
         file:
             name:      internal
             namespace: internal
-            path:      %kernel.root_dir%/../tmp/cache/%kernel.environment%/file
+            path:      '%kernel.root_dir%/../tmp/cache/%kernel.environment%/file'
         redis:
             server:    127.0.0.1
             port:      6379

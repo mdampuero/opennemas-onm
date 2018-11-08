@@ -101,9 +101,9 @@ class FormController extends Controller
                 }
             }
 
-            $name      = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
-            $subject   = $request->request->filter('subject', null, FILTER_SANITIZE_STRING);
-            $settings  = $this->get('orm.manager')
+            $name     = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
+            $subject  = $request->request->filter('subject', null, FILTER_SANITIZE_STRING);
+            $settings = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get([ 'site_name', 'contact_email' ]);
 

@@ -22,6 +22,6 @@ frontend_frontpage_category:
 
 frontend_externalfrontpage_category:
     path: /extseccion/{category}
-    defaults: { _controller: FrontendBundle:Frontpages:extShow, category:home }
+    defaults: { _controller: FrontendBundle:Frontpages:extShow, category: home }
     requirements:
         category : '[^/]+'

@@ -22,13 +22,13 @@ class OpinionsController extends Controller
      *
      * @return Response The response object.
      */
-    public function frontpageAction()
+    public function frontpageAction(Request $request)
     {
         if (!$this->get('core.security')->hasExtension('OPINION_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
-        $page = $this->request->query->getDigits('page', 1);
+        $page = $request->query->getDigits('page', 1);
 
         // Setup templating cache layer
         $this->view->setConfig('opinion');
@@ -208,13 +208,13 @@ class OpinionsController extends Controller
      *
      * @return Response the response object
      */
-    public function extFrontpageAction()
+    public function extFrontpageAction(Request $request)
     {
         if (!$this->get('core.security')->hasExtension('OPINION_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
-        $page         = $this->request->query->getDigits('page', 1);
+        $page         = $request->query->getDigits('page', 1);
         $categoryName = 'opinion';
 
         // Setup templating cache layer
@@ -338,7 +338,7 @@ class OpinionsController extends Controller
         }
 
         $authorID = (int) $request->query->getDigits('author_id', null);
-        $page     = $this->request->query->getDigits('page', 1);
+        $page     = $request->query->getDigits('page', 1);
 
         if (empty($authorID)) {
             throw new ResourceNotFoundException();

@@ -174,7 +174,7 @@ class ToolController extends Controller
      * @param array $propertiesToUpdate the list of properties and its values
      *
      * @return boolean true if the article was created successfully
-     **/
+     */
     private function saveContent($content, $propertiesToUpdate)
     {
         $relatedSrv = $this->get('related_contents');

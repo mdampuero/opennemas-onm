@@ -2,3 +2,4 @@ services:
     backend_login_success_handler:
         class:     Backend\EventListener\LoginSuccessHandler
         arguments: [ '@service_container' ]
+        public: true

@@ -9,6 +9,7 @@
 namespace Onm\Cache;
 
 use Redis as RedisBase;
+use Common\Data\Serialize\Serializer\PhpSerializer;
 
 /**
  * Redis cache driver.
@@ -91,7 +92,7 @@ class Redis extends AbstractCache
                 if ($data[$i] === false) {
                     continue;
                 }
-                $dataUnserialized = @unserialize($data[$i]);
+                $dataUnserialized = PhpSerializer::unserialize($data[$i]);
                 if ($dataUnserialized !== false || $data[$i] === 'b:0;') {
                     $newData[$id[$i]] = $dataUnserialized;
                 } else {
@@ -102,7 +103,7 @@ class Redis extends AbstractCache
             return $newData;
         } else {
             $data             = $this->getRedis()->get($id);
-            $dataUnserialized = @unserialize($data);
+            $dataUnserialized = PhpSerializer::unserialize($data);
 
             if ($dataUnserialized !== false || $data === 'b:0;') {
                 return $dataUnserialized;

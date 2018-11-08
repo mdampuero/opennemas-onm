@@ -1,6 +1,6 @@
 backend_purchase_show:
     path: /purchases/{id}
-    defaults: { _controller  : BackendBundle:Purchase:show }
+    defaults: { _controller: BackendBundle:Purchase:show }
     options:
         expose: true
 
