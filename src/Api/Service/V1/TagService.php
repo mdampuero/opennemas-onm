@@ -123,8 +123,13 @@ class TagService extends OrmService
      */
     public function getTagIdsFromStr($text, $languageId = null)
     {
+        $tags = $this->container->get('data.manager.filter')
+            ->set($text)
+            ->filter('tags')
+            ->get();
+
         $slugs = $this->container->get('data.manager.filter')
-            ->set(explode(' ', $text))
+            ->set(explode(',', $tags))
             ->filter('slug')
             ->get();
 
