@@ -215,7 +215,7 @@ class TagController extends ApiController
         }
 
         $extraData = [
-            'stats'   => $this->get('api.service.tag')->getNumContentsRel($items),
+            'stats'   => $this->get('api.service.tag')->getStats($items),
             'locale'  => $ls->getLocale('frontend'),
             'locales' => $locales
         ];

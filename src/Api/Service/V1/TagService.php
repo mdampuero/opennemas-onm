@@ -40,31 +40,30 @@ class TagService extends OrmService
     }
 
     /**
-     * Method for retrieve the number of contents related with some tag
+     * Returns the number of contents associated to a tag in a list of tags.
      *
-     * @param array list with all number of related contents by tag
+     * @param array The list of tags.
      *
-     * @return array list with all tags and the number of contest
+     * @return array A list where the key is a tag id and the value is the
+     *               number of contents associated to the tag.
      */
-    public function getNumContentsRel($tagList)
+    public function getStats($tags)
     {
-        if (empty($tagList)) {
+        if (empty($tags)) {
             return [];
         }
 
-        $tagListIds = $tagList;
-        if (!is_array($tagList) && is_object($tagList)) {
-            $tagListIds = $tagList['id'];
-        } elseif (is_array($tagList) && is_object($tagList[0])) {
-            $tagListIds = array_map(
-                function ($tag) {
-                    return $tag->id;
-                },
-                $tagList
-            );
+        if (!is_array($tags)) {
+            $tags = [ $tags ];
         }
 
-        return \Tag::numberOfContent($tagListIds);
+        $ids = array_map(function ($a) {
+            return $a->id;
+        }, $tags);
+
+        return $this->container->get('orm.manager')
+            ->getRepository($this->entity, $this->origin)
+            ->getNumberOfContents($ids);
     }
 
     /**
