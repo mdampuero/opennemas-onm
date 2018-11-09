@@ -12,6 +12,31 @@ namespace Common\ORM\Database\Repository;
 class TagRepository extends BaseRepository
 {
     /**
+     * Returns an array of privileges grouped by entity id.
+     *
+     * @param array $ids The entity ids.
+     *
+     * @return array The array of privileges.
+     */
+    public function getIdsByContentType($contentTypes)
+    {
+        $sql = 'SELECT DISTINCT(tag_id) FROM contents_tags' .
+            ' INNER JOIN contents' .
+            ' ON contents.pk_content = contents_tags.content_id' .
+            ' AND contents.content_type_name IN (?)';
+
+        $rs = $this->conn->fetchAll(
+            $sql,
+            [ $contentTypes ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        return array_map(function ($a) {
+            return $a['tag_id'];
+        }, $rs);
+    }
+
+    /**
      * Returns the number of contents associated to every tag in a list of tags.
      *
      * @param array $ids The list of tag ids.
@@ -36,30 +61,5 @@ class TagRepository extends BaseRepository
         }
 
         return $stats;
-    }
-
-    /**
-     * Returns an array of privileges grouped by entity id.
-     *
-     * @param array $ids The entity ids.
-     *
-     * @return array The array of privileges.
-     */
-    public function getIdsByContentType($contentTypes)
-    {
-        $sql = 'SELECT DISTINCT(tag_id) FROM contents_tags' .
-            ' INNER JOIN contents' .
-            ' ON contents.pk_content = contents_tags.content_id' .
-            ' AND contents.content_type_name IN (?)';
-
-        $rs = $this->conn->fetchAll(
-            $sql,
-            [ $contentTypes ],
-            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
-        );
-
-        return array_map(function ($a) {
-            return $a['tag_id'];
-        }, $rs);
     }
 }
