@@ -40,6 +40,33 @@ class TagService extends OrmService
     }
 
     /**
+     * Returns a list of tags basing on a list of slugs.
+     *
+     * @param array  $slugs  The list of slugs.
+     * @param string $locale The locale id.
+     *
+     * @return array The list of tags.
+     */
+    public function getListBySlugs($slugs, $locale = null, $limit = 25)
+    {
+        if (empty($slugs)) {
+            return ['items' => []];
+        }
+
+        $oql = is_array($slugs) ?
+            ' in ["' . implode('", "', $slugs) . '"]' :
+            ' = "' . $slugs . '"';
+
+        $oql = 'slug' . $oql . ' limit ' . $limit;
+
+        if (!empty($locale)) {
+            $oql = 'language_id = "' . $locale . '" and ' . $oql;
+        }
+
+        return $this->getList($oql);
+    }
+
+    /**
      * Returns the number of contents associated to a tag in a list of tags.
      *
      * @param array The list of tags.
@@ -168,33 +195,6 @@ class TagService extends OrmService
         $slugs = $this->createSearchableWord($arr);
 
         return $this->getListBySlugs($slugs, $languageId);
-    }
-
-    /**
-     * Returns a list of tags basing on a list of slugs.
-     *
-     * @param array  $slugs  The list of slugs.
-     * @param string $locale The locale id.
-     *
-     * @return array The list of tags.
-     */
-    public function getListBySlugs($slugs, $locale = null, $limit = 25)
-    {
-        if (empty($slugs)) {
-            return ['items' => []];
-        }
-
-        $oql = is_array($slugs) ?
-            ' in ["' . implode('", "', $slugs) . '"]' :
-            ' = "' . $slugs . '"';
-
-        $oql = 'slug' . $oql . ' limit ' . $limit;
-
-        if (!empty($locale)) {
-            $oql = 'language_id = "' . $locale . '" and ' . $oql;
-        }
-
-        return $this->getList($oql);
     }
 
     /**
