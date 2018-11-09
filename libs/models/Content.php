@@ -1768,10 +1768,10 @@ class Content implements \JsonSerializable, CsvSerializable
             $cache = getService('cache');
             foreach ($rs as $row) {
                 $cache->delete('frontpage_elements_map_' . $row['fk_category']);
-                getService('core.dispatcher')->dispatch(
-                    'frontpage.save_position',
-                    [ 'category' => $row['fk_category'] ]
-                );
+                getService('core.dispatcher')->dispatch('frontpage.save_position', [
+                    'category'    => $row['fk_category'],
+                    'frontpageId' => $row['frontpage_version_id'],
+                ]);
             }
 
             $user = getService('core.user');
