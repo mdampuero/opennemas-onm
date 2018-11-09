@@ -306,30 +306,6 @@ class TagService extends OrmService
     }
 
     /**
-     *  Method to retrieve the tags for a list of tag ids
-     *
-     * @param array $ids List of ids we want to retrieve
-     *
-     * @return string List of tags fo this tags.
-     */
-    public function getTagsSepByCommas($ids, $locale = null)
-    {
-        if (empty($ids)) {
-            return ['items' => []];
-        }
-        $tags = $this->getListByIds($ids);
-
-        $tagsString = '';
-        foreach ($tags['items'] as $tag) {
-            if (is_null($locale) || $tag->language_id == $locale) {
-                $tagsString .= ',' . $tag->name;
-            }
-        }
-        // We remove the first comma
-        return substr($tagsString, 1);
-    }
-
-    /**
      * Returns an array of tags associated with the list of contents type
      * requested
      *

@@ -11,6 +11,7 @@ namespace Test\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\StructuredData;
 use Common\Data\Core\FilterManager;
+use Common\ORM\Entity\Tag;
 
 /**
  * Defines test cases for StructuredData class.
@@ -47,7 +48,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $this->ts = $this->getMockBuilder('TagService')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getTagsSepByCommas' ])
+            ->setMethods([ 'getListByIds' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -170,8 +171,16 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->once())->method('get')
             ->willReturn('Site Name');
-        $this->ts->expects($this->once())->method('getTagsSepByCommas')
-            ->willReturn('keywords,video,json,linking,data');
+        $this->ts->expects($this->once())->method('getListByIds')
+            ->willReturn([
+                'items' => [
+                    new Tag([ 'name' => 'keywords' ]),
+                    new Tag([ 'name' => 'video' ]),
+                    new Tag([ 'name' => 'json' ]),
+                    new Tag([ 'name' => 'linking' ]),
+                    new Tag([ 'name' => 'data' ]),
+                ]
+            ]);
 
         $this->assertEquals($videoJson, $this->object->generateVideoJsonLDCode($this->data));
     }
@@ -213,8 +222,17 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         // Gallery only with cover image
         $onlyCover = $galleryJson . '}';
-        $this->ts->expects($this->any())->method('getTagsSepByCommas')
-            ->willReturn('keywords,object,json,linking,data');
+        $this->ts->expects($this->any())->method('getListByIds')
+            ->willReturn([
+                'items' => [
+                    new Tag([ 'name' => 'keywords' ]),
+                    new Tag([ 'name' => 'object' ]),
+                    new Tag([ 'name' => 'json' ]),
+                    new Tag([ 'name' => 'linking' ]),
+                    new Tag([ 'name' => 'data' ]),
+                ]
+            ]);
+
         $this->assertEquals($onlyCover, $this->object->generateImageGalleryJsonLDCode($this->data));
 
         // Load album photos
@@ -284,8 +302,17 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         // Gallery with several photos
         $severalImages = $galleryJson . $albumPhotosJson . '}' . $albumPhotosObjectJson;
-        $this->ts->expects($this->any())->method('getTagsSepByCommas')
-            ->willReturn('keywords,video,json,linking,data');
+        $this->ts->expects($this->any())->method('getListByIds')
+            ->willReturn([
+                'items' => [
+                    new Tag([ 'name' => 'keywords' ]),
+                    new Tag([ 'name' => 'video' ]),
+                    new Tag([ 'name' => 'json' ]),
+                    new Tag([ 'name' => 'linking' ]),
+                    new Tag([ 'name' => 'data' ]),
+                ]
+            ]);
+
         $this->assertEquals($severalImages, $this->object->generateImageGalleryJsonLDCode($this->data));
     }
 
@@ -327,8 +354,8 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->any())->method('get')
             ->willReturn('Site Name');
-        $this->ts->expects($this->any())->method('getTagsSepByCommas')
-            ->willReturn('');
+        $this->ts->expects($this->any())->method('getListByIds')
+            ->willReturn([ 'items' => [], 'total' => 0 ]);
 
         // Article with image
         $imageJson = '
