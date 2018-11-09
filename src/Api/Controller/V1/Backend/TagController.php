@@ -22,6 +22,29 @@ class TagController extends ApiController
     /**
      * {@inheritdoc}
      */
+    protected $extension = 'es.openhost.module.tags';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $getItemRoute = 'api_v1_backend_tag_show';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $permissions = [
+        'create' => 'TAG_CREATE',
+        'delete' => 'TAG_DELETE',
+        'list'   => 'TAG_ADMIN',
+        'patch'  => 'TAG_UPDATE',
+        'save'   => 'TAG_CREATE',
+        'show'   => 'TAG_UPDATE',
+        'update' => 'TAG_UPDATE',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $service = 'api.service.tag';
 
     /**
