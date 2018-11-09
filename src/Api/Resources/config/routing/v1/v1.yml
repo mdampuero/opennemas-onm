@@ -56,6 +56,3 @@ api_v1_frontend_advertisement:
 
 api_v1_frontend_tool:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/tool.yml'
-
-api_v1_frontend_tag:
-    resource: '@ApiBundle/Resources/config/routing/v1/backend/tag.yml'
