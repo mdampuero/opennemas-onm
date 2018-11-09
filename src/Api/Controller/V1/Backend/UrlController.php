@@ -19,16 +19,12 @@ class UrlController extends ApiController
     protected $extension = null;
 
     /**
-     * The route name to generate URL from when creating a new item.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $getItemRoute = 'api_v1_backend_url_show';
 
     /**
-     * The API service name.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $service = 'api.service.url';
 
