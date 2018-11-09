@@ -88,19 +88,15 @@ class TagService extends OrmService
             return [];
         }
 
-        $tagListIds = $tagList;
         if (!is_array($tagList) && is_object($tagList)) {
-            $tagListIds = $tagList['id'];
-        } elseif (is_array($tagList) && is_object($tagList[0])) {
-            $tagListIds = array_map(
-                function ($tag) {
-                    return $tag->id;
-                },
-                $tagList
-            );
+            $tagList = [ $tagList ];
         }
 
-        return \Tag::numberOfContent($tagListIds);
+        $ids = array_map(function ($tag) {
+            return $tag->id;
+        }, $tagList);
+
+        return \Tag::numberOfContent($ids);
     }
 
     /**
