@@ -42,11 +42,11 @@ class TagsController extends Controller
         ) {
             $fm = $this->get('data.manager.filter');
             $t  = $this->get('api.service.tag')
-                ->getTagsAssociatedCertainContentsTypes([1]);
+                ->getListByContentTypes([ 'article' ]);
 
             $letters = range('a', 'z');
 
-            foreach ($t as $tag) {
+            foreach ($t['items'] as $tag) {
                 if (is_numeric($tag->name[0])) {
                     $tags['#'][] = $tag;
                     continue;

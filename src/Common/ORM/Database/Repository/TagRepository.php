@@ -45,25 +45,21 @@ class TagRepository extends BaseRepository
      *
      * @return array The array of privileges.
      */
-    public function getTagsAssociatedCertainContentsTypes($contentTypesIds)
+    public function getIdsByContentType($contentTypes)
     {
-        $filters = [];
+        $sql = 'SELECT DISTINCT(tag_id) FROM contents_tags' .
+            ' INNER JOIN contents' .
+            ' ON contents.pk_content = contents_tags.content_id' .
+            ' AND contents.content_type_name IN (?)';
 
-        if (!is_array($contentTypesIds) || count($contentTypesIds) < 1) {
-            return [];
-        }
+        $rs = $this->conn->fetchAll(
+            $sql,
+            [ $contentTypes ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
 
-        $contentTypes = rtrim(str_repeat('?,', count($contentTypesIds)), ',');
-
-        $sql = 'SELECT id, name, language_id, slug FROM `tags` WHERE EXISTS(' .
-            ' SELECT 1 FROM contents_tags' .
-            ' INNER JOIN contents ON' .
-            ' contents.pk_content = contents_tags.content_id AND' .
-            ' contents.fk_content_type IN (' . $contentTypes . ')' .
-            ' WHERE tags.id = contents_tags.tag_id)';
-
-        $rs = $this->conn->fetchAll($sql, $contentTypesIds);
-
-        return $this->getEntities($rs);
+        return array_map(function ($a) {
+            return $a['tag_id'];
+        }, $rs);
     }
 }

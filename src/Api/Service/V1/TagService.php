@@ -306,18 +306,24 @@ class TagService extends OrmService
     }
 
     /**
-     * Returns an array of tags associated with the list of contents type
-     * requested
+     * Returns a list of tags associated to contents with content type in a
+     * list of types.
      *
-     * @param array $contentTypesIds ids for the content types
+     * @param array $contentTypes The list of content types.
      *
-     * @return array list of tags associated with the types of content indicated
+     * @return array The list of tags.
      */
-    public function getTagsAssociatedCertainContentsTypes($contentTypesIds)
+    public function getListByContentTypes($contentTypes)
     {
-        return $this->container->get('orm.manager')
+        $ids = $this->container->get('orm.manager')
             ->getRepository($this->entity, $this->origin)
-            ->getTagsAssociatedCertainContentsTypes($contentTypesIds);
+            ->getIdsByContentType($contentTypes);
+
+        if (empty($ids)) {
+            return [ 'items' => [], 'total' => 0 ];
+        }
+
+        return $this->getListByIds($ids);
     }
 
     /**
