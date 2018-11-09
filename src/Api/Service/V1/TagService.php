@@ -67,21 +67,20 @@ class TagService extends OrmService
      * @param string $locale The locale id.
      *
      * @return array The list of tags.
+     *
+     * @throws GetListException If no slugs provided or if there was a problem
+     *                          to find items.
      */
-    public function getListBySlugs($slugs, $locale = null, $limit = 25)
+    public function getListBySlugs($slugs, $locale = null)
     {
-        if (empty($slugs)) {
-            return ['items' => []];
+        if (!is_array($ids) || empty($ids)) {
+            throw new GetListException('Invalid slugs', 400);
         }
 
-        $oql = is_array($slugs) ?
-            ' in ["' . implode('", "', $slugs) . '"]' :
-            ' = "' . $slugs . '"';
-
-        $oql = 'slug' . $oql . ' limit ' . $limit;
+        $oql = sprintf('slug in ["%s"]', implode('","', $slugs));
 
         if (!empty($locale)) {
-            $oql = 'language_id = "' . $locale . '" and ' . $oql;
+            $oql .= sprintf(' and language_id = "%s"', $locale);
         }
 
         return $this->getList($oql);
