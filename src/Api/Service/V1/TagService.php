@@ -40,6 +40,27 @@ class TagService extends OrmService
     }
 
     /**
+     * Returns a list of tags associated to contents with content type in a
+     * list of types.
+     *
+     * @param array $contentTypes The list of content types.
+     *
+     * @return array The list of tags.
+     */
+    public function getListByContentTypes($contentTypes)
+    {
+        $ids = $this->container->get('orm.manager')
+            ->getRepository($this->entity, $this->origin)
+            ->getIdsByContentType($contentTypes);
+
+        if (empty($ids)) {
+            return [ 'items' => [], 'total' => 0 ];
+        }
+
+        return $this->getListByIds($ids);
+    }
+
+    /**
      * Returns a list of tags basing on a list of slugs.
      *
      * @param array  $slugs  The list of slugs.
@@ -303,27 +324,6 @@ class TagService extends OrmService
         $tags['items'] = $this->responsify($returnArr);
 
         return $tags;
-    }
-
-    /**
-     * Returns a list of tags associated to contents with content type in a
-     * list of types.
-     *
-     * @param array $contentTypes The list of content types.
-     *
-     * @return array The list of tags.
-     */
-    public function getListByContentTypes($contentTypes)
-    {
-        $ids = $this->container->get('orm.manager')
-            ->getRepository($this->entity, $this->origin)
-            ->getIdsByContentType($contentTypes);
-
-        if (empty($ids)) {
-            return [ 'items' => [], 'total' => 0 ];
-        }
-
-        return $this->getListByIds($ids);
     }
 
     /**
