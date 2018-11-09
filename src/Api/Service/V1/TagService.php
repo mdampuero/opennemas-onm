@@ -126,19 +126,6 @@ class TagService extends OrmService
     {
         $wordArr = explode(' ', $text);
 
-        return $this->getTagIdsFromWordArr($wordArr, $languageId);
-    }
-
-    /**
-     * Method to validate a text as tags
-     *
-     * @param mixed $text       Text with all tags
-     * @param mixed $languageId Language of the tag
-     *
-     * @return mixed List with all tags validate against DB
-     */
-    public function getTagIdsFromWordArr($wordArr, $languageId = null)
-    {
         if (!is_array($wordArr)) {
             return null;
         }
