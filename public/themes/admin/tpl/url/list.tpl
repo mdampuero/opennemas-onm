@@ -208,10 +208,10 @@
                     </div>
                   </td>
                   <td>
-                    <a ng-show="item.content_type !== 'user' && item.content_type !== 'user_group'" href="[% routing.generate('admin_' + item.content_type + '_show', { id: item.target }) %]" ng-if="[0, 1, 3].indexOf(item.type) !== -1">
+                    <a ng-if="item.content_type !== 'user' && item.content_type !== 'user_group'" href="[% routing.generate('admin_' + item.content_type + '_show', { id: item.target }) %]" ng-if="[0, 1, 3].indexOf(item.type) !== -1">
                       [% item.target %] ([% item.content_type %])
                     </a>
-                    <a ng-show="item.content_type === 'user' || item.content_type === 'user_group'"  href="[% routing.generate('backend_' + item.content_type + '_show', { id: item.target }) %]" ng-if="[0, 1, 3].indexOf(item.type) !== -1">
+                    <a ng-if="item.content_type === 'user' || item.content_type === 'user_group'"  href="[% routing.generate('backend_' + item.content_type + '_show', { id: item.target }) %]" ng-if="[0, 1, 3].indexOf(item.type) !== -1">
                       [% item.target %] ([% item.content_type %])
                     </a>
                     <span ng-if="[0, 1, 3].indexOf(item.type) === -1">
