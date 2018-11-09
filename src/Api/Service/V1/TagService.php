@@ -167,8 +167,7 @@ class TagService extends OrmService
 
         $slugs = $this->createSearchableWord($arr);
 
-
-        return \Tag::getTagsBySlug($slugs, $languageId);
+        return $this->getTagBySlug($slugs, $languageId);
     }
 
     /**
@@ -186,7 +185,7 @@ class TagService extends OrmService
         }
 
         $oql = is_array($slugs) ?
-            ' in ("' . implode('", "', $slugs) . '")' :
+            ' in ["' . implode('", "', $slugs) . '"]' :
             ' = "' . $slugs . '"';
 
         $oql = 'slug' . $oql . ' limit ' . $limit;
@@ -253,8 +252,7 @@ class TagService extends OrmService
 
         $slugs = $this->createSearchableWord($validTags);
 
-
-        $recoverTags = \Tag::getTagsBySlug($slugs, $locale);
+        $recoverTags = $this->getTagBySlug($slugs, $locale);
 
         if (count($recoverTags['items']) == 25) {
             return $recoverTags['items'];
