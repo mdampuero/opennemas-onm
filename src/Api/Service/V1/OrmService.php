@@ -228,10 +228,10 @@ class OrmService extends Service
             throw new GetListException('Invalid ids', 400);
         }
 
-        $contents = $this->container->get('orm.manager')
+        $items = $this->container->get('orm.manager')
             ->getRepository($this->entity, $this->origin)->find($ids);
 
-        return [ 'items' => $contents, 'total' => count($contents) ];
+        return [ 'items' => $items, 'total' => count($items) ];
     }
 
     /**
