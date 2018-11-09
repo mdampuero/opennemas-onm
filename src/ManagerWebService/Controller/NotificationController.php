@@ -204,7 +204,7 @@ class NotificationController extends Controller
 
         $writer = Writer::createFromFileObject(new \SplTempFileObject());
         $writer->setDelimiter(';');
-        $writer->setEncodingFrom('utf-8');
+        $writer->setInputEncoding('utf-8');
         $writer->insertOne([ 'id', 'title', 'instance_id', 'instance',
             'contact', 'read', 'view', 'clicked', 'opened' ]);
 
@@ -248,7 +248,7 @@ class NotificationController extends Controller
 
         $writer = Writer::createFromFileObject(new \SplTempFileObject());
         $writer->setDelimiter(';');
-        $writer->setEncodingFrom('utf-8');
+        $writer->setInputEncoding('utf-8');
         $writer->insertOne([ 'id', 'title', 'read', 'view', 'clicked', 'opened' ]);
 
         $writer->insertAll($data);

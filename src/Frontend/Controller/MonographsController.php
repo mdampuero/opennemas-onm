@@ -15,7 +15,6 @@
 namespace Frontend\Controller;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
@@ -29,8 +28,6 @@ class MonographsController extends Controller
 {
     /**
      * Common code for all the actions
-     *
-     * @return void
      */
     public function init()
     {
@@ -206,8 +203,8 @@ class MonographsController extends Controller
                             $content->placeholder = 'placeholder_1_1';
                         }
 
-                        $content->category_name  = $content->loadCategoryName($item['fk_content']);
-                        $content->category_title = $content->loadCategoryTitle($item['fk_content']);
+                        $content->category_name  = $content->loadCategoryName();
+                        $content->category_title = $content->loadCategoryTitle();
 
                          // Load attached and related contents from array
                         $content->loadAttachedVideo()

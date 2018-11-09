@@ -14,7 +14,7 @@ frontend_book_show:
 
 frontend_book_show_with_slug:
     path: /libro/{category_name}/{slug}/{id}.{_format}
-    defaults: { _controller: FrontendBundle:Books:show, _format:html }
+    defaults: { _controller: FrontendBundle:Books:show, _format: html }
     requirements:
         category_name: '[^/]+'
         slug         : '([^/]+)?'

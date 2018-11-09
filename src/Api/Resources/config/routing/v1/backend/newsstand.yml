@@ -1,0 +1,63 @@
+api_v1_backend_newsstand_create:
+    path:     /newsstands/new
+    defaults: { _controller  : ApiBundle:V1/Backend/Newsstand:create }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_newsstand_save:
+    path:     /newsstands
+    defaults: { _controller  : ApiBundle:V1/Backend/Newsstand:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_newsstand_show:
+    path:     /newsstands/{id}
+    defaults: { _controller  : ApiBundle:V1/Backend/Newsstand:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_newsstand_update:
+    path:     /newsstands/{id}
+    defaults: { _controller  : ApiBundle:V1/Backend/Newsstand:update }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_newsstand_delete:
+    path:     /newsstands/{id}
+    defaults: { _controller  : ApiBundle:V1/Backend/Newsstand:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_newsstand_patch:
+    path:     /newsstands/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Newsstand:patch }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_newsstands_list:
+    path:     /newsstands
+    defaults: { _controller: ApiBundle:V1/Backend/Newsstand:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_newsstands_patch:
+    path:     /user-groups
+    defaults: { _controller: ApiBundle:V1/Backend/Newsstand:patchSelected }
+    methods:  [ PATCH ]
+    options:
+        expose: true

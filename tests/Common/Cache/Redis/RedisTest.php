@@ -10,7 +10,6 @@
 namespace Tests\Common\Cache\Redis;
 
 use Common\Cache\Redis\Redis;
-use Common\ORM\Core\Entity;
 
 /**
  * Defines test cases for Redis class.

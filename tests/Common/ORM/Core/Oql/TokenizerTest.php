@@ -9,7 +9,7 @@
  */
 namespace Tests\Common\ORM\Core\Oql;
 
-use Common\ORM\Core\Oql\Tokenizer;
+use \Common\ORM\Core\Oql\Tokenizer;
 
 class TokenizerTest extends \PHPUnit\Framework\TestCase
 {
@@ -51,7 +51,7 @@ class TokenizerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException Common\ORM\Core\Exception\InvalidQueryException
+     * @expectedException \Common\ORM\Core\Exception\InvalidQueryException
      */
     public function testCheckOQL()
     {
@@ -94,7 +94,7 @@ class TokenizerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException Common\ORM\Core\Exception\InvalidTokenException
+     * @expectedException \Common\ORM\Core\Exception\InvalidTokenException
      */
     public function testTokenizeError()
     {

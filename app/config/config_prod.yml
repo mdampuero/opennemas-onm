@@ -3,3 +3,9 @@ imports:
 
 framework:
     trusted_hosts:   ~
+
+monolog:
+    handlers:
+        console:
+            type: console
+            process_psr_3_messages: false

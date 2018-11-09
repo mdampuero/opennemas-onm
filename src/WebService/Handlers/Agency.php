@@ -10,7 +10,6 @@ namespace WebService\Handlers;
 
 use Luracast\Restler\Format\XmlFormat;
 use Luracast\Restler\RestException;
-use Luracast\Restler\Data\Object;
 
 /**
  * Handles REST actions for news agency.
@@ -74,7 +73,7 @@ class Agency
         XmlFormat::$importSettingsFromXml = true;
 
         $output = simplexml_load_string($output);
-        $xml    = new XmlFormat($output);
+        $xml    = new XmlFormat();
 
         return $xml->read($output);
     }
@@ -83,6 +82,10 @@ class Agency
      * Get an newsml given a content id.
      *
      * @param integer $id The content id.
+     *
+     * @return XmlFormat|null
+     *
+     * @throws RestException
      */
     protected function newsml($id = null)
     {
@@ -183,7 +186,7 @@ class Agency
 
             libxml_clear_errors();
 
-            return;
+            return null;
         }
 
         $xml = new XmlFormat();
@@ -195,7 +198,6 @@ class Agency
      * Validates a finite number
      *
      * This is used for checking the int parameters
-     *
      */
     private function validateInt($number)
     {

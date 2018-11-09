@@ -17,7 +17,7 @@ class MessageExchangerTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->message_exchanger = new \Onm\Varnish\MessageExchanger();
+        $this->message_exchanger = new MessageExchanger();
     }
 
     /**
@@ -30,7 +30,7 @@ class MessageExchangerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Onm\Varnish\MessageExchanger::addBanMessage
+     * @covers \Onm\Varnish\MessageExchanger::addBanMessage
      */
     public function testAddBanMessage()
     {
@@ -43,7 +43,7 @@ class MessageExchangerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Onm\Varnish\MessageExchanger::getMessages
+     * @covers \Onm\Varnish\MessageExchanger::getMessages
      */
     public function testGetMessages()
     {

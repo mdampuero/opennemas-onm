@@ -15,7 +15,6 @@
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 
 /**

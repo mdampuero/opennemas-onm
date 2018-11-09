@@ -22,18 +22,18 @@ class Compress
      *
      * @param string $filePath the
      *
-     * @return string the list of files extracted
+     * @return null|array the list of files extracted
      */
     public static function decompressZIP($filePath)
     {
-        $zip = new ZipArchive;
+        $zip = new \ZipArchive;
 
         // open archive
         if ($zip->open($filePath) !== true) {
             $logger = getService('logger');
             $logger->notice("Could not open archive");
 
-            return;
+            return null;
         }
 
         $dataZIP = array();

@@ -9,7 +9,7 @@
  */
 namespace Tests\Common\Core\Component\Template;
 
-use Common\Core\Component\Template\Template;
+use \Common\Core\Component\Template\Template;
 
 class TemplateTest extends \PHPUnit\Framework\TestCase
 {
@@ -140,21 +140,46 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers Common\Core\Component\Template\Template::setConfig
      */
-    public function testSetConfig()
+    public function testSetConfigWithCacheEnabled()
     {
-        $template = $this->createMock(\Common\Core\Component\Template\Template::class);
+         $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+             ->disableOriginalConstructor()
+             ->setMethods([
+                 'configLoad', 'getConfigVars', 'setCaching', 'setCacheLifetime'
+             ])->getMock();
 
-        $template->method('configLoad')
-            ->willReturn(true);
+         $template->expects($this->once())->method('configLoad')
+             ->willReturn(true);
 
-        $template->method('getConfigVars')
-            ->willReturn([]);
+         $template->expects($this->once())->method('getConfigVars')
+             ->willReturn([ 'caching' => true ]);
 
+         $template->expects($this->once())->method('setCaching')
+             ->willReturn(true);
 
-        $this->assertEquals(
-            null,
-            $template->setConfig('frontpage')
-        );
+         $template->expects($this->once())->method('setCacheLifetime')
+             ->with(86400)->willReturn(true);
+
+         $this->assertEquals(null, $template->setConfig('frontpage'));
+    }
+
+    /**
+     * @covers Common\Core\Component\Template\Template::setConfig
+     */
+    public function testSetConfigWithCacheDisabled()
+    {
+         $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+             ->disableOriginalConstructor()
+             ->setMethods([ 'configLoad', 'getConfigVars' ])
+             ->getMock();
+
+         $template->expects($this->once())->method('configLoad')
+             ->willReturn(true);
+
+         $template->expects($this->once())->method('getConfigVars')
+             ->willReturn([]);
+
+         $this->assertEquals(null, $template->setConfig('frontpage'));
     }
 
     public function testSetFile()
@@ -174,7 +199,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::generateCacheId
+     * @covers \Common\Core\Component\Template\Template::generateCacheId
      */
     public function testGenerateCacheId()
     {
@@ -202,7 +227,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::getContainer
+     * @covers \Common\Core\Component\Template\Template::getContainer
      */
     public function testGetContainer()
     {
@@ -215,7 +240,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::getInstance
+     * @covers \Common\Core\Component\Template\Template::getInstance
      */
     public function testGetInstanceWithNoInstance()
     {
@@ -225,7 +250,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::getTheme
+     * @covers \Common\Core\Component\Template\Template::getTheme
      */
     public function testGetThemeWithNoTheme()
     {
@@ -235,7 +260,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::getTheme
+     * @covers \Common\Core\Component\Template\Template::getTheme
      */
     public function testGetThemeWithTheme()
     {
@@ -255,7 +280,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::getThemeSkinName
+     * @covers \Common\Core\Component\Template\Template::getThemeSkinName
      */
     public function testGetThemeSkinName()
     {
@@ -290,7 +315,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Template\Template::getThemeSkinProperty
+     * @covers \Common\Core\Component\Template\Template::getThemeSkinProperty
      */
     public function testGetThemeVariantProperty()
     {

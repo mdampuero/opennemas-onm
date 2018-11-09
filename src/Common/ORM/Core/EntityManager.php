@@ -9,11 +9,8 @@
  */
 namespace Common\ORM\Core;
 
-use Common\ORM\Core\Entity;
-use Common\ORM\Core\Connection;
 use Common\ORM\Core\Exception\InvalidConnectionException;
 use Common\ORM\Core\Exception\InvalidMetadataException;
-use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Schema\Dumper;
 use Common\ORM\Core\Schema\Schema;
 use Common\ORM\Core\Validation\Validator;

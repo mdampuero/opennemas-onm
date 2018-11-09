@@ -13,29 +13,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Process\Process;
 
 class InstallThemesCommand extends Command
 {
-    /**
-     * The list of themes.
-     *
-     * @var array
-     */
-    protected $themes = [
-        'anemoi', 'base', 'basic', 'bastet', 'bragi', 'cplandora', 'cronicas',
-        'dryads', 'estrelladigital', 'fivex', 'flashnews', 'forseti',
-        'galatea', 'gerion', 'hathor', 'horus', 'idealgallego', 'juno',
-        'kalliope', 'khepri', 'kratos', 'laregion', 'lavozdelanzarote',
-        'layin', 'lrinternacional', 'marruecosnegocios', 'mihos', 'moura',
-        'nemty', 'notus', 'odin', 'olympus', 'orfeo', 'prontoar', 'retrincos',
-        'selket', 'sercoruna', 'simplo', 'slido', 'sobek', 'stilo',
-        'tecnofisis', 'televisionlr', 'verbeia', 'vidar', 'zisa'
-    ];
-
     /**
      * {@inheritdoc}
      */
@@ -47,33 +30,18 @@ class InstallThemesCommand extends Command
                 InputArgument::OPTIONAL,
                 'What theme do you want to install'
             )
-            ->addOption(
-                'all',
-                'a',
-                InputOption::VALUE_NONE,
-                'If set, it will install all themes'
-            )
-            ->addOption(
-                'remote',
-                'r',
-                InputOption::VALUE_NONE,
-                'If set, it will get the list of themes from bitbucket.org'
-            )
             ->setName('themes:install')
             ->setDescription('Deploys or installs themes to the latest version')
             ->setHelp(
                 <<<EOF
-The <info>themes:install</info> updates or installs themes code by executing
+The <info>themes:install</> updates or installs themes code by executing
 and updates the .deploy.php file.
 
 - Install all themes
-<info>php app/console themes:install</info>
-
-- Install all themes in bitbucket.org
-<info>php app/console themes:install -r</info>
+<info>php bin/console themes:install</>
 
 - Install a theme
-<info>php app/console themes:install THEME_NAME</info>
+<info>php bin/console themes:install THEME_NAME</>
 EOF
             );
     }
@@ -87,15 +55,21 @@ EOF
         $this->input    = $input;
         $this->output   = $output;
 
-        $remote = $this->input->getOption('remote');
-        $theme  = $input->getArgument('theme');
+        $theme = $input->getArgument('theme');
 
-        if (empty($theme) && $remote) {
-            $this->auth = $this->askCredentials($input, $output);
-            $output->writeln('Getting themes from <info>bitbucket</>...');
+        if (empty($theme)) {
+            $this->auth = $this->askCredentials();
+            $output->write('Getting themes from <fg=blue>bitbucket</>...');
 
-            $this->themes = $this->getThemes();
-            $output->writeln('  <info>' . count($this->themes) . ' themes found</>');
+            try {
+                $this->themes = $this->getThemes();
+
+                if (!empty($this->themes)) {
+                    $output->writeln(' <info>DONE</>');
+                }
+            } catch (\Exception $e) {
+                $this->output->writeln('<fg=red>FAIL (' . $e->getMessage() . ')</>');
+            }
         }
 
         chdir($this->basePath);
@@ -109,12 +83,8 @@ EOF
             return;
         }
 
-        $this->output->write('Installing <info>' . count($this->themes) . '</> themes...');
+        $this->output->writeln('Installing <info>' . count($this->themes) . '</> themes...');
         $this->installThemes();
-
-        $this->output->write("\nGenerating <fg=blue>deploy number</>... ");
-        $this->generateDeployFile();
-        $this->output->writeln('<info>DONE</>');
     }
 
     /**
@@ -126,7 +96,7 @@ EOF
     {
         $helper = $this->getHelper('question');
 
-        $this->output->writeln('Please enter your <info>bitbucket</> credentials...');
+        $this->output->writeln('Please enter your <fg=blue>bitbucket</> credentials...');
 
         $question = new Question('  Username: ');
         $username = $helper->ask($this->input, $this->output, $question);
@@ -162,50 +132,69 @@ EOF
      */
     protected function execProcess($cmd)
     {
-        $output  = $this->output;
         $process = new Process($cmd);
 
         $process->setTimeout(3600);
-        $process->run(function ($type, $buffer) use ($output, $cmd) {
-            if (Process::ERR === $type) {
-                if (!$output->isVerbose()) {
-                    $output->write('<error>FAIL</> ');
-                }
+        $process->run();
 
-                if ($output->isVerbose()) {
-                    $output->write("\n\t<error>" . $buffer . "</>");
-                }
+        if ($process->isSuccessful()) {
+            $this->output->writeln('<info>DONE</>');
 
-                return Process::ERR;
+            if ($this->output->isVerbose()) {
+                $this->output->writeln($process->getOutput());
             }
 
-            if (!$output->isVerbose()) {
-                $output->write('<info>DONE</> ');
-            }
+            return;
+        }
 
-            if ($output->isVerbose()) {
-                $output->write("\n\t" . $buffer);
-            }
+        $this->output->writeln('<fg=red>FAIL</>');
 
-            return 0;
-        });
+        if ($this->output->isVerbose()) {
+            $this->output->write($process->getErrorOutput());
+        }
     }
 
     /**
      * Saves a file with a deploy version with the actual timestamp
+     *
+     * @param string $theme The theme name.
      */
-    protected function generateDeployFile()
+    protected function generateDeployFile($theme)
     {
-        $time = time();
-        $contents = "<?php define('THEMES_DEPLOYED_AT', '$time');";
+        $date     = date('YmdHis');
+        $contents = "<?php define('THEMES_DEPLOYED_AT', '$date');";
+        $path     = APPLICATION_PATH . '/public/themes/' . $theme
+            . '/.deploy.themes.php';
 
-        file_put_contents(APPLICATION_PATH.'/.deploy.themes.php', $contents);
+        return file_put_contents($path, $contents);
+    }
+
+    /**
+     * Returns the error message basing on the HTTP error code.
+     *
+     * @param integer $code The error code.
+     *
+     * @return string The error message.
+     */
+    protected function getError($code)
+    {
+        $errors = [
+            401 => 'Authentication failure'
+        ];
+
+        if (array_key_exists($code, $errors)) {
+            $code .= ": {$errors[$code]}";
+        }
+
+        return $code;
     }
 
     /**
      * Gets the list of repositories for themes from bitbucket.
      *
      * @param string $url The URL to get the themes from.
+     *
+     * @return null|array
      */
     protected function getThemes($url = 'https://api.bitbucket.org/2.0/repositories/opennemas?pagelen=100')
     {
@@ -215,9 +204,10 @@ EOF
         curl_setopt($ch, CURLOPT_USERPWD, $this->auth);
 
         $resp = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        if (!$resp) {
-            return;
+        if ($code !== 200 || !$resp) {
+            throw new \RuntimeException($this->getError($code));
         }
 
         $resp   = json_decode($resp, true);
@@ -235,7 +225,11 @@ EOF
             $themes = array_merge($themes, $this->getThemes($resp['next']));
         }
 
-        return array_values($themes);
+        $themes = array_values($themes);
+
+        sort($themes);
+
+        return $themes;
     }
 
     /**
@@ -244,13 +238,19 @@ EOF
     protected function installThemes()
     {
         foreach ($this->themes as $theme) {
-            $this->output->write("\n  - Installing <fg=blue>$theme</>... ");
+            $this->output->writeln("- Installing <fg=blue>$theme</>... ");
+            $this->output->write("  - Updating repository... ");
 
-            if (file_exists($this->basePath.'/public/themes/' . $theme)) {
+            if (file_exists($this->basePath . '/public/themes/' . $theme)) {
                 $this->pullTheme($theme);
             } else {
                 $this->cloneTheme($theme);
             }
+
+            $this->output->write("  - Generating deploy number... ");
+            $this->generateDeployFile($theme)
+                ? $this->output->writeln('<info>DONE</>')
+                : $this->output->writeln('<fg=red>FAIL</>');
         }
     }
 
@@ -261,7 +261,7 @@ EOF
      */
     protected function pullTheme($theme)
     {
-        chdir($this->basePath.'/public/themes/' . $theme);
+        chdir($this->basePath . '/public/themes/' . $theme);
         $this->execProcess('git pull');
         chdir($this->basePath);
     }

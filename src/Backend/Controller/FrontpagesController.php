@@ -36,16 +36,19 @@ class FrontpagesController extends Controller
         $versionId  = $versionId == null ? $versionId : intval($versionId);
 
         // Check if the user can access a frontpage from other category
-        if ((int) $categoryId !== 0 && !$this->get('core.security')->hasCategory($categoryId)) {
+        if ((int) $categoryId !== 0
+            && !$this->get('core.security')->hasCategory($categoryId)
+        ) {
             throw new AccessDeniedException();
         }
 
+        $fs  = $this->get('api.service.frontpage');
         $fvs = $this->get('api.service.frontpage_version');
 
         list($frontpages, $versions, $contentPositionByPos, $contents, $versionId) =
-            $fvs->getFrontpageData($categoryId, $versionId);
+            $fs->getDataForCategoryAndVersion($categoryId, $versionId);
 
-        $this->container->get('api.service.contentposition')
+        $this->container->get('api.service.content_position')
             ->getCategoriesWithManualFrontpage();
 
         $versions = $fvs->responsify($versions);
@@ -74,7 +77,6 @@ class FrontpagesController extends Controller
             'views'                => $views,
             'category'             => $categoryId,
             'contentPositionByPos' => $contentPositionByPos,
-            'contents'             => $contents
         ]);
         $this->get('core.locale')->setContext('backend');
 
@@ -113,9 +115,9 @@ class FrontpagesController extends Controller
      */
     public function savePositionsAction(Request $request)
     {
-        $savedProperly         = false;
-        $validReceivedData     = false;
         $dataPositionsNotValid = false;
+
+        $cps = $this->get('api.service.content_position');
 
         // Get application logger
         $logger = $this->get('application.log');
@@ -180,8 +182,7 @@ class FrontpagesController extends Controller
         $fvs = $this->get('api.service.frontpage_version');
 
         try {
-            $version  =
-                $fvs->saveFrontPageVersion($request->request->get('version', null));
+            $version  = $fvs->saveFrontPageVersion($request->request->get('version', null));
             $contents = [];
 
             // Iterate over each element and fetch its parameters to save.
@@ -195,7 +196,7 @@ class FrontpagesController extends Controller
             }
 
             // Save contents
-            $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $version->id, $contents);
+            $savedProperly = $cps->saveContentPositionsForHomePage($categoryID, $version->id, $contents);
 
             if (!$savedProperly) {
                 $message = _('Unable to save content positions: Error while saving in database.');
@@ -203,12 +204,8 @@ class FrontpagesController extends Controller
             }
         } catch (\Exception $e) {
             return new JsonResponse(
-                [
-                    'message' => $e->getMessage()
-                ],
-                $e->getCode() != null ?
-                    $e->getCode() :
-                    500
+                [ 'message' => $e->getMessage() ],
+                $e->getCode() != null ? $e->getCode() : 500
             );
         }
 
@@ -229,7 +226,7 @@ class FrontpagesController extends Controller
     }
 
     /**
-     * Changes the frontpage
+     * Changes the frontpage layout
      *
      * @param Request $request the request object
      *
@@ -240,12 +237,9 @@ class FrontpagesController extends Controller
      */
     public function pickLayoutAction(Request $request)
     {
-        $category           =
-            $request->query->filter('category', '', FILTER_SANITIZE_STRING);
-        $layout             =
-            $request->query->filter('layout', null, FILTER_SANITIZE_STRING);
-        $frontpageVersionId =
-            $request->query->filter('versionId', null, FILTER_SANITIZE_STRING);
+        $category           = $request->query->filter('category', '', FILTER_SANITIZE_STRING);
+        $layout             = $request->query->filter('layout', null, FILTER_SANITIZE_STRING);
+        $frontpageVersionId = $request->query->filter('versionId', null, FILTER_SANITIZE_STRING);
 
         if ($category == 'home') {
             $category = 0;
@@ -278,12 +272,6 @@ class FrontpagesController extends Controller
             );
         }
 
-        if ($category == 0) {
-            $section = 'home';
-        } else {
-            $section = $category;
-        }
-
         $this->get('core.dispatcher')->dispatch(
             'frontpage.save_position',
             [ 'category' => $category, 'frontpageId' => $frontpageVersionId ]
@@ -311,17 +299,16 @@ class FrontpagesController extends Controller
         $category    = (int) $request->query->filter('category', '', FILTER_SANITIZE_STRING);
         $versionId   = (int) $request->query->filter('versionId', '', FILTER_SANITIZE_STRING);
 
-        $newVersionAvailable = $this->get('api.service.frontpage_version')
-            ->checkLastSaved($category, $versionId, $dateRequest);
-        return new Response(json_encode($newVersionAvailable));
+        return new JsonResponse(
+            $this->get('api.service.frontpage_version')
+                ->checkLastSaved($category, $versionId, $dateRequest)
+        );
     }
 
     /**
      * Generates a preview for a particular frontpage given the required information
      *
      * @param Request $request the request object
-     *
-     * @return void
      *
      * @Security("hasExtension('FRONTPAGE_MANAGER')
      *     and hasPermission('ARTICLE_FRONTPAGE')")
@@ -422,7 +409,7 @@ class FrontpagesController extends Controller
     }
 
     /**
-     * Description of this action
+     * Returns the value of the frontpage preview generated in self::previewAction()
      *
      * @return Response the response object
      *
@@ -438,6 +425,14 @@ class FrontpagesController extends Controller
         return new Response($content);
     }
 
+    /**
+     * Removes a frontpage version
+     *
+     * @return Response the response object
+     *
+     * @Security("hasExtension('FRONTPAGE_MANAGER')
+     *     and hasPermission('ARTICLE_FRONTPAGE')")
+     */
     public function deleteAction($versionId, $categoryId)
     {
         $this->get('api.service.frontpage_version')

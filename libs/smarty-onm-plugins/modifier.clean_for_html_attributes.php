@@ -1,21 +1,15 @@
 <?php
 /**
- * Smarty plugin
- * @package Smarty
- * @subpackage plugins
- */
-
-
-/**
  * Smarty lower modifier plugin
  *
- * Type:     modifier<br>
- * Name:     mb_lower<br>
- * Purpose:  convert string to lowercase
- * @param string
+ * Type:     modifier
+ * Name:     clean_for_html_attribute
+ *
+ * @param string $html
+ *
  * @return string
  */
-function smarty_modifier_clean_for_html_attributes($string)
+function smarty_modifier_clean_for_html_attributes($html)
 {
-    return preg_replace(['/"/', '/\'/'], ['', ''], $string);
+    return preg_replace(['/"/', '/\'/'], ['', ''], $html);
 }

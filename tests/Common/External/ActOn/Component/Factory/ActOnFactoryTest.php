@@ -9,7 +9,6 @@
  */
 namespace Tests\Common\External\ActOn\Factory;
 
-use Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint;
 use Common\External\ActOn\Component\Factory\ActOnFactory;
 
 /**

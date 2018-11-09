@@ -333,7 +333,7 @@ comments:
             options: { length: 20, default: '' }
         parent_id:
             type: bigint
-            options: { unsigned: true, default: null, default: 0 }
+            options: { unsigned: true, default: null }
         user_id:
             type: bigint
             options: { length: 20, unsigned: true, default: 0 }
@@ -1049,13 +1049,6 @@ newsletters:
             primary: false
             unique:  false
             flags:   {}
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_newsletter]
-            primary: true
-            unique: true
-            flags: {  }
 opinions:
     columns:
         pk_opinion:

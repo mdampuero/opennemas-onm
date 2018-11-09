@@ -38,15 +38,13 @@ class ClientRepository extends BaseRepository
     public function find($id)
     {
         try {
-            $cr = $this->factory->get('customer');
+            $cr       = $this->factory->get('customer');
             $response = $cr::find($id);
 
             return new Client($this->converter->objectify($response));
         } catch (\Exception $e) {
             throw new EntityNotFoundException($this->metadata->name, $id, $e->getMessage());
         }
-
-        throw new EntityNotFoundException($this->metadata->name, $id);
     }
 
     /**
@@ -56,13 +54,15 @@ class ClientRepository extends BaseRepository
      * @param mixed   $clients  The clients from the previous repository.
      *
      * @return array The list of clients.
+     *
+     * @throws InvalidCriteriaException
      */
     public function findBy($criteria = null)
     {
         $bcriteria = $this->arrayToCriteria($criteria);
 
         try {
-            $cr = $this->factory->get('customer');
+            $cr       = $this->factory->get('customer');
             $response = $cr::search($bcriteria);
 
             $clients = [];

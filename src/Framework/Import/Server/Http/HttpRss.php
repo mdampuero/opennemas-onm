@@ -66,6 +66,8 @@ class HttpRss extends Http
      * Gets and returns the list of remote files.
      *
      * @return array The list of remote files.
+     *
+     * @throws \Exception
      */
     public function getRemoteFiles()
     {

@@ -12,7 +12,6 @@ namespace Framework\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CleanSmartyCacheCommand extends Command
@@ -29,6 +28,9 @@ class CleanSmartyCacheCommand extends Command
             );
     }
 
+    /**
+     * @return int|null
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $baseTmpInstancesPath = realpath(APP_PATH.'/../tmp/instances');
@@ -51,13 +53,12 @@ class CleanSmartyCacheCommand extends Command
                 $this->cleanCacheForTheme($output, $folder);
             }
         }
+
         $this->cleanCompileForTheme($output, $baseTmpInstancesPath);
     }
 
     /**
      * Cleans compile files for a theme
-     *
-     * @return void
      */
     private function cleanCompileForTheme($output, $baseTmpInstancesPath)
     {
@@ -74,8 +75,6 @@ class CleanSmartyCacheCommand extends Command
 
     /**
      * Cleans cache files for a theme
-     *
-     * @return void
      */
     private function cleanCacheForTheme($output, $themePath)
     {

@@ -72,7 +72,7 @@ orm:
                             options: { default: '', length: 20 }
                         parent_id:
                             type: bigint
-                            options: { default: null, unsigned: true, default: '0' }
+                            options: { default: null, unsigned: true }
                         user_id:
                             type: integer
                             options: { default: 0 }

@@ -24,8 +24,6 @@ class SearchController extends Controller
     /**
      * Handles the search form and shows the search contents
      *
-     * @return void
-     *
      * @Security("hasExtension('ADVANCED_SEARCH')
      *     and hasPermission('SEARCH_ADMIN')")
      */

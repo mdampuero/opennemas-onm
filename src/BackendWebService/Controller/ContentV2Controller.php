@@ -12,7 +12,6 @@ namespace BackendWebService\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Core\Controller\Controller;
 
 class ContentV2Controller extends ContentController
 {

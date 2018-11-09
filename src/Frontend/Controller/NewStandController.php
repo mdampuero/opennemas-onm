@@ -16,7 +16,6 @@ namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Common\Core\Controller\Controller;
 
@@ -29,24 +28,14 @@ class NewStandController extends Controller
 {
     /**
      * Common code for all the actions
-     *
-     * @return void
      */
     public function init()
     {
-        $this->cm = new \ContentManager();
-
-        // Esta variable no se utiliza?¿ Ni tp viene por .htaccess
-        // $subcategory_name = $this->request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
-        // solo se usa al cachear en show (tiene sentido?¿) Tp viene por .htaccess
-        // $page  = $this->request->query->getDigits('page', 1);
-        $this->category_name = $this->request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
-
+        $this->cm            = new \ContentManager();
+        $this->category_name = $this->get('request_stack')
+            ->getCurrentRequest()
+            ->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $this->view->assign([ 'actual_category' => $this->category_name, ]);
-
-        if (!defined('KIOSKO_DIR')) {
-            define('KIOSKO_DIR', "kiosko" . SS);
-        }
     }
 
     /**

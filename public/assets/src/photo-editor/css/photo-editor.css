@@ -271,7 +271,6 @@
 .photoEditor .photoEditorCrop {
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.8);
-  border-left-width: 1px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   cursor: move;
 }
@@ -382,7 +381,7 @@
 }
 /* All the same stuff for Firefox */
 .photoEditor input[type=range]::-moz-range-thumb {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0px 0px 1px #0d0d0d;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0 0 1px #0d0d0d;
   height: 24px;
   width: 24px;
   border-radius: 50%;
@@ -391,7 +390,7 @@
 }
 /* All the same stuff for IE */
 .photoEditor input[type=range]::-ms-thumb {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0px 0px 1px #0d0d0d;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0 0 1px #0d0d0d;
   height: 24px;
   width: 24px;
   border-radius: 50%;

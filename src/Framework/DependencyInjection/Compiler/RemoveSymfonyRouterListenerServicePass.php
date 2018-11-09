@@ -11,8 +11,6 @@ class RemoveSymfonyRouterListenerServicePass implements CompilerPassInterface
      * This will be replaced by our own router listener.
      *
      * @param ContainerBuilder $container The container builder
-     *
-     * @return void
      */
     public function process(ContainerBuilder $container)
     {

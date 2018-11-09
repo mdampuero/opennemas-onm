@@ -19,9 +19,9 @@ class ImageManager
     /**
      * It is responsible for calling by reference to any of the transformation methods available in the class.
      *
-     * @param string  $method     Name of the method to call (crop, thumbnail, zoomCrop, resize).
-     * @param Imagine $image      Image to transform.
-     * @param array   $parameters Parameters needed for the transformation method.
+     * @param string  $method  Name of the method to call (crop, thumbnail, zoomCrop, resize).
+     * @param \Imagine\Image\ImageInterface $image      Image to transform.
+     * @param array $parameters Parameters needed for the transformation method.
      *
      * @return Imagine the transformed image.
      */
@@ -37,10 +37,10 @@ class ImageManager
     /**
      * Performs the crop transformation.
      *
-     * @param Imagine $image      Image to transform.
+     * @param \Imagine\Image\ImageInterface $image      Image to transform.
      * @param array   $parameters Parameters needed for the transformation [topX, topY, width, height].
      *
-     * @return Imagine The transformed image.
+     * @return \Imagine\Image\ImageInterface The transformed image.
      */
     public function crop($image, array $parameters)
     {
@@ -58,11 +58,11 @@ class ImageManager
     /**
      * Performs the thumbnail transformation.
      *
-     * @param Imagine $image      Image to transform.
+     * @param \Imagine\Image\ImageInterface $image      Image to transform.
      * @param array   $parameters Parameters needed for the transformation [width, height, *type]
      *                             *type is not required.
      *
-     * @return Imagine The transformed image.
+     * @return \Imagine\Image\ImageInterface The transformed image.
      */
     public function thumbnail($image, array $parameters)
     {
@@ -83,10 +83,10 @@ class ImageManager
     /**
      * Performs the zoomCrop transformation.
      *
-     * @param Imagine $image      Image to transform.
+     * @param \Imagine\Image\ImageInterface $image      Image to transform.
      * @param array   $parameters Parameters needed for the transformation [width, height].
      *
-     * @return Imagine The transformed image.
+     * @return \Imagine\Image\ImageInterface The transformed image.
      */
     public function zoomCrop($image, array $parameters)
     {
@@ -128,10 +128,10 @@ class ImageManager
     /**
      * Performs the resize transformation.
      *
-     * @param Imagine $image      Image to transform.
+     * @param \Imagine\Image\ImageInterface $image      Image to transform.
      * @param array   $parameters Parameters needed for the transformation [width, height].
      *
-     * @return Imagine The transformed image.
+     * @return \Imagine\Image\ImageInterface The transformed image.
      */
     public function resize($image, array $parameters)
     {
@@ -144,7 +144,7 @@ class ImageManager
     /**
      * Performs the strip transformation.
      *
-     * @return Imagine the transformed image.
+     * @return \Imagine\Imagick\Image the transformed image.
      */
     public function strip($image)
     {
@@ -169,7 +169,7 @@ class ImageManager
      *
      * @param string $image path to the image.
      *
-     * @return Imagine recover from the filesystem.
+     * @return \Imagine\Imagick\Imagine recover from the filesystem.
      *
      * @codeCoverageIgnore
      */
@@ -180,6 +180,7 @@ class ImageManager
         }
 
         $imagine = new \Imagine\Imagick\Imagine();
+
         return $imagine->open($image);
     }
 
@@ -202,6 +203,8 @@ class ImageManager
      * @param int    box hegith.
      * @param string box mode.
      *
+     * @return \Imagine\Image\Box
+     *
      * @codeCoverageIgnore
      */
     public function getBox($widthResize, $heightResize, $mode = null)
@@ -214,6 +217,8 @@ class ImageManager
      *
      * @param int x point.
      * @param int y point.
+     *
+     * @return \Imagine\Image\Point
      *
      * @codeCoverageIgnore
      */

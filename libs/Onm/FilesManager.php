@@ -87,8 +87,6 @@ class FilesManager
      * Deletes a directory is it exists
      *
      * @param string $path the path to remove
-     *
-     * @return void
      */
     public function deleteDirectory($path)
     {

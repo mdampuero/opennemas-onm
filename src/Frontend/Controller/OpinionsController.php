@@ -22,13 +22,13 @@ class OpinionsController extends Controller
      *
      * @return Response The response object.
      */
-    public function frontpageAction()
+    public function frontpageAction(Request $request)
     {
         if (!$this->get('core.security')->hasExtension('OPINION_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
-        $page = $this->request->query->getDigits('page', 1);
+        $page = $request->query->getDigits('page', 1);
 
         // Setup templating cache layer
         $this->view->setConfig('opinion');
@@ -96,10 +96,11 @@ class OpinionsController extends Controller
 
                 if (count($contents) > 0) {
                     foreach ($contents as &$opinion) {
-                        if (isset($item->img1) && ($item->img1 > 0)) {
+                        // Little mess with $item and $opinion variables (undefined)
+                        if (isset($opinion->img1) && ($opinion->img1 > 0)) {
                             $contents[0]->img1 = $this
                                 ->get('entity_repository')
-                                ->find('Photo', $item->img1);
+                                ->find('Photo', $opinion->img1);
                         }
                     }
 
@@ -207,13 +208,13 @@ class OpinionsController extends Controller
      *
      * @return Response the response object
      */
-    public function extFrontpageAction()
+    public function extFrontpageAction(Request $request)
     {
         if (!$this->get('core.security')->hasExtension('OPINION_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
-        $page         = $this->request->query->getDigits('page', 1);
+        $page         = $request->query->getDigits('page', 1);
         $categoryName = 'opinion';
 
         // Setup templating cache layer
@@ -337,7 +338,7 @@ class OpinionsController extends Controller
         }
 
         $authorID = (int) $request->query->getDigits('author_id', null);
-        $page     = $this->request->query->getDigits('page', 1);
+        $page     = $request->query->getDigits('page', 1);
 
         if (empty($authorID)) {
             throw new ResourceNotFoundException();
@@ -788,7 +789,7 @@ class OpinionsController extends Controller
             || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
         ) {
             $this->cm = new \ContentManager();
-             $opinion = $this->cm->getUrlContent($wsUrl . '/ws/opinions/complete/' . $dirtyID, true);
+            $opinion  = $this->cm->getUrlContent($wsUrl . '/ws/opinions/complete/' . $dirtyID, true);
 
             if (is_string($opinion)) {
                 $opinion = @unserialize($opinion);
@@ -838,6 +839,8 @@ class OpinionsController extends Controller
      * Fetches the advertisement
      *
      * @param string $context the context to fetch ads from
+     *
+     * @return array
      *
      * TODO: Make this function non-static
      */

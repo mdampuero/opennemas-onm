@@ -10,10 +10,8 @@
 namespace Framework\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class InstancesListCommand extends ContainerAwareCommand
@@ -95,9 +93,7 @@ EOF
      * as parameter
      *
      * @param array $instances the list of Instance objects to show infor for
-     *
-     * @return void
-     **/
+     */
     private function printInstanceInfo($instances = [])
     {
         if (empty($instances)) {

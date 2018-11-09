@@ -47,10 +47,8 @@ class FrontpagesController extends Controller
             }
         }
 
-        $fvs = $this->get('api.service.frontpage_version');
-
         list($contentPositions, $contents, $invalidationDt, $lastSaved) =
-            $fvs->getPublicFrontpageData($categoryId);
+            $this->get('api.service.frontpage')->getCurrentVersionForCategory($categoryId);
 
         // Setup templating cache layer
         $this->view->setConfig('frontpages');
@@ -234,7 +232,7 @@ class FrontpagesController extends Controller
             if ($categoryName != 'home') {
                 // Redirect to home page if the desired category doesn't exist
                 if (empty($categoryName) || !$existsCategory) {
-                    throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+                    throw new ResourceNotFoundException();
                 }
             }
 

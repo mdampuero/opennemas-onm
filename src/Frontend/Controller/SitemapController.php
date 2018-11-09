@@ -40,7 +40,7 @@ class SitemapController extends Controller
     const EXTENSIONS = [
         'image' => [ 'IMAGE_MANAGER' ],
         'news'  => [ 'ARTICLE_MANAGER' ],
-        'tag'   => [ 'es.openhost.module.tagSitemap' ],
+        'tag'   => [ 'es.openhost.module.tagsSitemap' ],
         'video' => [ 'VIDEO_MANAGER' ],
         'web'   => [ 'ARTICLE_MANAGER', 'OPINION_MANAGER' ],
     ];
@@ -141,11 +141,16 @@ class SitemapController extends Controller
      */
     protected function generateTagSitemap()
     {
-        $tags = $this->get('api.service.tag')->getList(
-            'name regexp "^[a-zA-Z0-9]{1}.{1,29}$" order by name asc limit 10000'
-        );
+        $sql = 'SELECT DISTINCT(slug) FROM tags'
+            . ' WHERE slug REGEXP "^[a-zA-Z0-9]{1}.{1,29}$"'
+            . ' ORDER BY slug ASC';
 
-        $this->view->assign([ 'tags' => $tags['items'] ]);
+        $tags = $this->get('orm.connection.instance')->fetchAll($sql);
+        $tags = array_map(function ($a) {
+            return $a['slug'];
+        }, $tags);
+
+        $this->view->assign([ 'tags' => $tags ]);
     }
 
     /**
@@ -259,14 +264,13 @@ class SitemapController extends Controller
         ]);
 
         if ($format === 'xml.gz') {
-            $headers = [
+            $contents = gzencode($contents, 9);
+            $headers  = [
                 'Content-Type'        => 'application/x-gzip',
                 'Content-Length'      => strlen($contents),
                 'Content-Disposition' => 'attachment; filename="sitemap'
                     . $action . '.xml.gz"'
             ];
-
-            $contents = gzencode($contents, 9);
         }
 
         $headers = array_merge($headers, [

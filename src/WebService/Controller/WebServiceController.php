@@ -11,9 +11,7 @@ namespace WebService\Controller;
 
 use Luracast\Restler\Restler;
 use Luracast\Restler\Defaults;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Restler\OnmAuth;
 
 /**
  * Handles the actions for the web service
@@ -38,7 +36,7 @@ class WebServiceController extends Controller
 
         Defaults::$smartAutoRouting = false;
 
-        $r = new Restler();
+        $r            = new Restler();
         $r->container = $this->container;
         $r->setSupportedFormats('JsonFormat', 'XmlFormat');
         $r->addAPIClass('WebService\Handlers\Ads');
@@ -57,6 +55,5 @@ class WebServiceController extends Controller
         $r->addAuthenticationClass('Onm\Restler\OnmAuth');
 
         $r->handle();
-        return;
     }
 }

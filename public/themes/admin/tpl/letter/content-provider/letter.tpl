@@ -1,4 +1,4 @@
-<div data-content-id="{$content->id}" data-class="Letter" {getProperty item=$content category=$params['category'] property='bgcolor, title' style='true'}
+<div data-content-id="{$content->id}" data-class="{get_class($content)}" {getProperty item=$content category=$params['category'] property='bgcolor, title' style='true'} class="content-provider-element clearfix"
     data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
     data-title='{getProperty item=$content category=$params['category'] property='title'}'
     data-format ='{getProperty item=$content category=$params['category'] property='format'}'
@@ -9,7 +9,7 @@
           <label for="checkbox-{$content->id}"></label>
         </div>
         <div class="title">
-            <span class="type">{t}Texto{/t}</span>
+            <span class="type">{$content->content_type_l10n_name}</span>
              {$content->title}
         </div>
     </div>
@@ -21,7 +21,7 @@
             <i class="fa fa-cog"></i>
             <span class="caret"></span>
         </a>
-        <ul class="dropdown-menu pull-right">
+        <ul class="dropdown-menu pull-right dropdown-menu-right no-padding">
             <li>
                 <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=admin_opinion_show id=$content->id}">
                     <i class="fa fa-pencil"></i> {t}Edit{/t}

@@ -267,7 +267,7 @@ class CategoryController extends Controller
                 sprintf(_('Unable to find a category with the id "%d"'), $id)
             );
         } else {
-            $category->setInRss($status, $id);
+            $category->setInRss($status);
 
             dispatchEventWithParams('category.update', ['category' => $category]);
 

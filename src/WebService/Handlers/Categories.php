@@ -25,11 +25,10 @@ class Categories
     public function allContent($n1)
     {
         $this->validateInt(func_get_args());
-        $cm = new \ContentManager();
 
-        list($frontpageVersion, $contentPositions, $categoryContents) =
+        list(, , $categoryContents) =
             getService('api.service.frontpage_version')
-                ->getPublicContentsForFrontpageData($n1);
+                ->getContentsInCurrentVersionforCategory($n1);
 
         return $categoryContents;
     }

@@ -145,7 +145,7 @@
                     </li>
                     <li class="divider visible-md visible-sm"></li>
                     <li class="visible-md visible-sm">
-                      <a href="#">
+                      <a href="#" ng-click="saveLiveNow()">
                         <i class="fa fa-toggle-off"></i>
                         {t}Live now{/t}
                       </a>
@@ -226,7 +226,7 @@
                 <span class="fa fa-calendar"></span>
               </span>
             </li>
-            <li class="quicklinks hidden-md hidden-sm hidden-xs">
+            <li class="quicklinks hidden-sm hidden-xs">
               <a class="btn btn-white" href="#" ng-click="saveLiveNow()">
                 <span class="fa fa-toggle-off"></span> <span>{t}Live now{/t}</span>
               </a>

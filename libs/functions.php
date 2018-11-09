@@ -157,11 +157,12 @@ function getUserRealIP()
 
         $entries = preg_split('@[, ]@', $_SERVER['HTTP_X_FORWARDED_FOR']);
 
-        reset($entries);
-        while (list(, $entry) = each($entries)) {
+
+        foreach ($entries as $entry) {
             $entry = trim($entry);
+
+            // http://www.faqs.org/rfcs/rfc1918.html
             if (preg_match("/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/", $entry, $ipList)) {
-                // http://www.faqs.org/rfcs/rfc1918.html
                 $privateIp = [
                     '/^0\./',
                     '/^127\.0\.0\.1/',
@@ -295,7 +296,7 @@ function generatePiwikAmpCode($config)
 {
     $imgCode = '<amp-pixel src="%spiwik.php?idsite=%d&amp;rec=1&amp;action_name=AMP" layout="nodisplay"></amp-pixel>';
 
-    $code .= sprintf(
+    $code = sprintf(
         $imgCode,
         preg_replace("/^https?:/", "", $config['server_url']),
         $config['page_id']
@@ -309,7 +310,7 @@ function generatePiwikImageCode($config)
     $imgCode = '<img src="%spiwik.php?idsite=%d&amp;rec=1&amp;'
         . 'action_name=Newsletter&amp;url=%s" style="border:0; height:0; width:0" alt="" />';
 
-    $code .= sprintf(
+    $code = sprintf(
         $imgCode,
         $config['server_url'],
         $config['page_id'],

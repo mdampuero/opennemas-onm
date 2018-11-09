@@ -59,6 +59,7 @@ services:
     external.act_on.factory:
         class:     'Common\External\ActOn\Component\Factory\ActOnFactory'
         arguments: [ '@service_container', '%external.act_on%' ]
+        public: true
 
     external.act_on.http_client:
         class:   'GuzzleHttp\Client'

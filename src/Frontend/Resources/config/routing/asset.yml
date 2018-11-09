@@ -6,7 +6,7 @@ frontend_css_global:
 
 frontend_css_frontpage_category:
     path: dynamic/css/frontpage/{category}.{cb}.css
-    defaults: { _controller: FrontendBundle:Asset:customCssFrontpage, category: home, cb:12345 }
+    defaults: { _controller: FrontendBundle:Asset:customCssFrontpage, category: home, cb: 12345 }
     requirements:
         category : '[^/]+'
         cb : '[0-9]+'

@@ -31,7 +31,7 @@ class NewsletterController extends Controller
      * @return Response the response given to the user
      *
      * @Security("hasExtension('NEWSLETTER_MANAGER')")
-     **/
+     */
     public function showAction($id = null)
     {
         $item = $this->get('api.service.newsletter')->getItem($id);
@@ -174,8 +174,6 @@ class NewsletterController extends Controller
 
     /**
      * Returns the advertisements for the subscription page
-     *
-     * @return void
      */
     public function getAds()
     {

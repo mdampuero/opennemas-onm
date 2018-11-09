@@ -29,8 +29,9 @@ class AlbumsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->categoryName = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $this->page         = $this->request->query->getDigits('page', 1);
+        $request             = $this->get('request_stack')->getCurrentRequest();
+        $this->categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $this->page         = $request->query->getDigits('page', 1);
 
         if (!empty($this->categoryName) && $this->categoryName != 'home') {
             $category = $this->get('category_repository')->findBy(
@@ -91,7 +92,6 @@ class AlbumsController extends Controller
             $itemsPerPage  = isset($albumSettings['total_front']) ? $albumSettings['total_front'] : 8;
             $orderBy       = isset($albumSettings['orderFrontpage']) ? $albumSettings['orderFrontpage'] : 'created';
 
-            $order   = [ 'starttime DESC' ];
             $filters = [
                 'content_type_name' => [[ 'value' => 'album' ]],
                 'content_status'    => [[ 'value' => 1 ]],
@@ -285,7 +285,7 @@ class AlbumsController extends Controller
         $albumPhotos      = $album->_getAttachedPhotos($album->id);
         $albumPhotosPaged = $album->getAttachedPhotosPaged($album->id, 8, $page);
 
-        if (count($_albumArrayPaged) > $itemsPage) {
+        if (count($albumPhotosPaged) > $itemsPage) {
             array_pop($_albumArrayPaged);
         }
 

@@ -136,7 +136,7 @@ class ClientRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests findBy when the search criteria is invalid.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidCriteriaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidCriteriaException
      */
     public function testFindByWithError()
     {

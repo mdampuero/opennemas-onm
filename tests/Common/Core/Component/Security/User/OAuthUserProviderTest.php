@@ -176,7 +176,7 @@ class OAuthUserProviderTest extends \PHPUnit\Framework\TestCase
      * Test loadUserByOAuthUserResponse when no user found basing on the
      * response from resource.
      *
-     * @expectedException Symfony\Component\Security\Core\Exception\UsernameNotFoundException
+     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      */
     public function testLoadUserByOAuthUserResponseWhenErrorWhileConnecting()
     {

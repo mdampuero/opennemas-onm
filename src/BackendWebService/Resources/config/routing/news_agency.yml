@@ -1,17 +1,17 @@
 backend_ws_news_agency_import:
     path:     /news-agency/import
-    defaults: { _controller  : BackendWebServiceBundle:NewsAgency:import }
+    defaults: { _controller: BackendWebServiceBundle:NewsAgency:import }
     options:
         expose: true
 
 backend_ws_news_agency_list:
     path:     /news-agency
-    defaults: { _controller  : BackendWebServiceBundle:NewsAgency:list }
+    defaults: { _controller: BackendWebServiceBundle:NewsAgency:list }
     options:
         expose: true
 
 backend_ws_news_agency_show_image:
     path:     /news-agency/{source}/{id}
-    defaults: { _controller  : BackendWebServiceBundle:NewsAgency:showImage }
+    defaults: { _controller: BackendWebServiceBundle:NewsAgency:showImage }
     options:
         expose: true

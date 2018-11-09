@@ -10,7 +10,6 @@
 namespace Backend\Controller;
 
 use Common\Core\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 class NotificationController extends Controller
 {

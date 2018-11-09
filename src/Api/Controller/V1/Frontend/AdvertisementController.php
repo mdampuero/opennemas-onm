@@ -23,6 +23,8 @@ class AdvertisementController extends Controller
     /**
      * List advertisements for requested positions.
      *
+     * @param Request $request the request object
+     *
      * @return JsonResponse The list of advertisements.
      */
     public function listAction(Request $request)
@@ -39,7 +41,7 @@ class AdvertisementController extends Controller
             if (empty($element->content_status)
                 || (!empty($element->endtime) && $element->endtime < $date)
             ) {
-                return;
+                return null;
             }
 
             return $this->normalizeAdObject($element);
@@ -108,7 +110,7 @@ class AdvertisementController extends Controller
      *
      * @param integer $id The advertisement id.
      *
-     * @return Advertisement The advertisement.
+     * @return \Advertisement|null The advertisement.
      */
     protected function getAdvertisement($id)
     {
@@ -159,7 +161,7 @@ class AdvertisementController extends Controller
     /**
      * Returns the current advertisement format.
      *
-     * @param Advertisement $advertisement The advertisement object.
+     * @param \Advertisement $advertisement The advertisement object.
      *
      * @return string The current advertisement format.
      */
@@ -190,7 +192,7 @@ class AdvertisementController extends Controller
     /**
      * Returns the list of tags basing on an advertisement.
      *
-     * @param Advertisement $advertisement The advertisement object.
+     * @param \Advertisement $advertisement The advertisement object.
      * @param Instance      $instance      The current instance.
      *
      * @return string The list of tags.
@@ -243,9 +245,9 @@ class AdvertisementController extends Controller
     /**
      * Returns a normalized advertisement.
      *
-     * @param Advertisement $element The advertisement object.
+     * @param \Advertisement $element The advertisement object.
      *
-     * @return StdClass The normalized advertisement.
+     * @return \StdClass The normalized advertisement.
      */
     protected function normalizeAdObject($element)
     {

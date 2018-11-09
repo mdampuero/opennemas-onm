@@ -9,13 +9,6 @@
  */
 namespace Api\Service\V1;
 
-use Api\Exception\CreateExistingItemException;
-use Api\Exception\CreateItemException;
-use Api\Exception\DeleteItemException;
-use Api\Exception\DeleteListException;
-use Api\Exception\GetItemException;
-use Api\Exception\UpdateItemException;
-use Common\ORM\Core\Exception\EntityNotFoundException;
 
 class NewsletterService extends OrmService
 {

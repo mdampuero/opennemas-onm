@@ -10,7 +10,7 @@
 namespace Framework\Controller;
 
 use Common\Core\Controller\Controller;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Handles all the request for Welcome actions
@@ -27,10 +27,10 @@ class ErrorController extends Controller
      *
      * @return string the response string
      */
-    public function defaultAction()
+    public function defaultAction(Request $request)
     {
         global $error;
-        $error = unserialize($this->request->get('error'));
+        $error = unserialize($request->get('error'));
 
         if ($this->container->hasParameter('environment')
             && $this->container->getParameter('environment') == 'development'

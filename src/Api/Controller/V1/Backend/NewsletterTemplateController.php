@@ -13,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Intl;
 
 /**
  * Lists and displays newsletters.
@@ -231,7 +230,7 @@ class NewsletterTemplateController extends Controller
      * @param array $values the RAW values to clean
      *
      * @return array the cleaned values
-     **/
+     */
     public function parseValues($values)
     {
         if (!is_array($values['schedule']['hours'])) {

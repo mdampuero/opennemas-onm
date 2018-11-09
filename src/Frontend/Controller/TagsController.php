@@ -22,7 +22,7 @@ class TagsController extends Controller
     /**
      * Displays a list of tags.
      *
-     * @return Response The response object.
+     * @return \Symfony\Component\HttpFoundation\Response The response object.
      */
     public function indexAction()
     {
@@ -78,10 +78,13 @@ class TagsController extends Controller
     /**
      * Shows a paginated list of contents for a given tag name.
      *
+     * @return \Symfony\Component\HttpFoundation\Response The response object.
+     *
      * @return Response The response object.
      */
-    public function tagsAction(Request $request, $slug)
+    public function tagsAction(Request $request)
     {
+        $slug = $request->get('slug', null);
         $page = $request->query->getDigits('page', 1);
         $page = $page > 1 ? 2 : 1;
 

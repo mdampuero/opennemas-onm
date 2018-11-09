@@ -12,7 +12,6 @@ namespace Framework\Tests\ORM\FreshBooks\Repository;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Client;
 use Common\ORM\FreshBooks\Repository\ClientRepository;
-use Freshbooks\FreshBooksApi;
 
 /**
  * Defines test cases for ClientRepository class.
@@ -82,7 +81,7 @@ class ClientRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests find when API call fails.
      *
-     * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testFindWithInvalidId()
     {
@@ -130,7 +129,7 @@ class ClientRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests findBy when the search criteria is invalid.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidCriteriaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidCriteriaException
      */
     public function testFindByWithInvalidCriteria()
     {

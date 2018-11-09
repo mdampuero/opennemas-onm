@@ -23,35 +23,35 @@ class Book extends Content
      *
      * @var int
      */
-    public $pk_book  = null;
+    public $pk_book = null;
 
     /**
      * The author id that created this book
      *
      * @var int
      */
-    public $author  = null;
+    public $author = null;
 
     /**
      * The id of the cover image
      *
      * @var string
      */
-    public $cover_id  = null;
+    public $cover_id = null;
 
     /**
      * The editorial of the book
      *
      * @var string
      */
-    public $editorial  = null;
+    public $editorial = null;
 
     /**
      * Initializes the book instance given an id
      *
      * @param int $id the book id to load
      *
-     * @return Book The book object instance
+     * @return \Book The book object instance
      */
     public function __construct($id = null)
     {
@@ -72,44 +72,38 @@ class Book extends Content
         switch ($name) {
             case 'uri':
                 if (empty($this->category_name)) {
-                    $this->category_name = $this->loadCategoryName($this->pk_content);
+                    $this->category_name = $this->loadCategoryName();
                 }
-                $uri =  Uri::generate(
+                $uri = Uri::generate(
                     'book',
-                    array(
+                    [
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
                         'slug'     => urlencode($this->slug),
                         'category' => urlencode($this->category_name),
-                    )
+                    ]
                 );
 
                 return ($uri !== '') ? $uri : $this->permalink;
-
-                break;
             default:
                 return parent::__get($name);
-                break;
         }
-
     }
 
     /**
      * Overloads the object properties with an array of the new ones
      *
      * @param array $properties the list of properties to load
-     *
-     * @return void
      */
     public function load($properties)
     {
         parent::load($properties);
 
         if (array_key_exists('pk_book', $properties)) {
-            $this->pk_book   = (int) $properties['pk_book'];
+            $this->pk_book = (int) $properties['pk_book'];
         }
         if (array_key_exists('cover_id', $properties)) {
-            $this->cover_id   = (int) $properties['cover_id'];
+            $this->cover_id  = (int) $properties['cover_id'];
             $this->cover_img = getService('entity_repository')->find('Photo', $properties['cover_id']);
         }
     }
@@ -119,17 +113,19 @@ class Book extends Content
      *
      * @param int $id the book id to load
      *
-     * @return Book the Book object instance
+     * @return null|boolean|\Book the Book object instance
      */
     public function read($id)
     {
         // If no valid id then return
-        if (((int) $id) <= 0) return;
+        if (((int) $id) <= 0) {
+            return null;
+        }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
-                .'LEFT JOIN books ON pk_content = pk_book WHERE pk_content = ?',
+                . 'LEFT JOIN books ON pk_content = pk_book WHERE pk_content = ?',
                 [ $id ]
             );
 
@@ -142,6 +138,7 @@ class Book extends Content
             return $this;
         } catch (\Exception $e) {
             error_log($e->getMessage());
+
             return false;
         }
     }
@@ -151,8 +148,7 @@ class Book extends Content
      *
      * @param array $data an array that contains the book information
      *
-     * @return int the book id
-     * @return boolean false if the book was not created
+     * @return int|boolean false if the book was not created
      */
     public function create($data)
     {
@@ -209,7 +205,6 @@ class Book extends Content
             $this->load($data);
 
             return $this;
-
         } catch (\Exception $e) {
             error_log($e->getMessage());
             return false;

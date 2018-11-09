@@ -1,8 +1,11 @@
 <?php
-/*
- * -------------------------------------------------------------
- * File: function.meta_validation_tradedoubler.php
- * -------------------------------------------------------------
+/**
+ * Returns the tradedoubler meta tag
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_function_meta_validation_tradedoubler($params, &$smarty)
 {

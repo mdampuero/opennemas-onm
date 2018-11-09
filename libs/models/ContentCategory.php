@@ -213,6 +213,8 @@ class ContentCategory implements \JsonSerializable
      * Fetches all the information of a category into the object.
      *
      * @param string $id the category id.
+     *
+     * @return null|boolean
      */
     public function read($id)
     {
@@ -229,8 +231,11 @@ class ContentCategory implements \JsonSerializable
             $this->load($rs);
 
             $this->id = $this->pk_content_category;
+
+            return true;
         } catch (\Exception $e) {
             getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -342,7 +347,7 @@ class ContentCategory implements \JsonSerializable
         $conn = getService('dbal_connection');
         try {
             $conn->beginTransaction();
-            $rs = $conn->update(
+            $conn->update(
                 'content_categories',
                 [
                     'title'               => $data['title'],
@@ -359,7 +364,7 @@ class ContentCategory implements \JsonSerializable
 
             if ($data['subcategory']) {
                 // We look at subcategories and wee add them to their parent
-                $rs = $conn->update(
+                $conn->update(
                     'content_categories',
                     [ 'fk_content_category' => $data['subcategory'] ],
                     [ 'fk_content_category' => $data['id'] ]
@@ -367,12 +372,15 @@ class ContentCategory implements \JsonSerializable
             }
 
             $conn->commit();
+
             dispatchEventWithParams('category.update', ['category' => $this]);
 
             return true;
         } catch (\Exception $e) {
             getService('error.log')->error($e->getTraceAsString());
+
             $conn->rollBack();
+
             return false;
         }
     }
@@ -481,6 +489,8 @@ class ContentCategory implements \JsonSerializable
      * Changes the menu status (shown, hidden) for the category.
      *
      * @param string $status the status to set to the category.
+     *
+     * @return boolean
      */
     public function setAvailable($status)
     {
@@ -500,10 +510,12 @@ class ContentCategory implements \JsonSerializable
             }
 
             dispatchEventWithParams('category.update', [ 'category' => $this ]);
+
             return true;
         } catch (\Exception $e) {
             $logger = getService('error.log');
             $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
+
             return false;
         }
     }
@@ -512,6 +524,8 @@ class ContentCategory implements \JsonSerializable
      * Changes the rss status (shown, hidden) for the category.
      *
      * @param string $status the status to set to the category rss.
+     *
+     * @return boolean
      */
     public function setInRss($status)
     {

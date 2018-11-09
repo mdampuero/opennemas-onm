@@ -11,6 +11,7 @@ namespace Frontend\EventListener;
 
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -24,14 +25,14 @@ class AuthenticationListener implements EventSubscriberInterface
     /**
      * The service container.
      *
-     * @param ServiceContainer
+     * @param \Symfony\Component\DependencyInjection\Container
      */
     protected $container;
 
     /**
      * Initializes the AuthenticationListener.
      *
-     * @param ServiceContainer $container The service container.
+     * @param \Symfony\Component\DependencyInjection\Container $container The service container.
      */
     public function __construct($container)
     {
@@ -42,11 +43,13 @@ class AuthenticationListener implements EventSubscriberInterface
      * Loads an instance basing on the request.
      *
      * @param FilterResponseEvent $event The event object.
+     *
+     * @return Response
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
         if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
-            return;
+            return null;
         }
 
         $response = $event->getResponse();

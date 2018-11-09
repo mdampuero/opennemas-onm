@@ -19,6 +19,13 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 class BrandCollector extends DataCollector
 {
     /**
+     * The path to the json file to read
+     *
+     * @var string
+     */
+    public $path;
+
+    /**
      * Initiliazates the BrandCollector.
      *
      * @param string $root The path to kernel root directory.
@@ -71,5 +78,10 @@ class BrandCollector extends DataCollector
     protected function getMetadata()
     {
         return json_decode(file_get_contents($this->path), true);
+    }
+
+    public function reset()
+    {
+        $this->data = [];
     }
 }

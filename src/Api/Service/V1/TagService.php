@@ -205,7 +205,7 @@ class TagService extends OrmService
         $slugs = $this->createSearchableWord($arr);
 
 
-        return \Tag::getTagsBySlug($slugs, $languageId, $limit);
+        return \Tag::getTagsBySlug($slugs, $languageId);
     }
 
     /**

@@ -9,7 +9,6 @@
  */
 namespace ManagerWebService\EventListener;
 
-use Common\Core\Component\Security\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -25,14 +24,14 @@ class AuthenticationListener implements EventSubscriberInterface
     /**
      * The service container.
      *
-     * @param ServiceContainer
+     * @param \Symfony\Component\DependencyInjection\Container
      */
     protected $container;
 
     /**
      * Initializes the SecurityListener.
      *
-     * @param ServiceContainer $container The service container.
+     * @param \Symfony\Component\DependencyInjection\Container $container The service container.
      */
     public function __construct($container)
     {
@@ -44,11 +43,13 @@ class AuthenticationListener implements EventSubscriberInterface
      * Loads an instance basing on the request.
      *
      * @param FilterResponseEvent $event The event object.
+     *
+     * @return Response|null
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
         if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
-            return;
+            return null;
         }
 
         $response = $event->getResponse();

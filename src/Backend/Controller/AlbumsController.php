@@ -9,10 +9,10 @@
  */
 namespace Backend\Controller;
 
-use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
+use Common\Core\Annotation\Security;
 
 /**
  * Handles the actions for the system information
@@ -316,13 +316,22 @@ class AlbumsController extends Controller
             'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
-        $album->update($data);
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            _("Album updated successfully.")
-        );
+        if ($album->update($data)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _("Album updated successfully.")
+            );
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("There was a problem while updating the content.")
+            );
+        }
 
-        return $this->redirect($this->generateUrl('admin_album_show', [ 'id' => $album->id ]));
+        return $this->redirect($this->generateUrl(
+            'admin_album_show',
+            [ 'id' => $album->id ]
+        ));
     }
 
     /**
@@ -481,7 +490,7 @@ class AlbumsController extends Controller
     {
         $ds = $this->get('orm.manager')->getDataSet('Settings');
 
-        if ('POST' !== $this->request->getMethod()) {
+        if ('POST' !== $request->getMethod()) {
             return $this->render('album/config.tpl', [
                 'configs' => $ds->get([ 'album_settings' ])
             ]);

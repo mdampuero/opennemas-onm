@@ -32,7 +32,8 @@ class PollsController extends Controller
     public function init()
     {
         $contentType = \ContentManager::getContentTypeIdFromName('poll');
-        $category    = $this->request->query->filter(INPUT_GET, 0, FILTER_SANITIZE_STRING);
+        $category    = $this->get('request_stack')->getCurrentRequest()
+            ->query->filter(INPUT_GET, 0, FILTER_SANITIZE_STRING);
         $ccm         = \ContentCategoryManager::get_instance();
 
         list($this->parentCategories, $this->subcat, $this->categoryData) =
@@ -207,14 +208,14 @@ class PollsController extends Controller
 
         $poll = new \Poll($id);
         // Check empty data
-        if ($poll->id == null) {
+        if (empty($poll->id)) {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 sprintf(_('Unable to find a poll with the id "%s".'), $id)
             );
 
             return $this->redirect(
-                $this->generateUrl('admin_polls', [ 'category' => $data['category'] ])
+                $this->generateUrl('admin_polls')
             );
         }
 

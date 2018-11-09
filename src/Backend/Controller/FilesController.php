@@ -174,10 +174,10 @@ class FilesController extends Controller
                         continue;
                     }
                     foreach ($sub_files[$ind][0] as $value) {
-                        if ($v->pk_content_category != $ccm->get_id($ccm->getFather($value->catName))) {
+                        if ($v->pk_content_category != $this->ccm->get_id($this->ccm->getFather($value->catName))) {
                             continue;
                         }
-                        if ($ccm->get_id($ccm->getFather($value->catName))) {
+                        if ($this->ccm->get_id($this->ccm->getFather($value->catName))) {
                             $sub_size[$k][$ind] += filesize(MEDIA_PATH . '/' . FILE_DIR . '/' . $value->path);
                         }
                     }

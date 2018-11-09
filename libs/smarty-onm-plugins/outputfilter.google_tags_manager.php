@@ -1,12 +1,11 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     outputfilter.google_tags_manager.php
- * Type:     outputfilter
- * Name:     google_tags_manager
- * Purpose:  Prints Google Analytics code
- * -------------------------------------------------------------
+/**
+ * Prints Google Analytics code
+ *
+ * @param string $output
+ * @param \Smarty $smarty
+ *
+ * @return string
  */
 function smarty_outputfilter_google_tags_manager($output, $smarty)
 {

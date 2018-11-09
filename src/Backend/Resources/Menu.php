@@ -207,10 +207,10 @@ $menuXml = [
                 'privilege'   => 'ALBUM_ADMIN',
             ],
             [
-                'id'          => 'kiosko_manager',
+                'id'          => 'newsstand_manager',
                 'title'       => _('News Stand'),
                 'icon'        => 'fa fa-newspaper-o',
-                'link'        => url('admin_kioskos'),
+                'link'        => url('backend_newsstands'),
                 'module_name' => 'KIOSKO_MANAGER',
                 'privilege'   => 'KIOSKO_ADMIN',
             ],
@@ -332,7 +332,7 @@ $menuXml = [
                 'icon'        => 'fa fa-exchange',
                 'link'        => url('admin_instance_sync'),
                 'module_name' => 'SYNC_MANAGER',
-                'privilege'   => 'SYNC_ADMIN',
+                'privilege'   => 'INSTANCE_SYNC_ADMIN',
             ],
             [
                 'id'          => 'news_agency',

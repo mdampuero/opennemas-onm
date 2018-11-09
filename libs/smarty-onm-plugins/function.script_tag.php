@@ -1,12 +1,11 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     function.script_tag.php
- * Type:     function
- * Name:     script_tag
- * Purpose:  Returns the URL for a script.
- * -------------------------------------------------------------
+/**
+ * Returns the URL for a script.
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_function_script_tag($params, &$smarty)
 {
@@ -15,7 +14,6 @@ function smarty_function_script_tag($params, &$smarty)
         return;
     }
 
-    $output = '';
     $src    = $params['src'];
     $mtime  = DEPLOYED_AT;
     $server = '';
@@ -26,7 +24,8 @@ function smarty_function_script_tag($params, &$smarty)
         $server = DS . 'assets' . DS . 'js' . DS;
 
         if (!array_key_exists('common', $params)) {
-            $basepath = $params['basepath'] ? : DS . 'js';
+            $basepath = (array_key_exists('basepath', $params)
+                && $params['basepath']) ? : DS . 'js';
             $server   = DS . $smarty->getTheme()->path . DS . $basepath;
             $mtime    = THEMES_DEPLOYED_AT;
         }

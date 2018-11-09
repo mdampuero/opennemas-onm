@@ -10,7 +10,6 @@
 namespace Framework\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -84,6 +83,8 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      *
      * @param InputInterface  $input  An InputInterface instance.
      * @param OutputInterface $output An OutputInterface instance.
+     *
+     * @return int|null
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -134,7 +135,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
 
         if (count($instances) == 0) {
             $output->writeln('No instances');
-            return;
+            return 1;
         }
 
         foreach ($instances as $instance) {
@@ -155,6 +156,9 @@ class InstancesUpdateCommand extends ContainerAwareCommand
                 );
             }
         }
+
+        // No errors
+        return 0;
     }
 
     /**
@@ -162,6 +166,8 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      *
      * @param  Instance $i       The instance.
      * @param  array    $options Whether to get the Alexa's rank.
+     *
+     * @return boolean
      */
     private function getInstanceInfo(&$i, $options)
     {
@@ -255,8 +261,6 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      * Fetches the instance stats ()
      *
      * @param Instance $i The instance to get stats from
-     *
-     * @return void
      */
     public function getInstanceStats(&$i)
     {
@@ -359,7 +363,6 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      * Fetches the date of creation of the instance
      *
      * @param Instance $i The instance to get stats from
-     * @return void
      */
     public function getCreatedDate(&$i)
     {
@@ -379,8 +382,6 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      * Caculates the amount of Mb that an instance has
      *
      * @param Instance $i The instance to get stats from
-     *
-     * @return void
      */
     public function getMediaSize(&$i)
     {

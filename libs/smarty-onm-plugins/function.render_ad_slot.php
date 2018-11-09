@@ -5,7 +5,7 @@
  * @param array    $params The list of parameters.
  * @param Template $tpl    The template object.
  */
-function smarty_insert_renderbanner($params, $smarty)
+function smarty_function_render_ad_slot($params, $smarty)
 {
     $safeframeEnabled = $smarty->getContainer()
         ->get('orm.manager')
@@ -13,12 +13,12 @@ function smarty_insert_renderbanner($params, $smarty)
         ->get('ads_settings')['safe_frame'];
 
     $tpl    = '<div class="ad-slot oat%s">%s</div>';
-    $class  = '" data-type="' . $params['type'];
+    $class  = '" data-position="' . $params['position'];
     $format = 'safeframe';
 
-    // Filter advertisement by type/position
+    // Filter advertisement by position
     if (array_key_exists('ads_positions', $smarty->tpl_vars)
-        && !in_array($params['type'], $smarty->tpl_vars['ads_positions']->value)) {
+        && !in_array($params['position'], $smarty->tpl_vars['ads_positions']->value)) {
         return '';
     }
 
@@ -37,16 +37,16 @@ function smarty_insert_renderbanner($params, $smarty)
         return sprintf($tpl, $class, '');
     }
 
-    $ads  = $smarty->tpl_vars['advertisements']->value;
-    $type = $params['type'];
+    $ads    = $smarty->tpl_vars['advertisements']->value;
+    $slotId = $params['position'];
 
     if (!is_array($ads)) {
         return '';
     }
 
-    $ads = array_filter($ads, function ($ad) use ($type) {
+    $ads = array_filter($ads, function ($ad) use ($slotId) {
         return is_array($ad->positions)
-            && in_array($type, $ad->positions)
+            && in_array($slotId, $ad->positions)
             && $ad->isInTime();
     });
 

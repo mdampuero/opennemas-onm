@@ -1,10 +1,4 @@
 <?php
-/*
- * -------------------------------------------------------------
- * File:        function.get_social_link.php
- * Fetches from settings the selected social link and returns the url
- * -------------------------------------------------------------
- */
 function smarty_function_get_social_link($params, &$smarty)
 {
     if (!array_key_exists('page', $params)

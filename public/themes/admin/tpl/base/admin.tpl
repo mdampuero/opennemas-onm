@@ -48,7 +48,6 @@
       @Common/src/angular-onm-pagination/less/main.less,
       @Common/src/angular-tag/less/main.less,
       @Common/src/sidebar/less/main.less,
-      @Common/src/opennemas-webarch/css/layout/*,
       @Common/src/photo-editor/css/photo-editor.css,
       @Common/src/opennemas-webarch/less/main.less" filters="cssrewrite,less" output="common"}
     {/stylesheets}
@@ -90,13 +89,13 @@
     </script>
   {/block}
 </head>
-<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session._sf2_attributes.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}', '{t}Any{/t}')" >
+<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if array_key_exists('sidebar_pinned', $smarty.session) && $smarty.session._sf2_attributes.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}', '{t}Any{/t}')" >
   {block name="body"}
     <div class="overlay"></div>
     {block name="header"}
     <header class="header navbar navbar-inverse" ng-controller="NotificationCtrl" ng-init="{block name="ng-init"}{/block}getLatest()">
       <div class="navbar-inner">
-        {if !in_array('es.openhost.module.whiteLabel', $app.instance->activated_modules)}
+        {if is_array($app.instance->activated_modules) && !in_array('es.openhost.module.whiteLabel', $app.instance->activated_modules)}
         <div class="header-seperation">
           <a class="header-logo pull-left" href="{url name=admin_welcome}">
             <h1>
@@ -220,7 +219,7 @@
                       {is_module_activated name="KIOSKO_MANAGER"}
                         {acl isAllowed="KIOSKO_CREATE"}
                           <div class="quick-item">
-                            <a href="{url name=admin_kiosko_create}">
+                            <a href="{url name=backend_newsstand_create}">
                               <i class="fa fa-newspaper-o"></i>
                               <span class="title">{t}News Stand{/t}</span>
                             </a>
@@ -266,12 +265,12 @@
                       </li>
                       <li>
                         <a href="{url name=admin_cache_manager_clearcache}">
-                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove cache</span>
+                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove smarty cache</span>
                         </a>
                       </li>
                       <li>
                         <a href="{url name=admin_cache_manager_clearcompiled}">
-                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove compiles</span>
+                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove smarty compiles</span>
                         </a>
                       </li>
                       <li>
@@ -567,6 +566,7 @@
       @Common/src/fablock/fablock.js,
       @Common/src/angular-autoform/js/*,
       @Common/src/angular-bootstrap-multiselect/template.js,
+      @Common/src/angular-category-selector/js/onm-category-selector.js,
       @Common/src/angular-fly-to-cart/js/fly-to-cart.js,
       @Common/src/angular-image-preview/js/image-preview.js,
       @Common/src/angular-localize/localize.js,

@@ -9,7 +9,6 @@
  */
 namespace Framework\Import\Parser\NewsML\NewsMLComponent;
 
-use Framework\Import\Resource\Resource;
 
 /**
  * Parses NewsComponent of text type from NewsML custom format for EFE.
