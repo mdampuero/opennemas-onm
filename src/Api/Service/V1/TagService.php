@@ -167,18 +167,18 @@ class TagService extends OrmService
 
         $slugs = $this->createSearchableWord($arr);
 
-        return $this->getTagBySlug($slugs, $languageId);
+        return $this->getListBySlugs($slugs, $languageId);
     }
 
     /**
-     *  Get all tags by the exact slug
+     * Returns a list of tags basing on a list of slugs.
      *
-     * @param mixed  $slugs      slugs to check
-     * @param string $languageId Language id to search for it
+     * @param array  $slugs  The list of slugs.
+     * @param string $locale The locale id.
      *
-     * @return array tags for this slugs
+     * @return array The list of tags.
      */
-    public function getTagBySlug($slugs, $languageId = null, $limit = 25)
+    public function getListBySlugs($slugs, $locale = null, $limit = 25)
     {
         if (empty($slugs)) {
             return ['items' => []];
@@ -190,8 +190,8 @@ class TagService extends OrmService
 
         $oql = 'slug' . $oql . ' limit ' . $limit;
 
-        if (!empty($languageId)) {
-            $oql = 'language_id = "' . $languageId . '" and ' . $oql;
+        if (!empty($locale)) {
+            $oql = 'language_id = "' . $locale . '" and ' . $oql;
         }
 
         return $this->getList($oql);
@@ -220,7 +220,7 @@ class TagService extends OrmService
 
         $arr = $this->createSearchableWord($arr);
 
-        $findTags = $this->getTagBySlug($arr, $languageId, 1);
+        $findTags = $this->getListBySlugs($arr, $languageId, 1);
 
         foreach ($findTags['items'] as $tagAux) {
             if ($tag == $tagAux->name) {
@@ -252,7 +252,7 @@ class TagService extends OrmService
 
         $slugs = $this->createSearchableWord($validTags);
 
-        $recoverTags = $this->getTagBySlug($slugs, $locale);
+        $recoverTags = $this->getListBySlugs($slugs, $locale);
 
         if (count($recoverTags['items']) == 25) {
             return $recoverTags['items'];
