@@ -26,6 +26,18 @@ class UrlController extends ApiController
     /**
      * {@inheritdoc}
      */
+    protected $permissions = [
+        'create' => 'MASTER',
+        'delete' => 'MASTER',
+        'list'   => 'MASTER',
+        'patch'  => 'MASTER',
+        'save'   => 'MASTER',
+        'update' => 'MASTER'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $service = 'api.service.url';
 
     /**
