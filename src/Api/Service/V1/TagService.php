@@ -124,26 +124,16 @@ class TagService extends OrmService
      */
     public function getTagIdsFromStr($text, $languageId = null)
     {
-        $wordArr = explode(' ', $text);
+        $slugs = $this->container->get('data.manager.filter')
+            ->set(explode(' ', $text))
+            ->filter('slug')
+            ->get();
 
-        if (!is_array($wordArr)) {
-            return null;
-        }
+        $tags = $this->getListBySlugs($slugs, $languageId);
 
-        $tags = $this->getValidateTagBySlug($wordArr, $languageId);
-
-        if (empty($tags['items'])) {
-            return [];
-        }
-
-        $returnIds = [];
-        foreach ($tags['items'] as $tag) {
-            if (in_array($tag->name, $wordArr)) {
-                $returnIds[] = $tag->id;
-            }
-        }
-
-        return $returnIds;
+        return array_map(function ($a) {
+            return $a->id;
+        }, $tags['items']);
     }
 
     /**
@@ -187,20 +177,17 @@ class TagService extends OrmService
     /**
      *  Get all tags by the exact slug if is valid
      *
-     * @param mixed  $slugs      slugs to check
-     * @param string $languageId Language id to search for it
+     * @param array $slugs slugs to check
      *
      * @return array tags for this slugs
      */
-    public function getValidateTagBySlug($slugs, $languageId = null, $limit = 25)
+    public function getValidateTagBySlug($slugs, $languageId = null)
     {
-        $arr = $this->validTags($slugs, $languageId);
-
-        if (empty($arr)) {
+        if (empty($slugs)) {
             return [];
         }
 
-        $slugs = $this->createSearchableWord($arr);
+        $slugs = $this->createSearchableWord($slugs);
 
         return $this->getListBySlugs($slugs, $languageId);
     }
