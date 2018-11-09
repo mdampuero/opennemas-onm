@@ -73,7 +73,7 @@ class TagService extends OrmService
      */
     public function getListBySlugs($slugs, $locale = null)
     {
-        if (!is_array($ids) || empty($ids)) {
+        if (!is_array($slugs) || empty($slugs)) {
             throw new GetListException('Invalid slugs', 400);
         }
 
