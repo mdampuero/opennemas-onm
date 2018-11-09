@@ -21,36 +21,6 @@
 class Tag
 {
     /**
-     * Returns the number of contents for a given tag id or a list of tag ids
-     *
-     * @param int|array $tagId wether a list of tag ids or only one tag id
-     *
-     * @return int  the number of contents
-     */
-    public static function numberOfContent($tagId)
-    {
-        if (empty($tagId)) {
-            return null;
-        }
-
-        $sqlTagId = is_array($tagId) ?
-            ' IN (' . substr(str_repeat(', ?', count($tagId)), 2) . ')' :
-            ' = ?';
-
-        $sql = 'SELECT tag_id, count(1) AS related_content_count FROM `contents_tags` WHERE tag_id ' .
-            $sqlTagId .
-            'GROUP BY tag_id';
-        $rs  = getService('dbal_connection')->fetchAll($sql, $tagId);
-
-        $numberOfContents = [];
-        foreach ($rs as $row) {
-            $numberOfContents[$row['tag_id']] = $row['related_content_count'];
-        }
-
-        return $numberOfContents;
-    }
-
-    /**
      * Method to validate a list of tags
      *
      * @param mixed  $tags       list of all tags to validate

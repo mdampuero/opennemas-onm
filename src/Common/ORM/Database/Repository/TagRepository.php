@@ -12,6 +12,33 @@ namespace Common\ORM\Database\Repository;
 class TagRepository extends BaseRepository
 {
     /**
+     * Returns the number of contents associated to every tag in a list of tags.
+     *
+     * @param array $ids The list of tag ids.
+     *
+     * @return array A list where the key is a tag id and the value is the
+     *               number of contents associated to the tag.
+     */
+    public function getNumberOfContents($ids)
+    {
+        $sql = 'SELECT tag_id, count(1) AS total FROM `contents_tags` WHERE '
+            . 'tag_id IN (?) GROUP BY tag_id';
+
+        $rs = $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_INT_ARRAY ]
+        );
+
+        $stats = [];
+        foreach ($rs as $value) {
+            $stats[$value['tag_id']] = $value['total'];
+        }
+
+        return $stats;
+    }
+
+    /**
      * Returns an array of privileges grouped by entity id.
      *
      * @param array $ids The entity ids.
