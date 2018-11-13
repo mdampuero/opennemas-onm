@@ -676,6 +676,10 @@ backend_domain:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/domain.yml'
 
+backend_events:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/event.yml'
+
 backend_frontpage:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/frontpage.yml'
