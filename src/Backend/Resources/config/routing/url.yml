@@ -1,0 +1,17 @@
+backend_url_create:
+    path:     /urls/new
+    defaults: { _controller: BackendBundle:Url:create }
+    options:
+        expose: true
+
+backend_url_show:
+    path:     /urls/{id}
+    defaults: { _controller: BackendBundle:Url:show }
+    options:
+        expose: true
+
+backend_urls_list:
+    path:     /urls
+    defaults: { _controller: BackendBundle:Url:list }
+    options:
+        expose: true

@@ -425,9 +425,31 @@ $menuXml = [
         'id'          => 'settings_manager',
         'title'       => _('System'),
         'icon'        => 'fa fa-cogs',
-        'link'        => url('admin_system_settings'),
+        'link'        => '#',
         'module_name' => 'SETTINGS_MANAGER',
         'privilege'   => 'ONM_SETTINGS',
+        'submenu' => [
+            [
+                'id'          => 'urls',
+                'title'       => _('URLs'),
+                'link'        => url('backend_urls_list'),
+                'icon'        => 'fa fa-globe',
+                'privilege'   => 'MASTER'
+            ],
+            [
+                'id'          => 'cache',
+                'title'       => _('Cache manager'),
+                'icon'        => 'fa fa-database',
+                'link'        => url('admin_cache_manager'),
+                'privilege'   => 'MASTER'
+            ],
+            [
+                'id'          => 'settings',
+                'title'       => _('Settings'),
+                'icon'        => 'fa fa-cogs',
+                'link'        => url('admin_system_settings'),
+            ]
+        ]
     ]
 ];
 

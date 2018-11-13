@@ -22,57 +22,30 @@ class TagController extends ApiController
     /**
      * {@inheritdoc}
      */
+    protected $extension = 'es.openhost.module.tags';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $getItemRoute = 'api_v1_backend_tag_show';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $permissions = [
+        'create' => 'TAG_CREATE',
+        'delete' => 'TAG_DELETE',
+        'list'   => 'TAG_ADMIN',
+        'patch'  => 'TAG_UPDATE',
+        'save'   => 'TAG_CREATE',
+        'show'   => 'TAG_UPDATE',
+        'update' => 'TAG_UPDATE',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $service = 'api.service.tag';
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteAction($id)
-    {
-        $this->checkSecurity(null, 'TAG_DELETE');
-
-        return parent::deleteAction($id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteSelectedAction(Request $request)
-    {
-        $this->checkSecurity(null, 'TAG_DELETE');
-
-        return parent::deleteSelectedACtion($request);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function listAction(Request $request)
-    {
-        $this->checkSecurity(null, 'TAG_ADMIN');
-
-        return parent::listAction($request);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function showAction($id)
-    {
-        $this->checkSecurity(null, 'TAG_ADMIN');
-
-        return parent::showAction($id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $this->checkSecurity(null, 'TAG_ADMIN');
-
-        return parent::updateAction($request, $id);
-    }
 
     /**
      * Get suggested word.

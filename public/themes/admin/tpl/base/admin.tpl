@@ -249,39 +249,6 @@
                     </div>
                   </li>
                 {/block}
-                {block name="master_actions_block"}
-                {acl isAllowed="MASTER" hasExtension="CACHE_MANAGER"}
-                  <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                  </li>
-                  <li class="quicklinks sysops-actions dropdown">
-                    <a href="#" data-toggle="dropdown">
-                      <i class="fa fa-rebel text-danger master-user"></i>
-                      {t}Sysops{/t}
-                    </a>
-                    <ul  class="dropdown-menu on-left" role="menu">
-                      <li>
-                        <a href="{url name=admin_cache_manager}"><i class="fa fa-database"></i>Cache manager</a>
-                      </li>
-                      <li>
-                        <a href="{url name=admin_cache_manager_clearcache}">
-                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove smarty cache</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="{url name=admin_cache_manager_clearcompiled}">
-                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Remove smarty compiles</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="{url name=admin_cache_manager_banvarnishcache}">
-                          <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">Ban varnish caches</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                {/acl}
-                {/block}
               </ul>
             </div>
             <div class="pull-right ">

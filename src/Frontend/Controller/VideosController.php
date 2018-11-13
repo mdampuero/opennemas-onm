@@ -319,8 +319,8 @@ class VideosController extends Controller
      */
     public function showAction(Request $request)
     {
-        $dirtyID = $request->query->filter('video_id', '', FILTER_SANITIZE_STRING);
-        $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $dirtyID = $request->get('video_id', '', FILTER_SANITIZE_STRING);
+        $urlSlug = $request->get('slug', '', FILTER_SANITIZE_STRING);
 
         $video = $this->get('content_url_matcher')
             ->matchContentUrl('video', $dirtyID, $urlSlug, $this->category_name);

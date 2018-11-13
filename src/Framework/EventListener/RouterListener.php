@@ -248,6 +248,17 @@ class RouterListener implements EventSubscriberInterface
                 $message .= sprintf(' (from "%s")', $referer);
             }
 
+            $url = $this->container->get('core.redirector')
+                ->getUrl(trim($request->getRequestUri(), '/'));
+
+            if (!empty($url)) {
+                $response = $this->container->get('core.redirector')
+                    ->getResponse($request, $url);
+
+                $event->setResponse($response);
+                return;
+            }
+
             throw new NotFoundHttpException($message, $e);
         } catch (MethodNotAllowedException $e) {
             $message = sprintf(

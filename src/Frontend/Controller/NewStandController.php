@@ -178,7 +178,7 @@ class NewStandController extends Controller
      */
     public function showAction(Request $request)
     {
-        $dirtyID = $request->query->getDigits('id', null);
+        $dirtyID = $request->get('id', null);
 
         $content = $this->get('content_url_matcher')
             ->matchContentUrl('kiosko', $dirtyID, null, $this->category_name);
