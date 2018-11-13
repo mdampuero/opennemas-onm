@@ -3,7 +3,7 @@ orm:
         -
             name: Content
             enum:
-                content_type_name: [ static_page ]
+                content_type_name: [ static_page, event ]
             properties:
                 available:           boolean
                 body:                string
@@ -35,11 +35,11 @@ orm:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter
                     arguments: [ '@orm.metadata.content' ]
             repositories:
-                database:
+                instance:
                     class:     Common\ORM\Database\Repository\BaseRepository
                     arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache.connection.instance' ]
             persisters:
-                database:
+                instance:
                     class:     Common\ORM\Database\Persister\BasePersister
                     arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache.connection.instance' ]
             mapping:

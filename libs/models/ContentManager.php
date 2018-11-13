@@ -1414,6 +1414,11 @@ class ContentManager
                 'name'            => 'frontpage',
                 'title'           => _('Frontpage')
             ],
+            [
+                'pk_content_type' => 19,
+                'name'            => 'event',
+                'title'           => _('Event')
+            ],
         ];
 
         return $contentTypes;
