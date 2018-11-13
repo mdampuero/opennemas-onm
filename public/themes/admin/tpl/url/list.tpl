@@ -189,10 +189,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.pk_user_group) }">
+                <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
                   <td class="checkbox-cell">
                     <div class="checkbox check-default">
-                      <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.pk_user_group" type="checkbox">
+                      <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
                       <label for="checkbox[%$index%]"></label>
                     </div>
                   </td>
@@ -202,7 +202,7 @@
                       <a class="btn btn-default btn-small" href="[% routing.generate('backend_url_show', { id: item.id }) %]">
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
-                      <button class="btn btn-danger btn-small" ng-click="delete(item.pk_user_group)" type="button">
+                      <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                       </button>
                     </div>
