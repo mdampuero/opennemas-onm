@@ -1,0 +1,26 @@
+# events controller routes
+backend_events:
+    path:     /events
+    defaults: { _controller  : BackendBundle:Event:list }
+
+backend_event_create:
+    path:     /events/create
+    defaults: { _controller  : BackendBundle:Event:create }
+
+backend_event_show:
+    path:     /events/{id}/show
+    defaults: { _controller  : BackendBundle:Event:show }
+    options:
+        expose: true
+
+backend_event_update:
+    path:     /event/{id}/update
+    defaults: { _controller  : BackendBundle:Event:update }
+
+backend_event_delete:
+    path:     /event/{id}/delete
+    defaults: { _controller  : BackendBundle:Event:delete }
+
+backend_events_config:
+    path:     /events/config
+    defaults: { _controller  : BackendBundle:Event:config }
