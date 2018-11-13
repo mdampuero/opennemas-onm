@@ -1,0 +1,70 @@
+api_v1_backend_event_create:
+    path:     /events/new
+    defaults: { _controller: ApiBundle:V1/Backend/Event:create }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_event_delete:
+    path:     /events/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Event:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_event_patch:
+    path:     /events/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Event:patch }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_event_save:
+    path:     /events
+    defaults: { _controller: ApiBundle:V1/Backend/Event:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_event_show:
+    path:     /events/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Event:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_event_update:
+    path:     /events/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Event:update }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_events_delete:
+    path:     /events
+    defaults: { _controller: ApiBundle:V1/Backend/Event:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_events_list:
+    path:     /events
+    defaults: { _controller: ApiBundle:V1/Backend/Event:list, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_events_patch:
+    path:     /events
+    defaults: { _controller: ApiBundle:V1/Backend/Event:patchSelected }
+    methods:  [ PATCH ]
+    options:
+        expose: true

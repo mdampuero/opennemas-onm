@@ -6,6 +6,10 @@ api_v1_backend_author:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/author.yml'
     prefix:   /backend
 
+api_v1_backend_event:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/event.yml'
+    prefix:   /backend
+
 api_v1_backend_file:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/file.yml'
     prefix:   /backend
