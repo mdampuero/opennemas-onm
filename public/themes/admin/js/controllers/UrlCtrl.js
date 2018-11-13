@@ -33,6 +33,7 @@
          * @type {Object}
          */
         $scope.item = {
+          enabled: 0,
           redirection: 1,
           type: 0
         };
