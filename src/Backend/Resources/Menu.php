@@ -120,6 +120,15 @@ $menuXml = [
             ],
 
             [
+                'id'          => 'events_manager',
+                'title'       => _('Events'),
+                'icon'        => 'fa fa-calendar',
+                'link'        => url('backend_events'),
+                'module_name' => 'EVENTS_MANAGER',
+                'privilege'   => 'EVENTS_ADMIN',
+            ],
+
+            [
                 'id'          => 'poll_manager',
                 'title'       => _('Polls'),
                 'icon'        => 'fa fa-pie-chart',
