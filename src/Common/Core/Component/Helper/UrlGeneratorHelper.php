@@ -85,6 +85,7 @@ class UrlGeneratorHelper
             'letter'      => 'cartas-al-director/_CATEGORY_/_SLUG_/_DATE__ID_.html',
             'special'     => 'especiales/_CATEGORY_/_SLUG_/_DATE__ID_.html',
             'book'        => 'libro/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'event'       => 'event/_SLUG_',
         ];
     }
 
