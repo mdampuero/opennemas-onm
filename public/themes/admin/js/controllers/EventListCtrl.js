@@ -76,7 +76,7 @@
          * @return {Integer} The item id.
          */
         $scope.getId = function(item) {
-          return item.id;
+          return item.pk_content;
         };
       }
     ]);
