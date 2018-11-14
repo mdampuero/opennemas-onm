@@ -31,8 +31,8 @@ class EventController extends Controller
             . ' and slug = "%s" and content_status = "1" and in_litter = "0"';
 
         try {
-            $content = $this->get('orm.manager')->getRepository('Content')
-                ->findOneBy(sprintf($oql, $slug));
+            $content = $this->get('api.service.content')
+                ->getItemBy(sprintf($oql, $slug));
         } catch (\Exception $e) {
             // If the content does not exist or is not published raise an error
             throw new ResourceNotFoundException();
