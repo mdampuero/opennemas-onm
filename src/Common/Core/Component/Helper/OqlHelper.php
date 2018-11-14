@@ -72,7 +72,7 @@ class OqlHelper
         $bloggers = $this->container->get('user_repository')->findByUserMeta([
             'meta_key' => [ [ 'value' => 'is_blog' ] ],
             'meta_value' => [ [ 'value' => '1' ] ]
-        ], [ 'username' => 'asc' ], 1, 0);
+        ], [ 'username' => 'asc' ]);
 
         $ids = array_map(function ($a) {
             return $a->id;
