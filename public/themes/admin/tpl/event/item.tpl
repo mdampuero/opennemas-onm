@@ -4,9 +4,36 @@
 {javascripts}
 <script>
 jQuery(document).ready(function($) {
-  $('#date').datetimepicker({
+  var localeAux = '{$smarty.const.CURRENT_LANGUAGE_SHORT|default:"en"}';
+
+  localeAux = moment.locales().includes(localeAux) ?
+    localeAux :
+    'en';
+
+  $('#event_startdate, #event_enddate').datetimepicker({
     format: 'YYYY-MM-DD',
-    minDate: '{$cover->created|default:$smarty.now|date_format:"%Y-%m-%d"}'
+    locale: localeAux
+  });
+
+  $('#event_startdate').on('dp.change', function(e) {
+    $('#event_enddate').data('DateTimePicker').minDate(e.date);
+  });
+
+  $('#event_enddate').on('dp.change', function(e) {
+    $('#event_startdate').data('DateTimePicker').maxDate(e.date);
+  });
+
+  $('#starttime, #endtime').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:ss',
+    locale: localeAux
+  });
+
+  $('#starttime').on('dp.change', function(e) {
+    $('#endtime').data('DateTimePicker').minDate(e.date);
+  });
+
+  $('#endtime').on('dp.change', function(e) {
+    $('#starttime').data('DateTimePicker').maxDate(e.date);
   });
 });
 </script>
@@ -76,7 +103,7 @@ jQuery(document).ready(function($) {
               <div class="form-group">
                 <label for="title" class="form-label">{t}Title{/t}</label>
                 <div class="controls">
-                  <input type="text" id="title" name="title" ng-model="item.title" value="{$cover->title|default:""}" required class="form-control"/>
+                  <input type="text" id="title" name="title" ng-model="item.title" required class="form-control"/>
                 </div>
               </div>
 
@@ -85,7 +112,7 @@ jQuery(document).ready(function($) {
                   <label class="form-label" for="endtime">{t}Start date{/t}</label>
                   <div class="controls">
                     <div class="input-group">
-                      <input class="form-control" id="closetime" name="event_startdate" type="datetime" value="{$poll->params['closetime']}">
+                      <input class="form-control" id="event_startdate" name="event_startdate" type="datetime" ng-model="item.event_startdate">
                       <span class="input-group-addon add-on">
                         <span class="fa fa-calendar"></span>
                       </span>
@@ -94,10 +121,10 @@ jQuery(document).ready(function($) {
                 </div>
 
                 <div class="form-group col-md-6">
-                  <label class="form-label" for="endtime">{t}End date{/t}</label>
+                  <label class="form-label" for="endtime" ng-model="item.event_enddate">{t}End date{/t}</label>
                   <div class="controls">
                     <div class="input-group">
-                      <input class="form-control" id="closetime" name="event_startdate" type="datetime" value="{$poll->params['closetime']}">
+                      <input class="form-control" id="event_enddate" name="event_enddate" type="datetime">
                       <span class="input-group-addon add-on">
                         <span class="fa fa-calendar"></span>
                       </span>
@@ -182,7 +209,7 @@ jQuery(document).ready(function($) {
                   </label>
                   <div class="controls">
                     <div class="input-group">
-                      <input class="form-control" id="starttime" name="starttime" type="datetime" value="{if $album->starttime neq '0000-00-00 00:00:00'}{$album->starttime}{/if}">
+                      <input class="form-control" id="starttime" name="starttime" type="datetime" ng-model="item.starttime">
                       <span class="input-group-addon add-on">
                         <span class="fa fa-calendar"></span>
                       </span>
@@ -198,7 +225,7 @@ jQuery(document).ready(function($) {
                   </label>
                   <div class="controls">
                     <div class="input-group">
-                      <input class="form-control" id="endtime" name="endtime" type="datetime" value="{if $album->endtime neq '0000-00-00 00:00:00'}{$album->endtime}{/if}">
+                      <input class="form-control" id="endtime" name="endtime" type="datetime" ng-model="item.endtime">
                       <span class="input-group-addon add-on">
                         <span class="fa fa-calendar"></span>
                       </span>

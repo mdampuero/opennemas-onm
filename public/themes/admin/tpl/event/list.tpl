@@ -161,10 +161,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
+              <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(getId(item)) }">
                 <td class="checkbox-cell">
                   <div class="checkbox check-default" ng-if="isSelectable(item)">
-                    <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
+                    <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="getId(item)" type="checkbox">
                     <label for="checkbox[%$index%]"></label>
                   </div>
                 </td>
@@ -184,12 +184,12 @@
                   </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="EVENT_UPDATE"}
-                      <a class="btn btn-small" href="[% routing.generate('backend_event_show', { id: item.id }) %]">
+                      <a class="btn btn-small" href="[% routing.generate('backend_event_show', { id: getId(item) }) %]">
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
                     {/acl}
                     {acl isAllowed="EVENT_DELETE"}
-                      <button class="btn btn-danger btn-small" ng-click="delete(item.pk_EVENT)" type="button">
+                      <button class="btn btn-danger btn-small" ng-click="delete(item.pk_content)" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                       </button>
                     {/acl}

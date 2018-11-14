@@ -43,6 +43,7 @@
           favorite: 0,
           file: '',
           price: 0,
+          frontpage: 0,
           starttime: null,
           endtime: null,
           tag_ids: [],
@@ -59,8 +60,6 @@
           place_name: ''
         };
 
-        $scope.files = [];
-
         /**
          * @memberOf EventCtrl
          *
@@ -75,6 +74,19 @@
           save:     'api_v1_backend_event_save',
           show:     'api_v1_backend_event_show',
           update:   'api_v1_backend_event_update'
+        };
+
+        /**
+         * @function getItemId
+         * @memberOf EventCtrl
+         *
+         * @description
+         *   Returns the item id.
+         *
+         * @return {Integer} The item id.
+         */
+        $scope.getItemId = function() {
+          return $scope.item.pk_content;
         };
       }
     ]);
