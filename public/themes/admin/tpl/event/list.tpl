@@ -178,8 +178,7 @@
                   <span uib-tooltip="{t}Last editor{/t} [% shvs.extra.authors[item.fk_user_last_editor].name %]">[% item.title%]</span>
                   <div>
                     <small>
-                      <strong>{t}From:{/t}</strong> [% item.starttime %] <br>
-                      <strong>{t}To:{/t}</strong> [% item.endtime %]
+                      <strong>{t}Schedule{/t}:</strong> [% item.event_startdate %] -> [% item.event_enddate %] ([% item.event_starthour %] -> [% item.event_starthour %]) <br>
                     </small>
                   </div>
                   <div class="listing-inline-actions">

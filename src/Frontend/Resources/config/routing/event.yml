@@ -1,0 +1,13 @@
+frontend_events:
+    path: /events
+    defaults: { _controller: FrontendBundle:Event:frontpage }
+    options:
+        l10n: true
+
+frontend_event_show:
+    path: /event/{slug}
+    defaults: { _controller: FrontendBundle:Event:show, _format: html }
+    requirements:
+        slug : '[^/.]+'
+    options:
+        l10n: true
