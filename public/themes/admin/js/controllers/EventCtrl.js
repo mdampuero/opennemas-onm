@@ -56,8 +56,10 @@
           image: null,
           event_startdate: null,
           event_enddate: null,
+          event_starthour: null,
+          event_endhour: null,
+          event_place: null,
           external_link: '',
-          place_name: ''
         };
 
         /**

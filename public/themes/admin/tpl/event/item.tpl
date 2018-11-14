@@ -3,39 +3,52 @@
 {block name="footer-js" append}
 {javascripts}
 <script>
-jQuery(document).ready(function($) {
-  var localeAux = '{$smarty.const.CURRENT_LANGUAGE_SHORT|default:"en"}';
+// jQuery(document).ready(function($) {
+//   var localeAux = '{$smarty.const.CURRENT_LANGUAGE_SHORT|default:"en"}';
 
-  localeAux = moment.locales().includes(localeAux) ?
-    localeAux :
-    'en';
+//   localeAux = moment.locales().includes(localeAux) ?
+//     localeAux :
+//     'en';
 
-  $('#event_startdate, #event_enddate').datetimepicker({
-    format: 'YYYY-MM-DD',
-    locale: localeAux
-  });
+//   $('#event_startdate, #event_enddate').datetimepicker({
+//     format: 'YYYY-MM-DD',
+//     locale: localeAux
+//   });
 
-  $('#event_startdate').on('dp.change', function(e) {
-    $('#event_enddate').data('DateTimePicker').minDate(e.date);
-  });
+//   $('#event_startdate').on('dp.change', function(e) {
+//     $('#event_enddate').data('DateTimePicker').minDate(e.date);
+//   });
 
-  $('#event_enddate').on('dp.change', function(e) {
-    $('#event_startdate').data('DateTimePicker').maxDate(e.date);
-  });
+//   $('#event_enddate').on('dp.change', function(e) {
+//     $('#event_startdate').data('DateTimePicker').maxDate(e.date);
+//   });
 
-  $('#starttime, #endtime').datetimepicker({
-    format: 'YYYY-MM-DD HH:mm:ss',
-    locale: localeAux
-  });
+//   $('#starttime, #endtime').datetimepicker({
+//     format: 'YYYY-MM-DD HH:mm:ss',
+//     locale: localeAux
+//   });
 
-  $('#starttime').on('dp.change', function(e) {
-    $('#endtime').data('DateTimePicker').minDate(e.date);
-  });
+//   $('#starttime').on('dp.change', function(e) {
+//     $('#endtime').data('DateTimePicker').minDate(e.date);
+//   });
 
-  $('#endtime').on('dp.change', function(e) {
-    $('#starttime').data('DateTimePicker').maxDate(e.date);
-  });
-});
+//   $('#endtime').on('dp.change', function(e) {
+//     $('#starttime').data('DateTimePicker').maxDate(e.date);
+//   });
+
+//   $('#event_starthour, #event_endhour').datetimepicker({
+//     format: 'LT',
+//     locale: localeAux
+//   });
+
+//   $('#event_starthour').on('dp.change', function(e) {
+//     $('#endtime').data('DateTimePicker').minDate(e.date);
+//   });
+
+//   $('#event_starthour').on('dp.change', function(e) {
+//     $('#event_starthour').data('DateTimePicker').maxDate(e.date);
+//   });
+// });
 </script>
 {/javascripts}
 {/block}
@@ -107,12 +120,17 @@ jQuery(document).ready(function($) {
                 </div>
               </div>
 
+            </div>
+          </div>
+          <div class="grid simple">
+            <div class="grid-title"><h4 class="no-padding">{t}Where & When{/t}</h4></div>
+            <div class="grid-body">
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label class="form-label" for="endtime">{t}Start date{/t}</label>
+                  <label class="form-label" for="event_startdate">{t}Start date{/t}</label>
                   <div class="controls">
                     <div class="input-group">
-                      <input class="form-control" id="event_startdate" name="event_startdate" type="datetime" ng-model="item.event_startdate">
+                      <input class="form-control" datetime-picker datetime-picker-format="YYYY-MM-DD" datetime-picker-timezone="{$timezone}" datetime-picker-max="item.event_enddate" datetime-picker-use-current="true" id="event_startdate" name="event_startdate" ng-model="item.event_startdate" type="datetime">
                       <span class="input-group-addon add-on">
                         <span class="fa fa-calendar"></span>
                       </span>
@@ -121,10 +139,35 @@ jQuery(document).ready(function($) {
                 </div>
 
                 <div class="form-group col-md-6">
-                  <label class="form-label" for="endtime" ng-model="item.event_enddate">{t}End date{/t}</label>
+                  <label class="form-label" for="event_enddate">{t}End date{/t}</label>
                   <div class="controls">
                     <div class="input-group">
-                      <input class="form-control" id="event_enddate" name="event_enddate" type="datetime">
+                      <input class="form-control" datetime-picker datetime-picker-format="YYYY-MM-DD" datetime-picker-timezone="{$timezone}" datetime-picker-min="item.event_startdate" id="event_enddate" name="event_enddate" ng-model="item.event_enddate" type="datetime">
+                      <span class="input-group-addon add-on">
+                        <span class="fa fa-calendar"></span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label class="form-label" for="event_starthour">{t}Start hour{/t}</label>
+                  <div class="controls">
+                    <div class="input-group">
+                      <input class="form-control" datetime-picker datetime-picker-format="LT" datetime-picker-timezone="{$timezone}" datetime-picker-min="item.event_enddate" datetime-picker-use-current="true" id="event_starthour" name="event_starthour" ng-model="item.event_starthour" type="datetime">
+                      <span class="input-group-addon add-on">
+                        <span class="fa fa-calendar"></span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                  <label class="form-label" for="event_starthour" ng-model="item.event_starthour">{t}End hour{/t}</label>
+                  <div class="controls">
+                    <div class="input-group">
+                      <input class="form-control" datetime-picker datetime-picker-format="LT" datetime-picker-timezone="{$timezone}" datetime-picker-min="item.event_starthour" datetime-picker-use-current="true" id="event_starthour" name="event_starthour" ng-model="item.event_endhour" type="datetime">
                       <span class="input-group-addon add-on">
                         <span class="fa fa-calendar"></span>
                       </span>
@@ -133,6 +176,19 @@ jQuery(document).ready(function($) {
                 </div>
               </div>
 
+              <div class="row">
+                <div class="form-group col-xs-12">
+                  <label class="form-label" for="event_place">{t}Place{/t}</label>
+                  <div class="controls">
+                    <input class="form-control"  id="event_place" name="event_place" ng-model="item.event_place" type="text">
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="grid simple">
+            <div class="grid-body">
               <div class="form-group">
                 <label class="form-label clearfix" for="description">
                   <div class="pull-left">{t}Description{/t}</div>
