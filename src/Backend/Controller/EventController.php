@@ -35,32 +35,4 @@ class EventController extends BackendController
      * @var string
      */
     protected $resource = 'event';
-
-    /**
-     * Returns a list of extra data to use in  the create/edit item form
-     *
-     * @return array
-     **/
-    private function getExtraData()
-    {
-        $extra = [];
-
-        $security   = $this->get('core.security');
-        $converter  = $this->get('orm.manager')->getConverter('Category');
-        $categories = $this->get('orm.manager')
-            ->getRepository('Category')
-            ->findBy('internal_category = 1'); // review this filter to search for commen and specific for kiosko
-
-        $categories = array_filter($categories, function ($a) use ($security) {
-            return $security->hasCategory($a->pk_content_category);
-        });
-
-        $extra['categories'] = $converter->responsify($categories);
-        array_unshift($extra['categories'], [
-            'pk_content_category' => null,
-            'title'               => _('Select a category...')
-        ]);
-
-        return $extra;
-    }
 }
