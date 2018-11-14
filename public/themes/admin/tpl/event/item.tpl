@@ -157,7 +157,7 @@
                     <div class="input-group">
                       <input class="form-control" datetime-picker datetime-picker-format="LT" datetime-picker-timezone="{$timezone}" datetime-picker-min="item.event_enddate" datetime-picker-use-current="true" id="event_starthour" name="event_starthour" ng-model="item.event_starthour" type="datetime">
                       <span class="input-group-addon add-on">
-                        <span class="fa fa-calendar"></span>
+                        <span class="fa fa-clock-o"></span>
                       </span>
                     </div>
                   </div>
@@ -169,7 +169,7 @@
                     <div class="input-group">
                       <input class="form-control" datetime-picker datetime-picker-format="LT" datetime-picker-timezone="{$timezone}" datetime-picker-min="item.event_starthour" datetime-picker-use-current="true" id="event_starthour" name="event_starthour" ng-model="item.event_endhour" type="datetime">
                       <span class="input-group-addon add-on">
-                        <span class="fa fa-calendar"></span>
+                        <span class="fa fa-clock-o"></span>
                       </span>
                     </div>
                   </div>

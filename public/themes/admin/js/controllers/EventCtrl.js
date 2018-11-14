@@ -90,6 +90,30 @@
         $scope.getItemId = function() {
           return $scope.item.pk_content;
         };
+
+        // Update title_int when title changes
+        $scope.$watch('item.title', function(nv, ov) {
+          if (!nv) {
+            return;
+          }
+
+          if (nv && (!$scope.item.title_int ||
+              ov === $scope.item.title_int)) {
+            $scope.item.title_int = nv;
+          }
+
+          if (!$scope.item.slug || $scope.item.slug === '') {
+            if ($scope.tm) {
+              $timeout.cancel($scope.tm);
+            }
+
+            $scope.tm = $timeout(function() {
+              $scope.getSlug(nv, function(response) {
+                $scope.item.slug = response.data.slug;
+              });
+            }, 2500);
+          }
+        }, true);
       }
     ]);
 })();
