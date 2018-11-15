@@ -55,19 +55,29 @@ orm:
                     relations:
                         categories:
                             table: contents_categories
-                            ids:
-                                pk_content: pk_fk_content
-                            key: pk_fk_content_category
+                            target_key: pk_fk_content_category
+                            return_fields: pk_fk_content_category
                             columns:
                                 pk_fk_content:
                                     type: integer
                                 pk_fk_content_category:
                                     type: integer
+
+                        relations:
+                            table: related_contents
+                            target_key: pk_content1
+                            columns:
+                                pk_content1:
+                                    type: integer
+                                pk_content2:
+                                    type: integer
+                                relationship:
+                                    type: integer
+
                         tag_ids:
                             table: contents_tags
-                            ids:
-                                pk_content: content_id
-                            key: tag_id
+                            target_key: content_id
+                            return_fields: tag_id
                             columns:
                                 content_id:
                                     type: integer
