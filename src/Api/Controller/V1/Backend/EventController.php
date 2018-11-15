@@ -33,6 +33,18 @@ class EventController extends ApiController
     protected $service = 'api.service.content';
 
     /**
+     * Returns the content id
+     *
+     * @param Content $item the item
+     *
+     * @return integer
+     **/
+    public function getItemId($item)
+    {
+        return $item->pk_content;
+    }
+
+    /**
      * Returns a list of extra data
      *
      * @return array
