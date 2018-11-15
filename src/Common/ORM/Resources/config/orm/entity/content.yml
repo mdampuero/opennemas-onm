@@ -32,6 +32,7 @@ orm:
                 with_comment:        boolean
                 categories:          array
                 tag_ids:             array
+                relations:           array
             converters:
                 default:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter
@@ -83,16 +84,6 @@ orm:
                                     type: integer
                                 tag_id:
                                     type: integer
-                        # related_contents:
-                        #     table: contents_categories
-                        #     ids:
-                        #         pk_content: pk_fk_content
-                        #     key: pk_fk_content_category
-                        #     columns:
-                        #         pk_fk_content:
-                        #             type: integer
-                        #         pk_fk_content_category:
-                        #             type: integer
                     columns:
                         pk_content:
                             type: bigint
