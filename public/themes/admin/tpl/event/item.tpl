@@ -180,7 +180,7 @@
                 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.category }">
                   <div class="form-group">
                     <div class="controls">
-                      <onm-category-selector ng-model="item.category" categories="data.extra.categories" placeholder="{t}Select a category{/t}" default-value-text="{t}Select a category...{/t}" required />
+                      <onm-category-selector ng-model="category" categories="data.extra.categories" placeholder="{t}Select a category{/t}" default-value-text="{t}Select a category...{/t}" required />
                     </div>
                   </div>
                 </div>

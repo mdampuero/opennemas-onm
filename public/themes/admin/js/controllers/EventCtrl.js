@@ -35,7 +35,6 @@
           body: '',
           content_type_name: 'event',
           fk_content_type: 19,
-          category: null,
           content_status: 0,
           cover: null,
           date: '',
@@ -92,7 +91,7 @@
           return $scope.item.pk_content;
         };
 
-        $scope.$watch('item.category', function(nv, ov) {
+        $scope.$watch('category', function(nv, ov) {
           if (nv === ov) {
             return;
           }

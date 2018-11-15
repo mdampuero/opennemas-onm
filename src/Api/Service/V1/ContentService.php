@@ -17,12 +17,12 @@ class ContentService extends OrmService
     /**
      * {@inheritdoc}
      */
-    public function getItem($id)
-    {
-        $item = parent::getItem($id);
+    // public function getItem($id)
+    // {
+    //     $item = parent::getItem($id);
 
-        $item->id = $item->pk_content;
+    //     $item->id = $item->pk_content;
 
-        return $item;
-    }
+    //     return $item;
+    // }
 }
