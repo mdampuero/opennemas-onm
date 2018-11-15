@@ -52,6 +52,7 @@
           title: '',
           type: 0,
           with_comments: 0,
+          categories: [],
 
           image: null,
           event_startdate: null,
@@ -91,6 +92,14 @@
           return $scope.item.pk_content;
         };
 
+        $scope.$watch('item.category', function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
+          $scope.item.categories = [ Number(nv) ];
+        });
+
         // Update title_int when title changes
         $scope.$watch('item.title', function(nv, ov) {
           if (!nv) {
@@ -114,6 +123,22 @@
             }, 2500);
           }
         }, true);
+
+        // Update metadata when title or category change
+        $scope.$watch('[ item.title, item.category ]', function(nv, ov) {
+          if ($scope.item.tag_ids && $scope.item.tag_ids.length > 0 ||
+              !nv || nv === ov) {
+            return;
+          }
+
+          if ($scope.mtm) {
+            $timeout.cancel($scope.mtm);
+          }
+
+          $scope.mtm = $timeout(function() {
+            $scope.loadAutoSuggestedTags();
+          }, 2500);
+        });
       }
     ]);
 })();
