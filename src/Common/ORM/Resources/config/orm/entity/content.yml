@@ -30,6 +30,8 @@ orm:
                 title:               string
                 urn_source:          string
                 with_comment:        boolean
+                categories:          array
+                tag_ids:             array
             converters:
                 default:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter
@@ -40,7 +42,7 @@ orm:
                     arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache.connection.instance' ]
             persisters:
                 instance:
-                    class:     Common\ORM\Database\Persister\BasePersister
+                    class:     Common\ORM\Database\Persister\ContentPersister
                     arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache.connection.instance' ]
             mapping:
                 database:
@@ -50,6 +52,37 @@ orm:
                         ids:
                             pk_content: fk_content
                         key: meta_name
+                    relations:
+                        categories:
+                            table: contents_categories
+                            ids:
+                                pk_content: pk_fk_content
+                            key: pk_fk_content_category
+                            columns:
+                                pk_fk_content:
+                                    type: integer
+                                pk_fk_content_category:
+                                    type: integer
+                        tag_ids:
+                            table: contents_tags
+                            ids:
+                                pk_content: content_id
+                            key: tag_id
+                            columns:
+                                content_id:
+                                    type: integer
+                                tag_id:
+                                    type: integer
+                        # related_contents:
+                        #     table: contents_categories
+                        #     ids:
+                        #         pk_content: pk_fk_content
+                        #     key: pk_fk_content_category
+                        #     columns:
+                        #         pk_fk_content:
+                        #             type: integer
+                        #         pk_fk_content_category:
+                        #             type: integer
                     columns:
                         pk_content:
                             type: bigint
