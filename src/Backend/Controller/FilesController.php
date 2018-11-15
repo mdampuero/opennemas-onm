@@ -272,13 +272,16 @@ class FilesController extends Controller
             $rtbMediaManager
         );
 
-        if (!preg_match($regexp, $uploadedFile->getClientOriginalExtension())) {
+        if (!$this->get('core.security')->hasPermission('MASTER')
+            && !preg_match($regexp, $uploadedFile->getClientOriginalExtension())
+        ) {
             $this->get('error.log')->error(sprintf(
                 'User %s tried to upload a not allowed file type %s (%s).',
                 $this->getUser()->id,
                 $uploadedFile->getClientOriginalExtension(),
                 $uploadedFile->getClientOriginalName()
             ));
+
             $this->get('session')->getFlashBag()->add(
                 'error',
                 sprintf(_('We are sorry, file extension %s is not allowed for upload as it could '
