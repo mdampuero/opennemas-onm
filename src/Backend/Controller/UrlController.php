@@ -24,9 +24,9 @@ class UrlController extends BackendController
      * @var type
      */
     protected $permissions = [
-        'create' => null,
-        'list'   => null,
-        'show'   => null
+        'create' => 'MASTER',
+        'list'   => 'MASTER',
+        'show'   => 'MASTER'
     ];
 
     /**

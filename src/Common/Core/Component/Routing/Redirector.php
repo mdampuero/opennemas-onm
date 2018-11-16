@@ -172,8 +172,10 @@ class Redirector
      * @param string  $contentType The content type.
      *
      * @return Content The content.
+     *
+     * TODO: Change to protected when RedirectorController removed
      */
-    protected function getContent($id, $contentType)
+    public function getContent($id, $contentType)
     {
         $contentType = \classify($contentType);
         $method      = 'get' . $contentType;

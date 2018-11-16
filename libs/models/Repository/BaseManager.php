@@ -186,15 +186,17 @@ abstract class BaseManager
      */
     protected function getLimitSQL($elements = 20, $page = 1, $offset = 0)
     {
-        if ($page == 1) {
-            return ' LIMIT ' . ($offset + $elements);
-        }
-        if ($page > 1) {
-            return ' LIMIT ' . ($offset + ($page - 1) * $elements) .
-                ', ' . $elements;
+        $sql = '';
+
+        if (!empty($elements)) {
+            $sql = "LIMIT $elements";
         }
 
-        return '';
+        if ($page > 1 || $offset > 0) {
+            $sql .= ' OFFSET ' . ($offset + ($page - 1) * $elements);
+        }
+
+        return $sql;
     }
 
     /**

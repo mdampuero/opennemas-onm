@@ -136,9 +136,7 @@ class OpinionManager extends EntityManager
                                 ['value' => '1']
                             ]
                         ],
-                        ['username' => 'asc'],
-                        1,
-                        0
+                        ['username' => 'asc']
                     );
 
                     if (!empty($bloggers)) {

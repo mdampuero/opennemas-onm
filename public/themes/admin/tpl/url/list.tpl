@@ -91,7 +91,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Content{/t} {t}to{/t} {t}Content{/t}', value: 0}, { name: '{t}Slug{/t} {t}to{/t} {t}Content{/t}', value: 1 }, { name: '{t}Regex{/t} {t}to{/t} {t}Content{/t}', value: 2 }, { name: '{t}Slug{/t} {t}to{/t} {t}Slug{/t}/{t}URL{/t}', value: 3 } ]">
-              <ui-select name="request" theme="select2" ng-model="criteria.type">
+              <ui-select name="type" theme="select2" ng-model="criteria.type">
                 <ui-select-match>
                   <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
                 </ui-select-match>
@@ -100,13 +100,13 @@
                 </ui-select-choices>
               </ui-select>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-init="content_type = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Manual{/t}', value: 1}, { name: '{t}Automatic{/t}', value: 0 } ]">
-              <ui-select name="request" theme="select2" ng-model="criteria.request">
+            <li class="quicklinks hidden-xs ng-cloak">
+              <ui-select name="content_type" theme="select2" ng-model="criteria.content_type">
                 <ui-select-match>
-                  <strong>{t}Content type{/t}:</strong> [% $select.selected.name %]
+                  <strong>{t}Content type{/t}:</strong> [% $select.selected.title %]
                 </ui-select-match>
-                <ui-select-choices repeat="item.value as item in content_type | filter: $select.search">
-                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                <ui-select-choices repeat="item.name as item in addEmptyValue(data.extra.content_types, 'name', 'title') | filter: $select.search">
+                  <div ng-bind-html="item.title | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
             </li>
@@ -189,10 +189,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.pk_user_group) }">
+                <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
                   <td class="checkbox-cell">
                     <div class="checkbox check-default">
-                      <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.pk_user_group" type="checkbox">
+                      <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
                       <label for="checkbox[%$index%]"></label>
                     </div>
                   </td>
@@ -202,16 +202,16 @@
                       <a class="btn btn-default btn-small" href="[% routing.generate('backend_url_show', { id: item.id }) %]">
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
-                      <button class="btn btn-danger btn-small" ng-click="delete(item.pk_user_group)" type="button">
+                      <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                       </button>
                     </div>
                   </td>
                   <td>
-                    <a ng-show="item.content_type !== 'user' && item.content_type !== 'user_group'" href="[% routing.generate('admin_' + item.content_type + '_show', { id: item.target }) %]" ng-if="[0, 1, 3].indexOf(item.type) !== -1">
+                    <a ng-if="item.content_type !== 'user' && item.content_type !== 'user_group'" href="[% routing.generate('admin_' + item.content_type + '_show', { id: item.target }) %]" ng-if="[0, 1, 3].indexOf(item.type) !== -1">
                       [% item.target %] ([% item.content_type %])
                     </a>
-                    <a ng-show="item.content_type === 'user' || item.content_type === 'user_group'"  href="[% routing.generate('backend_' + item.content_type + '_show', { id: item.target }) %]" ng-if="[0, 1, 3].indexOf(item.type) !== -1">
+                    <a ng-if="item.content_type === 'user' || item.content_type === 'user_group'"  href="[% routing.generate('backend_' + item.content_type + '_show', { id: item.target }) %]" ng-if="[0, 1, 3].indexOf(item.type) !== -1">
                       [% item.target %] ([% item.content_type %])
                     </a>
                     <span ng-if="[0, 1, 3].indexOf(item.type) === -1">
@@ -229,9 +229,9 @@
                     <strong ng-if="isHelpEnabled() && item.type == 3">{t}Slug{/t}/{t}URL{/t}</strong>
                   </td>
                   <td class="text-center">
-                    <button class="btn btn-white" ng-click="patch(item, 'redirection', item.redirection != 1 ? 1 : 0)" type="button" uib-tooltip="[% !item.redirection ? '{t}Serve{/t}' : '{t}Redirect{/t}' %]">
+                    <button class="btn btn-white" ng-click="patch(item, 'redirection', item.redirection != 1 ? 1 : 0)" type="button">
                       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.redirectionLoading, 'fa-retweet text-error' : !item.redirectionLoading && item.redirection == 0, 'fa-retweet text-success': !item.redirectionLoading && item.redirection == 1 }"></i>
-                      <span class="badge text-uppercase text-bold" ng-class="{ 'badge-success': !item.redirection, 'badge-warning text-black': item.redirection }" uib-tooltip="{t}HTTP code{/t}">
+                      <span class="badge text-uppercase text-bold" ng-class="{ 'badge-success': !item.redirection, 'badge-warning text-black': item.redirection }">
                         [% item.redirection ? '301' : '200' %]
                       </span>
                     </button>
