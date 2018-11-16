@@ -97,7 +97,7 @@ class WidgetsController extends Controller
             $post = $request->request;
 
             $title      = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-            $tagIds     = $this->get('api.service.tag')->getTags($title);
+            $tagIds     = $this->getTags($title);
             $widgetData = [
                 'id'             => $post->getDigits('id'),
                 'action'         => $post->filter('action', null, FILTER_SANITIZE_STRING),
@@ -169,7 +169,7 @@ class WidgetsController extends Controller
         }
 
         $title      = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-        $tagIds     = $this->get('api.service.tag')->getTags($title);
+        $tagIds     = $this->getTags($title);
         $widgetData = [
             'id'              => $id,
             'action'          => $post->filter('action', null, FILTER_SANITIZE_STRING),
