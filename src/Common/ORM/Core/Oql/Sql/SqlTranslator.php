@@ -274,19 +274,20 @@ class SqlTranslator
     protected function translateFieldInRelation($str)
     {
         $relations = $this->metadata->getRelations();
+
+        $relationSqls = [];
         foreach ($relations as $relation) {
             $this->tables[] = $relation['table'];
-
-            foreach ($relation['ids'] as $tableId => $relationId) {
-                $this->sqls[] = sprintf(
-                    "%s.%s = %s.%s",
-                    $this->metadata->mapping['database']['table'],
-                    $tableId,
-                    $relation['table'],
-                    $relationId
-                );
-            }
+            $relationSqls[] = sprintf(
+                "`%s`.`%s` = `%s`.`%s`",
+                $this->metadata->mapping['database']['table'],
+                $relation['source_key'],
+                $relation['table'],
+                $relation['target_key']
+            );
         }
+
+        $this->sqls[] = implode(' and ', $relationSqls);
 
         // Push meta-based filters
         $this->sqls[] = "and $str";

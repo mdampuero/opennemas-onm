@@ -30,7 +30,8 @@ class SqlTanslatorTest extends \PHPUnit\Framework\TestCase
                     'relations' => [
                         'norf' => [
                             'table'   => 'foobar_norf',
-                            'ids'     => [ 'foo' => 'foo_id' ],
+                            'source_key' => 'foo',
+                            'target_key' => 'foo_id' ,
                             'columns' => [
                                 'wibble' => 'string',
                                 'flob'   => 'integer'
@@ -54,7 +55,7 @@ class SqlTanslatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([ 'foobar', 'foobar_meta', 'foobar_norf' ], $tables);
         $this->assertEquals(
             'foo = ? and foobar.foo = foobar_meta.foobar_foo and meta_key = ?'
-            . ' and meta_value = ? and foobar.foo = foobar_norf.foo_id '
+            . ' and meta_value = ? and `foobar`.`foo` = `foobar_norf`.`foo_id` '
             . 'and wibble = ? and ( baz != ? or baz in ( ? , ? ) ) order by'
                 . ' foo asc limit ?',
             $sql
