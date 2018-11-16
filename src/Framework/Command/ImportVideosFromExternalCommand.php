@@ -360,6 +360,6 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
 
         return array_map(function ($a) {
             return $a->id;
-        }, $tags);
+        }, $tags['items']);
     }
 }

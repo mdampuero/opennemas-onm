@@ -335,7 +335,7 @@ class Importer
 
         $ids = array_map(function ($a) {
             return $a->id;
-        }, $tags);
+        }, $tags['items']);
 
         $fm   = $this->container->get('data.manager.filter');
         $data = [
