@@ -9,10 +9,11 @@
  */
 namespace Api\Controller\V1\Backend;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Common\Core\Controller\Controller;
 use Common\Core\Annotation\Security;
+use Common\Core\Controller\Controller;
+use Common\ORM\Entity\Tag;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * The ToolController provides common actions to parse and transform values
@@ -36,6 +37,66 @@ class ToolController extends Controller
             ->get();
 
         return new JsonResponse([ 'slug' => $slug ]);
+    }
+
+    /**
+     * Returns a list of existing and new tags basing on a string.
+     *
+     * @param Request $request The request object.
+     *
+     * @return array The list of tags.
+     */
+    public function tagsAction(Request $request)
+    {
+        $this->checkSecurity('es.openhost.module.tags', 'TAG_ADMIN');
+
+        $str = $request->get('q');
+
+        if (empty($str)) {
+            return [ 'items' => [], 'total' => 0 ];
+        }
+
+        $filterManager = $this->get('data.manager.filter');
+        $tagService    = $this->get('api.service.tag');
+        $validator     = $this->get('api.validator.tag');
+        $locale        = $this->get('core.locale')->getLocale('frontend');
+
+        $tags  = $filterManager->set($str)->filter('tags')->get();
+        $tags  = explode(',', $tags);
+        $slugs = $filterManager->set($tags)->filter('slug')->get();
+
+        $foundTags = array_combine($slugs, $tags);
+
+        // Find existing tags
+        $existingTags  = $tagService->getListBySlugs($slugs);
+        $existingSlugs = array_map(function ($a) {
+            return $a->name;
+        }, $existingTags['items']);
+
+        // Remove existing tags from generated tags
+        $newTags = array_diff_key($foundTags, array_flip($existingSlugs));
+
+        // Append new valid tags to existing tags
+        foreach ($newTags as $slug => $name) {
+            $tag = new Tag([
+                'name'        => $name,
+                'language_id' => $locale,
+                'slug'        => $slug
+            ]);
+
+            try {
+                $validator->validate($tag);
+            } catch (\Exception $e) {
+                continue;
+            }
+
+            $existingTags['items'][] = $tag;
+            $existingTags['total']++;
+        }
+
+        $existingTags['items'] = $tagService->responsify($existingTags['items']);
+
+        return $existingTags;
     }
 
     /**
