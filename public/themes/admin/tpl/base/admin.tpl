@@ -82,9 +82,12 @@
         reset: '{t}reset{/t}',
         apply: '{t}apply{/t}'
       };
-      var tagTranlations = {
-        reload: '{t}Reload{/t}',
-        suggestedTag: '{t}Suggested tags{/t}',
+
+      var strings = {
+        tags: {
+          reload: '{t}Reload{/t}',
+          suggested: '{t}Suggested tags{/t}',
+        }
       };
     </script>
   {/block}

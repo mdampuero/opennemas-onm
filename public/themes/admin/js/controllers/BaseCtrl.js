@@ -361,6 +361,8 @@
           });
 
           var successCallback = function(response) {
+            $scope.disableFlags('http');
+
             if (!response.data.items || response.data.items === null) {
               return null;
             }
@@ -412,6 +414,8 @@
          * @return {Array} List of suggested tags
          */
         $scope.newAndExistingTagsFromTagList = function(tagsVal, locale, callback) {
+          $scope.flags.http.generate = true;
+
           var route = {
             name: 'api_v1_backend_tags_auto_suggester',
             params: {
@@ -420,9 +424,7 @@
             }
           };
 
-          http.get(route).then(
-            callback, $scope.errorCb
-          );
+          http.get(route).then(callback, $scope.errorCb);
         };
 
         /**

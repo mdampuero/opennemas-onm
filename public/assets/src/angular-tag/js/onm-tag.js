@@ -11,8 +11,8 @@
      *   Directive to create forms dynamically.
      */
     .directive('onmTag', [
-      '$window',
-      function() {
+      '$rootScope', '$window',
+      function($rootScope, $window) {
         return {
           restrict: 'E',
           scope: {
@@ -26,10 +26,10 @@
             placeholder:           '@',
           },
           template: function() {
-            return '<a class="reload-tags btn btn-primary btn-xs pull-right" ng-click="loadAutoSuggestedTags()" href="#">' +
-                '<i class="fa fa-refresh m-r-5"></i>' +
-                window.tagTranlations.reload +
-              '</a>' +
+            return '<button class="reload-tags btn btn-primary btn-xs pull-right" ng-click="loadAutoSuggestedTags()" type="button">' +
+                '<i class="fa fa-refresh m-r-5" ng-class="{ \'fa-spin\': $parent.flags.http.reload }"></i>' +
+                $window.strings.tags.generate +
+              '</button>' +
               '<div class="onmTag">' +
                 '<div class="currentTags">' +
                   '<ul class="onmTagList">' +
@@ -45,7 +45,7 @@
                   '<input type="hidden" name="tag_ids" ng-value="getTagIdsList()">' +
                 '</div>' +
                 '<div class="autoSuggested" ng-show="loadAutoSuggestedTags && suggestedTags && suggestedTags.length > 0">' +
-                  '<span class="title">' + window.tagTranlations.suggestedTag + '</span>' +
+                  '<span class="title">' + $window.strings.tags.suggested + '</span>' +
                   '<ul class="onmTagList">' +
                     '<li ng-repeat="suggestedTag in suggestedTags" class="newTag" ng-click="addSuggestedTag(suggestedTag)">' +
                       '<span>[% suggestedTag.name %]</span><a href="#"><i class="fa fa-plus tagIcon" aria-hidden="true"></a>' +
