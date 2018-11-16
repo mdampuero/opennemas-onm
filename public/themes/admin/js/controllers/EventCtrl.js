@@ -72,6 +72,10 @@
           }
 
           $scope.category = $scope.item.categories.shift();
+
+          $scope.cover = $scope.item.relations.filter(function(el) {
+            return el.relationship == 'cover';
+          }).shift()['pk_content2'];
         };
 
         /**
@@ -112,12 +116,13 @@
         });
 
         // Update slug when title is updated
-        $scope.$watch('image', function(nv, ov) {
+        $scope.$watch('cover', function(nv, ov) {
           if (!nv) {
             return;
           }
-
-          $scope.item.relations = [];
+          $scope.item.relations = [
+            { pk_content2: $scope.cover.pk_content, relationship: 'cover', }
+          ];
         }, true);
 
         // Update slug when title is updated
