@@ -121,6 +121,7 @@ class Configuration implements ConfigurationInterface
                                                         ->variableNode('return_fields')->end()
                                                         ->scalarNode('repository')->end()
                                                         ->scalarNode('target_key')->end()
+                                                        ->scalarNode('source_key')->end()
                                                         ->arrayNode('columns')
                                                             ->prototype('array')
                                                                 ->children()

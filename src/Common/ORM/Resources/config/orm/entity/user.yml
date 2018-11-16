@@ -53,6 +53,7 @@ orm:
                     relations:
                         user_groups:
                             table: user_user_group
+                            source_key: id
                             target_key: user_id
                             columns:
                                 user_id:

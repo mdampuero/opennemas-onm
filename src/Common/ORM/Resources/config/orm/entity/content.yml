@@ -56,7 +56,8 @@ orm:
                     relations:
                         categories:
                             table: contents_categories
-                            target_key: pk_fk_content_category
+                            source_key: pk_content
+                            target_key: pk_fk_content
                             return_fields: pk_fk_content_category
                             columns:
                                 pk_fk_content:
@@ -66,6 +67,7 @@ orm:
 
                         relations:
                             table: related_contents
+                            source_key: pk_content
                             target_key: pk_content1
                             columns:
                                 pk_content1:
@@ -77,6 +79,7 @@ orm:
 
                         tag_ids:
                             table: contents_tags
+                            source_key: pk_content
                             target_key: content_id
                             return_fields: tag_id
                             columns:
