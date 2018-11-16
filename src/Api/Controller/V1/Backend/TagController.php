@@ -73,7 +73,7 @@ class TagController extends ApiController
      */
     public function showConfAction()
     {
-        $this->checkSecurity(null, 'TAG_ADMIN');
+        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
 
         return new JsonResponse([
             'blacklist_tag' => $this->get('core.validator')
@@ -90,7 +90,7 @@ class TagController extends ApiController
      */
     public function updateConfAction(Request $request)
     {
-        $this->checkSecurity(null, 'TAG_ADMIN');
+        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
 
         $blacklistConf = $request->request->all();
 
