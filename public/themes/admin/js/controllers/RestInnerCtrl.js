@@ -100,7 +100,7 @@
          * @return {Boolean} description
          */
         $scope.itemHasId = function() {
-          return $scope.item.id && $scope.item.id !== null;
+          return $scope.getItemId() && $scope.getItemId() !== null;
         };
 
         /**
