@@ -97,7 +97,7 @@ class WidgetsController extends Controller
             $post = $request->request;
 
             $title      = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-            $tagIds     = $this->get('api.service.tag')->getTagIdsFromStr($title);
+            $tagIds     = $this->get('api.service.tag')->getTags($title);
             $widgetData = [
                 'id'             => $post->getDigits('id'),
                 'action'         => $post->filter('action', null, FILTER_SANITIZE_STRING),
@@ -169,7 +169,7 @@ class WidgetsController extends Controller
         }
 
         $title      = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-        $tagIds     = $this->get('api.service.tag')->getTagIdsFromStr($title);
+        $tagIds     = $this->get('api.service.tag')->getTags($title);
         $widgetData = [
             'id'              => $id,
             'action'          => $post->filter('action', null, FILTER_SANITIZE_STRING),
@@ -270,5 +270,21 @@ class WidgetsController extends Controller
             'widgets'    => $widgets,
             'pagination' => $pagination,
         ]);
+    }
+
+    /**
+     * Returns the list of tag ids basing on the advertisement title.
+     *
+     * @param string $title The advertisement title.
+     *
+     * @return array The list of tag ids.
+     */
+    protected function getTags($title)
+    {
+        $tags = $this->get('api.service.tag')->getListByString($title);
+
+        return array_map(function ($a) {
+            return $a->id;
+        }, $tags['items']);
     }
 }

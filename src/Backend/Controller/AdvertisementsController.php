@@ -135,11 +135,10 @@ class AdvertisementsController extends Controller
         }
 
         $title  = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-        $tagIds = $this->get('api.service.tag')->getTagIdsFromStr($title);
 
         $data = [
             'title'              => $title,
-            'tag_ids'            => $tagIds,
+            'tag_ids'            => $this->getTags($title),
             'category'           => 0,
             'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -283,14 +282,13 @@ class AdvertisementsController extends Controller
             $categories = null;
         }
 
-        $title  = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-        $tagIds = $this->get('api.service.tag')->getTagIdsFromStr($title);
+        $title = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
         $data = [
             'id'                 => $ad->id,
             'title'              => $title,
             'category'           => 0,
-            'tag_ids'            => $tagIds,
+            'tag_ids'            => $this->getTags($title),
             'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -550,5 +548,21 @@ class AdvertisementsController extends Controller
         }, $subscriptions['items']);
 
         return array_values($subscriptions);
+    }
+
+    /**
+     * Returns the list of tag ids basing on the advertisement title.
+     *
+     * @param string $title The advertisement title.
+     *
+     * @return array The list of tag ids.
+     */
+    protected function getTags($title)
+    {
+        $tags = $this->get('api.service.tag')->getListByString($title);
+
+        return array_map(function ($a) {
+            return $a->id;
+        }, $tags['items']);
     }
 }

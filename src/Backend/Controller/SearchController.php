@@ -82,15 +82,19 @@ class SearchController extends Controller
             }
 
             //Clean the input words
-            $tagsWords = $this->get('api.service.tag')
-                ->getTagIdsFromStr($searchString);
+            $tags = $this->get('api.service.tag')
+                ->getListByString($searchString);
+
+            $ids = array_map(function ($a) {
+                return $a->id;
+            }, $tags);
 
             //Create the query if exist tagsWords
             if (!empty($tagsWords)) {
                 $countTagsWords = count($tagsWords) - 1;
                 $tagsWords      = implode(',', $tagsWords);
                 $search[]       = ' pk_content in (SELECT contents_tags.content_id'
-                . " FROM contents_tags WHERE contents_tags.tag_id IN ($tagsWords)"
+                . " FROM contents_tags WHERE contents_tags.tag_id IN ($ids)"
                 . ' GROUP BY contents_tags.content_id'
                 . ' HAVING COUNT(contents_tags.tag_id) >'
                 . $countTagsWords . ')';

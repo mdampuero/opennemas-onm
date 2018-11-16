@@ -204,8 +204,6 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                 $published = new \DateTime((string) $video->published);
                 $date      = date_format($published, 'Y-m-d H:i:s');
 
-                $ts = $this->getcontainer()->get('api.service.tag');
-
                 // Generate data array for creating video in Onm instance
                 $data = [
                     'content_status' => 1,
@@ -216,7 +214,7 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                     'fk_author'      => 0,
                     'video_url'      => $videoUrl,
                     'title'          => $title,
-                    'tag_ids'        => $ts->getTagIdsFromStr($title),
+                    'tag_ids'        => $this->getTags($title),
                     'description'    => (string) $video->summary,
                     'author_name'    => 'Youtube',
                     'information'    => $information,
@@ -276,15 +274,13 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                 continue;
             }
 
-            $ts = $this->getContainer()->get('api.service.tag');
-
             $data = [
                 'author_name'    => 'script',
                 'body'           => $item[1],
                 'category'       => $this->category,
                 'content_status' => 1,
                 'fk_author'      => 0,
-                'tag_ids'        => $ts->getTagIdsFromStr($item[0]),
+                'tag_ids'        => $this->getTags($item[0]),
                 'params'         => [],
                 'description'    => $item[0],
                 'endtime'        => '',
@@ -348,5 +344,22 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
             '<fg=yellow>*** Videos import finished in ' . $time
             . ' secs. ***</>'
         );
+    }
+
+    /**
+     * Returns the list of tag ids for a string.
+     *
+     * @param string $str The string.
+     *
+     * @return array The list of tag ids.
+     */
+    protected function getTags($str)
+    {
+        $tags = $this->getContainer()->get('api.service.tag')
+            ->getListByString($str);
+
+        return array_map(function ($a) {
+            return $a->id;
+        }, $tags);
     }
 }

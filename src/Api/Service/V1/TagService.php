@@ -87,6 +87,29 @@ class TagService extends OrmService
     }
 
     /**
+     * Returns a list of tags basing on a string.
+     *
+     * @param string $str    The string.
+     * @param string $locale The locale id.
+     *
+     * @return array The list of tags.
+     */
+    public function getListByString($str, $locale = null)
+    {
+        $tags = $this->container->get('data.manager.filter')
+            ->set($str)
+            ->filter('tags')
+            ->get();
+
+        $slugs = $this->container->get('data.manager.filter')
+            ->set(explode(',', $tags))
+            ->filter('slug')
+            ->get();
+
+        return $this->getListBySlugs($slugs, $locale);
+    }
+
+    /**
      * Returns the number of contents associated to a tag in a list of tags.
      *
      * @param array The list of tags.
@@ -111,33 +134,6 @@ class TagService extends OrmService
         return $this->container->get('orm.manager')
             ->getRepository($this->entity, $this->origin)
             ->getNumberOfContents($ids);
-    }
-
-    /**
-     * Method to validate a text as tags
-     *
-     * @param mixed $text       Text with all tags
-     * @param mixed $languageId Language of the tag
-     *
-     * @return mixed List with all tags validate against DB
-     */
-    public function getTagIdsFromStr($text, $languageId = null)
-    {
-        $tags = $this->container->get('data.manager.filter')
-            ->set($text)
-            ->filter('tags')
-            ->get();
-
-        $slugs = $this->container->get('data.manager.filter')
-            ->set(explode(',', $tags))
-            ->filter('slug')
-            ->get();
-
-        $tags = $this->getListBySlugs($slugs, $languageId);
-
-        return array_map(function ($a) {
-            return $a->id;
-        }, $tags['items']);
     }
 
     /**
