@@ -10,9 +10,10 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
+use Common\Core\Component\Validator\Validator;
+use Common\ORM\Entity\Tag;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Core\Component\Validator\Validator;
 
 /**
  * Lists and displays tags.
@@ -59,9 +60,39 @@ class TagController extends ApiController
         $tags       = $request->query->get('tags', null);
         $languageId = $request->query->get('languageId', null);
         $ts         = $this->get('api.service.tag');
+        $items      = $ts->getTagsAndNewTags($languageId, $tags);
+
         return new JsonResponse([
-            'items' => $ts->getTagsAndNewTags($languageId, $tags)
+            'items' => $ts->responsify($items)
         ]);
+    }
+
+    /**
+     * Checks if the information in the request is valid to create a new Tag.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function validateAction(Request $request)
+    {
+        $msg  = $this->get('core.messenger');
+        $data = $request->query->all();
+
+        $data['slug'] = $this->get('data.manager.filter')
+            ->set($data['name'])
+            ->filter('slug')
+            ->get();
+
+        $item = new Tag($data);
+
+        try {
+            $this->get('api.validator.tag')->validate($item);
+        } catch (\Exception $e) {
+            $msg->add('error', $e->getMessage(), 400);
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**

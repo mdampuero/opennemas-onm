@@ -152,7 +152,7 @@
 
           var route = {
             name: 'api_v1_backend_tags_validate',
-            params: { text: $scope.editedTag.name, languageId: $scope.locale }
+            params: { name: $scope.editedTag.name, languageId: $scope.locale }
           };
 
           $scope.tm = $timeout(function() {
