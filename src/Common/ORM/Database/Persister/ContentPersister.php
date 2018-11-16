@@ -33,6 +33,12 @@ class ContentPersister extends BasePersister
             unset($entity->tag_ids);
         }
 
+        $relations = [];
+        if (!empty($entity->relations)) {
+            $tagIds = $entity->relations;
+            unset($entity->relations);
+        }
+
         parent::create($entity);
 
         $id = $this->metadata->getId($entity);
@@ -44,6 +50,10 @@ class ContentPersister extends BasePersister
         $this->persistTags($id, $categories);
 
         $entity->tag_ids = $tagIds;
+
+        $this->persistRelations($id, $relations);
+
+        $entity->relations = $relations;
 
         $entity->refresh();
     }
@@ -79,6 +89,7 @@ class ContentPersister extends BasePersister
         }
 
         $entity->categories = $categories;
+
 
         if (array_key_exists('tag_ids', $changes)) {
             $this->persistTags($id, $tagIds);
@@ -186,15 +197,15 @@ class ContentPersister extends BasePersister
     /**
      * Persits the content tags.
      *
-     * @param integer $id         The entity id.
-     * @param array   $tags The list of category ids.
+     * @param integer $id   The entity id.
+     * @param array   $tags The list of tag ids.
      */
     protected function persistTags($id, $tags)
     {
         // Ignore metas with value = null
         if (!empty($tags)) {
-            $tags = array_filter($tags, function ($category) {
-                return !is_null($tags);
+            $tags = array_filter($tags, function ($tag) {
+                return !is_null($tag);
             });
         }
 
@@ -251,6 +262,79 @@ class ContentPersister extends BasePersister
             $types = array_merge(
                 $types,
                 [ \PDO::PARAM_INT, \PDO::PARAM_INT ]
+            );
+        }
+
+        $this->conn->executeQuery($sql, $params, $types);
+    }
+
+    /**
+     * Persits the content relations.
+     *
+     * @param integer $id         The entity id.
+     * @param array   $relations  The list of relations.
+     */
+    protected function persistRelations($id, $relations)
+    {
+        // Ignore metas with value = null
+        if (!empty($relations)) {
+            $relations = array_filter($relations, function ($relation) {
+                return !is_null($relation);
+            });
+        }
+
+        // Remove old relations
+        $this->removeRelations($id, array_values($relations));
+
+        // Update relations
+        $this->saveRelations($id, $relations);
+    }
+
+    /**
+     * Deletes old relations.
+     *
+     * @param array $id   The entity id.
+     */
+    protected function removeRelations($id)
+    {
+        $sql      = "delete from related_contents where pk_content1 = ?";
+        $params[] = $id['pk_content'];
+        $types[]  = \PDO::PARAM_INT;
+
+        $this->conn->executeQuery($sql, $params, $types);
+    }
+
+    /**
+     * Saves new tags.
+     *
+     * @param array $id         The entity id.
+     * @param array $categories The list of category ids to save.
+     */
+    protected function saveRelations($id, $relations)
+    {
+        if (empty($relations)) {
+            return;
+        }
+
+        $sql = "replace into related_contents"
+            . "(pk_content1, pk_content2, relationship) values "
+            . str_repeat(
+                '(?,?,?),',
+                count($relations)
+            );
+
+        $sql    = rtrim($sql, ',');
+        $params = [];
+        $types  = [];
+        foreach ($relations as $value) {
+            $params = array_merge(
+                $params,
+                array_merge(array_values($id), [ $value ])
+            );
+
+            $types = array_merge(
+                $types,
+                [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_STR ]
             );
         }
 

@@ -62,7 +62,8 @@ class EventController extends ApiController
         });
 
         $extra = [
-            'tags'       => [],
+            'tags'       => $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($items->tag_ids)['items'],
             'categories' => $converter->responsify($categories),
         ];
 
