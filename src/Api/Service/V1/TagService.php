@@ -186,7 +186,6 @@ class TagService extends OrmService
             return [];
         }
 
-
         $slugs = $this->container->get('data.manager.filter')
             ->set($validTags)
             ->filter('slug')
