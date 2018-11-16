@@ -168,42 +168,6 @@ class TagService extends OrmService
     }
 
     /**
-     *  Check if the tag is a valid new tag
-     *
-     * @param string $tag        Tag to check
-     * @param string $languageId Language id to search for it
-     *
-     * @return boolean if the tag is a valid new tag
-     */
-    public function isValidNewTag($tag, $languageId = null)
-    {
-        if (!is_string($tag) || empty($tag)) {
-            return false;
-        }
-
-        $arr = $this->validTags($tag, $languageId);
-
-        if (empty($arr)) {
-            return false;
-        }
-
-        $arr = $this->container->get('data.manager.filter')
-            ->set($arr)
-            ->filter('slug')
-            ->get();
-
-        $findTags = $this->getListBySlugs($arr, $languageId, 1);
-
-        foreach ($findTags['items'] as $tagAux) {
-            if ($tag == $tagAux->name) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
      *  Method to retrieve the ids for a list of tags. In case some tag not exist
      * the system generate a new tag but whithout id
      *

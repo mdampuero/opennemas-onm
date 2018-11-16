@@ -48,31 +48,6 @@ class TagController extends ApiController
     protected $service = 'api.service.tag';
 
     /**
-     * Get suggested word.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function validNewTagAction(Request $request)
-    {
-        $ts   = $this->get('api.service.tag');
-        $text = $request->query->get('text', null);
-        $msg  = $this->get('core.messenger');
-        if (empty($text)) {
-            $msg->add(_('Invalid tag'), 'success');
-            return new JsonResponse($msg->getMessages(), $msg->getCode());
-        }
-
-        $languageId = $request->query->get('languageId', null);
-        $valid      = !is_null($languageId) && $ts->isValidNewTag($text, $languageId);
-
-        return new JsonResponse([
-            'valid' => $valid
-        ]);
-    }
-
-    /**
      * Get suggested tags for some word.
      *
      * @param string $languageId The tag language.
