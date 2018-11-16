@@ -50,26 +50,6 @@ class TagController extends ApiController
     /**
      * Get suggested tags for some word.
      *
-     * @param string $languageId The tag language.
-     * @param string $tag        The partial tag language.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function suggesterAction($languageId, $tag)
-    {
-        $ts  = $this->get('api.service.tag');
-        $oql = 'language_id = "%s" and name ~ "%s%%" limit 25';
-
-        $response = $ts->getList(sprintf($oql, $languageId, $tag));
-
-        return new JsonResponse([
-            'items' => $ts->responsify($response['items'])
-        ]);
-    }
-
-    /**
-     * Get suggested tags for some word.
-     *
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
