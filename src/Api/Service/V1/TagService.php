@@ -168,27 +168,6 @@ class TagService extends OrmService
     }
 
     /**
-     *  Get all tags by the exact slug if is valid
-     *
-     * @param array $slugs slugs to check
-     *
-     * @return array tags for this slugs
-     */
-    public function getValidateTagBySlug($slugs, $languageId = null)
-    {
-        if (empty($slugs)) {
-            return [];
-        }
-
-        $slugs = $this->container->get('data.manager.filter')
-            ->set($slugs)
-            ->filter('slug')
-            ->get();
-
-        return $this->getListBySlugs($slugs, $languageId);
-    }
-
-    /**
      *  Check if the tag is a valid new tag
      *
      * @param string $tag        Tag to check

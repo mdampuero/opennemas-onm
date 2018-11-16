@@ -550,13 +550,17 @@ class Photo extends Content
                             }
 
                             if (empty($this->tag_ids)) {
-                                $this->tag_ids = array_map(
-                                    function ($tag) {
-                                        return $tag->id;
-                                    },
-                                    getService('api.service.tag')
-                                        ->getValidateTagBySlug($iptc["2#025"])['items']
-                                );
+                                $slugs = getService('data.manager.filter')
+                                    ->set($iptc["2#025"])
+                                    ->filter('slug')
+                                    ->get();
+
+                                $tags = getService('api.service.tag')
+                                    ->getListBySlugs($slugs);
+
+                                $this->tag_ids = array_map(function ($tag) {
+                                    return $tag->id;
+                                }, $tags['items']);
                             }
 
                             if (empty($this->author_name)) {
