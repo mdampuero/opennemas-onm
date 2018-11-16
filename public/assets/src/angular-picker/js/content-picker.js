@@ -56,7 +56,7 @@
                           '</ui-select-choices>' +
                         '</ui-select>' +
                       '</li>' +
-                      '<li ng-if="criteria.contentType != \'contents-in-frontpage\'">' +
+                      '<li ng-if="criteria.contentType != \'contents-in-frontpage\' && criteria.contentType != \'photo\'">' +
                         '<ui-select class=" select2-border" name="category" theme="select2" ng-model="criteria.category">' +
                           '<ui-select-match>' +
                             '[% $select.selected.title %]' +
@@ -180,7 +180,10 @@
               target: attrs.contentPickerTarget,
               types: {
                 enabled:   [ ],
-                available: [ 'album', 'article', 'attachment', 'opinion', 'poll', 'video', 'special' ]
+                available: [
+                  'album', 'article', 'attachment', 'letter', 'opinion',
+                  'photo', 'poll', 'video', 'special'
+                ]
               },
 
               /**

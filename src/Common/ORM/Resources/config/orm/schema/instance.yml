@@ -8,3 +8,4 @@ orm:
                 - User
                 - UserGroup
                 - UserGroupPrivileges
+                - Url

@@ -85,7 +85,7 @@ class TagsController extends Controller
     public function tagsAction(Request $request)
     {
         $slug = $request->get('slug', null);
-        $page = $request->query->getDigits('page', 1);
+        $page = (int) $request->get('page', 1);
         $page = $page > 1 ? 2 : 1;
 
         $slug = $this->get('data.manager.filter')

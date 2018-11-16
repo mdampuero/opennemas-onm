@@ -93,9 +93,9 @@ class BooksController extends Controller
      */
     public function showAction(Request $request)
     {
-        $categoryName = $request->query->get('category_name', null);
-        $dirtyID      = $request->query->get('id', null);
-        $urlSlug      = $request->query->get('slug', null);
+        $categoryName = $request->get('category_name', null);
+        $dirtyID      = $request->get('id', null);
+        $urlSlug      = $request->get('slug', null);
 
         $content = $this->get('content_url_matcher')
             ->matchContentUrl('book', $dirtyID, $urlSlug, $categoryName);

@@ -44,19 +44,10 @@ class ErrorController extends Controller
 
             case 'ContentNotMigratedException':
             case 'ResourceNotFoundException':
-                $this->get('application.log')->info($class->getShortName());
-
-                return $this->getNotFoundResponse();
-
             case 'NotFoundHttpException':
                 $this->get('application.log')->info($class->getShortName());
 
-                // Redirect to redirectors URLs without /
-                $url = $this->generateUrl('frontend_redirect_content', [
-                    'slug'  => mb_ereg_replace('^\/', '', $request->getRequestUri())
-                ]);
-
-                return new RedirectResponse($url, 301);
+                return $this->getNotFoundResponse();
 
             default:
                 $this->get('error.log')->error($error->getMessage());
@@ -66,7 +57,7 @@ class ErrorController extends Controller
 
     /**
      * Generates a response when the error is caused by an unauthorized access
-     * to a protected resolurce.
+     * to a protected resource.
      *
      * @return Response The response object.
      */

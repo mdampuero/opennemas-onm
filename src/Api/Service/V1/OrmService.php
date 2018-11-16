@@ -19,7 +19,7 @@ use Api\Exception\PatchListException;
 use Api\Exception\UpdateItemException;
 use Api\Service\Service;
 
-class OrmService extends Service
+class OrmService implements Service
 {
     /**
      * The full class name.
@@ -29,11 +29,25 @@ class OrmService extends Service
     protected $class;
 
     /**
+     * The service container.
+     *
+     * @var ServiceContainer
+     */
+    protected $container;
+
+    /**
      * Wheter to return the total number of items when calling getList.
      *
      * @var boolean
      */
     protected $count = true;
+
+    /**
+     * The event dispatcher service.
+     *
+     * @var EventDispatcher
+     */
+    protected $dispatcher;
 
     /**
      * The entity manager.
@@ -67,15 +81,15 @@ class OrmService extends Service
      */
     public function __construct($container, $entity, $validator = null)
     {
-        $this->class  = $entity;
-        $this->em     = $container->get('orm.manager');
-        $this->entity = substr($entity, strrpos($entity, '\\') + 1);
+        $this->class      = $entity;
+        $this->container  = $container;
+        $this->dispatcher = $container->get('core.dispatcher');
+        $this->em         = $container->get('orm.manager');
+        $this->entity     = substr($entity, strrpos($entity, '\\') + 1);
 
         if (!empty($validator)) {
             $this->validator = $validator;
         }
-
-        parent::__construct($container);
     }
 
     /**
@@ -91,6 +105,10 @@ class OrmService extends Service
 
             $this->validate($item);
             $this->em->persist($item, $this->getOrigin());
+
+            $this->dispatcher->dispatch($this->getEventName('createItem'), [
+                'id' => $this->em->getMetadata($item)->getId($item)
+            ]);
 
             return $item;
         } catch (\Exception $e) {
@@ -108,6 +126,10 @@ class OrmService extends Service
             $item = $this->getItem($id);
 
             $this->em->remove($item, $item->getOrigin());
+
+            $this->dispatcher->dispatch($this->getEventName('deleteItem'), [
+                'id' => $id
+            ]);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new DeleteItemException($e->getMessage(), $e->getCode());
@@ -130,17 +152,22 @@ class OrmService extends Service
             throw new DeleteListException($e->getMessage(), $e->getCode());
         }
 
-        $deleted = 0;
+        $deleted = [];
         foreach ($response['items'] as $item) {
             try {
                 $this->em->remove($item, $item->getOrigin());
-                $deleted++;
+
+                $deleted[] = $this->em->getMetadata($item)->getId($item);
             } catch (\Exception $e) {
                 $this->container->get('error.log')->error($e->getMessage());
             }
         }
 
-        return $deleted;
+        $this->dispatcher->dispatch($this->getEventName('deleteList'), [
+            'ids' => $deleted
+        ]);
+
+        return count($deleted);
     }
 
     /**
@@ -149,8 +176,14 @@ class OrmService extends Service
     public function getItem($id)
     {
         try {
-            return $this->container->get('orm.manager')
+            $item = $this->container->get('orm.manager')
                 ->getRepository($this->entity, $this->origin)->find($id);
+
+            $this->dispatcher->dispatch($this->getEventName('getItem'), [
+                'id' => $id
+            ]);
+
+            return $item;
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new GetItemException($e->getMessage(), $e->getCode());
@@ -185,7 +218,13 @@ class OrmService extends Service
             throw new GetItemException();
         }
 
-        return array_pop($response['items']);
+        $item = array_pop($response['items']);
+
+        $this->dispatcher->dispatch($this->getEventName('getItemBy'), [
+            'oql' => $oql
+        ]);
+
+        return $item;
     }
 
     /**
@@ -204,6 +243,10 @@ class OrmService extends Service
             if ($this->count) {
                 $response['total'] = $repository->countBy($oql);
             }
+
+            $this->dispatcher->dispatch($this->getEventName('getList'), [
+                'oql' => $oql
+            ]);
 
             return $response;
         } catch (\Exception $e) {
@@ -230,6 +273,10 @@ class OrmService extends Service
 
         $items = $this->container->get('orm.manager')
             ->getRepository($this->entity, $this->origin)->find($ids);
+
+        $this->dispatcher->dispatch($this->getEventName('getListByIds'), [
+            'ids' => $ids
+        ]);
 
         return [ 'items' => $items, 'total' => count($items) ];
     }
@@ -259,6 +306,10 @@ class OrmService extends Service
 
             $this->validate($item);
             $this->em->persist($item, $this->getOrigin());
+
+            $this->dispatcher->dispatch($this->getEventName('patchItem'), [
+                'id' => $id
+            ]);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new PatchItemException($e->getMessage(), $e->getCode());
@@ -283,20 +334,24 @@ class OrmService extends Service
             throw new PatchListException($e->getMessage());
         }
 
-        $updated = 0;
+        $updated = [];
         foreach ($response['items'] as $item) {
             try {
                 $item->merge($data);
                 $this->validate($item);
                 $this->em->persist($item, $this->getOrigin());
 
-                $updated++;
+                $updated[] = $this->em->getMetadata($item)->getId($item);
             } catch (\Exception $e) {
                 $this->container->get('error.log')->error($e->getMessage());
             }
         }
 
-        return $updated;
+        $this->dispatcher->dispatch($this->getEventName('patchList'), [
+            'ids' => $updated
+        ]);
+
+        return count($updated);
     }
 
     /**
@@ -353,6 +408,10 @@ class OrmService extends Service
 
             $this->validate($item);
             $this->em->persist($item, $item->getOrigin());
+
+            $this->dispatcher->dispatch($this->getEventName('updateItem'), [
+                'id' => $id
+            ]);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
             throw new UpdateItemException($e->getMessage());
@@ -388,6 +447,18 @@ class OrmService extends Service
     protected function getOqlForList($oql)
     {
         return $oql;
+    }
+
+    /**
+     * Returns the event name for an action basing on the service entity.
+     *
+     * @param string $action The action name.
+     *
+     * @return string The event name.
+     */
+    protected function getEventName($action)
+    {
+        return \underscore(basename($this->entity)) . '.' . $action;
     }
 
     /**

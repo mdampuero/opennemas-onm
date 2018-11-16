@@ -22,62 +22,30 @@ class TagController extends ApiController
     /**
      * {@inheritdoc}
      */
+    protected $extension = 'es.openhost.module.tags';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $getItemRoute = 'api_v1_backend_tag_show';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $permissions = [
+        'create' => 'TAG_CREATE',
+        'delete' => 'TAG_DELETE',
+        'list'   => 'TAG_ADMIN',
+        'patch'  => 'TAG_UPDATE',
+        'save'   => 'TAG_CREATE',
+        'show'   => 'TAG_UPDATE',
+        'update' => 'TAG_UPDATE',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $service = 'api.service.tag';
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteAction($id)
-    {
-        // TODO: Uncomment when support for tag permissions
-        //$this->checkSecurity(null, 'TAG_DELETE');
-
-        return parent::deleteAction($id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteSelectedAction(Request $request)
-    {
-        // TODO: Uncomment when support for tag permissions
-        //$this->checkSecurity(null, 'TAG_DELETE');
-
-        return parent::deleteSelectedACtion($request);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function listAction(Request $request)
-    {
-        // TODO: Uncomment when support for tag permissions
-        //$this->checkSecurity(null, 'TAG_ADMIN');
-
-        return parent::listAction($request);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function showAction($id)
-    {
-        // TODO: Uncomment when support for tag permissions
-        //$this->checkSecurity(null, 'TAG_ADMIN');
-
-        return parent::showAction($id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateAction(Request $request, $id)
-    {
-        // TODO: Uncomment when support for tag permissions
-        //$this->checkSecurity(null, 'TAG_ADMIN');
-
-        return parent::updateAction($request, $id);
-    }
 
     /**
      * Get suggested word.
@@ -150,8 +118,7 @@ class TagController extends ApiController
      */
     public function showConfAction()
     {
-        // TODO: Uncomment when support for tag permissions
-        //$this->checkSecurity(null, 'TAG_ADMIN');
+        $this->checkSecurity(null, 'TAG_ADMIN');
 
         return new JsonResponse([
             'blacklist_tag' => $this->get('core.validator')
@@ -168,8 +135,7 @@ class TagController extends ApiController
      */
     public function updateConfAction(Request $request)
     {
-        // TODO: Uncomment when support for tag permissions
-        //$this->checkSecurity(null, 'TAG_ADMIN');
+        $this->checkSecurity(null, 'TAG_ADMIN');
 
         $blacklistConf = $request->request->all();
 

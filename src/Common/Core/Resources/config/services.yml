@@ -175,7 +175,7 @@ services:
 
     core.redirector:
         class:     Common\Core\Component\Routing\Redirector
-        arguments: [ '@service_container' ]
+        arguments: [ '@service_container', '@api.service.url', '@cache.connection.instance' ]
         public: true
 
     core.instance.checker:
@@ -340,6 +340,12 @@ services:
         class:     Common\Core\Component\Security\User\UserProvider
         arguments: [ '@orm.manager', [ 'instance', 'manager' ] ]
         public: true
+
+    core.subscriber.redirector:
+        class: Common\Core\EventSubscriber\RedirectorSubscriber
+        arguments: [ '@cache.connection.instance', '@core.instance' ]
+        tags:
+            - { name: kernel.event_subscriber }
 
     core.security.user.oauth_provider:
         class:     Common\Core\Component\Security\User\OAuthUserProvider

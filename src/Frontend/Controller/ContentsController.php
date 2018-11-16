@@ -324,7 +324,7 @@ class ContentsController extends Controller
             $httpCode = 400;
             $content  = "false";
 
-            if (!$saved) {
+            if ($saved) {
                 $httpCode = 200;
                 $content  = "Ok";
             }

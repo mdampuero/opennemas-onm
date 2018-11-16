@@ -264,8 +264,8 @@ class BlogsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $dirtyID = $request->query->getDigits('blog_id');
-        $urlSlug = $request->query->filter('blog_title', '', FILTER_SANITIZE_STRING);
+        $dirtyID = $request->get('blog_id');
+        $urlSlug = $request->get('blog_title', '', FILTER_SANITIZE_STRING);
 
         $blog = $this->get('content_url_matcher')
             ->matchContentUrl('opinion', $dirtyID, $urlSlug);

@@ -35,8 +35,8 @@ class CategoryController extends Controller
      */
     public function categoryAction(Request $request)
     {
-        $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
-        $page         = $request->query->getDigits('page', 1);
+        $categoryName = $request->get('category_name', '', FILTER_SANITIZE_STRING);
+        $page         = (int) $request->get('page', 1);
         $epp          = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('items_in_blog', 10);

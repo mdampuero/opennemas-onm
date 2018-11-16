@@ -30,6 +30,10 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'objectify', 'responsify' ])
             ->getMock();
 
+        $this->dispatcher = $this->getMockBuilder('EventDispatcher')
+            ->setMethods([ 'dispatch' ])
+            ->getMock();
+
         $this->em = $this->getMockBuilder('EntityManager' . uniqid())
             ->setMethods([
                 'getConverter' ,'getMetadata', 'getRepository', 'persist',
@@ -37,7 +41,7 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
             ])->getMock();
 
         $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
-            ->setMethods([ 'getIdKeys' ])
+            ->setMethods([ 'getId', 'getIdKeys' ])
             ->getMock();
 
         $this->logger = $this->getMockBuilder('Logger' . uniqid())
@@ -74,6 +78,9 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.dispatcher':
+                return $this->dispatcher;
+
             case 'error.log':
                 return $this->logger;
 

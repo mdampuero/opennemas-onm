@@ -202,7 +202,6 @@ class TagService extends OrmService
             return false;
         }
 
-
         $arr = $this->validTags($tag, $languageId);
 
         if (empty($arr)) {
