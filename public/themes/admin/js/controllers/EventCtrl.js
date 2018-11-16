@@ -58,6 +58,27 @@
         };
 
         /**
+         * @function parseItem
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Parses the response and adds information to the scope.
+         *
+         * @param {Object} data The data in the response.
+         */
+        $scope.parseItem = function(data) {
+          if (data.item) {
+            $scope.item = angular.extend($scope.item, data.item);
+          }
+
+          $scope.category = $scope.item.categories.slice(1);
+
+          // $scope.item.relations.each(function(index, el) {
+          //   console.log(el);
+          // });
+        };
+
+        /**
          * @memberOf EventCtrl
          *
          * @description
@@ -94,15 +115,19 @@
           $scope.item.categories = [ Number(nv) ];
         });
 
-        // Update title_int when title changes
-        $scope.$watch('item.title', function(nv, ov) {
+        // Update slug when title is updated
+        $scope.$watch('image', function(nv, ov) {
           if (!nv) {
             return;
           }
 
-          if (nv && (!$scope.item.title_int ||
-              ov === $scope.item.title_int)) {
-            $scope.item.title_int = nv;
+          $scope.item.relations = [];
+        }, true);
+
+        // Update slug when title is updated
+        $scope.$watch('item.title', function(nv, ov) {
+          if (!nv) {
+            return;
           }
 
           if (!$scope.item.slug || $scope.item.slug === '') {

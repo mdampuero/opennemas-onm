@@ -62,11 +62,36 @@ class EventController extends ApiController
         });
 
         $extra = [
-            'tags'       => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($items->tag_ids)['items'],
+            'tags'       => $this->getTagIds($items),
             'categories' => $converter->responsify($categories),
         ];
 
         return array_merge($extra, $this->getLocaleData('frontend'));
+    }
+
+    /**
+     * Returns the list of tag ids for a list of items or a individual item
+     *
+     * @param array|Content $items One Content object or a list of Content objects
+     *
+     * @return array
+     **/
+    public function getTagIds($items = null)
+    {
+        if (empty($items)) {
+            return [];
+        }
+
+        $tagIds = [];
+        if (is_array($items)) {
+            foreach ($items as $item) {
+                $tagIds = array_merge($tagIds, $item->tag_ids);
+            }
+        } else {
+            $tagIds = $items->tag_ids;
+        }
+
+        return $this->get('api.service.tag')
+            ->getListByIdsKeyMapped($tagIds)['items'];
     }
 }
