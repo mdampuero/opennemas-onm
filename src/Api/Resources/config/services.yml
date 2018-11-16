@@ -63,6 +63,11 @@ services:
         arguments: [ '@service_container' ]
         public: true
 
+    api.validator.tag:
+        class:     Api\Validator\V1\TagValidator
+        arguments: [ '@service_container' ]
+        public: true
+
     api.validator.user:
         class:     Api\Validator\V1\UserValidator
         arguments: [ '@service_container' ]
