@@ -28,18 +28,6 @@ class TagService extends OrmService
     }
 
     /**
-     * Method to simplificate the tag word for enable a search system
-     *
-     * @param string $word word for transformation
-     *
-     * @return string searcheable word.
-     */
-    public function createSearchableWord($word)
-    {
-        return \Onm\StringUtils::generateSlug($word, false);
-    }
-
-    /**
      * Returns a list of tags associated to contents with content type in a
      * list of types.
      *
@@ -160,7 +148,12 @@ class TagService extends OrmService
                 continue;
             }
 
-            if (empty($this->createSearchableWord($tag))) {
+            $slug = $this->container->get('data.manager.filter')
+                ->set($tag)
+                ->filter('slug')
+                ->get();
+
+            if (empty($slug)) {
                 continue;
             }
 
@@ -187,7 +180,10 @@ class TagService extends OrmService
             return [];
         }
 
-        $slugs = $this->createSearchableWord($slugs);
+        $slugs = $this->container->get('data.manager.filter')
+            ->set($slugs)
+            ->filter('slug')
+            ->get();
 
         return $this->getListBySlugs($slugs, $languageId);
     }
@@ -213,7 +209,10 @@ class TagService extends OrmService
             return false;
         }
 
-        $arr = $this->createSearchableWord($arr);
+        $arr = $this->container->get('data.manager.filter')
+            ->set($arr)
+            ->filter('slug')
+            ->get();
 
         $findTags = $this->getListBySlugs($arr, $languageId, 1);
 
@@ -245,7 +244,11 @@ class TagService extends OrmService
             return [];
         }
 
-        $slugs = $this->createSearchableWord($validTags);
+
+        $slugs = $this->container->get('data.manager.filter')
+            ->set($validTags)
+            ->filter('slug')
+            ->get();
 
         $recoverTags = $this->getListBySlugs($slugs, $locale);
 

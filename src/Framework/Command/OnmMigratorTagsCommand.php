@@ -144,7 +144,11 @@ class OnmMigratorTagsCommand extends ContainerAwareCommand
                     continue;
                 }
 
-                $searcheableWord = $tagService->createSearchableWord($tag);
+                $searcheableWord = $this->getContainer()
+                    ->get('data.manager.filter')
+                    ->set($tag)
+                    ->filter('slug')
+                    ->get();
 
                 if (empty($searcheableWord)) {
                     continue;
