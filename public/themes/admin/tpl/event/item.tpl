@@ -120,15 +120,20 @@
                 </div>
               </div>
 
-              <div class="row">
-                <div class="form-group col-xs-12">
-                  <label class="form-label" for="event_place">{t}Place{/t}</label>
-                  <div class="controls">
-                    <input class="form-control"  id="event_place" name="event_place" ng-model="item.event_place" type="text">
-                  </div>
+              <div class="form-group">
+                <label class="form-label" for="event_place">{t}Place{/t}</label>
+                <div class="controls">
+                  <input class="form-control"  id="event_place" name="event_place" ng-model="item.event_place" type="text">
                 </div>
-
               </div>
+
+              <div class="form-group">
+                <label class="form-label" for="event_website">{t}Website URL{/t}</label>
+                <div class="controls">
+                  <input class="form-control"  id="event_website" name="event_website" ng-model="item.event_website" type="text">
+                </div>
+              </div>
+
               <div class="form-group">
                 <label class="form-label clearfix" for="description">
                   <div class="pull-left">{t}Description{/t}</div>
@@ -196,7 +201,7 @@
                     </label>
                     <div class="controls">
                       <div class="input-group">
-                        <input class="form-control" id="starttime" name="starttime" type="datetime" ng-model="item.starttime">
+                        <input class="form-control" datetime-picker datetime-picker-timezone="{$timezone}" datetime-picker-use-current=true datetime-picker-min="item.event_startdate" id="event_enddate" name="event_enddate" id="starttime" name="starttime" type="datetime" ng-model="item.starttime">
                         <span class="input-group-addon add-on">
                           <span class="fa fa-calendar"></span>
                         </span>
@@ -212,7 +217,7 @@
                     </label>
                     <div class="controls">
                       <div class="input-group">
-                        <input class="form-control" id="endtime" name="endtime" type="datetime" ng-model="item.endtime">
+                        <input class="form-control" datetime-picker datetime-picker-timezone="{$timezone}" datetime-picker-use-current=true datetime-picker-min="item.endtime" id="endtime" name="endtime" id="endtime" name="endtime" type="datetime" ng-model="item.endtime">
                         <span class="input-group-addon add-on">
                           <span class="fa fa-calendar"></span>
                         </span>
