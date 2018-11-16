@@ -97,6 +97,7 @@ class ContentPersister extends BasePersister
         $changes    = $entity->getChanges();
         $categories = $entity->categories;
         $tagIds     = $entity->tag_ids;
+        $relations  = $entity->relations;
 
         // Categories change
         if (array_key_exists('categories', $changes)) {
@@ -127,6 +128,12 @@ class ContentPersister extends BasePersister
         }
 
         $entity->tag_ids = $tagIds;
+
+        if (array_key_exists('relations', $changes)) {
+            $this->persistRelations($id, $relations);
+        }
+
+        $entity->relations = $relations;
 
         if ($this->hasCache()) {
             $this->cache->remove($this->metadata->getPrefixedId($entity));
@@ -360,7 +367,7 @@ class ContentPersister extends BasePersister
         foreach ($relations as $value) {
             $params = array_merge(
                 $params,
-                array_merge(array_values($id), [ $value ])
+                array_merge(array_values($id), array_values($value))
             );
 
             $types = array_merge(
