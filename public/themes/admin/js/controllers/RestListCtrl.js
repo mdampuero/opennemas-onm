@@ -187,6 +187,10 @@
 
             // Scroll top
             $('body').animate({ scrollTop: '0px' }, 1000);
+          }, function(response) {
+            messenger.post(response.data);
+            $scope.flags.http.loading = 0;
+            $scope.items = [];
           });
         };
 

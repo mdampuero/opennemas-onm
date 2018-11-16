@@ -25,7 +25,7 @@
          * @type {Object}
          */
         $scope.criteria = {
-          pk_content_category: null,
+          pk_fk_content_category: null,
           content_type_name: 'event',
           epp: 10,
           in_litter: 0,
