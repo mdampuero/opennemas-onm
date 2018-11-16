@@ -30,7 +30,10 @@ class ToolController extends Controller
     public function slugAction(Request $request)
     {
         $slug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
-        $slug = \Onm\StringUtils::generateSlug($slug);
+        $slug = $this->get('data.manager.filter')
+            ->set($slug)
+            ->filter('slug')
+            ->get();
 
         return new JsonResponse([ 'slug' => $slug ]);
     }
