@@ -62,11 +62,41 @@ class EventController extends ApiController
         });
 
         $extra = [
-            'tags'       => $this->getTagIds($items),
-            'categories' => $converter->responsify($categories),
+            'categories'       => $converter->responsify($categories),
+            'related_contents' => $this->getRelatedContents($items),
+            'tags'             => $this->getTagIds($items),
         ];
 
         return array_merge($extra, $this->getLocaleData('frontend'));
+    }
+
+    /**
+     * Returns the list of photos linked to the article.
+     *
+     * @param Content $content The content.
+     *
+     * @return array The list of photos linked to the content.
+     */
+    protected function getRelatedContents($content)
+    {
+        $em    = $this->get('entity_repository');
+        $extra = [];
+
+        if (is_object($content)) {
+            $content = [ $content ];
+        }
+
+        foreach ($content as $element) {
+            foreach ($element->relations as $relation) {
+                $photo = $em->find('Photo', $relation['pk_content2']);
+
+                if (!empty($photo)) {
+                    $extra[$relation['pk_content2']] = \Onm\StringUtils::convertToUtf8($photo);
+                }
+            }
+        }
+
+        return $extra;
     }
 
     /**
