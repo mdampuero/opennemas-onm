@@ -28,5 +28,21 @@ class TagValidator extends Validator
         if (!empty($errors)) {
             throw new InvalidArgumentException('Invalid tag', 400);
         }
+
+        if (!$item->exists()) {
+            $oql = sprintf(
+                'name = "%s" and language_id = "%s"',
+                $item->name,
+                $item->language_id
+            );
+
+            try {
+                $this->container->get('api.service.tag')->getItemBy($oql);
+            } catch (\Exception $e) {
+                return;
+            }
+
+            throw new InvalidArgumentException('Invalid tag', 400);
+        }
     }
 }
