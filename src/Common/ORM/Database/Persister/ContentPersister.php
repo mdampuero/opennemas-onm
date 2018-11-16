@@ -9,7 +9,12 @@
  */
 namespace Common\ORM\Database\Persister;
 
+use Common\Cache\Core\Cache;
+use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
+use Common\ORM\Core\Metadata;
+use Common\ORM\Entity\User;
+use Common\ORM\Database\Data\Converter\BaseConverter;
 
 /**
  * The InstancecontentPersister class defines actions to persist contents.
@@ -17,10 +22,33 @@ use Common\ORM\Core\Entity;
 class ContentPersister extends BasePersister
 {
     /**
+     * Initializes a new DatabasePersister.
+     *
+     * @param Connection $conn     The database connection.
+     * @param Metadata   $metadata The entity metadata.
+     * @param Cache      $cache    The cache service.
+     */
+    public function __construct(Connection $conn, Metadata $metadata, Cache $cache = null, User $user)
+    {
+        $this->cache     = $cache;
+        $this->conn      = $conn;
+        $this->converter = new BaseConverter($metadata);
+        $this->metadata  = $metadata;
+        $this->user      = $user;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function create(Entity &$entity)
     {
+        if (empty($entity->starttime)) {
+            $entity->starttime = new \DateTime();
+        }
+
+        $entity->fk_fk_user_last_editor = $this->user->id;
+        $entity->fk_publisher           = $this->user->id;
+
         $categories = [];
         if (!empty($entity->categories)) {
             $categories = $entity->categories;
@@ -63,6 +91,9 @@ class ContentPersister extends BasePersister
      */
     public function update(Entity $entity)
     {
+        $entity->fk_user_last_editor = $this->user->id;
+        $entity->fk_publisher = $this->user->id;
+
         $changes    = $entity->getChanges();
         $categories = $entity->categories;
         $tagIds     = $entity->tag_ids;

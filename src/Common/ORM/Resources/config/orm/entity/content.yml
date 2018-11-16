@@ -44,7 +44,7 @@ orm:
             persisters:
                 instance:
                     class:     Common\ORM\Database\Persister\ContentPersister
-                    arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache.connection.instance' ]
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache.connection.instance', '@core.user' ]
             mapping:
                 database:
                     table: contents

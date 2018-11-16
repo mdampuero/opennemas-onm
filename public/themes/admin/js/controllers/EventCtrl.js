@@ -71,11 +71,7 @@
             $scope.item = angular.extend($scope.item, data.item);
           }
 
-          $scope.category = $scope.item.categories.slice(1);
-
-          // $scope.item.relations.each(function(index, el) {
-          //   console.log(el);
-          // });
+          $scope.category = $scope.item.categories.shift();
         };
 
         /**
