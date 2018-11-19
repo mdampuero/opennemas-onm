@@ -10,9 +10,8 @@
 namespace Test\Common\Core\Component\Security\Recaptcha;
 
 use Common\Core\Component\Security\Recaptcha\Recaptcha;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class RecaptchaTest extends KernelTestCase
+class RecaptchaTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
@@ -21,12 +20,16 @@ class RecaptchaTest extends KernelTestCase
             ->setMethods([ 'isSuccess', 'verify', 'getHostName' ])
             ->getMock();
 
-        $this->repository = $this->getMockBuilder('SettingManager')
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get', 'getParameter' ])
+            ->getMock();
+
+        $this->ds = $this->getMockBuilder('DataSet')
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->container = $this->getMockBuilder('ServiceContainer')
-            ->setMethods([ 'get', 'getParameter' ])
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'getDataSet' ])
             ->getMock();
 
         $this->requestStack = $this->getMockBuilder('RequestStack')
@@ -83,13 +86,19 @@ class RecaptchaTest extends KernelTestCase
 
         $this->container->expects($this->any())
             ->method('get')
-            ->with('setting_repository')
-            ->willReturn($this->repository);
+            ->with('orm.manager')
+            ->willReturn($this->em);
 
-        $this->repository->expects($this->once())
+        $this->em->expects($this->once())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
+
+        $this->ds->expects($this->once())
             ->method('get')
             ->with('recaptcha')
-            ->willReturn([ 'public_key' => 'site_wooble', 'private_key' => 'secret_baz',  ]);
+            ->willReturn([
+                'public_key' => 'site_wooble',
+                'private_key' => 'secret_baz'
+            ]);
 
         $this->recaptcha = new Recaptcha($this->container);
         $this->recaptcha->configureFromSettings();
@@ -109,15 +118,14 @@ class RecaptchaTest extends KernelTestCase
             'secretKey' => 'fres',
         ];
 
-        $this->container->expects($this->any())
-            ->method('get')
-            ->with('setting_repository')
-            ->willReturn($this->repository);
+        $this->container->expects($this->once())->method('get')
+            ->with('orm.manager') ->willReturn($this->em);
 
-        $this->repository->expects($this->once())
-            ->method('get')
-            ->with('recaptcha')
-            ->willReturn([]);
+        $this->em->expects($this->once())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
+
+        $this->ds->expects($this->once())->method('get')
+            ->with('recaptcha')->willReturn([]);
 
         $this->recaptcha = new Recaptcha($this->container);
         $this->recaptcha->configureFromSettings();

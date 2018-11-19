@@ -4,7 +4,7 @@
  * Returns the url for a given content
  * -------------------------------------------------------------
  */
-function smarty_function_get_url($params, $smarty)
+function smarty_function_get_url($params, &$smarty)
 {
     if (!array_key_exists('item', $params)
         || !is_object($params['item'])

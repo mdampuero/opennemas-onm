@@ -10,7 +10,6 @@
 namespace Manager\Controller;
 
 use Common\Core\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Handles the actions for the manager welcome page
@@ -21,8 +20,6 @@ class WelcomeController extends Controller
 {
     /**
      * Shows the welcome page of the manager
-     *
-     * @return void
      */
     public function defaultAction()
     {

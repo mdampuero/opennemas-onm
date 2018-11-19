@@ -9,21 +9,21 @@
  */
 namespace Tests\Common\ORM\Core\Schema;
 
-use Common\ORM\Core\Schema\Dumper;
-use Common\ORM\Core\Schema\Schema;
-use Common\ORM\Core\Metadata;
+use \Common\ORM\Core\Schema\Dumper;
+use \Common\ORM\Core\Schema\Schema;
+use \Common\ORM\Core\Metadata;
 
 /**
  * Defines test cases for Dumper class.
  */
-class DumperTest extends \PHPUnit_Framework_TestCase
+class DumperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
      */
     public function setUp()
     {
-        $schemas  = [
+        $schemas = [
             'Foobar' => new Schema([ 'name' => 'Foobar', 'entities' => [ 'Foo' ] ]),
             'Wibble' => new Schema([ 'name' => 'Wibble', 'entities' => [ 'Bar' ] ])
         ];
@@ -64,6 +64,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     public function testConstructWithoutArguments()
     {
         new Dumper();
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -101,7 +103,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests dump for an schema without database mapping information.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testDumpNoDatabaseInformation()
     {
@@ -119,7 +121,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests validate for a schema without table name.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateWithoutTableName()
     {
@@ -129,7 +131,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests validate for a schema for a invalid table name.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateInvalidTableName()
     {
@@ -153,7 +155,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests validateField for a field without type.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateFieldWithoutType()
     {
@@ -201,7 +203,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests validateIndex for an index without name.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateIndexWithoutName()
     {
@@ -214,7 +216,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests validateIndex for an index without columns.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateIndexWithUnknownColumns()
     {
@@ -227,14 +229,17 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests validateIndex for an index with invalid flags.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateIndexWithInvalidFlags()
     {
         $method = new \ReflectionMethod($this->dumper, 'validateIndex');
         $method->setAccessible(true);
 
-        $method->invokeArgs($this->dumper, [ 'gorp', [ 'foo' ], [ 'name' => 'bar', 'columns' => [ 'foo' ], 'primary' => 'baz' ] ]);
+        $method->invokeArgs(
+            $this->dumper,
+            [ 'gorp', [ 'foo' ], [ 'name' => 'bar', 'columns' => [ 'foo' ], 'primary' => 'baz' ] ]
+        );
     }
 
     /**
@@ -245,13 +250,18 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($this->dumper, 'validateIndex');
         $method->setAccessible(true);
 
-        $method->invokeArgs($this->dumper, [ 'gorp', [ 'foo' ], [ 'name' => 'bar', 'columns' => [ 'foo' ], 'primary' => true ] ]);
+        $method->invokeArgs(
+            $this->dumper,
+            [ 'gorp', [ 'foo' ], [ 'name' => 'bar', 'columns' => [ 'foo' ], 'primary' => true ] ]
+        );
+
+        $this->addToAssertionCount(1);
     }
 
     /**
      * Tests validateIndex with an already validated index.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateIndexesDuplicated()
     {
@@ -265,6 +275,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($dumper, [ 'gorp', [ 'quux' ], [ [ 'name' => 'id' ], [ 'name' => 'id' ] ] ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -282,12 +294,14 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($dumper, [ 'gorp', [ 'quux' ], [ [ 'name' => 'PRIMARY' ] ] ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
      * Tests validateOption for an invalid option.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateOptionInvalid()
     {
@@ -295,6 +309,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($this->dumper, [ 'gorp', 'quux', 'length', true ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -306,12 +322,14 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($this->dumper, [ 'gorp', 'quux', 'length', 10 ]);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
      * Tests validateOptions with unrecognized options.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateOptionsInvalid()
     {
@@ -341,7 +359,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests validateTable for a table without columns.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateTableNoColumns()
     {
@@ -354,7 +372,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests validateTable for a table without indexes.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateTableNoIndexes()
     {
@@ -379,13 +397,16 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($dumper, 'validateTable');
         $method->setAccessible(true);
 
-        $method->invokeArgs($dumper, [ 'gorp', [ 'columns' => [ 'foo' => 'integer' ], 'index' => [ 'name' => 'PRIMARY' ] ] ]);
+        $method->invokeArgs(
+            $dumper,
+            [ 'gorp', [ 'columns' => [ 'foo' => 'integer' ], 'index' => [ 'name' => 'PRIMARY' ] ] ]
+        );
     }
 
     /**
      * Tests validateType with an invalid type.
      *
-     * @expectedException Common\ORM\Core\Exception\InvalidSchemaException
+     * @expectedException \Common\ORM\Core\Exception\InvalidSchemaException
      */
     public function testValidateTypeInvalid()
     {
@@ -404,5 +425,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($this->dumper, [ 'gorp', 'garply', 'integer' ]);
+
+        $this->addToAssertionCount(1);
     }
 }

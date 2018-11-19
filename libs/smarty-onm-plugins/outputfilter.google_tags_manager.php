@@ -1,12 +1,11 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     outputfilter.google_tags_manager.php
- * Type:     outputfilter
- * Name:     google_tags_manager
- * Purpose:  Prints Google Analytics code
- * -------------------------------------------------------------
+/**
+ * Prints Google Analytics code
+ *
+ * @param string $output
+ * @param \Smarty $smarty
+ *
+ * @return string
  */
 function smarty_outputfilter_google_tags_manager($output, $smarty)
 {
@@ -29,7 +28,10 @@ function smarty_outputfilter_google_tags_manager($output, $smarty)
         && !preg_match('/\/fb\/instant-articles/', $uri)
         && !preg_match('@\.amp\.html$@', $uri)
     ) {
-        $containerId = trim(getService('setting_repository')->get('google_tags_id'));
+        $containerId = $smarty->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('google_tags_id');
 
         if (empty($containerId)) {
             return $output;

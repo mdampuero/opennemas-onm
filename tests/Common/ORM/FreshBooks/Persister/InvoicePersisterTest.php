@@ -12,12 +12,11 @@ namespace Framework\Tests\ORM\FreshBooks\Repository;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Invoice;
 use Common\ORM\FreshBooks\Persister\InvoicePersister;
-use Freshbooks\FreshBooksApi;
 
 /**
  * Defines test cases for InvoicePersister class.
  */
-class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
+class InvoicePersisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -125,7 +124,7 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests remove when API returns false.
      *
-     * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testRemoveWithError()
     {
@@ -160,7 +159,7 @@ class InvoicePersisterTest extends \PHPUnit_Framework_TestCase
     /**
      * Test update when API returns false.
      *
-     * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testUpdateWithError()
     {

@@ -10,7 +10,6 @@
 namespace Common\ORM\Braintree\Persister;
 
 use Common\ORM\Core\Entity;
-use Common\ORM\Core\Exception\EntityNotFoundException;
 
 /**
  * The ClientPersister class defines actions to create, update and remove
@@ -23,7 +22,7 @@ class ClientPersister extends BasePersister
      *
      * @param Entity $entity The client to save.
      *
-     * @throws RuntimeException If the the client can not be saved.
+     * @throws \RuntimeException If the the client can not be saved.
      */
     public function create(Entity &$entity)
     {
@@ -65,7 +64,7 @@ class ClientPersister extends BasePersister
      *
      * @param Entity $entity The client to update.
      *
-     * @throws RuntimeException If the client does not exist.
+     * @throws \RuntimeException If the client does not exist.
      */
     public function update(Entity $entity)
     {

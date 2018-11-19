@@ -34,6 +34,7 @@
         $scope.item = {
           type: 1,
           status: 0,
+          name: '',
           title: '',
           contents: [],
           schedule: {
@@ -41,6 +42,7 @@
             hours: [],
           },
           recipients: [],
+          params: [],
         };
 
         /**

@@ -71,14 +71,18 @@ class CorrectExifRotation implements FilterInterface
     }
 
     /**
+     * Returns the exif array data from an image object
      *
      * @param ImageInterface $image
+     *
+     * @return array
      */
     private function getExifFromImage(ImageInterface $image)
     {
         $exifData = exif_read_data("data://image/jpeg;base64," . base64_encode($image->get('jpg')));
+
         if (!is_array($exifData)) {
-            return array();
+            return [];
         }
 
         return $exifData;

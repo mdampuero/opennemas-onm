@@ -25,6 +25,8 @@ class BaseConverter extends Converter
      * @param mixed $data The data to convert.
      *
      * @return array The converted data.
+     *
+     * @throws \Exception
      */
     public function databasify($source)
     {
@@ -62,6 +64,8 @@ class BaseConverter extends Converter
      * @param array $items The items to convert.
      *
      * @return array The converted items.
+     *
+     * @throws \Exception
      */
     protected function mDatabasify($items)
     {
@@ -95,6 +99,8 @@ class BaseConverter extends Converter
      * @param mixed $source The entity or entity data.
      *
      * @return array The converted data and metas.
+     *
+     * @throws \Exception
      */
     protected function sDatabasify($source)
     {

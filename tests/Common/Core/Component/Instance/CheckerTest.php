@@ -10,12 +10,11 @@
 namespace Test\Common\Core\Component\Instance;
 
 use Common\Core\Component\Instance\Checker;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for Geo class.
  */
-class CheckerTest extends KernelTestCase
+class CheckerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -38,16 +37,16 @@ class CheckerTest extends KernelTestCase
     }
 
     /**
-     * undocumented function
+     * Checks if the instance is valid
      */
     public function testCheck()
     {
         $instance                = new \Common\ORM\Entity\Instance();
         $instance->internal_name = 'test';
-        $instance->domains       = [
-            'test.domain.com'
-        ];
+        $instance->domains       = [ 'test.domain.com' ];
         $instance->contact_mail  = 'test@opennemas.com';
         $this->checker->check($instance);
+
+        $this->addToAssertionCount(1);
     }
 }

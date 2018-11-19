@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\HtmlFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for HtmlFilter class.
  */
-class HtmlFilterTest extends KernelTestCase
+class HtmlFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -33,7 +32,6 @@ class HtmlFilterTest extends KernelTestCase
     public function testFilterWithHtmlEntities()
     {
         $str      = '<p>The string</p><p>to</p><p>parse</p>';
-
         $expected = '&lt;p&gt;The string&lt;/p&gt;&lt;p&gt;to&lt;/p&gt;&lt;p&gt'
             . ';parse&lt;/p&gt;';
 

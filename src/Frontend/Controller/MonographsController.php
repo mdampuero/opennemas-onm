@@ -15,11 +15,9 @@
 namespace Frontend\Controller;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for monographs
@@ -30,8 +28,6 @@ class MonographsController extends Controller
 {
     /**
      * Common code for all the actions
-     *
-     * @return void
      */
     public function init()
     {
@@ -156,9 +152,9 @@ class MonographsController extends Controller
      */
     public function showAction(Request $request)
     {
-        $dirtyID      = $request->query->get('special_id', '');
-        $urlSlug      = $request->query->get('slug', '');
-        $categoryName = $request->query->get('category_name', '');
+        $dirtyID      = $request->get('special_id', '');
+        $urlSlug      = $request->get('slug', '');
+        $categoryName = $request->get('category_name', '');
 
         $special = $this->get('content_url_matcher')
             ->matchContentUrl('special', $dirtyID, $urlSlug, $categoryName);
@@ -207,8 +203,8 @@ class MonographsController extends Controller
                             $content->placeholder = 'placeholder_1_1';
                         }
 
-                        $content->category_name  = $content->loadCategoryName($item['fk_content']);
-                        $content->category_title = $content->loadCategoryTitle($item['fk_content']);
+                        $content->category_name  = $content->loadCategoryName();
+                        $content->category_title = $content->loadCategoryTitle();
 
                          // Load attached and related contents from array
                         $content->loadAttachedVideo()
@@ -233,6 +229,7 @@ class MonographsController extends Controller
             'content'     => $special,
             'contentId'   => $special->id,
             'cache_id'    => $cacheID,
+            'o_content'   => $special,
             'x-tags'      => 'monograph,' . $special->id,
             'x-cache-for' => '+1 day',
             'tags'        => $this->get('api.service.tag')

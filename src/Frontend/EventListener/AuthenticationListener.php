@@ -11,6 +11,7 @@ namespace Frontend\EventListener;
 
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -24,14 +25,14 @@ class AuthenticationListener implements EventSubscriberInterface
     /**
      * The service container.
      *
-     * @param ServiceContainer
+     * @param \Symfony\Component\DependencyInjection\Container
      */
     protected $container;
 
     /**
      * Initializes the AuthenticationListener.
      *
-     * @param ServiceContainer $container The service container.
+     * @param \Symfony\Component\DependencyInjection\Container $container The service container.
      */
     public function __construct($container)
     {
@@ -42,11 +43,13 @@ class AuthenticationListener implements EventSubscriberInterface
      * Loads an instance basing on the request.
      *
      * @param FilterResponseEvent $event The event object.
+     *
+     * @return Response
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
         if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
-            return;
+            return null;
         }
 
         $response = $event->getResponse();
@@ -59,7 +62,10 @@ class AuthenticationListener implements EventSubscriberInterface
         $user = $token->getUser();
         $uri  = $event->getRequest()->getRequestUri();
 
-        if ($user === 'anon.' || empty($user) || !$this->isFrontendUri($uri)) {
+        if ($user === 'anon.'
+            || empty($user)
+            || !$this->container->get('core.helper.url')->isFrontendUri($uri)
+        ) {
             $response->headers->clearCookie('__onm_user');
 
             return $response;
@@ -69,7 +75,7 @@ class AuthenticationListener implements EventSubscriberInterface
             new Cookie('__onm_user', json_encode([
                 'name'           => $user->name,
                 'language'       => $user->user_language,
-                'user_groups'    => $user->fk_user_group,
+                'user_groups'    => array_keys($user->user_groups),
                 'advertisements' => $this->container
                     ->get('core.helper.subscription')
                     ->hasAdvertisements()
@@ -89,29 +95,5 @@ class AuthenticationListener implements EventSubscriberInterface
         return [
             KernelEvents::REQUEST => [ [ 'onKernelResponse', 100 ] ],
         ];
-    }
-
-    /**
-     * Checks if the current URI is for frontend.
-     *
-     * @param string $uri The current URI.
-     *
-     * @return boolean True if the current URI is for frontend. False otherwise.
-     */
-    protected function isFrontendUri($uri)
-    {
-        $ignore = [
-            '_profiler',
-            '_wdt',
-            'admin',
-            'api',
-            'asset',
-            'build\/assets',
-            'content\/share-by-email',
-            'manager',
-            'ws',
-        ];
-
-        return !preg_match('/^(' . implode('|', $ignore) . ')/', $uri);
     }
 }

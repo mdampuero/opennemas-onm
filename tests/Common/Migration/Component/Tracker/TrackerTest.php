@@ -10,12 +10,11 @@
 namespace Tests\Common\Migration\Component\Tracker;
 
 use Common\Migration\Component\Tracker\Tracker;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for class class.
  */
-class TrackerTest extends KernelTestCase
+class TrackerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

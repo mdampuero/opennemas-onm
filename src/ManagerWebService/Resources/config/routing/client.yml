@@ -39,7 +39,6 @@ manager_ws_client_update:
     methods:  [ PUT ]
     options:
         expose: true
-    methods:  [ GET ]
 
 manager_ws_clients_delete:
     path:     /clients

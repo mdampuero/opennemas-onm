@@ -14,9 +14,13 @@
     syntaxCheck="false"
     bootstrap="app/autoload.php"
 >
+    <php>
+        <ini name="error_reporting" value="-1" />
+        <server name="KERNEL_DIR" value="app/" />
+    </php>
 
     <testsuites>
-        <testsuite name="Opennemas">
+        <testsuite name="Opennemas Test Suite">
             <directory>tests/*</directory>
             <directory>./src/*/Tests</directory>
             <directory>./src/*/*Bundle/Tests</directory>
@@ -24,9 +28,6 @@
         </testsuite>
     </testsuites>
 
-    <php>
-        <server name="KERNEL_DIR" value="app" />
-    </php>
     <filter>
         <whitelist>
             <directory>./libs/models</directory>

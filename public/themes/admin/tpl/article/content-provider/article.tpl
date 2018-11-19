@@ -1,6 +1,7 @@
-<div data-content-id="{$content->id}" data-class="Article" {getProperty item=$content category=$params['category'] property='bgcolor, title' style="true"}
+<div data-content-id="{$content->id}" data-class="{get_class($content)}"
+    {getProperty item=$content category=$params['category'] property='bgcolor, title' style='true'}
+    data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
     data-title='{getProperty item=$content category=$params['category'] property='title'}'
-    data-bg='{getProperty item=$content category=$params['category'] property='bgcolor'}'
     data-format ='{getProperty item=$content category=$params['category'] property='format'}'
     class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} clearfix">
     <div class="description">
@@ -13,7 +14,7 @@
               <i class="fa fa-home"></i>
             {/if}
             {if !($content->in_frontpage) && ($params['home'] != true)}<i class="fa fa-star content-icon-suggested"></i>{/if}
-            <span class="type">{t}Article{/t}</span>
+            <span class="type">{$content->content_type_l10n_name}</span>
             {$content->title}
         </div>
     </div>
@@ -25,7 +26,7 @@
             <i class="fa fa-cog"></i>
             <span class="caret"></span>
         </a>
-        <ul class="dropdown-menu pull-right">
+        <ul class="dropdown-menu pull-right dropdown-menu-right no-padding">
             <li>
                 <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=admin_article_show id=$content->id}">
                     <i class="fa fa-pencil"></i> {t}Edit{/t}

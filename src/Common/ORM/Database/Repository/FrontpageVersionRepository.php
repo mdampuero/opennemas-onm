@@ -11,8 +11,6 @@ namespace Common\ORM\Database\Repository;
 
 class FrontpageVersionRepository extends BaseRepository
 {
-
-
     /**
      * Returns an array of categories grouped by entity id.
      *
@@ -27,25 +25,23 @@ class FrontpageVersionRepository extends BaseRepository
 
         $rs = $this->conn->fetchAll($sql);
 
-        $catFrontpageRel = [];
+        $categoryFrontpageMap = [];
 
         foreach ($rs as $value) {
-            $catFrontpageRel[$value['category_id']] =
-                (int) $value['frontpage_id'];
+            $categoryFrontpageMap[$value['category_id']] = (int) $value['frontpage_id'];
         }
 
-        return $catFrontpageRel;
+        return $categoryFrontpageMap;
     }
 
-
-     /**
+    /**
      * Returns an array of categories grouped by entity id.
      *
      * @param array $ids The entity ids.
      *
      * @return array The array of categories.
      */
-    public function getCurrentVerForCat($categoryId)
+    public function getCurrentVersionForCategory($categoryId)
     {
         $sql = 'SELECT id FROM frontpage_versions'
             . ' WHERE category_id = ? AND publish_date <= ?'
@@ -55,8 +51,6 @@ class FrontpageVersionRepository extends BaseRepository
             $categoryId,
             $this->getCurrentTimestampForDatabase()
         ]);
-
-        $frontpageVersionId = null;
 
         if (empty($rs)) {
             return null;
@@ -72,7 +66,7 @@ class FrontpageVersionRepository extends BaseRepository
      *
      * @return array The array of categories.
      */
-    public function getNextVerForCat($categoryId)
+    public function getNextVersionForCategory($categoryId)
     {
         $sql = 'SELECT id FROM frontpage_versions'
             . ' WHERE category_id = ? AND publish_date > ?'
@@ -92,11 +86,16 @@ class FrontpageVersionRepository extends BaseRepository
         return $rs[0]['id'];
     }
 
+    /**
+     * Returns a formatted string (Y-m-d H:i) of the current date
+     *
+     * @return string
+     */
     private function getCurrentTimestampForDatabase()
     {
         $dt = new \DateTime();
         $dt->setTimezone(new \DateTimeZone('UTC'));
         $dt->setTimestamp(time());
-        return $dt->format('Y-m-d H:i');
+        return $dt->format('Y-m-d H:i:s');
     }
 }

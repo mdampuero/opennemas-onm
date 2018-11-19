@@ -78,7 +78,7 @@
                 <span class="input-group-addon">
                   <i class="fa fa-user"></i>
                 </span>
-                <input autofocus class="form-control" id="_username" ng-model="username" placeholder="{t}User name{/t}" required type="text" value="{$smarty.cookies.login_username|default:""}">
+                <input autofocus class="form-control" id="_username" ng-model="username" placeholder="{t}User name{/t}" required type="text" value="">
               </div>
             </div>
             <div class="form-group">
@@ -86,7 +86,7 @@
                 <span class="input-group-addon">
                   <i class="fa fa-lock"></i>
                 </span>
-                <input class="form-control" id="_password" ng-model="password" placeholder="{t}Password{/t}" required type="password" value="{$smarty.cookies.login_password|default:""}">
+                <input class="form-control" id="_password" ng-model="password" placeholder="{t}Password{/t}" required type="password" value="">
               </div>
             </div>
             <div class="form-group col-md-10" ng-if="attempts > 2">

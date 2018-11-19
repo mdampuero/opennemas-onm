@@ -1,12 +1,10 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     outputfilter.piwik.php
- * Type:     outputfilter
- * Name:     canonical_url
- * Purpose:  Prints Piwik code
- * -------------------------------------------------------------
+/**
+ * Prints Piwik code
+ *
+ * @param string
+ *
+ * @return string
  */
 function smarty_outputfilter_piwik($output, $smarty)
 {

@@ -1,7 +1,7 @@
 admin_getting_started_finish:
     path:     /getting-started/finish
-    defaults: { _controller  : BackendBundle:GettingStarted:finishWizard }
+    defaults: { _controller: BackendBundle:GettingStarted:finishWizard }
 
 admin_getting_started:
     path:     /getting-started
-    defaults: { _controller  : BackendBundle:GettingStarted:gettingStarted }
+    defaults: { _controller: BackendBundle:GettingStarted:gettingStarted }

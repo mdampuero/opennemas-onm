@@ -17,7 +17,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Tests the orm:schema:check command.
  */
-class CheckSchemaCommandTest extends \PHPUnit_Framework_TestCase
+class CheckSchemaCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

@@ -10,6 +10,7 @@
 namespace Common\Core\Component\Loader;
 
 use Common\ORM\Entity\Instance;
+use Common\ORM\Entity\Theme;
 
 /**
  * Loads the opennemas core.
@@ -78,6 +79,26 @@ class Loader
         // TODO: Remove when using new ORM for all models
         $this->container->get('dbal_connection')
             ->selectDatabase($database);
+    }
+
+    /**
+     * Configures the locale basing on the instance.
+     */
+    public function configureLocale()
+    {
+        // Get repository name
+        $instance = $this->container->get('core.instance');
+        $name     = $instance->internal_name === 'manager' ? 'manager' : null;
+
+        $config = $this->container->get('orm.manager')
+            ->getDataSet('Settings', $name)
+            ->get('locale');
+
+        $config = $this->container->get('orm.manager')
+            ->getDataSet('Settings', $name)
+            ->get('locale');
+
+        $this->container->get('core.locale')->configure($config);
     }
 
     /**
@@ -162,12 +183,16 @@ class Loader
         if ($this->instance->internal_name !== 'manager') {
             $this->loadThemeFromUuid($this->instance->settings['TEMPLATE_USER']);
         }
+
+        $this->configureLocale();
     }
 
     /**
      * Returns an instance by internal name.
      *
      * @param string $internalName The instance internal name.
+     *
+     * @return void|Instance
      */
     public function loadInstanceFromInternalName($internalName)
     {
@@ -230,6 +255,8 @@ class Loader
      * Loads a theme basing on a theme UUID.
      *
      * @param string $uuid The theme UUID.
+     *
+     * @return Theme
      */
     public function loadThemeFromUuid($uuid)
     {
@@ -249,10 +276,10 @@ class Loader
      * @param string $host the host that we are looking for
      *
      * @return boolean true if the instance is valid
-     **/
+     */
     protected function checkInstanceData($instance, $host)
     {
-        return $instance instanceof \Common\ORM\Entity\Instance
+        return $instance instanceof Instance
             && in_array($host, $instance->domains);
     }
 
@@ -339,8 +366,6 @@ class Loader
         // TODO: delete from application
         define('MEDIA_IMG_PATH_WEB', MEDIA_URL . MEDIA_DIR . '/' . IMG_DIR);
 
-        define('KIOSKO_DIR', 'kiosko' . DS);
-
         // Template settings
         define('TEMPLATE_USER_PATH', SITE_PATH . DS . "themes" . DS . TEMPLATE_USER . DS);
         define('TEMPLATE_USER_URL', "/themes" . '/' . TEMPLATE_USER . '/');
@@ -350,6 +375,8 @@ class Loader
      * Loads an instance basing on an QOL query.
      *
      * @param string $oql The OQL query.
+     *
+     * @return Instance
      */
     public function loadInstanceFromOql($oql)
     {
@@ -416,6 +443,8 @@ class Loader
      * Loads a theme basing on an QOL query.
      *
      * @param string $oql The OQL query.
+     *
+     * @return Theme
      */
     protected function loadThemeFromOql($oql)
     {

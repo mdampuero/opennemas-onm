@@ -1,6 +1,6 @@
 api_v1_backend_translate_services_list:
     path:     /translations/services
-    defaults: { _controller  : ApiBundle:V1/Backend/Translation:servicesList }
+    defaults: { _controller: ApiBundle:V1/Backend/Translation:servicesList }
     methods:  [ GET ]
     options:
         expose: true

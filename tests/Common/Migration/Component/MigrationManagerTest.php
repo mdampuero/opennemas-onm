@@ -10,12 +10,11 @@
 namespace Tests\Common\Migration\Component;
 
 use Common\Migration\Component\MigrationManager;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for MigrationManager class.
  */
-class MigrationManagerTest extends KernelTestCase
+class MigrationManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

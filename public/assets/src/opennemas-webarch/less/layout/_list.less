@@ -36,22 +36,15 @@
 .table {
   td.editable {
     cursor: text;
-    a {
+
+    .fa {
       opacity: 0;
     }
-  }
 
-  td.editing {
-    input {
-      display: inline;
-      width: 40%
-    }
-  }
+    &:hover
 
-  td.editable:hover {
-    a {
+    .fa {
       opacity: 1;
-      cursor: pointer;
     }
   }
 }
@@ -132,8 +125,8 @@ tr:hover .listing-inline-actions {
   }
 
   button.link-danger {
-    margin-left: 0px;
-    padding-left: 0px;
+    margin-left: 0;
+    padding-left: 0;
   }
 
   & > *{
@@ -174,7 +167,6 @@ tr:hover .listing-inline-actions {
       margin: 0 auto;
       text-align: center;
       display: block;
-      text-align: center;
       width: 100%;
     }
 

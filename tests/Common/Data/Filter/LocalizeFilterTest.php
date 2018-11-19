@@ -11,12 +11,11 @@ namespace Tests\Common\Data\Filter;
 
 use Common\ORM\Core\Entity;
 use Common\Data\Filter\LocalizeFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for Localizer class.
  */
-class LocalizeFilterTest extends KernelTestCase
+class LocalizeFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

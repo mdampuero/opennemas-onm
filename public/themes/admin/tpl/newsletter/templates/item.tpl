@@ -32,10 +32,10 @@ var newsletterTemplateTranslations = {
             <h4>{t}Template{/t}</h4>
           </li>
         </ul>
-        <div class="all-actions pull-right">
+        <div class="all-actions pull-right" ng-if="!flags.http.loading && item">
           <ul class="nav quick-section">
             <li class="quicklinks btn-group">
-              <button class="btn btn-loading btn-primary text-uppercase" ng-click="saveVal()" ng-disabled="flags.http.saving || form.$invalid || (item.password && item.password !== rpassword)" type="button">
+              <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.saving || form.$invalid" type="button">
                 <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                 {t}Save{/t}
               </button>
@@ -53,6 +53,16 @@ var newsletterTemplateTranslations = {
         <h3 class="spinner-text">{t}Loading{/t}...</h3>
       </div>
     </div>
+
+    {* <div class="grid simple ng-cloak">
+      <div class="grid-title">
+        <i class="fa fa-envelope-o m-r-10"></i>{t}Name{/t}
+      </div>
+
+      <div class="grid-body">
+        <input type="text" class="form-control" name="title" id="title" ng-model="item.name"/>
+      </div>
+    </div> *}
 
     <div class="grid simple ng-cloak">
       <div class="grid-title">
@@ -165,6 +175,28 @@ var newsletterTemplateTranslations = {
             </div>
           </div>
         </div>
+
+        {is_module_activated name="es.openhost.module.acton"}
+        <div class="grid simple" ng-if="data.extra.newsletter_handler == 'acton'" >
+          <div class="grid-title">
+            <h5><i class="fa fa-address-book m-r-10"></i> {t}Act-On header and footers{/t}</h5>
+          </div>
+          <div class="grid-body">
+              <div class="form-group col-sm-6">
+                <label for="acton_header_id" class="form-label">{t}Act-On header id{/t}</label>
+                <div class="controls">
+                  <input id="acton_header_id" class="form-control" type="text" ng-model="item.params.acton_headerid">
+                </div>
+              </div>
+              <div class="form-group col-sm-6">
+                <label for="acton_footer_id" class="form-label">{t}Act-On footer id{/t}</label>
+                <div class="controls">
+                  <input id="acton_footer_id" class="form-control" type="text" ng-model="item.params.acton_footerid">
+                </div>
+              </div>
+          </div>
+        </div>
+        {/is_module_activated}
       </div>
     </div>
 

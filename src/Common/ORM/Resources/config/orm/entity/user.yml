@@ -13,7 +13,6 @@ orm:
                 categories:         array
                 email:              string
                 extensions:         array
-                fk_user_group:      array
                 id:                 integer
                 name:               string
                 password:           string
@@ -100,9 +99,6 @@ orm:
                         activated:
                             type: integer
                             options: { default: 0, comment: '1 activated - 0 disabled', notnull: true }
-                        fk_user_group:
-                            type: simple_array
-                            options: { default: null, length: 65532, notnull: false }
                     index:
                         -
                             name: PRIMARY

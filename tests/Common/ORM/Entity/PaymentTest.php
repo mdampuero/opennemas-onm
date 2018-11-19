@@ -4,7 +4,7 @@ namespace Framework\Tests\ORM\Entity;
 
 use Common\ORM\Entity\Payment;
 
-class PaymentTest extends \PHPUnit_Framework_TestCase
+class PaymentTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructor()
     {

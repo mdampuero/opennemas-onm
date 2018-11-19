@@ -14,7 +14,7 @@ use Common\External\ActOn\Component\Configuration\OrmConfigurationProvider;
 /**
  * Defines test cases for OrmConfigurationTest class.
  */
-class OrmConfigurationTest extends \PHPUnit_Framework_TestCase
+class OrmConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

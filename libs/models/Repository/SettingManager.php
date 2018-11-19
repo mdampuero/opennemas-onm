@@ -11,10 +11,6 @@
 
 namespace Repository;
 
-use Repository\BaseManager;
-use Onm\Database\DbalWrapper;
-use Onm\Cache\CacheInterface;
-
 /**
  * Handles common actions in Menus.
  */

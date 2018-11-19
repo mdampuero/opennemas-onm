@@ -8,36 +8,34 @@
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-microphone fa-lg"></i>
+              <i class="fa fa-microphone m-r-10"></i>
               <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/788682-opennemas-agencias-de-noticias" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                 <i class="fa fa-question"></i>
               </a>
-              {t}News agency{/t}
             </h4>
           </li>
           <li class="quicklinks">
-            <span class="h-seperate"></span>
+            <h4>
+              <a class="no-padding" href="{url name=backend_news_agency_servers_list}" title="{t}Go back to list{/t}">{t}News Agency{/t}</a>
+            </h4>
+          </li>
+          <li class="quicklinks hidden-xs m-l-5 m-r-5">
+            <h4>
+              <i class="fa fa-angle-right"></i>
+            </h4>
           </li>
           <li class="quicklinks">
-            <h5>
+            <h4>
               {if array_key_exists('id', $server)}
-                {t}Update source{/t}
+                {t}Edit source{/t}
               {else}
-                {t}Add source{/t}
+                {t}Create source{/t}
               {/if}
-            </h5>
+            </h4>
           </li>
         </ul>
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
-            <li class="quicklinks">
-              <a class="btn btn-link" href="{url name=backend_news_agency_servers_list}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
-                <span class="fa fa-reply"></span>
-              </a>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
             <li class="quicklinks">
               <button class="btn btn-primary" data-text="{t}Saving{/t}..." id="save-button" type="submit">
                 <span class="fa fa-save"></span>

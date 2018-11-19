@@ -49,8 +49,6 @@ class Special extends Content
      * Initializes the Special class.
      *
      * @param string $id the id of the album.
-     *
-     * @return void
      */
     public function __construct($id = null)
     {
@@ -72,7 +70,7 @@ class Special extends Content
             case 'uri':
                 if (empty($this->category_name)) {
                     $this->category_name =
-                        $this->loadCategoryName($this->pk_content);
+                        $this->loadCategoryName();
                 }
                 $uri = Uri::generate('special', [
                     'id'       => sprintf('%06d', $this->id),
@@ -140,8 +138,6 @@ class Special extends Content
      * Overloads the object properties with an array of the new ones
      *
      * @param array $properties the list of properties to load
-     *
-     * @return void
      */
     public function load($properties)
     {
@@ -276,8 +272,6 @@ class Special extends Content
      * Saves the items for the current special
      *
      * @param array $data the data of the special
-     *
-     * @return void
      */
     public function saveItems($data)
     {
@@ -330,6 +324,7 @@ class Special extends Content
         if ($id == null) {
             return $items;
         }
+
         try {
             $rs = getService('dbal_connection')->fetchAll(
                 'SELECT * FROM `special_contents` WHERE fk_special=? ORDER BY position ASC',
@@ -351,8 +346,6 @@ class Special extends Content
             error_log($e->getMessage());
             return false;
         }
-
-        return $items;
     }
 
     /**

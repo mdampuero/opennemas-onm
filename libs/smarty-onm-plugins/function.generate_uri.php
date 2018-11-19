@@ -1,8 +1,11 @@
 <?php
-/*
- * -------------------------------------------------------------
- * File:     	function.typecontent.php
- * Comprueba el tipo y escribe el nombre o la imag
+/**
+ * Generates the URI from a set of parameters
+ *
+ * @param array $params The list of parameters passed to the block.
+ * @param \Smarty $smarty The instance of smarty.
+ *
+ * @return null|string
  */
 function smarty_function_generate_uri($params, &$smarty)
 {

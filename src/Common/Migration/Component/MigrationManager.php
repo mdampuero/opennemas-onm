@@ -118,6 +118,8 @@ class MigrationManager
      * Returns a tracker for this migration.
      *
      * @return Tracker The tracker for migration.
+     *
+     * @throws InvalidTrackerException
      */
     public function getTracker()
     {

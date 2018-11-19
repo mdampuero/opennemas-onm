@@ -162,7 +162,7 @@ class CommentsController extends Controller
         // Create the vote
         $voteObject = new \Vote($commentId);
         if (is_null($voteObject)) {
-            return new Response(_("Error: no vote value!", 400));
+            return new Response(_("Error: no vote value!"), 400);
         }
 
         $update = $voteObject->update($voteValue, $ip);
@@ -240,9 +240,13 @@ class CommentsController extends Controller
                         ? \Comment::STATUS_ACCEPTED
                         : \Comment::STATUS_PENDING;
 
+                    $handling = $cm->autoAccept()
+                        ? _('Your comment was accepted.')
+                        : _('Your comment is valid and now is waiting for moderation.');
+
                     $httpCode = 200;
                     $message  = [
-                        'message' => _('Your comment was accepted.'),
+                        'message' => $handling,
                         'type'    => 'success',
                     ];
 
@@ -255,8 +259,17 @@ class CommentsController extends Controller
 
                     $errorType = $errors['type'];
                     $httpCode  = 400;
-                    $message   = [
-                        'message' => implode('<br>', $errors['errors']),
+
+                    $handling = ($cm->autoReject())
+                        ? _('Your comment was rejected due to:')
+                        : _('Your comment is waiting for moderation due to:');
+
+                    $message = [
+                        'message' => sprintf(
+                            '<strong>%s</strong><br> %s',
+                            $handling,
+                            implode('<br>', $errors['errors'])
+                        ),
                         'type'    => 'error',
                     ];
 

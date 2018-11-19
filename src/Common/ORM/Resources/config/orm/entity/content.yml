@@ -182,11 +182,5 @@ orm:
                             unique: false
                             flags: {  }
                         -
-                            name: metadata
-                            columns: [metadata]
-                            primary: false
-                            unique: false
-                            flags: { fulltext: true }
-                        -
                             name: urn_source
                             columns: [urn_source]

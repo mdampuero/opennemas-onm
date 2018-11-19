@@ -78,7 +78,8 @@
     "select2": "3.5.2",
     "spinkit": "1.2.5",
     "swfobject": "*",
-    "tinycon-angularjs": "1.1.0"
+    "tinycon-angularjs": "1.1.0",
+    "pdfjs-dist": "^2.0.550"
   },
   "devDependencies": {
     "angular-mocks": "1.5.8"

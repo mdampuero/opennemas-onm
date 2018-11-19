@@ -14,7 +14,7 @@ use Common\Core\Component\Helper\UrlHelper;
 /**
  * Defines test cases for UrlHelper class.
  */
-class UrlHelperTest extends \PHPUnit_Framework_TestCase
+class UrlHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -22,6 +22,15 @@ class UrlHelperTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->helper = new UrlHelper();
+    }
+
+    /**
+     * Tests isFrontendUri for frontend and backend URIs.
+     */
+    public function testIsFrontendUri()
+    {
+        $this->assertTrue($this->helper->isFrontendUri('/fubar'));
+        $this->assertFalse($this->helper->isFrontendUri('/admin'));
     }
 
     /**

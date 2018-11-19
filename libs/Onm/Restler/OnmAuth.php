@@ -11,8 +11,6 @@
  */
 namespace Onm\Restler;
 
-use Onm\Settings as s;
-
 /**
  * Handles the authentication protocol for the Onm News Agency
  *
@@ -37,11 +35,12 @@ class OnmAuth implements \Luracast\Restler\iAuthenticate
         // Parse digest string
         $digestParts = $this->digestParse($digest);
 
-        // Get valid user
-        $validUser = s::get('onm_digest_user');
-        $validPass = s::get('onm_digest_pass');
+        $settings = getService('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get([ 'onm_digest_user', 'onm_digest_pass' ]);
+
         // Based on all the info we gathered we can figure out what the response should be
-        $A1            = md5($validUser . ':' . $realm . ':' . $validPass);
+        $A1            = md5($settings['onm_digest_user'] . ':' . $realm . ':' . $settings['onm_digest_pass']);
         $A2            = md5($_SERVER['REQUEST_METHOD'] . ':' . $digestParts['uri']);
         $validResponse = md5(
             $A1 .

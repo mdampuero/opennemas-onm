@@ -203,7 +203,7 @@ class Widget extends Content
 
                 break;
             case 'smarty':
-                $content = $this->renderletSmarty($params);
+                $content = $this->renderletSmarty();
 
                 break;
             case 'intelligentwidget':

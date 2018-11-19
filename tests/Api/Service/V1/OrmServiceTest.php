@@ -15,7 +15,7 @@ use Common\ORM\Core\Entity;
 /**
  * Defines test cases for OrmService class.
  */
-class OrmServiceTest extends \PHPUnit_Framework_TestCase
+class OrmServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -30,6 +30,10 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ 'objectify', 'responsify' ])
             ->getMock();
 
+        $this->dispatcher = $this->getMockBuilder('EventDispatcher')
+            ->setMethods([ 'dispatch' ])
+            ->getMock();
+
         $this->em = $this->getMockBuilder('EntityManager' . uniqid())
             ->setMethods([
                 'getConverter' ,'getMetadata', 'getRepository', 'persist',
@@ -37,7 +41,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
             ])->getMock();
 
         $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
-            ->setMethods([ 'getIdKeys' ])
+            ->setMethods([ 'getId', 'getIdKeys' ])
             ->getMock();
 
         $this->logger = $this->getMockBuilder('Logger' . uniqid())
@@ -45,7 +49,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'find', 'findBy'])
+            ->setMethods([ 'countBy', 'find', 'findBy' ])
             ->getMock();
 
         $this->validator = $this->getMockBuilder('Validator' . uniqid())
@@ -71,9 +75,17 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Returns a mock basing on the requested service name.
+     *
+     * @return mixed A mock.
+     */
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.dispatcher':
+                return $this->dispatcher;
+
             case 'error.log':
                 return $this->logger;
 
@@ -92,6 +104,8 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $this->converter->expects($this->any())->method('objectify')
             ->with($data)->willReturn($data);
         $this->em->expects($this->once())->method('persist');
+        $this->dispatcher->expects($this->once())->method('dispatch')
+            ->with('entity.createItem');
 
         $item = $this->service->createItem($data);
 
@@ -101,7 +115,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests createItem when an error happens while converting data.
      *
-     * @expectedException Api\Exception\CreateItemException
+     * @expectedException \Api\Exception\CreateItemException
      */
     public function testCreateWhenErrorWhileConverting()
     {
@@ -115,7 +129,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests createItem when an error happens while persisting object.
      *
-     * @expectedException Api\Exception\CreateItemException
+     * @expectedException \Api\Exception\CreateItemException
      */
     public function testCreateWhenErrorWhilePersisting()
     {
@@ -139,13 +153,18 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $this->em->expects($this->once())->method('remove')
             ->with($item);
 
+        $this->dispatcher->expects($this->at(0))->method('dispatch')
+            ->with('entity.getItem', [ 'id' => 23 ]);
+        $this->dispatcher->expects($this->at(1))->method('dispatch')
+            ->with('entity.deleteItem', [ 'id' => 23 ]);
+
         $this->service->deleteItem(23);
     }
 
     /**
      * Tests deleteItem when no item found.
      *
-     * @expectedException Api\Exception\DeleteItemException
+     * @expectedException \Api\Exception\DeleteItemException
      */
     public function testDeleteItemWhenNoEntity()
     {
@@ -159,7 +178,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteItem when an error happens while removing object.
      *
-     * @expectedException Api\Exception\DeleteItemException
+     * @expectedException \Api\Exception\DeleteItemException
      */
     public function testDeleteItemWhenErrorWhileRemoving()
     {
@@ -169,6 +188,9 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
             ->willReturn($item);
         $this->em->expects($this->once())->method('remove')
             ->with($item)->will($this->throwException(new \Exception()));
+
+        $this->dispatcher->expects($this->at(0))->method('dispatch')
+            ->with('entity.getItem', [ 'id' => 23 ]);
 
         $this->logger->expects($this->once())->method('error');
 
@@ -183,10 +205,20 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $itemA = new Entity([ 'name' => 'wubble']);
         $itemB = new Entity([ 'name' => 'xyzzy' ]);
 
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('id in [1,2]')
+        $this->metadata->expects($this->at(0))->method('getId')
+            ->with($itemA)->willReturn(1);
+        $this->metadata->expects($this->at(1))->method('getId')
+            ->with($itemB)->willReturn(2);
+
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);
         $this->em->expects($this->exactly(2))->method('remove');
+
+        $this->dispatcher->expects($this->at(0))->method('dispatch')
+            ->with('entity.getListByIds', [ 'ids' => [ 1, 2 ] ]);
+        $this->dispatcher->expects($this->at(1))->method('dispatch')
+            ->with('entity.deleteList', [ 'ids' => [ 1, 2 ] ]);
 
         $this->assertEquals(2, $this->service->deleteList([ 1, 2 ]));
     }
@@ -194,7 +226,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteList when invalid list of ids provided.
      *
-     * @expectedException Api\Exception\DeleteListException
+     * @expectedException \Api\Exception\DeleteListException
      */
     public function testDeleteListWhenInvalidIds()
     {
@@ -209,12 +241,21 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $itemA = new Entity([ 'name' => 'wubble']);
         $itemB = new Entity([ 'name' => 'xyzzy' ]);
 
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('id in [1,2]')
+        $this->metadata->expects($this->at(0))->method('getId')
+            ->with($itemA)->willReturn(1);
+
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);
-        $this->em->expects($this->at(2))->method('remove');
+
+        $this->em->expects($this->at(1))->method('remove');
         $this->em->expects($this->at(3))->method('remove')
             ->will($this->throwException(new \Exception()));
+
+        $this->dispatcher->expects($this->at(0))->method('dispatch')
+            ->with('entity.getListByIds', [ 'ids' => [ 1, 2 ] ]);
+        $this->dispatcher->expects($this->at(1))->method('dispatch')
+            ->with('entity.deleteList', [ 'ids' => [ 1 ] ]);
 
         $this->logger->expects($this->once())->method('error');
 
@@ -224,15 +265,15 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteList when an error happens while searching.
      *
-     * @expectedException Api\Exception\DeleteListException
+     * @expectedException \Api\Exception\DeleteListException
      */
     public function testDeleteListWhenErrorWhileSearching()
     {
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('id in [1,2]')
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 1, 2 ])
             ->will($this->throwException(new \Exception()));
 
-        $this->logger->expects($this->exactly(2))->method('error');
+        $this->logger->expects($this->exactly(1))->method('error');
 
         $this->service->deleteList([ 1, 2 ]);
     }
@@ -247,13 +288,16 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $this->repository->expects($this->once())->method('find')
             ->with(1)->willReturn($item);
 
+        $this->dispatcher->expects($this->once())->method('dispatch')
+            ->with('entity.getItem', [ 'id' => 1 ]);
+
         $this->assertEquals($item, $this->service->getItem(1));
     }
 
     /**
      * Tests getItem when an error happens while converting data.
      *
-     * @expectedException Api\Exception\GetItemException
+     * @expectedException \Api\Exception\GetItemException
      */
     public function testGetItemWhenErrorWhileSearching()
     {
@@ -277,6 +321,12 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $this->repository->expects($this->once())->method('findBy')
             ->with('order by title asc')->willReturn([ $item ]);
 
+        $this->dispatcher->expects($this->at(0))->method('dispatch')
+            ->with('entity.getList', [ 'oql' => 'order by title asc' ]);
+
+        $this->dispatcher->expects($this->at(1))->method('dispatch')
+            ->with('entity.getItemBy', [ 'oql' => 'order by title asc' ]);
+
         $response = $this->service->getItemBy('order by title asc');
 
         $this->assertEquals($item, $response);
@@ -285,7 +335,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests getItemBy when error while searching.
      *
-     * @expectedException Api\Exception\GetItemException
+     * @expectedException \Api\Exception\GetItemException
      */
     public function testGetItemByWhenErrorWhileSearching()
     {
@@ -298,7 +348,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests getItemBy when the criteria returns more than one result.
      *
-     * @expectedException Api\Exception\GetItemException
+     * @expectedException \Api\Exception\GetItemException
      */
     public function testGetItemByWhenMoreThanOneResult()
     {
@@ -330,6 +380,9 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $this->repository->expects($this->once())->method('findBy')
             ->with('order by title asc')->willReturn($items);
 
+        $this->dispatcher->expects($this->once())->method('dispatch')
+            ->with('entity.getList', [ 'oql' => 'order by title asc' ]);
+
         $response = $this->service->getList('order by title asc');
 
         $this->assertArrayHasKey('items', $response);
@@ -351,6 +404,9 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $this->repository->expects($this->once())->method('findBy')
             ->with('order by title asc')->willReturn($items);
 
+        $this->dispatcher->expects($this->once())->method('dispatch')
+            ->with('entity.getList', [ 'oql' => 'order by title asc' ]);
+
         $response = $this->service->setCount(false)
             ->getList('order by title asc');
 
@@ -361,7 +417,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests getList when there is an error while counting contents.
      *
-     * @expectedException Api\Exception\GetListException
+     * @expectedException \Api\Exception\GetListException
      */
     public function testGetListWhenErrorWhileCounting()
     {
@@ -377,7 +433,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests getList when there is an error while searching contents.
      *
-     * @expectedException Api\Exception\GetListException
+     * @expectedException \Api\Exception\GetListException
      */
     public function testGetListWhenErrorWhileSearching()
     {
@@ -398,15 +454,11 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
             new Entity([ 'name' => 'mumble' ])
         ];
 
-        $this->em->expects($this->once())->method('getMetadata')
-            ->willReturn($this->metadata);
-        $this->metadata->expects($this->once())->method('getIdKeys')
-            ->willReturn([ 'id' ]);
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 1, 2 ])->willReturn($items);
 
-        $this->repository->expects($this->once())->method('countBy')
-            ->with('id in [1,2]')->willReturn(2);
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('id in [1,2]')->willReturn($items);
+        $this->dispatcher->expects($this->once())->method('dispatch')
+            ->with('entity.getListByIds', [ 'ids' => [ 1, 2 ] ]);
 
         $response = $this->service->getListByIds([ 1, 2 ]);
 
@@ -419,7 +471,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests getListByIds when invalid list of ids provided .
      *
-     * @expectedException Api\Exception\GetListException
+     * @expectedException \Api\Exception\GetListException
      */
     public function testGetListByIdsWhenInvalidIds()
     {
@@ -441,6 +493,11 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $this->em->expects($this->once())->method('persist')
             ->with($item);
 
+        $this->dispatcher->expects($this->at(0))->method('dispatch')
+            ->with('entity.getItem', [ 'id' => 1 ]);
+        $this->dispatcher->expects($this->at(1))->method('dispatch')
+            ->with('entity.patchItem', [ 'id' => 1 ]);
+
         $this->service->patchItem(1, $data);
 
         $this->assertEquals('mumble', $item->name);
@@ -449,7 +506,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests patchItem when there is an error while searching.
      *
-     * @expectedException Api\Exception\PatchItemException
+     * @expectedException \Api\Exception\PatchItemException
      */
     public function testPatchItemWhenErrorWhileSearching()
     {
@@ -467,7 +524,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests patchItem when there is an error while persisting.
      *
-     * @expectedException Api\Exception\PatchItemException
+     * @expectedException \Api\Exception\PatchItemException
      */
     public function testPatchItemWhenErrorWhilePersisting()
     {
@@ -482,6 +539,9 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
             ->will($this->throwException(new \Exception));
         $this->logger->expects($this->once())->method('error');
 
+        $this->dispatcher->expects($this->once())->method('dispatch')
+            ->with('entity.getItem', [ 'id' => 1 ]);
+
         $this->service->patchItem(1, $data);
     }
 
@@ -494,12 +554,22 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $itemB = new Entity([ 'name' => 'xyzzy', 'enabled' => false  ]);
         $data  = [ 'enabled' => true ];
 
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('id in [1,2]')
+        $this->metadata->expects($this->at(0))->method('getId')
+            ->with($itemA)->willReturn(1);
+        $this->metadata->expects($this->at(1))->method('getId')
+            ->with($itemB)->willReturn(2);
+
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);
         $this->converter->expects($this->once())->method('objectify')
             ->with($data)->willReturn($data);
         $this->em->expects($this->exactly(2))->method('persist');
+
+        $this->dispatcher->expects($this->at(0))->method('dispatch')
+            ->with('entity.getListByIds', [ 'ids' => [ 1, 2 ] ]);
+        $this->dispatcher->expects($this->at(1))->method('dispatch')
+            ->with('entity.patchList', [ 'ids' => [ 1, 2 ] ]);
 
         $this->assertEquals(2, $this->service->patchList([ 1, 2 ], $data));
         $this->assertTrue($itemA->enabled);
@@ -509,7 +579,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests patchList when invalid list of ids provided.
      *
-     * @expectedException Api\Exception\PatchListException
+     * @expectedException \Api\Exception\PatchListException
      */
     public function testPatchListWhenInvalidIds()
     {
@@ -521,16 +591,24 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testPatchListWhenOneErrorWhileUpdating()
     {
-        $itemA = new Entity([ 'name' => 'wubble']);
+        $itemA = new Entity([ 'name' => 'wubble' ]);
         $itemB = new Entity([ 'name' => 'xyzzy' ]);
         $data  = [ 'enabled' => true ];
 
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('id in [1,2]')
+        $this->metadata->expects($this->at(0))->method('getId')
+            ->willReturn(1);
+
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);
-        $this->em->expects($this->at(3))->method('persist');
-        $this->em->expects($this->at(4))->method('persist')
+        $this->em->expects($this->at(1))->method('persist');
+        $this->em->expects($this->at(2))->method('persist')
             ->will($this->throwException(new \Exception()));
+
+        $this->dispatcher->expects($this->at(0))->method('dispatch')
+            ->with('entity.getListByIds', [ 'ids' => [ 1, 2 ] ]);
+        $this->dispatcher->expects($this->at(1))->method('dispatch')
+            ->with('entity.patchList', [ 'ids' => [ 1 ] ]);
 
         $this->logger->expects($this->once())->method('error');
 
@@ -540,15 +618,15 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests patchList when an error happens while searching.
      *
-     * @expectedException Api\Exception\PatchListException
+     * @expectedException \Api\Exception\PatchListException
      */
     public function testPatchListWhenErrorWhileSearching()
     {
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('id in [1,2]')
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 1, 2 ])
             ->will($this->throwException(new \Exception()));
 
-        $this->logger->expects($this->exactly(2))->method('error');
+        $this->logger->expects($this->exactly(1))->method('error');
 
         $this->service->patchList([ 1, 2 ], [ 'enabled' => true ]);
     }
@@ -583,12 +661,9 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetOrigin()
     {
-        $property = new \ReflectionProperty($this->service, 'origin');
-        $property->setAccessible(true);
-
-        $this->assertEquals('instance', $property->getValue($this->service));
+        $this->assertEquals('instance', $this->service->getOrigin());
         $this->assertEquals($this->service, $this->service->setOrigin('wobble'));
-        $this->assertEquals('wobble', $property->getValue($this->service));
+        $this->assertEquals('wobble', $this->service->getOrigin());
     }
 
     /**
@@ -606,6 +681,11 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $this->em->expects($this->once())->method('persist')
             ->with($item);
 
+        $this->dispatcher->expects($this->at(0))->method('dispatch')
+            ->with('entity.getItem', [ 'id' => 1 ]);
+        $this->dispatcher->expects($this->at(1))->method('dispatch')
+            ->with('entity.updateItem', [ 'id' => 1 ]);
+
         $this->service->updateItem(1, $data);
 
         $this->assertEquals('mumble', $item->name);
@@ -614,7 +694,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests updateItem when there is an error while searching.
      *
-     * @expectedException Api\Exception\UpdateItemException
+     * @expectedException \Api\Exception\UpdateItemException
      */
     public function testUpdateItemWhenErrorWhileSearching()
     {
@@ -632,7 +712,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests updateItem when there is an error while persisting.
      *
-     * @expectedException Api\Exception\UpdateItemException
+     * @expectedException \Api\Exception\UpdateItemException
      */
     public function testUpdateItemWhenErrorWhilePersisting()
     {
@@ -646,6 +726,9 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $this->em->expects($this->once())->method('persist')
             ->will($this->throwException(new \Exception));
         $this->logger->expects($this->once())->method('error');
+
+        $this->dispatcher->expects($this->once())->method('dispatch')
+            ->with('entity.getItem', [ 'id' => 1 ]);
 
         $this->service->updateItem(1, $data);
     }
@@ -701,5 +784,7 @@ class OrmServiceTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($service, [ new Entity() ]);
+
+        $this->addToAssertionCount(1);
     }
 }

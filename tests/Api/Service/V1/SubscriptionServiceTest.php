@@ -15,7 +15,7 @@ use Common\ORM\Core\Entity;
 /**
  * Defines test cases for SubscriptionService class.
  */
-class SubscriptionServiceTest extends \PHPUnit_Framework_TestCase
+class SubscriptionServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -91,7 +91,7 @@ class SubscriptionServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests getItem when the item has no subscription property to true.
      *
-     * @expectedException Api\Exception\GetItemException
+     * @expectedException \Api\Exception\GetItemException
      */
     public function testGetItemWhenErrorWhenNoSubscription()
     {

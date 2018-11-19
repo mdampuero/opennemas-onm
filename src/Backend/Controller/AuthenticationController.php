@@ -9,13 +9,10 @@
  */
 namespace Backend\Controller;
 
+use Common\Core\Annotation\Template;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 /**
  * Handles the actions for the user authentication in backend.
@@ -68,7 +65,9 @@ class AuthenticationController extends Controller
                 $time->setTimezone(new \DateTimeZone('UTC'));
                 $time = $time->format('Y-m-d H:i:s');
 
-                $this->get('setting_repository')->set('last_login', $time);
+                $this->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')
+                    ->set('last_login', $time);
             }
 
             return $this->redirect($this->generateUrl('admin_welcome'));

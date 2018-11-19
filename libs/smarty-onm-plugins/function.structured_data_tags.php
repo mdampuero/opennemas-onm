@@ -9,7 +9,7 @@ function smarty_function_structured_data_tags($params, &$smarty)
 
     $content    = $smarty->tpl_vars['content']->value;
     $container  = $smarty->getContainer();
-    $sm         = $container->get('setting_repository');
+    $ds         = $container->get('orm.manager')->getDataSet('Settings', 'instance');
     $category   = $container->get('category_repository')->find($content->category);
     $user       = $container->get('user_repository')->find($content->fk_author);
     $url        = $container->get('request_stack')->getCurrentRequest()->getUri();
@@ -30,7 +30,7 @@ function smarty_function_structured_data_tags($params, &$smarty)
     // Get author if exists otherwise get agency
     $author = (!is_null($user->name)) ? $user->name : $content->agency;
     if (empty($author)) {
-        $author = $sm->get('site_name');
+        $author = $ds->get('site_name');
     }
 
     $created = $content->created instanceof \DateTime ?
@@ -39,7 +39,7 @@ function smarty_function_structured_data_tags($params, &$smarty)
         $content->changed->format('Y-m-d H:i:s') : $content->changed;
 
     // Check logo params
-    $logo = $sm->get('site_logo');
+    $logo = $ds->get('site_logo');
     if (!empty($logo)) {
         $logo = [
             'url'    => SITE_URL

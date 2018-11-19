@@ -14,7 +14,7 @@ use Common\ORM\Entity\UserGroup;
 use Common\ORM\Entity\Instance;
 use Common\ORM\Database\Persister\UserGroupPersister;
 
-class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
+class UserGroupPersisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -124,6 +124,8 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
 
         $this->cache->expects($this->exactly(2))->method('remove');
         $this->persister->update($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -154,6 +156,8 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
             ->with('*glorp_user-*');
 
         $this->persister->remove($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -165,5 +169,7 @@ class UserGroupPersisterTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $method->invokeArgs($this->persister, [ 1, [] ]);
+
+        $this->addToAssertionCount(1);
     }
 }

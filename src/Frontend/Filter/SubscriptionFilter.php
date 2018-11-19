@@ -24,8 +24,6 @@ class SubscriptionFilter
      *
      * @param Template $template the template object to render views
      * @param User $user the session user object
-     *
-     * @return void
      */
     public function __construct($template, $user)
     {
@@ -90,7 +88,7 @@ class SubscriptionFilter
     /**
      * Replaces article body for unsubscribed users.
      *
-     * @return Article $content The article.
+     * @return null|\Article $content The article.
      */
     public function paywallHook(&$content)
     {
@@ -102,7 +100,7 @@ class SubscriptionFilter
         ) {
             $restrictedContent = $this->template->fetch(
                 'paywall/partials/content_only_for_subscribers.tpl',
-                array('id' => $content->id)
+                [ 'id' => $content->id ]
             );
 
             $this->replaceContent($content, $restrictedContent);
@@ -112,25 +110,25 @@ class SubscriptionFilter
     }
 
     /**
-     * undocumented function
+     * Replaces all the Contents in an article  with the string passed
      *
-     * @return void
-     * @author
+     * @param \Article $content the content to change
+     * @param string $restrictedContent the contents to insert into the Article
      */
     private function replaceContent(&$content, $restrictedContent)
     {
-        $content->body = $restrictedContent;
+        $content->body      = $restrictedContent;
         $content->img       = null;
         $content->img2      = null;
         $content->fk_video2 = null;
 
         if ($content->content_type_name == 'video') {
-            $content->description = $restrictedContent;
+            $content->description            = $restrictedContent;
             $content->video_content_replaced = true;
         }
 
         if ($content->content_type_name == 'album') {
-            $content->description = $restrictedContent;
+            $content->description            = $restrictedContent;
             $content->album_content_replaced = true;
         }
     }

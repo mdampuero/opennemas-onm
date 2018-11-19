@@ -22,8 +22,6 @@ class NewsletterHelper
      * Initializes the NewsletterHelper.
      *
      * @param SettingsRepository $settingsRepository The settings repository service.
-     *
-     * @return void
      */
     public function __construct($ormManager)
     {
@@ -34,7 +32,7 @@ class NewsletterHelper
      * Returns the subscription type name configured in backend
      *
      * @return string the subscription type configured
-     **/
+     */
     public function getSubscriptionType()
     {
         return $this->sm->getDataSet('Settings', 'instance')->get('newsletter_subscriptionType');

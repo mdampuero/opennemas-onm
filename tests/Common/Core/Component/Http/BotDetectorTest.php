@@ -10,12 +10,11 @@
 namespace Tests\Common\Core\Component\Http;
 
 use Common\Core\Component\Http\BotDetector;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for BotDetector class.
  */
-class BotDetectorTest extends KernelTestCase
+class BotDetectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

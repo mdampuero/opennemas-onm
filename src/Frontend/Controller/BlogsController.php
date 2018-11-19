@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for advertisements
@@ -49,14 +48,17 @@ class BlogsController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/blog_frontpage.tpl', $cacheID)
         ) {
-            $authors = [];
-            foreach (\User::getAllUsersAuthors() as $author) {
-                if ($author->is_blog == 1) {
-                    $authors[$author->id] = $author;
-                }
-            }
+            $authors = $this->get('api.service.author')
+                ->getList('is_blog = 1 order by name asc');
 
-            $epp = $this->get('setting_repository')->get('items_in_blog', 10);
+            $authors = $this->get('data.manager.filter')
+                ->set($authors['items'])
+                ->filter('mapify', [ 'key' => 'id' ])
+                ->get();
+
+            $epp = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('items_in_blog', 10);
             $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
             $order   = [ 'starttime' => 'DESC' ];
@@ -83,6 +85,7 @@ class BlogsController extends Controller
             $em         = $this->get('opinion_repository');
             $blogs      = $em->findBy($filters, $order, $epp, $page);
             $countItems = $em->countBy($filters);
+            $photos     = $this->get('core.helper.user')->getPhotos($authors);
 
             $pagination = $this->get('paginator')->get([
                 'directional' => true,
@@ -96,13 +99,15 @@ class BlogsController extends Controller
                     $blog->author           = $authors[$blog->fk_author];
                     $blog->name             = $blog->author->name;
                     $blog->author_name_slug = $blog->author->username;
-                    // ????
-                    $item = new \Content();
-                    $item->loadAllContentProperties($blog->pk_content);
-                    $blog->summary     = $item->summary;
-                    $blog->img1_footer = $item->img1_footer;
-                    if (isset($item->img1) && ($item->img1 > 0)) {
-                        $blog->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
+
+                    if (array_key_exists($blog->author->avatar_img_id, $photos)) {
+                        $blog->author->photo =
+                            $photos[$blog->author->avatar_img_id];
+                    }
+
+                    if (isset($blog->img1) && !empty($blog->img1)) {
+                        $blog->img1 = $this->get('entity_repository')
+                            ->find('Photo', $blog->img1);
                     }
 
                     $blog->author->uri = \Uri::generate(
@@ -166,7 +171,9 @@ class BlogsController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('opinion/blog_author_index.tpl', $cacheID)
         ) {
-            $epp = $this->get('setting_repository')->get('items_per_page', 10);
+            $epp = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('items_per_page', 10);
             $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
             $author->slug  = $author->username;
@@ -257,8 +264,8 @@ class BlogsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $dirtyID = $request->query->getDigits('blog_id');
-        $urlSlug = $request->query->filter('blog_title', '', FILTER_SANITIZE_STRING);
+        $dirtyID = $request->get('blog_id');
+        $urlSlug = $request->get('blog_title', '', FILTER_SANITIZE_STRING);
 
         $blog = $this->get('content_url_matcher')
             ->matchContentUrl('opinion', $dirtyID, $urlSlug);
@@ -324,6 +331,7 @@ class BlogsController extends Controller
             'content'         => $blog,
             'contentId'       => $blog->id,
             'actual_category' => 'blog', // Used in renderMenu
+            'o_content'       => $blog,
             'x-tags'          => 'blog-inner,' . $blog->id,
             'x-cache-for'     => '+1 day',
             'x-cacheable'     => $cacheable,

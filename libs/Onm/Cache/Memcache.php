@@ -32,8 +32,6 @@ class Memcache extends AbstractCache
      * Initializes the cache layer
      *
      * @param array $options options to change initialization of the cache layer
-     *
-     * @return void
      */
     public function __construct($options)
     {

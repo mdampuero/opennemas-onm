@@ -1,43 +1,38 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     outputfilter.canonical_url.php
- * Type:     outputfilter
- * Name:     canonical_url
- * Purpose:  Prints the canonical url in a <link> tag
- * -------------------------------------------------------------
+/**
+ * Prints the canonical url in a <link> tag
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_outputfilter_canonical_url($output, $smarty)
 {
-    $theme   = $smarty->getTheme();
-    $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+    $request = $smarty->getContainer()
+        ->get('request_stack')
+        ->getCurrentRequest();
 
-    if (is_null($request)) {
+    if (empty($request)) {
         return $output;
     }
 
-    $uri = $request->getUri();
+    $uri = $request->getRequestUri();
 
-    if (empty($theme)
-        || $theme->uuid === 'es.openhost.theme.admin'
-        || $theme->uuid === 'es.openhost.theme.manager'
-        || preg_match('/\/fb\/instant-articles/', $uri)
-    ) {
+    if (preg_match('/\/fb\/instant-articles/', $uri)) {
         return $output;
     }
 
-    // Generate canonical url
-    $url = SITE_URL . substr(strtok($_SERVER["REQUEST_URI"], '?'), 1);
+    $tpl = '<link rel="canonical" href="%s"/>';
+    $url = SITE_URL . substr(strtok($uri, '?'), 1);
 
-    // Create tag <link> with the canonical url and check for amp
-    if (preg_match('/amp.html/', $url)) {
-        $url = preg_replace('/amp.html/', 'html', $url);
+    if (array_key_exists('o_content', $smarty->getTemplateVars())) {
+        $url = $smarty->getContainer()->get('core.helper.url_generator')
+            ->generate(
+                $smarty->getTemplateVars()['o_content'],
+                [ 'absolute' => true ]
+            );
     }
-    $canonical = '<link rel="canonical" href="' . $url . '"/>';
 
-    // Change output html
-    $output = str_replace('</head>', $canonical . '</head>', $output);
-
-    return $output;
+    return str_replace('</head>', sprintf($tpl, $url) . '</head>', $output);
 }

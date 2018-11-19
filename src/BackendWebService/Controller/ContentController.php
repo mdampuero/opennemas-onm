@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace BackendWebService\Controller;
 
 use Common\Core\Annotation\Security;
@@ -20,9 +19,10 @@ class ContentController extends Controller
     /**
      * Returns a list of contents in JSON format.
      *
-     * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
-     * @return JsonResponse              The response object.
+     * @param  Request $request     The request object.
+     * @param  string  $contentType Content type name.
+     *
+     * @return array The list of contents.
      */
     public function listAction(Request $request, $contentType)
     {
@@ -38,11 +38,13 @@ class ContentController extends Controller
         $results = $em->findBy($criteria, $order, $epp, $page);
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($criteria);
-        return new JsonResponse([
-            'extra'   => $this->loadExtraData($results),
-            'results' => $results,
-            'total'   => $total,
-        ]);
+
+        return [
+            'o-filename' => $contentType,
+            'extra'      => $this->loadExtraData(),
+            'results'    => $results,
+            'total'      => $total,
+        ];
     }
 
     /**
@@ -70,9 +72,9 @@ class ContentController extends Controller
 
         return new JsonResponse(
             [
-                'extra'             => $this->loadExtraData($results),
-                'results'           => $results,
-                'total'             => $total,
+                'extra'   => $this->loadExtraData(),
+                'results' => $results,
+                'total'   => $total,
             ]
         );
     }
@@ -268,7 +270,6 @@ class ContentController extends Controller
     {
         $this->hasRoles(__FUNCTION__, 'trash');
 
-        $em      = $this->get('entity_repository');
         $errors  = [];
         $success = [];
         $updated = [];
@@ -382,7 +383,6 @@ class ContentController extends Controller
     {
         $this->hasRoles(__FUNCTION__, $contentType);
 
-        $em      = $this->get('entity_repository');
         $errors  = [];
         $success = [];
         $updated = [];
@@ -417,7 +417,6 @@ class ContentController extends Controller
                 }
             } else {
                 $errors[] = [
-                    'id'      => $id,
                     'message' => sprintf(_('Unable to find the item with id "%d"'), $content->id),
                     'type'    => 'error'
                 ];
@@ -450,7 +449,6 @@ class ContentController extends Controller
      */
     public function emptyTrashAction()
     {
-        $em      = $this->get('entity_repository');
         $errors  = [];
         $success = [];
         $updated = [];
@@ -816,7 +814,7 @@ class ContentController extends Controller
      * Save positions for widget.
      *
      * @param  Request $request the request object
-     * @return Response the response object
+     * @return JsonResponse the response object
      */
     public function savePositionsAction(Request $request, $contentType)
     {
@@ -852,17 +850,14 @@ class ContentController extends Controller
 
         if ($updated > 0) {
             $success[] = [
-                'id'      => $id,
                 'message' => _('Positions saved successfully'),
                 'type'    => 'success'
             ];
         }
 
-        return new JsonResponse(
-            [
-                'messages'  => array_merge($success, $errors)
-            ]
-        );
+        return new JsonResponse([
+            'messages'  => array_merge($success, $errors)
+        ]);
     }
 
     /**
@@ -870,12 +865,11 @@ class ContentController extends Controller
      *
      * @param  string  $action      Required action.
      * @param  string  $contentType Content type name.
-     * @return boolean              [description]
+     * @return null|JsonResponse
      */
     protected function hasRoles($action, $contentType)
     {
-        $permissions = [];
-        $types[]     = $contentType;
+        $types[] = $contentType;
 
         // Add all admin permissions for generic list (trash,)
         if ($contentType == 'content') {
@@ -917,64 +911,34 @@ class ContentController extends Controller
                 return new JsonResponse($msg->getMessages(), $msg->getCode());
             }
         }
+
+        return null;
     }
 
     /**
      * Loads extra data related to the given contents.
      *
      * @param  array $contents Array of contents.
+     *
      * @return array           Array of extra data.
      */
-    protected function loadExtraData($contents)
+    protected function loadExtraData($contents = [])
     {
-        if (empty($contents)) {
-            return [];
-        }
+        $extra    = [];
+        $as       = $this->get('api.service.author');
+        $response = $as->getList('order by name asc');
 
-        $extra      = [];
-        $ids        = [];
-        $contentIds = [];
-
-        foreach ($contents as $content) {
-            $ids[] = $content->fk_author;
-            $ids[] = $content->fk_publisher;
-            $ids[] = $content->fk_user_last_editor;
-
-            $contentIds[] = $content->id;
-        }
-
-        $ids = array_unique($ids);
-
-        if (($key = array_search(0, $ids)) !== false) {
-            unset($ids[$key]);
-        }
-
-        if (($key = array_search(null, $ids)) !== false) {
-            unset($ids[$key]);
-        }
-
-        $extra['authors'] = [];
-        if (!empty($ids)) {
-            $converter = $this->get('orm.manager')->getConverter('User');
-            $users     = $this->get('orm.manager')->getRepository('User')
-                ->findBy(sprintf('id in [%s]', implode(',', $ids)));
-
-            foreach ($users as $user) {
-                $user->eraseCredentials();
-
-                $extra['authors'][$user->id] = $converter->responsify($user->getData());
-            }
-        }
+        $extra['authors'] = $as->responsify($response['items']);
 
         $ccm = \ContentCategoryManager::get_instance();
-        $fm  = $this->get('data.manager.filter');
 
         $categories          = $ccm->findAll();
         $extra['categories'] = [];
-        $categories          = $fm->set($categories)->filter('localize', [
-            'keys' => \ContentCategory::getL10nKeys(),
-            'locale' => $this->getLocaleData('frontend')['default']
-        ])->get();
+        $categories          = $this->get('data.manager.filter')
+            ->set($categories)->filter('localize', [
+                'keys' => \ContentCategory::getL10nKeys(),
+                'locale' => $this->getLocaleData('frontend')['default']
+            ])->get();
 
         foreach ($categories as $category) {
             $extra['categories'][$category->id] = $this->get('data.manager.filter')

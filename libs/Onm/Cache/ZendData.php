@@ -23,8 +23,6 @@ class ZendData extends AbstractCache
      * Initializes the cache handler class
      *
      * @param array $options options to change initialization of the cache layer
-     *
-     * @return void
      */
     public function __construct()
     {

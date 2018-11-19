@@ -12,7 +12,7 @@ namespace Tests\Framework\Models\Repository;
 /**
  * Defines test cases for ContentViewsManagerTest class.
  */
-class ContentViewsManagerTest extends \PHPUnit_Framework_TestCase
+class ContentViewsManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -153,7 +153,7 @@ class ContentViewsManagerTest extends \PHPUnit_Framework_TestCase
     public function testsetViews()
     {
         $id          = 1;
-        $returnValue = null;
+        $returnValue = true;
         $dbValue     = [];
         $sql         = 'UPDATE `content_views` SET views = views + 1'
             . ' WHERE pk_fk_content = ?';
@@ -194,7 +194,7 @@ class ContentViewsManagerTest extends \PHPUnit_Framework_TestCase
             'prefix'
         );
 
-        $this->assertEquals(null, $this->contentViewManager->setViews($id, $value));
+        $this->assertEquals(true, $this->contentViewManager->setViews($id, $value));
     }
 
     /**
@@ -203,7 +203,7 @@ class ContentViewsManagerTest extends \PHPUnit_Framework_TestCase
     public function testsetViewsMultipleIds()
     {
         $id          = [ 1, 2, 3 ];
-        $returnValue = null;
+        $returnValue = true;
         $dbValue     = [];
 
         $this->dbConn->expects($this->once())->method('executeUpdate')

@@ -9,7 +9,7 @@
  */
 namespace Onm;
 
-class StringUtilsTest extends \PHPUnit_Framework_TestCase
+class StringUtilsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StringUtils
@@ -26,7 +26,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::normalizeName
+     * @covers \Onm\StringUtils::normalizeName
      */
     public function testNormalizeName()
     {
@@ -34,17 +34,19 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::normalize
+     * @covers \Onm\StringUtils::normalize
      */
     public function testNormalize()
     {
         // I have a lot of problems with char encoding
-        // $this->assertEquals('a marinha lucense na que c��mpre ir no d��a',
-        //     $this->object->normalize('Á marinha lucense na que cómpre ir no día'));
+        $this->assertEquals(
+            'a marinha lucense na que compre ir no dia',
+            $this->object->normalize('Á marinha lucense na que cómpre ir no día')
+        );
     }
 
     /**
-     * @covers Onm\StringUtils::getTitle
+     * @covers \Onm\StringUtils::getTitle
      */
     public function testGetTitle()
     {
@@ -104,7 +106,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::getTitle
+     * @covers \Onm\StringUtils::getTitle
      */
     public function testGenerateSlug()
     {
@@ -239,7 +241,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::getTitle
+     * @covers \Onm\StringUtils::getTitle
      */
     public function testGetTitleReturnsTheSameString()
     {
@@ -252,7 +254,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::normalizeMetadata
+     * @covers \Onm\StringUtils::normalizeMetadata
      */
     public function testNormalizeMetadata()
     {
@@ -263,7 +265,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::getTags
+     * @covers \Onm\StringUtils::getTags
      */
     public function testGetTags()
     {
@@ -278,7 +280,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::getTags
+     * @covers \Onm\StringUtils::getTags
      */
     public function testGetTagsReturnsStringWithUniqueElements()
     {
@@ -293,7 +295,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::getTags
+     * @covers \Onm\StringUtils::getTags
      */
     public function testGetTagsRemovesUnnecesaryWords()
     {
@@ -308,7 +310,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::removeShorts
+     * @covers \Onm\StringUtils::removeShorts
      */
     public function testRemoveShorts()
     {
@@ -321,7 +323,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::getNumWords
+     * @covers \Onm\StringUtils::getNumWords
      * @todo   Implement testgetNumWords().
      */
     public function testGetNumWords()
@@ -336,7 +338,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::loadBadWords
+     * @covers \Onm\StringUtils::loadBadWords
      * @todo   Implement testLoadBadWords().
      */
     public function testLoadBadWords()
@@ -350,7 +352,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::filterBadWords
+     * @covers \Onm\StringUtils::filterBadWords
      */
     public function testFilterBadWords()
     {
@@ -364,7 +366,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::filterBadWords
+     * @covers \Onm\StringUtils::filterBadWords
      */
     public function testFilterBadWordsWithMinWeight()
     {
@@ -379,7 +381,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::filterBadWords
+     * @covers \Onm\StringUtils::filterBadWords
      */
     public function testFilterBadWordsWithMinWeightAndReplaceString()
     {
@@ -395,7 +397,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::filterBadWords
+     * @covers \Onm\StringUtils::filterBadWords
      */
     public function testFilterBadWordsWithReplaceString()
     {
@@ -411,7 +413,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::getWeightBadWords
+     * @covers \Onm\StringUtils::getWeightBadWords
      */
     public function testGetWeightBadWordsWithCleanText()
     {
@@ -424,7 +426,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::getWeightBadWords
+     * @covers \Onm\StringUtils::getWeightBadWords
      */
     public function testGetWeightBadWords()
     {
@@ -457,7 +459,6 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
             'Urna quam, congue vulputate',
             $this->object->removePunctuation('Urna quam, (-congue-) vulputate!?', [ ',' ])
         );
-
     }
 
     public function testCleanFileName()

@@ -28,14 +28,18 @@ class CategoryController extends Controller
     /**
      * Shows the latest contents in a category given its name and page number
      *
-     * @return Response the response object
+     * @param \Symfony\Component\HttpFoundation\Request the request object
+     *
+     * @return \Symfony\Component\HttpFoundation\Response the response object
      * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException if the category is not available
      */
     public function categoryAction(Request $request)
     {
-        $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
-        $page         = $request->query->getDigits('page', 1);
-        $epp          = $this->get('setting_repository')->get('items_in_blog', 10);
+        $categoryName = $request->get('category_name', '', FILTER_SANITIZE_STRING);
+        $page         = (int) $request->get('page', 1);
+        $epp          = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_in_blog', 10);
         $epp          = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
         if ($page > 1) {
@@ -176,7 +180,9 @@ class CategoryController extends Controller
     /**
      * Action for synchronized blog frontpage
      *
-     * @return Response the response object
+     * @param \Symfony\Component\HttpFoundation\Request the request object
+     *
+     * @return \Symfony\Component\HttpFoundation\Response the response object
      */
     public function extCategoryAction(Request $request)
     {
@@ -243,7 +249,7 @@ class CategoryController extends Controller
      *
      * @param string category the category identifier
      *
-     * @return void
+     * @return array
      */
     public function getInnerAds($category = 'home')
     {

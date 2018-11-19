@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Displays an album or a list of albums.
@@ -30,8 +29,9 @@ class AlbumsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $this->categoryName = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $this->page         = $this->request->query->getDigits('page', 1);
+        $request            = $this->get('request_stack')->getCurrentRequest();
+        $this->categoryName = $request->get('category_name', 'home', FILTER_SANITIZE_STRING);
+        $this->page         = $request->get('page', 1);
 
         if (!empty($this->categoryName) && $this->categoryName != 'home') {
             $category = $this->get('category_repository')->findBy(
@@ -86,11 +86,12 @@ class AlbumsController extends Controller
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('album/album_frontpage.tpl', $cacheID))
         ) {
-            $albumSettings = s::get('album_settings');
+            $albumSettings = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('album_settings');
             $itemsPerPage  = isset($albumSettings['total_front']) ? $albumSettings['total_front'] : 8;
             $orderBy       = isset($albumSettings['orderFrontpage']) ? $albumSettings['orderFrontpage'] : 'created';
 
-            $order   = [ 'starttime DESC' ];
             $filters = [
                 'content_type_name' => [[ 'value' => 'album' ]],
                 'content_status'    => [[ 'value' => 1 ]],
@@ -163,9 +164,9 @@ class AlbumsController extends Controller
      */
     public function showAction(Request $request)
     {
-        $this->page   = $request->query->getDigits('page', 1);
-        $dirtyID      = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
-        $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $this->page   = $request->get('page', 1);
+        $dirtyID      = $request->get('album_id');
+        $urlSlug      = $request->get('slug', '');
         $itemsPerPage = 8; // Items_page refers to the widget
 
         $album = $this->get('content_url_matcher')
@@ -187,7 +188,9 @@ class AlbumsController extends Controller
             || (!$this->view->isCached('album/album.tpl', $cacheID))
         ) {
             // Get the other albums for the albums widget
-            $settings = s::get('album_settings');
+            $settings = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('album_settings');
             $total    = isset($settings['total_front']) ? ($settings['total_front']) : 2;
 
             $order   = 'starttime DESC';
@@ -248,6 +251,7 @@ class AlbumsController extends Controller
             'page'           => $this->page,
             'cache_id'       => $cacheID,
             'contentId'      => $album->id,
+            'o_content'      => $album,
             'x-tags'         => 'album,' . $album->id,
             'x-cache-for'    => '+1 day',
             'x-cacheable'    => $cacheable,
@@ -281,7 +285,7 @@ class AlbumsController extends Controller
         $albumPhotos      = $album->_getAttachedPhotos($album->id);
         $albumPhotosPaged = $album->getAttachedPhotosPaged($album->id, 8, $page);
 
-        if (count($_albumArrayPaged) > $itemsPage) {
+        if (count($albumPhotosPaged) > $itemsPage) {
             array_pop($_albumArrayPaged);
         }
 

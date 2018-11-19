@@ -11,7 +11,6 @@ namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,8 +18,6 @@ class SpecialsController extends Controller
 {
     /**
      * Common code for all the actions
-     *
-     * @return void
      */
     public function init()
     {
@@ -43,8 +40,6 @@ class SpecialsController extends Controller
 
     /**
      * List all the specials in a category
-     *
-     * @return void
      *
      * @Security("hasExtension('SPECIAL_MANAGER')
      *     and hasPermission('SPECIAL_ADMIN')")
@@ -74,8 +69,6 @@ class SpecialsController extends Controller
 
     /**
      * List all the specials selected for the widget
-     *
-     * @return void
      *
      * @Security("hasExtension('SPECIAL_MANAGER')
      *     and hasPermission('SPECIAL_ADMIN')")

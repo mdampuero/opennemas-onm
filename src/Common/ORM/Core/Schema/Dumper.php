@@ -10,7 +10,6 @@
 namespace Common\ORM\Core\Schema;
 
 use Doctrine\DBAL\Schema\Schema as DoctrineSchema;
-use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Exception\InvalidSchemaException;
 
 /**
@@ -134,6 +133,8 @@ class Dumper
      * @param string $name The schema name.
      *
      * @return Schema The database schema.
+     *
+     * @throws \InvalidArgumentException
      */
     public function dump($name)
     {
@@ -393,8 +394,6 @@ class Dumper
      *
      * @param array $name   The table name.
      * @param array $config The table definition to validate.
-     *
-     * @return boolean True if the table is valid. Otherwise, returns false.
      *
      * @throws InvalidSchemaException If the table is not valid.
      */

@@ -12,7 +12,7 @@ namespace Tests\Common\ORM\Core;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
 
-class MetadataTest extends \PHPUnit_Framework_TestCase
+class MetadataTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
@@ -67,6 +67,8 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     {
         $metadata = new Metadata([]);
         $metadata->getConverter();
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -77,6 +79,8 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     public function testGetConverterInvalidName()
     {
         $this->metadata->getConverter('flob');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -86,6 +90,8 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     {
         $this->metadata->getConverter();
         $this->metadata->getConverter('frog');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -104,6 +110,22 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
         ];
         $this->assertEquals('qux', $this->metadata->getDataSetKey());
     }
+
+    /**
+     * Tests getDataSetName with valid and empty values in metadata.
+     */
+    public function testGetDataSetName()
+    {
+        $this->metadata->datasets = null;
+        $this->assertEmpty($this->metadata->getDataSetName());
+
+        $this->metadata->datasets = [];
+        $this->assertEmpty($this->metadata->getDataSetName());
+
+        $this->metadata->datasets['wibble'] = [];
+        $this->assertEquals('wibble', $this->metadata->getDataSetName());
+    }
+
 
     /**
      * Tests getDataSetValue with valid and empty values in metadata.
@@ -131,6 +153,8 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     {
         $metadata = new Metadata([]);
         $metadata->getDataSet();
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -141,6 +165,8 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     public function testGetDataSetInvalidName()
     {
         $this->metadata->getDataSet('flob');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -150,6 +176,8 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     {
         $this->metadata->getDataSet();
         $this->metadata->getDataSet('wibble');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -160,6 +188,8 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
         $entity = new Entity([ 'id' => 1, 'foo' => 'bar' ]);
         $this->assertEquals([ 'id' => 1 ], $this->metadata->getId($entity));
         $this->assertEmpty($this->metadata->getId(new Entity()));
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -264,6 +294,8 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     {
         $metadata = new Metadata([]);
         $metadata->getPersister();
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -274,6 +306,8 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     public function testGetPersisterInvalidName()
     {
         $this->metadata->getPersister('flob');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -283,6 +317,8 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     {
         $this->metadata->getPersister();
         $this->metadata->getPersister('grault');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -399,6 +435,8 @@ class MetadataTest extends \PHPUnit_Framework_TestCase
     {
         $this->metadata->getRepository();
         $this->metadata->getRepository('garply');
+
+        $this->addToAssertionCount(1);
     }
 
     /**

@@ -14,7 +14,7 @@ use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
 /**
  * Defines test cases for InstanceNotActivatedException class.
  */
-class InstanceNotActivatedExceptionTest extends \PHPUnit_Framework_TestCase
+class InstanceNotActivatedExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests constructor for InstanceNotActivatedException.

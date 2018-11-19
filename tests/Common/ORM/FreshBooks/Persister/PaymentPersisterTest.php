@@ -12,12 +12,11 @@ namespace Tests\Framework\ORM\FreshBooks\Repository;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Entity\Payment;
 use Common\ORM\FreshBooks\Persister\PaymentPersister;
-use Freshbooks\FreshBooksApi;
 
 /**
  * Defines test cases for PaymentPersister class.
  */
-class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
+class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -43,11 +42,11 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
             ],
             'mapping' => [
                 'freshbooks' => [
-                    'client_id' => [ 'name'=> 'customerId', 'type'=> 'string' ],
-                    'amount'    => [ 'name'=> 'amount', 'type'=> 'string' ],
-                    'date'      => [ 'name'=> 'date', 'type'=> 'string' ],
-                    'notes'     => [ 'name'=> 'notes', 'type'=> 'string' ],
-                    'type'      => [ 'name'=> 'type', 'type'=> 'string' ],
+                    'client_id' => [ 'name' => 'customerId', 'type' => 'string' ],
+                    'amount'    => [ 'name' => 'amount', 'type' => 'string' ],
+                    'date'      => [ 'name' => 'date', 'type' => 'string' ],
+                    'notes'     => [ 'name' => 'notes', 'type' => 'string' ],
+                    'type'      => [ 'name' => 'type', 'type' => 'string' ],
                 ]
             ],
         ]);
@@ -108,7 +107,7 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests remove when API returns false.
      *
-     * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testRemoveWithError()
     {
@@ -142,7 +141,7 @@ class PaymentPersisterTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests update when API returns false.
      *
-     * @expectedException Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
      */
     public function testUpdateWithError()
     {

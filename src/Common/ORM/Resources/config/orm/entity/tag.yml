@@ -17,8 +17,8 @@ orm:
                     arguments: [ '@orm.connection.instance', '@orm.metadata.tag', '@cache.connection.instance' ]
             persisters:
                 instance:
-                    class:     Common\ORM\Database\Persister\BasePersister
-                    arguments: [ '@orm.connection.instance', '@orm.metadata.tag', '@cache.connection.instance' ]
+                    class:     Common\ORM\Database\Persister\TagPersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.tag', '@cache.connection.instance', '@core.instance' ]
             mapping:
                 database:
                     table: tags

@@ -127,7 +127,7 @@
                           <div class="checkbox check-default check-title">
                             <input id="checkbox-[% name %]" ng-change="selectModule(name)" ng-checked="isModuleSelected(name)" ng-model="selected.all[name]" type="checkbox">
                             <label for="checkbox-[% name %]">
-                              <h5 class="semi-bold">[% name %]</h5>
+                              <h5 class="semi-bold">[% data.extra.extensions[name] ? data.extra.extensions[name] : name %]</h5>
                             </label>
                           </div>
                         </div>

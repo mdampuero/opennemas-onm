@@ -14,7 +14,7 @@
                 <p>{t}Downloading articles from news agencies, please wait...{/t}</p>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-primary accept" href="{url name=admin_news_agency_unlock}">{t}Stop sync{/t}</a>
+                <a class="btn btn-primary accept" href="{url name=backend_news_agency_unlock}">{t}Stop sync{/t}</a>
             </div>
         </div>
     </div>

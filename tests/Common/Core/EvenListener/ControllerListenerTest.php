@@ -12,12 +12,11 @@ namespace Tests\Common\Core\EventListener;
 use Common\Core\Component\Locale\Locale;
 use Common\Core\Component\Core\GlobalVariables;
 use Common\Core\EventListener\ControllerListener;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for ControllerListener class.
  */
-class ControllerListenerTest extends KernelTestCase
+class ControllerListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

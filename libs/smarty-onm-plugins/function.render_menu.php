@@ -1,8 +1,11 @@
 <?php
-/*
- * -------------------------------------------------------------
- * File:     	function.render_menu.php
- * Render menu items.
+/**
+ * Render menu items.Returns the BING webmaster HTML meta tag
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_function_render_menu($params, &$smarty)
 {

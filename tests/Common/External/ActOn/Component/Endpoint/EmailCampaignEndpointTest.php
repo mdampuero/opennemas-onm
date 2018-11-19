@@ -9,12 +9,12 @@
  */
 namespace Tests\Common\External\ActOn\Endpoint;
 
-use Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint;
+use \Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint;
 
 /**
  * Defines test cases for EmailCampaignEndpoint class.
  */
-class EmailCampaignEndpointTest extends \PHPUnit_Framework_TestCase
+class EmailCampaignEndpointTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -63,7 +63,7 @@ class EmailCampaignEndpointTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests createMessage when the request fails.
      *
-     * @expectedException Common\External\ActOn\Component\Exception\ActOnException
+     * @expectedException \Common\External\ActOn\Component\Exception\ActOnException
      */
     public function testCreateMessageWhenRequestFails()
     {
@@ -80,7 +80,7 @@ class EmailCampaignEndpointTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests createMessage when the request fails.
      *
-     * @expectedException Common\External\ActOn\Component\Exception\ActOnException
+     * @expectedException \Common\External\ActOn\Component\Exception\ActOnException
      */
     public function testCreateMessageWhenResponseFails()
     {
@@ -146,7 +146,7 @@ class EmailCampaignEndpointTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests sendMessage when request fails.
      *
-     * @expectedException Common\External\ActOn\Component\Exception\ActOnException
+     * @expectedException \Common\External\ActOn\Component\Exception\ActOnException
      */
     public function testSendMessageWhenRequestFails()
     {
@@ -163,7 +163,7 @@ class EmailCampaignEndpointTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests sendMessage when the response fails.
      *
-     * @expectedException Common\External\ActOn\Component\Exception\ActOnException
+     * @expectedException \Common\External\ActOn\Component\Exception\ActOnException
      */
     public function testSendMessageWhenResponseFails()
     {

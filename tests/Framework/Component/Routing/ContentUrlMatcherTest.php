@@ -12,7 +12,7 @@ namespace Framework\Tests\Component\Routing;
 use Framework\Component\Routing\ContentUrlMatcher;
 use Common\Data\Core\FilterManager;
 
-class ContentUrlMatcherTest extends \PHPUnit_Framework_TestCase
+class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

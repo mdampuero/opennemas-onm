@@ -15,7 +15,7 @@ use Common\ORM\Core\Entity;
 /**
  * Defines test cases for UserGroupService class.
  */
-class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
+class UserGroupServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -91,7 +91,7 @@ class UserGroupServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests getItem when the item has no user group property to true.
      *
-     * @expectedException Api\Exception\GetItemException
+     * @expectedException \Api\Exception\GetItemException
      */
     public function testGetItemWhenErrorWhenNoUserGroup()
     {

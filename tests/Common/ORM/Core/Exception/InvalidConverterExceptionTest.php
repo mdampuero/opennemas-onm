@@ -14,7 +14,7 @@ use Common\ORM\Core\Exception\InvalidConverterException;
 /**
  * Defines test cases for InvalidConverterException class.
  */
-class InvalidConverterExceptionTest extends \PHPUnit_Framework_TestCase
+class InvalidConverterExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests constructor for InvalidConverterException

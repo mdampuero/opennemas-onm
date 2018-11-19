@@ -19,7 +19,7 @@ class DomainController extends Controller
     /**
      * Lists all the available ads.
      *
-     * @return Response The response object.
+     * @return \Symfony\Component\HttpFoundation\Response The response object.
      *
      * @Security("hasPermission('ADMIN')")
      */
@@ -38,7 +38,7 @@ class DomainController extends Controller
      *
      * @param Request $request The request object.
      *
-     * @return Response The response object.
+     * @return \Symfony\Component\HttpFoundation\Response The response object.
      *
      * @Security("hasPermission('ADMIN')")
      */

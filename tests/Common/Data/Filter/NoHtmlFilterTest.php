@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\NoHtmlFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for HtmlFilter class.
  */
-class NoHtmlFilterTest extends KernelTestCase
+class NoHtmlFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment

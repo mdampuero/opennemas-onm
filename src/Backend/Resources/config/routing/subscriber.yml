@@ -23,7 +23,7 @@ backend_subscribers_list:
 
 backend_subscribers_settings:
     path:     /subscribers/settings
-    defaults: { _controller  : BackendBundle:Subscriber:settings }
+    defaults: { _controller: BackendBundle:Subscriber:settings }
     methods:  [ GET ]
     options:
         expose: true

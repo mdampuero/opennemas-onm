@@ -9,13 +9,12 @@
  */
 namespace Tests\Common\External\ActOn\Factory;
 
-use Common\External\ActOn\Component\Endpoint\EmailCampaignEndpoint;
 use Common\External\ActOn\Component\Factory\ActOnFactory;
 
 /**
  * Defines test cases for EndpointFactory class.
  */
-class ActOnFactoryTest extends \PHPUnit_Framework_TestCase
+class ActOnFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

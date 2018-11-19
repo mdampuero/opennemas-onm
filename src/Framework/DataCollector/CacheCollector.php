@@ -16,13 +16,20 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 class CacheCollector extends DataCollector
 {
     /**
-     * Initializes the CacheCollector
+     * The service container
      *
-     * @param ServiceContainer $container The service container.
+     * @var \Symfony\Component\DependencyInjection\Container
+     */
+    public $container;
+
+    /**
+     * Initializes the DatabaseCollector
+     *
+     * @param \Symfony\Component\DependencyInjection\Container $container The service container.
      */
     public function __construct($container)
     {
-        $this->container= $container;
+        $this->container = $container;
     }
 
     /**
@@ -30,10 +37,11 @@ class CacheCollector extends DataCollector
      */
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
-        $caches['cache.connection.manager'] =
+        $caches['cache.connection.manager']  =
             $this->container->get('cache.manager')->getConnection('manager');
-        $caches['cache.connection.instance']  =
+        $caches['cache.connection.instance'] =
             $this->container->get('cache.manager')->getConnection('instance');
+
         $caches['cache_manager'] = $this->container->get('cache_manager');
         $caches['cache']         = $this->container->get('cache');
 
@@ -98,8 +106,8 @@ class CacheCollector extends DataCollector
             $grouped[$key]['normal'] = $this->getNonMruQueries($value['data']);
             $grouped[$key]['mru']    = $this->getMruQueries($value['data']);
 
-            usort($value['data'], function ($a, $b) {
-                return $a['time'] > $b['time'];
+            usort($value['data'], function ($elemA, $elemB) {
+                return $elemA['time'] > $elemB['time'];
             });
         }
 
@@ -115,16 +123,24 @@ class CacheCollector extends DataCollector
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function reset()
+    {
+        $this->data = [];
+    }
+
+    /**
      * Returns the list of MRU queries.
      *
      * @param array $calls The list of function calls.
      *
-     * @return array The list of MRU queries.
+     * @return int The list of MRU queries.
      */
     protected function getMruQueries($calls)
     {
-        return count(array_filter($calls, function ($a) {
-            return array_key_exists('mru', $a['params']) && $a['params']['mru'];
+        return count(array_filter($calls, function ($item) {
+            return array_key_exists('mru', $item['params']) && $item['params']['mru'];
         }));
     }
 
@@ -133,13 +149,13 @@ class CacheCollector extends DataCollector
      *
      * @param array $calls The list of function calls.
      *
-     * @return array The list of cache queries.
+     * @return int The list of cache queries.
      */
     protected function getNonMruQueries($calls)
     {
-        return count(array_filter($calls, function ($a) {
-            return !array_key_exists('mru', $a['params'])
-                || !$a['params']['mru'];
+        return count(array_filter($calls, function ($item) {
+            return !array_key_exists('mru', $item['params'])
+                || !$item['params']['mru'];
         }));
     }
 }

@@ -15,7 +15,7 @@ use Common\ORM\Core\Entity;
 /**
  * Defines test cases for AuthorService class.
  */
-class AuthorServiceTest extends \PHPUnit_Framework_TestCase
+class AuthorServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -83,6 +83,8 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
             case 'orm.oql.fixer':
                 return $this->fixer;
         }
+
+        return null;
     }
 
     /**
@@ -91,8 +93,7 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
     public function testDeleteItem()
     {
         $item = new Entity([
-            'fk_user_group' => [ 3 ],
-            'user_groups'   => [ 3 => [ 'status' => 1 ] ]
+            'user_groups' => [ 3 => [ 'status' => 1 ] ]
         ]);
 
         $this->repository->expects($this->once())->method('findOneBy')
@@ -106,7 +107,7 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteItem when the item to delete is the current user.
      *
-     * @expectedException Api\Exception\DeleteItemException
+     * @expectedException \Api\Exception\DeleteItemException
      */
     public function testDeleteItemWhenEqualsToCurrentUser()
     {
@@ -116,7 +117,7 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteItem when no item found.
      *
-     * @expectedException Api\Exception\DeleteItemException
+     * @expectedException \Api\Exception\DeleteItemException
      */
     public function testDeleteItemWhenNoEntity()
     {
@@ -130,13 +131,12 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteItem when an error happens while removing object.
      *
-     * @expectedException Api\Exception\DeleteItemException
+     * @expectedException \Api\Exception\DeleteItemException
      */
     public function testDeleteItemWhenErrorWhileRemoving()
     {
         $item = new Entity([
-            'fk_user_group' => [ 3 ],
-            'user_groups'   => [ 3 => [ 'status' => 1 ] ]
+            'user_groups' => [ 3 => [ 'status' => 1 ] ]
         ]);
 
         $this->repository->expects($this->once())->method('findOneBy')
@@ -165,7 +165,7 @@ class AuthorServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests getItem when the item has no author property to true.
      *
-     * @expectedException Api\Exception\GetItemException
+     * @expectedException \Api\Exception\GetItemException
      */
     public function testGetItemWhenErrorWhenNoAuthor()
     {

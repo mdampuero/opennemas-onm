@@ -16,10 +16,8 @@ namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for kiosko content type
@@ -30,24 +28,14 @@ class NewStandController extends Controller
 {
     /**
      * Common code for all the actions
-     *
-     * @return void
      */
     public function init()
     {
-        $this->cm = new \ContentManager();
-
-        // Esta variable no se utiliza?¿ Ni tp viene por .htaccess
-        // $subcategory_name = $this->request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
-        // solo se usa al cachear en show (tiene sentido?¿) Tp viene por .htaccess
-        // $page  = $this->request->query->getDigits('page', 1);
-        $this->category_name = $this->request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
-
+        $this->cm            = new \ContentManager();
+        $this->category_name = $this->get('request_stack')
+            ->getCurrentRequest()
+            ->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $this->view->assign([ 'actual_category' => $this->category_name, ]);
-
-        if (!defined('KIOSKO_DIR')) {
-            define('KIOSKO_DIR', "kiosko" . SS);
-        }
     }
 
     /**
@@ -68,7 +56,9 @@ class NewStandController extends Controller
         }
 
         // Get settings for frontpage rendering
-        $configurations = s::get('kiosko_settings');
+        $configurations = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('kiosko_settings');
         $order          = $configurations['orderFrontpage'];
 
         // Setup templating cache layer
@@ -188,7 +178,7 @@ class NewStandController extends Controller
      */
     public function showAction(Request $request)
     {
-        $dirtyID = $request->query->getDigits('id', null);
+        $dirtyID = $request->get('id', null);
 
         $content = $this->get('content_url_matcher')
             ->matchContentUrl('kiosko', $dirtyID, null, $this->category_name);
@@ -242,6 +232,7 @@ class NewStandController extends Controller
             'content'        => $content,
             'cache_id'       => $cacheID,
             'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
+            'o_content'      => $content,
             'x-tags'         => 'newsstand,' . $content->pk_content,
             'tags'           => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($content->tag_ids)['items']

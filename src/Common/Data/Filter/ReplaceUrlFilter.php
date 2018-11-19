@@ -23,7 +23,6 @@ class ReplaceUrlFilter extends Filter
         $pattern  = $this->getParameter('pattern');
         $instance = $this->container->get('core.instance')->internal_name;
         $tokens   = [];
-        $isSlug   = true;
 
         preg_match_all($pattern, $str, $matches);
 
@@ -31,14 +30,13 @@ class ReplaceUrlFilter extends Filter
 
         if (array_key_exists('id', $matches)) {
             $tokens = $matches['id'];
-            $isSlug = false;
         }
 
         $tokens = array_unique($tokens);
 
         foreach ($tokens as $token) {
             list($translation, $foundAt) =
-                $this->getTranslation($token, $isSlug);
+                $this->getTranslation($token);
 
             if (empty($translation)) {
                 continue;
@@ -67,27 +65,19 @@ class ReplaceUrlFilter extends Filter
     /**
      * Returns a translation for the current token.
      *
-     * @param string  $token  The current token.
-     * @param boolean $isSlug Whether the token refers to a slug or a content
-     *                        id.
+     * @param string $source The source value.
      *
      * @return array The translation.
      */
-    protected function getTranslation($token, $isSlug = true)
+    protected function getTranslation($source)
     {
         $instances = $this->getParameter('instances');
         $type      = $this->getParameter('type', null);
-        $id        = null;
-
-        if (!$isSlug) {
-            $id    = $token;
-            $token = null;
-        }
 
         if (empty($instances)) {
             return [
                 $this->container->get('core.redirector')
-                    ->getTranslation($token, $type, $id),
+                    ->getUrl($source, $type),
                 $this->container->get('core.instance')->internal_name
             ];
         }
@@ -96,11 +86,11 @@ class ReplaceUrlFilter extends Filter
             $this->container->get('core.loader')
                 ->loadInstanceFromInternalName($instance);
 
-            $translation = $this->container->get('core.redirector')
-                ->getTranslation($token, $type, $id);
+            $url = $this->container->get('core.redirector')
+                ->getUrl($source, $type);
 
-            if (!empty($translation)) {
-                return [ $translation, $instance ];
+            if (!empty($url)) {
+                return [ $url, $instance ];
             }
         }
 

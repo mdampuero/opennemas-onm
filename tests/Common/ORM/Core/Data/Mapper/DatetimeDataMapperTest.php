@@ -4,7 +4,7 @@ namespace Tests\Common\ORM\Core\Data\Mapper;
 
 use Common\ORM\Core\Data\Mapper\DatetimeDataMapper;
 
-class DatetimeDataMapperTest extends \PHPUnit_Framework_TestCase
+class DatetimeDataMapperTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

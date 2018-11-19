@@ -43,7 +43,7 @@ class NewsletterRenderer
         EntityManager $entityManager,
         CategoryManager $categoryManager,
         AuthorService $authorService,
-        $settingManager,
+        $em,
         $adsHelper,
         $adsRepository,
         $instance
@@ -52,7 +52,7 @@ class NewsletterRenderer
         $this->er       = $entityManager;
         $this->cr       = $categoryManager;
         $this->as       = $authorService;
-        $this->sr       = $settingManager;
+        $this->ds       = $em->getDataSet('Settings', 'instance');
         $this->adHelper = $adsHelper;
         $this->ar       = $adsRepository;
         $this->instance = $instance;
@@ -146,14 +146,14 @@ class NewsletterRenderer
         $this->tpl->assign('URL_PUBLIC', 'http://' . $publicUrl);
 
         // Fetch and assign settings
-        $configurations = $this->sr->get([
+        $configurations = $this->ds->get([
             'newsletter_maillist',
             'newsletter_subscriptionType',
         ]);
         $this->tpl->assign('conf', $configurations);
         $this->tpl->assign('render_params', ['ads-format' => 'inline']);
 
-        return $this->tpl->fetch('newsletter/newNewsletter.tpl');
+        return $this->tpl->fetch('newsletter/newsletter.tpl');
     }
 
     /**
@@ -163,7 +163,7 @@ class NewsletterRenderer
      * @param Content $content the content from the repository
      *
      * @return Content the item completed
-     **/
+     */
     public function hydrateContent($content)
     {
         $content->cat    = $content->category_name;
@@ -209,7 +209,7 @@ class NewsletterRenderer
      * @param array $criteria the list of properties required to find contents
      *
      * @return array the list of contents
-     **/
+     */
     public function getContents($criteria)
     {
         $contents = [];
@@ -256,10 +256,10 @@ class NewsletterRenderer
             $orderBy = [ 'starttime' => 'desc' ];
         }
 
-        // Implementation for: most_viewed in 24hours filter
+        // Implementation for: most_viewed
         if ($criteria->filter === 'most_viewed') {
-            $yesterday = new \DateTime(null, getService('core.locale')->getTimeZone('frontend'));
-            $yesterday->sub(new \DateInterval('P1D'));
+            $threeDaysAgo = new \DateTime(null, getService('core.locale')->getTimeZone('frontend'));
+            $threeDaysAgo->sub(new \DateInterval('P3D'));
 
             $searchCriteria = array_merge($searchCriteria, [
                 'join' => [
@@ -269,9 +269,9 @@ class NewsletterRenderer
                         'contents.pk_content' => [ [ 'value' => 'content_views.pk_fk_content', 'field' => true ] ]
                     ]
                 ],
-                'starttime'         => [
+                'starttime' => [
                     [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-                    [ 'value' => $yesterday->format('Y-m-d H:i:s'), 'operator' => '>=' ],
+                    [ 'value' => $threeDaysAgo->format('Y-m-d H:i:s'), 'operator' => '>=' ],
                 ],
             ]);
 

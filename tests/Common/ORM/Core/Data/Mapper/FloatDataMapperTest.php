@@ -4,7 +4,7 @@ namespace Tests\Common\ORM\Core\Data\Mapper;
 
 use Common\ORM\Core\Data\Mapper\FloatDataMapper;
 
-class FloatDataMapperTest extends \PHPUnit_Framework_TestCase
+class FloatDataMapperTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

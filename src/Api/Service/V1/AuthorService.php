@@ -44,7 +44,6 @@ class AuthorService extends UserService
             $item = $this->getItem($id);
 
             unset($item->user_groups[3]);
-            $item->fk_user_group = array_diff($item->fk_user_group, [ 3 ]);
 
             $this->em->persist($item, $item->getOrigin());
         } catch (\Exception $e) {

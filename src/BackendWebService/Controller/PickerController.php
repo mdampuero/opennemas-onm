@@ -323,7 +323,7 @@ class PickerController extends Controller
         // Get contents for this home
         list($frontpageVersion, $contentPositions, $results) =
             $this->get('api.service.frontpage_version')
-                ->getPublicContentsForFrontpageData(0);
+                ->getContentsInCurrentVersionforCategory(0);
 
         $results = array_filter($results, function ($value) {
             return $value->content_type_name != 'widget';

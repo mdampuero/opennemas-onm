@@ -9,14 +9,11 @@
  */
 namespace Framework\Command;
 
+use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
-
-use Framework\Import\Synchronizer\Synchronizer;
 
 class NewsletterSchedulerCommand extends ContainerAwareCommand
 {
@@ -49,7 +46,6 @@ EOF
         $this->getContainer()->get('core.security')->setCliUser();
 
         $loader = $this->getContainer()->get('core.loader');
-        $logger = $this->getContainer()->get('logger');
 
         $instanceName = $input->getArgument('instance');
         $instance     = $loader->loadInstanceFromInternalName($instanceName);
@@ -70,7 +66,7 @@ EOF
         $this->newsletterRenderer = $this->getContainer()->get('core.renderer.newsletter');
 
         if (!is_object($instance)) {
-            throw new \Onm\Exception\InstanceNotFoundException(_('Instance not found'));
+            throw new InstanceNotFoundException();
         }
 
         if ($instance->activated != '1') {
@@ -119,7 +115,7 @@ EOF
      * @return array an array with two keys:
      *                  the first with a boolean: true, we can send, false, we cannot
      *                  the second is the reason why we cant send
-     **/
+     */
     public function canWeSendTemplate($template, $time)
     {
         // Check if it is the right day of the week to send the newsletter
@@ -191,7 +187,7 @@ EOF
      * @param DateTime $time the current DateTime
      *
      * @return Newsletter the created newsletter
-     **/
+     */
     public function sendScheduledTemplate($template, $output, $time)
     {
         // Render the template
@@ -241,9 +237,7 @@ EOF
      * Writes the provided line into the output
      *
      * @param string $line The line to write in the output
-     *
-     * @return void
-     **/
+     */
     private function outputLine($line)
     {
         $fullLine = sprintf('[Instance %s] %s', $this->instanceName, $line);

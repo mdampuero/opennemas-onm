@@ -11,17 +11,10 @@ namespace Onm\Merchant;
 
 use PayPal\Service\PayPalAPIInterfaceServiceService;
 
-/**
- *
- */
 class PaypalWrapper
 {
-
     /**
-     * undocumented function
-     *
-     * @return void
-     * @author
+     * Initializes the PaypalWrapper
      */
     public function __construct($settings)
     {
@@ -37,22 +30,12 @@ class PaypalWrapper
 
         $this->settings = $settings;
     }
-    /**
-     * undocumented function
-     *
-     * @return void
-     * @author
-     */
+
     public function getMerchantService()
     {
         return new PayPalAPIInterfaceServiceService($this->settings);
     }
 
-    /**
-     * undocumented function
-     *
-     * @return void
-     */
     public function getServiceUrl()
     {
         if ($this->settings['mode'] == 'live') {

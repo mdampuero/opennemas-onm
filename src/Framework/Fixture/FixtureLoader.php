@@ -36,7 +36,7 @@ class FixtureLoader
             throw new \InvalidArgumentException();
         }
 
-        $builder = new PHPUnit_Framework_MockObject_MockBuilder($this->testCase, $target);
+        $builder = new PHPUnit_Framework_MockObject_MockBuilder($this->testCase, $data['target']);
 
         if (array_key_exists('constructor', $data)
             && $data['constructor'] === 'disabled'

@@ -4,8 +4,6 @@
  * Start up and setup the app
 */
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Console\Application;
 
 require __DIR__.'/../app/autoload.php';
 

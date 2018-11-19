@@ -1,25 +1,36 @@
 <?php
-
+/**
+ * Returns the favicon meta tag
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
+ */
 function smarty_function_render_favico($params, &$smarty)
 {
     // Default favico
     $favicoUrl = '/assets/images/favicon.png';
 
     // Check if favico is defined on site
-    $favicoFileName  = getService('setting_repository')->get('favico');
-    $sectionSettings = getService('setting_repository')->get('section_settings');
+    $settings = $smarty->getContainer()
+        ->get('orm.manager')
+        ->getDataSet('Settings', 'instance')
+        ->get([ 'favico', 'section_settings' ]);
 
     $allowLogo = false;
-    if (is_array($sectionSettings) && array_key_exists('allowLogo', $sectionSettings)) {
-        $allowLogo = $sectionSettings['allowLogo'];
+    if (is_array($settings['section_settings'])
+        && array_key_exists('allowLogo', $settings['section_settings'])
+    ) {
+        $allowLogo = $settings['section_settings']['allowLogo'];
     }
 
-    if ($allowLogo && $favicoFileName) {
-        $favicoUrl = MEDIA_URL . MEDIA_DIR . '/sections/' . rawurlencode($favicoFileName);
+    if ($allowLogo && $settings['favico']) {
+        $favicoUrl = MEDIA_URL . MEDIA_DIR . '/sections/' . rawurlencode($settings['favico']);
     }
 
-    $output = "<link rel='shorcut icon' href='" . $favicoUrl . "'>\n";
-    $output .= "\t<link rel='apple-touch-icon' href='" . $favicoUrl . "'>\n";
+    $output = "<link rel='shorcut icon' href='" . $favicoUrl . "'>\n"
+        . "\t<link rel='apple-touch-icon' href='" . $favicoUrl . "'>\n";
 
     $appleSizes = ['57x57', '60x60', '72x72', '76x76', '114x114', '120x120', '144x144', '152x152', '180x180'];
     foreach ($appleSizes as $size) {

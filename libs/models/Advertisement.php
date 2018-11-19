@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Onm\Settings as s;
 
 /**
  * Advertisement class
@@ -143,8 +142,6 @@ class Advertisement extends Content
      * Initializes the Advertisement class
      *
      * @param int $id ID of the Advertisement
-     *
-     * @return Advertisement the instance of the advertisement class
      */
     public function __construct($id = null)
     {
@@ -158,7 +155,7 @@ class Advertisement extends Content
      *
      * @param array $properties
      *
-     * @return void
+     * @return Advertisement
      */
     public function load($properties)
     {
@@ -213,13 +210,13 @@ class Advertisement extends Content
      *
      * @param int $id the ID of the Advertisement
      *
-     * @return Advertisement the instance for the Ad
+     * @return null|boolean|Advertisement the instance for the Ad
      */
     public function read($id)
     {
         // If no valid id then return
         if (((int) $id) <= 0) {
-            return;
+            return null;
         }
 
         try {
@@ -261,10 +258,10 @@ class Advertisement extends Content
         $this->load($rs);
 
         if (is_string($this->params)) {
-            $advertisement->params = unserialize($this->params);
+            $this->params = unserialize($this->params);
 
-            if (!is_array($advertisement->params)) {
-                $advertisement->params = [];
+            if (!is_array($this->params)) {
+                $this->params = [];
             }
         }
 
@@ -277,7 +274,9 @@ class Advertisement extends Content
      *
      * @param array $data the needed data for create a new ad.
      *
-     * @return Advertisement
+     * @return boolean|Advertisement
+     *
+     * @throws \Exception
      */
     public function create($data)
     {
@@ -289,7 +288,7 @@ class Advertisement extends Content
         $data['pk_advertisement'] = $data['id'] = $this->id;
 
         try {
-            $rs = getService('dbal_connection')->insert(
+            getService('dbal_connection')->insert(
                 'advertisements',
                 [
                     'pk_advertisement'      => $data['pk_advertisement'],
@@ -318,6 +317,7 @@ class Advertisement extends Content
         } catch (\Exception $e) {
             $conn->rollback();
             getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -327,7 +327,7 @@ class Advertisement extends Content
      *
      * @param array $data
      *
-     * @return Advertisement Return the instance to chaining method
+     * @return boolean|Advertisement Return the instance to chaining method
      */
     public function update($data)
     {
@@ -340,7 +340,7 @@ class Advertisement extends Content
         parent::update($data);
 
         try {
-            $rs = getService('dbal_connection')->update(
+            getService('dbal_connection')->update(
                 'advertisements',
                 [
                     'fk_content_categories' => $data['categories'],
@@ -357,7 +357,7 @@ class Advertisement extends Content
                 [ 'pk_advertisement' => (int) $data['id'] ]
             );
 
-            $rs = getService('dbal_connection')->delete(
+            getService('dbal_connection')->delete(
                 'advertisements_positions',
                 [ 'advertisement_id' => $data['id'] ]
             );
@@ -372,6 +372,7 @@ class Advertisement extends Content
         } catch (\Exception $e) {
             $conn->rollback();
             getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -381,7 +382,7 @@ class Advertisement extends Content
      *
      * @param string $id the id of the ad to delete from db.
      *
-     * @return void
+     * @return boolean
      *
      */
     public function remove($id)
@@ -412,13 +413,13 @@ class Advertisement extends Content
      *
      * @param int $id Advertisement Id
      *
-     * @return string
+     * @return null|string
      */
     public function getUrl($id)
     {
         // If no valid id then return
         if (((int) $id) <= 0) {
-            return;
+            return null;
         }
 
         // Try to minimize the database overload if this object was preloaded
@@ -448,8 +449,6 @@ class Advertisement extends Content
     /**
      * Returns the list of sizes for Google DFP.
      *
-     * @param array $sizes The list of sizes for the current add.
-     *
      * @return string The list of sizes for Google DFP.
      */
     public function getSizes()
@@ -465,8 +464,6 @@ class Advertisement extends Content
 
     /**
      * Checks all parameters (old version) and returns the list of sizes.
-     *
-     * @param array $params The item parameters.
      *
      * @return array The list of sizes.
      */
@@ -521,13 +518,13 @@ class Advertisement extends Content
      *
      * @param int $id the id of the advertisement to increase num_count
      *
-     * @return void
+     * @return boolean
      */
     public static function setNumClics($id)
     {
         // If no valid id then return
         if (((int) $id) <= 0) {
-            return;
+            return null;
         }
 
         try {
@@ -556,7 +553,6 @@ class Advertisement extends Content
      * Renders the advertisment given a set of parameters
      *
      * @param array $params list of parameters for rendering the advertisement
-     * @param Template $tpl the Template class instance
      *
      * @return string the final html for the ad
      */
@@ -599,7 +595,7 @@ class Advertisement extends Content
         }
 
         $sql = 'INSERT INTO `advertisements_positions`(`advertisement_id`, `position_id`) VALUES %s';
-        $rs  = getService('dbal_connection')->executeUpdate(sprintf($sql, implode(', ', $positions)));
+        getService('dbal_connection')->executeUpdate(sprintf($sql, implode(', ', $positions)));
 
         return true;
     }

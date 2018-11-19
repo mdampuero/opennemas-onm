@@ -138,7 +138,9 @@ class SettingController extends Controller
      */
     public function listAction()
     {
-        $settings = $this->get('setting_repository')->get($this->keys);
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get($this->keys);
         $locale   = $this->get('core.locale');
 
         if (array_key_exists('google_analytics', $settings)) {
@@ -298,7 +300,8 @@ class SettingController extends Controller
         $settings = $request->get('extraFields');
         $settings = json_decode($settings, true);
 
-        $this->get('setting_repository')->set('extraInfoContents.ARTICLE_MANAGER', $settings);
+        $this->get('orm.manager')->getDataSet('Settings', 'instance')
+            ->set('extraInfoContents.ARTICLE_MANAGER', $settings);
 
         $msg->add(_('Settings saved.'), 'success');
 

@@ -1,6 +1,6 @@
 api_v1_backend_author_create:
     path:     /authors/new
-    defaults: { _controller  : ApiBundle:V1/Backend/Author:create }
+    defaults: { _controller: ApiBundle:V1/Backend/Author:create }
     methods:  [ GET ]
     options:
         expose: true
@@ -25,14 +25,14 @@ api_v1_backend_author_patch:
 
 api_v1_backend_author_save:
     path:     /authors
-    defaults: { _controller  : ApiBundle:V1/Backend/Author:save }
+    defaults: { _controller: ApiBundle:V1/Backend/Author:save }
     methods:  [ POST ]
     options:
         expose: true
 
 api_v1_backend_author_show:
     path:     /authors/{id}
-    defaults: { _controller  : ApiBundle:V1/Backend/Author:show }
+    defaults: { _controller: ApiBundle:V1/Backend/Author:show }
     methods:  [ GET ]
     options:
         expose: true
@@ -41,7 +41,7 @@ api_v1_backend_author_show:
 
 api_v1_backend_author_update:
     path:     /authors/{id}
-    defaults: { _controller  : ApiBundle:V1/Backend/Author:update }
+    defaults: { _controller: ApiBundle:V1/Backend/Author:update }
     methods:  [ PUT ]
     options:
         expose: true
@@ -57,7 +57,7 @@ api_v1_backend_authors_delete:
 
 api_v1_backend_authors_list:
     path:     /authors
-    defaults: { _controller  : ApiBundle:V1/Backend/Author:list }
+    defaults: { _controller: ApiBundle:V1/Backend/Author:list }
     methods:  [ GET ]
     options:
         expose: true

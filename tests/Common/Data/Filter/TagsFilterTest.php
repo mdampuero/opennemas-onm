@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\TagsFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines tests cases for TagsFilter class.
  */
-class TagsFilterTest extends KernelTestCase
+class TagsFilterTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

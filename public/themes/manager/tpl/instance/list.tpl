@@ -161,7 +161,7 @@
     <div class="column-filters collapsed hidden-sm" ng-class="{ 'collapsed': columns.collapsed }">
       <h5>{t}Columns{/t}</h5>
       <div class="row">
-        <div class="col-sm-6 col-md-3 column">
+        <div class="col-sm-6 col-md-3">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
             <label for="checkbox-name">
@@ -211,7 +211,7 @@
             </label>
           </div>
         </div>
-        <div class="col-sm-6 col-md-3 column">
+        <div class="col-sm-6 col-md-3">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-theme" checklist-model="columns.selected" checklist-value="'theme'" type="checkbox">
             <label for="checkbox-theme">
@@ -261,7 +261,7 @@
             </label>
           </div>
         </div>
-        <div class="col-sm-6 col-md-3 column">
+        <div class="col-sm-6 col-md-3">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-videos" checklist-model="columns.selected" checklist-value="'videos'" type="checkbox">
             <label for="checkbox-videos">
@@ -304,14 +304,14 @@
               {t}Users{/t}
             </label>
           </div>
-        </div>
-        <div class="col-sm-6 col-md-3 column">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-emails" checklist-model="columns.selected" checklist-value="'emails'" type="checkbox">
             <label for="checkbox-emails">
               {t}Emails{/t}
             </label>
           </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
           <div class="checkbox check-default p-b-5">
             <input id="checkbox-media-size" checklist-model="columns.selected" checklist-value="'media_size'" type="checkbox">
             <label for="checkbox-media-size">

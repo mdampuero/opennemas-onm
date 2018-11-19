@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  CommentListCtrl
@@ -31,6 +32,34 @@
           epp: 10,
           orderBy: { date:  'desc' },
           page: 1
+        };
+
+        /**
+         * @function getExportUrl
+         * @memberOf CommentListCtrl
+         *
+         * @description
+         *   Generates the URL to export comments to a CSV file.
+         *
+         * @return {String} The URL to export comments to a CSV file.
+         */
+        $scope.getExportUrl = function() {
+          var criteria = angular.copy($scope.criteria);
+
+          if (!criteria) {
+            return '';
+          }
+
+          oqlEncoder.configure({
+            placeholder: {
+              body: 'body ~ "%[value]%"',
+            }
+          });
+
+          return $scope.routing.generate('backend_ws_comments_list', {
+            format: '.csv',
+            oql: oqlEncoder.getOql(criteria)
+          });
         };
 
         /**
@@ -71,7 +100,7 @@
             // Disable spinner
             $scope.loading = 0;
             $scope.loadingMore = false;
-          }, function () {
+          }, function() {
             $scope.loading = 0;
             var params = {
               id: new Date().getTime(),
@@ -128,17 +157,20 @@
         $scope.patchSelected = function(property, value) {
           for (var i = 0; i < $scope.contents.length; i++) {
             var id = $scope.contents[i].id;
+
             if ($scope.selected.contents.indexOf(id) !== -1) {
               $scope.contents[i][property + 'Loading'] = 1;
             }
           }
 
           var data = { ids: $scope.selected.contents };
+
           data[property] = value;
 
           http.patch('backend_ws_comments_patch', data).then(function() {
             $scope.list('backend_ws_comments_list', true);
           });
         };
-    }]);
+      }
+    ]);
 })();

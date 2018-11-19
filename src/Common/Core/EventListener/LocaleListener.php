@@ -12,7 +12,6 @@ namespace Common\Core\EventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * The LocaleListener class configures the system locale basing on the request
@@ -45,23 +44,13 @@ class LocaleListener implements EventSubscriberInterface
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if (!$event->isMasterRequest()
-            || strpos($event->getRequest()->getRequestUri(), '/framework') === 0
-        ) {
+        if (strpos($event->getRequest()->getRequestUri(), '/framework') === 0) {
             return;
         }
 
-        // Get repository name
-        $instance = $this->container->get('core.instance');
-        $name     = $instance->internal_name === 'manager' ? 'manager' : null;
-
-        $config = $this->container->get('orm.manager')
-            ->getDataSet('Settings', $name)
-            ->get('locale');
-
         $this->locale->setContext(
             $this->container->get('core.globals')->getRoute()
-        )->configure($config);
+        );
 
         $this->configureRequestLocale($event);
         $this->configureUserLocale();
@@ -73,7 +62,7 @@ class LocaleListener implements EventSubscriberInterface
     /**
      * Configures the Locale service basing on the current request.
      */
-    protected function configureRequestLocale($event)
+    protected function configureRequestLocale(GetResponseEvent $event)
     {
         $request = $event->getRequest();
         $slug    = null;
@@ -149,7 +138,6 @@ class LocaleListener implements EventSubscriberInterface
         if (!defined('CURRENT_LANGUAGE_SHORT')) {
             define('CURRENT_LANGUAGE_SHORT', $this->locale->getLocaleShort());
         }
-
     }
 
     /**

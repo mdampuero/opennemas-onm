@@ -11,7 +11,7 @@ namespace tests\Common\ORM\Core;
 
 use Common\ORM\Core\Connection;
 
-class ConnectionTest extends \PHPUnit_Framework_TestCase
+class ConnectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

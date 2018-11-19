@@ -14,7 +14,7 @@ use Common\ORM\Core\Data\Mapper\MultiValueDataMapper;
 /**
  * Defines test cases for MultiValueDataMapper class.
  */
-class MultiValueDataMapperTest extends \PHPUnit_Framework_TestCase
+class MultiValueDataMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

@@ -30,7 +30,7 @@
 
 #onm-bar {cursor: pointer;height: 45px;background: rgba(245, 245, 245, 0.75);display:inline-block;left: 0;top: 0;color: #888;width: 100%;font-size: 15px;border-bottom: 1px solid #eaeaea;}
 #onm-bar .logo {float:left; display: inline-block;padding: 5px 10px;font-size: 20px;font-family: 'Open Sans';}
-#onm-bar .text {float: left;padding: 8px 0px;font-family: 'Open Sans', sans-serif;text-align: left;font-size: 12px;}
+#onm-bar .text {float: left;padding: 8px 0;font-family: 'Open Sans', sans-serif;text-align: left;font-size: 12px;}
 #onm-bar .content {text-align: center;padding-top: 5px;}
 #onm-bar .sign-up {float: right;padding: 0 10px;}
 #onm-bar .sign-up a {

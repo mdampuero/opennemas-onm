@@ -9,13 +9,9 @@
  */
 namespace Frontend\Controller;
 
-use Common\ORM\Core\Exception\EntityNotFoundException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for the user profile.
@@ -147,7 +143,7 @@ class AuthorController extends Controller
         }
 
         if (empty($wsUrl)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
 
         return $this->redirect($wsUrl . '/author/' . $slug);
@@ -162,8 +158,19 @@ class AuthorController extends Controller
      */
     public function frontpageAuthorsAction(Request $request)
     {
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = 16;
+        $page         = (int) $request->get('page', 1);
+        $itemsPerPage = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_in_blog', 10);
+
+        $offset = ($page - 1) * $itemsPerPage;
+
+        // Redirect to first page
+        if ($page < 1) {
+            return $this->redirectToRoute('frontend_frontpage_authors', [
+                'page' => 1
+            ]);
+        }
 
         // Setup templating cache layer
         $this->view->setConfig('articles');
@@ -172,42 +179,57 @@ class AuthorController extends Controller
         if ($this->view->getCaching() === 0
            || !$this->view->isCached('user/frontpage_author.tpl', $cacheID)
         ) {
-            $sql = "SELECT count(pk_content) as total_contents, users.id FROM contents, users "
-                . " WHERE users.fk_user_group  LIKE '%3%' "
-                . " AND contents.fk_author = users.id  AND fk_content_type IN (1, 4, 7, 9) "
-                . " AND available = 1 AND in_litter!= 1 GROUP BY users.id ORDER BY total_contents DESC";
+            $sql = "SELECT SQL_CALC_FOUND_ROWS contents.fk_author as id, count(pk_content) as total FROM contents"
+                . " WHERE contents.fk_author IN (SELECT users.id FROM users)"
+                . " AND fk_content_type IN (1, 4, 7, 9)  AND content_status = 1 AND in_litter!= 1"
+                . " GROUP BY contents.fk_author ORDER BY total DESC"
+                . " LIMIT $itemsPerPage OFFSET $offset";
 
-            $authors = $this->get('dbal_connection')->fetchAll($sql);
+            $items = $this->get('dbal_connection')->fetchAll($sql);
 
-            $total   = count($authors);
-            $authors = array_slice($authors, ($page - 1) * $itemsPerPage, $itemsPerPage);
+            $sql = 'SELECT FOUND_ROWS()';
 
-            $ids = array_map(function ($a) {
-                return $a['id'];
-            }, $authors);
+            $total = $this->get('dbal_connection')->fetchAssoc($sql);
+            $total = array_pop($total);
 
-            // Get user by slug
-            $oql   = sprintf('id in [%s]', implode(',', $ids));
-            $users = $this->get('orm.manager')->getRepository('User')->findBy($oql);
+            // Redirect to last page
+            if (ceil($total / $itemsPerPage) < $page) {
+                $page = ceil($total / $itemsPerPage);
 
-            // Map to keep original order
-            $map = [];
-            foreach ($users as $user) {
-                $map[$user->id] = $user;
+                return $this->redirectToRoute('frontend_frontpage_authors', [
+                    'page' => $page
+                ]);
             }
 
-            foreach ($authors as &$item) {
-                $user                 = $map[$item['id']];
-                $user->total_contents = $item['total_contents'];
-                $item                 = $user;
+            // Use id as array key
+            $items = $this->get('data.manager.filter')
+                ->set($items)
+                ->filter('mapify', [ 'key' => 'id' ])
+                ->get();
+
+            $response = $this->get('api.service.author')->getListByIds(array_keys($items));
+            $authors  = $this->get('data.manager.filter')
+                ->set($response['items'])
+                ->filter('mapify', [ 'key' => 'id' ])
+                ->get();
+
+            foreach ($items as &$item) {
+                $author = $authors[$item['id']];
+
                 // Fetch user avatar if exists
-                if (!empty($item->avatar_img_id)) {
-                    $item->photo = $this->get('entity_repository')->find(
-                        'Photo',
-                        $item->avatar_img_id
-                    );
+                if (!empty($author->avatar_img_id)) {
+                    $author->photo = $this->get('entity_repository')
+                        ->find('Photo', $author->avatar_img_id);
                 }
+
+                $author->total_contents = $item['total'];
+
+                $item = $author;
             }
+
+            $items = array_filter($items, function ($a) {
+                return !is_array($a);
+            });
 
             // Build the pagination
             $pagination = $this->get('paginator')->get([
@@ -219,7 +241,7 @@ class AuthorController extends Controller
             ]);
 
             $this->view->assign([
-                'authors_contents' => $authors,
+                'authors_contents' => $items,
                 'pagination'       => $pagination,
             ]);
         }

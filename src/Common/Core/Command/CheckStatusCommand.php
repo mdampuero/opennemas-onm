@@ -25,9 +25,9 @@ class CheckStatusCommand extends ContainerAwareCommand
             ->setDescription('Checks the core application status')
             ->setHelp(
                 <<<EOF
-The <info>core:status:check</info> checks if the application can be executed with current configuration values.
+The <info>core:status:check</> checks if the application can be executed with current configuration values.
 
-<info>php app/console core:status:check</info>
+<info>php app/console core:status:check</>
 
 EOF
             );
@@ -38,7 +38,6 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("<info>==></> Checking <fg=blue>core</> status...");
 
         $checker = $this->getContainer()->get('core.status.checker');
 

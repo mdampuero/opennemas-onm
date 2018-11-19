@@ -139,6 +139,8 @@ class RelatedContent
      * Updates relations from an array of elements.
      *
      * @param array $data list of elements with information for relations.
+     *
+     * @return boolean
      */
     public function update($data)
     {

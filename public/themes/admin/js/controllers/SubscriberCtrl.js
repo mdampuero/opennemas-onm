@@ -104,8 +104,7 @@
                     var ids = Object.keys($scope.data.extra.subscriptions);
 
                     // Remove all subscriptions
-                    data.fk_user_group = _.difference(data.fk_user_group, ids);
-                    data.user_groups   = _.difference(data.user_groups, ids);
+                    data.user_groups = _.difference(data.user_groups, ids);
                   }
 
                   return http.put(route, data);
@@ -141,14 +140,10 @@
             data.avatar_img_id = data.avatar_img_id.pk_photo;
           }
 
-          data.fk_user_group = [];
           for (var key in data.user_groups) {
-            if (data.user_groups[key].status === 0) {
+            if (!data.user_groups[key] || data.user_groups[key].status === 0) {
               delete data.user_groups[key];
-              continue;
             }
-
-            data.fk_user_group.push(key);
           }
 
           return data;

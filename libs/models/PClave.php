@@ -10,7 +10,6 @@
  *
  * @package    Model
  */
-use \Onm\Settings as s;
 
 /**
  * Handles all the CRUD operations over Keywords

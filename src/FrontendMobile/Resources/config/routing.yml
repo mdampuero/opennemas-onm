@@ -20,13 +20,6 @@ frontendmobile_frontpages_category:
     requirements:
         category : '[a-z0-9\-\._]+'
 
-frontendmobile_frontpages_category:
-    path: /mobile/seccion/{category}/{subcategory}
-    defaults: { _controller: FrontendMobileBundle:Mobile:redirectToCategoryFrontpage, category: null, subcategory : null }
-    requirements:
-        category    : '[a-z0-9\-\._]+'
-        subcategory : '[a-z0-9\-\._]+'
-
 frontendmobile_opinion_frontpage:
     path: /mobile/opinion
     defaults: { _controller: FrontendMobileBundle:Mobile:opinionFrontpageRedirect }

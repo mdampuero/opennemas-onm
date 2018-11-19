@@ -1,6 +1,6 @@
 api_v1_backend_user_create:
     path:     /users/new
-    defaults: { _controller  : ApiBundle:V1/Backend/User:create }
+    defaults: { _controller: ApiBundle:V1/Backend/User:create }
     methods:  [ GET ]
     options:
         expose: true
@@ -25,14 +25,14 @@ api_v1_backend_user_patch:
 
 api_v1_backend_user_save:
     path:     /users
-    defaults: { _controller  : ApiBundle:V1/Backend/User:save }
+    defaults: { _controller: ApiBundle:V1/Backend/User:save }
     methods:  [ POST ]
     options:
         expose: true
 
 api_v1_backend_user_show:
     path:     /users/{id}
-    defaults: { _controller  : ApiBundle:V1/Backend/User:show }
+    defaults: { _controller: ApiBundle:V1/Backend/User:show }
     methods:  [ GET ]
     options:
         expose: true
@@ -41,7 +41,7 @@ api_v1_backend_user_show:
 
 api_v1_backend_user_update:
     path:     /users/{id}
-    defaults: { _controller  : ApiBundle:V1/Backend/User:update }
+    defaults: { _controller: ApiBundle:V1/Backend/User:update }
     methods:  [ PUT ]
     options:
         expose: true
@@ -57,7 +57,7 @@ api_v1_backend_users_delete:
 
 api_v1_backend_users_list:
     path:     /users
-    defaults: { _controller  : ApiBundle:V1/Backend/User:list }
+    defaults: { _controller: ApiBundle:V1/Backend/User:list }
     methods:  [ GET ]
     options:
         expose: true

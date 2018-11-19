@@ -95,8 +95,6 @@ class Photo extends Content
      * Overloads the object properties with an array of the new ones
      *
      * @param array $properties the list of properties to load
-     *
-     * @return void
      */
     public function load($properties)
     {
@@ -472,11 +470,11 @@ class Photo extends Content
 
                     break;
                 case 'image/jpeg':
-                    $exif = [];
+                    $exifData = [];
                     if (isset($info)) {
                         foreach (array_keys($info) as $key) {
                             if ($key != 'APP1') {
-                                $exifData = @read_exif_data($image, 0, true);
+                                $exifData = @exif_read_data($image, 0, true);
                                 break;
                             }
                         }
@@ -522,7 +520,6 @@ class Photo extends Content
                             $errorReporting = ini_get('error_reporting');
                             error_reporting('E_ALL');
 
-                            $myiptc['Keywords']     = $keywords;
                             $myiptc['Caption']      = $iptc["2#120"][0];
                             $myiptc['Graphic_name'] = $iptc["2#005"][0];
                             $myiptc['Urgency']      = $iptc["2#010"][0];

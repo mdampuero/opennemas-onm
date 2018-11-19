@@ -7,14 +7,14 @@
  * file that was distributed with this source code.
  */
 /**
- * smarty_function_is_module_activated, Smarty plugin for render message board
- * <code>
- * {messageboard type="growl" clear="true"}
- * </code>
+ * Prints the content if the module is enabled
  *
- * @param array $params  Parameters of smarty function
- * @param Smarty $smarty Object reference to Smarty class
- * @return string Return a HTML code of the message board
+ * @param array   $params The list of parameters passed to the block.
+ * @param string  $content The content inside the block.
+ * @param \Smarty $smarty The instance of smarty.
+ * @param boolean $open Whether if we are in the open of the tag of in the close.
+ *
+ * @return null|string
  */
 function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
 {
@@ -26,8 +26,11 @@ function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
         $output = '';
     }
 
+    if (!isset($params['name'])) {
+        $output = '';
+    }
+
     $modules = explode(',', $params['name']);
-    $output  = '';
 
     if (count($modules) > 1) {
         $returnContent = false;
@@ -38,9 +41,9 @@ function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
             }
         }
 
-        $output = ($returnContent) ?  $content : "";
+        $output = ($returnContent) ? $content : "";
     } else {
-        $output = (getService('core.security')->hasExtension($params['name'])) ?  $content : "";
+        $output = (getService('core.security')->hasExtension($params['name'])) ? $content : "";
     }
 
     if (isset($params['deactivated']) && $params['deactivated'] == 1) {

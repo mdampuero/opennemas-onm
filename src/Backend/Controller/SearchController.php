@@ -11,7 +11,6 @@ namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,8 +23,6 @@ class SearchController extends Controller
 {
     /**
      * Handles the search form and shows the search contents
-     *
-     * @return void
      *
      * @Security("hasExtension('ADVANCED_SEARCH')
      *     and hasPermission('SEARCH_ADMIN')")

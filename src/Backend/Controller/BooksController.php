@@ -13,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 use Onm\StringUtils;
 
 /**
@@ -25,8 +24,6 @@ class BooksController extends Controller
 {
     /**
      * Common code for all the actions
-     *
-     * @return void
      */
     public function init()
     {
@@ -66,7 +63,10 @@ class BooksController extends Controller
      */
     public function listAction()
     {
-        $configurations = s::get('book_settings');
+        $configurations = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('book_settings');
+
         if (isset($configurations['total_widget'])
             && !empty($configurations['total_widget'])
         ) {
@@ -108,7 +108,10 @@ class BooksController extends Controller
      */
     public function widgetAction()
     {
-        $configurations = s::get('book_settings');
+        $configurations = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('book_settings');
+
         if (isset($configurations['total_widget'])
             && !empty($configurations['total_widget'])
         ) {
@@ -166,7 +169,6 @@ class BooksController extends Controller
 
         if (!empty($id)) {
             $book->setPosition($data['position']);
-            $book = $book->read($id);
 
             $request->getSession()->getFlashBag()->add(
                 'success',

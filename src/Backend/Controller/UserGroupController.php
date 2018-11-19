@@ -9,49 +9,30 @@
  */
 namespace Backend\Controller;
 
-use Common\Core\Annotation\Security;
-use Common\Core\Controller\Controller;
-
-class UserGroupController extends Controller
+class UserGroupController extends BackendController
 {
     /**
-     * Displays the form to create a new user group.
+     * The extension name required by this controller.
      *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('USER_GROUP_MANAGER')
-     *     and hasPermission('GROUP_CREATE')")
+     * @var string
      */
-    public function createAction()
-    {
-        return $this->render('user-group/item.tpl');
-    }
+    protected $extension = 'USER_GROUP_MANAGER';
 
     /**
-     * Displays the list of user groups.
+     * The list of permissions for every action.
      *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('USER_GROUP_MANAGER')
-     *     and hasPermission('GROUP_ADMIN')")
+     * @var type
      */
-    public function listAction()
-    {
-        return $this->render('user-group/list.tpl');
-    }
+    protected $permissions = [
+        'create' => 'GROUP_CREATE',
+        'list'   => 'GROUP_ADMIN',
+        'show'   => 'GROUP_UPDATE'
+    ];
 
     /**
-     * Displays the form to edit an user group.
+     * The resource name.
      *
-     * @param integer $id The user group id.
-     *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('USER_GROUP_MANAGER')
-     *     and hasPermission('GROUP_UPDATE')")
+     * @var string
      */
-    public function showAction($id)
-    {
-        return $this->render('user-group/item.tpl', [ 'id' => $id ]);
-    }
+    protected $resource = 'user-group';
 }

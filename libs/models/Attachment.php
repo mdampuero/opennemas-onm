@@ -57,8 +57,6 @@ class Attachment extends Content
      * Constructor for the Attachment class
      *
      * @param  integer $id the id of the Attachment
-     *
-     * @return void
      */
     public function __construct($id = null)
     {
@@ -79,7 +77,7 @@ class Attachment extends Content
         switch ($name) {
             case 'uri':
                 if (empty($this->category_name)) {
-                    $this->category_name = $this->loadCategoryName($this->pk_content);
+                    $this->category_name = $this->loadCategoryName();
                 }
 
                 $uri = "media" . DS . INSTANCE_UNIQUE_NAME . DS . FILE_DIR . $this->path;
@@ -102,13 +100,13 @@ class Attachment extends Content
      *
      * @param integer $id the id of the attachment we want to get information
      *
-     * @return void
+     * @return null|boolean|Attachment
      */
     public function read($id)
     {
         // If no valid id then return
         if (((int) $id) <= 0) {
-            return;
+            return null;
         }
 
         try {
@@ -136,8 +134,7 @@ class Attachment extends Content
      *
      * @param array $data the data for create the new Attachment
      *
-     * @return bool if it is true all went well,
-     *              if it is false something went wrong
+     * @return boolean if it is true all went well, if it is false something went wrong
      */
     public function create($data)
     {
@@ -193,7 +190,7 @@ class Attachment extends Content
      *
      * @param array $data the array of data for the attachment
      *
-     * @return void
+     * @return boolean
      */
     public function update($data)
     {
@@ -232,10 +229,10 @@ class Attachment extends Content
 
         $filename = MEDIA_PATH . DS . FILE_DIR . $this->path;
 
-        parent::remove($id);
-
         try {
-            $rs = getService('dbal_connection')->delete(
+            parent::remove($id);
+
+            getService('dbal_connection')->delete(
                 'attachments',
                 [ 'pk_attachment' => $id ]
             );
@@ -291,7 +288,7 @@ class Attachment extends Content
                 'SELECT path FROM attachments WHERE pk_attachment IN (' . $contents . ')'
             );
 
-            $rs = getService('dbal_connection')->executeUpdate(
+            getService('dbal_connection')->executeUpdate(
                 'DELETE FROM attachments WHERE `pk_attachment` IN (' . $contents . ')'
             );
 

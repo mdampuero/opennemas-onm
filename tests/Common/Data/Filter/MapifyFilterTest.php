@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\MapifyFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for MapifyFilter class.
  */
-class MapifyFilterTest extends KernelTestCase
+class MapifyFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests filter.
@@ -31,5 +30,13 @@ class MapifyFilterTest extends KernelTestCase
         $item = json_decode(json_encode([ 'norf' => 'mumble', 'qux' => 'bar' ]));
 
         $this->assertEquals([ 'mumble' => $item ], $filter->filter([ $item ]));
+
+        $item1 = [ 'norf' => 'mumble', 'qux' => 'bar' ];
+        $item2 = [ 'norf' => 'flob', 'qux' => 'plugh' ];
+
+        $this->assertEquals([
+            'mumble' => [ 'norf' => 'mumble', 'qux' => 'bar' ],
+            'flob'   => [ 'norf' => 'flob', 'qux' => 'plugh' ]
+        ], $filter->filter([ $item1, $item2 ]));
     }
 }

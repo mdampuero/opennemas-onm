@@ -10,8 +10,11 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
     }
 
     // Check if the twitter user is not empty
-    $sm   = $smarty->getContainer()->get('setting_repository');
-    $user = preg_split('@.com/[#!/]*@', $sm->get('twitter_page'));
+    $ds = $smarty->getContainer()
+        ->get('orm.manager')
+        ->getDataSet('Settings', 'instance');
+
+    $user = preg_split('@.com/[#!/]*@', $ds->get('twitter_page'));
 
     $twitterUser = $user[1];
     if (empty($twitterUser)) {

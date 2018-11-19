@@ -1,12 +1,11 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     output.filter.css_includes.pre01.php
- * Type:     outputfilter
- * Name:     css_includes
- * Purpose:  Handles all the css includes and print them into .
- * -------------------------------------------------------------
+/**
+ * Handles all the css includes and print them into .
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_outputfilter_css_includes($output, $smarty)
 {

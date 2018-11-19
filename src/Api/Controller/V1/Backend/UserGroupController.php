@@ -10,7 +10,6 @@
 namespace Api\Controller\V1\Backend;
 
 use Common\Core\Annotation\Security;
-use Common\ORM\Entity\UserGroup;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -236,6 +235,29 @@ class UserGroupController extends Controller
      */
     private function getExtraData()
     {
-        return [ 'modules' => \Privilege::getPrivilegesByModules() ];
+        $locale  = $this->get('core.locale')->getLocaleShort();
+        $modules = \Privilege::getPrivilegesByModules();
+        $oql     = sprintf(
+            "uuid in ['%s']",
+            implode("','", array_keys($modules))
+        );
+
+        $extensions = $this->get('orm.manager')
+            ->getRepository('Extension')
+            ->findBy($oql);
+
+        $extensions = $this->get('data.manager.filter')
+            ->set($extensions)
+            ->filter('mapify', [ 'key' => 'uuid' ])
+            ->get();
+
+        $extensions = array_map(function ($a) use ($locale) {
+            return $a->getName($locale);
+        }, $extensions);
+
+        return [
+            'extensions' => $extensions,
+            'modules'    => $modules
+        ];
     }
 }

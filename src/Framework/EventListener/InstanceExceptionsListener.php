@@ -1,27 +1,21 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Framework\EventListener;
 
 use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
-use Common\Core\Component\Exception\Instance\InstanceNotRegisteredException;
-use Psr\Log\LoggerInterface;
+use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 
 /**
  * Handles all instance-related exceptions.
@@ -32,6 +26,8 @@ class InstanceExceptionsListener implements EventSubscriberInterface
      * Checks and handles an exception if it is related to instance load.
      *
      * @param GetResponseForExceptionEvent $event The event object.
+     *
+     * @return null|boolean
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
@@ -44,22 +40,21 @@ class InstanceExceptionsListener implements EventSubscriberInterface
         $handling = true;
 
         $exception = $event->getException();
-        $request = $event->getRequest();
+        $request   = $event->getRequest();
 
         // Only handle instance exceptions
-        if ($exception instanceof InstanceNotRegisteredException
+        if ($exception instanceof InstanceNotFoundException
             || $exception instanceof InstanceNotActivatedException
         ) {
-            $attributes = array(
+            $request = $request->duplicate(null, null, [
                 '_controller' => 'BackendBundle:Error:default',
                 'exception'   => FlattenException::create($exception),
                 // keep for BC -- as $format can be an argument of the controller callable
                 // see src/Symfony/Bundle/TwigBundle/Controller/ExceptionController.php
                 // @deprecated in 2.4, to be removed in 3.0
                 'format'      => $request->getRequestFormat(),
-            );
+            ]);
 
-            $request = $request->duplicate(null, null, $attributes);
             $request->setMethod('GET');
 
             try {
@@ -76,11 +71,13 @@ class InstanceExceptionsListener implements EventSubscriberInterface
      * Returns an array of event names this subscriber wants to listen to.
      *
      * @return array The event names to listen to.
+     *
+     * @return array
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            KernelEvents::EXCEPTION => array('onKernelException', 100),
-        );
+        return [
+            KernelEvents::EXCEPTION => [ 'onKernelException', 100 ],
+        ];
     }
 }

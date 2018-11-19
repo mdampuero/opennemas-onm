@@ -1,16 +1,15 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     outputfilter.backend_analytics.php
- * Type:     outputfilter
- * Name:     backend_analytics
- * Purpose:  Prints Piwik and Google Analytics codes
- * -------------------------------------------------------------
+/**
+ * Prints Piwik and Google Analytics codes
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_outputfilter_backend_analytics($output, $smarty)
 {
-    $request = getService('request');
+    $request = getService('request_stack')->getCurrentRequest();
     $uri     = $request->getUri();
 
     if (preg_match('/\/admin/', $uri)
@@ -48,7 +47,7 @@ function addBackendCodes($output)
         . 'm=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)'
         . '})(window,document,\'script\',\'//www.google-analytics.com/analytics.js\',\'ga\');'
         . 'ga(\'create\', \'UA-40838799-4\', { cookieDomain: \''
-        . getService('request')->server->get('SERVER_NAME') . '\' });'
+        . getService('request_stack')->getCurrentRequest()->server->get('SERVER_NAME') . '\' });'
         . 'ga(\'send\', \'pageview\');'
         . '</script>'
         . '<!-- End Google Analytics -->';

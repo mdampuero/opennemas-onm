@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\YoutubeIdFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for YoutubeIdFilter class.
  */
-class YoutubeIdFilterTest extends KernelTestCase
+class YoutubeIdFilterTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

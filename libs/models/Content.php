@@ -1,23 +1,15 @@
 <?php
 /**
- * Defines the Content class
+ * This file is part of the Onm package.
  *
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package    Model
  */
-use Onm\Settings as s;
+use Common\Data\Serialize\Serializable\CsvSerializable;
 
-/**
- * Handles all the common actions in all the contents
- *
- * @package    Model
- */
-class Content implements \JsonSerializable
+class Content implements \JsonSerializable, CsvSerializable
 {
     const AVAILABLE     = 'available';
     const TRASHED       = 'trashed';
@@ -228,9 +220,6 @@ class Content implements \JsonSerializable
     public function __get($name)
     {
         switch ($name) {
-            case 'category_name':
-                return $this->category_name = $this->loadCategoryName();
-
             case 'category_title':
                 return $this->category_title = $this->loadCategoryTitle();
 
@@ -322,6 +311,36 @@ class Content implements \JsonSerializable
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function csvSerialize()
+    {
+        $keys = [
+            'pk_content', 'pretitle', 'title', 'description', 'created',
+            'changed', 'starttime', 'content_status', 'body'
+        ];
+
+        $data = array_intersect_key(get_object_vars($this), array_flip($keys));
+        $data = array_merge(array_fill_keys($keys, null), $data);
+
+        foreach ($this->getL10nKeys() as $key) {
+            if (!in_array($key, $keys)) {
+                continue;
+            }
+
+            $data[$key] = $this->__get($key);
+        }
+
+        foreach ($data as &$value) {
+            if ($value instanceof \Datetime) {
+                $value = $value->format('Y-m-d H:i:s');
+            }
+        }
+
+        return $data;
+    }
+
+    /**
      * Returns all content information when serialized.
      *
      * @return array The content information.
@@ -344,8 +363,6 @@ class Content implements \JsonSerializable
      * Overloads the object properties with an array of the new ones
      *
      * @param array $properties the list of properties to load
-     *
-     * @return void
      */
     public function load($properties)
     {
@@ -416,7 +433,7 @@ class Content implements \JsonSerializable
      *
      * @param integer $id content identifier
      *
-     * @return Content the content object with all the information
+     * @return null|Content the content object with all the information
      */
     public function read($id)
     {
@@ -432,7 +449,7 @@ class Content implements \JsonSerializable
             );
 
             if (!$rs) {
-                return;
+                return null;
             }
 
             // Load object properties
@@ -445,7 +462,8 @@ class Content implements \JsonSerializable
             return $this;
         } catch (\Exception $e) {
             error_log('Error fetching content with id' . $id . ': ' . $e->getMessage());
-            return;
+
+            return null;
         }
     }
 
@@ -471,9 +489,11 @@ class Content implements \JsonSerializable
             }
 
             $type = ucfirst($type);
+
             return new $type($contentId);
         } catch (\Exception $e) {
             error_log('Error on Content::get (ID:' . $contentId . ')' . $e->getMessage());
+
             return false;
         }
     }
@@ -484,6 +504,8 @@ class Content implements \JsonSerializable
      * @param array $data array with data for create the article
      *
      * @return boolean true if the content was created
+     *
+     * @throws \Exception
      */
     public function create($data)
     {
@@ -510,8 +532,12 @@ class Content implements \JsonSerializable
         }
 
         if (!isset($data['with_comment'])) {
-            $config               = s::get('comments_config');
-            $data['with_comment'] = isset($config['with_comments']) ? intval($config['with_comments']) : 1;
+            $config = getService('orm.manager')
+                ->getDataSet('Settings')
+                ->get('comments_config');
+
+            $data['with_comment'] = isset($config['with_comments']) ?
+                intval($config['with_comments']) : 1;
         }
 
         $catName = '';
@@ -687,7 +713,6 @@ class Content implements \JsonSerializable
             'params'         => (!isset($data['params']) || empty($data['params'])) ? null : serialize($data['params']),
             'slug'           => $data['slug'],
             'starttime'      => (!isset($data['starttime'])) ? $this->starttime : $data['starttime'],
-            'title'          => $data['title'],
             'with_comment'   => (!isset($data['with_comment'])) ? $this->with_comment : $data['with_comment'],
         ];
 
@@ -715,8 +740,6 @@ class Content implements \JsonSerializable
                         'cat_name'   => $catName,
                     ]
                 );
-            } else {
-                $catName = $this->category_name;
             }
 
             $this->tag_ids = $this->addTags(is_array($data['tag_ids']) ? $data['tag_ids'] : []);
@@ -731,6 +754,37 @@ class Content implements \JsonSerializable
             return true;
         } catch (\Exception $e) {
             error_log('Error updating content (ID:' . $data['id'] . '):' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Updates a property in the content and persist it into database
+     *
+     * @param array $properties the list of properties to update
+     *
+     * @return void
+     **/
+    public function patch($properties)
+    {
+        try {
+            $conn = getService('dbal_connection');
+            $rs   = $conn->update(
+                'contents',
+                $properties,
+                [ 'pk_content' => $this->pk_content ]
+            );
+
+            logContentEvent(__METHOD__, $this);
+            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams(
+                $this->content_type_name . '.update',
+                [ 'content' => $this ]
+            );
+
+            return true;
+        } catch (\Exception $e) {
+            error_log('Error patching property in content (ID:' . $this->pk_content . '):' . $e->getMessage());
             return false;
         }
     }
@@ -798,6 +852,8 @@ class Content implements \JsonSerializable
                 $this->content_type_name . '.update',
                 [ $this->content_type_name => $this ]
             );
+
+            return true;
         } catch (\Exception $e) {
             error_log('Error Content:delete, aka sendToTrash (ID:' . $id . '):' . $e->getMessage());
             return false;
@@ -814,7 +870,7 @@ class Content implements \JsonSerializable
     public static function checkExists($id)
     {
         if (!isset($id)) {
-            return;
+            return false;
         }
 
         try {
@@ -826,6 +882,7 @@ class Content implements \JsonSerializable
             return count($contentNum) >= 1;
         } catch (\Exception $e) {
             error_log('Error on check exists on content (ID:' . $id . '):' . $e->getMessage());
+
             return false;
         }
     }
@@ -833,12 +890,12 @@ class Content implements \JsonSerializable
     /**
      * Returns the URI for this content
      *
-     * @return string the uri
+     * @return string|array the uri
      */
     public function getUri()
     {
         if (empty($this->category_name)) {
-            $this->category_name = $this->loadCategoryName($this->pk_content);
+            $this->category_name = $this->loadCategoryName();
         }
 
         if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
@@ -875,7 +932,7 @@ class Content implements \JsonSerializable
     /**
      * Sets the state of this content to the trash
      *
-     * @return boolean true if all went well
+     * @return boolean|\Content true if all went well
      */
     public function setTrashed()
     {
@@ -1071,6 +1128,8 @@ class Content implements \JsonSerializable
      * Change current value of frontpage property
      *
      * @return boolean true if it was changed successfully
+     *
+     * @throws \Exception
      */
     public function toggleSuggested()
     {
@@ -1494,9 +1553,9 @@ class Content implements \JsonSerializable
             } elseif ($this->isPostponed($now)) {
                 return self::POSTPONED;
             }
-        } else {
-            return self::NOT_SCHEDULED;
         }
+
+        return self::NOT_SCHEDULED;
     }
 
     /**
@@ -1554,16 +1613,14 @@ class Content implements \JsonSerializable
     */
     public function isScheduled($now = null)
     {
-        $now   = new \DateTime($now);
-        $start = new \DateTime($this->starttime);
-        $end   = new \DateTime($this->endtime);
-
         if (empty($this->starttime)) {
             return false;
         }
 
-        // If the starttime is equals to and endtime (wrong values), this is not
-        // scheduled
+        $start = new \DateTime($this->starttime);
+        $end   = new \DateTime($this->endtime);
+
+        // If the starttime is equals to and endtime (wrong values), this is not scheduled
         //
         // TODO: Remove this checking when values fixed in database
         if ($start->getTimeStamp() - $end->getTimeStamp() == 0) {
@@ -1671,7 +1728,7 @@ class Content implements \JsonSerializable
     /**
      * Return the content type name for this content
      *
-     * @return void
+     * @return string
      */
     public function getContentTypeName()
     {
@@ -1761,7 +1818,6 @@ class Content implements \JsonSerializable
         }
 
         if (count($relations) > 0) {
-            $relatedContents = [];
             $relatedContents = getService('entity_repository')->findMulti($relations);
 
             // Filter out not ready for publish contents.
@@ -1938,7 +1994,7 @@ class Content implements \JsonSerializable
         }
 
         try {
-            $value = getService('dbal_connection')->executeUpdate(
+            getService('dbal_connection')->executeUpdate(
                 "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
                 . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?",
                 [ $this->id, $property, $value, $value ]
@@ -1988,7 +2044,7 @@ class Content implements \JsonSerializable
             $sql = 'DELETE FROM contentmeta WHERE fk_content = ? AND meta_name '
                 . (is_array($property) ? $propertyFilter : ' = ?');
 
-            $value = getService('dbal_connection')->executeUpdate($sql, $parameters);
+            getService('dbal_connection')->executeUpdate($sql, $parameters);
 
             return true;
         } catch (\Exception $e) {
@@ -2000,7 +2056,9 @@ class Content implements \JsonSerializable
     /**
      * Load content properties given the content id
      *
-     * @return array if it is in the contentmeta table
+     * @param int $id The id of the content
+     *
+     * @return boolean|Content if it is in the contentmeta table
      */
     public function loadAllContentProperties($id = null)
     {
@@ -2008,8 +2066,6 @@ class Content implements \JsonSerializable
         $contentProperties = $cache->fetch('content-meta-' . $this->id);
 
         if (!is_array($contentProperties)) {
-            $contentProperties = [];
-
             if ($this->id == null && $id == null) {
                 return false;
             }
@@ -2100,7 +2156,10 @@ class Content implements \JsonSerializable
             return;
         }
 
-        $metaDataFields = getService('setting_repository')->get($type);
+        $metaDataFields = getService('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get($type);
+
         if (!is_array($metaDataFields)) {
             return;
         }
@@ -2157,8 +2216,6 @@ class Content implements \JsonSerializable
      * Removes all tags associated with a content given its id
      *
      * @param mixed $contentId The id of the content
-     *
-     * @return void
      */
     public static function deleteTags($contentId)
     {
@@ -2183,6 +2240,8 @@ class Content implements \JsonSerializable
      * This is crap and should be in the article service.
      *
      * @param Array $data
+     *
+     * @return array
      */
     public function addTags($tagIds)
     {
@@ -2197,7 +2256,6 @@ class Content implements \JsonSerializable
 
         foreach ($tagIds as $tag) {
             if (is_array($tag)) {
-                $tag['slug']  = $ts->createSearchableWord($tag['name']);
                 $tag          = $ts->createItem($tag);
                 $insertTags[] = $tag->id;
                 $newTags[]    = $tag;
@@ -2218,6 +2276,10 @@ class Content implements \JsonSerializable
      *
      * @param mixed $contentIds a array with all the ids of the contents you want recover
      *  If you use a integer only recover this one.
+     *
+     * @throws \Exception
+     *
+     * @return array
      */
     public function getContentTags($contentIds)
     {

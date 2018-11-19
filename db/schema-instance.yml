@@ -333,7 +333,7 @@ comments:
             options: { length: 20, default: '' }
         parent_id:
             type: bigint
-            options: { unsigned: true, default: null, default: 0 }
+            options: { unsigned: true, default: null }
         user_id:
             type: bigint
             options: { length: 20, unsigned: true, default: 0 }
@@ -548,9 +548,6 @@ contents:
         body:
             type: text
             options: { length: 4294967295, default: null, notnull: false }
-        metadata:
-            type: string
-            options: { length: 512, default: null, notnull: false }
         starttime:
             type: datetime
             options: { default: CURRENT_TIMESTAMP, notnull: false }
@@ -670,12 +667,6 @@ contents:
             unique: false
             flags: {  }
         -
-            name: metadata
-            columns: [metadata]
-            primary: false
-            unique: false
-            flags: { fulltext: true }
-        -
             name: urn_source
             columns: [urn_source]
             unique: true
@@ -742,6 +733,12 @@ contents_tags:
             columns: [content_id, tag_id]
             primary: true
             unique: true
+            flags: {  }
+        -
+            name: content_tags_content_id
+            columns: [ content_id ]
+            primary: false
+            unique: false
             flags: {  }
     foreign_keys:
         -
@@ -997,6 +994,9 @@ newsletters:
         status:
             type: integer
             options: { length: 10, default: 0, notnull: true }
+        name:
+            type: string
+            options: { default: null, length: 512, notnull: false }
         title:
             type: string
             options: { default: null, length: 512 }
@@ -1027,6 +1027,9 @@ newsletters:
         template_id:
             type: bigint
             options: { lenght: 20, default: null, unsigned: true, notnull: false  }
+        params:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
     index:
         -
             name:    PRIMARY
@@ -1046,13 +1049,6 @@ newsletters:
             primary: false
             unique:  false
             flags:   {}
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_newsletter]
-            primary: true
-            unique: true
-            flags: {  }
 opinions:
     columns:
         pk_opinion:
@@ -1677,9 +1673,6 @@ users:
         activated:
             type: integer
             options: { unsigned: true, default: 0, notnull: true, comment: '1 activated - 0 deactivated' }
-        fk_user_group:
-            type: string
-            options: { length: 100, default: null, notnull: false }
     index:
         -
             name: PRIMARY

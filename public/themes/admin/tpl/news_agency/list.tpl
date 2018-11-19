@@ -8,19 +8,18 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-microphone fa-lg"></i>
+                <i class="fa fa-microphone m-r-10"></i>
                 <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/788682-opennemas-agencias-de-noticias" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                   <i class="fa fa-question"></i>
                 </a>
-                {t}News Agency{/t}
               </h4>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak">
-              <h5>
-                <small class="p-l-10">
-                  [% extra.last_sync %]
-                </small>
-              </h5>
+            <li class="quicklinks">
+              <h4>
+                  <a class="no-padding" href="{url name=backend_news_agency}">
+                    {t}News Agency{/t}
+                  </a>
+              </h4>
             </li>
           </ul>
           <div class="all-actions pull-right">
@@ -37,7 +36,7 @@
                   <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks">
-                  <a class="btn btn-primary" href="{url name=admin_news_agency_sync}" id="sync-button">
+                  <a class="btn btn-primary" href="{url name=backend_news_agency_sync}" id="sync-button">
                     <i class="fa fa-retweet"></i>
                     <span class="hidden-xs">{t}Sync{/t}</span>
                   </a>
@@ -209,20 +208,20 @@
                       </div>
                       <div class="m-l-15" ng-show="extra.related[id].type === 'text'">
                         <div class="listing-inline-actions">
-                          <button class="btn btn-link" ng-click="open('modal-view-content', extra.related[id])" title="{t}View{/t}">
+                          <a class="btn btn-default btn-small" ng-click="open('modal-view-content', extra.related[id])" title="{t}View{/t}">
                             <i class="fa fa-eye"></i> {t}View content{/t}
-                          </button>
+                          </a>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="listing-inline-actions">
-                    <button class="btn btn-link" ng-click="preview(content)" title="{t}View{/t}">
+                    <a class="btn btn-default btn-small" ng-click="preview(content)" title="{t}View{/t}">
                       <i class="fa fa-eye"></i> {t}View content{/t}
-                    </button>
-                    <span class="badge badge-success no-animate" ng-if="imported.indexOf(content.urn) !== -1">{t}Imported{/t}</span>
-                    <button class="btn btn-link no-animate" ng-click="import(content)" ng-if="imported.indexOf(content.urn) === -1" title="{t}Import{/t}">
-                      <span class="fa fa-cloud-download"></span> {t}Import{/t}
+                    </a>
+                    <span class="btn btn-success btn-small" ng-if="imported.indexOf(content.urn) !== -1">{t}Imported{/t}</span>
+                    <button class="btn btn-primary btn-small" ng-click="import(content)" ng-if="imported.indexOf(content.urn) === -1" title="{t}Import{/t}">
+                      <span class="fa fa-cloud-download m-r-5"></span>{t}Import{/t}
                     </button>
                   </div>
                 </td>

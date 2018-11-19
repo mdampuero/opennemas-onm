@@ -15,7 +15,7 @@ use Common\Core\Component\Helper\UrlHelper;
 /**
  * Defines test cases for L10nRouteHelper class.
  */
-class L10nRouteHelperTest extends \PHPUnit_Framework_TestCase
+class L10nRouteHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

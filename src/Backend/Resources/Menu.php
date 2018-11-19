@@ -207,10 +207,10 @@ $menuXml = [
                 'privilege'   => 'ALBUM_ADMIN',
             ],
             [
-                'id'          => 'kiosko_manager',
+                'id'          => 'newsstand_manager',
                 'title'       => _('News Stand'),
                 'icon'        => 'fa fa-newspaper-o',
-                'link'        => url('admin_kioskos'),
+                'link'        => url('backend_newsstands'),
                 'module_name' => 'KIOSKO_MANAGER',
                 'privilege'   => 'KIOSKO_ADMIN',
             ],
@@ -332,13 +332,13 @@ $menuXml = [
                 'icon'        => 'fa fa-exchange',
                 'link'        => url('admin_instance_sync'),
                 'module_name' => 'SYNC_MANAGER',
-                'privilege'   => 'SYNC_ADMIN',
+                'privilege'   => 'INSTANCE_SYNC_ADMIN',
             ],
             [
                 'id'          => 'news_agency',
                 'title'       => _('News Agency'),
                 'icon'        => 'fa fa-microphone',
-                'link'        => url('admin_news_agency'),
+                'link'        => url('backend_news_agency'),
                 'module_name' => 'NEWS_AGENCY_IMPORTER',
                 'privilege'   => 'IMPORT_ADMIN',
             ],
@@ -425,9 +425,31 @@ $menuXml = [
         'id'          => 'settings_manager',
         'title'       => _('System'),
         'icon'        => 'fa fa-cogs',
-        'link'        => url('admin_system_settings'),
+        'link'        => '#',
         'module_name' => 'SETTINGS_MANAGER',
         'privilege'   => 'ONM_SETTINGS',
+        'submenu' => [
+            [
+                'id'          => 'urls',
+                'title'       => _('URLs'),
+                'link'        => url('backend_urls_list'),
+                'icon'        => 'fa fa-globe',
+                'privilege'   => 'MASTER'
+            ],
+            [
+                'id'          => 'cache',
+                'title'       => _('Cache manager'),
+                'icon'        => 'fa fa-database',
+                'link'        => url('admin_cache_manager'),
+                'privilege'   => 'MASTER'
+            ],
+            [
+                'id'          => 'settings',
+                'title'       => _('Settings'),
+                'icon'        => 'fa fa-cogs',
+                'link'        => url('admin_system_settings'),
+            ]
+        ]
     ]
 ];
 

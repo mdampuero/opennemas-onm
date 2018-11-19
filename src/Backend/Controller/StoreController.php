@@ -3,7 +3,6 @@
 namespace Backend\Controller;
 
 use Common\Core\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Intl\Intl;
 use Common\Core\Annotation\Security;
 

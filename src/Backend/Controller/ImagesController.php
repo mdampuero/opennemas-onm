@@ -13,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for the images
@@ -109,9 +108,7 @@ class ImagesController extends Controller
             if ($ids <= 0) {
                 $this->get('session')->getFlashBag()->add('error', _('Please provide a image id for show it.'));
 
-                return $this->redirect(
-                    $this->generateUrl('admin_images', ['category' => $category])
-                );
+                return $this->redirect($this->generateUrl('admin_images'));
             }
 
             $ids = [$ids];

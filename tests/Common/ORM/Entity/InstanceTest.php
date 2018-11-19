@@ -11,7 +11,7 @@ namespace tests\Common\ORM\Core;
 
 use Common\ORM\Entity\Instance;
 
-class InstanceTest extends \PHPUnit_Framework_TestCase
+class InstanceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests getClient for an instance without client and an instance with

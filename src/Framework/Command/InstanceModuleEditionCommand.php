@@ -39,6 +39,12 @@ class InstanceModuleEditionCommand extends ContainerAwareCommand
                 'Extension UUID.'
             )
             ->addOption(
+                'activate',
+                'a',
+                InputOption::VALUE_NONE,
+                'If set, the extension will be enabled/disabled basing on the remove flag.'
+            )
+            ->addOption(
                 'remove',
                 'r',
                 InputOption::VALUE_NONE,
@@ -54,25 +60,38 @@ class InstanceModuleEditionCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name   = $input->getArgument('instance');
-        $uuid   = $input->getArgument('uuid');
-        $remove = $input->getOption('remove');
+        $name     = $input->getArgument('instance');
+        $uuid     = $input->getArgument('uuid');
+        $activate = $input->getOption('activate');
+        $remove   = $input->getOption('remove');
 
         $loader   = $this->getContainer()->get('core.loader');
         $instance = $loader->loadInstanceFromInternalName($name);
 
         $loader->init();
 
-        $before = count($instance->purchased);
+        $before = count($instance->purchased)
+            + count($instance->activated_modules);
 
         $instance->purchased[] = $uuid;
         $instance->purchased   = array_unique($instance->purchased);
 
-        if ($remove) {
-            $instance->purchased = array_diff($instance->purchased, [ $uuid ]);
+        if ($activate) {
+            $instance->activated_modules[] = $uuid;
+            $instance->activated_modules   = array_unique($instance->activated_modules);
         }
 
-        $after = count($instance->purchased);
+        if ($remove) {
+            $instance->purchased = array_diff($instance->purchased, [ $uuid ]);
+
+            if ($activate) {
+                $instance->activated_modules =
+                    array_diff($instance->activated_modules, [ $uuid ]);
+            }
+        }
+
+        $after = count($instance->purchased)
+            + count($instance->activated_modules);
 
         if ($before !== $after) {
             $this->getContainer()->get('orm.manager')->persist($instance);

@@ -116,7 +116,7 @@ class Entity extends DataObject implements Validable
     public function merge($data)
     {
         if (!is_array($data)) {
-            return false;
+            return;
         }
 
         foreach ($data as $key => $value) {

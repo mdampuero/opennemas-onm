@@ -438,9 +438,6 @@ users:
         activated:
             type: boolean
             options: { default: '1', comment: '1 activated - 0 deactivated' }
-        fk_user_group:
-            type: string
-            options: { default: null, notnull: false, length: 100 }
     index:
         -
             name: PRIMARY

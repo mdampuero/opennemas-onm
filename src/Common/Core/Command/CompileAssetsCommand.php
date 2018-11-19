@@ -10,7 +10,6 @@
 namespace Common\Core\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
@@ -33,7 +32,7 @@ class CompileAssetsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $themes = $this->getContainer()->getParameter('core.paths.themes');
-        $paths  = [ $themes . '/admin', $themes . '/manager' ] ;
+        $paths  = [ $themes . '/admin', $themes . '/manager' ];
         $step   = 1;
         $steps  = 1 + count($paths);
 
@@ -76,8 +75,6 @@ class CompileAssetsCommand extends ContainerAwareCommand
      * Extracts all paths to script files from file content.
      *
      * @param string $file The file content.
-     *
-     * @return array The array of paths to script files.
      */
     protected function extractScripts($file)
     {
@@ -103,8 +100,6 @@ class CompileAssetsCommand extends ContainerAwareCommand
      * Extracts paths to stylesheet files from file content.
      *
      * @param string $file The file content.
-     *
-     * @return array The array of paths to stylesheet files.
      */
     protected function extractStyles($file)
     {
@@ -153,8 +148,8 @@ class CompileAssetsCommand extends ContainerAwareCommand
      */
     protected function writeScripts($output)
     {
-        $am      = $this->getContainer()->get('core.service.assetic.javascript_manager');
-        $scripts = $this->bag->getScripts();
+        $am       = $this->getContainer()->get('core.service.assetic.javascript_manager');
+        $scripts  = $this->bag->getScripts();
         $progress = null;
 
         if ($output->isVeryVerbose()) {

@@ -13,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Intl;
 
 /**
  * Lists and displays newsletters.
@@ -77,7 +76,7 @@ class NewsletterTemplateController extends Controller
             ];
         }
 
-        if (!empty($settings['newsletter_maillist']['email'])) {
+        if (!empty($settings['newsletter_maillist']) && isset($settings['newsletter_maillist']['email'])) {
             $extra['recipients'][] = [
                 'type' => 'external',
                 'name' => $settings['newsletter_maillist']['email'],
@@ -142,7 +141,7 @@ class NewsletterTemplateController extends Controller
             [ 'value' => '',          'title' => _('No filter') ],
             [ 'value' => 'blogs',     'title' => _('Blogs') ],
             [ 'value' => 'in_last_day', 'title' => _('Last in 24 hours') ],
-            [ 'value' => 'most_viewed', 'title' => _('Most viewed in 24 hours') ],
+            [ 'value' => 'most_viewed', 'title' => _('Most viewed') ],
         ];
 
         return $extra;
@@ -231,7 +230,7 @@ class NewsletterTemplateController extends Controller
      * @param array $values the RAW values to clean
      *
      * @return array the cleaned values
-     **/
+     */
     public function parseValues($values)
     {
         if (!is_array($values['schedule']['hours'])) {

@@ -14,7 +14,7 @@ use Common\Core\Component\Security\Http\Logout\LogoutSuccessHandler;
 /**
  * Defines test cases for LogoutSuccessHandler class.
  */
-class LogoutSuccessHandlerTest extends \PHPUnit_Framework_TestCase
+class LogoutSuccessHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

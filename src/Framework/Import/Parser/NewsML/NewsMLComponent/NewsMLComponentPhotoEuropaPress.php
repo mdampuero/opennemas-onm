@@ -9,9 +9,6 @@
  */
 namespace Framework\Import\Parser\NewsML\NewsMLComponent;
 
-use Framework\Import\Parser\NewsML\NewsML;
-use Framework\Import\Resource\Resource;
-
 /**
  * Parses NewsComponent that represent a photo resource from NewsML files.
  */

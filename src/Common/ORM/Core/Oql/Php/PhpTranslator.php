@@ -9,7 +9,6 @@
  */
 namespace Common\ORM\Core\Oql\Php;
 
-use Common\ORM\Core\Exception\InvalidTokenException;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Oql\Tokenizer;
 

@@ -14,7 +14,7 @@ use Common\Data\Filter\ReplaceImagesUrlFilter;
 /**
  * Defines test cases for ReplaeImagesUrlFilter class.
  */
-class ReplaceImagesUrlFilterTest extends \PHPUnit_Framework_TestCase
+class ReplaceImagesUrlFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

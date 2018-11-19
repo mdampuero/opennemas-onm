@@ -30,16 +30,17 @@ class AdvertisementRenderer
     public function __construct($container)
     {
         $this->container = $container;
+        $this->router    = $this->container->get('router');
+        $this->tpl       = $this->container->get('core.template.admin');
 
-        $this->router = $this->container->get('router');
-        $this->sm     = $this->container->get('setting_repository');
-        $this->tpl    = $this->container->get('core.template.admin');
+        $this->ds = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance');
     }
 
     /**
      * Returns the string that depicts the default mark shown alongside ads
      *
-     * @param Advertisement $ad the advertisement object where to search for the mark
+     * @param \Advertisement $ad the advertisement object where to search for the mark
      *
      * @return string The default mark for the advertisements
      */
@@ -51,7 +52,7 @@ class AdvertisementRenderer
         }
 
         // If the mark is not valid then use the default one.
-        $settings    = $this->container->get('setting_repository')->get('ads_settings');
+        $settings    = $this->ds->get('ads_settings');
         $defaultMark = (
                 is_array($settings)
                 && array_key_exists('default_mark', $settings)
@@ -66,7 +67,7 @@ class AdvertisementRenderer
     /**
      * Returns the list of CSS classes according to device restrictions for an Ad
      *
-     * @param Advertisement $ad the advertisement to get restrictions from
+     * @param \Advertisement $ad the advertisement to get restrictions from
      *
      * @return string the css classes to apply
      */
@@ -89,15 +90,14 @@ class AdvertisementRenderer
     /**
      * Renders an advertisement given some params
      *
-     * @param Advertisement $ad The advertisement to render.
+     * @param \Advertisement $ad The advertisement to render.
      * @param array $params an array of parameters to render the ad
      *
      * @return string the HTML content for the advertisement
      */
     public function render(\Advertisement $ad, $params = [])
     {
-        $safeFrame = $this->container->get('setting_repository')
-            ->get('ads_settings')['safe_frame'];
+        $safeFrame = $this->ds->get('ads_settings')['safe_frame'];
 
         if ($safeFrame) {
             return $this->renderSafeFrameSlot($ad, $params);
@@ -117,7 +117,7 @@ class AdvertisementRenderer
     /**
      * Renders an advertisement.
      *
-     * @param Advertisement $ad The advertisement to render.
+     * @param \Advertisement $ad The advertisement to render.
      * @param string $format the render format to use 'amp' or 'inline'
      *
      * @return string The HTML for the slot.
@@ -146,9 +146,8 @@ class AdvertisementRenderer
     /**
      * Generates the HTML header section for the DFP ads.
      *
-     * @param array $ads    The list of advertisements to generate the header
-     *                      from.
-     * @param string $format the render format to use 'amp' or 'inline'
+     * @param array  $ads    The list of advertisements to generate the header from.
+     * @param string $format The render format to use 'amp' or 'inline'
      *
      * @return string the HTML content for the DFP slot.
      */
@@ -183,7 +182,7 @@ class AdvertisementRenderer
             $params['content']->id
         );
 
-        $options    = $this->sm->get('dfp_options');
+        $options    = $this->ds->get('dfp_options');
         $customCode = $this->getDFPCustomCode();
 
         return $this->tpl->fetch('advertisement/helpers/inline/dfp.header.tpl', [
@@ -199,8 +198,8 @@ class AdvertisementRenderer
     /**
      * Renders a DFP advertisement slot.
      *
-     * @param Advertisement $ad The advertisement to render.
-     * @param string $format the render format to use 'amp' or 'inline'
+     * @param \Advertisement $ad     The advertisement to render.
+     * @param string         $format The render format to use 'amp' or 'inline'
      *
      * @return string The HTML content for the DFP advertisement slot.
      */
@@ -215,7 +214,7 @@ class AdvertisementRenderer
      * Renders an image/swf based advertisement.
      *
      * @param string $ad     The advertisement to render.
-     * @param Photo  $img    The image object.
+     * @param \Photo $img    The image object.
      * @param string $format The render format to use 'amp' or 'inline'
      *
      * @return string The HTML code for the advertisement.
@@ -251,8 +250,7 @@ class AdvertisementRenderer
     /**
      * Generates the HTML code to include in header for Revive advertisements.
      *
-     * @param array The list of advertisements.
-     * @param string $format the render format to use 'amp' or 'inline'
+     * @param array $ads The list of advertisements.
      *
      * @return string The HTML code to include in header.
      */
@@ -271,7 +269,7 @@ class AdvertisementRenderer
             return '';
         }
 
-        $config = $this->sm->get('revive_ad_server');
+        $config = $this->ds->get('revive_ad_server');
         $zones  = [];
 
         foreach ($ads as $ad) {
@@ -291,8 +289,7 @@ class AdvertisementRenderer
     /**
      * Renders a Revive advertisement.
      *
-     * @param Advertisement $ad the ad to render.
-     * @param string $format the render format to use 'amp' or 'inline'
+     * @param \Advertisement $ad the ad to render.
      *
      * @return string the HTML content for the DFP slot.
      */
@@ -314,8 +311,8 @@ class AdvertisementRenderer
     /**
      * Generates the HTML code to include in header for Smart advertisements.
      *
-     * @param array The list of advertisements.
-     * @param string $format the render format to use 'amp' or 'inline'
+     * @param array $ads     The list of advertisements.
+     * @param string $format The render format to use 'amp' or 'inline'
      *
      * @return string The HTML code to include in header.
      */
@@ -335,7 +332,7 @@ class AdvertisementRenderer
             return '';
         }
 
-        $config = $this->sm->get('smart_ad_server');
+        $config = $this->ds->get('smart_ad_server');
         $zones  = [];
 
         foreach ($ads as $ad) {
@@ -345,8 +342,16 @@ class AdvertisementRenderer
             ];
         }
 
+        $template = 'smart.header.tpl';
+        if (is_array($config)
+            && array_key_exists('tags_format', $config)
+            && $config['tags_format'] == 'onecall_sync'
+        ) {
+            $template = 'smart.header.sync.tpl';
+        }
+
         return $this->tpl
-            ->fetch('advertisement/helpers/inline/smart.header.tpl', [
+            ->fetch('advertisement/helpers/inline/' . $template, [
                 'config'        => $config,
                 'page_id'       => $config['page_id'][$params['advertisementGroup']],
                 'zones'         => $zones,
@@ -362,15 +367,24 @@ class AdvertisementRenderer
     /**
      * Renders a Smart advertisement.
      *
-     * @param Advertisement $ad the ad to render.
-     * @param string $format the render format to use 'amp' or 'inline'
+     * @param \Advertisement $ad the ad to render.
      *
      * @return string the HTML content for the Smart slot.
      */
     public function renderInlineSmartSlot($ad)
     {
+        $config = $this->ds->get('smart_ad_server');
+
+        $template = 'smart.slot.tpl';
+        if (is_array($config)
+            && array_key_exists('tags_format', $config)
+            && $config['tags_format'] == 'onecall_sync'
+        ) {
+            $template = 'smart.slot.sync.tpl';
+        }
+
         return $this->tpl
-            ->fetch('advertisement/helpers/inline/smart.slot.tpl', [
+            ->fetch('advertisement/helpers/inline/' . $template, [
                 'id' => $ad->params['smart_format_id'],
             ]);
     }
@@ -428,7 +442,7 @@ class AdvertisementRenderer
             return $a['device'] === 'desktop';
         });
 
-        if (empty($size)) {
+        if (empty($sizes)) {
             $size = $sizes;
         }
 
@@ -449,8 +463,8 @@ class AdvertisementRenderer
     /**
      * Returns the HTML for a safe frame ad slot
      *
-     * @param  Advertisement $ad The ad to render.
-     * @param array $params the list of parameters
+     * @param \Advertisement $ad     The ad to render.
+     * @param array          $params The list of parameters
      *
      * @return string the HTML generated
      */
@@ -481,8 +495,8 @@ class AdvertisementRenderer
     /**
      * Renders a SafeFrame document for an advertisement
      *
-     * @param  Advertisement $ad The ad to render.
-     * @param array $params the list of parameters
+     * @param \Advertisement $ad     The ad to render.
+     * @param array          $params The list of parameters
      *
      * @return string the HTML generated
      */
@@ -514,8 +528,8 @@ class AdvertisementRenderer
     /**
      * Returns the HTML code for a OpenX advertisement.
      *
-     * @param Advertisement $ad       The advertisement object.
-     * @param string        $category The current category.
+     * @param \Advertisement $ad       The advertisement object.
+     * @param string         $category The current category.
      *
      * @return string The HTML code for the OpenX advertisement.
      */
@@ -526,8 +540,7 @@ class AdvertisementRenderer
             'category'  => $params['category'],
             'extension' => $params['extension'],
             'openXId'   => $ad->params['openx_zone_id'],
-            'url'       => $this->container->get('setting_repository')
-                ->get('revive_ad_server')['url']
+            'url'       => $this->ds->get('revive_ad_server')['url']
         ];
 
         return $this->container->get('core.template.admin')
@@ -537,8 +550,8 @@ class AdvertisementRenderer
     /**
      * Returns the HTML code for a Google DFP advertisement.
      *
-     * @param Advertisement $ad       The advertisement object.
-     * @param string        $category The current category.
+     * @param \Advertisement $ad       The advertisement object.
+     * @param string         $category The current category.
      *
      * @return string The HTML code for the Google DFP advertisement.
      */
@@ -562,14 +575,14 @@ class AdvertisementRenderer
     /**
      * Returns the HTML code for a Smart advertisement.
      *
-     * @param Advertisement $ad       The advertisement object.
-     * @param string        $category The current category.
+     * @param \Advertisement $ad       The advertisement object.
+     * @param string         $category The current category.
      *
      * @return string The HTML code for the Smart advertisement.
      */
     protected function renderSafeFrameSmart($ad, $params)
     {
-        $config = $this->sm->get('smart_ad_server');
+        $config = $this->ds->get('smart_ad_server');
         $params = [
             'config'        => $config,
             'page_id'       => $config['page_id'][$params['advertisementGroup']],
@@ -582,8 +595,8 @@ class AdvertisementRenderer
     /**
      * Returns the HTML code for a flash-based advertisement.
      *
-     * @param Advertisement $ad  The advertisement object.
-     * @param Photo         $img The flash object.
+     * @param \Advertisement $ad  The advertisement object.
+     * @param \Photo         $img The flash object.
      *
      * @return string The HTML code for a flash-based advertisement.
      */
@@ -609,7 +622,7 @@ class AdvertisementRenderer
     /**
      * Returns the HTML code for a HTML/JS advertisement.
      *
-     * @param Advertisement $ad The advertisement object.
+     * @param \Advertisement $ad The advertisement object.
      *
      * @return string The HTML code for the HTML/JS advertisement.
      */
@@ -626,8 +639,8 @@ class AdvertisementRenderer
     /**
      * Returns the HTML code for an image-based advertisement.
      *
-     * @param Advertisement $ad  The advertisement object.
-     * @param Photo         $img The image object.
+     * @param \Advertisement $ad  The advertisement object.
+     * @param \Photo         $img The image object.
      *
      * @return string The HTML code for the image-based advertisement.
      */
@@ -659,7 +672,7 @@ class AdvertisementRenderer
      */
     protected function getDFPCustomCode()
     {
-        $code = $this->sm->get('dfp_custom_code');
+        $code = $this->ds->get('dfp_custom_code');
 
         if (empty($code)) {
             return '';
@@ -671,13 +684,15 @@ class AdvertisementRenderer
     /**
      * Returns the targeting-related JS code for google DFP.
      *
-     * @param string $category The current category.
+     * @param string  $category  The current category.
+     * @param string  $module    The current module.
+     * @param integer $contentId The id of the content current.
      *
      * @return string The targeting-related JS code.
      */
     protected function getDFPTargeting($category, $module, $contentId)
     {
-        $options = $this->container->get('setting_repository')->get('dfp_options');
+        $options = $this->ds->get('dfp_options');
 
         if (!is_array($options)) {
             return '';
@@ -714,7 +729,7 @@ class AdvertisementRenderer
      */
     protected function getSmartCustomCode()
     {
-        $code = $this->sm->get('smart_custom_code');
+        $code = $this->ds->get('smart_custom_code');
 
         if (empty($code)) {
             return '';
@@ -726,13 +741,15 @@ class AdvertisementRenderer
     /**
      * Returns the targeting-related JS code for google DFP.
      *
-     * @param string $category The current category.
+     * @param string  $category The current category.
+     * @param string  $module    The current module.
+     * @param integer $contentId The id of the content current.
      *
      * @return string The targeting-related JS code.
      */
     protected function getSmartTargeting($category, $module, $contentId)
     {
-        $config = $this->sm->get('smart_ad_server');
+        $config = $this->ds->get('smart_ad_server');
 
         $targetingCode = '';
         if (array_key_exists('category_targeting', $config)
@@ -762,7 +779,7 @@ class AdvertisementRenderer
     /**
      * Returns the advertisement script.
      *
-     * @param Advertisement $ad The advertisement object.
+     * @param \Advertisement $ad The advertisement object.
      *
      * @return string The advertisement script.
      */
@@ -780,15 +797,15 @@ class AdvertisementRenderer
     /**
      * Returns the image object for the advertisement.
      *
-     * @param Advertisement $ad The advertisement object.
+     * @param \Advertisement $ad The advertisement object.
      *
-     * @return Photo The image for the advertisement.
+     * @return \Photo The image for the advertisement.
      */
     protected function getImage($ad)
     {
         if (empty($ad->img)) {
             $this->container->get('application.log')->info(
-                'The advertisement ' . $ad->id . ' is empty'
+                'The advertisement photo for the ad (' . $ad->id . ') is empty'
             );
 
             return null;

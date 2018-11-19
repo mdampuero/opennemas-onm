@@ -26,29 +26,29 @@
             placeholder:           '@',
           },
           template: function() {
-            return '<div class="onmTag">' +
+            return '<a class="reload-tags btn btn-primary btn-xs pull-right" ng-click="loadAutoSuggestedTags()" href="#">' +
+                '<i class="fa fa-refresh m-r-5"></i>' +
+                window.tagTranlations.reload +
+              '</a>' +
+              '<div class="onmTag">' +
                 '<div class="currentTags">' +
                   '<ul class="onmTagList">' +
-                    '<li ng-repeat="acceptedTag in acceptedTags()" ng-class=" !acceptedTag.id ? \'newTag\' : \'\'">' +
+                    '<li ng-repeat="acceptedTag in acceptedTags()" ng-class="getTagCssClass(acceptedTag)">' +
                       '<span>[% acceptedTag.name %]</span>' +
                       '<a href="#" ng-click="removeTag(acceptedTag)"><i class="fa fa-times tagIcon" aria-hidden="true"></i></a>' +
                     '</li>' +
                   '</ul>' +
                   '<div class="tag-input">' +
-                    '<input type="text" ng-class=" invalidTag ? \'has-error \' : \'\'" ng-model="newTag" placeholder="[% placeholder %]" ng-keydown="validateTag($event)" uib-typeahead="tagSuggested as tagSuggested.name for tagSuggested in getLocalSuggestedTags($viewValue)" typeahead-loading="isSuggesting" typeahead-wait-ms="500" typeahead-on-select="suggestedTagAccepted($item, $model, $label)" typeahead-min-length="2" typeahead-focus-first="false">' +
-                    '<i class="fa fa-circle-o-notch fa-spin loading-icon" ng-show="isSuggesting || isValidating"></i>' +
+                    '<input type="text" ng-class=" invalidTag ? \'has-error \' : \'\'" ng-model="newTag" placeholder="[% placeholder %]" ng-keydown="inputTagKeyUp($event)" uib-typeahead="tagSuggested as tagSuggested.name for tagSuggested in getLocalSuggestedTags($viewValue)" typeahead-loading="isSuggesting" typeahead-wait-ms="500" typeahead-on-select="suggestedTagAccepted($item, $model, $label)" typeahead-min-length="2" typeahead-focus-first="false">' +
+                    '<i class="tag-input-icon fa fa-circle-o-notch fa-spin loading-icon" ng-show="isSuggesting || isValidating"></i>' +
                   '</div>' +
                   '<input type="hidden" name="tag_ids" ng-value="getTagIdsList()">' +
                 '</div>' +
-                '<div class="autoSuggested" ng-show="loadAutoSuggestedTags">' +
+                '<div class="autoSuggested" ng-show="loadAutoSuggestedTags && suggestedTags && suggestedTags.length > 0">' +
                   '<span class="title">' + window.tagTranlations.suggestedTag + '</span>' +
-                  '<a class="reload-tags btn btn-primary btn-xs pull-right" ng-click="loadAutoSuggestedTags()" href="#">' +
-                    '<i class="fa fa-refresh m-r-5"></i>' +
-                    window.tagTranlations.reload +
-                  '</a>' +
                   '<ul class="onmTagList">' +
-                    '<li ng-repeat="suggestedTag in suggestedTags" class="newTag">' +
-                      '<span>[% suggestedTag.name %]</span><a href="#" ng-click="addTag(suggestedTag)"><i class="fa fa-plus tagIcon" aria-hidden="true"></a>' +
+                    '<li ng-repeat="suggestedTag in suggestedTags" class="newTag" ng-click="addSuggestedTag(suggestedTag)">' +
+                      '<span>[% suggestedTag.name %]</span><a href="#"><i class="fa fa-plus tagIcon" aria-hidden="true"></a>' +
                     '</li>' +
                   '</ul>' +
                 '</div>' +
@@ -62,6 +62,7 @@
             $scope.newTag       = '';
             $scope.invalidTag   = false;
             $scope.isValidating = false;
+            $scope.tagToDelete  = null;
 
             /**
              * @function acceptedTags
@@ -96,62 +97,46 @@
             };
 
             /**
-             * @function validateTag
+             * @function inputTagKeyUp
              * @memberOf onm-tag
              *
              * @description
-             *   Add a new tag to the list when the user press enter.
+             *   Method that captures the key up event from the tag input and
+             * triggers the corresponding action. (create or delete a tag).
+             *
+             * @param {event} e - keyup event
              */
-            $scope.validateTag = function(e) {
+            $scope.inputTagKeyUp = function(e) {
               $scope.invalidTag = false;
-              if (e.keyCode !== 13) {
-                return null;
-              }
-              e.preventDefault();
-              if ($scope.newTag === '') {
-                $scope.invalidTag = false;
-                return null;
-              }
 
-              for (var i = 0; i < $scope.ngModel.length; i++) {
-                if (!$scope.ngModel[i].id && $scope.ngModel[i].name === $scope.newTag) {
-                  $scope.invalidTag = true;
-                  return null;
-                }
-                if (Number.isInteger($scope.ngModel[i]) &&
-                  $scope.tagsList[$scope.ngModel[i]].language_id === $scope.locale &&
-                  $scope.tagsList[$scope.ngModel[i]].name === $scope.newTag
-                ) {
-                  $scope.invalidTag = true;
-                  return null;
-                }
-              }
-
-              var callback = function(response) {
-                if (!response.data || !response.data.items ||
-                  !Array.isArray(response.data.items) ||
-                  response.data.items.length !== 1
-                ) {
-                  $scope.invalidTag = true;
+              // Check if the action is delete a tag 8 - backspace
+              if (e.keyCode === 8 && $scope.newTag === '') {
+                e.preventDefault();
+                if ($scope.tagToDelete !== null) {
+                  $scope.removeTag($scope.tagToDelete);
+                  $scope.tagToDelete = null;
                 } else {
-                  $scope.invalidTag = false;
-                  var tag = response.data.items[0];
+                  var tagToDelete = $scope.ngModel[$scope.ngModel.length - 1];
 
-                  if (tag.id) {
-                    $scope.tagsList[tag.id] = tag;
-                    $scope.ngModel.push(tag.id);
+                  if (typeof tagToDelete === 'object') {
+                    $scope.tagToDelete = tagToDelete;
                   } else {
-                    $scope.ngModel.push(tag);
-                    $scope.removeFromSuggested(tag);
+                    $scope.tagToDelete = $scope.tagsList[tagToDelete];
                   }
-                  $scope.newTag = '';
                 }
-                $scope.isValidating = false;
-                $scope.isSuggesting = false;
-              };
+                return null;
+              }
+              $scope.tagToDelete = null;
 
-              $scope.isValidating = true;
-              this.checkNewTags([ $scope.newTag ], $scope.locale, callback);
+              // If is other than add a new tag 13 - enter, 188 - comma, 9 - tab
+              if ([ 13, 188, 9 ].indexOf(e.keyCode) === -1) {
+                return null;
+              }
+
+              e.preventDefault();
+
+              // Add new tag
+              $scope.addTag();
               return null;
             };
 
@@ -226,15 +211,15 @@
             };
 
             /**
-             * @function addTag
+             * @function addSuggestedTag
              * @memberOf onm-tag
              *
              * @description
-             *   Remove some tag from the tag list.
+             *   Add some tag from the suggested list.
              *
-             * @param {Object}  tag2delete - Tag to delete
+             * @param {Object}  newTag - Tag to add
              */
-            $scope.addTag = function(newTag) {
+            $scope.addSuggestedTag = function(newTag) {
               for (var i = 0; i < $scope.suggestedTags.length; i++) {
                 // If delete tag and array position tag are new check if are the same
                 if (
@@ -247,6 +232,61 @@
                 // If delete tag and array position tag have id, check if the ids are the same
                 }
               }
+              return null;
+            };
+
+            /**
+             * @function addTag
+             * @memberOf onm-tag
+             *
+             * @description
+             *   Add some tag from the input field.
+             */
+            $scope.addTag = function() {
+              if ($scope.newTag === '') {
+                $scope.invalidTag = false;
+                return null;
+              }
+
+              for (var i = 0; i < $scope.ngModel.length; i++) {
+                if (!$scope.ngModel[i].id && $scope.ngModel[i].name === $scope.newTag) {
+                  $scope.invalidTag = true;
+                  return null;
+                }
+                if (Number.isInteger($scope.ngModel[i]) &&
+                  $scope.tagsList[$scope.ngModel[i]].language_id === $scope.locale &&
+                  $scope.tagsList[$scope.ngModel[i]].name === $scope.newTag
+                ) {
+                  $scope.invalidTag = true;
+                  return null;
+                }
+              }
+
+              var callback = function(response) {
+                if (!response.data || !response.data.items ||
+                  !Array.isArray(response.data.items) ||
+                  response.data.items.length !== 1
+                ) {
+                  $scope.invalidTag = true;
+                } else {
+                  $scope.invalidTag = false;
+                  var tag = response.data.items[0];
+
+                  if (tag.id) {
+                    $scope.tagsList[tag.id] = tag;
+                    $scope.ngModel.push(tag.id);
+                  } else {
+                    $scope.ngModel.push(tag);
+                    $scope.removeFromSuggested(tag);
+                  }
+                  $scope.newTag = '';
+                }
+                $scope.isValidating = false;
+                $scope.isSuggesting = false;
+              };
+
+              $scope.isValidating = true;
+              this.checkNewTags([ $scope.newTag ], $scope.locale, callback);
               return null;
             };
 
@@ -286,6 +326,33 @@
              */
             $scope.getTagIdsList = function() {
               return JSON.stringify($scope.ngModel);
+            };
+
+            /**
+             * @function getTagCssClass
+             * @memberOf onm-tag
+             *
+             * @description
+             *  Get the value for the css tag
+             *
+             * @param tag
+             *
+             * @return The css value for the tag
+             */
+            $scope.getTagCssClass = function(tag) {
+              if ($scope.tagToDelete === null) {
+                return !tag.id ? 'newTag' : '';
+              }
+
+              if (!tag.id && tag.name !== $scope.tagToDelete.name) {
+                return 'newTag';
+              }
+
+              if (tag.id && tag.id !== $scope.tagToDelete.id) {
+                return '';
+              }
+
+              return 'toDeleteTag';
             };
           },
         };

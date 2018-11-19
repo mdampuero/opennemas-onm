@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Adapter;
 
 use Common\Data\Adapter\GoogleAnalyticsAdapter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for GoogleAnalyticsAdapter class.
  */
-class GoogleAnalyticsAdapterTest extends KernelTestCase
+class GoogleAnalyticsAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

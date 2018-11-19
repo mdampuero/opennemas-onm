@@ -28,7 +28,7 @@ services:
 
     kernel.listener.varnish_cleaner:
         class: Framework\EventListener\VarnishCleanerListener
-        arguments: [ %varnish%, '@varnish_cleaner', '@varnish_ban_message_exchanger', '@application.log' ]
+        arguments: [ '%varnish%', '@varnish_cleaner', '@varnish_ban_message_exchanger', '@application.log' ]
         tags:
             - { name: kernel.event_listener, event: kernel.terminate, method: onKernelTerminate, priority: 100 }
 
@@ -37,11 +37,6 @@ services:
         arguments: [ '@service_container', '@cache', '@logger' ]
         tags:
             - { name: kernel.event_subscriber }
-
-    kernel.listener.cron_actions:
-        class: Framework\EventListener\CronActionSubscriber
-        tags:
-            - {name: kernel.event_subscriber}
 
     kernel.subscriber.routing:
         class: Framework\EventListener\RouterListener

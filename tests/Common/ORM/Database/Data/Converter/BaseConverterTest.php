@@ -9,14 +9,13 @@
  */
 namespace Tests\Common\ORM\Database\Data\Converter;
 
-use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
 use Common\ORM\Database\Data\Converter\BaseConverter;
 
 /**
  * Defines test cases for BaseConverter class.
  */
-class BaseConverterTest extends \PHPUnit_Framework_TestCase
+class BaseConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

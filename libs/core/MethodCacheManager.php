@@ -15,6 +15,7 @@
  * @subpackage Cache
  * @author     Fran Dieguez <fran@openhost.es>
  */
+use Common\Data\Serialize\Serializer\PhpSerializer;
 
 class MethodCacheManager
 {
@@ -23,28 +24,28 @@ class MethodCacheManager
      *
      * @var int
      */
-    private $ttl       = 300;
+    private $ttl = 300;
 
     /**
      * The object to interact with
      *
      * @var mixed
      */
-    private $object    = null;
+    private $object = null;
 
     /**
      * The object with cache service
      *
      * @var mixed
      */
-    private $cache    = null;
+    private $cache = null;
 
     /**
      * A list of methods that the object has
      *
      * @var array
      */
-    private $methods   = null;
+    private $methods = null;
 
     /**
      * The class name of the referenced object
@@ -62,11 +63,9 @@ class MethodCacheManager
      *
      * @return MethodCacheManager
      */
-    public function __construct($object, $options = array())
+    public function __construct($object, $options = [])
     {
-        global $kernel;
-        $this->cache = $kernel->getContainer()->get('cache');
-
+        $this->cache  = getService('cache');
         $this->object = $object;
 
         if (isset($options['ttl'])) {
@@ -82,30 +81,34 @@ class MethodCacheManager
      * @param array  $args   the arguments to pass to the method
      *
      * @return mixed the result of the called
+     *
+     * @throws \Exception
      */
     public function __call($method, $args)
     {
         $class_methods = $this->getInternalObjectMethods();
 
-        if (in_array($method, $class_methods)) {
-            $key = $this->classname.$method.md5(serialize($args));
-            if (defined('CACHE_PREFIX')) {
-                $key = CACHE_PREFIX . $key;
-            }
-
-            if (false === ($result = $this->cache->fetch($key))) {
-                $result = call_user_func_array(array($this->object, $method), $args);
-                $this->cache->save($key, serialize($result), $this->ttl);
-
-                return $result;
-            }
-
-            return unserialize($result);
-        } else {
-            throw new Exception(
-                " Method ".$method." does not exist in this class ".get_class($this->object)."."
-            );
+        if (!in_array($method, $class_methods)) {
+            throw new Exception(sprintf(
+                " Method %s does not exist in this class %s.",
+                $method,
+                get_class($this->object)
+            ));
         }
+
+        $key = $this->classname . $method . md5(serialize($args));
+        if (defined('CACHE_PREFIX')) {
+            $key = CACHE_PREFIX . $key;
+        }
+
+        if (false === ($result = $this->cache->fetch($key))) {
+            $result = call_user_func_array([ $this->object, $method ], $args);
+            $this->cache->save($key, serialize($result), $this->ttl);
+
+            return $result;
+        }
+
+        return PhpSerializer::unserialize($result);
     }
 
     /**

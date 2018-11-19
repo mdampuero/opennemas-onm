@@ -11,12 +11,11 @@ namespace Tests\Common\Core\Component\Security\User;
 
 use Common\ORM\Entity\User;
 use Common\Core\Component\Security\User\OAuthUserProvider;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for OAuthUserProvider class.
  */
-class OAuthUserProviderTest extends KernelTestCase
+class OAuthUserProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -177,7 +176,7 @@ class OAuthUserProviderTest extends KernelTestCase
      * Test loadUserByOAuthUserResponse when no user found basing on the
      * response from resource.
      *
-     * @expectedException Symfony\Component\Security\Core\Exception\UsernameNotFoundException
+     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      */
     public function testLoadUserByOAuthUserResponseWhenErrorWhileConnecting()
     {

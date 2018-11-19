@@ -1,12 +1,10 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     outputfilter.google_analytics.php
- * Type:     outputfilter
- * Name:     canonical_url
- * Purpose:  Prints Google Analytics code
- * -------------------------------------------------------------
+/**
+ * Prints Google Analytics code
+ *
+ * @param string
+ *
+ * @return string
  */
 function smarty_outputfilter_google_analytics($output, $smarty)
 {

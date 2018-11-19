@@ -12,7 +12,6 @@ namespace Frontend\Controller;
 use Common\Core\Controller\Controller;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Displays static pages.
@@ -63,6 +62,7 @@ class StaticPageController extends Controller
             'content_id'         => $content->id,
             'page'               => $content,
             'cache_id'           => $cacheID,
+            'o_content'          => $content,
             'x-tags'             => 'static-page,' . $content->id,
             'tags'               => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($content->tag_ids)['items']

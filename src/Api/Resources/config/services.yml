@@ -2,55 +2,73 @@ services:
     api.service.author:
         class:     Api\Service\V1\AuthorService
         arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
-
-    api.service.newsletter:
-        class:     Api\Service\V1\NewsletterService
-        arguments: [ '@service_container', 'Common\ORM\Entity\Newsletter' ]
-
-    api.service.subscriber:
-        class:     Api\Service\V1\SubscriberService
-        arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
-
-    api.service.subscription:
-        class:     Api\Service\V1\SubscriptionService
-        arguments: [ '@service_container', 'Common\ORM\Entity\UserGroup', '@api.validator.subscription' ]
-
-    api.service.user:
-        class:     Api\Service\V1\UserService
-        arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
-
-    api.service.user_group:
-        class:     Api\Service\V1\UserGroupService
-        arguments: [ '@service_container', 'Common\ORM\Entity\UserGroup', '@api.validator.user_group' ]
-
-    api.service.frontpage:
-        class:     Api\Service\V1\FrontpageService
-        arguments: [ '@service_container', 'Common\ORM\Entity\Frontpage' ]
-
-    api.service.frontpage_version:
-        class:     Api\Service\V1\FrontpageVersionService
-        arguments: [ '@service_container', 'Common\ORM\Entity\FrontpageVersion' ]
+        public: true
 
     api.service.content_position:
         class:     Api\Service\V1\ContentPositionService
         arguments: [ '@service_container', 'Common\ORM\Entity\ContentPosition' ]
+        public: true
+
+    api.service.frontpage:
+        class:     Api\Service\V1\FrontpageService
+        arguments: [ '@service_container', 'Common\ORM\Entity\Frontpage' ]
+        public: true
+
+    api.service.frontpage_version:
+        class:     Api\Service\V1\FrontpageVersionService
+        arguments: [ '@service_container', 'Common\ORM\Entity\FrontpageVersion' ]
+        public: true
+
+    api.service.newsletter:
+        class:     Api\Service\V1\NewsletterService
+        arguments: [ '@service_container', 'Common\ORM\Entity\Newsletter' ]
+        public: true
+
+    api.service.subscriber:
+        class:     Api\Service\V1\SubscriberService
+        arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
+        public: true
+
+    api.service.subscription:
+        class:     Api\Service\V1\SubscriptionService
+        arguments: [ '@service_container', 'Common\ORM\Entity\UserGroup', '@api.validator.subscription' ]
+        public: true
 
     api.service.tag:
         class:     Api\Service\V1\TagService
         arguments: [ '@service_container', 'Common\ORM\Entity\Tag' ]
+        public: true
+
+    api.service.user:
+        class:     Api\Service\V1\UserService
+        arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
+        public: true
+
+    api.service.user_group:
+        class:     Api\Service\V1\UserGroupService
+        arguments: [ '@service_container', 'Common\ORM\Entity\UserGroup', '@api.validator.user_group' ]
+        public: true
+
+    api.service.url:
+        class:     Api\Service\V1\OrmService
+        arguments: [ '@service_container', 'Common\ORM\Entity\Url' ]
 
     api.validator.subscriber:
         class:     Api\Validator\V1\SubscriberValidator
         arguments: [ '@service_container' ]
+        public: true
 
     api.validator.subscription:
         class:     Api\Validator\V1\SubscriptionValidator
         arguments: [ '@service_container' ]
+        public: true
 
     api.validator.user:
         class:     Api\Validator\V1\UserValidator
         arguments: [ '@service_container' ]
+        public: true
 
     api.validator.user_group:
         class:     Api\Validator\V1\UserGroupValidator
         arguments: [ '@service_container' ]
+        public: true

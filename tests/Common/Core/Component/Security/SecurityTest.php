@@ -16,7 +16,7 @@ use Common\Core\Component\Security\Security;
 /**
  * Defines test cases for Security class.
  */
-class SecurityTest extends \PHPUnit_Framework_TestCase
+class SecurityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -29,8 +29,7 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->user = new User([
-            'fk_user_group' => [],
-            'user_groups'   => []
+            'user_groups' => []
         ]);
 
         $this->security = new Security();

@@ -6,13 +6,12 @@ function smarty_function_renderplaceholder($params, &$smarty)
 
     // Get all the parameters passed to the function
     $items       = $params['items'];
-    $tpl         = $params['tpl'];
     $placeholder = $params['placeholder'];
-    $cssclass    = $params['cssclass'];
-    $order       = (array_key_exists('order', $params)) ?
-        $params['order'] :
-        'normal';
     unset($params['items']);
+
+    if (!array_key_exists('tags', $params) || empty($params['tags'])) {
+        $params['tags'] = $smarty->getTemplateVars('tags');
+    }
 
     // Assign smarty variables to params
     $params['category_name'] = $smarty->getTemplateVars('category_name');
@@ -21,7 +20,6 @@ function smarty_function_renderplaceholder($params, &$smarty)
     if (!is_array($contentPositionByPos) || empty($contentPositionByPos)) {
         $contentPositionByPos = getPlaceholderInTheOldWay($placeholder, $items);
     }
-
 
     // Doing some checks if this method was called properly
     if (!isset($items)) {

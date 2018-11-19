@@ -17,7 +17,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Tests the orm:config:clear command.
  */
-class CheckStatusCommandTest extends \PHPUnit_Framework_TestCase
+class CheckStatusCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

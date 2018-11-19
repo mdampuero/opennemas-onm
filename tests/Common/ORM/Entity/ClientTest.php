@@ -11,7 +11,7 @@ namespace Tests\Common\ORM\Entity;
 
 use Common\ORM\Entity\Client;
 
-class ClientTest extends \PHPUnit_Framework_TestCase
+class ClientTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructor()
     {

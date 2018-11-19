@@ -8,7 +8,8 @@
  */
 function smarty_function_hwi_oauth_resource_owners($params, &$smarty)
 {
-    $helper = getService('hwi_oauth.templating.helper.oauth');
-
-    return $helper->getResourceOwners();
+    return $smarty
+        ->getContainer()
+        ->get('core.helper.hwi_oauth')
+        ->getResourceOwners();
 }

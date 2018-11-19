@@ -102,6 +102,8 @@ class Authentication
      * Returns the access token.
      *
      * @return string The access token.
+     *
+     * @throws ActOnException
      */
     public function getToken()
     {
@@ -121,6 +123,8 @@ class Authentication
 
     /**
      * Refreshes the access token.
+     *
+     * @throws ActOnException
      */
     public function refreshToken()
     {

@@ -59,7 +59,7 @@ class CheckSchemaCommand extends ContainerAwareCommand
         $database   = $input->getArgument('database');
         $schema     = $input->getOption('schema');
 
-        $em     = $this->getContainer()->get('orm.manager');
+        $em = $this->getContainer()->get('orm.manager');
 
         $dumper = $em->getDumper($schema);
         $conn   = $em->getConnection($connection);

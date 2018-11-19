@@ -12,7 +12,6 @@ namespace FrontendMobile\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for the system information
@@ -64,7 +63,7 @@ class MobileController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        return $this->redirect('/'.$article->uri);
+        return $this->redirect('/' . $article->uri);
     }
 
     /**
@@ -94,6 +93,6 @@ class MobileController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        return $this->redirect('/'.$opinion->uri);
+        return $this->redirect('/' . $opinion->uri);
     }
 }

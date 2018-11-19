@@ -29,8 +29,7 @@ class SearchController extends Controller
      */
     public function googleAction()
     {
-        list($positions, $advertisements) =
-            \Frontend\Controller\ArticlesController::getAds();
+        list($positions, $advertisements) = ArticlesController::getAds();
 
         return $this->render('search/search.tpl', [
             'ads_positions'  => $positions,
@@ -46,9 +45,14 @@ class SearchController extends Controller
      *
      * @return Response The response object.
      */
-    public function internalAction()
+    public function internalAction(Request $request)
     {
-        // TODO: Implement
-        return new Response('Not implemented', 501);
+        return $this->forward(
+            'Frontend\Controller\TagsController::tagsAction',
+            [
+                'resource' => 'tags',
+                'slug'     => $request->get('tag_name')
+            ]
+        );
     }
 }

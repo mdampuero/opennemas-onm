@@ -30,24 +30,31 @@ class AdvertisementRendererTest extends TestCase
     {
         $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
 
-        $this->router = $this->getMockBuilder('Router')
-            ->setMethods([ 'generate' ])
-            ->getMock();
-
-        $this->sm = $this->getMockBuilder('SettingsManager')
+        $this->ds = $this->getMockBuilder('DataSet')
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->templateAdmin = $this->getMockBuilder('TemplateAdmin')
-            ->setMethods([ 'fetch' ])
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'getDataSet' ])
             ->getMock();
 
         $this->logger = $this->getMockBuilder('Logger')
             ->setMethods([ 'info' ])
             ->getMock();
 
+        $this->router = $this->getMockBuilder('Router')
+            ->setMethods([ 'generate' ])
+            ->getMock();
+
+        $this->templateAdmin = $this->getMockBuilder('TemplateAdmin')
+            ->setMethods([ 'fetch' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->em->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
 
         $this->renderer = new AdvertisementRenderer($this->container);
     }
@@ -55,32 +62,34 @@ class AdvertisementRendererTest extends TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'router':
-                return $this->router;
-
-            case 'setting_repository':
-                return $this->sm;
+            case 'application.log':
+                return $this->logger;
 
             case 'core.template.admin':
                 return $this->templateAdmin;
 
-            case 'application.log':
-                return $this->logger;
+            case 'orm.manager':
+                return $this->em;
+
+            case 'router':
+                return $this->router;
         }
+
+        return null;
     }
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::__construct
+     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::__construct
      */
     public function testConstruct()
     {
         $this->assertEquals($this->router, $this->renderer->router);
-        $this->assertEquals($this->sm, $this->renderer->sm);
+        $this->assertEquals($this->ds, $this->renderer->ds);
         $this->assertEquals($this->templateAdmin, $this->renderer->tpl);
     }
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::getDeviceCSSClasses
+     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::getDeviceCSSClasses
      */
     public function testGetDeviceCSSClasses()
     {
@@ -110,14 +119,14 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::getMark
+     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::getMark
      */
     public function testGetMark()
     {
         $ad         = new \Advertisement();
         $ad->params = [];
 
-        $this->sm->expects($this->any())->method('get')
+        $this->ds->expects($this->any())->method('get')
             ->with('ads_settings')
             ->willReturn([]);
 
@@ -129,14 +138,14 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::getMark
+     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::getMark
      */
     public function testGetMarkWithCustomDefaultMark()
     {
         $ad         = new \Advertisement();
         $ad->params = [];
 
-        $this->sm->expects($this->any())->method('get')
+        $this->ds->expects($this->any())->method('get')
             ->with('ads_settings')
             ->willReturn([ 'default_mark' => 'Custom mark']);
 
@@ -144,7 +153,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineReviveSlot
+     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineReviveSlot
      */
     public function testRenderInlineReviveSlot()
     {
@@ -178,7 +187,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineInterstitial
+     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineInterstitial
      */
     public function testRenderInlineInterstitial()
     {
@@ -201,6 +210,7 @@ class AdvertisementRendererTest extends TestCase
                 'device' => 'phone'
             ]
         ];
+
         $ad1->params['device'] = [ 'phone' => 1, 'desktop' => 1 ];
 
         $ads = [ $ad1 ];
@@ -219,7 +229,7 @@ class AdvertisementRendererTest extends TestCase
 
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineInterstitial
+     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineInterstitial
      */
     public function testRenderInlineInterstitialWithNoInterstitials()
     {
@@ -239,7 +249,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers Common\Core\Component\Renderer\AdvertisementRenderer::renderSafeFrameSlot
+     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderSafeFrameSlot
      * @todo   Implement testRenderSafeFrameSlot().
      */
     public function testRenderSafeFrameSlot()

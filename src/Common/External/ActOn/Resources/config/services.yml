@@ -29,12 +29,24 @@ parameters:
                                     - subject
                                     - when
                                 optional:
+                                    - categoryid
+                                    - createcrmmsgsentnotes
                                     - footerid
                                     - headerid
                                     - htmlbody
-                                    - textbody
                                     - iscustom
-
+                                    - istextonly
+                                    - issuppressduplicates
+                                    - logoid
+                                    - replytoemail
+                                    - replytoname
+                                    - sendtoids
+                                    - sendtorecids
+                                    - suppressids
+                                    - textbody
+                                    - timezone
+                                    - title
+                                    - whenend
 services:
     external.act_on.provider.config:
         class:     'Common\External\ActOn\Component\Configuration\OrmConfigurationProvider'
@@ -47,6 +59,7 @@ services:
     external.act_on.factory:
         class:     'Common\External\ActOn\Component\Factory\ActOnFactory'
         arguments: [ '@service_container', '%external.act_on%' ]
+        public: true
 
     external.act_on.http_client:
         class:   'GuzzleHttp\Client'

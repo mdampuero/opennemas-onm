@@ -78,6 +78,35 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     };
 
     /**
+     * @function getExportUrl
+     * @memberOf ContentListCtrl
+     *
+     * @description
+     *   Generates the URL to export comments to a CSV file.
+     *
+     * @return {String} The URL to export comments to a CSV file.
+     */
+    $scope.getExportUrl = function() {
+      var criteria = angular.copy($scope.criteria);
+
+      if (!criteria || !criteria.content_type_name) {
+        return '';
+      }
+
+      oqlEncoder.configure({
+        placeholder: {
+          title: 'title ~ "%[value]%"',
+        }
+      });
+
+      return $scope.routing.generate('backend_ws_contents_list', {
+        contentType: criteria.content_type_name,
+        format: '.csv',
+        oql: oqlEncoder.getOql(criteria)
+      });
+    };
+
+    /**
      * Initializes the content type for the current list.
      *
      * @param string content Content type.
@@ -140,6 +169,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       $location.search('oql', oql);
 
       http.get(route).then(function(response) {
+        $scope.data  = response.data;
         $scope.total = parseInt(response.data.total);
 
         if (response.data.hasOwnProperty('extra')) {

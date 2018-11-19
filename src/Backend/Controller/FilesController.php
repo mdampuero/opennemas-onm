@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +13,6 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for the system information
@@ -180,10 +174,10 @@ class FilesController extends Controller
                         continue;
                     }
                     foreach ($sub_files[$ind][0] as $value) {
-                        if ($v->pk_content_category != $ccm->get_id($ccm->getFather($value->catName))) {
+                        if ($v->pk_content_category != $this->ccm->get_id($this->ccm->getFather($value->catName))) {
                             continue;
                         }
-                        if ($ccm->get_id($ccm->getFather($value->catName))) {
+                        if ($this->ccm->get_id($this->ccm->getFather($value->catName))) {
                             $sub_size[$k][$ind] += filesize(MEDIA_PATH . '/' . FILE_DIR . '/' . $value->path);
                         }
                     }
@@ -499,7 +493,9 @@ class FilesController extends Controller
     {
         $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
+        $itemsPerPage = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_per_page', 20);
 
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);

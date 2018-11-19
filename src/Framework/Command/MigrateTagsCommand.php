@@ -17,10 +17,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Doctrine\DBAL\Schema\Schema;
-use Symfony\Component\Yaml\Yaml;
-
-use Common\ORM\Entity\Client;
 
 class MigrateTagsCommand extends ContainerAwareCommand
 {
@@ -66,7 +62,8 @@ class MigrateTagsCommand extends ContainerAwareCommand
         $sql = 'select id, name'
             . ' from tags'
             . ' where name regexp'
-            . ' "(á|à|ã|ä|â|Á|À|Ã|Ä|Â|é|è|ë|ê|É|È|Ë|Ê|í|ì|ï|î|Í|Ì|Ï|Î|ó|ò|õ|ö|ô|Ó|Ò|Õ|Ö|Ô|ú|ù|ü|û|Ú|Ù|Ü|Û)+"';
+            . ' "(á|à|ã|ä|â|Á|À|Ã|Ä|Â|é|è|ë|ê|É|È|Ë|Ê|í|ì|ï|î|Í|Ì|Ï|Î|ó|ò|õ|ö|ô|Ó|Ò'
+            . '|Õ|Ö|Ô|ú|ù|ü|û|Ú|Ù|Ü|Û)+"';
         $rs  = $conn->fetchAll($sql);
 
         $output->write("\nMigrating <info>" . count($rs) . '</> contents...');
@@ -95,7 +92,7 @@ class MigrateTagsCommand extends ContainerAwareCommand
 
             if (!$preview) {
                 try {
-                    $conn->update('tags', [ 'name' => $metadata ], [ 'id' => $r['id'] ]);
+                    $conn->update('tags', [ 'name' => $name ], [ 'id' => $r['id'] ]);
                     $cache->delete('tag-' . $r['id']);
                     $updated++;
                 } catch (\Exception $e) {

@@ -13,7 +13,6 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for the public RSS
@@ -38,12 +37,13 @@ class RssController extends Controller
         ) {
             $ccm = \ContentCategoryManager::get_instance();
 
-            $categoriesTree = $ccm->getCategoriesTreeMenu();
-            $opinionAuthors = \User::getAllUsersAuthors();
+            $categories = $ccm->getCategoriesTreeMenu();
+            $authors    = $this->get('api.service.author')
+                ->getList('order by name asc');
 
             $this->view->assign([
-                'categoriesTree' => $categoriesTree,
-                'opinionAuthors' => $opinionAuthors,
+                'categoriesTree' => $categories,
+                'opinionAuthors' => $authors['items'],
             ]);
         }
 
@@ -88,9 +88,8 @@ class RssController extends Controller
                 $rssTitle = $category->title;
             }
 
-            list($contentPositions, $contents, $invalidationDt, $lastSaved) =
-                $this->get('api.service.frontpage_version')
-                    ->getPublicFrontpageData($id);
+            list($contentPositions, $contents, $invalidationDt, $lastSaved) = $this->get('api.service.frontpage')
+                ->getCurrentVersionForCategory($id);
 
             // Remove advertisements and widgets
             $contents = array_filter(
@@ -103,6 +102,7 @@ class RssController extends Controller
                 }
             );
 
+            $this->sortByPlaceholder($contents, $contentPositions, $categoryName);
             $this->getRelatedContents($contents);
 
             $this->view->assign([
@@ -149,7 +149,9 @@ class RssController extends Controller
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
             $rssTitle = $titles[$type];
-            $total    = $this->get('setting_repository')->get('elements_in_rss', 10);
+            $total    = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('elements_in_rss', 10);
             $contents = $this->getLatestContents($type, $category, $total);
 
             $this->getRelatedContents($contents);
@@ -418,7 +420,7 @@ class RssController extends Controller
      * @param array  $contents The list of contents to sort.
      * @param string $category The category name.
      */
-    protected function sortByPlaceholder(&$contents, $category)
+    protected function sortByPlaceholder(&$contents, $contentPositions, $category)
     {
         $order = $this->getPlaceholders($category);
 
@@ -426,16 +428,26 @@ class RssController extends Controller
             return;
         }
 
-        uasort($contents, function ($a, $b) use ($order) {
-            $positionA = array_search($a->placeholder, $order);
-            $positionB = array_search($b->placeholder, $order);
+        // Order contentPositions
+        uksort($contentPositions, function ($a, $b) use ($order) {
+            $positionA = array_search($a, $order);
+            $positionB = array_search($b, $order);
 
-            return $positionA < $positionB ? -1 :
-                (
-                    $positionA > $positionB ? 1 :
-                    ($a->position < $b->position ? -1 : 1)
-                );
+            return $positionA < $positionB ? -1 : 1;
         });
+
+        // Set array with contents order
+        $sorted = [];
+        foreach ($contentPositions as $items) {
+            foreach ($items as $item) {
+                if (array_key_exists($item->pk_fk_content, $contents)) {
+                    $sorted[$item->pk_fk_content] =
+                        $contents[$item->pk_fk_content];
+                }
+            }
+        }
+        // Reassign ordered contents
+        $contents = $sorted;
     }
 
     /**
@@ -463,7 +475,9 @@ class RssController extends Controller
         }
 
         // TODO: Use new repository when cache is unified
-        $layout = $this->get('setting_repository')->get($setting);
+        $layout = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get($setting);
         $theme  = $this->get('core.theme');
 
         if (empty($layout)) {

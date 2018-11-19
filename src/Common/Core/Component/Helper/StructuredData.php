@@ -19,12 +19,12 @@ class StructuredData
     /**
      * Initializes StructuredData
      *
-     * @param SettingManager $sm       The setting service.
-     * @param TagService     $ts       The tag service.
+     * @param EntityManager $em The entity manager.
+     * @param TagService    $ts The tag service.
      */
-    public function __construct($sm, $ts)
+    public function __construct($em, $ts)
     {
-        $this->sm = $sm;
+        $this->ds = $em->getDataSet('Settings', 'instance');
         $this->ts = $ts;
     }
 
@@ -72,7 +72,7 @@ class StructuredData
             "keywords": "' . $keywords . '",
             "publisher" : {
                 "@type" : "Organization",
-                "name" : "' . $this->sm->get("site_name") . '",
+                "name" : "' . $this->ds->get("site_name") . '",
                 "logo": {
                     "@type": "ImageObject",
                     "url": "' . $data['logo']['url'] . '",
@@ -180,7 +180,7 @@ class StructuredData
             "description": "' . strip_tags($data['summary']) . '",
             "publisher" : {
                 "@type" : "Organization",
-                "name" : "' . $this->sm->get("site_name") . '",
+                "name" : "' . $this->ds->get("site_name") . '",
                 "logo": {
                     "@type": "ImageObject",
                     "url": "' . $data['logo']['url'] . '",

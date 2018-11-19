@@ -127,6 +127,8 @@ class Locale
      * Configures the Locale service.
      *
      * @param array $config The locale configuration.
+     *
+     * @return Locale
      */
     public function configure($configs)
     {
@@ -339,6 +341,8 @@ class Locale
      * Changes the locale for the current request.
      *
      * @param string $locale  The locale for the current request.
+     *
+     * @return Locale
      */
     public function setRequestLocale($locale)
     {

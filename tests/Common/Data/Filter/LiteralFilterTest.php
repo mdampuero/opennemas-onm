@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\LiteralFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines tests cases for LiteralFilter class.
  */
-class LiteralFilterTest extends KernelTestCase
+class LiteralFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

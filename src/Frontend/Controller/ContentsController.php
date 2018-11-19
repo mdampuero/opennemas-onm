@@ -18,9 +18,7 @@ use Common\Core\Annotation\BotDetector;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Cookie;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the generic actions for contents
@@ -74,10 +72,11 @@ class ContentsController extends Controller
         $cacheID = $this->view->getCacheId('content', $contentID, 'print');
 
         return $this->render('article/article_printer.tpl', [
-            'cache_id' => $cacheID,
-            'content'  => $content,
-            'article'  => $content,
-            'x-tags'   => 'content-print,' . $contentID
+            'cache_id'  => $cacheID,
+            'content'   => $content,
+            'article'   => $content,
+            'o_content' => $content,
+            'x-tags'    => 'content-print,' . $contentID
         ]);
     }
 
@@ -118,10 +117,11 @@ class ContentsController extends Controller
         $cacheID = $this->view->getCacheId('sync', 'content', $contentID, 'print');
 
         return $this->render('article/article_printer.tpl', [
-            'cache_id' => $cacheID,
-            'content'  => $content,
-            'article'  => $content,
-            'x-tags'   => 'ext-content-print,' . $contentID
+            'cache_id'  => $cacheID,
+            'content'   => $content,
+            'article'   => $content,
+            'o_content' => $content,
+            'x-tags'    => 'ext-content-print,' . $contentID
         ]);
     }
 
@@ -135,8 +135,7 @@ class ContentsController extends Controller
     public function shareByEmailAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $isValid = false;
-            $errors  = [];
+            $errors = [];
 
             $response = $request->request->filter('g-recaptcha-response', '', FILTER_SANITIZE_STRING);
             $isValid  = $this->get('core.recaptcha')
@@ -175,22 +174,27 @@ class ContentsController extends Controller
                 throw new ResourceNotFoundException();
             }
 
+            $settingManager = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance');
+
             // Fetch information required for sending the mail
             $senderEmail = $request->request->filter('sender_email', null, FILTER_VALIDATE_EMAIL);
             $senderName  = $request->request->filter('sender_name', null, FILTER_SANITIZE_STRING);
             $mailSubject = sprintf(
                 _('%s has shared with you a content from %s.'),
                 $senderName,
-                s::get('site_name')
+                $settingManager->get('site_name')
             );
             $recipients  = explode(',', $request->request->get('recipients', []));
 
             if (empty($senderEmail)) {
                 $errors [] = _('Fill your Email address');
             }
+
             if (empty($senderName)) {
                 $errors [] = _('Complete your name');
             }
+
             $cleanRecipients = [];
             foreach ($recipients as $recipient) {
                 if (filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
@@ -226,7 +230,7 @@ class ContentsController extends Controller
                 ->setBody($mailBodyPlain, 'text/plain')
                 ->setTo($recipients[0])
                 ->setFrom([$senderEmail => $senderName])
-                ->setSender(['no-reply@postman.opennemas.com' => s::get('site_name')])
+                ->setSender([ 'no-reply@postman.opennemas.com' => $settingManager->get('site_name') ])
                 ->setBcc($recipients);
 
             $headers = $message->getHeaders();
@@ -320,7 +324,7 @@ class ContentsController extends Controller
             $httpCode = 400;
             $content  = "false";
 
-            if (!$saved) {
+            if ($saved) {
                 $httpCode = 200;
                 $content  = "Ok";
             }
@@ -334,8 +338,6 @@ class ContentsController extends Controller
 
     /**
      * Alteres the article given the paywall module status
-     *
-     * @return Article the article
      */
     public function paywallHook(&$content)
     {
@@ -370,10 +372,7 @@ class ContentsController extends Controller
                 if (!$hasSubscription) {
                     $newContent    = $this->renderView(
                         'paywall/partials/content_only_for_subscribers.tpl',
-                        [
-                            'logged' => $isLogged,
-                            'id'     => $content->id
-                        ]
+                        [ 'id'     => $content->id ]
                     );
                     $content->body = $newContent;
                 }

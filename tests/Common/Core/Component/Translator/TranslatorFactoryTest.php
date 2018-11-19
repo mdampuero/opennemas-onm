@@ -10,12 +10,11 @@
 namespace Tests\Common\Core\Component\Translator;
 
 use Common\Core\Component\Translator\TranslatorFactory;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for TranslatorFactory class.
  */
-class TranslatorFactoryTest extends KernelTestCase
+class TranslatorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

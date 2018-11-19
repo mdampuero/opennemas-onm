@@ -14,6 +14,18 @@ use Common\Core\Component\Validator\Validator;
 
 class TagService extends OrmService
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function createItem($data)
+    {
+        $data['slug'] = $this->container->get('data.manager.filter')
+            ->set($data['name'])
+            ->filter('slug')
+            ->get();
+
+        return parent::createItem($data);
+    }
 
     /**
      * Method to simplificate the tag word for enable a search system
@@ -28,31 +40,39 @@ class TagService extends OrmService
     }
 
     /**
-     * Method to fetch the most used tag given the slug
+     * Returns the most used tag basing on the slug for a language.
      *
-     * @param string $slug The slug of a tag
+     * @param string $slug       The slug of a tag.
+     * @param string $languageId The language id.
      *
-     * @return Tag $tag The tag object
+     * @return Tag $tag The tag object.
      */
     public function getMostUsedTagBySlug($slug, $languageId)
     {
         $tags = $this->getTagBySlug($slug, $languageId);
 
-        if (count($tags['items']) < 2) {
-            return count($tags['items']) == 1 ? $tags['items'][0] : null;
+        if ($tags['total'] < 2) {
+            return $tags['total'] === 1 ? $tags['items'][0] : null;
         }
 
-        $tagsCount   = $this->getNumContentsRel($tags['items']);
-        $mostUsedTag = $tags['items'][0];
-        for ($i = 1; $i < count($tags['items']); $i++) {
-            if (array_key_exists($tags['items'][$i]->id, $tagsCount)
-                && $tagsCount[$mostUsedTag->id] < $tagsCount[$tags['items'][$i]->id]
-            ) {
-                $mostUsedTag = $tags['items'][$i];
+        $tagsCount = $this->getNumContentsRel($tags['items']);
+        if (empty($tagsCount)) {
+            return null;
+        }
+
+        $mostUses = max($tagsCount);
+
+        foreach ($tagsCount as $id => $uses) {
+            if ($uses === $mostUses) {
+                $tag = array_filter($tags['items'], function ($a) use ($id) {
+                    return $a->id === $id;
+                });
+
+                return array_shift($tag);
             }
         }
 
-        return $mostUsedTag;
+        return null;
     }
 
     /**
@@ -68,41 +88,15 @@ class TagService extends OrmService
             return [];
         }
 
-        $tagListIds = $tagList;
         if (!is_array($tagList) && is_object($tagList)) {
-            $tagListIds = $tagList['id'];
-        } elseif (is_array($tagList) && is_object($tagList[0])) {
-            $tagListIds = array_map(
-                function ($tag) {
-                    return $tag->id;
-                },
-                $tagList
-            );
+            $tagList = [ $tagList ];
         }
 
-        return \Tag::numberOfContent($tagListIds);
-    }
+        $ids = array_map(function ($tag) {
+            return $tag->id;
+        }, $tagList);
 
-    /**
-     * Method for replace the parameter name by slug in OQL query
-     *
-     * @param oql $oql to check and replace the field name by slug
-     *
-     * @return String new oql with the field name replace
-     */
-    public function replaceSearchBySlug($oql)
-    {
-        $oqlAux = $oql;
-        if (preg_match('/and\s*name\s*~\s*"?[^"]*"?/', $oql, $matches)) {
-            $oqlNameAux = explode('"', $matches[0]);
-            if (count($oqlNameAux) == 3) {
-                $oqlNameAux[0] = str_replace("name", 'slug', $oqlNameAux[0]);
-                $oqlNameAux[1] = '"' . $this->createSearchableWord($oqlNameAux[1]) . '"';
-                $oqlNameAux    = implode($oqlNameAux);
-                $oqlAux        = str_replace($matches[0], $oqlNameAux, $oql);
-            }
-        }
-        return $oqlAux;
+        return \Tag::numberOfContent($ids);
     }
 
     /**
@@ -207,7 +201,7 @@ class TagService extends OrmService
         $slugs = $this->createSearchableWord($arr);
 
 
-        return \Tag::getTagsBySlug($slugs, $languageId, $limit);
+        return \Tag::getTagsBySlug($slugs, $languageId);
     }
 
     /**
@@ -332,6 +326,7 @@ class TagService extends OrmService
         if (empty($ids)) {
             return ['items' => []];
         }
+
         $tags      = $this->getListByIds($ids);
         $returnArr = [];
 
@@ -341,6 +336,7 @@ class TagService extends OrmService
             }
         }
         $tags['items'] = $this->responsify($returnArr);
+
         return $tags;
     }
 
@@ -381,5 +377,18 @@ class TagService extends OrmService
         return $this->container->get('orm.manager')
             ->getRepository($this->entity, $this->origin)
             ->getTagsAssociatedCertainContentsTypes($contentTypesIds);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateItem($id, $data)
+    {
+        $data['slug'] = $this->container->get('data.manager.filter')
+            ->set($data['name'])
+            ->filter('slug')
+            ->get();
+
+        parent::updateItem($id, $data);
     }
 }

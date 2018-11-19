@@ -46,7 +46,8 @@ class NewsAgencyController extends Controller
         }
 
         $importer = $this->get('news_agency.importer');
-        $servers  = $this->get('setting_repository')->get('news_agency_config');
+        $servers  = $this->get('orm.manager')->getDataSet('Settings')
+            ->get('news_agency_config');
 
         $em         = $this->get('entity_repository');
         $repository = new LocalRepository();
@@ -277,7 +278,8 @@ class NewsAgencyController extends Controller
         }, $categories);
 
         // Get servers
-        $params['servers'] = $this->get('setting_repository')->get('news_agency_config');
+        $params['servers'] = $this->get('orm.manager')->getDataSet('Settings')
+            ->get('news_agency_config');
 
         if (!is_array($params['servers'])) {
             $params['servers'] = [];
@@ -300,11 +302,12 @@ class NewsAgencyController extends Controller
             [ 'name' => _('Photo'), 'value' => 'photo' ]
         ];
 
-        $authors = \User::getAllUsersAuthors();
+        $authors = $this->get('api.service.author')
+            ->getList('order by name asc');
 
         $params['authors'] = [];
 
-        foreach ($authors as $author) {
+        foreach ($authors['items'] as $author) {
             $params['authors'][] = [
                 'name' => $author->name,
                 'value' => $author->id

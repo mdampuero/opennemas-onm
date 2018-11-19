@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Adapter;
 
 use Common\Data\Adapter\LogoEnabledAdapter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for LogoEnabledAdapter class.
  */
-class LogoEnabledAdapterTest extends KernelTestCase
+class LogoEnabledAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

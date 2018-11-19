@@ -66,8 +66,6 @@ class NewsletterSenderHelper
      * @param SettingsRepository $settingsRepository The settings repository service.
      * @param NewsletterManager  $newsletterManager The newsletter manager service.
      * @param string             $noReplyAddress The no-reply address parameter.
-     *
-     * @return void
      */
     public function __construct(
         $settingsRepository,
@@ -195,6 +193,8 @@ class NewsletterSenderHelper
                 'title'    => $newsletter->title,
                 'htmlbody' => $newsletter->html,
             ];
+
+            // Load general header and footer acton params
             if (!empty($settings['actOn.headerId'])) {
                 $messageParams['headerid'] = $settings['actOn.headerId'];
             }
@@ -203,17 +203,27 @@ class NewsletterSenderHelper
                 $messageParams['footerid'] = $settings['actOn.footerId'];
             }
 
+            // Overwrite header and footer params if the newsletter has custom ones.
+            if (!empty($newsletter->params['acton_headerid'])) {
+                $messageParams['headerid'] = $newsletter->params['acton_headerid'];
+            }
+
+            if (!empty($newsletter->params['acton_headerid'])) {
+                $messageParams['footerid'] = $newsletter->params['acton_footerid'];
+            }
+
             $id = $endpoint->createMessage($messageParams);
 
             $sendingParams = [
-                'iscustom'    => 'Y',
-                'htmlbody' => $newsletter->html,
-                'textbody' => $newsletter->html,
-                'sendername'  => $settings['site_name'],
-                'senderemail' => $settings['newsletter_maillist']['sender'],
-                'subject'     => $newsletter->title,
-                'when'        => time(),
-                'sendtoids'   => $marketingList->id,
+                'iscustom'              => 'Y',
+                'htmlbody'              => $newsletter->html,
+                'textbody'              => $newsletter->html,
+                'sendername'            => $settings['site_name'],
+                'senderemail'           => $settings['newsletter_maillist']['sender'],
+                'subject'               => $newsletter->title,
+                'when'                  => time(),
+                'sendtoids'             => $marketingList->id,
+                'createcrmmsgsentnotes' => 'N',
             ];
 
             if (!empty($settings['actOn.headerId'])) {
@@ -306,10 +316,11 @@ class NewsletterSenderHelper
     /**
      * Sends an email with the new subscription data
      *
-     * @param Array $data Data for subscription
+     * @param array $data Data for subscription
      *
-     * @return Array Message and class to show the user
-     * @throws Exception Thrown on any problem with the external service
+     * @return array Message and class to show the user
+     *
+     * @throws \Exception
      */
     public function sendSubscriptionMail($data)
     {

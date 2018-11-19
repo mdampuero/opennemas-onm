@@ -10,12 +10,11 @@
 namespace Tests\Common\Core\Component\Translator\OpenTrad;
 
 use Common\Core\Component\Translator\OpenTrad\OpenTradTranslator;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for OpenTradTranslator class.
  */
-class OpenTradTranslatorTest extends KernelTestCase
+class OpenTradTranslatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

@@ -14,7 +14,7 @@ use Common\Core\Component\Exception\BotDetectedException;
 /**
  * Defines test cases for BotDetectedException class.
  */
-class BotDetectedExceptionTest extends \PHPUnit_Framework_TestCase
+class BotDetectedExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests methods when the exception is empty.

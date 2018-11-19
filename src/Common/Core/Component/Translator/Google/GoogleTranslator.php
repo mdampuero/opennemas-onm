@@ -24,8 +24,8 @@ class GoogleTranslator extends Translator
      *
      * @var string
      */
-    protected $url = 'https://translation.googleapis.com/language/translate/v2'
-        . '?format=html&key=%s&q=%s&source=%s&target=%s';
+    protected $url =
+            'https://translation.googleapis.com/language/translate/v2?format=html&key=%s&q=%s&source=%s&target=%s';
 
     /**
      * {@inheritdoc}

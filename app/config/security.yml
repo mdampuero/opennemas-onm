@@ -80,6 +80,7 @@ security:
         manager_ws:
             pattern:   ^/managerws
             stateless: true
+            provider: manager_ws
             lexik_jwt:
                 authorization_header:
                     enabled: true
@@ -90,7 +91,9 @@ security:
 
         opennemas:
             pattern:    ^/*
+            logout_on_user_change: true
             anonymous:  ~
+            provider: chain_provider
             form_login:
                 login_path:                     frontend_authentication_login
                 check_path:                     core_authentication_check
@@ -108,8 +111,8 @@ security:
                     __onm_user: { path: null, domain: null }
             oauth:
                 resource_owners:
-                    facebook: "/oauth/login/check-facebook"
-                    twitter:  "/oauth/login/check-twitter"
+                    facebook: '/oauth/login/check-facebook'
+                    twitter:  '/oauth/login/check-twitter'
                 login_path:          frontend_authentication_login
                 default_target_path: frontend_authentication_login
                 check_path:          core_authentication_check

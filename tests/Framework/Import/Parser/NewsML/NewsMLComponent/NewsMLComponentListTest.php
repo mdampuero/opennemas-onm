@@ -12,7 +12,7 @@ namespace Framework\Tests\Import\Parser\NewsML;
 use Framework\Import\Parser\NewsML\NewsMLComponent\NewsMLComponentList;
 use Framework\Import\Resource\Resource;
 
-class NewsMLComponentListTest extends \PHPUnit_Framework_TestCase
+class NewsMLComponentListTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
@@ -41,7 +41,8 @@ class NewsMLComponentListTest extends \PHPUnit_Framework_TestCase
         $parser->method('getBag')->willReturn([]);
 
         $photo = new Resource();
-        $photo->id = 'photo1';
+
+        $photo->id   = 'photo1';
         $photo->type = 'photo';
 
         $parser->method('parse')->will(

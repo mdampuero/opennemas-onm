@@ -42,6 +42,8 @@ class AdapterManager
      * @param mixed  $args  The arguments for adapter.
      *
      * @return mixed The filtered value.
+     *
+     * @throws InvalidAdapterException
      */
     public function adapt($name, $value, $args = [])
     {

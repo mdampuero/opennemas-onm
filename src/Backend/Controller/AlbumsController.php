@@ -9,11 +9,10 @@
  */
 namespace Backend\Controller;
 
-use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
+use Common\Core\Annotation\Security;
 
 /**
  * Handles the actions for the system information
@@ -98,17 +97,13 @@ class AlbumsController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
-            $authorsComplete = \User::getAllUsersAuthors();
-            $authors         = [ '0' => _(' - Select one author - ') ];
-
-            foreach ($authorsComplete as $author) {
-                $authors[$author->id] = $author->name;
-            }
-            $ls = $this->get('core.locale');
             return $this->render('album/new.tpl', [
-                'authors' => $authors,
-                'commentsConfig' => s::get('comments_config'),
-                'locale'         => $ls->getLocale('frontend'),
+                'authors'        => $this->getAuthors(),
+                'commentsConfig' => $this->get('orm.manager')
+                    ->getDataSet('Settings')
+                    ->get('comments_config'),
+                'locale'         => $this->get('core.locale')
+                    ->getLocale('frontend'),
                 'tags'           => []
             ]);
         }
@@ -238,21 +233,15 @@ class AlbumsController extends Controller
             ]));
         }
 
-        $photos          = $album->_getAttachedPhotos($id);
-        $authorsComplete = \User::getAllUsersAuthors();
-        $authors         = [ '0' => _(' - Select one author - ') ];
-        foreach ($authorsComplete as $author) {
-            $authors[$author->id] = $author->name;
-        }
-
-        $ls = $this->get('core.locale');
         return $this->render('album/new.tpl', [
             'category'       => $album->category,
-            'photos'         => $photos,
+            'photos'         => $album->_getAttachedPhotos($id),
             'album'          => $album,
-            'authors'        => $authors,
-            'commentsConfig' => s::get('comments_config'),
-            'locale'         => $ls->getRequestLocale('frontend'),
+            'authors'        => $this->getAuthors(),
+            'commentsConfig' => $this->get('orm.manager')->getDataSet('Settings')
+                ->get('comments_config'),
+            'locale'         => $this->get('core.locale')
+                ->getRequestLocale('frontend'),
             'tags'           => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($album->tag_ids)['items']
         ]);
@@ -327,13 +316,22 @@ class AlbumsController extends Controller
             'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
-        $album->update($data);
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            _("Album updated successfully.")
-        );
+        if ($album->update($data)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _("Album updated successfully.")
+            );
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("There was a problem while updating the content.")
+            );
+        }
 
-        return $this->redirect($this->generateUrl('admin_album_show', [ 'id' => $album->id ]));
+        return $this->redirect($this->generateUrl(
+            'admin_album_show',
+            [ 'id' => $album->id ]
+        ));
     }
 
     /**
@@ -436,7 +434,8 @@ class AlbumsController extends Controller
     {
         $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
+        $itemsPerPage = $this->get('orm.manager')->getDataSet('Settings')
+            ->get('items_per_page') ?: 20;
 
         $em       = $this->get('entity_repository');
         $category = $this->get('category_repository')->find($categoryId);
@@ -489,12 +488,11 @@ class AlbumsController extends Controller
      */
     public function configAction(Request $request)
     {
-        if ('POST' !== $this->request->getMethod()) {
-            $configurationsKeys = [ 'album_settings', ];
-            $configurations     = s::get($configurationsKeys);
+        $ds = $this->get('orm.manager')->getDataSet('Settings');
 
+        if ('POST' !== $request->getMethod()) {
             return $this->render('album/config.tpl', [
-                'configs'   => $configurations
+                'configs' => $ds->get([ 'album_settings' ])
             ]);
         }
 
@@ -511,15 +509,35 @@ class AlbumsController extends Controller
             ]
         ];
 
-        foreach ($settings as $key => $value) {
-            s::set($key, $value);
+
+        try {
+            $ds->set($settings);
+
+            $type    = 'success';
+            $message = _('Settings saved successfully.');
+        } catch (\Exception $e) {
+            $type    = 'error';
+            $message = _('Unable to save the settings.');
         }
 
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            _('Settings saved successfully.')
-        );
+        $this->get('session')->getFlashBag()->add($type, $message);
 
         return $this->redirect($this->generateUrl('admin_albums_config'));
+    }
+
+    /**
+     * Returns the list of authors.
+     *
+     * @return array The list of authors.
+     */
+    protected function getAuthors()
+    {
+        $response = $this->get('api.service.author')
+            ->getList('order by name asc');
+
+        return $this->get('data.manager.filter')
+            ->set($response['items'])
+            ->filter('mapify', [ 'key' => 'id'])
+            ->get();
     }
 }

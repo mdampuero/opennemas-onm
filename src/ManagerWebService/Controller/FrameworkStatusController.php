@@ -12,6 +12,7 @@ namespace ManagerWebService\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Common\Core\Controller\Controller;
 
 class FrameworkStatusController extends Controller
@@ -21,15 +22,12 @@ class FrameworkStatusController extends Controller
      *
      * @param Request $request The request object.
      *
-     * @return Response The response object.
+     * @return JsonResponse|RedirectResponse The response object.
      *
      * @Security("hasPermission('OPCACHE_LIST')")
      */
     public function opcacheStatusAction(Request $request)
     {
-        $config = $status = $mem = $opcacheStats =  $freeKeys =  $notSupportedMessage = null;
-        $statusKeyValues = $directivesKeyValues = $newDirs = null;
-
         if (!extension_loaded('Zend OPcache')) {
             $notSupportedMessage = 'You do not have the Zend OPcache extension loaded.';
         }
@@ -37,6 +35,7 @@ class FrameworkStatusController extends Controller
         $action = $request->query->filter('action', null, FILTER_SANITIZE_STRING);
         if ($action == 'reset') {
             \opcache_reset();
+
             return $this->redirect($this->generateUrl('manager_framework_opcache_status'));
         }
 
@@ -49,7 +48,7 @@ class FrameworkStatusController extends Controller
         $freeKeys     = $opcacheStats['max_cached_keys'] - $opcacheStats['num_cached_keys'];
 
         if (!array_key_exists('scripts', $status)) {
-            $status['scripts'] = array();
+            $status['scripts'] = [];
         }
 
         if (!$config['directives']['opcache.enable']) {
@@ -60,35 +59,34 @@ class FrameworkStatusController extends Controller
         $directivesKeyValues = $this->getDirectives($config);
         $newDirs             = $this->getNewDirs($status['scripts'], $config);
 
-        return new JsonResponse(
-            array(
-                'not_supported_message' => $notSupportedMessage,
-                'config'                => $config,
-                'status'                => $status,
-                'mem'                   => $mem,
-                'stats'                 => $opcacheStats,
-                'free_keys'             => $freeKeys,
-                'status_key_values'     => $statusKeyValues,
-                'directive_key_values'  => $directivesKeyValues,
-                'files_key_values'      => $newDirs,
-            )
-        );
+        return new JsonResponse([
+            'not_supported_message' => $notSupportedMessage,
+            'config'                => $config,
+            'status'                => $status,
+            'mem'                   => $mem,
+            'stats'                 => $opcacheStats,
+            'free_keys'             => $freeKeys,
+            'status_key_values'     => $statusKeyValues,
+            'directive_key_values'  => $directivesKeyValues,
+            'files_key_values'      => $newDirs,
+        ]);
     }
 
     /**
-     * undocumented function
+     * Returns an array representing the current status of the opcache
      *
-     * @return void
-     * @author
+     * @param  array $status the opcache status values
+     *
+     * @return array
      */
     public function getStatus($status)
     {
-        $statusKeyValues = array();
+        $statusKeyValues = [];
         if (!is_array($status)) {
-            $status = array();
+            $status = [];
         }
 
-        foreach ($status as $key => $value) {
+        foreach ($status as $key => &$value) {
             if ($key === 'scripts') {
                 continue;
             }
@@ -104,7 +102,7 @@ class FrameworkStatusController extends Controller
 
                     if ($k === 'used_memory'
                         || $k === 'free_memory'
-                        || $k  ===  'wasted_memory'
+                        || $k === 'wasted_memory'
                     ) {
                         $v = $this->sizeForHumans($v);
                     }
@@ -152,13 +150,9 @@ class FrameworkStatusController extends Controller
      */
     public function getDirectives($config)
     {
-        $directivesKeyValues = array();
+        $directivesKeyValues = [];
         foreach ($config['directives'] as $key => $value) {
-            if ($value === false) {
-                $value = 'false';
-            } else {
-                $value = 'true';
-            }
+            $value = ($value === false) ? 'false' : 'true';
 
             if ($key == 'opcache.memory_consumption') {
                 $value = $this->sizeForHumans($value);
@@ -181,16 +175,16 @@ class FrameworkStatusController extends Controller
      */
     public function getNewDirs($scripts, $data)
     {
-        $dirs = array();
+        $dirs = [];
         foreach ($scripts as $key => $data) {
             $dirs[dirname($key)][basename($key)] = $data;
         }
         asort($dirs);
 
-        $newDirs = array();
+        $newDirs = [];
         foreach ($dirs as $dir => $files) {
             $memoryConsumption = 0;
-            $newFiles = array();
+            $newFiles          = [];
             foreach ($files as $data) {
                 $memoryConsumption += $data["memory_consumption"];
 
@@ -199,17 +193,17 @@ class FrameworkStatusController extends Controller
                 $newFile['memory_consumption_human_readable'] =
                     $this->sizeForHumans($data["memory_consumption"]);
 
-                $newFiles []= $newFile;
+                $newFiles[] = $newFile;
             }
 
-            $newDir = array(
+            $newDir = [
                 'name'                     => $dir,
                 'total_memory_consumption' => $this->sizeForHumans($memoryConsumption),
                 'count'                    => count($newFiles),
                 'files'                    => $newFiles
-            );
+            ];
 
-            $newDirs []= $newDir;
+            $newDirs[] = $newDir;
         }
 
         return $newDirs;

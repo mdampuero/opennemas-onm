@@ -9,8 +9,6 @@
  */
 namespace Repository;
 
-use Onm\Cache\CacheInterface;
-use Onm\Database\DbalWrapper;
 use Symfony\Component\Finder\Finder;
 
 /**

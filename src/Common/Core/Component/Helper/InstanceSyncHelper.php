@@ -38,18 +38,20 @@ class InstanceSyncHelper
      */
     public function getSyncURL($categoryName)
     {
-        $wsUrl = '';
-        $syncParams = $this->container->get('setting_repository')->get('sync_params');
+        $syncParams = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('sync_params');
+
         if ($syncParams) {
             foreach ($syncParams as $siteUrl => $values) {
-                if (is_array($values['categories']) && in_array($categoryName, $values['categories'])) {
-                    $wsUrl = $siteUrl;
-
-                    return $wsUrl;
+                if (is_array($values['categories'])
+                    && in_array($categoryName, $values['categories'])
+                ) {
+                    return $siteUrl;
                 }
             }
         }
 
-        return $wsUrl;
+        return '';
     }
 }

@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\DateFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for DateFilter class.
  */
-class DateFilterTest extends KernelTestCase
+class DateFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

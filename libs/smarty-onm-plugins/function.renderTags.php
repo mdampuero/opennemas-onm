@@ -30,8 +30,12 @@ function smarty_function_renderTags($params, &$smarty)
     }
 
     if ($method == 'tags' && $content->fk_content_type != 1) {
-        $googleSearchKey = getService('setting_repository')->get('google_custom_search_api_key');
-        $method          = (!empty($googleSearchKey)) ? 'google' : 'tags';
+        $googleSearchKey = $smarty->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('google_custom_search_api_key');
+
+        $method = (!empty($googleSearchKey)) ? 'google' : 'tags';
     }
 
     // Get url generator
@@ -64,9 +68,8 @@ function smarty_function_renderTags($params, &$smarty)
                 break;
             case 'tags':
                 if (strpos($tag, '#') !== 0) {
-                    $url = $generator->generate('tag_frontpage', [
-                        'resource' => 'tags',
-                        'tag_name' => $tags[$tagId]['slug']
+                    $url = $generator->generate('frontend_tag_frontpage', [
+                        'slug' => $tags[$tagId]['slug']
                     ]);
                 }
                 break;

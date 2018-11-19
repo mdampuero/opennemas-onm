@@ -10,13 +10,11 @@
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\AdvertisementHelper;
-use Common\ORM\Entity\User;
-use Common\ORM\Entity\UserGroup;
 
 /**
  * Defines test cases for class class.
  */
-class AdvertisementHelperTest extends \PHPUnit_Framework_TestCase
+class AdvertisementHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -43,6 +41,8 @@ class AdvertisementHelperTest extends \PHPUnit_Framework_TestCase
             case 'orm.connection.instance':
                 return $this->instanceConnection;
         }
+
+        return null;
     }
 
     /**

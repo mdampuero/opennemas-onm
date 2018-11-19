@@ -150,7 +150,7 @@ class SubscriberController extends Controller
         // Prepare the CSV content
         $writer = Writer::createFromFileObject(new \SplTempFileObject());
         $writer->setDelimiter(';');
-        $writer->setEncodingFrom('utf-8');
+        $writer->setInputEncoding('utf-8');
         $writer->insertOne($headers);
         $writer->insertAll($data);
 

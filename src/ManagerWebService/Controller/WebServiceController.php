@@ -13,10 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Common\ORM\Entity\Instance;
-use Common\ORM\Entity\User;
 use Onm\Instance\InstanceCreator;
 use Common\Core\Controller\Controller;
-use Onm\Exception\InstanceNotConfiguredException;
 use Onm\Exception\DatabaseNotRestoredException;
 
 /**
@@ -156,7 +154,6 @@ class WebServiceController extends Controller
                 [
                     'activated'     => true,
                     'email'         => $instance->contact_mail,
-                    'fk_user_group' => [ 5 ],
                     'name'          => $instance->contact_mail,
                     'token'         => md5(uniqid(mt_rand(), true)),
                     'type'          => 0,
@@ -205,7 +202,6 @@ class WebServiceController extends Controller
                     ],
                     $companyMail,
                     $params['base_domain'],
-                    $instance->external['site_language'],
                     $instance->plan
                 );
             }

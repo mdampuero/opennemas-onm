@@ -25,7 +25,6 @@ class StringUtils
         "\r" => ' ',
         ' '  => ' ',
         '!'  => ' ',
-        '!'  => ' ',
         '"'  => ' ',
         '#'  => ' ',
         '$'  => ' ',
@@ -35,7 +34,6 @@ class StringUtils
         ')'  => ' ',
         '*'  => ' ',
         '+'  => ' ',
-        ','  => ' ',
         ','  => ' ',
         '.'  => ' ',
         ':'  => ' ',
@@ -48,12 +46,9 @@ class StringUtils
         '…'  => ' ',
         '-'  => ' ',
         '/'  => ' ',
-        '/'  => ' ',
-        ';'  => ' ',
         '<'  => ' ',
         '='  => ' ',
         '>'  => ' ',
-        '?'  => ' ',
         '@'  => ' ',
         '['  => ' ',
         '\"' => ' ',
@@ -64,7 +59,6 @@ class StringUtils
         '`'  => ' ',
         '|'  => ' ',
         '~'  => ' ',
-        '¡'  => ' ',
         '£'  => ' ',
         'ª'  => 'a',
         '´'  => ' ',
@@ -670,7 +664,7 @@ class StringUtils
     {
         if (is_array($text)) {
             return array_map(function ($a) use ($numWords) {
-                \Onm\StringUtils::getNumWords($a, $numWords);
+                self::getNumWords($a, $numWords);
             }, $text);
         }
 

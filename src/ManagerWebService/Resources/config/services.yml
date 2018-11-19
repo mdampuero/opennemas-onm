@@ -4,7 +4,9 @@ services:
         arguments: [ '@service_container' ]
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 99 }
+        public: true
 
     manager_ws.security.user.provider:
         class:     Common\Core\Component\Security\User\UserProvider
         arguments: [ '@orm.manager', [ 'manager' ] ]
+        public: true

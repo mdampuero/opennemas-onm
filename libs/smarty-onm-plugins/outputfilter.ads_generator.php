@@ -1,12 +1,11 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     output.filter.ads_generator.php
- * Type:     output
- * Name:     ads_generator
- * Purpose:  Generates all the script tags for OpenX based ads.
- * -------------------------------------------------------------
+/**
+ * Generates all the script tags for OpenX based ads.
+ *
+ * @param array $params the list of parameters
+ * @param \Smarty $smarty the smarty instance
+ *
+ * @return string
  */
 function smarty_outputfilter_ads_generator($output, $smarty)
 {
@@ -32,7 +31,10 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     $category  = $smarty->parent->tpl_vars['actual_category']->value;
     $content   = $smarty->parent->tpl_vars['content']->value;
     $positions = [];
-    $settings  = getService('setting_repository')->get('ads_settings');
+    $settings  = $smarty->getContainer()
+        ->get('orm.manager')
+        ->getDataSet('Settings', 'instance')
+        ->get('ads_settings');
 
     $safeFrameEnabled = getService('core.helper.advertisement')->isSafeFrameEnabled();
 

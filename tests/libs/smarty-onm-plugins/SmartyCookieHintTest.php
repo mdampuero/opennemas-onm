@@ -29,16 +29,22 @@ class SmartyCookieHintTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->sm = $this->getMockBuilder('SettingManager')
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'getDataSet' ])
+            ->getMock();
+
+        $this->ds = $this->getMockBuilder('DataSet')
             ->setMethods([ 'get' ])
             ->getMock();
+
+        $this->em->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
 
         $this->smarty->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
         $this->container->expects($this->any())->method('get')
-            ->willReturn($this->sm);
-
+            ->willReturn($this->em);
 
         $this->html = "<div id='cookies_overlay' style='display: none;'>"
             . "            <div class='cookies-overlay'>                <p>"
@@ -73,7 +79,7 @@ class SmartyCookieHintTest extends \PHPUnit\Framework\TestCase
      */
     public function testCookieHintWhenNoUrl()
     {
-        $this->sm->expects($this->at(1))
+        $this->ds->expects($this->at(1))
             ->method('get')
             ->with('cookies_hint_url')
             ->willReturn('');
@@ -89,7 +95,7 @@ class SmartyCookieHintTest extends \PHPUnit\Framework\TestCase
      */
     public function testCookieHintWhenUrl()
     {
-        $this->sm->expects($this->at(1))
+        $this->ds->expects($this->at(1))
             ->method('get')
             ->with('cookies_hint_url')
             ->willReturn('http://www.cookie-hint-url.com');
@@ -105,7 +111,7 @@ class SmartyCookieHintTest extends \PHPUnit\Framework\TestCase
      */
     public function testCookieHintWhenCmpIsActivated()
     {
-        $this->sm->expects($this->at(0))
+        $this->ds->expects($this->at(0))
             ->method('get')
             ->with('cmp_script')
             ->willReturn(1);

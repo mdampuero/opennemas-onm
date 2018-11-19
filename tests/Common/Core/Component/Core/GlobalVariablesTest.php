@@ -10,12 +10,11 @@
 namespace Tests\Common\Core\Component\Core;
 
 use Common\Core\Component\Core\GlobalVariables;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for GlobalVariables class.
  */
-class GlobalVariablesTest extends KernelTestCase
+class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

@@ -37,8 +37,9 @@ class CommentsController extends Controller
      */
     public function defaultAction()
     {
-        // Select between comments system
-        $commentSystem = $this->get('setting_repository')->get('comment_system');
+        $commentSystem = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('comment_system');
 
         switch ($commentSystem) {
             case 'onm':
@@ -69,43 +70,51 @@ class CommentsController extends Controller
     {
         $type = $request->query->filter('type', '', FILTER_SANITIZE_STRING);
 
-        $sm = $this->get('setting_repository');
-        switch ($type) {
-            case 'onm':
-                $sm->set('comment_system', 'onm');
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    _("Now you are using the Opennemas comment system.")
-                );
-                return $this->redirect($this->generateUrl('backend_comments_config'));
+        $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
 
-            case 'disqus':
-                $sm->set('comment_system', 'disqus');
+        // check if the comment system is valid
+        if (!in_array($type, [ 'onm', 'facebook', 'disqus'])) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("Comment data sent not valid.")
+            );
 
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    _("Now you are using the Facebook comment system.")
-                );
+            return $this->redirect($this->generateUrl('backend_comments'));
+        }
 
-                return $this->redirect($this->generateUrl('backend_comments_disqus_config'));
+        try {
+            $ds->set('comment_system', $type);
 
-            case 'facebook':
-                $sm->set('comment_system', 'facebook');
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    _("Now you are using the Facebook comment system.")
-                );
-                return $this->redirect($this->generateUrl('backend_comments_facebook_config'));
+            switch ($type) {
+                case 'onm':
+                    $commentSystemName = 'Opennemas';
+                    $commentConfigUrl  = 'backend_comments_config';
+                    break;
 
-            case 'reset':
-                return $this->render('comment/select_module.tpl');
+                case 'disqus':
+                    $commentSystemName = 'disqus';
+                    $commentConfigUrl  = 'backend_comments_disqus_config';
+                    break;
 
-            default:
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _("Comment data sent not valid.")
-                );
-                return $this->redirect($this->generateUrl('backend_comments'));
+                case 'facebook':
+                    $commentSystemName = 'Facebook';
+                    $commentConfigUrl  = 'backend_comments_facebook_config';
+                    break;
+            }
+
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf(_("Now you are using the %s comment system."), $commentSystemName)
+            );
+
+            return $this->redirect($this->generateUrl($commentConfigUrl));
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("Unable to save the settings.")
+            );
+
+            return $this->redirect($this->generateUrl('backend_comments'));
         }
     }
 
@@ -244,20 +253,16 @@ class CommentsController extends Controller
     {
         $defaultConfigs = $this->get('core.helper.comment')->getDefaultConfigs();
 
-        $sm = $this->get('setting_repository');
+        $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
 
         if ('POST' !== $request->getMethod()) {
-            $configs         = $sm->get('comments_config', []);
-            $commentsHandler = $sm->get('comment_system');
-
+            $configs         = $ds->get('comments_config', []);
+            $commentsHandler = $ds->get('comment_system');
             foreach ($configs as $configName => $value) {
-                if ($value == '1') {
-                    $configs[$configName] = true;
-                }
+                $configs[$configName] = $value == '1';
             }
 
             $configs = array_merge($defaultConfigs, $configs);
-
 
             return $this->render('comment/config.tpl', [
                 'configs' => $configs,
@@ -285,13 +290,17 @@ class CommentsController extends Controller
             $request->request->get('blacklist_comment', '')
         );
 
-        $result = ['success', _('Settings saved.')];
-        if (!$sm->set('comments_config', $configs)) {
+        try {
+            $ds->set('comments_config', $configs);
+
+            $result = ['success', _('Settings saved.')];
+        } catch (\Exception $e) {
             $result = [
                 'error',
                 _('There was an error while saving the settings')
             ];
         }
+
         list($type, $message) = $result;
         $this->get('session')->getFlashBag()->add($type, $message);
 
@@ -308,11 +317,14 @@ class CommentsController extends Controller
      */
     public function disqusDefaultAction()
     {
-        $disqusShortName = $this->get('setting_repository')->get('disqus_shortname');
-        $disqusSecretKey = $this->get('setting_repository')->get('disqus_secret_key');
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get([ 'disqus_shortname', 'disqus_secret_key']);
 
         // Check if module is configured, if not redirect to configuration form
-        if (!$disqusShortName || !$disqusSecretKey) {
+        if (empty($settings['disqus_shortname'])
+            || empty($settings['disqus_secret_key'])
+        ) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
                 _('Please provide your Disqus configuration to start to use your Disqus Comments module')
@@ -322,8 +334,8 @@ class CommentsController extends Controller
         }
 
         return $this->render('comment/disqus/list.tpl', [
-            'disqus_shortname'  => $disqusShortName,
-            'disqus_secret_key' => $disqusSecretKey,
+            'disqus_shortname'  => $settings['disqus_shortname'],
+            'disqus_secret_key' => $settings['disqus_secret_key'],
         ]);
     }
 
@@ -339,20 +351,20 @@ class CommentsController extends Controller
      */
     public function disqusConfigAction(Request $request)
     {
-        $sm = $this->get('setting_repository');
+        $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
 
         if ($request->getMethod() != 'POST') {
             $configs = array_merge(
                 $this->get('core.helper.comment')->getDefaultConfigs(),
-                $sm->get('comments_config', [])
+                $ds->get('comments_config', [])
             );
 
             return $this->render('comment/config.tpl', [
                 'configs'        => $configs,
                 'extra' => [
-                    'handler' => $sm->get('comment_system'),
-                    'shortname' => $sm->get('disqus_shortname'),
-                    'secretKey' => $sm->get('disqus_secret_key'),
+                    'handler' => $ds->get('comment_system'),
+                    'shortname' => $ds->get('disqus_shortname'),
+                    'secretKey' => $ds->get('disqus_secret_key'),
                 ]
             ]);
         }
@@ -365,18 +377,20 @@ class CommentsController extends Controller
             $this->get('core.helper.comment')->getDefaultConfigs(),
             $configs
         );
-        if ($sm->set('disqus_shortname', $shortname)
-            && $sm->set('disqus_secret_key', $secretKey)
-            && $sm->set('comments_config', $configs)
-        ) {
-            $sm->set('comment_system', 'disqus');
+
+        try {
+            $ds->set([
+                'comment_system'    => 'disqus',
+                'disqus_shortname'  => $shortname,
+                'disqus_secret_key' => $secretKey,
+                'comments_config'   => $configs,
+            ]);
+
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Disqus configurations saved properly.')
             );
-
-            return $this->redirect($this->generateUrl('backend_comments_disqus_config'));
-        } else {
+        } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 _('There was an error while saving the Disqus module configuration')
@@ -396,12 +410,13 @@ class CommentsController extends Controller
      */
     public function facebookDefaultAction()
     {
-        $fbSettings = $this->get('setting_repository')->get('facebook');
+        $fbSettings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('facebook');
 
         return $this->render('comment/facebook/list.tpl', [
-            'fb_app_id'  =>
-                array_key_exists('api_key', $fbSettings)
-                    ? $fbSettings['api_key'] : null,
+            'fb_app_id' => array_key_exists('api_key', $fbSettings) ?
+                $fbSettings['api_key'] : null,
         ]);
     }
 
@@ -417,8 +432,10 @@ class CommentsController extends Controller
      */
     public function facebookConfigAction(Request $request)
     {
-        $sm         = $this->get('setting_repository');
-        $fbSettings = $this->get('setting_repository')->get('facebook', []);
+        $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
+
+        $fbSettings = $ds->get('facebook', []);
+
         if (!is_array($fbSettings)) {
             $fbSettings = [];
         }
@@ -426,13 +443,13 @@ class CommentsController extends Controller
         if ($request->getMethod() != 'POST') {
             $configs = array_merge(
                 $this->get('core.helper.comment')->getDefaultConfigs(),
-                $sm->get('comments_config', [])
+                $ds->get('comments_config', [])
             );
 
             return $this->render('comment/config.tpl', [
                 'configs' => $configs,
                 'extra'   => [
-                    'handler'   => $sm->get('comment_system'),
+                    'handler'   => $ds->get('comment_system'),
                     'fb_app_id' =>
                         array_key_exists('api_key', $fbSettings)
                             ? $fbSettings['api_key'] : null,
@@ -448,21 +465,23 @@ class CommentsController extends Controller
             $this->get('core.helper.comment')->getDefaultConfigs(),
             $configs
         );
-        if ($sm->set('facebook', $fbSettings)
-            && $sm->set('comments_config', $configs)
-        ) {
+
+        try {
+            $ds->set([
+                'facebook'        => $fbSettings,
+                'comments_config' => $configs
+            ]);
+
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Facebook configuration saved successfully')
             );
-
-            return $this->redirect($this->generateUrl('backend_comments_facebook_config'));
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('There was an error while saving the Facebook comments module configuration')
+            );
         }
-
-        $this->get('session')->getFlashBag()->add(
-            'error',
-            _('There was an error while saving the Facebook comments module configuration')
-        );
 
         return $this->redirect($this->generateUrl('backend_comments_facebook_config'));
     }

@@ -9,12 +9,10 @@
  */
 namespace Tests\Common\Data\Filter;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-
 /**
  * Defines test cases for Filter class.
  */
-class FilterTest extends KernelTestCase
+class FilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

@@ -409,20 +409,21 @@ class Opinion extends Content
 
         $category = 0;
 
-        list($contentPositions, $contentsSuggestedInFrontpage, $invalidationDt, $lastSaved) =
-                getService('api.service.frontpageVersion')
-                    ->getPublicFrontpageData($id);
+        list(, $contentsSuggestedInFrontpage, , ) = getService('api.service.frontpage')
+            ->getCurrentVersionForCategory($category);
 
+        $excludedContents = [];
         foreach ($contentsSuggestedInFrontpage as $content) {
             if ($content->content_type == 4) {
                 $excludedContents[] = (int) $content->id;
             }
         }
 
+        $sqlExcludedContents = '';
         if (count($excludedContents) > 0) {
-            $sqlExcludedContents  = ' AND opinions.pk_opinion NOT IN (';
-            $sqlExcludedContents .= implode(', ', $excludedContents);
-            $sqlExcludedContents .= ') ';
+            $sqlExcludedContents .=
+                ' AND opinions.pk_opinion NOT IN ('
+                . implode(', ', $excludedContents) . ') ';
         }
 
         // Getting latest opinions taking in place later considerations

@@ -1,6 +1,6 @@
 frontend_ad_redirect:
     path: /ads/{id}.{_format}
-    defaults: { _controller: FrontendBundle:Advertisement:redirect, _format:html }
+    defaults: { _controller: FrontendBundle:Advertisement:redirect, _format: html }
 
 frontend_ad_ads_txt:
     path: /ads.txt

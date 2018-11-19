@@ -23,49 +23,49 @@ class Kiosko extends Content
      *
      * @var int
      */
-    public $pk_kiosko   = null;
+    public $pk_kiosko = null;
 
     /**
      * The name of the kiosko
      *
      * @var string
      */
-    public $name        = null;
+    public $name = null;
 
     /**
      * The path to the kiosko file
      *
      * @var string
      */
-    public $path        = null;
+    public $path = null;
 
     /**
      * The publishing date of the kiosko
      *
      * @var string
      */
-    public $date        = null;
+    public $date = null;
 
     /**
      * Whether if this kiosko is marked as favorite or not
      *
      * @var boolean
      */
-    public $favorite    = 0;
+    public $favorite = 0;
 
     /**
      * The price of this kiosko
      *
      * @var int
      */
-    public $price       = 0;
+    public $price = 0;
 
     /**
      * The type of kiosko
      *
      * @var string
      */
-    public $type        = 0;
+    public $type = 0;
 
     /**
      * The path to the kiosko
@@ -82,7 +82,7 @@ class Kiosko extends Content
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Cover');
-        $this->kiosko_path = INSTANCE_MEDIA_PATH . 'kiosko' . DS;
+        $this->kiosko_path            = INSTANCE_MEDIA_PATH . 'kiosko' . DS;
 
         parent::__construct($id);
     }
@@ -119,7 +119,7 @@ class Kiosko extends Content
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
-                .'LEFT JOIN kioskos ON pk_content = pk_kiosko WHERE pk_content = ?',
+                . 'LEFT JOIN kioskos ON pk_content = pk_kiosko WHERE pk_content = ?',
                 [ $id ]
             );
 
@@ -131,7 +131,7 @@ class Kiosko extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error while fetching Kiosko: '.$e->getMessage());
+            error_log('Error while fetching Kiosko: ' . $e->getMessage());
             return false;
         }
     }
@@ -148,12 +148,14 @@ class Kiosko extends Content
         $data['price'] = isset($data['price']) ? $data['price'] : 0;
         $data['type']  = isset($data['type']) ? $data['type'] : 0;
 
-        parent::create($data);
+        $conn = getService('dbal_connection');
+
+        $conn->beginTransaction();
 
         try {
-            $this->createThumb($data['name'], $data['path']);
+            parent::create($data);
 
-            getService('dbal_connection')->insert(
+            $conn->insert(
                 'kioskos',
                 [
                     'pk_kiosko' => (int) $this->id,
@@ -165,9 +167,14 @@ class Kiosko extends Content
                 ]
             );
 
+            $conn->commit();
+
             return $this;
         } catch (\Exception $e) {
-            error_log('Error while creating Kiosko: '.$e->getMessage());
+            error_log('Error while creating Kiosko: ' . $e->getMessage());
+
+            $conn->rollback();
+
             return false;
         }
     }
@@ -181,10 +188,14 @@ class Kiosko extends Content
      */
     public function update($data)
     {
-        parent::update($data);
+        $conn = getService('dbal_connection');
+
+        $conn->beginTransaction();
 
         try {
-            getService('dbal_connection')->update(
+            parent::update($data);
+
+            $conn->update(
                 'kioskos',
                 [
                     'name'      => $data['name'],
@@ -195,9 +206,13 @@ class Kiosko extends Content
                 [ 'pk_kiosko' => (int) $data['id'] ]
             );
 
+            $conn->commit();
+
             return $this;
         } catch (\Exception $e) {
-            error_log('Error while updating Kiosko: '.$e->getMessage());
+            $conn->rollback();
+
+            error_log('Error while updating Kiosko: ' . $e->getMessage());
             return false;
         }
     }
@@ -211,75 +226,71 @@ class Kiosko extends Content
      */
     public function remove($id)
     {
-        parent::remove($this->id);
+        $conn = getService('dbal_connection');
 
         try {
-            $paperPdf      = $this->kiosko_path . $this->path . $this->name;
-            $paperImage    = $this->kiosko_path . $this->path
-                . preg_replace("/.pdf$/", ".jpg", $this->name);
-            $bigPaperImage = $this->kiosko_path . $this->path .
-                preg_replace('/.pdf$/', '.jpg', '650-' . $this->name);
+            $conn->beginTransaction();
 
-            unlink($paperPdf);
-            unlink($paperImage);
-            unlink($bigPaperImage);
+            parent::remove($this->id);
 
-            getService('dbal_connection')
-                ->delete('kioskos', [ 'pk_kiosko' => $id ]);
+            $conn->delete('kioskos', [ 'pk_kiosko' => $id ]);
+
+            $conn->commit();
+
+            $this->removeFiles();
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error while removing Kiosko: '.$e->getMessage());
+            $conn->rollback();
+            error_log('Error while removing Kiosko: ' . $e->getMessage());
             return false;
         }
     }
 
     /**
-     * Creates the PDF thumbnail for the kiosko.
+     * Removes the files assigned to the newsstand
+     *
+     * @return void
+     **/
+    public function removeFiles()
+    {
+        $coverFile  = $this->kiosko_path . $this->path . $this->name;
+        $coverThumb = $this->kiosko_path . $this->path . $this->thumb_url;
+
+        // Remove old files if fileinput changed
+        if (file_exists($coverFile) && is_file($coverFile)) {
+            unlink($coverFile);
+        }
+
+        if (file_exists($coverThumb) && is_file($coverThumb)) {
+            unlink($coverThumb);
+        }
+
+        return;
+    }
+
+    /**
+     * Saves a  the PDF thumbnail for the kiosko.
      *
      * @param string $file_pdf The filename to the pdf file.
      * @param string $path     The path to the pdf file.
      */
-    public function createThumb($file_pdf, $path)
+    public function saveFiles($targetPath, $targetFileName, $cover, $thumbnail)
     {
-        $imageFileName = basename($file_pdf, '.pdf') . '.jpg';
-        $tmpName       = '/tmp/' . basename($file_pdf, '.pdf') . '.png';
+        $absolutePath      = $this->kiosko_path . $targetPath;
+        $thumbnailFileName = basename($targetFileName, '.pdf') . '.jpg';
 
-        // Thumbnail first page (see [0])
-        if (!file_exists($this->kiosko_path . $path . $file_pdf)) {
-            return;
+        // Create folder if it doesn't exist
+        if (!file_exists($absolutePath)) {
+            \Onm\FilesManager::createDirectory($absolutePath);
         }
 
-        try {
-            $imagick = new \Imagick($this->kiosko_path . $path . $file_pdf . '[0]');
-            $imagick->setImageBackgroundColor('white');
-            $imagick->thumbnailImage(650, 0);
+        $uploadStatus = (
+            $cover->isValid() && $cover->move($absolutePath, $targetFileName)
+            && $thumbnail->isValid() && $thumbnail->move($absolutePath, $thumbnailFileName)
+        );
 
-            // Deprecated: $imagick = $imagick->flattenImages();
-            // $imagick->setImageAlphaChannel(imagick::ALPHACHANNEL_REMOVE);
-            // This constant used above is not supported for all versions of Imagick
-            // Use number (11) to solve problem
-            // http://php.net/manual/en/imagick.flattenimages.php#116956
-            $imagick->setImageAlphaChannel(11);
-            $imagick->mergeImageLayers(imagick::LAYERMETHOD_FLATTEN);
-            $imagick->setFormat('png');
-
-            // First, save to PNG (*.pdf => /tmp/xxx.png)
-            $imagick->writeImage($tmpName);
-
-            // Finally, save to jpg (/tmp/xxx.png => *.jpg) to avoid
-            // problems with image
-            $imagick = new \Imagick($tmpName);
-            $imagick->writeImage($this->kiosko_path . $path . '650-' . $imageFileName);
-            $imagick->thumbnailImage(180, 0);
-
-            // Write the new image to a file
-            $imagick->writeImage($this->kiosko_path.$path.$imageFileName);
-
-            //remove temp image
-            unlink($tmpName);
-        } catch (\Exception $e) {
-        }
+        return $uploadStatus;
     }
 
     /**
@@ -291,7 +302,7 @@ class Kiosko extends Content
     {
         $items = [];
         $sql   = 'SELECT DISTINCT MONTH(date) as month, YEAR(date) as year'
-            .  ' FROM `kioskos` ORDER BY year DESC, month DESC';
+            . ' FROM `kioskos` ORDER BY year DESC, month DESC';
 
         $rs = getService('dbal_connection')->fetchAll($sql);
 

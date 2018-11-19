@@ -96,7 +96,7 @@ class MediaItem
     /**
      * The description of the fie
      *
-     * @var string23
+     * @var string
      *
      */
     public $description = null;
@@ -144,12 +144,11 @@ class MediaItem
     {
         if (is_null($filename)) {
             if (is_null($this->filename)) {
-                return(null);
+                return null;
             }
             $filename = $this->filename;
         }
 
-        $details = array();
         $details = @getimagesize($filename);
 
         return $details;
@@ -166,7 +165,7 @@ class MediaItem
     {
         if (is_null($filename)) {
             if (is_null($this->filename)) {
-                return(null);
+                return null;
             }
 
             $filename = $this->filename;

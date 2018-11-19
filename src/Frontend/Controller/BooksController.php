@@ -18,7 +18,6 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for books
@@ -37,7 +36,7 @@ class BooksController extends Controller
     public function frontpageAction(Request $request)
     {
         $page         = $request->query->getDigits('page', 1);
-        $categoryName = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
         // Setup templating cache layer
         $this->view->setConfig('articles');
@@ -94,9 +93,9 @@ class BooksController extends Controller
      */
     public function showAction(Request $request)
     {
-        $categoryName = $this->request->query->get('category_name', null);
-        $dirtyID      = $request->query->get('id', null);
-        $urlSlug      = $request->query->get('slug', null);
+        $categoryName = $request->get('category_name', null);
+        $dirtyID      = $request->get('id', null);
+        $urlSlug      = $request->get('slug', null);
 
         $content = $this->get('content_url_matcher')
             ->matchContentUrl('book', $dirtyID, $urlSlug, $categoryName);
@@ -116,8 +115,8 @@ class BooksController extends Controller
 
             $content->category_title = $content->loadCategoryTitle($content->id);
 
-            $contentManager  = new \ContentManager();
-            $books = $contentManager->find_by_category(
+            $contentManager = new \ContentManager();
+            $books          = $contentManager->find_by_category(
                 'Book',
                 $content->category,
                 'content_status=1',
@@ -138,7 +137,8 @@ class BooksController extends Controller
             'contentId'   => $content->id,
             'category'    => $content->category,
             'cache_id'    => $cacheID,
-            'x-tags'      => 'book,'.$content->id,
+            'o_content'   => $content,
+            'x-tags'      => 'book,' . $content->id,
             'x-cache-for' => '+1 day',
         ]);
     }
@@ -152,31 +152,34 @@ class BooksController extends Controller
      */
     public function ajaxPaginationListAction(Request $request)
     {
-        $contentManager   = new \ContentManager();
-        $category   = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
-        $this->page = $request->query->getDigits('page', 1);
-        $last       = false;
+        $contentManager = new \ContentManager();
+        $category       = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
+        $this->page     = $request->query->getDigits('page', 1);
+        $last           = false;
+
         if ($this->page < 1) {
             $this->page = 1;
         }
 
-        $limit = 'LIMIT '.(($this->page - 1) * 5).',  5';
+        $limit = 'LIMIT ' . (($this->page - 1) * 5) . ',  5';
         $books = $contentManager->find_by_category(
             'Book',
             $category,
             'content_status=1',
-            'ORDER BY position ASC, created DESC '. $limit
+            'ORDER BY position ASC, created DESC ' . $limit
         );
 
         if (count($books) == 0) {
             $this->page = $this->page - 1;
-            $limit = 'LIMIT '.(($this->page - 1) * 5).',  5';
-            $books  = $contentManager->find_by_category(
+
+            $limit = 'LIMIT ' . (($this->page - 1) * 5) . ',  5';
+            $books = $contentManager->find_by_category(
                 'Book',
                 $category,
                 'content_status=1',
-                'ORDER BY position ASC, created DESC '. $limit
+                'ORDER BY position ASC, created DESC ' . $limit
             );
+
             $last = true;
         }
 

@@ -9,8 +9,6 @@
  */
 namespace Backend\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 
@@ -20,6 +18,8 @@ class SidebarsController extends Controller
      * Handles the default action.
      *
      * @param Request $request The request object.
+     *
+     * @return string
      */
     public function listAction()
     {

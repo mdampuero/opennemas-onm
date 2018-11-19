@@ -1,20 +1,24 @@
 parameters:
-    orm.config_path: %kernel.root_dir%/../src/Common/ORM/Resources/config/orm
+    orm.config_path: '%kernel.root_dir%/../src/Common/ORM/Resources/config/orm'
 
 services:
     orm.loader:
         class: Common\ORM\Core\Loader\Loader
         arguments: [ '%orm.config_path%', '%kernel.environment%', '%orm.default%', '@cache.manager' ]
+        public: true
 
     orm.manager:
         class: Common\ORM\Core\EntityManager
         arguments: [ '@service_container' ]
+        public: true
 
     orm.oql.fixer:
         class: Common\ORM\Core\Oql\Fixer
+        public: true
 
     # TODO: Remove when models use new ORM
     orm.connection.instance:
         class:     Common\ORM\Core\Connection
         factory:   [ '@orm.manager', 'getConnection' ]
         arguments: [ 'instance' ]
+        public: true

@@ -10,12 +10,11 @@
 namespace Tests\Common\Core\Component\Translator\Google;
 
 use Common\Core\Component\Translator\Google\GoogleTranslator;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for GoogleTranslator class.
  */
-class GoogleTranslatorTest extends KernelTestCase
+class GoogleTranslatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

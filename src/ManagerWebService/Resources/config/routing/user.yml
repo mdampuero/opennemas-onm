@@ -62,7 +62,7 @@ manager_ws_users_delete:
 
 manager_ws_users_list:
     path:     /users
-    defaults: { _controller: ManagerWebServiceBundle:User:list }
+    defaults: { _controller: ManagerWebServiceBundle:User:list, format: 'json'  }
     methods:  [ GET ]
     options:
         expose: true

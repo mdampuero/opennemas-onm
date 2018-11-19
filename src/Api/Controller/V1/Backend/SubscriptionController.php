@@ -10,7 +10,6 @@
 namespace Api\Controller\V1\Backend;
 
 use Common\Core\Annotation\Security;
-use Common\ORM\Entity\UserGroup;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

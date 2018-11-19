@@ -12,7 +12,7 @@ namespace Framework\Tests\Import\Parser\Nitf;
 use Framework\Import\Parser\Nitf\Nitf;
 use Framework\Import\Resource\Resource;
 
-class NitfTest extends \PHPUnit_Framework_TestCase
+class NitfTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
@@ -157,8 +157,9 @@ class NitfTest extends \PHPUnit_Framework_TestCase
         ));
 
         $resource = new Resource();
+
         $resource->agency_name = 'Foobar Agency';
-        $resource->body = '<p>Paragraph 1</p><p>Paragraph 2</p>';
+        $resource->body        = '<p>Paragraph 1</p><p>Paragraph 2</p>';
 
         $resource->created_time =
             \DateTime::createFromFormat('Ymd\THisP', '20150921T080200+0000');

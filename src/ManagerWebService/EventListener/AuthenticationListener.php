@@ -9,7 +9,6 @@
  */
 namespace ManagerWebService\EventListener;
 
-use Common\Core\Component\Security\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -25,14 +24,14 @@ class AuthenticationListener implements EventSubscriberInterface
     /**
      * The service container.
      *
-     * @param ServiceContainer
+     * @param \Symfony\Component\DependencyInjection\Container
      */
     protected $container;
 
     /**
      * Initializes the SecurityListener.
      *
-     * @param ServiceContainer $container The service container.
+     * @param \Symfony\Component\DependencyInjection\Container $container The service container.
      */
     public function __construct($container)
     {
@@ -44,11 +43,13 @@ class AuthenticationListener implements EventSubscriberInterface
      * Loads an instance basing on the request.
      *
      * @param FilterResponseEvent $event The event object.
+     *
+     * @return Response|null
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
         if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
-            return;
+            return null;
         }
 
         $response = $event->getResponse();
@@ -117,18 +118,20 @@ class AuthenticationListener implements EventSubscriberInterface
      */
     protected function getPermissions(UserInterface $user)
     {
-        if (empty($user->fk_user_group)) {
+        if (empty($user->user_groups)) {
             return [];
         }
 
-        $oql = sprintf('pk_user_group in [%s]', implode(',', $user->fk_user_group));
+        $ugs    = $this->container->get('api.service.user_group');
+        $origin = $ugs->getOrigin();
 
-        $userGroups = $this->container->get('orm.manager')
-            ->getRepository('UserGroup', $user->getOrigin())
-            ->findBy($oql);
+        $userGroups = $ugs->setOrigin('manager')
+            ->getListByIds(array_keys($user->user_groups));
+
+        $ugs->setOrigin($origin);
 
         $permissions = [];
-        foreach ($userGroups as $userGroup) {
+        foreach ($userGroups['items'] as $userGroup) {
             $permissions = array_merge($permissions, $userGroup->privileges);
         }
 

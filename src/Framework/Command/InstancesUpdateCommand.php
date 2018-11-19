@@ -10,7 +10,6 @@
 namespace Framework\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -84,6 +83,8 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      *
      * @param InputInterface  $input  An InputInterface instance.
      * @param OutputInterface $output An OutputInterface instance.
+     *
+     * @return int|null
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -97,6 +98,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
             'media_size'      => $input->getOption('media-size'),
             'created'         => $input->getOption('created'),
         ];
+
         $offset       = $input->getOption('offset');
         $this->input  = $input;
         $this->output = $output;
@@ -107,7 +109,11 @@ class InstancesUpdateCommand extends ContainerAwareCommand
             && !$options['media_size']
             && !$options['created']
         ) {
-            $this->output->writeln('<error>Please provide --instance-stats --alexa, --views, --media-size or --created</error>');
+            $this->output->writeln(
+                '<error>Please provide --instance-stats '
+                    . '--alexa, --views, --media-size or --created</error>'
+            );
+
             return 1;
         }
 
@@ -129,25 +135,30 @@ class InstancesUpdateCommand extends ContainerAwareCommand
 
         if (count($instances) == 0) {
             $output->writeln('No instances');
-            return;
+            return 1;
         }
 
         foreach ($instances as $instance) {
             if ($output->isVerbose()) {
-                $output->writeln('Getting info about \''.$instance->internal_name.'\'');
+                $output->writeln('Getting info about \'' . $instance->internal_name . '\'');
             }
 
             try {
                 $this->getInstanceInfo($instance, $options);
                 $this->em->persist($instance);
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                $this->getContainer()->get('error.log')
+                    ->error($e->getMessage());
+
                 $output->writeln(
                     '<error>Error while getting info about \''
-                    . $instance->internal_name.'\': ' . $e->getMessage() . '</>'
+                    . $instance->internal_name . '\': ' . $e->getMessage() . '</>'
                 );
             }
         }
+
+        // No errors
+        return 0;
     }
 
     /**
@@ -155,6 +166,8 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      *
      * @param  Instance $i       The instance.
      * @param  array    $options Whether to get the Alexa's rank.
+     *
+     * @return boolean
      */
     private function getInstanceInfo(&$i, $options)
     {
@@ -196,7 +209,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
                 $this->output->write("\t- Getting page num views ");
             }
             $sql = 'SELECT value FROM settings WHERE name=\'piwik\'';
-            $rs = $conn->fetchAll($sql);
+            $rs  = $conn->fetchAll($sql);
 
             if ($rs !== false && !empty($rs)) {
                 $piwik = unserialize($rs[0]['value']);
@@ -207,7 +220,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
 
                 $message = "<fg=green>DONE</>";
             } else {
-                $message = "<error>FAILED</error>"."Piwik code not available";
+                $message = "<error>FAILED</error>" . "Piwik code not available";
             }
 
             if ($this->output->isVeryVerbose()) {
@@ -248,29 +261,28 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      * Fetches the instance stats ()
      *
      * @param Instance $i The instance to get stats from
-     *
-     * @return void
      */
     public function getInstanceStats(&$i)
     {
-        $conn  = $this->getContainer()->get('orm.manager')->getConnection('instance');
+        $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
 
         // Count contents
         $sql = 'SELECT count(*) as total FROM contents';
-        $rs = $conn->fetchAll($sql);
+        $rs  = $conn->fetchAll($sql);
 
         if (!empty($rs)) {
             $i->contents = $rs[0]['total'];
         }
 
         $sql = 'SELECT content_type_name as type, count(*) as total '
-            .'FROM contents WHERE in_litter != 1 GROUP BY `fk_content_type`, `content_type_name`';
+            . 'FROM contents WHERE in_litter != 1 '
+            . 'GROUP BY `fk_content_type`, `content_type_name`';
 
         $rs = $conn->fetchAll($sql);
 
         if (!empty($rs)) {
             foreach ($rs as $value) {
-                $allowedContentTypes = array(
+                $allowedContentTypes = [
                     'advertisement',
                     'attachment',
                     'album',
@@ -282,20 +294,20 @@ class InstancesUpdateCommand extends ContainerAwareCommand
                     'static_page',
                     'video',
                     'widget'
-                );
+                ];
 
                 if (!in_array($value['type'], $allowedContentTypes)) {
                     continue;
                 }
 
                 $type = $value['type'] . 's';
+
                 $i->{$type} = $value['total'];
             }
         }
 
         // Count users
-        $sql = "SELECT COUNT(id) FROM users WHERE type = 0 and activated = 1 and
-            fk_user_group NOT REGEXP '^4$|^4,|,4,|,4$'";
+        $sql = "SELECT COUNT(id) FROM users WHERE activated = 1 AND type IN (0,2)";
         $rs  = $conn->fetchArray($sql);
 
         if ($rs !== false && !empty($rs)) {
@@ -351,7 +363,6 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      * Fetches the date of creation of the instance
      *
      * @param Instance $i The instance to get stats from
-     * @return void
      */
     public function getCreatedDate(&$i)
     {
@@ -371,16 +382,16 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      * Caculates the amount of Mb that an instance has
      *
      * @param Instance $i The instance to get stats from
-     *
-     * @return void
      */
     public function getMediaSize(&$i)
     {
-        $size = 0;
-        $mediaPath = realpath(SITE_PATH."media".DS.$i->internal_name);
+        $size      = 0;
+        $mediaPath = realpath(SITE_PATH . "media" . DS . $i->internal_name);
+
         if ($mediaPath) {
-            $size = (int) shell_exec('du -s '.$mediaPath.'/ | awk \'{ print $1}\'');
+            $size = (int) shell_exec('du -s ' . $mediaPath . '/ | awk \'{ print $1}\'');
         }
+
         $i->media_size = $size / 1024;
     }
 

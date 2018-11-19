@@ -16,7 +16,7 @@
  * @param  Smarty_Internal_Template $template Current template
  * @param  boolean                  $repeat   Current extension call number.
  *
- * @return string Result HTML.
+ * @return void
  */
 function smarty_block_javascripts($params, $content, $template, &$repeat)
 {

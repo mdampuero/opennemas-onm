@@ -4,7 +4,7 @@ namespace Framework\Tests\ORM\Core\Exception;
 
 use Common\ORM\Core\Exception\InvalidCriteriaException;
 
-class InvalidCriteriaExceptionTest extends \PHPUnit_Framework_TestCase
+class InvalidCriteriaExceptionTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetMessageWithPreviousMessage()
     {

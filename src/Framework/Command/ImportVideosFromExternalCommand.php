@@ -13,7 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportVideosFromExternalCommand extends ContainerAwareCommand
@@ -263,8 +262,7 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
     public function importHTMLVideosFromCsv($videos)
     {
         $this->output->writeln(
-            "<fg=yellow>*** Importing count($videos) videos from csv "
-            . "<info>$file</info> ***</fg=yellow>\n"
+            "<fg=yellow>Importing count($videos) videos from csv </>"
         );
 
         $importedVideos = $notImportedVideos = $alreadyImported = 0;
@@ -327,6 +325,8 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
      * Check if the video is already imported
      *
      * @param string Video url
+     *
+     * @return boolean
      */
     protected function isAlreadyImported($url)
     {
@@ -346,7 +346,7 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
     {
         $this->output->writeln(
             '<fg=yellow>*** Videos import finished in ' . $time
-            . ' secs. ***</fg=yellow>'
+            . ' secs. ***</>'
         );
     }
 }

@@ -59,7 +59,9 @@ class EmailCampaignEndpoint extends Endpoint
      *
      * @param array $params The action parameters.
      *
-     * @throws InvalidArgumentException If parameters are invalid.
+     * @return array
+     *
+     * @throws \InvalidArgumentException If parameters are invalid.
      * @throws ActOnException           If the action fails.
      */
     public function sendMessage($id, $params)

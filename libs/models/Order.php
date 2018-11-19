@@ -20,8 +20,6 @@ class Order
 {
     /**
      * undocumented function
-     *
-     * @return void
      * @author
      */
     public function __construct($id = null)
@@ -104,8 +102,6 @@ class Order
 
     /**
      * Fills the user attribute from the user information
-     *
-     * @return void
      */
     public function getUser()
     {

@@ -217,6 +217,7 @@ class AssetBag
 
         $theme = substr($src, 1, strpos($src, '/') - 1);
         $asset = substr($src, strpos($src, '/'));
+        $path  = '';
 
         if (strpos($theme, 'Theme') !== false) {
             $path = $this->parseThemeName($theme) . $asset;

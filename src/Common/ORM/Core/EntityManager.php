@@ -9,11 +9,8 @@
  */
 namespace Common\ORM\Core;
 
-use Common\ORM\Core\Entity;
-use Common\ORM\Core\Connection;
 use Common\ORM\Core\Exception\InvalidConnectionException;
 use Common\ORM\Core\Exception\InvalidMetadataException;
-use Common\ORM\Core\Metadata;
 use Common\ORM\Core\Schema\Dumper;
 use Common\ORM\Core\Schema\Schema;
 use Common\ORM\Core\Validation\Validator;
@@ -37,6 +34,13 @@ class EntityManager
      * @var ServiceContainer
      */
     protected $container;
+
+    /**
+     * The list of initialized datasets
+     *
+     * @var array
+     */
+    protected $datasets = [];
 
     /**
      * Initializes the EntityManager.
@@ -88,17 +92,25 @@ class EntityManager
      *
      * @return DataSet The dataset.
      */
-    public function getDataSet($entity, $dataset = null)
+    public function getDataSet($entity, $name = null)
     {
-        $entity   = \classify($entity);
         $metadata = $this->getMetadata($entity);
-        $dataset  = $metadata->getDataSet($dataset);
+        $name     = $metadata->getDataSetName($name);
+        $dataset  = $metadata->getDataSet($name);
 
-        $class = '\\' . $dataset['class'];
-        $args  = $this->parseArgs($dataset['arguments']);
-        $class = new \ReflectionClass($class);
+        if (!array_key_exists($entity, $this->datasets)
+            || !array_key_exists($name, $this->datasets[$entity])
+            || empty($this->datasets[$entity][$name])
+        ) {
+            $entity = \classify($entity);
+            $class  = '\\' . $dataset['class'];
+            $args   = $this->parseArgs($dataset['arguments']);
+            $class  = new \ReflectionClass($class);
 
-        return $class->newInstanceArgs($args);
+            $this->datasets[$entity][$name] = $class->newInstanceArgs($args);
+        }
+
+        return $this->datasets[$entity][$name];
     }
 
     /**

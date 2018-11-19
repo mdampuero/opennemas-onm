@@ -1,8 +1,8 @@
 .form-horizontal .control-group {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 .form-horizontal input+.help-block, .form-horizontal select+.help-block, .form-horizontal textarea+.help-block, .form-horizontal .uneditable-input+.help-block, .form-horizontal .input-prepend+.help-block, .form-horizontal .input-append+.help-block {
-    margin-top:0px;
+    margin-top:0;
     margin-bottom:5px;
 }
 /* Sidenav for Docs
@@ -73,7 +73,7 @@
     padding-left:300px;
 }
 .settings > div:first-child {
-    padding-top:0px;
+    padding-top:0;
 }
 .settings > div {
     padding-top:20px;
@@ -100,7 +100,7 @@ input[type="checkbox"].ios-switch + div {
     background-color: rgba(0, 0, 0, 0.1);
     -webkit-transition-duration: .4s;
     -webkit-transition-property: background-color, box-shadow;
-    box-shadow: inset 0 0 0 0px rgba(0,0,0,0.4);
+    box-shadow: inset 0 0 0 0 rgba(0,0,0,0.4);
     display:inline-block;
 }
 
@@ -142,7 +142,7 @@ input[type="checkbox"].ios-switch + div > div {
     -moz-transition-timing-function: cubic-bezier(.54,1.85,.5,1);
     -moz-transition-duration: 0.4s;
     -moz-transition-property: transform, background-color;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3), 0px 0px 0 1px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.4);
     pointer-events: none;
     margin-top: 1px;
     margin-left: 1px;
@@ -153,7 +153,7 @@ input[type="checkbox"].ios-switch:checked + div > div {
     -webkit-transform: translate3d(20px, 0, 0);
     -moz-transform: translate3d(20px, 0, 0);
     background-color: #ffffff;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3), 0px 0px 0 1px rgba(8, 80, 172,1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(8, 80, 172,1);
 }
 
 /* Tiny Knob */
@@ -166,7 +166,7 @@ input[type="checkbox"].tinyswitch.ios-switch + div > div {
 input[type="checkbox"].tinyswitch.ios-switch:checked + div > div {
     -webkit-transform: translate3d(16px, 0, 0);
     -moz-transform: translate3d(16px, 0, 0);
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3), 0px 0px 0 1px rgba(8, 80, 172,1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(8, 80, 172,1);
 }
 
 /* Big Knob */
@@ -179,12 +179,12 @@ input[type="checkbox"].bigswitch.ios-switch + div > div {
 input[type="checkbox"].bigswitch.ios-switch:checked + div > div {
     -webkit-transform: translate3d(25px, 0, 0);
     -moz-transform: translate3d(16px, 0, 0);
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3), 0px 0px 0 1px rgba(8, 80, 172,1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(8, 80, 172,1);
 }
 
 /* Green Knob */
 input[type="checkbox"].green.ios-switch:checked + div > div {
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 162, 63,1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 162, 63,1);
 }
 
 .domain-list {
@@ -228,7 +228,7 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
     transition: border linear .2s, box-shadow linear .2s;
 }
 .domain-list .domain .side-tool {
-    width:0px;
+    width: 0;
     position:relative;
 }
 .domain-list .domain button {

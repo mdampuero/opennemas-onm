@@ -6,7 +6,7 @@
  * {gravatar email='example@example.com' image=true default_image='path/to/image.png' size=16}
  *
  */
-function smarty_function_gravatar($params)
+function smarty_function_gravatar($params, &$smarty)
 {
     if (!array_key_exists('email', $params)) {
         return '';

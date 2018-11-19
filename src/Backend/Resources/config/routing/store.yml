@@ -1,9 +1,9 @@
 admin_store_checkout:
     path: /store/checkout
-    defaults: { _controller  : BackendBundle:Store:checkout }
+    defaults: { _controller: BackendBundle:Store:checkout }
 
 admin_store_list:
     path: /store
-    defaults: { _controller  : BackendBundle:Store:list }
+    defaults: { _controller: BackendBundle:Store:list }
     options:
         expose: true

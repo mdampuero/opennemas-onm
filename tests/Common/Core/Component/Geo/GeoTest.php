@@ -10,12 +10,11 @@
 namespace Test\Common\Core\Component\Geo;
 
 use Common\Core\Component\Geo\Geo;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines test cases for Geo class.
  */
-class GeoTest extends KernelTestCase
+class GeoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

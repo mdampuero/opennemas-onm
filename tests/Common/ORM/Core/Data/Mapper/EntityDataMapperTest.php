@@ -5,7 +5,7 @@ namespace Tests\Common\ORM\Core\Data\Mapper;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Data\Mapper\EntityDataMapper;
 
-class EntityDataMapperTest extends \PHPUnit_Framework_TestCase
+class EntityDataMapperTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

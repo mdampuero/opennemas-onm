@@ -1,6 +1,6 @@
 backend_ws_getting_started_accept_terms:
     path:     /getting-started/terms
-    defaults: { _controller  : BackendWebServiceBundle:GettingStarted:acceptTerms }
+    defaults: { _controller: BackendWebServiceBundle:GettingStarted:acceptTerms }
     methods:  [ PUT ]
     options:
         expose: true

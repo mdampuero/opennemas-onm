@@ -11,7 +11,6 @@ namespace Frontend\Controller;
 
 use Common\Core\Controller\Controller;
 use Common\ORM\Core\Exception\EntityNotFoundException;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -31,9 +30,9 @@ class ArticlesController extends Controller
      */
     public function showAction(Request $request)
     {
-        $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
-        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $dirtyID      = $request->get('article_id', '');
+        $categoryName = $request->get('category_name', 'home');
+        $urlSlug      = $request->get('slug', '');
 
         $article = $this->get('content_url_matcher')
             ->matchContentUrl('article', $dirtyID, $urlSlug, $categoryName);
@@ -78,10 +77,11 @@ class ArticlesController extends Controller
         list($positions, $advertisements) =
             $this->getAds($category->pk_content_category);
 
-        $layout = $this->get('setting_repository')->get(
-            'frontpage_layout_' . $category->pk_content_category,
-            'default'
-        );
+        $layout = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+            ->get(
+                'frontpage_layout_' . $category->pk_content_category,
+                'default'
+            );
 
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('content', $article->id, $token);
@@ -122,6 +122,7 @@ class ArticlesController extends Controller
             'content'               => $article,
             'contentId'             => $article->id,
             'time'                  => '12345',
+            'o_content'             => $article,
             'o_token'               => $token,
             'x-cache-for'           => '+1 day',
             'x-cacheable'           => empty($token),
@@ -192,6 +193,7 @@ class ArticlesController extends Controller
             'relationed'            => $article->relatedContents,
             'suggested'             => $article->suggested,
             'videoInt'              => $article->videoInt,
+            'o_content'             => $article,
             'x-cache-for'           => '+1 day',
             'x-tags'                => 'ext-article,' . $article->id
         ]);

@@ -14,7 +14,7 @@ use Common\Core\Component\Security\Authentication\OAuthAuthenticationSuccessHand
 /**
  * Defines test cases for OAuthAuthenticationSuccessHandler class.
  */
-class OAuthAuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
+class OAuthAuthenticationSuccessHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

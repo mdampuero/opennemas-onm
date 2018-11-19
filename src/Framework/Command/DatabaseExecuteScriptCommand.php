@@ -24,25 +24,25 @@ class DatabaseExecuteScriptCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-        ->setName('database:execute-script')
-        ->setDescription('Handles the current database schema.')
-        ->addArgument(
-            'script',
-            InputArgument::REQUIRED,
-            'The SQL script to execute.'
-        )
-        ->addOption(
-            'instance',
-            'i',
-            InputOption::VALUE_REQUIRED,
-            'The instance name where execute the script'
-        )
-        ->addOption(
-            'database',
-            'd',
-            InputOption::VALUE_REQUIRED,
-            'The database name where execute the script'
-        );
+            ->setName('database:execute-script')
+            ->setDescription('Handles the current database schema.')
+            ->addArgument(
+                'script',
+                InputArgument::REQUIRED,
+                'The SQL script to execute.'
+            )
+            ->addOption(
+                'instance',
+                'i',
+                InputOption::VALUE_REQUIRED,
+                'The instance name where execute the script'
+            )
+            ->addOption(
+                'database',
+                'd',
+                InputOption::VALUE_REQUIRED,
+                'The database name where execute the script'
+            );
     }
 
     /**

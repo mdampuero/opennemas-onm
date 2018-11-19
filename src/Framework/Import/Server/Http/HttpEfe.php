@@ -43,21 +43,18 @@ class HttpEfe extends Http
      * Gets and returns the list of remote files.
      *
      * @return array The list of remote files.
+     *
+     * @throws \Exception
      */
     public function getRemoteFiles()
     {
         $content = $this->getContentFromUrl($this->params['url']);
 
         if (!$content) {
-            throw new \Exception(
-                sprintf(
-                    _(
-                        'Can\'t connect to server %s. Please check your'
-                        .' connection details.'
-                    ),
-                    $this->params['name']
-                )
-            );
+            throw new \Exception(sprintf(
+                _('Can\'t connect to server %s. Please check your connection details.'),
+                $this->params['name']
+            ));
         }
 
         $xml   = simplexml_load_string($content);

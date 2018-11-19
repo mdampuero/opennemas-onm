@@ -5,11 +5,12 @@
     .photo {
         display: inline-block;
     }
-        .photo img {
-            float: left;
-            width: 220px;
-            margin-right: 10px;
-        }
+
+    .photo img {
+        float: left;
+        width: 220px;
+        margin-right: 10px;
+    }
 </style>
 {/block}
 
@@ -31,7 +32,7 @@
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li>
-                        <a href="{url name=admin_news_agency}" class="btn btn-link" title="{t}Go back to list{/t}">
+                        <a href="{url name=backend_news_agency}" class="btn btn-link" title="{t}Go back to list{/t}">
                             <span class="fa fa-reply"></span>
                         </a>
                     </li>
@@ -39,7 +40,7 @@
                         <span class="h-seperate"></span>
                     </li>
                     <li>
-                        <a class="btn btn-primary" href="{url name=admin_news_agency_pickcategory source_id=$element->source_id id=$element->xml_file}" title="{t}Import{/t}" id="import_button">
+                        <a class="btn btn-primary" href="{url name=backend_news_agency_pickcategory source_id=$element->source_id id=$element->xml_file}" title="{t}Import{/t}" id="import_button">
                         <span class="fa fa-cloud-download"></span> <span class="hidden-xs">{t}Import{/t}</span>
                         </a>
                     </li>
@@ -57,7 +58,7 @@
                 <div class="col-md-3">
                         {foreach from=$element->photos item=photo}
                         <div class="photo" style="width:220px;display:block;">
-                            <img src="{url name=admin_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id index=$photo@index}" alt="{$photo->title}" class="thumbnail">
+                            <img src="{url name=backend_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id index=$photo@index}" alt="{$photo->title}" class="thumbnail">
                             <small>
                                 <p>{$photo->title}</p>
                             </small>
@@ -104,7 +105,7 @@
                         <h5>{t}Photos{/t}</h5>
                         {foreach from=$element->photos item=photo}
                         <div class="photo">
-                            <img src="{url name=admin_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id index=$photo@index}" alt="{$photo->title}" class="thumbnail" style="width:150px">
+                            <img src="{url name=backend_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id index=$photo@index}" alt="{$photo->title}" class="thumbnail" style="width:150px">
                             <div>
                                 <strong>{t}Description{/t}:</strong>
                                 <p>{$photo->title}</p>

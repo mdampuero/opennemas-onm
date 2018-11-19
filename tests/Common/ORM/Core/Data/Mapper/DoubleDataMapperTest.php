@@ -4,7 +4,7 @@ namespace Tests\Common\ORM\Core\Data\Mapper;
 
 use Common\ORM\Core\Data\Mapper\DoubleDataMapper;
 
-class DoubleDataMapperTest extends \PHPUnit_Framework_TestCase
+class DoubleDataMapperTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

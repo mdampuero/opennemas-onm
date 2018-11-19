@@ -14,7 +14,7 @@ use Common\External\ActOn\Component\Authentication\Authentication;
 /**
  * Defines test cases for Authentication class.
  */
-class AuthenticationTest extends \PHPUnit_Framework_TestCase
+class AuthenticationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -47,7 +47,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests authenticate when request to Act-On API fails.
      *
-     * @expectedException Common\External\ActOn\Component\Exception\ActOnException
+     * @expectedException \Common\External\ActOn\Component\Exception\ActOnException
      */
     public function testAuthenticateWhenRequestFails()
     {
@@ -60,7 +60,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests authenticate when response from Act-On is invalid.
      *
-     * @expectedException Common\External\ActOn\Component\Exception\ActOnException
+     * @expectedException \Common\External\ActOn\Component\Exception\ActOnException
      */
     public function testAuthenticateWhenResponseInvalid()
     {
@@ -156,7 +156,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests authenticate when request to Act-On API fails.
      *
-     * @expectedException Common\External\ActOn\Component\Exception\ActOnException
+     * @expectedException \Common\External\ActOn\Component\Exception\ActOnException
      */
     public function testRefreshTokenWhenRequestFails()
     {
@@ -169,7 +169,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests authenticate when response from Act-On is invalid.
      *
-     * @expectedException Common\External\ActOn\Component\Exception\ActOnException
+     * @expectedException \Common\External\ActOn\Component\Exception\ActOnException
      */
     public function testRefreshTokenWhenResponseInvalid()
     {

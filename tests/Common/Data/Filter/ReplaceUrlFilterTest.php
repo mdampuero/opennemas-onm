@@ -43,7 +43,7 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->redirector = $this->getMockBuilder('Redirector')
-            ->setMethods([ 'getTranslation' ])
+            ->setMethods([ 'getUrl' ])
             ->getMock();
 
         $this->ug = $this->getMockBuilder('UrlGeneratorHelper')
@@ -100,7 +100,7 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
             ])->getMock();
 
         $filter->expects($this->once())->method('getTranslation')
-            ->with('waldo', false)
+            ->with('waldo')
             ->willReturn([ [ 'pk_content' => 1, 'type' => 'bar'], 'qux' ]);
         $this->ug->expects($this->once())->method('setInstance')
             ->with($this->instance)->willReturn($this->ug);
@@ -129,7 +129,7 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
             ])->getMock();
 
         $filter->expects($this->once())->method('getTranslation')
-            ->with('waldo', true)
+            ->with('waldo')
             ->willReturn([ [ 'pk_content' => 1, 'type' => 'bar'], 'qux' ]);
         $this->ug->expects($this->once())->method('setInstance')
             ->with($this->instance)->willReturn($this->ug);
@@ -158,7 +158,7 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
             ])->getMock();
 
         $filter->expects($this->once())->method('getTranslation')
-            ->with('waldo', false)
+            ->with('waldo')
             ->willReturn([ [ 'pk_content' => 1, 'type' => 'bar' ], 'qux' ]);
         $this->repository->expects($this->once())->method('find')
             ->with('Bar', 1)->willReturn(null);
@@ -194,7 +194,7 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
             ])->getMock();
 
         $filter->expects($this->once())->method('getTranslation')
-            ->with('hendrerit', true)->willReturn([ null, null ]);
+            ->with('hendrerit')->willReturn([ null, null ]);
 
         $this->assertEquals($this->str, $filter->filter($this->str));
     }
@@ -218,10 +218,10 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
             ->with('wubble');
         $this->loader->expects($this->at(1))->method('loadInstanceFromInternalName')
             ->with('grault');
-        $this->redirector->expects($this->at(0))->method('getTranslation')
-            ->with(null, null, 'waldo')->willReturn(null);
-        $this->redirector->expects($this->at(1))->method('getTranslation')
-            ->with(null, null, 'waldo')->willReturn($translation);
+        $this->redirector->expects($this->at(0))->method('getUrl')
+            ->with('waldo')->willReturn(null);
+        $this->redirector->expects($this->at(1))->method('getUrl')
+            ->with('waldo')->willReturn($translation);
 
         $this->assertEquals(
             [ $translation, 'grault' ],
@@ -246,8 +246,8 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
             ->with('wubble');
         $this->loader->expects($this->at(1))->method('loadInstanceFromInternalName')
             ->with('grault');
-        $this->redirector->expects($this->exactly(2))->method('getTranslation')
-            ->with(null, null, 'waldo')->willReturn(null);
+        $this->redirector->expects($this->exactly(2))->method('getUrl')
+            ->with('waldo')->willReturn(null);
 
         $this->assertEquals(
             [ null, null ],
@@ -269,8 +269,8 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($filter, 'getTranslation');
         $method->setAccessible(true);
 
-        $this->redirector->expects($this->once())->method('getTranslation')
-            ->with('waldo', null, null)->willReturn($translation);
+        $this->redirector->expects($this->once())->method('getUrl')
+            ->with('waldo')->willReturn($translation);
 
         $this->assertEquals(
             [ $translation, 'qux' ],

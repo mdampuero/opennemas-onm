@@ -80,7 +80,7 @@
                     </hedline>
                     {if $article->author neq 'null'}
                     <rights>
-                      <rights.owner>{$article->author|htmlspecialchars}</rights.owner>
+                      <rights.owner>{$article->author->name}</rights.owner>
                       {if $smarty.const.SITE neq 'console'}
                       <rights.owner.photo>http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$authorPhoto->path_img}</rights.owner.photo>
                       {/if}

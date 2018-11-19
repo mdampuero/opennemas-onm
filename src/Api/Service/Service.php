@@ -9,25 +9,8 @@
  */
 namespace Api\Service;
 
-abstract class Service
+interface Service
 {
-    /**
-     * The service container.
-     *
-     * @var ServiceContainer
-     */
-    protected $container;
-
-    /**
-     * Initializes the Service.
-     *
-     * @param ServiceContainer $container The service container.
-     */
-    public function __construct($container)
-    {
-        $this->container = $container;
-    }
-
     /**
      * Creates a new item.
      *
@@ -35,16 +18,16 @@ abstract class Service
      *
      * @return mixed The new item.
      */
-    abstract public function createItem($data);
+    public function createItem($data);
 
     /**
      * Deletes an item.
      *
      * @param integer $id The item id.
      *
-     * @throws DeleteItemException If the item could not be deleted.
+     * @throws \Api\Exception\DeleteItemException If the item could not be deleted.
      */
-    abstract public function deleteItem($ids);
+    public function deleteItem($ids);
 
     /**
      * Deletes a list of item.
@@ -53,7 +36,7 @@ abstract class Service
      *
      * @return integer The number of successfully deleted item.
      */
-    abstract public function deleteList($item);
+    public function deleteList($item);
 
     /**
      * Returns an item.
@@ -62,9 +45,9 @@ abstract class Service
      *
      * @return mixed The item.
      *
-     * @throws GetItemException If the item was not found.
+     * @throws \Api\Exception\GetItemException If the item was not found.
      */
-    abstract public function getItem($id);
+    public function getItem($id);
 
     /**
      * Returns a list of items basing on a criteria.
@@ -73,9 +56,9 @@ abstract class Service
      *
      * @return array The list of items.
      *
-     * @throws GetListException If there was a problem to find items.
+     * @throws \Api\Exception\GetListException If there was a problem to find items.
      */
-    abstract public function getList($oql = '');
+    public function getList($oql = '');
 
     /**
      * Updates some item properties.
@@ -83,9 +66,9 @@ abstract class Service
      * @param integer $id   The item id.
      * @param array   $data The new item information.
      *
-     * @throws PatchItemException If the item could not be patched.
+     * @throws \Api\Exception\PatchItemException If the item could not be patched.
      */
-    abstract public function patchItem($id, $data);
+    public function patchItem($id, $data);
 
     /**
      * Updates some properties for a list of items.
@@ -95,7 +78,7 @@ abstract class Service
      *
      * @return integer The number of successfully updated items.
      */
-    abstract public function patchList($ids, $data);
+    public function patchList($ids, $data);
 
     /**
      * Updates an item.
@@ -103,7 +86,7 @@ abstract class Service
      * @param integer $id   The item id.
      * @param array   $data The item information.
      *
-     * @throws UpdateItemException If the item could not be updated.
+     * @throws \Api\Exception\UpdateItemException If the item could not be updated.
      */
-    abstract public function updateItem($id, $data);
+    public function updateItem($id, $data);
 }

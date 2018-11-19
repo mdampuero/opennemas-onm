@@ -10,12 +10,11 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\YoutubeUrlFilter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Defines tests cases for YoutubeUrlFilter class.
  */
-class YoutubeUrlFilterTest extends KernelTestCase
+class YoutubeUrlFilterTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

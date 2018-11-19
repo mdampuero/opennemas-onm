@@ -9,8 +9,7 @@
  */
 namespace Api\Controller\V1\Backend;
 
-use Common\Core\Annotation\Security;
-use Common\Core\Controller\Controller;
+use Api\Controller\V1\ApiController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Component\Validator\Validator;
@@ -18,176 +17,35 @@ use Common\Core\Component\Validator\Validator;
 /**
  * Lists and displays tags.
  */
-class TagController extends Controller
+class TagController extends ApiController
 {
     /**
-     * Returns the data to create a new tag.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_CREATE')")
+     * {@inheritdoc}
      */
-    public function createAction()
-    {
-    }
+    protected $extension = 'es.openhost.module.tags';
 
     /**
-     * Deletes an tag.
-     *
-     * @param integer $id The tag id.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_DELETE')")
+     * {@inheritdoc}
      */
-    public function deleteAction($id)
-    {
-        $msg = $this->get('core.messenger');
-
-        $this->get('api.service.tag')->deleteItem($id);
-        $msg->add(_('Item deleted successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
+    protected $getItemRoute = 'api_v1_backend_tag_show';
 
     /**
-     * Deletes the selected tags.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_DELETE')")
+     * {@inheritdoc}
      */
-    public function deleteSelectedAction(Request $request)
-    {
-        $ids     = $request->request->get('ids', []);
-        $msg     = $this->get('core.messenger');
-        $deleted = $this->get('api.service.tag')->deleteList($ids);
-
-        if ($deleted > 0) {
-            $msg->add(
-                sprintf(_('%s items deleted successfully'), $deleted),
-                'success'
-            );
-        }
-
-        if ($deleted !== count($ids)) {
-            $msg->add(sprintf(
-                _('%s items could not be deleted successfully'),
-                count($ids) - $deleted
-            ), 'error');
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
+    protected $permissions = [
+        'create' => 'TAG_CREATE',
+        'delete' => 'TAG_DELETE',
+        'list'   => 'TAG_ADMIN',
+        'patch'  => 'TAG_UPDATE',
+        'save'   => 'TAG_CREATE',
+        'show'   => 'TAG_UPDATE',
+        'update' => 'TAG_UPDATE',
+    ];
 
     /**
-     * Returns a list of contents in JSON format.
-     *
-     * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
-     * @return JsonResponse              The response object.
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
+     * {@inheritdoc}
      */
-    public function listAction(Request $request)
-    {
-        $ts  = $this->get('api.service.tag');
-        $oql = $request->query->get('oql', '');
-
-        $response = $ts->getList($ts->replaceSearchBySlug($oql));
-
-        return new JsonResponse([
-            'items' => $ts->responsify($response['items']),
-            'total' => $response['total'],
-            'extra' => $this->getExtraData($response['items'])
-        ]);
-    }
-
-    /**
-     * Saves a new tag.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_CREATE')")
-     */
-    public function saveAction(Request $request)
-    {
-        $msg = $this->get('core.messenger');
-        $tag = $request->request->all();
-
-        if (array_key_exists('slug', $tag)) {
-            $msg->add(_('Wrong parameter slug'), 'error');
-            return new JsonResponse($msg->getMessages(), $msg->getCode());
-        }
-
-        $ts          = $this->get('api.service.tag');
-        $tag['slug'] = $ts->createSearchableWord($tag['name']);
-
-        $tag = $ts->createItem($tag);
-        $msg->add(_('Item saved successfully'), 'success', 201);
-
-        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
-        $response->headers->set(
-            'Location',
-            $this->generateUrl(
-                'api_v1_backend_tags_list',
-                [ 'id' => $tag->id ]
-            )
-        );
-
-        return $response;
-    }
-
-    /**
-     * Returns an tag.
-     *
-     * @param integer $id the tag id.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
-     */
-    public function showAction($id)
-    {
-        $ss   = $this->get('api.service.tag');
-        $item = $ss->getItem($id);
-
-        return new JsonResponse([
-            'item'  => $ss->responsify($item)
-        ]);
-    }
-
-    /**
-     * Updates the tag information given its id and the new information.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $msg = $this->get('core.messenger');
-        $tag = $request->request->all();
-
-        if (array_key_exists('slug', $tag)) {
-            $msg->add(_('Wrong parameter slug'), 'error');
-            return new JsonResponse($msg->getMessages(), $msg->getCode());
-        }
-
-        $ts          = $this->get('api.service.tag');
-        $tag['slug'] = $ts->createSearchableWord($tag['name']);
-        $ts->updateItem($id, $tag);
-
-        $msg->add(_('Item saved successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
+    protected $service = 'api.service.tag';
 
     /**
      * Get suggested word.
@@ -217,22 +75,17 @@ class TagController extends Controller
     /**
      * Get suggested tags for some word.
      *
-     * @param Request $request The request object.
+     * @param string $languageId The tag language.
+     * @param string $tag        The partial tag language.
      *
      * @return JsonResponse The response object.
      */
-    public function suggesterAction(Request $request, $languageId, $tag)
+    public function suggesterAction($languageId, $tag)
     {
-        $ts     = $this->get('api.service.tag');
-        $tagAux = $ts->createSearchableWord($tag);
+        $ts  = $this->get('api.service.tag');
+        $oql = 'language_id = "%s" and name ~ "%s%%" limit 25';
 
-        $msg = $this->get('core.messenger');
-        if (empty($tagAux)) {
-            $msg->add(_('Invalid tag'), 'error');
-            return new JsonResponse($msg->getMessages(), $msg->getCode());
-        }
-
-        $response = $ts->getList('language_id = "' . $languageId . '" and slug ~ "' . $tagAux . '%" limit 25');
+        $response = $ts->getList(sprintf($oql, $languageId, $tag));
 
         return new JsonResponse([
             'items' => $ts->responsify($response['items'])
@@ -262,11 +115,11 @@ class TagController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
      */
     public function showConfAction()
     {
+        $this->checkSecurity(null, 'TAG_ADMIN');
+
         return new JsonResponse([
             'blacklist_tag' => $this->get('core.validator')
                 ->getConfig(Validator::BLACKLIST_RULESET_TAGS)
@@ -279,11 +132,11 @@ class TagController extends Controller
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
      */
     public function updateConfAction(Request $request)
     {
+        $this->checkSecurity(null, 'TAG_ADMIN');
+
         $blacklistConf = $request->request->all();
 
         if (!is_array($blacklistConf) ||
@@ -311,45 +164,28 @@ class TagController extends Controller
     }
 
     /**
-     * Loads extra data related to the given contents.
-     *
-     * @param boolean $all Whether to use 'All' or 'Select...' option.
-     *
-     * @return array Array of extra data.
+     * {@inheritdoc}
      */
-    private function getExtraData($tagList)
+    protected function getExtraData($items = [])
     {
+        $ls      = $this->get('core.locale');
+        $locales = [ $ls->getLocale('frontend') => $ls->getLocaleName('frontend') ];
+
         $multilanguage = in_array(
             'es.openhost.module.multilanguage',
             $this->get('core.instance')->activated_modules
         );
-        $ls            = $this->get('core.locale');
-        $locale        = $ls->getLocale('frontend');
-        $locales       = $multilanguage ?
-            $this->getLanguages($ls->getAvailableLocales('frontend')) :
-            [['key' => $locale, 'value' => $ls->getSupportedLocales('frontend')[$locale]]];
+
+        if ($multilanguage) {
+            $locales = $ls->getAvailableLocales('frontend');
+        }
 
         $extraData = [
-            'numberOfContents' => $this->get('api.service.tag')->getNumContentsRel($tagList),
-            'locales'          => $locales
+            'stats'   => $this->get('api.service.tag')->getNumContentsRel($items),
+            'locale'  => $ls->getLocale('frontend'),
+            'locales' => $locales
         ];
 
         return $extraData;
-    }
-
-    /**
-     * Transform the language object in a array
-     *
-     * @param object $languages Transform the object languages in a array
-     *
-     * @return array Array with the languages.
-     */
-    private function getLanguages($languages)
-    {
-        $arrayLanguages = [];
-        foreach ($languages as $key => $value) {
-            $arrayLanguages[] = ['key' => $key, 'value' => $value];
-        }
-        return $arrayLanguages;
     }
 }

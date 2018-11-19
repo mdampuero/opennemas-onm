@@ -13,16 +13,20 @@ use Common\ORM\Entity\ContentPosition;
 
 class ContentPositionRepository extends BaseRepository
 {
-
+    /**
+     * Number of max elements allowd in a frontpage, excluding advertisements
+     *
+     * @var int
+     **/
     const MAX_NUMBER_OF_CONTENTS = 100;
 
-
     /**
-     * Returns an array of categories grouped by entity id.
+     * Returns a list of content positions for a given category and frontpage id
      *
-     * @param array $ids The entity ids.
+     * @param int $categoryId the category id to get contents from
+     * @param int $frontpageVersionId the category id to get contents from
      *
-     * @return array The array of categories.
+     * @return array
      */
     public function getContentPositions($categoryId, $frontpageId)
     {

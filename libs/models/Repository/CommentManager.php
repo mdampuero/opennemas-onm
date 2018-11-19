@@ -11,8 +11,6 @@
 
 namespace Repository;
 
-use Onm\Cache\CacheInterface;
-
 /**
  * An EntityRepository serves as a repository for entities with generic as well
  * as business specific methods for retrieving entities.
@@ -25,20 +23,6 @@ use Onm\Cache\CacheInterface;
  */
 class CommentManager extends BaseManager
 {
-    /**
-     * Initializes the entity manager.
-     *
-     * @param Connection     $dbConn      The database connection.
-     * @param CacheInterface $cache       The cache instance.
-     * @param string         $cachePrefix The cache prefix.
-     */
-    public function __construct($dbConn, CacheInterface $cache, $cachePrefix)
-    {
-        $this->dbConn      = $dbConn;
-        $this->cache       = $cache;
-        $this->cachePrefix = $cachePrefix;
-    }
-
     /**
      * Counts comments given a criteria.
      *
@@ -257,12 +241,10 @@ class CommentManager extends BaseManager
             return false;
         }
 
-        return $this->countBy(
-            [
-                'content_id' => [['value' => $contentID]],
-                'status' => [['value' => \Comment::STATUS_ACCEPTED]]
-            ]
-        );
+        return $this->countBy([
+            'content_id' => [['value' => $contentID]],
+            'status' => [['value' => \Comment::STATUS_ACCEPTED]]
+        ]);
     }
 
     /**
@@ -292,7 +274,9 @@ class CommentManager extends BaseManager
     /**
      * Deletes comments given a SQL filter
      *
-     * @return void
+     * @param array $filter the filter to use to remove comments
+     *
+     * @return boolean
      */
     public function deleteFromFilter($filter)
     {
@@ -302,6 +286,8 @@ class CommentManager extends BaseManager
             return true;
         } catch (\Exception $e) {
             error_log('Error while deleting comments from filter:' . $e->getMessage());
+
+            return false;
         }
     }
 }

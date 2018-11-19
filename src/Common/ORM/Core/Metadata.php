@@ -71,10 +71,7 @@ class Metadata extends DataObject implements Validable
             throw new InvalidDataSetException($this->name);
         }
 
-        if (empty($dataset)) {
-            $dataset = array_keys($this->datasets);
-            $dataset = array_shift($dataset);
-        }
+        $dataset = $this->getDataSetName($dataset);
 
         if (array_key_exists($dataset, $this->datasets)) {
             return $this->datasets[$dataset];
@@ -102,11 +99,28 @@ class Metadata extends DataObject implements Validable
     }
 
     /**
+     * Returns the dataset name basing on the parameters.
+     *
+     * @param string $dataset The dataset name.
+     *
+     * @return string The valid dataset name.
+     */
+    public function getDataSetName($dataset = null)
+    {
+        if (empty($dataset) && $this->datasets) {
+            $dataset = array_keys($this->datasets);
+            $dataset = array_shift($dataset);
+        }
+
+        return $dataset;
+    }
+
+    /**
      * Returns the value name for the data set.
      *
      * @return string The value name.
      */
-    public function getDataSetvalue()
+    public function getDataSetValue()
     {
         if (!array_key_exists('database', $this->mapping)
             || !array_key_exists('dataset', $this->mapping['database'])

@@ -10,35 +10,33 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
-use Common\Core\Controller\Controller;
 
-class SubscriberController extends Controller
+class SubscriberController extends BackendController
 {
     /**
-     * Displays the form to create a subscriber.
+     * The extension name required by this controller.
      *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('CONTENT_SUBSCRIPTIONS')
-     *     and hasPermission('SUBSCRIBER_CREATE')")
+     * @var string
      */
-    public function createAction()
-    {
-        return $this->render('subscriber/item.tpl');
-    }
+    protected $extension = 'CONTENT_SUBSCRIPTIONS';
 
     /**
-     * Displays the list of subscribers.
+     * The list of permissions for every action.
      *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('CONTENT_SUBSCRIPTIONS')
-     *     and hasPermission('SUBSCRIBER_LIST')")
+     * @var type
      */
-    public function listAction()
-    {
-        return $this->render('subscriber/list.tpl');
-    }
+    protected $permissions = [
+        'create' => 'SUBSCRIBER_CREATE',
+        'list'   => 'SUBSCRIBER_ADMIN',
+        'show'   => 'SUBSCRIBER_UPDATE'
+    ];
+
+    /**
+     * The resource name.
+     *
+     * @var string
+     */
+    protected $resource = 'subscriber';
 
     /**
      * Displays the list of settings for subscribers.
@@ -51,18 +49,5 @@ class SubscriberController extends Controller
     public function settingsAction()
     {
         return $this->render('subscriber/settings.tpl');
-    }
-
-    /**
-     * Displays the form to edit a subscriber.
-     *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('CONTENT_SUBSCRIPTIONS')
-     *     and hasPermission('SUBSCRIBER_UPDATE')")
-     */
-    public function showAction($id)
-    {
-        return $this->render('subscriber/item.tpl', [ 'id' => $id ]);
     }
 }

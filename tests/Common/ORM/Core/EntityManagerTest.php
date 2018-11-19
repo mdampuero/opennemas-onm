@@ -15,15 +15,12 @@ use Common\ORM\Entity\Client;
 use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\EntityManager;
-use Common\ORM\Core\Metadata;
-use Common\ORM\Entity\Payment;
 use Common\ORM\FreshBooks\FreshBooksManager;
-use Common\ORM\Core\Exception\InvalidPersisterException;
 
 /**
  * Defines test cases for EntityManager class.
  */
-class EntityManagerTest extends \PHPUnit_Framework_TestCase
+class EntityManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -86,8 +83,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
             ->setMethods([ '__construct' ])
             ->getMock();
 
-        $this->dataset = $this->getMockBuilder('MockDataset')
-            ->setMockClassName('Dataset')
+        $this->dataset = $this->getMockBuilder('Dataset')
             ->disableOriginalConstructor()
             ->setMethods([ '__construct' ])
             ->getMock();
@@ -212,6 +208,8 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetDataSetInvalidName()
     {
         $this->em->getDataSet('Entity', 'foo');
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -230,7 +228,13 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetDataSetValid()
     {
         $this->assertNotEmpty($this->em->getDataSet('Entity'));
-        $this->assertNotEmpty($this->em->getDataSet('Entity', 'default'));
+
+        $ds1 = $this->em->getDataSet('Entity', null);
+        $ds2 = $this->em->getDataSet('Entity', 'default');
+
+        $this->assertNotEmpty($ds1);
+        $this->assertNotEmpty($ds2);
+        $this->assertEquals($ds1, $ds2);
     }
 
     /**
@@ -343,6 +347,8 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $property->setValue($entity, [ true ]);
 
         $this->em->persist($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -353,6 +359,8 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $entity = new Entity([ 'id' => 1 ]);
 
         $this->em->persist($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**
@@ -363,6 +371,8 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         $entity = new Entity([ 'id' => 1 ]);
 
         $this->em->remove($entity);
+
+        $this->addToAssertionCount(1);
     }
 
     /**

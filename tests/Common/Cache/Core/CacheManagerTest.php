@@ -9,14 +9,12 @@
  */
 namespace Tests\Common\ORM\Core;
 
-use Common\Cache\Redis\Redis;
 use Common\Cache\Core\CacheManager;
-use Common\Cache\Core\Exception\InvalidConnectionException;
 
 /**
  * Defines test cases for CacheManager class.
  */
-class CacheManagerTest extends \PHPUnit_Framework_TestCase
+class CacheManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.

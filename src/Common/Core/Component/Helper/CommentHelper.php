@@ -12,21 +12,23 @@ namespace Common\Core\Component\Helper;
 class CommentHelper
 {
     /**
-     * The settings manager.
+     * The dataset for settings.
      *
-     * @var SettingsManager
+     * @var DataSet
      */
-    protected $sm;
+    protected $ds;
 
     /**
      * Initializes the AdvertisementHelper.
      *
-     * @param ServiceContainer $container The service container.
+     * @param EntityManager $em             The entity manager.
+     * @param array         $defaultConfigs The list of configurations by
+     *                                      default.
      */
-    public function __construct($sm, $defaultConfigs)
+    public function __construct($em, $defaultConfigs)
     {
-        $this->sm             = $sm;
-        $this->configs        = $sm->get('comments_config', []);
+        $this->ds             = $em->getDataSet('Settings', 'instance');
+        $this->configs        = $this->ds->get('comments_config', []);
         $this->defaultConfigs = $defaultConfigs;
     }
 
@@ -54,7 +56,7 @@ class CommentHelper
      * Returns the complete configs merged with the default
      *
      * @return array the list of configs
-     **/
+     */
     public function getConfigs()
     {
         if (!is_array($this->configs)) {
@@ -68,7 +70,7 @@ class CommentHelper
      * Returns a list of configurations for the comments module
      *
      * @return array the list of default configurations
-     **/
+     */
     public function getDefaultConfigs()
     {
         return $this->defaultConfigs;
@@ -78,7 +80,7 @@ class CommentHelper
      * Whether comments must be enabled by default in comments or not
      *
      * @return boolean true if comments are enabled by default on contents
-     **/
+     */
     public function enableCommentsByDefault()
     {
         return $this->getConfigs()['with_comments'] == 1;

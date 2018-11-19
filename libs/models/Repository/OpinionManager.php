@@ -11,9 +11,6 @@
 
 namespace Repository;
 
-use Onm\Cache\CacheInterface;
-use Onm\Database\DbalWrapper;
-
 /**
  * An EntityRepository serves as a repository for entities with generic as well
  * as business specific methods for retrieving entities.
@@ -139,9 +136,7 @@ class OpinionManager extends EntityManager
                                 ['value' => '1']
                             ]
                         ],
-                        ['username' => 'asc'],
-                        1,
-                        0
+                        ['username' => 'asc']
                     );
 
                     if (!empty($bloggers)) {

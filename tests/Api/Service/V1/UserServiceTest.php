@@ -16,7 +16,7 @@ use Common\ORM\Core\Exception\EntityNotFoundException;
 /**
  * Defines test cases for UserService class.
  */
-class UserServiceTest extends \PHPUnit_Framework_TestCase
+class UserServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -29,6 +29,10 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->converter = $this->getMockBuilder('Converter' . uniqid())
             ->setMethods([ 'objectify', 'responsify' ])
+            ->getMock();
+
+        $this->dispatcher = $this->getMockBuilder('EventDispatcher')
+            ->setMethods([ 'dispatch' ])
             ->getMock();
 
         $this->em = $this->getMockBuilder('EntityManager' . uniqid())
@@ -46,7 +50,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
-            ->setMethods([ 'getIdKeys' ])
+            ->setMethods([ 'getId', 'getIdKeys' ])
             ->getMock();
 
         $this->logger = $this->getMockBuilder('Logger' . uniqid())
@@ -54,7 +58,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'findBy', 'findOneBy'])
+            ->setMethods([ 'countBy', 'findBy', 'findOneBy' ])
             ->getMock();
 
         $this->user = new Entity([
@@ -86,6 +90,9 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.dispatcher':
+                return $this->dispatcher;
+
             case 'core.security.encoder.password':
                 return $this->encoder;
 
@@ -104,9 +111,35 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests createItem when no error.
+     * Tests createItem when password is not provided and no error.
      */
-    public function testCreateItem()
+    public function testCreateItemWhenPasswordNotProvided()
+    {
+        $data = [
+            'email'    => 'flob@garply.com',
+            'name'     => 'flob',
+            'password' => null,
+            'type'     => 1
+        ];
+
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->with('email = "flob@garply.com"')
+            ->will($this->throwException(new EntityNotFoundException('User')));
+        $this->converter->expects($this->any())->method('objectify')
+            ->with(array_diff_key($data, [ 'password' => null ]))
+            ->willReturn(array_diff_key($data, [ 'password' => null ]));
+        $this->em->expects($this->once())->method('persist');
+
+        $item = $this->service->createItem($data);
+
+        $this->assertEquals('flob', $item->name);
+        $this->assertEquals(null, $item->password);
+    }
+
+    /**
+     * Tests createItem when password is provided and no error.
+     */
+    public function testCreateItemWhenPasswordProvided()
     {
         $data = [
             'email'    => 'flob@garply.com',
@@ -127,6 +160,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $item = $this->service->createItem($data);
 
         $this->assertEquals('flob', $item->name);
+        $this->assertEquals('quux', $item->password);
     }
 
     /**
@@ -153,7 +187,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests createItem when no email provided.
      *
-     * @expectedException Api\Exception\CreateExistingItemException
+     * @expectedException \Api\Exception\CreateExistingItemException
      */
     public function testCreateItemWhenEmailInUseForSubscriberAndUser()
     {
@@ -174,7 +208,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests createItem when no email provided.
      *
-     * @expectedException Api\Exception\CreateItemException
+     * @expectedException \Api\Exception\CreateItemException
      */
     public function testCreateItemWhenNoEmail()
     {
@@ -201,7 +235,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteItem when the item to delete is the current user.
      *
-     * @expectedException Api\Exception\DeleteItemException
+     * @expectedException \Api\Exception\DeleteItemException
      */
     public function testDeleteItemWhenEqualsToCurrentUser()
     {
@@ -226,7 +260,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteItem when no item found.
      *
-     * @expectedException Api\Exception\DeleteItemException
+     * @expectedException \Api\Exception\DeleteItemException
      */
     public function testDeleteItemWhenNoEntity()
     {
@@ -240,7 +274,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteItem when an error happens while removing object.
      *
-     * @expectedException Api\Exception\DeleteItemException
+     * @expectedException \Api\Exception\DeleteItemException
      */
     public function testDeleteItemWhenErrorWhileRemoving()
     {
@@ -324,7 +358,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteList when invalid list of ids provided.
      *
-     * @expectedException Api\Exception\DeleteListException
+     * @expectedException \Api\Exception\DeleteListException
      */
     public function testDeleteListWhenInvalidIds()
     {
@@ -359,7 +393,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests deleteList when an error happens while searching.
      *
-     * @expectedException Api\Exception\DeleteListException
+     * @expectedException \Api\Exception\DeleteListException
      */
     public function testDeleteListWhenErrorWhileSearching()
     {
@@ -377,8 +411,6 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $this->service->deleteList([ 1, 2 ]);
     }
 
-
-
     /**
      * Tests getItem when no error.
      */
@@ -395,7 +427,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests getItem when the item has no user property to true.
      *
-     * @expectedException Api\Exception\GetItemException
+     * @expectedException \Api\Exception\GetItemException
      */
     public function testGetItemWhenErrorWhenNoUser()
     {
@@ -477,28 +509,29 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests updateItem when no error.
+     * Tests updateItem when password is not provided and no error.
      */
-    public function testUpdateItem()
+    public function testUpdateItemWhenPasswordNotProvided()
     {
         $data = [
             'email'    => 'garply@glork.glorp',
             'name'     => 'mumble',
-            'password' => 'quux',
+            'password' => '',
             'type'     => 1
         ];
+
         $item = new Entity([
-            'name'  => 'foobar',
-            'email' => 'garply@glork.glorp',
-            'type'  => 1
+            'name'     => 'foobar',
+            'email'    => 'garply@glork.glorp',
+            'password' => 'wibblequxbar',
+            'type'     => 1
         ]);
 
         $this->repository->expects($this->once())->method('findBy')
             ->willReturn([]);
-        $this->encoder->expects($this->once())->method('encodePassword')
-            ->with('quux')->willReturn('quux');
-        $this->converter->expects($this->once())->method('objectify')
-            ->with($data)->willReturn($data);
+        $this->converter->expects($this->any())->method('objectify')
+            ->with(array_diff_key($data, [ 'password' => null ]))
+            ->willReturn(array_diff_key($data, [ 'password' => null ]));
 
         $this->repository->expects($this->once())->method('findOneBy')
             ->with('id = 1 and type != 1')->willReturn($item);
@@ -508,12 +541,54 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
         $this->service->updateItem(1, $data);
 
         $this->assertEquals('mumble', $item->name);
+        $this->assertEquals('wibblequxbar', $item->password);
+    }
+
+    /**
+     * Tests updateItem when password is provided and no error.
+     */
+    public function testUpdateItemWhenPasswordProvided()
+    {
+        $data = [
+            'email'    => 'garply@glork.glorp',
+            'name'     => 'mumble',
+            'password' => 'quux',
+            'type'     => 1
+        ];
+
+        $item = new Entity([
+            'name'     => 'foobar',
+            'email'    => 'garply@glork.glorp',
+            'password' => 'wibblequxbar',
+            'type'     => 1
+        ]);
+
+        $this->repository->expects($this->once())->method('findBy')
+            ->willReturn([]);
+        $this->encoder->expects($this->once())->method('encodePassword')
+            ->with('quux')->willReturn('flobwubblexyzzy');
+        $this->converter->expects($this->once())->method('objectify')
+            ->with(array_merge($data, [
+                'password' => 'flobwubblexyzzy'
+            ]))->willReturn(array_merge($data, [
+                'password' => 'flobwubblexyzzy'
+            ]));
+
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->with('id = 1 and type != 1')->willReturn($item);
+        $this->em->expects($this->once())->method('persist')
+            ->with($item);
+
+        $this->service->updateItem(1, $data);
+
+        $this->assertEquals('mumble', $item->name);
+        $this->assertEquals('flobwubblexyzzy', $item->password);
     }
 
     /**
      * Tests updateItem when no email provided.
      *
-     * @expectedException Api\Exception\UpdateItemException
+     * @expectedException \Api\Exception\UpdateItemException
      */
     public function testUpdateItemWhenEmailInUseForAnotherUser()
     {
@@ -566,7 +641,7 @@ class UserServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests createItem when no email provided.
      *
-     * @expectedException Api\Exception\UpdateItemException
+     * @expectedException \Api\Exception\UpdateItemException
      */
     public function testUpdateItemWhenNoEmail()
     {

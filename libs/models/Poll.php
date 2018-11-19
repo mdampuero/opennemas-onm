@@ -1,20 +1,11 @@
 <?php
 /**
- * Defines the Poll class
+ * This file is part of the Onm package.
  *
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package    Model
- */
-
-/**
- * Handles all CRUD operations over Polls.
- *
- * @package    Model
  */
 class Poll extends Content
 {
@@ -79,7 +70,7 @@ class Poll extends Content
         switch ($name) {
             case 'uri':
                 if (empty($this->category_name)) {
-                    $this->category_name = $this->loadCategoryName($this->pk_content);
+                    $this->category_name = $this->loadCategoryName();
                 }
 
                 $uri = Uri::generate('poll', [
@@ -94,6 +85,32 @@ class Poll extends Content
             default:
                 return parent::__get($name);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function csvSerialize()
+    {
+        $data   = parent::csvSerialize();
+        $ignore = [ 'pk_item', 'metadata' ];
+
+        $data['total_votes'] = $this->total_votes;
+
+        $i = 0;
+        foreach ($this->items as $item) {
+            foreach ($item as $key => $value) {
+                if (in_array($key, $ignore)) {
+                    continue;
+                }
+
+                $data[$key . $i] = $value;
+            }
+
+            $i++;
+        }
+
+        return $data;
     }
 
     /**
@@ -135,8 +152,6 @@ class Poll extends Content
      * Overloads the object properties with an array of the new ones
      *
      * @param array $properties the list of properties to load
-     *
-     * @return void
      */
     public function load($properties)
     {
@@ -175,7 +190,6 @@ class Poll extends Content
                 'pk_poll'       => (int) $this->id,
                 'pretitle'      => $data['pretitle'],
                 'total_votes'   => 0,
-                'visualization' => $data['visualization'],
             ]);
 
             // Save poll items
@@ -220,7 +234,6 @@ class Poll extends Content
             // Update the poll info
             $conn->update('polls', [
                 'pretitle'      => $data['pretitle'],
-                'visualization' => $data['visualization'],
                 'total_votes'   => $total,
             ], [ 'pk_poll' => $data['id'] ]);
 

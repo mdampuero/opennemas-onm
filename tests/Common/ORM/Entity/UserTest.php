@@ -11,7 +11,7 @@ namespace tests\Common\ORM\Core;
 
 use Common\ORM\Entity\User;
 
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -19,12 +19,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->user = new User([
-            'activated'     => true,
-            'email'         => 'waldo@baz.com',
-            'fk_user_group' => [],
-            'password'      => 'glorp',
-            'token'         => 'baz',
-            'username'      => 'waldo',
+            'activated' => true,
+            'email'     => 'waldo@baz.com',
+            'password'  => 'glorp',
+            'token'     => 'baz',
+            'username'  => 'waldo',
         ]);
     }
 
@@ -149,7 +148,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsEqualTo()
     {
-        $user = new User([ 'email' => 'garply@xyzzy.gar', 'fk_user_group' => [] ]);
+        $user = new User([ 'email' => 'garply@xyzzy.gar' ]);
 
         $this->assertFalse($this->user->isEqualTo($user));
 

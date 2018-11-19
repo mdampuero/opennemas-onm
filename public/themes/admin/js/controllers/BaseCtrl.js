@@ -172,8 +172,7 @@
 
             var getType = {};
 
-            if (callback &&
-                getType.toString.call(callback) === '[object Function]') {
+            if (callback && getType.toString.call(callback) === '[object Function]') {
               return callback(response);
             }
             return null;
@@ -270,33 +269,23 @@
          * @return {Array} list of suggested tags from the fields
          */
         $scope.getSuggestedTags = function(locale, tagText, currentTags) {
-          var route = {
-            name: 'api_v1_backend_tags_suggester',
-            params: {
-              tag: tagText,
-              languageId: locale
-            }
-          };
+          var ids = currentTags.filter(function(e) {
+            return !angular.isObject(e);
+          });
 
-          return http.get(route).then(
-            function(response) {
-              if (!response.data.items || !Array.isArray(response.data.items)) {
-                return [];
-              }
+          var oql = 'name ~ "' + tagText + '%" and language_id = "' + locale +
+            '" order by name asc limit 25';
 
-              /*
-               *  We check if from the suggested tags exist someones in the
-               * current tag list
-               */
-              var tagsuggestedList = Array.isArray(currentTags) && currentTags.length > 0 ?
-                response.data.items.filter(function(tagElement) {
-                  return currentTags.indexOf(tagElement.id) === -1;
-                }) :
-                response.data.items;
+          if (ids.length > 0) {
+            oql = 'id !in [' + ids.join(', ') + '] and ' + oql;
+          }
 
-              return tagsuggestedList;
-            }, $scope.errorCb
-          );
+          return http.get({
+            name: 'api_v1_backend_tags_list',
+            params: { oql: oql }
+          }).then(function(response) {
+            return response.data.items;
+          }, $scope.errorCb);
         };
 
         /**
@@ -475,8 +464,7 @@
          */
         $scope.watchTagIds = function(fields) {
           $scope.$watch(fields, function(nv, ov) {
-            if ($scope.tag_ids && $scope.tag_ids.length > 0 ||
-                !nv || nv === ov) {
+            if ($scope.tag_ids && $scope.tag_ids.length > 0 || !nv || nv === ov) {
               return;
             }
 
@@ -513,9 +501,7 @@
               container: 'photoEditor',
               image: $window.instanceMedia + '/images' + imgData.path_img,
               closeCallBack: modal.close,
-            },
-            photoEditorTranslations
-            );
+            }, photoEditorTranslations);
 
             photoEditor.init();
           });

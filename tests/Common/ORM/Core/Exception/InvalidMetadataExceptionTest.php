@@ -14,7 +14,7 @@ use Common\ORM\Core\Exception\InvalidMetadataException;
 /**
  * Defines test cases for InvalidMetadataException class.
  */
-class InvalidMetadataExceptionTest extends \PHPUnit_Framework_TestCase
+class InvalidMetadataExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests constructor for InvalidMetadataException.

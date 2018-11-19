@@ -72,518 +72,518 @@ class Privilege
                 'pk_privilege' => 1,
                 'name'         => 'CATEGORY_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'CATEGORY',
+                'module'       => 'CATEGORY_MANAGER',
                 'enabled'      => 1
             ],
             2 => [
                 'pk_privilege' => 2,
                 'name'         => 'CATEGORY_AVAILABLE',
                 'description'  => _('Activate/deactivate'),
-                'module'       => 'CATEGORY',
+                'module'       => 'CATEGORY_MANAGER',
                 'enabled'      => 1
             ],
             3 => [
                 'pk_privilege' => 3,
                 'name'         => 'CATEGORY_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'CATEGORY',
+                'module'       => 'CATEGORY_MANAGER',
                 'enabled'      => 1
             ],
             4 => [
                 'pk_privilege' => 4,
                 'name'         => 'CATEGORY_DELETE',
                 'description'  => _('Remove'),
-                'module'       => 'CATEGORY',
+                'module'       => 'CATEGORY_MANAGER',
                 'enabled'      => 1
             ],
             5 => [
                 'pk_privilege' => 5,
                 'name'         => 'CATEGORY_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'CATEGORY',
+                'module'       => 'CATEGORY_MANAGER',
                 'enabled'      => 1
             ],
             6 => [
                 'pk_privilege' => 6,
                 'name'         => 'ARTICLE_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'ARTICLE',
+                'module'       => 'ARTICLE_MANAGER',
                 'enabled'      => 1
             ],
             7 => [
                 'pk_privilege' => 7,
                 'name'         => 'ARTICLE_FRONTPAGE',
                 'description'  => _('Manage frontpages'),
-                'module'       => 'ARTICLE',
+                'module'       => 'ARTICLE_MANAGER',
                 'enabled'      => 1
             ],
             8 => [
                 'pk_privilege' => 8,
                 'name'         => 'ARTICLE_PENDINGS',
                 'description'  => _('List pending articles'),
-                'module'       => 'ARTICLE',
+                'module'       => 'ARTICLE_MANAGER',
                 'enabled'      => 1
             ],
             9 => [
                 'pk_privilege' => 9,
                 'name'         => 'ARTICLE_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
-                'module'       => 'ARTICLE',
+                'module'       => 'ARTICLE_MANAGER',
                 'enabled'      => 1
             ],
             10 => [
                 'pk_privilege' => 10,
                 'name'         => 'ARTICLE_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'ARTICLE',
+                'module'       => 'ARTICLE_MANAGER',
                 'enabled'      => 1
             ],
             11 => [
                 'pk_privilege' => 11,
                 'name'         => 'ARTICLE_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'ARTICLE',
+                'module'       => 'ARTICLE_MANAGER',
                 'enabled'      => 1
             ],
             12 => [
                 'pk_privilege' => 12,
                 'name'         => 'ARTICLE_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'ARTICLE',
+                'module'       => 'ARTICLE_MANAGER',
                 'enabled'      => 1
             ],
             13 => [
                 'pk_privilege' => 13,
                 'name'         => 'ARTICLE_ARCHIVE',
                 'description'  => _('Arquive/unarquive'),
-                'module'       => 'ARTICLE',
+                'module'       => 'ARTICLE_MANAGER',
                 'enabled'      => 1
             ],
             14 => [
                 'pk_privilege' => 14,
                 'name'         => 'ARTICLE_FAVORITE',
                 'description'  => _('Manager favorite flag'),
-                'module'       => 'ARTICLE',
+                'module'       => 'ARTICLE_MANAGER',
                 'enabled'      => 1
             ],
             15 => [
                 'pk_privilege' => 15,
                 'name'         => 'ARTICLE_HOME',
                 'description'  => _('Manage home frontpage'),
-                'module'       => 'ARTICLE',
+                'module'       => 'ARTICLE_MANAGER',
                 'enabled'      => 1
             ],
             16 => [
                 'pk_privilege' => 16,
                 'name'         => 'ARTICLE_TRASH',
                 'description'  => _('Send to trash and restore'),
-                'module'       => 'ARTICLE',
+                'module'       => 'ARTICLE_MANAGER',
                 'enabled'      => 1
             ],
             17 => [
                 'pk_privilege' => 17,
                 'name'         => 'ARTICLE_ARCHIVE_ADMI',
                 'description'  => _('List articles in arquive'),
-                'module'       => 'ARTICLE',
+                'module'       => 'ARTICLE_MANAGER',
                 'enabled'      => 1
             ],
             18 => [
                 'pk_privilege' => 18,
                 'name'         => 'ADVERTISEMENT_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'ADVERTISEMENT',
+                'module'       => 'ADS_MANAGER',
                 'enabled'      => 1
             ],
             19 => [
                 'pk_privilege' => 19,
                 'name'         => 'ADVERTISEMENT_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
-                'module'       => 'ADVERTISEMENT',
+                'module'       => 'ADS_MANAGER',
                 'enabled'      => 1
             ],
             20 => [
                 'pk_privilege' => 20,
                 'name'         => 'ADVERTISEMENT_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'ADVERTISEMENT',
+                'module'       => 'ADS_MANAGER',
                 'enabled'      => 1
             ],
             21 => [
                 'pk_privilege' => 21,
                 'name'         => 'ADVERTISEMENT_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'ADVERTISEMENT',
+                'module'       => 'ADS_MANAGER',
                 'enabled'      => 1
             ],
             22 => [
                 'pk_privilege' => 22,
                 'name'         => 'ADVERTISEMENT_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'ADVERTISEMENT',
+                'module'       => 'ADS_MANAGER',
                 'enabled'      => 1
             ],
             23 => [
                 'pk_privilege' => 23,
                 'name'         => 'ADVERTISEMENT_TRASH',
                 'description'  => _('Send to trash and restore'),
-                'module'       => 'ADVERTISEMENT',
+                'module'       => 'ADS_MANAGER',
                 'enabled'      => 1
             ],
             24 => [
                 'pk_privilege' => 24,
                 'name'         => 'ADVERTISEMENT_HOME',
                 'description'  => _('Manage advertisements for homepage'),
-                'module'       => 'ADVERTISEMENT',
+                'module'       => 'ADS_MANAGER',
                 'enabled'      => 1
             ],
             25 => [
                 'pk_privilege' => 25,
                 'name'         => 'ADVERTISEMENT_FAVORITE',
                 'description'  => _('Manage favorite flag'),
-                'module'       => 'ADVERTISEMENT',
+                'module'       => 'ADS_MANAGER',
                 'enabled'      => 1
             ],
             26 => [
                 'pk_privilege' => 26,
                 'name'         => 'OPINION_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'OPINION',
+                'module'       => 'OPINION_MANAGER',
                 'enabled'      => 1
             ],
             27 => [
                 'pk_privilege' => 27,
                 'name'         => 'OPINION_FRONTPAGE',
                 'description'  => _('Manage frontpage'),
-                'module'       => 'OPINION',
+                'module'       => 'OPINION_MANAGER',
                 'enabled'      => 1
             ],
             28 => [
                 'pk_privilege' => 28,
                 'name'         => 'OPINION_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
-                'module'       => 'OPINION',
+                'module'       => 'OPINION_MANAGER',
                 'enabled'      => 1
             ],
             29 => [
                 'pk_privilege' => 29,
                 'name'         => 'OPINION_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'OPINION',
+                'module'       => 'OPINION_MANAGER',
                 'enabled'      => 1
             ],
             30 => [
                 'pk_privilege' => 30,
                 'name'         => 'OPINION_HOME',
                 'description'  => _('Administrate opinion widget'),
-                'module'       => 'OPINION',
+                'module'       => 'OPINION_MANAGER',
                 'enabled'      => 1
             ],
             31 => [
                 'pk_privilege' => 31,
                 'name'         => 'OPINION_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'OPINION',
+                'module'       => 'OPINION_MANAGER',
                 'enabled'      => 1
             ],
             32 => [
                 'pk_privilege' => 32,
                 'name'         => 'OPINION_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'OPINION',
+                'module'       => 'OPINION_MANAGER',
                 'enabled'      => 1
             ],
             33 => [
                 'pk_privilege' => 33,
                 'name'         => 'OPINION_TRASH',
                 'description'  => _('Send to trash and restore'),
-                'module'       => 'OPINION',
+                'module'       => 'OPINION_MANAGER',
                 'enabled'      => 1
             ],
             34 => [
                 'pk_privilege' => 34,
                 'name'         => 'COMMENT_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'COMMENT',
+                'module'       => 'COMMENT_MANAGER',
                 'enabled'      => 1
             ],
             35 => [
                 'pk_privilege' => 35,
                 'name'         => 'COMMENT_POLL',
                 'description'  => _('Manage poll comments'),
-                'module'       => 'COMMENT',
+                'module'       => 'COMMENT_MANAGER',
                 'enabled'      => 1
             ],
             37 => [
                 'pk_privilege' => 37,
                 'name'         => 'COMMENT_AVAILABLE',
                 'description'  => _('Approve/reject'),
-                'module'       => 'COMMENT',
+                'module'       => 'COMMENT_MANAGER',
                 'enabled'      => 1
             ],
             38 => [
                 'pk_privilege' => 38,
                 'name'         => 'COMMENT_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'COMMENT',
+                'module'       => 'COMMENT_MANAGER',
                 'enabled'      => 1
             ],
             39 => [
                 'pk_privilege' => 39,
                 'name'         => 'COMMENT_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'COMMENT',
+                'module'       => 'COMMENT_MANAGER',
                 'enabled'      => 1
             ],
             40 => [
                 'pk_privilege' => 40,
                 'name'         => 'COMMENT_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'COMMENT',
+                'module'       => 'COMMENT_MANAGER',
                 'enabled'      => 1
             ],
             41 => [
                 'pk_privilege' => 41,
                 'name'         => 'COMMENT_TRASH',
                 'description'  => _('Send to trash and restore'),
-                'module'       => 'COMMENT',
+                'module'       => 'COMMENT_MANAGER',
                 'enabled'      => 1
             ],
             42 => [
                 'pk_privilege' => 42,
                 'name'         => 'ALBUM_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'ALBUM',
+                'module'       => 'ALBUM_MANAGER',
                 'enabled'      => 1
             ],
             43 => [
                 'pk_privilege' => 43,
                 'name'         => 'ALBUM_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
-                'module'       => 'ALBUM',
+                'module'       => 'ALBUM_MANAGER',
                 'enabled'      => 1
             ],
             44 => [
                 'pk_privilege' => 44,
                 'name'         => 'ALBUM_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'ALBUM',
+                'module'       => 'ALBUM_MANAGER',
                 'enabled'      => 1
             ],
             45 => [
                 'pk_privilege' => 45,
                 'name'         => 'ALBUM_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'ALBUM',
+                'module'       => 'ALBUM_MANAGER',
                 'enabled'      => 1
             ],
             46 => [
                 'pk_privilege' => 46,
                 'name'         => 'ALBUM_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'ALBUM',
+                'module'       => 'ALBUM_MANAGER',
                 'enabled'      => 1
             ],
             47 => [
                 'pk_privilege' => 47,
                 'name'         => 'ALBUM_TRASH',
                 'description'  => _('Send to trash and restore'),
-                'module'       => 'ALBUM',
+                'module'       => 'ALBUM_MANAGER',
                 'enabled'      => 1
             ],
             48 => [
                 'pk_privilege' => 48,
                 'name'         => 'VIDEO_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'VIDEO',
+                'module'       => 'VIDEO_MANAGER',
                 'enabled'      => 1
             ],
             49 => [
                 'pk_privilege' => 49,
                 'name'         => 'VIDEO_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
-                'module'       => 'VIDEO',
+                'module'       => 'VIDEO_MANAGER',
                 'enabled'      => 1
             ],
             50 => [
                 'pk_privilege' => 50,
                 'name'         => 'VIDEO_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'VIDEO',
+                'module'       => 'VIDEO_MANAGER',
                 'enabled'      => 1
             ],
             51 => [
                 'pk_privilege' => 51,
                 'name'         => 'VIDEO_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'VIDEO',
+                'module'       => 'VIDEO_MANAGER',
                 'enabled'      => 1
             ],
             52 => [
                 'pk_privilege' => 52,
                 'name'         => 'VIDEO_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'VIDEO',
+                'module'       => 'VIDEO_MANAGER',
                 'enabled'      => 1
             ],
             53 => [
                 'pk_privilege' => 53,
                 'name'         => 'VIDEO_TRASH',
                 'description'  => _('Send to trash and restore'),
-                'module'       => 'VIDEO',
+                'module'       => 'VIDEO_MANAGER',
                 'enabled'      => 1
             ],
             60 => [
                 'pk_privilege' => 60,
                 'name'         => 'PHOTO_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'IMAGE',
+                'module'       => 'IMAGE_MANAGER',
                 'enabled'      => 1
             ],
             61 => [
                 'pk_privilege' => 61,
                 'name'         => 'PHOTO_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
-                'module'       => 'IMAGE',
+                'module'       => 'IMAGE_MANAGER',
                 'enabled'      => 1
             ],
             62 => [
                 'pk_privilege' => 62,
                 'name'         => 'PHOTO_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'IMAGE',
+                'module'       => 'IMAGE_MANAGER',
                 'enabled'      => 1
             ],
             63 => [
                 'pk_privilege' => 63,
                 'name'         => 'PHOTO_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'IMAGE',
+                'module'       => 'IMAGE_MANAGER',
                 'enabled'      => 1
             ],
             64 => [
                 'pk_privilege' => 64,
                 'name'         => 'PHOTO_CREATE',
                 'description'  => _('Create/upload'),
-                'module'       => 'IMAGE',
+                'module'       => 'IMAGE_MANAGER',
                 'enabled'      => 1
             ],
             65 => [
                 'pk_privilege' => 65,
                 'name'         => 'PHOTO_TRASH',
                 'description'  => _('Send to trash and restore'),
-                'module'       => 'IMAGE',
+                'module'       => 'IMAGE_MANAGER',
                 'enabled'      => 1
             ],
             66 => [
                 'pk_privilege' => 66,
                 'name'         => 'STATIC_PAGE_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'STATIC',
+                'module'       => 'STATIC_PAGES_MANAGER',
                 'enabled'      => 1
             ],
             67 => [
                 'pk_privilege' => 67,
                 'name'         => 'STATIC_PAGE_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
-                'module'       => 'STATIC',
+                'module'       => 'STATIC_PAGES_MANAGER',
                 'enabled'      => 1
             ],
             68 => [
                 'pk_privilege' => 68,
                 'name'         => 'STATIC_PAGE_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'STATIC',
+                'module'       => 'STATIC_PAGES_MANAGER',
                 'enabled'      => 1
             ],
             69 => [
                 'pk_privilege' => 69,
                 'name'         => 'STATIC_PAGE_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'STATIC',
+                'module'       => 'STATIC_PAGES_MANAGER',
                 'enabled'      => 1
             ],
             70 => [
                 'pk_privilege' => 70,
                 'name'         => 'STATIC_PAGE_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'STATIC',
+                'module'       => 'STATIC_PAGES_MANAGER',
                 'enabled'      => 1
             ],
             71 => [
                 'pk_privilege' => 71,
                 'name'         => 'KIOSKO_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'KIOSKO',
+                'module'       => 'KIOSKO_MANAGER',
                 'enabled'      => 1
             ],
             72 => [
                 'pk_privilege' => 72,
                 'name'         => 'KIOSKO_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
-                'module'       => 'KIOSKO',
+                'module'       => 'KIOSKO_MANAGER',
                 'enabled'      => 1
             ],
             73 => [
                 'pk_privilege' => 73,
                 'name'         => 'KIOSKO_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'KIOSKO',
+                'module'       => 'KIOSKO_MANAGER',
                 'enabled'      => 1
             ],
             74 => [
                 'pk_privilege' => 74,
                 'name'         => 'KIOSKO_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'KIOSKO',
+                'module'       => 'KIOSKO_MANAGER',
                 'enabled'      => 1
             ],
             75 => [
                 'pk_privilege' => 75,
                 'name'         => 'KIOSKO_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'KIOSKO',
+                'module'       => 'KIOSKO_MANAGER',
                 'enabled'      => 1
             ],
             76 => [
                 'pk_privilege' => 76,
                 'name'         => 'KIOSKO_HOME',
                 'description'  => _('Manage frontpage'),
-                'module'       => 'KIOSKO',
+                'module'       => 'KIOSKO_MANAGER',
                 'enabled'      => 1
             ],
             77 => [
                 'pk_privilege' => 77,
                 'name'         => 'POLL_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'POLL',
+                'module'       => 'POLL_MANAGER',
                 'enabled'      => 1
             ],
             78 => [
                 'pk_privilege' => 78,
                 'name'         => 'POLL_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
-                'module'       => 'POLL',
+                'module'       => 'POLL_MANAGER',
                 'enabled'      => 1
             ],
             79 => [
                 'pk_privilege' => 79,
                 'name'         => 'POLL_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'POLL',
+                'module'       => 'POLL_MANAGER',
                 'enabled'      => 1
             ],
             80 => [
                 'pk_privilege' => 80,
                 'name'         => 'POLL_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'POLL',
+                'module'       => 'POLL_MANAGER',
                 'enabled'      => 1
             ],
             81 => [
                 'pk_privilege' => 81,
                 'name'         => 'POLL_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'POLL',
+                'module'       => 'POLL_MANAGER',
                 'enabled'      => 1
             ],
             82 => [
@@ -618,238 +618,210 @@ class Privilege
                 'pk_privilege' => 86,
                 'name'         => 'USER_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'USER',
+                'module'       => 'USER_MANAGER',
                 'enabled'      => 1
             ],
             87 => [
                 'pk_privilege' => 87,
                 'name'         => 'USER_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'USER',
+                'module'       => 'USER_MANAGER',
                 'enabled'      => 1
             ],
             88 => [
                 'pk_privilege' => 88,
                 'name'         => 'USER_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'USER',
+                'module'       => 'USER_MANAGER',
                 'enabled'      => 1
             ],
             89 => [
                 'pk_privilege' => 89,
                 'name'         => 'USER_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'USER',
+                'module'       => 'USER_MANAGER',
                 'enabled'      => 1
             ],
             90 => [
                 'pk_privilege' => 90,
                 'name'         => 'PCLAVE_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'PCLAVE',
+                'module'       => 'KEYWORD_MANAGER',
                 'enabled'      => 1
             ],
             91 => [
                 'pk_privilege' => 91,
                 'name'         => 'PCLAVE_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'PCLAVE',
+                'module'       => 'KEYWORD_MANAGER',
                 'enabled'      => 1
             ],
             92 => [
                 'pk_privilege' => 92,
                 'name'         => 'PCLAVE_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'PCLAVE',
+                'module'       => 'KEYWORD_MANAGER',
                 'enabled'      => 1
             ],
             93 => [
                 'pk_privilege' => 93,
                 'name'         => 'PCLAVE_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'PCLAVE',
+                'module'       => 'KEYWORD_MANAGER',
                 'enabled'      => 1
             ],
             95 => [
                 'pk_privilege' => 95,
                 'name'         => 'GROUP_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'GROUP',
+                'module'       => 'USER_GROUP_MANAGER',
                 'enabled'      => 1
             ],
             96 => [
                 'pk_privilege' => 96,
                 'name'         => 'GROUP_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'GROUP',
+                'module'       => 'USER_GROUP_MANAGER',
                 'enabled'      => 1
             ],
             97 => [
                 'pk_privilege' => 97,
                 'name'         => 'GROUP_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'GROUP',
+                'module'       => 'USER_GROUP_MANAGER',
                 'enabled'      => 1
             ],
             99 => [
                 'pk_privilege' => 99,
                 'name'         => 'GROUP_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'GROUP',
+                'module'       => 'USER_GROUP_MANAGER',
                 'enabled'      => 1
             ],
             104 => [
                 'pk_privilege' => 104,
                 'name'         => 'ATTACHMENT_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'FILE',
+                'module'       => 'FILE_MANAGER',
                 'enabled'      => 1
             ],
             105 => [
                 'pk_privilege' => 105,
                 'name'         => 'ATTACHMENT_FRONTS',
                 'description'  => _('File Fronts'),
-                'module'       => 'FILE',
+                'module'       => 'FILE_MANAGER',
                 'enabled'      => 1
             ],
             106 => [
                 'pk_privilege' => 106,
                 'name'         => 'ATTACHMENT_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'FILE',
+                'module'       => 'FILE_MANAGER',
                 'enabled'      => 1
             ],
             107 => [
                 'pk_privilege' => 107,
                 'name'         => 'ATTACHMENT_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'FILE',
+                'module'       => 'FILE_MANAGER',
                 'enabled'      => 1
             ],
             108 => [
                 'pk_privilege' => 108,
                 'name'         => 'ATTACHMENT_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'FILE',
+                'module'       => 'FILE_MANAGER',
                 'enabled'      => 1
             ],
             112 => [
                 'pk_privilege' => 112,
                 'name'         => 'NEWSLETTER_ADMIN',
                 'description'  => _('Manage Newsletter'),
-                'module'       => 'NEWSLETTER',
-                'enabled'      => 1
-            ],
-            113 => [
-                'pk_privilege' => 113,
-                'name'         => 'BACKEND_ADMIN',
-                'description'  => _('Backend manager'),
-                'module'       => 'BACKEND',
+                'module'       => 'NEWSLETTER_MANAGER',
                 'enabled'      => 1
             ],
             114 => [
                 'pk_privilege' => 114,
                 'name'         => 'CACHE_TPL_ADMIN',
                 'description'  => _('Manage caches'),
-                'module'       => 'CACHE',
+                'module'       => 'CACHE_MANAGER',
                 'enabled'      => 1
             ],
             115 => [
                 'pk_privilege' => 115,
                 'name'         => 'SEARCH_ADMIN',
                 'description'  => _('Use search'),
-                'module'       => 'SEARCH',
+                'module'       => 'ADVANCED_SEARCH',
                 'enabled'      => 1
             ],
             116 => [
                 'pk_privilege' => 116,
                 'name'         => 'TRASH_ADMIN',
                 'description'  => _('List trashed elementes'),
-                'module'       => 'SEARCH',
+                'module'       => 'TRASH_MANAGER',
                 'enabled'      => 1
             ],
             117 => [
                 'pk_privilege' => 117,
                 'name'         => 'WIDGET_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'WIDGET',
+                'module'       => 'WIDGET_MANAGER',
                 'enabled'      => 1
             ],
             118 => [
                 'pk_privilege' => 118,
                 'name'         => 'WIDGET_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
-                'module'       => 'WIDGET',
+                'module'       => 'WIDGET_MANAGER',
                 'enabled'      => 1
             ],
             119 => [
                 'pk_privilege' => 119,
                 'name'         => 'WIDGET_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'WIDGET',
+                'module'       => 'WIDGET_MANAGER',
                 'enabled'      => 1
             ],
             120 => [
                 'pk_privilege' => 120,
                 'name'         => 'WIDGET_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'WIDGET',
+                'module'       => 'WIDGET_MANAGER',
                 'enabled'      => 1
             ],
             121 => [
                 'pk_privilege' => 121,
                 'name'         => 'WIDGET_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'WIDGET',
+                'module'       => 'WIDGET_MANAGER',
                 'enabled'      => 1
             ],
             122 => [
                 'pk_privilege' => 122,
                 'name'         => 'MENU_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'MENU',
+                'module'       => 'MENU_MANAGER',
                 'enabled'      => 1
             ],
             123 => [
                 'pk_privilege' => 123,
                 'name'         => 'MENU_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
-                'module'       => 'MENU',
+                'module'       => 'MENU_MANAGER',
                 'enabled'      => 1
             ],
             124 => [
                 'pk_privilege' => 124,
                 'name'         => 'MENU_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'MENU',
+                'module'       => 'MENU_MANAGER',
                 'enabled'      => 1
             ],
             125 => [
                 'pk_privilege' => 125,
                 'name'         => 'IMPORT_ADMIN',
                 'description'  => _('Import news from agency'),
-                'module'       => 'IMPORT',
-                'enabled'      => 1
-            ],
-            127 => [
-                'pk_privilege' => 127,
-                'name'         => 'IMPORT_XML',
-                'description'  => _('Import XML files'),
-                'module'       => 'IMPORT',
-                'enabled'      => 1
-            ],
-            130 => [
-                'pk_privilege' => 130,
-                'name'         => 'ONM_CONFIG',
-                'description'  => _('Manage global settings'),
-                'module'       => 'ONM',
-                'enabled'      => 1
-            ],
-            131 => [
-                'pk_privilege' => 131,
-                'name'         => 'ONM_MANAGER',
-                'description'  => _('Access instance manager'),
-                'module'       => 'ONM',
+                'module'       => 'NEWS_AGENCY_IMPORTER',
                 'enabled'      => 1
             ],
             132 => [
@@ -877,287 +849,266 @@ class Privilege
                 'pk_privilege' => 135,
                 'name'         => 'GROUP_CHANGE',
                 'description'  => _('Change the user group from one user'),
-                'module'       => 'GROUP',
+                'module'       => 'USER_GROUP_MANAGER',
                 'enabled'      => 1
             ],
             137 => [
                 'pk_privilege' => 137,
                 'name'         => 'BOOK_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'BOOK',
+                'module'       => 'BOOK_MANAGER',
                 'enabled'      => 1
             ],
             138 => [
                 'pk_privilege' => 138,
                 'name'         => 'BOOK_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'BOOK',
+                'module'       => 'BOOK_MANAGER',
                 'enabled'      => 1
             ],
             139 => [
                 'pk_privilege' => 139,
                 'name'         => 'BOOK_HOME',
                 'description'  => _('Manage widget'),
-                'module'       => 'BOOK',
+                'module'       => 'BOOK_MANAGER',
                 'enabled'      => 1
             ],
             140 => [
                 'pk_privilege' => 140,
                 'name'         => 'BOOK_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
-                'module'       => 'BOOK',
+                'module'       => 'BOOK_MANAGER',
                 'enabled'      => 1
             ],
             141 => [
                 'pk_privilege' => 141,
                 'name'         => 'BOOK_SETTINGS',
                 'description'  => _('Administrate settings'),
-                'module'       => 'BOOK',
+                'module'       => 'BOOK_MANAGER',
                 'enabled'      => 1
             ],
             142 => [
                 'pk_privilege' => 142,
                 'name'         => 'BOOK_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'BOOK',
+                'module'       => 'BOOK_MANAGER',
                 'enabled'      => 1
             ],
             143 => [
                 'pk_privilege' => 143,
                 'name'         => 'BOOK_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'BOOK',
+                'module'       => 'BOOK_MANAGER',
                 'enabled'      => 1
             ],
             144 => [
                 'pk_privilege' => 144,
                 'name'         => 'BOOK_TRASH',
                 'description'  => _('Send to trash and restore'),
-                'module'       => 'BOOK',
+                'module'       => 'BOOK_MANAGER',
                 'enabled'      => 1
             ],
             145 => [
                 'pk_privilege' => 145,
                 'name'         => 'SPECIAL_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'SPECIAL',
+                'module'       => 'SPECIAL_MANAGER',
                 'enabled'      => 1
             ],
             146 => [
                 'pk_privilege' => 146,
                 'name'         => 'SPECIAL_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'SPECIAL',
+                'module'       => 'SPECIAL_MANAGER',
                 'enabled'      => 1
             ],
             147 => [
                 'pk_privilege' => 147,
                 'name'         => 'SPECIAL_FAVORITE',
                 'description'  => _('Manage widget'),
-                'module'       => 'SPECIAL',
+                'module'       => 'SPECIAL_MANAGER',
                 'enabled'      => 1
             ],
             148 => [
                 'pk_privilege' => 148,
                 'name'         => 'SPECIAL_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
-                'module'       => 'SPECIAL',
+                'module'       => 'SPECIAL_MANAGER',
                 'enabled'      => 1
             ],
             149 => [
                 'pk_privilege' => 149,
                 'name'         => 'SPECIAL_SETTINGS',
                 'description'  => _('Manage module settings'),
-                'module'       => 'SPECIAL',
+                'module'       => 'SPECIAL_MANAGER',
                 'enabled'      => 1
             ],
             150 => [
                 'pk_privilege' => 150,
                 'name'         => 'SPECIAL_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'SPECIAL',
+                'module'       => 'SPECIAL_MANAGER',
                 'enabled'      => 1
             ],
             151 => [
                 'pk_privilege' => 151,
                 'name'         => 'SPECIAL_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'SPECIAL',
+                'module'       => 'SPECIAL_MANAGER',
                 'enabled'      => 1
             ],
             152 => [
                 'pk_privilege' => 152,
                 'name'         => 'SPECIAL_TRASH',
                 'description'  => _('Send to trash and restore'),
-                'module'       => 'SPECIAL',
-                'enabled'      => 1
-            ],
-            153 => [
-                'pk_privilege' => 153,
-                'name'         => 'SCHEDULE_SETTINGS',
-                'description'  => _('Manage module settings'),
-                'module'       => 'SCHEDULE',
-                'enabled'      => 1
-            ],
-            154 => [
-                'pk_privilege' => 154,
-                'name'         => 'SCHEDULE_ADMIN',
-                'description'  => _('Manage agenda'),
-                'module'       => 'SCHEDULE',
+                'module'       => 'SPECIAL_MANAGER',
                 'enabled'      => 1
             ],
             155 => [
                 'pk_privilege' => 155,
                 'name'         => 'VIDEO_HOME',
                 'description'  => _('Manage frontpage'),
-                'module'       => 'VIDEO',
+                'module'       => 'VIDEO_MANAGER',
                 'enabled'      => 1
             ],
             156 => [
                 'pk_privilege' => 156,
                 'name'         => 'VIDEO_FAVORITE',
                 'description'  => _('Manage favorite flag'),
-                'module'       => 'VIDEO',
+                'module'       => 'VIDEO_MANAGER',
                 'enabled'      => 1
             ],
             157 => [
                 'pk_privilege' => 157,
                 'name'         => 'ALBUM_HOME',
                 'description'  => _('Manage frontpage'),
-                'module'       => 'ALBUM',
+                'module'       => 'ALBUM_MANAGER',
                 'enabled'      => 1
             ],
             158 => [
                 'pk_privilege' => 158,
                 'name'         => 'ALBUM_FAVORITE',
                 'description'  => _('Manage favorite flag'),
-                'module'       => 'ALBUM',
+                'module'       => 'ALBUM_MANAGER',
                 'enabled'      => 1
             ],
             159 => [
                 'pk_privilege' => 159,
                 'name'         => 'ALBUM_SETTINGS',
                 'description'  => _('Manage module setting'),
-                'module'       => 'ALBUM',
+                'module'       => 'ALBUM_MANAGER',
                 'enabled'      => 1
             ],
             160 => [
                 'pk_privilege' => 160,
                 'name'         => 'POLL_SETTINGS',
                 'description'  => _('Manage module setting'),
-                'module'       => 'POLL',
+                'module'       => 'POLL_MANAGER',
                 'enabled'      => 1
             ],
             161 => [
                 'pk_privilege' => 161,
                 'name'         => 'OPINION_SETTINGS',
                 'description'  => _('Manage module setting'),
-                'module'       => 'OPINION',
+                'module'       => 'OPINION_MANAGER',
                 'enabled'      => 1
             ],
             162 => [
                 'pk_privilege' => 162,
                 'name'         => 'CATEGORY_SETTINGS',
                 'description'  => _('Manage module settings'),
-                'module'       => 'CATEGORY',
+                'module'       => 'CATEGORY_MANAGER',
                 'enabled'      => 1
             ],
             163 => [
                 'pk_privilege' => 163,
                 'name'         => 'VIDEO_SETTINGS',
                 'description'  => _('Manage module settings'),
-                'module'       => 'VIDEO',
+                'module'       => 'VIDEO_MANAGER',
                 'enabled'      => 1
             ],
             179 => [
                 'pk_privilege' => 179,
                 'name'         => 'MENU_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'MENU',
+                'module'       => 'MENU_MANAGER',
                 'enabled'      => 1
             ],
             164 => [
                 'pk_privilege' => 164,
                 'name'         => 'MENU_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'MENU',
-                'enabled'      => 1
-            ],
-            165 => [
-                'pk_privilege' => 165,
-                'name'         => 'IMPORT_EFE_FILE',
-                'description'  => _('Import EFE articles file'),
-                'module'       => 'IMPORT',
+                'module'       => 'MENU_MANAGER',
                 'enabled'      => 1
             ],
             166 => [
                 'pk_privilege' => 166,
                 'name'         => 'LETTER_TRASH',
                 'description'  => _('Send to trash and restore'),
-                'module'       => 'LETTER',
+                'module'       => 'LETTER_MANAGER',
                 'enabled'      => 1
             ],
             167 => [
                 'pk_privilege' => 167,
                 'name'         => 'LETTER_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'LETTER',
+                'module'       => 'LETTER_MANAGER',
                 'enabled'      => 1
             ],
             168 => [
                 'pk_privilege' => 168,
                 'name'         => 'LETTER_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'LETTER',
+                'module'       => 'LETTER_MANAGER',
                 'enabled'      => 1
             ],
             169 => [
                 'pk_privilege' => 169,
                 'name'         => 'LETTER_SETTINGS',
                 'description'  => _('Manage module settings'),
-                'module'       => 'LETTER',
+                'module'       => 'LETTER_MANAGER',
                 'enabled'      => 1
             ],
             170 => [
                 'pk_privilege' => 170,
                 'name'         => 'LETTER_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
-                'module'       => 'LETTER',
+                'module'       => 'LETTER_MANAGER',
                 'enabled'      => 1
             ],
             171 => [
                 'pk_privilege' => 171,
                 'name'         => 'LETTER_FAVORITE',
                 'description'  => _('Manage widget'),
-                'module'       => 'LETTER',
+                'module'       => 'LETTER_MANAGER',
                 'enabled'      => 1
             ],
             172 => [
                 'pk_privilege' => 172,
                 'name'         => 'LETTER_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'LETTER',
+                'module'       => 'LETTER_MANAGER',
                 'enabled'      => 1
             ],
             173 => [
                 'pk_privilege' => 173,
                 'name'         => 'LETTER_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'LETTER',
+                'module'       => 'LETTER_MANAGER',
                 'enabled'      => 1
             ],
             174 => [
                 'pk_privilege' => 174,
                 'name'         => 'POLL_FAVORITE',
                 'description'  => _('Manage favourite flag'),
-                'module'       => 'POLL',
+                'module'       => 'POLL_MANAGER',
                 'enabled'      => 1
             ],
             175 => [
                 'pk_privilege' => 175,
                 'name'         => 'POLL_HOME',
                 'description'  => _('Manage frontpage'),
-                'module'       => 'POLL',
+                'module'       => 'POLL_MANAGER',
                 'enabled'      => 1
             ],
             177 => [
@@ -1167,25 +1118,18 @@ class Privilege
                 'module'       => 'IMPORT',
                 'enabled'      => 1
             ],
-            178 => [
-                'pk_privilege' => 178,
-                'name'         => 'SYNC_ADMIN',
-                'description'  => _('Administer synchronization between Opennemas'),
-                'module'       => 'SYNC_MANAGER',
-                'enabled'      => 1
-            ],
             180 => [
                 'pk_privilege' => 180,
                 'name'         => 'INSTANCE_SYNC_ADMIN',
-                'description'  => _('Administer instances'),
-                'module'       => 'INSTANCE_SYNC',
+                'description'  => _('Administer synchronization between Opennemas'),
+                'module'       => 'SYNC_MANAGER',
                 'enabled'      => 1
             ],
             181 => [
                 'pk_privilege' => 181,
                 'name'         => 'SPECIAL_HOME',
                 'description'  => _('Manage frontpage'),
-                'module'       => 'SPECIAL',
+                'module'       => 'SPECIAL_MANAGER',
                 'enabled'      => 1
             ],
             182 => [
@@ -1199,49 +1143,49 @@ class Privilege
                 'pk_privilege' => 183,
                 'name'         => 'ATTACHMENT_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
-                'module'       => 'FILE',
+                'module'       => 'FILE_MANAGER',
                 'enabled'      => 1
             ],
             184 => [
                 'pk_privilege' => 184,
                 'name'         => 'ATTACHMENT_HOME',
                 'description'  => _('Manage frontpage'),
-                'module'       => 'FILE',
+                'module'       => 'FILE_MANAGER',
                 'enabled'      => 1
             ],
             185 => [
                 'pk_privilege' => 185,
                 'name'         => 'ATTACHMENT_FAVORITE',
                 'description'  => _('Manage favourite flag'),
-                'module'       => 'FILE',
+                'module'       => 'FILE_MANAGER',
                 'enabled'      => 1
             ],
             186 => [
                 'pk_privilege' => 186,
                 'name'         => 'KIOSKO_FAVORITE',
                 'description'  => _('Manage favourite flag'),
-                'module'       => 'KIOSKO',
+                'module'       => 'KIOSKO_MANAGER',
                 'enabled'      => 1
             ],
             187 => [
                 'pk_privilege' => 187,
                 'name'         => 'OPINION_FAVORITE',
                 'description'  => _('Manage favourite flag'),
-                'module'       => 'OPINION',
+                'module'       => 'OPINION_MANAGER',
                 'enabled'      => 1
             ],
             188 => [
                 'pk_privilege' => 188,
                 'name'         => 'USER_EDIT_OWN_PROFILE',
                 'description'  => _('Edit user own profile'),
-                'module'       => 'USER',
+                'module'       => 'USER_MANAGER',
                 'enabled'      => 1
             ],
             189 => [
                 'pk_privilege' => 189,
                 'name'         => 'ADVERTISEMENT_SETTINGS',
                 'description'  => _('Manage module settings'),
-                'module'       => 'ADVERTISEMENT',
+                'module'       => 'ADS_MANAGER',
                 'enabled'      => 1
             ],
             // All existing privileges
@@ -1641,25 +1585,29 @@ class Privilege
                 'pk_privilege' => 243,
                 'name'         => 'TAG_ADMIN',
                 'description'  => _('List'),
-                'module'       => 'TAG',
+                'module'       => 'es.openhost.module.tags',
+                'enabled'      => 1
             ],
             244 => [
                 'pk_privilege' => 244,
                 'name'         => 'TAG_UPDATE',
                 'description'  => _('Edit'),
-                'module'       => 'TAG',
+                'module'       => 'es.openhost.module.tags',
+                'enabled'      => 1
             ],
             245 => [
                 'pk_privilege' => 245,
                 'name'         => 'TAG_DELETE',
                 'description'  => _('Delete'),
-                'module'       => 'TAG',
+                'module'       => 'es.openhost.module.tags',
+                'enabled'      => 1
             ],
             246 => [
                 'pk_privilege' => 246,
                 'name'         => 'TAG_CREATE',
                 'description'  => _('Create'),
-                'module'       => 'TAG',
+                'module'       => 'es.openhost.module.tags',
+                'enabled'      => 1
             ],
         ];
 

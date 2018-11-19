@@ -10,7 +10,6 @@
 namespace Frontend\Controller;
 
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,15 +20,17 @@ class OpinionsController extends Controller
     /**
      * Renders the opinion frontpage.
      *
+     * @param Request $request The request object.
+     *
      * @return Response The response object.
      */
-    public function frontpageAction()
+    public function frontpageAction(Request $request)
     {
         if (!$this->get('core.security')->hasExtension('OPINION_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
-        $page = $this->request->query->getDigits('page', 1);
+        $page = $request->get('page', 1);
 
         // Setup templating cache layer
         $this->view->setConfig('opinion');
@@ -66,13 +67,11 @@ class OpinionsController extends Controller
             $order['starttime'] = 'DESC';
 
             // Fetch configurations for this frontpage
-            $configurations = $this->get('setting_repository')->get(
-                'opinion_settings',
-                [
+            $configurations = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')->get('opinion_settings', [
                     'total_editorial' => 2,
                     'total_director'  => 1,
-                ]
-            );
+                ]);
 
             // Fetch last editorial opinions from editorial
             if ($configurations['total_editorial'] > 0) {
@@ -99,10 +98,11 @@ class OpinionsController extends Controller
 
                 if (count($contents) > 0) {
                     foreach ($contents as &$opinion) {
-                        if (isset($item->img1) && ($item->img1 > 0)) {
+                        // Little mess with $item and $opinion variables (undefined)
+                        if (isset($opinion->img1) && ($opinion->img1 > 0)) {
                             $contents[0]->img1 = $this
                                 ->get('entity_repository')
-                                ->find('Photo', $item->img1);
+                                ->find('Photo', $opinion->img1);
                         }
                     }
 
@@ -113,29 +113,24 @@ class OpinionsController extends Controller
                 }
             }
 
-            $numOpinions = $this->get('setting_repository')->get('items_per_page');
+            $numOpinions = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('items_per_page');
             if (!empty($configurations)
                 && array_key_exists('total_opinions', $configurations)
             ) {
                 $numOpinions = $configurations['total_opinions'];
             }
 
-             // Fetch all authors
-            $allAuthors = \User::getAllUsersAuthors();
-
-            $authorsBlog = [];
-            foreach ($allAuthors as $authorData) {
-                if ($authorData->is_blog == 1) {
-                    $authorsBlog[$authorData->id] = $authorData;
-                }
-            }
-
             $filters['type_opinion'] = [['value' => 0]];
-            if (!empty($authorsBlog)) {
-                // Must drop the blogs
+
+            $bloggers = $this->get('api.service.author')
+                ->getList('is_blog = 1 order by name asc');
+
+            if (!empty($bloggers['total'])) {
                 $filters = array_merge($filters, [
                     'opinions`.`fk_author' => [ [
-                        'value' => array_keys($authorsBlog),
+                        'value' => array_map(function ($a) {
+                            return $a->id;
+                        }, $bloggers['items']),
                         'operator' => 'NOT IN'
                     ] ]
                 ]);
@@ -213,15 +208,17 @@ class OpinionsController extends Controller
     /**
      * Renders the opinion frontpage
      *
+     * @param Request $request The request object.
+     *
      * @return Response the response object
      */
-    public function extFrontpageAction()
+    public function extFrontpageAction(Request $request)
     {
         if (!$this->get('core.security')->hasExtension('OPINION_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
-        $page         = $this->request->query->getDigits('page', 1);
+        $page         = $request->get('page', 1);
         $categoryName = 'opinion';
 
         // Setup templating cache layer
@@ -294,7 +291,9 @@ class OpinionsController extends Controller
                 );
             }
 
-            $itemsPerPage = s::get('items_per_page');
+            $itemsPerPage = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('items_per_page');
             // Get external media url for author images
             $externalMediaUrl = $this->cm->getUrlContent($wsUrl . '/ws/instances/mediaurl/', true);
 
@@ -342,8 +341,8 @@ class OpinionsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $authorID = (int) $request->query->getDigits('author_id', null);
-        $page     = $this->request->query->getDigits('page', 1);
+        $authorID = (int) $request->get('author_id', null);
+        $page     = $request->get('page', 1);
 
         if (empty($authorID)) {
             throw new ResourceNotFoundException();
@@ -412,7 +411,9 @@ class OpinionsController extends Controller
             $orderBy = ['created' => 'DESC'];
 
             // Total opinions per page
-            $numOpinions = $this->get('setting_repository')->get('items_per_page');
+            $numOpinions = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('items_per_page');
             if (!empty($configurations)
                 && array_key_exists('total_opinions', $configurations)
             ) {
@@ -487,9 +488,9 @@ class OpinionsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $authorID     = $request->query->getDigits('author_id', null);
-        $authorSlug   = $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING);
-        $page         = $request->query->getDigits('page', 1);
+        $authorID     = $request->get('author_id', null);
+        $authorSlug   = $request->get('author_slug', null, FILTER_SANITIZE_STRING);
+        $page         = $request->get('page', 1);
         $categoryName = 'opinion';
 
         if (empty($authorID)) {
@@ -580,7 +581,9 @@ class OpinionsController extends Controller
 
             $this->cm = new \ContentManager();
 
-            $itemsPerPage = s::get('items_per_page');
+            $itemsPerPage = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('items_per_page');
             // Get external media url for author images
             $externalMediaUrl = $this->cm->getUrlContent($wsUrl . '/ws/instances/mediaurl/', true);
 
@@ -632,8 +635,8 @@ class OpinionsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $dirtyID = $request->query->filter('opinion_id', '', FILTER_SANITIZE_STRING);
-        $urlSlug = $request->query->filter('opinion_title', '', FILTER_SANITIZE_STRING);
+        $dirtyID = $request->get('opinion_id', '', FILTER_SANITIZE_STRING);
+        $urlSlug = $request->get('opinion_title', '', FILTER_SANITIZE_STRING);
 
         $opinion = $this->get('content_url_matcher')
             ->matchContentUrl('opinion', $dirtyID, $urlSlug);
@@ -746,6 +749,7 @@ class OpinionsController extends Controller
             'content'         => $opinion,
             'contentId'       => $opinion->id,
             'opinion'         => $opinion,
+            'o_content'       => $opinion,
             'x-tags'          => 'opinion,' . $opinion->id,
             'x-cache-for'     => '+1 day',
             'x-cacheable'     => $cacheable,
@@ -767,7 +771,7 @@ class OpinionsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $dirtyID      = $request->query->getDigits('opinion_id');
+        $dirtyID      = $request->get('opinion_id');
         $categoryName = 'opinion';
 
         // Redirect to opinion frontpage if opinion_id wasn't provided
@@ -789,7 +793,7 @@ class OpinionsController extends Controller
             || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
         ) {
             $this->cm = new \ContentManager();
-             $opinion = $this->cm->getUrlContent($wsUrl . '/ws/opinions/complete/' . $dirtyID, true);
+            $opinion  = $this->cm->getUrlContent($wsUrl . '/ws/opinions/complete/' . $dirtyID, true);
 
             if (is_string($opinion)) {
                 $opinion = @unserialize($opinion);
@@ -814,6 +818,7 @@ class OpinionsController extends Controller
                 'suggested'       => $opinion->machineRelated,
                 'opinion'         => $opinion,
                 'content'         => $opinion,
+                'o_content'       => $opinion,
                 'actual_category' => 'opinion',
                 'media_url'       => $opinion->externalMediaUrl,
                 'contentId'       => $opinion->id,
@@ -838,6 +843,8 @@ class OpinionsController extends Controller
      * Fetches the advertisement
      *
      * @param string $context the context to fetch ads from
+     *
+     * @return array
      *
      * TODO: Make this function non-static
      */

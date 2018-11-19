@@ -11,7 +11,7 @@ namespace Common\Core\Component\Helper;
 
 use Common\Data\Core\FilterManager;
 
-class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
+class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -34,6 +34,10 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->kernel = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
+            ->getMock();
+
+        $this->locale = $this->getMockBuilder('Locale')
+            ->setMethods([ 'getContext', 'setContext' ])
             ->getMock();
 
         $this->request = $this->getMockBuilder('Request')
@@ -62,27 +66,28 @@ class UrlGeneratorHelperTest extends \PHPUnit_Framework_TestCase
 
     public function serviceContainerCallback($name)
     {
-        if ($name === 'data.manager.filter') {
-            return $this->fm;
-        }
+        switch ($name) {
+            case 'data.manager.filter':
+                return $this->fm;
 
-        if ($name === 'user_repository') {
-            return $this->um;
-        }
+            case 'user_repository':
+                return $this->um;
 
-        if ($name === 'core.instance') {
-            return $this->instance;
-        }
+            case 'core.instance':
+                return $this->instance;
 
-        if ($name === 'request_stack') {
-            return $this->requestStack;
+            case 'core.locale':
+                return $this->locale;
+
+            case 'request_stack':
+                return $this->requestStack;
         }
 
         return null;
     }
 
     /**
-     * @covers Common\Core\Component\Helper\UrlGeneratorHelper::__construct
+     * @covers \Common\Core\Component\Helper\UrlGeneratorHelper::__construct
      */
     public function testConstructor()
     {

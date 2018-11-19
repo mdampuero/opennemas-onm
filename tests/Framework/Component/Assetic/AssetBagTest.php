@@ -5,7 +5,7 @@ namespace Tests\Framework\Component\Assetic;
 use Framework\Component\Assetic\AssetBag;
 use Common\ORM\Entity\Instance;
 
-class AssetBagTest extends \PHPUnit_Framework_TestCase
+class AssetBagTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

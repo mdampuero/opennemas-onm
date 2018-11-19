@@ -44,7 +44,6 @@ abstract class AbstractCache implements CacheInterface
      * Set the namespace to prefix all cache ids with
      *
      * @param  string $namespace
-     * @return void
      */
     public function setNamespace($namespace)
     {
@@ -75,6 +74,7 @@ abstract class AbstractCache implements CacheInterface
      * {@inheritdoc}
      *
      * @param  string $id cache id The id of the cache entry to fetch.
+     *
      * @return string The cached data or FALSE, if no cache entry
      *                exists for the given id.
      */
@@ -156,8 +156,8 @@ abstract class AbstractCache implements CacheInterface
     /**
      * {@inheritdoc}
      *
-     * @param string $id       The cache id.
-     * @param string $data     The cache entry/data.
+     * @param string|array $id       The cache id.
+     * @param string|array $data     The cache entry/data.
      * @param int    $lifeTime The lifetime. If != false, sets a specific
      *                         lifetime for this cache entry (null => infinite
      *                         lifeTime).
@@ -362,7 +362,7 @@ abstract class AbstractCache implements CacheInterface
      * @return boolean TRUE if the entry was successfully stored in the
      *                         cache, FALSE otherwise.
      */
-    abstract protected function doSave($id, $data, $lifeTime = false);
+    abstract protected function doSave($id, $data, $lifeTime = null);
 
     /**
      * Deletes a cache entry.

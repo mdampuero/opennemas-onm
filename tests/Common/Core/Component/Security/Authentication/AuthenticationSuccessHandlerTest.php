@@ -10,12 +10,11 @@
 namespace Tests\Common\Core\Component\Security\Authentication;
 
 use Common\Core\Component\Security\Authentication\AuthenticationSuccessHandler;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
  * Defines test cases for AuthenticationSuccessHandler class.
  */
-class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
+class AuthenticationSuccessHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

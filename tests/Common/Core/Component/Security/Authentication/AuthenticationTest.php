@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Security;
 /**
  * Defines test cases for class class.
  */
-class AuthenticationTest extends \PHPUnit_Framework_TestCase
+class AuthenticationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.

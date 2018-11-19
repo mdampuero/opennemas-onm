@@ -1,12 +1,11 @@
 <?php
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     output.filter.js_includes.pre01.php
- * Type:     outputfilter
- * Name:     js_includes
- * Purpose:  Handles all the js includes and print them into .
- * -------------------------------------------------------------
+/**
+ * Handles all the js includes and print them into .
+ *
+ * @param string $output
+ * @param \Smarty $smarty
+ *
+ * @return string
  */
 function smarty_outputfilter_js_includes($output, $smarty)
 {

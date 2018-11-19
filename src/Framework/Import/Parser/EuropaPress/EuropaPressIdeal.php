@@ -9,7 +9,6 @@
  */
 namespace Framework\Import\Parser\EuropaPress;
 
-use Framework\Import\Parser\Parser;
 use Framework\Import\Resource\Resource;
 
 /**

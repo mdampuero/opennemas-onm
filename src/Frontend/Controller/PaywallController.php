@@ -17,7 +17,6 @@ namespace Frontend\Controller;
 use PayPal\CoreComponentTypes\BasicAmountType;
 use PayPal\EBLBaseComponents\DoExpressCheckoutPaymentRequestDetailsType;
 use PayPal\EBLBaseComponents\ActivationDetailsType;
-use PayPal\EBLBaseComponents\AddressType;
 use PayPal\EBLBaseComponents\BillingAgreementDetailsType;
 use PayPal\EBLBaseComponents\PaymentDetailsItemType;
 use PayPal\EBLBaseComponents\PaymentDetailsType;
@@ -42,7 +41,6 @@ use PayPal\PayPalAPI\SetExpressCheckoutRequestType;
 
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for paywall module
@@ -89,7 +87,9 @@ class PaywallController extends Controller
             }
         }
 
-        $settings = s::get('paywall_settings');
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('paywall_settings');
 
         $articleID = $request->query->getDigits('content_id');
 
@@ -122,7 +122,9 @@ class PaywallController extends Controller
             return $this->redirect($this->generateUrl('frontend_paywall_showcase'));
         }
 
-        $paywallSettings = s::get('paywall_settings');
+        $paywallSettings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('paywall_settings');
 
         foreach ($paywallSettings['payment_modes'] as $mode) {
             if ($mode['time'] == $selectedPlanId) {
@@ -181,7 +183,9 @@ class PaywallController extends Controller
         $setECDetails->ReturnURL          = $returnUrl;
         $setECDetails->ReqConfirmShipping = 0; // no shipping
         $setECDetails->NoShipping         = 1; // no shipping
-        $setECDetails->BrandName          = s::get('site_name');
+        $setECDetails->BrandName          = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('site_name');
 
         if ($recurringPayment == '1') {
             // Billing agreement details
@@ -246,7 +250,9 @@ class PaywallController extends Controller
     {
         $token = $request->query->get('token');
 
-        $paywallSettings = s::get('paywall_settings');
+        $paywallSettings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('paywall_settings');
 
         // Some sanity checks before continue with the payment
         if (empty($request->getSession()->get('paywall_transaction'))
@@ -343,6 +349,7 @@ class PaywallController extends Controller
         }
 
         $paymentInfo = $DoECResponse->DoExpressCheckoutPaymentResponseDetails->PaymentInfo[0];
+        $message     = '';
 
         // Payment done, let's update some registries in the app
         if (isset($DoECResponse) && $DoECResponse->Ack == 'Success') {
@@ -393,7 +400,9 @@ class PaywallController extends Controller
     {
         $token = $request->query->get('token');
 
-        $paywallSettings = s::get('paywall_settings');
+        $paywallSettings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('paywall_settings');
 
         // Some sanity checks before continue with the payment
         if (empty($request->getSession()->get('paywall_transaction'))
@@ -678,7 +687,9 @@ class PaywallController extends Controller
 
         if (isset($getRPPDetailsResponse) && $getRPPDetailsResponse->Ack == 'Success') {
             // Fetch paywall settings
-            $paywallSettings = s::get('paywall_settings');
+            $paywallSettings = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('paywall_settings');
 
             // Set some values from response
             $price       = $getRPPDetailsResponse->GetRecurringPaymentsProfileDetailsResponseDetails
@@ -739,7 +750,9 @@ class PaywallController extends Controller
             $setECDetails->ReturnURL          = $returnUrl;
             $setECDetails->ReqConfirmShipping = 0; // no shipping
             $setECDetails->NoShipping         = 1; // no shipping
-            $setECDetails->BrandName          = s::get('site_name');
+            $setECDetails->BrandName          = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('site_name');
 
             // Billing agreement details
             $billingAgreementDetails = new BillingAgreementDetailsType('RecurringPayments');
@@ -795,12 +808,12 @@ class PaywallController extends Controller
 
     /**
      * Description of the action
-     *
-     * @return void
      */
     public function returnCancelPaymentAction()
     {
-        $paywallSettings = s::get('paywall_settings');
+        $paywallSettings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('paywall_settings');
 
         return $this->render('paywall/payment_error.tpl', [
             'settings' => $paywallSettings
@@ -819,15 +832,15 @@ class PaywallController extends Controller
 
     /**
      * undocumented function
-     *
-     * @return void
      * @author
      */
     private function getPaypalService()
     {
         $settings = [];
 
-        $databaseSettings = s::get('paywall_settings');
+        $databaseSettings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('paywall_settings');
 
         $settings = [
             "acct1.UserName"  => $databaseSettings['paypal_username'],
