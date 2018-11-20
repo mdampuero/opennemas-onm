@@ -21,22 +21,8 @@ angular.module('BackendApp.controllers').controller('FileCtrl', [
      * @param {Array}  tags     Array with all the tags needed for the file
      */
     $scope.init = function(file, locale, tags) {
-      $scope.tag_ids = file !== null ? file.tag_ids : [];
-      $scope.locale  = locale;
-      $scope.tags    = tags;
-      $scope.watchTagIds('title');
-    };
-
-    /**
-     * @function getTagsAutoSuggestedFields
-     * @memberOf FileCtrl
-     *
-     * @description
-     *   Method to method to retrieve th title for the autosuggested words
-     *
-     */
-    $scope.getTagsAutoSuggestedFields = function() {
-      return $scope.title;
+      $scope.locale = locale;
+      $scope.tags   = tags;
     };
   }
 ]);
