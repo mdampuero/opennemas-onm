@@ -29,9 +29,8 @@ angular.module('BackendApp.controllers')
        * @param {Array}  tags       Array with all the tags needed for the static page
        */
       $scope.init = function(staticPage, locale, tags) {
-        $scope.tag_ids = staticPage ? staticPage : [];
-        $scope.locale  = locale;
-        $scope.tags    = tags;
+        $scope.locale = locale;
+        $scope.tags   = tags;
       };
     }
   ]);

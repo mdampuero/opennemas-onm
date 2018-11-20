@@ -26,9 +26,9 @@
             <li class="quicklinks hidden-xs">
               <h5>
                 {if !isset($page->id)}
-                  {t}Creating static page{/t}
+                  {t}Create{/t}
                 {else}
-                  {t}Editing page{/t}
+                  {t}Edit{/t}
                 {/if}
               </h5>
             </li>
@@ -99,7 +99,7 @@
           <div class="grid simple">
             <div class="grid-body">
               {acl isAllowed="STATIC_PAGE_AVAILABLE"}
-              <div class="form-group no-margin">
+              <div class="form-group">
                 <div class="checkbox">
                   <input id="content_status" name="content_status" {if (isset($page) && $page->content_status eq 1)}checked{/if}  value="1" type="checkbox"/>
                   <label for="content_status">
@@ -111,7 +111,7 @@
               <div class="form-group">
                 <label for="metadata" class="form-label">{t}Tags{/t}</label>
                 <div class="controls">
-                  <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="newAndExistingTagsFromTagList" get-suggested-tags="getSuggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
+                  {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
                 </div>
               </div>
             </div>
