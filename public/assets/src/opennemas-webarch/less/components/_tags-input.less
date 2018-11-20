@@ -26,7 +26,7 @@ tags-input .tags.focused {
 
 tags-input .tags .tag-item {
   background: 0;
-  background-color: #0090d9;
+  background-color: @info-color;
   border: 0;
   border-radius: .25em;
   color: #fff;
@@ -36,6 +36,10 @@ tags-input .tags .tag-item {
   margin-right: 4px;
   text-shadow: none;
   vertical-align: middle;
+
+  &.tag-item-new {
+    background-color: @success-color;
+  }
 }
 
 tags-input .tags .input {
@@ -57,7 +61,7 @@ tags-input .tags.focused .input {
 
 tags-input .tags .tag-item.selected {
   background: 0;
-  background-color: #e94847;
+  background-color: @danger-color;
 }
 
 tags-input .tags .tag-item .remove-button {
