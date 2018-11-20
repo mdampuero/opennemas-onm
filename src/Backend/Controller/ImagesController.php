@@ -99,67 +99,33 @@ class ImagesController extends Controller
      */
     public function showAction(Request $request)
     {
-        $ids  = $request->query->get('id');
-        $page = $request->query->getDigits('page', 1);
+        $id    = $request->query->getDigits('id');
+        $photo = $this->get('entity_repository')->find('Photo', $id);
 
-        // Check if ids was passed as params
-        if (!is_array($ids) || !(count($ids) > 0)) {
-            $ids = (int) $ids;
-            if ($ids <= 0) {
-                $this->get('session')->getFlashBag()->add('error', _('Please provide a image id for show it.'));
+        if (is_null($photo->id)) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find a photo with the id "%d".'), $id)
+            );
 
-                return $this->redirect($this->generateUrl('admin_images'));
-            }
-
-            $ids = [$ids];
+            return $this->redirect($this->generateUrl('admin_albums'));
         }
 
-        $contentAux = new \Content();
-        $auxTagIds  = $contentAux->getContentTags($ids);
-        $photos     = [];
-        $allTags    = [];
-        foreach ($ids as $id) {
-            $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
-            if (!empty($id)) {
-                $photo          = new \Photo($id);
-                $photo->tag_ids = array_key_exists($photo->id, $auxTagIds) ?
-                    $auxTagIds[$photo->id] :
-                    [];
-                $allTags        = array_merge($allTags, $photo->tag_ids);
+        $tags = [];
 
-                if (!is_null($photo->pk_photo)) {
-                    $photos [] = $photo;
-                }
-            }
+        if (!empty($photo->tag_ids)) {
+            $ts   = $this->get('api.service.tag');
+            $tags = $ts->responsify($ts->getListByIds($photo->tag_ids)['items']);
         }
 
         $ls = $this->get('core.locale');
 
-        // Check if passed ids fits photos in database, if not redirect to listing
-        if (count($photos) <= 0) {
-            $this->get('session')->getFlashBag()->add('error', _('Unable to find any photo with that id'));
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_images',
-                    [ 'page'     => $page,
-                        'locale' => $ls->getRequestLocale('frontend'),
-                        'tags'   => []
-                    ]
-                )
-            );
-        }
-
-        return $this->render(
-            'image/new.tpl',
-            [
-                'photos'        => $photos,
-                'MEDIA_IMG_URL' => $this->imgUrl,
-                'locale'        => $ls->getRequestLocale('frontend'),
-                'tags'          => $this->get('api.service.tag')
-                    ->getListByIdsKeyMapped(array_unique($allTags))['items']
-            ]
-        );
+        return $this->render('image/new.tpl', [
+            'photo'         => $photo,
+            'MEDIA_IMG_URL' => $this->imgUrl,
+            'locale'        => $ls->getRequestLocale('frontend'),
+            'tags'          => $tags
+        ]);
     }
 
     /**
@@ -173,45 +139,51 @@ class ImagesController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $photosRAW   = $request->request->get('description');
-        $ids         = [];
-        $photosSaved = 0;
+        $id    = $request->query->getDigits('id');
+        $photo = $this->get('entity_repository')->find('Photo', $id);
 
-        foreach (array_keys($photosRAW) as $id) {
-            $photoData = [
-                'id'             => filter_var($id, FILTER_SANITIZE_STRING),
-                'title'          => filter_var($_POST['title'][$id], FILTER_SANITIZE_STRING),
-                'description'    => filter_var(
-                    $_POST['description'][$id],
-                    FILTER_SANITIZE_STRING,
-                    FILTER_FLAG_NO_ENCODE_QUOTES
-                ),
-                'author_name'    => filter_var($_POST['author_name'][$id], FILTER_SANITIZE_STRING),
-                'address'        => filter_var($_POST['address'][$id], FILTER_SANITIZE_STRING),
-                'category'       => filter_var($_POST['category'][$id], FILTER_SANITIZE_STRING),
-                'content_status' => 1,
-                'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
-            ];
+        if (is_null($photo->id)) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find a photo with the id "%d".'), $id)
+            );
 
-            $photo = new \Photo($id);
-
-            $ids[] = $id;
-
-            if ($photo->update($photoData)) {
-                $photosSaved++;
-            }
+            return $this->redirect($this->generateUrl('admin_albums'));
         }
 
-        if (count($ids) > 0) {
+        $photoData = [
+            'id'             => filter_var($id, FILTER_SANITIZE_STRING),
+            'title'          => filter_var($_POST['title'][$id], FILTER_SANITIZE_STRING),
+            'description'    => filter_var(
+                $_POST['description'][$id],
+                FILTER_SANITIZE_STRING,
+                FILTER_FLAG_NO_ENCODE_QUOTES
+            ),
+            'author_name'    => filter_var($_POST['author_name'][$id], FILTER_SANITIZE_STRING),
+            'address'        => filter_var($_POST['address'][$id], FILTER_SANITIZE_STRING),
+            'category'       => filter_var($_POST['category'][$id], FILTER_SANITIZE_STRING),
+            'content_status' => 1,
+            'tags'           => json_decode($request->request->get('tags', ''), true)
+        ];
+
+        $photo = new \Photo($id);
+
+        if ($photo->update($photoData)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
-                sprintf(_('Data successfully saved for %d photos'), $photosSaved)
+                _("Photo updated successfully.")
+            );
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("There was a problem while updating the content.")
             );
         }
 
-        $queryIDs = implode('&id[]=', $ids);
-
-        return $this->redirect($this->generateUrl('admin_image_show') . '?id[]=' . $queryIDs);
+        return $this->redirect($this->generateUrl(
+            'admin_image_show',
+            [ 'id' => $photo->id ]
+        ));
     }
 
     /**

@@ -31,10 +31,9 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="metadata-{$photo->id}" class="form-label">{t}Keywords{/t}</label>
+      <label for="metadata-{$photo->id}" class="form-label">{t}Tags{/t}</label>
       <div class="controls">
-        <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="newAndExistingTagsFromTagList" get-suggested-tags="getSuggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
-        <div class="help-block">{t}Used for searches and automated suggestions.{/t}</div>
+        {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
       </div>
     </div>
     <div class="form-group">

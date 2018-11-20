@@ -236,8 +236,8 @@ admin_image_create:
     options:
         expose: true
 
-admin_image_update:
-    path:     /image/update
+admin_photo_update:
+    path:     /image/{id}/update
     defaults: { _controller: BackendBundle:Images:update }
 
 # Videos controller routes

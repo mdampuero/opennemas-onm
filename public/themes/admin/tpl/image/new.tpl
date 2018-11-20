@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form id="formulario" name="form_upload" action="{url name=admin_image_update}" method="POST" ng-controller="ImageCtrl" ng-init="init({json_encode($photos)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
+  <form id="formulario" name="form_upload" action="{if isset($photo->id)}{url name=admin_photo_update id=$photo->id}{else}{url name=admin_photo_create}{/if}" method="POST" ng-controller="ImageCtrl" ng-init="init({json_encode($photos)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -44,13 +44,11 @@
       </div>
     </div>
     <div class="content">
-      {foreach from=$photos item=photo name=photo_show}
-        <div class="grid simple">
-          <div class="grid-body">
-            {include file="image/_partials/photo_data.tpl" display='inline'}
-          </div>
+      <div class="grid simple">
+        <div class="grid-body">
+          {include file="image/_partials/photo_data.tpl" display='inline'}
         </div>
-      {/foreach}
+      </div>
     </div>
   </form>
   <div class="modal fade" id="modal-image-location">
