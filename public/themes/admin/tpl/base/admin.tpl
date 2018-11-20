@@ -46,7 +46,6 @@
       @Common/src/webarch/css/magic_space.css,
       @Common/src/angular-dynamic-image/less/main.less,
       @Common/src/angular-onm-pagination/less/main.less,
-      @Common/src/angular-tag/less/main.less,
       @Common/src/sidebar/less/main.less,
       @Common/src/photo-editor/css/photo-editor.css,
       @Common/src/opennemas-webarch/less/main.less" filters="cssrewrite,less" output="common"}
@@ -545,7 +544,6 @@
       @Common/src/angular-picker/js/picker.js,
       @Common/src/angular-picker/js/content-picker.js,
       @Common/src/angular-picker/js/media-picker.js,
-      @Common/src/angular-tag/js/onm-tag.js,
       @Common/src/onm-tags-input/js/onm-tags-input.js,
       @Common/src/angular-query-manager/query-manager.js,
       @Common/src/angular-renderer/renderer.js,
