@@ -127,7 +127,7 @@ class SpecialsController extends Controller
             'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
             'noticias_right' => json_decode($request->request->get('noticias_right_input')),
             'noticias_left'  => json_decode($request->request->get('noticias_left_input')),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($special->create($data)) {
@@ -158,9 +158,8 @@ class SpecialsController extends Controller
      */
     public function showAction(Request $request)
     {
-        $id = $request->query->getDigits('id', null);
-
-        $special = new \Special($id);
+        $id      = $request->query->getDigits('id', null);
+        $special = $this->get('entity_repository')->find('Special', $id);
 
         if (is_null($special->id)) {
             $this->get('session')->getFlashBag()->add(
@@ -171,10 +170,12 @@ class SpecialsController extends Controller
             return $this->redirect($this->generateUrl('admin_specials'));
         }
 
-        $auxTagIds        = $special->getContentTags($special->id);
-        $special->tag_ids = array_key_exists($special->id, $auxTagIds) ?
-            $auxTagIds[$special->id] :
-            [];
+        $tags = [];
+
+        if (!empty($special->tag_ids)) {
+            $ts   = $this->get('api.service.tag');
+            $tags = $ts->responsify($ts->getListByIds($special->tag_ids)['items']);
+        }
 
         $contents = $special->getContents($id);
 
@@ -205,9 +206,8 @@ class SpecialsController extends Controller
         return $this->render('special/new.tpl', [
             'special'  => $special,
             'category' => $special->category,
-            'locale'         => $ls->getRequestLocale('frontend'),
-            'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($special->tag_ids)['items']
+            'locale'   => $ls->getRequestLocale('frontend'),
+            'tags'     => $tags
         ]);
     }
 
@@ -252,7 +252,7 @@ class SpecialsController extends Controller
                 'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
                 'noticias_left'  => json_decode($request->request->get('noticias_left_input')),
                 'noticias_right' => json_decode($request->request->get('noticias_right_input')),
-                'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+                'tags'           => json_decode($request->request->get('tags', ''), true)
             ];
 
             if ($special->update($data)) {
