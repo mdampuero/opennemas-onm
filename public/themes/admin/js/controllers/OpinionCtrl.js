@@ -21,10 +21,8 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @param {Array}  tags     Array with all the tags needed for the opinion
      */
     $scope.init = function(opinion, locale, tags) {
-      $scope.tag_ids = opinion !== null ? opinion.tag_ids : [];
-      $scope.locale  = locale;
-      $scope.tags    = tags;
-      $scope.watchTagIds('title');
+      $scope.locale = locale;
+      $scope.tags   = tags;
     };
 
     /**
