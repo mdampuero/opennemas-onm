@@ -604,30 +604,6 @@
           return title + ' ' + category;
         };
 
-        /**
-         * @function loadAutoSuggestedTags
-         * @memberOf ArticleCtrl
-         *
-         * @description
-         *   Retrieve all auto suggested words for this article
-         *
-         * @return {string} all words for all fields
-         */
-        $scope.loadAutoSuggestedTags = function() {
-          var data = $scope.getTagsAutoSuggestedFields();
-
-          $scope.checkAutoSuggesterTags(
-            function(items) {
-              if (items !== null) {
-                $scope.article.tag_ids = $scope.article.tag_ids.concat(items);
-              }
-            },
-            data,
-            $scope.article.tag_ids,
-            $scope.config.locale
-          );
-        };
-
         // Update footers when photos change
         $scope.$watch('[ article.img1, article.img2, article.params.imageHome ]',
           function(nv, ov) {
@@ -765,22 +741,6 @@
             }, 2500);
           }
         }, true);
-
-        // Update metadata when title or category change
-        $scope.$watch('[ article.title, article.category ]', function(nv, ov) {
-          if ($scope.article.tag_ids && $scope.article.tag_ids.length > 0 ||
-              !nv || nv === ov) {
-            return;
-          }
-
-          if ($scope.mtm) {
-            $timeout.cancel($scope.mtm);
-          }
-
-          $scope.mtm = $timeout(function() {
-            $scope.loadAutoSuggestedTags();
-          }, 2500);
-        });
 
         // Shows a modal window to translate content automatically
         $scope.$watch('config.locale', function(nv, ov) {
