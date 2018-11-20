@@ -603,7 +603,10 @@ class Content implements \JsonSerializable, CsvSerializable
             $this->pk_content   = $this->id;
             $data['pk_content'] = $this->id;
             $data['id']         = $this->id;
-            $data['tag_ids']    = $this->addTags($data['tags']);
+
+            if (array_key_exists('tags', $data)) {
+                $data['tag_ids'] = $this->addTags($data['tags']);
+            }
 
             self::load($contentData);
 
@@ -740,7 +743,9 @@ class Content implements \JsonSerializable, CsvSerializable
                 );
             }
 
-            $this->tag_ids = $this->addTags($data['tags']);
+            if (array_key_exists('tags', $data)) {
+                $this->tag_ids = $this->addTags($data['tags']);
+            }
 
             logContentEvent(__METHOD__, $this);
             dispatchEventWithParams('content.update', [ 'content' => $this ]);
