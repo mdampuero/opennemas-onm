@@ -144,7 +144,7 @@
               <label for="metadata" class="form-label">{t}Keywords{/t}</label>
               <span class="help">{t}Separated by comas{/t}</span>
               <div class="controls">
-                <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="newAndExistingTagsFromTagList" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
+                {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
               </div>
             </div>
 
