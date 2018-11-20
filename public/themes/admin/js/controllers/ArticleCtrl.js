@@ -23,7 +23,8 @@
      *   Provides actions to edit, save and update articles.
      */
     .controller('ArticleCtrl', [
-      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'linker', 'localizer', 'messenger', 'webStorage',
+      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner',
+      'http', 'linker', 'localizer', 'messenger', 'webStorage',
       function($controller, $scope, $timeout, $uibModal, $window, cleaner,
           http, linker, localizer, messenger, webStorage) {
         // Initialize the super class and extend it.
@@ -721,25 +722,29 @@
 
         // Update title_int when title changes
         $scope.$watch('article.title', function(nv, ov) {
-          if (!nv) {
+          if (!nv && !ov) {
             return;
           }
 
-          if (nv && (!$scope.article.title_int ||
-              ov === $scope.article.title_int)) {
+          if (!$scope.article.title_int || ov === $scope.article.title_int) {
             $scope.article.title_int = nv;
           }
 
-          if (!$scope.article.slug || $scope.article.slug === '') {
+          if (!$scope.article.pk_content) {
             if ($scope.tm) {
               $timeout.cancel($scope.tm);
+            }
+
+            if (!nv) {
+              $scope.article.slug = '';
+              return;
             }
 
             $scope.tm = $timeout(function() {
               $scope.getSlug(nv, function(response) {
                 $scope.article.slug = response.data.slug;
               });
-            }, 2500);
+            }, 250);
           }
         }, true);
 
