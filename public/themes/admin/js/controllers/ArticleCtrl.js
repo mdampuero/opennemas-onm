@@ -297,7 +297,7 @@
             $scope.article         = $scope.data.article;
             $scope.categories      = $scope.data.extra.categories;
             $scope.fieldsByModule  = $scope.data.extra.moduleFields;
-            $scope.tags            = $scope.data.extra.tags;
+            $scope.article.tags    = $scope.toArray($scope.data.extra.tags);
 
             $scope.build();
 
@@ -445,7 +445,7 @@
               return;
             }
 
-            $scope.tags                 = response.data.tags;
+            $scope.article.tags         = response.data.tags;
             $scope.data.article.tag_ids = response.data.tag_ids;
             $scope.article.tag_ids      = response.data.tag_ids;
             messenger.post(response.data.message);
