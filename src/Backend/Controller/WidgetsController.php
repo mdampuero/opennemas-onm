@@ -97,12 +97,11 @@ class WidgetsController extends Controller
             $post = $request->request;
 
             $title      = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-            $tagIds     = $this->getTags($title);
             $widgetData = [
                 'id'             => $post->getDigits('id'),
                 'action'         => $post->filter('action', null, FILTER_SANITIZE_STRING),
                 'title'          => $title,
-                'tag_ids'        => $tagIds,
+                'tags'           => $this->getTags($title),
                 'content_status' => (int) $post->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'renderlet'      => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
                 'description'    => $post->get('description', ''),
@@ -169,12 +168,11 @@ class WidgetsController extends Controller
         }
 
         $title      = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-        $tagIds     = $this->getTags($title);
         $widgetData = [
             'id'              => $id,
             'action'          => $post->filter('action', null, FILTER_SANITIZE_STRING),
             'title'           => $title,
-            'tag_ids'         => $tagIds,
+            'tags'            => $this->getTags($title),
             'content_status'  => (int) $post->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'renderlet'       => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
             'description'     => $post->get('description', ''),
@@ -281,10 +279,8 @@ class WidgetsController extends Controller
      */
     protected function getTags($title)
     {
-        $tags = $this->get('api.service.tag')->getListByString($title);
+        $ts = $this->get('api.service.tag');
 
-        return array_map(function ($a) {
-            return $a->id;
-        }, $tags['items']);
+        return $ts->responsify($ts->getListByString($title)['items']);
     }
 }
