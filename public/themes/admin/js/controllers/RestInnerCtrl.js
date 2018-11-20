@@ -19,8 +19,8 @@
      *   Provides actions to edit, save and update subscribers.
      */
     .controller('RestInnerCtrl', [
-      '$controller', '$scope', '$uibModal', '$window', 'cleaner', 'http', 'messenger', 'routing',
-      function($controller, $scope, $uibModal, $window, cleaner, http, messenger, routing) {
+      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'messenger', 'routing',
+      function($controller, $scope, $timeout, $uibModal, $window, cleaner, http, messenger, routing) {
         $.extend(this, $controller('BaseCtrl', { $scope: $scope }));
 
         /**
@@ -32,6 +32,16 @@
          * @type {Object}
          */
         $scope.item = {};
+
+        /**
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *  Whether to refresh the item after a successful update.
+         *
+         * @type {Boolean}
+         */
+        $scope.refreshOnUpdate = false;
 
         /**
          * @function getData
@@ -150,6 +160,12 @@
 
               $window.location.href =
                 routing.generate($scope.routes.redirect, { id: id });
+            }
+
+            if (response.status === 200 && $scope.refreshOnUpdate) {
+              $timeout(function() {
+                $scope.getItem($scope.getItemId());
+              }, 500);
             }
 
             messenger.post(response.data);
