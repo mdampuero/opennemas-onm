@@ -2,8 +2,8 @@
  * Handle actions for poll inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
-  '$controller', '$rootScope', '$scope', '$sce', '$timeout', 'http',
-  function($controller, $rootScope, $scope, $sce, $timeout, http) {
+  '$compile', '$controller', '$rootScope', '$scope', '$sce', '$timeout', 'http',
+  function($compile, $controller, $rootScope, $scope, $sce, $timeout, http) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -30,6 +30,22 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       }
     };
 
+    $scope.title = null;
+
+    /**
+     * @function generateTagsFrom
+     * @memberOf InnerCtrl
+     *
+     * @description
+     *   Returns a string to use when clicking on "Generate" button for
+     *   tags component.
+     *
+     * @return {String} The string to generate tags from.
+     */
+    $scope.generateTagsFrom = function() {
+      return $('#title').val();
+    };
+
     $scope.getVideoData = function() {
       var route = {
         name: 'admin_videos_get_info',
@@ -45,9 +61,10 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         function(response) {
           $scope.external_content = $sce.trustAsHtml(response.data);
           $scope.loading_data     = false;
+
           $timeout(function() {
-            $scope.loadAutoSuggestedTags();
-          }, 0);
+            angular.element('.tags-input-generate-btn').triggerHandler('click');
+          }, 250);
         }
       );
     };

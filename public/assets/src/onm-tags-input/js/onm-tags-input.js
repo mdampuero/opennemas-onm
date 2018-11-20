@@ -23,7 +23,7 @@
             placeholder:  '@',
           },
           template: function() {
-            return '<button class="reload-tags btn btn-info btn-mini pull-right" ng-click="generate(generateFrom)" type="button">' +
+            return '<button class="btn btn-info btn-mini pull-right tags-input-generate-btn" ng-click="generate(generateFrom)" type="button">' +
                 '<i class="fa fa-refresh m-r-5" ng-class="{ \'fa-spin\': $parent.flags.http.reload }"></i>' +
                 $window.strings.tags.generate +
               '</button>' +
