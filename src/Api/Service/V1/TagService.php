@@ -19,10 +19,7 @@ class TagService extends OrmService
      */
     public function createItem($data)
     {
-        $data['slug'] = $this->container->get('data.manager.filter')
-            ->set($data['name'])
-            ->filter('slug')
-            ->get();
+        $data = $this->parse($data);
 
         return parent::createItem($data);
     }
@@ -249,11 +246,32 @@ class TagService extends OrmService
      */
     public function updateItem($id, $data)
     {
+        $data = $this->parse($data);
+
+        parent::updateItem($id, $data);
+    }
+
+    /**
+     * Checks and adds missing fields to the provided data.
+     *
+     * @param array The data to parse.
+     *
+     * @return array The parsed data.
+     */
+    protected function parse($data)
+    {
         $data['slug'] = $this->container->get('data.manager.filter')
             ->set($data['name'])
             ->filter('slug')
             ->get();
 
-        parent::updateItem($id, $data);
+        if (!array_key_exists('language_id', $data)
+            || empty($data['language_id'])
+        ) {
+            $data['language_id'] = $this->container->get('core.locale')
+                ->getLocale('frontend');
+        }
+
+        return $data;
     }
 }

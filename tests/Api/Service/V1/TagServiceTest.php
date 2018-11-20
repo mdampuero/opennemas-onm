@@ -43,6 +43,10 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'filter', 'get', 'set' ])
             ->getMock();
 
+        $this->locale = $this->getMockBuilder('Locale')
+            ->setMethods([ 'getLocale' ])
+            ->getMock();
+
         $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
             ->setMethods([ 'getId', 'getIdKeys' ])
             ->getMock();
@@ -76,6 +80,9 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
             case 'core.dispatcher':
                 return $this->dispatcher;
 
+            case 'core.locale':
+                return $this->locale;
+
             case 'data.manager.filter':
                 return $this->fm;
 
@@ -94,8 +101,16 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $data = [ 'name' => 'Plugh' ];
 
         $this->converter->expects($this->any())->method('objectify')
-            ->with(array_merge($data, [ 'slug' => 'plugh' ]))
-            ->willReturn(array_merge($data, [ 'slug' => 'plugh' ]));
+            ->with(array_merge($data, [
+                'slug'        => 'plugh',
+                'language_id' => 'es_ES'
+            ]))->willReturn(array_merge($data, [
+                'slug'        => 'plugh',
+                'language_id' => 'es_ES'
+            ]));
+
+        $this->locale->expects($this->once())->method('getLocale')
+            ->with('frontend')->willReturn('es_ES');
 
         $this->em->expects($this->once())->method('persist');
 
@@ -119,8 +134,16 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $data = [ 'name' => 'Wibble' ];
 
         $this->converter->expects($this->any())->method('objectify')
-            ->with(array_merge($data, [ 'slug' => 'wibble' ]))
-            ->willReturn(array_merge($data, [ 'slug' => 'wibble' ]));
+            ->with(array_merge($data, [
+                'slug'        => 'wibble',
+                'language_id' => 'es_ES'
+            ]))->willReturn(array_merge($data, [
+                'slug'        => 'wibble',
+                'language_id' => 'es_ES'
+            ]));
+
+        $this->locale->expects($this->once())->method('getLocale')
+            ->with('frontend')->willReturn('es_ES');
 
         $this->repository->expects($this->once())->method('find')
             ->with(1)->willReturn($item);
