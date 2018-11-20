@@ -31,7 +31,7 @@
                 '<tags-input add-from-autocomplete-only="false" ng-model="ngModel" display-property="name" on-tag-added="exists($tag)" on-tag-adding="validate($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" tag-class="{ \'tag-item-exists\': $tag.id, \'tag-item-new\': !$tag.id }">' +
                   '<auto-complete debounce-delay="250" highlight-matched-text="true" load-on-down-arrow="true" min-length="3" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
                 '</tags-input>' +
-                '<input name="tags" type="hidden" value="[% JSON.stringify(ngModel) %]">' +
+                '<input name="tags" type="hidden" ng-value="getJsonValue()">' +
               '</div>' +
             '<script type="text/ng-template" id="tag">' +
               '<span ng-bind-html="$highlight($getDisplayText())"></span>' +
@@ -101,8 +101,34 @@
             name: 'api_v1_backend_tools_tags',
             params: { q: str }
           }).then(function(response) {
-            $scope.ngModel = response.data.items;
+            if (!$scope.ngModel) {
+              $scope.ngModel = response.data.items;
+            }
+
+            var ids = $scope.ngModel.map(function(e) {
+              return e.id;
+            });
+
+            // Prevent duplicated tags
+            var newTags = response.data.items.filter(function(e) {
+              return ids.indexOf(e.id) === -1;
+            });
+
+            $scope.ngModel = $scope.ngModel.concat(newTags);
           });
+        };
+
+        /**
+         * @function getJsonValue
+         * @memberOf OnmTagsInputCtrl
+         *
+         * @description
+         *   Returns the ngModel as JSON string.
+         *
+         * @return {String} The ngModel as JSON string.
+         */
+        $scope.getJsonValue = function() {
+          return JSON.stringify($scope.ngModel);
         };
 
         /**
