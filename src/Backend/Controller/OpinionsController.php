@@ -187,7 +187,12 @@ class OpinionsController extends Controller
                 ->get(OpinionsController::EXTRA_INFO_TYPE);
         }
 
-        $ts = $this->get('api.service.tag');
+        $tags = [];
+
+        if (!empty($file->tag_ids)) {
+            $ts   = $this->get('api.service.tag');
+            $tags = $ts->responsify($ts->getListByIds($file->tag_ids)['items']);
+        }
 
         return $this->render('opinion/new.tpl', [
             'opinion'        => $opinion,
@@ -197,8 +202,7 @@ class OpinionsController extends Controller
             'extra_fields'   => $extraFields,
             'locale'         => $this->get('core.locale')
                 ->getRequestLocale('frontend'),
-            'tags'           =>
-                $ts->responsify($ts->getListByIds($opinion->tag_ids)['items'])
+            'tags'           => $tags
         ]);
     }
 

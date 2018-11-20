@@ -373,8 +373,6 @@ class FilesController extends Controller
         $id   = $request->query->getDigits('id');
         $file = $this->get('entity_repository')->find('Attachment', $id);
 
-        // If the file doesn't exists redirect to the listing
-        // and show error message
         if (!is_object($file) || is_null($file->pk_attachment)) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -384,14 +382,17 @@ class FilesController extends Controller
             return $this->redirect($this->generateUrl('admin_files'));
         }
 
-        $ts = $this->get('api.service.tag');
+        $tags = [];
+
+        if (!empty($file->tag_ids)) {
+            $ts   = $this->get('api.service.tag');
+            $tags = $ts->responsify($ts->getListByIds($file->tag_ids)['items']);
+        }
 
         return $this->render('files/new.tpl', [
             'attaches' => $file,
-            'locale'   => $this->get('core.locale')
-                ->getRequestLocale('frontend'),
-            'tags'     =>
-                $ts->responsify($ts->getListByIds($file->tag_ids)['items'])
+            'locale'   => $this->get('core.locale')->getRequestLocale('frontend'),
+            'tags'     => $tags
         ]);
     }
 

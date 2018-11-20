@@ -297,7 +297,7 @@
             $scope.article         = $scope.data.article;
             $scope.categories      = $scope.data.extra.categories;
             $scope.fieldsByModule  = $scope.data.extra.moduleFields;
-            $scope.article.tags    = $scope.toArray($scope.data.extra.tags);
+            $scope.article.tags    = $scope.data.extra.tags;
 
             $scope.build();
 
