@@ -21,27 +21,13 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @param {Array}  tags     Array with all the tags needed for the video
      */
     $scope.init = function(video, locale, tags) {
-      $scope.tag_ids          = video !== null ? video.tag_ids : [];
-      $scope.locale           = locale;
-      $scope.tags             = tags;
+      $scope.locale = locale;
+      $scope.tags   = tags;
+
       if (!$scope.title) {
         $scope.loading_data     = false;
         $scope.external_content = '';
-      } else {
-        $scope.watchTagIds('title');
       }
-    };
-
-    /**
-     * @function getTagsAutoSuggestedFields
-     * @memberOf VideoCtrl
-     *
-     * @description
-     *   Method to method to retrieve th title for the autosuggested words
-     *
-     */
-    $scope.getTagsAutoSuggestedFields = function() {
-      return $scope.title ? $scope.title : $('#title').val();
     };
 
     $scope.getVideoData = function() {
