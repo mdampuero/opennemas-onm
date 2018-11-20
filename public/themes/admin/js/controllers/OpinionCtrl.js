@@ -76,18 +76,6 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     };
 
     /**
-     * @function getTagsAutoSuggestedFields
-     * @memberOf OpinionCtrl
-     *
-     * @description
-     *   Method to method to retrieve th title for the autosuggested words
-     *
-     */
-    $scope.getTagsAutoSuggestedFields = function() {
-      return $scope.title;
-    };
-
-    /**
      * Updates scope when photo1 changes.
      *
      * @param array nv The new values.

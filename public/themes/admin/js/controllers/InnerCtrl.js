@@ -31,6 +31,20 @@
         $scope.overlay = {};
 
         /**
+         * @function generateTagsFrom
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *   Returns a string to use when clicking on "Generate" button for
+         *   tags component.
+         *
+         * @return {String} The string to generate tags from.
+         */
+        $scope.generateTagsFrom = function() {
+          return $scope.title;
+        };
+
+        /**
          * @function removeImage
          * @memberOf InnerCtrl
          *
