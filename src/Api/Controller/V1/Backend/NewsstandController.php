@@ -46,9 +46,8 @@ class NewsstandController extends Controller
      */
     public function showAction(Request $request)
     {
-        $id = $request->query->getDigits('id', null);
-
-        $content = new \Kiosko($id);
+        $id      = $request->query->getDigits('id', null);
+        $content = $this->get('entity_repository')->find('Kiosko', $id);
 
         if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
             && !$content->isOwner($this->getUser()->id)
@@ -66,19 +65,20 @@ class NewsstandController extends Controller
             );
         }
 
-        $auxTagIds        = $content->getContentTags($content->id);
-        $content->tag_ids = array_key_exists($content->id, $auxTagIds) ?
-            $auxTagIds[$content->id] :
-            [];
-
         $extra = $this->getExtraData();
+
+        if (!empty($content->tag_ids)) {
+            $ts = $this->get('api.service.tag');
+
+            $extra['tags'] = $ts->responsify(
+                $ts->getListByIds($content->tag_ids)['items']
+            );
+        }
 
         return new JsonResponse([
             'item' => $content,
             'extra' => array_merge($extra, [
                 'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
-                'tags'           => $this->get('api.service.tag')
-                    ->getListByIdsKeyMapped($content->tag_ids)['items']
             ])
         ]);
     }
@@ -109,7 +109,7 @@ class NewsstandController extends Controller
             'date'           => $postInfo->filter('date', null, FILTER_SANITIZE_STRING),
             'price'          => $postInfo->filter('price', 0.0, FILTER_SANITIZE_NUMBER_FLOAT),
             'fk_publisher'   => (int) $this->getUser()->id,
-            'tag_ids'        => $request->request->get('tag_ids', ''),
+            'tags'           => $request->request->get('tags', ''),
             'name'           => '',
             'path'           => $dateTime->format('Y/m/d') . '/',
         ];
@@ -205,7 +205,7 @@ class NewsstandController extends Controller
                 'name'           => $content->name,
                 'thumb_url'      => $content->thumb_url,
                 'fk_user_last_editor' => $this->getUser()->id,
-                'tag_ids'        => $request->request->get('tag_ids', '')
+                'tags'           => $request->request->get('tags', '')
             ];
 
             $cover     = $request->files->get('cover');
