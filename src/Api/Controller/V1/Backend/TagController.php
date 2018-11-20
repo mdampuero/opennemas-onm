@@ -49,25 +49,6 @@ class TagController extends ApiController
     protected $service = 'api.service.tag';
 
     /**
-     * Get suggested tags for some word.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function autoSuggesterAction(Request $request)
-    {
-        $tags       = $request->query->get('tags', null);
-        $languageId = $request->query->get('languageId', null);
-        $ts         = $this->get('api.service.tag');
-        $items      = $ts->getTagsAndNewTags($languageId, $tags);
-
-        return new JsonResponse([
-            'items' => $ts->responsify($items)
-        ]);
-    }
-
-    /**
      * Checks if the information in the request is valid to create a new Tag.
      *
      * @param Request $request The request object.
