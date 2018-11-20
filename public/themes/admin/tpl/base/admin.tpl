@@ -86,6 +86,7 @@
       var strings = {
         tags: {
           reload: '{t}Reload{/t}',
+          generate: '{t}Generate{/t}',
           suggested: '{t}Suggested tags{/t}',
         }
       };
@@ -545,6 +546,7 @@
       @Common/src/angular-picker/js/content-picker.js,
       @Common/src/angular-picker/js/media-picker.js,
       @Common/src/angular-tag/js/onm-tag.js,
+      @Common/src/onm-tags-input/js/onm-tags-input.js,
       @Common/src/angular-query-manager/query-manager.js,
       @Common/src/angular-renderer/renderer.js,
       @Common/src/angular-repeat-finish/repeat-finish.js,
