@@ -77,9 +77,14 @@
           }).then(function(response) {
             if (response.data.total === 1 &&
                 tag.name === response.data.items[0].name) {
-              tag.id   = response.data.items[0].id;
-              tag.slug = response.data.items[0].slug;
+              for (var property in response.data.items[0]) {
+                tag[property] = response.data.items[0][property];
+              }
+
+              return;
             }
+
+            tag.language_id = $scope.locale;
           });
         };
 
