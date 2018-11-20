@@ -58,45 +58,16 @@ class ToolController extends Controller
 
         $filterManager = $this->get('data.manager.filter');
         $tagService    = $this->get('api.service.tag');
-        $validator     = $this->get('api.validator.tag');
-        $locale        = $this->get('core.locale')->getLocale('frontend');
 
         $tags  = $filterManager->set($str)->filter('tags')->get();
         $tags  = explode(',', $tags);
         $slugs = $filterManager->set($tags)->filter('slug')->get();
 
-        $foundTags = array_combine($slugs, $tags);
+        $tags = $tagService->getListBySlugs($slugs);
 
-        // Find existing tags
-        $existingTags  = $tagService->getListBySlugs($slugs);
-        $existingSlugs = array_map(function ($a) {
-            return $a->name;
-        }, $existingTags['items']);
+        $tags['items'] = $tagService->responsify($tags['items']);
 
-        // Remove existing tags from generated tags
-        $newTags = array_diff_key($foundTags, array_flip($existingSlugs));
-
-        // Append new valid tags to existing tags
-        foreach ($newTags as $slug => $name) {
-            $tag = new Tag([
-                'name'        => $name,
-                'language_id' => $locale,
-                'slug'        => $slug
-            ]);
-
-            try {
-                $validator->validate($tag);
-            } catch (\Exception $e) {
-                continue;
-            }
-
-            $existingTags['items'][] = $tag;
-            $existingTags['total']++;
-        }
-
-        $existingTags['items'] = $tagService->responsify($existingTags['items']);
-
-        return $existingTags;
+        return $tags;
     }
 
     /**
