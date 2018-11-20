@@ -575,17 +575,17 @@
         };
 
         /**
-         * @function getTagsAutoSuggestedFields
+         * @function generateTagsFrom
          * @memberOf ArticleCtrl
          *
          * @description
-         *   Concat all fields from where generate auto suggested tags
+         *   Returns a string to use when clicking on "Generate" button for
+         *   tags component.
          *
-         * @return {string} all words for all fields
+         * @return {String} The string to generate tags from.
          */
-        $scope.getTagsAutoSuggestedFields = function() {
-          var title    = $scope.article.title ? $scope.article.title : '';
-          var category = '';
+        $scope.generateTagsFrom = function() {
+          var tags = $scope.article.title ? $scope.article.title : '';
 
           // Get category name from category id
           if ($scope.article.pk_fk_content_category) {
@@ -593,15 +593,16 @@
               return e.pk_content_category ===
                 $scope.article.pk_fk_content_category;
             });
-            var lz   = localizer.get($scope.data.extra.options);
+
+            var lz = localizer.get($scope.data.extra.options);
 
             if (categories.length > 0) {
-              category = lz.localize(categories[0],
-                [ 'title' ], $scope.config.locale).title;
+              tags += ' ' + lz.localize(categories[0], [ 'title' ],
+                $scope.config.locale).title;
             }
           }
 
-          return title + ' ' + category;
+          return tags;
         };
 
         // Update footers when photos change
