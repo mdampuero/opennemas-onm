@@ -52,8 +52,10 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'find' ])
-            ->getMock();
+            ->setMethods([
+                'countBy', 'find', 'findBy', 'getIdsByContentType',
+                'getNumberOfContents'
+            ])->getMock();
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
@@ -121,6 +123,197 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('Plugh', $item->name);
         $this->assertEquals('plugh', $item->slug);
+    }
+
+    /**
+     * Tests getListByContentTypes when there are no tags associated to any
+     * content in the list of types.
+     */
+    public function testGetListByContentTypesWhenNoTags()
+    {
+        $this->repository->expects($this->once())->method('getIdsByContentType')
+            ->with([ 'article' ])->willReturn([]);
+
+        $response = $this->service->getListByContentTypes([ 'article' ]);
+
+        $this->assertEquals([], $response['items']);
+        $this->assertEquals(0, $response['total']);
+    }
+
+    /**
+     * Tests getListByContentTypes when there are tags associated to any
+     * content in the list of types.
+     */
+    public function testGetListByContentTypesWhenTagsFound()
+    {
+        $tags = [
+            new Tag([ 'id' => 1]),
+            new Tag([ 'id' => 2]),
+            new Tag([ 'id' => 3]),
+        ];
+
+        $this->repository->expects($this->once())->method('getIdsByContentType')
+            ->with([ 'article' ])->willReturn([ 1, 2, 3 ]);
+
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 1, 2, 3 ])->willReturn($tags);
+
+        $response = $this->service->getListByContentTypes([ 'article' ]);
+
+        $this->assertEquals($tags, $response['items']);
+        $this->assertEquals(3, $response['total']);
+    }
+
+    /**
+     * Tests getListBySlugs when no valid slugs provided.
+     *
+     * @expectedException \Api\Exception\GetListException
+     */
+    public function testGetListBySlugWhenNoSlugsProvided()
+    {
+        $this->service->getListBySlugs([]);
+    }
+
+    /**
+     * Tests getListBySlugs when no valid slugs provided.
+     */
+    public function testGetListBySlugWhenSlugsProvided()
+    {
+        $tags = [ new Tag([ 'slug' => 'wobble' ]) ];
+
+        $this->repository->expects($this->once())->method('findBy')
+            ->with('slug in ["wobble"] and language_id = "es_ES"')
+            ->willReturn($tags);
+
+        $this->repository->expects($this->once())->method('countBy')
+            ->with('slug in ["wobble"] and language_id = "es_ES"')
+            ->willReturn(1);
+
+        $response = $this->service->getListBySlugs([ 'wobble' ], 'es_ES');
+
+        $this->assertEquals($tags, $response['items']);
+        $this->assertEquals(1, $response['total']);
+    }
+
+    /**
+     * Tests getListBySlugs when no valid string provided.
+     *
+     * @expectedException \Api\Exception\GetListException
+     */
+    public function testGetListByStringWhenNoStringProvided()
+    {
+        $this->fm->expects($this->at(0))->method('set')
+            ->with('')->willReturn($this->fm);
+        $this->fm->expects($this->at(1))->method('filter')
+            ->with('tags')->willReturn($this->fm);
+        $this->fm->expects($this->at(2))->method('get')
+            ->willReturn('');
+        $this->fm->expects($this->at(3))->method('set')
+            ->with([ '' ])->willReturn($this->fm);
+        $this->fm->expects($this->at(4))->method('filter')
+            ->with('slug')->willReturn($this->fm);
+        $this->fm->expects($this->at(5))->method('get')
+            ->willReturn([]);
+
+        $this->service->getListByString('');
+    }
+
+    /**
+     * Tests getListBySlugs when valid string provided.
+     */
+    public function testGetListByStringWhenStringProvided()
+    {
+        $tags = [ new Tag([ 'slug' => 'wobble' ]) ];
+
+        $this->fm->expects($this->at(0))->method('set')
+            ->with('wobble norf')->willReturn($this->fm);
+        $this->fm->expects($this->at(1))->method('filter')
+            ->with('tags')->willReturn($this->fm);
+        $this->fm->expects($this->at(2))->method('get')
+            ->willReturn('wobble,norf');
+        $this->fm->expects($this->at(3))->method('set')
+            ->with([ 'wobble', 'norf' ])->willReturn($this->fm);
+        $this->fm->expects($this->at(4))->method('filter')
+            ->with('slug')->willReturn($this->fm);
+        $this->fm->expects($this->at(5))->method('get')
+            ->willReturn([ 'wobble', 'norf' ]);
+
+        $this->repository->expects($this->once())->method('findBy')
+            ->with('slug in ["wobble","norf"]')
+            ->willReturn($tags);
+
+        $this->repository->expects($this->once())->method('countBy')
+            ->with('slug in ["wobble","norf"]')->willReturn(1);
+
+        $response = $this->service->getListByString('wobble norf');
+
+        $this->assertEquals($tags, $response['items']);
+        $this->assertEquals(1, $response['total']);
+    }
+
+    /**
+     * Tests getListByIdsKeyMapped when ids provided.
+     */
+    public function testGetListByIdsKeyMappedWhenIdsProvided()
+    {
+        $tag = new Tag([ 'id' => 134 ]);
+
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 134 ])->willReturn([ $tag ]);
+
+        $this->converter->expects($this->once())->method('responsify')
+            ->with([ 134 => $tag ])->willReturn([ 134 => $tag ]);
+
+        $this->assertEquals(
+            [ 'items' => [ 134 => $tag ], 'total' => 1 ],
+            $this->service->getListByIdsKeyMapped([ 134 ])
+        );
+    }
+
+    /**
+     * Tests getListByIdsKeyMapped when no ids provided.
+     */
+    public function testGetListByIdsKeyMappedWhenNoIdsProvided()
+    {
+        $this->assertEquals(
+            [ 'items' => [], 'total' => 0 ],
+            $this->service->getListByIdsKeyMapped([])
+        );
+    }
+
+    /**
+     * Tests getStats when empty values provided.
+     */
+    public function testGetStatsWhenEmptyValuesProvided()
+    {
+        $this->assertEquals([], $this->service->getStats(null));
+        $this->assertEquals([], $this->service->getStats([]));
+    }
+
+    /**
+     * Tests getStats when a tag provided.
+     */
+    public function testGetStatsWhenTagProvided()
+    {
+        $tag = new Tag([ 'id' => 134 ]);
+
+        $this->repository->expects($this->once())->method('getNumberOfContents')
+            ->with([ 134 ])->willReturn([ 134 => 345 ]);
+
+        $this->assertEquals([ 134 => 345 ], $this->service->getStats($tag));
+    }
+
+    /**
+     * Tests getStats when a list of tags provided.
+     */
+    public function testGetStatsWhenListOfTagsProvided()
+    {
+        $tags = [ new Tag([ 'id' => 134 ]), new Tag([ 'id' => 455 ]) ];
+
+        $this->repository->expects($this->once())->method('getNumberOfContents')
+            ->with([ 134, 455 ])->willReturn([ 134 => 345, 455 => 0 ]);
+
+        $this->assertEquals([ 134 => 345, 455 => 0 ], $this->service->getStats($tags));
     }
 
     /**

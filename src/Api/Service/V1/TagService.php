@@ -9,6 +9,7 @@
  */
 namespace Api\Service\V1;
 
+use Api\Exception\GetListException;
 use Common\ORM\Entity\Tag;
 use Common\Core\Component\Validator\Validator;
 
@@ -81,17 +82,39 @@ class TagService extends OrmService
      */
     public function getListByString($str, $locale = null)
     {
-        $tags = $this->container->get('data.manager.filter')
-            ->set($str)
-            ->filter('tags')
-            ->get();
+        $fm = $this->container->get('data.manager.filter');
 
-        $slugs = $this->container->get('data.manager.filter')
-            ->set(explode(',', $tags))
-            ->filter('slug')
-            ->get();
+        $tags  = $fm->set($str)->filter('tags')->get();
+        $slugs = $fm->set(explode(',', $tags))->filter('slug')->get();
 
         return $this->getListBySlugs($slugs, $locale);
+    }
+
+    /**
+     *  Method to retrieve the tags for a list of tag ids
+     *
+     * @param array $ids List of ids we want to retrieve
+     *
+     * @return array List of tags fo this tags.
+     */
+    public function getListByIdsKeyMapped($ids, $locale = null)
+    {
+        if (empty($ids)) {
+            return [ 'items' => [], 'total' => 0 ];
+        }
+
+        $tags      = $this->getListByIds($ids);
+        $returnArr = [];
+
+        foreach ($tags['items'] as $tag) {
+            if (is_null($locale) || $tag->language_id == $locale) {
+                $returnArr[$tag->id] = \Onm\StringUtils::convertToUtf8($tag);
+            }
+        }
+
+        $tags['items'] = $this->responsify($returnArr);
+
+        return $tags;
     }
 
     /**
@@ -119,32 +142,6 @@ class TagService extends OrmService
         return $this->container->get('orm.manager')
             ->getRepository($this->entity, $this->origin)
             ->getNumberOfContents($ids);
-    }
-
-    /**
-     *  Method to retrieve the tags for a list of tag ids
-     *
-     * @param array $ids List of ids we want to retrieve
-     *
-     * @return array List of tags fo this tags.
-     */
-    public function getListByIdsKeyMapped($ids, $locale = null)
-    {
-        if (empty($ids)) {
-            return ['items' => []];
-        }
-
-        $tags      = $this->getListByIds($ids);
-        $returnArr = [];
-
-        foreach ($tags['items'] as $tag) {
-            if (is_null($locale) || $tag->language_id == $locale) {
-                $returnArr[$tag->id] = \Onm\StringUtils::convertToUtf8($tag);
-            }
-        }
-        $tags['items'] = $this->responsify($returnArr);
-
-        return $tags;
     }
 
     /**
