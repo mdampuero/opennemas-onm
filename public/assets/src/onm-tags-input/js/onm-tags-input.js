@@ -24,7 +24,7 @@
           },
           template: function() {
             return '<button class="btn btn-info btn-mini pull-right tags-input-generate-btn" ng-click="generate(generateFrom)" type="button">' +
-                '<i class="fa fa-refresh m-r-5" ng-class="{ \'fa-spin\': $parent.flags.http.reload }"></i>' +
+                '<i class="fa fa-refresh m-r-5" ng-class="{ \'fa-spin\': generating }"></i>' +
                 $window.strings.tags.generate +
               '</button>' +
               '<div>' +
@@ -101,11 +101,14 @@
           if (!str) {
             return;
           }
+          $scope.generating = true;
 
           http.get({
             name: 'api_v1_backend_tools_tags',
             params: { q: str }
           }).then(function(response) {
+            $scope.generating = false;
+
             if (!$scope.ngModel) {
               $scope.ngModel = response.data.items;
             }
@@ -120,6 +123,8 @@
             });
 
             $scope.ngModel = $scope.ngModel.concat(newTags);
+          }, function() {
+            $scope.generating = false;
           });
         };
 
