@@ -70,7 +70,7 @@ class TagController extends ApiController
         try {
             $this->get('api.validator.tag')->validate($item);
         } catch (\Exception $e) {
-            $msg->add('error', $e->getMessage(), 400);
+            $msg->add($e->getMessage(), 'error', 400);
         }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
