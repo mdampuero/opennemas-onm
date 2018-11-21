@@ -205,18 +205,21 @@
                       <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                       </button>
+                      <a class="btn btn-white btn-small" href="/[% item.source %]" ng-if="item.type == 1 || item.type == 2" target="_blank">
+                        <i class="fa fa-external-link m-r-5"></i>{t}Test{/t}
+                      </a>
                     </div>
                   </td>
                   <td>
-                    <a ng-if="item.content_type !== 'user' && item.content_type !== 'user_group'" href="[% routing.generate('admin_' + item.content_type + '_show', { id: item.target }) %]" ng-if="[0, 1, 3].indexOf(item.type) !== -1">
+                    <a href="[% routing.generate('admin_' + item.content_type + '_show', { id: item.target }) %]" ng-if="(item.type == 0 || item.type == 1 || item.type == 3) && item.content_type !== 'user' && item.content_type !== 'user_group'">
                       [% item.target %] ([% item.content_type %])
                     </a>
-                    <a ng-if="item.content_type === 'user' || item.content_type === 'user_group'"  href="[% routing.generate('backend_' + item.content_type + '_show', { id: item.target }) %]" ng-if="[0, 1, 3].indexOf(item.type) !== -1">
+                    <a href="/[% item.target %]" ng-if="item.type == 2 || item.type == 4">
+                      [% item.target %]
+                    </a>
+                    <a href="[% routing.generate('backend_' + item.content_type + '_show', { id: item.target }) %]" ng-if="item.content_type === 'user' || item.content_type === 'user_group'">
                       [% item.target %] ([% item.content_type %])
                     </a>
-                    <span ng-if="[0, 1, 3].indexOf(item.type) === -1">
-                      [% item.target %] ([% item.content_type %])
-                    </span>
                   </td>
                   <td class="text-center">
                     <i class="fa" ng-class="{ 'fa-file-text-o': item.type == 0, 'fa-code': item.type == 1 || item.type == 2, 'fa-asterisk': item.type > 2 }"></i>
@@ -230,7 +233,7 @@
                   </td>
                   <td class="text-center">
                     <button class="btn btn-white" ng-click="patch(item, 'redirection', item.redirection != 1 ? 1 : 0)" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.redirectionLoading, 'fa-retweet text-error' : !item.redirectionLoading && item.redirection == 0, 'fa-retweet text-success': !item.redirectionLoading && item.redirection == 1 }"></i>
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.redirectionLoading, 'fa-exchange-alt text-error' : !item.redirectionLoading && item.redirection == 0, 'fa-retweet text-success': !item.redirectionLoading && item.redirection == 1 }"></i>
                       <span class="badge text-uppercase text-bold" ng-class="{ 'badge-success': !item.redirection, 'badge-warning text-black': item.redirection }">
                         [% item.redirection ? '301' : '200' %]
                       </span>

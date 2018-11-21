@@ -99,6 +99,24 @@ i.ng-hide-add-active, i.ng-hide-remove {
   }
 }
 
+.fa-exchange-alt {
+  display: inline-block;
+  font-size: inherit;
+  font: normal normal normal 14px/1 FontAwesome;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: auto;
+  transform: rotate(90deg) scale(-1, 1);
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
+  -ms-transform: rotate(90deg) scale(-1, 1);
+  -webkit-transform: rotate(90deg) scale(-1, 1);
+  width: 15px;
+
+  &:before {
+      content: "\f0ec";
+  }
+}
+
 // Set old alerts colors
 .alert-success {color: #fff;background-color: @success-color;}
 .alert-success .link {color: #fff;}
