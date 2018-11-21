@@ -34,6 +34,7 @@
          */
         $scope.item = {
           enabled: 0,
+          target: '',
           redirection: 1,
           type: 0
         };
@@ -70,7 +71,7 @@
             return;
           }
 
-          // Remove selected content when slug or regex to slug
+          // Remove selected content when URI or regex to URI
           if ([ 0, 1, 3 ].indexOf(nv) === -1) {
             if ($scope.data.extra.content) {
               delete $scope.data.extra.content;
