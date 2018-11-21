@@ -12,11 +12,11 @@ namespace Common\Core\Component\Routing;
 use Api\Service\Service;
 use Common\Cache\Core\Cache;
 use Common\ORM\Entity\Url;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Framework\Component\MIME\MimeTypeTool;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -266,6 +266,7 @@ class Redirector
         $response = new BinaryFileResponse($path);
 
         $response->headers->set('X-Status-Code', 200);
+        $response->headers->set('Content-Type', MimeTypeTool::getMimeType($path));
 
         return $response;
     }
