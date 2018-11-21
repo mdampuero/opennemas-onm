@@ -95,7 +95,7 @@
                     </div>
                     <div class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
                       <i class="fa fa-info-circle m-r-5 text-info"></i>
-                      {t}If enabled, this rule will cause a redirection to a valid opennemas URL{/t}
+                      {t}If enabled, this rule redirects to a valid opennemas URL{/t}
                     </div>
                   </div>
                 </div>
