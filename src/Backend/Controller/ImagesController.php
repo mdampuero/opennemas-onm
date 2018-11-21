@@ -153,15 +153,15 @@ class ImagesController extends Controller
 
         $photoData = [
             'id'             => filter_var($id, FILTER_SANITIZE_STRING),
-            'title'          => filter_var($_POST['title'][$id], FILTER_SANITIZE_STRING),
+            'title'          => filter_var($_POST['title'], FILTER_SANITIZE_STRING),
             'description'    => filter_var(
-                $_POST['description'][$id],
+                $_POST['description'],
                 FILTER_SANITIZE_STRING,
                 FILTER_FLAG_NO_ENCODE_QUOTES
             ),
-            'author_name'    => filter_var($_POST['author_name'][$id], FILTER_SANITIZE_STRING),
-            'address'        => filter_var($_POST['address'][$id], FILTER_SANITIZE_STRING),
-            'category'       => filter_var($_POST['category'][$id], FILTER_SANITIZE_STRING),
+            'author_name'    => filter_var($_POST['author_name'], FILTER_SANITIZE_STRING),
+            'address'        => filter_var($_POST['address'], FILTER_SANITIZE_STRING),
+            'category'       => filter_var($_POST['category'], FILTER_SANITIZE_STRING),
             'content_status' => 1,
             'tags'           => json_decode($request->request->get('tags', ''), true)
         ];

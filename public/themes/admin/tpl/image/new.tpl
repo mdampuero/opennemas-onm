@@ -73,7 +73,6 @@
                 </span>
               </div>
               <input type="hidden" class="final_address" value="">
-              <input type="hidden" class="target_image_id" value="">
             </div>
             <div class="map">
               <div id="map_canvas"></div>
@@ -329,19 +328,16 @@
 
         $('button.locate').on('click', function(e, ui) {
           var button = $(this);
-          var image_id = $(button).data('image-id');
           var addresss = $(button).closest('.photo-edit').find('.photo_address').val();
 
           $('.final_address').val(addresss);
           $('.address_search_input').val(addresss);
-          $('.target_image_id').val(image_id);
         });
 
         $('#modal-image-location .btn.accept').on('click', function(e){
           var location = $('.final_address').val();
-          var image_id = $('.target_image_id').val();
 
-          var element = $('#photo-' + image_id).find('.photo_address');
+          var element = $('#photo').find('.photo_address');
           delete map;
           $('#map_canvas').html('&nbsp;');
 

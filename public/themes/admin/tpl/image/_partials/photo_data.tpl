@@ -1,4 +1,4 @@
-<div id="photo-{$photo->id}" class="form-vertical clearfix photo-edit">
+<div id="photo" class="form-vertical clearfix photo-edit">
   <div class="col-md-4">
     <div class="thumbnail">
       {if preg_match('/^swf$/i', $photo->type_img)}
@@ -25,22 +25,22 @@
   </div>
   <div class="photo-basic-information col-md-8">
     <div class="form-group">
-      <label for="description-{$photo->id}" class="form-label">{t}Description{/t}</label>
+      <label for="description" class="form-label">{t}Description{/t}</label>
       <div class="controls">
-        <textarea required id="description-{$photo->id}" name="description[{$photo->id}]" class="form-control" rows="4">{$photo->description|clearslash}</textarea>
+        <textarea required id="description" name="description" class="form-control" rows="4">{$photo->description|clearslash}</textarea>
       </div>
     </div>
     <div class="form-group">
-      <label for="metadata-{$photo->id}" class="form-label">{t}Tags{/t}</label>
+      <label for="metadata" class="form-label">{t}Tags{/t}</label>
       <div class="controls">
         {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
       </div>
     </div>
     <div class="form-group">
-      <label for="author_name[{$photo->id}]" class="form-label">{t}Copyright{/t}</label>
+      <label for="author_name" class="form-label">{t}Copyright{/t}</label>
       <div class="controls">
         <div class="input-group">
-          <input class="form-control" type="text" id="author_name[{$photo->id}]" name="author_name[{$photo->id}]" value='{$photo->author_name|clearslash}'/>
+          <input class="form-control" type="text" id="author_name" name="author_name" value='{$photo->author_name|clearslash}'/>
           <span class="input-group-addon add-on">
             <span class="fa fa-copyright"></span>
           </span>
@@ -51,7 +51,7 @@
       <label for="geolocation" class="form-label">{t}Location{/t}</label>
       <div class="controls">
         <div class="input-group col-xs-6">
-          <input class="form-control photo_address" type="text" id="address_{$photo->id}" name="address[{$photo->id}]" value="{$photo->address}">
+          <input class="form-control photo_address" type="text" id="address" name="address" value="{$photo->address}">
           <span class="input-group-btn">
             <button class="locate btn btn-default" data-image-id="{$photo->id}" data-toggle="modal" href="#modal-image-location" type="button">
               <i class="fa fa-map-marker"></i>
@@ -61,13 +61,13 @@
       </div>
     </div>
     <div class="iptc-exif">
-      <h5 class="toggler toggler_{$photo->id}" ng-click="info_{$photo->id} = !info_{$photo->id}">
+      <h5 class="toggler toggler" ng-click="info = !info">
         {t escape=off}View advanced data{/t}
         <span>
-          <i class="fa" ng-class="{ 'fa-plus-square-o': !info_{$photo->id}, 'fa-minus-square-o': info_{$photo->id} }"></i>
+          <i class="fa" ng-class="{ 'fa-plus-square-o': !info, 'fa-minus-square-o': info }"></i>
         </span>
       </h5>
-      <div class="info info_{$photo->id} ng-cloak" ng-if="info_{$photo->id}">
+      <div class="info ng-cloak" ng-if="info">
         {if is_null($photo->exif) neq true}
           <h6>{t}EXIF Data{/t}</h6>
           <div id="exif" class="photo-static-info">
@@ -104,8 +104,8 @@
         {/if}
       </div><!-- /additional-info -->
     </div>
-    <input type="hidden" name="resolution[{$photo->id}]" value="{$photo->resolution}" />
-    <input type="hidden" name="title[{$photo->id}]" value="{$photo->title}" />
-    <input type="hidden" name="category[{$photo->id}]" value="{$photo->category}" />
+    <input type="hidden" name="resolution" value="{$photo->resolution}" />
+    <input type="hidden" name="title" value="{$photo->title}" />
+    <input type="hidden" name="category" value="{$photo->category}" />
   </div><!-- /photo-{$rnf} -->
 </div>
