@@ -181,7 +181,7 @@ class ImagesController extends Controller
         }
 
         return $this->redirect($this->generateUrl(
-            'admin_image_show',
+            'admin_photo_show',
             [ 'id' => $photo->id ]
         ));
     }

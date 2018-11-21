@@ -220,10 +220,6 @@ admin_image_new:
     path:     /images/new
     defaults: { _controller: BackendBundle:Images:new }
 
-admin_image_show:
-    path:     /images/show
-    defaults: { _controller: BackendBundle:Images:show }
-
 admin_photo_show:
     path:     /images/{id}/show
     defaults: { _controller: BackendBundle:Images:show }
