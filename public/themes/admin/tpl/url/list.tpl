@@ -90,7 +90,7 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Content{/t} {t}to{/t} {t}Content{/t}', value: 0}, { name: '{t}Slug{/t} {t}to{/t} {t}Content{/t}', value: 1 }, { name: '{t}Regex{/t} {t}to{/t} {t}Content{/t}', value: 2 }, { name: '{t}Slug{/t} {t}to{/t} {t}Slug{/t}/{t}URL{/t}', value: 3 } ]">
+            <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Content{/t} {t}to{/t} {t}Content{/t}', value: 0}, { name: 'URI {t}to{/t} {t}Content{/t}', value: 1 }, { name: '{t}Regex{/t} {t}to{/t} {t}Content{/t}', value: 2 }, { name: 'URI {t}to{/t} URI', value: 3 } ]">
               <ui-select name="type" theme="select2" ng-model="criteria.type">
                 <ui-select-match>
                   <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
@@ -219,14 +219,14 @@
                     </span>
                   </td>
                   <td class="text-center">
-                    <i class="fa" ng-class="{ 'fa-file-text-o': item.type == 0, 'fa-code': item.type == 1 || item.type == 3, 'fa-asterisk': item.type == 2 }"></i>
+                    <i class="fa" ng-class="{ 'fa-file-text-o': item.type == 0, 'fa-code': item.type == 1 || item.type == 2, 'fa-asterisk': item.type > 2 }"></i>
                     <strong ng-if="isHelpEnabled() && item.type == 0">{t}Content{/t}</strong>
-                    <strong ng-if="isHelpEnabled() && item.type == 1 || item.type == 3">{t}Slug{/t}</strong>
-                    <strong ng-if="isHelpEnabled() && item.type == 2">{t}Regex{/t}</strong>
+                    <strong ng-if="isHelpEnabled() && item.type == 1 || item.type == 2">URI</strong>
+                    <strong ng-if="isHelpEnabled() && item.type > 2">{t}Regex{/t}</strong>
                     {t}to{/t}
-                    <i class="fa" ng-class="{ 'fa-file-text-o': item.type == 0 || item.type == 1 || item.type == 2, 'fa-code': item.type == 3 }"></i>
-                    <strong ng-if="isHelpEnabled() && item.type == 0 || item.type == 1 || item.type == 2">{t}Content{/t}</strong>
-                    <strong ng-if="isHelpEnabled() && item.type == 3">{t}Slug{/t}/{t}URL{/t}</strong>
+                    <i class="fa" ng-class="{ 'fa-file-text-o': item.type == 0 || item.type == 1 || item.type == 3, 'fa-code': item.type == 2 || item.type == 4 }"></i>
+                    <strong ng-if="isHelpEnabled() && (item.type == 0 || item.type == 1 || item.type == 3)">{t}Content{/t}</strong>
+                    <strong ng-if="isHelpEnabled() && (item.type == 2 || item.type == 4)">URI</strong>
                   </td>
                   <td class="text-center">
                     <button class="btn btn-white" ng-click="patch(item, 'redirection', item.redirection != 1 ? 1 : 0)" type="button">
