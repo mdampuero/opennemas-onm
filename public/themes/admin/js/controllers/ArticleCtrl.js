@@ -586,24 +586,7 @@
          * @return {String} The string to generate tags from.
          */
         $scope.generateTagsFrom = function() {
-          var tags = $scope.article.title ? $scope.article.title : '';
-
-          // Get category name from category id
-          if ($scope.article.pk_fk_content_category) {
-            var categories = $scope.data.extra.categories.filter(function(e) {
-              return e.pk_content_category ===
-                $scope.article.pk_fk_content_category;
-            });
-
-            var lz = localizer.get($scope.data.extra.options);
-
-            if (categories.length > 0) {
-              tags += ' ' + lz.localize(categories[0], [ 'title' ],
-                $scope.config.locale).title;
-            }
-          }
-
-          return tags;
+          return $scope.article.title;
         };
 
         // Update footers when photos change
