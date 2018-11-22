@@ -23,16 +23,22 @@
             placeholder:  '@',
           },
           template: function() {
-            return '<button class="btn btn-info btn-mini pull-right tags-input-generate-btn" ng-click="generate(generateFrom)" type="button">' +
+            return '<div class="tags-input-buttons">' +
+              '<button class="btn btn-info btn-mini pull-right" ng-click="generate(generateFrom)" type="button">' +
                 '<i class="fa fa-refresh m-r-5" ng-class="{ \'fa-spin\': generating }"></i>' +
                 $window.strings.tags.generate +
               '</button>' +
-              '<div>' +
-                '<tags-input add-from-autocomplete-only="false" ng-model="ngModel" display-property="name" on-tag-added="exists($tag)" on-tag-adding="validate($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" tag-class="{ \'tag-item-exists\': $tag.id, \'tag-item-new\': !$tag.id }">' +
-                  '<auto-complete debounce-delay="250" highlight-matched-text="true" load-on-down-arrow="true" min-length="3" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
-                '</tags-input>' +
-                '<input name="tags" type="hidden" ng-value="getJsonValue()">' +
-              '</div>' +
+              '<button class="btn btn-danger btn-mini m-r-5 pull-right" ng-click="clear()" type="button">' +
+                '<i class="fa fa-trash-o m-r-5"></i>' +
+                $window.strings.tags.clear +
+              '</button>' +
+            '</div>' +
+            '<div>' +
+              '<tags-input add-from-autocomplete-only="false" ng-model="ngModel" display-property="name" on-tag-added="exists($tag)" on-tag-adding="validate($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" tag-class="{ \'tag-item-exists\': $tag.id, \'tag-item-new\': !$tag.id }">' +
+                '<auto-complete debounce-delay="250" highlight-matched-text="true" load-on-down-arrow="true" min-length="3" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
+              '</tags-input>' +
+              '<input name="tags" type="hidden" ng-value="getJsonValue()">' +
+            '</div>' +
             '<script type="text/ng-template" id="tag">' +
               '<span ng-bind-html="$highlight($getDisplayText())"></span>' +
             '</script';
@@ -54,6 +60,17 @@
     .controller('OnmTagsInputCtrl', [
       '$scope', '$timeout', 'http',
       function($scope, $timeout, http) {
+        /**
+         * @function clear
+         * @memberOf OnmTagsInputCtrl
+         *
+         * @description
+         *   Removes all tags from the list.
+         */
+        $scope.clear = function() {
+          $scope.ngModel = [];
+        };
+
         /**
          * @function exists
          * @memberOf OnmTagsInputCtrl

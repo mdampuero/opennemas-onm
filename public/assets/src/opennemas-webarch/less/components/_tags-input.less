@@ -76,14 +76,16 @@ tags-input .tags .tag-item .remove-button {
   vertical-align: middle;
 }
 
-.tags-input-generate-btn {
-  border-radius: 3px;
-  font-size: 12px;
-  line-height: 1.5;
-  margin-top: -30px;
-  padding: 1px 5px;
+.tags-input-buttons {
+  position: absolute;
+  right: 0;
+  top: -35px;
 
-  &:focus {
+  .btn {
+    font-weight: 800;
+  }
+
+  .btn-info:focus {
     background: @info-color;
   }
 }
