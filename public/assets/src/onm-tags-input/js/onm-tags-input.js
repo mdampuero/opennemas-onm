@@ -20,6 +20,7 @@
             locale:       '=',
             ngModel:      '=',
             generateFrom: '=',
+            autoGenerate: '=',
             placeholder:  '@',
           },
           template: function() {
@@ -208,8 +209,8 @@
         };
 
         // Generates a new list of tags when generateFrom value changes
-        $scope.$watch('generateFrom', function(nv, ov) {
-          if (!nv || !ov || nv === ov) {
+        $scope.$watch('autoGenerate', function(nv) {
+          if (!nv) {
             return;
           }
 
@@ -218,9 +219,10 @@
           }
 
           $scope.tm = $timeout(function() {
-            $scope.generate(nv);
+            $scope.autoGenerate = false;
+            $scope.generate($scope.generateFrom());
           }, 250);
-        });
+        }, true);
       }
     ]);
 })();
