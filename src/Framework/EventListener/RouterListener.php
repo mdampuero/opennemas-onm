@@ -249,7 +249,7 @@ class RouterListener implements EventSubscriberInterface
             }
 
             $url = $this->container->get('core.redirector')
-                ->getUrl(trim($request->getRequestUri(), '/'));
+                ->getUrl(preg_replace('/^\//', '', $request->getRequestUri()));
 
             if (!empty($url)) {
                 $response = $this->container->get('core.redirector')

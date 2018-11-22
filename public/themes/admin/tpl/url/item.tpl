@@ -95,7 +95,7 @@
                     </div>
                     <div class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
                       <i class="fa fa-info-circle m-r-5 text-info"></i>
-                      {t}If enabled, this rule will cause a redirection to a valid opennemas URL{/t}
+                      {t}If enabled, this rule redirects to a valid opennemas URL{/t}
                     </div>
                   </div>
                 </div>
@@ -139,10 +139,10 @@
                 <div class="row">
                   <div class="col-md-6 form-group no-margin">
                     <div class="radio">
-                      <input id="type-slug-content" ng-model="item.type" ng-value="1" type="radio">
-                      <label for="type-slug-content">
+                      <input id="type-uri-content" ng-model="item.type" ng-value="1" type="radio">
+                      <label for="type-uri-content">
                         <i class="fa fa-code"></i>
-                        <strong>{t}Slug{/t}</strong>
+                        <strong>URI</strong>
                         -
                         <i class="fa fa-file-text-o"></i>
                         <strong>{t}Content{/t}</strong>
@@ -150,23 +150,23 @@
                     </div>
                     <div class="help m-b-15 m-l-3" ng-if="isHelpEnabled()">
                       <i class="fa fa-info-circle m-r-5 text-info"></i>
-                      {t}Redirects a slug to a content id{/t}
+                      {t}Redirects an URI to a content id{/t}
                     </div>
                   </div>
                   <div class="col-md-6 form-group no-margin">
                     <div class="radio">
-                      <input id="type-slug-slug" ng-model="item.type" ng-value="2" type="radio">
-                      <label for="type-slug-slug">
+                      <input id="type-uri-uri" ng-model="item.type" ng-value="2" type="radio">
+                      <label for="type-uri-uri">
                         <i class="fa fa-code"></i>
-                        <strong>{t}Slug{/t}</strong>
+                        <strong>URI</strong>
                         -
                         <i class="fa fa-code"></i>
-                        <strong>{t}Slug{/t}/{t}URL{/t}</strong>
+                        <strong>URI</strong>
                       </label>
                     </div>
                     <div class="help m-b-15 m-l-3" ng-if="isHelpEnabled()">
                       <i class="fa fa-info-circle m-r-5 text-info"></i>
-                      {t}Redirects a slug to another slug or external URL{/t}
+                      {t}Redirects an URI to another URI or external URL{/t}
                     </div>
                   </div>
                 </div>
@@ -184,23 +184,23 @@
                     </div>
                     <div class="help m-l-3" ng-if="isHelpEnabled()">
                       <i class="fa fa-info-circle m-r-5 text-info"></i>
-                      {t}Redirects slugs to captured content ids basing on a regular expression{/t}
+                      {t}Redirects URIs to captured content ids basing on a regular expression{/t}
                     </div>
                   </div>
                   <div class="col-md-6 form-group">
                     <div class="radio">
-                      <input id="type-regex-slug" ng-model="item.type" ng-value="4" type="radio">
-                      <label for="type-regex-slug">
+                      <input id="type-regex-uri" ng-model="item.type" ng-value="4" type="radio">
+                      <label for="type-regex-uri">
                         <i class="fa fa-asterisk"></i>
                         <strong>{t}Regex{/t}</strong>
                         -
                         <i class="fa fa-code"></i>
-                        <strong>{t}Slug{/t}/{t}URL{/t}</strong>
+                        <strong>URI</strong>
                       </label>
                     </div>
                     <div class="help m-l-3" ng-if="isHelpEnabled()">
                       <i class="fa fa-info-circle m-r-5 text-info"></i>
-                      {t}Redirects slugs to another slugs basing on a regular expression{/t}
+                      {t}Redirects URIs to another URIs basing on a regular expression{/t}
                     </div>
                   </div>
                 </div>
@@ -219,8 +219,8 @@
                     <div class="form-group">
                       <label for="name" class="form-label">
                         <span ng-if="item.type === 0">{t}Content{/t}</span>
-                        <span ng-if="item.type === 1 || item.type === 2">{t}Slug{/t}</span>
-                        <span ng-if="item.type >= 3">{t}Pattern{/t}</span>
+                        <span ng-if="item.type === 1 || item.type === 2">URI</span>
+                        <span ng-if="item.type >= 3">{t}Regex{/t}</span>
                       </label>
                       <div class="controls">
                         <input class="form-control" id="name" name="name" ng-model="item.source" placeholder="[% item.type == 0 ? '1234' : (item.type == 1 || item.type == 2 ? 'qux/thud/norf': '^[a-z]+/([0-9]+)$') %]" required type="text">
@@ -233,7 +233,7 @@
                         <div class="form-group">
                           <label for="name" class="form-label">
                             <span ng-if="item.type === 0 || item.type === 1 || item.type === 3">{t}Content{/t}</span>
-                            <span ng-if="item.type === 2 || item.type === 4">{t}Slug{/t}/{t}URL{/t}</span>
+                            <span ng-if="item.type === 2 || item.type === 4">URI</span>
                           </label>
                           <span class="help m-l-5" ng-if="item.type === 2 || item.type === 4">
                             <i class="fa fa-warning text-warning"></i>
@@ -283,11 +283,11 @@
                   </div>
                 </div>
                 <div class="m-t-15 row" ng-if="examples">
-                  <div class="col-md-4">
+                  <div ng-class="{ 'col-md-4': item.type !== 2 && item.type !== 4, 'col-md-6': item.type === 2 || item.type === 4 }">
                     <div class="form-group no-margin">
                       <label for="name" class="form-label">
                         <span ng-if="item.type === 0">{t}Content{/t}</span>
-                        <span ng-if="item.type === 1 || item.type === 2">{t}Slug{/t}</span>
+                        <span ng-if="item.type === 1 || item.type === 2">URI</span>
                         <span ng-if="item.type === 3 || item.type === 4">{t}Regex{/t}</span>
                       </label>
                       <div class="controls">
@@ -297,34 +297,38 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-4">
-                    <div class="form-group no-margin">
-                      <label for="name" class="form-label">
-                        <span ng-if="item.type === 0 || item.type === 1 || item.type === 3">{t}Content{/t}</span>
-                        <span ng-if="item.type === 2 || item.type === 4">{t}Slug{/t}/{t}URL{/t}</span>
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" ng-if="item.type === 0 || item.type === 1 || item.type === 3"  readonly type="text" value="32455">
-                        <input class="form-control" ng-if="item.type === 2 || item.type === 4"  readonly type="text" value="flob">
+                  <div ng-class="{ 'col-md-8': item.type !== 2 && item.type !== 4, 'col-md-6': item.type === 2 || item.type === 4 }">
+                    <div class="row">
+                      <div ng-class="{ 'col-md-6': item.type !== 2 && item.type !== 4, 'col-md-12': item.type === 2 || item.type === 4 }">
+                        <div class="form-group no-margin">
+                          <label for="name" class="form-label">
+                            <span ng-if="item.type === 0 || item.type === 1 || item.type === 3">{t}Content{/t}</span>
+                            <span ng-if="item.type === 2 || item.type === 4">URI</span>
+                          </label>
+                          <div class="controls">
+                            <input class="form-control" ng-if="item.type === 0 || item.type === 1 || item.type === 3"  readonly type="text" value="32455">
+                            <input class="form-control" ng-if="item.type === 2 || item.type === 4"  readonly type="text" value="flob">
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4" ng-if="item.type !== 2 && item.type !== 4">
-                    <div class="form-group no-margin">
-                      <label for="name" class="form-label">{t}Content type{/t}</label>
-                      <div class="controls">
-                        <input class="form-control" readonly type="text" value="article">
+                      <div class="col-md-6" ng-if="item.type === 0 || item.type === 1 || item.type === 3">
+                        <div class="form-group no-margin">
+                          <label for="name" class="form-label">{t}Content type{/t}</label>
+                          <div class="controls">
+                            <input class="form-control" readonly type="text" value="article">
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="p-b-15 p-t-15 visible-sm visible-xs" ng-if="examples"></div>
                 <div class="m-t-15 row" ng-if="examples">
-                  <div class="col-md-4">
+                  <div ng-class="{ 'col-md-4': item.type !== 2 && item.type !== 4, 'col-md-6': item.type === 2 || item.type === 4 }">
                     <div class="form-group no-margin">
                       <label for="name" class="form-label">
                         <span ng-if="item.type === 0">{t}Content{/t}</span>
-                        <span ng-if="item.type === 1 || item.type === 2">{t}Slug{/t}</span>
+                        <span ng-if="item.type === 1 || item.type === 2">URI</span>
                         <span ng-if="item.type === 3 || item.type === 4">{t}Regex{/t}</span>
                       </label>
                       <div class="controls">
@@ -334,36 +338,40 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-4">
-                    <div class="form-group no-margin">
-                      <label for="name" class="form-label">
-                        <span ng-if="item.type === 0 || item.type === 1 || item.type === 3">{t}Content{/t}</span>
-                        <span ng-if="item.type === 2 || item.type === 4">{t}Slug{/t}/{t}URL{/t}</span>
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" ng-if="item.type === 0 || item.type === 1"  readonly type="text" value="5345">
-                        <input class="form-control" ng-if="item.type === 2"  readonly type="text" value="">
-                        <input class="form-control" ng-if="item.type === 3"  readonly type="text" value="$1-$2">
-                        <input class="form-control" ng-if="item.type === 4"  readonly type="text" value="http://www.example.org/$2/$1">
+                  <div ng-class="{ 'col-md-8': item.type !== 2 && item.type !== 4, 'col-md-6': item.type === 2 || item.type === 4 }">
+                    <div class="row">
+                      <div ng-class="{ 'col-md-6': item.type !== 2 && item.type !== 4, 'col-md-12': item.type === 2 || item.type === 4 }">
+                        <div class="form-group no-margin">
+                          <label for="name" class="form-label">
+                            <span ng-if="item.type === 0 || item.type === 1 || item.type === 3">{t}Content{/t}</span>
+                            <span ng-if="item.type === 2 || item.type === 4">URI</span>
+                          </label>
+                          <div class="controls">
+                            <input class="form-control" ng-if="item.type === 0 || item.type === 1"  readonly type="text" value="5345">
+                            <input class="form-control" ng-if="item.type === 2"  readonly type="text" value="">
+                            <input class="form-control" ng-if="item.type === 3"  readonly type="text" value="$1-$2">
+                            <input class="form-control" ng-if="item.type === 4"  readonly type="text" value="http://www.example.org/$2/$1">
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4" ng-if="item.type !== 2 && item.type !== 4">
-                    <div class="form-group no-margin">
-                      <label for="name" class="form-label">{t}Content type{/t}</label>
-                      <div class="controls">
-                        <input class="form-control" readonly type="text" value="photo">
+                      <div class="col-md-6" ng-if="item.type === 0 || item.type === 1 || item.type === 3">
+                        <div class="form-group no-margin">
+                          <label for="name" class="form-label">{t}Content type{/t}</label>
+                          <div class="controls">
+                            <input class="form-control" readonly type="text" value="photo">
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="p-b-15 p-t-15 visible-sm visible-xs" ng-if="examples"></div>
                 <div class="m-t-15 row" ng-if="examples">
-                  <div class="col-md-4">
+                  <div ng-class="{ 'col-md-4': item.type !== 2 && item.type !== 4, 'col-md-6': item.type === 2 || item.type === 4 }">
                     <div class="form-group no-margin">
                       <label for="name" class="form-label">
                         <span ng-if="item.type === 0">{t}Content{/t}</span>
-                        <span ng-if="item.type === 1 || item.type === 2">{t}Slug{/t}</span>
+                        <span ng-if="item.type === 1 || item.type === 2">URI</span>
                         <span ng-if="item.type === 3 || item.type === 4">{t}Regex{/t}</span>
                       </label>
                       <div class="controls">
@@ -373,25 +381,29 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-4">
-                    <div class="form-group no-margin">
-                      <label for="name" class="form-label">
-                        <span ng-if="item.type === 0 || item.type === 1 || item.type === 3">{t}Content{/t}</span>
-                        <span ng-if="item.type === 2 || item.type === 4">{t}Slug{/t}/{t}URL{/t}</span>
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" ng-if="item.type === 0 || item.type === 1"  readonly type="text" value="45">
-                        <input class="form-control" ng-if="item.type === 2"  readonly type="text" value="http://www.example.org">
-                        <input class="form-control" ng-if="item.type === 3"  readonly type="text" value="$1">
-                        <input class="form-control" ng-if="item.type === 4"  readonly type="text" value="http://www.example.org/$0">
+                  <div ng-class="{ 'col-md-8': item.type !== 2 && item.type !== 4, 'col-md-6': item.type === 2 || item.type === 4 }">
+                    <div class="row">
+                      <div ng-class="{ 'col-md-6': item.type !== 2 && item.type !== 4, 'col-md-12': item.type === 2 || item.type === 4 }">
+                        <div class="form-group no-margin">
+                          <label for="name" class="form-label">
+                            <span ng-if="item.type === 0 || item.type === 1 || item.type === 3">{t}Content{/t}</span>
+                            <span ng-if="item.type === 2 || item.type === 4">URI</span>
+                          </label>
+                          <div class="controls">
+                            <input class="form-control" ng-if="item.type === 0 || item.type === 1"  readonly type="text" value="45">
+                            <input class="form-control" ng-if="item.type === 2"  readonly type="text" value="http://www.example.org">
+                            <input class="form-control" ng-if="item.type === 3"  readonly type="text" value="$1">
+                            <input class="form-control" ng-if="item.type === 4"  readonly type="text" value="http://www.example.org/$0">
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4" ng-if="item.type !== 2 && item.type !== 4">
-                    <div class="form-group no-margin">
-                      <label for="name" class="form-label">{t}Content type{/t}</label>
-                      <div class="controls">
-                        <input class="form-control" readonly type="text" value="user">
+                      <div class="col-md-6" ng-if="item.type === 0 || item.type === 1 || item.type === 3">
+                        <div class="form-group no-margin">
+                          <label for="name" class="form-label">{t}Content type{/t}</label>
+                          <div class="controls">
+                            <input class="form-control" readonly type="text" value="user">
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

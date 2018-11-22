@@ -81,16 +81,21 @@
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
-            <li class="m-r-10 input-prepend inside search-input no-boarder">
-              <span class="add-on">
-                <span class="fa fa-search fa-lg"></span>
-              </span>
-              <input class="no-boarder" name="title" ng-model="criteria.source" placeholder="{t}Search{/t}" type="text"/>
+            <li class="quicklinks">
+              <div class="input-group input-group-animated">
+                <span class="input-group-addon">
+                  <span class="fa fa-search fa-lg"></span>
+                </span>
+                <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.source }" ng-model="criteria.source" placeholder="{t}Search{/t}" type="text">
+                <span class="input-group-addon input-group-addon-inside pointer no-animate ng-cloak" ng-click="criteria.source = null" ng-show="criteria.source">
+                  <i class="fa fa-times"></i>
+                </span>
+              </div>
             </li>
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Content{/t} {t}to{/t} {t}Content{/t}', value: 0}, { name: '{t}Slug{/t} {t}to{/t} {t}Content{/t}', value: 1 }, { name: '{t}Regex{/t} {t}to{/t} {t}Content{/t}', value: 2 }, { name: '{t}Slug{/t} {t}to{/t} {t}Slug{/t}/{t}URL{/t}', value: 3 } ]">
+            <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Content{/t} {t}to{/t} {t}Content{/t}', value: 0}, { name: 'URI {t}to{/t} {t}Content{/t}', value: 1 }, { name: '{t}Regex{/t} {t}to{/t} {t}Content{/t}', value: 2 }, { name: 'URI {t}to{/t} URI', value: 3 } ]">
               <ui-select name="type" theme="select2" ng-model="criteria.type">
                 <ui-select-match>
                   <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
@@ -205,32 +210,35 @@
                       <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                       </button>
+                      <a class="btn btn-white btn-small" href="/[% item.source %]" ng-if="item.type == 1 || item.type == 2" target="_blank">
+                        <i class="fa fa-external-link m-r-5"></i>{t}Test{/t}
+                      </a>
                     </div>
                   </td>
                   <td>
-                    <a ng-if="item.content_type !== 'user' && item.content_type !== 'user_group'" href="[% routing.generate('admin_' + item.content_type + '_show', { id: item.target }) %]" ng-if="[0, 1, 3].indexOf(item.type) !== -1">
+                    <a href="[% routing.generate('admin_' + item.content_type + '_show', { id: item.target }) %]" ng-if="(item.type == 0 || item.type == 1 || item.type == 3) && item.content_type !== 'user' && item.content_type !== 'user_group'">
                       [% item.target %] ([% item.content_type %])
                     </a>
-                    <a ng-if="item.content_type === 'user' || item.content_type === 'user_group'"  href="[% routing.generate('backend_' + item.content_type + '_show', { id: item.target }) %]" ng-if="[0, 1, 3].indexOf(item.type) !== -1">
+                    <a href="/[% item.target %]" ng-if="item.type == 2 || item.type == 4">
+                      [% item.target %]
+                    </a>
+                    <a href="[% routing.generate('backend_' + item.content_type + '_show', { id: item.target }) %]" ng-if="item.content_type === 'user' || item.content_type === 'user_group'">
                       [% item.target %] ([% item.content_type %])
                     </a>
-                    <span ng-if="[0, 1, 3].indexOf(item.type) === -1">
-                      [% item.target %] ([% item.content_type %])
-                    </span>
                   </td>
                   <td class="text-center">
-                    <i class="fa" ng-class="{ 'fa-file-text-o': item.type == 0, 'fa-code': item.type == 1 || item.type == 3, 'fa-asterisk': item.type == 2 }"></i>
+                    <i class="fa" ng-class="{ 'fa-file-text-o': item.type == 0, 'fa-code': item.type == 1 || item.type == 2, 'fa-asterisk': item.type > 2 }"></i>
                     <strong ng-if="isHelpEnabled() && item.type == 0">{t}Content{/t}</strong>
-                    <strong ng-if="isHelpEnabled() && item.type == 1 || item.type == 3">{t}Slug{/t}</strong>
-                    <strong ng-if="isHelpEnabled() && item.type == 2">{t}Regex{/t}</strong>
+                    <strong ng-if="isHelpEnabled() && item.type == 1 || item.type == 2">URI</strong>
+                    <strong ng-if="isHelpEnabled() && item.type > 2">{t}Regex{/t}</strong>
                     {t}to{/t}
-                    <i class="fa" ng-class="{ 'fa-file-text-o': item.type == 0 || item.type == 1 || item.type == 2, 'fa-code': item.type == 3 }"></i>
-                    <strong ng-if="isHelpEnabled() && item.type == 0 || item.type == 1 || item.type == 2">{t}Content{/t}</strong>
-                    <strong ng-if="isHelpEnabled() && item.type == 3">{t}Slug{/t}/{t}URL{/t}</strong>
+                    <i class="fa" ng-class="{ 'fa-file-text-o': item.type == 0 || item.type == 1 || item.type == 3, 'fa-code': item.type == 2 || item.type == 4 }"></i>
+                    <strong ng-if="isHelpEnabled() && (item.type == 0 || item.type == 1 || item.type == 3)">{t}Content{/t}</strong>
+                    <strong ng-if="isHelpEnabled() && (item.type == 2 || item.type == 4)">URI</strong>
                   </td>
                   <td class="text-center">
                     <button class="btn btn-white" ng-click="patch(item, 'redirection', item.redirection != 1 ? 1 : 0)" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.redirectionLoading, 'fa-retweet text-error' : !item.redirectionLoading && item.redirection == 0, 'fa-retweet text-success': !item.redirectionLoading && item.redirection == 1 }"></i>
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.redirectionLoading, 'fa-exchange-alt text-error' : !item.redirectionLoading && item.redirection == 0, 'fa-retweet text-success': !item.redirectionLoading && item.redirection == 1 }"></i>
                       <span class="badge text-uppercase text-bold" ng-class="{ 'badge-success': !item.redirection, 'badge-warning text-black': item.redirection }">
                         [% item.redirection ? '301' : '200' %]
                       </span>
