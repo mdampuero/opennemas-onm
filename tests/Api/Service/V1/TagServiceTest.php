@@ -350,4 +350,56 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Wibble', $item->name);
         $this->assertEquals('wibble', $item->slug);
     }
+
+    /**
+     * Tests parse when all tag information is provided.
+     */
+    public function testParseWhenAllDataProvided()
+    {
+        $data = [
+            'name'        => 'Wibble',
+            'slug'        => 'wobble',
+            'language_id' => 'es_ES'
+        ];
+
+        $this->fm->expects($this->once())->method('set')
+            ->with('wobble')->willReturn($this->fm);
+        $this->fm->expects($this->once())->method('filter')
+            ->with('slug')->willReturn($this->fm);
+        $this->fm->expects($this->once())->method('get')
+            ->willReturn('wobble');
+
+        $method = new \ReflectionMethod($this->service, 'parse');
+        $method->setAccessible(true);
+
+        $this->assertEquals($data, $method->invokeArgs($this->service, [ $data ]));
+    }
+
+    /**
+     * Tests parse when only some tag information is provided.
+     */
+    public function testParseWhenLimitedDataProvided()
+    {
+        $data = [
+            'name' => 'Wibble',
+        ];
+
+        $this->fm->expects($this->once())->method('set')
+            ->with('Wibble')->willReturn($this->fm);
+        $this->fm->expects($this->once())->method('filter')
+            ->with('slug')->willReturn($this->fm);
+        $this->fm->expects($this->once())->method('get')
+            ->willReturn('wibble');
+
+        $this->locale->expects($this->once())->method('getLocale')
+            ->with('frontend')->willReturn('en');
+
+        $method = new \ReflectionMethod($this->service, 'parse');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            array_merge($data, [ 'slug' => 'wibble', 'language_id' => 'en' ]),
+            $method->invokeArgs($this->service, [ $data ])
+        );
+    }
 }

@@ -163,8 +163,14 @@ class TagService extends OrmService
      */
     protected function parse($data)
     {
+        $slug = $data['name'];
+
+        if (array_key_exists('slug', $data) && !empty($data['slug'])) {
+            $slug = $data['slug'];
+        }
+
         $data['slug'] = $this->container->get('data.manager.filter')
-            ->set($data['name'])
+            ->set($slug)
             ->filter('slug')
             ->get();
 
