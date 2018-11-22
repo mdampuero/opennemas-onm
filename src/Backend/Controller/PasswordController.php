@@ -12,6 +12,7 @@ namespace Backend\Controller;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PasswordController extends Controller
 {
@@ -106,7 +107,7 @@ class PasswordController extends Controller
             'url'  => $this->get('router')->generate(
                 'backend_password_change',
                 [ 'token' => $token ],
-                true
+                UrlGeneratorInterface::ABSOLUTE_URL
             ),
         ]);
 
