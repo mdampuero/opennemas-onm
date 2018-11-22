@@ -103,7 +103,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group">
-                    <input class="form-control" id="title" name="title" ng-model="article.title" ng-trim="false" placeholder="[% data.article.title[data.extra.options.default] %]" required tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.title[data.extra.options.default] %]">
+                    <input class="form-control" id="title" name="title" ng-blur="autoGenerateTags = true" ng-model="article.title" ng-trim="false" placeholder="[% data.article.title[data.extra.options.default] %]" required tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.title[data.extra.options.default] %]">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.title.length >= 50 && article.title.length < 80, 'text-danger': article.title.length >= 80 }">
                         [% article.title ? article.title.length : 0 %]

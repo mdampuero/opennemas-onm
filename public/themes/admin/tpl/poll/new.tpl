@@ -63,7 +63,7 @@
               <div class="form-group">
                 <label class="form-label" for="title">{t}Title{/t}</label>
                 <div class="controls">
-                  <input class="form-control" id="title" name="title" ng-model="title" required type="text" value="{$poll->title|clearslash|escape:"html"}"/>
+                  <input class="form-control" id="title" name="title" ng-blur="autoGenerateTags = true" ng-model="title" required type="text" value="{$poll->title|clearslash|escape:"html"}"/>
                 </div>
               </div>
               <div class="form-group">

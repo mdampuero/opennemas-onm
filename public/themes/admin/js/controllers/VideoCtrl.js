@@ -63,7 +63,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
           $scope.loading_data     = false;
 
           $timeout(function() {
-            angular.element('.tags-input-generate-btn').triggerHandler('click');
+            angular.element('.tags-input-buttons .btn-info').triggerHandler('click');
           }, 250);
         }
       );

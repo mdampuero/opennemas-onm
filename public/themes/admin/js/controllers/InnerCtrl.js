@@ -24,6 +24,16 @@
          * @memberOf InnerCtrl
          *
          * @description
+         *  Whether to auto-generate tags when generateTagsFrom changes.
+         *
+         * @type {Boolean}
+         */
+        $scope.autoGenerateTags = false;
+
+        /**
+         * @memberOf InnerCtrl
+         *
+         * @description
          *  The list of overlays.
          *
          * @type {Object}

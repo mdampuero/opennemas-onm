@@ -102,7 +102,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="title" >
-                    <input class="form-control" name="title" ng-model="title" ng-trim="false" required type="text" value="{$opinion->title|clearslash|escape:"html"}"/>
+                    <input class="form-control" name="title" ng-blur="autoGenerateTags = true" ng-model="title" ng-trim="false" required type="text" value="{$opinion->title|clearslash|escape:"html"}"/>
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': title.length >= 50 && title.length < 100, 'text-danger': title.length >= 100 }">
                         [% title.length %]

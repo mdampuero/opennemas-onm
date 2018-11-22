@@ -64,7 +64,7 @@
               <div class="form-group">
                 <label for="" class="form-label">{t}Title{/t}</label>
                 <div class="controls">
-                  <input type="text" id="title" name="title" ng-model="title" value="{$attaches->title|clearslash}" class="form-control" required>
+                  <input type="text" id="title" name="title" ng-blur="autoGenerateTags = true" ng-model="title" value="{$attaches->title|clearslash}" class="form-control" required>
                 </div>
               </div>
               <div class="form-group">
