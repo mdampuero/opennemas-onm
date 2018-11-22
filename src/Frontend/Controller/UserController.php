@@ -15,6 +15,7 @@ use Api\Exception\GetItemException;
 use Api\Exception\UpdateItemException;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Handles the actions for the user profile.
@@ -394,9 +395,11 @@ class UserController extends Controller
         $this->view->setCaching(0);
         $body = $this->renderView('user/emails/register.tpl', [
             'name' => $data['name'],
-            'url'  => $this->get('router')->generate('frontend_user_activate', [
-                'token' => $data['token']
-            ], true),
+            'url'  => $this->get('router')->generate(
+                'frontend_user_activate',
+                [ 'token' => $data['token'] ],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            ),
         ]);
 
         $message = \Swift_Message::newInstance();

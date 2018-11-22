@@ -9,6 +9,8 @@
  */
 namespace Common\Core\Component\Renderer;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 /**
  * The AdvertisementRenderer service provides methods to generate the HTML code
  * for advertisements basing on the advertisements information.
@@ -241,7 +243,7 @@ class AdvertisementRenderer
             'url'      => $this->container->get('router')->generate(
                 'frontend_ad_redirect',
                 [ 'id' => $publicId ],
-                true
+                UrlGeneratorInterface::ABSOLUTE_URL
             ),
             'width'    => $img->width
         ]);
