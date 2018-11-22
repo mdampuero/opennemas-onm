@@ -138,6 +138,7 @@
                       </div>
                     </th>
                     <th>{t}Name{/t}</th>
+                    <th>{t}Slug{/t}</th>
                     <th class="text-center" width="10">{t}Nº contents{/t}</th>
                     <th class="text-center" width="10"></th>
                   </tr>
@@ -145,11 +146,11 @@
                 <tbody>
                   <tr ng-if="editedTag && !editedTag.id" class="bg-warning">
                     <td></td>
-                    <td class="editing">
+                    <td>
                       <div class="row">
-                        <div class="col-lg-4 col-sm-6 form-group no-margin">
+                        <div class="col-sm-6 form-group no-margin">
                           <label class="form-label" for="name">
-                            {t}Tag{/t}
+                            {t}Name{/t}
                           </label>
                           <div class="controls input-with-icon right">
                             <input class="form-control" id="name" name="name" ng-change="isValid()" ng-model="editedTag.name" placeholder="{t}Tag{/t}" required type="text">
@@ -161,7 +162,7 @@
                             </span>
                           </div>
                         </div>
-                        <div class="col-lg-4 col-sm-6 form-group no-margin" ng-if="data.extra.locales.length > 2">
+                        <div class="col-sm-6 form-group no-margin" ng-if="data.extra.locales.length > 2">
                           <label class="form-label" for="locale">
                             {t}Language{/t}
                           </label>
@@ -183,6 +184,19 @@
                         </button>
                       </div>
                     </td>
+                    <td>
+                      <div class="row">
+                        <div class="col-sm-6 form-group">
+                          <label class="form-label" for="slug">{t}Slug{/t}</label>
+                          <div class="controls input-with-icon right">
+                            <input class="form-control" id="slug" name="slug" ng-model="editedTag.slug" type="text">
+                            <span class="icon right ng-cloak">
+                              <span class="fa fa-circle-o-notch fa-spin ng-cloak" ng-if="flags.http.generating"></span>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
                     <td></td>
                     <td></td>
                   </tr>
@@ -193,15 +207,15 @@
                         <label for="checkbox[%$index%]"></label>
                       </div>
                     </td>
-                    <td class="editable" ng-click="editTag(item)" ng-if="item.id !== editedTag.id">
-                      [% item.name %]
-                      <i class="fa fa-pencil m-l-5"></i>
-                    </td>
-                    <td class="editing" ng-if="item.id === editedTag.id">
-                      <div class="row">
-                        <div class="col-lg-4 col-sm-6 form-group no-margin">
+                    <td class="editable">
+                      <div class="cursor-text"  ng-click="editTag(item)" ng-if="item.id !== editedTag.id">
+                        [% item.name %]
+                        <i class="edit-icon fa fa-pencil m-l-5"></i>
+                      </div>
+                      <div class="row" ng-if="item.id === editedTag.id">
+                        <div class="col-sm-6 form-group no-margin">
                           <label class="form-label" for="name">
-                            {t}Tag{/t}
+                            {t}Name{/t}
                           </label>
                           <div class="controls input-with-icon right">
                             <input class="form-control" id="name" name="name" ng-change="isValid()" ng-model="editedTag.name" placeholder="{t}Tag{/t}" required type="text">
@@ -213,7 +227,7 @@
                             </span>
                           </div>
                         </div>
-                        <div class="col-lg-4 col-sm-6 form-group no-margin" ng-if="data.extra.locales.length > 2">
+                        <div class="col-sm-6 form-group no-margin" ng-if="data.extra.locales.length > 2">
                           <label class="form-label" for="locale">
                             {t}Language{/t}
                           </label>
@@ -224,15 +238,33 @@
                           </div>
                         </div>
                       </div>
-                      <div class="form-group no-margin p-t-5">
-                        <button class="btn btn-default btn-small" ng-click="editTag()" type="button">
-                          <i class="fa fa-times m-r-5"></i>
-                          {t}Cancel{/t}
-                        </button>
-                        <button class="btn btn-small btn-success btn-loading" ng-disabled="form.$invalid" ng-click="save()"  type="button">
-                          <i class="fa fa-check m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
-                          {t}Save{/t}
-                        </button>
+                      <div class="row" ng-if="item.id === editedTag.id">
+                        <div class="form-group no-margin p-t-5">
+                          <button class="btn btn-default btn-small" ng-click="editTag()" type="button">
+                            <i class="fa fa-times m-r-5"></i>
+                            {t}Cancel{/t}
+                          </button>
+                          <button class="btn btn-small btn-success btn-loading" ng-disabled="form.$invalid" ng-click="save()"  type="button">
+                            <i class="fa fa-check m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
+                            {t}Save{/t}
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div ng-if="item.id !== editedTag.id">
+                        [% item.slug %]
+                      </div>
+                      <div class="row" ng-if="item.id === editedTag.id">
+                        <div class="col-sm-6 form-group">
+                          <label class="form-label" for="slug">{t}Slug{/t}</label>
+                          <div class="controls input-with-icon right">
+                            <input class="form-control" id="slug" name="slug" ng-model="editedTag.slug" type="text">
+                            <span class="icon right ng-cloak">
+                              <span class="fa fa-circle-o-notch fa-spin ng-cloak" ng-if="flags.http.generating"></span>
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </td>
                     <td class="text-center">

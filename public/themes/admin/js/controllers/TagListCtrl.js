@@ -59,10 +59,16 @@
          *   Makes some tag editable.
          */
         $scope.editTag = function(tag) {
-          $scope.editedTag = tag ? {
-            id: tag.id, name: tag.name, language_id: tag.language_id
-          } :
-            null;
+          $scope.editedTag = null;
+
+          if (tag) {
+            $scope.editedTag = {
+              id: tag.id,
+              name: tag.name,
+              language_id: tag.language_id,
+              slug: tag.slug
+            };
+          }
         };
 
         /**
@@ -169,6 +175,32 @@
             });
           }, 500);
         };
+
+        // Generates the slug for a new tag when name changes
+        $scope.$watch('editedTag.name', function(nv) {
+          if ($scope.form.slug && $scope.form.slug.$dirty ||
+              !nv || !$scope.editedTag || $scope.editedTag.id) {
+            return;
+          }
+
+          $scope.flags.http.generating = true;
+
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+          }
+
+          $scope.tm = $timeout(function() {
+            $scope.getSlug(nv, function(response) {
+              $scope.disableFlags('http');
+
+              $scope.editedTag.slug = '';
+
+              if (response.data.slug) {
+                $scope.editedTag.slug = response.data.slug;
+              }
+            });
+          }, 500);
+        }, true);
       }
     ]);
 })();
