@@ -374,12 +374,12 @@ class Redirector
             return $this->getContent($target, $url->content_type);
         }
 
-        // Slug to slug/URL
+        // URI to URI
         if ($url->type === 2) {
-            return $url->target;
+            return $this->replaceInternalVariables($url->target);
         }
 
-        // RegExp to slug/URL
+        // RegExp to URI
         return $this->getTargetForRegExpUrl($request, $url);
     }
 
@@ -394,6 +394,7 @@ class Redirector
     protected function getTargetForRegExpUrl(Request $request, Url $url)
     {
         $uri = trim($request->getRequestUri(), '/');
+        $uri = $this->replaceInternalVariables($uri);
 
         preg_match_all(
             '/' . preg_replace('/\//', '\\\/', $url->source) . '/',
@@ -459,5 +460,36 @@ class Redirector
 
         return is_object($target)
             || $target !== trim($request->getRequestUri(), '/');
+    }
+
+    /**
+     * Replaces some valid placeholders by dynamic internal variables in the
+     * Url target.
+     *
+     * @param string $target The Url target.
+     *
+     * @return string The target after replacements.
+     */
+    protected function replaceInternalVariables($target)
+    {
+        $patterns = [
+            '/\$THEMES_DEPLOYED_AT/',
+            '/\$DEPLOYED_AT/',
+            '/\$INSTANCE/',
+            '/\$THEME\b/',
+        ];
+
+        $replacements = [
+            THEMES_DEPLOYED_AT,
+            DEPLOYED_AT,
+            $this->container->get('core.instance')->internal_name,
+            str_replace(
+                'es.openhost.theme.',
+                '',
+                $this->container->get('core.theme')->uuid
+            ),
+        ];
+
+        return preg_replace($patterns, $replacements, $target);
     }
 }

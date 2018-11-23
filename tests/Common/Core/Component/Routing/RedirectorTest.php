@@ -22,6 +22,14 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
+        if (!defined('DEPLOYED_AT')) {
+            define('DEPLOYED_AT', '20181123192820');
+        }
+
+        if (!defined('THEMES_DEPLOYED_AT')) {
+            define('THEMES_DEPLOYED_AT', '20181123192820');
+        }
+
         $this->cache = $this->getMockBuilder('Common\Cache\Core\Cache')
             ->disableOriginalConstructor()
             ->setMethods([
@@ -37,6 +45,8 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'get', 'getParameter' ])
             ->getMock();
+
+        $this->instance = $this->getMockBuilder('Instance')->getMock();
 
         $this->em = $this->getMockBuilder('EntityManager')
             ->setMethods([ 'getRepository' ])
@@ -70,6 +80,8 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getItemBy', 'getList' ])
             ->getMock();
 
+        $this->theme = $this->getMockBuilder('Theme')->getMock();
+
         $this->ugh = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
             ->disableOriginalConstructor()
             ->setMethods([ 'generate' ])
@@ -86,6 +98,9 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->any())->method('getRepository')
             ->willReturn($this->repository);
 
+        $this->instance->internal_name = 'baz';
+        $this->theme->uuid             = 'es.openhost.theme.fred';
+
         $this->response->headers = $this->headers;
 
         $this->redirector = new Redirector($this->container, $this->service, $this->cache);
@@ -100,6 +115,12 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'core.helper.url_generator':
                 return $this->ugh;
+
+            case 'core.instance':
+                return $this->instance;
+
+            case 'core.theme':
+                return $this->theme;
 
             case 'entity_repository':
             case 'opinion_repository':
@@ -990,5 +1011,34 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             new Url(),
             'flob/garply'
         ]));
+    }
+
+    /**
+     * Tests replaceInternalVariables for multiple targets.
+     */
+    public function testReplaceInternalVariables()
+    {
+        $method = new \ReflectionMethod($this->redirector, 'replaceInternalVariables');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            'fred/' . THEMES_DEPLOYED_AT,
+            $method->invokeArgs($this->redirector, [ '$THEME/$THEMES_DEPLOYED_AT' ])
+        );
+
+        $this->assertEquals(
+            DEPLOYED_AT . '/' . THEMES_DEPLOYED_AT,
+            $method->invokeArgs($this->redirector, [ '$DEPLOYED_AT/$THEMES_DEPLOYED_AT' ])
+        );
+
+        $this->assertEquals(
+            'baz',
+            $method->invokeArgs($this->redirector, [ '$INSTANCE' ])
+        );
+
+        $this->assertEquals(
+            DEPLOYED_AT,
+            $method->invokeArgs($this->redirector, [ '$DEPLOYED_AT' ])
+        );
     }
 }
