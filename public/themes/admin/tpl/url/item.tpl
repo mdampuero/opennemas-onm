@@ -223,7 +223,14 @@
                         <span ng-if="item.type >= 3">{t}Regex{/t}</span>
                       </label>
                       <div class="controls">
-                        <input class="form-control" id="name" name="name" ng-model="item.source" placeholder="[% item.type == 0 ? '1234' : (item.type == 1 || item.type == 2 ? 'qux/thud/norf': '^[a-z]+/([0-9]+)$') %]" required type="text">
+                        <div class="input-group">
+                          <input class="form-control" id="name" name="name" ng-model="item.source" placeholder="[% item.type == 0 ? '1234' : (item.type == 1 || item.type == 2 ? 'qux/thud/norf': '^[a-z]+/([0-9]+)$') %]" required type="text">
+                          <span class="input-group-btn">
+                            <a class="btn btn-default" href="/[% item.source %]" ng-disabled="!item.source || (item.type !== 1 && item.type !== 2)" target="_blank" title="{t}Test{/t}">
+                              <i class="fa fa-external-link"></i>
+                            </a>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
