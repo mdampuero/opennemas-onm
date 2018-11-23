@@ -25,7 +25,7 @@
           },
           template: function() {
             return '<div class="tags-input-buttons">' +
-              '<button class="btn btn-info btn-mini pull-right" ng-click="generate(generateFrom)" type="button">' +
+              '<button class="btn btn-info btn-mini pull-right" ng-click="generate(generateFrom())" type="button">' +
                 '<i class="fa fa-refresh m-r-5" ng-class="{ \'fa-spin\': generating }"></i>' +
                 $window.strings.tags.generate +
               '</button>' +
@@ -119,6 +119,7 @@
           if (!str) {
             return;
           }
+
           $scope.generating = true;
 
           http.get({
