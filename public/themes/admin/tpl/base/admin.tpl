@@ -85,9 +85,7 @@
       var strings = {
         tags: {
           clear: '{t}Clear{/t}',
-          reload: '{t}Reload{/t}',
           generate: '{t}Generate{/t}',
-          suggested: '{t}Suggested tags{/t}',
         }
       };
     </script>
