@@ -102,6 +102,9 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $this->fm->expects($this->once())->method('get')
             ->with()->willReturn('plugh');
 
+        $this->metadata->expects($this->once())->method('getId')
+            ->willReturn([ 'id' => 1 ]);
+
         $item = $this->service->createItem($data);
 
         $this->assertEquals('Plugh', $item->name);
