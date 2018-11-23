@@ -58,7 +58,7 @@
          *
          * @type {Object}
          */
-        $scope.flags = { http: {} };
+        $scope.flags = { generate: {}, http: {} };
 
         /**
          * @memberOf InnerCtrl
