@@ -725,7 +725,7 @@
         }, true);
 
         // Generates slug when flag changes
-        $scope.$watch('flags.generate.slug', function(nv, ov) {
+        $scope.$watch('flags.generate.slug', function(nv) {
           if ($scope.article.id && $scope.article.slug || !nv) {
             $scope.flags.generate.slug = false;
 
