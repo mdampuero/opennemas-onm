@@ -76,8 +76,15 @@ class Redirector
      */
     public function getResponse(Request $request, Url $url)
     {
-        return $url->redirection ? $this->getRedirectResponse($request, $url) :
-            $this->getForwardResponse($request, $url);
+        $response = $url->redirection
+            ? $this->getRedirectResponse($request, $url)
+            : $this->getForwardResponse($request, $url);
+
+        $xTags = $response->headers->get('x-tags') . ",url-" . $url->id;
+
+        $response->headers->set('x-tags', trim($xTags, ','));
+
+        return $response;
     }
 
     /**

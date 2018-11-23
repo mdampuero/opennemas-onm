@@ -42,6 +42,10 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getRepository' ])
             ->getMock();
 
+        $this->headers = $this->getMockBuilder('HeaderBag')
+            ->setMethods([ 'get', 'set' ])
+            ->getMock();
+
         $this->kernel = $this->getMockBuilder('AppKernel')
             ->disableOriginalConstructor()
             ->setMethods([ 'getContainer', 'handle' ])
@@ -54,6 +58,8 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
             ->setMethods([ 'duplicate', 'getRequestUri' ])
             ->getMock();
+
+        $this->response = $this->getMockBuilder('Response')->getMock();
 
         $this->router = $this->getMockBuilder('Router')
             ->setMethods([ 'match' ])
@@ -79,6 +85,8 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
         $this->em->expects($this->any())->method('getRepository')
             ->willReturn($this->repository);
+
+        $this->response->headers = $this->headers;
 
         $this->redirector = new Redirector($this->container, $this->service, $this->cache);
     }
@@ -136,15 +144,20 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetResponseWhenRedirectionDisabled()
     {
-        $url = new Url([ 'redirection'  => false ]);
+        $url = new Url([ 'id' => 546, 'redirection'  => false ]);
 
         $redirector = $this->getMockBuilder('Common\Core\Component\Routing\Redirector')
             ->setConstructorArgs([ $this->container, $this->service, $this->cache ])
             ->setMethods([ 'getForwardResponse' ])
             ->getMock();
 
+        $this->headers->expects($this->once())->method('get')
+            ->with('x-tags')->willReturn('');
+        $this->headers->expects($this->once())->method('set')
+            ->with('x-tags')->willReturn('url-546');
+
         $redirector->expects($this->once())->method('getForwardResponse')
-            ->with($this->request, $url);
+            ->with($this->request, $url)->willReturn($this->response);
 
         $redirector->getResponse($this->request, $url);
     }
@@ -155,7 +168,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetResponseWhenRedirectionEnabled()
     {
-        $url = new Url([ 'redirection'  => true ]);
+        $url = new Url([ 'id' => 637, 'redirection'  => true ]);
 
         $redirector = $this->getMockBuilder('Common\Core\Component\Routing\Redirector')
             ->setConstructorArgs([ $this->container, $this->service, $this->cache ])
@@ -163,7 +176,12 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $redirector->expects($this->once())->method('getRedirectResponse')
-            ->with($this->request, $url);
+            ->with($this->request, $url)->willReturn($this->response);
+
+        $this->headers->expects($this->once())->method('get')
+            ->with('x-tags')->willReturn('grault-wobble');
+        $this->headers->expects($this->once())->method('get')
+            ->with('x-tags')->willReturn('grault-wobble,url-637');
 
         $redirector->getResponse($this->request, $url);
     }
