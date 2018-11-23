@@ -62,7 +62,7 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="title" name="title" ng-blur="autoGenerateTags = true" type="text" value="{$page->title|default:""}" maxlength="120" tabindex="1" required ng-model="title"/>
+                  <input class="form-control" id="title" name="title" ng-blur="generate()" type="text" value="{$page->title|default:""}" maxlength="120" tabindex="1" required ng-model="title"/>
                 </div>
               </div>
               <div class="form-group">

@@ -79,7 +79,7 @@
             <div class="form-group">
               <label for="title" class="form-label">{t}Title{/t}</label>
               <div class="controls">
-                <input type="text" id="title" name="title" ng-blur="autoGenerateTags = true" ng-model="title" value="{$book->title|default:""}" required class="form-control"/>
+                <input type="text" id="title" name="title" ng-blur="generate()" ng-model="title" value="{$book->title|default:""}" required class="form-control"/>
               </div>
             </div>
 

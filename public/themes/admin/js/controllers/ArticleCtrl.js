@@ -720,16 +720,28 @@
 
             if (!nv) {
               $scope.article.slug = '';
-              return;
             }
-
-            $scope.tm = $timeout(function() {
-              $scope.getSlug(nv, function(response) {
-                $scope.article.slug = response.data.slug;
-              });
-            }, 250);
           }
         }, true);
+
+        // Generates slug when flag changes
+        $scope.$watch('flags.generate.slug', function(nv) {
+          if ($scope.article.id || !nv) {
+            return;
+          }
+
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+          }
+
+          $scope.tm = $timeout(function() {
+            $scope.getSlug($scope.article.title, function(response) {
+              $scope.article.slug = response.data.slug;
+
+              $scope.flags.generate.slug = false;
+            });
+          }, 250);
+        });
 
         // Shows a modal window to translate content automatically
         $scope.$watch('config.locale', function(nv, ov) {

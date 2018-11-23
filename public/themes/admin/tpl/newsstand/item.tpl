@@ -124,7 +124,7 @@ jQuery(document).ready(function($) {
                   <div class="form-group">
                     <label for="title" class="form-label">{t}Title{/t}</label>
                     <div class="controls">
-                      <input type="text" id="title" name="title" ng-blur="autoGenerateTags = true" ng-model="item.title" value="{$cover->title|default:""}" required class="form-control"/>
+                      <input type="text" id="title" name="title" ng-blur="generate()" ng-model="item.title" value="{$cover->title|default:""}" required class="form-control"/>
                     </div>
                   </div>
 

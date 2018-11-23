@@ -101,7 +101,7 @@
                   {t}Title{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="title" name="title" ng-blur="autoGenerateTags = true" ng-model="title" required type="text" value="{$album->title|clearslash|escape:"html"|default:""}"/>
+                  <input class="form-control" id="title" name="title" ng-blur="generate()" ng-model="title" required type="text" value="{$album->title|clearslash|escape:"html"|default:""}"/>
                 </div>
               </div>
               <div class="form-group">

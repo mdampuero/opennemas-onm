@@ -24,21 +24,22 @@
          * @memberOf InnerCtrl
          *
          * @description
-         *  Whether to auto-generate tags when generateTagsFrom changes.
-         *
-         * @type {Boolean}
-         */
-        $scope.autoGenerateTags = false;
-
-        /**
-         * @memberOf InnerCtrl
-         *
-         * @description
          *  The list of overlays.
          *
          * @type {Object}
          */
         $scope.overlay = {};
+
+        /**
+         * @function generate
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *   Forces automatic field generation.
+         */
+        $scope.generate = function() {
+          $scope.flags.generate = { slug: true, tags: true };
+        };
 
         /**
          * @function generateTagsFrom
