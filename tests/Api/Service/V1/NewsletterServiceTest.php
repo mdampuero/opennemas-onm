@@ -116,6 +116,9 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($data);
         $this->em->expects($this->once())->method('persist');
 
+        $this->metadata->expects($this->once())->method('getId')
+            ->willReturn([ 'id' => 1 ]);
+
         $item = $this->service->createItem($data);
 
         $this->assertEquals($data['title'], $item->title);

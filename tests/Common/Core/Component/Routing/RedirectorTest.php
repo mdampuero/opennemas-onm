@@ -22,6 +22,14 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
+        if (!defined('DEPLOYED_AT')) {
+            define('DEPLOYED_AT', '20181123192820');
+        }
+
+        if (!defined('THEMES_DEPLOYED_AT')) {
+            define('THEMES_DEPLOYED_AT', '20181123192820');
+        }
+
         $this->cache = $this->getMockBuilder('Common\Cache\Core\Cache')
             ->disableOriginalConstructor()
             ->setMethods([
@@ -38,8 +46,14 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'getParameter' ])
             ->getMock();
 
+        $this->instance = $this->getMockBuilder('Instance')->getMock();
+
         $this->em = $this->getMockBuilder('EntityManager')
             ->setMethods([ 'getRepository' ])
+            ->getMock();
+
+        $this->headers = $this->getMockBuilder('HeaderBag')
+            ->setMethods([ 'get', 'set' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('AppKernel')
@@ -55,6 +69,8 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'duplicate', 'getRequestUri' ])
             ->getMock();
 
+        $this->response = $this->getMockBuilder('Response')->getMock();
+
         $this->router = $this->getMockBuilder('Router')
             ->setMethods([ 'match' ])
             ->getMock();
@@ -63,6 +79,8 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods([ 'getItemBy', 'getList' ])
             ->getMock();
+
+        $this->theme = $this->getMockBuilder('Theme')->getMock();
 
         $this->ugh = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
             ->disableOriginalConstructor()
@@ -80,6 +98,11 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->any())->method('getRepository')
             ->willReturn($this->repository);
 
+        $this->instance->internal_name = 'baz';
+        $this->theme->uuid             = 'es.openhost.theme.fred';
+
+        $this->response->headers = $this->headers;
+
         $this->redirector = new Redirector($this->container, $this->service, $this->cache);
     }
 
@@ -92,6 +115,12 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'core.helper.url_generator':
                 return $this->ugh;
+
+            case 'core.instance':
+                return $this->instance;
+
+            case 'core.theme':
+                return $this->theme;
 
             case 'entity_repository':
             case 'opinion_repository':
@@ -136,15 +165,20 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetResponseWhenRedirectionDisabled()
     {
-        $url = new Url([ 'redirection'  => false ]);
+        $url = new Url([ 'id' => 546, 'redirection'  => false ]);
 
         $redirector = $this->getMockBuilder('Common\Core\Component\Routing\Redirector')
             ->setConstructorArgs([ $this->container, $this->service, $this->cache ])
             ->setMethods([ 'getForwardResponse' ])
             ->getMock();
 
+        $this->headers->expects($this->once())->method('get')
+            ->with('x-tags')->willReturn('');
+        $this->headers->expects($this->once())->method('set')
+            ->with('x-tags')->willReturn('url-546');
+
         $redirector->expects($this->once())->method('getForwardResponse')
-            ->with($this->request, $url);
+            ->with($this->request, $url)->willReturn($this->response);
 
         $redirector->getResponse($this->request, $url);
     }
@@ -155,7 +189,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetResponseWhenRedirectionEnabled()
     {
-        $url = new Url([ 'redirection'  => true ]);
+        $url = new Url([ 'id' => 637, 'redirection'  => true ]);
 
         $redirector = $this->getMockBuilder('Common\Core\Component\Routing\Redirector')
             ->setConstructorArgs([ $this->container, $this->service, $this->cache ])
@@ -163,7 +197,12 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $redirector->expects($this->once())->method('getRedirectResponse')
-            ->with($this->request, $url);
+            ->with($this->request, $url)->willReturn($this->response);
+
+        $this->headers->expects($this->once())->method('get')
+            ->with('x-tags')->willReturn('grault-wobble');
+        $this->headers->expects($this->once())->method('get')
+            ->with('x-tags')->willReturn('grault-wobble,url-637');
 
         $redirector->getResponse($this->request, $url);
     }
@@ -972,5 +1011,34 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             new Url(),
             'flob/garply'
         ]));
+    }
+
+    /**
+     * Tests replaceInternalVariables for multiple targets.
+     */
+    public function testReplaceInternalVariables()
+    {
+        $method = new \ReflectionMethod($this->redirector, 'replaceInternalVariables');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            'fred/' . THEMES_DEPLOYED_AT,
+            $method->invokeArgs($this->redirector, [ '$THEME/$THEMES_DEPLOYED_AT' ])
+        );
+
+        $this->assertEquals(
+            DEPLOYED_AT . '/' . THEMES_DEPLOYED_AT,
+            $method->invokeArgs($this->redirector, [ '$DEPLOYED_AT/$THEMES_DEPLOYED_AT' ])
+        );
+
+        $this->assertEquals(
+            'baz',
+            $method->invokeArgs($this->redirector, [ '$INSTANCE' ])
+        );
+
+        $this->assertEquals(
+            DEPLOYED_AT,
+            $method->invokeArgs($this->redirector, [ '$DEPLOYED_AT' ])
+        );
     }
 }

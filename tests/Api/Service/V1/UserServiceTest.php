@@ -129,6 +129,8 @@ class UserServiceTest extends \PHPUnit\Framework\TestCase
             ->with(array_diff_key($data, [ 'password' => null ]))
             ->willReturn(array_diff_key($data, [ 'password' => null ]));
         $this->em->expects($this->once())->method('persist');
+        $this->metadata->expects($this->once())->method('getId')
+            ->willReturn([ 'id' => 1 ]);
 
         $item = $this->service->createItem($data);
 
@@ -156,6 +158,8 @@ class UserServiceTest extends \PHPUnit\Framework\TestCase
         $this->converter->expects($this->any())->method('objectify')
             ->with($data)->willReturn($data);
         $this->em->expects($this->once())->method('persist');
+        $this->metadata->expects($this->once())->method('getId')
+            ->willReturn([ 'id' => 1 ]);
 
         $item = $this->service->createItem($data);
 
