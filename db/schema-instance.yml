@@ -735,14 +735,20 @@ contents_tags:
             unique: true
             flags: {  }
         -
-            name: content_tags_content_id
+            name: contents_tags_tag_id
+            columns: [ tag_id ]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: contents_tags_content_id
             columns: [ content_id ]
             primary: false
             unique: false
             flags: {  }
     foreign_keys:
         -
-            name: content_tags_content_id
+            name: contents_tags_content_id
             source_field: [ content_id ]
             target_table: contents
             target_field: [ pk_content ]

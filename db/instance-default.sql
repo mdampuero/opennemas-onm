@@ -528,8 +528,8 @@ CREATE TABLE `contents_tags` (
   `content_id` bigint(20) unsigned NOT NULL,
   `tag_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`content_id`,`tag_id`),
-  KEY `content_tags_content_id` (`content_id`),
-  KEY `contents_tags_tag_id` (`tag_id`),
+  KEY `contents_tags_content_id` (`content_id`),
+  KEY `contents_tags_tag_id` (`tag_id`) USING BTREE,
   CONSTRAINT `content_tags_content_id` FOREIGN KEY (`content_id`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `contents_tags_tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1163,7 +1163,8 @@ CREATE TABLE `url` (
   `content_type` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
   `redirection` tinyint(1) NOT NULL DEFAULT '0',
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `url_content_type_source` (`content_type`,`source`(50))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1435,4 +1436,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-31 17:27:43
+-- Dump completed on 2018-11-27 16:57:09
