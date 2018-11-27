@@ -1519,33 +1519,42 @@ tags:
             primary: false
             unique: false
             flags: {  }
-translation_ids:
+url:
     columns:
-        pk_content_old:
-            type: string
-            options: { default: null, notnull: false }
-        pk_content:
-            type: bigint
-            options: { length: 20, unsigned: true, default: null }
+        id:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
         type:
-            type: string
-            options: { length: 100, default: null }
-        slug:
-            type: text
-            options: { length: 65535, default: '', notnull: false }
-        domain:
-            type: string
-            options: { length: 255, default: null, notnull: false }
+            type:    integer
+            options: { default: 0, unsigned: true, notnull: true }
+        source:
+            type:    string
+            options: { default: null, length: 1024, notnull: true }
+        target:
+            type:    string
+            options: { default: null, length: 1024, notnull: true }
+        content_type:
+            type:    string
+            options: { default: null, length: 30, notnull: false }
+        redirection:
+            type:    boolean
+            options: { default: 0, notnull: true }
+        enabled:
+            type:    boolean
+            options: { default: 0, notnull: true }
     index:
         -
-            name: translation_ids_slug
-            columns: [slug]
-        -
-            name: pk_content
-            columns: [pk_content]
+            name:    PRIMARY
+            columns: [ id ]
+            primary: true
+            unique:  true
+            flags:   {  }
+        - 
+            name:    url_content_type_source
+            columns: [content_type, source]
             primary: false
-            unique: false
-            flags: {  }
+            unique:  false
+            flags:   {}
 user_groups:
     columns:
         pk_user_group:
