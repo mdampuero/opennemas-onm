@@ -35,7 +35,7 @@
               '</button>' +
             '</div>' +
             '<div>' +
-              '<tags-input add-from-autocomplete-only="false" ng-model="ngModel" display-property="name" on-tag-added="exists($tag)" on-tag-adding="validate($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" tag-class="{ \'tag-item-exists\': $tag.id, \'tag-item-new\': !$tag.id }">' +
+              '<tags-input add-from-autocomplete-only="false" display-property="name" key-property="id" ng-model="ngModel" on-tag-added="exists($tag)" on-tag-adding="validate($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" tag-class="{ \'tag-item-exists\': $tag.id, \'tag-item-new\': !$tag.id }">' +
                 '<auto-complete debounce-delay="250" highlight-matched-text="true" load-on-down-arrow="true" min-length="3" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
               '</tags-input>' +
               '<input name="tags" type="hidden" ng-value="getJsonValue()">' +
