@@ -81,6 +81,16 @@
         $scope.suggestedTags = {};
 
         /**
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *  The list of overlays.
+         *
+         * @type {Object}
+         */
+        $scope.overlay = {};
+
+        /**
          * @function configure
          * @memberOf BaseCtrl
          *
@@ -451,6 +461,32 @@
             $scope.locale
           );
           return null;
+        };
+
+        /**
+         * @function toggleOverlay
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *   Enables/disables an overlay by name.
+         *
+         * @param {String} name The overlay name.
+         */
+        $scope.toggleOverlay = function(name) {
+          $scope.overlay[name] = !$scope.overlay[name];
+        };
+
+        /**
+         * @function removeImage
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *   Removes the given image from the scope.
+         *
+         * @param string image The image to remove.
+         */
+        $scope.removeImage = function(image) {
+          delete $scope[image];
         };
 
         /**
