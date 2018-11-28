@@ -1,0 +1,34 @@
+{
+  "short_name": "Onm PWA",
+  "name": "Opennemas Nemo PWA",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#009fe3",
+  "gcm_sender_id": "482941778795",
+  "gcm_sender_id_comment": "Do not change the GCM Sender ID",
+
+  "icons": [
+    {
+      "src": "/media/bloges/sections/favicon-512.png",
+      "type": "image/png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "/media/bloges/sections/favicon-512.png",
+      "type": "image/png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "/media/bloges/sections/favicon-512.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "/media/bloges/sections/favicon-512.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+ 
+  ]
+}
