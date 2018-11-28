@@ -89,7 +89,6 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'contentId'          => $content->id,
             'lifetime'           => $settings['lifetime_cookie'],
             'positions'          => implode(',', $positions),
-            'time'               => time(),
             'url'                => getService('router')
                 ->generate('api_v1_advertisements_list')
         ]);
