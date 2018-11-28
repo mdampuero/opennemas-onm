@@ -92,12 +92,12 @@ class ContentPersister extends BasePersister
     public function update(Entity $entity)
     {
         $entity->fk_user_last_editor = $this->user->id;
-        $entity->fk_publisher = $this->user->id;
+        $entity->fk_publisher        = $this->user->id;
 
         $changes    = $entity->getChanges();
         $categories = $entity->categories;
         $tagIds     = $entity->tag_ids;
-        $relations  = $entity->relations;
+        $relations  = $entity->related_contents;
 
         // Categories change
         if (array_key_exists('categories', $changes)) {
@@ -129,7 +129,7 @@ class ContentPersister extends BasePersister
 
         $entity->tag_ids = $tagIds;
 
-        if (array_key_exists('relations', $changes)) {
+        if (array_key_exists('related_contents', $changes)) {
             $this->persistRelations($id, $relations);
         }
 
@@ -355,9 +355,9 @@ class ContentPersister extends BasePersister
         }
 
         $sql = "replace into related_contents"
-            . "(pk_content1, pk_content2, relationship) values "
+            . "(pk_content1, pk_content2, relationship, position) values "
             . str_repeat(
-                '(?,?,?),',
+                '(?,?,?,?),',
                 count($relations)
             );
 
@@ -372,7 +372,7 @@ class ContentPersister extends BasePersister
 
             $types = array_merge(
                 $types,
-                [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_STR ]
+                [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_STR, \PDO::PARAM_INT ]
             );
         }
 

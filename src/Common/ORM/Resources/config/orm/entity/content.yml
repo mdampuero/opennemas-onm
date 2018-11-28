@@ -32,7 +32,7 @@ orm:
                 with_comment:        boolean
                 categories:          array
                 tag_ids:             array
-                relations:           array
+                related_contents:    array
             converters:
                 default:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter
@@ -65,7 +65,7 @@ orm:
                                 pk_fk_content_category:
                                     type: integer
 
-                        relations:
+                        related_contents:
                             table: related_contents
                             source_key: pk_content
                             target_key: pk_content1

@@ -26,12 +26,12 @@ class EventController extends Controller
      */
     public function frontpageAction(Request $request)
     {
-        $page  = $request->get('page', 1);
-        $date  = date('Y-m-d H:i:s');
-        $epp   = $this->get('orm.manager')
+        $page   = $request->get('page', 1);
+        $date   = date('Y-m-d H:i:s');
+        $epp    = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('items_per_page');
-        $offset = ($page <= 2) ? 0 : ($page-1) * $epp;
+        $offset = ($page <= 2) ? 0 : ($page - 1) * $epp;
 
         $eventIds = $this->get('orm.manager')->getConnection('instance')
             ->executeQuery(
@@ -51,8 +51,6 @@ class EventController extends Controller
 
         $total = $this->get('dbal_connection')->fetchAssoc($sql);
         $total = array_pop($total);
-
-
 
         $eventIds = array_map(function ($event) {
             return $event['pk_content'];

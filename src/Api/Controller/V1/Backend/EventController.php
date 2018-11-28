@@ -87,12 +87,18 @@ class EventController extends ApiController
         }
 
         foreach ($content as $element) {
-            foreach ($element->relations as $relation) {
+            if (!is_array($element->related_contents)) {
+                continue;
+            }
+            
+            foreach ($element->related_contents as $relation) {
+                if ($relation['relationship'] !== 'cover') {
+                    continue;
+                }
+
                 $photo = $em->find('Photo', $relation['pk_content2']);
 
-                if (!empty($photo)) {
-                    $extra[$relation['pk_content2']] = \Onm\StringUtils::convertToUtf8($photo);
-                }
+                $extra[$relation['pk_content2']] = \Onm\StringUtils::convertToUtf8($photo);
             }
         }
 
