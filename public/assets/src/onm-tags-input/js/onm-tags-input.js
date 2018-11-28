@@ -211,7 +211,8 @@
 
         // Generates a new list of tags when generateFrom value changes
         $scope.$watch('autoGenerate', function(nv) {
-          if (!nv) {
+          if (!nv || !$scope.ngModel || $scope.ngModel.length > 0) {
+            $scope.autoGenerate = false;
             return;
           }
 
