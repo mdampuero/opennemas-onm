@@ -57,7 +57,7 @@ parameters:
     instance_creator:
         end_point:   https://manager.dev.opennemas.com/managerws/
         base_domain: dev.opennemas.com
-        template:    es.openhost.theme.basic
+        template:    es.openhost.theme.nemo
     manager_url: https://manager.dev.opennemas.com/
     manager_webservice:
         api_key:         sheequaiJie5deewijie6oojaiShie5R
