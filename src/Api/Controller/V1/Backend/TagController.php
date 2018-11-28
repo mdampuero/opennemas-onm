@@ -10,9 +10,10 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
+use Common\Core\Component\Validator\Validator;
+use Common\ORM\Entity\Tag;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Core\Component\Validator\Validator;
 
 /**
  * Lists and displays tags.
@@ -48,65 +49,31 @@ class TagController extends ApiController
     protected $service = 'api.service.tag';
 
     /**
-     * Get suggested word.
+     * Checks if the information in the request is valid to create a new Tag.
      *
      * @param Request $request The request object.
      *
-     * @return JsonResponse The response object.
+     * @return Response The response object.
      */
-    public function validNewTagAction(Request $request)
+    public function validateAction(Request $request)
     {
-        $ts   = $this->get('api.service.tag');
-        $text = $request->query->get('text', null);
         $msg  = $this->get('core.messenger');
-        if (empty($text)) {
-            $msg->add(_('Invalid tag'), 'success');
-            return new JsonResponse($msg->getMessages(), $msg->getCode());
+        $data = $request->query->all();
+
+        $data['slug'] = $this->get('data.manager.filter')
+            ->set($data['name'])
+            ->filter('slug')
+            ->get();
+
+        $item = new Tag($data);
+
+        try {
+            $this->get('api.validator.tag')->validate($item);
+        } catch (\Exception $e) {
+            $msg->add($e->getMessage(), 'error', 400);
         }
 
-        $languageId = $request->query->get('languageId', null);
-        $valid      = !is_null($languageId) && $ts->isValidNewTag($text, $languageId);
-
-        return new JsonResponse([
-            'valid' => $valid
-        ]);
-    }
-
-    /**
-     * Get suggested tags for some word.
-     *
-     * @param string $languageId The tag language.
-     * @param string $tag        The partial tag language.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function suggesterAction($languageId, $tag)
-    {
-        $ts  = $this->get('api.service.tag');
-        $oql = 'language_id = "%s" and name ~ "%s%%" limit 25';
-
-        $response = $ts->getList(sprintf($oql, $languageId, $tag));
-
-        return new JsonResponse([
-            'items' => $ts->responsify($response['items'])
-        ]);
-    }
-
-    /**
-     * Get suggested tags for some word.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function autoSuggesterAction(Request $request)
-    {
-        $tags       = $request->query->get('tags', null);
-        $languageId = $request->query->get('languageId', null);
-        $ts         = $this->get('api.service.tag');
-        return new JsonResponse([
-            'items' => $ts->getTagsAndNewTags($languageId, $tags)
-        ]);
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
@@ -118,7 +85,7 @@ class TagController extends ApiController
      */
     public function showConfAction()
     {
-        $this->checkSecurity(null, 'TAG_ADMIN');
+        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
 
         return new JsonResponse([
             'blacklist_tag' => $this->get('core.validator')
@@ -135,7 +102,7 @@ class TagController extends ApiController
      */
     public function updateConfAction(Request $request)
     {
-        $this->checkSecurity(null, 'TAG_ADMIN');
+        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
 
         $blacklistConf = $request->request->all();
 
@@ -181,7 +148,7 @@ class TagController extends ApiController
         }
 
         $extraData = [
-            'stats'   => $this->get('api.service.tag')->getNumContentsRel($items),
+            'stats'   => $this->get('api.service.tag')->getStats($items),
             'locale'  => $ls->getLocale('frontend'),
             'locales' => $locales
         ];

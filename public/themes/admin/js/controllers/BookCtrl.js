@@ -21,22 +21,8 @@ angular.module('BackendApp.controllers').controller('BookCtrl', [
      * @param {Array}  tags     Array with all the tags needed for the book
      */
     $scope.init = function(book, locale, tags) {
-      $scope.tag_ids = book !== null ? book.tag_ids : [];
-      $scope.locale  = locale;
-      $scope.tags    = tags;
-      $scope.watchTagIds('title');
-    };
-
-    /**
-     * @function getTagsAutoSuggestedFields
-     * @memberOf BookCtrl
-     *
-     * @description
-     *   Method to method to retrieve th title for the autosuggested words
-     *
-     */
-    $scope.getTagsAutoSuggestedFields = function() {
-      return $scope.title;
+      $scope.locale = locale;
+      $scope.tags   = tags;
     };
 
     /**

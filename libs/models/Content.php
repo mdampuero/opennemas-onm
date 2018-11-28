@@ -595,6 +595,7 @@ class Content implements \JsonSerializable, CsvSerializable
         ];
         $conn        = getService('dbal_connection');
         try {
+
             // Insert into contents table
             $conn->insert('contents', $contentData);
 
@@ -603,9 +604,9 @@ class Content implements \JsonSerializable, CsvSerializable
             $data['pk_content'] = $this->id;
             $data['id']         = $this->id;
 
-            $contentData['tag_ids'] = (empty($data['tag_ids'])) ?
-                [] :
-                $this->addTags($data['tag_ids']);
+            if (array_key_exists('tags', $data)) {
+                $data['tag_ids'] = $this->addTags($data['tags']);
+            }
 
             self::load($contentData);
 
@@ -742,7 +743,9 @@ class Content implements \JsonSerializable, CsvSerializable
                 );
             }
 
-            $this->tag_ids = $this->addTags(is_array($data['tag_ids']) ? $data['tag_ids'] : []);
+            if (array_key_exists('tags', $data)) {
+                $this->tag_ids = $this->addTags($data['tags']);
+            }
 
             logContentEvent(__METHOD__, $this);
             dispatchEventWithParams('content.update', [ 'content' => $this ]);
@@ -2243,32 +2246,30 @@ class Content implements \JsonSerializable, CsvSerializable
      *
      * @return array
      */
-    public function addTags($tagIds)
+    public function addTags($tags)
     {
-        $newTags    = [];
-        $insertTags = [];
-        $ts         = getService('api.service.tag');
-
-        if (empty($tagIds)) {
+        if (empty($tags)) {
             self::deleteTags($this->id);
             return [];
         }
 
-        foreach ($tagIds as $tag) {
-            if (is_array($tag)) {
-                $tag          = $ts->createItem($tag);
-                $insertTags[] = $tag->id;
-                $newTags[]    = $tag;
-            } else {
-                $insertTags[] = intval($tag);
+        $ts  = getService('api.service.tag');
+        $ids = [];
+
+        foreach ($tags as $tag) {
+            if (!array_key_exists('id', $tag)) {
+                $tag = $ts->responsify($ts->createItem($tag));
             }
+
+            $ids[] = (int) $tag['id'];
         }
 
-        $insertTags = array_unique($insertTags);
+        $ids = array_unique($ids);
 
         self::deleteTags($this->id);
-        self::saveTags($insertTags, $this->id);
-        return $insertTags;
+        self::saveTags($ids, $this->id);
+
+        return $ids;
     }
 
     /**

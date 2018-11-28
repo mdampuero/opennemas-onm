@@ -23,7 +23,8 @@
      *   Provides actions to edit, save and update articles.
      */
     .controller('ArticleCtrl', [
-      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'linker', 'localizer', 'messenger', 'webStorage',
+      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner',
+      'http', 'linker', 'localizer', 'messenger', 'webStorage',
       function($controller, $scope, $timeout, $uibModal, $window, cleaner,
           http, linker, localizer, messenger, webStorage) {
         // Initialize the super class and extend it.
@@ -296,7 +297,7 @@
             $scope.article         = $scope.data.article;
             $scope.categories      = $scope.data.extra.categories;
             $scope.fieldsByModule  = $scope.data.extra.moduleFields;
-            $scope.tags            = $scope.data.extra.tags;
+            $scope.article.tags    = $scope.data.extra.tags;
 
             $scope.build();
 
@@ -444,7 +445,7 @@
               return;
             }
 
-            $scope.tags                 = response.data.tags;
+            $scope.article.tags         = response.data.tags;
             $scope.data.article.tag_ids = response.data.tag_ids;
             $scope.article.tag_ids      = response.data.tag_ids;
             messenger.post(response.data.message);
@@ -575,57 +576,17 @@
         };
 
         /**
-         * @function getTagsAutoSuggestedFields
+         * @function generateTagsFrom
          * @memberOf ArticleCtrl
          *
          * @description
-         *   Concat all fields from where generate auto suggested tags
+         *   Returns a string to use when clicking on "Generate" button for
+         *   tags component.
          *
-         * @return {string} all words for all fields
+         * @return {String} The string to generate tags from.
          */
-        $scope.getTagsAutoSuggestedFields = function() {
-          var title    = $scope.article.title ? $scope.article.title : '';
-          var category = '';
-
-          // Get category name from category id
-          if ($scope.article.pk_fk_content_category) {
-            var categories = $scope.data.extra.categories.filter(function(e) {
-              return e.pk_content_category ===
-                $scope.article.pk_fk_content_category;
-            });
-            var lz   = localizer.get($scope.data.extra.options);
-
-            if (categories.length > 0) {
-              category = lz.localize(categories[0],
-                [ 'title' ], $scope.config.locale).title;
-            }
-          }
-
-          return title + ' ' + category;
-        };
-
-        /**
-         * @function loadAutoSuggestedTags
-         * @memberOf ArticleCtrl
-         *
-         * @description
-         *   Retrieve all auto suggested words for this article
-         *
-         * @return {string} all words for all fields
-         */
-        $scope.loadAutoSuggestedTags = function() {
-          var data = $scope.getTagsAutoSuggestedFields();
-
-          $scope.checkAutoSuggesterTags(
-            function(items) {
-              if (items !== null) {
-                $scope.article.tag_ids = $scope.article.tag_ids.concat(items);
-              }
-            },
-            data,
-            $scope.article.tag_ids,
-            $scope.config.locale
-          );
+        $scope.generateTagsFrom = function() {
+          return $scope.article.title;
         };
 
         // Update footers when photos change
@@ -744,42 +705,44 @@
 
         // Update title_int when title changes
         $scope.$watch('article.title', function(nv, ov) {
-          if (!nv) {
+          if (!nv && !ov) {
             return;
           }
 
-          if (nv && (!$scope.article.title_int ||
-              ov === $scope.article.title_int)) {
+          if (!$scope.article.title_int || ov === $scope.article.title_int) {
             $scope.article.title_int = nv;
           }
 
-          if (!$scope.article.slug || $scope.article.slug === '') {
+          if (!$scope.article.pk_content) {
             if ($scope.tm) {
               $timeout.cancel($scope.tm);
             }
 
-            $scope.tm = $timeout(function() {
-              $scope.getSlug(nv, function(response) {
-                $scope.article.slug = response.data.slug;
-              });
-            }, 2500);
+            if (!nv) {
+              $scope.article.slug = '';
+            }
           }
         }, true);
 
-        // Update metadata when title or category change
-        $scope.$watch('[ article.title, article.category ]', function(nv, ov) {
-          if ($scope.article.tag_ids && $scope.article.tag_ids.length > 0 ||
-              !nv || nv === ov) {
+        // Generates slug when flag changes
+        $scope.$watch('flags.generate.slug', function(nv) {
+          if ($scope.article.id && $scope.article.slug || !nv) {
+            $scope.flags.generate.slug = false;
+
             return;
           }
 
-          if ($scope.mtm) {
-            $timeout.cancel($scope.mtm);
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
           }
 
-          $scope.mtm = $timeout(function() {
-            $scope.loadAutoSuggestedTags();
-          }, 2500);
+          $scope.tm = $timeout(function() {
+            $scope.getSlug($scope.article.title, function(response) {
+              $scope.article.slug = response.data.slug;
+
+              $scope.flags.generate.slug = false;
+            });
+          }, 250);
         });
 
         // Shows a modal window to translate content automatically

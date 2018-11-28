@@ -49,6 +49,16 @@
         $scope.files = [];
 
         /**
+         * @memberOf NewsstandCtrl
+         *
+         * @description
+         *  Whether to refresh the item after a successful update.
+         *
+         * @type {Boolean}
+         */
+        $scope.refreshOnUpdate = true;
+
+        /**
          * @memberOf CoverCtrl
          *
          * @description
@@ -119,18 +129,11 @@
             data.item.thumbnail_url = data.extra.KIOSKO_IMG_URL + data.item.path + '/' + data.item.thumb_url;
           }
 
-          $scope.item = angular.extend($scope.item, data.item);
-        };
+          if (data.extra.tags) {
+            data.item.tags = data.extra.tags;
+          }
 
-        /**
-         * @function getTagsAutoSuggestedFields
-         * @memberOf CoverCtrl
-         *
-         * @description
-         *  Method to retrieve text to calculate tags from
-         */
-        $scope.getTagsAutoSuggestedFields = function() {
-          return $scope.title;
+          $scope.item = angular.extend($scope.item, data.item);
         };
 
         /**

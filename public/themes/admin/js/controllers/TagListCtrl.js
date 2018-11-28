@@ -59,10 +59,16 @@
          *   Makes some tag editable.
          */
         $scope.editTag = function(tag) {
-          $scope.editedTag = tag ? {
-            id: tag.id, name: tag.name, language_id: tag.language_id
-          } :
-            null;
+          $scope.editedTag = null;
+
+          if (tag) {
+            $scope.editedTag = {
+              id: tag.id,
+              name: tag.name,
+              language_id: tag.language_id,
+              slug: tag.slug
+            };
+          }
         };
 
         /**
@@ -139,28 +145,62 @@
          *   Generates an username basing on the name.
          */
         $scope.isValid = function() {
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+            $scope.disableFlags('http');
+          }
+
           if (!$scope.editedTag.name) {
             return;
           }
 
           $scope.flags.http.validating = 1;
 
+          var route = {
+            name: 'api_v1_backend_tags_validate',
+            params: { name: $scope.editedTag.name, languageId: $scope.locale }
+          };
+
+          $scope.tm = $timeout(function() {
+            http.get(route).then(function() {
+              $scope.disableFlags('http');
+              $scope.form.name.$setValidity('exists', true);
+            }, function(response) {
+              $scope.disableFlags('http');
+              $scope.form.name.$setValidity('exists', false);
+
+              $scope.error = '<ul><li>' + response.data.map(function(e) {
+                return e.message;
+              }).join('</li><li>') + '</li></ul>';
+            });
+          }, 500);
+        };
+
+        // Generates the slug for a new tag when name changes
+        $scope.$watch('editedTag.name', function(nv) {
+          if ($scope.form.slug && $scope.form.slug.$dirty ||
+              !nv || !$scope.editedTag || $scope.editedTag.id) {
+            return;
+          }
+
+          $scope.flags.http.generating = true;
+
           if ($scope.tm) {
             $timeout.cancel($scope.tm);
           }
 
-          var route = {
-            name: 'api_v1_backend_tags_valid_new_tag',
-            params: { text: $scope.editedTag.name, languageId: $scope.locale }
-          };
-
           $scope.tm = $timeout(function() {
-            http.get(route).then(function(response) {
+            $scope.getSlug(nv, function(response) {
               $scope.disableFlags('http');
-              $scope.form.name.$setValidity('exists', response.data.valid);
+
+              $scope.editedTag.slug = '';
+
+              if (response.data.slug) {
+                $scope.editedTag.slug = response.data.slug;
+              }
             });
           }, 500);
-        };
+        }, true);
       }
     ]);
 })();

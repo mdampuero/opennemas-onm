@@ -1,6 +1,7 @@
 tags-input .tags {
   background-color: #fff;
-  border: 1px solid #e5e9ec;
+  border: 1px solid @input-border-color;
+  border-radius: 2px;
   box-shadow: none;
   cursor: text;
   overflow: hidden;
@@ -21,12 +22,12 @@ tags-input .tags {
 
 tags-input .tags.focused {
   background-color: #f4f5f7;
-  border-color: #e5e9ec;
+  border-color: @input-border-color;
 }
 
 tags-input .tags .tag-item {
   background: 0;
-  background-color: #0090d9;
+  background-color: @info-color;
   border: 0;
   border-radius: .25em;
   color: #fff;
@@ -36,6 +37,10 @@ tags-input .tags .tag-item {
   margin-right: 4px;
   text-shadow: none;
   vertical-align: middle;
+
+  &.tag-item-new {
+    background-color: @success-color;
+  }
 }
 
 tags-input .tags .input {
@@ -57,7 +62,7 @@ tags-input .tags.focused .input {
 
 tags-input .tags .tag-item.selected {
   background: 0;
-  background-color: #e94847;
+  background-color: @danger-color;
 }
 
 tags-input .tags .tag-item .remove-button {
@@ -69,4 +74,18 @@ tags-input .tags .tag-item .remove-button {
   margin: 0 0 0 5px;
   padding: 0;
   vertical-align: middle;
+}
+
+.tags-input-buttons {
+  position: absolute;
+  right: 0;
+  top: -35px;
+
+  .btn {
+    font-weight: 800;
+  }
+
+  .btn-info:focus {
+    background: @info-color;
+  }
 }

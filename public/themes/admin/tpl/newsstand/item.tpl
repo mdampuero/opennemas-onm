@@ -52,7 +52,7 @@ jQuery(document).ready(function($) {
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <button class="btn btn-loading btn-primary text-uppercase" ng-click="save()" ng-disabled="flags.http.saving || form.$invalid" type="button">
+              <button class="btn btn-loading btn-primary text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving || form.$invalid" type="button">
                 <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                 {t}Save{/t}
               </button>
@@ -124,7 +124,7 @@ jQuery(document).ready(function($) {
                   <div class="form-group">
                     <label for="title" class="form-label">{t}Title{/t}</label>
                     <div class="controls">
-                      <input type="text" id="title" name="title" ng-model="item.title" value="{$cover->title|default:""}" required class="form-control"/>
+                      <input type="text" id="title" name="title" ng-blur="generate()" ng-model="item.title" value="{$cover->title|default:""}" required class="form-control"/>
                     </div>
                   </div>
 
@@ -204,7 +204,7 @@ jQuery(document).ready(function($) {
                   <label for="metadata" class="form-label">{t}Keywords{/t}</label>
                   <span class="help">{t}List of words separated by commas{/t}.</span>
                   <div class="controls">
-                    <onm-tag ng-model="item.tag_ids" locale="data.extra.locale" tags-list="data.extra.tags" check-new-tags="newAndExistingTagsFromTagList" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
+                    {include file="ui/component/tags-input/tags.tpl" ngModel="item.tags"}
                   </div>
                 </div>
 

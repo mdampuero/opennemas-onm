@@ -119,11 +119,13 @@ class ArticleController extends Controller
             $article->dropFromAllHomePages();
         }
 
+        $ts = $this->get('api.service.tag');
+
         $msg->add(_('Article successfully updated.'), 'success');
         $response['message'] = $msg->getMessages()[0];
         $response['tag_ids'] = $article->tag_ids;
-        $response['tags']    = $this->get('api.service.tag')
-            ->getListByIdsKeyMapped($article->tag_ids)['items'];
+        $response['tags']    =
+            $ts->responsify($ts->getListByIds($article->tag_ids)['items']);
 
         return new JsonResponse($response, $msg->getCode());
     }

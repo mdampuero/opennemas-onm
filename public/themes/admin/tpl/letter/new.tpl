@@ -66,7 +66,7 @@
               <div class="form-group">
                 <label for="title" class="form-label">{t}Title{/t}</label>
                 <div class="controls">
-                  <input type="text" id="title" name="title" value="{$letter->title|clearslash|escape:"html"}" ng-model="title" required class="form-control" />
+                  <input type="text" id="title" name="title" ng-blur="generate()" ng-model="title" required class="form-control" value="{$letter->title|clearslash|escape:"html"}"/>
                 </div>
               </div>
               <div class="form-group">
@@ -141,7 +141,9 @@
               {/is_module_activated}
               <div class="form-group">
                 <label for="metadata" class="form-label">{t}Tags{/t}</label>
-                <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="newAndExistingTagsFromTagList" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
+                <div class="controls">
+                  {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
+                </div>
               </div>
               <div class="form-group">
                 <label for="url" class="form-label">{t}Related url{/t}</label>

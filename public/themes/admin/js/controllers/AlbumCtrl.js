@@ -23,22 +23,8 @@ angular.module('BackendApp.controllers')
        * @param {Array}  tags   Array with all the tags needed for the album
        */
       $scope.init = function(album, locale, tags) {
-        $scope.tag_ids = album !== null ? album.tag_ids : [];
-        $scope.locale  = locale;
-        $scope.tags    = tags;
-        $scope.watchTagIds('title');
-      };
-
-      /**
-       * @function getTagsAutoSuggestedFields
-       * @memberOf AlbumCtrl
-       *
-       * @description
-       *   Method to method to retrieve th title for the autosuggested words
-       *
-       */
-      $scope.getTagsAutoSuggestedFields = function() {
-        return $scope.title;
+        $scope.locale = locale;
+        $scope.tags   = tags;
       };
 
       /**

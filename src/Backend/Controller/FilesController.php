@@ -322,7 +322,7 @@ class FilesController extends Controller
             'content_status' => !preg_match('@(js|html)$@', $uploadedFile->getClientOriginalExtension()),
             'description'    => $request->request->get('description', ''),
             'fk_publisher'   => $this->getUser()->id,
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         // Move uploaded file
@@ -374,14 +374,9 @@ class FilesController extends Controller
     public function showAction(Request $request)
     {
         $id   = $request->query->getDigits('id');
-        $page = $request->query->getDigits('page');
+        $file = $this->get('entity_repository')->find('Attachment', $id);
 
-        $file = new \Attachment($id);
-
-
-        // If the file doesn't exists redirect to the listing
-        // and show error message
-        if (is_null($file->pk_attachment)) {
+        if (!is_object($file) || is_null($file->pk_attachment)) {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 sprintf(_('Unable to find the file with the id "%s"'), $id)
@@ -389,18 +384,18 @@ class FilesController extends Controller
 
             return $this->redirect($this->generateUrl('admin_files'));
         }
-        $auxTagIds     = $file->getContentTags($file->id);
-        $file->tag_ids = array_key_exists($file->id, $auxTagIds) ?
-            $auxTagIds[$file->id] :
-            [];
 
-        $ls = $this->get('core.locale');
+        $tags = [];
+
+        if (!empty($file->tag_ids)) {
+            $ts   = $this->get('api.service.tag');
+            $tags = $ts->responsify($ts->getListByIds($file->tag_ids)['items']);
+        }
+
         return $this->render('files/new.tpl', [
             'attaches' => $file,
-            'page'     => $page,
-            'locale'         => $ls->getRequestLocale('frontend'),
-            'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($file->tag_ids)['items']
+            'locale'   => $this->get('core.locale')->getRequestLocale('frontend'),
+            'tags'     => $tags
         ]);
     }
 
@@ -417,7 +412,8 @@ class FilesController extends Controller
     {
         $id = $request->request->getDigits('id');
 
-        $file = new \Attachment($id);
+        $file = $this->get('entity_repository')->find('Attachment', $id);
+
         $data = [
             'title'          => $request->request
                 ->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
@@ -426,7 +422,7 @@ class FilesController extends Controller
             'id'             => (int) $id,
             'description'    => $request->request->filter('description', null),
             'fk_publisher'   => $this->getUser()->id,
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($file->update($data)) {

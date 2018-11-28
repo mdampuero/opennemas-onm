@@ -144,7 +144,7 @@ class VideosController extends Controller
                 $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'video_url'      => $requestPost->filter('video_url', ''),
             'with_comment'   => (int) $requestPost->getDigits('with_comment', 0),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($type == 'external' || $type == 'script') {
@@ -231,7 +231,7 @@ class VideosController extends Controller
             'information'    => json_decode($requestPost->get('information', ''), true),
             'video_url'      => $requestPost->filter('video_url', ''),
             'params'         => $request->request->get('params', []),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($video->author_name == 'external' || $video->author_name == 'script') {
@@ -304,8 +304,7 @@ class VideosController extends Controller
      */
     public function showAction(Request $request)
     {
-        $id = $request->query->getDigits('id', null);
-
+        $id    = $request->query->getDigits('id', null);
         $video = $this->get('entity_repository')->find('Video', $id);
 
         if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
@@ -328,10 +327,12 @@ class VideosController extends Controller
             return $this->redirect($this->generateUrl('admin_videos'));
         }
 
-        $auxTagIds      = $video->getContentTags($video->id);
-        $video->tag_ids = array_key_exists($video->id, $auxTagIds) ?
-            $auxTagIds[$video->id] :
-            [];
+        $tags = [];
+
+        if (!empty($video->tag_ids)) {
+            $ts   = $this->get('api.service.tag');
+            $tags = $ts->responsify($ts->getListByIds($video->tag_ids)['items']);
+        }
 
         if (is_object($video->information)) {
             $video->information = get_object_vars($video->information);
@@ -353,8 +354,7 @@ class VideosController extends Controller
                 ->enableCommentsByDefault(),
             'locale'         => $this->get('core.locale')
                 ->getRequestLocale('frontend'),
-            'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($video->tag_ids)['items']
+            'tags'           => $tags
         ]);
     }
 
