@@ -73,9 +73,11 @@
 
           $scope.category = $scope.item.categories.shift();
 
-          $scope.cover = $scope.item.relations.filter(function(el) {
+          var coverId = $scope.item.related_contents.filter(function(el) {
             return el.relationship == 'cover';
-          }).shift()['pk_content2'];
+          }).shift();
+
+          $scope.related_contents = data.extra.related_contents[coverId.pk_content2];
         };
 
         /**
@@ -116,12 +118,13 @@
         });
 
         // Update slug when title is updated
-        $scope.$watch('cover', function(nv, ov) {
+        $scope.$watch('related_contents', function(nv, ov) {
           if (!nv) {
             return;
           }
-          $scope.item.relations = [
-            { pk_content2: $scope.cover.pk_content, relationship: 'cover', }
+
+          $scope.item.related_contents = [
+            { pk_content2: nv.pk_content, relationship: 'cover', position: 0 }
           ];
         }, true);
 
