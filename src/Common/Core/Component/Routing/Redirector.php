@@ -396,8 +396,14 @@ class Redirector
         $uri = trim($request->getRequestUri(), '/');
         $uri = $this->replaceInternalVariables($uri);
 
+        $pattern = preg_replace(
+            [ '/\//', '/\?/'],
+            [ '\\/', '\\?' ],
+            $url->source
+        );
+
         preg_match_all(
-            '/' . preg_replace('/\//', '\\\/', $url->source) . '/',
+            '/' . $pattern . '/',
             $uri,
             $matches
         );
