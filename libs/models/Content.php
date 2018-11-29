@@ -2257,7 +2257,8 @@ class Content implements \JsonSerializable, CsvSerializable
         $ids = [];
 
         foreach ($tags as $tag) {
-            if (!array_key_exists('id', $tag)) {
+            if (!array_key_exists('id', $tag) || !is_numeric($tag['id'])) {
+                unset($tag['id']);
                 $tag = $ts->responsify($ts->createItem($tag));
             }
 
