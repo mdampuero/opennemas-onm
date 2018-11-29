@@ -109,6 +109,7 @@ monolog:
             type:  stream
             path:  '%kernel.logs_dir%/%kernel.environment%.log'
             level: error
+            formatter: monolog.formatter.standard
         applog:
             type:  stream
             path:  '%kernel.logs_dir%/application.log'
