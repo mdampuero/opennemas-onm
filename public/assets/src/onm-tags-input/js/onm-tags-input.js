@@ -35,7 +35,7 @@
               '</button>' +
             '</div>' +
             '<div>' +
-              '<tags-input add-from-autocomplete-only="false" display-property="name" key-property="id" ng-model="ngModel" on-tag-added="exists($tag)" on-tag-adding="validate($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" tag-class="{ \'tag-item-exists\': $tag.id, \'tag-item-new\': !$tag.id }">' +
+              '<tags-input add-from-autocomplete-only="false" display-property="name" key-property="id" ng-model="ngModel" on-tag-adding="validate($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
                 '<auto-complete debounce-delay="250" highlight-matched-text="true" load-on-down-arrow="true" min-length="3" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
               '</tags-input>' +
               '<input name="tags" type="hidden" ng-value="getJsonValue()">' +
@@ -83,26 +83,26 @@
          * @param {Object} tag The added tag object.
          */
         $scope.exists = function(tag) {
-          if (tag.id) {
-            return;
-          }
+          tag.id          = tag.name;
+          tag.language_id = $scope.locale;
 
           var oql = 'name = "' + tag.name + '" order by name asc limit 1';
 
-          http.get({
+          return http.get({
             name: 'api_v1_backend_tags_list',
             params: { oql: oql }
           }).then(function(response) {
-            if (response.data.total === 1 &&
-                tag.name === response.data.items[0].name) {
+            if (response.data.total > 0) {
               for (var property in response.data.items[0]) {
                 tag[property] = response.data.items[0][property];
               }
-
-              return;
             }
 
-            tag.language_id = $scope.locale;
+            return $scope.ngModel.filter(function(e) {
+              return e.id === tag.id;
+            }).length === 0;
+          }, function() {
+            return true;
           });
         };
 
@@ -161,6 +161,22 @@
         };
 
         /**
+         * @function isNewTag
+         * @memberOf OnmTagsInputCtrl
+         *
+         * @description
+         *   Checks if the tag id is numeric to determine if it is a new tag or
+         *   the tag already exists.
+         *
+         * @param {Object} tag The tag to check.
+         *
+         * @return {Boolean} True if the tag is new. False otherwise.
+         */
+        $scope.isNewTag = function(tag) {
+          return !angular.isNumber(tag.id);
+        };
+
+        /**
          * @function getTags
          * @memberOf OnmTagsInputCtrl
          *
@@ -195,6 +211,7 @@
          *                  false if the tag is not valid.
          */
         $scope.validate = function(tag) {
+          // If selected from the autocomplete
           if (tag.id) {
             return true;
           }
@@ -203,7 +220,7 @@
             name: 'api_v1_backend_tags_validate',
             params: tag
           }).then(function() {
-            return true;
+            return $scope.exists(tag);
           }, function() {
             return false;
           });
