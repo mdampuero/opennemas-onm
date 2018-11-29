@@ -129,21 +129,21 @@ monolog:
     channels: ['main', 'applog', 'errorlog']
     handlers:
         main:
-            type:  stream
-            path:  '%kernel.logs_dir%/%kernel.environment%.log'
-            level: error
+            type:      stream
+            path:      '%kernel.logs_dir%/%kernel.environment%.log'
+            level:     error
             formatter: monolog.formatter.standard
         applog:
-            type:  stream
-            path:  '%kernel.logs_dir%/application.log'
-            level: info
-            channels: applog
+            type:      stream
+            path:      '%kernel.logs_dir%/application.log'
+            level:     info
+            channels:  applog
             formatter: monolog.formatter.standard
         errorlog:
-            type:  stream
-            path:  '%kernel.logs_dir%/opennemas-error.log'
-            level: error
-            channels: errorlog
+            type:      stream
+            path:      '%kernel.logs_dir%/opennemas-error.log'
+            level:     error
+            channels:  errorlog
             formatter: monolog.formatter.standard
 
 hwi_oauth:
