@@ -21,9 +21,8 @@ angular.module('BackendApp.controllers').controller('ImageCtrl', [
      * @param {Array}  tags     Array with all the tags needed for the image
      */
     $scope.init = function(images, locale, tags) {
-      $scope.tag_ids = images !== null && Array.isArray(images) && images.length > 0 ? images[0].tag_ids : [];
-      $scope.locale  = locale;
-      $scope.tags    = tags;
+      $scope.locale = locale;
+      $scope.tags   = tags;
     };
   }
 ]);

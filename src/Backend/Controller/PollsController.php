@@ -116,7 +116,7 @@ class PollsController extends Controller
             'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'item'           => json_decode($request->request->get('parsedAnswers')),
             'params'         => $request->request->get('params', []),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         $poll = $poll->create($data);
@@ -154,7 +154,7 @@ class PollsController extends Controller
     public function showAction(Request $request)
     {
         $id   = $request->query->getDigits('id', null);
-        $poll = new \Poll($id);
+        $poll = $this->get('entity_repository')->find('Poll', $id);
 
         if (is_null($poll->id)) {
             $this->get('session')->getFlashBag()->add(
@@ -165,16 +165,19 @@ class PollsController extends Controller
             return $this->redirect($this->generateUrl('admin_polls'));
         }
 
-        $auxTagIds     = $poll->getContentTags($poll->id);
-        $poll->tag_ids = array_key_exists($poll->id, $auxTagIds) ?
-            $auxTagIds[$poll->id] :
-            [];
+        $tags = [];
+
+        if (!empty($poll->tag_ids)) {
+            $ts   = $this->get('api.service.tag');
+            $tags = $ts->responsify($ts->getListByIds($poll->tag_ids)['items']);
+        }
 
         if (is_string($poll->params)) {
             $poll->params = unserialize($poll->params);
         }
 
         $ls = $this->get('core.locale');
+
         return $this->render('poll/new.tpl', [
             'poll'  => $poll,
             'items' => $poll->items,
@@ -182,8 +185,7 @@ class PollsController extends Controller
                 ->getDataSet('Settings', 'instance')
                 ->get('comments_config'),
             'locale'         => $ls->getRequestLocale('frontend'),
-            'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($poll->tag_ids)['items']
+            'tags'           => $tags
         ]);
     }
 
@@ -233,7 +235,7 @@ class PollsController extends Controller
             'content_status' => $request->request->getDigits('content_status', 0),
             'item'           => json_decode($request->request->get('parsedAnswers')),
             'params'         => $request->request->get('params'),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($poll->update($data)) {

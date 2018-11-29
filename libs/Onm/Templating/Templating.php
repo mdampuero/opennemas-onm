@@ -22,10 +22,11 @@ class Templating
      * Initializes the Templating.
      *
      * @param ServiceContainer $container The service container.
+     * @param \Symfony\Component\Stopwatch\Stopwatch $debugStopwatch The service container.
      */
     public function __construct($container, $debugStopwatch)
     {
-        $this->container = $container;
+        $this->container      = $container;
         $this->debugStopwatch = $debugStopwatch;
     }
 

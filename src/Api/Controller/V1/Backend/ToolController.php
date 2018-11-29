@@ -9,10 +9,11 @@
  */
 namespace Api\Controller\V1\Backend;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Common\Core\Controller\Controller;
 use Common\Core\Annotation\Security;
+use Common\Core\Controller\Controller;
+use Common\ORM\Entity\Tag;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * The ToolController provides common actions to parse and transform values
@@ -30,9 +31,43 @@ class ToolController extends Controller
     public function slugAction(Request $request)
     {
         $slug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
-        $slug = \Onm\StringUtils::generateSlug($slug);
+        $slug = $this->get('data.manager.filter')
+            ->set($slug)
+            ->filter('slug')
+            ->get();
 
         return new JsonResponse([ 'slug' => $slug ]);
+    }
+
+    /**
+     * Returns a list of existing and new tags basing on a string.
+     *
+     * @param Request $request The request object.
+     *
+     * @return array The list of tags.
+     */
+    public function tagsAction(Request $request)
+    {
+        $this->checkSecurity('es.openhost.module.tags', 'TAG_ADMIN');
+
+        $str = $request->get('q');
+
+        if (empty($str)) {
+            return [ 'items' => [], 'total' => 0 ];
+        }
+
+        $filterManager = $this->get('data.manager.filter');
+        $tagService    = $this->get('api.service.tag');
+
+        $tags  = $filterManager->set($str)->filter('tags')->get();
+        $tags  = explode(',', $tags);
+        $slugs = $filterManager->set($tags)->filter('slug')->get();
+
+        $tags = $tagService->getListBySlugs($slugs);
+
+        $tags['items'] = $tagService->responsify($tags['items']);
+
+        return $tags;
     }
 
     /**

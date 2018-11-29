@@ -12,11 +12,11 @@ namespace Common\Core\Component\Routing;
 use Api\Service\Service;
 use Common\Cache\Core\Cache;
 use Common\ORM\Entity\Url;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Framework\Component\MIME\MimeTypeTool;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -76,8 +76,15 @@ class Redirector
      */
     public function getResponse(Request $request, Url $url)
     {
-        return $url->redirection ? $this->getRedirectResponse($request, $url) :
-            $this->getForwardResponse($request, $url);
+        $response = $url->redirection
+            ? $this->getRedirectResponse($request, $url)
+            : $this->getForwardResponse($request, $url);
+
+        $xTags = $response->headers->get('x-tags') . ",url-" . $url->id;
+
+        $response->headers->set('x-tags', trim($xTags, ','));
+
+        return $response;
     }
 
     /**
@@ -266,6 +273,7 @@ class Redirector
         $response = new BinaryFileResponse($path);
 
         $response->headers->set('X-Status-Code', 200);
+        $response->headers->set('Content-Type', MimeTypeTool::getMimeType($path));
 
         return $response;
     }
@@ -366,12 +374,12 @@ class Redirector
             return $this->getContent($target, $url->content_type);
         }
 
-        // Slug to slug/URL
+        // URI to URI
         if ($url->type === 2) {
-            return $url->target;
+            return $this->replaceInternalVariables($url->target);
         }
 
-        // RegExp to slug/URL
+        // RegExp to URI
         return $this->getTargetForRegExpUrl($request, $url);
     }
 
@@ -386,6 +394,7 @@ class Redirector
     protected function getTargetForRegExpUrl(Request $request, Url $url)
     {
         $uri = trim($request->getRequestUri(), '/');
+        $uri = $this->replaceInternalVariables($uri);
 
         preg_match_all(
             '/' . preg_replace('/\//', '\\\/', $url->source) . '/',
@@ -451,5 +460,36 @@ class Redirector
 
         return is_object($target)
             || $target !== trim($request->getRequestUri(), '/');
+    }
+
+    /**
+     * Replaces some valid placeholders by dynamic internal variables in the
+     * Url target.
+     *
+     * @param string $target The Url target.
+     *
+     * @return string The target after replacements.
+     */
+    protected function replaceInternalVariables($target)
+    {
+        $patterns = [
+            '/\$THEMES_DEPLOYED_AT/',
+            '/\$DEPLOYED_AT/',
+            '/\$INSTANCE/',
+            '/\$THEME\b/',
+        ];
+
+        $replacements = [
+            THEMES_DEPLOYED_AT,
+            DEPLOYED_AT,
+            $this->container->get('core.instance')->internal_name,
+            str_replace(
+                'es.openhost.theme.',
+                '',
+                $this->container->get('core.theme')->uuid
+            ),
+        ];
+
+        return preg_replace($patterns, $replacements, $target);
     }
 }

@@ -40,6 +40,7 @@
 
     // Initialize the advertisement manager on load
     that.addEventListener('load', load);
+    that.addEventListener('OAM.load', load);
   };
 
   /**
@@ -263,6 +264,10 @@
       // If data-position is not available just go for data-type
       if (!type) {
         var type = parseInt(slot.getAttribute('data-type'));
+      }
+      
+      if (slot.childNodes.length !== 0) {
+        continue;
       }
 
       var id   = parseInt(slot.getAttribute('data-id'));

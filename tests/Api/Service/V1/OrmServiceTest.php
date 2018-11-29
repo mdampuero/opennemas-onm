@@ -106,6 +106,8 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->once())->method('persist');
         $this->dispatcher->expects($this->once())->method('dispatch')
             ->with('entity.createItem');
+        $this->metadata->expects($this->once())->method('getId')
+            ->willReturn([ 'id' => 1 ]);
 
         $item = $this->service->createItem($data);
 
@@ -206,9 +208,9 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $itemB = new Entity([ 'name' => 'xyzzy' ]);
 
         $this->metadata->expects($this->at(0))->method('getId')
-            ->with($itemA)->willReturn(1);
+            ->with($itemA)->willReturn([ 'id' => 1 ]);
         $this->metadata->expects($this->at(1))->method('getId')
-            ->with($itemB)->willReturn(2);
+            ->with($itemB)->willReturn([ 'id' => 2 ]);
 
         $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
@@ -242,7 +244,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $itemB = new Entity([ 'name' => 'xyzzy' ]);
 
         $this->metadata->expects($this->at(0))->method('getId')
-            ->with($itemA)->willReturn(1);
+            ->with($itemA)->willReturn([ 'id' => 1 ]);
 
         $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
@@ -555,9 +557,9 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $data  = [ 'enabled' => true ];
 
         $this->metadata->expects($this->at(0))->method('getId')
-            ->with($itemA)->willReturn(1);
+            ->with($itemA)->willReturn([ 'id' => 1 ]);
         $this->metadata->expects($this->at(1))->method('getId')
-            ->with($itemB)->willReturn(2);
+            ->with($itemB)->willReturn([ 'id' => 2 ]);
 
         $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
@@ -596,7 +598,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $data  = [ 'enabled' => true ];
 
         $this->metadata->expects($this->at(0))->method('getId')
-            ->willReturn(1);
+            ->willReturn([ 'id' => 1 ]);
 
         $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])

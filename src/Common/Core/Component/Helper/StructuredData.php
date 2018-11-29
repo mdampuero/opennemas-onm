@@ -58,9 +58,9 @@ class StructuredData
     public function generateVideoJsonLDCode($data)
     {
         $keywords = empty($data['video']->tag_ids) ?
-            '' :
-            $this->ts->getTagsSepByCommas($data['video']->tag_ids);
-        $code     = '{
+            '' : $this->getTags($data['video']->tag_ids);
+
+        $code = '{
             "@context": "http://schema.org/",
             "@type": "VideoObject",
             "author": "' . $data['author'] . '",
@@ -94,9 +94,9 @@ class StructuredData
     public function generateImageGalleryJsonLDCode($data)
     {
         $keywords = empty($data['content']->tag_ids) ?
-            '' :
-            $this->ts->getTagsSepByCommas($data['content']->tag_ids);
-        $code     = '{
+            '' : $this->getTags($data['content']->tag_ids);
+
+        $code = '{
             "@context":"http://schema.org",
             "@type":"ImageGallery",
             "description": "' . strip_tags($data['summary']) . '",
@@ -157,9 +157,9 @@ class StructuredData
     public function generateNewsArticleJsonLDCode($data)
     {
         $keywords = empty($data['content']->tag_ids) ?
-            '' :
-            $this->ts->getTagsSepByCommas($data['content']->tag_ids);
-        $code     = '{
+            '' : $this->getTags($data['content']->tag_ids);
+
+        $code = '{
             "@context" : "http://schema.org",
             "@type" : "NewsArticle",
             "mainEntityOfPage": {
@@ -203,5 +203,23 @@ class StructuredData
         $code .= '}';
 
         return $code;
+    }
+
+    /**
+     *  Method to retrieve the tags for a list of tag ids
+     *
+     * @param array $ids List of ids we want to retrieve
+     *
+     * @return string List of tags fo this tags.
+     */
+    protected function getTags($ids)
+    {
+        $tags = $this->ts->getListByIds($ids);
+
+        $names = array_map(function ($a) {
+            return $a->name;
+        }, $tags['items']);
+
+        return implode(',', $names);
     }
 }

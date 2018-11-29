@@ -14,7 +14,12 @@ namespace Onm\Varnish;
  */
 class MessageExchanger
 {
-    public $messages = array();
+    /**
+     * The list of messages.
+     *
+     * @var array
+     */
+    public $messages = [];
 
     /**
      * Adds a new BAN message to the queue.
@@ -25,7 +30,7 @@ class MessageExchanger
      */
     public function addBanMessage($ban)
     {
-        $this->messages []= $ban;
+        $this->messages[] = $ban;
 
         return $this;
     }

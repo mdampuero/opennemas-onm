@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form id="formulario" name="form_upload" action="{url name=admin_image_update}" method="POST" ng-controller="ImageCtrl" ng-init="init({json_encode($photos)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
+  <form id="formulario" name="form_upload" action="{if isset($photo->id)}{url name=admin_photo_update id=$photo->id}{else}{url name=admin_photo_create}{/if}" method="POST" ng-controller="ImageCtrl" ng-init="init({json_encode($photos)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -44,13 +44,11 @@
       </div>
     </div>
     <div class="content">
-      {foreach from=$photos item=photo name=photo_show}
-        <div class="grid simple">
-          <div class="grid-body">
-            {include file="image/_partials/photo_data.tpl" display='inline'}
-          </div>
+      <div class="grid simple">
+        <div class="grid-body">
+          {include file="image/_partials/photo_data.tpl" display='inline'}
         </div>
-      {/foreach}
+      </div>
     </div>
   </form>
   <div class="modal fade" id="modal-image-location">
@@ -75,7 +73,6 @@
                 </span>
               </div>
               <input type="hidden" class="final_address" value="">
-              <input type="hidden" class="target_image_id" value="">
             </div>
             <div class="map">
               <div id="map_canvas"></div>
@@ -331,19 +328,16 @@
 
         $('button.locate').on('click', function(e, ui) {
           var button = $(this);
-          var image_id = $(button).data('image-id');
           var addresss = $(button).closest('.photo-edit').find('.photo_address').val();
 
           $('.final_address').val(addresss);
           $('.address_search_input').val(addresss);
-          $('.target_image_id').val(image_id);
         });
 
         $('#modal-image-location .btn.accept').on('click', function(e){
           var location = $('.final_address').val();
-          var image_id = $('.target_image_id').val();
 
-          var element = $('#photo-' + image_id).find('.photo_address');
+          var element = $('#photo').find('.photo_address');
           delete map;
           $('#map_canvas').html('&nbsp;');
 

@@ -62,8 +62,13 @@ class PickerController extends Controller
 
         if (!empty($title)) {
             $titleSql = "(description LIKE '%$title%' OR title LIKE '%$title%'";
+
             $tagSearcheableWord = $this
-                ->get('api.service.tag')->createSearchableWord($title);
+                ->get('data.manager.filter')
+                ->set($title)
+                ->filter('slug')
+                ->get();
+
             if (!empty($tagSearcheableWord)) {
                 $titleSql .= ' OR EXISTS(SELECT 1 FROM tags' .
                     ' INNER JOIN contents_tags ON contents_tags.tag_id = tags.id' .

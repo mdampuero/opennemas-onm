@@ -29,10 +29,8 @@ angular.module('BackendApp.controllers')
        * @param {Array}  tags   Array with all the tags needed for the poll
        */
       $scope.init = function(poll, locale, tags) {
-        $scope.tag_ids = poll !== null ? poll.tag_ids : [];
-        $scope.locale  = locale;
-        $scope.tags    = tags;
-        $scope.watchTagIds('title');
+        $scope.locale = locale;
+        $scope.tags   = tags;
       };
 
       /**
@@ -76,17 +74,6 @@ angular.module('BackendApp.controllers')
        */
       $scope.removeAnswer = function(index) {
         $scope.answers.splice(index, 1);
-      };
-
-      /**
-       * @function getTagsAutoSuggestedFields
-       * @memberOf PollCtrl
-       *
-       * @description
-       *  Method to method to retrieve th title for the autosuggested words
-       */
-      $scope.getTagsAutoSuggestedFields = function() {
-        return $scope.title;
       };
 
       // Updates internal parsedAnswers parameter when answers change.

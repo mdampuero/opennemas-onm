@@ -106,9 +106,12 @@ class OrmService implements Service
             $this->validate($item);
             $this->em->persist($item, $this->getOrigin());
 
-            $this->dispatcher->dispatch($this->getEventName('createItem'), [
-                'id' => $this->em->getMetadata($item)->getId($item)
-            ]);
+            $id = $this->em->getMetadata($item)->getId($item);
+
+            $this->dispatcher->dispatch(
+                $this->getEventName('createItem'),
+                [ 'id' => array_pop($id) ]
+            );
 
             return $item;
         } catch (\Exception $e) {
@@ -157,7 +160,9 @@ class OrmService implements Service
             try {
                 $this->em->remove($item, $item->getOrigin());
 
-                $deleted[] = $this->em->getMetadata($item)->getId($item);
+                $id = $this->em->getMetadata($item)->getId($item);
+
+                $deleted[] = array_pop($id);
             } catch (\Exception $e) {
                 $this->container->get('error.log')->error($e->getMessage());
             }
@@ -341,7 +346,9 @@ class OrmService implements Service
                 $this->validate($item);
                 $this->em->persist($item, $this->getOrigin());
 
-                $updated[] = $this->em->getMetadata($item)->getId($item);
+                $id = $this->em->getMetadata($item)->getId($item);
+
+                $updated[] = array_pop($id);
             } catch (\Exception $e) {
                 $this->container->get('error.log')->error($e->getMessage());
             }

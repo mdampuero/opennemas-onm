@@ -87,29 +87,55 @@ class MimeTypeTool
      */
     public static function getMimeType($file)
     {
-        $mime = 'application/octet-stream';
+        $extension = self::getMimeTypeFromExtension($file);
+        $fileinfo  = self::getMimeTypeFromFileinfo($file);
 
+        if ($fileinfo !== $extension && $fileinfo === 'text/plain') {
+            return $extension;
+        }
+
+        return $fileinfo;
+    }
+
+    /**
+     * Returns the MIME type for a file basing on the fileinfo.
+     *
+     * @param string $file The path to the file.
+     *
+     * @return string The MIME type.
+     */
+    protected static function getMimeTypeFromFileinfo($file)
+    {
         if (extension_loaded('fileinfo')
             && 'http://' !== substr($file, 0, 7)
             && 'https://' !== substr($file, 0, 8)
         ) {
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
-
-            if (false !== ($m = finfo_file($finfo, $file))) {
-                $mime = $m;
-            }
+            $mime  = finfo_file($finfo, $file);
 
             finfo_close($finfo);
 
             return $mime;
         }
 
+        return 'text/plain';
+    }
+
+    /**
+     * Returns the MIME type for a file basing on the file extension.
+     *
+     * @param string $file The path to the file.
+     *
+     * @return string The MIME type.
+     */
+    protected static function getMimeTypeFromExtension($file)
+    {
         $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
         if (array_key_exists($ext, self::$ext2Mime)) {
-            $mime = self::$ext2Mime[$ext];
+            return self::$ext2Mime[$ext];
         }
 
-        return $mime;
+        return 'text/plain';
     }
 }

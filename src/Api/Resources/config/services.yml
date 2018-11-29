@@ -41,7 +41,7 @@ services:
 
     api.service.tag:
         class:     Api\Service\V1\TagService
-        arguments: [ '@service_container', 'Common\ORM\Entity\Tag' ]
+        arguments: [ '@service_container', 'Common\ORM\Entity\Tag', '@api.validator.tag' ]
         public: true
 
     api.service.user:
@@ -65,6 +65,11 @@ services:
 
     api.validator.subscription:
         class:     Api\Validator\V1\SubscriptionValidator
+        arguments: [ '@service_container' ]
+        public: true
+
+    api.validator.tag:
+        class:     Api\Validator\V1\TagValidator
         arguments: [ '@service_container' ]
         public: true
 

@@ -330,7 +330,12 @@ class Importer
      */
     protected function getData($resource, $category, $author, $enabled, $target)
     {
-        $fm   = getService('data.manager.filter');
+        $ts = $this->container->get('api.service.tag');
+
+        $tags = $ts->responsify(
+            $ts->getListByString($resource->title)['items']
+        );
+
         $data = [
             'category'            => $category,
             'content_status'      => $enabled,
@@ -340,8 +345,7 @@ class Importer
             'fk_publisher'        => $this->getAuthor($resource, $author),
             'fk_user_last_editor' => $this->getAuthor($resource, $author),
             'in_home'             => 0,
-            'tag_ids'             => getService('api.service.tag')
-                ->getTagIdsFromStr($resource->title),
+            'tags'                => $tags,
             'title'               => $resource->title,
             'urn_source'          => $resource->urn,
             'with_comment'        => $this->getComments(),
