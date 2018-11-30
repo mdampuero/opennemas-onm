@@ -68,29 +68,6 @@ opennemas:
         asset_servers:     '%opennemas.assetic.asset_servers%'
         asset_domain:      '%opennemas.assetic.asset_domain%'
 
-        bundles:
-            - FrameworkBundle
-            - TwigBundle
-            - MonologBundle
-            - SwiftmailerBundle
-            - SensioFrameworkExtraBundle
-            - AsseticBundle
-            - CometCultBraintreeBundle
-            - FOSJsRoutingBundle
-            - LexikJWTAuthenticationBundle
-            - HttplugBundle
-            - HWIOAuthBundle
-            - ApiBundle
-            - BackendBundle
-            - BackendWebServiceBundle
-            - FrontendBundle
-            - FrontendMobileBundle
-            - ManagerBundle
-            - ManagerWebServiceBundle
-            - WebServiceBundle
-            - CacheBundle
-            - CoreBundle
-
         # Filters configuration
         filters:
             uglifyjs:
@@ -108,6 +85,28 @@ opennemas:
                     sourceMap:
                         sourceMapFileInline: true
 
+assetic:
+    bundles:
+        - FrameworkBundle
+        - TwigBundle
+        - MonologBundle
+        - SwiftmailerBundle
+        - SensioFrameworkExtraBundle
+        - AsseticBundle
+        - CometCultBraintreeBundle
+        - FOSJsRoutingBundle
+        - LexikJWTAuthenticationBundle
+        - HWIOAuthBundle
+        - ApiBundle
+        - BackendBundle
+        - BackendWebServiceBundle
+        - FrontendBundle
+        - FrontendMobileBundle
+        - ManagerBundle
+        - ManagerWebServiceBundle
+        - WebServiceBundle
+        - CacheBundle
+        - CoreBundle
 # Twig Configuration
 twig:
     debug:            '%kernel.debug%'
