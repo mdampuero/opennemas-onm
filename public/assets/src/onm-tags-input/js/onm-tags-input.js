@@ -217,6 +217,8 @@
             return true;
           }
 
+          tag.language_id = $scope.locale;
+
           return http.get({
             name: 'api_v1_backend_tags_validate',
             params: tag
