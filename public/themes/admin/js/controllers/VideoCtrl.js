@@ -30,8 +30,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       }
     };
 
-    $scope.title = null;
-
     /**
      * @function generateTagsFrom
      * @memberOf InnerCtrl
