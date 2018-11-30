@@ -77,6 +77,10 @@
             return el.relationship == 'cover';
           }).shift();
 
+          if (!coverId) {
+            return;
+          }
+
           $scope.related_contents = data.extra.related_contents[coverId.pk_content2];
         };
 
