@@ -49,7 +49,7 @@ class ArticlesController extends Controller
             $url = str_replace('" target="_blank', '', $article->params['bodyLink']);
 
             return $this->forward(
-                'FrontendBundle:Redirectors:externalLink',
+                'FrontendBundle:Redirector:externalLink',
                 [ 'to'  => $url ]
             );
         }
