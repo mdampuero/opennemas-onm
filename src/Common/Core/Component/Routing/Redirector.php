@@ -338,11 +338,7 @@ class Redirector
         }
 
         foreach ($urls['items'] as $url) {
-            $pattern = preg_replace(
-                [ '/\//', '/\?/'],
-                [ '\\/', '\\?' ],
-                $url->source
-            );
+            $pattern = preg_replace([ '/\//' ], [ '\\/' ], $url->source);
 
             if (preg_match('/' . $pattern . '/', $uri)) {
                 return $url;
@@ -396,8 +392,10 @@ class Redirector
         $uri = trim($request->getRequestUri(), '/');
         $uri = $this->replaceInternalVariables($uri);
 
+        $pattern = preg_replace([ '/\//' ], [ '\\/' ], $url->source);
+
         preg_match_all(
-            '/' . preg_replace('/\//', '\\\/', $url->source) . '/',
+            '/' . $pattern . '/',
             $uri,
             $matches
         );
