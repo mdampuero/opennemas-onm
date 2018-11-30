@@ -189,9 +189,9 @@ class OpinionsController extends Controller
 
         $tags = [];
 
-        if (!empty($file->tag_ids)) {
+        if (!empty($opinion->tag_ids)) {
             $ts   = $this->get('api.service.tag');
-            $tags = $ts->responsify($ts->getListByIds($file->tag_ids)['items']);
+            $tags = $ts->responsify($ts->getListByIds($opinion->tag_ids)['items']);
         }
 
         return $this->render('opinion/new.tpl', [
