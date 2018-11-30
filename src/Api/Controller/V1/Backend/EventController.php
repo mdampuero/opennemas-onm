@@ -55,7 +55,7 @@ class EventController extends ApiController
         $converter  = $this->get('orm.manager')->getConverter('Category');
         $categories = $this->get('orm.manager')
             ->getRepository('Category')
-            ->findBy('internal_category = 1 and fk_content_category=0');
+            ->findBy('internal_category = 1');
 
         $categories = array_filter($categories, function ($category) use ($security) {
             return $security->hasCategory($category->pk_content_category);
