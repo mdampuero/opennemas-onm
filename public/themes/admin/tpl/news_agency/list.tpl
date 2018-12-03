@@ -230,7 +230,7 @@
                       <span class="fa fa-cloud-download m-r-5"></span>{t}Import{/t}
                     </button>
                   </div>
-                </td>[% extra.servers[content.source] %]
+                </td>
                 <td class="nowrap center hidden-xs hidden-sm">
                   <span class="badge badge-success" style="background-color:[% extra.servers[content.source].color %]!important;">
                     [% extra.servers[content.source].name %]
