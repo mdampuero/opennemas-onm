@@ -89,6 +89,7 @@ class NewsAgencyServerController extends Controller
             'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
             'target_author'  => $request->request->filter('target_author', '', FILTER_SANITIZE_STRING),
             'import_related' => $request->request->filter('import_related', '', FILTER_SANITIZE_STRING),
+            'categories_map' => json_decode($request->request->get('categories_map', [])),
             'filters'        => $request->request->get('filters', []),
         ];
 
@@ -181,6 +182,7 @@ class NewsAgencyServerController extends Controller
             'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
             'target_author'  => $request->request->filter('target_author', '', FILTER_SANITIZE_STRING),
             'import_related' => $request->request->filter('import_related', '', FILTER_SANITIZE_STRING),
+            'categories_map' => json_decode($request->request->get('categories_map', [])),
             'filters'        => $request->request->get('filters', [])
         ];
 

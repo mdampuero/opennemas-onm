@@ -218,11 +218,42 @@
             <div ng-show="auto_import === '1'">
               <div class="form-group" ng-init="category = '{$server['category']}'; categories = {json_encode($categories)|clear_json}">
                 <label class="form-label" for="category">{t}Category{/t}</label>
-                <span class="help m-l-5">{t}Category to import{/t}</span>
+                <span class="help m-l-5">{t}Default category to import{/t}</span>
                 <div class="controls">
                   <select id="category" name="category" ng-disabled="!auto_import">
                     <option value="[% key %]" ng-repeat="(key, value) in categories" ng-selected="category === key">[% value %]</option>
                   </select>
+                </div>
+              </div>
+              <div class="form-group" {if !empty($server['categories_map'])}ng-init="categoriesMap = {json_encode($server['categories_map'])|clear_json}"{/if}>
+                <label class="form-label" for="category_mapping">{t}Category mapping{/t}</label>
+                <div class="controls">
+                  <div class="row m-t-15" ng-repeat="categoryMap in categoriesMap track by $index">
+                    <div class="col-md-6 col-sm-9">
+                      <input class="form-control" ng-model="categoryMap.slug" placeholder="{t}Category name from source{/t}" type="text">
+                    </div>
+                    <div class="col-md-4 col-sm-9">
+                      <select id="category_mapping" ng-model="categoryMap.id" ng-disabled="!auto_import">
+                        <option value="[% key %]" ng-repeat="(key, value) in categories" ng-selected="category === key">[% value %]</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2 col-sm-3">
+                      <button class="btn btn-block btn-danger ng-cloak" ng-click="removeCategoryMap($index)" type="button">
+                        <i class="fa fa-trash-o"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <input type="hidden" name="categories_map" value="[% categoryJson %]">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+                    <button class="btn btn-block btn-success" ng-click="addCategoryMap()" type="button">
+                      <i class="fa fa-plus"></i>
+                      {t}Add{/t}
+                    </button>
+                  </div>
                 </div>
               </div>
               <div class="form-group" ng-init="author = '{$server['target_author']}'; authors = {json_encode($authors)|clear_json}">
@@ -250,13 +281,20 @@
                       <input class="form-control" name="filters[]" ng-model="filter" placeholder="{t}Comma-separated list of words to match{/t}" type="text">
                     </div>
                     <div class="col-md-2 col-sm-3">
-                      <button class="btn btn-block btn-success" ng-click="addFilter()" ng-if="$index === 0" type="button">
-                        <i class="fa fa-plus"></i>
-                      </button>
-                      <button class="btn btn-block btn-danger ng-cloak" ng-click="removeFilter($index)" ng-if="$index > 0" type="button">
+                      <button class="btn btn-block btn-danger ng-cloak" ng-click="removeFilter($index)" type="button">
                         <i class="fa fa-trash-o"></i>
                       </button>
                     </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+                    <button class="btn btn-block btn-success" ng-click="addFilter()" type="button">
+                      <i class="fa fa-plus"></i>
+                      {t}Add{/t}
+                    </button>
                   </div>
                 </div>
               </div>
