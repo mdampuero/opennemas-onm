@@ -50,6 +50,7 @@ class NewsMLTest extends \PHPUnit\Framework\TestCase
                 </AdministrativeMetadata>
                 <DescriptiveMetadata>
                     <OfInterestTo FormalName=\"sample,tags\"/>
+                    <Property FormalName=\"Tesauro\" Value=\"POL\"/>
                 </DescriptiveMetadata>
                 <NewsManagement>
                     <FirstCreated>20040729T054956Z</FirstCreated>
@@ -104,6 +105,16 @@ class NewsMLTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             '<p>Paragraph 1</p><p>Paragraph 2</p>',
             $this->parser->getBody($this->valid)
+        );
+    }
+
+    public function testGetCategory()
+    {
+        $this->assertEmpty($this->parser->getCategory($this->invalid));
+
+        $this->assertEquals(
+            'POL',
+            $this->parser->getCategory($this->valid)
         );
     }
 
@@ -198,7 +209,8 @@ class NewsMLTest extends \PHPUnit\Framework\TestCase
             [
                 'agency_name'  => 'Foobar Agency \'quote\' ',
                 'created_time' => $date->format('Y-m-d H:i:s'),
-                'id'           => '040729054956.xm61wen7'
+                'id'           => '040729054956.xm61wen7',
+                'category'     => 'POL'
             ],
             $this->parser->getBag()
         );
