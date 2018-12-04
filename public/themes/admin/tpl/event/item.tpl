@@ -71,10 +71,10 @@
 
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label class="form-label" for="event_startdate">{t}Start date{/t}</label>
+                  <label class="form-label" for="event_start_date">{t}Start date{/t}</label>
                   <div class="controls">
                     <div class="input-group">
-                      <input class="form-control" datetime-picker datetime-picker-format="YYYY-MM-DD" datetime-picker-timezone="{$timezone}" datetime-picker-max="item.event_enddate" datetime-picker-use-current="true" id="event_startdate" name="event_startdate" ng-model="item.event_startdate" type="datetime">
+                      <input class="form-control" datetime-picker datetime-picker-format="YYYY-MM-DD" datetime-picker-timezone="{$timezone}" datetime-picker-max="item.event_end_date" datetime-picker-use-current="true" id="event_start_date" name="event_start_date" ng-model="item.event_start_date" type="datetime">
                       <span class="input-group-addon add-on">
                         <span class="fa fa-calendar"></span>
                       </span>
@@ -83,10 +83,10 @@
                 </div>
 
                 <div class="form-group col-md-6">
-                  <label class="form-label" for="event_enddate">{t}End date{/t}</label>
+                  <label class="form-label" for="event_end_date">{t}End date{/t}</label>
                   <div class="controls">
                     <div class="input-group">
-                      <input class="form-control" datetime-picker datetime-picker-format="YYYY-MM-DD" datetime-picker-timezone="{$timezone}" datetime-picker-min="item.event_startdate" id="event_enddate" name="event_enddate" ng-model="item.event_enddate" type="datetime">
+                      <input class="form-control" datetime-picker datetime-picker-format="YYYY-MM-DD" datetime-picker-timezone="{$timezone}" datetime-picker-min="item.event_start_date" id="event_end_date" name="event_end_date" ng-model="item.event_end_date" type="datetime">
                       <span class="input-group-addon add-on">
                         <span class="fa fa-calendar"></span>
                       </span>
@@ -96,10 +96,10 @@
               </div>
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label class="form-label" for="event_starthour">{t}Start hour{/t}</label>
+                  <label class="form-label" for="event_start_hour">{t}Start hour{/t}</label>
                   <div class="controls">
                     <div class="input-group">
-                      <input class="form-control" datetime-picker datetime-picker-format="LT" datetime-picker-timezone="{$timezone}" datetime-picker-min="item.event_enddate" datetime-picker-use-current="true" id="event_starthour" name="event_starthour" ng-model="item.event_starthour" type="datetime">
+                      <input class="form-control" datetime-picker datetime-picker-format="LT" datetime-picker-timezone="{$timezone}" datetime-picker-min="item.event_end_date" datetime-picker-use-current="true" id="event_start_hour" name="event_start_hour" ng-model="item.event_start_hour" type="datetime">
                       <span class="input-group-addon add-on">
                         <span class="fa fa-clock-o"></span>
                       </span>
@@ -108,10 +108,10 @@
                 </div>
 
                 <div class="form-group col-md-6">
-                  <label class="form-label" for="event_starthour" ng-model="item.event_starthour">{t}End hour{/t}</label>
+                  <label class="form-label" for="event_end_hour">{t}End hour{/t}</label>
                   <div class="controls">
                     <div class="input-group">
-                      <input class="form-control" datetime-picker datetime-picker-format="LT" datetime-picker-timezone="{$timezone}" datetime-picker-min="item.event_starthour" datetime-picker-use-current="true" id="event_starthour" name="event_starthour" ng-model="item.event_endhour" type="datetime">
+                      <input class="form-control" datetime-picker datetime-picker-format="LT" datetime-picker-timezone="{$timezone}" datetime-picker-min="item.event_start_hour" datetime-picker-use-current="true" id="event_end_hour" name="event_end_hour" ng-model="item.event_end_hour" type="datetime">
                       <span class="input-group-addon add-on">
                         <span class="fa fa-clock-o"></span>
                       </span>
@@ -201,7 +201,7 @@
                     </label>
                     <div class="controls">
                       <div class="input-group">
-                        <input class="form-control" datetime-picker datetime-picker-timezone="{$timezone}" datetime-picker-use-current=true datetime-picker-min="item.event_startdate" id="event_enddate" name="event_enddate" id="starttime" name="starttime" type="datetime" ng-model="item.starttime">
+                        <input class="form-control" datetime-picker datetime-picker-timezone="{$timezone}" datetime-picker-use-current=true datetime-picker-min="item.event_start_date" id="event_end_date" name="event_end_date" id="starttime" name="starttime" type="datetime" ng-model="item.starttime">
                         <span class="input-group-addon add-on">
                           <span class="fa fa-calendar"></span>
                         </span>

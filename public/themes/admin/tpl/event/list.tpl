@@ -178,7 +178,8 @@
                   <span uib-tooltip="{t}Last editor{/t} [% shvs.extra.authors[item.fk_user_last_editor].name %]">[% item.title%]</span>
                   <div>
                     <small>
-                      [% item.event_startdate %] -> [% item.event_enddate %] [% item.event_starthour %] -> [% item.event_starthour %]) <span ng-show="item.event_place">([% item.event_place%])</span>
+                      <span ng-show="item.event_start_date || item.event_end_date">[% item.event_start_date %] &rarr; [% item.event_end_date %]</span>
+                      <span ng-show="item.event_start_hour.length > 0 || item.event_end_hour.length > 0">([% item.event_start_hour %] &rarr; [% item.event_start_hour %])</span> <div ng-show="item.event_place">{t}Place{/t}: [% item.event_place%]</div>
                     </small>
                   </div>
                   <div class="listing-inline-actions">
