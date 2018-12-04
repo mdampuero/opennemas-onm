@@ -903,7 +903,7 @@ class ContentManager
                     ]
                 ]
             ],
-            'fk_content_type' => [[ 'value' => [ 1,3,4,7,9,11 ], 'operator' => 'IN' ]],
+            'fk_content_type' => [[ 'value' => [ 1,4,7,9,11 ], 'operator' => 'IN' ]],
             'in_litter'       => [[ 'value' => 0 ]],
             'starttime'       => [[ 'value' => $date, 'operator' => '>=' ]],
             'endtime'         => [
