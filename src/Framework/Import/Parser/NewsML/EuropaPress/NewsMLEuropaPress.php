@@ -60,6 +60,25 @@ class NewsMLEuropaPress extends NewsML
     }
 
     /**
+     * Returns the category assigned to the resouce
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The category.
+     */
+    public function getCategory($data)
+    {
+        $property = $data->xpath('//TopicSet/Topic/FormalName[@Scheme="EuropaPress_Seccion"]');
+
+        $category = '';
+        if (is_array($property) && !empty($property)) {
+            $category = (string) $property[0];
+        }
+
+        return $category;
+    }
+
+    /**
      * Returns the created time from the parsed data.
      *
      * @param SimpleXMLObject The parsed data.
@@ -116,6 +135,7 @@ class NewsMLEuropaPress extends NewsML
         $this->bag['agency_name']  = $this->getAgencyName($data);
         $this->bag['id']           = $this->getId($data);
         $this->bag['body']         = $this->getBody($data);
+        $this->bag['category']     = $this->getCategory($data);
         $this->bag['tags']         = $this->getTags($data);
         $this->bag['created_time'] = $this->getCreatedTime($data)
             ->format('Y-m-d H:i:s');
