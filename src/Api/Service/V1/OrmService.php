@@ -272,7 +272,7 @@ class OrmService implements Service
      */
     public function getListByIds($ids)
     {
-        if (!is_array($ids) || empty($ids)) {
+        if (!is_array($ids)) {
             throw new GetListException('Invalid ids', 400);
         }
 

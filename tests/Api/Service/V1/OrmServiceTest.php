@@ -471,13 +471,13 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getListByIds when invalid list of ids provided .
+     * Tests getListByIds when invalid list of ids provided.
      *
      * @expectedException \Api\Exception\GetListException
      */
     public function testGetListByIdsWhenInvalidIds()
     {
-        $this->service->getListByIds([]);
+        $this->service->getListByIds(null);
     }
 
     /**
