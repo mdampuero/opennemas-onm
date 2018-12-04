@@ -65,6 +65,9 @@ class EventController extends ApiController
             'categories'       => $converter->responsify($categories),
             'related_contents' => $this->getRelatedContents($items),
             'tags'             => $this->getTagIds($items),
+            'template_vars'    => [
+                'media_dir' => $this->get('core.instance')->getMediaShortPath(),
+            ],
         ];
 
         return array_merge($extra, $this->getLocaleData('frontend'));
@@ -90,7 +93,7 @@ class EventController extends ApiController
             if (!is_array($element->related_contents)) {
                 continue;
             }
-            
+
             foreach ($element->related_contents as $relation) {
                 if ($relation['relationship'] !== 'cover') {
                     continue;

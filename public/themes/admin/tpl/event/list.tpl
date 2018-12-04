@@ -152,11 +152,8 @@
                     <label for="select-all"></label>
                   </div>
                 </th>
-                <th class="center hidden-xs hidden-sm" style="width:10px"></th>
+                <th class="hidden-xs hidden-sm text-center" width="80"><i class="fa fa-picture-o"></i></th>
                 <th>{t}Title{/t}</th>
-                {if $category=='widget' || $category == 'all'}
-                <th class="center hidden-xs" width="200">{t}Section{/t}</th>
-                {/if}
                 <th class="text-center" width="100">{t}Published{/t}</th>
               </tr>
             </thead>
@@ -168,18 +165,17 @@
                     <label for="checkbox[%$index%]"></label>
                   </div>
                 </td>
-                <td class="center hidden-xs hidden-sm">
-                  <img ng-src="{$EVENT_IMG_URL}[% item.path%][% item.thumb_url %]"
-                  title="{$cover->title|clearslash}" alt="{$cover->title|clearslash}" style="max-width:80px" class="thumbnail" />
+                <td class="text-center hidden-xs hidden-sm">
+                  <span ng-show="!item.cover" class="fa fa-calendar-o fa-2x thumbnail"></span>
+                  <img ng-show="item.cover" ng-src="[% data.extra.template_vars.media_dir %][% item.cover.path_file %][% item.cover.name %]" style="max-width:80px" class="thumbnail" />
                 </td>
                 <td>
-                  <img ng-src="{$EVENT_IMG_URL}[% item.path%][% item.thumb_url %]"
-                  title="{$cover->title|clearslash}" alt="{$cover->title|clearslash}" style="max-width:80px" class="thumbnail visible-xs visible-sm" />
                   <span uib-tooltip="{t}Last editor{/t} [% shvs.extra.authors[item.fk_user_last_editor].name %]">[% item.title%]</span>
                   <div>
+                    <span ng-show="item.event_start_date || item.event_end_date">[% item.event_start_date %] &rarr; [% item.event_end_date %]</span>
                     <small>
-                      <span ng-show="item.event_start_date || item.event_end_date">[% item.event_start_date %] &rarr; [% item.event_end_date %]</span>
-                      <span ng-show="item.event_start_hour.length > 0 || item.event_end_hour.length > 0">([% item.event_start_hour %] &rarr; [% item.event_start_hour %])</span> <div ng-show="item.event_place">{t}Place{/t}: [% item.event_place%]</div>
+                      <span ng-show="item.event_start_hour.length > 0 || item.event_end_hour.length > 0">([% item.event_start_hour %] &rarr; [% item.event_end_hour %])</span>
+                      <div ng-show="item.event_place">{t}Place{/t}: [% item.event_place%]</div>
                     </small>
                   </div>
                   <div class="listing-inline-actions">
@@ -195,20 +191,12 @@
                     {/acl}
                   </div>
                 </td>
-                {if $category == 'widget' || $category == 'all'}
-                  <td class="hidden-xs text-center">
-                    [% item.category_name %]
-                  </td>
-                {/if}
-                <td class="hidden-xs text-center">
-                  [% item.date %]
-                </td>
                 {acl isAllowed="EVENT_AVAILABLE"}
-                  <td class="text-center">
-                    <button class="btn btn-white" ng-click="patch(item, 'content_status', item.content_status != 1 ? 1 : 0)" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.content_statusLoading, 'fa-check text-success' : !item.content_statusLoading && item.content_status == 1, 'fa-times text-danger': !item.content_statusLoading && item.content_status == 0 }"></i>
-                    </button>
-                  </td>
+                <td class="text-center">
+                  <button class="btn btn-white" ng-click="patch(item, 'content_status', item.content_status != 1 ? 1 : 0)" type="button">
+                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.content_statusLoading, 'fa-check text-success' : !item.content_statusLoading && item.content_status == 1, 'fa-times text-danger': !item.content_statusLoading && item.content_status == 0 }"></i>
+                  </button>
+                </td>
                 {/acl}
               </tr>
             </tbody>

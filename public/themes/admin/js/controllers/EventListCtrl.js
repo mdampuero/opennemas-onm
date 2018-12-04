@@ -64,6 +64,22 @@
           $scope.list();
         };
 
+        $scope.parseList = function(data) {
+          data.items = data.items.map(function(element) {
+            var cover = '';
+
+            if (element.related_contents.length > 0) {
+              var coverId = element.related_contents[0].pk_content2;
+
+              cover = data.extra.related_contents[coverId];
+            }
+            element.cover = cover;
+            return element;
+          });
+
+          return data;
+        };
+
         /**
          * @function getId
          * @memberOf EventListCtrl
