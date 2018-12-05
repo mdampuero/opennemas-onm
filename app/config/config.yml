@@ -85,6 +85,28 @@ opennemas:
                     sourceMap:
                         sourceMapFileInline: true
 
+assetic:
+    bundles:
+        - FrameworkBundle
+        - TwigBundle
+        - MonologBundle
+        - SwiftmailerBundle
+        - SensioFrameworkExtraBundle
+        - AsseticBundle
+        - CometCultBraintreeBundle
+        - FOSJsRoutingBundle
+        - LexikJWTAuthenticationBundle
+        - HWIOAuthBundle
+        - ApiBundle
+        - BackendBundle
+        - BackendWebServiceBundle
+        - FrontendBundle
+        - FrontendMobileBundle
+        - ManagerBundle
+        - ManagerWebServiceBundle
+        - WebServiceBundle
+        - CacheBundle
+        - CoreBundle
 # Twig Configuration
 twig:
     debug:            '%kernel.debug%'
