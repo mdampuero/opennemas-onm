@@ -85,6 +85,10 @@ class EventController extends ApiController
         $em    = $this->get('entity_repository');
         $extra = [];
 
+        if (empty($content)) {
+            return $extra;
+        }
+
         if (is_object($content)) {
             $content = [ $content ];
         }
