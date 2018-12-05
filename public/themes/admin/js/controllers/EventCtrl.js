@@ -41,7 +41,6 @@
           frontpage: 0,
           starttime: null,
           endtime: null,
-          tag_ids: [],
           thumbnail: null,
           title: '',
           type: 0,
@@ -49,7 +48,6 @@
           categories: [],
           related_contents: [],
           tags: [],
-
           event_startdate: null,
           event_enddate: null,
           event_starthour: null,
@@ -69,7 +67,10 @@
          */
         $scope.parseItem = function(data) {
           if (data.item) {
-            $scope.item = angular.extend($scope.item, data.item);
+            $scope.item      = angular.extend($scope.item, data.item);
+            $scope.item.tags = $scope.item.tags.map(function(id) {
+              return data.extra.tags[id];
+            });
           }
 
           $scope.category = $scope.item.categories.shift();
