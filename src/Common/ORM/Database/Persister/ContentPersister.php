@@ -55,15 +55,15 @@ class ContentPersister extends BasePersister
             unset($entity->categories);
         }
 
-        $tagIds = [];
-        if (!empty($entity->tag_ids)) {
-            $tagIds = $entity->tag_ids;
-            unset($entity->tag_ids);
+        $tags = [];
+        if (!empty($entity->tags)) {
+            $tags = $entity->tags;
+            unset($entity->tags);
         }
 
         $relations = [];
         if (!empty($entity->related_contents)) {
-            $tagIds = $entity->related_contents;
+            $relations = $entity->related_contents;
             unset($entity->related_contents);
         }
 
@@ -75,9 +75,9 @@ class ContentPersister extends BasePersister
 
         $entity->categories = $categories;
 
-        $this->persistTags($id, $categories);
+        $this->persistTags($id, $tags);
 
-        $entity->tag_ids = $tagIds;
+        $entity->tags = $tags;
 
         $this->persistRelations($id, $relations);
 
@@ -248,7 +248,7 @@ class ContentPersister extends BasePersister
         }
 
         // Remove old tags
-        $this->removeTags($id, array_values($tags));
+        $this->removeTags($id, $tags);
 
         // Update tags
         $this->saveTags($id, $tags);

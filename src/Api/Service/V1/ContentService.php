@@ -17,12 +17,28 @@ class ContentService extends OrmService
     /**
      * {@inheritdoc}
      */
-    // public function getItem($id)
-    // {
-    //     $item = parent::getItem($id);
+    public function createItem($data)
+    {
+        if (array_key_exists('tags', $data) && !empty($data['tags'])) {
+            $data['tags'] = array_map(function ($a) {
+                return $a['id'];
+            }, $data['tags']);
+        }
 
-    //     $item->id = $item->pk_content;
+        return parent::createItem($data);
+    }
 
-    //     return $item;
-    // }
+    /**
+     * {@inheritdoc}
+     */
+    public function updateItem($id, $data)
+    {
+        if (array_key_exists('tags', $data) && !empty($data['tags'])) {
+            $data['tags'] = array_map(function ($a) {
+                return $a['id'];
+            }, $data['tags']);
+        }
+
+        return parent::updateItem($id, $data);
+    }
 }
