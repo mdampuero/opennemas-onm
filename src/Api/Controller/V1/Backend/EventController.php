@@ -66,7 +66,7 @@ class EventController extends ApiController
             'related_contents' => $this->getRelatedContents($items),
             'tags'             => $this->getTagIds($items),
             'template_vars'    => [
-                'media_dir' => $this->get('core.instance')->getMediaShortPath(),
+                'media_dir' => $this->get('core.instance')->getMediaShortPath() . '/images',
             ],
         ];
 

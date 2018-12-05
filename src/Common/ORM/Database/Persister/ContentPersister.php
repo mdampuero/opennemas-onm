@@ -46,8 +46,8 @@ class ContentPersister extends BasePersister
             $entity->starttime = new \DateTime();
         }
 
-        $entity->fk_fk_user_last_editor = $this->user->id;
-        $entity->fk_publisher           = $this->user->id;
+        $entity->fk_user_last_editor = $this->user->id;
+        $entity->fk_publisher        = $this->user->id;
 
         $categories = [];
         if (!empty($entity->categories)) {
@@ -62,9 +62,9 @@ class ContentPersister extends BasePersister
         }
 
         $relations = [];
-        if (!empty($entity->relations)) {
-            $tagIds = $entity->relations;
-            unset($entity->relations);
+        if (!empty($entity->related_contents)) {
+            $tagIds = $entity->related_contents;
+            unset($entity->related_contents);
         }
 
         parent::create($entity);
@@ -240,6 +240,7 @@ class ContentPersister extends BasePersister
      */
     protected function persistTags($id, $tags)
     {
+        return;
         // Ignore metas with value = null
         if (!empty($tags)) {
             $tags = array_filter($tags, function ($tag) {

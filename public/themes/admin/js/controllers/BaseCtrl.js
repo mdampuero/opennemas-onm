@@ -115,7 +115,6 @@
          $scope.overlay[name] = !$scope.overlay[name];
        };
 
-
         /**
          * @function configure
          * @memberOf BaseCtrl

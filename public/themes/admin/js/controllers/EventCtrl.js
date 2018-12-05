@@ -47,7 +47,8 @@
           type: 0,
           with_comments: 0,
           categories: [],
-          relations: [],
+          related_contents: [],
+          tags: [],
 
           event_startdate: null,
           event_enddate: null,
@@ -81,7 +82,7 @@
             return;
           }
 
-          $scope.related_contents = data.extra.related_contents[coverId.pk_content2];
+          $scope.cover = data.extra.related_contents[coverId.pk_content2];
         };
 
         /**
@@ -122,7 +123,7 @@
         });
 
         // Update slug when title is updated
-        $scope.$watch('related_contents', function(nv, ov) {
+        $scope.$watch('cover', function(nv, ov) {
           if (!nv) {
             return;
           }
@@ -151,21 +152,19 @@
           }
         }, true);
 
-        // Update metadata when title or category change
-        $scope.$watch('[ item.title, item.category ]', function(nv, ov) {
-          if ($scope.item.tag_ids && $scope.item.tag_ids.length > 0 ||
-              !nv || nv === ov) {
-            return;
-          }
-
-          if ($scope.mtm) {
-            $timeout.cancel($scope.mtm);
-          }
-
-          $scope.mtm = $timeout(function() {
-            $scope.loadAutoSuggestedTags();
-          }, 2500);
-        });
+        /**
+         * @function generateTagsFrom
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *   Returns a string to use when clicking on "Generate" button for
+         *   tags component.
+         *
+         * @return {String} The string to generate tags from.
+         */
+        $scope.generateTagsFrom = function() {
+          return $('#title').val();
+        };
       }
     ]);
 })();

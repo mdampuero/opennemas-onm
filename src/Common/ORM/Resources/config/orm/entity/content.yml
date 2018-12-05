@@ -31,7 +31,7 @@ orm:
                 urn_source:          string
                 with_comment:        boolean
                 categories:          array
-                tag_ids:             array
+                tags:                array
                 related_contents:    array
             converters:
                 default:
@@ -77,7 +77,7 @@ orm:
                                 relationship:
                                     type: integer
 
-                        tag_ids:
+                        tags:
                             table: contents_tags
                             source_key: pk_content
                             target_key: content_id
