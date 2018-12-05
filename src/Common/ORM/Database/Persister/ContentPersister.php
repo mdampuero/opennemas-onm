@@ -96,7 +96,7 @@ class ContentPersister extends BasePersister
 
         $changes    = $entity->getChanges();
         $categories = $entity->categories;
-        $tagIds     = $entity->tag_ids;
+        $tags       = $entity->tags;
         $relations  = $entity->related_contents;
 
         // Categories change
@@ -109,8 +109,8 @@ class ContentPersister extends BasePersister
         $entity->setNotStored('categories');
 
         // Ignore tag_ids, persist them later
-        unset($entity->tag_ids);
-        $entity->setNotStored('tag_ids');
+        unset($entity->tags);
+        $entity->setNotStored('tags');
 
         parent::update($entity);
 
@@ -123,11 +123,11 @@ class ContentPersister extends BasePersister
         $entity->categories = $categories;
 
 
-        if (array_key_exists('tag_ids', $changes)) {
-            $this->persistTags($id, $tagIds);
+        if (array_key_exists('tags', $changes)) {
+            $this->persistTags($id, $tags);
         }
 
-        $entity->tag_ids = $tagIds;
+        $entity->tags = $tags;
 
         if (array_key_exists('related_contents', $changes)) {
             $this->persistRelations($id, $relations);
@@ -240,7 +240,6 @@ class ContentPersister extends BasePersister
      */
     protected function persistTags($id, $tags)
     {
-        return;
         // Ignore metas with value = null
         if (!empty($tags)) {
             $tags = array_filter($tags, function ($tag) {
