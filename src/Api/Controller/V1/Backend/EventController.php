@@ -128,10 +128,10 @@ class EventController extends ApiController
         $tagIds = [];
         if (is_array($items)) {
             foreach ($items as $item) {
-                $tagIds = array_merge($tagIds, $item->tag_ids);
+                $tagIds = array_merge($tagIds, $item->tags);
             }
         } else {
-            $tagIds = $items->tag_ids;
+            $tagIds = $items->tags;
         }
 
         return $this->get('api.service.tag')
