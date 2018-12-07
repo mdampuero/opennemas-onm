@@ -276,7 +276,7 @@
                   </div>
                   <div class="thumbnail-placeholder">
                     <div class="img-thumbnail" ng-if="!cover">
-                      <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="related_contents">
+                      <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover">
                         <i class="fa fa-picture-o fa-2x"></i>
                         <h5>Pick an image</h5>
                       </div>
