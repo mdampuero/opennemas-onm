@@ -10,8 +10,10 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
-class EventController extends ApiController
+class EventController extends ContentApiController
 {
     /**
      * {@inheritdoc}
@@ -42,35 +44,6 @@ class EventController extends ApiController
     public function getItemId($item)
     {
         return $item->pk_content;
-    }
-
-    /**
-     * Returns a list of extra data
-     *
-     * @return array
-     **/
-    protected function getExtraData($items = null)
-    {
-        $security   = $this->get('core.security');
-        $converter  = $this->get('orm.manager')->getConverter('Category');
-        $categories = $this->get('orm.manager')
-            ->getRepository('Category')
-            ->findBy('internal_category = 1');
-
-        $categories = array_filter($categories, function ($category) use ($security) {
-            return $security->hasCategory($category->pk_content_category);
-        });
-
-        $extra = [
-            'categories'       => $converter->responsify($categories),
-            'related_contents' => $this->getRelatedContents($items),
-            'tags'             => $this->getTagIds($items),
-            'template_vars'    => [
-                'media_dir' => $this->get('core.instance')->getMediaShortPath() . '/images',
-            ],
-        ];
-
-        return array_merge($extra, $this->getLocaleData('frontend'));
     }
 
     /**
@@ -110,31 +83,5 @@ class EventController extends ApiController
         }
 
         return $extra;
-    }
-
-    /**
-     * Returns the list of tag ids for a list of items or a individual item
-     *
-     * @param array|Content $items One Content object or a list of Content objects
-     *
-     * @return array
-     **/
-    public function getTagIds($items = null)
-    {
-        if (empty($items)) {
-            return [];
-        }
-
-        $tagIds = [];
-        if (is_array($items)) {
-            foreach ($items as $item) {
-                $tagIds = array_merge($tagIds, $item->tags);
-            }
-        } else {
-            $tagIds = $items->tags;
-        }
-
-        return $this->get('api.service.tag')
-            ->getListByIdsKeyMapped($tagIds)['items'];
     }
 }

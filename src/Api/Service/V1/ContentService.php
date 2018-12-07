@@ -9,22 +9,6 @@
  */
 namespace Api\Service\V1;
 
-use Common\ORM\Entity\Tag;
-use Common\Core\Component\Validator\Validator;
-
 class ContentService extends OrmService
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function createItem($data)
-    {
-        if (array_key_exists('tags', $data) && !empty($data['tags'])) {
-            $data['tags'] = array_map(function ($a) {
-                return $a['id'];
-            }, $data['tags']);
-        }
-
-        return parent::createItem($data);
-    }
 }
