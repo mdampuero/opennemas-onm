@@ -61,9 +61,9 @@ class ContentPersister extends BasePersister
             unset($entity->tags);
         }
 
-        $relations = [];
+        $relatedContents = [];
         if (!empty($entity->related_contents)) {
-            $relations = $entity->related_contents;
+            $relatedContents = $entity->related_contents;
             unset($entity->related_contents);
         }
 
@@ -72,16 +72,13 @@ class ContentPersister extends BasePersister
         $id = $this->metadata->getId($entity);
 
         $this->persistCategories($id, $categories);
-
         $entity->categories = $categories;
 
         $this->persistTags($id, $tags);
-
         $entity->tags = $tags;
 
-        $this->persistRelations($id, $relations);
-
-        $entity->relations = $relations;
+        $this->persistRelations($id, $relatedContents);
+        $entity->related_contents = $relatedContents;
 
         $entity->refresh();
     }
@@ -121,7 +118,6 @@ class ContentPersister extends BasePersister
         }
 
         $entity->categories = $categories;
-
 
         if (array_key_exists('tags', $changes)) {
             $this->persistTags($id, $tags);

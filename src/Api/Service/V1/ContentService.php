@@ -27,18 +27,4 @@ class ContentService extends OrmService
 
         return parent::createItem($data);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateItem($id, $data)
-    {
-        if (array_key_exists('tags', $data) && !empty($data['tags'])) {
-            $data['tags'] = array_map(function ($a) {
-                return $a['id'];
-            }, $data['tags']);
-        }
-
-        return parent::updateItem($id, $data);
-    }
 }
