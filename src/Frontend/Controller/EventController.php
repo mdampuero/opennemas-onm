@@ -35,14 +35,14 @@ class EventController extends Controller
 
         $eventIds = $this->get('orm.manager')->getConnection('instance')
             ->executeQuery(
-                "SELECT SQL_CALC_FOUND_ROWS DISTINCT pk_content, contentmeta.meta_value as event_startdate "
+                "SELECT SQL_CALC_FOUND_ROWS DISTINCT pk_content, contentmeta.meta_value as event_start_date "
                 . "FROM contents join contentmeta "
-                . "ON contentmeta.meta_name = 'event_startdate' "
+                . "ON contentmeta.meta_name = 'event_start_date' "
                 . "AND contents.pk_content = contentmeta.fk_content "
                 . "WHERE fk_content_type = 19 AND content_status = 1 and in_litter = 0 "
                 . "AND (starttime = '0000-00-00 00:00:00' OR starttime IS NULL OR starttime <= ? ) "
                 . "AND (endtime IS NULL OR endtime = '0000-00-00 00:00:00' OR endtime > ?) "
-                . " ORDER BY event_startdate DESC LIMIT ? OFFSET ?",
+                . " ORDER BY event_start_date DESC LIMIT ? OFFSET ?",
                 [ $date, $date, $epp, $offset ]
             )
             ->fetchAll();
@@ -68,7 +68,6 @@ class EventController extends Controller
             'total'       => $total,
             'route'       => 'frontend_events_frontpage'
         ]);
-
 
         // Setup templating cache layer
         $this->view->setConfig('articles');
