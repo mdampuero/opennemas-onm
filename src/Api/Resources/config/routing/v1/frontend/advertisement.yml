@@ -7,3 +7,5 @@ api_v1_advertisement_show:
     path:     /advertisements/{id}
     defaults: { _controller: ApiBundle:V1/Frontend/Advertisement:show }
     methods:  [ GET ]
+    requirements:
+        id: \d+
