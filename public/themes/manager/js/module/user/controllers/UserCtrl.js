@@ -205,14 +205,19 @@
           if (response.data.user) {
             $scope.user = angular.merge($scope.user, response.data.user);
           }
+          $scope.user.user_groups = $scope.toArray($scope.user.user_groups);
+
+          var userGroupsPresent = $scope.user.user_groups.map(function(userGroup) {
+            return userGroup.user_group_id;
+          });
 
           for (var id in $scope.extra.user_groups) {
-            if (!$scope.user.user_groups[id]) {
-              $scope.user.user_groups[id] = {
+            if (userGroupsPresent.indexOf(parseInt(id)) === -1) {
+              $scope.user.user_groups.push({
                 expires: null,
                 status: 0,
-                user_group_id: id
-              };
+                user_group_id: parseInt(id)
+              });
             }
           }
         });
