@@ -36,7 +36,7 @@
               '</button>' +
             '</div>' +
             '<div>' +
-              '<tags-input add-from-autocomplete-only="[% addFromAutoCompleteOnly %]" display-property="name" key-property="id" ng-model="ngModel" on-tag-adding="validate($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
+              '<tags-input add-from-autocomplete-only="[% addFromAutoCompleteOnly %]" display-property="name" key-property="id" ng-model="ngModel" on-tag-adding="exists($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
                 '<auto-complete debounce-delay="250" highlight-matched-text="true" load-on-down-arrow="true" min-length="3" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
               '</tags-input>' +
               '<input name="tags" type="hidden" ng-value="getJsonValue()">' +
@@ -84,6 +84,11 @@
          * @param {Object} tag The added tag object.
          */
         $scope.exists = function(tag) {
+          // If selected from the autocomplete
+          if (tag.id) {
+            return true;
+          }
+
           tag.id          = tag.name;
           tag.language_id = $scope.locale;
 
@@ -93,17 +98,19 @@
             name: 'api_v1_backend_tags_list',
             params: { oql: oql }
           }).then(function(response) {
-            if (response.data.total > 0) {
-              for (var property in response.data.items[0]) {
-                tag[property] = response.data.items[0][property];
-              }
+            if (response.data.total === 0) {
+              return $scope.validate(tag);
+            }
+
+            for (var property in response.data.items[0]) {
+              tag[property] = response.data.items[0][property];
             }
 
             return $scope.ngModel.filter(function(e) {
               return e.id === tag.id;
             }).length === 0;
           }, function() {
-            return true;
+            return false;
           });
         };
 
@@ -223,7 +230,7 @@
             name: 'api_v1_backend_tags_validate',
             params: tag
           }).then(function() {
-            return $scope.exists(tag);
+            return true;
           }, function() {
             return false;
           });
