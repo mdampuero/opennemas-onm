@@ -204,9 +204,9 @@
                   </td>
                   <td class="hidden-sm hidden-xs">
                     <ul class="no-style">
-                      <li class="m-b-5 m-r-5 pull-left" ng-repeat="(id, user_group) in item.user_groups" ng-if="data.extra.user_groups[id] && user_group.status !== 0" uib-tooltip="{t}User group disabled{/t}" tooltip-enable="data.extra.user_groups[id].enabled === 0">
-                        <a class="label text-uppercase" ng-class="{ 'label-danger': !data.extra.user_groups[id].enabled, 'label-default': data.extra.user_groups[id].enabled }" href="[% routing.generate('backend_user_group_show', { id: id }) %]">
-                          <strong>[% data.extra.user_groups[id].name %]</strong>
+                      <li class="m-b-5 m-r-5 pull-left" ng-repeat="(id, user_group) in item.user_groups" ng-if="data.extra.user_groups[user_group.user_group_id] && user_group.status !== 0" uib-tooltip="{t}User group disabled{/t}" tooltip-enable="data.extra.user_groups[user_group.user_group_id].enabled === 0">
+                        <a class="label text-uppercase" ng-class="{ 'label-danger': !data.extra.user_groups[id].enabled, 'label-default': data.extra.user_groups[user_group.user_group_id].enabled }" href="[% routing.generate('backend_user_group_show', { id: id }) %]">
+                          <strong>[% data.extra.user_groups[user_group.user_group_id].name %]</strong>
                         </span>
                         </a>
                       </li>
