@@ -28,7 +28,7 @@
          *
          * @type {Array}
          */
-        $scope.filters = [ '' ];
+        $scope.filters = [];
 
         /**
          * @memberOf NewsAgencyServerCtrl
@@ -38,10 +38,7 @@
          *
          * @type {Array}
          */
-        $scope.categoriesMap = [{
-            slug: '',
-            id: null
-        }];
+        $scope.categoriesMap = [];
 
         /**
          * @memberOf NewsAgencyServerCtrl
@@ -140,7 +137,7 @@
           $scope.filters.splice(index, 1);
         };
 
-        //
+        // Converts categoriesMap value to a JSON string
         $scope.$watch('categoriesMap', function(nv) {
           if (nv) {
             $scope.categoryJson = JSON.stringify(nv);

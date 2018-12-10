@@ -70,7 +70,7 @@ class NewsMLEuropaPress extends NewsML
     {
         $property = $data->xpath('//TopicSet/Topic/FormalName[@Scheme="EuropaPress_Seccion"]');
 
-        $category = '';
+        $category = null;
         if (is_array($property) && !empty($property)) {
             $category = (string) $property[0];
         }

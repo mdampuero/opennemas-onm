@@ -143,7 +143,7 @@ class NewsAgencyController extends Controller
         $criteria = [
             'source'   => $source,
             'title'    => $title,
-            'category' => $title, // Also search by category
+            'category' => $title,
             'type'     => $type
         ];
 

@@ -86,7 +86,7 @@ class NewsML extends Parser
     {
         $property = $data->xpath('//DescriptiveMetadata/Property[@FormalName="Tesauro"]');
 
-        $category = '';
+        $category = null;
         if (is_array($property) && !empty($property)) {
             $category = (string) $property[0]->attributes()->Value;
         }
