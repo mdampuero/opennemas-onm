@@ -309,13 +309,11 @@ class Importer
 
         if ($this->autoImport()) {
             // Check if resource category has mapping
-            if (!array_key_exists('categories_map', $this->config)) {
-                return $this->config['category'];
-            }
-
-            foreach ($this->config['categories_map'] as $map) {
-                if ($map->slug == $resource->category) {
-                    return $map->id;
+            if (array_key_exists('categories_map', $this->config)) {
+                foreach ($this->config['categories_map'] as $map) {
+                    if ($map->slug == $resource->category) {
+                        return $map->id;
+                    }
                 }
             }
 
