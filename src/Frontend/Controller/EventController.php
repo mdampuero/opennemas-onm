@@ -26,64 +26,68 @@ class EventController extends Controller
      */
     public function frontpageAction(Request $request)
     {
-        $page   = $request->get('page', 1);
-        $date   = date('Y-m-d H:i:s');
-        $epp    = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page');
-        $offset = ($page <= 2) ? 0 : ($page - 1) * $epp;
+        $page = $request->get('page', 1);
 
-        $eventIds = $this->get('orm.manager')->getConnection('instance')
-            ->executeQuery(
-                "SELECT SQL_CALC_FOUND_ROWS DISTINCT pk_content, contentmeta.meta_value as event_start_date "
-                . "FROM contents join contentmeta "
-                . "ON contentmeta.meta_name = 'event_start_date' "
-                . "AND contents.pk_content = contentmeta.fk_content "
-                . "WHERE fk_content_type = 19 AND content_status = 1 and in_litter = 0 "
-                . "AND (starttime = '0000-00-00 00:00:00' OR starttime IS NULL OR starttime <= ? ) "
-                . "AND (endtime IS NULL OR endtime = '0000-00-00 00:00:00' OR endtime > ?) "
-                . " ORDER BY event_start_date DESC LIMIT ? OFFSET ?",
-                [ $date, $date, $epp, $offset ]
-            )
-            ->fetchAll();
+        $this->view->setConfig('frontpages');
+        $cacheID = $this->view->getCacheId('frontpage', 'events', $page);
 
-        $sql = 'SELECT FOUND_ROWS()';
+        if ($this->view->getCaching() === 0
+            || !$this->view->isCached("event/frontpage.tpl", $cacheID)
+        ) {
+            $date   = date('Y-m-d H:i:s');
+            $epp    = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('items_per_page');
+            $offset = ($page <= 2) ? 0 : ($page - 1) * $epp;
 
-        $total = $this->get('dbal_connection')->fetchAssoc($sql);
-        $total = array_pop($total);
+            $eventIds = $this->get('orm.manager')->getConnection('instance')
+                ->executeQuery(
+                    "SELECT SQL_CALC_FOUND_ROWS DISTINCT pk_content, contentmeta.meta_value as event_start_date "
+                    . "FROM contents join contentmeta "
+                    . "ON contentmeta.meta_name = 'event_start_date' "
+                    . "AND contents.pk_content = contentmeta.fk_content "
+                    . "WHERE fk_content_type = 19 AND content_status = 1 and in_litter = 0 "
+                    . "AND (starttime = '0000-00-00 00:00:00' OR starttime IS NULL OR starttime <= ? ) "
+                    . "AND (endtime IS NULL OR endtime = '0000-00-00 00:00:00' OR endtime > ?) "
+                    . " ORDER BY event_start_date DESC LIMIT ? OFFSET ?",
+                    [ $date, $date, $epp, $offset ]
+                )
+                ->fetchAll();
 
-        $eventIds = array_map(function ($event) {
-            return $event['pk_content'];
-        }, $eventIds);
+            $sql = 'SELECT FOUND_ROWS()';
 
-        $contents = $this->get('api.service.content')
-            ->getListByIds($eventIds);
+            $total = $this->get('dbal_connection')->fetchAssoc($sql);
+            $total = array_pop($total);
+
+            $contents = $this->get('api.service.content')
+                ->getListByIds(array_map(function ($event) {
+                    return $event['pk_content'];
+                }, $eventIds));
+
+            $this->view->assign([
+                'contents'        => $contents['items'],
+                'pagination'      => $this->get('paginator')->get([
+                    'directional' => true,
+                    'epp'         => 5,
+                    'page'        => $page,
+                    'total'       => $total,
+                    'route'       => 'frontend_events_frontpage'
+                ]),
+                'related_contents' => $this->getRelations($contents['items']),
+                'tags'             => $this->getTags($contents['items']),
+            ]);
+        }
 
         list($positions, $advertisements) = $this->getAds();
-
-        $pagination = $this->get('paginator')->get([
-            'directional' => true,
-            'epp'         => 5,
-            'page'        => $page,
-            'total'       => $total,
-            'route'       => 'frontend_events_frontpage'
-        ]);
-
-        // Setup templating cache layer
-        $this->view->setConfig('articles');
-        $cacheID = $this->view->getCacheId('event', 'frontpage', $page);
 
         return $this->render('event/frontpage.tpl', [
             'ads_positions'      => $positions,
             'advertisements'     => $advertisements,
-            'contents'           => $contents['items'],
             'page'               => $page,
             'cache_id'           => $cacheID,
-            'pagination'         => $pagination,
-            'x-tags'             => 'event-frontpage',
+            'x-tags'             => 'event-frontpage,' . $page,
         ]);
     }
-
 
     /**
      * Displays an event.
@@ -108,13 +112,6 @@ class EventController extends Controller
         // TODO: Remove when pk_content column renamed to id
         $content->id = $content->pk_content;
 
-        $contentAux       = new \Content();
-        $contentAux->id   = $content->id;
-        $auxTagIds        = $contentAux->getContentTags($content->id);
-        $content->tag_ids = array_key_exists($content->id, $auxTagIds) ?
-            $auxTagIds[$content->id] :
-            [];
-
         // Setup templating cache layer
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('content', $content->id);
@@ -126,12 +123,11 @@ class EventController extends Controller
             'category_real_name' => $content->title,
             'content'            => $content,
             'content_id'         => $content->id,
-            'page'               => $content,
             'cache_id'           => $cacheID,
             'o_content'          => $content,
-            'x-tags'             => 'static-page,' . $content->id,
-            'tags'               => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($content->tag_ids)['items']
+            'x-tags'             => 'event,' . $content->id,
+            'tags'               => $this->getTags($content),
+            'related_contents'   => $this->getRelations($content),
         ]);
     }
 
@@ -151,5 +147,64 @@ class EventController extends Controller
             ->findByPositionsAndCategory($positions, 0);
 
         return [ $positions, $advertisements ];
+    }
+
+    /**
+     * Returns the list of covers
+     *
+     * @param array $coverIds the list of contents to fetch related from
+     *
+     * @return array
+     */
+    public function getRelations(&$contents)
+    {
+        if (!is_array($contents)) {
+            $contents = [ $contents ];
+        }
+
+        $ids = [];
+        foreach ($contents as $content) {
+            if ($content->hasRelated('cover')) {
+                continue;
+            }
+
+            $ids[] = $content->getRelated('cover');
+        }
+
+        $relations = $this->get('entity_repository')->findBy([
+            'content_type_name' => [[ 'value' => 'photo', ]],
+            'pk_content'        => [[ 'value' => array_unique($ids), 'operator' => 'IN', 'value']],
+        ]);
+
+        $relationContents = [];
+        foreach ($relations as $content) {
+            $relationContents[$content->id] = $content;
+        }
+
+        return $relationContents;
+    }
+
+    /**
+     * Returns the list of tags from a list of contents
+     *
+     * @param array $contents The list of contents to fetch tags from
+     *
+     * @return array
+     */
+    public function getTags($contents)
+    {
+        if (!is_array($contents)) {
+            $contents = [ $contents ];
+        }
+
+        $tagIds = [];
+        foreach ($contents as $content) {
+            $tagIds = array_merge($tagIds, $content->tags);
+        }
+
+        $tags = $this->get('api.service.tag')
+            ->getListByIdsKeyMapped($tagIds)['items'];
+
+        return $tags;
     }
 }
