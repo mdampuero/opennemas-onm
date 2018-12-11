@@ -157,7 +157,9 @@
                     var ids = Object.keys($scope.data.extra.user_groups);
 
                     // Remove all user groups
-                    data.user_groups = _.difference(data.user_groups, ids);
+                    data.user_groups = data.user_groups.filter(function(group) {
+                      return ids.indexOf(group.user_group_id) !== -1;
+                    });
                   }
 
                   return http.put(route, data);

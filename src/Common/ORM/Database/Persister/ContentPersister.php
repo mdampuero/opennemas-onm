@@ -67,18 +67,28 @@ class ContentPersister extends BasePersister
             unset($entity->related_contents);
         }
 
-        parent::create($entity);
+        $this->conn->beginTransaction();
 
-        $id = $this->metadata->getId($entity);
+        try {
+            parent::create($entity);
 
-        $this->persistCategories($id, $categories);
-        $entity->categories = $categories;
+            $id = $this->metadata->getId($entity);
 
-        $this->persistTags($id, $tags);
-        $entity->tags = $tags;
+            $this->persistCategories($id, $categories);
+            $entity->categories = $categories;
 
-        $this->persistRelations($id, $relatedContents);
-        $entity->related_contents = $relatedContents;
+            $this->persistTags($id, $tags);
+            $entity->tags = $tags;
+
+            $this->persistRelations($id, $relatedContents);
+            $entity->related_contents = $relatedContents;
+
+            $this->conn->commit();
+        } catch (\Exception $e) {
+            $this->conn->rollback();
+
+            return;
+        }
 
         $entity->refresh();
     }
@@ -109,30 +119,36 @@ class ContentPersister extends BasePersister
         unset($entity->tags);
         $entity->setNotStored('tags');
 
-        parent::update($entity);
+        try {
+            parent::update($entity);
 
-        $id = $this->metadata->getId($entity);
+            $id = $this->metadata->getId($entity);
 
-        if (array_key_exists('categories', $changes)) {
-            $this->persistCategories($id, $categories);
-        }
+            if (array_key_exists('categories', $changes)) {
+                $this->persistCategories($id, $categories);
+            }
 
-        $entity->categories = $categories;
+            $entity->categories = $categories;
 
-        if (array_key_exists('tags', $changes)) {
-            $this->persistTags($id, $tags);
-        }
+            if (array_key_exists('tags', $changes)) {
+                $this->persistTags($id, $tags);
+            }
 
-        $entity->tags = $tags;
+            $entity->tags = $tags;
 
-        if (array_key_exists('related_contents', $changes)) {
-            $this->persistRelations($id, $relations);
-        }
+            if (array_key_exists('related_contents', $changes)) {
+                $this->persistRelations($id, $relations);
+            }
 
-        $entity->relations = $relations;
+            $entity->relations = $relations;
 
-        if ($this->hasCache()) {
-            $this->cache->remove($this->metadata->getPrefixedId($entity));
+            $this->conn->commit();
+
+            if ($this->hasCache()) {
+                $this->cache->remove($this->metadata->getPrefixedId($entity));
+            }
+        } catch (\Exception $e) {
+            $this->conn->rollback();
         }
     }
 
@@ -141,16 +157,26 @@ class ContentPersister extends BasePersister
      */
     public function remove(Entity $entity)
     {
-        parent::remove($entity);
+        $this->conn->beginTransaction();
 
-        $id = $this->metadata->getId($entity);
+        try {
+            parent::remove($entity);
 
-        $this->removeCategories($id);
+            $id = $this->metadata->getId($entity);
 
-        $this->removeTags($id);
+            $this->removeCategories($id);
 
-        if ($this->hasCache()) {
-            $this->cache->remove($this->metadata->getPrefixedId($entity));
+            $this->removeTags($id);
+
+            $this->commit();
+
+            if ($this->hasCache()) {
+                $this->cache->remove($this->metadata->getPrefixedId($entity));
+            }
+        } catch (\Exception $e) {
+            $this->conn->rollback();
+
+            return;
         }
     }
 

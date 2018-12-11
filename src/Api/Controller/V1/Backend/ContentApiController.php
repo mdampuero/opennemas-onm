@@ -47,8 +47,11 @@ class ContentApiController extends ApiController
 
         $msg = $this->get('core.messenger');
 
+        $data         = $request->request->all();
+        $data['tags'] = $this->parseTags($data['tags']);
+
         $item = $this->get($this->service)
-            ->createItem($request->request->all());
+            ->createItem($data);
         $msg->add(_('Item saved successfully'), 'success', 201);
 
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -76,28 +79,8 @@ class ContentApiController extends ApiController
 
         $msg = $this->get('core.messenger');
 
-        $data = $request->request->all();
-        $tags = $data['tags'];
-
-        $ts = $this->get('api.service.tag');
-
-        $ids = [];
-        foreach ($tags as $tag) {
-            if (!array_key_exists('id', $tag) || !is_numeric($tag['id'])) {
-                unset($tag['id']);
-
-                try {
-                    $tag = $ts->responsify($ts->createItem($tag));
-                } catch (\Exception $e) {
-                    continue;
-                }
-            }
-
-            $ids[] = (int) $tag['id'];
-        }
-
-        $ids          = array_unique($ids);
-        $data['tags'] = $ids;
+        $data         = $request->request->all();
+        $data['tags'] = $this->parseTags($data['tags']);
 
         $this->get($this->service)
             ->updateItem($id, $data);
@@ -163,5 +146,34 @@ class ContentApiController extends ApiController
 
         return $this->get('api.service.tag')
             ->getListByIdsKeyMapped($tagIds)['items'];
+    }
+
+    /**
+     * Parses the tags provided from the request and transforms them into
+     * ids
+     *
+     * @param array $tags The lis tof tag objects
+     * @return array
+     **/
+    private function parseTags($tags = [])
+    {
+        $ts = $this->get('api.service.tag');
+
+        $ids = [];
+        foreach ($tags as $tag) {
+            if (!array_key_exists('id', $tag) || !is_numeric($tag['id'])) {
+                unset($tag['id']);
+
+                try {
+                    $tag = $ts->responsify($ts->createItem($tag));
+                } catch (\Exception $e) {
+                    continue;
+                }
+            }
+
+            $ids[] = (int) $tag['id'];
+        }
+
+        return array_unique($ids);
     }
 }

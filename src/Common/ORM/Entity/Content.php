@@ -39,8 +39,14 @@ class Content extends Entity
      */
     public function getRelated($name)
     {
-        return array_filter($this->related, function ($element) {
+        $related = array_filter($this->related, function ($element) {
             return $element->relationship == $name;
         });
+
+        if (count($related) == 1) {
+            $related = array_pop($related);
+        }
+
+        return $related;
     }
 }
