@@ -144,7 +144,7 @@ class OrmService implements Service
      */
     public function deleteList($ids)
     {
-        if (!is_array($ids) || empty($ids)) {
+        if (!is_array($ids)) {
             throw new DeleteListException('Invalid ids', 400);
         }
 
@@ -274,6 +274,10 @@ class OrmService implements Service
     {
         if (!is_array($ids)) {
             throw new GetListException('Invalid ids', 400);
+        }
+
+        if (empty($ids)) {
+            return [ 'items' => [], 'total' => 0 ];
         }
 
         $items = $this->container->get('orm.manager')
