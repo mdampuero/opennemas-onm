@@ -227,6 +227,7 @@
               </div>
               <div class="form-group" {if !empty($server['categories_map'])}ng-init="categoriesMap = {json_encode($server['categories_map'])|clear_json}"{/if}>
                 <label class="form-label" for="category_mapping">{t}Category mapping{/t}</label>
+                <span class="help m-l-5">{t}Source{/t} - {t}Target{/t}</span>
                 <div class="controls">
                   <div class="row m-t-15" ng-repeat="categoryMap in categoriesMap track by $index">
                     <div class="col-md-6 col-sm-9">
