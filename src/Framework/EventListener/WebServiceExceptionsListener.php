@@ -95,7 +95,7 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
             return;
         }
 
-        $msg->add($this->getMessage($exception), 'error', $exception->getCode());
+        $msg->add($this->getMessage($exception), 'error', $exception->getStatusCode());
 
         $event->setResponse(new JsonResponse($msg->getMessages(), $msg->getCode()));
     }
