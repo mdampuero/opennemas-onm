@@ -10,17 +10,25 @@ self.addEventListener('install', function(event) {
         console.log('[Opennemas] Cached index page during install ' + response.url);
         return cache.put(indexPage, response);
       });
-  }));
+    })
+  );
 });
 
-//If any fetch fails, it will look for the request in the cache and serve it from there first
+// If any fetch fails, it will look for the request in the cache and serve it from there first
 self.addEventListener('fetch', function(event) {
   var updateCache = function(request) {
     return caches.open('opennemas-offline').then(function(cache) {
       return fetch(request).then(function(response) {
-        if (/.*.(png|jpg)/.test(response.url)) {
-          console.log('[Opennemas] Ignoring image: ' + response.url);
-          return response;
+        var toIgnore = [
+          /.*.(png|jpg)/,
+          /.*\/(admin|api|entityws|login|manager|managerws)\/.*/
+        ];
+
+        for (var i = 0; i < toIgnore.length; i++) {
+          if (toIgnore[i].test(response.url)) {
+            console.log('[Opennemas] Ignoring URL: ' + response.url);
+            return response;
+          }
         }
 
         console.log('[Opennemas] Add page to offline ' + response.url);
