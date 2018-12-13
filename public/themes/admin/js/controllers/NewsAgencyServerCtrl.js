@@ -28,7 +28,17 @@
          *
          * @type {Array}
          */
-        $scope.filters = [ '' ];
+        $scope.filters = [];
+
+        /**
+         * @memberOf NewsAgencyServerCtrl
+         *
+         * @description
+         *  The list of categories map
+         *
+         * @type {Array}
+         */
+        $scope.categoriesMap = [];
 
         /**
          * @memberOf NewsAgencyServerCtrl
@@ -49,6 +59,20 @@
          * @type {Boolean}
          */
         $scope.type = false;
+
+        /**
+         * @function addCategoryMap
+         * @memberOf NewsAgencyServerCtrl
+         *
+         * @description
+         *   Adds a new category map to the list.
+         */
+        $scope.addCategoryMap = function() {
+          $scope.categoriesMap.push({
+            slug: '',
+            id: null
+          });
+        };
 
         /**
          * @function addFilter
@@ -88,6 +112,19 @@
         };
 
         /**
+         * @function removeCategoryMap
+         * @memberOf NewsAgencyServerCtrl
+         *
+         * @description
+         *   Removes a category map from the list of categories map.
+         *
+         * @param {Integer} index The index of the filter to list.
+         */
+        $scope.removeCategoryMap = function(index) {
+          $scope.categoriesMap.splice(index, 1);
+        };
+
+        /**
          * @function removeFilter
          * @memberOf NewsAgencyServerCtrl
          *
@@ -97,8 +134,15 @@
          * @param {Integer} index The index of the filter to list.
          */
         $scope.removeFilter = function(index) {
-          $scope.filters.splice(1, index);
+          $scope.filters.splice(index, 1);
         };
+
+        // Converts categoriesMap value to a JSON string
+        $scope.$watch('categoriesMap', function(nv) {
+          if (nv) {
+            $scope.categoryJson = JSON.stringify(nv);
+          }
+        }, true);
 
         // Updates the URL for Opennemas News Agency the instance change
         $scope.$watch('instance', function(nv) {

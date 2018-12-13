@@ -27,6 +27,7 @@ class NitfTest extends \PHPUnit\Framework\TestCase
             <head>
                 <title>Sample title</title>
                 <meta name=\"prioridad\" content=\"U\" />
+                <meta name=\"categoria\" content=\"POL\" />
                 <docdata management-status=\"usable\">
                     <urgency ed-urg=\"3\" />
                     <evloc city=\"Budapest\" iso-cc=\"HUN\" />
@@ -84,6 +85,16 @@ class NitfTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             '<p>Paragraph 1</p><p>Paragraph 2</p>',
             $this->parser->getBody($this->valid)
+        );
+    }
+
+    public function testGetCategory()
+    {
+        $this->assertEmpty($this->parser->getCategory($this->invalid));
+
+        $this->assertEquals(
+            'POL',
+            $this->parser->getCategory($this->valid)
         );
     }
 
@@ -169,6 +180,7 @@ class NitfTest extends \PHPUnit\Framework\TestCase
 
         $resource->id       = '21155709';
         $resource->priority = 3;
+        $resource->category = 'POL';
         $resource->summary  = '<p>Sample summary</p>';
         $resource->title    = 'Sample title';
         $resource->type     = 'text';

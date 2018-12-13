@@ -140,7 +140,13 @@ class NewsAgencyController extends Controller
             $type = $matches[1][0];
         }
 
-        $criteria   = [ 'source' => $source, 'title'  => $title, 'type' => $type ];
+        $criteria = [
+            'source'   => $source,
+            'title'    => $title,
+            'category' => $title,
+            'type'     => $type
+        ];
+
         $repository = new LocalRepository();
 
         $total    = $repository->countBy($criteria);

@@ -125,11 +125,9 @@ class Importer
             throw new \Exception(_('Content already imported'));
         }
 
-        $category = $this->getCategory($category);
+        $category = $this->getCategory($resource, $category);
         $author   = $this->getAuthor($resource, $author);
-
-        $data = $this->getData($resource, $category, $author, $enabled, $target);
-
+        $data     = $this->getData($resource, $category, $author, $enabled, $target);
         if ($resource->type === 'photo') {
             $photo = new \Photo();
             $id    = $photo->createFromLocalFile($data);
@@ -303,13 +301,22 @@ class Importer
      *
      * @return integer The category for contents.
      */
-    protected function getCategory($category = null)
+    protected function getCategory($resource, $category = null)
     {
         if (!empty($category)) {
             return $category;
         }
 
         if ($this->autoImport()) {
+            // Check if resource category has mapping
+            if (array_key_exists('categories_map', $this->config)) {
+                foreach ($this->config['categories_map'] as $map) {
+                    if ($map->slug == $resource->category) {
+                        return $map->id;
+                    }
+                }
+            }
+
             return $this->config['category'];
         }
 
