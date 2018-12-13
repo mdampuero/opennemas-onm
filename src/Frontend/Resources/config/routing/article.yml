@@ -1,7 +1,7 @@
 # Articles routes
 frontend_external_article_show:
     path: /extarticulo/{category_name}/{slug}/{article_id}.html
-    defaults: { _controller: FrontendBundle:Articles:extShow }
+    defaults: { _controller: FrontendBundle:Article:extShow }
     requirements:
         category_name: '[^/]+'
         slug         : '[^/]+'
@@ -11,7 +11,7 @@ frontend_external_article_show:
 
 frontend_article_show:
     path: /articulo/{category_name}/{slug}/{article_id}.html
-    defaults: { _controller: FrontendBundle:Articles:show }
+    defaults: { _controller: FrontendBundle:Article:show }
     requirements:
         category_name: '[^/]+'
         slug         : '[^/]+'

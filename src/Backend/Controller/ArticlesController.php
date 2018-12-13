@@ -358,7 +358,7 @@ class ArticlesController extends Controller
         $actualCategoryId      = $ccm->get_id($category_name);
 
         list($positions, $advertisements) =
-            \Frontend\Controller\ArticlesController::getAds($actualCategoryId);
+            \Frontend\Controller\ArticleController::getAds($actualCategoryId);
 
         // Fetch media associated to the article
         $photoInt = '';

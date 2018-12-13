@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 /**
  * Defines the frontend controller for the articles.
  */
-class ArticlesController extends Controller
+class ArticleController extends Controller
 {
     /**
      * Displays the article given its id.
