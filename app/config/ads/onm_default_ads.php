@@ -37,7 +37,8 @@ $preScript = '<script src="//ced.sascdn.com/tag/3035/smart.js" async></script>
     });
 </script>';
 
-$i = 1;
+$rand = rand();
+$i    = 1;
 return array_map(function ($ad) use (&$i, $default) {
     $adObject = new Advertisement();
     // Merge default params on all ads
@@ -159,39 +160,6 @@ return array_map(function ($ad) use (&$i, $default) {
     11 => [
         'positions' => [ 11 ],
         'fk_content_categories' => [ 0 ],
-        'script' => $preScript . '<div id="sas_64438"></div>
-            <script type="application/javascript">
-                sas.cmd.push(function() {
-                    sas.call("std", {
-                        siteId: 214597, //
-                        pageId: 905245, // Page : Opennemas/global
-                        formatId: 64438, // Format : rectangle_1.1 300x600
-                    });
-                });
-            </script>',
-        'params' => [
-            'sizes' => [
-                '0' => [
-                    'width' => 300,
-                    'height' => 600,
-                    'device' => 'desktop'
-                ],
-                '1' => [
-                    'width' => 300,
-                    'height' => 600,
-                    'device' => 'tablet'
-                ],
-                '2' => [
-                    'width' => 300,
-                    'height' => 600,
-                    'device' => 'phone'
-                ],
-            ],
-        ],
-    ],
-    12 => [
-        'positions' => [ 12 ],
-        'fk_content_categories' => [ 0 ],
         'script' => $preScript . '<div id="sas_64439"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
@@ -206,14 +174,19 @@ return array_map(function ($ad) use (&$i, $default) {
             'sizes' => [
                 '0' => [
                     'width' => 300,
+                    'height' => 250,
+                    'device' => 'desktop'
+                ],
+                '1' => [
+                    'width' => 300,
+                    'height' => 250,
+                    'device' => 'tablet'
+                ],
+                '2' => [
+                    'width' => 300,
                     'height' => 600,
                     'device' => 'phone'
                 ],
-            ],
-            'devices' => [
-                'desktop' => 0,
-                'tablet' => 0,
-                'phone' => 1
             ],
         ],
     ],
@@ -227,67 +200,6 @@ return array_map(function ($ad) use (&$i, $default) {
                         siteId: 214597, //
                         pageId: 905245, // Page : Opennemas/global
                         formatId: 64442, // Format : rectangle_2.1 300x600
-                    });
-                });
-            </script>',
-        'params' => [
-            'sizes' => [
-                '0' => [
-                    'width' => 300,
-                    'height' => 600,
-                    'device' => 'phone'
-                ],
-            ],
-            'devices' => [
-                'desktop' => 0,
-                'tablet' => 0,
-                'phone' => 1
-            ],
-        ],
-    ],
-    22 => [
-        'positions' => [ 22 ],
-        'fk_content_categories' => [ 0 ],
-        'script' => $preScript . '<div id="sas_64443"></div>
-            <script type="application/javascript">
-                sas.cmd.push(function() {
-                    sas.call("std", {
-                        siteId: 214597, //
-                        pageId: 905245, // Page : Opennemas/global
-                        formatId: 64443, // Format : rectangle_2.2 300x600
-                    });
-                });
-            </script>',
-        'params' => [
-            'sizes' => [
-                '0' => [
-                    'width' => 300,
-                    'height' => 600,
-                    'device' => 'desktop'
-                ],
-                '1' => [
-                    'width' => 300,
-                    'height' => 600,
-                    'device' => 'tablet'
-                ],
-                '2' => [
-                    'width' => 300,
-                    'height' => 600,
-                    'device' => 'phone'
-                ],
-            ],
-        ],
-    ],
-    31 => [
-        'positions' => [ 31 ],
-        'fk_content_categories' => [ 0 ],
-        'script' => $preScript . '<div id="sas_64036"></div>
-            <script type="application/javascript">
-                sas.cmd.push(function() {
-                    sas.call("std", {
-                        siteId: 214597, //
-                        pageId: 905245, // Page : Opennemas/global
-                        formatId: 64036, // Format : rectangle_3.1 300x600
                     });
                 });
             </script>',
@@ -410,39 +322,6 @@ return array_map(function ($ad) use (&$i, $default) {
             ],
         ],
     ],
-    35 => [
-        'positions' => [ 35 ],
-        'fk_content_categories' => [ 0 ],
-        'script' => $preScript . '<div id="sas_64116"></div>
-            <script type="application/javascript">
-                sas.cmd.push(function() {
-                    sas.call("std", {
-                        siteId: 214597, //
-                        pageId: 905245, // Page : Opennemas/global
-                        formatId: 64116, // Format : rectangle_3.5 300x600
-                    });
-                });
-            </script>',
-        'params' => [
-            'sizes' => [
-                '0' => [
-                    'width' => 300,
-                    'height' => 600,
-                    'device' => 'desktop'
-                ],
-                '1' => [
-                    'width' => 300,
-                    'height' => 600,
-                    'device' => 'tablet'
-                ],
-                '2' => [
-                    'width' => 300,
-                    'height' => 600,
-                    'device' => 'phone'
-                ],
-            ],
-        ],
-    ],
     91 => [
         'positions' => [ 91 ],
         'fk_content_categories' => [ 0 ],
@@ -535,79 +414,14 @@ return array_map(function ($ad) use (&$i, $default) {
     103 => [
         'positions' => [ 103 ],
         'fk_content_categories' => [ 0 ],
-        'script' => $preScript . '<div id="sas_64036"></div>
+        'script' => $preScript . '<div id="rec31_' . $rand . '"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
                     sas.call("std", {
                         siteId: 214597, //
                         pageId: 905245, // Page : Opennemas/global
                         formatId: 64036, // Format : rectangle_3.1 300x600
-                    });
-                });
-            </script>',
-        'params' => [
-            'sizes' => [
-                '0' => [
-                    'width' => 300,
-                    'height' => 600,
-                    'device' => 'desktop'
-                ],
-                '1' => [
-                    'width' => 300,
-                    'height' => 600,
-                    'device' => 'tablet'
-                ],
-                '2' => [
-                    'width' => 300,
-                    'height' => 600,
-                    'device' => 'phone'
-                ],
-            ],
-        ],
-    ],
-    104 => [
-        'positions' => [ 104 ],
-        'fk_content_categories' => [ 0 ],
-        'script' => $preScript . '<div id="sas_64572"></div>
-            <script type="application/javascript">
-                sas.cmd.push(function() {
-                    sas.call("std", {
-                        siteId: 214597, //
-                        pageId: 905245, // Page : Opennemas/global
-                        formatId: 64572, // Format : banner_under_body 728x550
-                    });
-                });
-            </script>',
-        'params' => [
-            'sizes' => [
-                '0' => [
-                    'width' => 728,
-                    'height' => 550,
-                    'device' => 'desktop'
-                ],
-                '1' => [
-                    'width' => 728,
-                    'height' => 550,
-                    'device' => 'tablet'
-                ],
-                '2' => [
-                    'width' => 320,
-                    'height' => 100,
-                    'device' => 'phone'
-                ],
-            ],
-        ],
-    ],
-    105 => [
-        'positions' => [ 105 ],
-        'fk_content_categories' => [ 0 ],
-        'script' => $preScript . '<div id="sas_64113"></div>
-            <script type="application/javascript">
-                sas.cmd.push(function() {
-                    sas.call("std", {
-                        siteId: 214597, //
-                        pageId: 905245, // Page : Opennemas/global
-                        formatId: 64113, // Format : rectangle_3.2 300x600
+                        tagId: "rec31_' . $rand . '"
                     });
                 });
             </script>',
@@ -634,13 +448,14 @@ return array_map(function ($ad) use (&$i, $default) {
     106 => [
         'positions' => [ 106 ],
         'fk_content_categories' => [ 0 ],
-        'script' => $preScript . '<div id="sas_64114"></div>
+        'script' => $preScript . '<div id="rec33_' . $rand . '"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
                     sas.call("std", {
                         siteId: 214597, //
                         pageId: 905245, // Page : Opennemas/global
                         formatId: 64114, // Format : rectangle_3.3 300x600
+                        tagId: "rec33_' . $rand . '"
                     });
                 });
             </script>',
@@ -667,46 +482,14 @@ return array_map(function ($ad) use (&$i, $default) {
     107 => [
         'positions' => [ 107 ],
         'fk_content_categories' => [ 0 ],
-        'script' => $preScript . '<div id="sas_64115"></div>
+        'script' => $preScript . '<div id="rec34_' . $rand . '"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
                     sas.call("std", {
                         siteId: 214597, //
                         pageId: 905245, // Page : Opennemas/global
                         formatId: 64115, // Format : rectangle_3.4 300x600
-                    });
-                });
-            </script>',
-        'params' => [
-            'sizes' => [
-                '0' => [
-                    'width' => 300,
-                    'height' => 600,
-                    'device' => 'desktop'
-                ],
-                '1' => [
-                    'width' => 300,
-                    'height' => 600,
-                    'device' => 'tablet'
-                ],
-                '2' => [
-                    'width' => 300,
-                    'height' => 600,
-                    'device' => 'phone'
-                ],
-            ],
-        ],
-    ],
-    108 => [
-        'positions' => [ 108 ],
-        'fk_content_categories' => [ 0 ],
-        'script' => $preScript . '<div id="sas_64116"></div>
-            <script type="application/javascript">
-                sas.cmd.push(function() {
-                    sas.call("std", {
-                        siteId: 214597, //
-                        pageId: 905245, // Page : Opennemas/global
-                        formatId: 64116, // Format : rectangle_3.5 300x600
+                        tagId: "rec34_' . $rand . '"
                     });
                 });
             </script>',
@@ -1337,44 +1120,17 @@ return array_map(function ($ad) use (&$i, $default) {
             ],
         ],
     ],
-    2201 => [
-        'positions' => [ 2201 ],
-        'fk_content_categories' => [ 0 ],
-        'script' => $preScript . '<div id="sas_64120"></div>
-            <script type="application/javascript">
-                sas.cmd.push(function() {
-                    sas.call("std", {
-                        siteId: 214597, //
-                        pageId: 905245, // Page : Opennemas/global
-                        formatId: 64120, // Format : banner_intext_1 600x300
-                    });
-                });
-            </script>',
-    ],
-    3201 => [
-        'positions' => [ 3201 ],
-        'fk_content_categories' => [ 0 ],
-        'script' => $preScript . '<div id="sas_64120"></div>
-            <script type="application/javascript">
-                sas.cmd.push(function() {
-                    sas.call("std", {
-                        siteId: 214597, //
-                        pageId: 905245, // Page : Opennemas/global
-                        formatId: 64120, // Format : banner_intext_1 600x300
-                    });
-                });
-            </script>',
-    ],
     2203 => [
         'positions' => [ 2203 ],
         'fk_content_categories' => [ 0 ],
-        'script' => $preScript . '<div id="sas_64457"></div>
+        'script' => $preScript . '<div id="intext_article_' . $rand . '"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
                     sas.call("std", {
                         siteId: 214597, //
                         pageId: 905245, // Page : Opennemas/global
-                        formatId: 64457, // Format : Intext_video 1x1
+                        formatId: 64121, // Format : banner_intext_2 600x300
+                        tagId: "intext_article_' . $rand . '"
                     });
                 });
             </script>',
@@ -1382,41 +1138,14 @@ return array_map(function ($ad) use (&$i, $default) {
     3203 => [
         'positions' => [ 3203 ],
         'fk_content_categories' => [ 0 ],
-        'script' => $preScript . '<div id="sas_64457"></div>
-            <script type="application/javascript">
-                sas.cmd.push(function() {
-                    sas.call("std", {
-                        siteId: 214597, //
-                        pageId: 905245, // Page : Opennemas/global
-                        formatId: 64457, // Format : Intext_video 1x1
-                    });
-                });
-            </script>',
-    ],
-    2205 => [
-        'positions' => [ 2205 ],
-        'fk_content_categories' => [ 0 ],
-        'script' => $preScript . '<div id="sas_64121"></div>
+        'script' => $preScript . '<div id="intext_opinion_' . $rand . '"></div>
             <script type="application/javascript">
                 sas.cmd.push(function() {
                     sas.call("std", {
                         siteId: 214597, //
                         pageId: 905245, // Page : Opennemas/global
                         formatId: 64121, // Format : banner_intext_2 600x300
-                    });
-                });
-            </script>',
-    ],
-    3205 => [
-        'positions' => [ 3205 ],
-        'fk_content_categories' => [ 0 ],
-        'script' => $preScript . '<div id="sas_64121"></div>
-            <script type="application/javascript">
-                sas.cmd.push(function() {
-                    sas.call("std", {
-                        siteId: 214597, //
-                        pageId: 905245, // Page : Opennemas/global
-                        formatId: 64121, // Format : banner_intext_2 600x300
+                        tagId: "intext_opinion_' . $rand . '"
                     });
                 });
             </script>',
