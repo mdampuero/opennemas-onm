@@ -188,14 +188,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getConfig.
-     */
-    public function testGetConfig()
-    {
-        $this->assertArrayHasKey('article', $this->urlGenerator->getConfig());
-    }
-
-    /**
      * Tests setInstance.
      */
     public function testSetInstance()
@@ -606,5 +598,16 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ]]),
             ''
         );
+    }
+
+    /**
+     * Tests getConfig.
+     */
+    public function testGetConfig()
+    {
+        $method = new \ReflectionMethod($this->urlGenerator, 'getConfig');
+        $method->setAccessible(true);
+
+        $this->assertArrayHasKey('article', $method->invokeArgs($this->urlGenerator, []));
     }
 }

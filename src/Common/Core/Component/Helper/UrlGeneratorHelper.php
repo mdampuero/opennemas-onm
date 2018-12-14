@@ -66,29 +66,6 @@ class UrlGeneratorHelper
     }
 
     /**
-     * Returns the list of configurations for uri generation.
-     *
-     * @return array the array of configurations
-     */
-    public function getConfig()
-    {
-        return [
-            'article'     => 'articulo/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'opinion'     => 'opinion/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'blog'        => 'blog/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'video'       => 'video/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'album'       => 'album/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'poll'        => 'encuesta/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'static_page' => 'estaticas/_SLUG_.html',
-            'ad'          => 'publicidad/_ID_.html',
-            'kiosko'      => 'portadas-papel/_CATEGORY_/_DATE__ID_.html',
-            'letter'      => 'cartas-al-director/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'special'     => 'especiales/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'book'        => 'libro/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-        ];
-    }
-
-    /**
      * Returns a generated uri for a content type given some params.
      *
      * @param string $content The content to generate the url.
@@ -333,5 +310,28 @@ class UrlGeneratorHelper
         $uriTemplate = $config[$contentType];
 
         return preg_replace($keys, $values, $uriTemplate);
+    }
+
+    /**
+     * Returns the list of configurations for uri generation.
+     *
+     * @return array the array of configurations
+     */
+    protected function getConfig()
+    {
+        return [
+            'article'     => 'articulo/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'opinion'     => 'opinion/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'blog'        => 'blog/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'video'       => 'video/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'album'       => 'album/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'poll'        => 'encuesta/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'static_page' => 'estaticas/_SLUG_.html',
+            'ad'          => 'publicidad/_ID_.html',
+            'kiosko'      => 'portadas-papel/_CATEGORY_/_DATE__ID_.html',
+            'letter'      => 'cartas-al-director/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'special'     => 'especiales/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'book'        => 'libro/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+        ];
     }
 }
