@@ -9,128 +9,34 @@
  */
 namespace Frontend\Controller;
 
-use Common\Core\Controller\Controller;
-use Common\ORM\Core\Exception\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Defines the frontend controller for the articles.
  */
-class ArticleController extends Controller
+class ArticleController extends FrontendController
 {
     /**
-     * Displays the article given its id.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
+     * {@inheritdoc}
      */
-    public function showAction(Request $request)
-    {
-        $dirtyID      = $request->get('article_id', '');
-        $categoryName = $request->get('category_name', 'home');
-        $urlSlug      = $request->get('slug', '');
+    protected $extension = 'article';
 
-        $article = $this->get('content_url_matcher')
-            ->matchContentUrl('article', $dirtyID, $urlSlug, $categoryName);
+    /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'extShow' => 'article_inner',
+        'show'    => 'article_inner'
+    ];
 
-        if (empty($article)) {
-            throw new ResourceNotFoundException();
-        }
-
-        // Redirect if external link is set
-        if (array_key_exists('bodyLink', $article->params)
-            && !empty($article->params['bodyLink'])
-        ) {
-            // TODO: Remove when target="_blank"' not included in URI for external
-            $url = str_replace('" target="_blank', '', $article->params['bodyLink']);
-
-            return $this->forward(
-                'FrontendBundle:Redirector:externalLink',
-                [ 'to'  => $url ]
-            );
-        }
-
-        $sh = $this->get('core.helper.subscription');
-
-        $token = $sh->getToken($article);
-
-        if ($sh->isBlocked($token, 'access')) {
-            throw new AccessDeniedException();
-        }
-
-        try {
-            $category = $this->get('orm.manager')->getRepository('Category')
-                ->findOneBy(sprintf('name = "%s"', $categoryName));
-
-            $category->title = $this->get('data.manager.filter')
-                ->set($category->title)
-                ->filter('localize')
-                ->get();
-        } catch (EntityNotFoundException $e) {
-            throw new ResourceNotFoundException();
-        }
-
-        list($positions, $advertisements) =
-            $this->getAds($category->pk_content_category);
-
-        $layout = $this->get('orm.manager')->getDataSet('Settings', 'instance')
-            ->get(
-                'frontpage_layout_' . $category->pk_content_category,
-                'default'
-            );
-
-        $this->view->setConfig('articles');
-        $cacheID = $this->view->getCacheId('content', $article->id, $token);
-
-        if ($this->view->getCaching() === 0
-            || !$this->view->isCached("extends:layouts/{$layout}.tpl|article/article.tpl", $cacheID)
-        ) {
-            $em = $this->get('entity_repository');
-
-            if (isset($article->img2) && ($article->img2 > 0)) {
-                $photoInt = $em->find('Photo', $article->img2);
-                $this->view->assign('photoInt', $photoInt);
-            }
-
-            if (isset($article->fk_video2) && ($article->fk_video2 > 0)) {
-                $videoInt = $em->find('Video', $article->fk_video2);
-                $this->view->assign('videoInt', $videoInt);
-            }
-
-            $this->view->assign([
-                'relationed' => $this->getRelated($article),
-                'suggested'  => $this->getSuggested($article, $category)
-            ]);
-        }
-
-        $locale = getService('core.locale')->getRequestLocale();
-
-        return $this->render("extends:layouts/{$layout}.tpl|article/article.tpl", [
-            'actual_category'       => $category->name,
-            'actual_category_id'    => $category->pk_content_category,
-            'actual_category_title' => $category->title,
-            'ads_positions'         => $positions,
-            'advertisements'        => $advertisements,
-            'article'               => $article,
-            'cache_id'              => $cacheID,
-            'category_data'         => $category,
-            'category_name'         => $category->name,
-            'content'               => $article,
-            'contentId'             => $article->id,
-            'time'                  => '12345',
-            'o_content'             => $article,
-            'o_token'               => $token,
-            'x-cache-for'           => '+1 day',
-            'x-cacheable'           => empty($token),
-            'x-tags'                => 'article,' . $article->id,
-            'tags'                  => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($article->tag_ids, $locale)['items']
-        ]);
-    }
+    /**
+     * {@inheritdoc}
+     */
+    protected $positions = [
+        'article_inner' => [ 7 ]
+    ];
 
     /**
      * Displays the external article given its id
@@ -177,7 +83,7 @@ class ArticleController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        list($positions, $advertisements) = $this->getAds();
+        list($positions, $advertisements) = $this->getAdvertisements();
 
         return $this->render('article/article.tpl', [
             'actual_category_title' => $article->category_title,
@@ -200,25 +106,33 @@ class ArticleController extends Controller
     }
 
     /**
-     * Fetches advertisements for article inner
-     *
-     * @param string category the category identifier
-     *
-     * @return array the list of advertisements for this page
-     *
-     * TODO: Make this function non-static
+     * {@inheritdoc}
      */
-    public static function getAds($category = 'home')
+    protected function getParameters($params, $item = null)
     {
-        $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
+        $locale = $this->get('core.locale')->getRequestLocale();
+        $params = parent::getParameters($params, $item);
 
-        // TODO: Use $this->get when the function changes to non-static
-        $positions      = getService('core.helper.advertisement')
-            ->getPositionsForGroup('article_inner', [ 7 ]);
-        $advertisements = getService('advertisement_repository')
-            ->findByPositionsAndCategory($positions, $category);
+        if (array_key_exists('o_category', $params)) {
+            $params['o_layout'] = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')->get(
+                    'frontpage_layout_' . $params['o_category']->pk_content_category,
+                    'default'
+                );
+        }
 
-        return [ $positions, $advertisements ];
+        if (!empty($item)) {
+            $params['article'] = $item;
+
+            $params['tags'] = $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($item->tag_ids, $locale)['items'];
+
+            if (array_key_exists('bodyLink', $item->params)) {
+                $params['o_external_link'] = $item->params['bodyLink'];
+            }
+        }
+
+        return $params;
     }
 
     /**
@@ -278,5 +192,28 @@ class ArticleController extends Controller
 
         return $this->get('automatic_contents')
             ->searchSuggestedContents('article', $query);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function hydrate($params = [], $item = null)
+    {
+        $params = [
+            'relationed' => $this->getRelated($item),
+            'suggested'  => $this->getSuggested($item, $params['o_category'])
+        ];
+
+        $em = $this->get('entity_repository');
+
+        if (!empty($item->img2)) {
+            $params['photoInt'] = $em->find('Photo', $item->img2);
+        }
+
+        if (!empty($item->fk_video2)) {
+            $params['videoInt'] = $em->find('Video', $item->fk_video2);
+        }
+
+        $this->view->assign($params);
     }
 }
