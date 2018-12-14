@@ -202,9 +202,9 @@ class UrlGeneratorHelper
             return $this->{$methodName}($content);
         }
 
-        $created = (is_object($content->created)) ?
-            $content->created->format('Y-m-d H:i:s') :
-            $content->created;
+        $created = is_object($content->created)
+            ? $content->created->format('Y-m-d H:i:s')
+            : $content->created;
 
         return $this->generateUriFromConfig(strtolower($content->content_type_name), [
             'id'       => sprintf('%06d', $content->id),
@@ -223,9 +223,10 @@ class UrlGeneratorHelper
      */
     protected function getUriForLetter($content)
     {
-        $created = (is_object($content->created)) ?
-            $content->created->format('Y-m-d H:i:s') :
-            $content->created;
+        $created = is_object($content->created)
+            ? $content->created->format('Y-m-d H:i:s')
+            : $content->created;
+
         return $this->generateUriFromConfig('letter', [
             'id'       => sprintf('%06d', $content->id),
             'date'     => date('YmdHis', strtotime($created)),
