@@ -7,8 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\Core\Component\Helper;
+namespace Tests\Common\Core\Component\Helper;
 
+use Common\Core\Component\Helper\UrlGeneratorHelper;
 use Common\Data\Core\FilterManager;
 
 class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
@@ -185,6 +186,25 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             'http://quux.com/wibble/fred',
             $helper->generate('wubble', [ 'absolute' => true ])
         );
+    }
+
+    /**
+     * Tests isValid.
+     */
+    public function testIsValid()
+    {
+        $item = null;
+
+        $urlGenerator = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'generate' ])
+            ->getMock();
+
+        $urlGenerator->expects($this->any())->method('generate')
+            ->with($item)->willReturn('norf/bar');
+
+        $this->assertTrue($urlGenerator->isValid($item, 'norf/bar'));
+        $this->assertFalse($urlGenerator->isValid($item, 'corge/garply'));
     }
 
     /**

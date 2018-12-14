@@ -110,6 +110,20 @@ class UrlGeneratorHelper
     }
 
     /**
+     * Checks if the provided URI is for the provided item.
+     *
+     * @param Content $item The item.
+     * @param string  $uri  The URI to check.
+     *
+     * @return boolean True if the URI is valid for the current item.  False
+     *                 otherwise.
+     */
+    public function isValid($item, $uri)
+    {
+        return $uri === $this->generate($item);
+    }
+
+    /**
      * Changes the instance to force URL generation for the specified instance.
      *
      * @param Instance $sintance The instance.
