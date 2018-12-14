@@ -20,6 +20,25 @@ use Common\Core\Controller\Controller;
 class ArticlesController extends Controller
 {
     /**
+     * {@inheritdoc}
+     */
+    protected $extension = 'article';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'preview' => 'article_inner'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $positions = [
+        'article_inner' => [ 7 ]
+    ];
+
+    /**
      * Lists articles in the system
      *
      * @return Response the response object
@@ -318,103 +337,92 @@ class ArticlesController extends Controller
      */
     public function previewAction(Request $request)
     {
-        $locale = $request->get('locale');
-
         $this->get('core.locale')->setContext('frontend')
-            ->setRequestLocale($locale);
+            ->setRequestLocale($request->get('locale'));
 
-        $this->loadCategories($request);
+        $article  = new \Article();
+        $category = null;
 
-        $er = $this->get('entity_repository');
-
-        $article         = new \Article();
-        $articleContents = $request->request->filter('article');
+        $data = array_merge([
+            'pk_article'   => 0,
+            'id'           => 0,
+            'with_comment' => 0
+        ], $request->request->filter('article'));
 
         // Load config
         $this->view = $this->get('core.template');
         $this->view->setCaching(0);
 
-        // Fetch all article properties and generate a new object
-        foreach ($articleContents as $key => $value) {
-            if (!empty($value)) {
-                $article->{$key} = $value;
+        foreach ($data as $key => $value) {
+            $article->{$key} = $value;
+        }
+
+        if (!empty($article->tags)) {
+            foreach ($article->tags as $tag) {
+                if (!array_key_exists('id', $tag) || !is_numeric($tag['id'])) {
+                    continue;
+                }
+
+                $tags[$tag['id']] = $tag;
             }
+
+            $article->tags    = $tags;
+            $article->tag_ids = array_keys($tags);
         }
 
-        // Disable comments on preview
-        $article->with_comment = 0;
-
-        // Set a dummy Id for the article if doesn't exists
-        if (empty($article->pk_article) && empty($article->id)) {
-            $article->pk_article = 0;
-            $article->id         = 0;
-        }
+        $params = [
+            'contentId' => $article->id,
+            'article'   => $article,
+            'content'   => $article,
+            'tags'      => $article->tags
+        ];
 
         // Fetch article category name
-        $ccm = \ContentCategoryManager::get_instance();
+        if (!empty($article->category)) {
+            $category = $this->getCategory($article->category);
 
-        $category_name         = $ccm->getName($article->category);
-        $actual_category_title = $ccm->getTitle($category_name);
-        $actualCategoryId      = $ccm->get_id($category_name);
+            $params['category_name']         = $category->name;
+            $params['actual_category_title'] = $category->title;
+            $params['actual_category']       = $category->name;
+        }
 
-        list($positions, $advertisements) =
-            \Frontend\Controller\ArticleController::getAds($actualCategoryId);
+        list($positions, $advertisements) = $this->getAdvertisements($category);
+
+        $params['ads_positions']  = $positions;
+        $params['advertisements'] = $advertisements;
+
+        $er = $this->get('entity_repository');
 
         // Fetch media associated to the article
-        $photoInt = '';
-        if (isset($article->img2)
-            && ($article->img2 != 0)
-        ) {
-            $photoInt = $er->find('Photo', $article->img2);
+        if (isset($article->img2) && ($article->img2 != 0)) {
+            $params['photoInt'] = $er->find('Photo', $article->img2);
         }
 
-        $videoInt = '';
-        if (isset($article->fk_video2)
-            && ($article->fk_video2 != 0)
-        ) {
-            $videoInt = $er->find('Video', $article->fk_video2);
+        if (isset($article->fk_video2) && ($article->fk_video2 != 0)) {
+            $params['videoInt'] = $er->find('Video', $article->fk_video2);
         }
 
-        $ids = [];
         if (!empty($article->relatedInner)) {
             $ids = array_map(function ($a) {
                 return [ $a['type'],  $a['id'] ];
             }, $article->relatedInner);
+
+            $params['relationed'] = $this->get('entity_repository')
+                ->findMulti($ids);
         }
 
-        $related = $this->get('entity_repository')->findMulti($ids);
-
-        // Machine suggested contents code
-        $machineSuggestedContents = $this->get('automatic_contents')
-            ->searchSuggestedContents(
-                'article',
-                "category_name= '" . $article->category_name
+        if (!empty($article->category)) {
+            // Machine suggested contents code
+            $params['suggested'] = $this->get('automatic_contents')
+                ->searchSuggestedContents(
+                    'article',
+                    "category_name= '" . $article->category_name
                     . "' AND pk_content <>" . $article->id,
-                4
-            );
-
-        if (!is_null($article->tag_ids) && is_array($article->tag_ids)) {
-            $article->tag_ids = array_filter($article->tag_ids, function ($tag) {
-                return !is_array($tag);
-            });
+                    4
+                );
         }
 
-        $this->view->assign([
-            'ads_positions'         => $positions,
-            'advertisements'        => $advertisements,
-            'relationed'            => $related,
-            'suggested'             => $machineSuggestedContents,
-            'contentId'             => $article->id,
-            'category_name'         => $category_name,
-            'actual_category'       => $category_name,
-            'article'               => $article,
-            'content'               => $article,
-            'actual_category_title' => $actual_category_title,
-            'photoInt'              => $photoInt,
-            'videoInt'              => $videoInt,
-            'tags'                  => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($article->tag_ids)['items']
-        ]);
+        $this->view->assign($params);
 
         $this->get('session')->set(
             'last_preview',
@@ -459,23 +467,26 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Common code for all the actions
+     * Returns the category basing on the name included in the request URI.
+     *
+     * @param integer $id The category id.
+     *
+     * @return Category The category.
      */
-    public function loadCategories(Request $request)
+    protected function getCategory($id)
     {
-        $this->category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        try {
+            $category = $this->get('orm.manager')->getRepository('Category')
+                ->findOneBy(sprintf('pk_content_category = %s', $id));
 
-        $this->ccm      = \ContentCategoryManager::get_instance();
-        $this->category = ($this->category == 'all') ? 0 : $this->category;
+            $category->title = $this->get('data.manager.filter')
+                ->set($category->title)
+                ->filter('localize')
+                ->get();
 
-        list($this->parentCategories, $this->subcat, $this->categoryData) =
-            $this->ccm->getArraysMenu($this->category);
-
-        $this->view->assign([
-            'category'     => $this->category,
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->categoryData,
-        ]);
+            return $category;
+        } catch (EntityNotFoundException $e) {
+            throw new ResourceNotFoundException();
+        }
     }
 }
