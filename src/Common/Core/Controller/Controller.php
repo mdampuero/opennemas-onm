@@ -30,11 +30,32 @@ class Controller extends SymfonyController
     protected $extension = null;
 
     /**
+     * The list of advertisements groups.
+     *
+     * @var array
+     */
+    protected $groups = [];
+
+    /**
      * The list of permissions for every action.
      *
      * @var type
      */
     protected $permissions = [];
+
+    /**
+     * The list of parameters to generate responses with.
+     *
+     * @var array
+     */
+    protected $params = [];
+
+    /**
+     * The list of advertisements positions.
+     *
+     * @var array
+     */
+    protected $positions = [];
 
     /**
      * The resource name.
@@ -173,6 +194,62 @@ class Controller extends SymfonyController
     }
 
     /**
+     * Returns the advertisement group basing on the current action.
+     *
+     * @param string $action The current action.
+     *
+     * @return string The advertisement group.
+     */
+    protected function getAdvertisementGroup($action)
+    {
+        if (array_key_exists($action, $this->groups)) {
+            return $this->groups[$action];
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the list of positions for the current action.
+     *
+     * @param string $action The current action.
+     *
+     * @return array The list of positions.
+     */
+    protected function getAdvertisementPositions($action)
+    {
+        if (array_key_exists($action, $this->positions)) {
+            return $this->positions[$action];
+        }
+
+        return [];
+    }
+
+    /**
+     * Returns an array with the list of positions and advertisements.
+     *
+     * @param Category $category The category object.
+     *
+     * @return array The list of positions and advertisements.
+     */
+    protected function getAdvertisements($category = null)
+    {
+        $categoryId = empty($category) ? 0 : $category->pk_content_category;
+        $action     = $this->get('core.globals')->getAction();
+        $group      = $this->getAdvertisementGroup($action);
+
+        $positions = array_merge(
+            $this->get('core.helper.advertisement')->getPositionsForGroup($group),
+            $this->getAdvertisementPositions($group)
+        );
+
+        $advertisements = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $categoryId);
+
+        return [ $positions, $advertisements ];
+    }
+
+    /**
      * Returns the list of categories.
      *
      * @return array The list of categories.
@@ -255,5 +332,17 @@ class Controller extends SymfonyController
             'available'   => $ls->getAvailableLocales($context),
             'translators' => array_unique($translators)
         ];
+    }
+
+    /**
+     * Returns the path to the Smarty template.
+     *
+     * @return string The path to the Smarty template.
+     */
+    protected function getTemplate()
+    {
+        $extension = $this->get('core.globals')->getExtension();
+
+        return "{$extension}/{$extension}.tpl";
     }
 }
