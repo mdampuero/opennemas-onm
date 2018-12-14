@@ -58,6 +58,16 @@ class ErrorController extends Controller
 
             case 'ContentNotMigratedException':
             case 'ResourceNotFoundException':
+                $url = $this->container->get('core.redirector')
+                    ->getUrl(preg_replace('/^\//', '', $request->getRequestUri()));
+
+                if (!empty($url)) {
+                    return $this->container->get('core.redirector')
+                        ->getResponse($request, $url);
+                }
+
+                return $this->getNotFoundResponse();
+
             case 'NotFoundHttpException':
                 $this->get('application.log')->info($class->getShortName());
 
