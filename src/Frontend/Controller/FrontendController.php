@@ -12,6 +12,7 @@ namespace Frontend\Controller;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class FrontendController extends Controller
@@ -36,7 +37,7 @@ class FrontendController extends Controller
         $ugh  = $this->get('core.helper.url_generator');
         $item = $this->getItem($request);
 
-        if (empty($item)) {
+        if (empty($item) || !$item->isReadyForPublish()) {
             throw new ResourceNotFoundException();
         }
 
