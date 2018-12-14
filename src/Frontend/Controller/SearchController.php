@@ -21,6 +21,20 @@ use Common\Core\Controller\Controller;
 class SearchController extends Controller
 {
     /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'google' => 'article_inner'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $positions = [
+        'article_inner' => [ 7 ]
+    ];
+
+    /**
      * Displays the search results with the google algorithm.
      *
      * @param Request $request The request object.
@@ -29,7 +43,7 @@ class SearchController extends Controller
      */
     public function googleAction()
     {
-        list($positions, $advertisements) = ArticleController::getAds();
+        list($positions, $advertisements) = $this->getAdvertisements();
 
         return $this->render('search/search.tpl', [
             'ads_positions'  => $positions,
