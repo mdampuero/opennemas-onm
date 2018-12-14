@@ -127,38 +127,6 @@ class Controller extends SymfonyController
     }
 
     /**
-     * Returns information about a template
-     *
-     * @return array
-     */
-    public function getExpireDate()
-    {
-        $data = null;
-
-        // If the template is cached, fetch the dates from it
-        if ($this->view->caching && $this->view->cache_lifetime) {
-            $templateObject = array_shift($this->view->template_objects);
-
-            $creationDate = new \DateTime();
-            $creationDate->setTimeStamp($templateObject->cached->timestamp);
-            $creationDate->setTimeZone(new \DateTimeZone('UTC'));
-
-            $expires    = $templateObject->cached->timestamp + $this->view->cache_lifetime;
-            $expireDate = new \DateTime();
-            $expireDate->setTimeStamp($expires);
-            $expireDate->setTimeZone(new \DateTimeZone('UTC'));
-
-            $data = [
-                'creation_date' => $creationDate,
-                'expire_date'   => $expireDate,
-                'max_age'       => $expires - time(),
-            ];
-        }
-
-        return $data;
-    }
-
-    /**
      * Renders a template.
      *
      * @param string   $view       The view name.
