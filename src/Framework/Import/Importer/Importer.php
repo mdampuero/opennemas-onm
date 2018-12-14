@@ -125,11 +125,9 @@ class Importer
             throw new \Exception(_('Content already imported'));
         }
 
-        $category = $this->getCategory($category);
+        $category = $this->getCategory($resource, $category);
         $author   = $this->getAuthor($resource, $author);
-
-        $data = $this->getData($resource, $category, $author, $enabled, $target);
-
+        $data     = $this->getData($resource, $category, $author, $enabled, $target);
         if ($resource->type === 'photo') {
             $photo = new \Photo();
             $id    = $photo->createFromLocalFile($data);
@@ -303,13 +301,22 @@ class Importer
      *
      * @return integer The category for contents.
      */
-    protected function getCategory($category = null)
+    protected function getCategory($resource, $category = null)
     {
         if (!empty($category)) {
             return $category;
         }
 
         if ($this->autoImport()) {
+            // Check if resource category has mapping
+            if (array_key_exists('categories_map', $this->config)) {
+                foreach ($this->config['categories_map'] as $map) {
+                    if ($map->slug == $resource->category) {
+                        return $map->id;
+                    }
+                }
+            }
+
             return $this->config['category'];
         }
 
@@ -330,7 +337,12 @@ class Importer
      */
     protected function getData($resource, $category, $author, $enabled, $target)
     {
-        $fm   = getService('data.manager.filter');
+        $ts = $this->container->get('api.service.tag');
+
+        $tags = $ts->responsify(
+            $ts->getListByString($resource->title)['items']
+        );
+
         $data = [
             'category'            => $category,
             'content_status'      => $enabled,
@@ -340,8 +352,7 @@ class Importer
             'fk_publisher'        => $this->getAuthor($resource, $author),
             'fk_user_last_editor' => $this->getAuthor($resource, $author),
             'in_home'             => 0,
-            'tag_ids'             => getService('api.service.tag')
-                ->getTagIdsFromStr($resource->title),
+            'tags'                => $tags,
             'title'               => $resource->title,
             'urn_source'          => $resource->urn,
             'with_comment'        => $this->getComments(),

@@ -66,7 +66,7 @@ class LettersController extends Controller
             'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
             'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'body'           => $request->request->get('body', ''),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($letter->create($data)) {
@@ -98,9 +98,8 @@ class LettersController extends Controller
      */
     public function showAction(Request $request)
     {
-        $id = $request->query->getDigits('id', null);
-
-        $letter = new \Letter($id);
+        $id    = $request->query->getDigits('id', null);
+        $letter = $this->get('entity_repository')->find('Letter', $id);
 
         if (!empty($letter->image)) {
             $photo1 = new \Photo($letter->image);
@@ -116,23 +115,21 @@ class LettersController extends Controller
             return $this->redirect($this->generateUrl('admin_letters'));
         }
 
-        $auxTagIds       = $letter->getContentTags($letter->id);
-        $letter->tag_ids = array_key_exists($letter->id, $auxTagIds) ?
-            $auxTagIds[$letter->id] :
-            [];
+        $tags = [];
+
+        if (!empty($letter->tag_ids)) {
+            $ts   = $this->get('api.service.tag');
+            $tags = $ts->responsify($ts->getListByIds($letter->tag_ids)['items']);
+        }
 
         $ls = $this->get('core.locale');
-        return $this->render(
-            'letter/new.tpl',
-            [
-                'letter' => $letter,
-                'enableComments' => $this->get('core.helper.comment')
-                    ->enableCommentsByDefault(),
-                'locale'         => $ls->getRequestLocale('frontend'),
-                'tags'           => $this->get('api.service.tag')
-                    ->getListByIdsKeyMapped($letter->tag_ids)['items']
-            ]
-        );
+        return $this->render('letter/new.tpl', [
+            'letter'         => $letter,
+            'enableComments' => $this->get('core.helper.comment')
+                ->enableCommentsByDefault(),
+            'locale'         => $ls->getRequestLocale('frontend'),
+            'tags'           => $tags
+        ]);
     }
 
     /**
@@ -172,7 +169,7 @@ class LettersController extends Controller
             'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
             'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'body'           => $request->request->filter('body', ''),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($letter->update($data)) {

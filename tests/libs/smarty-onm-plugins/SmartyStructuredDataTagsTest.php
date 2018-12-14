@@ -47,7 +47,6 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
 
         $this->ts = $this->getMockBuilder('TagService')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getTagsSepByCommas' ])
             ->getMock();
 
         $this->cm = $this->getMockBuilder('CategoryManager')
@@ -97,9 +96,6 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->any())
             ->method('getUri')
             ->willReturn('http://route/to/content.html');
-
-        $this->ts->expects($this->any())->method('getTagsSepByCommas')
-            ->willReturn('foo, bar, baz, thud');
     }
 
     /**

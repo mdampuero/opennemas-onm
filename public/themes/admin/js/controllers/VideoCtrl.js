@@ -2,8 +2,8 @@
  * Handle actions for poll inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
-  '$controller', '$rootScope', '$scope', '$sce', '$timeout', 'http',
-  function($controller, $rootScope, $scope, $sce, $timeout, http) {
+  '$compile', '$controller', '$rootScope', '$scope', '$sce', '$timeout', 'http',
+  function($compile, $controller, $rootScope, $scope, $sce, $timeout, http) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -21,27 +21,27 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @param {Array}  tags     Array with all the tags needed for the video
      */
     $scope.init = function(video, locale, tags) {
-      $scope.tag_ids          = video !== null ? video.tag_ids : [];
-      $scope.locale           = locale;
-      $scope.tags             = tags;
+      $scope.locale = locale;
+      $scope.tags   = tags;
+
       if (!$scope.title) {
         $scope.loading_data     = false;
         $scope.external_content = '';
-      } else {
-        $scope.watchTagIds('title');
       }
     };
 
     /**
-     * @function getTagsAutoSuggestedFields
-     * @memberOf VideoCtrl
+     * @function generateTagsFrom
+     * @memberOf InnerCtrl
      *
      * @description
-     *   Method to method to retrieve th title for the autosuggested words
+     *   Returns a string to use when clicking on "Generate" button for
+     *   tags component.
      *
+     * @return {String} The string to generate tags from.
      */
-    $scope.getTagsAutoSuggestedFields = function() {
-      return $scope.title ? $scope.title : $('#title').val();
+    $scope.generateTagsFrom = function() {
+      return $('#title').val();
     };
 
     $scope.getVideoData = function() {
@@ -59,9 +59,10 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         function(response) {
           $scope.external_content = $sce.trustAsHtml(response.data);
           $scope.loading_data     = false;
+
           $timeout(function() {
-            $scope.loadAutoSuggestedTags();
-          }, 0);
+            angular.element('.tags-input-buttons .btn-info').triggerHandler('click');
+          }, 250);
         }
       );
     };

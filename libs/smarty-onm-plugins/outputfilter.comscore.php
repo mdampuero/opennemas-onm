@@ -65,24 +65,26 @@ function addComScoreCode($smarty, $output, $type = null)
                 </script>
             </amp-analytics>
             <!-- End comScore -->';
-    } else {
-        $code = '<!-- BegincomScore Tag -->'
-            . '<script>'
-            . 'var _comscore = _comscore || [];'
-            . '_comscore.push({ c1: "2", c2: "' . $config['page_id'] . '" });'
-            . '(function() {'
-            . 'var s = document.createElement("script"), '
-            . 'el = document.getElementsByTagName("script")[0]; s.async = true;'
-            . 's.src = (document.location.protocol == "https:" '
-            . '? "https://sb" :"http://b") + ".scorecardresearch.com/beacon.js";'
-            . 'el.parentNode.insertBefore(s, el);'
-            . '})();'
-            . '</script>'
-            . '<noscript>'
-            . '<img src="http://b.scorecardresearch.com/p?c1=2&c2=' . $config['page_id'] . '&cv=2.0&cj=1" />'
-            . '</noscript>'
-            . '<!-- EndcomScore  Tag -->';
+
+        return preg_replace('@(<body.*>)@', '${1}' . "\n" . $code, $output);
     }
 
-    return str_replace('</body>', $code . '</body>', $output);
+    $code = '<!-- BegincomScore Tag -->'
+        . '<script>'
+        . 'var _comscore = _comscore || [];'
+        . '_comscore.push({ c1: "2", c2: "' . $config['page_id'] . '" });'
+        . '(function() {'
+        . 'var s = document.createElement("script"), '
+        . 'el = document.getElementsByTagName("script")[0]; s.async = true;'
+        . 's.src = (document.location.protocol == "https:" '
+        . '? "https://sb" :"http://b") + ".scorecardresearch.com/beacon.js";'
+        . 'el.parentNode.insertBefore(s, el);'
+        . '})();'
+        . '</script>'
+        . '<noscript>'
+        . '<img src="http://b.scorecardresearch.com/p?c1=2&c2=' . $config['page_id'] . '&cv=2.0&cj=1" />'
+        . '</noscript>'
+        . '<!-- EndcomScore  Tag -->';
+
+    return str_replace('</head>', $code . '</head>', $output);
 }

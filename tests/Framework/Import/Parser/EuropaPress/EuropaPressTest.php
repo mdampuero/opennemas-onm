@@ -74,7 +74,7 @@ class EuropaPressTest extends \PHPUnit\Framework\TestCase
 
         $this->text->agency_name  = 'EuropaPress';
         $this->text->body         = 'Sample body';
-        $this->text->category     = 'Politics POL';
+        $this->text->category     = 'POL';
         $this->text->created_time = \DateTime::createFromFormat(
             'd/m/Y H:i:s',
             '21/09/2015 18:16:04',
@@ -115,7 +115,7 @@ class EuropaPressTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEmpty($this->parser->getCategory($this->invalid));
 
-        $this->assertEquals(_('Politics POL'), $this->parser->getCategory($this->valid));
+        $this->assertEquals('POL', $this->parser->getCategory($this->valid));
 
         $this->assertEquals('XYZ', $this->parser->getCategory($this->miss));
     }

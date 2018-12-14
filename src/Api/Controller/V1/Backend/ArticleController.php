@@ -79,13 +79,19 @@ class ArticleController extends Controller
             );
         }
 
-        $extra         = $this->getExtraData(false);
-        $extra         = array_merge($extra, $this->getPhotos($article));
-        $extra         = array_merge($extra, $this->getVideos($article));
-        $extra         = array_merge($extra, $this->getAlbums($article));
-        $extra         = array_merge($extra, $this->getRelated($article));
-        $extra['tags'] = $this->get('api.service.tag')
-            ->getListByIdsKeyMapped($article->tag_ids)['items'];
+        $extra = $this->getExtraData(false);
+        $extra = array_merge($extra, $this->getPhotos($article));
+        $extra = array_merge($extra, $this->getVideos($article));
+        $extra = array_merge($extra, $this->getAlbums($article));
+        $extra = array_merge($extra, $this->getRelated($article));
+
+        if (!empty($article->tag_ids)) {
+            $ts = $this->get('api.service.tag');
+
+            $extra['tags'] = $ts->responsify(
+                $ts->getListByIds($article->tag_ids)['items']
+            );
+        }
 
         return new JsonResponse([ 'article' => $article, 'extra' => $extra ]);
     }
@@ -129,7 +135,7 @@ class ArticleController extends Controller
      */
     protected function getExtraData($all = true)
     {
-        $extra = [];
+        $extra = [ 'tags' => [] ];
 
         $security   = $this->get('core.security');
         $converter  = $this->get('orm.manager')->getConverter('Category');

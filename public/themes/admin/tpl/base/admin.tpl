@@ -46,7 +46,6 @@
       @Common/src/webarch/css/magic_space.css,
       @Common/src/angular-dynamic-image/less/main.less,
       @Common/src/angular-onm-pagination/less/main.less,
-      @Common/src/angular-tag/less/main.less,
       @Common/src/sidebar/less/main.less,
       @Common/src/photo-editor/css/photo-editor.css,
       @Common/src/opennemas-webarch/less/main.less" filters="cssrewrite,less" output="common"}
@@ -82,14 +81,17 @@
         reset: '{t}reset{/t}',
         apply: '{t}apply{/t}'
       };
-      var tagTranlations = {
-        reload: '{t}Reload{/t}',
-        suggestedTag: '{t}Suggested tags{/t}',
+
+      var strings = {
+        tags: {
+          clear: '{t}Clear{/t}',
+          generate: '{t}Generate{/t}',
+        }
       };
     </script>
   {/block}
 </head>
-<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if array_key_exists('sidebar_pinned', $smarty.session) && $smarty.session._sf2_attributes.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}', '{t}Any{/t}')" >
+<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session && array_key_exists('sidebar_pinned', $smarty.session) && $smarty.session._sf2_attributes.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}', '{t}Any{/t}')" >
   {block name="body"}
     <div class="overlay"></div>
     {block name="header"}
@@ -541,7 +543,7 @@
       @Common/src/angular-picker/js/picker.js,
       @Common/src/angular-picker/js/content-picker.js,
       @Common/src/angular-picker/js/media-picker.js,
-      @Common/src/angular-tag/js/onm-tag.js,
+      @Common/src/onm-tags-input/js/onm-tags-input.js,
       @Common/src/angular-query-manager/query-manager.js,
       @Common/src/angular-renderer/renderer.js,
       @Common/src/angular-repeat-finish/repeat-finish.js,

@@ -161,6 +161,7 @@
                 </th>
                 <th>{t}Title{/t}</th>
                 <th class="center hidden-xs hidden-sm" style="width: 140px;">{t}Origin{/t}</th>
+                <th class="center hidden-xs hidden-sm" style="width: 140px;">{t}Category{/t}</th>
                 <th class="center hidden-xs hidden-sm" style="width: 140px;">{t}Date{/t}</th>
                 <th class="right hidden-xs" style="width: 50px;">{t}Priority{/t}</th>
               </tr>
@@ -180,7 +181,12 @@
                   </div>
                   <p class="visible-xs-block visible-sm-block">
                     <span class="label label-important m-r-5" style="background-color:[% extra.servers[content.source].color %];">
-                      [% extra.servers[content.source].agency_string %]
+                      [% extra.servers[content.source].name %]
+                    </span>
+                  </p>
+                  <p class="visible-xs-block visible-sm-block">
+                    <span>
+                      [% content.category %]
                     </span>
                   </p>
                   <p class="visible-xs-block visible-sm-block">
@@ -226,8 +232,13 @@
                   </div>
                 </td>
                 <td class="nowrap center hidden-xs hidden-sm">
-                  <span class="badge badge-success" style="background-color:[% extra.servers[content.source].color %];">
-                    [% extra.servers[content.source].agency_string %]
+                  <span class="badge badge-success" style="background-color:[% extra.servers[content.source].color %]!important;">
+                    [% extra.servers[content.source].name %]
+                  </span>
+                </td>
+                <td class="nowrap center hidden-xs hidden-sm">
+                  <span>
+                    [% content.category %]
                   </span>
                 </td>
                 <td class="nowrap center hidden-xs hidden-sm">

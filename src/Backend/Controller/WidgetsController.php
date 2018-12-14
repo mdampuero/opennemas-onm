@@ -97,12 +97,11 @@ class WidgetsController extends Controller
             $post = $request->request;
 
             $title      = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-            $tagIds     = $this->get('api.service.tag')->getTagIdsFromStr($title);
             $widgetData = [
                 'id'             => $post->getDigits('id'),
                 'action'         => $post->filter('action', null, FILTER_SANITIZE_STRING),
                 'title'          => $title,
-                'tag_ids'        => $tagIds,
+                'tags'           => $this->getTags($title),
                 'content_status' => (int) $post->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'renderlet'      => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
                 'description'    => $post->get('description', ''),
@@ -169,12 +168,11 @@ class WidgetsController extends Controller
         }
 
         $title      = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-        $tagIds     = $this->get('api.service.tag')->getTagIdsFromStr($title);
         $widgetData = [
             'id'              => $id,
             'action'          => $post->filter('action', null, FILTER_SANITIZE_STRING),
             'title'           => $title,
-            'tag_ids'         => $tagIds,
+            'tags'            => $this->getTags($title),
             'content_status'  => (int) $post->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'renderlet'       => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
             'description'     => $post->get('description', ''),
@@ -270,5 +268,19 @@ class WidgetsController extends Controller
             'widgets'    => $widgets,
             'pagination' => $pagination,
         ]);
+    }
+
+    /**
+     * Returns the list of tag ids basing on the advertisement title.
+     *
+     * @param string $title The advertisement title.
+     *
+     * @return array The list of tag ids.
+     */
+    protected function getTags($title)
+    {
+        $ts = $this->get('api.service.tag');
+
+        return $ts->responsify($ts->getListByString($title)['items']);
     }
 }

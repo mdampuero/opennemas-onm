@@ -471,13 +471,24 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getListByIds when invalid list of ids provided .
+     * Tests getListByIds when the list of ids is empty.
+     */
+    public function testGetListByIdsWhenEmptyIds()
+    {
+        $this->assertEquals(
+            [ 'items' => [], 'total' => 0 ],
+            $this->service->getListByIds([])
+        );
+    }
+
+    /**
+     * Tests getListByIds when invalid list of ids provided.
      *
      * @expectedException \Api\Exception\GetListException
      */
     public function testGetListByIdsWhenInvalidIds()
     {
-        $this->service->getListByIds([]);
+        $this->service->getListByIds(null);
     }
 
     /**

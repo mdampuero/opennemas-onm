@@ -249,6 +249,8 @@ abstract class AssetManager
                 return DS . str_replace(SITE_PATH, '', $a);
             }, $asset);
 
+            sort($asset);
+
             $asset = implode(',', $asset);
             $src   = $name . '.' . $this->extension;
         }

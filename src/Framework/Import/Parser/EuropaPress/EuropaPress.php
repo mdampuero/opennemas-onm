@@ -23,33 +23,6 @@ class EuropaPress extends Parser
     public function __construct($factory)
     {
         parent::__construct($factory);
-
-        $this->categories = [
-            'ACE' => _('Society'),
-            'AGR' => _('Agriculture'),
-            'AYU' => _('Council'),
-            'CUL' => _('Society (CUL)'),
-            'CYA' => _('Event CYA'),
-            'CYT' => _('Society CYT'),
-            'DCG' => _('Disturbs'),
-            'DEP' => _('Sports'),
-            'ECO' => _('Economy'),
-            'EDU' => _('Society Education EDU'),
-            'GAL' => _('GALICIA'),
-            'JEI' => _('JUSTICIA'),
-            'MEA' => _('Environment'),
-            'OPI' => _('Opinion'),
-            'OPL' => _('Politics OPL'),
-            'POL' => _('Politics POL'),
-            'PRT' => _('TV Guide'),
-            'REL' => _('Society REL'),
-            'SAN' => _('Society SAN'),
-            'SOC' => _('Society SOC'),
-            'SUC' => _('Event SUC'),
-            'SYS' => _('Society SYS'),
-            'TOR' => _('Society Toros'),
-            'TRI' => _('Justice')
-        ];
     }
 
     /**
@@ -97,10 +70,6 @@ class EuropaPress extends Parser
         }
 
         $category = (string) $data->SECCION;
-
-        if (array_key_exists($category, $this->categories)) {
-            return $this->categories[$category];
-        }
 
         return $category;
     }

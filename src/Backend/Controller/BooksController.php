@@ -161,7 +161,7 @@ class BooksController extends Controller
             'category'       => $request->request->getInt('category', 0),
             'position'       => $request->request->getInt('position', 1),
             'content_status' => $request->request->getInt('content_status', 0),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         $book = new \Book();
@@ -206,9 +206,8 @@ class BooksController extends Controller
      */
     public function showAction(Request $request)
     {
-        $id = $request->query->getInt('id');
-
-        $book = new \Book($id);
+        $id   = $request->query->getInt('id');
+        $book = $this->get('entity_repository')->find('Book', $id);
 
         if (is_null($book->id)) {
             $this->get('session')->getFlashBag()->add(
@@ -219,10 +218,12 @@ class BooksController extends Controller
             return $this->redirect($this->generateUrl('admin_books'));
         }
 
-        $auxTagIds     = $book->getContentTags($book->id);
-        $book->tag_ids = array_key_exists($book->id, $auxTagIds) ?
-            $auxTagIds[$book->id] :
-            [];
+        $tags = [];
+
+        if (!empty($book->tag_ids)) {
+            $ts   = $this->get('api.service.tag');
+            $tags = $ts->responsify($ts->getListByIds($book->tag_ids)['items']);
+        }
 
         if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
             && !$book->isOwner($this->getUser()->id)
@@ -239,9 +240,8 @@ class BooksController extends Controller
         return $this->render('book/new.tpl', [
             'book'     => $book,
             'category' => $book->category,
-            'locale'         => $ls->getRequestLocale('frontend'),
-            'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($book->tag_ids)['items']
+            'locale'   => $ls->getRequestLocale('frontend'),
+            'tags'     => $tags
         ]);
     }
 
@@ -304,7 +304,7 @@ class BooksController extends Controller
             'category'       => $request->request->getInt('category', 0),
             'position'       => $request->request->getInt('position', 1),
             'content_status' => $request->request->getInt('content_status', 0),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($book->update($data)) {

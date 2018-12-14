@@ -21,10 +21,8 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
      * @param {Array}  tags     Array with all the tags needed for the special
      */
     $scope.init = function(special, locale, tags) {
-      $scope.tag_ids = special !== null ? special.tag_ids : [];
-      $scope.locale  = locale;
-      $scope.tags    = tags;
-      $scope.watchTagIds('title');
+      $scope.locale = locale;
+      $scope.tags   = tags;
     };
 
     /**
@@ -42,18 +40,6 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
         $scope.ids.push(photos[i].id);
         $scope.photos.push(photos[i].photo);
       }
-    };
-
-    /**
-     * @function getTagsAutoSuggestedFields
-     * @memberOf SpecialCtrl
-     *
-     * @description
-     *   Method to method to retrieve th title for the autosuggested words
-     *
-     */
-    $scope.getTagsAutoSuggestedFields = function() {
-      return $scope.title;
     };
 
     /**

@@ -187,6 +187,13 @@ class OpinionsController extends Controller
                 ->get(OpinionsController::EXTRA_INFO_TYPE);
         }
 
+        $tags = [];
+
+        if (!empty($opinion->tag_ids)) {
+            $ts   = $this->get('api.service.tag');
+            $tags = $ts->responsify($ts->getListByIds($opinion->tag_ids)['items']);
+        }
+
         return $this->render('opinion/new.tpl', [
             'opinion'        => $opinion,
             'authors'        => $authors,
@@ -195,8 +202,7 @@ class OpinionsController extends Controller
             'extra_fields'   => $extraFields,
             'locale'         => $this->get('core.locale')
                 ->getRequestLocale('frontend'),
-            'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($opinion->tag_ids)['items']
+            'tags'           => $tags
         ]);
     }
 
@@ -265,7 +271,7 @@ class OpinionsController extends Controller
             'params'              => [
                 'only_registered' => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
             ],
-            'tag_ids'             => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'             => json_decode($request->request->get('tags', ''), true)
         ];
 
         $data = $this->loadMetaDataFields($data, $request->request, OpinionsController::EXTRA_INFO_TYPE);
@@ -365,7 +371,7 @@ class OpinionsController extends Controller
             'params'              => [
                 'only_registered' => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
             ],
-            'tag_ids'             => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'             => json_decode($request->request->get('tags', ''), true)
         ];
 
         $data = $this->loadMetaDataFields($data, $request->request, OpinionsController::EXTRA_INFO_TYPE);

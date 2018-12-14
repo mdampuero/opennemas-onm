@@ -46,26 +46,9 @@ api_v1_backend_tags_list:
     options:
         expose: true
 
-api_v1_backend_tags_valid_new_tag:
+api_v1_backend_tags_validate:
     path:     /tags/validator
-    defaults: { _controller: ApiBundle:V1/Backend/Tag:validNewTag }
-    methods:  [ GET ]
-    options:
-        expose: true
-
-api_v1_backend_tags_suggester:
-    path:     /tags/suggester/{languageId}/{tag}
-    defaults: { _controller: ApiBundle:V1/Backend/Tag:suggester }
-    methods:  [ GET ]
-    options:
-        expose: true
-    requirements:
-        tag:        '[^/]+'
-        languageId: '[^/]+'
-
-api_v1_backend_tags_auto_suggester:
-    path:     /tags/autosuggester
-    defaults: { _controller: ApiBundle:V1/Backend/Tag:autoSuggester }
+    defaults: { _controller: ApiBundle:V1/Backend/Tag:validate }
     methods:  [ GET ]
     options:
         expose: true

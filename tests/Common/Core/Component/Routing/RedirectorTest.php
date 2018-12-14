@@ -925,7 +925,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             'content_type' => 'norf',
             'enabled'      => true,
             'redirection'  => true,
-            'source'       => '^f.*r-([0-9]+)$',
+            'source'       => '^f.*r-([0-9]+)(-fred)?$',
             'target'       => '$1',
             'type'         => 4
         ]);
@@ -933,8 +933,15 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->redirector, 'getTarget');
         $method->setAccessible(true);
 
-        $this->request->expects($this->once())->method('getRequestUri')
+        $this->request->expects($this->at(0))->method('getRequestUri')
+            ->willReturn('/foobar-34-fred');
+        $this->request->expects($this->at(1))->method('getRequestUri')
             ->willReturn('/foobar-345');
+
+        $this->assertEquals(
+            34,
+            $method->invokeArgs($this->redirector, [ $this->request, $url ])
+        );
 
         $this->assertEquals(
             345,

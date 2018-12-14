@@ -64,7 +64,7 @@
               <div class="form-group">
                 <label for="" class="form-label">{t}Title{/t}</label>
                 <div class="controls">
-                  <input type="text" id="title" name="title" ng-model="title" value="{$attaches->title|clearslash}" class="form-control" required>
+                  <input type="text" id="title" name="title" ng-blur="generate()" ng-model="title" value="{$attaches->title|clearslash}" class="form-control" required>
                 </div>
               </div>
               <div class="form-group">
@@ -88,7 +88,7 @@
               <div class="form-group">
                 <label for="metadata" class="form-label">{t}Tags{/t}</label>
                 <div class="controls">
-                  <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="newAndExistingTagsFromTagList" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
+                  {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
                 </div>
               </div>
               <div class="form-group">

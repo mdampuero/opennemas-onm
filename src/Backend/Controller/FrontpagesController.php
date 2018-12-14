@@ -352,6 +352,10 @@ class FrontpagesController extends Controller
         $contents =
             $this->container->get('entity_repository')->findMulti($contentsMap);
 
+        // Filter unpublished contents
+        $cm       = new \ContentManager;
+        $contents = $cm->getAvailable($contents);
+
         $contentsInHomepage = [];
         foreach ($contents as $content) {
             $contentsInHomepage[$content->id] = $content;
@@ -371,7 +375,6 @@ class FrontpagesController extends Controller
             }
         }
 
-        $cm = new \ContentManager;
         if (count($imageIdsList) > 0) {
             $imageList = $cm->find('Photo', 'pk_content IN (' . implode(',', $imageIdsList) . ')');
         } else {

@@ -20,7 +20,7 @@
   (function() {
     var am = document.createElement('script');
 
-    am.src   = '/assets/src/onm-am/am.{{$time}}.js';
+    am.src   = '/assets/src/onm-am/am.{{$smarty.const.DEPLOYED_AT}}.js';
     am.async = true;
 
     (document.getElementsByTagName('head')[0] ||

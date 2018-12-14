@@ -126,7 +126,7 @@ class AlbumsController extends Controller
             'starttime'      => $request->request
                 ->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'params'         => $request->request->get('params', []),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         $album = new \Album();
@@ -202,9 +202,8 @@ class AlbumsController extends Controller
      */
     public function showAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
-
-        $album = new \Album($id);
+        $id    = $request->query->getDigits('id');
+        $album = $this->get('entity_repository')->find('Album', $id);
 
         if (is_null($album->id)) {
             $this->get('session')->getFlashBag()->add(
@@ -215,10 +214,12 @@ class AlbumsController extends Controller
             return $this->redirect($this->generateUrl('admin_albums'));
         }
 
-        $auxTagIds      = $album->getContentTags($album->id);
-        $album->tag_ids = array_key_exists($album->id, $auxTagIds) ?
-            $auxTagIds[$album->id] :
-            [];
+        $tags = [];
+
+        if (!empty($album->tag_ids)) {
+            $ts   = $this->get('api.service.tag');
+            $tags = $ts->responsify($ts->getListByIds($album->tag_ids)['items']);
+        }
 
         if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
             && !$album->isOwner($this->getUser()->id)
@@ -242,8 +243,7 @@ class AlbumsController extends Controller
                 ->get('comments_config'),
             'locale'         => $this->get('core.locale')
                 ->getRequestLocale('frontend'),
-            'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($album->tag_ids)['items']
+            'tags'           => $tags
         ]);
     }
 
@@ -313,7 +313,7 @@ class AlbumsController extends Controller
             'starttime'      => $requestPost
                 ->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'params'         => $requestPost->get('params', []),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($album->update($data)) {

@@ -102,7 +102,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="title" >
-                    <input class="form-control" name="title" ng-model="title" ng-trim="false" required type="text" value="{$opinion->title|clearslash|escape:"html"}"/>
+                    <input class="form-control" name="title" ng-blur="generate()" ng-model="title" ng-trim="false" required type="text" value="{$opinion->title|clearslash|escape:"html"}"/>
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': title.length >= 50 && title.length < 100, 'text-danger': title.length >= 100 }">
                         [% title.length %]
@@ -210,7 +210,7 @@
                       {t}Tags{/t}
                     </label>
                     <div class="controls">
-                      <onm-tag ng-model="tag_ids" locale="locale" tags-list="tags" check-new-tags="newAndExistingTagsFromTagList" get-suggested-tags="getSuggestedTags" load-auto-suggested-tags="loadAutoSuggestedTags" suggested-tags="suggestedTags" placeholder="{t}Write a tag and press Enter...{/t}"/>
+                      {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
                     </div>
                   </div>
                   {if is_object($opinion)}

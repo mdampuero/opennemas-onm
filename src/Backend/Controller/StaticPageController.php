@@ -152,13 +152,20 @@ class StaticPageController extends Controller
                 ->getRepository('Content')
                 ->find($id);
 
-            $entity->id      = $entity->pk_content;
-            $contentAux      = new \Content();
+            $entity->id = $entity->pk_content;
+
+            $contentAux = new \Content();
+
             $contentAux->id  = $entity->id;
-            $auxTagIds       = $contentAux->getContentTags($entity->id);
-            $entity->tag_ids = array_key_exists($entity->id, $auxTagIds) ?
-                $auxTagIds[$entity->id] :
-                [];
+            $auxTagIds       = $contentAux->getContentTags($entity->id)[$entity->id];
+            $entity->tag_ids = $auxTagIds;
+
+            $tags = [];
+
+            if (!empty($auxTagIds)) {
+                $ts   = $this->get('api.service.tag');
+                $tags = $ts->responsify($ts->getListByIds($auxTagIds)['items']);
+            }
         } catch (EntityNotFoundException $e) {
             $request->getSession()->getFlashBag()->add(
                 'error',
@@ -167,12 +174,10 @@ class StaticPageController extends Controller
             return $this->redirect($this->generateUrl('backend_static_pages_list'));
         }
 
-        $ls = $this->get('core.locale');
         return $this->render('static_pages/new.tpl', [
             'page'   => $entity,
-            'locale' => $ls->getRequestLocale('frontend'),
-            'tags'   => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($entity->tag_ids)['items']
+            'locale' => $this->get('core.locale')->getRequestLocale('frontend'),
+            'tags'   => $tags
         ]);
     }
 
@@ -205,8 +210,13 @@ class StaticPageController extends Controller
             return $this->redirect($url);
         }
 
-        $entity->setData($converter->objectify($request->request->all()));
-        $tagIds = json_decode($request->request->get('tag_ids', ''), true);
+        $data = $request->request->all();
+        $tags = json_decode($request->request->get('tags', ''), true);
+
+        $data['tags']    = null;
+        $data['tag_ids'] = null;
+
+        $entity->setData($converter->objectify($data));
 
         $entity->changed = new \DateTime();
 
@@ -219,9 +229,11 @@ class StaticPageController extends Controller
         $entity->content_status = (empty($status)) ? 0 : 1;
 
         try {
-            $contentAux      = new \Content();
-            $contentAux->id  = $id;
-            $entity->tag_ids = $contentAux->addTags($tagIds);
+            $contentAux     = new \Content();
+            $contentAux->id = $entity->pk_content;
+
+            $contentAux->addTags($tags);
+
             $em->persist($entity);
 
             // TODO: Remove when static pages list ported to the new ORM

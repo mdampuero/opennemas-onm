@@ -20,7 +20,7 @@ class NitfEfe extends Nitf
     public function checkFormat($data)
     {
         if (parent::checkFormat($data)
-            && strpos($this->getAgencyName($data), 'EFE')  !== false
+            && strpos($this->getAgencyName($data), 'EFE') !== false
         ) {
             return true;
         }

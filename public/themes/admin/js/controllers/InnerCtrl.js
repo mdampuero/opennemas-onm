@@ -31,6 +31,31 @@
         $scope.overlay = {};
 
         /**
+         * @function generate
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *   Forces automatic field generation.
+         */
+        $scope.generate = function() {
+          $scope.flags.generate = { slug: true, tags: true };
+        };
+
+        /**
+         * @function generateTagsFrom
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *   Returns a string to use when clicking on "Generate" button for
+         *   tags component.
+         *
+         * @return {String} The string to generate tags from.
+         */
+        $scope.generateTagsFrom = function() {
+          return $scope.title;
+        };
+
+        /**
          * @function removeImage
          * @memberOf InnerCtrl
          *

@@ -95,7 +95,7 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Content{/t} {t}to{/t} {t}Content{/t}', value: 0}, { name: 'URI {t}to{/t} {t}Content{/t}', value: 1 }, { name: '{t}Regex{/t} {t}to{/t} {t}Content{/t}', value: 2 }, { name: 'URI {t}to{/t} URI', value: 3 } ]">
+            <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Content{/t} {t}to{/t} {t}Content{/t}', value: 0}, { name: 'URI {t}to{/t} {t}Content{/t}', value: 1 }, { name: 'URI {t}to{/t} URI', value: 2 }, { name: 'Regex {t}to{/t} Content', value: 3 }, { name: 'Regex {t}to{/t} URI', value: 4 } ]">
               <ui-select name="type" theme="select2" ng-model="criteria.type">
                 <ui-select-match>
                   <strong>{t}Type{/t}:</strong> [% $select.selected.name %]

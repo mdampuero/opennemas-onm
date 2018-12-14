@@ -87,15 +87,17 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
             return;
         }
 
-        $this->container->get('error.log')->error($exception->getMessage()
-            . ' (' . $exception->getFile() . ':' . $exception->getLine() . ')');
+        $this->container->get('error.log')->error(
+            get_class($exception) . ':' . $exception->getMessage()
+            . ' (' . $exception->getFile() . ':' . $exception->getLine() . ')'
+        );
 
         if ($exception instanceof AuthenticationException) {
             $event->setResponse(new JsonResponse('', 401));
             return;
         }
 
-        $msg->add($this->getMessage($exception), 'error', $exception->getCode());
+        $msg->add($this->getMessage($exception), 'error', $exception->getStatusCode());
 
         $event->setResponse(new JsonResponse($msg->getMessages(), $msg->getCode()));
     }
