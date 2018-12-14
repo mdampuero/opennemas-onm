@@ -231,32 +231,11 @@ class UrlGeneratorHelper
             $type = 'blog';
         }
 
-        $authorName = 'author';
-        if ($content->fk_author == 0) {
-            if ((int) $content->type_opinion == 1) {
-                $authorName = 'editorial';
-            } elseif ((int) $content->type_opinion == 2) {
-                $authorName = 'director';
-            }
-        } else {
-            $authorAux = $content->author;
-            if (!is_object($authorAux)) {
-                $authorAux = $this->container->get('user_repository')
-                    ->find($content->fk_author);
-            }
-
-            if (is_object($authorAux)) {
-                $authorName = $authorAux->name;
-            }
-        }
-
-        $authorName = \Onm\StringUtils::generateSlug($authorName);
-
         return $this->generateUriFromConfig($type, [
             'id'       => sprintf('%06d', $content->id),
             'date'     => date('YmdHis', strtotime($content->created)),
             'slug'     => urlencode($content->slug),
-            'category' => urlencode($authorName),
+            'category' => urlencode($this->getAuthorName($content)),
         ]);
     }
 
@@ -310,6 +289,40 @@ class UrlGeneratorHelper
         $uriTemplate = $config[$contentType];
 
         return preg_replace($keys, $values, $uriTemplate);
+    }
+
+    /**
+     * Returns the author name to use in the URI for an opinion.
+     *
+     * @param Opinion $opinion The opinion.
+     *
+     * @return string The author name.
+     */
+    protected function getAuthorName($opinion)
+    {
+        if (!empty($opinion->fk_author)) {
+            if (!is_object($opinion->author)) {
+                $opinion->author = $this->container->get('user_repository')
+                    ->find($opinion->fk_author);
+            }
+
+            if (!empty($opinion->author)) {
+                return $this->container->get('data.manager.filter')
+                    ->set($opinion->author->name)
+                    ->filter('slug')
+                    ->get();
+            }
+        }
+
+        if ((int) $opinion->type_opinion == 1) {
+            return 'editorial';
+        }
+
+        if ((int) $opinion->type_opinion == 2) {
+            return 'director';
+        }
+
+        return 'author';
     }
 
     /**
