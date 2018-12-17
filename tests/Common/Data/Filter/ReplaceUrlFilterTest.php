@@ -101,7 +101,7 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
 
         $filter->expects($this->once())->method('getTranslation')
             ->with('waldo')
-            ->willReturn([ [ 'pk_content' => 1, 'type' => 'bar'], 'qux' ]);
+            ->willReturn([ json_decode(json_encode([ 'target' => 1, 'content_type' => 'bar'], true)), 'qux' ]);
         $this->ug->expects($this->once())->method('setInstance')
             ->with($this->instance)->willReturn($this->ug);
         $this->ug->expects($this->once())->method('generate')
@@ -130,7 +130,7 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
 
         $filter->expects($this->once())->method('getTranslation')
             ->with('waldo')
-            ->willReturn([ [ 'pk_content' => 1, 'type' => 'bar'], 'qux' ]);
+            ->willReturn([ json_decode(json_encode([ 'target' => 1, 'content_type' => 'bar'], true)), 'qux' ]);
         $this->ug->expects($this->once())->method('setInstance')
             ->with($this->instance)->willReturn($this->ug);
         $this->ug->expects($this->once())->method('generate')
@@ -159,7 +159,7 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
 
         $filter->expects($this->once())->method('getTranslation')
             ->with('waldo')
-            ->willReturn([ [ 'pk_content' => 1, 'type' => 'bar' ], 'qux' ]);
+            ->willReturn([ json_decode(json_encode([ 'target' => 1, 'content_type' => 'bar'], true)), 'qux' ]);
         $this->repository->expects($this->once())->method('find')
             ->with('Bar', 1)->willReturn(null);
 
