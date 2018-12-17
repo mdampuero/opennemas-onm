@@ -34,7 +34,7 @@ orm:
                     table: url
                     columns:
                         id:
-                            type: integer
+                            type:    integer
                             options: { default: null, unsigned: true, autoincrement: true }
                         type:
                             type:    integer
@@ -61,3 +61,9 @@ orm:
                             primary: true
                             unique:  true
                             flags:   {  }
+                        - 
+                            name:    url_content_type_source
+                            columns: [content_type, source]
+                            primary: false
+                            unique:  false
+                            flags:   {}
