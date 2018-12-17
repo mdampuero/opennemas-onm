@@ -73,7 +73,11 @@ class MonographsController extends Controller
      */
     public function frontpageAction(Request $request)
     {
-        $this->page = $request->query->getDigits('page', 1);
+        $page = $request->query->getDigits('page', 1);
+        $epp  = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_in_blog', 10);
+        $epp = 1;//(is_null($epp) || $epp <= 0) ? 10 : $epp;
 
         if (empty($this->categoryName)) {
             $this->categoryName = 'home';
@@ -81,7 +85,7 @@ class MonographsController extends Controller
 
         // Setup templating cache layer
         $this->view->setConfig('specials');
-        $cacheID = $this->view->getCacheId('frontpage', 'special', $this->categoryName, $this->page);
+        $cacheID = $this->view->getCacheId('frontpage', 'special', $this->categoryName, $page);
 
         // Don't execute the action logic if was cached before
         if (($this->view->getCaching() === 0)
@@ -93,6 +97,7 @@ class MonographsController extends Controller
             $filters = [
                 'content_type_name' => [[ 'value' => 'special' ]],
                 'content_status'    => [[ 'value' => 1 ]],
+                'in_home'           => [[ 'value' => 1 ]],
                 'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
                 'starttime'         => [
                     'union' => 'OR',
@@ -112,7 +117,8 @@ class MonographsController extends Controller
                 $filters['pk_fk_content_category'] = [ [ 'value' => $this->category ] ];
             }
 
-            $monographs = $em->findBy($filters, $order, 14);
+            $monographs = $em->findBy($filters, $order, $epp, $page);
+            $total      = count($monographs) + 1;
 
             $tagsIds = [];
             if (!empty($monographs)) {
@@ -134,10 +140,22 @@ class MonographsController extends Controller
                         ->getListByIdsKeyMapped(array_unique($tagsIds))['items']
                 );
             }
+
+            $pagination = $this->get('paginator')->get([
+                'directional' => true,
+                'epp'         => $epp,
+                'maxLinks'    => 0,
+                'page'        => $page,
+                'total'       => $total + 1,
+                'route'       => [
+                    'name'   => 'frontend_monograph_frontpage'
+                ]
+            ]);
         }
 
         return $this->render('special/frontpage_special.tpl', [
             'cache_id'    => $cacheID,
+            'pagination'  => $pagination,
             'x-tags'      => 'monograph-frontpage',
             'x-cache-for' => '+1 day',
         ]);
