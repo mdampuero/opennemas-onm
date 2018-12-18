@@ -41,7 +41,9 @@ class FrontendController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        if (!$ugh->isValid($item, $request->getRequestUri())) {
+        if (!$ugh->isValid($item, $request->getRequestUri())
+            && empty($this->get('request_stack')->getParentRequest())
+        ) {
             return new RedirectResponse($ugh->generate($item));
         }
 
