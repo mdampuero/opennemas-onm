@@ -43,7 +43,7 @@ class ReplaceUrlFilter extends Filter
             }
 
             $content = $this->container->get('entity_repository')
-                ->find(\classify($translation['type']), $translation['pk_content']);
+                ->find(\classify($translation->content_type), $translation->target);
 
             if (empty($content)) {
                 continue;

@@ -109,6 +109,24 @@ class Nitf extends Parser
     }
 
     /**
+     * Returns the category assigned to the resouce
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The category.
+     */
+    public function getCategory($data)
+    {
+        $category = $data->xpath('//head/meta[@name="categoria"]');
+
+        if (empty($category)) {
+            return '';
+        }
+
+        return (string) $category[0]->attributes()->content;
+    }
+
+    /**
      * Returns the created time from the parsed data.
      *
      * @param SimpleXMLObject The parsed data.

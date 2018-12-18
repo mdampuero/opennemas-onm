@@ -177,9 +177,9 @@
     item.src = this.normalize(this.config.url + '/' + ad.id);
 
     item.src += 'category=' + this.config.category +
-      '&module             =' + this.config.extension +
+      '&module=' + this.config.extension +
       '&advertisementGroup =' + this.config.advertisementGroup +
-      '&contentId          =' + this.config.contentId;
+      '&contentId=' + this.config.contentId;
 
     // Dispatch event when iframe loaded
     item.onload = function() {
@@ -265,7 +265,7 @@
       if (!type) {
         var type = parseInt(slot.getAttribute('data-type'));
       }
-      
+
       if (slot.childNodes.length !== 0) {
         continue;
       }
