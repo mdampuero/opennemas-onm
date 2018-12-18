@@ -16,6 +16,7 @@ function smarty_function_get_url($params, &$smarty)
     $content  = $params['item'];
     $absolute = array_key_exists('absolute', $params) && $params['absolute'];
     $escape   = array_key_exists('escape', $params) && $params['escape'];
+    $isAmp    = array_key_exists('amp', $params) && $params['amp'];
 
     // If the article has an external link return it
     if (!empty($content->params)
@@ -36,6 +37,10 @@ function smarty_function_get_url($params, &$smarty)
 
     $url = $smarty->getContainer()->get('core.helper.l10n_route')
         ->localizeUrl($url, '');
+
+    if ($isAmp && $content->content_type_name == 'article') {
+        $url = str_replace('.html', '.amp.html', $url);
+    }
 
     return $escape ? rawurlencode($url) : $url;
 }
