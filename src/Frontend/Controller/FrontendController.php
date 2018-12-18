@@ -165,11 +165,12 @@ class FrontendController extends Controller
         ]);
 
         if (!empty($item)) {
-            $params['contentId'] = $item->id;
-            $params['x-tags']    = $params['x-tags'] . ',' . $item->id;
-            $params['o_token']   = $this->get('core.helper.subscription')
+            $params['o_token'] = $this->get('core.helper.subscription')
                 ->getToken($item);
 
+            $params['x-tags'] .= ',' . $item->id;
+
+            $params['contentId']   = $item->id;
             $params['x-cacheable'] = empty($params['o_token']);
         }
 
