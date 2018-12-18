@@ -77,7 +77,7 @@ class MonographsController extends Controller
         $epp  = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('items_in_blog', 10);
-        $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
+        $epp  = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
         if (empty($this->categoryName)) {
             $this->categoryName = 'home';
