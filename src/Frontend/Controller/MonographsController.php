@@ -77,7 +77,7 @@ class MonographsController extends Controller
         $epp  = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('items_in_blog', 10);
-        $epp = 1;//(is_null($epp) || $epp <= 0) ? 10 : $epp;
+        $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
         if (empty($this->categoryName)) {
             $this->categoryName = 'home';
@@ -133,29 +133,28 @@ class MonographsController extends Controller
                     }
                 }
 
-                $this->view->assign(['specials' => $monographs]);
-                $this->view->assign(
-                    'tags',
-                    $this->get('api.service.tag')
-                        ->getListByIdsKeyMapped(array_unique($tagsIds))['items']
-                );
-            }
+                $pagination = $this->get('paginator')->get([
+                    'directional' => true,
+                    'epp'         => $epp,
+                    'maxLinks'    => 0,
+                    'page'        => $page,
+                    'total'       => $total + 1,
+                    'route'       => [
+                        'name'   => 'frontend_monograph_frontpage'
+                    ]
+                ]);
 
-            $pagination = $this->get('paginator')->get([
-                'directional' => true,
-                'epp'         => $epp,
-                'maxLinks'    => 0,
-                'page'        => $page,
-                'total'       => $total + 1,
-                'route'       => [
-                    'name'   => 'frontend_monograph_frontpage'
-                ]
-            ]);
+                $this->view->assign([
+                    'specials'   => $monographs,
+                    'pagination' => $pagination,
+                    'tags'       => $this->get('api.service.tag')
+                        ->getListByIdsKeyMapped(array_unique($tagsIds))['items']
+                ]);
+            }
         }
 
         return $this->render('special/frontpage_special.tpl', [
             'cache_id'    => $cacheID,
-            'pagination'  => $pagination,
             'x-tags'      => 'monograph-frontpage',
             'x-cache-for' => '+1 day',
         ]);
