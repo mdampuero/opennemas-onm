@@ -134,12 +134,22 @@ class FrontendController extends Controller
     }
 
     /**
-     * Returns the cache id basing on the action and an item.
+     * Returns the cache id basing on the list of parameters.
+     *
+     * @param array $params The list of parameters.
      *
      * @return string The cache id.
      */
-    protected function getCacheId()
+    protected function getCacheId($params)
     {
+        if (array_key_exists('o_content', $params)) {
+            return $this->view->getCacheId(
+                'content',
+                $params['o_content']->id,
+                $params['o_token']
+            );
+        }
+
         return $this->view->getCacheId(
             $this->get('core.globals')->getExtension(),
             $this->get('core.globals')->getAction()
@@ -224,7 +234,6 @@ class FrontendController extends Controller
     protected function getParameters($request, $item = null)
     {
         $params = array_merge($request->query->all(), [
-            'cache_id'   => $this->getCacheId($item),
             'o_category' => null,
             'x-tags'     => $this->get('core.globals')->getExtension()
         ]);
@@ -262,6 +271,7 @@ class FrontendController extends Controller
             $this->getAdvertisements($params['o_category']);
 
         return array_merge($this->params, $params, [
+            'cache_id'       => $this->getCacheId($params),
             'ads_positions'  => $positions,
             'advertisements' => $advertisements
         ]);
