@@ -30,7 +30,7 @@ class Controller extends SymfonyController
     protected $extension = null;
 
     /**
-     * The list of advertisements groups.
+     * The list of advertisements groups per action.
      *
      * @var array
      */
@@ -51,7 +51,7 @@ class Controller extends SymfonyController
     protected $params = [];
 
     /**
-     * The list of advertisements positions.
+     * The list of advertisements positions per action.
      *
      * @var array
      */
@@ -63,6 +63,20 @@ class Controller extends SymfonyController
      * @var string
      */
     protected $resource = null;
+
+    /**
+     * The list of routes per action.
+     *
+     * @var array
+     */
+    protected $routes = [];
+
+    /**
+     * The list of templates per action.
+     *
+     * @var array
+     */
+    protected $templates = [];
 
     /**
      * Returns services from the service container.
@@ -202,11 +216,9 @@ class Controller extends SymfonyController
      */
     protected function getAdvertisementGroup($action)
     {
-        if (array_key_exists($action, $this->groups)) {
-            return $this->groups[$action];
-        }
-
-        return null;
+        return array_key_exists($action, $this->groups)
+            ? $this->groups[$action]
+            : null;
     }
 
     /**
@@ -218,11 +230,9 @@ class Controller extends SymfonyController
      */
     protected function getAdvertisementPositions($action)
     {
-        if (array_key_exists($action, $this->positions)) {
-            return $this->positions[$action];
-        }
-
-        return [];
+        return array_key_exists($action, $this->positions)
+            ? $this->positions[$action]
+            : [];
     }
 
     /**
@@ -335,14 +345,35 @@ class Controller extends SymfonyController
     }
 
     /**
+     * Returns the defined route name for the provided action.
+     *
+     * @param string $action The action name.
+     *
+     * @return string The route name.
+     */
+    protected function getRoute($action)
+    {
+        $endpoint  = $this->get('core.globals')->getEndpoint();
+        $extension = $this->get('core.globals')->getExtension();
+
+        return array_key_exists($action, $this->routes)
+            ? $this->routes[$action]
+            : $endpoint . '_' . $extension . '_' . $action;
+    }
+
+    /**
      * Returns the path to the Smarty template.
+     *
+     * @param string $action The action name.
      *
      * @return string The path to the Smarty template.
      */
-    protected function getTemplate()
+    protected function getTemplate($action = null)
     {
         $extension = $this->get('core.globals')->getExtension();
 
-        return "{$extension}/{$extension}.tpl";
+        return array_key_exists($action, $this->templates)
+            ? $this->templates[$action]
+            : "{$extension}/{$extension}.tpl";
     }
 }
