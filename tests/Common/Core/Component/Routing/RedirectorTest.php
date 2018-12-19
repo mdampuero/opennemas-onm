@@ -765,6 +765,40 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getRegExpUrl when an Url is and is not found.
+     */
+    public function testGetRegExpUrlWithMultipleContentTypes()
+    {
+        $url = new Url([
+            'content_type' => 'norf',
+            'enabled'      => true,
+            'redirection'  => true,
+            'source'       => '^f.*r$',
+            'target'       => 4796,
+            'type'         => 0
+        ]);
+
+        $this->service->expects($this->at(0))->method('getList')
+            ->with('type in [3,4] and enabled = 1')
+            ->willReturn([ 'items' => [], 'total' => 0 ]);
+
+        $this->service->expects($this->at(1))->method('getList')
+            ->with('content_type in ["qux","norf"] and type in [3,4] and enabled = 1')
+            ->willReturn([ 'items' => [ $url ], 'total' => 1 ]);
+
+        $this->service->expects($this->at(2))->method('getList')
+            ->with('content_type in ["qux","norf"] and type in [3,4] and enabled = 1')
+            ->willReturn([ 'items' => [ $url ], 'total' => 1 ]);
+
+        $method = new \ReflectionMethod($this->redirector, 'getRegExpUrl');
+        $method->setAccessible(true);
+
+        $this->assertEmpty($method->invokeArgs($this->redirector, [ 'garply' ]));
+        $this->assertEmpty($method->invokeArgs($this->redirector, [ 'garply', [ 'qux', 'norf' ] ]));
+        $this->assertEquals($url, $method->invokeArgs($this->redirector, [ 'foo-bar', [ 'qux', 'norf' ] ]));
+    }
+
+    /**
      * Tests getTarget with a content-to-content Url.
      */
     public function testGetTargetForContentToContent()
