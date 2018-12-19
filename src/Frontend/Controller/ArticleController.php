@@ -136,6 +136,29 @@ class ArticleController extends FrontendController
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function hydrate($params = [], $item = null)
+    {
+        $params = [
+            'relationed' => $this->getRelated($item),
+            'suggested'  => $this->getSuggested($item, $params['o_category'])
+        ];
+
+        $em = $this->get('entity_repository');
+
+        if (!empty($item->img2)) {
+            $params['photoInt'] = $em->find('Photo', $item->img2);
+        }
+
+        if (!empty($item->fk_video2)) {
+            $params['videoInt'] = $em->find('Video', $item->fk_video2);
+        }
+
+        $this->view->assign($params);
+    }
+
+    /**
      * Returns the list of related contents for an article.
      *
      * @param Article $article The article object.
@@ -192,28 +215,5 @@ class ArticleController extends FrontendController
 
         return $this->get('automatic_contents')
             ->searchSuggestedContents('article', $query);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function hydrate($params = [], $item = null)
-    {
-        $params = [
-            'relationed' => $this->getRelated($item),
-            'suggested'  => $this->getSuggested($item, $params['o_category'])
-        ];
-
-        $em = $this->get('entity_repository');
-
-        if (!empty($item->img2)) {
-            $params['photoInt'] = $em->find('Photo', $item->img2);
-        }
-
-        if (!empty($item->fk_video2)) {
-            $params['videoInt'] = $em->find('Video', $item->fk_video2);
-        }
-
-        $this->view->assign($params);
     }
 }
