@@ -19,8 +19,8 @@
      *   Check billing information when saving user.
      */
     .controller('EventCtrl', [
-      '$controller', '$scope', 'oqlEncoder', 'oqlDecoder', 'messenger', 'cleaner', 'linker', 'localizer', '$timeout',
-      function($controller, $scope, oqlEncoder, oqlDecoder, messenger, cleaner, linker, localizer, $timeout) {
+      '$controller', '$scope', '$timeout',
+      function($controller, $scope, $timeout) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -76,7 +76,7 @@
           $scope.category = $scope.item.categories.shift();
 
           var coverId = $scope.item.related_contents.filter(function(el) {
-            return el.relationship == 'cover';
+            return el.relationship === 'cover';
           }).shift();
 
           if (!coverId) {
@@ -129,9 +129,11 @@
             return;
           }
 
-          $scope.item.related_contents = [
-            { pk_content2: nv.pk_content, relationship: 'cover', position: 0 }
-          ];
+          $scope.item.related_contents = [{
+            pk_content2: nv.pk_content,
+            relationship: 'cover',
+            position: 0
+          }];
         }, true);
 
         // Update slug when title is updated
