@@ -264,9 +264,9 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->with('redirector-baz-norf')->willReturn($url);
 
         $redirector->expects($this->once())->method('getLiteralUrl')
-            ->with('baz', 'norf')->willReturn($url);
+            ->with('baz', [ 'norf' ])->willReturn($url);
 
-        $this->assertEquals($url, $redirector->getUrl('baz', 'norf'));
+        $this->assertEquals($url, $redirector->getUrl('baz', [ 'norf' ]));
     }
 
     /**
@@ -294,11 +294,11 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->with('redirector-baz-quux-norf')->willReturn($url);
 
         $redirector->expects($this->once())->method('getLiteralUrl')
-            ->with('baz-quux', 'norf')->willReturn(null);
+            ->with('baz-quux', [ 'norf' ])->willReturn(null);
         $redirector->expects($this->once())->method('getRegExpUrl')
-            ->with('baz-quux', 'norf')->willReturn($url);
+            ->with('baz-quux', [ 'norf' ])->willReturn($url);
 
-        $this->assertEquals($url, $redirector->getUrl('baz-quux', 'norf'));
+        $this->assertEquals($url, $redirector->getUrl('baz-quux', [ 'norf' ]));
     }
 
     /**
@@ -311,17 +311,17 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             'redirector--',
-            $method->invokeArgs($this->redirector, [ null, null ])
+            $method->invokeArgs($this->redirector, [ null, [ null ] ])
         );
 
         $this->assertEquals(
             'redirector-mumble-',
-            $method->invokeArgs($this->redirector, [ 'mumble', null ])
+            $method->invokeArgs($this->redirector, [ 'mumble', [ null ] ])
         );
 
         $this->assertEquals(
             'redirector-mumble-flob',
-            $method->invokeArgs($this->redirector, [ 'mumble', 'flob' ])
+            $method->invokeArgs($this->redirector, [ 'mumble', [ 'flob' ] ])
         );
     }
 
@@ -574,12 +574,43 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
         $this->service->expects($this->at(1))->method('getItemBy')
             ->with(
-                'content_type = "thud" and type in [0,1,2] '
+                'content_type in ["thud"] and type in [0,1,2] '
                 . 'and source = "1234" and enabled = 1 limit 1'
             )->willReturn($url);
 
         $this->assertEmpty($method->invokeArgs($this->redirector, [ 1234 ]));
-        $this->assertEquals($url, $method->invokeArgs($this->redirector, [ 1234, 'thud' ]));
+        $this->assertEquals($url, $method->invokeArgs($this->redirector, [ 1234, [ 'thud' ] ]));
+    }
+
+    /**
+     * Tests getLiteralUrl when Url is and is not found.
+     */
+    public function testGetLiteralUrlWithMultipleContentTypes()
+    {
+        $url = new Url([
+            'content_type' => 'article',
+            'enabled'      => true,
+            'redirection'  => true,
+            'source'       => '/plugh/wubble',
+            'target'       => '/foobar',
+            'type'         => 2
+        ]);
+
+        $method = new \ReflectionMethod($this->redirector, 'getLiteralUrl');
+        $method->setAccessible(true);
+
+        $this->service->expects($this->at(0))->method('getItemBy')
+            ->with('type in [0,1,2] and source = "1234" and enabled = 1 limit 1')
+            ->will($this->throwException(new \Exception()));
+
+        $this->service->expects($this->at(1))->method('getItemBy')
+            ->with(
+                'content_type in ["thud","bar"] and type in [0,1,2] '
+                . 'and source = "1234" and enabled = 1 limit 1'
+            )->willReturn($url);
+
+        $this->assertEmpty($method->invokeArgs($this->redirector, [ 1234 ]));
+        $this->assertEquals($url, $method->invokeArgs($this->redirector, [ 1234, [ 'thud', 'bar' ] ]));
     }
 
     /**
@@ -718,19 +749,19 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->willReturn([ 'items' => [], 'total' => 0 ]);
 
         $this->service->expects($this->at(1))->method('getList')
-            ->with('content_type = "qux" and type in [3,4] and enabled = 1')
+            ->with('content_type in ["qux"] and type in [3,4] and enabled = 1')
             ->willReturn([ 'items' => [ $url ], 'total' => 1 ]);
 
         $this->service->expects($this->at(2))->method('getList')
-            ->with('content_type = "qux" and type in [3,4] and enabled = 1')
+            ->with('content_type in ["qux"] and type in [3,4] and enabled = 1')
             ->willReturn([ 'items' => [ $url ], 'total' => 1 ]);
 
         $method = new \ReflectionMethod($this->redirector, 'getRegExpUrl');
         $method->setAccessible(true);
 
         $this->assertEmpty($method->invokeArgs($this->redirector, [ 'garply' ]));
-        $this->assertEmpty($method->invokeArgs($this->redirector, [ 'garply', 'qux' ]));
-        $this->assertEquals($url, $method->invokeArgs($this->redirector, [ 'foo-bar', 'qux' ]));
+        $this->assertEmpty($method->invokeArgs($this->redirector, [ 'garply', [ 'qux' ] ]));
+        $this->assertEquals($url, $method->invokeArgs($this->redirector, [ 'foo-bar', [ 'qux' ] ]));
     }
 
     /**

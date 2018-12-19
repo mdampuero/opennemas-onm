@@ -103,9 +103,12 @@ class Redirector
             throw new \InvalidArgumentException();
         }
 
+        if (!is_array($contentType) && !empty($contentType)) {
+            $contentType = [ $contentType ];
+        }
+
         $cacheId = $this->getCacheId($source, $contentType);
         $url     = null;
-
         if ($this->hasCache() && $this->cache->exists($cacheId)) {
             return $this->cache->get($cacheId);
         }
@@ -133,7 +136,7 @@ class Redirector
      */
     protected function getCacheId($slug, $type)
     {
-        return implode('-', [ 'redirector', $slug, $type ]);
+        return implode('-', [ 'redirector', $slug, implode('-', $type) ]);
     }
 
     /**
@@ -246,7 +249,7 @@ class Redirector
         );
 
         if (!empty($contentType)) {
-            $oql = sprintf('content_type = "%s"', $contentType)
+            $oql = sprintf('content_type in ["%s"]', implode('","', $contentType))
                 . ' and ' . $oql;
         }
 
@@ -327,7 +330,7 @@ class Redirector
         $oql = sprintf('type in [%s] and enabled = 1', implode(',', [ 3, 4 ]));
 
         if (!empty($contentType)) {
-            $oql = sprintf('content_type = "%s"', $contentType)
+            $oql = sprintf('content_type in ["%s"]', implode('","', $contentType))
                 . ' and ' . $oql;
         }
 
