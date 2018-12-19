@@ -173,10 +173,10 @@ class EventController extends Controller
             'pk_content'        => [[ 'value' => array_unique($ids), 'operator' => 'IN', 'value']],
         ]);
 
-        $relationContents = [];
-        foreach ($relations as $content) {
-            $relationContents[$content->id] = $content;
-        }
+        $relations = $this->get('data.manager.filter')
+            ->set($relations)
+            ->filter('mapify', [ 'key' => 'id' ])
+            ->get();
 
         return $relationContents;
     }
