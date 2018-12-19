@@ -157,6 +157,10 @@ class ContentController extends ApiController
      **/
     private function parseTags($tags = [])
     {
+        if (empty($tags)) {
+            return [];
+        }
+
         $ts = $this->get('api.service.tag');
 
         $ids = [];

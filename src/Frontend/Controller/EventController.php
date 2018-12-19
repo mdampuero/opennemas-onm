@@ -178,7 +178,7 @@ class EventController extends Controller
             ->filter('mapify', [ 'key' => 'id' ])
             ->get();
 
-        return $relationContents;
+        return $relations;
     }
 
     /**

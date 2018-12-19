@@ -119,6 +119,8 @@ class ContentPersister extends BasePersister
         unset($entity->tags);
         $entity->setNotStored('tags');
 
+        $this->conn->beginTransaction();
+
         try {
             parent::update($entity);
 
