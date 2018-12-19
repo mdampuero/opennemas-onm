@@ -45,43 +45,4 @@ class EventController extends ContentController
     {
         return $item->pk_content;
     }
-
-    /**
-     * Returns the list of photos linked to the article.
-     *
-     * @param Content $content The content.
-     *
-     * @return array The list of photos linked to the content.
-     */
-    protected function getRelatedContents($content)
-    {
-        $em    = $this->get('entity_repository');
-        $extra = [];
-
-        if (empty($content)) {
-            return $extra;
-        }
-
-        if (is_object($content)) {
-            $content = [ $content ];
-        }
-
-        foreach ($content as $element) {
-            if (!is_array($element->related_contents)) {
-                continue;
-            }
-
-            foreach ($element->related_contents as $relation) {
-                if ($relation['relationship'] !== 'cover') {
-                    continue;
-                }
-
-                $photo = $em->find('Photo', $relation['pk_content2']);
-
-                $extra[$relation['pk_content2']] = \Onm\StringUtils::convertToUtf8($photo);
-            }
-        }
-
-        return $extra;
-    }
 }
