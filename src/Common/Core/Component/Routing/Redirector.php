@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Redirector
 {
@@ -211,7 +211,7 @@ class Redirector
         $target = $this->getTarget($request, $url);
 
         if (!$this->isTargetValid($request, $url, $target)) {
-            throw new ResourceNotFoundException();
+            throw new NotFoundHttpException();
         }
 
         if (is_object($target)) {
@@ -304,7 +304,7 @@ class Redirector
         $target = $this->getTarget($request, $url);
 
         if (!$this->isTargetValid($request, $url, $target)) {
-            throw new ResourceNotFoundException();
+            throw new NotFoundHttpException();
         }
 
         if (is_object($target)) {
@@ -456,8 +456,11 @@ class Redirector
             return empty($url->target);
         }
 
-        return is_object($target)
-            || $target !== trim($request->getRequestUri(), '/');
+        if (is_object($target)) {
+            return $target->isReadyForPublish();
+        }
+
+        return $target !== trim($request->getRequestUri(), '/');
     }
 
     /**

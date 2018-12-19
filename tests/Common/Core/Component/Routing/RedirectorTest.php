@@ -403,7 +403,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests getForwardResponse when target is invalid.
      *
-     * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
+     * @expectedException Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function testGetForwardResponseWhenInvalidTarget()
     {
@@ -438,9 +438,14 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetForwardResponseWhenValidContentTarget()
     {
-        $content = json_decode(json_encode([
-            'content_type_name' => 'article'
-        ]));
+        $content = $this->getMockBuilder('Content')
+            ->setMethods([ 'isReadyForPublish' ])
+            ->getMock();
+
+        $content->content_type_name = 'article';
+
+        $content->expects($this->once())->method('isReadyForPublish')
+            ->willReturn(true);
 
         $url = new Url([
             'content_type' => 'article',
@@ -485,9 +490,14 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetForwardResponseWhenValidMediaTarget()
     {
-        $content = json_decode(json_encode([
-            'content_type_name' => 'attachment'
-        ]));
+        $content = $this->getMockBuilder('Content')
+            ->setMethods([ 'isReadyForPublish' ])
+            ->getMock();
+
+        $content->content_type_name = 'attachment';
+
+        $content->expects($this->once())->method('isReadyForPublish')
+            ->willReturn(true);
 
         $url = new Url([
             'content_type' => 'article',
@@ -602,7 +612,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests getRedirectResponse when target is invalid.
      *
-     * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
+     * @expectedException Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function testGetRedirectResponseWhenInvalidTarget()
     {
@@ -637,9 +647,14 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRedirectResponseWhenValidContentTarget()
     {
-        $content = json_decode(json_encode([
-            'content_type_name' => 'article'
-        ]));
+        $content = $this->getMockBuilder('Content')
+            ->setMethods([ 'isReadyForPublish' ])
+            ->getMock();
+
+        $content->content_type_name = 'article';
+
+        $content->expects($this->once())->method('isReadyForPublish')
+            ->willReturn(true);
 
         $url = new Url([
             'content_type' => 'article',
@@ -989,6 +1004,17 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsTargetValid()
     {
+        $content = $this->getMockBuilder('Content')
+            ->setMethods([ 'isReadyForPublish' ])
+            ->getMock();
+
+        $content->content_type_name = 'photo';
+
+        $content->expects($this->at(0))->method('isReadyForPublish')
+            ->willReturn(true);
+        $content->expects($this->at(1))->method('isReadyForPublish')
+            ->willReturn(false);
+
         $method = new \ReflectionMethod($this->redirector, 'isTargetValid');
         $method->setAccessible(true);
 
@@ -1004,7 +1030,13 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($method->invokeArgs($this->redirector, [
             $this->request,
             new Url(),
-            json_decode(json_encode([ 'content_type_name' => 'photo' ]))
+            $content
+        ]));
+
+        $this->assertFalse($method->invokeArgs($this->redirector, [
+            $this->request,
+            new Url(),
+            $content
         ]));
 
         $this->assertFalse($method->invokeArgs($this->redirector, [
