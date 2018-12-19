@@ -174,6 +174,10 @@ class EventController extends Controller
             $ids[] = $content->getRelated('cover');
         }
 
+        if (empty($ids)) {
+            return [];
+        }
+
         $relations = $this->get('entity_repository')->findBy([
             'content_type_name' => [[ 'value' => 'photo', ]],
             'pk_content'        => [[ 'value' => array_unique($ids), 'operator' => 'IN', 'value']],
