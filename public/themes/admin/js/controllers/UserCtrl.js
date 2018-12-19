@@ -39,10 +39,6 @@
           user_language: 'default'
         };
 
-        $scope.expanded  = {
-          user_groups: true,
-        };
-
         /**
          * @memberOf UserCtrl
          *
