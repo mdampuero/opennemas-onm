@@ -34,7 +34,7 @@
         $scope.item = {
           body: '',
           content_type_name: 'event',
-          fk_content_type: 19,
+          fk_content_type: 5,
           content_status: 0,
           description: '',
           favorite: 0,
