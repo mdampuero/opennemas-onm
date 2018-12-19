@@ -166,8 +166,8 @@
                   </div>
                 </td>
                 <td class="text-center hidden-xs hidden-sm">
-                  <span ng-show="!item.cover" class="fa fa-calendar-o fa-2x thumbnail"></span>
-                  <img ng-show="item.cover" ng-src="[% data.extra.template_vars.media_dir %][% item.cover.path_file %][% item.cover.name %]" style="max-width:80px" class="thumbnail" />
+                  <span ng-show="!getCover(item)" class="fa fa-calendar-o fa-2x thumbnail"></span>
+                  <img ng-show="getCover(item)" ng-src="[% data.extra.template_vars.media_dir %][% getCover(item).path_file %][% getCover(item).name %]" style="max-width:80px" class="thumbnail" />
                 </td>
                 <td>
                   <span uib-tooltip="{t}Last editor{/t} [% shvs.extra.authors[item.fk_user_last_editor].name %]">[% item.title%]</span>

@@ -15,8 +15,8 @@
      *   Handles all actions in user groups list.
      */
     .controller('EventListCtrl', [
-      '$controller', '$scope', 'oqlEncoder'
-      function ($controller, $scope, oqlEncoder) {
+      '$controller', '$scope', 'oqlEncoder',
+      function($controller, $scope, oqlEncoder) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -64,20 +64,23 @@
           $scope.list();
         };
 
-        $scope.parseList = function(data) {
-          data.items = data.items.map(function(element) {
-            var cover = '';
+        /**
+         * @function getCover
+         * @memberOf EventListCtrl
+         *
+         * @description
+         *   Returns the cover image for a given content
+         */
+        $scope.getCover = function(element) {
+          var cover = '';
 
-            if (element.related_contents.length > 0) {
-              var coverId = element.related_contents[0].pk_content2;
+          if (element.related_contents.length > 0) {
+            var coverId = element.related_contents[0].pk_content2;
 
-              cover = data.extra.related_contents[coverId];
-            }
-            element.cover = cover;
-            return element;
-          });
+            cover = $scope.data.extra.related_contents[coverId];
+          }
 
-          return data;
+          return cover;
         };
 
         /**
