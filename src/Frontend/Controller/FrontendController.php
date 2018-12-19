@@ -18,12 +18,58 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class FrontendController extends Controller
 {
     /**
+     * The list of configuration ids for Smarty cache per action.
+     *
+     * @var array
+     */
+    protected $caches = [];
+
+    /**
      * {@inheritdoc}
      */
     protected $params = [
         'x-cache-for' => '+1 day',
         'x-cacheable' => true
     ];
+
+    /**
+     * The list of valid query parameters per action.
+     *
+     * @var array
+     */
+    protected $queries = [
+        'list' => [ 'page' ]
+    ];
+
+    /**
+     * Displays a frontpage basing on the parameters in the request.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function listAction(Request $request)
+    {
+        $action = $this->get('core.globals')->getAction();
+        $query  = $this->parseQuery($this->getQueryParameters($action, $request));
+        $route  = $this->getRoute($action);
+
+        $expected = $this->get('router')->generate($route, $query);
+
+        if ($request->getRequestUri() !== $expected) {
+            return new RedirectResponse($expected);
+        }
+
+        $params = $this->getParameters($request);
+
+        $this->view->setConfig($this->getCacheConfiguration($action));
+
+        if (!$this->isCached($params)) {
+            $this->hydrate($params);
+        }
+
+        return $this->render($this->getTemplate($action), $params);
+    }
 
     /**
      * Displays a content basing on the parameters in the request.
@@ -34,17 +80,19 @@ class FrontendController extends Controller
      */
     public function showAction(Request $request)
     {
-        $ugh  = $this->get('core.helper.url_generator');
-        $item = $this->getItem($request);
+        $action = $this->get('core.globals')->getAction();
+        $item   = $this->getItem($request);
+
+        $expected = $this->get('core.helper.url_generator')->generate($item);
 
         if (empty($item) || !$item->isReadyForPublish()) {
             throw new ResourceNotFoundException();
         }
 
-        if (!$ugh->isValid($item, $request->getRequestUri())
+        if ($request->getRequestUri() !== $expected
             && empty($this->get('request_stack')->getParentRequest())
         ) {
-            return new RedirectResponse($ugh->generate($item));
+            return new RedirectResponse($expected);
         }
 
         $params = $this->getParameters($request, $item);
@@ -59,11 +107,30 @@ class FrontendController extends Controller
             throw new AccessDeniedException();
         }
 
+        $this->view->setConfig($this->getCacheConfiguration($action));
+
         if (!$this->isCached($params)) {
             $this->hydrate($params, $item);
         }
 
-        return $this->render($this->getTemplate($params), $params);
+        return $this->render(
+            $this->getTemplate($this->get('core.globals')->getAction()),
+            $params
+        );
+    }
+
+    /**
+     * Returns the cache configuration name basing on the action name.
+     *
+     * @param string $action The action name.
+     *
+     * @return string The cache configuration name.
+     */
+    protected function getCacheConfiguration($action)
+    {
+        return array_key_exists($action, $this->caches)
+            ? $this->caches[$action]
+            : $this->get('core.globals')->getExtension() . '-' . $action;
     }
 
     /**
@@ -158,8 +225,6 @@ class FrontendController extends Controller
     {
         $params = array_merge($request->query->all(), [
             'cache_id'   => $this->getCacheId($item),
-            'content'    => $item,
-            'o_content'  => $item,
             'o_category' => null,
             'x-tags'     => $this->get('core.globals')->getExtension()
         ]);
@@ -170,7 +235,9 @@ class FrontendController extends Controller
 
             $params['x-tags'] .= ',' . $item->id;
 
+            $params['content']     = $item;
             $params['contentId']   = $item->id;
+            $params['o_content']   = $item;
             $params['x-cacheable'] = empty($params['o_token']);
         }
 
@@ -179,7 +246,9 @@ class FrontendController extends Controller
         }
 
         // TODO: Clean this ASAP
-        if (!empty($params['o_category'])) {
+        if (array_key_exists('o_category', $params)
+            && !empty($params['o_category'])
+        ) {
             $params = array_merge($params, [
                 'actual_category'       => $params['o_category']->name,
                 'actual_category_id'    => $params['o_category']->pk_content_category,
@@ -199,6 +268,24 @@ class FrontendController extends Controller
     }
 
     /**
+     * Returns the list of valid query parameters from the request for the
+     * provided action.
+     *
+     * @param string  $action  The action name.
+     * @param Request $request The current request.
+     *
+     * @return array The list of valid parameters.
+     */
+    protected function getQueryParameters($action, Request $request)
+    {
+        return array_key_exists($action, $this->queries)
+            ? array_intersect_key(
+                $request->query->all(),
+                array_flip($this->queries[$action])
+            ) : [];
+    }
+
+    /**
      * Returns the subscription token from the list of parameters.
      *
      * @param array $params The list of parameters.
@@ -209,24 +296,6 @@ class FrontendController extends Controller
     protected function getSubscriptionToken($params)
     {
         return array_key_exists('o_token', $params) ? $params['o_token'] : null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getTemplate($params = [])
-    {
-        if (!array_key_exists('o_layout', $params)
-            || empty($params['o_layout'])
-        ) {
-            return parent::getTemplate($params);
-        }
-
-        return sprintf(
-            'extends:layouts/%s.tpl|%s',
-            $params['o_layout'],
-            parent::getTemplate($params)
-        );
     }
 
     /**
@@ -289,8 +358,28 @@ class FrontendController extends Controller
         return array_key_exists('cache_id', $params)
             && !empty($this->view->getCaching())
             && $this->view->isCached(
-                $this->getTemplate($params),
+                $this->getTemplate($this->get('core.globals')->getAction()),
                 $params['cache_id']
             );
+    }
+
+    /**
+     * Parses all query parameters.
+     *
+     * @param array $query The list of query parameters.
+     *
+     * @return array The parsed query parameters
+     */
+    protected function parseQuery($query)
+    {
+        if (array_key_exists('page', $query)) {
+            $query['page'] = (int) $query['page'];
+
+            if ($query['page'] < 2) {
+                unset($query['page']);
+            }
+        }
+
+        return $query;
     }
 }
