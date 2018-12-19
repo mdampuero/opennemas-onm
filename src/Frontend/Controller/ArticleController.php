@@ -21,6 +21,13 @@ class ArticleController extends FrontendController
     /**
      * {@inheritdoc}
      */
+    protected $caches = [
+        'show' => 'articles'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $extension = 'article';
 
     /**
