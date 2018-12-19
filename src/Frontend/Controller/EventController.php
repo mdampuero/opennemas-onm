@@ -109,9 +109,6 @@ class EventController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        // TODO: Remove when pk_content column renamed to id
-        $content->id = $content->pk_content;
-
         // Setup templating cache layer
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('content', $content->id);
@@ -164,7 +161,7 @@ class EventController extends Controller
 
         $ids = [];
         foreach ($contents as $content) {
-            if ($content->hasRelated('cover')) {
+            if (!$content->hasRelated('cover')) {
                 continue;
             }
 
