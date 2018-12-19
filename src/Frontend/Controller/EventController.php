@@ -99,11 +99,17 @@ class EventController extends Controller
     public function showAction($slug)
     {
         $oql = 'content_type_name = "event"'
-            . ' and slug = "%s" and content_status = "1" and in_litter = "0"';
-
+            . ' and slug = "%s" and content_status = "1" and in_litter = "0"'
+            . ' and (starttime = "0000-00-00 00:00:00" or starttime is null or starttime <= "%s" )'
+            . ' and (endtime is null or endtime = "0000-00-00 00:00:00" or endtime > "%s")';
         try {
             $content = $this->get('api.service.content')
-                ->getItemBy(sprintf($oql, $slug));
+                ->getItemBy(sprintf(
+                    $oql,
+                    $slug,
+                    date('Y-m-d H:i:s'),
+                    date('Y-m-d H:i:s')
+                ));
         } catch (\Exception $e) {
             // If the content does not exist or is not published raise an error
             throw new ResourceNotFoundException();
