@@ -15,8 +15,8 @@
      *   Handles all actions in user groups list.
      */
     .controller('EventListCtrl', [
-      '$controller', '$scope', 'oqlEncoder', 'linker', 'localizer',
-      function($controller, $scope, oqlEncoder, linker, localizer) {
+      '$controller', '$scope', 'oqlEncoder'
+      function ($controller, $scope, oqlEncoder) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**

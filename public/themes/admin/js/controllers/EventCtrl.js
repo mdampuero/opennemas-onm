@@ -164,7 +164,7 @@
          * @return {String} The string to generate tags from.
          */
         $scope.generateTagsFrom = function() {
-          return $('#title').val();
+          return $scope.item.title;
         };
       }
     ]);
