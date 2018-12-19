@@ -13,7 +13,7 @@ use Api\Controller\V1\ApiController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class EventController extends ContentApiController
+class EventController extends ContentController
 {
     /**
      * {@inheritdoc}

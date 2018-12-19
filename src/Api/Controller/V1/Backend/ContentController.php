@@ -13,7 +13,7 @@ use Api\Controller\V1\ApiController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class ContentApiController extends ApiController
+class ContentController extends ApiController
 {
     /**
      * The API service name.
