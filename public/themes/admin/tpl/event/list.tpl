@@ -33,7 +33,6 @@
       </div>
     </div>
   </div>
-
   <div class="page-navbar selected-navbar collapsed" class="hidden"  ng-class="{ 'collapsed': selected.items.length == 0 }">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -96,7 +95,7 @@
           <li class="quicklinks hidden-xs ng-cloak">
             <onm-category-selector ng-model="criteria.pk_fk_content_category" categories="data.extra.categories" label-text="{t}Category{/t}" default-value-text="{t}Any{/t}" placeholder="{t}Select a category{/t}" required />
           </li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}Any{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
             <ui-select name="status" theme="select2" ng-model="criteria.content_status">
               <ui-select-match>
                 <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
@@ -125,7 +124,6 @@
       </div>
     </div>
   </div>
-
   <div class="content">
       <div class="listing-no-contents" ng-hide="!flags.http.loading">
         <div class="text-center p-b-15 p-t-15">
@@ -152,8 +150,10 @@
                     <label for="select-all"></label>
                   </div>
                 </th>
-                <th class="hidden-xs hidden-sm text-center" width="80"><i class="fa fa-picture-o"></i></th>
+                <th class="hidden-xs hidden-sm text-center" width="100"><i class="fa fa-picture-o"></i></th>
                 <th>{t}Title{/t}</th>
+                <th class="hidden-xs text-center" width="150">{t}Start{/t}</th>
+                <th class="hidden-xs text-center" width="150">{t}End{/t}</th>
                 <th class="text-center" width="100">{t}Published{/t}</th>
               </tr>
             </thead>
@@ -166,18 +166,37 @@
                   </div>
                 </td>
                 <td class="text-center hidden-xs hidden-sm">
-                  <span ng-show="!getCover(item)" class="fa fa-calendar-o fa-2x thumbnail"></span>
-                  <img ng-show="getCover(item)" ng-src="[% data.extra.template_vars.media_dir %][% getCover(item).path_file %][% getCover(item).name %]" style="max-width:80px" class="thumbnail" />
+                  <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="getCover(item).path_img" only-image="true" transform="zoomcrop,220,220"></dynamic-image>
                 </td>
                 <td>
-                  <span uib-tooltip="{t}Last editor{/t} [% shvs.extra.authors[item.fk_user_last_editor].name %]">[% item.title%]</span>
-                  <div>
-                    <span ng-show="item.event_start_date || item.event_end_date">[% item.event_start_date %] &rarr; [% item.event_end_date %]</span>
-                    <small>
-                      <span ng-show="item.event_start_hour.length > 0 || item.event_end_hour.length > 0">([% item.event_start_hour %] &rarr; [% item.event_end_hour %])</span>
-                      <div ng-show="item.event_place">{t}Place{/t}: [% item.event_place%]</div>
+                  [% item.title%]
+                  <div class="visible-xs">
+                    <strong class="m-r-5"><small>{t}Start{/t}</small>:</strong>
+                    <span ng-show="!item.event_start_date && !item.event_start_hour">?</span>
+                    <span ng-show="item.event_start_date">
+                      <i class="fa fa-calendar"></i>
+                      [% item.event_start_date %]
+                    </span>
+                    <small class="m-l-5" ng-show="item.event_start_hour">
+                      <i class="fa fa-clock-o"></i>
+                      <strong>[% item.event_start_hour %]</strong>
                     </small>
                   </div>
+                  <div class="visible-xs">
+                    <strong class="m-r-10"><small>{t}End{/t}</small>:</strong>
+                    <span ng-show="!item.event_end_date && !item.event_end_hour">?</span>
+                    <span ng-show="item.event_end_date">
+                      <i class="fa fa-calendar"></i>
+                      [% item.event_end_date %]
+                    </span>
+                    <small class="m-l-5" ng-show="item.event_end_hour">
+                      <i class="fa fa-clock-o"></i>
+                      <strong>[% item.event_end_hour %]</strong>
+                    </small>
+                  </div>
+                  <small>
+                    <div ng-show="item.event_place">{t}Place{/t}: [% item.event_place%]</div>
+                  </small>
                   <div class="listing-inline-actions">
                     {acl isAllowed="EVENT_UPDATE"}
                       <a class="btn btn-small" href="[% routing.generate('backend_event_show', { id: getId(item) }) %]">
@@ -190,6 +209,28 @@
                       </button>
                     {/acl}
                   </div>
+                </td>
+                <td class="hidden-xs text-center">
+                  <span ng-show="!item.event_start_date && !item.event_start_hour">?</span>
+                  <div ng-show="item.event_start_date">
+                    <i class="fa fa-calendar"></i>
+                    [% item.event_start_date %]
+                  </div>
+                  <small ng-show="item.event_start_hour">
+                    <i class="fa fa-clock-o"></i>
+                    <strong>[% item.event_start_hour %]</strong>
+                  </small>
+                </td>
+                <td class="hidden-xs text-center">
+                  <span ng-show="!item.event_end_date && !item.event_end_hour">?</span>
+                  <div ng-show="item.event_end_date">
+                    <i class="fa fa-calendar"></i>
+                    [% item.event_end_date %]
+                  </div>
+                  <small ng-show="item.event_end_hour">
+                    <i class="fa fa-clock-o"></i>
+                    <strong>[% item.event_end_hour %]</strong>
+                  </small>
                 </td>
                 {acl isAllowed="EVENT_AVAILABLE"}
                 <td class="text-center">
