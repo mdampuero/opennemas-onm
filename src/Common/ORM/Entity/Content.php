@@ -19,18 +19,18 @@ class Content extends Entity
     /**
      * Gets the value of the property from the raw data array.
      *
-     * @param string $property The property name.
+     * @param string $name The property name.
      *
      * @return mixed The property value.
      */
-    public function &__get($property)
+    public function &__get($name)
     {
-        switch ($property) {
+        switch ($name) {
             case 'id':
                 $value = $this->pk_content;
                 break;
             default:
-                $value = parent::__get($property);
+                $value = parent::__get($name);
                 break;
         }
 
@@ -46,9 +46,9 @@ class Content extends Entity
      */
     public function __isset($name)
     {
-        return parent::__isset($property) || !empty($this->__get($name));
+        return parent::__isset($name) || !empty($this->__get($name));
     }
-    
+
     /**
      * Returns true if content has objects associated to an specific position
      *
