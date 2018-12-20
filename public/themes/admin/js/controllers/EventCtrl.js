@@ -125,15 +125,17 @@
 
         // Update slug when title is updated
         $scope.$watch('cover', function(nv, ov) {
+          $scope.item.related_contents = [];
+
           if (!nv) {
             return;
           }
 
-          $scope.item.related_contents = [ {
+          $scope.item.related_contents.push({
             pk_content2: nv.pk_content,
             relationship: 'cover',
             position: 0
-          } ];
+          });
         }, true);
 
         // Update slug when title is updated
