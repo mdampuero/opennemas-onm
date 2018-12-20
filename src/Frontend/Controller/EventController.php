@@ -47,8 +47,8 @@ class EventController extends Controller
                     . "ON contentmeta.meta_name = 'event_start_date' "
                     . "AND contents.pk_content = contentmeta.fk_content "
                     . "WHERE fk_content_type = 5 AND content_status = 1 and in_litter = 0 "
-                    . "AND (starttime = '0000-00-00 00:00:00' OR starttime IS NULL OR starttime <= ? ) "
-                    . "AND (endtime IS NULL OR endtime = '0000-00-00 00:00:00' OR endtime > ?) "
+                    . "AND (starttime IS NULL OR starttime <= ? ) "
+                    . "AND (endtime IS NULL OR endtime > ?) "
                     . " ORDER BY event_start_date DESC LIMIT ? OFFSET ?",
                     [ $date, $date, $epp, $offset ]
                 )
