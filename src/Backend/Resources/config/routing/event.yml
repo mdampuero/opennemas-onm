@@ -8,3 +8,7 @@ backend_event_show:
     defaults: { _controller  : BackendBundle:Event:show }
     options:
         expose: true
+
+backend_event_create:
+    path:     /events/new
+    defaults: { _controller  : BackendBundle:Event:create }
