@@ -57,6 +57,16 @@
         };
 
         /**
+         * @memberOf EventCtrl
+         *
+         * @description
+         *  Whether to refresh the item after a successful update.
+         *
+         * @type {Boolean}
+         */
+        $scope.refreshOnUpdate = true;
+
+        /**
          * @function parseItem
          * @memberOf RestInnerCtrl
          *
@@ -72,8 +82,6 @@
               return data.extra.tags[id];
             });
           }
-
-          $scope.category = $scope.item.categories.shift();
 
           var coverId = $scope.item.related_contents.filter(function(el) {
             return el.relationship === 'cover';
@@ -129,11 +137,11 @@
             return;
           }
 
-          $scope.item.related_contents = [{
+          $scope.item.related_contents = [ {
             pk_content2: nv.pk_content,
             relationship: 'cover',
             position: 0
-          }];
+          } ];
         }, true);
 
         // Update slug when title is updated
