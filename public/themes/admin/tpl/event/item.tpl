@@ -12,7 +12,7 @@
             </h4>
           </li>
           <li class="quicklinks">
-            <a class="no-padding" href="{url name=backend_events}" title="{t}Go back to list{/t}">
+            <a class="no-padding" href="{url name=backend_events_list}" title="{t}Go back to list{/t}">
               <h4>
                 {t}Events{/t}
               </h4>

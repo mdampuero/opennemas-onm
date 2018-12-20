@@ -123,7 +123,7 @@ $menuXml = [
                 'id'          => 'events_manager',
                 'title'       => _('Events'),
                 'icon'        => 'fa fa-calendar',
-                'link'        => url('backend_events'),
+                'link'        => url('backend_events_list'),
                 'module_name' => 'es.openhost.module.events',
                 'privilege'   => 'EVENTS_ADMIN',
             ],
