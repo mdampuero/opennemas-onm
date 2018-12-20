@@ -123,14 +123,6 @@
           return $scope.item.pk_content;
         };
 
-        $scope.$watch('category', function(nv, ov) {
-          if (nv === ov) {
-            return;
-          }
-
-          $scope.item.categories = [ Number(nv) ];
-        });
-
         // Update slug when title is updated
         $scope.$watch('cover', function(nv, ov) {
           if (!nv) {
