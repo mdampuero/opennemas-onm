@@ -68,7 +68,7 @@ class ContentUrlMatcher
             && $content->pk_content === $id
             && $content->created === $date
             && $content->content_type_name === $type
-            && (is_null($slug) || $slug === $content->slug)
+            && (is_null($slug) || (string) $slug === (string) $content->slug)
             && (is_null($category) || $category === $content->category_name)
             && $content->isReadyForPublish()
         ) {
