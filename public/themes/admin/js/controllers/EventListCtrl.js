@@ -97,31 +97,6 @@
         $scope.getId = function(item) {
           return item.pk_content;
         };
-
-        /**
-         * @function getRelation
-         * @memberOf EventListCtrl
-         *
-         * @description
-         *   Returns the elements taht are in a relation.
-         *
-         * @param {Object} item     The item.
-         * @param {String} relation The name of the relation to fetch.
-         * @param {Object} single   Whether to return only one element or not.
-         *
-         * @return {Array} The list of relations
-         */
-        $scope.getRelation = function(item, name, single) {
-          var relation = item.related_contents.filter(function(el) {
-            return el.relationship === name;
-          });
-
-          if (single) {
-            relation = relation.shift();
-          }
-
-          return relation;
-        };
       }
     ]);
 })();
