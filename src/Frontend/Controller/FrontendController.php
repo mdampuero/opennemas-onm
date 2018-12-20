@@ -55,6 +55,7 @@ class FrontendController extends Controller
         $route  = $this->getRoute($action);
 
         $expected = $this->get('router')->generate($route, $query);
+        $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
 
         if ($request->getRequestUri() !== $expected) {
             return new RedirectResponse($expected);
@@ -84,6 +85,7 @@ class FrontendController extends Controller
         $item   = $this->getItem($request);
 
         $expected = $this->get('core.helper.url_generator')->generate($item);
+        $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
 
         if (empty($item) || !$item->isReadyForPublish()) {
             throw new ResourceNotFoundException();
