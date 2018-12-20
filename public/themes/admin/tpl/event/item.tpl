@@ -258,7 +258,10 @@
           </div>
           <div class="grid simple">
             <div class="grid-title">
-              <h4>{t}Image{/t}</h4>
+              <h4>
+                <i class="fa fa-picture-o m-r-10"></i>
+                {t}Image{/t}
+              </h4>
             </div>
             <div class="grid-body">
               <div class="thumbnail-wrapper">
