@@ -136,6 +136,10 @@ class Redirector
      */
     protected function getCacheId($slug, $type)
     {
+        if (is_null($type)) {
+            $type = [];
+        }
+
         return implode('-', [ 'redirector', $slug, implode('-', $type) ]);
     }
 
