@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Displays static pages.
+ * Displays events.
  */
 class EventController extends Controller
 {
@@ -32,7 +32,7 @@ class EventController extends Controller
         $cacheID = $this->view->getCacheId('frontpage', 'events', $page);
 
         if ($this->view->getCaching() === 0
-            || !$this->view->isCached("event/frontpage.tpl", $cacheID)
+            || !$this->view->isCached("event/list.tpl", $cacheID)
         ) {
             $date   = date('Y-m-d H:i:s');
             $epp    = $this->get('orm.manager')
@@ -80,7 +80,7 @@ class EventController extends Controller
 
         list($positions, $advertisements) = $this->getAds();
 
-        return $this->render('event/frontpage.tpl', [
+        return $this->render('event/list.tpl', [
             'ads_positions'      => $positions,
             'advertisements'     => $advertisements,
             'page'               => $page,
@@ -100,8 +100,9 @@ class EventController extends Controller
     {
         $oql = 'content_type_name = "event"'
             . ' and slug = "%s" and content_status = "1" and in_litter = "0"'
-            . ' and (starttime = "0000-00-00 00:00:00" or starttime is null or starttime <= "%s" )'
-            . ' and (endtime is null or endtime = "0000-00-00 00:00:00" or endtime > "%s")';
+            . ' and (starttime is null or starttime <= "%s" )'
+            . ' and (endtime is null or or endtime > "%s")';
+
         try {
             $content = $this->get('api.service.content')
                 ->getItemBy(sprintf(
@@ -120,7 +121,8 @@ class EventController extends Controller
         $cacheID = $this->view->getCacheId('content', $content->id);
 
         list($positions, $advertisements) = $this->getAds();
-        return $this->render('event/show.tpl', [
+
+        return $this->render('event/item.tpl', [
             'ads_positions'      => $positions,
             'advertisements'     => $advertisements,
             'category_real_name' => $content->title,
