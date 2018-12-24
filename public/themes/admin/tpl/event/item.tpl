@@ -117,7 +117,7 @@
                   </label>
                   <div class="controls">
                     <div class="input-group">
-                      <input class="form-control" datetime-picker datetime-picker-timezone="{$timezone}" datetime-picker-use-current=true datetime-picker-min="item.event_start_date" id="event_end_date" name="event_end_date" id="starttime" name="starttime" type="datetime" ng-model="item.starttime">
+                      <input class="form-control" datetime-picker datetime-picker-timezone="{$timezone}" datetime-picker-use-current=true datetime-picker-min="item.created" id="starttime" name="starttime" ng-model="item.starttime" type="datetime">
                       <span class="input-group-addon add-on">
                         <span class="fa fa-calendar"></span>
                       </span>
@@ -133,7 +133,7 @@
                   </label>
                   <div class="controls">
                     <div class="input-group">
-                      <input class="form-control" datetime-picker datetime-picker-timezone="{$timezone}" datetime-picker-use-current=true datetime-picker-min="item.endtime" id="endtime" name="endtime" id="endtime" name="endtime" type="datetime" ng-model="item.endtime">
+                      <input class="form-control" datetime-picker datetime-picker-timezone="{$timezone}" datetime-picker-use-current=true datetime-picker-min="item.endtime" id="endtime" name="endtime" ng-model="item.endtime" type="datetime">
                       <span class="input-group-addon add-on">
                         <span class="fa fa-calendar"></span>
                       </span>
@@ -146,7 +146,7 @@
                 <i class="fa fa-tag m-r-10"></i>{t}Tags{/t}
                 <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.tags }"></i>
                 <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.tags" ng-class="{ 'badge-danger' : item.tags.length === 0 }">
-                  <span ng-show="item.tags.length === 0">{t}No tags{/t}</span>
+                  <span ng-show="item.tags.length === 0"><strong>{t}No tags{/t}</strong></span>
                   <span ng-show="item.tags.length != 0">
                     <strong>[% item.tags.length %] {t}Tags{/t}</span></strong>
                   </span>
@@ -202,7 +202,7 @@
                     <label class="form-label" for="event_start_hour">{t}Start hour{/t}</label>
                     <div class="controls">
                       <div class="input-group">
-                        <input class="form-control" datetime-picker datetime-picker-format="LT" datetime-picker-timezone="{$timezone}" datetime-picker-min="item.event_end_date" datetime-picker-use-current="true" id="event_start_hour" name="event_start_hour" ng-model="item.event_start_hour" type="datetime">
+                        <input class="form-control" datetime-picker datetime-picker-format="HH:mm" datetime-picker-timezone="{$timezone}" datetime-picker-min="item.event_end_date" datetime-picker-use-current="true" id="event_start_hour" name="event_start_hour" ng-model="item.event_start_hour" type="datetime">
                         <span class="input-group-addon add-on">
                           <span class="fa fa-clock-o"></span>
                         </span>
@@ -226,7 +226,7 @@
                     <label class="form-label" for="event_end_hour">{t}End hour{/t}</label>
                     <div class="controls">
                       <div class="input-group">
-                        <input class="form-control" datetime-picker datetime-picker-format="LT" datetime-picker-timezone="{$timezone}" datetime-picker-min="item.event_start_hour" datetime-picker-use-current="true" id="event_end_hour" name="event_end_hour" ng-model="item.event_end_hour" type="datetime">
+                        <input class="form-control" datetime-picker datetime-picker-format="HH:mm" datetime-picker-timezone="{$timezone}" datetime-picker-min="item.event_start_hour" datetime-picker-use-current="true" id="event_end_hour" name="event_end_hour" ng-model="item.event_end_hour" type="datetime">
                         <span class="input-group-addon add-on">
                           <span class="fa fa-clock-o"></span>
                         </span>

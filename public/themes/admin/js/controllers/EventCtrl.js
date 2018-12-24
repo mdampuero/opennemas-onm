@@ -39,6 +39,7 @@
           description: '',
           favorite: 0,
           frontpage: 0,
+          created: new Date(),
           starttime: null,
           endtime: null,
           thumbnail: null,
