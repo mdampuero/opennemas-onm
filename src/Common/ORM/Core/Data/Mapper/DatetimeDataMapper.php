@@ -103,7 +103,7 @@ class DatetimeDataMapper
      */
     public function fromString($value)
     {
-        return $this->fromDatetimetz($value);
+        return $this->fromDatetime($value);
     }
 
     /**
