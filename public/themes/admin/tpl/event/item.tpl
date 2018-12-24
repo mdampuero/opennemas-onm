@@ -181,8 +181,7 @@
                 </div>
               </div>
               <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.when = !expanded.when">
-                <i class="fa fa-clock-o m-r-10"></i>
-                {t}When{/t}
+                <i class="fa fa-clock-o m-r-10"></i>{t}When{/t}
                 <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.when }"></i>
               </div>
               <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.when }">
