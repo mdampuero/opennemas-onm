@@ -170,7 +170,7 @@ class ContentPersister extends BasePersister
 
             $this->removeTags($id);
 
-            $this->commit();
+            $this->conn->commit();
 
             if ($this->hasCache()) {
                 $this->cache->remove($this->metadata->getPrefixedId($entity));
