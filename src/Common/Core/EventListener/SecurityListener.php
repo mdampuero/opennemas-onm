@@ -168,7 +168,7 @@ class SecurityListener implements EventSubscriberInterface
         $origin = $ugs->getOrigin();
 
         $userGroups = $ugs->setOrigin($user->getOrigin())
-            ->getListByIds(array_map(function($element) {
+            ->getListByIds(array_map(function ($element) {
                 return $element['user_group_id'];
             }, $user->user_groups));
 

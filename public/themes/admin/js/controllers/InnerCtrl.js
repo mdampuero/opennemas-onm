@@ -20,7 +20,6 @@
       function($controller, $scope, http) {
         $.extend(this, $controller('BaseCtrl', { $scope: $scope }));
 
-
         /**
          * @function generate
          * @memberOf InnerCtrl
