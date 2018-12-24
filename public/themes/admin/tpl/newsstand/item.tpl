@@ -196,13 +196,12 @@ jQuery(document).ready(function($) {
                 <div class="form-group">
                   <label for="category" class="form-label">{t}Category{/t}</label>
                   <div class="controls">
-                    <onm-category-selector ng-model="item.category" categories="categories" placeholder="{t}Select a category{/t}" default-value-text="{t}Select a category...{/t}" required />
+                    <onm-category-selector class="block" ng-model="item.category" categories="categories" placeholder="{t}Select a category{/t}" default-value-text="{t}Select a category...{/t}" required />
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="metadata" class="form-label">{t}Keywords{/t}</label>
-                  <span class="help">{t}List of words separated by commas{/t}.</span>
+                  <label for="metadata" class="form-label">{t}Tags{/t}</label>
                   <div class="controls">
                     {include file="ui/component/tags-input/tags.tpl" ngModel="item.tags"}
                   </div>
