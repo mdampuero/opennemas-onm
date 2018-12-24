@@ -101,7 +101,7 @@ class EventController extends Controller
         $oql = 'content_type_name = "event"'
             . ' and slug = "%s" and content_status = "1" and in_litter = "0"'
             . ' and (starttime is null or starttime <= "%s" )'
-            . ' and (endtime is null or or endtime > "%s")';
+            . ' and (endtime is null or endtime > "%s")';
 
         try {
             $content = $this->get('api.service.content')
