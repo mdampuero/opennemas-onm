@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('onm.tagsInput', [ 'onm.http' ])
+  angular.module('onm.tagsInput', [ 'onm.http', 'onm.oql' ])
 
     /**
      * @ngdoc directive
@@ -17,12 +17,12 @@
           controller: 'OnmTagsInputCtrl',
           restrict: 'E',
           scope: {
-            addFromAutoCompleteOnly: '=',
-            autoGenerate:            '=',
-            generateFrom:            '=',
-            locale:                  '=',
-            ngModel:                 '=',
-            placeholder:             '@',
+            autoGenerate:  '=',
+            generateFrom:  '=',
+            locale:        '=',
+            ngModel:       '=',
+            placeholder:   '@',
+            selectionOnly: '=',
           },
           template: function() {
             return '<div class="tags-input-buttons">' +
@@ -36,13 +36,16 @@
               '</button>' +
             '</div>' +
             '<div>' +
-              '<tags-input add-from-autocomplete-only="[% addFromAutoCompleteOnly %]" display-property="name" key-property="id" ng-model="ngModel" on-tag-adding="exists($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
-                '<auto-complete debounce-delay="250" highlight-matched-text="true" load-on-down-arrow="true" min-length="3" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
+              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="ngModel" on-tag-adding="add($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
+                '<auto-complete debounce-delay="250" highlight-matched-text="true" load-on-down-arrow="true" min-length="2" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
               '</tags-input>' +
               '<input name="tags" type="hidden" ng-value="getJsonValue()">' +
             '</div>' +
             '<script type="text/ng-template" id="tag">' +
-              '<span ng-bind-html="$highlight($getDisplayText())"></span>' +
+              '<span class="tag-item-text" ng-bind-html="$highlight($getDisplayText())"></span>' +
+              '<span class="tag-item-mark" ng-if="$parent.$parent.$parent.$parent.$parent.isNewTag(data)">' +
+                '(' + $window.strings.tags.newItem + ')' +
+              '</span>' +
             '</script';
           }
         };
@@ -60,8 +63,8 @@
      *   List, checks and validates tags.
      */
     .controller('OnmTagsInputCtrl', [
-      '$scope', '$timeout', 'http',
-      function($scope, $timeout, http) {
+      '$scope', '$timeout', '$window', 'http', 'oqlEncoder',
+      function($scope, $timeout, $window, http, oqlEncoder) {
         /**
          * @function clear
          * @memberOf OnmTagsInputCtrl
@@ -74,7 +77,7 @@
         };
 
         /**
-         * @function exists
+         * @function add
          * @memberOf OnmTagsInputCtrl
          *
          * @description
@@ -83,35 +86,15 @@
          *
          * @param {Object} tag The added tag object.
          */
-        $scope.exists = function(tag) {
-          // If selected from the autocomplete
-          if (tag.id) {
-            return true;
+        $scope.add = function(tag) {
+          if ($scope.isNewTag(tag)) {
+            tag.name = tag.name.replace(
+              ' (' + $window.strings.tags.newItem + ')', '');
+
+            return $scope.validate(tag);
           }
 
-          tag.id          = tag.name;
-          tag.language_id = $scope.locale;
-
-          var oql = 'name = "' + tag.name + '" order by name asc limit 1';
-
-          return http.get({
-            name: 'api_v1_backend_tags_list',
-            params: { oql: oql }
-          }).then(function(response) {
-            if (response.data.total === 0) {
-              return $scope.validate(tag);
-            }
-
-            for (var property in response.data.items[0]) {
-              tag[property] = response.data.items[0][property];
-            }
-
-            return $scope.ngModel.filter(function(e) {
-              return e.id === tag.id;
-            }).length === 0;
-          }, function() {
-            return false;
-          });
+          return true;
         };
 
         /**
@@ -196,13 +179,37 @@
          * @return {Object} The list of tags.
          */
         $scope.list = function(query) {
-          var oql = 'name ~ "%' + query + '%" order by name asc limit 10';
+          var criteria = {
+            name: query,
+            epp: 10,
+            page: 1
+          };
+
+          oqlEncoder.configure({ placeholder: { name: '[key] ~ "%[value]%"' } });
+
+          var oql = oqlEncoder.getOql(criteria);
 
           return http.get({
             name: 'api_v1_backend_tags_list',
             params: { oql: oql }
           }).then(function(response) {
-            return response.data.items;
+            var items = response.data.items;
+
+            if (!$scope.selectionOnly) {
+              var found = items.filter(function(e) {
+                return e.name === query;
+              });
+
+              if (found.length === 0) {
+                items.push({
+                  id: query,
+                  language_id: $scope.locale,
+                  name: query
+                });
+              }
+            }
+
+            return items;
           });
         };
 
@@ -220,11 +227,9 @@
          */
         $scope.validate = function(tag) {
           // If selected from the autocomplete
-          if (tag.id) {
+          if (!$scope.isNewTag(tag)) {
             return true;
           }
-
-          tag.language_id = $scope.locale;
 
           return http.get({
             name: 'api_v1_backend_tags_validate',

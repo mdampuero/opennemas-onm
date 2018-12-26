@@ -1,1 +1,1 @@
-<onm-tags-input add-from-auto-complete-only="{if !$app.security->hasPermission('TAG_CREATE')}true{else}false{/if}" ng-model="{$ngModel}" locale="config.locale" generate-from="generateTagsFrom" auto-generate="flags.generate.tags" placeholder="{t}Add a tag...{/t}"/>
+<onm-tags-input auto-generate="flags.generate.tags" locale="config.locale" generate-from="generateTagsFrom" ng-model="{$ngModel}" placeholder="{t}Add a tag...{/t}" selection-only="{if !$app.security->hasPermission('TAG_CREATE')}true{else}false{/if}"/>
