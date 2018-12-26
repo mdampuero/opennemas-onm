@@ -105,6 +105,9 @@ class Tokenizer
      */
     public function tokenize($query)
     {
+        // Replace escaped quotes
+        $query = preg_replace('/\\\"/', '@@@', $query);
+
         $tokens = $this->getTokens($query);
 
         // Get internal OQL tokens
@@ -158,6 +161,7 @@ class Tokenizer
     {
         $matrix = [];
         $tokens = [ $query ];
+
         foreach ($this->steps as $step) {
             foreach ($tokens as $token) {
                 $replacement = $this->replaceTokens($token, $matrix, $step);

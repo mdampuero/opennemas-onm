@@ -325,6 +325,9 @@ class SqlTranslator
             $str = str_replace($str[0], '', $str);
         }
 
+        // Expand escaped quotes
+        $str = preg_replace('/@@@/', '\\\"', $str);
+
         // Change datetime to UTC
         if ($type === 'T_DATETIME') {
             $date = new \DateTime($str);
