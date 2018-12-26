@@ -1,1 +1,1 @@
-<onm-tags-input auto-generate="flags.generate.tags" locale="config.locale" generate-from="generateTagsFrom" ng-model="{$ngModel}" placeholder="{t}Add a tag...{/t}" selection-only="{if !$app.security->hasPermission('TAG_CREATE')}true{else}false{/if}"/>
+<onm-tags-input auto-generate="flags.generate.tags" locale="config.locale" generate-from="generateTagsFrom" max-tags="10" ng-model="{$ngModel}" placeholder="{t}Add a tag...{/t}" selection-only="{if !$app.security->hasPermission('TAG_CREATE')}true{else}false{/if}"/>

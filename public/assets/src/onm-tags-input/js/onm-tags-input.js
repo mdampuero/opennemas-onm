@@ -20,6 +20,7 @@
             autoGenerate:  '=',
             generateFrom:  '=',
             locale:        '=',
+            maxTags:       '=',
             ngModel:       '=',
             placeholder:   '@',
             selectionOnly: '=',
@@ -34,6 +35,9 @@
                 '<i class="fa fa-trash-o m-r-5"></i>' +
                 $window.strings.tags.clear +
               '</button>' +
+              '<span class="tags-input-counter badge badge-default pull-right" ng-class="{ \'badge-danger\': ngModel.length == maxTags, \'badge-warning text-default\': ngModel.length > maxTags/2 && ngModel.length < maxTags }">' +
+                '[% ngModel.length %] / [% maxTags %]' +
+              '</span>' +
             '</div>' +
             '<div>' +
               '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="ngModel" on-tag-adding="add($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
@@ -87,6 +91,10 @@
          * @param {Object} tag The added tag object.
          */
         $scope.add = function(tag) {
+          if ($scope.ngModel.length >= $scope.maxTags) {
+            return false;
+          }
+
           if ($scope.isNewTag(tag)) {
             tag.name = tag.name.replace(
               ' (' + $window.strings.tags.newItem + ')', '');
