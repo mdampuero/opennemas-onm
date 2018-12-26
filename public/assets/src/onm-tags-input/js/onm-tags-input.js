@@ -36,11 +36,11 @@
                 $window.strings.tags.clear +
               '</button>' +
               '<span class="tags-input-counter badge badge-default pull-right" ng-class="{ \'badge-danger\': ngModel.length == maxTags, \'badge-warning text-default\': ngModel.length > maxTags/2 && ngModel.length < maxTags }">' +
-                '[% ngModel.length %] / [% maxTags %]' +
+                '[% ngModel ? ngModel.length : 0 %] / [% maxTags %]' +
               '</span>' +
             '</div>' +
             '<div>' +
-              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="ngModel" on-tag-adding="add($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
+              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="ngModel" on-tag-adding="add($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" required tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
                 '<auto-complete debounce-delay="250" highlight-matched-text="true" load-on-down-arrow="true" min-length="2" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
               '</tags-input>' +
               '<input name="tags" type="hidden" ng-value="getJsonValue()">' +
@@ -91,7 +91,7 @@
          * @param {Object} tag The added tag object.
          */
         $scope.add = function(tag) {
-          if ($scope.ngModel.length >= $scope.maxTags) {
+          if ($scope.ngModel && $scope.ngModel.length >= $scope.maxTags) {
             return false;
           }
 
