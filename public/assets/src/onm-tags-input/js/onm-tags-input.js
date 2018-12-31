@@ -49,8 +49,12 @@
             '</div>' +
             '<script type="text/ng-template" id="tag">' +
               '<span class="tag-item-text" ng-bind-html="$highlight($getDisplayText())"></span>' +
-              '<span class="tag-item-mark" ng-if="$parent.$parent.$parent.$parent.$parent.isNewTag(data)">' +
-                '(' + $window.strings.tags.newItem + ')' +
+              '<span class="badge badge-success pull-right text-uppercase" ng-if="$parent.$parent.$parent.$parent.$parent.isNewTag(data)">' +
+                '<strong>' + $window.strings.tags.newItem + '</strong>' +
+              '</span>' +
+
+              '<span class="badge badge-default pull-right" ng-show="$parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id]">' +
+                '<strong>[% $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] %]</strong>' +
               '</span>' +
             '</script';
           }
@@ -204,6 +208,8 @@
             name: 'api_v1_backend_tags_list',
             params: { oql: oql }
           }).then(function(response) {
+            $scope.data = response.data;
+
             var items = response.data.items;
 
             if (!$scope.selectionOnly) {
