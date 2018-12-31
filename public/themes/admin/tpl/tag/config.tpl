@@ -55,7 +55,7 @@
               </div>
             </div>
             <div class="form-group col-lg-4 col-md-6">
-              <label class="form-label" for="max-tags">{t}Number of iitems in the list of suggestions{/t}</label>
+              <label class="form-label" for="max-tags">{t}Number of items in the list of suggestions{/t}</label>
               <div class="controls">
                 <input class="form-control" id="max-tags" ng-model="settings.tags_maxResults" type="number">
               </div>
