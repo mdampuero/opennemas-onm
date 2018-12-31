@@ -50,8 +50,8 @@
           $scope.loading = true;
 
           http.get('api_v1_backend_tags_config').then(function(response) {
-            $scope.blacklist_tag = response.data.blacklist_tag;
-            $scope.loading = false;
+            $scope.settings = response.data;
+            $scope.loading  = false;
           }, function() {
             $scope.loading = false;
           });
@@ -65,10 +65,8 @@
         $scope.saveConf = function($event) {
           $event.preventDefault();
 
-          var data = { blacklist_tag: $scope.blacklist_tag };
-
           $scope.saving = false;
-          http.put('api_v1_backend_tag_conf_save', data)
+          http.put('api_v1_backend_tag_conf_save', $scope.settings)
             .then(function(response) {
               $scope.saving = false;
 

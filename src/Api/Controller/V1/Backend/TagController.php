@@ -91,10 +91,19 @@ class TagController extends ApiController
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('list'));
 
-        return new JsonResponse([
-            'blacklist_tag' => $this->get('core.validator')
-                ->getConfig(Validator::BLACKLIST_RULESET_TAGS)
-        ]);
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get([ 'blacklist_tag', 'tags_maxItems', 'tags_maxResults' ]);
+
+        if (array_key_exists('tags_maxItems', $settings)) {
+            $settings['tags_maxItems'] = (int) $settings['tags_maxItems'];
+        }
+
+        if (array_key_exists('tags_maxResults', $settings)) {
+            $settings['tags_maxResults'] = (int) $settings['tags_maxResults'];
+        }
+
+        return new JsonResponse($settings);
     }
 
     /**
@@ -108,29 +117,24 @@ class TagController extends ApiController
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('list'));
 
-        $blacklistConf = $request->request->all();
+        $settings = $request->request->all();
 
-        if (!is_array($blacklistConf) ||
-            !array_key_exists('blacklist_tag', $blacklistConf) ||
-            empty($blacklistConf['blacklist_tag'])
+        if (!array_key_exists('blacklist_tag', $settings)
+            || empty($settings['blacklist_tag'])
         ) {
-            $blacklistConf = ['blacklist_tag' => null];
+            $settings['blacklist_tag'] = null;
         }
 
         $msg = $this->get('core.messenger');
+
         try {
-            $this->get('core.validator')->setConfig(
-                Validator::BLACKLIST_RULESET_TAGS,
-                $blacklistConf['blacklist_tag']
-            );
+            $this->get('orm.manager')->getDataSet('Settings')->set($settings);
             $msg->add(_('Item saved successfully'), 'success');
         } catch (\Exception $e) {
-            $msg->add(
-                _('Unable to save settings'),
-                'error'
-            );
+            $msg->add(_('Unable to save settings'), 'error');
             $this->get('error.log')->error($e->getMessage());
         }
+
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
