@@ -37,7 +37,12 @@ class TagValidator extends Validator
             );
 
             try {
-                $this->container->get('api.service.tag')->getItemBy($oql);
+                $tag = $this->container->get('api.service.tag')->getItemBy($oql);
+
+                // Tags with different names are considered different
+                if ($tag->name !== $item->name) {
+                    return;
+                }
             } catch (\Exception $e) {
                 return;
             }
