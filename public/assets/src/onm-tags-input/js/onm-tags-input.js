@@ -53,8 +53,8 @@
                 '<strong>' + $window.strings.tags.newItem + '</strong>' +
               '</span>' +
 
-              '<span class="badge badge-default pull-right" ng-show="$parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id]">' +
-                '<strong>[% $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] %]</strong>' +
+              '<span class="badge badge-default pull-right" ng-class="{ \'badge-danger\': !$parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] }" ng-show="!$parent.$parent.$parent.$parent.$parent.isNewTag(data)">' +
+                '<strong>[% $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] ? $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] : 0 %]</strong>' +
               '</span>' +
             '</script';
           }
