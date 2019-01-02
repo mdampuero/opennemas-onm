@@ -43,7 +43,7 @@
             '</div>' +
             '<div>' +
               '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="ngModel" on-tag-adding="add($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
-                '<auto-complete debounce-delay="250" max-results-to-show="[% maxResults + 1 %]" highlight-matched-text="true" load-on-down-arrow="true" min-length="2" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
+                '<auto-complete debounce-delay="250" highlight-matched-text="true" load-on-down-arrow="true" min-length="2" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
               '</tags-input>' +
               '<input name="tags" type="hidden" ng-value="getJsonValue()">' +
             '</div>' +
