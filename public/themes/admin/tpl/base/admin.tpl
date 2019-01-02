@@ -562,6 +562,5 @@
     {/javascripts}
   {/block}
   {block name="footer-js"}{/block}
-  {browser_update}
   {uservoice_widget}
 </body>
