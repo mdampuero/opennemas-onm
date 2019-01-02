@@ -195,7 +195,7 @@
         $scope.list = function(query) {
           var criteria = {
             name: query,
-            epp: 10,
+            epp: $scope.maxResults,
             orderBy: { 'length(name)': 'asc' },
             page: 1
           };
