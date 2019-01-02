@@ -245,7 +245,7 @@
                       </div>
                       <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="thumbnail" media-picker-type="photo"></div>
                     </dynamic-image>
-                    <input type="hidden" name="video_image" ng-value="thumbnail.id"/>
+                    <input type="hidden" name="information[thumbnail]" ng-value="thumbnail.pk_photo"/>
                   </div>
                 </div>
               </div>
