@@ -382,7 +382,7 @@
                         <div class="checkbox">
                           <input class="form-control" id="browser-update" name="browser-update" ng-false-value="'0'" ng-model="settings.browser_update" ng-true-value="'1'"  type="checkbox"/>
                           <label class="form-label" for="browser-update">
-                            {t}Enable message for updating old browsers{/t}
+                            {t}Notify users that they should update their browser{/t}
                           </label>
                         </div>
                       </div>
