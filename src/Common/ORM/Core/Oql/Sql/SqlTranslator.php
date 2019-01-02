@@ -49,7 +49,7 @@ class SqlTranslator
         'M_ASC'          => 'asc',
         'M_DESC'         => 'desc',
         'M_ORDER_BY'     => 'order by',
-        'M_LENGTH'       => 'length',
+        'M_LENGTH'       => 'char_length',
         'M_LIMIT'        => 'limit',
         'M_OFFSET'       => 'offset',
         'O_EQUALS'       => '=',
