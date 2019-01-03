@@ -103,7 +103,7 @@ class NewsletterHelper
 
         return array_map(function ($a) {
             return [
-                'id'   => $a['id'],
+                'id'   => (string) $a['id'],
                 'name' => $a['name'],
                 'type' => 'acton',
             ];
@@ -146,7 +146,7 @@ class NewsletterHelper
 
         return array_map(function ($a) {
             return [
-                'id'   => $a->pk_user_group,
+                'id'   => (string) $a->pk_user_group,
                 'name' => $a->name,
                 'type' => 'list'
             ];
