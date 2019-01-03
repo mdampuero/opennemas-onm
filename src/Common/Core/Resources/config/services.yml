@@ -10,6 +10,7 @@ parameters:
             - ads_generator
             - ads_scripts
             - adsense_validator
+            - browser_update
             - comscore
             - chartbeat
             - cmp_script
@@ -26,6 +27,7 @@ parameters:
             - css_includes
             - js_includes
             - backend_analytics
+            - browser_update
             - trimwhitespace
         ignore_cli:
             - backend_analytics
@@ -33,6 +35,7 @@ parameters:
         output:
             - css_includes
             - js_includes
+            - browser_update
     core.helper.comment.default_params:
         disable_comments: false
         with_comments: true
