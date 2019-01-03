@@ -65,7 +65,7 @@
        */
       this.getCondition = function(key, value) {
         if (typeof value === 'string' || value instanceof String) {
-          value = value.replace('"', '\\"');
+          value = value.replace(/"/g, '\\"');
         }
 
         // If placeholder

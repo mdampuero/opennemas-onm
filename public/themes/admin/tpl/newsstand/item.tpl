@@ -52,7 +52,7 @@ jQuery(document).ready(function($) {
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <button class="btn btn-loading btn-primary text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving || form.$invalid" type="button">
+              <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving || form.$invalid" type="button">
                 <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                 {t}Save{/t}
               </button>
@@ -201,8 +201,7 @@ jQuery(document).ready(function($) {
                 </div>
 
                 <div class="form-group">
-                  <label for="metadata" class="form-label">{t}Keywords{/t}</label>
-                  <span class="help">{t}List of words separated by commas{/t}.</span>
+                  <label for="metadata" class="form-label">{t}Tags{/t}</label>
                   <div class="controls">
                     {include file="ui/component/tags-input/tags.tpl" ngModel="item.tags"}
                   </div>

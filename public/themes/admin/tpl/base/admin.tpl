@@ -86,6 +86,7 @@
         tags: {
           clear: '{t}Clear{/t}',
           generate: '{t}Generate{/t}',
+          newItem: '{t}New tag{/t}',
         }
       };
     </script>

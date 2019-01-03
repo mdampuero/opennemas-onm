@@ -62,25 +62,12 @@
               <li class="quicklinks hidden-xs">
                 <span class="h-seperate"></span>
               </li>
-              {if isset($id)}
-                {acl isAllowed="ARTICLE_UPDATE"}
-                  <li class="quicklinks">
-                    <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving" type="button">
-                      <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
-                      <span class="text">{t}Update{/t}</span>
-                    </button>
-                  </li>
-                {/acl}
-              {else}
-                {acl isAllowed="ARTICLE_CREATE"}
-                  <li class="quicklinks">
-                    <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving" type="button">
-                      <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
-                      <span class="text">{t}Save{/t}</span>
-                    </button>
-                  </li>
-                {/acl}
-              {/if}
+              <li class="quicklinks">
+                <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving || articleForm.$invalid" type="button">
+                  <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
+                  <span class="text">{t}Save{/t}</span>
+                </button>
+              </li>
             </ul>
           </div>
         </div>

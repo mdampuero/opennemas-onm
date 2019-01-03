@@ -162,4 +162,20 @@ class SmartySettingTest extends \PHPUnit\Framework\TestCase
             'field' => 'flob'
         ], $this->smarty));
     }
+
+    /**
+     * Tests smarty_function_setting when a setting name provided but the
+     * returned value from database is empty and the dataset returns the
+     * provided default value.
+     */
+    public function testSettingWhenDefaultValue()
+    {
+        $this->ds->expects($this->once())->method('get')
+            ->with('xyzzy')->willReturn('thud');
+
+        $this->assertEquals('thud', smarty_function_setting([
+            'name'    => 'xyzzy',
+            'default' => 'thud'
+        ], $this->smarty));
+    }
 }

@@ -417,7 +417,8 @@
          *   Saves a new article.
          */
         $scope.save = function() {
-          if ($scope.articleForm.$invalid || !$scope.data.article.pk_fk_content_category) {
+          if ($scope.articleForm.$invalid ||
+              !$scope.data.article.pk_fk_content_category) {
             $scope.showRequired = true;
             return;
           }

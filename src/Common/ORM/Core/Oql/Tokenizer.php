@@ -26,11 +26,11 @@ class Tokenizer
         [ 'T_STRING' ],
         [
             'COMMA', 'C_AND', 'C_OR', 'G_CPARENTHESIS', 'G_CBRACKET',
-            'G_OBRACKET', 'G_OPARENTHESIS', 'M_ASC', 'M_DESC', 'M_LIMIT',
-            'M_OFFSET', 'M_ORDER_BY', 'O_GREAT_EQUALS', 'O_LESS_EQUALS',
-            'O_NOT_EQUALS', 'O_NOT_IN', 'O_NOT_LIKE', 'O_NOT_REGEXP',
-            'O_EQUALS', 'O_GREAT', 'O_IN', 'O_IS', 'O_NOT_IS', 'O_LESS',
-            'O_LIKE', 'O_REGEXP',
+            'G_OBRACKET', 'G_OPARENTHESIS', 'M_ASC', 'M_DESC', 'M_LENGTH',
+            'M_LIMIT', 'M_OFFSET', 'M_ORDER_BY', 'O_GREAT_EQUALS',
+            'O_LESS_EQUALS', 'O_NOT_EQUALS', 'O_NOT_IN', 'O_NOT_LIKE',
+            'O_NOT_REGEXP', 'O_EQUALS', 'O_GREAT', 'O_IN', 'O_IS', 'O_NOT_IS',
+            'O_LESS', 'O_LIKE', 'O_REGEXP',
         ],
         [
             'T_BOOL', 'T_DATETIME', 'T_NULL', 'T_FLOAT', 'T_INTEGER', 'T_FIELD',
@@ -53,6 +53,7 @@ class Tokenizer
         'M_ASC'          => '/\s*asc\s*/',
         'M_DESC'         => '/\s*desc\s*/',
         'M_LIMIT'        => '/\s*limit\s+/',
+        'M_LENGTH'       => '/\s*length\s*/',
         'M_OFFSET'       => '/\s*offset\s+/',
         'M_ORDER_BY'     => '/\s*order by\s+/',
         'O_GREAT_EQUALS' => '/\s*>=\s*/',
@@ -90,9 +91,10 @@ class Tokenizer
         'S_OFFSET'    => '/M_OFFSET T_INTEGER/',
         'T_LITERAL'   => '/T_ARRAY|T_BOOL|T_DATETIME|T_FLOAT|T_INTEGER|T_NULL|T_STRING/',
         'T_ARRAY'     => '/G_OBRACKET\s*T_LITERAL\s*(COMMA\s*T_LITERAL\s*)*\s*G_CBRACKET/',
-        'S_ORDER'     => '/M_ORDER_BY\s*T_FIELD\s*(M_ASC|M_DESC)(\s*COMMA\s*T_FIELD\s*(M_ASC|M_DESC))*/',
+        'S_FIELD'     => '/T_FIELD|M_LENGTH\s*G_OPARENTHESIS\s*T_FIELD\s*G_CPARENTHESIS/',
+        'S_ORDER'     => '/M_ORDER_BY\s*S_FIELD\s*(M_ASC|M_DESC)(\s*COMMA\s*S_FIELD\s*(M_ASC|M_DESC))*/',
         'S_MODIFIER'  => '/S_ORDER(\s*S_LIMIT\s*(S_OFFSET)?)?|(S_ORDER)?\s*S_LIMIT(\s*S_OFFSET)?/',
-        'S_CONDITION' => '/T_FIELD\s*T_OPERATOR\s*(T_FIELD|T_LITERAL)|T_LITERAL\s*T_OPERATOR\s*T_FIELD|G_OPARENTHESIS\s*S_CONDITION\s*G_CPARENTHESIS|S_CONDITION(\s*T_CONNECTOR\s*S_CONDITION)+/',
+        'S_CONDITION' => '/S_FIELD\s*T_OPERATOR\s*(S_FIELD|T_LITERAL)|T_LITERAL\s*T_OPERATOR\s*S_FIELD|G_OPARENTHESIS\s*S_CONDITION\s*G_CPARENTHESIS|S_CONDITION(\s*T_CONNECTOR\s*S_CONDITION)+/',
         'OQL'         => '/G_OPARENTHESIS\s*OQL\s*G_CPARENTHESIS|OQL(\s*T_CONNECTOR\s*OQL)+|S_CONDITION(\s*S_MODIFIER|OQL)*|OQL\s*S_MODIFIER|OQL\s*OQL|^S_MODIFIER$/',
     ];
 
@@ -105,6 +107,9 @@ class Tokenizer
      */
     public function tokenize($query)
     {
+        // Replace escaped quotes
+        $query = preg_replace('/\\\"/', '@@@', $query);
+
         $tokens = $this->getTokens($query);
 
         // Get internal OQL tokens
@@ -158,6 +163,7 @@ class Tokenizer
     {
         $matrix = [];
         $tokens = [ $query ];
+
         foreach ($this->steps as $step) {
             foreach ($tokens as $token) {
                 $replacement = $this->replaceTokens($token, $matrix, $step);

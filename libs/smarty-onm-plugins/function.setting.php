@@ -11,6 +11,7 @@ function smarty_function_setting($params, &$smarty)
         return '';
     }
 
+    $default = null;
     $request = $smarty->getContainer()->get('request_stack')
         ->getCurrentRequest();
 
@@ -21,10 +22,14 @@ function smarty_function_setting($params, &$smarty)
         return -1;
     }
 
+    if (array_key_exists('default', $params)) {
+        $default = $params['default'];
+    }
+
     $value = $smarty->getContainer()
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance')
-        ->get($params['name']);
+        ->get($params['name'], $default);
 
     if (array_key_exists('field', $params)) {
         if (is_array($value) && array_key_exists($params['field'], $value)) {

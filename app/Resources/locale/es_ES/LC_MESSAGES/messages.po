@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-02 22:01+0000\n"
-"PO-Revision-Date: 2019-01-02 23:02+0100\n"
+"POT-Creation-Date: 2019-01-03 11:00+0000\n"
+"PO-Revision-Date: 2019-01-03 12:01+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -5213,6 +5213,9 @@ msgstr "Limpiar"
 msgid "Generate"
 msgstr "Generar"
 
+msgid "New tag"
+msgstr "Nueva etiqueta"
+
 msgid "Instance information"
 msgstr "Información de la instancia"
 
@@ -6993,9 +6996,6 @@ msgstr "Divide los decimales con un punto"
 msgid "Item"
 msgstr "Elemento"
 
-msgid "List of words separated by commas"
-msgstr "Lista de palabras separadas por comas"
-
 msgid "Delete letter"
 msgstr "Eliminar carta"
 
@@ -7524,9 +7524,6 @@ msgstr "Editar libro"
 
 msgid "Cover image"
 msgstr "Imagen de portada"
-
-msgid "Separated by comas"
-msgstr "Separadas por comas"
 
 msgid "Delete all the contents in category"
 msgstr "Eliminar todos los contenidos en esta categoría"
@@ -8198,6 +8195,12 @@ msgstr "Haz clic en las flechas para revelar más opciones de configuración."
 
 msgid "Add items"
 msgstr "Añadir elementos"
+
+msgid "Maximum number of tags per content"
+msgstr "Número máximo de etiquetas por contenido"
+
+msgid "Number of items in the list of suggestions"
+msgstr "Número de elementos en la lista de sugerencias"
 
 msgid "Config tag module"
 msgstr "Configuración del módulo «Etiquetas»"
@@ -9213,6 +9216,12 @@ msgstr "Bienvenido al Gestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Usa la barra lateral derecha para explorar la información disponible."
+
+#~ msgid "List of words separated by commas"
+#~ msgstr "Lista de palabras separadas por comas"
+
+#~ msgid "Separated by comas"
+#~ msgstr "Separadas por comas"
 
 #~ msgid ""
 #~ "Some elements were removed because this frontpage had too many contents."
