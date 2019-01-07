@@ -439,10 +439,10 @@ class Menu
 
         // If the content multilanguage is disabled
         // remove additional translations
-        if ($isMultilanguageEnable) {
+        if (!$isMultilanguageEnable) {
             $item = $fm->set($item)
                 ->filter('localize', [
-                    'keys' => $this->getL10nKeys(),
+                    'keys'  => $this->getL10nKeys(),
                     'locale' => getService('core.locale')
                         ->setContext('frontend')->getLocale()
                 ])
