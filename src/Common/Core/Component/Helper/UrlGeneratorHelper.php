@@ -66,29 +66,6 @@ class UrlGeneratorHelper
     }
 
     /**
-     * Returns the list of configurations for uri generation.
-     *
-     * @return array the array of configurations
-     */
-    public function getConfig()
-    {
-        return [
-            'article'     => 'articulo/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'opinion'     => 'opinion/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'blog'        => 'blog/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'video'       => 'video/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'album'       => 'album/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'poll'        => 'encuesta/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'static_page' => 'estaticas/_SLUG_.html',
-            'ad'          => 'publicidad/_ID_.html',
-            'kiosko'      => 'portadas-papel/_CATEGORY_/_DATE__ID_.html',
-            'letter'      => 'cartas-al-director/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'special'     => 'especiales/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'book'        => 'libro/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-        ];
-    }
-
-    /**
      * Returns a generated uri for a content type given some params.
      *
      * @param string $content The content to generate the url.
@@ -130,6 +107,20 @@ class UrlGeneratorHelper
         $this->locale->setContext($context);
 
         return $uri;
+    }
+
+    /**
+     * Checks if the provided URI is for the provided item.
+     *
+     * @param Content $item The item.
+     * @param string  $uri  The URI to check.
+     *
+     * @return boolean True if the URI is valid for the current item.  False
+     *                 otherwise.
+     */
+    public function isValid($item, $uri)
+    {
+        return $uri === $this->generate($item);
     }
 
     /**
@@ -202,9 +193,9 @@ class UrlGeneratorHelper
             return $this->{$methodName}($content);
         }
 
-        $created = (is_object($content->created)) ?
-            $content->created->format('Y-m-d H:i:s') :
-            $content->created;
+        $created = is_object($content->created)
+            ? $content->created->format('Y-m-d H:i:s')
+            : $content->created;
 
         return $this->generateUriFromConfig(strtolower($content->content_type_name), [
             'id'       => sprintf('%06d', $content->id),
@@ -223,9 +214,10 @@ class UrlGeneratorHelper
      */
     protected function getUriForLetter($content)
     {
-        $created = (is_object($content->created)) ?
-            $content->created->format('Y-m-d H:i:s') :
-            $content->created;
+        $created = is_object($content->created)
+            ? $content->created->format('Y-m-d H:i:s')
+            : $content->created;
+
         return $this->generateUriFromConfig('letter', [
             'id'       => sprintf('%06d', $content->id),
             'date'     => date('YmdHis', strtotime($created)),
@@ -253,32 +245,11 @@ class UrlGeneratorHelper
             $type = 'blog';
         }
 
-        $authorName = 'author';
-        if ($content->fk_author == 0) {
-            if ((int) $content->type_opinion == 1) {
-                $authorName = 'editorial';
-            } elseif ((int) $content->type_opinion == 2) {
-                $authorName = 'director';
-            }
-        } else {
-            $authorAux = $content->author;
-            if (!is_object($authorAux)) {
-                $authorAux = $this->container->get('user_repository')
-                    ->find($content->fk_author);
-            }
-
-            if (is_object($authorAux)) {
-                $authorName = $authorAux->name;
-            }
-        }
-
-        $authorName = \Onm\StringUtils::generateSlug($authorName);
-
         return $this->generateUriFromConfig($type, [
             'id'       => sprintf('%06d', $content->id),
             'date'     => date('YmdHis', strtotime($content->created)),
             'slug'     => urlencode($content->slug),
-            'category' => urlencode($authorName),
+            'category' => urlencode($this->getAuthorName($content)),
         ]);
     }
 
@@ -332,5 +303,62 @@ class UrlGeneratorHelper
         $uriTemplate = $config[$contentType];
 
         return preg_replace($keys, $values, $uriTemplate);
+    }
+
+    /**
+     * Returns the author name to use in the URI for an opinion.
+     *
+     * @param Opinion $opinion The opinion.
+     *
+     * @return string The author name.
+     */
+    protected function getAuthorName($opinion)
+    {
+        if (!empty($opinion->fk_author)) {
+            if (!is_object($opinion->author)) {
+                $opinion->author = $this->container->get('user_repository')
+                    ->find($opinion->fk_author);
+            }
+
+            if (!empty($opinion->author)) {
+                return $this->container->get('data.manager.filter')
+                    ->set($opinion->author->name)
+                    ->filter('slug')
+                    ->get();
+            }
+        }
+
+        if ((int) $opinion->type_opinion == 1) {
+            return 'editorial';
+        }
+
+        if ((int) $opinion->type_opinion == 2) {
+            return 'director';
+        }
+
+        return 'author';
+    }
+
+    /**
+     * Returns the list of configurations for uri generation.
+     *
+     * @return array the array of configurations
+     */
+    protected function getConfig()
+    {
+        return [
+            'article'     => 'articulo/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'opinion'     => 'opinion/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'blog'        => 'blog/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'video'       => 'video/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'album'       => 'album/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'poll'        => 'encuesta/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'static_page' => 'estaticas/_SLUG_.html',
+            'ad'          => 'publicidad/_ID_.html',
+            'kiosko'      => 'portadas-papel/_CATEGORY_/_DATE__ID_.html',
+            'letter'      => 'cartas-al-director/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'special'     => 'especiales/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'book'        => 'libro/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+        ];
     }
 }
