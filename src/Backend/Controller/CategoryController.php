@@ -32,11 +32,11 @@ class CategoryController extends Controller
      */
     public function listAction()
     {
-        $cm           = $this->get('category_repository');
-        $categories   = $cm->findBy(null, 'name ASC');
+        $categories   = $this
+            ->get('orm.manager')
+            ->getRepository('Category')
+            ->findBy('order by name asc');
         $languageData = $this->getLocaleData('frontend', null, true);
-
-        $cm->sortCategories($categories);
 
         $map = [];
         foreach ($categories as $category) {
