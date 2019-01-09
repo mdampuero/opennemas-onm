@@ -343,11 +343,14 @@ class ArticlesController extends Controller
         $article  = new \Article();
         $category = null;
 
-        $data = array_merge([
-            'pk_article'   => 0,
-            'id'           => 0,
-            'with_comment' => 0
-        ], $request->request->filter('article'));
+        $data = array_merge(
+            $request->request->filter('article'),
+            [
+                'pk_article'   => 0,
+                'id'           => 0,
+                'with_comment' => 0
+            ]
+        );
 
         // Load config
         $this->view = $this->get('core.template');
