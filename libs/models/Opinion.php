@@ -137,6 +137,13 @@ class Opinion extends Content
                 } else {
                     $authorObj = $ur->find($this->fk_author);
                 }
+
+                // TODO: Fix this ASAP
+                if (!empty($authorObj) && !empty($authorObj->avatar_img_id)) {
+                    $authorObj->photo = getService('entity_repository')
+                        ->find('Photo', $authorObj->avatar_img_id);
+                }
+
                 return $authorObj;
             default:
                 return parent::__get($name);

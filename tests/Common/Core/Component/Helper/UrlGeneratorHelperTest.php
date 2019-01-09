@@ -7,8 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\Core\Component\Helper;
+namespace Tests\Common\Core\Component\Helper;
 
+use Common\Core\Component\Helper\UrlGeneratorHelper;
 use Common\Data\Core\FilterManager;
 
 class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
@@ -188,11 +189,22 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getConfig.
+     * Tests isValid.
      */
-    public function testGetConfig()
+    public function testIsValid()
     {
-        $this->assertArrayHasKey('article', $this->urlGenerator->getConfig());
+        $item = null;
+
+        $urlGenerator = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'generate' ])
+            ->getMock();
+
+        $urlGenerator->expects($this->any())->method('generate')
+            ->with($item)->willReturn('norf/bar');
+
+        $this->assertTrue($urlGenerator->isValid($item, 'norf/bar'));
+        $this->assertFalse($urlGenerator->isValid($item, 'corge/garply'));
     }
 
     /**
@@ -276,6 +288,30 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getUriForContent when created property is a DateTime object.
+     */
+    public function testGetUriForContentWhenCreatedAsObject()
+    {
+        $content = new \Video();
+        $date    = new \DateTime();
+
+        $content->id                = 252;
+        $content->category_name     = 'actualidad';
+        $content->created           = $date;
+        $content->content_type_name = 'video';
+        $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+
+        $method = new \ReflectionMethod($this->urlGenerator, 'getUriForContent');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            'video/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/' .
+                $date->format('YmdHis') . '000252.html',
+            $method->invokeArgs($this->urlGenerator, [ $content ])
+        );
+    }
+
+    /**
      * Tests getUriForContent when the content has no body link property.
      */
     public function testGetUriForContentWhenNoBodyLink()
@@ -320,6 +356,31 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             'cartas-al-director/my-author/letter-slug/20150114234940000252.html',
+            $method->invokeArgs($this->urlGenerator, [ $content ])
+        );
+    }
+
+    /**
+     * Tests getUriForLetter when created property is a DateTime object.
+     */
+    public function testGetUriForLetterWhenCreatedAsObject()
+    {
+        $content = new \Letter();
+        $date    = new \DateTime();
+
+        $content->id                = 252;
+        $content->author            = 'My author';
+        $content->created           = $date;
+        $content->content_type_name = 'letter';
+        $content->slug              = 'letter-slug';
+
+        $method = new \ReflectionMethod($this->urlGenerator, 'getUriForLetter');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            'cartas-al-director/my-author/letter-slug/'
+                . $date->format('YmdHis')
+                . '000252.html',
             $method->invokeArgs($this->urlGenerator, [ $content ])
         );
     }
@@ -560,26 +621,13 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests for created as object instead of string.
+     * Tests getConfig.
      */
-    public function testCreatedAsObject()
+    public function testGetConfig()
     {
-        $content = new \Video();
-
-        $date                       = new \DateTime();
-        $content->id                = 252;
-        $content->category_name     = 'actualidad';
-        $content->created           = $date->format('Y-m-d H:i:s');
-        $content->content_type_name = 'video';
-        $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
-
-        $method = new \ReflectionMethod($this->urlGenerator, 'getUriForContent');
+        $method = new \ReflectionMethod($this->urlGenerator, 'getConfig');
         $method->setAccessible(true);
 
-        $this->assertEquals(
-            'video/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/' .
-                $date->format('YmdHis') . '000252.html',
-            $method->invokeArgs($this->urlGenerator, [ $content ])
-        );
+        $this->assertArrayHasKey('article', $method->invokeArgs($this->urlGenerator, []));
     }
 }

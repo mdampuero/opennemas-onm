@@ -30,6 +30,13 @@ class Controller extends SymfonyController
     protected $extension = null;
 
     /**
+     * The list of advertisements groups per action.
+     *
+     * @var array
+     */
+    protected $groups = [];
+
+    /**
      * The list of permissions for every action.
      *
      * @var type
@@ -37,11 +44,39 @@ class Controller extends SymfonyController
     protected $permissions = [];
 
     /**
+     * The list of parameters to generate responses with.
+     *
+     * @var array
+     */
+    protected $params = [];
+
+    /**
+     * The list of advertisements positions per action.
+     *
+     * @var array
+     */
+    protected $positions = [];
+
+    /**
      * The resource name.
      *
      * @var string
      */
     protected $resource = null;
+
+    /**
+     * The list of routes per action.
+     *
+     * @var array
+     */
+    protected $routes = [];
+
+    /**
+     * The list of templates per action.
+     *
+     * @var array
+     */
+    protected $templates = [];
 
     /**
      * Returns services from the service container.
@@ -127,38 +162,6 @@ class Controller extends SymfonyController
     }
 
     /**
-     * Returns information about a template
-     *
-     * @return array
-     */
-    public function getExpireDate()
-    {
-        $data = null;
-
-        // If the template is cached, fetch the dates from it
-        if ($this->view->caching && $this->view->cache_lifetime) {
-            $templateObject = array_shift($this->view->template_objects);
-
-            $creationDate = new \DateTime();
-            $creationDate->setTimeStamp($templateObject->cached->timestamp);
-            $creationDate->setTimeZone(new \DateTimeZone('UTC'));
-
-            $expires    = $templateObject->cached->timestamp + $this->view->cache_lifetime;
-            $expireDate = new \DateTime();
-            $expireDate->setTimeStamp($expires);
-            $expireDate->setTimeZone(new \DateTimeZone('UTC'));
-
-            $data = [
-                'creation_date' => $creationDate,
-                'expire_date'   => $expireDate,
-                'max_age'       => $expires - time(),
-            ];
-        }
-
-        return $data;
-    }
-
-    /**
      * Renders a template.
      *
      * @param string   $view       The view name.
@@ -202,6 +205,58 @@ class Controller extends SymfonyController
         }
 
         return $response;
+    }
+
+    /**
+     * Returns the advertisement group basing on the current action.
+     *
+     * @param string $action The current action.
+     *
+     * @return string The advertisement group.
+     */
+    protected function getAdvertisementGroup($action)
+    {
+        return array_key_exists($action, $this->groups)
+            ? $this->groups[$action]
+            : null;
+    }
+
+    /**
+     * Returns the list of positions for the current action.
+     *
+     * @param string $action The current action.
+     *
+     * @return array The list of positions.
+     */
+    protected function getAdvertisementPositions($action)
+    {
+        return array_key_exists($action, $this->positions)
+            ? $this->positions[$action]
+            : [];
+    }
+
+    /**
+     * Returns an array with the list of positions and advertisements.
+     *
+     * @param Category $category The category object.
+     *
+     * @return array The list of positions and advertisements.
+     */
+    protected function getAdvertisements($category = null)
+    {
+        $categoryId = empty($category) ? 0 : $category->pk_content_category;
+        $action     = $this->get('core.globals')->getAction();
+        $group      = $this->getAdvertisementGroup($action);
+
+        $positions = array_merge(
+            $this->get('core.helper.advertisement')->getPositionsForGroup($group),
+            $this->getAdvertisementPositions($group)
+        );
+
+        $advertisements = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $categoryId);
+
+        return [ $positions, $advertisements ];
     }
 
     /**
@@ -292,38 +347,35 @@ class Controller extends SymfonyController
     }
 
     /**
-     * This method load from the request the metadata fields,
+     * Returns the defined route name for the provided action.
      *
-     * @param mixed   $data Data where load the metadata fields.
-     * @param Request $postReq Request where the metadata are.
-     * @param string  $type type of the extra field
+     * @param string $action The action name.
      *
-     * @return array
+     * @return string The route name.
      */
-    protected function loadMetaDataFields($data, $postReq, $type)
+    protected function getRoute($action)
     {
-        if (!$this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
-            return $data;
-        }
+        $endpoint  = $this->get('core.globals')->getEndpoint();
+        $extension = $this->get('core.globals')->getExtension();
 
-        // If I don't have the extension, I don't check the settings
-        $groups = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get($type);
+        return array_key_exists($action, $this->routes)
+            ? $this->routes[$action]
+            : $endpoint . '_' . $extension . '_' . $action;
+    }
 
-        if (!is_array($groups)) {
-            return $data;
-        }
+    /**
+     * Returns the path to the Smarty template.
+     *
+     * @param string $action The action name.
+     *
+     * @return string The path to the Smarty template.
+     */
+    protected function getTemplate($action = null)
+    {
+        $extension = $this->get('core.globals')->getExtension();
 
-        foreach ($groups as $group) {
-            foreach ($group['fields'] as $field) {
-                if ($postReq->get($field['key'], null) == null) {
-                    continue;
-                }
-
-                $data[$field['key']] = $postReq->get($field['key']);
-            }
-        }
-        return $data;
+        return array_key_exists($action, $this->templates)
+            ? $this->templates[$action]
+            : "{$extension}/{$extension}.tpl";
     }
 }

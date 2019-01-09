@@ -32,7 +32,7 @@ class AdvertisementController extends Controller
         $places   = explode(',', $request->query->get('places'));
         $category = $request->query->get('category');
 
-        $advertisements = $this->getAdvertisements($places, $category);
+        $advertisements = $this->getItems($places, $category);
 
         $advertisements = array_map(function ($element) {
             $date = date('Y-m-d H:i:s');
@@ -77,7 +77,7 @@ class AdvertisementController extends Controller
         $contentId          = $request->query->get('contentId', '');
         $advertisementGroup = $request->query->get('advertisementGroup', 'article_inner');
 
-        $ad = $this->getAdvertisement($id);
+        $ad = $this->getItem($id);
 
         if (empty($ad) || empty($ad->content_status)) {
             throw new ResourceNotFoundException(
@@ -112,7 +112,7 @@ class AdvertisementController extends Controller
      *
      * @return \Advertisement|null The advertisement.
      */
-    protected function getAdvertisement($id)
+    protected function getItem($id)
     {
         if ($this->get('core.security')->hasExtension('ADS_MANAGER')) {
             return $this->get('entity_repository')->find('Advertisement', $id);
@@ -138,7 +138,7 @@ class AdvertisementController extends Controller
      *
      * @return array The list of advertisements.
      */
-    protected function getAdvertisements($places, $category)
+    protected function getItems($places, $category)
     {
         $id       = 0;
         $excluded = [ 'home', 'opinion', 'blog', 'newsletter' ];

@@ -122,7 +122,10 @@ class AmpController extends Controller
                 $this->view->assign('videoInt', $videoInt);
             }
 
-            $this->view->assign('relationed', $this->getRelated($article));
+            $this->view->assign([
+                'relationed' => $this->getRelated($article),
+                'suggested'  => $this->getSuggested($article, $category)
+            ]);
 
             $patterns = [
                 '@(align|border|style|nowrap|onclick)=(\'|").*?(\'|")@',
@@ -278,5 +281,25 @@ class AmpController extends Controller
         }
 
         return $related;
+    }
+
+    /**
+     * Returns the list of suggested contents for an article.
+     *
+     * @param Article  $article  The current article.
+     * @param Category $category The article category.
+     *
+     * @return array The list of suggested contents.
+     */
+    private function getSuggested($article, $category)
+    {
+        $query = sprintf(
+            'category_name = "%s" AND pk_content <> %s',
+            $category->name,
+            $article->id
+        );
+
+        return $this->get('automatic_contents')
+            ->searchSuggestedContents('article', $query);
     }
 }

@@ -513,5 +513,21 @@ function generateGAAmpCode($config)
         }
     }
 
+    $code .= '<amp-analytics type="googleanalytics" id="analytics-onm">
+<script type="application/json">
+{
+  "vars": {
+    "account": "UA-40838799-5"
+  },
+  "triggers": {
+    "trackPageview": {
+      "on": "visible",
+      "request": "pageview"
+    }
+  }
+}
+</script>
+</amp-analytics>' . "\n";
+
     return $code;
 }

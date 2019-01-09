@@ -49,6 +49,7 @@ class SqlTranslator
         'M_ASC'          => 'asc',
         'M_DESC'         => 'desc',
         'M_ORDER_BY'     => 'order by',
+        'M_LENGTH'       => 'char_length',
         'M_LIMIT'        => 'limit',
         'M_OFFSET'       => 'offset',
         'O_EQUALS'       => '=',
@@ -325,6 +326,9 @@ class SqlTranslator
         ) {
             $str = str_replace($str[0], '', $str);
         }
+
+        // Expand escaped quotes
+        $str = preg_replace('/@@@/', '\\\"', $str);
 
         // Change datetime to UTC
         if ($type === 'T_DATETIME') {

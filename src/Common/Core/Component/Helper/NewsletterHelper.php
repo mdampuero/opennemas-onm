@@ -9,23 +9,71 @@
  */
 namespace Common\Core\Component\Helper;
 
+use Api\Service\Service;
+use Common\ORM\Core\EntityManager;
+
 class NewsletterHelper
 {
     /**
-     * The settings repository service.
+     * The entity manager.
      *
-     * @var SettingsRepository
+     * @var EntityManager
      */
-    protected $sm;
+    protected $em;
+
+    /**
+     * The API service to get internal subscriptions.
+     *
+     * @var Service
+     */
+    protected $service;
 
     /**
      * Initializes the NewsletterHelper.
      *
-     * @param SettingsRepository $settingsRepository The settings repository service.
+     * @param EntityManager $em The entity manager
      */
-    public function __construct($ormManager)
+    public function __construct(EntityManager $em, Service $service)
     {
-        $this->sm = $ormManager;
+        $this->em      = $em;
+        $this->service = $service;
+    }
+
+    /**
+     * Returns the list of content types available to use in newsletters.
+     *
+     * @return array The list of content types.
+     */
+    public function getContentTypes()
+    {
+        $types        = [];
+        $contentTypes = \ContentManager::getContentTypesFiltered();
+        $ignored      = [
+            'comment', 'frontpage', 'schedule', 'photo', 'event',
+            'advertisement', 'widget'
+        ];
+
+        foreach ($contentTypes as $key => $value) {
+            if (!in_array($key, $ignored)) {
+                $types[] = [ 'title' => _($value), 'value' => $key ];
+            }
+        }
+
+        return $types;
+    }
+
+    /**
+     * Returns the list of available recipients.
+     *
+     * @return array The list of available recipients.
+     */
+    public function getRecipients()
+    {
+        return array_merge(
+            $this->getInternalSubscriptions(),
+            $this->getActOnSubscriptions(),
+            $this->getExternalSubscriptions()
+        );
     }
 
     /**
@@ -35,6 +83,73 @@ class NewsletterHelper
      */
     public function getSubscriptionType()
     {
-        return $this->sm->getDataSet('Settings', 'instance')->get('newsletter_subscriptionType');
+        return $this->em->getDataSet('Settings', 'instance')
+            ->get('newsletter_subscriptionType');
+    }
+
+    /**
+     * Returns the list of configured Act-On lists.
+     *
+     * @return array The list of configured Act-On lists.
+     */
+    protected function getActOnSubscriptions()
+    {
+        $lists = $this->em->getDataSet('Settings', 'instance')
+            ->get('actOn.marketingLists');
+
+        if (empty($lists)) {
+            return [];
+        }
+
+        return array_map(function ($a) {
+            return [
+                'id'   => (string) $a['id'],
+                'name' => $a['name'],
+                'type' => 'acton',
+            ];
+        }, $lists);
+    }
+
+    /**
+     * Returns the list of external mail lists.
+     *
+     * @return array The list of external mail lists.
+     */
+    protected function getExternalSubscriptions()
+    {
+        $mailList = $this->em->getDataSet('Settings', 'instance')
+            ->get('newsletter_maillist');
+
+        if (empty($mailList) || empty($mailList['email'])) {
+            return [];
+        }
+
+        return [ [
+            'email' => $mailList['email'],
+            'name'  => $mailList['email'],
+            'type'  => 'external'
+        ] ];
+    }
+
+    /**
+     * Returns the list of subscriptions with the newsletter privilege enabled.
+     *
+     * @return array The list of subscriptions.
+     */
+    protected function getInternalSubscriptions()
+    {
+        $response = $this->service->getList();
+
+        $subscriptions = array_filter($response['items'], function ($a) {
+            return in_array(224, $a->privileges);
+        });
+
+        return array_map(function ($a) {
+            return [
+                'id'   => (string) $a->pk_user_group,
+                'name' => $a->name,
+                'type' => 'list'
+            ];
+        }, $subscriptions);
     }
 }

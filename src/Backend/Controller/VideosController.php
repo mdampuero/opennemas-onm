@@ -133,7 +133,7 @@ class VideosController extends Controller
             'category'       => (int) $category,
             'content_status' => (int) $requestPost->getDigits('content_status', 0),
             'fk_author'      => $requestPost->getDigits('fk_author', 0),
-            'information'    => json_decode($requestPost->get('information', ''), true),
+            'information'    => $requestPost->get('information', []),
             'params'         => $request->request->get('params', []),
             'description'    => $requestPost->get('description', ''),
             'endtime'        =>
@@ -147,10 +147,9 @@ class VideosController extends Controller
             'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
-        if ($type == 'external' || $type == 'script') {
-            $videoData['information']              = $requestPost->get('infor', '');
-            $videoData['information']['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
-        }
+        $videoData['information'] = is_string($videoData['information'])
+            ? json_decode($videoData['information'], true)
+            : $videoData['information'];
 
         if ($type == 'web-source' && empty($videoData['information'])) {
             $this->get('session')->getFlashBag()->add(
@@ -228,16 +227,15 @@ class VideosController extends Controller
                 $requestPost->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'author_name'    =>
                 $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
-            'information'    => json_decode($requestPost->get('information', ''), true),
+            'information'    => $requestPost->get('information', []),
             'video_url'      => $requestPost->filter('video_url', ''),
             'params'         => $request->request->get('params', []),
             'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
-        if ($video->author_name == 'external' || $video->author_name == 'script') {
-            $videoData['information']              = $requestPost->get('infor', '');
-            $videoData['information']['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
-        }
+        $videoData['information'] = is_string($videoData['information'])
+            ? json_decode($videoData['information'], true)
+            : $videoData['information'];
 
         $video->update($videoData);
 

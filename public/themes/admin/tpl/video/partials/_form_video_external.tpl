@@ -26,32 +26,29 @@
           <option value="html5" {if !empty($video->id) && $video->type == 'html5'}selected="selected"{/if}>{t}HTML5 video{/t}</option>
           <option value="flv" {if !empty($video->id) && $video->type == 'flv'}selected="selected"{/if}>{t}Flash video{/t}</option>
         </select>
-
         <p></p>
-
         <div class="ng-cloak" ng-if="file_type == 'html5'">
           <div class="input-group">
             <span class="input-group-addon">{t}MP4 format{/t}</span>
-            <input type="text" class="form-control" placeholder="{t}http://www.example.com/path/to/file.mp4{/t}" name="infor[source][mp4]" value="{$video->information['source']['mp4']|default:""}" aria-describedby="basic-addon-mp4">
+            <input type="text" class="form-control" placeholder="{t}http://www.example.com/path/to/file.mp4{/t}" name="information[source][mp4]" value="{$video->information['source']['mp4']|default:""}" aria-describedby="basic-addon-mp4">
           </div>
           <br>
           <div class="input-group">
             <span class="input-group-addon">{t}Ogg format{/t}</span>
-            <input type="text" class="form-control" placeholder="{t}http://www.example.com/path/to/file.ogg{/t}" name="infor[source][ogg]" value="{$video->information['source']['ogg']|default:""}" aria-describedby="basic-addon-ogg">
+            <input type="text" class="form-control" placeholder="{t}http://www.example.com/path/to/file.ogg{/t}" name="information[source][ogg]" value="{$video->information['source']['ogg']|default:""}" aria-describedby="basic-addon-ogg">
           </div>
           <br>
           <div class="input-group">
             <span class="input-group-addon">{t}WebM format{/t}</span>
-            <input type="text" class="form-control" placeholder="{t}http://www.example.com/path/to/file.webm{/t}" name="infor[source][webm]" value="{$video->information['source']['webm']|default:""}" aria-describedby="basic-addon-webm">
+            <input type="text" class="form-control" placeholder="{t}http://www.example.com/path/to/file.webm{/t}" name="information[source][webm]" value="{$video->information['source']['webm']|default:""}" aria-describedby="basic-addon-webm">
           </div>
         </div>
         <div class="ng-cloak" ng-if="file_type == 'flv'">
           <div class="input-group">
             <span class="input-group-addon">{t}FLV format{/t}</span>
-            <input type="text" class="form-control" placeholder="{t}http://www.example.com/path/to/file.flv{/t}" name="infor[source][flv]" value="{$video->video_url}" aria-describedby="basic-addon-flv">
+            <input type="text" class="form-control" placeholder="{t}http://www.example.com/path/to/file.flv{/t}" name="information[source][flv]" value="{$video->video_url}" aria-describedby="basic-addon-flv">
           </div>
         </div>
-
         <input type="hidden" name="type" id="type" value="$video->type|default:'html5'">
     </div>
 </div>
@@ -65,32 +62,6 @@
     </div>
     {/if}
 </div>
-<!--
-<div id="related_media" class="form-group">
-    <label for="video_image" class="form-label">{t}Video cover{/t}</label>
-    <div class="content cover-image {if isset($video) && $video->thumbnail}assigned{/if}">
-        <div class="image-data">
-            <a href="#media-uploader" {acl isAllowed='PHOTO_ADMIN'}data-toggle="modal"{/acl} data-position="inner-image" class="image thumbnail">
-                {if !empty($video->thumbnail)}
-                    <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$video->thumbnail}"/>
-                {/if}
-            </a>
-            <div class="article-resource-footer">
-                <input type="hidden" name="video_image" value="{$video->information['thumbnail']}" class="related-element-id"/>
-            </div>
-        </div>
-
-        <div class="not-set">
-            {t}Image not set{/t}
-        </div>
-
-        <div class="btn-group">
-            <a href="#media-uploader" {acl isAllowed='PHOTO_ADMIN'}data-toggle="modal"{/acl} data-position="cover-image" class="btn btn-small">{t}Set image{/t}</a>
-            <a href="#" class="unset btn btn-small btn-danger"><i class="fa fa-trash"></i></a>
-        </div>
-    </div>
-</div> -->
-<input type="hidden" value="{json_encode($information)|escape:"html"}" name="information" />
 <input type="hidden" name="author_name" value="external"/>
 
 {script_tag src="/videojs/video.js" common=1}

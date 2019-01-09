@@ -11,6 +11,16 @@ tags-input .tags {
   -webkit-appearance: none;
 }
 
+tags-input.ng-invalid .tags {
+  box-shadow: none;
+  border-color: @danger-color;
+}
+
+tags-input.ng-pristine .tags {
+  box-shadow: none;
+  border-color: @input-border-color;
+}
+
 tags-input .tags.focused {
   box-shadow: none;
   outline: none;
@@ -41,6 +51,17 @@ tags-input .tags .tag-item {
   &.tag-item-new {
     background-color: @success-color;
   }
+}
+
+.tags-input-counter {
+  font-weight: bold;
+  font-size: 75%;
+  margin: 5px 5px;
+}
+
+.tag-item-mark {
+  font-size: 80%;
+  margin-left: 5px;
 }
 
 tags-input .tags .input {
@@ -88,4 +109,8 @@ tags-input .tags .tag-item .remove-button {
   .btn-info:focus {
     background: @info-color;
   }
+}
+
+tags-input .autocomplete .suggestion-list {
+  max-height: 310px;
 }

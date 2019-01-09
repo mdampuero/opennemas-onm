@@ -86,6 +86,7 @@
         tags: {
           clear: '{t}Clear{/t}',
           generate: '{t}Generate{/t}',
+          newItem: '{t}New tag{/t}',
         }
       };
     </script>
@@ -562,6 +563,5 @@
     {/javascripts}
   {/block}
   {block name="footer-js"}{/block}
-  {browser_update}
   {uservoice_widget}
 </body>

@@ -26,33 +26,6 @@
    {/if}
  </div>
 </div>
-<!--
-<div id="related_media" class="form-controlgroup">
-    <h3 class="title">{t}Video Cover{/t}</h3>
-    <div class="content cover-image {if isset($video) && $video->thumbnail}assigned{/if}">
-        <div class="image-data">
-            <a href="#media-uploader" {acl isAllowed='PHOTO_ADMIN'}data-toggle="modal"{/acl} data-position="inner-image" class="image thumbnail">
-                {if !empty($video->thumbnail)}
-                    <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$video->thumbnail}"/>
-                {/if}
-            </a>
-            <div class="article-resource-footer">
-                <input type="hidden" name="video_image" value="{$video->information['thumbnail']}" class="related-element-id"/>
-            </div>
-        </div>
-
-        <div class="not-set">
-            {t}Image not set{/t}
-        </div>
-
-        <div class="btn-group">
-            <a href="#media-uploader" {acl isAllowed='PHOTO_ADMIN'}data-toggle="modal"{/acl} data-position="cover-image" class="btn btn-small">{t}Set image{/t}</a>
-            <a href="#" class="unset btn btn-small btn-danger"><i class="fa fa-trash"></i></a>
-        </div>
-    </div>
-  </div>
--->
-
 <input type="hidden" value="{$video->video_url}" name="video_url" />
 <input type="hidden" value="{json_encode($information)|escape:"html"}" name="information" />
 <input type="hidden" name="author_name" value="script"/>

@@ -1,7 +1,7 @@
 # Articles routes
 frontend_external_article_show:
     path: /extarticulo/{category_name}/{slug}/{article_id}.html
-    defaults: { _controller: FrontendBundle:Articles:extShow }
+    defaults: { _controller: FrontendBundle:Article:extShow }
     requirements:
         category_name: '[^/]+'
         slug         : '[^/]+'
@@ -10,12 +10,13 @@ frontend_external_article_show:
         l10n: true
 
 frontend_article_show:
-    path: /articulo/{category_name}/{slug}/{article_id}.html
-    defaults: { _controller: FrontendBundle:Articles:show }
+    path: /articulo/{category_name}/{slug}/{created}{id}.html
+    defaults: { _controller: FrontendBundle:Article:show }
     requirements:
         category_name: '[^/]+'
-        slug         : '[^/]+'
-        article_id   : '([0-9]+)'
+        slug:          '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
     options:
         l10n: true
 

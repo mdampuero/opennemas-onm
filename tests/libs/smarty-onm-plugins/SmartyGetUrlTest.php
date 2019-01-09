@@ -121,7 +121,35 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             'http://grault.com/es/glorp/1',
             smarty_function_get_url([
-                'item'     => json_decode(json_encode([ 'id' => '1' ])),
+                'item'     => $item,
+                'absolute' => true
+            ], $this->smarty)
+        );
+    }
+
+    /**
+     * Tests smarty_function_get_url when item is AMP format
+     */
+    public function testGetUrlWhenAMP()
+    {
+        $item = json_decode(json_encode([
+            'id' => '1',
+            'content_type_name' => 'article'
+        ]));
+
+        $this->generator->expects($this->once())->method('generate')
+            ->with($item, [ 'absolute' => true ])
+            ->willReturn('http://grault.com/glorp.html');
+
+        $this->helper->expects($this->once())->method('localizeUrl')
+            ->with('http://grault.com/glorp.html', '')
+            ->willReturn('http://grault.com/es/glorp.html');
+
+        $this->assertEquals(
+            'http://grault.com/es/glorp.amp.html',
+            smarty_function_get_url([
+                'item'     => $item,
+                'amp'      => true,
                 'absolute' => true
             ], $this->smarty)
         );

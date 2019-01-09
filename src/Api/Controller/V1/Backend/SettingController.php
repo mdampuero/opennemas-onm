@@ -28,6 +28,7 @@ class SettingController extends Controller
         'actOn.authentication',
         'body_end_script',
         'body_start_script',
+        'browser_update',
         'chartbeat',
         'cmp_script',
         'comscore',

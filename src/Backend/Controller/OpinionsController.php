@@ -749,4 +749,40 @@ class OpinionsController extends Controller
             ->filter('mapify', [ 'key' => 'id'])
             ->get();
     }
+
+    /**
+     * This method load from the request the metadata fields,
+     *
+     * @param mixed   $data Data where load the metadata fields.
+     * @param Request $postReq Request where the metadata are.
+     * @param string  $type type of the extra field
+     *
+     * @return array
+     */
+    protected function loadMetaDataFields($data, $postReq, $type)
+    {
+        if (!$this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
+            return $data;
+        }
+
+        // If I don't have the extension, I don't check the settings
+        $groups = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get($type);
+
+        if (!is_array($groups)) {
+            return $data;
+        }
+
+        foreach ($groups as $group) {
+            foreach ($group['fields'] as $field) {
+                if ($postReq->get($field['key'], null) == null) {
+                    continue;
+                }
+
+                $data[$field['key']] = $postReq->get($field['key']);
+            }
+        }
+        return $data;
+    }
 }

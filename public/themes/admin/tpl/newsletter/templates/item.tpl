@@ -134,7 +134,7 @@ var newsletterTemplateTranslations = {
 
               <div class="form-group">
                 <div class="m-t-15 m-b-10">
-                  <div class="checkbox" ng-repeat="recipient in data.extra.recipients|filter:{ type: 'external' }">
+                  <div class="checkbox" ng-repeat="recipient in data.extra.recipients | filter: { type: 'external' }">
                     <input id="checkbox-external-[% $index %]" checklist-model="item.recipients" checklist-value="recipient" type="checkbox" load-on-empty="true">
                     <label for="checkbox-external-[% $index %]">
                       [% recipient.email %]
@@ -148,7 +148,7 @@ var newsletterTemplateTranslations = {
             <div class="acton" ng-if="data.extra.newsletter_handler == 'acton'">
               <h5><i class="fa fa-address-book m-r-10"></i>{t}Act-On marketing lists{/t}</h5>
               <div class="form-group">
-                <div class="m-t-15 m-b-10" ng-repeat="recipient in data.extra.recipients|filter:{ type: 'acton' }">
+                <div class="m-t-15 m-b-10" ng-repeat="recipient in data.extra.recipients | filter: { type: 'acton' }">
                   <div class="checkbox">
                     <input id="checkbox-acton-[% $index %]" checklist-model="item.recipients" checklist-value="recipient" type="checkbox" load-on-empty="true">
                     <label for="checkbox-acton-[% $index %]">
@@ -163,11 +163,14 @@ var newsletterTemplateTranslations = {
             <div class="internal" ng-if="data.extra.newsletter_handler == 'create_subscriptor'">
               <h5><i class="fa fa-address-book m-r-10"></i>{t}Subscription lists{/t}</h5>
               <div class="form-group">
-                <div class="m-t-15 m-b-10" ng-repeat="recipient in data.extra.recipients|filter:{ type: 'list' }">
+                <div class="m-t-15 m-b-10" ng-repeat="recipient in data.extra.recipients | filter: { type: 'list' }">
                   <div class="checkbox">
                     <input id="checkbox-lists-[% $index %]" checklist-model="item.recipients" checklist-value="recipient" type="checkbox">
                     <label for="checkbox-lists-[% $index %]">
-                      <strong>[% recipient.name %]</strong> - {t 1="[% recipient.subscribers %]"}%1 subscriptors{/t}
+                      <strong>[% recipient.name %]</strong>
+                      <span class="text-lowercase">
+                        - [% data.extra.subscribers[recipient.id] %] {t}Subscribers{/t}
+                      </span>
                     </label>
                   </div>
                 </div>

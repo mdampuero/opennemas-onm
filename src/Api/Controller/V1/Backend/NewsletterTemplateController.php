@@ -33,121 +33,6 @@ class NewsletterTemplateController extends Controller
     }
 
     /**
-     * Returns a list of extra data.
-     *
-     * @param array $item The list of items.
-     *
-     * @return array Array of template parameters.
-     */
-    private function getExtraData()
-    {
-        $extra = [];
-
-        $recipients = [];
-
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get([
-                'newsletter_maillist',
-                'newsletter_subscriptionType',
-                'actOn.marketingLists',
-            ]);
-
-        $extra['newsletter_handler'] = $settings['newsletter_subscriptionType'];
-
-        $ss       = $this->get('api.service.subscription');
-        $ssb      = $this->get('api.service.subscriber');
-        $response = $ss->getList('');
-
-        $lists = array_filter($response['items'], function ($list) {
-            return in_array(224, $list->privileges);
-        });
-
-        $extra['recipients'] = [];
-        foreach ($lists as $list) {
-            $extra['recipients'][] = [
-                'type' => 'list',
-                'name' => $list->name,
-                'id'   => (string) $list->pk_user_group,
-                'subscribers' => (string) $ssb->getList(
-                    '(user_group_id = "' . $list->pk_user_group
-                    . '" and status != 0)'
-                )['total']
-            ];
-        }
-
-        if (!empty($settings['newsletter_maillist']) && isset($settings['newsletter_maillist']['email'])) {
-            $extra['recipients'][] = [
-                'type' => 'external',
-                'name' => $settings['newsletter_maillist']['email'],
-                'email' => $settings['newsletter_maillist']['email'],
-            ];
-        }
-
-        if (empty($settings['actOn.marketingLists'])) {
-            $settings['actOn.marketingLists'] = [];
-        }
-
-        foreach ($settings['actOn.marketingLists'] as $list) {
-            $extra['recipients'][] = [
-                'type' => 'acton',
-                'name' => $list['name'],
-                'id'   => $list['id'],
-            ];
-        }
-
-        $contentTypesAvailable = \ContentManager::getContentTypesFiltered();
-        unset($contentTypesAvailable['comment']);
-
-        $extra['content_types'] = [
-            [ 'title' => _('Any'), 'value' => '' ]
-        ];
-
-        foreach ($contentTypesAvailable as $key => $value) {
-            $notValidContentTypes = ['frontpage', 'schedule', 'photo', 'event', 'advertisement', 'widget'];
-            if (in_array($key, $notValidContentTypes)) {
-                continue;
-            }
-
-            $extra['content_types'][] = [
-                'title' => _($value),
-                'value' => $key
-            ];
-        }
-
-        $extra['hours'] = [];
-        for ($i = 0; $i < 24; $i++) {
-            $extra['hours'][] = sprintf("%02d:00", $i);
-        }
-
-        $extra['days'] = [
-            _("Monday"),
-            _("Tuesday"),
-            _("Wednesday"),
-            _("Thursday"),
-            _("Friday"),
-            _("Saturday"),
-            _("Sunday"),
-        ];
-
-        $converter  = $this->get('orm.manager')->getConverter('Category');
-        $categories = $this->get('orm.manager')
-            ->getRepository('Category')
-            ->findBy('internal_category = 1');
-
-        $extra['categories'] = $converter->responsify($categories);
-
-        $extra['filters'] = [
-            [ 'value' => '',          'title' => _('No filter') ],
-            [ 'value' => 'blogs',     'title' => _('Blogs') ],
-            [ 'value' => 'in_last_day', 'title' => _('Last in 24 hours') ],
-            [ 'value' => 'most_viewed', 'title' => _('Most viewed') ],
-        ];
-
-        return $extra;
-    }
-
-    /**
      * Saves a new newsletter.
      *
      * @param Request $request The request object.
@@ -231,7 +116,7 @@ class NewsletterTemplateController extends Controller
      *
      * @return array the cleaned values
      */
-    public function parseValues($values)
+    protected function parseValues($values)
     {
         if (!is_array($values['schedule']['hours'])) {
             $values['schedule']['hours'] = [];
@@ -286,5 +171,60 @@ class NewsletterTemplateController extends Controller
         }
 
         return $values;
+    }
+
+    /**
+     * Returns a list of extra data.
+     *
+     * @param array $item The list of items.
+     *
+     * @return array Array of template parameters.
+     */
+    private function getExtraData()
+    {
+        $nh = $this->get('core.helper.newsletter');
+
+        $extra = [
+            'content_types' => $nh->getContentTypes(),
+            'days' => [
+                _("Monday"), _("Tuesday"), _("Wednesday"), _("Thursday"),
+                _("Friday"), _("Saturday"), _("Sunday"),
+            ],
+            'filters' => [
+                [ 'value' => '', 'title' => _('No filter') ],
+                [ 'value' => 'blogs', 'title' => _('Blogs') ],
+                [ 'value' => 'in_last_day', 'title' => _('Last in 24 hours') ],
+                [ 'value' => 'most_viewed', 'title' => _('Most viewed') ],
+            ],
+            'hours'              => [],
+            'newsletter_handler' => $nh->getSubscriptionType(),
+            'recipients'         => $nh->getRecipients(),
+            'subscribers'        => []
+        ];
+
+        $ssb = $this->get('api.service.subscriber');
+
+        foreach ($extra['recipients'] as $recipient) {
+            if ($recipient['type'] !== 'list') {
+                continue;
+            }
+
+            $extra['subscribers'][$recipient['id']] = $ssb->getList(
+                sprintf('status = 1 and user_group_id = %s', $recipient['id'])
+            )['total'];
+        }
+
+        for ($i = 0; $i < 24; $i++) {
+            $extra['hours'][] = sprintf("%02d:00", $i);
+        }
+
+        $converter  = $this->get('orm.manager')->getConverter('Category');
+        $categories = $this->get('orm.manager')
+            ->getRepository('Category')
+            ->findBy('internal_category = 1');
+
+        $extra['categories'] = $converter->responsify($categories);
+
+        return $extra;
     }
 }

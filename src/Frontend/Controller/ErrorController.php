@@ -17,6 +17,20 @@ use Symfony\Component\HttpFoundation\Response;
 class ErrorController extends Controller
 {
     /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'default' => 'article_inner'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $positions = [
+        'article_inner' => [ 7 ]
+    ];
+
+    /**
      * Displays an error page basing on the current error.
      *
      * @param Request $request The request object.
@@ -44,6 +58,16 @@ class ErrorController extends Controller
 
             case 'ContentNotMigratedException':
             case 'ResourceNotFoundException':
+                $url = $this->container->get('core.redirector')
+                    ->getUrl(preg_replace('/^\//', '', $request->getRequestUri()));
+
+                if (!empty($url)) {
+                    return $this->container->get('core.redirector')
+                        ->getResponse($request, $url);
+                }
+
+                return $this->getNotFoundResponse();
+
             case 'NotFoundHttpException':
                 $this->get('application.log')->info($class->getShortName());
 
@@ -63,7 +87,7 @@ class ErrorController extends Controller
      */
     protected function getAccessDeniedResponse()
     {
-        list($positions, $advertisements) = ArticlesController::getAds();
+        list($positions, $advertisements) = $this->getAdvertisements();
 
         return new Response($this->renderView('static_pages/403.tpl', [
             'ads_positions'  => $positions,
@@ -107,7 +131,7 @@ class ErrorController extends Controller
      */
     protected function getNotFoundResponse()
     {
-        list($positions, $advertisements) = ArticlesController::getAds();
+        list($positions, $advertisements) = $this->getAdvertisements();
 
         $this->view->setConfig('articles');
 

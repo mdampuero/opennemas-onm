@@ -141,8 +141,7 @@
             </div>
 
             <div class="form-group">
-              <label for="metadata" class="form-label">{t}Keywords{/t}</label>
-              <span class="help">{t}Separated by comas{/t}</span>
+              <label for="metadata" class="form-label">{t}Tags{/t}</label>
               <div class="controls">
                 {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
               </div>

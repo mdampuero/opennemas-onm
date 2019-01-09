@@ -64,6 +64,10 @@
        * @return {String} The condition.
        */
       this.getCondition = function(key, value) {
+        if (typeof value === 'string' || value instanceof String) {
+          value = value.replace(/"/g, '\\"');
+        }
+
         // If placeholder
         if (this.config.placeholder[key]) {
           var condition = this.config.placeholder[key];

@@ -76,12 +76,22 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
         $this->coreValidator->expects($this->any())->method('validate')
             ->willReturn([]);
 
-        $this->tagService->expects($this->once())->method('getItemBy')
+        $this->tagService->expects($this->at(0))->method('getItemBy')
             ->with('name = "flob" and language_id = "es_ES"')
             ->will($this->throwException(new \Exception()));
 
+        $this->tagService->expects($this->at(1))->method('getItemBy')
+            ->with('name = "plugh" and language_id = "es_ES"')
+            ->willReturn(new Entity([ 'name' => 'Plugh' ]));
+
+
         $this->validator->validate(new Entity([
             'name'        => 'flob',
+            'language_id' => 'es_ES'
+        ]));
+
+        $this->validator->validate(new Entity([
+            'name'        => 'plugh',
             'language_id' => 'es_ES'
         ]));
     }
@@ -114,7 +124,8 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $this->tagService->expects($this->once())->method('getItemBy')
-            ->with('name = "baz" and language_id = "es_ES"');
+            ->with('name = "baz" and language_id = "es_ES"')
+            ->willReturn(new Entity([ 'name' => 'baz' ]));
 
         $this->validator->validate(new Entity([
             'name'        => 'baz',
