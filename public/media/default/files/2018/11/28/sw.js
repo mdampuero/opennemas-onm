@@ -21,7 +21,7 @@ self.addEventListener('fetch', function(event) {
       return fetch(request).then(function(response) {
         var toIgnore = [
           /.*.(png|jpg)/,
-          /.*\/(admin|api|entityws|login|manager|managerws)\/.*/
+          /.*\/(admin|api|auth|entityws|login|manager|managerws)\/.*/
         ];
 
         for (var i = 0; i < toIgnore.length; i++) {
