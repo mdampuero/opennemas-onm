@@ -31,7 +31,7 @@ self.addEventListener('fetch', function(event) {
           }
         }
 
-        console.log('[Opennemas] Add page to offline ' + response.url);
+        console.log('[Opennemas] Adding page to offline cache ', response.url);
 
         return cache.put(request, response);
       });
