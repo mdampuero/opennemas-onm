@@ -17,7 +17,8 @@ function smarty_outputfilter_ojd($output, $smarty)
     $uri     = $request->getUri();
     $referer = $request->headers->get('referer');
 
-    if (!preg_match('/\/admin\/frontpages/', $referer)
+    if (!preg_match('/newsletter/', $smarty->source->resource)
+        && !preg_match('/\/admin\/frontpages/', $referer)
         && !preg_match('/\/manager/', $uri)
         && !preg_match('/\/managerws/', $uri)
         && !preg_match('/\/share-by-email/', $uri)
