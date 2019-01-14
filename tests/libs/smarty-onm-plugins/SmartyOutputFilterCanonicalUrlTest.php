@@ -188,7 +188,7 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
         $this->smarty->expects($this->any())->method('getTemplateVars')
             ->willReturn([]);
 
-        $this->smarty->source->resource = 'newsletter/newNewsletter.tpl';
+        $this->smarty->source->resource = 'newsletter/newsletter.tpl';
 
         $this->assertEquals($output, smarty_outputfilter_canonical_url(
             $output,
