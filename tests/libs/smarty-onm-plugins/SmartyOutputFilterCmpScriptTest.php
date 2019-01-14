@@ -22,7 +22,8 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
         include_once './libs/smarty-onm-plugins/outputfilter.cmp_script.php';
 
         $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer' ])
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getContainer', 'getTemplateVars', '__set', '__get' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('Container')
@@ -67,6 +68,17 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
             ->method('getCurrentRequest')->willReturn($this->request);
 
         $this->output = '<html><head>Hello World</head><body></body></html>';
+
+        $this->smartySource = $this->getMockBuilder('Smarty_Template_Source')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->smarty->expects($this->any())
+            ->method('__get')
+            ->with($this->equalTo('source'))
+            ->will($this->returnValue($this->smartySource));
+
+        $this->smarty->source->resource = 'foo.tpl';
     }
 
     /**

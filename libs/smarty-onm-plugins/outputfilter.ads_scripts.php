@@ -17,7 +17,8 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
 
     $uri = $request->getUri();
 
-    if (!preg_match('/\/admin\/frontpages/', $uri)
+    if (!preg_match('/newsletter/', $smarty->source->resource)
+        && !preg_match('/\/admin\/frontpages/', $uri)
         && !preg_match('/\/manager/', $uri)
         && !preg_match('/\/managerws/', $uri)
         && !preg_match('/\/share-by-email/', $uri)

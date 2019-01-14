@@ -19,11 +19,13 @@ function smarty_outputfilter_adsense_validator($output, $smarty)
 
     $uri = $request->getUri();
 
-    if (!preg_match('/\/manager/', $uri)
+    if (!preg_match('/newsletter/', $smarty->source->resource)
+        && !preg_match('/\/manager/', $uri)
         && !preg_match('/\/managerws/', $uri)
         && !preg_match('/\/share-by-email/', $uri)
         && !preg_match('/\/sharrre/', $uri)
         && !preg_match('/\/ads/', $uri)
+        && !preg_match('/\/admin/', $uri)
         && !preg_match('/\/comments/', $uri)
         && !preg_match('/\/fb\/instant-articles/', $uri)
         && !preg_match('@\.amp\.html$@', $uri)

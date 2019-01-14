@@ -46,7 +46,7 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer', 'getTemplateVars' ])
+            ->setMethods([ 'getContainer', 'getTemplateVars', '__set', '__get' ])
             ->getMock();
 
         $this->smarty->expects($this->any())->method('getContainer')
@@ -54,6 +54,18 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+
+        $this->smartySource = $this->getMockBuilder('Smarty_Template_Source')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->smarty->expects($this->any())
+            ->method('__get')
+            ->with($this->equalTo('source'))
+            ->will($this->returnValue($this->smartySource));
+
+        $this->smarty->source->resource = 'foo.tpl';
     }
 
     /**
