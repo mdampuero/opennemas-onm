@@ -12,7 +12,10 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     $ads = $smarty->parent->tpl_vars['advertisements']->value;
     $app = $smarty->parent->tpl_vars['app']->value;
 
-    if (!is_array($ads) || count($ads) <= 0) {
+    if (!is_array($ads)
+        || count($ads) <= 0
+        || preg_match('/newsletter/', $smarty->source->resource)
+    ) {
         return $output;
     }
 

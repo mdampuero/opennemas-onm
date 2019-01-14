@@ -12,7 +12,7 @@ namespace Tests\Libs\Smarty;
 /**
  * Defines test cases for SmartyAdsenseValidatorTest class.
  */
-class SmartyAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
+class SmartyOutputFilterAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -22,7 +22,7 @@ class SmartyAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
         include_once './libs/smarty-onm-plugins/outputfilter.adsense_validator.php';
 
         $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer' ])
+            ->setMethods([ 'getContainer', '__get' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('Container')
@@ -59,6 +59,17 @@ class SmartyAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
         $this->output = '<html><head>Hello World</head><body></body></html>';
+
+        $this->smartySource = $this->getMockBuilder('Smarty_Template_Source')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->smarty->expects($this->any())
+            ->method('__get')
+            ->with($this->equalTo('source'))
+            ->will($this->returnValue($this->smartySource));
+
+        $this->smarty->source->resource = 'foo.tpl';
     }
 
     /**

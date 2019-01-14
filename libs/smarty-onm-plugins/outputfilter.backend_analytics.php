@@ -12,7 +12,8 @@ function smarty_outputfilter_backend_analytics($output, $smarty)
     $request = getService('request_stack')->getCurrentRequest();
     $uri     = $request->getUri();
 
-    if (preg_match('/\/admin/', $uri)
+    if (!preg_match('/newsletter/', $smarty->source->resource)
+        && preg_match('/\/admin/', $uri)
         && getService('service_container')->getParameter('backend_analytics.enabled')
     ) {
         return addBackendCodes($output);

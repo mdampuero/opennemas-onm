@@ -9,8 +9,20 @@
  **/
 function smarty_outputfilter_generate_fb_pages_tag($output, $smarty)
 {
+    $request = $smarty->getContainer()
+        ->get('request_stack')
+        ->getCurrentRequest();
+
+    if (is_null($request)) {
+        return $output;
+    }
+
+    $uri = $request->getRequestUri();
+
     if (!$smarty->getContainer()->get('core.security')
         ->hasExtension('FIA_MODULE')
+        || preg_match('/newsletter/', $smarty->source->resource)
+        || preg_match('/\/admin/', $uri)
     ) {
         return $output;
     }

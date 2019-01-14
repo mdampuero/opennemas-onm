@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 /**
  * Defines test cases for SmartyUrl class.
  */
-class SmartyCanonicalUrlTest extends \PHPUnit\Framework\TestCase
+class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -40,7 +40,7 @@ class SmartyCanonicalUrlTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer', 'getTemplateVars' ])
+            ->setMethods([ 'getContainer', 'getTemplateVars', '__set', '__get' ])
             ->getMock();
 
         $this->smarty->expects($this->any())->method('getContainer')
@@ -48,6 +48,17 @@ class SmartyCanonicalUrlTest extends \PHPUnit\Framework\TestCase
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->smartySource = $this->getMockBuilder('Smarty_Template_Source')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->smarty->expects($this->any())
+            ->method('__get')
+            ->with($this->equalTo('source'))
+            ->will($this->returnValue($this->smartySource));
+
+        $this->smarty->source->resource = 'foo.tpl';
     }
 
     /**
@@ -153,6 +164,31 @@ class SmartyCanonicalUrlTest extends \PHPUnit\Framework\TestCase
 
         $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn(null);
+
+        $this->assertEquals($output, smarty_outputfilter_canonical_url(
+            $output,
+            $this->smarty
+        ));
+    }
+
+    /**
+     * Tests smarty_outputfilter_canonical_url where there is no request in
+     * progress.
+     */
+    public function testCanonicalUrlWhenRenderingNewsletter()
+    {
+        $output = '<html><head></head><body></body></html>';
+
+        $this->request->expects($this->once())->method('getRequestUri')
+            ->willReturn('/thud/nor');
+
+        $this->rs->expects($this->any())->method('getCurrentRequest')
+            ->willReturn($this->request);
+
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([]);
+
+        $this->smarty->source->resource = 'newsletter/newsletter.tpl';
 
         $this->assertEquals($output, smarty_outputfilter_canonical_url(
             $output,
