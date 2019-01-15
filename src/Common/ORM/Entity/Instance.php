@@ -27,6 +27,19 @@ class Instance extends Entity
     }
 
     /**
+     * Returns the base url for the instance
+     *
+     * @return string
+     **/
+    public function getBaseUrl()
+    {
+        $protocol = (in_array('es.openhost.module.frontendSsl', $this->activated_modules))
+            ? 'https://' : 'http://';
+
+        return $protocol . $this->getMainDomain();
+    }
+
+    /**
      * Returns the database name.
      *
      * @return string The database name.

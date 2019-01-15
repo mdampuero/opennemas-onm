@@ -40,6 +40,24 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getDatabaseName for an instance without database and an instance
+     * with database.
+     */
+    public function testGetBaseUrl()
+    {
+        $instance = new Instance();
+
+        $instance->main_domain       = 0;
+        $instance->domains           = ['foo.opennemas.com', 'bar.opennemas.com'];
+        $instance->activated_modules = [ ];
+
+        $this->assertEquals('http://foo.opennemas.com', $instance->getBaseUrl());
+
+        $instance->activated_modules = [ 'es.openhost.module.frontendSsl' ];
+        $this->assertEquals('https://foo.opennemas.com', $instance->getBaseUrl());
+    }
+
+    /**
      * Tests getMainDomain for all combinations of main_domain and domains.
      */
     public function testGetMainDomain()

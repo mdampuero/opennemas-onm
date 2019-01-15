@@ -34,6 +34,7 @@ class AdvertisementRenderer
         $this->container = $container;
         $this->router    = $this->container->get('router');
         $this->tpl       = $this->container->get('core.template.admin');
+        $this->instance  = $this->container->get('core.instance');
 
         $this->ds = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance');
@@ -238,13 +239,13 @@ class AdvertisementRenderer
         return $this->tpl->fetch($template, [
             'height'   => $img->height,
             'mediaUrl' => $img->path_img . $img->path_file,
-            'src'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
+            'src'      => $this->instance->getBaseUrl() . '/media/' . INSTANCE_UNIQUE_NAME
                 . '/images' . $img->path_file . $img->name,
-            'url'      => $this->container->get('router')->generate(
-                'frontend_ad_redirect',
-                [ 'id' => $publicId ],
-                UrlGeneratorInterface::ABSOLUTE_URL
-            ),
+            'url'      => $this->instance->getBaseUrl()
+                . $this->container->get('router')->generate(
+                    'frontend_ad_redirect',
+                    [ 'id' => $publicId ]
+                ),
             'width'    => $img->width
         ]);
     }
