@@ -59,17 +59,17 @@ class CategoryController extends Controller
         $em      = $this->get('entity_repository');
         $order   = [ 'starttime' => 'DESC' ];
         $filters = [
-            'category_name'     => [ [ 'value' => $category->name ] ],
-            'fk_content_type'   => [ [ 'value' => [1, 7, 9], 'operator' => 'IN' ] ],
-            'content_status'    => [ [ 'value' => 1 ] ],
-            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            'starttime'         => [
+            'pk_fk_content_category' => [ [ 'value' => $category->pk_content_category ] ],
+            'fk_content_type'        => [ [ 'value' => [1, 7, 9], 'operator' => 'IN' ] ],
+            'content_status'         => [ [ 'value' => 1 ] ],
+            'in_litter'              => [[ 'value' => 1, 'operator' => '!=' ]],
+            'starttime'              => [
                 'union' => 'OR',
                 [ 'value' => '0000-00-00 00:00:00' ],
                 [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
             ],
-            'endtime'         => [
+            'endtime'                => [
                 'union' => 'OR',
                 [ 'value' => '0000-00-00 00:00:00' ],
                 [ 'value' => null, 'operator' => 'IS', 'field' => true ],
