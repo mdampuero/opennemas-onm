@@ -951,10 +951,4 @@ class ContentController extends Controller
 
         return $extra;
     }
-
-
-    protected function getRelatedContents($items)
-    {
-        return [];
-    }
 }

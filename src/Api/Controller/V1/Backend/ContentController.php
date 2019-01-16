@@ -119,6 +119,17 @@ class ContentController extends ApiController
         return array_merge($extra, $this->getLocaleData('frontend'));
     }
 
+    /**
+     * Returns the list of photos linked to the article.
+     *
+     * @param Content $content The content.
+     *
+     * @return array The list of photos linked to the content.
+     */
+    private function getRelatedContents($items)
+    {
+        return [];
+    }
 
     /**
      * Returns the list of tag ids for a list of items or a individual item
