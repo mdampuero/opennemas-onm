@@ -4,7 +4,7 @@
  *
  * @package    Model
  */
-/*
+/**
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *

@@ -33,9 +33,4 @@ class StaticPageController extends ContentController
      * @var string
      */
     protected $service = 'api.service.content';
-
-    protected function getRelatedContents($items)
-    {
-        return [];
-    }
 }
