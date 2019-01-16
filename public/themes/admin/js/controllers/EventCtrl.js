@@ -9,11 +9,7 @@
      *
      * @requires $controller
      * @requires $scope
-     * @requires $uibModal
-     * @requires $window
-     * @requires cleaner
-     * @requires http
-     * @requires messenger
+     * @requires $timeout
      *
      * @description
      *   Check billing information when saving user.

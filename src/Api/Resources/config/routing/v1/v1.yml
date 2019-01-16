@@ -38,6 +38,10 @@ api_v1_backend_subscription:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/subscription.yml'
     prefix:   /backend
 
+api_v1_backend_static_page:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/static_page.yml'
+    prefix:   /backend
+
 api_v1_backend_tag:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/tag.yml'
     prefix:   /backend
