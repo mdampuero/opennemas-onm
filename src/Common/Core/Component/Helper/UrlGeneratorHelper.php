@@ -168,7 +168,7 @@ class UrlGeneratorHelper
         return $this->generateUriFromConfig('article', [
             'id'       => sprintf('%06d', $content->id),
             'date'     => date('YmdHis', strtotime($content->created)),
-            'category' => $content->category_name,
+            'category' => urlencode($content->category_name),
             'slug'     => urlencode($content->slug),
         ]);
     }
