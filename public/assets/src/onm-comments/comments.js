@@ -126,20 +126,4 @@ jQuery(document).ready(function() {
       }
     });
   });
-
-  $('[placeholder]').on('focus', function() {
-    var input = $(this);
-
-    if (input.val() === input.attr('placeholder')) {
-      input.val('');
-      input.removeClass('placeholder');
-    }
-  }).on('blur', function() {
-    var input = $(this);
-
-    if (input.val() === '' || input.val() === input.attr('placeholder')) {
-      input.addClass('placeholder');
-      input.val(input.attr('placeholder'));
-    }
-  });
 });
