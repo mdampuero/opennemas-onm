@@ -281,9 +281,6 @@ class OpinionsController extends Controller
                 'success',
                 _('Opinion successfully created.')
             );
-
-            // Clear caches
-            dispatchEventWithParams('opinion.create', [ 'authorId' => $data['fk_author'] ]);
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',

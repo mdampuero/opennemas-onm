@@ -426,7 +426,6 @@ class FilesController extends Controller
         ];
 
         if ($file->update($data)) {
-            dispatchEventWithParams('content.update', [ 'content' => $file ]);
             $this->get('session')->getFlashBag()->add('success', sprintf(_('File successfully updated.')));
         } else {
             $this->get('session')->getFlashBag()->add(
