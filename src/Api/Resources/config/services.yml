@@ -82,9 +82,3 @@ services:
         class:     Api\Validator\V1\UserGroupValidator
         arguments: [ '@service_container' ]
         public: true
-
-    api.listener.cache_subscriber:
-        class: Api\EventListener\CacheSubscriber
-        arguments: [ '@service_container', '@cache', '@logger' ]
-        tags:
-            - { name: kernel.event_subscriber }
