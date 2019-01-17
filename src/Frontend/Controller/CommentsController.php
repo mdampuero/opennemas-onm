@@ -40,16 +40,14 @@ class CommentsController extends Controller
         $offset      = $request->query->getDigits('offset', 1);
         $darkTheme   = $request->query->getDigits('dark_theme', 0);
 
-        $configs = $this->get('core.helper.comment')->getConfigs();
-        if (empty($elemsByPage)) {
-            $elemsByPage = (int) $configs['number_elements'];
-        }
-
-        if (empty($contentID)
-            || !\Content::checkExists($contentID)
-        ) {
+        if (empty($contentID) || !\Content::checkExists($contentID)) {
             return new Response('', 404);
         }
+
+        // Get and process comments settings
+        $configs     = $this->get('core.helper.comment')->getConfigs();
+        $elemsByPage = empty($elemsByPage)
+            ? (int) $configs['number_elements'] : $elemsByPage;
 
         // Getting comments and total count comments for current article
         $cm       = $this->get('comment_repository');
@@ -66,6 +64,7 @@ class CommentsController extends Controller
             'comments'       => $comments,
             'contentId'      => $contentID,
             'elems_per_page' => $elemsByPage,
+            'required_email' => $this->get('core.helper.comment')->requiredEmail(),
             'offset'         => $offset,
             'dark_theme'     => $darkTheme,
             'count'          => $total,
@@ -196,7 +195,6 @@ class CommentsController extends Controller
         $ip          = getUserRealIP();
         $cm          = $this->get('core.helper.comment');
 
-
         // Check current recaptcha
         $isValid = $this->get('core.recaptcha')
             ->configureFromSettings()
@@ -260,7 +258,7 @@ class CommentsController extends Controller
                     $errorType = $errors['type'];
                     $httpCode  = 400;
 
-                    $handling = ($cm->autoReject())
+                    $handling = ($cm->autoReject() || $cm->requiredEmail())
                         ? _('Your comment was rejected due to:')
                         : _('Your comment is waiting for moderation due to:');
 

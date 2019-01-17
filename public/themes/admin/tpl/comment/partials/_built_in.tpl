@@ -32,8 +32,8 @@
   <div class="grid-body">
       <div class="form-group">
         <div class="checkbox">
-          <input id="email_required" name="configs[email_required]" type="checkbox" value="1" ng-model="configs.email_required">
-          <label class="form-label" for="email_required">
+          <input id="required_email" name="configs[required_email]" type="checkbox" value="1" ng-model="configs.required_email">
+          <label class="form-label" for="required_email">
             <span class="checkbox-title">{t}Email required{/t}</span>
           </label>
           <div class="help p-l-25">
