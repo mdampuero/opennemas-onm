@@ -47,7 +47,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testValidate()
     {
-        $this->ds->expects($this->once())->method('get')->with('blacklist.comment')
+        $this->ds->expects($this->at(0))->method('get')->with('blacklist.comment')
             ->willReturn('1,2,3,4');
 
         $validator = new Validator\Validator($this->em, $this->symfonyValidator);
@@ -71,7 +71,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateComment()
     {
-        $this->ds->expects($this->once())->method('get')->with('blacklist.comment')
+        $this->ds->expects($this->at(0))->method('get')->with('blacklist.comment')
             ->willReturn('1,2,3,4');
         $this->symfonyValidator->expects($this->once())->method('validate')
             ->willReturn([]);
@@ -84,7 +84,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateCommentWithErrors()
     {
-        $this->ds->expects($this->once())->method('get')->with('blacklist.comment')
+        $this->ds->expects($this->at(0))->method('get')->with('blacklist.comment')
             ->willReturn('1,2,3,4');
         $this->symfonyValidator->expects($this->once())->method('validate')
             ->willReturn([
