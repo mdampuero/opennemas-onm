@@ -86,6 +86,24 @@ angular.module('BackendApp.controllers')
         return $scope.item.pk_content;
       };
 
+      /**
+       * @function parseItem
+       * @memberOf RestInnerCtrl
+       *
+       * @description
+       *   Parses the response and adds information to the scope.
+       *
+       * @param {Object} data The data in the response.
+       */
+      $scope.parseItem = function(data) {
+        if (data.item) {
+          $scope.item      = angular.extend($scope.item, data.item);
+          $scope.item.tags = $scope.item.tags.map(function(id) {
+            return data.extra.tags[id];
+          });
+        }
+      };
+
       // Update slug when title is updated
       $scope.$watch('item.title', function(nv, ov) {
         if (!nv) {
