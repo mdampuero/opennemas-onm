@@ -337,7 +337,7 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeObjectCacheContentMeta(Event $event)
     {
-        $content = $event->getArgument('content');
+        $content = $event->getArgument('item');
 
         $this->objectCacheHandler->delete("content-meta-" . $content->id);
     }
@@ -351,16 +351,15 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeObjectCacheForContent(Event $event)
     {
-        $content = $event->getArgument('content');
+        $content = $event->getArgument('item');
 
-        $id = $content->id;
         if (!empty($content->content_type_name)) {
             $contentType = $content->content_type_name;
         } else {
             $contentType = \underscore(get_class($content));
         }
 
-        $this->objectCacheHandler->delete($contentType . "-" . $id);
+        $this->objectCacheHandler->delete($contentType . "-" . $content->id);
     }
 
     /**
@@ -502,11 +501,11 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheForContent(Event $event)
     {
-        if (!$event->hasArgument('content')) {
+        if (!$event->hasArgument('item')) {
             return;
         }
 
-        $content = $event->getArgument('content');
+        $content = $event->getArgument('item');
 
         $this->initializeSmartyCacheHandler();
 
@@ -617,11 +616,11 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheOpinion(Event $event)
     {
-        if (!$event->hasArgument('content')) {
+        if (!$event->hasArgument('item')) {
             return;
         }
 
-        $content = $event->getArgument('content');
+        $content = $event->getArgument('item');
         if (empty($content->fk_author)) {
             return;
         }

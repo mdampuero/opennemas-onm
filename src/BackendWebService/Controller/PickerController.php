@@ -75,7 +75,7 @@ class PickerController extends Controller
                     " WHERE contents_tags.content_id = contents.pk_content AND tags.slug LIKE '%$tagSearcheableWord%')";
             }
             $titleSql .= ')';
-            $filter[] = $titleSql;
+            $filter[]  = $titleSql;
         }
 
         if (!empty($category)) {
@@ -181,7 +181,7 @@ class PickerController extends Controller
             );
 
             // Invalidate the cache for the photo
-            dispatchEventWithParams('content.update', [ 'content' => $photo ]);
+            dispatchEventWithParams('content.update', [ 'item' => $photo ]);
             dispatchEventWithParams(
                 $photo->content_type_name . '.update',
                 [ 'content' => $photo ]
