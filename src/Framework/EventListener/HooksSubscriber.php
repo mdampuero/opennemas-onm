@@ -98,6 +98,36 @@ class HooksSubscriber implements EventSubscriberInterface
             'content.set_positions' => [
                 ['mockHookAction', 0],
             ],
+            'content.createItem' => [
+                ['removeVarnishCacheCurrentInstance', 5],
+            ],
+            'content.updateItem' => [
+                ['removeSmartyCacheForContent', 5],
+                ['removeObjectCacheForContent', 10],
+                ['removeObjectCacheContentMeta', 10],
+                ['removeVarnishCacheCurrentInstance', 5],
+            ],
+            'content.deleteItem' => [
+                ['removeSmartyCacheForContent', 5],
+                ['removeObjectCacheForContent', 10],
+                ['removeObjectCacheContentMeta', 10],
+                ['removeVarnishCacheCurrentInstance', 5],
+            ],
+            'content.patchItem'     => [
+                ['removeSmartyCacheForContent', 5],
+                ['removeObjectCacheForContent', 10],
+                ['removeObjectCacheContentMeta', 10],
+                ['removeVarnishCacheCurrentInstance', 5],
+            ],
+            'content.updateList' => [
+                [ 'mockHookAction', 5 ],
+            ],
+            'content.deleteList' => [
+                [ 'mockHookAction', 5 ],
+            ],
+            'content.patchList' => [
+                [ 'mockHookAction', 5 ],
+            ],
             // Frontpage hooks
             'frontpage.save_position' => [
                 ['removeVarnishCacheFrontpage', 5],
