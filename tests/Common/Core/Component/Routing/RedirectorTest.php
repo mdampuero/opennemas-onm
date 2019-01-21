@@ -10,6 +10,7 @@
 namespace Tests\Common\Core\Component\Routing;
 
 use Common\Core\Component\Routing\Redirector;
+use Common\ORM\Entity\Category;
 use Common\ORM\Entity\Url;
 
 /**
@@ -1102,6 +1103,18 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             $this->request,
             new Url(),
             $content
+        ]));
+
+        $this->assertTrue($method->invokeArgs($this->redirector, [
+            $this->request,
+            new Url(),
+            new Category([ 'internal_category' => 1 ])
+        ]));
+
+        $this->assertFalse($method->invokeArgs($this->redirector, [
+            $this->request,
+            new Url(),
+            new Category([ 'internal_category' => 0 ])
         ]));
 
         $this->assertFalse($method->invokeArgs($this->redirector, [
