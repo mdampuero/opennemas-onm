@@ -69,7 +69,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-link" href="#" ng-click="patchSelected('in_litter', 1)">
+            <button class="btn btn-link" href="#" ng-click="sendToTrash()">
               <i class="fa fa-trash-o fa-lg"></i>
             </button>
           </li>
@@ -204,7 +204,7 @@
                       </a>
                     {/acl}
                     {acl isAllowed="EVENT_DELETE"}
-                      <button class="btn btn-danger btn-small" ng-click="delete(item.pk_content)" type="button">
+                      <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                       </button>
                     {/acl}
@@ -250,8 +250,9 @@
         </div>
       </div>
     </div>
+
     <script type="text/ng-template" id="modal-delete">
-      {include file="base/modal/modal.delete.tpl"}
+      {include file="common/modals/modal.trash.tpl"}
     </script>
   </div>
 

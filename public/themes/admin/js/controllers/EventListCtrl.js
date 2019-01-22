@@ -17,7 +17,7 @@
     .controller('EventListCtrl', [
       '$controller', '$scope', 'oqlEncoder',
       function($controller, $scope, oqlEncoder) {
-        $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
+        $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
         /**
          * The criteria to search.
@@ -80,21 +80,6 @@
           }
 
           return cover;
-        };
-
-        /**
-         * @function getId
-         * @memberOf EventListCtrl
-         *
-         * @description
-         *   Returns the item id.
-         *
-         * @param {Object} item The item.
-         *
-         * @return {Integer} The item id.
-         */
-        $scope.getId = function(item) {
-          return item.pk_content;
         };
       }
     ]);

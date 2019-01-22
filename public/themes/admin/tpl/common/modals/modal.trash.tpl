@@ -1,0 +1,34 @@
+<div ng-init="template.extra.client ? template.step = 2 : template.step = 1">
+  <div class="modal-body">
+    <button class="close" data-dismiss="modal" aria-hidden="true" ng-click="dismiss()" type="button">
+      <i class="fa fa-times"></i>
+    </button>
+    <h3 class="p-b-30 p-t-30 text-center">{t}Send to trash{/t}</h3>
+    <div ng-show="template.step === 2">
+      <div class="text-center">
+        <div class="checkbox inline p-b-15 p-t-30 text-left">
+          <label for="terms">
+          {t escape=off}Are you sure that do you want send to the trash?{/t}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer row">
+    <div class="col-xs-6">
+      <button class="btn btn-block btn-danger text-uppercase" data-dismiss="modal" ng-click="dismiss()" ng-disabled="loading" type="button">
+        <h4 class="bold text-uppercase text-white">
+          <i class="fa fa-times m-r-5"></i>
+          {t}No{/t}
+        </h4>
+      </button>
+    </div>
+    <div class="col-xs-6">
+      <button type="button" class="btn btn-block btn-success btn-loading" ng-click="confirm()">
+        <h4 class="bold text-uppercase text-white">
+          <i class="fa fa-check m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': loading }"></i>
+          {t}Yes{/t}
+        </h4>
+      </button>
+    </div>
+  </div>
+</div>

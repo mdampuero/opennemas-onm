@@ -72,7 +72,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-link" href="#" ng-click="patchSelected('in_litter', 1)">
+            <button class="btn btn-link" href="#" ng-click="sendToTrash()">
               <i class="fa fa-trash-o fa-lg"></i>
             </button>
           </li>
@@ -165,8 +165,6 @@
                 <td>
                   [% item.title %]
                   <span class="hidden-md hidden-lg">
-                   - <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% item.slug %]/" target="_blank" title="{t}Open in a new window{/t}">
-                   <span class="fa fa-external-link"></span>{t}Link{/t}
                  </a>
                </span>
                <div class="listing-inline-actions">
@@ -176,10 +174,13 @@
                   </a>
                 {/acl}
                 {acl isAllowed="STATIC_PAGE_DELETE"}
-                  <button class="btn btn-danger btn-small" ng-click="patch(item, 'in_litter', item.in_litter != 1 ? 1 : 0)" type="button">
+                  <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">
                     <i class="fa m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': item.in_litterLoading, 'fa-trash-o': !item.in_litterLoading }"></i>{t}Delete{/t}
                   </button>
                 {/acl}
+                <a class="btn btn-small btn-white hidden-md hidden-lg" href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% item.slug %]/" target="_blank" title="{t}Open in a new window{/t}">
+                  <span class="fa fa-external-link"></span>
+                </a>
               </div>
             </td>
             <td class="hidden-sm hidden-xs">
@@ -206,16 +207,7 @@
   </div>
 
   <script type="text/ng-template" id="modal-delete">
-    {include file="common/modals/_modalDelete.tpl"}
-  </script>
-  <script type="text/ng-template" id="modal-delete-selected">
-    {include file="common/modals/_modalBatchDelete.tpl"}
-  </script>
-  <script type="text/ng-template" id="modal-update-selected">
-    {include file="common/modals/_modalBatchUpdate.tpl"}
-  </script>
-  <script type="text/ng-template" id="modal-delete">
-    {include file="base/modal/modal.delete.tpl"}
+    {include file="common/modals/modal.trash.tpl"}
   </script>
 </div>
 {/block}
