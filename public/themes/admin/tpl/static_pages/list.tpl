@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="StaticPageListCtrl" ng-init="init('static_page', 'backend_ws_contents_list')">
+<div ng-app="BackendApp" ng-controller="StaticPageListCtrl" ng-init="init()">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
