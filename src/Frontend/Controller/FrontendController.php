@@ -51,13 +51,12 @@ class FrontendController extends Controller
     public function listAction(Request $request)
     {
         $action = $this->get('core.globals')->getAction();
-        $query  = $this->parseQuery($this->getQueryParameters($action, $request));
         $route  = $this->getRoute($action);
 
-        $expected = $this->get('router')->generate($route, $query);
+        $expected = $this->get('router')->generate($route);
         $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
 
-        if ($request->getRequestUri() !== $expected) {
+        if ($request->getPathInfo() !== $expected) {
             return new RedirectResponse($expected);
         }
 
@@ -91,7 +90,7 @@ class FrontendController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        if ($request->getRequestUri() !== $expected
+        if ($request->getPathInfo() !== $expected
             && empty($this->get('request_stack')->getParentRequest())
         ) {
             return new RedirectResponse($expected);
