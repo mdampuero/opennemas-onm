@@ -34,9 +34,10 @@ class StaticPageController extends BackendController
      * @var type
      */
     protected $permissions = [
-        'create' => null,
-        'list'   => null,
-        'show'   => null
+        'create' => 'STATIC_PAGE_CREATE',
+        'update' => 'STATIC_PAGE_UPDATE',
+        'list'   => 'STATIC_PAGE_ADMIN',
+        'show'   => 'STATIC_PAGE_CREATE',
     ];
 
     /**

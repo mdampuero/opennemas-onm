@@ -126,7 +126,7 @@ class ContentController extends ApiController
      *
      * @return array The list of photos linked to the content.
      */
-    private function getRelatedContents($items)
+    protected function getRelatedContents($items)
     {
         return [];
     }
