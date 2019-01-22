@@ -64,25 +64,6 @@
         };
 
         /**
-         * @function getCover
-         * @memberOf EventListCtrl
-         *
-         * @description
-         *   Returns the cover image for a given content
-         */
-        $scope.getCover = function(element) {
-          var cover = '';
-
-          if (element.related_contents.length > 0) {
-            var coverId = element.related_contents[0].pk_content2;
-
-            cover = $scope.data.extra.related_contents[coverId];
-          }
-
-          return cover;
-        };
-
-        /**
          * @function getId
          * @memberOf EventListCtrl
          *

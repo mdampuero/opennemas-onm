@@ -75,7 +75,7 @@ angular.module('BackendApp.controllers')
 
       /**
        * @function getItemId
-       * @memberOf EventCtrl
+       * @memberOf StaticPageCtrl
        *
        * @description
        *   Returns the item id.
@@ -88,7 +88,7 @@ angular.module('BackendApp.controllers')
 
       /**
        * @function parseItem
-       * @memberOf RestInnerCtrl
+       * @memberOf StaticPageCtrl
        *
        * @description
        *   Parses the response and adds information to the scope.
