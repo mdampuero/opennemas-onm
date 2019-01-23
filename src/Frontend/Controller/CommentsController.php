@@ -235,7 +235,6 @@ class CommentsController extends Controller
                     'type'    => 'warning',
                 ];
 
-
                 $data['status'] = \Comment::STATUS_PENDING;
                 $comment = new \Comment();
                 $comment->create($data);
