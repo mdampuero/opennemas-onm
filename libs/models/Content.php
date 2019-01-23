@@ -1954,18 +1954,6 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Returns a metaproperty value from the current content
-     *
-     * @param string $metaName the property name to fetch
-     *
-     * @return mixed the meta value or false if it's not available
-     */
-    public function getMetadata($metaName)
-    {
-        return $this->{$metaName};
-    }
-
-    /**
      * Sets a metaproperty for the actual content
      *
      * @param string $property the name of the property
