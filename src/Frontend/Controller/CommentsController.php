@@ -220,6 +220,7 @@ class CommentsController extends Controller
 
             $data['body'] = '<p>' . preg_replace('@\\n@', '</p><p>', $data['body']) . '</p>';
 
+            $errors = $this->get('core.validator')->validate($data, 'comment');
             if ($cm->moderateManually()) {
                 $data['status'] = \Comment::STATUS_PENDING;
 
@@ -228,11 +229,20 @@ class CommentsController extends Controller
                     'type'    => 'warning',
                 ];
 
-                $comment = new \Comment();
-                $comment->create($data);
+                if (!empty($errors)) {
+                    $message = [
+                        'message' => sprintf(
+                            '<strong>%s</strong><br> %s',
+                            $handling,
+                            implode('<br>', $errors['errors'])
+                        ),
+                        'type'    => 'error',
+                    ];
+                } else {
+                    $comment = new \Comment();
+                    $comment->create($data);
+                }
             } else {
-                $errors = $this->get('core.validator')->validate($data, 'comment');
-
                 if (empty($errors)) {
                     $data['status'] = $cm->autoAccept()
                         ? \Comment::STATUS_ACCEPTED
