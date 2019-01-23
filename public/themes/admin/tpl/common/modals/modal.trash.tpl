@@ -3,15 +3,9 @@
     <button class="close" data-dismiss="modal" aria-hidden="true" ng-click="dismiss()" type="button">
       <i class="fa fa-times"></i>
     </button>
-    <h3 class="p-b-30 p-t-30 text-center">{t}Send to trash{/t}</h3>
-    <div ng-show="template.step === 2">
-      <div class="text-center">
-        <div class="checkbox inline p-b-15 p-t-30 text-left">
-          <label for="terms">
-          {t escape=off}Are you sure that do you want send to the trash?{/t}</label>
-        </div>
-      </div>
-    </div>
+    <h3 class="p-b-30 p-t-30 text-center">{t}Are you sure?{/t}</h3>
+    <h4 class="p-b-30 text-center" ng-if="!template.selected || template.selected == 1">{t}Do you want to send the item to trash?{/t}</h4>
+    <h4 class="p-b-30 text-center" ng-if="template.selected > 1">{t}Do you want to send the selected items to trash?{/t}</h4>
   </div>
   <div class="modal-footer row">
     <div class="col-xs-6">

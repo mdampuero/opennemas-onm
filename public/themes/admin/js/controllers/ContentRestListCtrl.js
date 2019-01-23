@@ -49,8 +49,9 @@
             resolve: {
               template: function() {
                 return {
-                  name:  $scope.id ? 'update' : 'create',
-                  value: 1,
+                  name:     $scope.id ? 'update' : 'create',
+                  selected: $scope.selected.items.length,
+                  value:    1,
                 };
               },
               success: function() {
