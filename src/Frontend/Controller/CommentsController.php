@@ -222,26 +222,23 @@ class CommentsController extends Controller
 
             $errors = $this->get('core.validator')->validate($data, 'comment');
             if ($cm->moderateManually()) {
-                $data['status'] = \Comment::STATUS_PENDING;
+                if (!empty($errors)) {
+                    throw new \Exception(sprintf(
+                        '<strong>%s</strong><br> %s',
+                        _('Your comment was rejected due to:'),
+                        implode('<br>', $errors['errors'])
+                    ));
+                }
 
                 $message = [
                     'message' => _('Your comment was accepted and now we have to moderate it.'),
                     'type'    => 'warning',
                 ];
 
-                if (!empty($errors)) {
-                    $message = [
-                        'message' => sprintf(
-                            '<strong>%s</strong><br> %s',
-                            $handling,
-                            implode('<br>', $errors['errors'])
-                        ),
-                        'type'    => 'error',
-                    ];
-                } else {
-                    $comment = new \Comment();
-                    $comment->create($data);
-                }
+
+                $data['status'] = \Comment::STATUS_PENDING;
+                $comment = new \Comment();
+                $comment->create($data);
             } else {
                 if (empty($errors)) {
                     $data['status'] = $cm->autoAccept()
@@ -289,7 +286,10 @@ class CommentsController extends Controller
             }
         } catch (\Exception $e) {
             $httpCode = 400;
-            $message  = $e->getMessage();
+            $message  = [
+                'message' => $e->getMessage(),
+                'type'    => 'error',
+            ];
         }
 
         $response = new JsonResponse($message, $httpCode);
