@@ -62,11 +62,17 @@
           modal.result.then(function(response) {
             if (response) {
               if (item) {
-                $scope.patch(item, 'in_litter', 1);
+                $scope.patch(item, 'in_litter', 1)
+                  .then(function() {
+                    $scope.list();
+                  });
                 return;
               }
 
-              $scope.patchSelected('in_litter', 1);
+              $scope.patchSelected('in_litter', 1)
+                .then(function() {
+                  $scope.list();
+                });
             }
           });
         };
