@@ -79,14 +79,14 @@ class UrlGeneratorHelper
             return $content->externalUri;
         }
 
-        $url = '';
+        $uri = '';
 
         if (is_array($params)
             && array_key_exists('absolute', $params)
             && $params['absolute']
         ) {
             // Absolute URL basing on the current instance
-            $url = ($this->forceHttp ? 'http://' : '//')
+            $uri = ($this->forceHttp ? 'http://' : '//')
                 . $this->instance->getMainDomain();
 
             $request = $this->container->get('request_stack')
@@ -94,7 +94,7 @@ class UrlGeneratorHelper
 
             if (!empty($request)) {
                 // Absolute URL basing on the current request
-                $url = $request->getSchemeAndHttpHost();
+                $uri = $request->getSchemeAndHttpHost();
             }
         }
 
@@ -102,7 +102,16 @@ class UrlGeneratorHelper
         $context = $this->locale->getContext();
         $this->locale->setContext('frontend');
 
-        $uri = $url . '/' . $this->getUriForContent($content);
+        $method = 'getUriForContent';
+
+        if (!$content instanceof \Content) {
+            $reflect = new \ReflectionClass($content);
+            $method  = 'getUriFor' . $reflect->getShortName();
+        }
+
+        if (method_exists($this, $method)) {
+            $uri .= '/' . $this->{$method}($content);
+        }
 
         $this->locale->setContext($context);
 
@@ -171,6 +180,22 @@ class UrlGeneratorHelper
             'category' => urlencode($content->category_name),
             'slug'     => urlencode($content->slug),
         ]);
+    }
+
+    /**
+     * Returns the URI for a Category.
+     *
+     * @param Category $category The category object.
+     *
+     * @return string The category URI.
+     */
+    protected function getUriForCategory($category)
+    {
+        $uri = $this->container->get('router')->generate('category_frontpage', [
+            'category_name' => $category->name
+        ]);
+
+        return trim($uri, '/');
     }
 
     /**
