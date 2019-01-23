@@ -98,7 +98,7 @@ class Loader
             ->getDataSet('Settings', $name)
             ->get('locale');
 
-        $this->container->get('core.locale')->configure($config);
+        $this->container->get('core.locale')->configure($config)->apply();
     }
 
     /**
