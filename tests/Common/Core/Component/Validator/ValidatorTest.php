@@ -137,6 +137,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->ds->expects($this->at(0))->method('get')->with('blacklist.comment')
             ->willReturn('1,2,3,4');
+        $this->ds->expects($this->at(1))->method('get')->with('comments_config')
+            ->willReturn(['required_email' => false, 'moderation_manual' => false]);
         $this->symfonyValidator->expects($this->once())->method('validate')
             ->willReturn([]);
 
@@ -151,7 +153,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->at(0))->method('get')->with('blacklist.comment')
             ->willReturn('1,2,3,4');
         $this->ds->expects($this->at(1))->method('get')->with('comments_config')
-            ->willReturn(['required_email' => true]);
+            ->willReturn(['required_email' => true, 'moderation_manual' => false]);
         $this->symfonyValidator->expects($this->once())->method('validate')
             ->willReturn([]);
 
