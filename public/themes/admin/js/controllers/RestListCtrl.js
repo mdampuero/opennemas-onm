@@ -216,7 +216,7 @@
             params: { id: $scope.getId(item) }
           };
 
-          http.patch(route, data).then(function(response) {
+          return http.patch(route, data).then(function(response) {
             item[property + 'Loading'] = 0;
             item[property] = value;
             messenger.post(response.data);
@@ -249,7 +249,7 @@
 
           data[property] = value;
 
-          http.patch($scope.routes.patchSelected, data)
+          return http.patch($scope.routes.patchSelected, data)
             .then(function(response) {
               $scope.list().then(function() {
                 $scope.selected = { all: false, items: [] };
