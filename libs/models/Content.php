@@ -21,13 +21,6 @@ class Content implements \JsonSerializable, CsvSerializable
     const POSTPONED     = 'postponed';
 
     /**
-     * Whether if this content is available
-     *
-     * @var int 0|1
-     */
-    public $available = null;
-
-    /**
      * The main text of the content
      *
      * @var string
@@ -585,7 +578,6 @@ class Content implements \JsonSerializable, CsvSerializable
             'fk_user_last_editor' => empty(getService('core.user')) ? 0 : (int) getService('core.user')->id,
             'in_home'             => (empty($data['in_home'])) ? 0 : intval($data['in_home']),
             'favorite'            => (empty($data['favorite'])) ? 0 : intval($data['favorite']),
-            'available'           => (int) $data['content_status'],
             'with_comment'        => $data['with_comment'],
             'slug'                => $data['slug'],
             'category_name'       => $catName,
@@ -695,8 +687,6 @@ class Content implements \JsonSerializable, CsvSerializable
 
         $contentData = [
             'title'          => $data['title'],
-            'available'      =>
-                (!isset($data['content_status'])) ? $this->content_status : (int) $data['content_status'],
             'body'           => (!array_key_exists('body', $data)) ? '' : $data['body'],
             'category_name'  => $catName,
             'changed'        => date("Y-m-d H:i:s"),
@@ -847,7 +837,6 @@ class Content implements \JsonSerializable, CsvSerializable
                     'fk_user_last_editor' => $lastEditor,
                     'in_litter' => 1,
                     'content_status' => 0,
-                    'available' => 0,
                     'changed' => date("Y-m-d H:i:s"),
                 ],
                 [ 'pk_content' => $id ]
@@ -1032,12 +1021,10 @@ class Content implements \JsonSerializable, CsvSerializable
             $date                 = date("Y-m-d H:i:s");
             $this->changed        = $date;
             $this->content_status = $status;
-            $this->available      = $status;
 
             getService('dbal_connection')->update(
                 'contents',
                 [
-                    'available'      => $this->available,
                     'content_status' => $this->content_status,
                     'changed'        => $date,
                 ],
@@ -1192,7 +1179,6 @@ class Content implements \JsonSerializable, CsvSerializable
 
                 $values = [
                     $status,
-                    $status,
                     $this->starttime,
                     $lastEditor,
                     $this->id
@@ -1207,7 +1193,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
             getService('dbal_connection')->executeUpdate(
                 'UPDATE contents '
-                . 'SET `available`=?, `content_status`=?, `starttime`=?, '
+                . 'SET `content_status`=?, `starttime`=?, '
                 . '`fk_user_last_editor`=? WHERE `pk_content`=?',
                 $values
             );
@@ -1222,7 +1208,6 @@ class Content implements \JsonSerializable, CsvSerializable
 
             // Set status for it's updated to next event
             if (!empty($this)) {
-                $this->available      = $status;
                 $this->content_status = $status;
             }
 
@@ -1310,7 +1295,6 @@ class Content implements \JsonSerializable, CsvSerializable
                 'contents',
                 [
                     'content_status'      => 0,
-                    'available'           => 0,
                     'fk_user_last_editor' => (int) getService('core.user')->id,
                     'changed'             => date("Y-m-d H:i:s"),
                 ],
@@ -1318,7 +1302,6 @@ class Content implements \JsonSerializable, CsvSerializable
             );
 
             // Set status for it's updated state to next event
-            $this->available      = 0;
             $this->content_status = 0;
 
             /* Notice log of this action */
