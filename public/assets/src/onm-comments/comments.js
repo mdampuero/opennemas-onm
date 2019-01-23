@@ -29,6 +29,7 @@ jQuery(document).ready(function() {
           .removeClass('alert-success')
           .removeClass('alert-error')
           .removeClass('alert-warning')
+          .removeClass('alert-danger')
           .addClass('alert-' + answer.type)
           .html(answer.message)
           .slideDown()
