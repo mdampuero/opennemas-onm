@@ -64,54 +64,13 @@
         <div class="grid simple">
           <div class="grid-body no-padding">
             {acl isAllowed="STATIC_PAGE_AVAILABLE"}
-            <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.published }">
-            </div>
             <div class="grid-collapse-title">
-              <div class="form-group no-margin">
-                <div class="checkbox">
-                  <input id="content-status" ng-false-value="0" ng-model="item.content_status" ng-true-value="1" type="checkbox">
-                  <label for="content-status">{t}Published{/t}</label>
-                </div>
-              </div>
+              {include file="ui/component/content-editor-accordion/published.tpl"}
             </div>
             {/acl}
-            <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.tags = !expanded.tags">
-              <i class="fa fa-tag m-r-10"></i>{t}Tags{/t}
-              <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.tags }"></i>
-              <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.tags" ng-class="{ 'badge-danger' : item.tags.length === 0 }">
-                <span ng-show="item.tags.length === 0"><strong>{t}No tags{/t}</strong></span>
-                <span ng-show="item.tags.length != 0">
-                  <strong>[% item.tags.length %] {t}Tags{/t}</span></strong>
-                </span>
-              </span>
-            </div>
-            <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.tags }">
-              <div class="form-group">
-                <div class="controls">
-                  {include file="ui/component/tags-input/tags.tpl" ngModel="item.tags"}
-                </div>
-              </div>
-            </div>
-            <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.slug = !expanded.slug">
-              <i class="fa fa-globe m-r-10"></i>{t}Slug{/t}
-              <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.slug }"></i>
-            </div>
-            <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.slug }">
-              <div class="form-group">
-                <label class="form-label" for="slug">
-                  {t}Slug{/t}
-                </label>
-                <span class="m-t-2 pull-right" ng-if="item.id">
-                  <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/[% item.uri %]" target="_blank">
-                    <i class="fa fa-external-link"></i>
-                    {t}Link{/t}
-                  </a>
-                </span>
-                <div class="controls">
-                  <input class="form-control" id="slug" name="slug" ng-model="item.slug" type="text" ng-disabled="item.content_status != '0'">
-                </div>
-              </div>
-            </div>
+
+            {include file="ui/component/content-editor-accordion/tags.tpl"}
+            {include file="ui/component/content-editor-accordion/slug.tpl" route="[% routing.generate('frontend_static_page', { slug: item.slug }) %]"}
           </div>
         </div>
       </div>

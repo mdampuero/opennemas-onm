@@ -60,126 +60,16 @@
         <div class="col-md-4 col-md-push-8">
           <div class="grid simple">
             <div class="grid-body no-padding">
-              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.published }">
-              </div>
               <div class="grid-collapse-title">
-                <div class="form-group">
-                  <div class="checkbox">
-                    <input id="content-status" ng-false-value="0" ng-model="item.content_status" ng-true-value="1" type="checkbox">
-                    <label for="content-status">{t}Published{/t}</label>
-                  </div>
-                </div>
-                {is_module_activated name="COMMENT_MANAGER"}
-                  <div class="form-group no-margin">
-                    <div class="checkbox">
-                    <input id="with-comments" ng-false-value="0" ng-model="item.with_comment" ng-true-value="1" type="checkbox">
-                      <label for="with-comments">{t}Allow comments{/t}</label>
-                    </div>
-                  </div>
-                {/is_module_activated}
+                {include file="ui/component/content-editor-accordion/published.tpl"}
+                {include file="ui/component/content-editor-accordion/allow_comments.tpl"}
               </div>
-              <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.category = !expanded.category">
-                <input name="categories" ng-value="categories" type="hidden">
-                <i class="fa fa-bookmark m-r-10"></i>{t}Category{/t}
-                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.category || item.categories.length === 0 || !item.categories[0]" ng-class="{ 'badge-danger' : item.categories.length === 0 || !item.categories[0] }">
-                  <span ng-show="item.categories.length === 0 || !item.categories[0]">
-                    <strong>{t}Not selected{/t}</strong>
-                  </span>
-                  <span ng-show="item.categories.length !== 0 && item.categories[0] && !flags.categories.none">
-                    <strong><span ng-repeat="category in data.extra.categories|filter:{ pk_content_category: item.categories[0]}">[% category.title %]</span></strong>
-                  </span>
-                </span>
-              </div>
-              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.category }">
-                <div class="form-group">
-                  <div class="controls">
-                    <onm-category-selector class="block" ng-model="item.categories[0]" categories="data.extra.categories" placeholder="{t}Select a category{/t}" default-value-text="{t}Select a category...{/t}" required />
-                  </div>
-                </div>
-              </div>
-              <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.schedule = !expanded.schedule">
-                <i class="fa fa-calendar m-r-10"></i>{t}Schedule{/t}
-                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.schedule }"></i>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.schedule && item.endtime">
-                  <strong>{t}End{/t}</strong>
-                  <span class="hidden-lg visible-xlg pull-right">: [% item.endtime %]</span>
-                </span>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.schedule && item.starttime">
-                  <strong>{t}Start{/t}</strong>
-                  <span class="hidden-lg visible-xlg pull-right">: [% item.starttime %]</span>
-                </span>
-              </div>
-              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.schedule }">
-                <div class="form-group">
-                  <label class="form-label" for="starttime">
-                    {t}Publication start date{/t}
-                  </label>
-                  <div class="controls">
-                    <div class="input-group">
-                      <input class="form-control" datetime-picker datetime-picker-timezone="{$timezone}" datetime-picker-use-current=true datetime-picker-min="item.created" id="starttime" name="starttime" ng-model="item.starttime" type="datetime">
-                      <span class="input-group-addon add-on">
-                        <span class="fa fa-calendar"></span>
-                      </span>
-                    </div>
-                    <span class="help-block">
-                      {t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}
-                    </span>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="endtime">
-                    {t}Publication end date{/t}
-                  </label>
-                  <div class="controls">
-                    <div class="input-group">
-                      <input class="form-control" datetime-picker datetime-picker-timezone="{$timezone}" datetime-picker-use-current=true datetime-picker-min="item.endtime" id="endtime" name="endtime" ng-model="item.endtime" type="datetime">
-                      <span class="input-group-addon add-on">
-                        <span class="fa fa-calendar"></span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <span><i class="fa fa-info-circle text-info"></i> {t}This content will only be available in the time range specified above.{/t}</span>
-              </div>
-              <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.tags = !expanded.tags">
-                <i class="fa fa-tag m-r-10"></i>{t}Tags{/t}
-                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.tags }"></i>
-                <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.tags" ng-class="{ 'badge-danger' : item.tags.length === 0 }">
-                  <span ng-show="item.tags.length === 0"><strong>{t}No tags{/t}</strong></span>
-                  <span ng-show="item.tags.length != 0">
-                    <strong>[% item.tags.length %] {t}Tags{/t}</span></strong>
-                  </span>
-                </span>
-              </div>
-              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.tags }">
-                <div class="form-group">
-                  <label for="metadata" class="form-label">{t}Tags{/t}</label>
-                  <div class="controls">
-                    {include file="ui/component/tags-input/tags.tpl" ngModel="item.tags"}
-                  </div>
-                </div>
-              </div>
-              <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.slug = !expanded.slug">
-                <i class="fa fa-globe m-r-10"></i>{t}Slug{/t}
-                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.slug }"></i>
-              </div>
-              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.slug }">
-                <div class="form-group">
-                  <label class="form-label" for="slug">
-                    {t}Slug{/t}
-                  </label>
-                  <span class="m-t-2 pull-right" ng-if="item.id">
-                    <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/[% item.uri %]" target="_blank">
-                      <i class="fa fa-external-link"></i>
-                      {t}Link{/t}
-                    </a>
-                  </span>
-                  <div class="controls">
-                    <input class="form-control" id="slug" name="slug" ng-model="item.slug" type="text" ng-disabled="item.content_status != '0'">
-                  </div>
-                </div>
-              </div>
+
+              {include file="ui/component/content-editor-accordion/category.tpl"}
+              {include file="ui/component/content-editor-accordion/scheduling.tpl"}
+              {include file="ui/component/content-editor-accordion/tags.tpl"}
+              {include file="ui/component/content-editor-accordion/slug.tpl" route="[% routing.generate('frontend_event_show', { slug: item.slug }) %]"}
+
               <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.when = !expanded.when">
                 <i class="fa fa-clock-o m-r-10"></i>{t}When{/t}
                 <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.when }"></i>
@@ -246,6 +136,13 @@
                     <input class="form-control"  id="event_place" name="event_place" ng-model="item.event_place" type="text">
                   </div>
                 </div>
+              </div>
+              <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.external_website = !expanded.external_website">
+                <i class="fa fa-map-marker m-r-10"></i>
+                {t}External website{/t}
+                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.external_website }"></i>
+              </div>
+              <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.external_website }">
                 <div class="form-group">
                   <label class="form-label" for="event_website">{t}Website URL{/t}</label>
                   <div class="controls">

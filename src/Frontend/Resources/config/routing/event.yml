@@ -11,3 +11,4 @@ frontend_event_show:
         slug : '[^/.]+'
     options:
         l10n: true
+        expose: true

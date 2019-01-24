@@ -6,3 +6,4 @@ frontend_static_page:
         slug    : '[^/.]+'
     options:
         l10n: true
+        expose: true
