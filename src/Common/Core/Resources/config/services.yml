@@ -43,6 +43,7 @@ parameters:
         moderation_manual: true
         moderation_autoreject: false
         moderation_autoaccept: false
+        required_email: false
 
 services:
     core.collector.brand:
