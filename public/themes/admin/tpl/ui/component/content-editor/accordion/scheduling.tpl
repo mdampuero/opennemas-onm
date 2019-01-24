@@ -1,6 +1,11 @@
 <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.schedule = !expanded.schedule">
   <i class="fa fa-clock-o m-r-10"></i>{t}Schedule{/t}
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.schedule }"></i>
+
+  {* <span ng-if="now.getTime() < (new Date(item.starttime).getTime())"></span>
+  <span class="badge badge-default pull-right m-r-10 m-t-2" ng-if="!item.starttime && !item.endtime">{t}In time{/t}</span>
+  <span class="badge badge-default pull-right m-r-10 m-t-2" ng-if="!item.starttime && !item.endtime">{t}Future{/t}<span class="hidden-lg visible-xlg pull-right">: [% item.starttime %]</span><span>: [% item.endtime %]</span></span>
+  <span class="badge badge-default pull-right m-r-10 m-t-2" ng-if="!item.starttime && !item.endtime">{t}Dued{/t}<span class="hidden-lg visible-xlg pull-right">: [% item.endtime %]</span></span> *}
   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.schedule && item.endtime">
     <strong>{t}End{/t}</strong>
     <span class="hidden-lg visible-xlg pull-right">: [% item.endtime %]</span>

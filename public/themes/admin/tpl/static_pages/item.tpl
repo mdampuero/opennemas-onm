@@ -65,40 +65,20 @@
           <div class="grid-body no-padding">
             {acl isAllowed="STATIC_PAGE_AVAILABLE"}
             <div class="grid-collapse-title">
-              {include file="ui/component/content-editor-accordion/published.tpl"}
+              {include file="ui/component/content-editor/accordion/published.tpl"}
             </div>
             {/acl}
 
-            {include file="ui/component/content-editor-accordion/tags.tpl"}
-            {include file="ui/component/content-editor-accordion/slug.tpl" route="[% routing.generate('frontend_static_page', { slug: item.slug }) %]"}
+            {include file="ui/component/content-editor/accordion/tags.tpl"}
+            {include file="ui/component/content-editor/accordion/slug.tpl" route="[% routing.generate('frontend_static_page', { slug: item.slug }) %]"}
           </div>
         </div>
       </div>
       <div class="col-md-8 col-md-pull-4">
         <div class="grid simple">
           <div class="grid-body">
-            <div class="form-group">
-              <label for="title" class="form-label">{t}Title{/t}</label>
-              <div class="controls">
-                <input type="text" id="title" name="title" ng-model="item.title" required class="form-control"/>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label clearfix" for="body">
-                <div class="pull-left">{t}Body{/t}</div>
-              </label>
-              {acl isAllowed='PHOTO_ADMIN'}
-              <div class="pull-right">
-                <div class="btn btn-mini" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="5" media-picker-target="editor.body">
-                  <i class="fa fa-plus"></i>
-                  {t}Insert image{/t}
-                </div>
-              </div>
-              {/acl}
-              <div class="controls">
-                <textarea name="body" id="body" ng-model="item.body" onm-editor onm-editor-preset="standard"  class="form-control" rows="30"></textarea>
-              </div>
-            </div>
+            {include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true}
+            {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=30 required=true imagepicker=true}
           </div>
         </div>
       </div>

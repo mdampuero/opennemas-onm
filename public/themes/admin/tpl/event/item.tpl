@@ -61,14 +61,14 @@
           <div class="grid simple">
             <div class="grid-body no-padding">
               <div class="grid-collapse-title">
-                {include file="ui/component/content-editor-accordion/published.tpl"}
-                {include file="ui/component/content-editor-accordion/allow_comments.tpl"}
+                {include file="ui/component/content-editor/accordion/published.tpl"}
+                {include file="ui/component/content-editor/accordion/allow_comments.tpl"}
               </div>
 
-              {include file="ui/component/content-editor-accordion/category.tpl"}
-              {include file="ui/component/content-editor-accordion/scheduling.tpl"}
-              {include file="ui/component/content-editor-accordion/tags.tpl"}
-              {include file="ui/component/content-editor-accordion/slug.tpl" route="[% routing.generate('frontend_event_show', { slug: item.slug }) %]"}
+              {include file="ui/component/content-editor/accordion/category.tpl"}
+              {include file="ui/component/content-editor/accordion/scheduling.tpl"}
+              {include file="ui/component/content-editor/accordion/tags.tpl"}
+              {include file="ui/component/content-editor/accordion/slug.tpl" route="[% routing.generate('frontend_event_show', { slug: item.slug }) %]"}
 
               <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.when = !expanded.when">
                 <i class="fa fa-clock-o m-r-10"></i>{t}When{/t}
@@ -202,28 +202,9 @@
         <div class="col-md-8 col-md-pull-4">
           <div class="grid simple">
             <div class="grid-body">
-              <div class="form-group">
-                <label for="title" class="form-label">{t}Title{/t}</label>
-                <div class="controls">
-                  <input type="text" id="title" name="title" ng-model="item.title" required class="form-control"/>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label clearfix" for="description">
-                  <div class="pull-left">{t}Description{/t}</div>
-                </label>
-                <div class="controls">
-                  <textarea name="description" id="description" ng-model="item.description" onm-editor onm-editor-preset="simple"  class="form-control" rows="5"></textarea>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label clearfix" for="body">
-                  <div class="pull-left">{t}Body{/t}</div>
-                </label>
-                <div class="controls">
-                  <textarea name="body" id="body" ng-model="item.body" onm-editor onm-editor-preset="standard"  class="form-control" rows="15"></textarea>
-                </div>
-              </div>
+              {include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true}
+              {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 required=true imagepicker=true}
+              {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 required=true imagepicker=true}
             </div>
           </div>
         </div>
