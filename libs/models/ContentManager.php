@@ -461,14 +461,12 @@ class ContentManager
         ];
 
         $order = ['content_views.views' => 'desc'];
-        if ($category) {
-            $category = getService('category_repository')->find($category);
-
-            if ($category) {
-                $category = $category->name;
+        if (!empty($category)) {
+            if (!is_array($category)) {
+                $category = [$category];
             }
 
-            $criteria['category_name'] = [['value' => $category]];
+            $criteria['pk_fk_content_category'] = [['value' => $category, 'operator' => 'IN']];
         }
 
         if ($author) {
