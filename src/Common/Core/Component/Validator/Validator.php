@@ -133,38 +133,58 @@ class Validator
                 new BaseConstraints\NotBlank([
                     'message' => _('Please provide a valid author name')
                 ]),
-                new Constraints\BlackListWords([
-                    'words'   => $config,
-                    'message' => _('Your name has invalid words')
-                ]),
             ],
-            'author_ip'    => new BaseConstraints\NotBlank([
+            'author_ip' => new BaseConstraints\NotBlank([
                 'message' => _('Your IP address is not valid.')
             ]),
-            'author_email' => new BaseConstraints\Blank(),
-            'body'         => [
+            'body' => [
                 new BaseConstraints\Length([
                     'min'        => 5,
                     'minMessage' => _('Your comment is too short')
-                ]),
-                new Constraints\BlackListWords([
-                    'words'   => $config,
-                    'message' => _('Your comment has words under discussion.')
                 ]),
             ],
             'content_id' => new BaseConstraints\Range(['min' => 1]),
         ];
 
-        if (array_key_exists('author_email', $data) && !empty($data['author_email'])) {
+        // Check constraints for author email
+        if (!empty($data['author_email'])) {
             $constraintMap['author_email'] = [
                 new BaseConstraints\Email([
                     'message' => _('Please provide a valid email address')
                 ]),
-                new Constraints\BlackListWords([
-                    'words'   => $config,
-                    'message' => _('Your email is not allowed')
+            ];
+        } elseif ($this->ds->get('comments_config')['required_email']) {
+            $constraintMap['author_email'] = [
+                new BaseConstraints\NotBlank([
+                    'message' => _('Please provide a valid email address')
                 ]),
             ];
+        }
+
+        // Only with automatic moderation;
+        if (!$this->ds->get('comments_config')['moderation_manual']) {
+            $blackListValidations = [
+                'author' => [
+                    new Constraints\BlackListWords([
+                        'words'   => $config,
+                        'message' => _('Your name has invalid words')
+                    ]),
+                ],
+                'body' => [
+                    new Constraints\BlackListWords([
+                        'words'   => $config,
+                        'message' => _('Your comment has words under discussion.')
+                    ]),
+                ],
+                'author_email' => [
+                    new Constraints\BlackListWords([
+                        'words'   => $config,
+                        'message' => _('Your email is not allowed')
+                    ]),
+                ]
+            ];
+
+            $constraintMap = array_merge_recursive($constraintMap, $blackListValidations);
         }
 
         return new BaseConstraints\Collection($constraintMap);
@@ -176,7 +196,7 @@ class Validator
      *
      * @return Collection BaseConstraints collection for tags.
      */
-    protected function getTagConstraint($data)
+    protected function getTagConstraint()
     {
         $config = $this->getConfig(self::BLACKLIST_RULESET_TAGS);
 

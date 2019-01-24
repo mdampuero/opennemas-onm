@@ -11,6 +11,7 @@ namespace Common\Core\Component\Routing;
 
 use Api\Service\Service;
 use Common\Cache\Core\Cache;
+use Common\ORM\Entity\Category;
 use Common\ORM\Entity\Url;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Framework\Component\MIME\MimeTypeTool;
@@ -464,7 +465,15 @@ class Redirector
         }
 
         if (is_object($target)) {
-            return $target->isReadyForPublish();
+            if ($target instanceof \Content) {
+                return $target->isReadyForPublish();
+            }
+
+            if ($target instanceof Category) {
+                return $target->internal_category === 1;
+            }
+
+            return true;
         }
 
         return $target !== trim($request->getRequestUri(), '/');

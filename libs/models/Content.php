@@ -1758,7 +1758,8 @@ class Content implements \JsonSerializable, CsvSerializable
         try {
             // Fetch the list of frontpages where this article is included
             $rs = getService('dbal_connection')->fetchAll(
-                "SELECT fk_category FROM content_positions WHERE pk_fk_content = ?",
+                "SELECT fk_category, frontpage_version_id"
+                . " FROM content_positions WHERE pk_fk_content = ?",
                 [ $this->id ]
             );
 

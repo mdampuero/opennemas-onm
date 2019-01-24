@@ -10,6 +10,7 @@
 namespace Frontend\Controller;
 
 use Common\Core\Controller\Controller;
+use Common\ORM\Core\Exception\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -83,12 +84,12 @@ class FrontendController extends Controller
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
 
-        $expected = $this->get('core.helper.url_generator')->generate($item);
-        $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
-
         if (empty($item) || !$item->isReadyForPublish()) {
             throw new ResourceNotFoundException();
         }
+
+        $expected = $this->get('core.helper.url_generator')->generate($item);
+        $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
 
         if ($request->getPathInfo() !== $expected
             && empty($this->get('request_stack')->getParentRequest())

@@ -47,7 +47,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testValidate()
     {
-        $this->ds->expects($this->once())->method('get')->with('blacklist.comment')
+        $this->ds->expects($this->at(0))->method('get')->with('blacklist.comment')
             ->willReturn('1,2,3,4');
 
         $validator = new Validator\Validator($this->em, $this->symfonyValidator);
@@ -71,7 +71,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateComment()
     {
-        $this->ds->expects($this->once())->method('get')->with('blacklist.comment')
+        $this->ds->expects($this->at(0))->method('get')->with('blacklist.comment')
             ->willReturn('1,2,3,4');
         $this->symfonyValidator->expects($this->once())->method('validate')
             ->willReturn([]);
@@ -84,7 +84,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateCommentWithErrors()
     {
-        $this->ds->expects($this->once())->method('get')->with('blacklist.comment')
+        $this->ds->expects($this->at(0))->method('get')->with('blacklist.comment')
             ->willReturn('1,2,3,4');
         $this->symfonyValidator->expects($this->once())->method('validate')
             ->willReturn([
@@ -120,5 +120,59 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $validator = new Validator\Validator($this->em, $this->symfonyValidator);
 
         $this->assertTrue($validator->setConfig(Validator\Validator::BLACKLIST_RULESET_COMMENTS, $rules));
+    }
+
+    public function testSetConfigError()
+    {
+        $rules = 'test@foo';
+        $this->ds->expects($this->once())->method('set')->with('blacklist.comment', $rules)
+            ->will($this->throwException(new \Exception()));
+
+        $validator = new Validator\Validator($this->em, $this->symfonyValidator);
+
+        $this->assertFalse($validator->setConfig(Validator\Validator::BLACKLIST_RULESET_COMMENTS, $rules));
+    }
+
+    public function testValidateCommentNoRequiredEmail()
+    {
+        $this->ds->expects($this->at(0))->method('get')->with('blacklist.comment')
+            ->willReturn('1,2,3,4');
+        $this->ds->expects($this->at(1))->method('get')->with('comments_config')
+            ->willReturn(['required_email' => false, 'moderation_manual' => false]);
+        $this->symfonyValidator->expects($this->once())->method('validate')
+            ->willReturn([]);
+
+        $validator = new Validator\Validator($this->em, $this->symfonyValidator);
+        $data      = [ 'author_email' => 'johndoe@example.com' ];
+
+        $this->assertEquals([], $validator->validate($data, Validator\Validator::BLACKLIST_RULESET_COMMENTS));
+    }
+
+    public function testValidateCommentWithRequiredEmail()
+    {
+        $this->ds->expects($this->at(0))->method('get')->with('blacklist.comment')
+            ->willReturn('1,2,3,4');
+        $this->ds->expects($this->at(1))->method('get')->with('comments_config')
+            ->willReturn(['required_email' => true, 'moderation_manual' => false]);
+        $this->symfonyValidator->expects($this->once())->method('validate')
+            ->willReturn([]);
+
+        $validator = new Validator\Validator($this->em, $this->symfonyValidator);
+        $data      = [ 'author_email' => '' ];
+
+        $this->assertEquals([], $validator->validate($data, Validator\Validator::BLACKLIST_RULESET_COMMENTS));
+    }
+
+    public function testValidateTag()
+    {
+        $this->ds->expects($this->at(0))->method('get')->with('blacklist.tag')
+            ->willReturn('1,2,3,4');
+        $this->symfonyValidator->expects($this->once())->method('validate')
+            ->willReturn([]);
+
+        $validator = new Validator\Validator($this->em, $this->symfonyValidator);
+        $data      = [];
+
+        $this->assertEquals([], $validator->validate($data, Validator\Validator::BLACKLIST_RULESET_TAGS));
     }
 }

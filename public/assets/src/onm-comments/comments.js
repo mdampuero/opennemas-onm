@@ -29,6 +29,7 @@ jQuery(document).ready(function() {
           .removeClass('alert-success')
           .removeClass('alert-error')
           .removeClass('alert-warning')
+          .removeClass('alert-danger')
           .addClass('alert-' + answer.type)
           .html(answer.message)
           .slideDown()
@@ -125,21 +126,5 @@ jQuery(document).ready(function() {
         $('.load-more').hide();
       }
     });
-  });
-
-  $('[placeholder]').on('focus', function() {
-    var input = $(this);
-
-    if (input.val() === input.attr('placeholder')) {
-      input.val('');
-      input.removeClass('placeholder');
-    }
-  }).on('blur', function() {
-    var input = $(this);
-
-    if (input.val() === '' || input.val() === input.attr('placeholder')) {
-      input.addClass('placeholder');
-      input.val(input.attr('placeholder'));
-    }
   });
 });

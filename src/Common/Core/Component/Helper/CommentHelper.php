@@ -87,6 +87,16 @@ class CommentHelper
     }
 
     /**
+     * Whether if comments must have an email
+     *
+     * @return boolean true if the comments author email is mandatory
+     */
+    public function requiredEmail()
+    {
+        return $this->getConfigs()['required_email'] == 1;
+    }
+
+    /**
      * Whether if comments must be moderated manually or not according to configs
      *
      * @return boolean true if the comments are moderated manually

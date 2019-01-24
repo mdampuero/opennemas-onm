@@ -11,6 +11,7 @@ namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\UrlGeneratorHelper;
 use Common\Data\Core\FilterManager;
+use Common\ORM\Entity\Category;
 
 class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 {
@@ -48,6 +49,10 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCurrentRequest'])
             ->getMock();
 
+        $this->router = $this->getMockBuilder('Router')
+            ->setMethods([ 'generate' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -82,6 +87,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
             case 'request_stack':
                 return $this->requestStack;
+
+            case 'router':
+                return $this->router;
         }
 
         return null;
@@ -96,6 +104,23 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $property->setAccessible(true);
 
         $this->assertEquals($this->container, $property->getValue($this->urlGenerator));
+    }
+
+    /**
+     * Tests generate when the content provided has an external URI.
+     */
+    public function testGenerateForCategory()
+    {
+        $category = new Category([ 'name' => 'garply' ]);
+
+        $this->router->expects($this->once())->method('generate')
+            ->with('category_frontpage', [ 'category_name' => 'garply' ])
+            ->willReturn('blog/section/garply');
+
+        $this->assertEquals(
+            '/blog/section/garply',
+            $this->urlGenerator->generate($category)
+        );
     }
 
     /**
@@ -119,6 +144,8 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerateForInstance()
     {
+        $content = new \Content();
+
         $helper = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
             ->setMethods([ 'getUriForContent' ])
             ->setConstructorArgs([ $this->container ])
@@ -131,26 +158,26 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->willReturn(null);
 
         $helper->expects($this->any())->method('getUriForContent')
-            ->with('wubble')->willReturn('wibble/fred');
+            ->with($content)->willReturn('wibble/fred');
 
         $this->assertEquals(
             '/wibble/fred',
-            $helper->generate('wubble', [ 'absolute' => false  ])
+            $helper->generate($content, [ 'absolute' => false  ])
         );
 
         $this->assertEquals(
             '//thud.opennemas.com/wibble/fred',
-            $helper->generate('wubble', [ 'absolute' => true ])
+            $helper->generate($content, [ 'absolute' => true ])
         );
 
         $this->assertEquals(
             '/wibble/fred',
-            $helper->forceHttp(true)->generate('wubble', [ 'absolute' => false  ])
+            $helper->forceHttp(true)->generate($content, [ 'absolute' => false  ])
         );
 
         $this->assertEquals(
             'http://thud.opennemas.com/wibble/fred',
-            $helper->forceHttp(true)->generate('wubble', [ 'absolute' => true ])
+            $helper->forceHttp(true)->generate($content, [ 'absolute' => true ])
         );
     }
 
@@ -160,6 +187,8 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerateForRequest()
     {
+        $content = new \Content();
+
         $helper = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
             ->setMethods([ 'getUriForContent' ])
             ->setConstructorArgs([ $this->container ])
@@ -173,18 +202,18 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->willReturn('http://quux.com');
 
         $helper->expects($this->at(0))->method('getUriForContent')
-            ->with('wubble')->willReturn('wibble/fred');
+            ->with($content)->willReturn('wibble/fred');
         $helper->expects($this->at(1))->method('getUriForContent')
-            ->with('wubble')->willReturn('wibble/fred');
+            ->with($content)->willReturn('wibble/fred');
 
         $this->assertEquals(
             '/wibble/fred',
-            $helper->generate('wubble', ['absolute' => false  ])
+            $helper->generate($content, ['absolute' => false  ])
         );
 
         $this->assertEquals(
             'http://quux.com/wibble/fred',
-            $helper->generate('wubble', [ 'absolute' => true ])
+            $helper->generate($content, [ 'absolute' => true ])
         );
     }
 
