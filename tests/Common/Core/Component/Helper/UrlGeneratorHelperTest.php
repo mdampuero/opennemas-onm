@@ -611,6 +611,53 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getUriForUser when the content provided is a video.
+     */
+    public function testGetUriForUser()
+    {
+        $user = new \User();
+
+        $user->id   = 252;
+        $user->name = 'pepito';
+
+        $method = new \ReflectionMethod($this->urlGenerator, 'getUriForUser');
+        $method->setAccessible(true);
+
+        $this->router->expects($this->once())->method('generate')
+            ->with('frontend_opinion_author_frontpage', [ 'author_slug' => $user->name, 'author_id' => $user->id ])
+            ->willReturn('opinion/autor/252/pepito');
+
+        $this->assertEquals(
+            'opinion/autor/252/pepito',
+            $method->invokeArgs($this->urlGenerator, [ $user ])
+        );
+    }
+
+    /**
+     * Tests getUriForUser when the content provided is an blogger.
+     */
+    public function testGetUriForUserBlogger()
+    {
+        $user = new \User();
+
+        $user->id   = 252;
+        $user->name = 'pepito';
+        $user->meta['is_blog'] = 1;
+
+        $method = new \ReflectionMethod($this->urlGenerator, 'getUriForUser');
+        $method->setAccessible(true);
+
+        $this->router->expects($this->once())->method('generate')
+            ->with('frontend_blog_author_frontpage', [ 'author_slug' => $user->name ])
+            ->willReturn('opinion/autor/252/pepito');
+
+        $this->assertEquals(
+            'opinion/autor/252/pepito',
+            $method->invokeArgs($this->urlGenerator, [ $user ])
+        );
+    }
+
+    /**
      * Tests generateUriFromConfig for valid and invalid content types.
      */
     public function testGenerateUriFromConfig()
