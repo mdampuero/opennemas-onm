@@ -615,7 +615,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForUser()
     {
-        $user = new \User();
+        $user = new \Common\ORM\Entity\User();
 
         $user->id   = 252;
         $user->name = 'pepito';
@@ -638,11 +638,11 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForUserBlogger()
     {
-        $user = new \User();
+        $user = new \Common\ORM\Entity\User();
 
         $user->id   = 252;
         $user->name = 'pepito';
-        $user->meta['is_blog'] = 1;
+        $user->is_blog = 1;
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForUser');
         $method->setAccessible(true);
