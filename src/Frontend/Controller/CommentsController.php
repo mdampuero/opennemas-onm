@@ -39,8 +39,15 @@ class CommentsController extends Controller
         $elemsByPage = $request->query->getDigits('elems_per_page');
         $offset      = $request->query->getDigits('offset', 1);
         $darkTheme   = $request->query->getDigits('dark_theme', 0);
+        $criteria    = [
+            'content_status' => [ [ 'value' => 1 ] ],
+            'in_litter'      => [ [ 'value' => 0 ] ],
+            'pk_content'     => [ [ 'value' => $contentID ] ],
+        ];
 
-        if (empty($contentID) || !\Content::checkExists($contentID)) {
+        if (empty($contentID)
+            || empty($this->get('entity_repository')->findBy($criteria))
+        ) {
             return new Response('', 404);
         }
 
