@@ -2,17 +2,11 @@
   <i class="fa fa-clock-o m-r-10"></i>{t}Schedule{/t}
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.schedule }"></i>
 
-  {* <span ng-if="now.getTime() < (new Date(item.starttime).getTime())"></span>
-  <span class="badge badge-default pull-right m-r-10 m-t-2" ng-if="!item.starttime && !item.endtime">{t}In time{/t}</span>
-  <span class="badge badge-default pull-right m-r-10 m-t-2" ng-if="!item.starttime && !item.endtime">{t}Future{/t}<span class="hidden-lg visible-xlg pull-right">: [% item.starttime %]</span><span>: [% item.endtime %]</span></span>
-  <span class="badge badge-default pull-right m-r-10 m-t-2" ng-if="!item.starttime && !item.endtime">{t}Dued{/t}<span class="hidden-lg visible-xlg pull-right">: [% item.endtime %]</span></span> *}
-  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.schedule && item.endtime">
-    <strong>{t}End{/t}</strong>
-    <span class="hidden-lg visible-xlg pull-right">: [% item.endtime %]</span>
-  </span>
-  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.schedule && item.starttime">
-    <strong>{t}Start{/t}</strong>
-    <span class="hidden-lg visible-xlg pull-right">: [% item.starttime %]</span>
+  {* <span ng-if="now.getTime() < (new Date(item.starttime).getTime())"></span> *}
+  <span class="scheduling ng-cloak pull-right text-uppercase m-r-10 m-t-2" {*ng-show="!expanded.schedule"*}>
+    <span class="badge badge-primary text-bold" ng-show="getContentScheduling(item) == 1">{t}Planned for{/t}<span class="hidden-lg visible-xlg pull-right">: [% item.starttime %]</span></span>
+    <span class="badge badge-danger text-bold" ng-show="getContentScheduling(item) == -1">{t}Dued on {/t}<span class="hidden-lg visible-xlg pull-right">: [% item.endtime %]</span></span>
+    <span class="badge badge-default text-bold" ng-show="getContentScheduling(item) == 0">{t}In time{/t}</span>
   </span>
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.schedule }">
@@ -38,7 +32,7 @@
     </label>
     <div class="controls">
       <div class="input-group">
-        <input class="form-control" datetime-picker datetime-picker-timezone="{$timezone}" datetime-picker-use-current=true datetime-picker-min="item.endtime" id="endtime" name="endtime" ng-model="item.endtime" type="datetime">
+        <input class="form-control" datetime-picker datetime-picker-timezone="{$timezone}" datetime-picker-use-current=true datetime-picker-min="item.starttime" id="endtime" name="endtime" ng-model="item.endtime" type="datetime">
         <span class="input-group-addon add-on">
           <span class="fa fa-calendar"></span>
         </span>
