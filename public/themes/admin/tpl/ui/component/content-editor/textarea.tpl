@@ -1,6 +1,6 @@
 <div class="form-group">
   <label class="form-label clearfix" for="{$field}">
-    <div class="pull-left">{t}Description{/t}</div>
+    <div class="pull-left">{$title}</div>
   </label>
   {if $imagepicker}
   {acl isAllowed='PHOTO_ADMIN'}

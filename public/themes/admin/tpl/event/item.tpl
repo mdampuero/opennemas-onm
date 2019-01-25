@@ -66,12 +66,12 @@
             </div>
 
             {include file="ui/component/content-editor/accordion/category.tpl"}
-            {include file="ui/component/content-editor/accordion/scheduling.tpl"}
             {include file="ui/component/content-editor/accordion/tags.tpl"}
             {include file="ui/component/content-editor/accordion/slug.tpl" route="[% routing.generate('frontend_event_show', { slug: item.slug }) %]"}
+            {include file="ui/component/content-editor/accordion/scheduling.tpl"}
 
             <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.when = !expanded.when">
-              <i class="fa fa-clock-o m-r-10"></i>{t}When{/t}
+              <i class="fa fa-calendar m-r-10"></i>{t}Event date{/t}
               <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.when }"></i>
             </div>
             <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.when }">
@@ -126,7 +126,7 @@
             </div>
             <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.where = !expanded.where">
               <i class="fa fa-map-marker m-r-10"></i>
-              {t}Where{/t}
+              {t}Event location{/t}
               <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.where }"></i>
             </div>
             <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.where }">
@@ -138,7 +138,7 @@
               </div>
             </div>
             <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.external_website = !expanded.external_website">
-              <i class="fa fa-map-marker m-r-10"></i>
+              <i class="fa fa-external-link m-r-10"></i>
               {t}External website{/t}
               <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.external_website }"></i>
             </div>
@@ -203,8 +203,8 @@
         <div class="grid simple">
           <div class="grid-body">
             {include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true}
-            {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 required=true imagepicker=true}
-            {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 required=true imagepicker=true}
+            {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true}
+            {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true}
           </div>
         </div>
       </div>
