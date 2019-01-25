@@ -211,7 +211,6 @@
           var starttime = item.starttime ? new Date(item.starttime) : null;
           var endtime   = item.endtime ? new Date(item.endtime) : null;
 
-          console.log(now, endtime, starttime);
           if (endtime && endtime.getTime() < now.getTime()) {
             return -1;
           }
