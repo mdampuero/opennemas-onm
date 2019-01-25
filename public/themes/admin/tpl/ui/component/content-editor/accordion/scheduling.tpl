@@ -2,10 +2,9 @@
   <i class="fa fa-clock-o m-r-10"></i>{t}Schedule{/t}
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.schedule }"></i>
 
-  {* <span ng-if="now.getTime() < (new Date(item.starttime).getTime())"></span> *}
   <span class="scheduling ng-cloak pull-right text-uppercase m-r-10 m-t-2" {*ng-show="!expanded.schedule"*}>
-    <span class="badge badge-primary text-bold" ng-show="getContentScheduling(item) == 1">{t}Planned for{/t}<span class="hidden-lg visible-xlg pull-right">: [% item.starttime %]</span></span>
-    <span class="badge badge-danger text-bold" ng-show="getContentScheduling(item) == -1">{t}Dued on {/t}<span class="hidden-lg visible-xlg pull-right">: [% item.endtime %]</span></span>
+    <span class="badge badge-primary text-bold" ng-show="getContentScheduling(item) == 1">{t}Planned{/t}<span class="hidden-lg visible-xlg pull-right">: [% item.starttime %]</span></span>
+    <span class="badge badge-danger text-bold" ng-show="getContentScheduling(item) == -1">{t}Dued{/t}<span class="hidden-lg visible-xlg pull-right">: [% item.endtime %]</span></span>
     <span class="badge badge-default text-bold" ng-show="getContentScheduling(item) == 0">{t}In time{/t}</span>
   </span>
 </div>
@@ -16,14 +15,11 @@
     </label>
     <div class="controls">
       <div class="input-group">
-        <input class="form-control" datetime-picker datetime-picker-timezone="{$timezone}" datetime-picker-use-current=true datetime-picker-min="item.created" id="starttime" name="starttime" ng-model="item.starttime" type="datetime">
+        <input class="form-control" datetime-picker datetime-picker-timezone="{$app.locale->getTimeZone()->getName()}" datetime-picker-use-current=true datetime-picker-min="item.created" id="starttime" name="starttime" ng-model="item.starttime" type="datetime">
         <span class="input-group-addon add-on">
           <span class="fa fa-calendar"></span>
         </span>
       </div>
-      <span class="help-block">
-        {t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}
-      </span>
     </div>
   </div>
   <div class="form-group">
@@ -32,7 +28,7 @@
     </label>
     <div class="controls">
       <div class="input-group">
-        <input class="form-control" datetime-picker datetime-picker-timezone="{$timezone}" datetime-picker-use-current=true datetime-picker-min="item.starttime" id="endtime" name="endtime" ng-model="item.endtime" type="datetime">
+        <input class="form-control" datetime-picker datetime-picker-timezone="{$app.locale->getTimeZone()->getName()}" datetime-picker-use-current=true datetime-picker-min="item.starttime" id="endtime" name="endtime" ng-model="item.endtime" type="datetime">
         <span class="input-group-addon add-on">
           <span class="fa fa-calendar"></span>
         </span>
@@ -40,4 +36,7 @@
     </div>
   </div>
   <span><i class="fa fa-info-circle text-info"></i> {t}This content will only be available in the time range specified above.{/t}</span>
+  <span class="help-block">
+    {t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"} ({$app.locale->getTimeZone()->getName()})
+  </span>
 </div>
