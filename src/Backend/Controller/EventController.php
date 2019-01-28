@@ -24,9 +24,10 @@ class EventController extends BackendController
      * @var type
      */
     protected $permissions = [
-        'create' => null,
-        'list'   => null,
-        'show'   => null
+        'create' => 'EVENT_CREATE',
+        'update' => 'EVENT_UPDATE',
+        'list'   => 'EVENT_ADMIN',
+        'show'   => 'EVENT_CREATE',
     ];
 
     /**
