@@ -544,7 +544,7 @@ class Comment implements CsvSerializable
     {
         try {
             $rs = getService('dbal_connection')->fetchColumn(
-                "SELECT max(date) as max FROM `comments"
+                "SELECT max(date) as max FROM `comments`"
             );
 
             return $rs;
