@@ -80,9 +80,9 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
         $uri       = $event->getRequest()->getRequestUri();
         $msg       = $this->container->get('core.messenger');
 
-        if (strpos($uri, '/managerws') === false
-            && strpos($uri, '/api') === false
-            && strpos($uri, '/entityws') === false
+        if (!preg_match('@^/managerws.*@', $uri)
+            && !preg_match('@^/api.*@', $uri)
+            && !preg_match('@^/entityws.*@', $uri)
         ) {
             return;
         }
