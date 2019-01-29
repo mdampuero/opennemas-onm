@@ -80,7 +80,7 @@ class AdvertisementController extends Controller
             return new Response($content, 200, [
                 'Content-Type' => 'text/plain',
                 'x-cacheable'  => true,
-                'x-cache-for'  => '100d',
+                'x-cache-for'  => '+100 day',
                 'x-tags'       => 'instance-' . $instanceName . ',ads,txt',
                 'x-instance'   => $instanceName,
             ]);
@@ -99,7 +99,7 @@ class AdvertisementController extends Controller
         return new Response(trim($content), 200, [
             'Content-Type' => 'text/plain',
             'x-cacheable'  => true,
-            'x-cache-for'  => '100d',
+            'x-cache-for'  => '+100 day',
             'x-tags'       => 'instance-' . $instanceName . ',ads,txt',
             'x-instance'   => $instanceName,
         ]);
