@@ -46,7 +46,14 @@ class UrlController extends ApiController
     protected function getExtraData($items = null)
     {
         return [
-            'content_types' => \ContentManager::getContentTypes()
+            'content_types' => array_merge(
+                \ContentManager::getContentTypes(),
+                [
+                    ['name' => 'category', 'title' => _('Category')],
+                    ['name' => 'tag', 'title' => _('Tag')],
+                    ['name' => 'user', 'title' => _('User')],
+                ]
+            )
         ];
     }
 }

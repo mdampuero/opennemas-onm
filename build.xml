@@ -151,7 +151,7 @@
     <target name="phpcs" description="Find coding standard violations using PHP_CodeSniffer">
         <exec executable="${toolsdir}/phpcs">
             <arg line="-n" />
-            <arg value="--standard=PSR2" />
+            <arg value="--standard=${basedir}/phpcs.xml" />
             <arg line="--extensions=php" />
             <arg line="${project.paths.php.space-separated}" />
         </exec>
@@ -161,7 +161,7 @@
         <exec executable="${toolsdir}/phpcs" output="${basedir}/build/logs/checkstyle.xml">
             <arg line="-n" />
             <arg line="--report=checkstyle" />
-            <arg value="--standard=PSR2" />
+            <arg value="--standard=${basedir}/phpcs.xml" />
             <arg line="--extensions=php" />
             <arg line="${project.paths.php.space-separated}" />
         </exec>

@@ -347,6 +347,26 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getUser when an user is and is not found.
+     */
+    public function testGetUser()
+    {
+        $method = new \ReflectionMethod($this->redirector, 'getUser');
+        $method->setAccessible(true);
+
+        $this->em->expects($this->any())->method('getRepository')
+            ->with('User')->willReturn($this->repository);
+
+        $this->repository->expects($this->at(0))->method('find')
+            ->with(2341)->will($this->throwException(new \Exception()));
+        $this->repository->expects($this->at(1))->method('find')
+            ->with(1467)->willReturn('plugh');
+
+        $this->assertEmpty($method->invokeArgs($this->redirector, [ 2341 ]));
+        $this->assertEquals('plugh', $method->invokeArgs($this->redirector, [ 1467 ]));
+    }
+
+    /**
      * Tests getComment when the comment does not exists, when it exists but the
      * linked content does not exists and when the comment and the content
      * exist.
