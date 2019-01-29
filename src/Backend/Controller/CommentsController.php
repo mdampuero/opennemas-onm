@@ -259,7 +259,9 @@ class CommentsController extends Controller
             $configs         = $ds->get('comments_config', []);
             $commentsHandler = $ds->get('comment_system');
             foreach ($configs as $configName => $value) {
-                $configs[$configName] = $value == '1';
+                if ($value == '1') {
+                    $configs[$configName] = true;
+                }
             }
 
             $configs = array_merge($defaultConfigs, $configs);

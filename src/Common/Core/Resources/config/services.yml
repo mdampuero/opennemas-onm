@@ -43,6 +43,7 @@ parameters:
         moderation_manual: true
         moderation_autoreject: false
         moderation_autoaccept: false
+        required_email: false
 
 services:
     core.collector.brand:
@@ -385,5 +386,5 @@ services:
 
     core.validator:
         class:      Common\Core\Component\Validator\Validator
-        arguments: [ '@orm.manager', '@validator' ]
+        arguments: [ '@orm.manager', '@validator', '@core.helper.comment' ]
         public:    true
