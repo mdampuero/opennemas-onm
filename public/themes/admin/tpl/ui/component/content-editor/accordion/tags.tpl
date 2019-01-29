@@ -9,7 +9,7 @@
     </span>
     </div>
     <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.tags }">
-    <div class="form-group">
+    <div class="form-group no-margin">
         <label for="metadata" class="form-label">{t}Tags{/t}</label>
         <div class="controls">
         {include file="ui/component/tags-input/tags.tpl" ngModel="item.tags"}

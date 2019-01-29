@@ -7,7 +7,7 @@
   </a>
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.slug }">
-  <div class="form-group">
+  <div class="form-group no-margin">
     <div class="controls">
       <input class="form-control" id="slug" name="slug" ng-model="item.slug" type="text" ng-disabled="item.content_status != '0'">
     </div>

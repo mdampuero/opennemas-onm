@@ -22,7 +22,7 @@
       </div>
     </div>
   </div>
-  <div class="form-group">
+  <div class="form-group no-padding">
     <label class="form-label" for="endtime">
       {t}Publication end date{/t}
     </label>

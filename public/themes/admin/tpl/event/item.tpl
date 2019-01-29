@@ -153,17 +153,18 @@
               <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.external_website }"></i>
             </div>
             <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.external_website }">
-              <div class="form-group">
+              <div class="form-group no-padding">
                 <label class="form-label" for="event_website">{t}Website URL{/t}</label>
                 <div class="controls">
                   <input class="form-control"  id="event_website" name="event_website" ng-model="item.event_website" type="text">
                 </div>
               </div>
             </div>
-            <div class="grid-collapse-title ng-cloak-pointer">
+            <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.cover = !expanded.cover">
               <i class="fa fa-image m-t-5"></i> {t}Image{/t}
+              <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.cover }"></i>
             </div>
-            <div class="grid-collapse-body expanded ng-cloak">
+            <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.cover }">
               <div class="thumbnail-wrapper">
                 <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.cover }"></div>
                 <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.cover }">
