@@ -96,7 +96,7 @@ class NewsletterHelperTest extends \PHPUnit\Framework\TestCase
 
         $types = $this->helper->getContentTypes();
 
-        $this->assertNotEmpty('comment', $types);
+        $this->assertNotEmpty($types);
         $this->assertNotContains('comment', $types);
     }
 
