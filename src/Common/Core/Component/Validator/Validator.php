@@ -38,10 +38,11 @@ class Validator
      * @param DataSet    $settingsManager the settings repository object
      * @param Validator  $validator       the validator service
      */
-    public function __construct($em, $validator)
+    public function __construct($em, $validator, $commentHelper)
     {
-        $this->ds        = $em->getDataSet('Settings', 'instance');
-        $this->validator = $validator;
+        $this->ds            = $em->getDataSet('Settings', 'instance');
+        $this->validator     = $validator;
+        $this->commentHelper = $commentHelper;
     }
 
     /**
@@ -153,7 +154,7 @@ class Validator
                     'message' => _('Please provide a valid email address')
                 ]),
             ];
-        } elseif ($this->ds->get('comments_config')['required_email']) {
+        } elseif ($this->commentHelper->isEmailRequired()) {
             $constraintMap['author_email'] = [
                 new BaseConstraints\NotBlank([
                     'message' => _('Please provide a valid email address')
