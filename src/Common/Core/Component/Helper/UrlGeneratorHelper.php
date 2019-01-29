@@ -300,6 +300,31 @@ class UrlGeneratorHelper
     }
 
     /**
+     * Returns the URI for an User.
+     *
+     * @param User $user The user object.
+     *
+     * @return string The user URI.
+     */
+    protected function getUriForUser($user)
+    {
+        $routeName   = 'frontend_opinion_author_frontpage';
+        $routeParams = [
+            'author_slug' => \Onm\StringUtils::generateSlug($user->name),
+            'author_id'   => $user->id,
+        ];
+
+        if ($user->is_blog) {
+            $routeName   = 'frontend_blog_author_frontpage';
+            $routeParams = [ 'author_slug' => \Onm\StringUtils::generateSlug($user->name) ];
+        }
+
+        $uri = $this->container->get('router')->generate($routeName, $routeParams);
+
+        return trim($uri, '/');
+    }
+
+    /**
      * Returns a generated uri for a content type given some params.
      *
      * @param string $contentType The content type to generate the URL.

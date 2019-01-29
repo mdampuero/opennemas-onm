@@ -91,7 +91,7 @@ class CommentHelper
      *
      * @return boolean true if the comments author email is mandatory
      */
-    public function requiredEmail()
+    public function isEmailRequired()
     {
         return $this->getConfigs()['required_email'] == 1;
     }
