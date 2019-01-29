@@ -69,7 +69,13 @@
             {include file="ui/component/content-editor/accordion/tags.tpl"}
             {include file="ui/component/content-editor/accordion/slug.tpl" route="[% routing.generate('frontend_event_show', { slug: item.slug }) %]"}
             {include file="ui/component/content-editor/accordion/scheduling.tpl"}
-
+          </div>
+        </div>
+        <div class="grid simple">
+          <div class="grid-body no-padding">
+            <div class="grid-collapse-title">
+              <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
+            </div>
             <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.when = !expanded.when">
               <i class="fa fa-calendar m-r-10"></i>{t}Event date{/t}
               <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.when }"></i>
@@ -122,6 +128,10 @@
                     </div>
                   </div>
                 </div>
+
+                <span class="help-block">
+                  {t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"} ({$app.locale->getTimeZone()->getName()})
+                </span>
               </div>
             </div>
             <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.where = !expanded.where">
@@ -150,49 +160,44 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="grid simple">
-          <div class="grid-title">
-            <h4>
-              <i class="fa fa-picture-o m-r-10"></i>
-              {t}Image{/t}
-            </h4>
-          </div>
-          <div class="grid-body">
-            <div class="thumbnail-wrapper">
-              <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.cover }"></div>
-              <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.cover }">
-                <p>Are you sure?</p>
-                <div class="confirm-actions">
-                  <button class="btn btn-link" ng-click="toggleOverlay('cover')" type="button">
-                    <i class="fa fa-times fa-lg"></i>
-                    {t}No{/t}
-                  </button>
-                  <button class="btn btn-link" ng-click="removeImage('cover');toggleOverlay('cover')" type="button">
-                    <i class="fa fa-check fa-lg"></i>
-                    {t}Yes{/t}
-                  </button>
-                </div>
-              </div>
-              <div class="thumbnail-placeholder">
-                <div class="img-thumbnail" ng-show="!cover">
-                  <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover">
-                    <i class="fa fa-picture-o fa-2x"></i>
-                    <h5>Pick an image</h5>
+            <div class="grid-collapse-title ng-cloak-pointer">
+              <i class="fa fa-image m-t-5"></i> {t}Image{/t}
+            </div>
+            <div class="grid-collapse-body expanded ng-cloak">
+              <div class="thumbnail-wrapper">
+                <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.cover }"></div>
+                <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.cover }">
+                  <p>Are you sure?</p>
+                  <div class="confirm-actions">
+                    <button class="btn btn-link" ng-click="toggleOverlay('cover')" type="button">
+                      <i class="fa fa-times fa-lg"></i>
+                      {t}No{/t}
+                    </button>
+                    <button class="btn btn-link" ng-click="removeImage('cover');toggleOverlay('cover')" type="button">
+                      <i class="fa fa-check fa-lg"></i>
+                      {t}Yes{/t}
+                    </button>
                   </div>
                 </div>
-                <div class="dynamic-image-placeholder" ng-show="cover">
-                  <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="cover">
-                    <div class="thumbnail-actions">
-                      <div class="thumbnail-action remove-action" ng-click="toggleOverlay('cover')">
-                        <i class="fa fa-trash-o fa-2x"></i>
-                      </div>
-                      <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover" media-picker-types="photo">
-                        <i class="fa fa-camera fa-2x"></i>
-                      </div>
+                <div class="thumbnail-placeholder">
+                  <div class="img-thumbnail" ng-show="!cover">
+                    <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover">
+                      <i class="fa fa-picture-o fa-2x"></i>
+                      <h5>Pick an image</h5>
                     </div>
-                  </dynamic-image>
+                  </div>
+                  <div class="dynamic-image-placeholder" ng-show="cover">
+                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="cover">
+                      <div class="thumbnail-actions">
+                        <div class="thumbnail-action remove-action" ng-click="toggleOverlay('cover')">
+                          <i class="fa fa-trash-o fa-2x"></i>
+                        </div>
+                        <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover" media-picker-types="photo">
+                          <i class="fa fa-camera fa-2x"></i>
+                        </div>
+                      </div>
+                    </dynamic-image>
+                  </div>
                 </div>
               </div>
             </div>
