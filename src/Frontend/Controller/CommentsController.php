@@ -348,7 +348,7 @@ class CommentsController extends Controller
         $response->setData($commentsCount);
         // Add edge cache support
         $response->headers->set('x-tags', 'comments,' . $ids);
-        $response->headers->set('x-cache-for', '300s');
+        $response->headers->set('x-cache-for', '+300 seg');
         $response->headers->set('x-cacheable', 'true');
 
         return $response;
