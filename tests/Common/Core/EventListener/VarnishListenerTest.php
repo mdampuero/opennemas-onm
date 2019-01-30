@@ -115,6 +115,27 @@ class VarnishListenerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getExpire when Varnish value already found.
+     */
+    public function testGetExpireWhenValidExpireFound()
+    {
+        $method = new \ReflectionMethod($this->listener, 'getExpire');
+        $method->setAccessible(true);
+
+        $this->headers->expects($this->any())->method('get')
+            ->with('x-cache-for')->willReturn(null);
+        $this->template->expects($this->any())->method('hasValue')
+            ->with('x-cache-for')->willReturn(true);
+        $this->template->expects($this->once())->method('getValue')
+            ->with('x-cache-for')->willReturn('3600s');
+
+        $this->assertEquals(
+            '3600s',
+            $method->invokeArgs($this->listener, [ $this->response ])
+        );
+    }
+
+    /**
      * Tests getExpire when value found in response and template.
      */
     public function testGetExpireWhenValueInTemplate()

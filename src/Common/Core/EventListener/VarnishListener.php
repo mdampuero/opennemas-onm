@@ -98,7 +98,13 @@ class VarnishListener
             $expire = $this->template->getValue('x-cache-for');
         }
 
-        return !empty($expire) ? strtotime($expire) - time() . 's' : null;
+        if (preg_match('/[0-9]+s/', $expire)) {
+            return $expire;
+        }
+
+        $expire = strtotime($expire);
+
+        return !empty($expire) ? $expire - time() . 's' : null;
     }
 
     /**
@@ -122,9 +128,9 @@ class VarnishListener
             return [];
         }
 
-        return array_merge([
+        return array_unique(array_merge([
             'instance-' . $this->instance->internal_name,
             'locale-' . $this->locale->getRequestLocale(),
-        ], array_unique($tags));
+        ], $tags));
     }
 }
