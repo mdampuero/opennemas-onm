@@ -154,6 +154,7 @@ class Validator
                     'message' => _('Please provide a valid email address')
                 ]),
             ];
+
             $blackListValidations['author_email'] = [
                 new Constraints\BlackListWords([
                     'words'   => $config,
