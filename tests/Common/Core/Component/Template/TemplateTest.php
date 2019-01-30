@@ -350,4 +350,30 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('style.css', $template->getThemeSkinProperty('css_file'));
     }
+
+    /**
+     * Tests getValue for multiple values.
+     */
+    public function testGetValue()
+    {
+        $template = new Template($this->container, []);
+
+        $template->assign('garply', 'flob');
+
+        $this->assertEmpty($template->getValue('xyzzy'));
+        $this->assertEquals('flob', $template->getValue('garply'));
+    }
+
+    /**
+     * Tests hasValue for multiple values.
+     */
+    public function testHasValue()
+    {
+        $template = new Template($this->container, []);
+
+        $template->assign('garply', 'flob');
+
+        $this->assertFalse($template->hasValue('xyzzy'));
+        $this->assertTrue($template->hasValue('garply'));
+    }
 }
