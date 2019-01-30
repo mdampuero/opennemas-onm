@@ -176,33 +176,8 @@ class Controller extends SymfonyController
             $response = new Response();
         }
 
-        if (array_key_exists('xtags', $parameters)) {
-            $parameters['xtags'] .= ',locale-' . $this->get('core.locale')->getRequestLocale();
-        }
-
         $content = $this->renderView($view, $parameters);
         $response->setContent($content);
-
-        if (array_key_exists('x-tags', $parameters)
-            && (
-                !array_key_exists('x-cacheable', $parameters) ||
-                (array_key_exists('x-cacheable', $parameters)
-                && $parameters['x-cacheable'] !== false)
-            )
-        ) {
-            $instance = $this->get('core.instance')->internal_name;
-
-            $response->headers->set('x-instance', $instance);
-
-            $response->headers->set('x-tags', 'instance-' . $instance . ',' . $parameters['x-tags']);
-
-            if (array_key_exists('x-cache-for', $parameters)
-                && !empty($parameters['x-cache-for'])
-            ) {
-                $expires = strtotime($parameters['x-cache-for']) - time() . 's';
-                $response->headers->set('x-cache-for', $expires);
-            }
-        }
 
         return $response;
     }
