@@ -154,6 +154,12 @@ class Validator
                     'message' => _('Please provide a valid email address')
                 ]),
             ];
+            $blackListValidations['author_email'] = [
+                new Constraints\BlackListWords([
+                    'words'   => $config,
+                    'message' => _('Your email is not allowed')
+                ]),
+            ];
         } elseif ($this->commentHelper->isEmailRequired()) {
             $constraintMap['author_email'] = [
                 new BaseConstraints\NotBlank([
@@ -177,12 +183,6 @@ class Validator
                         'message' => _('Your comment has words under discussion.')
                     ]),
                 ],
-                'author_email' => [
-                    new Constraints\BlackListWords([
-                        'words'   => $config,
-                        'message' => _('Your email is not allowed')
-                    ]),
-                ]
             ];
 
             $constraintMap = array_merge_recursive($constraintMap, $blackListValidations);
