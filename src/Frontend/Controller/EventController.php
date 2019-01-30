@@ -29,7 +29,7 @@ class EventController extends Controller
         $page = $request->get('page', 1);
 
         $this->view->setConfig('frontpages');
-        $cacheID = $this->view->getCacheId('frontpage', 'events', $page);
+        $cacheID = $this->view->getCacheId('frontpage', 'event', $page);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached("event/list.tpl", $cacheID)
