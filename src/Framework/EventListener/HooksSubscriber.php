@@ -172,11 +172,13 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheUser', 10],
                 ['removeSmartyCacheAuthor', 5],
                 ['removeObjectCacheMultiCacheAllAuthors', 5],
+                ['removeVarnishCacheCurrentInstance', 5],
             ],
             'user.delete' => [
                 ['removeObjectCacheUser', 10],
                 ['removeSmartyCacheAuthor', 5],
                 ['removeObjectCacheMultiCacheAllAuthors', 5],
+                ['removeVarnishCacheCurrentInstance', 5],
             ],
             'user.social.connect' => [
                 ['mockHookAction', 0],
@@ -216,7 +218,7 @@ class HooksSubscriber implements EventSubscriberInterface
      *
      * @return boolean
      */
-    public function mockHookAction(Event $event)
+    public function mockHookAction()
     {
         return true;
     }
@@ -263,26 +265,28 @@ class HooksSubscriber implements EventSubscriberInterface
         // Delete cache for author profile
         $this->objectCacheHandler->delete('user-' . $authorId);
 
-        // Get the list articles for this author
-        $cm       = new \ContentManager();
-        $opinions = $cm->getOpinionArticlesWithAuthorInfo(
-            'opinions.type_opinion=0 AND opinions.fk_author=' . $authorId
-            . ' AND contents.available=1 and contents.content_status=1',
-            'ORDER BY created DESC '
-        );
+        // Get the all contents assigned to this author
+        $criteria = [
+            'fk_author'       => [[ 'value' => $authorId ]],
+            'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
+            'content_status'  => [[ 'value' => 1 ]],
+            'in_litter'       => [[ 'value' => 0 ]],
+            'starttime'       => [[
+                'value' => date('Y-m-d H:i:s', strtotime("-1 day")),
+                'operator' => '>='
+            ]],
+        ];
+
+        $contents = $this->container->get('entity_repository')->findBy($criteria);
+
         $this->initializeSmartyCacheHandler();
 
         $this->view->setLocale(false);
 
-        if (!empty($opinions)) {
-            foreach ($opinions as &$opinion) {
-                if (!in_array('pk_content', $opinion)) {
-                    continue;
-                }
-
-                $this->smartyCacheHandler
-                    ->deleteGroup($this->view->getCacheId('content', $opinion['pk_content']));
-            }
+        foreach ($contents as $content) {
+            $this->smartyCacheHandler->deleteGroup(
+                $this->view->getCacheId('content', $content->id)
+            );
         }
 
         // Delete frontpage caches
