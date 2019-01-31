@@ -8,15 +8,15 @@
      * @name  mediaPicker
      *
      * @requires $compile
-     * @requires $http
-     * @requires routing
+     * @requires $window
+     * @requires http
      *
      * @description
      *   Directive to create and display the media picker modal window.
      */
     .directive('mediaPicker', [
-      '$compile', '$http', '$window', 'routing',
-      function($compile, $http, $window, routing) {
+      '$compile', '$window', 'http',
+      function($compile, $window, http) {
         // Runs during compile
         return {
           controller: 'MediaPickerCtrl',
@@ -484,13 +484,13 @@
               $scope.loading = true;
               $scope.enhance = false;
 
-              var url = routing.generate(
-                'backend_ws_picker_mode',
-                { mode: $scope.picker.modes.enabled }
-              );
+              var route = {
+                name:   'backend_ws_picker_mode',
+                params: { mode: $scope.picker.modes.enabled }
+              };
 
               // Get the parameters for the media picker
-              $http.post(url).then(function(response) {
+              http.post(route).then(function(response) {
                 $scope.loading = false;
                 $scope.picker.params = response.data;
 
@@ -511,18 +511,18 @@
      * @description
      *   Controller to handle media picker actions.
      *
-     * @requires $http
      * @requires $rootScope
      * @requires $scope
      * @requires $timeout
+     * @requires $window
      * @requires FileUploader
-     * @requires dynamicImage
-     * @requires itemService
+     * @requires DynamicImage
+     * @requires http
      * @requires routing
      */
     .controller('MediaPickerCtrl', [
-      '$http', '$rootScope', '$scope', '$timeout', '$window', 'FileUploader', 'DynamicImage', 'itemService', 'routing',
-      function($http, $rootScope, $scope, $timeout, $window, FileUploader, DynamicImage, itemService, routing) {
+      '$rootScope', '$scope', '$timeout', '$window', 'FileUploader', 'DynamicImage', 'http', 'routing',
+      function($rootScope, $scope, $timeout, $window, FileUploader, DynamicImage, http, routing) {
         /**
          * The array of contents.
          *
@@ -768,25 +768,24 @@
             data.to = $scope.to;
           }
 
-          var url = routing.generate('backend_ws_picker_list', data);
+          http.get({ name: 'backend_ws_picker_list', params: data })
+            .then(function(response) {
+              $scope.loadingMore = false;
 
-          $http.get(url).then(function(response) {
-            $scope.loadingMore = false;
+              if (reset) {
+                $scope.contents      = response.data.results;
+                $scope.total         = response.data.total;
+                $scope.searchLoading = false;
+              } else {
+                $scope.contents = $scope.contents.concat(response.data.results);
+              }
 
-            if (reset) {
-              $scope.contents      = response.data.results;
-              $scope.total         = response.data.total;
-              $scope.searchLoading = false;
-            } else {
-              $scope.contents = $scope.contents.concat(response.data.results);
-            }
+              $scope.total = response.data.total;
 
-            $scope.total = response.data.total;
-
-            if (response.data.hasOwnProperty('extra')) {
-              $scope.extra = response.data.extra;
-            }
-          });
+              if (response.data.hasOwnProperty('extra')) {
+                $scope.extra = response.data.extra;
+              }
+            });
         };
 
         /**
@@ -901,12 +900,12 @@
           $scope.saving = true;
 
           var data = { description: $scope.selected.lastSelected.description };
-          var url  = routing.generate(
-            'backend_ws_picker_save_description',
-            { id: $scope.selected.lastSelected.id }
-          );
+          var route  = {
+            name:   'backend_ws_picker_save_description',
+            params: { id: $scope.selected.lastSelected.id }
+          };
 
-          $http.post(url, data).then(function() {
+          http.post(route, data).then(function() {
             $scope.saving = false;
             $scope.saved = true;
 
@@ -1062,58 +1061,24 @@
          */
         $scope.uploadMediaImg = function(image) {
           $scope.enhance = false;
+
           $('.picker-dialog').removeClass('picker-photo-editor');
+
           if (image === null) {
             $scope.$apply();
-            return true;
+            return;
           }
-          var blob = $scope.dataURItoBlob(image.toDataURL());
-          var body = new FormData();
 
-          body.append('file', new File([ blob ], $scope.selected.lastSelected.name));
-          var url = routing.generate('admin_image_create');
+          var route = { name: 'admin_image_create' };
+          var body  = [];
 
-          $http.post(url, body, {
-            transformRequest: angular.identity,
-            headers: { 'Content-Type': undefined } // eslint-disable-line no-undefined
-          }).success(function() {
+          body[$scope.selected.lastSelected.name] = image;
+
+          http.post(route, body).success(function() {
             $scope.list(true);
           }).error(function() {
-            return null;
+            return false;
           });
-          return null;
-        };
-
-        /**
-         * @function dataURItoBlob
-         * @memberOf MediaPickerCtrl
-         *
-         * @description
-         *   Converts datauri type to blob.
-         *
-         * @param {Object}   dataUri     The data tu convert to blob.
-         *
-         * @return {blob} The same data but in blob format
-         */
-        $scope.dataURItoBlob = function(dataURI) {
-          // Convert base64 to raw binary data held in a string
-          var byteString = atob(dataURI.split(',')[1]);
-
-          // Separate out the mime component
-          var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-          // Write the bytes of the string to an ArrayBuffer
-          var arrayBuffer = new ArrayBuffer(byteString.length);
-          var ia = new Uint8Array(arrayBuffer);
-
-          for (var i = 0; i < byteString.length; i++) {
-            ia[i] = byteString.charCodeAt(i);
-          }
-
-          var dataView = new DataView(arrayBuffer);
-          var blob = new Blob([ dataView ], { type: mimeString });
-
-          return blob;
         };
 
         /**
