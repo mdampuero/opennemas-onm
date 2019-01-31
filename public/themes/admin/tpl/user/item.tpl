@@ -106,9 +106,9 @@
                 </div>
                 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.user_groups }">
                   {acl isAllowed="USER_ADMIN"}
-                    <div class="checkbox p-b-5" ng-repeat="user_group in data.extra.user_groups">
-                      <input id="checkbox-[% $index %]" ng-false-value="0" ng-model="item.user_groups[user_group.pk_user_group].status" ng-true-value="1" type="checkbox">
-                      <label for="checkbox-[% $index %]">[% user_group.name %]</label>
+                    <div class="checkbox p-b-5" ng-repeat="user_group in item.user_groups">
+                      <input id="checkbox-[% $index %]" ng-false-value="0" ng-model="user_group.status" ng-true-value="1" type="checkbox">
+                      <label for="checkbox-[% $index %]">[% data.extra.user_groups[user_group.user_group_id].name %]</label>
                     </div>
                   {/acl}
                 </div>
@@ -143,7 +143,7 @@
                         {t}Select/deselect all{/t}
                       </label>
                     </div>
-                    <div class="checkbox-list checkbox-list-user-groups">
+                    <div class="checkbox-list checkbox-list-categories">
                       <div class="checkbox p-b-5" ng-repeat="category in (filteredCategories = (data.extra.categories | filter : { parent: 0 } : true))" ng-if="category.id != 0">
                         <div class="m-t-15" ng-if="$index > 0 && category.type != filteredCategories[$index - 1].type">
                           <h5 ng-if="category.type == 1"><i class="fa fa-sticky-note m-r-5"></i>{t}Contents{/t}</h5>

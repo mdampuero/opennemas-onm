@@ -131,9 +131,9 @@
               <label class="form-label">
                 {t}User groups{/t}
               </label>
-              <div class="checkbox p-b-5" ng-repeat="user_group in extra.user_groups">
-                <input id="checkbox-[% $index %]" ng-false-value="0" ng-model="user.user_groups[user_group.pk_user_group].status" ng-true-value="1" type="checkbox">
-                <label for="checkbox-[% $index %]">[% user_group.name %]</label>
+              <div class="checkbox p-b-5" ng-repeat="user_group in user.user_groups">
+                <input id="checkbox-[% $index %]" ng-model="user_group.status" ng-false-value="0" ng-true-value="1" type="checkbox">
+                <label for="checkbox-[% $index %]">[% extra.user_groups[user_group.user_group_id].name %]</label>
               </div>
             </div>
             <div class="form-group" ng-if="security.hasPermission('MASTER')">

@@ -5,86 +5,75 @@
  */
 function smarty_function_renderTags($params, &$smarty)
 {
-    // If no metadata return empty output
-    if (!array_key_exists('content', $params) || !array_key_exists('tags', $params)) {
+    if (!array_key_exists('content', $params)
+        || empty($params['content'])
+        || (empty($params['content']->tags)
+            && empty($params['content']->tag_ids))
+        || !array_key_exists('tags', $params)
+        || empty($params['tags'])
+    ) {
         return '';
     }
 
     $content = $params['content'];
     $tags    = $params['tags'];
-
-    if (empty($tags) || empty($content) || !is_array($content->tag_ids)) {
-        return '';
-    }
+    $ids     = !empty($content->tags)
+        ? $content->tags
+        : (!empty($content->tag_ids) ? $content->tag_ids : []);
 
     // Check and sanitize params: separator, class, limit
-    $separator = (!array_key_exists('separator', $params)) ? ', ' : $params['separator'];
-    $class     = (!array_key_exists('class', $params)) ? ' class="tags" ' : $params['class'];
-    $limit     = (array_key_exists('limit', $params)) ? $params['limit'] : null;
+    $separator = !array_key_exists('separator', $params) ? ', ' : $params['separator'];
+    $limit     = array_key_exists('limit', $params) ? $params['limit'] : null;
+    $method    = array_key_exists('method', $params) ? $params['method'] : 'tag';
+    $key       = '';
 
-    // Setup desired rendering method (internal, google search) from internal parameter
-    if (array_key_exists('internal', $params)) {
-        $method = ($params['internal'] == 'true') ? 'tags' : $params['internal'];
-    } else {
-        $method = 'tags';
-    }
-
-    if ($method == 'tags' && $content->fk_content_type != 1) {
-        $googleSearchKey = $smarty->getContainer()
+    if ($method === 'tag' && $content->fk_content_type != 1) {
+        $key = $smarty->getContainer()
             ->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('google_custom_search_api_key');
 
-        $method = (!empty($googleSearchKey)) ? 'google' : 'tags';
+        if (!empty($key)) {
+            $method = 'google';
+        }
     }
 
-    // Get url generator
-    $generator = getService('router');
-
-    $output = '';
+    $generator = $smarty->getContainer()->get('router');
+    $output    = '';
 
     // Generate tags links
     $i = 0;
-    foreach ($content->tag_ids as $tagId) {
+    foreach ($ids as $tagId) {
         if (!array_key_exists($tagId, $tags)) {
             continue;
         }
-        $tag = $tags[$tagId]['name'];
 
-        $url = $target = '';
-        switch ($method) {
-            case 'hashtag':
-                if (strpos($tag, '#') === 0) {
-                    $baseUrl = 'https://twitter.com/hashtag/';
-                    $url     = htmlentities($baseUrl . substr($tag, 1), ENT_QUOTES);
-                    $target  = 'target="_blank"';
-                }
-                break;
-            case 'google':
-                if (strpos($tag, '#') !== 0) {
-                    $baseUrl = $generator->generate('frontend_search_google');
-                    $url     = $baseUrl . '?q=' . $tag . '&ie=UTF-8&cx=' . $googleSearchKey;
-                }
-                break;
-            case 'tags':
-                if (strpos($tag, '#') !== 0) {
-                    $url = $generator->generate('frontend_tag_frontpage', [
-                        'slug' => $tags[$tagId]['slug']
-                    ]);
-                }
-                break;
+        $url = $generator->generate('frontend_tag_frontpage', [
+            'slug' => $tags[$tagId]['slug']
+        ]);
+
+        if ($method === 'google') {
+            $url = $generator->generate('frontend_search_google', [
+                'q'  => $tags[$tagId]['name'],
+                'cx' => $key,
+                'ie' => 'UTF-8'
+            ]);
         }
 
-        if (!empty($url)) {
-            $url = $smarty->getContainer()->get('core.helper.l10n_route')
-                ->localizeUrl($url, '');
+        $url = $smarty->getContainer()->get('core.helper.l10n_route')
+            ->localizeUrl($url, '');
 
-            $output .= '<a ' . $class . ' ' . $target . ' href="' . $url .
-                '" title="' . $tag . '">' . $tag . '</a>' . $separator;
-            $i++;
-        }
+        $output .= sprintf(
+            '<a href="%s" title="%s">%s</a>%s',
+            $url,
+            $tags[$tagId]['name'],
+            $tags[$tagId]['name'],
+            $separator
+        );
 
-        if (!is_null($limit) && $i === $limit) {
+        $i++;
+
+        if (!empty($limit) && $i === $limit) {
             return $output;
         }
     }

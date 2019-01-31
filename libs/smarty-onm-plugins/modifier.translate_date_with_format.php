@@ -1,14 +1,16 @@
 <?php
 function smarty_modifier_translate_date_with_format($date, $format = "l, j \d\\e F")
 {
-    if (!is_null($date) && !is_string($date)) {
+    if (!is_null($date) && !is_string($date) && !$date instanceof \DateTime) {
         return '';
     }
 
-    try {
-        $date = new DateTime($date);
-    } catch (Exception $e) {
-        return '';
+    if (!$date instanceof \DateTime) {
+        try {
+            $date = new DateTime($date);
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 
     $namesEN = [

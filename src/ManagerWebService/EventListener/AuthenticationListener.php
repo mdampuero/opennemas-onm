@@ -125,8 +125,12 @@ class AuthenticationListener implements EventSubscriberInterface
         $ugs    = $this->container->get('api.service.user_group');
         $origin = $ugs->getOrigin();
 
+        $userGroups = array_map(function ($userGroup) {
+            return $userGroup['user_group_id'];
+        }, $user->user_groups);
+
         $userGroups = $ugs->setOrigin('manager')
-            ->getListByIds(array_keys($user->user_groups));
+            ->getListByIds($userGroups);
 
         $ugs->setOrigin($origin);
 

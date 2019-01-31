@@ -1,25 +1,17 @@
-backend_static_page_build_slug:
-    path:     /static-pages/{id}/build-slug
-    defaults: { _controller: BackendBundle:StaticPage:buildSlug }
-
 backend_static_page_create:
-    path:     /static-pages/create
+    path:     /static-pages/new
     defaults: { _controller: BackendBundle:StaticPage:create }
-
-backend_static_pages_list:
-    path:     /static-pages
-    defaults: { _controller: BackendBundle:StaticPage:list }
-
-backend_static_page_save:
-    path:     /static-pages/save
-    defaults: { _controller: BackendBundle:StaticPage:save }
+    options:
+        expose: true
 
 backend_static_page_show:
-    path:     /static-pages/{id}/show
+    path:     /static-pages/{id}
     defaults: { _controller: BackendBundle:StaticPage:show }
     options:
         expose: true
 
-backend_static_page_update:
-    path:     /static-pages/{id}/update
-    defaults: { _controller: BackendBundle:StaticPage:update }
+backend_static_pages_list:
+    path:     /static-pages
+    defaults: { _controller: BackendBundle:StaticPage:list }
+    options:
+        expose: true

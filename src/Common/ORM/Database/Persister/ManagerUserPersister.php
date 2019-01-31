@@ -34,14 +34,23 @@ class ManagerUserPersister extends BasePersister
             unset($entity->user_groups);
         }
 
-        parent::create($entity);
+        $this->conn->beginTransaction();
 
-        $id = $this->metadata->getId($entity);
+        try {
+            parent::create($entity);
 
-        $this->persistUserGroups($id, $userGroups);
+            $id = $this->metadata->getId($entity);
 
-        $entity->instances   = $instances;
-        $entity->user_groups = $userGroups;
+            $this->persistUserGroups($id, $userGroups);
+
+            $entity->instances   = $instances;
+            $entity->user_groups = $userGroups;
+
+            $this->conn->commit();
+        } catch (\Throwable $th) {
+            $this->conn->rollback();
+            return;
+        }
 
         $entity->refresh();
     }
@@ -73,19 +82,28 @@ class ManagerUserPersister extends BasePersister
         unset($entity->user_groups);
         $entity->setNotStored('user_groups');
 
-        parent::update($entity);
+        $this->conn->beginTransaction();
+        try {
+            parent::update($entity);
 
-        $id = $this->metadata->getId($entity);
+            $id = $this->metadata->getId($entity);
 
-        if (array_key_exists('user_groups', $changes)) {
-            $this->persistUserGroups($id, $userGroups);
-        }
+            if (array_key_exists('user_groups', $changes)) {
+                $this->persistUserGroups($id, $userGroups);
+            }
 
-        $entity->instances   = $instances;
-        $entity->user_groups = $userGroups;
+            $entity->instances   = $instances;
+            $entity->user_groups = $userGroups;
 
-        if ($this->hasCache()) {
-            $this->cache->remove($this->metadata->getPrefixedId($entity));
+            if ($this->hasCache()) {
+                $this->cache->remove($this->metadata->getPrefixedId($entity));
+            }
+
+            $this->conn->commit();
+        } catch (\Exception $e) {
+            $this->conn->rollback();
+
+            return;
         }
     }
 

@@ -1,33 +1,33 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('static_page', 'backend_ws_contents_list')">
+<div ng-app="BackendApp" ng-controller="StaticPageListCtrl" ng-init="init()">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-file-o page-navbar-icon"></i>
+              <i class="fa fa-file-o m-r-10"></i>
               <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/238735-opennemas-p%C3%A1ginas-est%C3%A1ticas" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                 <i class="fa fa-question"></i>
               </a>
-              {t}Static Pages{/t}
             </h4>
           </li>
-          <li class="quicklinks visible-xs">
-            <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/238735-opennemas-p%C3%A1ginas-est%C3%A1ticas" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
-              <i class="fa fa-question fa-lg"></i>
-            </a>
+          <li class="quicklinks">
+            <h4>
+              <a class="no-padding" href="{url name=backend_static_pages_list}" title="{t}Go back to list{/t}">
+                {t}Static Pages{/t}
+              </a>
+            </h4>
           </li>
         </ul>
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             {acl isAllowed="STATIC_PAGE_CREATE"}
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=backend_static_page_create}" title="{t}Create new page{/t}">
-                <span class="fa fa-plus"></span>
-                {t}Create{/t}
+              <a class="btn btn-success text-uppercase" href="{url name=backend_static_page_create}" title="{t}Create new page{/t}">
+                <span class="fa fa-plus m-r-5"></span>{t}Create{/t}
               </a>
             </li>
             {/acl}
@@ -36,7 +36,7 @@
       </div>
     </div>
   </div>
-  <div class="page-navbar selected-navbar collapsed" class="hidden" ng-class="{ 'collapsed': selected.contents.length == 0 }">
+  <div class="page-navbar selected-navbar collapsed" class="hidden" ng-class="{ 'collapsed': selected.items.length == 0 }">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section pull-left">
@@ -50,27 +50,29 @@
           </li>
           <li class="quicklinks">
             <h4>
-              [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+              [% selected.items.length %] <span class="hidden-xs">{t}items selected{/t}</span>
             </h4>
           </li>
         </ul>
         <ul class="nav quick-section pull-right">
           {acl isAllowed="STATIC_PAGE_AVAILABLE"}
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')">
-              <i class="fa fa-check fa-lg"></i>
+            <button class="btn btn-link" ng-click="patchSelected('content_status', 0)" uib-tooltip="{t}Unpublish{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-times fa-lg"></i>
             </button>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')">
-              <i class="fa fa-times fa-lg"></i>
+            <button class="btn btn-link" ng-click="patchSelected('content_status', 1)" uib-tooltip="{t}Publish{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-check fa-lg"></i>
             </button>
           </li>
           {/acl}
           {acl isAllowed="STATIC_PAGE_DELETE"}
-          <li class="quicklinks"><span class="h-seperate"></span></li>
           <li class="quicklinks">
-            <button class="btn btn-link" href="#" id="batch-delete" ng-click="sendToTrashSelected()">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks">
+            <button class="btn btn-link" href="#" ng-click="sendToTrash()">
               <i class="fa fa-trash-o fa-lg"></i>
             </button>
           </li>
@@ -122,25 +124,28 @@
     </div>
   </div>
   <div class="content">
-    <div class="grid simple">
+    <div class="listing-no-contents" ng-hide="!flags.http.loading">
+      <div class="text-center p-b-15 p-t-15">
+        <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
+        <h3 class="spinner-text">{t}Loading{/t}...</h3>
+      </div>
+    </div>
+    <div class="listing-no-contents ng-cloak" ng-if="!flags.http.loading && items.length == 0">
+      <div class="text-center p-b-15 p-t-15">
+        <i class="fa fa-4x fa-warning text-warning"></i>
+        <h3>{t}Unable to find any item that matches your search.{/t}</h3>
+        <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
+      </div>
+    </div>
+    <div class="grid simple ng-cloak" ng-if="!flags.http.loading && items.length > 0">
       <div class="grid-body no-padding">
-        <div class="spinner-wrapper" ng-if="loading">
-          <div class="loading-spinner"></div>
-          <div class="spinner-text">{t}Loading{/t}...</div>
-        </div>
-        <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
-          <div class="center">
-            <h4>{t}Unable to find any page that matches your search.{/t}</h4>
-            <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
-          </div>
-        </div>
-        <div class="table-wrapper ng-cloak" ng-if="!loading && contents.length > 0">
+        <div class="table-wrapper ng-cloak">
           <table class="table table-hover no-margin">
             <thead>
               <tr>
                 <th class="checkbox-cell">
                   <div class="checkbox checkbox-default">
-                    <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                    <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
                     <label for="select-all"></label>
                   </div>
                 </th>
@@ -150,42 +155,43 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
+              <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(getId(item)) }">
                 <td class="checkbox-cell">
-                  <div class="checkbox check-default">
-                    <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                  <div class="checkbox check-default" ng-if="isSelectable(item)">
+                    <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="getId(item)" type="checkbox">
                     <label for="checkbox[%$index%]"></label>
                   </div>
                 </td>
                 <td>
-                  [% content.title %]
+                  [% item.title %]
                   <span class="hidden-md hidden-lg">
-                   - <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% content.slug %]/" target="_blank" title="{t}Open in a new window{/t}">
-                   <span class="fa fa-external-link"></span>{t}Link{/t}
                  </a>
                </span>
                <div class="listing-inline-actions">
                 {acl isAllowed="STATIC_PAGE_UPDATE"}
-                  <a class="link" href="[% edit(content.pk_content, 'backend_static_page_show') %]">
+                  <a class="btn btn-small" href="[% routing.generate('backend_static_page_show', { id: getId(item) }) %]">
                     <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
                 {/acl}
                 {acl isAllowed="STATIC_PAGE_DELETE"}
-                  <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
-                    <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
+                  <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">
+                    <i class="fa m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': item.in_litterLoading, 'fa-trash-o': !item.in_litterLoading }"></i>{t}Delete{/t}
                   </button>
                 {/acl}
+                <a class="btn btn-small btn-white hidden-md hidden-lg" href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% item.slug %]/" target="_blank" title="{t}Open in a new window{/t}">
+                  <span class="fa fa-external-link"></span>
+                </a>
               </div>
             </td>
             <td class="hidden-sm hidden-xs">
-              <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% content.slug %]/" target="_blank" title="{t}Open in a new window{/t}">
-                {$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% content.slug %]
+              <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% item.slug %]/" target="_blank" title="{t}Open in a new window{/t}">
+                {$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% item.slug %]
               </a>
             </td>
             <td class="text-center">
               {acl isAllowed="STATIC_PAGE_AVAILABLE"}
-              <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
-                <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }" ></i>
+              <button class="btn btn-white" ng-click="patch(item, 'content_status', item.content_status != 1 ? 1 : 0)" type="button">
+                <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.content_statusLoading, 'fa-check text-success' : !item.content_statusLoading && item.content_status == 1, 'fa-times text-danger': !item.content_statusLoading && item.content_status == 0 }"></i>
               </button>
               {/acl}
             </td>
@@ -194,19 +200,14 @@
       </table>
     </div>
   </div>
-  <div class="grid-footer clearfix ng-cloak"  ng-if="!loading && contents.length > 0">
+  <div class="grid-footer clearfix ng-cloak" ng-if="!loading && items.length > 0">
     <div class="pull-right">
-      <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
+      <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
     </div>
   </div>
+
   <script type="text/ng-template" id="modal-delete">
-    {include file="common/modals/_modalDelete.tpl"}
-  </script>
-  <script type="text/ng-template" id="modal-delete-selected">
-    {include file="common/modals/_modalBatchDelete.tpl"}
-  </script>
-  <script type="text/ng-template" id="modal-update-selected">
-    {include file="common/modals/_modalBatchUpdate.tpl"}
+    {include file="common/modals/modal.trash.tpl"}
   </script>
 </div>
 {/block}
