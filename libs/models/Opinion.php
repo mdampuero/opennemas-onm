@@ -204,6 +204,9 @@ class Opinion extends Content
 
             $this->saveMetadataFields($data, Opinion::EXTRA_INFO_TYPE);
 
+            // Clear caches
+            dispatchEventWithParams('opinion.create', [ 'authorId' => $data['fk_author'] ]);
+
             return $this->id;
         } catch (\Exception $e) {
             error_log('Error on Opinion::create: ' . $e->getMessage());

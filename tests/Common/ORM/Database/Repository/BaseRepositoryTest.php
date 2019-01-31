@@ -42,15 +42,14 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
                     ],
                     'relations' => [
                         'norf' => [
-                            'table'   => 'extension_norf',
-                            'ids'     => [ 'foo' => 'foo_id' ],
-                            'key'     => 'norf_id',
-                            'columns' => [
+                            'table'      => 'extension_norf',
+                            'target_key' => 'foo_id',
+                            'columns'    => [
                                 'extension_id' => [
                                     'type'    => 'integer',
                                     'options' => [ 'default' => null, 'unsigned' => true ]
                                 ],
-                                'norf_id' => [
+                                'norf_id'      => [
                                     'type'    => 'integer',
                                     'options' => [ 'default' => null, 'unsigned' => true ]
                                 ]
@@ -172,7 +171,7 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
             'foo'    => 1,
             'bar'    => 'glork',
             'wibble' => 'qux',
-            'norf'   => [ 3 => [ 'norf_id' => 3 ] ]
+            'norf'   => [ 3 => [ 'norf_id' => 3, 'foo_id' => 1 ] ]
         ], $entity->getData());
     }
 
@@ -248,7 +247,7 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
             'bar'    => 'glork',
             'wibble' => 'qux',
             'norf'   => [
-                3 => [ 'norf_id' => 3 ],
+                3 => [ 'norf_id' => 3, 'foo_id' => 1 ],
             ]
         ], $entities[0]->getData());
 
@@ -257,7 +256,7 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
             'bar'    => 'thud',
             'wibble' => 'glork',
             'norf'   => [
-                5 => [ 'norf_id' => 5 ],
+                5 => [ 'norf_id' => 5, 'foo_id' => 2 ],
             ]
         ], $entities[1]->getData());
     }
@@ -298,7 +297,7 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
             'bar'    => 'glork',
             'wibble' => 'qux',
             'norf'   => [
-                3 => [ 'norf_id' => 3 ],
+                3 => [ 'foo_id' => 1, 'norf_id' => 3 ],
             ]
         ], $entities[0]->getData());
 
@@ -307,7 +306,7 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
             'bar'    => 'thud',
             'wibble' => 'glork',
             'norf'   => [
-                5 => [ 'norf_id' => 5 ],
+                5 => [ 'foo_id' => 2, 'norf_id' => 5 ],
             ]
         ], $entities[1]->getData());
     }

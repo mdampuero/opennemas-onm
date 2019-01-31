@@ -1,0 +1,17 @@
+backend_event_create:
+    path:     /events/new
+    defaults: { _controller: BackendBundle:Event:create }
+    options:
+        expose: true
+
+backend_event_show:
+    path:     /events/{id}
+    defaults: { _controller: BackendBundle:Event:show }
+    options:
+        expose: true
+
+backend_events_list:
+    path:     /events
+    defaults: { _controller: BackendBundle:Event:list }
+    options:
+        expose: true

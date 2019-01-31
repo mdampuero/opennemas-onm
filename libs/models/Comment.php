@@ -251,7 +251,7 @@ class Comment implements CsvSerializable
         $data['id'] = getService('dbal_connection')->lastInsertId();
         $this->load($data);
 
-        dispatchEventWithParams('comment.create', ['content' => $this]);
+        dispatchEventWithParams('comment.create', [ 'item' => $this ]);
 
         return $this;
     }
@@ -328,7 +328,7 @@ class Comment implements CsvSerializable
         // Load new data
         $this->load($data);
 
-        dispatchEventWithParams('comment.update', ['content' => $this]);
+        dispatchEventWithParams('comment.update', [ 'item' => $this ]);
 
         return $this;
     }
@@ -357,7 +357,7 @@ class Comment implements CsvSerializable
             throw new \Exception(_('Unable to delete the comment.'));
         }
 
-        dispatchEventWithParams('comment.delete', ['content' => $this]);
+        dispatchEventWithParams('comment.delete', [ 'item' => $this ]);
 
         return true;
     }
@@ -380,7 +380,7 @@ class Comment implements CsvSerializable
             );
 
             $this->load($data);
-            dispatchEventWithParams('comment.update', ['content' => $this]);
+            dispatchEventWithParams('comment.update', [ 'item' => $this ]);
 
             return $this;
         } catch (\Exception $e) {
@@ -498,7 +498,7 @@ class Comment implements CsvSerializable
                 [ $this->id, $property, $value, $value ]
             );
 
-            dispatchEventWithParams('comment.update', ['content' => $this]);
+            dispatchEventWithParams('comment.update', [ 'item' => $this ]);
 
             return true;
         } catch (\Exception $e) {
@@ -527,7 +527,7 @@ class Comment implements CsvSerializable
                 [ 'id' => (int) $this->id ]
             );
 
-            dispatchEventWithParams('comment.update', ['content' => $this]);
+            dispatchEventWithParams('comment.update', [ 'item' => $this ]);
             return true;
         } catch (\Exception $e) {
             error_log($e->getMessage());

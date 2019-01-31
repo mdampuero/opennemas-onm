@@ -54,12 +54,18 @@ class ContentCategoryManager
     {
         try {
             $rs = getService('dbal_connection')->fetchAll(
-                'SELECT count(contents.pk_content) AS number,'
-                . '`contents_categories`.`pk_fk_content_category` AS cat '
-                . 'FROM `contents`,`contents_categories` '
-                . 'WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content` '
-                . 'AND `in_litter`=0 AND `contents`.`fk_content_type`=? '
-                . ' GROUP BY `contents_categories`.`pk_fk_content_category`',
+                "SELECT
+                    count(contents.pk_content) AS number,
+                    `contents_categories`.`pk_fk_content_category` AS cat
+                FROM
+                    `contents`
+                INNER JOIN
+                    `contents_categories`
+                ON
+                    `contents`.`pk_content`=`contents_categories`.`pk_fk_content`
+                WHERE
+                    `in_litter`=0 AND `contents`.`fk_content_type`=?
+                GROUP BY `contents_categories`.`pk_fk_content_category`",
                 [ $type ]
             );
 
@@ -71,6 +77,7 @@ class ContentCategoryManager
             return $groups;
         } catch (\Exception $e) {
             getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
+
             return false;
         }
     }

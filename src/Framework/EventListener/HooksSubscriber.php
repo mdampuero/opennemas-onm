@@ -98,6 +98,36 @@ class HooksSubscriber implements EventSubscriberInterface
             'content.set_positions' => [
                 ['mockHookAction', 0],
             ],
+            'content.createItem' => [
+                ['removeVarnishCacheCurrentInstance', 5],
+            ],
+            'content.updateItem' => [
+                ['removeSmartyCacheForContent', 5],
+                ['removeObjectCacheForContent', 10],
+                ['removeObjectCacheContentMeta', 10],
+                ['removeVarnishCacheCurrentInstance', 5],
+            ],
+            'content.deleteItem' => [
+                ['removeSmartyCacheForContent', 5],
+                ['removeObjectCacheForContent', 10],
+                ['removeObjectCacheContentMeta', 10],
+                ['removeVarnishCacheCurrentInstance', 5],
+            ],
+            'content.patchItem'     => [
+                ['removeSmartyCacheForContent', 5],
+                ['removeObjectCacheForContent', 10],
+                ['removeObjectCacheContentMeta', 10],
+                ['removeVarnishCacheCurrentInstance', 5],
+            ],
+            'content.updateList' => [
+                [ 'mockHookAction', 5 ],
+            ],
+            'content.deleteList' => [
+                [ 'mockHookAction', 5 ],
+            ],
+            'content.patchList' => [
+                [ 'mockHookAction', 5 ],
+            ],
             // Frontpage hooks
             'frontpage.save_position' => [
                 ['removeVarnishCacheFrontpage', 5],
@@ -172,11 +202,13 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheUser', 10],
                 ['removeSmartyCacheAuthor', 5],
                 ['removeObjectCacheMultiCacheAllAuthors', 5],
+                ['removeVarnishCacheCurrentInstance', 5],
             ],
             'user.delete' => [
                 ['removeObjectCacheUser', 10],
                 ['removeSmartyCacheAuthor', 5],
                 ['removeObjectCacheMultiCacheAllAuthors', 5],
+                ['removeVarnishCacheCurrentInstance', 5],
             ],
             'user.social.connect' => [
                 ['mockHookAction', 0],
@@ -216,7 +248,7 @@ class HooksSubscriber implements EventSubscriberInterface
      *
      * @return boolean
      */
-    public function mockHookAction(Event $event)
+    public function mockHookAction()
     {
         return true;
     }
@@ -263,26 +295,28 @@ class HooksSubscriber implements EventSubscriberInterface
         // Delete cache for author profile
         $this->objectCacheHandler->delete('user-' . $authorId);
 
-        // Get the list articles for this author
-        $cm       = new \ContentManager();
-        $opinions = $cm->getOpinionArticlesWithAuthorInfo(
-            'opinions.type_opinion=0 AND opinions.fk_author=' . $authorId
-            . ' AND contents.available=1 and contents.content_status=1',
-            'ORDER BY created DESC '
-        );
+        // Get the all contents assigned to this author
+        $criteria = [
+            'fk_author'       => [[ 'value' => $authorId ]],
+            'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
+            'content_status'  => [[ 'value' => 1 ]],
+            'in_litter'       => [[ 'value' => 0 ]],
+            'starttime'       => [[
+                'value' => date('Y-m-d H:i:s', strtotime("-1 day")),
+                'operator' => '>='
+            ]],
+        ];
+
+        $contents = $this->container->get('entity_repository')->findBy($criteria);
+
         $this->initializeSmartyCacheHandler();
 
         $this->view->setLocale(false);
 
-        if (!empty($opinions)) {
-            foreach ($opinions as &$opinion) {
-                if (!in_array('pk_content', $opinion)) {
-                    continue;
-                }
-
-                $this->smartyCacheHandler
-                    ->deleteGroup($this->view->getCacheId('content', $opinion['pk_content']));
-            }
+        foreach ($contents as $content) {
+            $this->smartyCacheHandler->deleteGroup(
+                $this->view->getCacheId('content', $content->id)
+            );
         }
 
         // Delete frontpage caches
@@ -337,7 +371,7 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeObjectCacheContentMeta(Event $event)
     {
-        $content = $event->getArgument('content');
+        $content = $event->getArgument('item');
 
         $this->objectCacheHandler->delete("content-meta-" . $content->id);
     }
@@ -351,16 +385,15 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeObjectCacheForContent(Event $event)
     {
-        $content = $event->getArgument('content');
+        $content = $event->getArgument('item');
 
-        $id = $content->id;
         if (!empty($content->content_type_name)) {
             $contentType = $content->content_type_name;
         } else {
             $contentType = \underscore(get_class($content));
         }
 
-        $this->objectCacheHandler->delete($contentType . "-" . $id);
+        $this->objectCacheHandler->delete($contentType . "-" . $content->id);
     }
 
     /**
@@ -502,11 +535,11 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheForContent(Event $event)
     {
-        if (!$event->hasArgument('content')) {
+        if (!$event->hasArgument('item')) {
             return;
         }
 
-        $content = $event->getArgument('content');
+        $content = $event->getArgument('item');
 
         $this->initializeSmartyCacheHandler();
 
@@ -617,11 +650,11 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheOpinion(Event $event)
     {
-        if (!$event->hasArgument('content')) {
+        if (!$event->hasArgument('item')) {
             return;
         }
 
-        $content = $event->getArgument('content');
+        $content = $event->getArgument('item');
         if (empty($content->fk_author)) {
             return;
         }

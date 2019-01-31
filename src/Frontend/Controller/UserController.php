@@ -114,12 +114,22 @@ class UserController extends Controller
                 ->find('Photo', $this->get('core.user')->avatar_img_id);
         }
 
+        $userGroups = array_filter(
+            $this->get('core.user')->user_groups,
+            function ($el) {
+                return $el['status'] != 0;
+            }
+        );
+
         return $this->render('user/show.tpl', [
             'countries'     => $countries,
             'photo'         => $photo,
             'settings'      => $this->getSettings(),
             'subscriptions' => $this->getSubscriptions(),
             'user'          => $this->get('core.user'),
+            'user_groups'   => array_map(function ($el) {
+                return $el['user_group_id'];
+            }, $userGroups),
         ]);
     }
 
@@ -372,7 +382,7 @@ class UserController extends Controller
 
         $subscriptions = [];
         foreach ($items['items'] as $item) {
-            $subscriptions[$item->pk_user_group] = [
+            $subscriptions[] = [
                 'user_group_id' => $item->pk_user_group,
                 'status'        => $item->request ? 2 : 1
             ];
