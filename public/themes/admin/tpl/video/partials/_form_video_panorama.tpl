@@ -37,10 +37,16 @@
     </div>
   </div>
   <div id="video-information">
-    {if isset($video)}
-      {include file="video/partials/_video_information.tpl"}
-    {/if}
-    <div ng-if="loading_data"><div class="spinner"></div>Loading request...</div>
-    <div ng-bind-html="external_content"></div>
+    <div class="listing-no-contents ng-cloak" ng-if="loading_data">
+      <div class="text-center p-b-15 p-t-15">
+        <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
+        <h3 class="spinner-text">{t}Loading{/t}...</h3>
+      </div>
+    </div>
+    <div id="external-content ng-cloak" ng-if="!loading_data">
+      {if isset($video)}
+        {include file="video/partials/_video_information.tpl"}
+      {/if}
+    </div>
   </div>
 </div>

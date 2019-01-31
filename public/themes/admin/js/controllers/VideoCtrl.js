@@ -2,8 +2,8 @@
  * Handle actions for poll inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
-  '$compile', '$controller', '$rootScope', '$scope', '$sce', '$timeout', 'http',
-  function($compile, $controller, $rootScope, $scope, $sce, $timeout, http) {
+  '$compile', '$controller', '$rootScope', '$scope', '$timeout', 'http',
+  function($compile, $controller, $rootScope, $scope, $timeout, http) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -57,8 +57,9 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
       http.get(route).then(
         function(response) {
-          $scope.external_content = $sce.trustAsHtml(response.data);
-          $scope.loading_data     = false;
+          $('#external-content').append($compile(response.data)($scope));
+
+          $scope.loading_data = false;
 
           $timeout(function() {
             angular.element('.tags-input-buttons .btn-info').triggerHandler('click');
