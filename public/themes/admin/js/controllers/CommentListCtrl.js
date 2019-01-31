@@ -134,13 +134,13 @@
             params: { id: item.id }
           };
 
-          http.patch(route, data).then(function(response) {
+          return http.patch(route, data).then(function(response) {
             item[property + 'Loading'] = 0;
             item[property] = value;
-            messenger.post(response.data);
+            messenger.post(response.data.messages);
           }, function(response) {
             item[property + 'Loading'] = 0;
-            messenger.post(response.data);
+            messenger.post(response.data.messages);
           });
         };
 
