@@ -4,6 +4,11 @@ services:
         arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
         public: true
 
+    api.service.content:
+        class:     Api\Service\V1\ContentService
+        arguments: [ '@service_container', 'Common\ORM\Entity\Content' ]
+        public: true
+
     api.service.content_position:
         class:     Api\Service\V1\ContentPositionService
         arguments: [ '@service_container', 'Common\ORM\Entity\ContentPosition' ]

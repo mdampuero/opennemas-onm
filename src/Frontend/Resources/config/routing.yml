@@ -46,6 +46,9 @@ frontend_comment:
 frontend_content:
     resource: '@FrontendBundle/Resources/config/routing/content.yml'
 
+frontend_event:
+    resource: '@FrontendBundle/Resources/config/routing/event.yml'
+
 frontend_form:
     resource: '@FrontendBundle/Resources/config/routing/form.yml'
 

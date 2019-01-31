@@ -97,7 +97,8 @@
             rows: [
               [ 'CATEGORY_MANAGER', 'CONTENT' ],
               [ 'ARTICLE_MANAGER', 'OPINION_MANAGER', 'COMMENT_MANAGER' ],
-              [ 'POLL_MANAGER', 'STATIC_PAGES_MANAGER', 'SPECIAL_MANAGER', 'LETTER_MANAGER' ]
+              [ 'POLL_MANAGER', 'STATIC_PAGES_MANAGER', 'SPECIAL_MANAGER', 'LETTER_MANAGER' ],
+              [ 'es.openhost.module.events' ],
             ]
           },
           {

@@ -101,12 +101,11 @@ class InstanceUserPersister extends ManagerUserPersister
                 return !is_null($a);
             });
         }
+        // Remove old categories
+        $this->removeCategories($id, array_values($categories));
 
         // Update categories
         $this->saveCategories($id, $categories);
-
-        // Remove old categories
-        $this->removeCategories($id, array_values($categories));
     }
 
     /**

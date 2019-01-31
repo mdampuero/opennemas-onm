@@ -317,6 +317,8 @@ class Controller extends SymfonyController
             $locale = $request->query->get('locale');
         }
 
+        $locale = empty($locale) ? $default : $locale;
+
         if ($translation
             && $this->get('core.security')
                 ->hasPermission('es.openhost.module.translation')

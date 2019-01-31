@@ -32,11 +32,11 @@ class CategoryController extends Controller
      */
     public function listAction()
     {
-        $cm           = $this->get('category_repository');
-        $categories   = $cm->findBy(null, 'name ASC');
+        $categories   = $this
+            ->get('orm.manager')
+            ->getRepository('Category')
+            ->findBy('order by name asc');
         $languageData = $this->getLocaleData('frontend', null, true);
-
-        $cm->sortCategories($categories);
 
         $map = [];
         foreach ($categories as $category) {
@@ -138,8 +138,6 @@ class CategoryController extends Controller
                     $this->get('orm.manager')->persist($user, 'instance');
                 }
 
-                dispatchEventWithParams('category.delete', ['category' => $category]);
-
                 $this->get('session')->getFlashBag()->add(
                     'success',
                     _("Category deleted successfully.")
@@ -233,8 +231,6 @@ class CategoryController extends Controller
         } else {
             $category->setAvailable($status);
 
-            dispatchEventWithParams('category.update', ['category' => $category]);
-
             $this->get('session')->getFlashBag()->add(
                 'success',
                 sprintf(_('Successfully changed availability for category with id "%d"'), $id)
@@ -268,8 +264,6 @@ class CategoryController extends Controller
             );
         } else {
             $category->setInRss($status);
-
-            dispatchEventWithParams('category.update', ['category' => $category]);
 
             $this->get('session')->getFlashBag()->add(
                 'success',

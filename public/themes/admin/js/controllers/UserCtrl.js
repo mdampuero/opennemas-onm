@@ -153,7 +153,9 @@
                     var ids = Object.keys($scope.data.extra.user_groups);
 
                     // Remove all user groups
-                    data.user_groups = _.difference(data.user_groups, ids);
+                    data.user_groups = data.user_groups.filter(function(group) {
+                      return ids.indexOf(group.user_group_id) !== -1;
+                    });
                   }
 
                   return http.put(route, data);
@@ -275,13 +277,19 @@
             $scope.item.user_groups = {};
           }
 
-          for (var id in $scope.data.extra.user_groups) {
-            if (!$scope.item.user_groups[id]) {
-              $scope.item.user_groups[id] = {
-                expires: null,
+          var userGroups = Object.keys(data.extra.user_groups);
+          var userGroupsPresent =  $scope.item.user_groups.map(function(userGroup) {
+            return userGroup.user_group_id;
+          });
+
+          for (var index in userGroups) {
+            if (userGroupsPresent.indexOf(parseInt(userGroups[index])) === -1) {
+              $scope.item.user_groups.push({
+                user_id: $scope.item.id,
+                user_group_id: parseInt(userGroups[index]),
                 status: 0,
-                user_group_id: id
-              };
+                expire: null
+              });
             }
           }
 

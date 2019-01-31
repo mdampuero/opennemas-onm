@@ -1,0 +1,70 @@
+api_v1_backend_static_page_create:
+    path:     /static_pages/new
+    defaults: { _controller: ApiBundle:V1/Backend/StaticPage:create }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_static_page_delete:
+    path:     /static_pages/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/StaticPage:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_static_page_patch:
+    path:     /static_pages/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/StaticPage:patch }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_static_page_save:
+    path:     /static_pages
+    defaults: { _controller: ApiBundle:V1/Backend/StaticPage:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_static_page_show:
+    path:     /static_pages/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/StaticPage:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_static_page_update:
+    path:     /static_pages/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/StaticPage:update }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_static_pages_delete:
+    path:     /static_pages
+    defaults: { _controller: ApiBundle:V1/Backend/StaticPage:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_static_pages_list:
+    path:     /static_pages
+    defaults: { _controller: ApiBundle:V1/Backend/StaticPage:list, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_static_pages_patch:
+    path:     /static_pages
+    defaults: { _controller: ApiBundle:V1/Backend/StaticPage:patchSelected }
+    methods:  [ PATCH ]
+    options:
+        expose: true
