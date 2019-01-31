@@ -720,7 +720,7 @@ class Content implements \JsonSerializable, CsvSerializable
             'favorite'            => !isset($data['favorite'])
                 ? (int) $this->favorite : (int) $data['favorite'],
             'fk_author'           => !array_key_exists('fk_author', $data)
-                || empty($data['fk_author']) ? $this->fk_author : (int) $data['fk_author'],
+                || empty($data['fk_author']) ? null : (int) $data['fk_author'],
             'fk_publisher'        => $this->fk_publisher,
             'fk_user_last_editor' => empty(getService('core.user')) ?
                 $this->fk_user_last_editor : (int) getService('core.user')->id,
