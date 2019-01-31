@@ -15,7 +15,7 @@
 <div class="form-group">
     <label for="body" class="form-label">{t}Body{/t}</label>
     <div class="controls">
-        <textarea name="body" id="body" rows="6" class="form-control onm-editor" data-preset="simple">{$video->body|clearslash|default:""}</textarea>
+        <textarea name="body" id="body" rows="6" class="form-control" onm-editor ng-model="description" data-preset="simple">{$video->body|clearslash|default:""}</textarea>
     </div>
 </div>
 
