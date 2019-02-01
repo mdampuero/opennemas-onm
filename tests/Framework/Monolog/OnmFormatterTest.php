@@ -30,8 +30,8 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
 
         $this->instance = new Instance([ 'internal_name' => 'fred' ]);
 
-        $this->request = $this->getMockBuilder('request')
-            ->setMethods([ 'getClientIp', 'getUri'])
+        $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
+            ->setMethods([ 'getClientIps', 'getUri'])
             ->getMock();
 
         $this->rs = $this->getMockBuilder('RequestStack')
@@ -86,8 +86,8 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
     {
         $this->headers->expects($this->once())->method('get')
             ->with('User-Agent')->willReturn('glork/plugh');
-        $this->request->expects($this->once())->method('getClientIp')
-            ->willReturn('128.0.134.43');
+        $this->request->expects($this->once())->method('getClientIps')
+            ->willReturn([ '143.53.0.1', '128.0.134.43' ]);
         $this->request->expects($this->once())->method('getUri')
             ->willReturn('http://norf.org/qux');
         $this->rs->expects($this->any())->method('getCurrentRequest')
@@ -117,6 +117,37 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('client_ip', $record['extra']);
         $this->assertArrayHasKey('user_agent', $record['extra']);
         $this->assertArrayHasKey('url', $record['extra']);
+    }
+
+    /**
+     * Tests getClientIp when the list of client ips is not empty.
+     */
+    public function testGetClientIp()
+    {
+        $this->request->expects($this->once())->method('getClientIps')
+            ->willReturn([ '143.53.0.1', '128.0.134.43' ]);
+
+        $method = new \ReflectionMethod($this->formatter, 'getClientIp');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            '128.0.134.43',
+            $method->invokeArgs($this->formatter, [ $this->request ])
+        );
+    }
+
+     /**
+     * Tests getClientIp when the list of client ips is empty.
+     */
+    public function testGetClientIpWhenNoIps()
+    {
+        $this->request->expects($this->once())->method('getClientIps')
+            ->willReturn([]);
+
+        $method = new \ReflectionMethod($this->formatter, 'getClientIp');
+        $method->setAccessible(true);
+
+        $this->assertEmpty($method->invokeArgs($this->formatter, [ $this->request ]));
     }
 
     /**
