@@ -26,7 +26,7 @@ function smarty_outputfilter_google_tags_manager($output, $smarty)
         && !preg_match('/\/sharrre/', $uri)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
-        && !preg_match('/\/fb\/instant-articles/', $uri)
+        && !preg_match('/\/rss/', $uri)
         && !preg_match('@\.amp\.html$@', $uri)
     ) {
         $containerId = $smarty->getContainer()

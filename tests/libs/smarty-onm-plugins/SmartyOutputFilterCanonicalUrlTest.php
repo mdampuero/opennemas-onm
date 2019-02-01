@@ -88,7 +88,7 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
         $output = '<html><head></head><body></body></html>';
 
         $this->request->expects($this->once())->method('getRequestUri')
-            ->willReturn('/fb/instant-articles');
+            ->willReturn('/rss/facebook-instant-articles');
 
         $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
