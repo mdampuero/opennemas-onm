@@ -18,6 +18,13 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class InstanceController extends Controller
 {
     /**
+     * The list of settings that can be updated in manager.
+     *
+     * @var array
+     */
+    protected $keys = [ 'max_mailing', 'pass_level', 'piwik' ];
+
+    /**
      * Deletes an instance.
      *
      * @param integer $id The instance id.
@@ -477,6 +484,8 @@ class InstanceController extends Controller
             $em->getConnection('instance')
                 ->selectDatabase($instance->getDatabaseName());
 
+            $settings = array_intersect_key($settings, array_flip($this->keys));
+
             $em->getDataSet('Settings', 'instance')->set($settings);
 
             $this->get('core.dispatcher')
@@ -619,7 +628,8 @@ class InstanceController extends Controller
 
         $em->persist($instance);
 
-        // Update settings for instance
+        $settings = array_intersect_key($settings, array_flip($this->keys));
+
         $this->get('core.loader')->configureInstance($instance);
         $em->getDataSet('Settings', 'instance')->set($settings);
 
