@@ -196,7 +196,7 @@ class CommentsController extends Controller
     {
         $body        = $request->request->filter('body', '', FILTER_SANITIZE_STRING);
         $authorName  = $request->request->filter('author-name', '', FILTER_SANITIZE_STRING);
-        $authorEmail = $request->request->filter('author-email', '', FILTER_SANITIZE_STRING);
+        $authorEmail = $request->request->filter('author-email', null, FILTER_SANITIZE_STRING);
         $contentId   = $request->request->getDigits('content-id');
         $response    = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
         $ip          = getUserRealIP();
@@ -214,20 +214,27 @@ class CommentsController extends Controller
             ], 400);
         }
 
+
         $httpCode = 200;
+
         try {
             $data = [
                 'content_id'   => $contentId,
                 'body'         => $body,
                 'author'       => $authorName,
-                'author_email' => $authorEmail,
                 'author_ip'    => $ip
             ];
+
+            if (!empty($authorEmail)) {
+                $data['author_email'] = $authorEmail;
+            }
+
             $data = array_map('strip_tags', $data);
 
             $data['body'] = '<p>' . preg_replace('@\\n@', '</p><p>', $data['body']) . '</p>';
 
             $errors = $this->get('core.validator')->validate($data, 'comment');
+
             if ($cm->moderateManually()) {
                 if (!empty($errors)) {
                     throw new \Exception(sprintf(
