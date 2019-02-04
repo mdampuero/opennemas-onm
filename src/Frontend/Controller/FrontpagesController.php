@@ -53,7 +53,7 @@ class FrontpagesController extends Controller
         // Setup templating cache layer
         $this->view->setConfig('frontpages');
 
-        $systemDate = new \DateTime(null, new \DateTimeZone('UTC'));
+        $systemDate = new \DateTime();
         $lifetime   = $invalidationDt->getTimestamp() - $systemDate->getTimestamp();
 
         if (!empty($invalidationDt)) {
