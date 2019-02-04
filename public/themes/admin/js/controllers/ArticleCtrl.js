@@ -40,11 +40,12 @@
          */
         $scope.article = {
           body: '',
-          params: {},
-          summary: '',
           content_status: 0,
           created: new Date(),
+          fk_author: null,
+          params: {},
           starttime: new Date(),
+          summary: '',
           tag_ids: []
         };
 
