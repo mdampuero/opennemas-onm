@@ -14,7 +14,7 @@ use Common\Core\Component\Locale\Locale;
 use Common\ORM\Entity\Instance;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
-class VarnishListener
+class HttpCacheHeadersListener
 {
     /**
      * The current instance.

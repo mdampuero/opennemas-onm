@@ -10,13 +10,13 @@
 namespace Tests\Common\Core\EventListener;
 
 use Symfony\Component\HttpFoundation\Response;
-use Common\Core\EventListener\VarnishListener;
+use Common\Core\EventListener\HttpCacheHeadersListener;
 use Common\ORM\Entity\Instance;
 
 /**
- * Defines test cases for VarnishListener class.
+ * Defines test cases for HttpCacheHeadersListener class.
  */
-class VarnishListenerTest extends \PHPUnit\Framework\TestCase
+class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -53,7 +53,7 @@ class VarnishListenerTest extends \PHPUnit\Framework\TestCase
 
         $this->response->headers = $this->headers;
 
-        $this->listener = new VarnishListener($this->instance, $this->locale, $this->template);
+        $this->listener = new HttpCacheHeadersListener($this->instance, $this->locale, $this->template);
     }
 
     /**
@@ -75,7 +75,7 @@ class VarnishListenerTest extends \PHPUnit\Framework\TestCase
      */
     public function testOnKernelResponseWhenTags()
     {
-        $listener = $this->getMockBuilder('Common\Core\EventListener\VarnishListener')
+        $listener = $this->getMockBuilder('Common\Core\EventListener\HttpCacheHeadersListener')
             ->setConstructorArgs([ $this->instance, $this->locale, $this->template ])
             ->setMethods([ 'getExpire', 'getTags' ])
             ->getMock();
