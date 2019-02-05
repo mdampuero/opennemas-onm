@@ -64,8 +64,6 @@ class AdvertisementController extends Controller
     {
         // Check ads module and show default ads.txt if deactivated
         if (!$this->get('core.security')->hasExtension('ADS_MANAGER')) {
-            $instanceName = getService('core.instance')->internal_name;
-
             $content = "google.com, pub-7694073983816204, DIRECT, f08c47fec0942fa0\n"
                 . "#SmartAdServer\n"
                 . "smartadserver.com,3035,DIRECT\n"
@@ -79,10 +77,8 @@ class AdvertisementController extends Controller
 
             return new Response($content, 200, [
                 'Content-Type' => 'text/plain',
-                'x-cacheable'  => true,
                 'x-cache-for'  => '+100 day',
-                'x-tags'       => 'instance-' . $instanceName . ',ads,txt',
-                'x-instance'   => $instanceName,
+                'x-tags'       => 'ads,txt',
             ]);
         }
 
@@ -91,17 +87,14 @@ class AdvertisementController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $content      = $this->get('orm.manager')
+        $content = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('ads_txt');
-        $instanceName = getService('core.instance')->internal_name;
 
         return new Response(trim($content), 200, [
             'Content-Type' => 'text/plain',
-            'x-cacheable'  => true,
             'x-cache-for'  => '+100 day',
-            'x-tags'       => 'instance-' . $instanceName . ',ads,txt',
-            'x-instance'   => $instanceName,
+            'x-tags'       => 'ads,txt',
         ]);
     }
 
@@ -132,10 +125,8 @@ class AdvertisementController extends Controller
 
         // Return the resopnse object
         return new Response($fileContents, 200, [
-            'x-instance'  => $this->get('core.instance')->internal_name,
-            'x-tags'      => 'rtb,',
+            'x-tags'      => 'rtb',
             'x-cache-for' => '+1 day',
-            'x-cacheable' => true,
         ]);
     }
 

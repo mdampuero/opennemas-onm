@@ -143,12 +143,7 @@ class ErrorController extends Controller
 
         return new Response($content, 404, [
             'x-cache-for' => '+1 day',
-            'x-cacheable' => true,
-            'x-instance'  => $this->get('core.instance')->internal_name,
-            'x-tags'      => sprintf(
-                'instance-%s,not-found',
-                $this->get('core.instance')->internal_name
-            )
+            'x-tags'      => 'not-found',
         ]);
     }
 }

@@ -118,12 +118,9 @@ class ErrorController extends Controller
             ]);
         }
 
-        $instance = $this->get('core.instance')->internal_name;
-
         $response = new Response($content, 404);
-        $response->headers->set('x-cache-for', '5s');
-        $response->headers->set('x-instance', $instance);
-        $response->headers->set('x-tags', 'instance-' . $instance . ',not-activated-error');
+        $response->headers->set('x-cache-for', '+5 sec');
+        $response->headers->set('x-tags', 'not-activated-error');
 
         return $response;
     }
@@ -150,7 +147,7 @@ class ErrorController extends Controller
         }
 
         $response = new Response($content, 404);
-        $response->headers->set('x-cache-for', '5s');
+        $response->headers->set('x-cache-for', '+5 sec');
 
         return $response;
     }
