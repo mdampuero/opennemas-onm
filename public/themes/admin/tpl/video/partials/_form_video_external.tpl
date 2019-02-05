@@ -8,14 +8,14 @@
 <div class="form-group">
     <label for="description" class="form-label">{t}Description{/t}</label>
     <div class="controls">
-        <textarea name="description" id="description" required rows="3" class="form-control">{$video->description|clearslash|default:""}</textarea>
+      <textarea onm-editor onm-editor-preset="simple" ng-model="description" name="description" id="description" required rows="3" class="form-control">{$video->description|clearslash|default:""}</textarea>
     </div>
 </div>
 
 <div class="form-group">
     <label for="body" class="form-label">{t}Body{/t}</label>
     <div class="controls">
-        <textarea name="body" id="body" rows="6" class="form-control" onm-editor ng-model="description" data-preset="simple">{$video->body|clearslash|default:""}</textarea>
+        <textarea name="body" id="body" rows="6" class="form-control" onm-editor ng-model="model" data-preset="simple">{$video->body|clearslash|default:""}</textarea>
     </div>
 </div>
 
