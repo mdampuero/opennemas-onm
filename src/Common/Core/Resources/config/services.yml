@@ -393,5 +393,5 @@ services:
 
     core.validator:
         class:      Common\Core\Component\Validator\Validator
-        arguments: [ '@orm.manager', '@validator' ]
+        arguments: [ '@orm.manager', '@validator', '@core.helper.comment' ]
         public:    true

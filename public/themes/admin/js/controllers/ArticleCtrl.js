@@ -40,11 +40,12 @@
          */
         $scope.article = {
           body: '',
-          params: {},
-          summary: '',
           content_status: 0,
           created: new Date(),
+          fk_author: null,
+          params: {},
           starttime: new Date(),
+          summary: '',
           tag_ids: []
         };
 
@@ -727,7 +728,7 @@
 
         // Generates slug when flag changes
         $scope.$watch('flags.generate.slug', function(nv) {
-          if ($scope.article.id && $scope.article.slug || !nv) {
+          if ($scope.article.id || $scope.article.slug || !nv) {
             $scope.flags.generate.slug = false;
 
             return;

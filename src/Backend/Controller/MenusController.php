@@ -323,6 +323,10 @@ class MenusController extends Controller
             array_push($pages, ['title' => _("Poll"),'link' => "poll/"]);
         }
 
+        if ($this->get('core.security')->hasExtension('es.openhost.module.events')) {
+            array_push($pages, ['title' => _("Events"),'link' => "events/"]);
+        }
+
         if ($this->get('core.security')->hasExtension('LETTER_MANAGER')) {
             array_push($pages, ['title' => _("Letters to the Editor"),'link' => "cartas-al-director/"]);
         }

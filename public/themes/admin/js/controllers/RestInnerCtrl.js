@@ -124,7 +124,7 @@
          * @return {Boolean} description
          */
         $scope.itemHasId = function() {
-          return $scope.item.id && $scope.item.id !== null;
+          return $scope.getItemId() && $scope.getItemId() !== null;
         };
 
         /**
@@ -194,6 +194,32 @@
           }
 
           http.post(route, data).then(successCb, $scope.errorCb);
+        };
+
+        /**
+         * @function getContentScheduling
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Returns -1 if the the item scheduling state is DUED.
+         *   Returns  0 if the the item scheduling state is IN TIME.
+         *   Returns  1 if the the item scheduling state is PLANNED.
+         */
+        $scope.getContentScheduling = function(item) {
+          var now = new Date();
+
+          var starttime = item.starttime ? new Date(item.starttime) : null;
+          var endtime   = item.endtime ? new Date(item.endtime) : null;
+
+          if (endtime && endtime.getTime() < now.getTime()) {
+            return -1;
+          }
+
+          if (starttime && starttime.getTime() > now.getTime()) {
+            return 1;
+          }
+
+          return 0;
         };
       }
     ]);

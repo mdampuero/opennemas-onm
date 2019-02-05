@@ -103,7 +103,6 @@ class FrontpageVersionService extends OrmService
 
         if (!empty($frontpageVersionId)) {
             $frontpageVersion = $this->getItem($frontpageVersionId);
-            $frontpageVersion = $this->changeToUTC($frontpageVersion);
         }
 
         list($contentPositions, $contents) =
@@ -263,7 +262,6 @@ class FrontpageVersionService extends OrmService
         $oql = 'category_id = ' . $categoryIdAux . ' order by publish_date desc';
 
         $versions = $this->getList($oql)['items'];
-        $versions = $this->changeToUTC($versions);
 
         return [$frontpages, $versions];
     }
@@ -477,34 +475,6 @@ class FrontpageVersionService extends OrmService
     }
 
     /**
-     * Changes the publish_date property to UTC on each item in a given list of frontpage versions
-     *
-     * @param array $versions the list of frontpage versions
-     *
-     * @return array
-     **/
-    private function changeToUTC($versions)
-    {
-        if (empty($versions)) {
-            return $versions;
-        }
-
-        $versionsAux = $versions;
-        if (!is_array($versionsAux)) {
-            $versionsAux = [$versionsAux];
-        }
-
-        foreach ($versionsAux as $versionAux) {
-            if (!empty($versionAux->publish_date)) {
-                $versionAux->publish_date->setTimezone(new \DateTimeZone('UTC'));
-            }
-
-            $versionAux->created->setTimezone(new \DateTimeZone('UTC'));
-        }
-        return is_array($versions) ? $versionsAux : $versionsAux[0];
-    }
-
-    /**
      * Removes contents out of time from an array of contents
      *
      * @param array $contents the lit of contents to filter
@@ -585,7 +555,6 @@ class FrontpageVersionService extends OrmService
         }
 
         $invalidationTime = \DateTime::createFromFormat('Y-m-d H:i:s', $invalidationTime, $this->locale->getTimeZone());
-        $invalidationTime->setTimeZone(new \DateTimeZone('UTC'));
 
         return $invalidationTime;
     }

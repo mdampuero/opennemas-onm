@@ -55,4 +55,12 @@ class BrandCollectorTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals('core.collector.brand', $this->collector->getName());
     }
+
+    /**
+     * Tests getReset.
+     */
+    public function testGetReset()
+    {
+        $this->assertEmpty($this->collector->reset());
+    }
 }

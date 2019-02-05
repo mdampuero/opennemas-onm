@@ -21,7 +21,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
 
     $scope.frontpageInfo = {
       lastSaved:           null,
-      publish_date:        window.moment.tz(new Date(), 'UTC'),
+      publish_date:        new Date(),
       checkNewVersion:     true,
       originalVersionName: null
     };
@@ -42,11 +42,11 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
         $scope.version = {
           id:           0,
           frontpage_id: null,
-          name:         window.moment.tz($scope.time.timestamp, 'UTC')
-            .tz($scope.time.timezone).format('YYYY-MM-DD HH:mm:ss'),
+          name:         $window.moment($scope.time.timestamp)
+            .format('YYYY-MM-DD HH:mm:ss'),
           type:         'manual',
           created:      null,
-          publish_date: window.moment.tz($scope.time.timestamp, 'UTC'),
+          publish_date: $window.moment($scope.time.timestamp),
           category_id:  $scope.categoryId,
 
         };
@@ -58,10 +58,11 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
         $scope.version   = $scope.getCurrentVersion(versionId);
         $scope.versionId = $scope.version.id;
       }
+
       $scope.frontpageInfo.publish_date = $scope.version.publish_date === null ?
         '' :
-        window.moment.tz($scope.version.publish_date, 'UTC')
-          .tz($scope.time.timezone).format('YYYY-MM-DD HH:mm:ss');
+        $window.moment($scope.version.publish_date)
+          .format('YYYY-MM-DD HH:mm:ss');
 
       var copyVersionName = (' ' + $scope.version.name).slice(1);
 
@@ -84,7 +85,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       $scope.versions.forEach(function(version) {
         if (version.publish_date !== null && version.id !== 0) {
           diffCurrToVer =
-            window.moment.tz(version.publish_date, 'UTC').toDate().getTime() -
+            $window.moment(version.publish_date).toDate().getTime() -
             currentServerTime;
           if (diffCurrToVer <= 0 &&
             (currentVer.versionId === null || diffCurrToVer > currentVer.diff)
@@ -210,12 +211,12 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
     };
 
     $scope.changeCategory = function(id) {
-      window.location = routing.generate('admin_frontpage_list',
+      $window.location = routing.generate('admin_frontpage_list',
         { category: id });
     };
 
     $scope.changeVersion = function(versionId) {
-      window.location = routing.generate('admin_frontpage_list',
+      $window.location = routing.generate('admin_frontpage_list',
         {
           category: $scope.categoryId,
           version: versionId
@@ -264,14 +265,14 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
     };
 
     $scope.utcToTimezone = function(date) {
-      return date === '' ? '' : window.moment.tz(date, 'UTC')
-        .tz($scope.time.timezone).format('YYYY-MM-DD HH:mm');
+      return date === '' ? '' : $window.moment(date)
+        .format('YYYY-MM-DD HH:mm');
     };
 
     $scope.saveLiveNow = function() {
       $scope.frontpageInfo.publish_date =
-        window.moment.tz(new Date().getTime() - $scope.time.diff, 'UTC')
-          .tz($scope.time.timezone).format('YYYY-MM-DD HH:mm:ss');
+        window.moment(new Date().getTime() - $scope.time.diff)
+          .format('YYYY-MM-DD HH:mm:ss');
 
       $scope.liveNowModal();
     };
@@ -279,10 +280,9 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
     $scope.saveVersion = function() {
       $scope.version.id = null;
 
-      var date = window.moment.tz(
-        $scope.frontpageInfo.publish_date,
-        $scope.time.timezone
-      ).tz('UTC').format('YYYY-MM-DD HH:mm:ss');
+      var date = window.moment(
+        $scope.frontpageInfo.publish_date
+      ).format('YYYY-MM-DD HH:mm:ss');
 
       if ($scope.frontpageInfo.originalVersionName === $scope.version.name) {
         $scope.version.name = $scope.getAutoVersionName($scope.version.name);
@@ -291,6 +291,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       if (date === $scope.version.publish_date) {
         $scope.frontpageInfo.publish_date = '';
       }
+
       $scope.save();
     };
 
@@ -341,14 +342,12 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
         ).toDate().getTime() - currentServerTime;
 
       if (diffCurrToVer <= 0) {
-        var publishDateUTC = window.moment.tz(
-          $scope.frontpageInfo.publish_date,
-          $scope.time.timezone
+        var publishDateUTC = window.moment(
+          $scope.frontpageInfo.publish_date
         ).toDate().getTime();
 
-        var currentVerTime = window.moment.tz(
-          $scope.getCurrentVersion().publish_date,
-          'UTC'
+        var currentVerTime = $window.moment(
+          $scope.getCurrentVersion().publish_date
         ).toDate().getTime();
 
         if (publishDateUTC > currentVerTime) {
@@ -405,10 +404,9 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
 
         version.publish_date = $scope.frontpageInfo.publish_date === '' ?
           null :
-          window.moment.tz(
-            $scope.frontpageInfo.publish_date,
-            $scope.time.timezone
-          ).tz('UTC').format('YYYY-MM-DD HH:mm:ss');
+          window.moment(
+            $scope.frontpageInfo.publish_date
+          ).format('YYYY-MM-DD HH:mm:ss');
 
         if (version.id === 0) {
           version.id = null;
@@ -441,10 +439,9 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           } else {
             $scope.version.publish_date = $scope.frontpageInfo.publish_date === '' ?
               null :
-              window.moment.tz(
-                $scope.frontpageInfo.publish_date,
-                $scope.time.timezone
-              ).tz('UTC').format('YYYY-MM-DD HH:mm:ss');
+              window.moment(
+                $scope.frontpageInfo.publish_date
+              ).format('YYYY-MM-DD HH:mm:ss');
             $scope.versions.sort($scope.comparePublishDates);
             $scope.getReloadVersionStatus();
           }

@@ -36,22 +36,28 @@ class CommentsController extends Controller
     public function getAction(Request $request)
     {
         $contentID   = $request->query->filter('content_id', null, FILTER_SANITIZE_NUMBER_INT);
-        $elemsByPage = $request->query->getDigits('elems_per_page');
+        $elemsByPage = (int) $request->query->get('elems_per_page');
         $offset      = $request->query->getDigits('offset', 1);
         $darkTheme   = $request->query->getDigits('dark_theme', 0);
+        $criteria    = [
+            'content_status' => [ [ 'value' => 1 ] ],
+            'in_litter'      => [ [ 'value' => 0 ] ],
+            'pk_content'     => [ [ 'value' => $contentID ] ],
+        ];
 
-        if (empty($contentID) || !\Content::checkExists($contentID)) {
+        if (empty($contentID)
+            || empty($this->get('entity_repository')->findBy($criteria))
+        ) {
             return new Response('', 404);
         }
 
-        // Get and process comments settings
-        $configs     = $this->get('core.helper.comment')->getConfigs();
-        $elemsByPage = empty($elemsByPage)
+        $configs = $this->get('core.helper.comment')->getConfigs();
+        $cm      = $this->get('comment_repository');
+        $total   = $cm->countCommentsForContentId($contentID);
+
+        $elemsByPage = empty($elemsByPage) || $elemsByPage > $total
             ? (int) $configs['number_elements'] : $elemsByPage;
 
-        // Getting comments and total count comments for current article
-        $cm       = $this->get('comment_repository');
-        $total    = $cm->countCommentsForContentId($contentID);
         $comments = $cm->getCommentsforContentId($contentID, $elemsByPage, $offset);
 
         foreach ($comments as &$comment) {
@@ -64,7 +70,7 @@ class CommentsController extends Controller
             'comments'       => $comments,
             'contentId'      => $contentID,
             'elems_per_page' => $elemsByPage,
-            'required_email' => $this->get('core.helper.comment')->requiredEmail(),
+            'required_email' => $this->get('core.helper.comment')->isEmailRequired(),
             'offset'         => $offset,
             'dark_theme'     => $darkTheme,
             'count'          => $total,
@@ -189,7 +195,7 @@ class CommentsController extends Controller
     {
         $body        = $request->request->filter('body', '', FILTER_SANITIZE_STRING);
         $authorName  = $request->request->filter('author-name', '', FILTER_SANITIZE_STRING);
-        $authorEmail = $request->request->filter('author-email', '', FILTER_SANITIZE_STRING);
+        $authorEmail = $request->request->filter('author-email', null, FILTER_SANITIZE_STRING);
         $contentId   = $request->request->getDigits('content-id');
         $response    = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
         $ip          = getUserRealIP();
@@ -207,20 +213,27 @@ class CommentsController extends Controller
             ], 400);
         }
 
+
         $httpCode = 200;
+
         try {
             $data = [
                 'content_id'   => $contentId,
                 'body'         => $body,
                 'author'       => $authorName,
-                'author_email' => $authorEmail,
                 'author_ip'    => $ip
             ];
+
+            if (!empty($authorEmail)) {
+                $data['author_email'] = $authorEmail;
+            }
+
             $data = array_map('strip_tags', $data);
 
             $data['body'] = '<p>' . preg_replace('@\\n@', '</p><p>', $data['body']) . '</p>';
 
             $errors = $this->get('core.validator')->validate($data, 'comment');
+
             if ($cm->moderateManually()) {
                 if (!empty($errors)) {
                     throw new \Exception(sprintf(
@@ -264,7 +277,7 @@ class CommentsController extends Controller
                     $errorType = $errors['type'];
                     $httpCode  = 400;
 
-                    $handling = ($cm->autoReject() || $cm->requiredEmail())
+                    $handling = ($cm->autoReject() || $cm->isEmailRequired())
                         ? _('Your comment was rejected due to:')
                         : _('Your comment is waiting for moderation due to:');
 

@@ -330,7 +330,7 @@ class ContentController extends Controller
                     }
                 }
 
-                dispatchEventWithParams('content.update', [ 'content' => $content ]);
+                dispatchEventWithParams('content.update', [ 'item' => $content ]);
                 dispatchEventWithParams(
                     $content->content_type_name . '.update',
                     [ $content->content_type_name => $content ]

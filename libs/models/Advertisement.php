@@ -540,7 +540,7 @@ class Advertisement extends Content
 
             // Clean entity repository cache
             $ad = new \Advertisement($id);
-            dispatchEventWithParams('content.update-set-num-views', [ 'content' => $ad ]);
+            dispatchEventWithParams('content.update-set-num-views', [ 'item' => $ad ]);
 
             return true;
         } catch (\Exception $e) {

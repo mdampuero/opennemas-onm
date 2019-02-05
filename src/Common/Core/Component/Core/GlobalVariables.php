@@ -149,7 +149,7 @@ class GlobalVariables implements \ArrayAccess
     /**
      * Returns the security service.
      *
-     * @return Locale The locale service.
+     * @return Security The security service.
      */
     public function getSecurity()
     {
@@ -169,7 +169,7 @@ class GlobalVariables implements \ArrayAccess
     /**
      * Returns the theme service.
      *
-     * @return Locale The theme service.
+     * @return Theme The theme service.
      */
     public function getTheme()
     {

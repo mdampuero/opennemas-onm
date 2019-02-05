@@ -22,7 +22,10 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
     {
         $this->conn = $this->getMockBuilder('Common\ORM\Core\Connection')
             ->disableOriginalConstructor()
-            ->setMethods([ 'delete', 'executeQuery', 'insert', 'lastInsertId', 'update' ])
+            ->setMethods([
+                'delete', 'executeQuery', 'insert', 'lastInsertId', 'update',
+                'beginTransaction', 'commit', 'rollback'
+            ])
             ->getMock();
 
         $this->metadata = new Metadata([
@@ -48,7 +51,8 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
                     'relations' => [
                         'groups' => [
                             'table' => 'user_groups',
-                            'ids'   => [ 'id' => 'user_id' ]
+                            'source_key' => 'id',
+                            'target_key' => 'user_id',
                         ]
                     ],
                     'index' => [
@@ -80,28 +84,31 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
             'user_groups' => [ [ 'user_group_id' => 25, 'status' => 0 ] ]
         ]);
 
+        $this->conn->expects($this->once())->method('beginTransaction');
         $this->conn->expects($this->once())->method('lastInsertId')->willReturn(1);
         $this->conn->expects($this->once())->method('insert')->with(
             'users',
             [ 'id' => null, 'name' => 'xyzzy' ],
             [ 'id' => \PDO::PARAM_STR, 'name' => \PDO::PARAM_STR ]
         );
-        $this->conn->expects($this->at(2))->method('executeQuery')->with(
+        $this->conn->expects($this->at(3))->method('executeQuery')->with(
             'replace into user_user_group values (?,?,?,?)',
             [ 1, 25, 0, null ],
             [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
         );
-        $this->conn->expects($this->at(3))->method('executeQuery')->with(
+        $this->conn->expects($this->at(4))->method('executeQuery')->with(
             'delete from user_user_group where user_id = ? and user_group_id not in (?)',
             [ 1, [ 25 ] ],
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
-        $this->conn->expects($this->at(4))->method('executeQuery')->with(
+        $this->conn->expects($this->at(5))->method('commit');
+
+        $this->conn->expects($this->at(7))->method('executeQuery')->with(
             'replace into users_content_categories values (?,?),(?,?)',
             [ 1, 1, 1, 2 ],
             [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
         );
-        $this->conn->expects($this->at(5))->method('executeQuery')->with(
+        $this->conn->expects($this->at(6))->method('executeQuery')->with(
             'delete from users_content_categories where pk_fk_user = ? and pk_fk_content_category not in (?)',
             [ 1, [ 1, 2 ] ],
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
@@ -123,36 +130,37 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
             'user_groups' => [ [ 'user_group_id' => 24, 'status' => 0 ] ]
         ]);
 
+        $this->conn->expects($this->once())->method('beginTransaction');
         $this->conn->expects($this->once())->method('update')->with(
             'users',
             [ 'name' => 'garply' ],
             [ 'id' => 1 ],
             [ 'name' => \PDO::PARAM_STR ]
         );
-        $this->conn->expects($this->at(1))->method('executeQuery')->with(
+        $this->conn->expects($this->at(2))->method('executeQuery')->with(
             'replace into user_user_group values (?,?,?,?)',
             [ 1, 24, 0, null ],
             [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
         );
-        $this->conn->expects($this->at(2))->method('executeQuery')->with(
+        $this->conn->expects($this->at(3))->method('executeQuery')->with(
             'delete from user_user_group where user_id = ? and user_group_id not in (?)',
             [ 1, [ 24 ] ],
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
+        $this->conn->expects($this->at(4))->method('commit');
 
-        $this->conn->expects($this->at(3))->method('executeQuery')->with(
-            'replace into users_content_categories values (?,?)',
-            [ 1, 1 ],
-            [ \PDO::PARAM_INT, \PDO::PARAM_INT ]
-        );
-        $this->conn->expects($this->at(4))->method('executeQuery')->with(
+        $this->conn->expects($this->at(5))->method('executeQuery')->with(
             'delete from users_content_categories where pk_fk_user = ? and pk_fk_content_category not in (?)',
             [ 1, [ 1 ] ],
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
-        $this->cache->expects($this->exactly(3))->method('remove');
-        $this->persister->update($entity);
+        $this->conn->expects($this->at(6))->method('executeQuery')->with(
+            'replace into users_content_categories values (?,?)',
+            [ 1, 1 ],
+            [ \PDO::PARAM_INT, \PDO::PARAM_INT ]
+        );
 
+        $this->persister->update($entity);
         $this->addToAssertionCount(1);
     }
 

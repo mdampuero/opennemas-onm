@@ -74,7 +74,10 @@ class ErrorController extends Controller
                 return $this->getNotFoundResponse();
 
             default:
-                $this->get('error.log')->error($error->getMessage());
+                $this->get('error.log')->error(
+                    $class->getShortName() . ': ' . $error->getMessage()
+                );
+
                 return $this->getErrorResponse();
         }
     }

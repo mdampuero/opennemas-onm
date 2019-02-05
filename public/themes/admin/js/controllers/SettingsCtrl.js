@@ -71,6 +71,7 @@
             }
           },
           rtb_files: [],
+          theme_skin: 'default',
           translators: []
         };
 

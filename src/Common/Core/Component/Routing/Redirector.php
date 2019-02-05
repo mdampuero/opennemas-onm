@@ -98,7 +98,7 @@ class Redirector
      *
      * @throws \InvalidArgumentException When no source value provided.
      */
-    public function getUrl($source, $contentType = null)
+    public function getUrl($source, $contentType = [])
     {
         if (empty($source)) {
             throw new \InvalidArgumentException();
@@ -113,7 +113,6 @@ class Redirector
         if ($this->hasCache() && $this->cache->exists($cacheId)) {
             return $this->cache->get($cacheId);
         }
-
         $url = $this->getLiteralUrl($source, $contentType);
 
         if (empty($url)) {
@@ -201,6 +200,24 @@ class Redirector
 
         return $this->container->get('entity_repository')
             ->find($contentType, $id);
+    }
+
+    /**
+     * Returns an user by id.
+     *
+     * @param integer $id The user id.
+     *
+     * @return User The user.
+     */
+    protected function getUser($id)
+    {
+        try {
+            return $this->container->get('orm.manager')
+                ->getRepository('User')
+                ->find($id);
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     /**

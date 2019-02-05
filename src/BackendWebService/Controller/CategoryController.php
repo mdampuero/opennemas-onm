@@ -95,7 +95,6 @@ class CategoryController extends ContentController
         }
 
         if ($category->{$execMethod}($data)) {
-            dispatchEventWithParams('category.' . $execMethod, ['category' => $category]);
             $msg->add(
                 sprintf(_('Category data saved successfully.'), $data['id']),
                 'success',

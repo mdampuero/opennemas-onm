@@ -90,9 +90,9 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
         $this->user->categories  = [ 'flob', 'grault' ];
         $this->user->id          = 1234;
         $this->user->user_groups = [
-            1  => [ 'status' => 1 ],
-            2  => [ 'status' => 1 ],
-            34 => [ 'status' => 1 ],
+            [ 'user_group_id' => 1, 'status' => 1 ],
+            [ 'user_group_id' => 2, 'status' => 1 ],
+            [ 'user_group_id' => 34, 'status' => 1 ],
         ];
 
         $this->em->expects($this->any())->method('getRepository')

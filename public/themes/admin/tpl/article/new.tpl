@@ -333,7 +333,7 @@
                   <div class="grid-title">
                     <h4>
                       <a href="[% routing.generate('backend_subscriptions_list') %]">
-                        <i class="fa fa-list m-r-12"></i>{t}Lists{/t}
+                        <i class="fa fa-list m-r-10"></i>{t}Lists{/t}
                       </a>
                     </h4>
                   </div>

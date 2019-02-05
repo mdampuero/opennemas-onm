@@ -5,26 +5,29 @@
  */
 function smarty_function_renderMetaKeywords($params, &$smarty)
 {
-    // If no metadata return empty output
-    if (!array_key_exists('content', $params) || !array_key_exists('tags', $params)) {
+    if (!array_key_exists('content', $params)
+        || empty($params['content'])
+        || (empty($params['content']->tags)
+            && empty($params['content']->tag_ids))
+        || !array_key_exists('tags', $params)
+        || empty($params['tags'])
+    ) {
         return '';
     }
 
     $content = $params['content'];
     $tags    = $params['tags'];
+    $ids     = !empty($content->tags)
+        ? $content->tags
+        : (!empty($content->tag_ids) ? $content->tag_ids : []);
 
-    if (empty($content->tag_ids) || !is_array($content->tag_ids)
-        || empty($tags) || !is_array($tags)
-    ) {
-        return '';
-    }
+    $finalTags = array_map(function ($a) use ($tags) {
+        return array_key_exists($a, $tags) ? $tags[$a]['name'] : null;
+    }, $ids);
 
-    $finalTags = [];
-    foreach ($content->tag_ids as $tagId) {
-        if (array_key_exists($tagId, $tags)) {
-            $finalTags[] = $tags[$tagId]['name'];
-        }
-    }
+    $finalTags = array_filter($finalTags, function ($a) {
+        return !empty($a);
+    });
 
     if (empty($finalTags)) {
         return '';
