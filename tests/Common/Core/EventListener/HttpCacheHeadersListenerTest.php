@@ -57,6 +57,19 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests onKernelResponse when x-cacheable value is false.
+     */
+    public function testOnKernelResponseWhenNoCacheable()
+    {
+        $this->template->expects($this->at(0))->method('hasValue')
+            ->with('x-cacheable')->willReturn(true);
+        $this->template->expects($this->at(1))->method('getValue')
+            ->with('x-cacheable')->willReturn(false);
+
+        $this->listener->onKernelResponse($this->event);
+    }
+
+    /**
      * Tests onKernelResponse when no x-tags found in response nor template.
      */
     public function testOnKernelResponseWhenNoTags()
@@ -64,7 +77,9 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
         $this->headers->expects($this->once())->method('get')
             ->with('x-tags')->willReturn(null);
 
-        $this->template->expects($this->once())->method('hasValue')
+        $this->template->expects($this->at(0))->method('hasValue')
+            ->with('x-cacheable')->willReturn(false);
+        $this->template->expects($this->at(1))->method('hasValue')
             ->with('x-tags')->willReturn(false);
 
         $this->listener->onKernelResponse($this->event);
@@ -81,6 +96,8 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->template->expects($this->at(0))->method('hasValue')
+            ->with('x-cacheable')->willReturn(false);
+        $this->template->expects($this->at(1))->method('hasValue')
             ->with('x-tags')->willReturn(true);
 
         $listener->expects($this->once())->method('getTags')

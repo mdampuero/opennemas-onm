@@ -61,6 +61,12 @@ class HttpCacheHeadersListener
     {
         $response = $event->getResponse();
 
+        if ($this->template->hasValue('x-cacheable')
+            && $this->template->getValue('x-cacheable') === false
+        ) {
+            return;
+        }
+
         if (!$this->template->hasValue('x-tags')
             && empty($response->headers->get('x-tags'))
         ) {
