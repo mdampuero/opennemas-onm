@@ -249,7 +249,7 @@ class CommentsController extends Controller
                 ];
 
                 $data['status'] = \Comment::STATUS_PENDING;
-                $comment = new \Comment();
+                $comment        = new \Comment();
                 $comment->create($data);
             } else {
                 if (empty($errors)) {
@@ -361,7 +361,7 @@ class CommentsController extends Controller
         $response->setData($commentsCount);
         // Add edge cache support
         $response->headers->set('x-tags', 'comments,' . $ids);
-        $response->headers->set('x-cache-for', '+300 seg');
+        $response->headers->set('x-cache-for', '+300 sec');
 
         return $response;
     }
