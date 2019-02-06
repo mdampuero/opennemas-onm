@@ -1,8 +1,6 @@
 <?php
 function smarty_function_getProperty($params, &$smarty)
 {
-
-
     if (!isset($params['item'])) {
         $smarty->trigger_error("get_property: missing 'item' parameter");
         return;
@@ -16,17 +14,18 @@ function smarty_function_getProperty($params, &$smarty)
     }
 
     $properties = explode(', ', $params['property']);
-    $output = '';
-    $end='';
+    $output     = '';
+    $end        = '';
 
     if (is_array($properties)) {
         if (!empty($params['style'])) {
             $output = " style =\"";
-            $end = "\"";
+            $end    = "\"";
         }
         foreach ($properties as $key => $property) {
-            $prop = $property."_".$category;
-            $value = $item->getMetadata($prop);
+            $prop  = $property . "_" . $category;
+            $value = $item->{$prop};
+
             if (!empty($value)) {
                 if ($property == 'bgcolor') {
                     $output .= "background-color:{$value};";
@@ -43,5 +42,5 @@ function smarty_function_getProperty($params, &$smarty)
         }
     }
 
-    return $output.$end;
+    return $output . $end;
 }

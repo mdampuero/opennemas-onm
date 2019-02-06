@@ -131,11 +131,6 @@ class CategoryController extends Controller
                 // Load category related information
                 $content->author = $this->get('user_repository')->find($content->fk_author);
 
-                // Get number comments for a content
-                if ($content->with_comment == 1) {
-                    $content->num_comments = $content->getMetadata('num_comments');
-                }
-
                 // Load attached and related contents from array
                 $content->loadFrontpageImageFromHydratedArray($imageList)
                     ->loadAttachedVideo()
