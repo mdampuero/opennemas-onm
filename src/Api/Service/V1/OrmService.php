@@ -185,8 +185,7 @@ class OrmService implements Service
     public function getItem($id)
     {
         try {
-            $item = $this->container->get('orm.manager')
-                ->getRepository($this->entity, $this->origin)->find($id);
+            $item = $this->em->getRepository($this->entity, $this->origin)->find($id);
 
             $this->dispatcher->dispatch($this->getEventName('getItem'), [
                 'id'   => $id,
@@ -246,8 +245,7 @@ class OrmService implements Service
         try {
             $oql = $this->getOqlForList($oql);
 
-            $repository = $this->container->get('orm.manager')
-                ->getRepository($this->entity, $this->origin);
+            $repository = $this->em->getRepository($this->entity, $this->origin);
 
             $response = [ 'items' => $repository->findBy($oql) ];
 
@@ -287,8 +285,7 @@ class OrmService implements Service
             return [ 'items' => [], 'total' => 0 ];
         }
 
-        $items = $this->container->get('orm.manager')
-            ->getRepository($this->entity, $this->origin)->find($ids);
+        $items = $this->em->getRepository($this->entity, $this->origin)->find($ids);
 
         $this->dispatcher->dispatch($this->getEventName('getListByIds'), [
             'ids'   => $ids,
