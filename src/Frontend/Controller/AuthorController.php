@@ -71,18 +71,23 @@ class AuthorController extends Controller
             foreach ($contents as &$item) {
                 $item         = $item->get($item->id);
                 $item->author = $user;
-                if (isset($item->img1) && ($item->img1 > 0)) {
+
+                if (isset($item->img1) && !empty($item->img1)) {
                     $image = $er->find('Photo', $item->img1);
+
                     if (is_object($image) && !is_null($image->id)) {
                         $item->img1_path = $image->path_file . $image->name;
                         $item->img1      = $image;
                     }
                 }
 
-                if ($item->fk_content_type == 7) {
-                    $image           = $er->find('Photo', $item->cover_id);
-                    $item->img1_path = $image->path_file . $image->name;
-                    $item->img1      = $image;
+                if ($item->fk_content_type == 7 && !empty($item->cover_id)) {
+                    $image = $er->find('Photo', $item->cover_id);
+
+                    if (is_object($image) && !is_null($image->id)) {
+                        $item->img1_path = $image->path_file . $image->name;
+                        $item->img1      = $image;
+                    }
                 }
 
                 if ($item->fk_content_type == 9) {
@@ -90,7 +95,7 @@ class AuthorController extends Controller
                     $item->summary   = $item->description;
                 }
 
-                if (isset($item->fk_video) && ($item->fk_video > 0)) {
+                if (isset($item->fk_video) && !empty($item->fk_video)) {
                     $item->video = $er->find('Video', $item->fk_video2);
                 }
             }
