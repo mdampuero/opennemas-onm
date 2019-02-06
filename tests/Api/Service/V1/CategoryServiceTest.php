@@ -254,6 +254,8 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->once())->method('countContents')
             ->will($this->throwException(new \Exception()));
 
+        $this->logger->expects($this->once())->method('error');
+
         $method->invokeArgs($this->service, [ new Category([ 'pk_content_category' => 10267 ]) ]);
     }
 
