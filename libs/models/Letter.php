@@ -95,8 +95,6 @@ class Letter extends Content
             $this->ip = $this->params['ip'];
         }
 
-        $this->image = $this->getMetadata('image');
-
         if (!empty($this->image)) {
             $this->photo = $this->image;
         }

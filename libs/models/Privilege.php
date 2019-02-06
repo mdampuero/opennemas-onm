@@ -1609,6 +1609,34 @@ class Privilege
                 'module'       => 'es.openhost.module.tags',
                 'enabled'      => 1
             ],
+            247 => [
+                'pk_privilege' => 247,
+                'name'         => 'EVENT_ADMIN',
+                'description'  => _('List'),
+                'module'       => 'es.openhost.module.events',
+                'enabled'      => 1
+            ],
+            248 => [
+                'pk_privilege' => 248,
+                'name'         => 'EVENT_UPDATE',
+                'description'  => _('Edit'),
+                'module'       => 'es.openhost.module.events',
+                'enabled'      => 1
+            ],
+            249 => [
+                'pk_privilege' => 249,
+                'name'         => 'EVENT_DELETE',
+                'description'  => _('Delete'),
+                'module'       => 'es.openhost.module.events',
+                'enabled'      => 1
+            ],
+            250 => [
+                'pk_privilege' => 250,
+                'name'         => 'EVENT_CREATE',
+                'description'  => _('Create'),
+                'module'       => 'es.openhost.module.events',
+                'enabled'      => 1
+            ],
         ];
 
         return array_filter(self::$privileges, function ($a) {

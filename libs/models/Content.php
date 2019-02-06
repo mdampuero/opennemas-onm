@@ -21,13 +21,6 @@ class Content implements \JsonSerializable, CsvSerializable
     const POSTPONED     = 'postponed';
 
     /**
-     * Whether if this content is available
-     *
-     * @var int 0|1
-     */
-    public $available = null;
-
-    /**
      * The main text of the content
      *
      * @var string
@@ -568,30 +561,37 @@ class Content implements \JsonSerializable, CsvSerializable
             'fk_content_type'     => \ContentManager::getContentTypeIdFromName(underscore($this->content_type)),
             'content_type_name'   => underscore($this->content_type),
             'title'               => $data['title'],
-            'description'         => (empty($data['description'])
-                && !isset($data['description'])) ? '' : $data['description'],
-            'body'                => (!array_key_exists('body', $data)) ? '' : $data['body'],
-            'starttime'           => ($data['starttime'] < date("Y-m-d H:i:s")
-                && !is_null($data['starttime'])) ? date("Y-m-d H:i:s") : $data['starttime'],
-            'endtime'             => (empty($data['endtime'])) ? null : $data['endtime'],
-            'created'             => (empty($data['created'])) ? date("Y-m-d H:i:s") : $data['created'],
-            'changed'             => date("Y-m-d H:i:s"),
-            'content_status'      => (int) $data['content_status'],
-            'position'            => (empty($data['position'])) ? 2 : (int) $data['position'],
-            'frontpage'           => (!isset($data['frontpage'])
-                || empty($data['frontpage'])) ? 0 : intval($data['frontpage']),
-            'fk_author'           => (!array_key_exists('fk_author', $data)) ? 0 : (int) $data['fk_author'],
-            'fk_publisher'        => empty(getService('core.user')) ? 0 : (int) getService('core.user')->id,
-            'fk_user_last_editor' => empty(getService('core.user')) ? 0 : (int) getService('core.user')->id,
-            'in_home'             => (empty($data['in_home'])) ? 0 : intval($data['in_home']),
-            'favorite'            => (empty($data['favorite'])) ? 0 : intval($data['favorite']),
-            'available'           => (int) $data['content_status'],
-            'with_comment'        => $data['with_comment'],
-            'slug'                => $data['slug'],
+            'body'                => !array_key_exists('body', $data)
+                ? '' : $data['body'],
             'category_name'       => $catName,
+            'changed'             => date('Y-m-d H:i:s'),
+            'content_status'      => (int) $data['content_status'],
+            'created'             => date('Y-m-d H:i:s'),
+            'description'         => !isset($data['description'])
+                ? '' : $data['description'],
+            'endtime'             => empty($data['endtime'])
+                ? null : $data['endtime'],
+            'favorite'            => !isset($data['favorite'])
+                ? 0 : (int) $data['favorite'],
+            'fk_author'           => !array_key_exists('fk_author', $data)
+                || empty($data['fk_author']) ? null : (int) $data['fk_author'],
+            'fk_publisher'        => empty(getService('core.user')) ?
+                null : (int) getService('core.user')->id,
+            'fk_user_last_editor' => empty(getService('core.user')) ?
+                null : (int) getService('core.user')->id,
+            'frontpage'           => !isset($data['frontpage'])
+                ? 0 : (int) $data['frontpage'],
+            'in_home'             => !isset($data['in_home'])
+                ? 0 : (int) $data['in_home'],
+            'params'              => !isset($data['params']) || empty($data['params'])
+                ? null : serialize($data['params']),
+            'slug'                => $data['slug'],
+            'starttime'           => empty($data['starttime']) || $data['starttime'] < date('Y-m-d H:i:s')
+                ? date('Y-m-d H:i:s') : $data['starttime'],
+            'position'            => empty($data['position'])
+                ? 2 : (int) $data['position'],
+            'with_comment'        => $data['with_comment'],
             'urn_source'          => (empty($data['urn_source'])) ? null : $data['urn_source'],
-            'params'              => (!isset($data['params'])
-                || empty($data['params'])) ? null : serialize($data['params'])
         ];
 
         $conn = getService('dbal_connection');
@@ -629,7 +629,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.create', [ 'content' => $this ]);
+            dispatchEventWithParams('content.create', [ 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.create',
                 [ $this->content_type_name => $this ]
@@ -694,29 +694,37 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         $contentData = [
-            'title'          => $data['title'],
-            'available'      =>
-                (!isset($data['content_status'])) ? $this->content_status : (int) $data['content_status'],
-            'body'           => (!array_key_exists('body', $data)) ? '' : $data['body'],
-            'category_name'  => $catName,
-            'changed'        => date("Y-m-d H:i:s"),
-            'content_status' =>
-                (!isset($data['content_status'])) ? $this->content_status : (int) $data['content_status'],
-            'created'        => (!isset($data['created'])) ? $this->created : $data['created'],
-            'description'    =>
-                (empty($data['description']) && !isset($data['description'])) ? '' : $data['description'],
-            'endtime'        => (empty($data['endtime'])) ? null : $data['endtime'],
-            'favorite'       => (!isset($data['favorite'])) ? (int) $this->favorite : (int) $data['favorite'],
-            'fk_author'      => (!isset($data['fk_author'])
-                || is_null($data['fk_author'])) ? (int) $this->fk_author : (int) $data['fk_author'],
-            'fk_publisher'   => $this->fk_publisher,
-            'fk_user_last_editor' => (int) $data['fk_user_last_editor'],
-            'frontpage'      => (!isset($data['frontpage'])) ? $this->frontpage : (int) $data['frontpage'],
-            'in_home'        => (!isset($data['in_home'])) ? $this->in_home : (int) $data['in_home'],
-            'params'         => (!isset($data['params']) || empty($data['params'])) ? null : serialize($data['params']),
-            'slug'           => $data['slug'],
-            'starttime'      => (!isset($data['starttime'])) ? $this->starttime : $data['starttime'],
-            'with_comment'   => (!isset($data['with_comment'])) ? $this->with_comment : $data['with_comment'],
+            'title'               => $data['title'],
+            'body'                => !array_key_exists('body', $data)
+                ? '' : $data['body'],
+            'category_name'       => $catName,
+            'changed'             => date("Y-m-d H:i:s"),
+            'content_status'      => !isset($data['content_status'])
+                ? $this->content_status : (int) $data['content_status'],
+            'created'             => !isset($data['created'])
+                ? $this->created : $data['created'],
+            'description'         => !isset($data['description'])
+                ? '' : $data['description'],
+            'endtime'             => empty($data['endtime'])
+                ? null : $data['endtime'],
+            'favorite'            => !isset($data['favorite'])
+                ? (int) $this->favorite : (int) $data['favorite'],
+            'fk_author'           => !array_key_exists('fk_author', $data)
+                || empty($data['fk_author']) ? null : (int) $data['fk_author'],
+            'fk_publisher'        => $this->fk_publisher,
+            'fk_user_last_editor' => empty(getService('core.user')) ?
+                $this->fk_user_last_editor : (int) getService('core.user')->id,
+            'frontpage'           => !isset($data['frontpage'])
+                ? $this->frontpage : (int) $data['frontpage'],
+            'in_home'             => !isset($data['in_home'])
+                ? $this->in_home : (int) $data['in_home'],
+            'params'              => !isset($data['params']) || empty($data['params'])
+                ? null : serialize($data['params']),
+            'slug'                => $data['slug'],
+            'starttime'           => !isset($data['starttime'])
+                ? $this->starttime : $data['starttime'],
+            'with_comment'        => !isset($data['with_comment'])
+                ? $this->with_comment : $data['with_comment'],
         ];
 
         try {
@@ -752,7 +760,7 @@ class Content implements \JsonSerializable, CsvSerializable
             }
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams('content.update', [ 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
                 [ 'content' => $this ]
@@ -783,7 +791,7 @@ class Content implements \JsonSerializable, CsvSerializable
             );
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams('content.update', [ 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
                 [ 'content' => $this ]
@@ -814,7 +822,7 @@ class Content implements \JsonSerializable, CsvSerializable
             $conn->commit();
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.delete', [ 'content' => $this ]);
+            dispatchEventWithParams('content.delete', [ 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.delete',
                 [ $this->content_type_name => $this ]
@@ -847,14 +855,13 @@ class Content implements \JsonSerializable, CsvSerializable
                     'fk_user_last_editor' => $lastEditor,
                     'in_litter' => 1,
                     'content_status' => 0,
-                    'available' => 0,
                     'changed' => date("Y-m-d H:i:s"),
                 ],
                 [ 'pk_content' => $id ]
             );
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams('content.update', [ 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
                 [ $this->content_type_name => $this ]
@@ -963,7 +970,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams('content.update', [ 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
                 [ $this->content_type_name => $this ]
@@ -1000,7 +1007,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams('content.update', [ 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
                 [ $this->content_type_name => $this ]
@@ -1032,12 +1039,10 @@ class Content implements \JsonSerializable, CsvSerializable
             $date                 = date("Y-m-d H:i:s");
             $this->changed        = $date;
             $this->content_status = $status;
-            $this->available      = $status;
 
             getService('dbal_connection')->update(
                 'contents',
                 [
-                    'available'      => $this->available,
                     'content_status' => $this->content_status,
                     'changed'        => $date,
                 ],
@@ -1046,7 +1051,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams('content.update', [ 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
                 [ $this->content_type_name => $this ]
@@ -1082,7 +1087,7 @@ class Content implements \JsonSerializable, CsvSerializable
             );
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams('content.update', [ 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
                 [ $this->content_type_name => $this ]
@@ -1118,7 +1123,7 @@ class Content implements \JsonSerializable, CsvSerializable
             );
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams('content.update', [ 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
                 [ $this->content_type_name => $this ]
@@ -1150,7 +1155,7 @@ class Content implements \JsonSerializable, CsvSerializable
             );
 
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams('content.update', [ 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
                 [ $this->content_type_name => $this ]
@@ -1192,7 +1197,6 @@ class Content implements \JsonSerializable, CsvSerializable
 
                 $values = [
                     $status,
-                    $status,
                     $this->starttime,
                     $lastEditor,
                     $this->id
@@ -1207,14 +1211,14 @@ class Content implements \JsonSerializable, CsvSerializable
 
             getService('dbal_connection')->executeUpdate(
                 'UPDATE contents '
-                . 'SET `available`=?, `content_status`=?, `starttime`=?, '
+                . 'SET `content_status`=?, `starttime`=?, '
                 . '`fk_user_last_editor`=? WHERE `pk_content`=?',
                 $values
             );
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams('content.update', [ 'item' => $this ]);
             getService('core.dispatcher')->dispatch(
                 $this->content_type_name . '.update',
                 [ $this->content_type_name => $this ]
@@ -1222,7 +1226,6 @@ class Content implements \JsonSerializable, CsvSerializable
 
             // Set status for it's updated to next event
             if (!empty($this)) {
-                $this->available      = $status;
                 $this->content_status = $status;
             }
 
@@ -1278,7 +1281,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams('content.update', [ 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
                 [ $this->content_type_name => $this ]
@@ -1310,7 +1313,6 @@ class Content implements \JsonSerializable, CsvSerializable
                 'contents',
                 [
                     'content_status'      => 0,
-                    'available'           => 0,
                     'fk_user_last_editor' => (int) getService('core.user')->id,
                     'changed'             => date("Y-m-d H:i:s"),
                 ],
@@ -1318,12 +1320,11 @@ class Content implements \JsonSerializable, CsvSerializable
             );
 
             // Set status for it's updated state to next event
-            $this->available      = 0;
             $this->content_status = 0;
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams('content.update', [ 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
                 [ $this->content_type_name => $this ]
@@ -1362,7 +1363,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.set_positions', [ 'content' => $this ]);
+            dispatchEventWithParams('content.set_positions', [ 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.set_positions',
                 [ $this->content_type_name => $this ]
@@ -1403,7 +1404,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'content' => $this ]);
+            dispatchEventWithParams('content.update', [ 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
                 [ $this->content_type_name => $this ]
@@ -1969,18 +1970,6 @@ class Content implements \JsonSerializable, CsvSerializable
             error_log('Error on Content::isInFrontpageOfCategory (ID:' . $categoryID . ')');
             return false;
         }
-    }
-
-    /**
-     * Returns a metaproperty value from the current content
-     *
-     * @param string $metaName the property name to fetch
-     *
-     * @return mixed the meta value or false if it's not available
-     */
-    public function getMetadata($metaName)
-    {
-        return $this->{$metaName};
     }
 
     /**

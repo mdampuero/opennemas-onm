@@ -94,6 +94,12 @@
               {/acl}
               {/is_module_activated}
 
+              {is_module_activated name="es.openhost.module.events"}
+              {acl isAllowed="es.openhost.module.events"}
+              <option value="event">{t}Events{/t}</option>
+              {/acl}
+              {/is_module_activated}
+
               {is_module_activated name="ADS_MANAGER"}
               {acl isAllowed="ADVERTISEMENT_TRASH"}
               <option value="advertisement">{t}Advertisements{/t}</option>

@@ -46,7 +46,7 @@
     {$category->name}
   </td>
   <td class="hidden-xs text-center">
-    {$contents_count['articles'][$category->id]|default:0}
+    {$contents_count['articles'][$category->pk_content_category]|default:0}
   </td>
   <td class="text-center">
     {if $category->inmenu==1}

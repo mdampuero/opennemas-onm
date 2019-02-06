@@ -369,6 +369,8 @@ class Poll extends Content
                 ]
             );
 
+            dispatchEventWithParams('content.update', [ 'item' => $this ]);
+
             return true;
         } catch (\Exception $e) {
             error_log($e->getMessage());

@@ -98,7 +98,7 @@ class Redirector
      *
      * @throws \InvalidArgumentException When no source value provided.
      */
-    public function getUrl($source, $contentType = null)
+    public function getUrl($source, $contentType = [])
     {
         if (empty($source)) {
             throw new \InvalidArgumentException();

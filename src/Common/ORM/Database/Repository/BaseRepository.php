@@ -400,23 +400,29 @@ class BaseRepository extends Repository
     protected function getRelations($ids)
     {
         $relations = $this->metadata->getRelations();
+        $returnMap = [];
 
-        $values = [];
         foreach ($relations as $name => $relation) {
             $table = $relation['table'];
-            $rid   = $relation['ids'][$this->metadata->getIdKeys()[0]];
+            $rid   = $relation['target_key'];
             $sql   = 'select * from ' . $table
                 . ' where ' . $rid . ' in (' . implode(',', $ids) . ')';
 
             $rs = $this->conn->fetchAll($sql);
 
             foreach ($rs as $value) {
-                $values[$value[$rid]][$name][$value[$relation['key']]] =
-                    array_diff_key($value, array_flip([ $rid ]));
+                if (!array_key_exists('return_fields', $relation)) {
+                    $returnMap[$value[$rid]][$name][] = $value;
+                    continue;
+                }
+
+                $returnMap[$value[$rid]][$name][] = !is_array($relation['return_fields'])
+                    ? $value[$relation['return_fields']]
+                    : array_intersect_key($value, $relation['return_fields']);
             }
         }
 
-        return $values;
+        return $returnMap;
     }
 
     /**

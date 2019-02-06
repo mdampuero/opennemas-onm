@@ -108,10 +108,10 @@ class OrmService implements Service
 
             $id = $this->em->getMetadata($item)->getId($item);
 
-            $this->dispatcher->dispatch(
-                $this->getEventName('createItem'),
-                [ 'id' => array_pop($id) ]
-            );
+            $this->dispatcher->dispatch($this->getEventName('createItem'), [
+                'id'   => array_pop($id),
+                'item' => $item
+            ]);
 
             return $item;
         } catch (\Exception $e) {
@@ -131,7 +131,8 @@ class OrmService implements Service
             $this->em->remove($item, $item->getOrigin());
 
             $this->dispatcher->dispatch($this->getEventName('deleteItem'), [
-                'id' => $id
+                'id'   => $id,
+                'item' => $item
             ]);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
@@ -156,6 +157,7 @@ class OrmService implements Service
         }
 
         $deleted = [];
+        $items   = [];
         foreach ($response['items'] as $item) {
             try {
                 $this->em->remove($item, $item->getOrigin());
@@ -163,13 +165,15 @@ class OrmService implements Service
                 $id = $this->em->getMetadata($item)->getId($item);
 
                 $deleted[] = array_pop($id);
+                $items[]   = $item;
             } catch (\Exception $e) {
                 $this->container->get('error.log')->error($e->getMessage());
             }
         }
 
         $this->dispatcher->dispatch($this->getEventName('deleteList'), [
-            'ids' => $deleted
+            'ids'   => $deleted,
+            'items' => $items
         ]);
 
         return count($deleted);
@@ -185,7 +189,8 @@ class OrmService implements Service
                 ->getRepository($this->entity, $this->origin)->find($id);
 
             $this->dispatcher->dispatch($this->getEventName('getItem'), [
-                'id' => $id
+                'id'   => $id,
+                'item' => $item
             ]);
 
             return $item;
@@ -226,7 +231,8 @@ class OrmService implements Service
         $item = array_pop($response['items']);
 
         $this->dispatcher->dispatch($this->getEventName('getItemBy'), [
-            'oql' => $oql
+            'item' => $item,
+            'oql'  => $oql
         ]);
 
         return $item;
@@ -250,7 +256,8 @@ class OrmService implements Service
             }
 
             $this->dispatcher->dispatch($this->getEventName('getList'), [
-                'oql' => $oql
+                'items' => $response['items'],
+                'oql'   => $oql
             ]);
 
             return $response;
@@ -284,7 +291,8 @@ class OrmService implements Service
             ->getRepository($this->entity, $this->origin)->find($ids);
 
         $this->dispatcher->dispatch($this->getEventName('getListByIds'), [
-            'ids' => $ids
+            'ids'   => $ids,
+            'items' => $items
         ]);
 
         return [ 'items' => $items, 'total' => count($items) ];
@@ -317,7 +325,8 @@ class OrmService implements Service
             $this->em->persist($item, $this->getOrigin());
 
             $this->dispatcher->dispatch($this->getEventName('patchItem'), [
-                'id' => $id
+                'id'   => $id,
+                'item' => $item
             ]);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
@@ -344,6 +353,7 @@ class OrmService implements Service
         }
 
         $updated = [];
+        $items   = [];
         foreach ($response['items'] as $item) {
             try {
                 $item->merge($data);
@@ -353,13 +363,15 @@ class OrmService implements Service
                 $id = $this->em->getMetadata($item)->getId($item);
 
                 $updated[] = array_pop($id);
+                $items[]   = $item;
             } catch (\Exception $e) {
                 $this->container->get('error.log')->error($e->getMessage());
             }
         }
 
         $this->dispatcher->dispatch($this->getEventName('patchList'), [
-            'ids' => $updated
+            'ids'   => $updated,
+            'items' => $items
         ]);
 
         return count($updated);
@@ -421,7 +433,8 @@ class OrmService implements Service
             $this->em->persist($item, $item->getOrigin());
 
             $this->dispatcher->dispatch($this->getEventName('updateItem'), [
-                'id' => $id
+                'id'   => $id,
+                'item' => $item
             ]);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());

@@ -68,7 +68,7 @@ class Menu
             }
 
             $conn->commit();
-            dispatchEventWithParams('menu.create', ['content' => $this]);
+            dispatchEventWithParams('menu.create', [ 'item' => $this ]);
             return $this;
         } catch (\Exception $e) {
             $conn->rollback();
@@ -169,7 +169,7 @@ class Menu
                 return false;
             }
             $conn->commit();
-            dispatchEventWithParams('menu.update', ['content' => $this]);
+            dispatchEventWithParams('menu.update', [ 'item' => $this ]);
             return $this;
         } catch (\Exception $e) {
             $conn->rollback();
@@ -196,7 +196,7 @@ class Menu
             $conn->delete('menues', [ 'pk_menu' => $id ]);
             $conn->commit();
 
-            dispatchEventWithParams('menu.delete', ['content' => $this]);
+            dispatchEventWithParams('menu.delete', [ 'item' => $this ]);
 
             return true;
         } catch (\Exception $e) {

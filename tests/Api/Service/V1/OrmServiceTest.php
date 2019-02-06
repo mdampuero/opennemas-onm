@@ -156,9 +156,9 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with($item);
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
-            ->with('entity.getItem', [ 'id' => 23 ]);
+            ->with('entity.getItem', [ 'id' => 23, 'item' => $item ]);
         $this->dispatcher->expects($this->at(1))->method('dispatch')
-            ->with('entity.deleteItem', [ 'id' => 23 ]);
+            ->with('entity.deleteItem', [ 'id' => 23, 'item' => $item ]);
 
         $this->service->deleteItem(23);
     }
@@ -192,7 +192,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with($item)->will($this->throwException(new \Exception()));
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
-            ->with('entity.getItem', [ 'id' => 23 ]);
+            ->with('entity.getItem', [ 'id' => 23, 'item' => $item ]);
 
         $this->logger->expects($this->once())->method('error');
 
@@ -218,9 +218,16 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->exactly(2))->method('remove');
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
-            ->with('entity.getListByIds', [ 'ids' => [ 1, 2 ] ]);
+            ->with('entity.getListByIds', [
+                'ids'   => [ 1, 2 ],
+                'items' => [ $itemA, $itemB ]
+            ]);
+
         $this->dispatcher->expects($this->at(1))->method('dispatch')
-            ->with('entity.deleteList', [ 'ids' => [ 1, 2 ] ]);
+            ->with('entity.deleteList', [
+                'ids'   => [ 1, 2 ],
+                'items' => [ $itemA, $itemB ]
+            ]);
 
         $this->assertEquals(2, $this->service->deleteList([ 1, 2 ]));
     }
@@ -255,9 +262,15 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->will($this->throwException(new \Exception()));
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
-            ->with('entity.getListByIds', [ 'ids' => [ 1, 2 ] ]);
+            ->with('entity.getListByIds', [
+                'ids'   => [ 1, 2 ],
+                'items' => [ $itemA, $itemB ]
+            ]);
         $this->dispatcher->expects($this->at(1))->method('dispatch')
-            ->with('entity.deleteList', [ 'ids' => [ 1 ] ]);
+            ->with('entity.deleteList', [
+                'ids'   => [ 1 ],
+                'items' => [ $itemA ]
+            ]);
 
         $this->logger->expects($this->once())->method('error');
 
@@ -291,7 +304,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with(1)->willReturn($item);
 
         $this->dispatcher->expects($this->once())->method('dispatch')
-            ->with('entity.getItem', [ 'id' => 1 ]);
+            ->with('entity.getItem', [ 'id'   => 1, 'item' => $item ]);
 
         $this->assertEquals($item, $this->service->getItem(1));
     }
@@ -324,10 +337,16 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with('order by title asc')->willReturn([ $item ]);
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
-            ->with('entity.getList', [ 'oql' => 'order by title asc' ]);
+            ->with('entity.getList', [
+                'items' => [ $item ],
+                'oql'   => 'order by title asc'
+            ]);
 
         $this->dispatcher->expects($this->at(1))->method('dispatch')
-            ->with('entity.getItemBy', [ 'oql' => 'order by title asc' ]);
+            ->with('entity.getItemBy', [
+                'item' => $item,
+                'oql'  => 'order by title asc'
+            ]);
 
         $response = $this->service->getItemBy('order by title asc');
 
@@ -383,7 +402,10 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with('order by title asc')->willReturn($items);
 
         $this->dispatcher->expects($this->once())->method('dispatch')
-            ->with('entity.getList', [ 'oql' => 'order by title asc' ]);
+            ->with('entity.getList', [
+                'items' => $items,
+                'oql'   => 'order by title asc'
+            ]);
 
         $response = $this->service->getList('order by title asc');
 
@@ -407,7 +429,10 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with('order by title asc')->willReturn($items);
 
         $this->dispatcher->expects($this->once())->method('dispatch')
-            ->with('entity.getList', [ 'oql' => 'order by title asc' ]);
+            ->with('entity.getList', [
+                'items' => $items,
+                'oql'   => 'order by title asc'
+            ]);
 
         $response = $this->service->setCount(false)
             ->getList('order by title asc');
@@ -460,7 +485,10 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with([ 1, 2 ])->willReturn($items);
 
         $this->dispatcher->expects($this->once())->method('dispatch')
-            ->with('entity.getListByIds', [ 'ids' => [ 1, 2 ] ]);
+            ->with('entity.getListByIds', [
+                'ids'   => [ 1, 2 ],
+                'items' => $items
+            ]);
 
         $response = $this->service->getListByIds([ 1, 2 ]);
 
@@ -507,9 +535,9 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with($item);
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
-            ->with('entity.getItem', [ 'id' => 1 ]);
+            ->with('entity.getItem', [ 'id' => 1, 'item' => $item ]);
         $this->dispatcher->expects($this->at(1))->method('dispatch')
-            ->with('entity.patchItem', [ 'id' => 1 ]);
+            ->with('entity.patchItem', [ 'id' => 1, 'item' => $item ]);
 
         $this->service->patchItem(1, $data);
 
@@ -553,7 +581,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $this->logger->expects($this->once())->method('error');
 
         $this->dispatcher->expects($this->once())->method('dispatch')
-            ->with('entity.getItem', [ 'id' => 1 ]);
+            ->with('entity.getItem', [ 'id' => 1, 'item' => $item ]);
 
         $this->service->patchItem(1, $data);
     }
@@ -580,9 +608,16 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->exactly(2))->method('persist');
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
-            ->with('entity.getListByIds', [ 'ids' => [ 1, 2 ] ]);
+            ->with('entity.getListByIds', [
+                'ids'   => [ 1, 2 ],
+                'items' => [ $itemA, $itemB ]
+            ]);
+
         $this->dispatcher->expects($this->at(1))->method('dispatch')
-            ->with('entity.patchList', [ 'ids' => [ 1, 2 ] ]);
+            ->with('entity.patchList', [
+                'ids'   => [ 1, 2 ],
+                'items' => [ $itemA, $itemB ]
+            ]);
 
         $this->assertEquals(2, $this->service->patchList([ 1, 2 ], $data));
         $this->assertTrue($itemA->enabled);
@@ -608,20 +643,29 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $itemB = new Entity([ 'name' => 'xyzzy' ]);
         $data  = [ 'enabled' => true ];
 
-        $this->metadata->expects($this->at(0))->method('getId')
-            ->willReturn([ 'id' => 1 ]);
+        $this->metadata->expects($this->once())->method('getId')
+            ->willReturn([ 'id' => 2 ]);
 
         $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);
-        $this->em->expects($this->at(1))->method('persist');
+
         $this->em->expects($this->at(2))->method('persist')
             ->will($this->throwException(new \Exception()));
 
+        $this->em->expects($this->at(3))->method('persist');
+
         $this->dispatcher->expects($this->at(0))->method('dispatch')
-            ->with('entity.getListByIds', [ 'ids' => [ 1, 2 ] ]);
+            ->with('entity.getListByIds', [
+                'ids'   => [ 1, 2 ],
+                'items' => [ $itemA, $itemB ]
+            ]);
+
         $this->dispatcher->expects($this->at(1))->method('dispatch')
-            ->with('entity.patchList', [ 'ids' => [ 1 ] ]);
+            ->with('entity.patchList', [
+                'ids'   => [ 2 ],
+                'items' => [ $itemB ]
+            ]);
 
         $this->logger->expects($this->once())->method('error');
 
@@ -695,9 +739,16 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with($item);
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
-            ->with('entity.getItem', [ 'id' => 1 ]);
+            ->with('entity.getItem', [
+                'id'   => 1,
+                'item' => $item
+            ]);
+
         $this->dispatcher->expects($this->at(1))->method('dispatch')
-            ->with('entity.updateItem', [ 'id' => 1 ]);
+            ->with('entity.updateItem', [
+                'id'   => 1,
+                'item' => $item
+            ]);
 
         $this->service->updateItem(1, $data);
 
@@ -741,7 +792,10 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $this->logger->expects($this->once())->method('error');
 
         $this->dispatcher->expects($this->once())->method('dispatch')
-            ->with('entity.getItem', [ 'id' => 1 ]);
+            ->with('entity.getItem', [
+                'id'   => 1,
+                'item' => $item
+            ]);
 
         $this->service->updateItem(1, $data);
     }

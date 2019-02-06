@@ -8,7 +8,6 @@ $default = [
     'endtime' => null,
     'created' => '2011-09-28 23:44:24',
     'changed' => '2011-09-28 23:44:24',
-    'available' => '1',
     'content_status' => '1',
     'content_type_l10n_name' => 'Publicidad',
     'fk_content_type' => '2',
