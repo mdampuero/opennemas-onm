@@ -1,23 +1,8 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-  {javascripts}
-    <script>
-      $(document).ready(function($) {
-        var btn = $('.onm-button');
-
-        $('.fileinput').fileinput({
-          name: 'logo_path',
-          uploadtype:'image'
-        });
-      });
-    </script>
-  {/javascripts}
-{/block}
-
 {block name="content"}
-  <form ng-app="BackendApp" ng-controller="CategoryCtrl"
-  ng-init="init({json_encode($category)|clear_json}, {json_encode($extra_data)|clear_json}, {json_encode($multilanguage_enabled)|clear_json}, {json_encode($language_data)|clear_json})" enctype="multipart/form-data">
+  <form ng-controller="CategoryCtrl"
+  ng-init="init()">
     <div class="page-navbar actions-navbar ng-cloak" ng-show="!loading">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -42,7 +27,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_categories}" class="btn btn-link" title="{t}Config categories module{/t}">
+                <a class="btn btn-link" href="{url name=backend_categories_list}" class="btn btn-link" title="{t}Config categories module{/t}">
                   <span class="fa fa-reply"></span>
                 </a>
               </li>
@@ -132,7 +117,7 @@
                       </td>
                       <td class="right">
                         <div class="btn-group">
-                          <a class="btn btn-mini" href="[% routing.generate('admin_category_show', { id: subcategory.id }) %]"
+                          <a class="btn btn-mini" href="[% routing.generate('backend_category_show', { id: subcategory.id }) %]"
                               title="Modificar">
                             <i class="fa fa-pencil"></i>
                           </a>
