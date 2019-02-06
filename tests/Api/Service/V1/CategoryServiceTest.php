@@ -1,0 +1,291 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Tests\Api\Service\V1;
+
+use Api\Service\V1\CategoryService;
+use Common\ORM\Entity\Category;
+
+/**
+ * Defines test cases for CategoryService class.
+ */
+class CategoryServiceTest extends \PHPUnit\Framework\TestCase
+{
+    /**
+     * Configures the testing environment.
+     */
+    public function setUp()
+    {
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->dispatcher = $this->getMockBuilder('EventDispatcher')
+            ->setMethods([ 'dispatch' ])
+            ->getMock();
+
+        $this->em = $this->getMockBuilder('EntityManager' . uniqid())
+            ->setMethods([ 'getRepository' ])->getMock();
+
+        $this->logger = $this->getMockBuilder('Logger')
+            ->setMethods([ 'error' ])
+            ->getMock();
+
+        $this->repository = $this->getMockBuilder('Repository' . uniqid())
+            ->setMethods([
+                'countContents', 'moveContents', 'removeContents'
+            ])->getMock();
+
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->em->expects($this->any())->method('getRepository')
+            ->willReturn($this->repository);
+
+        $this->service = $this->getMockBuilder('Api\Service\V1\CategoryService')
+            ->setMethods([ 'getItem' ])
+            ->setConstructorArgs([ $this->container, 'Common\ORM\Entity\Category' ])
+            ->getMock();
+    }
+
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'core.dispatcher':
+                return $this->dispatcher;
+
+            case 'error.log':
+                return $this->logger;
+
+            case 'orm.manager':
+                return $this->em;
+        }
+
+        return null;
+    }
+
+    /**
+     * Tests emptyItem when the item was not found.
+     *
+     * @expectedException \Api\Exception\ApiException
+     */
+    public function testEmptyItemWhenItemNotFound()
+    {
+        $this->service->expects($this->once())->method('getItem')
+            ->with(1)->will($this->throwException(new \Exception()));
+
+        $this->logger->expects($this->once())->method('error');
+
+        $this->service->emptyItem(1);
+    }
+
+    /**
+     * Tests emptyItem when the item was not found.
+     *
+     * @expectedException \Api\Exception\ApiException
+     */
+    public function testEmptyItemWhenItemIsEmpty()
+    {
+        $this->service->expects($this->once())->method('getItem')
+            ->willReturn(new Category([ 'pk_content_category' => 18752 ]));
+
+        $this->repository->expects($this->once())->method('countContents')
+            ->with(18752)->willReturn([]);
+
+        $this->logger->expects($this->once())->method('error');
+
+        $this->service->emptyItem(1);
+    }
+
+    /**
+     * Tests emptyItem when the item was not found.
+     */
+    public function testEmptyItemWhenItemIsNotEmpty()
+    {
+        $category = new Category([ 'pk_content_category' => 18752 ]);
+        $contents = [ 'id' => 8883, 'type' => 'glorp' ];
+
+        $this->service->expects($this->once())->method('getItem')
+            ->willReturn($category);
+
+        $this->repository->expects($this->at(0))->method('countContents')
+            ->with(18752)->willReturn([ 18752 => 10 ]);
+        $this->repository->expects($this->at(1))->method('removeContents')
+            ->with(1)->willReturn($contents);
+
+        $this->dispatcher->expects($this->once())->method('dispatch')
+            ->with('category.emptyItem', [
+                'id'       => 1,
+                'item'     => $category,
+                'contents' => $contents
+            ]);
+
+        $this->service->emptyItem(1);
+    }
+
+    /**
+     * Tests emptyItem when the item was not found.
+     *
+     * @expectedException \Api\Exception\ApiException
+     */
+    public function testMoveItemWhenItemNotFound()
+    {
+        $this->service->expects($this->once())->method('getItem')
+            ->with(4937)->will($this->throwException(new \Exception()));
+
+        $this->logger->expects($this->once())->method('error');
+
+        $this->service->moveItem(4937, 26252);
+    }
+
+    /**
+     * Tests emptyItem when the item was not found.
+     *
+     * @expectedException \Api\Exception\ApiException
+     */
+    public function testMoveItemWhenItemIsEmpty()
+    {
+        $this->service->expects($this->once())->method('getItem')
+            ->willReturn(new Category([ 'pk_content_category' => 24036 ]));
+
+        $this->repository->expects($this->once())->method('countContents')
+            ->with(24036)->willReturn([]);
+
+        $this->logger->expects($this->once())->method('error');
+
+        $this->service->moveItem(24036, 6506);
+    }
+
+    /**
+     * Tests emptyItem when the item was not found.
+     */
+    public function testMoveItemWhenItemIsNotEmpty()
+    {
+        $source   = new Category([ 'pk_content_category' => 394 ]);
+        $target   = new Category([ 'pk_content_category' => 12119 ]);
+        $contents = [ 'id' => 8883, 'type' => 'glorp' ];
+
+        $this->service->expects($this->at(0))->method('getItem')
+            ->with(394)->willReturn($source);
+        $this->service->expects($this->at(1))->method('getItem')
+            ->with(12119)->willReturn($target);
+
+        $this->repository->expects($this->at(0))->method('countContents')
+            ->with(394)->willReturn([ 394 => 10 ]);
+        $this->repository->expects($this->at(1))->method('moveContents')
+            ->with(394, 12119)->willReturn($contents);
+
+        $this->dispatcher->expects($this->once())->method('dispatch')
+            ->with('category.moveItem', [
+                'id'       => 394,
+                'item'     => $source,
+                'target'   => $target,
+                'contents' => $contents
+            ]);
+
+        $this->service->moveItem(394, 12119);
+    }
+
+    /**
+     * Tests getStats for an item.
+     */
+    public function testGetStatsForItem()
+    {
+        $this->repository->expects($this->once())->method('countContents')
+            ->with([ 9230 ])->willReturn([ 9230 => 325 ]);
+
+        $this->assertEquals(
+            [ 9230 => 325 ],
+            $this->service->getStats(new Category([ 'pk_content_category' => 9230 ]))
+        );
+    }
+
+    /**
+     * Tests getStats for a list of items
+     */
+    public function testGetStatsForList()
+    {
+        $this->repository->expects($this->once())->method('countContents')
+            ->with([ 9230 ])->willReturn([ 9230 => 325 ]);
+
+        $this->assertEquals(
+            [ 9230 => 325 ],
+            $this->service->getStats([ new Category([ 'pk_content_category' => 9230 ]) ])
+        );
+    }
+
+    /**
+     * Tests getStats when an error while counting.
+     *
+     * @expectedException \Api\Exception\ApiException
+     */
+    public function testGetStatsWhenError()
+    {
+        $this->repository->expects($this->once())->method('countContents')
+            ->with([ 9230 ])->will($this->throwException(new \Exception()));
+
+        $this->service->getStats([ new Category([ 'pk_content_category' => 9230 ]) ]);
+    }
+
+    /**
+     * Tests getStats when no items provided.
+     */
+    public function testGetStatsWhenNoItems()
+    {
+        $this->assertEmpty($this->service->getStats(null));
+    }
+
+    /**
+     * Tests isItemEmpty when an error is thrown while searching.
+     *
+     * @expectedException \Api\Exception\ApiException
+     */
+    public function testIsItemEmptyWhenError()
+    {
+        $method = new \ReflectionMethod($this->service, 'isItemEmpty');
+        $method->setAccessible(true);
+
+        $this->repository->expects($this->once())->method('countContents')
+            ->will($this->throwException(new \Exception()));
+
+        $method->invokeArgs($this->service, [ new Category([ 'pk_content_category' => 10267 ]) ]);
+    }
+
+    /**
+     * Tests isItemEmpty when the item is empty.
+     */
+    public function testIsItemEmptyWhenEmpty()
+    {
+        $method = new \ReflectionMethod($this->service, 'isItemEmpty');
+        $method->setAccessible(true);
+
+        $this->repository->expects($this->once())->method('countContents')
+            ->willReturn([]);
+
+        $this->assertTrue(
+            $method->invokeArgs($this->service, [ new Category([ 'pk_content_category' => 10267 ]) ])
+        );
+    }
+
+    /**
+     * Tests isItemEmpty when the item is not empty.
+     */
+    public function testIsItemEmptyWhenNotEmpty()
+    {
+        $method = new \ReflectionMethod($this->service, 'isItemEmpty');
+        $method->setAccessible(true);
+
+        $this->repository->expects($this->once())->method('countContents')
+            ->willReturn([ 10267 => 9223 ]);
+
+        $this->assertFalse(
+            $method->invokeArgs($this->service, [ new Category([ 'pk_content_category' => 10267 ]) ])
+        );
+    }
+}
