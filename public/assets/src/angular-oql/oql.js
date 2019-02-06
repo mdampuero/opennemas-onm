@@ -152,6 +152,10 @@
        * @return {String} The limit query.
        */
       this.getLimit = function(criteria) {
+        if (criteria.epp === null) {
+          return '';
+        }
+
         if (criteria.epp > 0) {
           return 'limit ' + criteria.epp;
         }
