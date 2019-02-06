@@ -18,11 +18,11 @@ orm:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter
                     arguments: [ '@orm.metadata.category' ]
             repositories:
-                database:
+                instance:
                     class:     Common\ORM\Database\Repository\BaseRepository
                     arguments: [ '@orm.connection.instance', '@orm.metadata.category', '@cache.connection.instance' ]
             persisters:
-                database:
+                instance:
                     class:     Common\ORM\Database\Persister\BasePersister
                     arguments: [ '@orm.connection.instance', '@orm.metadata.category', '@cache.connection.instance' ]
             mapping:
