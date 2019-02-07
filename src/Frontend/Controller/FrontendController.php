@@ -353,7 +353,7 @@ class FrontendController extends Controller
      * Updates the list of parameters and/or the item when the response for
      * the current request is not cached.
      */
-    protected function hydrate()
+    protected function hydrateShow()
     {
     }
 
