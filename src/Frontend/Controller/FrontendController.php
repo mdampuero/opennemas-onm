@@ -152,10 +152,18 @@ class FrontendController extends Controller
             );
         }
 
-        return $this->view->getCacheId(
-            $this->get('core.globals')->getExtension(),
-            $this->get('core.globals')->getAction()
+        $cacheParams = array_merge(
+            [
+                $this->get('core.globals')->getExtension(),
+                $this->get('core.globals')->getAction(),
+            ],
+            array_values($this->getQueryParameters(
+                $this->get('core.globals')->getAction(),
+                $params
+            ))
         );
+
+        return $this->view->getCacheId($cacheParams);
     }
 
     /**
@@ -288,11 +296,11 @@ class FrontendController extends Controller
      *
      * @return array The list of valid parameters.
      */
-    protected function getQueryParameters($action, Request $request)
+    protected function getQueryParameters(string $action, array $params)
     {
         return array_key_exists($action, $this->queries)
             ? array_intersect_key(
-                $request->query->all(),
+                $params,
                 array_flip($this->queries[$action])
             ) : [];
     }
