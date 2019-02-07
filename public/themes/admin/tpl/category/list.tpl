@@ -168,7 +168,7 @@
                   <th>{t}Name{/t}</th>
                   <th width="200">{t}Slug{/t}</th>
                   <th class="hidden-xs text-center" width="80"><i class="fa fa-picture-o"></i></th>
-                  <th class="hidden-xs text-center" width="50"><i class="fa fa-paint-brush"></i></th>
+                  <th class="hidden-xs text-center" width="80"><i class="fa fa-paint-brush"></i></th>
                   <th width="100">{t}Contents{/t}</th>
                   <th class="hidden-sm hidden-xs text-center" width="50">{t}RSS{/t}</th>
                   <th class="text-center" width="50">{t}Enabled{/t}</th>
@@ -223,10 +223,10 @@
                     [% item.name %]
                   </td>
                   <td class="hidden-xs text-center v-align-middle">
-                    <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path_img" ng-if="item.avatar_img_id"></dynamic-image>
+                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.logo_path" only-image="true"></dynamic-image>
                   </td>
                   <td class="hidden-xs text-center v-align-middle">
-                    <div style="border: 1px solid #d1dade; border-radius: 4px; float: left; height: 38px; width: 37px;"></div>
+                    <div style="border: 1px solid #d1dade; border-radius: 4px; float: left; height: 38px; width: 38px;" ng-style="{ 'background-color': item.color}"></div>
                   </td>
                   <td class="hidden-sm hidden-xs text-center v-align-middle">
                     <span class="badge badge-default" ng-class="{ 'badge-danger': !data.extra.stats[getId(item)] || data.extra.stats[getId(item)] == 0 }">
