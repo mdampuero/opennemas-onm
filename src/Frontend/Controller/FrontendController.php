@@ -122,6 +122,46 @@ class FrontendController extends Controller
     }
 
     /**
+     * Displays a conetnt in amp format basing on the parameters in the request.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     **/
+    public function showAmpAction(Request $request)
+    {
+        $action = $this->get('core.globals')->getAction();
+        $item   = $this->getItem($request);
+
+        if (empty($item) || !$item->isReadyForPublish()) {
+            throw new ResourceNotFoundException();
+        }
+
+        $params = $this->getParameters($request, $item);
+
+        if ($this->hasExternalLink($params)) {
+            return new RedirectResponse($this->getExternalLink($params));
+        }
+
+        if ($this->hasSubscription($params)
+            && $this->isBlocked($this->getSubscriptionToken($params))
+        ) {
+            throw new AccessDeniedException();
+        }
+
+        $this->view->setConfig($this->getCacheConfiguration($action));
+
+        if (!$this->isCached($params)) {
+            $this->hydrateShowAmp($params, $item);
+        }
+
+        return $this->render(
+            $this->getTemplate($this->get('core.globals')->getAction()),
+            $params
+        );
+    }
+
+    /**
      * Returns the cache configuration name basing on the action name.
      *
      * @param string $action The action name.
@@ -355,6 +395,49 @@ class FrontendController extends Controller
      */
     protected function hydrateShow()
     {
+    }
+
+    /**
+     * Updates the list of parameters and/or the item when the response for
+     * the current request is not cached.
+     */
+    protected function hydrateShowAmp($params, $item)
+    {
+        // Avoid NewRelic js script
+        if (extension_loaded('newrelic')) {
+            newrelic_disable_autorum();
+        }
+
+        if (!$this->get('core.security')->hasExtension('AMP_MODULE')) {
+            throw new ResourceNotFoundException();
+        }
+
+        // RenderColorMenu
+        $siteColor   = '#005689';
+        $configColor = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('site_color');
+
+        if (!empty($configColor)) {
+            if (!preg_match('@^#@', $configColor)) {
+                $siteColor = '#' . $configColor;
+            } else {
+                $siteColor = $configColor;
+            }
+        }
+
+        $this->view->assign('site_color', $siteColor);
+
+        $em = $this->get('entity_repository');
+        if (isset($item->img2) && ($item->img2 > 0)) {
+            $photoInt = $em->find('Photo', $item->img2);
+            $this->view->assign('photoInt', $photoInt);
+        }
+
+        if (isset($item->fk_video2) && ($item->fk_video2 > 0)) {
+            $videoInt = $em->find('Video', $item->fk_video2);
+            $this->view->assign('videoInt', $videoInt);
+        }
     }
 
     /**

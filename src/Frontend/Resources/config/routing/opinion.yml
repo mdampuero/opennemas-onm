@@ -1,44 +1,38 @@
+frontend_opinion_show:
+    path: /opinion/{author_name}/{opinion_title}/{created}{id}.html
+    defaults: { _controller: FrontendBundle:Opinion:show, author_name: author, }
+    requirements:
+        author_name   : '[^/]+'
+        opinion_title : '[^/]+'
+        opinion_id    : '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
+    options:
+        l10n: true
+
+frontend_opinion_show_amp:
+    path: /opinion/{author_name}/{opinion_title}/{created}{id}.amp.html
+    defaults: { _controller: FrontendBundle:Opinion:showAmp }
+    requirements:
+        author_name   : '[^/]+'
+        opinion_title : '[^/]+'
+        opinion_id    : '[^/]+'
+        created       : '[0-9]{14}'
+        id            : '[0-9]+'
+    options:
+        l10n: true
+
 frontend_opinion_author_frontpage:
     path: /opinion/autor/{author_id}/{author_slug}
-    defaults: { _controller: FrontendBundle:Opinions:frontpageAuthor }
+    defaults: { _controller: FrontendBundle:Opinion:frontpageAuthor }
     requirements:
         author_slug   : '(.*)?'
         author_id     : '([0-9]+)'
     options:
         l10n: true
 
-frontend_opinion_show_with_author_slug:
-    path: /opinion/{author_name}/{opinion_title}/{opinion_id}.{_format}
-    defaults: { _controller: FrontendBundle:Opinions:show, author_name: author, _format: html }
-    requirements:
-        author_name   : '[^/]+'
-        opinion_title : '[^/]+'
-        opinion_id    : '[^/]+'
-    options:
-        l10n: true
-
-frontend_opinion_show_with_author_slug_and_date:
-    path: /opinion/{author_name}/{date}/{opinion_title}/{opinion_id}.{_format}
-    defaults: { _controller: FrontendBundle:Opinions:show, author_name: author, _format: html }
-    requirements:
-        author_name  : '[^/]+'
-        opinion_title: '[^/]+'
-        opinion_id   : '[^/]+'
-        date         : '([0-9]{4})-([0-1][0-9])-([0-3][0-9])'
-    options:
-        l10n: true
-
-frontend_opinion_show:
-    path: /opinion/{opinion_title}/{opinion_id}.{_format}
-    defaults: { _controller: FrontendBundle:Opinions:show, _format : html }
-    requirements:
-        opinion_title: '[^/]+'
-        opinion_id   : '[^/]+'
-    options:
-        l10n: true
-
 frontend_opinion_frontpage:
     path: /opinion
-    defaults: { _controller: FrontendBundle:Opinions:frontpage }
+    defaults: { _controller: FrontendBundle:Opinion:frontpage }
     options:
         l10n: true
