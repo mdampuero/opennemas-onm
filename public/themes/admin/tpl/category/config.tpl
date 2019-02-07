@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form action="{url name=admin_categories_config}" method="POST" name="formulario" id="formulario">
+  <form action="{url name=backend_categories_configure}" method="POST" name="formulario" id="formulario">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -20,7 +20,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_categories}" title="{t}Go back to list{/t}">
+                <a class="btn btn-link" href="{url name=backend_categories_list}" title="{t}Go back to list{/t}">
                   <i class="fa fa-reply"></i>
                 </a>
               </li>
