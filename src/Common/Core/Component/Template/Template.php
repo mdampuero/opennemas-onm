@@ -190,7 +190,7 @@ class Template extends \Smarty
                 function ($item) {
                     return preg_replace('/[^a-zA-Z0-9\s]+/', '', $item);
                 },
-                func_get_args()
+                $this->arrayFlatten(func_get_args())
             ),
             function ($item) {
                 return !empty($item);
@@ -472,5 +472,23 @@ class Template extends \Smarty
                 $this->loadFilter($filterSectionName, $filterName);
             }
         }
+    }
+
+    /**
+     * Flatten a multi-dimensional array to a single-level array,
+     * sorting the entries in order to depth first.
+     *
+     * @param array $carry Array to initialize, will be the subject if the only argument passed.
+     * @param mixed $subject Optional Array or value that has data in potential multi-dimensions.
+     *
+     * @return array
+     */
+    private function arrayFlatten(?array $carry = [], $subject = null): array
+    {
+        return array_reduce((array) ($subject ?? $carry), function (array $carry, $item) {
+            return is_array($item)
+                ? $this->arrayFlatten($carry, $item)
+                : array_merge($carry, (array) $item);
+        }, $subject !== null ? (array) $carry : []); // Don't merge onto the $subject...
     }
 }
