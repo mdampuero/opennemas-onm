@@ -209,7 +209,7 @@
                               </a>
                             </li>
                             <li>
-                              <a href="#" ng-click="empty()">
+                              <a href="#" ng-click="empty(getId(item))">
                                 <i class="fa fa-fire"></i>
                                 {t}Empty{/t}
                               </a>
