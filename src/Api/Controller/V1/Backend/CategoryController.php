@@ -164,6 +164,7 @@ class CategoryController extends ApiController
 
         return [
             'content_types' => array_values($types),
+            'locale'        => $this->get('core.helper.locale')->getConfiguration(),
             'stats'         => $this->get($this->service)->getStats($items)
         ];
     }
