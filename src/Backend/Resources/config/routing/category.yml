@@ -1,13 +1,19 @@
-backend_categories_configure:
-    path:     /categories/configuration
-    defaults: { _controller: BackendBundle:Category:configure }
+backend_category_create:
+    path:     /categories/new
+    defaults: { _controller: BackendBundle:Category:create }
     methods:  [ GET ]
     options:
         expose: true
 
-backend_category_create:
-    path:     /categories/new
+backend_category_show:
+    path:     /categories/{id}
     defaults: { _controller: BackendBundle:Category:show }
+    options:
+        expose: true
+
+backend_categories_configure:
+    path:     /categories/configuration
+    defaults: { _controller: BackendBundle:Category:configure }
     methods:  [ GET ]
     options:
         expose: true
@@ -16,11 +22,5 @@ backend_categories_list:
     path:     /categories
     defaults: { _controller: BackendBundle:Category:list }
     methods:  [ GET ]
-    options:
-        expose: true
-
-backend_category_show:
-    path:     /categories/{id}
-    defaults: { _controller: BackendBundle:Category:show }
     options:
         expose: true
