@@ -64,6 +64,10 @@
             $scope.item  = angular.extend($scope.item, data.item);
             $scope.cover = $scope.item.logo_path.replace($window.instanceMedia, '');
           }
+
+          if (data.extra.locale && data.extra.locale.selected) {
+            $scope.config.locale = data.extra.locale.selected;
+          }
         };
 
         // Updates the logo_path when an image is selected
