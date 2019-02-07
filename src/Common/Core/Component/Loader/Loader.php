@@ -150,7 +150,7 @@ class Loader
      */
     public function getInstance()
     {
-        return $this->instance;
+        return !empty($this->instance) ? $this->instance : null;
     }
 
     /**
