@@ -1,3 +1,10 @@
+api_v1_backend_category_create:
+    path:     /categories/new
+    defaults: { _controller: ApiBundle:V1/Backend/Category:create }
+    methods:  [ GET ]
+    options:
+        expose: true
+
 api_v1_backend_category_delete:
     path:     /categories/{id}
     defaults: { _controller: ApiBundle:V1/Backend/Category:delete }
