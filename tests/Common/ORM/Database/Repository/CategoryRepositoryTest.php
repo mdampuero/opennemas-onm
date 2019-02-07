@@ -328,7 +328,7 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->conn->expects($this->once())->method('executeQuery')
             ->with(
                 'DELETE FROM contents WHERE pk_content IN (?)',
-                [ [ 4 ] ],
+                [ [ 52 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             );
 
@@ -359,7 +359,7 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->conn->expects($this->once())->method('executeQuery')
             ->with(
                 'DELETE FROM contents WHERE pk_content IN (?)',
-                [ [ 4, 5 ] ],
+                [ [ 94, 105 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             )->willReturn([ [ 'id' => 1, 'type' => 'flob' ] ]);
 

@@ -155,11 +155,15 @@ class CategoryRepository extends BaseRepository
             return [];
         }
 
+        $toDelete = array_map(function ($a) {
+            return $a['id'];
+        }, $data);
+
         $sql = 'DELETE FROM contents WHERE pk_content IN (?)';
 
         $this->conn->executeQuery(
             $sql,
-            [ $ids ],
+            [ $toDelete ],
             [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
 
