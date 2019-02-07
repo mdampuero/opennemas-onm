@@ -16,6 +16,14 @@
                 {t}Categories{/t}
               </h4>
             </li>
+            <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="data.extra.locale.multilanguage">
+              <h4>
+                <i class="fa fa-angle-right"></i>
+              </h4>
+            </li>
+            <li class="quicklinks ng-cloak" ng-if="data.extra.locale.multilanguage">
+              <translator keys="data.extra.keys" ng-model="config.locale" options="data.extra.locale"></translator>
+            </li>
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
@@ -151,17 +159,16 @@
             <table class="table table-hover no-margin">
               <thead>
                 <tr>
-                  <th class="checkbox-cell">
+                  <th class="text-center v-align-middle" width="50">
                     <div class="checkbox checkbox-default">
                       <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
                       <label for="select-all"></label>
                     </div>
                   </th>
-                  <th width="400">{t}Name{/t}</th>
-                  <th>{t}Slug{/t}</th>
+                  <th>{t}Name{/t}</th>
+                  <th width="200">{t}Slug{/t}</th>
                   <th class="hidden-xs text-center" width="80"><i class="fa fa-picture-o"></i></th>
                   <th class="hidden-xs text-center" width="50"><i class="fa fa-paint-brush"></i></th>
-                  <th width="100">{t}Content type{/t}</th>
                   <th width="100">{t}Contents{/t}</th>
                   <th class="hidden-sm hidden-xs text-center" width="50">{t}RSS{/t}</th>
                   <th class="text-center" width="50">{t}Enabled{/t}</th>
@@ -169,26 +176,32 @@
               </thead>
               <tbody>
                 <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
-                  <td class="checkbox-cell">
+                  <td class="text-center v-align-middle">
                     <div class="checkbox check-default" ng-if="isSelectable(item)">
                       <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="getId(item)" type="checkbox">
                       <label for="checkbox[%$index%]"></label>
                     </div>
                   </td>
-                  <td>
+                  <td class="v-align-middle">
                     <div class="[% 'm-l-' + 30 * levels[getId(item)] %]">
                       <strong class="hidden-xs" ng-if="item.name">
                         [% item.title %]
                       </strong>
                       <div class="listing-inline-actions">
-                        <div class="btn-group">
-                          <a class="btn btn-default btn-small" href="[% routing.generate('backend_category_show', { id: getId(item) }) %]">
-                            <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
-                          </a>
-                          <button class="btn btn-default btn-small dropdown-toggle" data-toggle="dropdown" type="button">
-                            <i class="fa fa-caret-down"></i>
+                        <translator item="data.results[$index]" keys="data.extra.keys" link="[% routing.generate('backend_category_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+                        <a class="btn btn-default btn-small" href="[% routing.generate('backend_category_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage">
+                          <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+                        </a>
+                        <span uib-tooltip="{t}Only empty categories can be deleted{/t}" tooltip-enable="data.extra.stats[getId(item)] > 0">
+                          <button class="btn btn-danger btn-small" ng-click="delete(getId(item))" ng-disabled="data.extra.stats[getId(item)] > 0" type="button">
+                            <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                           </button>
-                          <ul class="dropdown-menu no-padding pull-right">
+                        </span>
+                        <span>
+                          <button class="btn btn-white btn-small dropdown-toggle" data-toggle="dropdown" type="button">
+                            <i class="fa fa-ellipsis-h"></i>
+                          </button>
+                          <ul class="dropdown-menu no-padding">
                             <li>
                               <a href="#" ng-click="move(getId(item), item)">
                                 <i class="fa fa-exchange"></i>
@@ -202,46 +215,32 @@
                               </a>
                             </li>
                           </ul>
-                        </div>
-                        <span uib-tooltip="{t}Only empty categories can be deleted{/t}" tooltip-enable="data.extra.stats[getId(item)] > 0">
-                          <button class="btn btn-danger btn-small" ng-click="delete(getId(item))" ng-disabled="data.extra.stats[getId(item)] > 0" type="button">
-                            <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
-                          </button>
                         </span>
                       </div>
                     </div>
                   </td>
-                  <td class="hidden-xs">
+                  <td class="hidden-xs v-align-middle">
                     [% item.name %]
                   </td>
-                  <td class="hidden-xs text-center">
+                  <td class="hidden-xs text-center v-align-middle">
                     <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path_img" ng-if="item.avatar_img_id"></dynamic-image>
                   </td>
-                  <td class="hidden-xs text-center">
-                    <div style="border: 1px solid; border-radius: 4px; float: left; height: 50px; margin-right: 15px; width: 50px;"></div>
+                  <td class="hidden-xs text-center v-align-middle">
+                    <div style="border: 1px solid #d1dade; border-radius: 4px; float: left; height: 38px; width: 37px;"></div>
                   </td>
-                  <td class="text-center">
-                    <i class="fa fa-file-text-o" ng-if="item.internal_category === 1" uib-tooltip="{t}Articles{/t}"></i>
-                    <i class="fa fa-stack-overflow" ng-if="item.internal_category === 7" uib-tooltip="{t}Albums{/t}"></i>
-                    <i class="fa fa-film" ng-if="item.internal_category === 9" uib-tooltip="{t}Videos{/t}"></i>
-                    <i class="fa fa-newspaper-o" ng-if="item.internal_category === 14" uib-tooltip="{t}News Stand{/t}"></i>
-                    <i class="fa fa-star" ng-if="item.internal_category === 10" uib-tooltip="{t}Specials{/t}"></i>
-                    <i class="fa fa-pie-chart" ng-if="item.internal_category === 11" uib-tooltip="{t}Polls{/t}"></i>
-                    <i class="fa fa-book" ng-if="item.internal_category === 15" uib-tooltip="{t}Books{/t}"></i>
-                  </td>
-                  <td class="hidden-sm hidden-xs text-center">
+                  <td class="hidden-sm hidden-xs text-center v-align-middle">
                     <span class="badge badge-default" ng-class="{ 'badge-danger': !data.extra.stats[getId(item)] || data.extra.stats[getId(item)] == 0 }">
                       <strong>
                         [% data.extra.stats[getId(item)] ? data.extra.stats[getId(item)] : 0 %]
                       </strong>
                     </span>
                   </td>
-                  <td class="text-center">
+                  <td class="text-center v-align-middle">
                     <button class="btn btn-white" ng-click="patchRss(item, item.params.inrss != 1 ? 1 : 0)" type="button">
                       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.inrssLoading, 'fa-feed text-success' : !item.inrssLoading && item.params.inrss == '1', 'fa-feed text-error': !item.inrssLoading && (!item.params || !item.params.inrss || item.params.inrss == '0') }"></i>
                     </button>
                   </td>
-                  <td class="text-center">
+                  <td class="text-center v-align-middle">
                     <button class="btn btn-white" ng-click="patch(item, 'inmenu', item.inmenu != 1 ? 1 : 0)" type="button">
                       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.inmenuLoading, 'fa-check text-success' : !item.inmenuLoading && item.inmenu == '1', 'fa-times text-error': !item.inmenuLoading && item.inmenu == '0' }"></i>
                     </button>

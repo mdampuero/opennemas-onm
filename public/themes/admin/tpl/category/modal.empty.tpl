@@ -5,15 +5,17 @@
   <h3 class="p-b-30 p-t-30 text-center">{t}Are you sure?{/t}</h3>
   <h4 class="p-b-30 text-center" ng-if="!template.selected || template.selected == 1">{t}Do you want to empty the item?{/t}</h4>
   <h4 class="p-b-30 text-center" ng-if="template.selected > 1">{t}Do you want to empty the selected items?{/t}</h4>
-  <p ng-if="!template.selected || template.selected == 1">
+  <p class="text-center" ng-if="!template.selected || template.selected == 1">
     {t escape=off}This means that all contents assigned to the category <strong>[% template.item.title %]</strong> will be deleted.{/t}
   </p>
-  <p ng-if="template.selected > 1">
+  <p class="text-center" ng-if="template.selected > 1">
     {t escape=off}This means that all contents assigned to the selected categories will be deleted.{/t}
   </p>
-  <div class="alert alert-warning m-t-15 no-margin">
-    <i class="fa fa-warning"></i>
-    {t}Be careful. This operation can not be undone.{/t}
+  <div class="m-t-30 no-margin text-center">
+    <div><i class="fa fa-3x fa-warning text-warning"></i></div>
+    <p class="bold m-t-10 text-uppercase">
+      {t}This action can not be undone.{/t}
+    </p>
   </div>
 </div>
 <div class="modal-footer row">
