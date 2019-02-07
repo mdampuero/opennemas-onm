@@ -245,14 +245,17 @@ class FrontendController extends Controller
     {
         $params = array_merge($request->query->all(), [
             'o_category' => null,
-            'x-tags'     => $this->get('core.globals')->getExtension()
+            'x-tags'     => [
+                $this->get('core.globals')->getExtension(),
+                $this->get('core.globals')->getExtension() . '-' . $this->get('core.globals')->getAction()
+            ]
         ]);
 
         if (!empty($item)) {
             $params['o_token'] = $this->get('core.helper.subscription')
                 ->getToken($item);
 
-            $params['x-tags'] .= ',' . $item->id;
+            $params['x-tags'][] = $item->id;
 
             $params['content']     = $item;
             $params['contentId']   = $item->id;
@@ -276,6 +279,8 @@ class FrontendController extends Controller
                 'category_name'         => $params['o_category']->name,
             ]);
         }
+
+        $params['x-tags'] = implode(',', $params['x-tags']);
 
         list($positions, $advertisements) =
             $this->getAdvertisements($params['o_category']);
