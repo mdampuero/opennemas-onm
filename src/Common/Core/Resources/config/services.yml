@@ -105,6 +105,11 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
+    core.helper.locale:
+        class:     Common\Core\Component\Helper\LocaleHelper
+        arguments: [ '@orm.manager', '@core.instance', '@core.locale', '@request_stack', '@core.security' ]
+        public:    true
+
     core.helper.l10n_route:
         class:     Common\Core\Component\Helper\L10nRouteHelper
         arguments: [ '@service_container' ]
