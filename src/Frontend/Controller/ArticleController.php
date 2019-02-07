@@ -22,7 +22,8 @@ class ArticleController extends FrontendController
      * {@inheritdoc}
      */
     protected $caches = [
-        'show' => 'articles'
+        'show'    => 'articles',
+        'showamp' => 'articles',
     ];
 
     /**
@@ -35,7 +36,8 @@ class ArticleController extends FrontendController
      */
     protected $groups = [
         'extShow' => 'article_inner',
-        'show'    => 'article_inner'
+        'show'    => 'article_inner',
+        'showamp' => 'amp_inner',
     ];
 
     /**
@@ -43,6 +45,15 @@ class ArticleController extends FrontendController
      */
     protected $positions = [
         'article_inner' => [ 7 ]
+    ];
+
+    /**
+     * The list of templates per action.
+     *
+     * @var array
+     */
+    protected $templates = [
+        'showamp' => 'amp/content.tpl',
     ];
 
     /**
