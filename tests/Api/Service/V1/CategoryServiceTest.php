@@ -49,7 +49,7 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->repository);
 
         $this->service = $this->getMockBuilder('Api\Service\V1\CategoryService')
-            ->setMethods([ 'getItem' ])
+            ->setMethods([ 'getItem', 'getListByIds' ])
             ->setConstructorArgs([ $this->container, 'Common\ORM\Entity\Category' ])
             ->getMock();
     }
@@ -130,6 +130,107 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests emptyList when the list of ids is invalid.
+     *
+     * @expectedException \Api\Exception\ApiException
+     */
+    public function testEmptyListWhenInvalidIds()
+    {
+        $this->service->emptyList('thud');
+    }
+
+    /**
+     * Tests emptyList when an error happens while searching or emptying the
+     * list.
+     *
+     * @expectedException \Api\Exception\ApiException
+     */
+    public function testEmptyListWhenError()
+    {
+        $this->service->expects($this->once())->method('getListByIds')
+            ->will($this->throwException(new \Exception()));
+
+        $this->logger->expects($this->once())->method('error');
+
+        $this->service->emptyList([ 1, 2 ]);
+    }
+
+    /**
+     * Tests emptyList when the action is executed successfully.
+     */
+    public function testEmptyListWhenSuccess()
+    {
+        $items = [ new Category([ 'pk_content_category' => 1 ]) ];
+
+        $this->service->expects($this->once())->method('getListByIds')
+            ->with([ 1, 2 ])->willReturn([
+                'items' => $items,
+                'total' => 1
+            ]);
+
+        $this->repository->expects($this->once())->method('removeContents')
+            ->with([ 1 ])->willReturn([ [ 'id' => 17427, 'type' => 'flob' ] ]);
+
+        $this->dispatcher->expects($this->once())->method('dispatch')
+            ->with('category.emptyList', [
+                'ids'      => [ 1, 2 ],
+                'items'    => $items,
+                'contents' => [ [ 'id' => 17427, 'type' => 'flob' ] ]
+            ]);
+
+        $this->service->emptyList([ 1, 2 ]);
+    }
+
+    /**
+     * Tests getStats for an item.
+     */
+    public function testGetStatsForItem()
+    {
+        $this->repository->expects($this->once())->method('countContents')
+            ->with([ 9230 ])->willReturn([ 9230 => 325 ]);
+
+        $this->assertEquals(
+            [ 9230 => 325 ],
+            $this->service->getStats(new Category([ 'pk_content_category' => 9230 ]))
+        );
+    }
+
+    /**
+     * Tests getStats for a list of items
+     */
+    public function testGetStatsForList()
+    {
+        $this->repository->expects($this->once())->method('countContents')
+            ->with([ 9230 ])->willReturn([ 9230 => 325 ]);
+
+        $this->assertEquals(
+            [ 9230 => 325 ],
+            $this->service->getStats([ new Category([ 'pk_content_category' => 9230 ]) ])
+        );
+    }
+
+    /**
+     * Tests getStats when an error while counting.
+     *
+     * @expectedException \Api\Exception\ApiException
+     */
+    public function testGetStatsWhenError()
+    {
+        $this->repository->expects($this->once())->method('countContents')
+            ->with([ 9230 ])->will($this->throwException(new \Exception()));
+
+        $this->service->getStats([ new Category([ 'pk_content_category' => 9230 ]) ]);
+    }
+
+    /**
+     * Tests getStats when no items provided.
+     */
+    public function testGetStatsWhenNoItems()
+    {
+        $this->assertEmpty($this->service->getStats(null));
+    }
+
+    /**
      * Tests emptyItem when the item was not found.
      *
      * @expectedException \Api\Exception\ApiException
@@ -193,52 +294,59 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getStats for an item.
-     */
-    public function testGetStatsForItem()
-    {
-        $this->repository->expects($this->once())->method('countContents')
-            ->with([ 9230 ])->willReturn([ 9230 => 325 ]);
-
-        $this->assertEquals(
-            [ 9230 => 325 ],
-            $this->service->getStats(new Category([ 'pk_content_category' => 9230 ]))
-        );
-    }
-
-    /**
-     * Tests getStats for a list of items
-     */
-    public function testGetStatsForList()
-    {
-        $this->repository->expects($this->once())->method('countContents')
-            ->with([ 9230 ])->willReturn([ 9230 => 325 ]);
-
-        $this->assertEquals(
-            [ 9230 => 325 ],
-            $this->service->getStats([ new Category([ 'pk_content_category' => 9230 ]) ])
-        );
-    }
-
-    /**
-     * Tests getStats when an error while counting.
+     * Tests moveList when the list of ids is invalid.
      *
      * @expectedException \Api\Exception\ApiException
      */
-    public function testGetStatsWhenError()
+    public function testMoveListWhenInvalidIds()
     {
-        $this->repository->expects($this->once())->method('countContents')
-            ->with([ 9230 ])->will($this->throwException(new \Exception()));
-
-        $this->service->getStats([ new Category([ 'pk_content_category' => 9230 ]) ]);
+        $this->service->moveList('thud', 18028);
     }
 
     /**
-     * Tests getStats when no items provided.
+     * Tests emptyList when the list of ids is invalid.
+     *
+     * @expectedException \Api\Exception\ApiException
      */
-    public function testGetStatsWhenNoItems()
+    public function testMoveListWhenError()
     {
-        $this->assertEmpty($this->service->getStats(null));
+        $this->service->expects($this->once())->method('getListByIds')
+            ->will($this->throwException(new \Exception()));
+
+        $this->logger->expects($this->once())->method('error');
+
+        $this->service->moveList([ 1, 2 ], 22933);
+    }
+
+    /**
+     * Tests emptyMove when the action is executed successfully.
+     */
+    public function testMoveListWhenSuccess()
+    {
+        $items  = [ new Category([ 'pk_content_category' => 1 ]) ];
+        $target = new Category([ 'pk_content_category' => 22933 ]);
+
+        $this->service->expects($this->at(0))->method('getListByIds')
+            ->with([ 1, 2 ])->willReturn([
+                'items' => $items,
+                'total' => 1
+            ]);
+
+        $this->service->expects($this->at(1))->method('getItem')
+            ->with(22933)->willReturn($target);
+
+        $this->repository->expects($this->once())->method('moveContents')
+            ->with([ 1 ])->willReturn([ [ 'id' => 17427, 'type' => 'flob' ] ]);
+
+        $this->dispatcher->expects($this->once())->method('dispatch')
+            ->with('category.moveList', [
+                'ids'      => [ 1, 2 ],
+                'items'    => $items,
+                'target'   => $target,
+                'contents' => [ [ 'id' => 17427, 'type' => 'flob' ] ]
+            ]);
+
+        $this->service->moveList([ 1, 2 ], 22933);
     }
 
     /**

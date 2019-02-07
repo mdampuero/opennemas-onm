@@ -44,6 +44,42 @@ class CategoryService extends OrmService
     }
 
     /**
+     * Removes all contents assigned to a list of categories.
+     *
+     * @param integer $ids The list of category ids.
+     *
+     * @return integer The number of emptied categories.
+     */
+    public function emptyList($ids)
+    {
+        if (!is_array($ids) || empty($ids)) {
+            throw new ApiException('Invalid ids', 400);
+        }
+
+        try {
+            $response = $this->getListByIds($ids);
+
+            $toDelete = array_map(function ($a) {
+                return $a->pk_content_category;
+            }, $response['items']);
+
+            $deleted = $this->em->getRepository($this->entity, $this->origin)
+                ->removeContents($toDelete);
+
+            $this->dispatcher->dispatch($this->getEventName('emptyList'), [
+                'ids'      => $ids,
+                'items'    => $response['items'],
+                'contents' => $deleted
+            ]);
+        } catch (\Exception $e) {
+            $this->container->get('error.log')->error($e->getMessage());
+            throw new ApiException($e->getMessage(), $e->getCode());
+        }
+
+        return $response['total'];
+    }
+
+    /**
      * Moves all contents assigned to a category to another category.
      *
      * @param integer $id The category id of the source category.
@@ -73,6 +109,45 @@ class CategoryService extends OrmService
             $this->container->get('error.log')->error($e->getMessage());
             throw new ApiException($e->getMessage(), $e->getCode());
         }
+    }
+
+    /**
+     * Moves all contents assigned to a list of categories to another category.
+     *
+     * @param integer $ids The list of source category ids.
+     * @param integer $to  The category id of the target category.
+     *
+     * @return integer The number of affected categories.
+     */
+    public function moveList($ids, $to)
+    {
+        if (!is_array($ids) || empty($ids)) {
+            throw new ApiException('Invalid ids', 400);
+        }
+
+        try {
+            $response = $this->getListByIds($ids);
+            $target   = $this->getItem($to);
+
+            $toMove = array_map(function ($a) {
+                return $a->pk_content_category;
+            }, $response['items']);
+
+            $moved = $this->em->getRepository($this->entity, $this->origin)
+                ->moveContents($toMove, (int) $to);
+
+            $this->dispatcher->dispatch($this->getEventName('moveList'), [
+                'ids'      => $ids,
+                'items'    => $response['items'],
+                'target'   => $target,
+                'contents' => $moved
+            ]);
+        } catch (\Exception $e) {
+            $this->container->get('error.log')->error($e->getMessage());
+            throw new ApiException($e->getMessage(), $e->getCode());
+        }
+
+        return $response['total'];
     }
 
     /**
