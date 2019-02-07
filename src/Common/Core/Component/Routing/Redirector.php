@@ -110,9 +110,11 @@ class Redirector
 
         $cacheId = $this->getCacheId($source, $contentType);
         $url     = null;
+
         if ($this->hasCache() && $this->cache->exists($cacheId)) {
             return $this->cache->get($cacheId);
         }
+
         $url = $this->getLiteralUrl($source, $contentType);
 
         if (empty($url)) {
@@ -140,7 +142,7 @@ class Redirector
             $type = [];
         }
 
-        return implode('-', [ 'redirector', $slug, implode('-', $type) ]);
+        return implode('-', [ 'redirector', md5($slug), implode('-', $type) ]);
     }
 
     /**
