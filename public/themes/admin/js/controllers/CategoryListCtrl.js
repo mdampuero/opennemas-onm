@@ -252,6 +252,10 @@
             data.items = $scope.sortItems(data.items, 0, 0);
           }
 
+          if (data.extra.locale && data.extra.locale.selected) {
+            $scope.config.locale = data.extra.locale.selected;
+          }
+
           return data;
         };
 
