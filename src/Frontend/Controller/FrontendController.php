@@ -112,7 +112,7 @@ class FrontendController extends Controller
         $this->view->setConfig($this->getCacheConfiguration($action));
 
         if (!$this->isCached($params)) {
-            $this->hydrate($params, $item);
+            $this->hydrateShow($params, $item);
         }
 
         return $this->render(

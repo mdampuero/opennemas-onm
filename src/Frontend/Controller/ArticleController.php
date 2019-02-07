@@ -145,7 +145,7 @@ class ArticleController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    protected function hydrate($params = [], $item = null)
+    protected function hydrateShow($params = [], $item = null)
     {
         $params = [
             'relationed' => $this->getRelated($item),
