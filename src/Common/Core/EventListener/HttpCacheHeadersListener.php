@@ -44,7 +44,7 @@ class HttpCacheHeadersListener
      * @param Locale   $locale   The Locale service.
      * @param Template $template The Template service.
      */
-    public function __construct(Instance $instance, Locale $locale, Template $template)
+    public function __construct(?Instance $instance, Locale $locale, Template $template)
     {
         $this->instance = $instance;
         $this->locale   = $locale;
