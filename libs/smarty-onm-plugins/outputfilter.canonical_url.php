@@ -20,7 +20,7 @@ function smarty_outputfilter_canonical_url($output, $smarty)
     $uri = $request->getRequestUri();
 
     if (preg_match('/newsletter/', $smarty->source->resource)
-        || preg_match('/\/fb\/instant-articles/', $uri)
+        || preg_match('/\/rss/', $uri)
     ) {
         return $output;
     }

@@ -42,5 +42,5 @@ frontend_rss_category:
         category: '[^/]+'
 
 frontend_fb_instant_articles:
-    path: /fb/instant-articles
+    path: /rss/facebook-instant-articles
     defaults: { _controller: FrontendBundle:Rss:facebookInstantArticlesRSS }

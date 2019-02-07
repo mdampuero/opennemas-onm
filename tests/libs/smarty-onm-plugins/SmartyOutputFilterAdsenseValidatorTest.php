@@ -152,7 +152,7 @@ class SmartyOutputFilterAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
         ));
 
         $this->request->expects($this->any())->method('getUri')
-            ->willReturn('http://fb/instant-articles/test.com');
+            ->willReturn('http://rss/facebook-instant-articles/test.com');
 
         $this->assertEquals($this->output, smarty_outputfilter_adsense_validator(
             $this->output,
