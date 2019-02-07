@@ -192,7 +192,7 @@
                       {is_module_activated name="CATEGORY_MANAGER"}
                         {acl isAllowed="CATEGORY_CREATE"}
                           <div class="quick-item">
-                            <a href="{url name=admin_category_create}">
+                            <a href="{url name=backend_category_create}">
                               <i class="fa fa-bookmark"></i>
                               <span class="title">{t}Category{/t}</span>
                             </a>
