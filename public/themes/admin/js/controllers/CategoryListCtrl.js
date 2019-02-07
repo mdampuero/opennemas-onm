@@ -71,7 +71,7 @@
               success: function() {
                 return function() {
                   var route = {
-                    name: $scope.routes.move,
+                    name: $scope.routes.empty,
                     params: { id: id }
                   };
 
@@ -85,7 +85,9 @@
             messenger.post(response.data);
 
             if (response.success) {
-              $scope.list();
+              $scope.list().then(function() {
+                $scope.selected = { all: false, items: [] };
+              });
             }
           });
         };
@@ -122,7 +124,9 @@
             messenger.post(response.data);
 
             if (response.success) {
-              $scope.list();
+              $scope.list().then(function() {
+                $scope.selected = { all: false, items: [] };
+              });
             }
           });
         };
@@ -178,7 +182,7 @@
                 return {
                   source: item,
                   categories: angular.copy($scope.items).filter(function(e) {
-                    return e.pk_content_category !== id;
+                    return $scope.getId(e) !== id;
                   })
                 };
               },
@@ -199,7 +203,9 @@
             messenger.post(response.data);
 
             if (response.success) {
-              $scope.list();
+              $scope.list().then(function() {
+                $scope.selected = { all: false, items: [] };
+              });
             }
           });
         };
@@ -221,7 +227,7 @@
                 return {
                   selected: $scope.selected.items.length,
                   categories: angular.copy($scope.items).filter(function(e) {
-                    return $scope.selected.items.indexOf(e.pk_content_category) === -1;
+                    return $scope.selected.items.indexOf($scope.getId(e)) === -1;
                   })
                 };
               },
@@ -239,7 +245,9 @@
             messenger.post(response.data);
 
             if (response.success) {
-              $scope.list();
+              $scope.list().then(function() {
+                $scope.selected = { all: false, items: [] };
+              });
             }
           });
         };
