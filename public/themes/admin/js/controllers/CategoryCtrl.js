@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
@@ -28,7 +28,7 @@
          * @type {Object}
          */
         $scope.category = {
-          title:{},
+          title: {},
           internal_category: 1
         };
 
@@ -47,7 +47,7 @@
 
           $scope.languageData = languageData;
 
-          $scope.category            = ('id' in category) ? category : $scope.category;
+          $scope.category            = 'id' in category ? category : $scope.category;
           $scope.subcategories       = extraData.subcategories;
           $scope.categories          = extraData.categories;
           $scope.modules             = extraData.modules;
@@ -71,6 +71,7 @@
         $scope.save = function() {
           $scope.preSave();
           var data = $scope.category;
+
           $scope.saving = true;
 
           http.put('backend_ws_category_save', data)
@@ -86,16 +87,18 @@
                 $scope.category.id === '' ||
                 $scope.category.id === null
               );
+
               $scope.category.id = response.data.category;
 
               messenger.post(response.data.message);
 
               if (reload) {
-                document.location = routing.generate('admin_category_show', {id: $scope.category.id});
+                document.location = routing.generate('backend_category_show', { id: $scope.category.id });
               }
             }, function(response) {
               $scope.saving = false;
-              if($scope.category.internal_category === 0) {
+
+              if ($scope.category.internal_category === 0) {
                 $scope.category.internal_category = -1;
               }
               messenger.post(response.data);
@@ -106,10 +109,10 @@
          * Precalculation of params needed
          */
         $scope.pre = function() {
-          $scope.languageData = $scope.languageData || {available:['default'], locale:'default'};
+          $scope.languageData = $scope.languageData || { available: [ 'default' ], locale: 'default' };
 
           // Initialize all the languages
-          Object.keys($scope.languageData.available).forEach(function (langAux) {
+          Object.keys($scope.languageData.available).forEach(function(langAux) {
             if (!$scope.category.title[langAux]) {
               $scope.category.title[langAux] = '';
             }
@@ -119,7 +122,7 @@
             $scope.category.internal_category = -1;
           }
 
-          $scope.lang = $scope.languageData.locale || $scope.languageData['default'];
+          $scope.lang = $scope.languageData.locale || $scope.languageData.default;
 
           if (!$scope.category.internal_category) {
             $scope.category.internal_category = $scope.allowedCategories[0].code;
@@ -129,11 +132,14 @@
           $scope.subsectionCategories = [];
           for (var key in $scope.categories) {
             if ($scope.category.id !== $scope.categories[key].id && $scope.categories[key].internal_category === 1) {
-              $scope.subsectionCategories.push({'code':$scope.categories[key].id, 'value':$scope.categories[key].title[$scope.lang]});
+              $scope.subsectionCategories.push({
+                code: $scope.categories[key].id,
+                value: $scope.categories[key].title[$scope.lang]
+              });
             }
           }
 
-          $scope.multiLanguageFields = ['title'];
+          $scope.multiLanguageFields = [ 'title' ];
         };
 
         /**
@@ -154,11 +160,10 @@
           }
 
           $scope.getSlug($scope.category.title[$scope.lang], function(response) {
-              if (response.data.slug !== undefined && $scope.category.name === undefined) {
-                $scope.category.name = response.data.slug;
-              }
+            if (response.data.slug !== undefined && $scope.category.name === undefined) {
+              $scope.category.name = response.data.slug;
             }
-          );
+          });
         };
 
         $scope.internalCategoriesImgs = {
