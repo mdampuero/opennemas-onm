@@ -49,6 +49,10 @@ class HttpCacheHeadersListener
         $this->instance = $instance;
         $this->locale   = $locale;
         $this->template = $template;
+
+        $this->instanceName = is_object($this->instance)
+            ? $this->instance->internal_name
+            : '';
     }
 
     /**
@@ -76,7 +80,8 @@ class HttpCacheHeadersListener
         $tags   = $this->getTags($response);
         $expire = $this->getExpire($response);
 
-        $response->headers->set('x-instance', $this->instance->internal_name);
+
+        $response->headers->set('x-instance', $this->instanceName);
         $response->headers->set('x-tags', implode(',', $tags));
 
         if (!empty($expire)) {
@@ -126,8 +131,8 @@ class HttpCacheHeadersListener
         $tags = explode(',', $this->template->getValue('x-tags')
             . ',' . $response->headers->get('x-tags'));
 
-        $tags = array_filter($tags, function ($a) {
-            return !empty($a);
+        $tags = array_filter($tags, function ($tag) {
+            return !empty($tag);
         });
 
         if (empty($tags)) {
@@ -135,7 +140,7 @@ class HttpCacheHeadersListener
         }
 
         return array_unique(array_merge([
-            'instance-' . $this->instance->internal_name,
+            'instance-' . $this->instanceName,
             'locale-' . $this->locale->getRequestLocale(),
         ], $tags));
     }
