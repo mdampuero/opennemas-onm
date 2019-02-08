@@ -28,11 +28,11 @@
                 {if !isset($id)}{t}Creating article{/t}{else}{t}Editing article{/t}{/if}
               </h5>
             </li>
-            <li class="quicklinks seperate hidden-xs ng-cloak" ng-if="config.multilanguage">
+            <li class="quicklinks seperate hidden-xs ng-cloak" ng-if="config.locale.multilanguage">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks ng-cloak" ng-if="config.multilanguage">
-              <translator keys="data.extra.keys" ng-model="config.locale" options="data.extra.options"></translator>
+            <li class="quicklinks ng-cloak" ng-if="config.locale.multilanguage">
+              <translator item="data.item" keys="data.extra.keys" ng-model="config.locale.selected" options="config.locale"></translator>
             </li>
           </ul>
           <div class="all-actions pull-right">
@@ -240,14 +240,7 @@
                       {t}Category{/t} *
                     </label>
                     <div class="controls">
-                      <ui-select class="form-control" name="pk_fk_content_category" theme="select2" ng-model="article.pk_fk_content_category">
-                        <ui-select-match>
-                          [% $select.selected.title %]
-                        </ui-select-match>
-                        <ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in categories | filter: { title: $select.search }">
-                          <div ng-bind-html="item.title | highlight: $select.search"></div>
-                        </ui-select-choices>
-                      </ui-select>
+                      <onm-category-selector class="block" categories="categories" default-value-text="{t}Select a category{/t}..." ng-model="article.pk_fk_content_category" placeholder="{t}Select a category{/t}"></onm-category-selector>
                     </div>
                   </div>
                   <div class="form-group">

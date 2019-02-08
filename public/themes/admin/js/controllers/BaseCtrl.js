@@ -129,22 +129,13 @@
             return;
           }
 
-          // Configure the form
-          if ($scope.config.multilanguage === null) {
-            $scope.config.multilanguage = data.multilanguage;
-          }
-
-          if (data.translators) {
-            $scope.config.translators = data.translators;
-          }
-
-          if ($scope.config.locale === null) {
+          if (data.locale) {
             $scope.config.locale = data.locale;
           }
 
-          if ($scope.forcedLocale && Object.keys(data.options.available)
+          if ($scope.forcedLocale && Object.keys(data.locale.available)
             .indexOf($scope.forcedLocale)) {
-            $scope.config.locale = $scope.forcedLocale;
+            $scope.config.locale.selected = $scope.forcedLocale;
           }
         };
 
@@ -379,12 +370,13 @@
         });
 
         // Updates linkers when locale changes
-        $scope.$watch('config.locale', function(nv, ov) {
+        $scope.$watch('config.locale.selected', function(nv, ov) {
           if (nv === ov) {
             return;
           }
 
-          if (!$scope.config.multilanguage || !$scope.config.locale) {
+          if (!$scope.config.locale.multilanguage ||
+              !$scope.config.locale.selected) {
             return;
           }
 
@@ -392,7 +384,7 @@
             $scope.config.linkers[key].setKey(nv);
             $scope.config.linkers[key].update();
           }
-        });
+        }, true);
       }
     ]);
 })();

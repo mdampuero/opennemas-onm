@@ -15,11 +15,11 @@
               {t}Articles{/t}
             </h4>
           </li>
-          <li class="quicklinks seperate hidden-xs ng-cloak" ng-if="config.multilanguage">
+          <li class="quicklinks seperate hidden-xs ng-cloak" ng-if="config.locale.multilanguage">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks ng-cloak" ng-if="config.multilanguage">
-            <translator keys="data.extra.keys" ng-model="config.locale" options="data.extra.options"></translator>
+          <li class="quicklinks ng-cloak" ng-if="config.locale.multilanguage">
+            <translator keys="data.extra.keys" ng-model="config.locale.selected" options="data.extra.locale"></translator>
           </li>
           <li class="quicklinks visible-xs">
             <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas-c%C3%B3mo-crear-un-art%C3%ADcu" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
@@ -39,7 +39,7 @@
             {/acl}
               <li class="quicklinks">
                 {acl isAllowed="ARTICLE_CREATE"}
-                <a class="btn btn-primary ng-cloak" href="{url name=admin_article_create}[% config.multilanguage ? '?locale=' + config.locale : '' %]" id="create-button">
+                <a class="btn btn-primary ng-cloak" href="{url name=admin_article_create}[% config.locale.multilanguage ? '?locale=' + config.locale.selected : '' %]" id="create-button">
                   <i class="fa fa-plus"></i>
                   {t}Create{/t}
                 </a>
@@ -69,7 +69,7 @@
           </li>
         </ul>
         <ul class="nav quick-section pull-right">
-          <li class="quicklinks" ng-if="config.multilanguage">
+          <li class="quicklinks" ng-if="config.locale.multilanguage">
             {acl isAllowed="ARTICLE_UPDATE"}
             <div class="dropdown">
               <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" uib-tooltip="{t}Translate selected{/t}" tooltip-placement="bottom">
@@ -83,7 +83,7 @@
             </div>
             {/acl}
           </li>
-          <li class="quicklinks hidden-xs" ng-if="config.multilanguage">
+          <li class="quicklinks hidden-xs" ng-if="config.locale.multilanguage">
             <span class="h-seperate"></span>
           </li>
           {acl isAllowed="ARTICLE_AVAILABLE"}
@@ -209,8 +209,8 @@
                   </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="ARTICLE_UPDATE"}
-                      <translator item="data.results[$index]" keys="data.extra.keys" link="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="config.multilanguage" options="data.extra.options" text="{t}Edit{/t}"></translator>
-                      <a class="btn btn-default btn-small" href="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="!config.multilanguage">
+                      <translator item="data.results[$index]" keys="data.extra.keys" link="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="config.locale.multilanguage" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+                      <a class="btn btn-default btn-small" href="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="!config.locale.multilanguage">
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
                     {/acl}
