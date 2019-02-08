@@ -33,7 +33,7 @@
                 <i class="fa fa-angle-right"></i>
               </h4>
             </li>
-            <li class="quicklinks ng-cloak" ng-if="data.extra.locale.multilanguage">
+            <li class="quicklinks ng-cloak" ng-if="config.locale.multilanguage">
               <translator item="data.item" keys="data.extra.keys" ng-model="config.locale.selected" options="config.locale"></translator>
             </li>
           </ul>
