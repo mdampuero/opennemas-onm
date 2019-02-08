@@ -35,7 +35,7 @@
                   '{{text}}' +
                   '<i class="fa fa-angle-down"></i>' +
                 '</button>' +
-                '<ul class="dropdown-menu" role="menu" style="padding:0">' +
+                '<ul class="dropdown-menu no-padding" role="menu">' +
                   '<li ng-repeat="language in languages" ng-if="language.value != ngModel">' +
                     '<a href="{{link + \'?locale=\' + language.value}}">' +
                       '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>' +
@@ -58,9 +58,9 @@
                 '{{languages[ngModel].name}}' +
                 '<i class="fa fa-angle-down"></i>' +
               '</button>' +
-              '<ul class="dropdown-menu" role="menu" style="padding:0">' +
+              '<ul class="dropdown-menu no-padding" role="menu">' +
                 '<li ng-repeat="language in languages" ng-if="language.value != ngModel">' +
-                  '<a href="#" ng-click="changeSelected(language.value)">' +
+                  '<a href="#" ng-click="changeSelected($event, language.value)">' +
                     '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>' +
                     '{{language.name}}' +
                   '</a>' +
@@ -68,7 +68,7 @@
               '</ul>' +
             '</div>';
           },
-          link: function($scope) {
+          link: function($scope, element) {
             $scope.max       = 4;
             $scope.collapsed = $window.innerWidth < 992;
             $scope.languages = {};
@@ -120,7 +120,8 @@
              *
              * @param {String} The language value.
              */
-            $scope.changeSelected = function(language) {
+            $scope.changeSelected = function(e, language) {
+              e.preventDefault();
               $scope.ngModel = language;
             };
 
