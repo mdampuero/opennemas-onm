@@ -91,13 +91,14 @@
         $scope.overlay = {};
 
         /**
--        * @function removeImage
--        * @memberOf InnerCtrl
--        * @description
--        *   Removes the given image from the scope.
--        *
--        * @param string image The image to remove.
--        */
+         * @function removeImage
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *   Removes the given image from the scope.
+         *
+         * @param string image The image to remove.
+         */
         $scope.removeImage = function(image) {
           delete $scope[image];
         };
@@ -111,9 +112,9 @@
          *
          * @param {String} name The overlay name.
          */
-       $scope.toggleOverlay = function(name) {
-         $scope.overlay[name] = !$scope.overlay[name];
-       };
+        $scope.toggleOverlay = function(name) {
+          $scope.overlay[name] = !$scope.overlay[name];
+        };
 
         /**
          * @function configure
