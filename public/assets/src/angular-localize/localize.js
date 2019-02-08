@@ -45,6 +45,13 @@
           key: null,
 
           /**
+           * The last key name.
+           *
+           * @type {String}
+           */
+          previousKey: null,
+
+          /**
            * The list of keys that have to be updated on change.
            *
            * @type {Array}
@@ -112,6 +119,12 @@
            */
           linkItem: function(original, localized) {
             var that = this;
+
+            this.scope.$watch(function() {
+              return that.key;
+            }, function(nv, ov) {
+              that.previousKey = ov;
+            }, true);
 
             // Localized changes
             this.scope.$watch(function() {
@@ -197,15 +210,19 @@
               // Value missing
               if (!original[this.keys[i]]) {
                 original[this.keys[i]] = {};
+                continue;
               }
 
               // Convert string to l10n_string
               if (angular.isString(original[this.keys[i]])) {
-                original[this.keys[i]] = {};
+                var value = original[this.keys[i]];
 
-                original[this.keys[i]][this.key] = original[this.keys[i]];
+                original[this.keys[i]] = {};
+                original[this.keys[i]][this.previousKey] = value;
+                continue;
               }
 
+              // Convert string to l10n_string
               if (angular.isObject(original[this.keys[i]])) {
                 original[this.keys[i]][this.key] = localized[this.keys[i]];
               }
