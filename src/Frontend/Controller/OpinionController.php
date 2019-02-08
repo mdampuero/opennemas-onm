@@ -35,9 +35,10 @@ class OpinionController extends FrontendController
      * {@inheritdoc}
      */
     protected $groups = [
-        'showamp'   => 'amp_inner',
-        'frontpage' => 'opinion_frontpage',
-        'show'      => 'opinion_inner',
+        'showamp'         => 'amp_inner',
+        'frontpage'       => 'opinion_frontpage',
+        'frontpageauthor' => 'opinion_frontpage',
+        'show'            => 'opinion_inner',
     ];
 
     /**
