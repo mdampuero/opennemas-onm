@@ -34,7 +34,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       $scope.locale = locale;
       $scope.tags   = tags;
 
-      if (video.information) {
+      if (video && video.information) {
         $scope.information = video.information;
 
         if ($scope.information.embedHTML) {
@@ -79,9 +79,12 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
       http.get(route).then(
         function(response) {
-          $scope.information = response.data;
-
+          $scope.information     = response.data;
           $scope.informationJson = JSON.stringify($scope.information);
+
+          if ($scope.information.title && !$scope.title) {
+            $scope.title = $scope.information.title;
+          }
 
           if ($scope.information.embedHTML) {
             $scope.information.embedHTML =

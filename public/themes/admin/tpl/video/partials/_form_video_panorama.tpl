@@ -43,7 +43,7 @@
         <h3 class="spinner-text">{t}Loading{/t}...</h3>
       </div>
     </div>
-    <div class="ng-cloak" ng-if="information && !loading_data">
+    <div class="ng-cloak" ng-show="information && !loading_data">
       {include file="video/partials/_video_information.tpl"}
     </div>
   </div>
