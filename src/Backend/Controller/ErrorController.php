@@ -148,6 +148,7 @@ class ErrorController extends Controller
 
         $response = new Response($content, 404);
         $response->headers->set('x-cache-for', '+5 sec');
+        $response->headers->set('x-tags', 'not-found-instance-error');
 
         return $response;
     }
