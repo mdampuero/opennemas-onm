@@ -175,7 +175,7 @@ class OpinionController extends FrontendController
         ) {
             return new RedirectResponse(
                 $this->generateUrl('frontend_blog_show', [
-                    'blog_id'     => $dirtyID,
+                    'blog_id'     => $item->pk_content,
                     'author_name' => $author->username,
                     'blog_title'  => $item->slug,
                 ])
@@ -206,6 +206,10 @@ class OpinionController extends FrontendController
      */
     protected function hydrateFrontpage(array $params) : void
     {
+        $epp  = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+            ->get('items_per_page', 10);
+        $page = array_key_exists('page', $params) ? $params['page'] : 1;
+
         $date    = date('Y-m-d H:i:s');
         $filters = [
             'content_status' => [['value' => 1]],
@@ -224,22 +228,13 @@ class OpinionController extends FrontendController
             ],
         ];
 
-        $em = $this->get('opinion_repository');
-
-        $page = array_key_exists('page', $params) ? $params['page'] : 1;
-
-        $order['in_home'] = 'DESC';
-        if ($page == 1) {
-            $order['position']  = 'ASC';
-            $filters['in_home'] = [['value' => 1]];
-        }
         $order['starttime'] = 'DESC';
 
-        // Fetch configurations for his frontpage
+        $em = $this->get('opinion_repository');
+
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')->get('opinion_settings', [
                 'total_editorial' => 2,
-                'total_director'  => 1,
             ]);
 
         // Fetch last editorial opinions from editorial
@@ -258,50 +253,21 @@ class OpinionController extends FrontendController
             $params['editorial'] = $editorialContents;
         }
 
-        // Fetch lastest opinions from director
-        $contents = [];
-        if ($settings['total_director'] > 0) {
-            $filters['type_opinion'] = [['value' => 2]];
-
-            $contents = $em->findBy($filters, $order, 2, $page);
-
-            foreach ($contents as &$opinion) {
-                if (isset($opinion->img1) && ($opinion->img1 > 0)) {
-                    $contents[0]->img1 = $this
-                        ->get('entity_repository')
-                        ->find('Photo', $opinion->img1);
-                }
-            }
-
-            $params = array_merge($params, [
-                'director'         => $contents[0],
-                'opinionsDirector' => $contents
-            ]);
-        }
-
-        $epp = $this->get('orm.manager')->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 10);
-
-        $filters['type_opinion'] = [['value' => 0]];
-
         $bloggers = $this->get('api.service.author')
             ->getList('is_blog = 1 order by name asc');
 
         if (!empty($bloggers['total'])) {
             $filters = array_merge($filters, [
                 'opinions`.`fk_author' => [ [
-                    'value' => array_map(function ($a) {
-                        return $a->id;
+                    'value' => array_map(function ($author) {
+                        return $author->id;
                     }, $bloggers['items']),
                     'operator' => 'NOT IN'
-                ] ]
+                    ] ]
             ]);
         }
 
-        // Make pagination using all opinions. Overwriting filter
-        if ($page == 1) {
-            unset($filters['in_home']);
-        }
+        $filters['type_opinion'] = [['value' => 0]];
 
         $opinions      = $em->findBy($filters, $order, $epp, $page);
         $countOpinions = $em->countBy($filters);

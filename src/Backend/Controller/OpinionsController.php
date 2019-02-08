@@ -460,7 +460,6 @@ class OpinionsController extends Controller
 
         $configs = [
             'opinion_settings' => [
-                'total_director'        => filter_var($configsRAW['total_director'], FILTER_VALIDATE_INT),
                 'total_editorial'       => filter_var($configsRAW['total_editorial'], FILTER_VALIDATE_INT),
                 'total_opinions'        => filter_var($configsRAW['total_opinions'], FILTER_VALIDATE_INT),
                 'total_opinion_authors' => filter_var($configsRAW['total_opinion_authors'], FILTER_VALIDATE_INT),
