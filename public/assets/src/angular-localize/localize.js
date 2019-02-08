@@ -123,7 +123,9 @@
             this.scope.$watch(function() {
               return that.key;
             }, function(nv, ov) {
-              that.previousKey = ov;
+              if (ov && nv && ov !== nv) {
+                that.previousKey = ov;
+              }
             }, true);
 
             // Localized changes
@@ -213,12 +215,18 @@
                 continue;
               }
 
-              // Convert string to l10n_string
               if (angular.isString(original[this.keys[i]])) {
                 var value = original[this.keys[i]];
 
-                original[this.keys[i]] = {};
-                original[this.keys[i]][this.previousKey] = value;
+                // If locale changed, convert string
+                if (this.previousKey) {
+                  original[this.keys[i]] = {};
+                  original[this.keys[i]][this.previousKey] = value;
+                  continue;
+                }
+
+                // If locale not changed, update string
+                original[this.keys[i]] = localized[this.keys[i]];
                 continue;
               }
 
