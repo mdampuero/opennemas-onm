@@ -53,7 +53,7 @@
             }
 
             return '<div class="translator btn-group">' +
-              '<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">' +
+              '<button class="btn btn-white dropdown-toggle" data-toggle="dropdown" type="button">' +
                 '<i class="fa {{languages[ngModel].icon}} m-r-5" ng-show="languages[ngModel].icon"></i>' +
                 '{{languages[ngModel].name}}' +
                 '<i class="fa fa-angle-down"></i>' +
@@ -76,7 +76,7 @@
 
             var getOption = function(name, value, main, translators, keys, item) {
               var option = {
-                class: value === main ? 'primary' : 'default',
+                class: value === main ? 'info' : 'default',
                 icon: item ? 'fa-plus' : '',
                 name: name,
                 translated: false,
