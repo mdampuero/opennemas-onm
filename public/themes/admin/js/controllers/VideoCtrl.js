@@ -17,7 +17,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      *
      * @type {Array}
      */
-    $scope.information = [];
+    $scope.information = {};
 
     /**
      * @function init

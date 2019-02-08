@@ -1,5 +1,5 @@
 <div class="contentform-main">
-  <div class="form-group">
+  <div class="form-group no-margin">
     <label for="video_url" class="form-label">{t}Video URL{/t}</label>
     <div class="controls">
       <div class="input-group">
@@ -43,7 +43,7 @@
         <h3 class="spinner-text">{t}Loading{/t}...</h3>
       </div>
     </div>
-    <div class="ng-cloak" ng-show="information && !loading_data">
+    <div class="ng-cloak" ng-show="information.service && !loading_data">
       {include file="video/partials/_video_information.tpl"}
     </div>
   </div>
