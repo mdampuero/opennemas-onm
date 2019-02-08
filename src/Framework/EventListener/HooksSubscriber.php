@@ -550,7 +550,8 @@ class HooksSubscriber implements EventSubscriberInterface
             ->deleteGroup($this->view->getCacheId('content', $content->pk_content))
             ->deleteGroup($this->view->getCacheId('archive', date('Ymd')))
             ->deleteGroup($this->view->getCacheId('rss', $content->content_type_name))
-            ->deleteGroup($this->view->getCacheId('frontpage', $content->content_type_name));
+            ->deleteGroup($this->view->getCacheId('frontpage', $content->content_type_name))
+            ->deleteGroup($this->view->getCacheId($content->content_type_name, 'frontpage'));
 
         if ($content->content_type_name == 'article') {
             $this->smartyCacheHandler

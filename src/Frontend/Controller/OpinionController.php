@@ -235,6 +235,7 @@ class OpinionController extends FrontendController
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')->get('opinion_settings', [
                 'total_editorial' => 2,
+                'total_opinions'  => $epp
             ]);
 
         // Fetch last editorial opinions from editorial
@@ -268,6 +269,7 @@ class OpinionController extends FrontendController
         }
 
         $filters['type_opinion'] = [['value' => 0]];
+        $epp                     = $settings['total_opinions'] ?? $epp;
 
         $opinions      = $em->findBy($filters, $order, $epp, $page);
         $countOpinions = $em->countBy($filters);
