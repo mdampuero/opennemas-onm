@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form name="form" ng-controller="CategoryCtrl" ng-init="getItem({$id})">
+  <form name="form" ng-controller="CategoryCtrl" ng-init="forcedLocale = '{$locale}'; getItem({$id})">
     <div class="page-navbar actions-navbar ng-cloak" ng-show="!loading">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -34,7 +34,7 @@
               </h4>
             </li>
             <li class="quicklinks ng-cloak" ng-if="data.extra.locale.multilanguage">
-              <translator keys="data.extra.keys" ng-model="config.locale" options="data.extra.locale"></translator>
+              <translator item="data.item" keys="data.extra.keys" ng-model="config.locale.selected" options="config.locale"></translator>
             </li>
           </ul>
           <div class="all-actions pull-right">

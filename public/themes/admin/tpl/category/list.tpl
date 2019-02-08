@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div ng-controller="CategoryListCtrl" ng-init="init()">
+  <div ng-controller="CategoryListCtrl" ng-init="forcedLocale = '{$locale}'; init()">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -22,7 +22,7 @@
               </h4>
             </li>
             <li class="quicklinks ng-cloak" ng-if="data.extra.locale.multilanguage">
-              <translator keys="data.extra.keys" ng-model="config.locale" options="data.extra.locale"></translator>
+              <translator keys="data.extra.keys" ng-model="config.locale.selected" options="data.extra.locale"></translator>
             </li>
           </ul>
           <div class="all-actions pull-right">
@@ -36,7 +36,7 @@
               {acl isAllowed="CATEGORY_CREATE"}
               <li class="quicklinks">
                 <a class="btn btn-success text-uppercase" href="[% routing.generate('backend_category_create') %]">
-                  <span class="fa fa-plus"></span>
+                  <span class="fa fa-plus m-r-5"></span>
                   {t}Create{/t}
                 </a>
               </li>
@@ -188,7 +188,7 @@
                         [% item.title %]
                       </strong>
                       <div class="listing-inline-actions">
-                        <translator item="data.results[$index]" keys="data.extra.keys" link="[% routing.generate('backend_category_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+                        <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_category_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage" options="data.extra.locale" text="{t}Edit{/t}"></translator>
                         <a class="btn btn-default btn-small" href="[% routing.generate('backend_category_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage">
                           <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                         </a>
