@@ -16,33 +16,6 @@
                 {/if}
               </h4>
             </li>
-            <li class="quicklinks hidden-xs">
-              <span class="h-seperate"></span>
-            </li>
-            <li class="quicklinks dropdown hidden-xs">
-              <div data-toggle="dropdown">
-                {if $home}
-                  {t}Opinion frontpage{/t}
-                {else}
-                  {t}Listing{/t}
-                {/if}
-                <span class="caret"></span>
-              </div>
-              <ul class="dropdown-menu">
-                {acl isAllowed="OPINION_FRONTPAGE"}
-                <li>
-                  <a href="{url name=admin_opinions_frontpage}">
-                    {t}Opinion frontpage{/t}
-                  </a>
-                </li>
-                {/acl}
-                <li>
-                  <a href="{url name=admin_opinions}">
-                    {t}Listing{/t}
-                  </a>
-                </li>
-              </ul>
-            </li>
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
@@ -81,11 +54,7 @@
         </div>
       </div>
     </div>
-    {if $home}
-      {include file="opinion/partials/_opinion_list_home.tpl"}
-    {else}
-      {include file="opinion/partials/_opinion_list.tpl"}
-    {/if}
+    {include file="opinion/partials/_opinion_list.tpl"}
     <script type="text/ng-template" id="modal-delete">
       {include file="common/modals/_modalDelete.tpl"}
     </script>

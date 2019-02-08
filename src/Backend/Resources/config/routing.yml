@@ -484,10 +484,6 @@ admin_blogs:
     path:     /opinions/blog
     defaults: { _controller: BackendBundle:Opinions:list, blog  : 1 }
 
-admin_opinions_frontpage:
-    path:     /opinions/frontpage
-    defaults: { _controller: BackendBundle:Opinions:frontpage }
-
 admin_opinion_create:
     path:     /opinions/create
     defaults: { _controller: BackendBundle:Opinions:create }
@@ -517,11 +513,6 @@ admin_opinion_update:
 admin_opinion_toggleinhome:
     path:     /opinion/{id}/toggle-in-home
     defaults: { _controller: BackendBundle:Opinions:toggleInHome }
-
-
-admin_opinions_savepositions:
-    path:     /opinions/save-positions
-    defaults: { _controller: BackendBundle:Opinions:savePositions }
 
 admin_opinions_content_provider:
     path:     /opinions/content-provider
