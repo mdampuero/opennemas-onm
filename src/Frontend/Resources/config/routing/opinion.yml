@@ -12,7 +12,7 @@ frontend_opinion_show:
 
 frontend_opinion_show_amp:
     path: /opinion/{author_name}/{opinion_title}/{created}{id}.amp.html
-    defaults: { _controller: FrontendBundle:Opinion:showAmp }
+    defaults: { _controller: FrontendBundle:Opinion:showAmp, _format: 'amp' }
     requirements:
         author_name   : '[^/]+'
         opinion_title : '[^/]+'
@@ -34,5 +34,11 @@ frontend_opinion_author_frontpage:
 frontend_opinion_frontpage:
     path: /opinion
     defaults: { _controller: FrontendBundle:Opinion:frontpage }
+    options:
+        l10n: true
+
+frontend_opinion_editorial_frontpage:
+    path: /editorial
+    defaults: { _controller: FrontendBundle:Opinion:frontpageAuthor, author_slug: editorial, author_id: 1 }
     options:
         l10n: true

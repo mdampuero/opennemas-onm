@@ -57,6 +57,7 @@ class OpinionController extends FrontendController
     protected $queries = [
         'frontpage'       => [ 'page' ],
         'frontpageauthor' => [ 'author_id' ],
+        'showamp'         => [ '_format' ],
     ];
 
     /**

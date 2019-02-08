@@ -184,19 +184,21 @@ class FrontendController extends Controller
      */
     protected function getCacheId($params)
     {
+        $cacheParams = [
+            $this->get('core.globals')->getExtension(),
+            $this->get('core.globals')->getAction(),
+        ];
+
         if (array_key_exists('o_content', $params)) {
-            return $this->view->getCacheId(
+            $cacheParams = [
                 'content',
                 $params['o_content']->id,
-                $params['o_token']
-            );
+                $params['o_token'],
+            ];
         }
 
         $cacheParams = array_merge(
-            [
-                $this->get('core.globals')->getExtension(),
-                $this->get('core.globals')->getAction(),
-            ],
+            $cacheParams,
             array_values($this->getQueryParameters(
                 $this->get('core.globals')->getAction(),
                 $params
