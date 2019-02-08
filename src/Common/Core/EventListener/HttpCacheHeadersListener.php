@@ -49,10 +49,6 @@ class HttpCacheHeadersListener
         $this->instance = $instance;
         $this->locale   = $locale;
         $this->template = $template;
-
-        $this->instanceName = is_object($this->instance)
-            ? $this->instance->internal_name
-            : '';
     }
 
     /**
@@ -80,8 +76,10 @@ class HttpCacheHeadersListener
         $tags   = $this->getTags($response);
         $expire = $this->getExpire($response);
 
+        if ($this->hasInstance()) {
+            $response->headers->set('x-instance', $this->getInstance());
+        }
 
-        $response->headers->set('x-instance', $this->instanceName);
         $response->headers->set('x-tags', implode(',', $tags));
 
         if (!empty($expire)) {
@@ -119,6 +117,16 @@ class HttpCacheHeadersListener
     }
 
     /**
+     * Returns the instance value to use in x-instance and x-tags.
+     *
+     * @return string The instance value to use in x-instance and x-tags.
+     */
+    protected function getInstance()
+    {
+        return !empty($this->instance) ? $this->instance->internal_name : '';
+    }
+
+    /**
      * Returns the list of tags to add to the response headers basing on the
      * response and the template service.
      *
@@ -139,9 +147,22 @@ class HttpCacheHeadersListener
             return [];
         }
 
-        return array_unique(array_merge([
-            'instance-' . $this->instanceName,
-            'locale-' . $this->locale->getRequestLocale(),
-        ], $tags));
+        $defaults = [ 'locale-' . $this->locale->getRequestLocale() ];
+
+        if ($this->hasInstance()) {
+            array_unshift($defaults, 'instance-' . $this->getInstance());
+        }
+
+        return array_unique(array_merge($defaults, $tags));
+    }
+
+    /**
+     * Checks if the service has a valid instance.
+     *
+     * @return boolean True if the listener has an instance. False otherwise.
+     */
+    protected function hasInstance()
+    {
+        return !empty($this->getInstance());
     }
 }

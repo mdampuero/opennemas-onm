@@ -193,6 +193,44 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getInstance for multiple values.
+     */
+    public function testGetInstance()
+    {
+        $method = new \ReflectionMethod($this->listener, 'getInstance');
+        $method->setAccessible(true);
+
+        $this->assertEquals('fubar', $method->invokeArgs($this->listener, []));
+
+        $listener = new HttpCacheHeadersListener(null, $this->locale, $this->template);
+        $this->assertEmpty($method->invokeArgs($listener, []));
+    }
+
+    /**
+     * Tests getTags when no instance.
+     */
+    public function testGetTagsWhenNoInstance()
+    {
+        $listener = new HttpCacheHeadersListener(null, $this->locale, $this->template);
+
+        $method = new \ReflectionMethod($listener, 'getTags');
+        $method->setAccessible(true);
+
+        $this->headers->expects($this->any())->method('get')
+            ->with('x-tags')->willReturn(null);
+
+        $this->template->expects($this->any())->method('hasValue')
+            ->with('x-tags')->willReturn(true);
+        $this->template->expects($this->any())->method('getValue')
+            ->with('x-tags')->willReturn('gorp,wibble');
+
+        $this->assertEquals(
+            [ 'locale-en_US' , 'gorp' , 'wibble' ],
+            $method->invokeArgs($listener, [ $this->response ])
+        );
+    }
+
+    /**
      * Tests getTags when no tags found.
      */
     public function testGetTagsWhenNoValues()
@@ -249,5 +287,19 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
             [ 'instance-fubar', 'locale-en_US' , 'gorp' , 'wibble' ],
             $method->invokeArgs($this->listener, [ $this->response ])
         );
+    }
+
+    /**
+     * Tests hasInstance for multiple values.
+     */
+    public function testHasInstance()
+    {
+        $method = new \ReflectionMethod($this->listener, 'hasInstance');
+        $method->setAccessible(true);
+
+        $this->assertTrue($method->invokeArgs($this->listener, []));
+
+        $listener = new HttpCacheHeadersListener(null, $this->locale, $this->template);
+        $this->assertFalse($method->invokeArgs($listener, []));
     }
 }
