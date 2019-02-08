@@ -178,11 +178,13 @@
           $location.search('oql', oql);
 
           return http.get(route).then(function(response) {
-            response.data = $scope.parseList(response.data);
+            $scope.data = response.data;
 
-            $scope.data  = response.data;
-            $scope.items = response.data.items;
+            if (response.data.items) {
+              $scope.items = response.data.items;
+            }
 
+            $scope.parseList(response.data);
             $scope.disableFlags('http');
 
             // Scroll top

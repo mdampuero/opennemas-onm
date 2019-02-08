@@ -66,7 +66,7 @@
          */
         $scope.getData = function() {
           // Do not use angular.copy as it doesnt copy some keys in the object
-          var eltoClean = angular.extend({}, $scope.item);
+          var eltoClean = angular.extend({}, $scope.data.item);
 
           return cleaner.clean(eltoClean);
         };
@@ -92,6 +92,10 @@
 
           http.get(route).then(function(response) {
             $scope.data = response.data;
+
+            if (response.data.item) {
+              $scope.item = angular.extend($scope.item, response.data.item);
+            }
 
             $scope.parseItem($scope.data);
             $scope.disableFlags('http');
@@ -137,9 +141,7 @@
          * @param {Object} data The data in the response.
          */
         $scope.parseItem = function(data) {
-          if (data.item) {
-            $scope.item = angular.extend($scope.item, data.item);
-          }
+          return data;
         };
 
         /**
