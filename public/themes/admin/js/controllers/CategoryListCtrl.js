@@ -51,6 +51,52 @@
         };
 
         /**
+         * @function areSelectedEmpty
+         * @memberOf CategoryListCtrl
+         *
+         * @description
+         *   Checks if all selected categories are empty.
+         *
+         * @return {Boolean} True if all selected categories are empty. False
+         *                   otherwise.
+         */
+        $scope.areSelectedEmpty = function() {
+          if (!$scope.selected.items) {
+            return false;
+          }
+
+          var notEmpty = $scope.selected.items.filter(function(e) {
+            return $scope.data.extra.stats[e] &&
+              $scope.data.extra.stats[e] > 0;
+          });
+
+          return notEmpty.length === 0;
+        };
+
+        /**
+         * @function areSelectedNotEmpty
+         * @memberOf CategoryListCtrl
+         *
+         * @description
+         *   Checks if all selected categories are empty.
+         *
+         * @return {Boolean} True if all selected categories are not empty.
+         *                   False otherwise.
+         */
+        $scope.areSelectedNotEmpty = function() {
+          if (!$scope.selected.items) {
+            return false;
+          }
+
+          var empty = $scope.selected.items.filter(function(e) {
+            return !$scope.data.extra.stats[e] ||
+              $scope.data.extra.stats[e] === 0;
+          });
+
+          return empty.length === 0;
+        };
+
+        /**
          * @function empty
          * @memberOf RestListCtrl
          *
@@ -160,6 +206,23 @@
           } });
 
           $scope.list();
+        };
+
+        /**
+         * @function isEmpty
+         * @memberOf CategoryListCtrl
+         *
+         * @description
+         *   Checks if the item is empty.
+         *
+         * @param {Object} item The item to check.
+         *
+         * @return {Boolean} True if all selected categories are empty. False
+         *                   otherwise.
+         */
+        $scope.isEmpty = function(item) {
+          return !$scope.data.extra.stats[$scope.getId(item)] ||
+            $scope.data.extra.stats[$scope.getId(item)] === 0;
         };
 
         /**

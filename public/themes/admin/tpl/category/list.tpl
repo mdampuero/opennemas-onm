@@ -65,12 +65,12 @@
             </li>
           </ul>
           <ul class="nav quick-section pull-right">
-            <li class="quicklinks" ng-if="selected.items.length < items.length">
+            <li class="quicklinks" ng-if="selected.items.length < items.length && areSelectedNotEmpty()">
               <button class="btn btn-link" ng-click="moveSelected()" uib-tooltip="{t}Move contents{/t}" tooltip-placement="bottom">
                 <i class="fa fa-exchange fa-lg"></i>
               </button>
             </li>
-            <li class="quicklinks hidden-xs" ng-if="selected.items.length < items.length">
+            <li class="quicklinks hidden-xs" ng-if="selected.items.length < items.length && areSelectedNotEmpty()">
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks">
@@ -94,10 +94,10 @@
               </li>
             {/acl}
             {acl isAllowed="CATEGORY_DELETE"}
-              <li class="quicklinks hidden-xs">
+              <li class="quicklinks hidden-xs" ng-if="areSelectedEmpty()">
                 <span class="h-seperate"></span>
               </li>
-              <li class="quicklinks">
+              <li class="quicklinks" ng-if="areSelectedEmpty()">
                 <button class="btn btn-link" ng-click="deleteSelected('api_v1_backend_categories_delete')" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom">
                   <i class="fa fa-trash-o fa-lg"></i>
                 </button>
@@ -198,7 +198,7 @@
                           </button>
                         </div>
                         <span>
-                          <button class="btn btn-white btn-small dropdown-toggle" data-toggle="dropdown" type="button">
+                          <button class="btn btn-white btn-small dropdown-toggle" data-toggle="dropdown" ng-disabled="isEmpty(item)" type="button">
                             <i class="fa fa-ellipsis-h"></i>
                           </button>
                           <ul class="dropdown-menu no-padding">
