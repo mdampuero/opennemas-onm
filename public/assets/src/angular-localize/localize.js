@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   /**
@@ -22,6 +22,7 @@
        */
       this.get = function(keys, scope, clean, ignore) {
         return {
+
           /**
            * Flag to delete objects not found in original values when enabled.
            *
@@ -88,7 +89,8 @@
 
             // Link objects
             if (!angular.isArray(original) || !angular.isArray(localized)) {
-              return this.linkItem(original, localized);
+              this.linkItem(original, localized);
+              return;
             }
 
             // Different lists' length
@@ -109,7 +111,7 @@
            * @param {Object} localized The localized item.
            */
           linkItem: function(original, localized) {
-            var self = this;
+            var that = this;
 
             // Localized changes
             this.scope.$watch(function() {
@@ -119,7 +121,7 @@
                 return;
               }
 
-              self.updateOriginal(original, nv);
+              that.updateOriginal(original, nv);
             }, true);
 
             // Original changes
@@ -130,7 +132,7 @@
                 return;
               }
 
-              self.updateLocalized(localized, nv);
+              that.updateLocalized(localized, nv);
             }, true);
           },
 
@@ -155,12 +157,16 @@
            * @param {Object} original  The original item.
            */
           updateLocalized: function(localized, original) {
-            var self  = this;
+            var that = this;
 
             for (var i = 0; i < this.keys.length; i++) {
               if (original[this.keys[i]]) {
                 if (this.clean) {
                   delete localized[this.keys[i]];
+                }
+
+                if (angular.isString(original[this.keys[i]])) {
+                  localized[this.keys[i]] = original[this.keys[i]];
                 }
 
                 if (original[this.keys[i]][this.key]) {
@@ -170,7 +176,7 @@
             }
 
             var ukeys = Object.keys(original).filter(function(e) {
-              return self.keys.indexOf(e) < 0 && self.ignore.indexOf(e) < 0;
+              return that.keys.indexOf(e) < 0 && that.ignore.indexOf(e) < 0;
             });
 
             for (var i = 0; i < ukeys.length; i++) {
@@ -185,11 +191,19 @@
            * @param {Object} localized The localized item.
            */
           updateOriginal: function(original, localized) {
-            var self  = this;
+            var that = this;
 
             for (var i = 0; i < this.keys.length; i++) {
+              // Value missing
               if (!original[this.keys[i]]) {
                 original[this.keys[i]] = {};
+              }
+
+              // Convert string to l10n_string
+              if (angular.isString(original[this.keys[i]])) {
+                original[this.keys[i]] = {};
+
+                original[this.keys[i]][this.key] = original[this.keys[i]];
               }
 
               if (angular.isObject(original[this.keys[i]])) {
@@ -198,7 +212,7 @@
             }
 
             var ukeys = Object.keys(localized).filter(function(e) {
-              return self.keys.indexOf(e) < 0 && self.ignore.indexOf(e) < 0;
+              return that.keys.indexOf(e) < 0 && that.ignore.indexOf(e) < 0;
             });
 
             for (var i = 0; i < ukeys.length; i++) {
@@ -218,7 +232,7 @@
       };
 
       return this;
-    }).factory('localizer', function () {
+    }).factory('localizer', function() {
       /**
        * @function get
        * @memberOf linker
@@ -230,11 +244,12 @@
        */
       this.get = function(config) {
         return {
+
           /**
            * The localizer configuration.
            *
            * @type {Object}
-          */
+           */
           config: config,
 
           /**
@@ -252,6 +267,7 @@
             }
 
             var localized = [];
+
             for (var i = 0; i < item.length; i++) {
               localized.push(this.localizeItem(item[i], keys, locale));
             }
@@ -296,7 +312,7 @@
            * @return {String} The localized value.
            */
           localizeValue: function(value, locale) {
-            if (!angular.isObject(value)) {
+            if (angular.isString(value) || !angular.isObject(value)) {
               return value;
             }
 
@@ -316,5 +332,5 @@
       };
 
       return this;
-    }) ;
+    });
 })();
