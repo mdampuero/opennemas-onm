@@ -277,7 +277,7 @@
           $scope.items = lz.localize($scope.data.items,
             $scope.data.extra.keys, $scope.config.locale);
 
-          if (!$scope.config.linker.items) {
+          if (!$scope.config.linkers.items) {
             $scope.config.linkers.items = linker.get($scope.data.extra.keys,
               $scope.config.locale.default, $scope, false);
           }
