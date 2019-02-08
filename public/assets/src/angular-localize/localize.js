@@ -20,7 +20,7 @@
        *
        * @return {Object} The linker
        */
-      this.get = function(keys, scope, clean, ignore) {
+      this.get = function(keys, defaultKey, scope, clean, ignore) {
         return {
 
           /**
@@ -29,6 +29,13 @@
            * @type {Boolean}
            */
           clean: clean,
+
+          /**
+           * The fallback key when current key has no value.
+           *
+           * @type {String}
+           */
+          defaultKey: defaultKey,
 
           /**
            * List of keys to ignore in this linker.
@@ -175,18 +182,32 @@
             var that = this;
 
             for (var i = 0; i < this.keys.length; i++) {
-              if (original[this.keys[i]]) {
-                if (this.clean) {
-                  delete localized[this.keys[i]];
-                }
+              var property = this.keys[i];
 
-                if (angular.isString(original[this.keys[i]])) {
-                  localized[this.keys[i]] = original[this.keys[i]];
-                }
+              if (!original[property]) {
+                continue;
+              }
 
-                if (original[this.keys[i]][this.key]) {
-                  localized[this.keys[i]] = original[this.keys[i]][this.key];
-                }
+              if (this.clean) {
+                delete localized[property];
+              }
+
+              // Use string in default key only
+              if (angular.isString(original[property]) &&
+                  this.defaultKey === this.key) {
+                localized[property] = original[property];
+                continue;
+              }
+
+              // Use value from key
+              if (original[property][this.key]) {
+                localized[property] = original[property][this.key];
+                continue;
+              }
+
+              // Fallback only when not cleaning
+              if (!this.clean && original[property][this.defaultKey]) {
+                localized[property] = original[property][this.defaultKey];
               }
             }
 
