@@ -29,18 +29,6 @@
                   <span class="h-seperate"></span>
                 </li>
               {/acl}
-              {acl isAllowed="OPINION_FRONTPAGE"}
-                {if $home}
-                  <li>
-                    <button class="btn btn-white" id="save_positions" ng-click="saveOpinionsFrontpage()" title="{t}Save positions{/t}" type="button">
-                      <i class="fa fa-save"></i> <span class="hidden-xs">{t}Save positions{/t}</span>
-                    </button>
-                  </li>
-                  <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                  </li>
-                {/if}
-              {/acl}
               {acl isAllowed="OPINION_CREATE"}
                 <li class="quicklinks">
                   <a class="btn btn-primary" href="{url name=admin_opinion_create}" title="{t}New opinion{/t}" id="create-button">
