@@ -151,13 +151,13 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
         $this->security->expects($this->once())->method('hasExtension')
             ->with('AMP_MODULE')->willReturn(true);
 
-        $this->smarty->expects($this->exactly(3))->method('getTemplateVars')
+        $this->smarty->expects($this->exactly(1))->method('getTemplateVars')
             ->willReturn([
                 'o_content' => json_decode(json_encode([
                     'category_name'     => 'gorp',
                     'pk_content'        => 145,
                     'created'           => '1999-12-31 23:59:59',
-                    'content_type_name' => 'article',
+                    'content_type_name' => 'opinion',
                     'slug'              => 'foobar-thud'
                 ]), false)
             ]);
@@ -175,7 +175,7 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
      * Tests smarty_outputfilter_meta_amphtml when there is a content but it is
      * not an article.
      */
-    public function testMetaAmpHtmlWhenNoArticle()
+    public function testMetaAmpHtmlWhenNoValidContentType()
     {
         $this->rs->expects($this->any())
             ->method('getCurrentRequest')
@@ -189,10 +189,10 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
 
         $output = '<html><head></head><body>Hello World!</body></html>';
 
-        $this->smarty->expects($this->exactly(2))->method('getTemplateVars')
+        $this->smarty->expects($this->exactly(1))->method('getTemplateVars')
             ->willReturn([
                 'o_content' => json_decode(json_encode([
-                    'content_type_name' => 'opinion'
+                    'content_type_name' => 'invalidtype'
                 ]), false)
             ]);
 
