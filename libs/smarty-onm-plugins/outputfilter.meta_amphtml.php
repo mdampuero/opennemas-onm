@@ -26,13 +26,14 @@ function smarty_outputfilter_meta_amphtml($output, $smarty)
     $content = $smarty->getTemplateVars()['o_content'];
     $tpl     = '<link rel="amphtml" href="%s"/>';
 
+    // var_dump($container->get('core.helper.url_generator')->generate($content, [ 'absolute' => true ]));die();
+
     $url = $container->get('core.helper.l10n_route')->localizeUrl(
-        $container->get('router')->generate('frontend_article_show_amp', [
-            'category_name' => $content->category_name,
-            'slug'          => $content->slug,
-            'article_id'    => date('YmdHis', strtotime($content->created))
-                . sprintf('%06d', $content->pk_content),
-            ], UrlGeneratorInterface::ABSOLUTE_URL)
+        $container->get('router')->generate(
+            'frontend_' . $content->content_type_name . '_show_amp',
+            [ 'id' => $content->pk_content, ],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        )
     );
 
     return str_replace('</head>', sprintf($tpl, $url) . '</head>', $output);
