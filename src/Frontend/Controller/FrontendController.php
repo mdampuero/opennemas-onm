@@ -43,6 +43,15 @@ class FrontendController extends Controller
     ];
 
     /**
+     * The list of templates per action.
+     *
+     * @var array
+     */
+    protected $templates = [
+        'showamp' => 'amp/content.tpl',
+    ];
+
+    /**
      * Displays a frontpage basing on the parameters in the request.
      *
      * @param Request $request The request object.
@@ -269,8 +278,11 @@ class FrontendController extends Controller
      */
     protected function getItem(Request $request)
     {
+        $contentType = $request->get('content_type')
+            ?? \classify($this->get('core.globals')->getExtension());
+
         return $this->get('entity_repository')->find(
-            \classify($this->get('core.globals')->getExtension()),
+            \classify($contentType),
             $this->getIdFromRequest($request)
         );
     }
