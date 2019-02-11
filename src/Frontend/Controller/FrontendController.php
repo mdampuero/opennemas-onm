@@ -472,6 +472,11 @@ class FrontendController extends Controller
             $videoInt = $em->find('Video', $item->fk_video2);
             $this->view->assign('videoInt', $videoInt);
         }
+
+        $this->view->assign([
+            'related_contents'   => $this->getRelated($item),
+            'suggested_contents' => $this->getSuggested($item)
+        ]);
     }
 
     /**
@@ -523,5 +528,65 @@ class FrontendController extends Controller
         }
 
         return $query;
+    }
+
+
+
+    /**
+     * Returns the list of related contents for an article.
+     *
+     * @param Article $article The article object.
+     *
+     * @return array The list of rellated contents.
+     */
+    protected function getRelated($content)
+    {
+        $relations = $this->get('related_contents')
+            ->getRelations($content->id, 'inner');
+
+        if (empty($relations)) {
+            return [];
+        }
+
+        $em = $this->get('entity_repository');
+
+        $related  = [];
+        $contents = $em->findMulti($relations);
+
+        // Filter out not ready for publish contents.
+        foreach ($contents as $content) {
+            if (!$content->isReadyForPublish()) {
+                continue;
+            }
+
+            if ($content->content_type == 1 && !empty($content->img1)) {
+                $content->photo = $em->find('Photo', $content->img1);
+            } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
+                $content->video = $em->find('Video', $content->fk_video);
+            }
+
+            $related[] = $content;
+        }
+
+        return $related;
+    }
+
+    /**
+     * Returns the list of suggested contents for an article.
+     *
+     * @param Article  $article  The current article.
+     * @param Category $category The article category.
+     *
+     * @return array The list of suggested contents.
+     */
+    protected function getSuggested($content, $category = null)
+    {
+        $query = sprintf(
+            'pk_content <> %s',
+            $content->id
+        );
+
+        return $this->get('automatic_contents')
+            ->searchSuggestedContents($content->content_type_name, $query);
     }
 }

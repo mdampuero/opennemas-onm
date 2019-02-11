@@ -183,7 +183,7 @@ class ArticleController extends FrontendController
      *
      * @return array The list of rellated contents.
      */
-    private function getRelated($article)
+    protected function getRelated($article)
     {
         $relations = $this->get('related_contents')
             ->getRelations($article->id, 'inner');
@@ -223,7 +223,7 @@ class ArticleController extends FrontendController
      *
      * @return array The list of suggested contents.
      */
-    private function getSuggested($article, $category)
+    protected function getSuggested($article, $category)
     {
         $query = sprintf(
             'category_name = "%s" AND pk_content <> %s',

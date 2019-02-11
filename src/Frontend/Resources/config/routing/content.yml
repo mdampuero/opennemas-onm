@@ -33,5 +33,5 @@ frontend_content_show_amp:
     path: /{content_type}/{id}.amp.html
     defaults: { _controller: FrontendBundle:Frontend:showAmp }
     requirements:
-        content_type:  '[a-z_]+'
+        content_type:  '(opinion|article)'
         id : '([0-9]+)'
