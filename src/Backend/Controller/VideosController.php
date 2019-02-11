@@ -11,6 +11,7 @@ namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 
@@ -370,24 +371,18 @@ class VideosController extends Controller
         $url    = $request->query->get('url', null, FILTER_DEFAULT);
         $url    = rawurldecode($url);
         $params = $this->container->getParameter('panorama');
+        $output = _("Please check the video url, seems to be incorrect");
 
         if ($url) {
             try {
-                $videoP      = new \Panorama\Video($url, $params);
-                $information = $videoP->getVideoDetails();
-
-                $output = $this->renderView(
-                    'video/partials/_video_information.tpl',
-                    ['information' => $information]
-                );
+                $videoP = new \Panorama\Video($url, $params);
+                $output = $videoP->getVideoDetails();
             } catch (\Exception $e) {
                 $output = _("Can't get video information. Check the url");
             }
-        } else {
-            $output = _("Please check the video url, seems to be incorrect");
         }
 
-        return new Response($output);
+        return new JsonResponse($output);
     }
 
     /**
