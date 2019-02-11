@@ -90,8 +90,12 @@
 
                 if (keys) {
                   for (var i = 0; i < keys.length; i++) {
-                    if (item[keys[i]] && angular.isObject(item[keys[i]]) &&
-                        item[keys[i]][value]) {
+                    if (!item[keys[i]]) {
+                      return option;
+                    }
+
+                    if (angular.isString(item[keys[i]]) && value === main ||
+                        angular.isObject(item[keys[i]]) && item[keys[i]][value]) {
                       option.icon       = 'fa-pencil';
                       option.translated = true;
 
