@@ -165,10 +165,8 @@ class AssetController extends Controller
         }
 
         return new Response($response, 200, [
-            // 'Expire'       => new \DateTime("+5 min"),
             'Content-Type' => 'text/css',
-            'x-instance'   => $this->get('core.instance')->internal_name,
-            'x-tags'       => 'instance-' . $this->get('core.instance')->internal_name . ',frontpagecss',
+            'x-tags'       => 'frontpagecss',
         ]);
     }
 
@@ -242,9 +240,8 @@ class AssetController extends Controller
         $contents = $coreCss . PHP_EOL . $customCss;
 
         return new Response($contents, 200, [
-            'Content-Type'  => 'text/css',
-            'x-instance'    => $this->get('core.instance')->internal_name,
-            'x-tags'        => 'instance-' . $this->get('core.instance')->internal_name . ',customcss',
+            'Content-Type' => 'text/css',
+            'x-tags'       => 'customcss',
         ]);
     }
 

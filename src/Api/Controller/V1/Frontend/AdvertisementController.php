@@ -51,12 +51,9 @@ class AdvertisementController extends Controller
             return !is_null($element);
         });
 
-        $instance = $this->get('core.instance');
-        $headers  = [
-            'x-cache-for'  => '1d',
-            'x-cacheable'  => true,
-            'x-instance'   => $instance->internal_name,
-            'x-tags'       => $this->getListTags($places, $advertisements, $instance)
+        $headers = [
+            'x-cache-for' => '+1 day',
+            'x-tags'      => $this->getListTags($places, $advertisements)
         ];
 
         return new JsonResponse(array_values($advertisements), 200, $headers);
@@ -86,12 +83,9 @@ class AdvertisementController extends Controller
             );
         }
 
-        $instance = $this->get('core.instance');
-        $headers  = [
-            'x-cache-for'  => '1d',
-            'x-cacheable'  => true,
-            'x-instance'   => $instance->internal_name,
-            'x-tags'       => $this->getItemTags($ad, $instance),
+        $headers = [
+            'x-cache-for' => '+1 day',
+            'x-tags'      => $this->getItemTags($ad),
         ];
 
         $contents = $this->get('core.renderer.advertisement')
@@ -193,19 +187,16 @@ class AdvertisementController extends Controller
      * Returns the list of tags basing on an advertisement.
      *
      * @param \Advertisement $advertisement The advertisement object.
-     * @param Instance      $instance      The current instance.
      *
      * @return string The list of tags.
      */
-    protected function getItemTags($advertisement, $instance)
+    protected function getItemTags($advertisement)
     {
         $tags = [
-            'instance-' . $instance->internal_name,
             'extension-advertisement',
-            'show'
+            'show',
+            'content-' . $advertisement->id
         ];
-
-        $tags[] = 'content-' . $advertisement->id;
 
         foreach ($advertisement->positions as $position) {
             $tags[] = 'position-' . $position;
@@ -219,14 +210,12 @@ class AdvertisementController extends Controller
      *
      * @param array    $positions      The list of positions.
      * @param array    $advertisements The list of advertisements.
-     * @param Instance $instance       The current instance.
      *
      * @return string The list of tags.
      */
-    protected function getListTags($positions, $advertisements, $instance)
+    protected function getListTags($positions, $advertisements)
     {
         $tags = [
-            'instance-' . $instance->internal_name,
             'extension-advertisement',
             'list'
         ];
