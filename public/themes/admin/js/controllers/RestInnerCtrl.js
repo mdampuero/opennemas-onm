@@ -93,9 +93,11 @@
           http.get(route).then(function(response) {
             $scope.data = response.data;
 
-            if (response.data.item) {
-              $scope.item = angular.extend($scope.item, response.data.item);
+            if (!response.data.item) {
+              $scope.data.item = {};
             }
+
+            $scope.item = angular.extend($scope.item, response.data.item);
 
             $scope.parseItem($scope.data);
             $scope.disableFlags('http');

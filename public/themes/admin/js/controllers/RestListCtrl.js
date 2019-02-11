@@ -180,9 +180,11 @@
           return http.get(route).then(function(response) {
             $scope.data = response.data;
 
-            if (response.data.items) {
-              $scope.items = response.data.items;
+            if (!response.data.items) {
+              $scope.data.items = [];
             }
+
+            $scope.items = $scope.data.items;
 
             $scope.parseList(response.data);
             $scope.disableFlags('http');
