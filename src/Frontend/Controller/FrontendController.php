@@ -139,6 +139,15 @@ class FrontendController extends Controller
      **/
     public function showAmpAction(Request $request)
     {
+        if (!$this->get('core.security')->hasExtension('AMP_MODULE')) {
+            throw new ResourceNotFoundException();
+        }
+
+        // Avoid NewRelic js script
+        if (extension_loaded('newrelic')) {
+            newrelic_disable_autorum();
+        }
+
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
 
@@ -203,6 +212,7 @@ class FrontendController extends Controller
                 'content',
                 $params['o_content']->id,
                 $params['o_token'],
+                array_key_exists('_format', $params) ? $params['_format'] : null
             ];
         }
 
@@ -417,35 +427,6 @@ class FrontendController extends Controller
      */
     protected function hydrateShowAmp($params, $item)
     {
-        // Avoid NewRelic js script
-        if (extension_loaded('newrelic')) {
-            newrelic_disable_autorum();
-        }
-
-        if (!$this->get('core.security')->hasExtension('AMP_MODULE')) {
-            throw new ResourceNotFoundException();
-        }
-
-        // Get instance logo size
-        $logo = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('site_logo');
-        if (!empty($logo)) {
-            $instance = $this->get('core.instance');
-
-            $logoPath     = $instance->getMediaShortPath() . '/sections/' . rawurlencode($logo);
-            $logoUrl      = $instance->getBaseUrl() . $logoPath;
-            $logoFullPath = SITE_PATH . $logoPath;
-
-            $logoSize = @getimagesize($logoFullPath);
-            if (is_array($logoSize)) {
-                $this->view->assign([
-                    'logoSize' => $logoSize,
-                    'logoUrl'  => $logoUrl
-                ]);
-            }
-        }
-
         // RenderColorMenu
         $siteColor   = '#005689';
         $configColor = $this->get('orm.manager')
@@ -461,6 +442,28 @@ class FrontendController extends Controller
         }
 
         $this->view->assign('site_color', $siteColor);
+
+        // Get instance logo size
+        $logo = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('site_logo');
+
+        if (!empty($logo)) {
+            $logoPath = $this->get('core.instance')->getMediaShortPath() . '/sections/' . rawurlencode($logo);
+
+            $logoPath     = $instance->getMediaShortPath() . '/sections/' . rawurlencode($logo);
+            $logoUrl      = $instance->getBaseUrl() . $logoPath;
+            $logoFilePath = SITE_PATH . $logoPath;
+
+            $logoSize = (file_exists($logoFilePath)) ? @getimagesize($logoFilePath) : null;
+
+            if (is_array($logoSize)) {
+                $this->view->assign([
+                    'logoSize' => $logoSize,
+                    'logoUrl'  => $logoUrl
+                ]);
+            }
+        }
 
         $em = $this->get('entity_repository');
         if (isset($item->img2) && ($item->img2 > 0)) {
@@ -530,12 +533,10 @@ class FrontendController extends Controller
         return $query;
     }
 
-
-
     /**
-     * Returns the list of related contents for an article.
+     * Returns the list of related contents for a content.
      *
-     * @param Article $article The article object.
+     * @param Content $content The content object.
      *
      * @return array The list of rellated contents.
      */
@@ -572,10 +573,10 @@ class FrontendController extends Controller
     }
 
     /**
-     * Returns the list of suggested contents for an article.
+     * Returns the list of suggested contents for a content.
      *
-     * @param Article  $article  The current article.
-     * @param Category $category The article category.
+     * @param Contetn  $content  The current content.
+     * @param Category $category The content category.
      *
      * @return array The list of suggested contents.
      */

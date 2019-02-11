@@ -30,7 +30,7 @@ frontend_article_show_amp:
 
 frontend_article_show_amp_old:
     path: /articulo/{category_name}/{slug}/{created}{id}.amp.html
-    defaults: { _controller: FrontendBundle:Article:showAmp, page: 1 }
+    defaults: { _controller: FrontendBundle:Article:showAmp, _format: amp }
     requirements:
         category_name: '[^/]+'
         slug:          '[^/]+'
