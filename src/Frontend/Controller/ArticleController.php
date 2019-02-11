@@ -223,7 +223,7 @@ class ArticleController extends FrontendController
      *
      * @return array The list of suggested contents.
      */
-    protected function getSuggested($article, $category)
+    protected function getSuggested($article, $category = null)
     {
         $query = sprintf(
             'category_name = "%s" AND pk_content <> %s',

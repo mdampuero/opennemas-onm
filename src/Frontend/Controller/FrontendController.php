@@ -449,10 +449,8 @@ class FrontendController extends Controller
             ->get('site_logo');
 
         if (!empty($logo)) {
-            $logoPath = $this->get('core.instance')->getMediaShortPath() . '/sections/' . rawurlencode($logo);
-
-            $logoPath     = $instance->getMediaShortPath() . '/sections/' . rawurlencode($logo);
-            $logoUrl      = $instance->getBaseUrl() . $logoPath;
+            $logoPath     = $this->get('core.instance')->getMediaShortPath() . '/sections/' . rawurlencode($logo);
+            $logoUrl      = $this->get('core.instance')->getBaseUrl() . $logoPath;
             $logoFilePath = SITE_PATH . $logoPath;
 
             $logoSize = (file_exists($logoFilePath)) ? @getimagesize($logoFilePath) : null;
