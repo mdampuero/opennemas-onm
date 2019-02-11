@@ -426,6 +426,26 @@ class FrontendController extends Controller
             throw new ResourceNotFoundException();
         }
 
+        // Get instance logo size
+        $logo = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('site_logo');
+        if (!empty($logo)) {
+            $instance = $this->get('core.instance');
+
+            $logoPath     = $instance->getMediaShortPath() . '/sections/' . rawurlencode($logo);
+            $logoUrl      = $instance->getBaseUrl() . $logoPath;
+            $logoFullPath = SITE_PATH . $logoPath;
+
+            $logoSize = @getimagesize($logoFullPath);
+            if (is_array($logoSize)) {
+                $this->view->assign([
+                    'logoSize' => $logoSize,
+                    'logoUrl'  => $logoUrl
+                ]);
+            }
+        }
+
         // RenderColorMenu
         $siteColor   = '#005689';
         $configColor = $this->get('orm.manager')
