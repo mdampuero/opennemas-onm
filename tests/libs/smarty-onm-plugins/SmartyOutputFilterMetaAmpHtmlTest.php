@@ -151,16 +151,17 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
         $this->security->expects($this->once())->method('hasExtension')
             ->with('AMP_MODULE')->willReturn(true);
 
+        $content = new \Content();
+        $content->load([
+            'category_name'     => 'gorp',
+            'pk_content'        => rand(),
+            'created'           => '1999-12-31 23:59:59',
+            'content_type_name' => 'opinion',
+            'slug'              => 'foobar-thud'
+        ]);
+
         $this->smarty->expects($this->exactly(1))->method('getTemplateVars')
-            ->willReturn([
-                'o_content' => json_decode(json_encode([
-                    'category_name'     => 'gorp',
-                    'pk_content'        => 145,
-                    'created'           => '1999-12-31 23:59:59',
-                    'content_type_name' => 'opinion',
-                    'slug'              => 'foobar-thud'
-                ]), false)
-            ]);
+            ->willReturn([ 'o_content' => $content]);
 
         $this->assertEquals(
             '<html><head><link rel="amphtml" href="/wibble/wubble"/></head><body>Hello World!</body></html>',
@@ -189,12 +190,13 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
 
         $output = '<html><head></head><body>Hello World!</body></html>';
 
+        $content = new \Content();
+        $content->load([
+            'content_type_name' => 'invalidtype'
+        ]);
+
         $this->smarty->expects($this->exactly(1))->method('getTemplateVars')
-            ->willReturn([
-                'o_content' => json_decode(json_encode([
-                    'content_type_name' => 'invalidtype'
-                ]), false)
-            ]);
+            ->willReturn([ 'o_content' => $content ]);
 
         $this->assertEquals($output, smarty_outputfilter_meta_amphtml($output, $this->smarty));
     }
