@@ -207,13 +207,6 @@ class UrlGeneratorHelper
      */
     protected function getUriForContent($content)
     {
-        // If the content has a bodyLink parameter then that it is the final uri.
-        if (isset($content->params['bodyLink']) && !empty($content->params['bodyLink'])) {
-            return $this->container->get('router')->generate('frontend_redirect_external_link', [
-                'id' => $content->pk_content
-            ]);
-        }
-
         $methodName = 'getUriFor' . ucfirst($content->content_type_name);
 
         if (method_exists($this, $methodName)) {

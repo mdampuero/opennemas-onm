@@ -49,10 +49,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCurrentRequest'])
             ->getMock();
 
-        $this->router = $this->getMockBuilder('Router')
-            ->setMethods([ 'generate' ])
-            ->getMock();
-
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -286,38 +282,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             'articulo/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/20150114234940000252.html',
             $method->invokeArgs($this->urlGenerator, [ $content ])
-        );
-    }
-
-    /**
-     * Tests getUriForContent when the content has no body link property.
-     */
-    public function testGetUriForContentWhenBodyLink()
-    {
-        $content = new \Content();
-
-        $content->pk_content = 1;
-        $content->content_type_name = 'glorp';
-        $content->params            = [
-            'bodyLink' => 'http://fred.flob/foobar/norf'
-        ];
-
-        $helper = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
-            ->setMethods([ 'getUriForGlorp' ])
-            ->setConstructorArgs([ $this->container ])
-            ->getMock();
-
-        $method = new \ReflectionMethod($helper, 'getUriForContent');
-        $method->setAccessible(true);
-
-        $this->router->expects($this->once())->method('generate')
-            ->with('frontend_redirect_external_link', [ 'id' => $content->pk_content ])
-            ->willReturn('redirect/content/1');
-
-        // Test relative url generation for article
-        $this->assertEquals(
-            'redirect/content/1',
-            $method->invokeArgs($helper, [ $content ])
         );
     }
 

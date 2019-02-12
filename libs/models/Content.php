@@ -912,12 +912,6 @@ class Content implements \JsonSerializable, CsvSerializable
             $this->category_name = $this->loadCategoryName();
         }
 
-        if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
-            return trim(getService('router')->generate('frontend_redirect_external_link', [
-                'id' => $this->pk_content
-            ]), '/') . '" target="_blank';
-        }
-
         $type     = $this->content_type_name;
         $id       = sprintf('%06d', $this->id);
         $date     = date('YmdHis', strtotime($this->created));
