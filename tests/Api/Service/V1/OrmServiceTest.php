@@ -41,7 +41,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ])->getMock();
 
         $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
-            ->setMethods([ 'getId', 'getIdKeys' ])
+            ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
             ->getMock();
 
         $this->logger = $this->getMockBuilder('Logger' . uniqid())
@@ -517,6 +517,17 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     public function testGetListByIdsWhenInvalidIds()
     {
         $this->service->getListByIds(null);
+    }
+
+    /**
+     * Tests getL10nKeys.
+     */
+    public function testGetL10nKeys()
+    {
+        $this->metadata->expects($this->once())->method('getL10nKeys')
+            ->willReturn([ 'quux', 'frog' ]);
+
+        $this->assertEquals([ 'quux', 'frog' ], $this->service->getL10nKeys());
     }
 
     /**

@@ -296,6 +296,16 @@ class OrmService implements Service
     }
 
     /**
+     * Returns the list of properties that support localization in this service.
+     *
+     * @return array The list of properties that support localization.
+     */
+    public function getL10nKeys()
+    {
+        return $this->em->getMetadata($this->entity)->getL10nKeys();
+    }
+
+    /**
      * Returns the current service origin.
      *
      * @return string The current service origin.
