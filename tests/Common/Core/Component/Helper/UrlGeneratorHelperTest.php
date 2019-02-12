@@ -49,6 +49,10 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getCurrentRequest'])
             ->getMock();
 
+        $this->router = $this->getMockBuilder('Router')
+            ->setMethods([ 'generate' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -609,8 +613,8 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     {
         $user = new \Common\ORM\Entity\User();
 
-        $user->id   = 252;
-        $user->name = 'pepito';
+        $user->id      = 252;
+        $user->name    = 'pepito';
         $user->is_blog = 1;
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForUser');
