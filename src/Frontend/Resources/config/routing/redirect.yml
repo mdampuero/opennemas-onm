@@ -1,7 +1,3 @@
-frontend_redirect_external_link:
-    path: /redirect
-    defaults: { _controller: FrontendBundle:Redirector:externalLink }
-
 frontend_redirect_content:
     path: /redirect/content
     defaults: { _controller: FrontendBundle:Redirector:content }

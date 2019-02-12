@@ -18,20 +18,6 @@ function smarty_function_get_url($params, &$smarty)
     $escape   = array_key_exists('escape', $params) && $params['escape'];
     $isAmp    = array_key_exists('amp', $params) && $params['amp'];
 
-    // If the article has an external link return it
-    if (!empty($content->params)
-        && is_array($content->params)
-        && array_key_exists('bodyLink', $content->params)
-        && !empty($content->params['bodyLink'])
-    ) {
-        return $smarty->getContainer()
-            ->get('router')
-            ->generate(
-                'frontend_redirect_external_link',
-                [ 'to' => $content->params['bodyLink'] ]
-            ) . '" target="_blank';
-    }
-
     $url = $smarty->getContainer()->get('core.helper.url_generator')
         ->generate($params['item'], [ 'absolute' => $absolute ]);
 
