@@ -84,17 +84,15 @@ class RedirectorController extends Controller
      */
     public function externalLinkAction(Request $request)
     {
-        $url = $request->query->filter('to', '', FILTER_VALIDATE_URL);
+        $contentId = $request->query->filter('id', '', FILTER_VALIDATE_INT);
 
-        if ($request->attributes->has('to')) {
-            $url = $request->attributes->filter('to', '', FILTER_VALIDATE_URL);
-        }
+        $content = new \Content($contentId);
 
-        if (empty($url)) {
+        if (!array_key_exists('bodyLink', $content->params) || empty($content->params['bodyLink'])) {
             throw new ResourceNotFoundException();
         }
 
-        return $this->redirect($url);
+        return $this->redirect($content->params['bodyLink']);
     }
 
     /**

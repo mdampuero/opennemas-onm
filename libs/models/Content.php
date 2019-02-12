@@ -913,7 +913,9 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
-            return 'redirect?to=' . urlencode($this->params['bodyLink']) . '" target="_blank';
+            return trim(getService('router')->generate('frontend_redirect_external_link', [
+                'id' => $this->pk_content
+            ]), '/') . '" target="_blank';
         }
 
         $type     = $this->content_type_name;

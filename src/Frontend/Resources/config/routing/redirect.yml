@@ -1,6 +1,8 @@
 frontend_redirect_external_link:
-    path: /redirect
+    path: /content/redirect/{id}
     defaults: { _controller: FrontendBundle:Redirector:externalLink }
+    requirements:
+        id : '[0-9]+'
 
 frontend_redirect_content:
     path: /redirect/content
