@@ -29,8 +29,8 @@ class L10nStringDataMapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testFromArray()
     {
-        $this->assertEmpty($this->mapper->fromArray(null));
-        $this->assertEmpty($this->mapper->fromArray([]));
+        $this->assertNull($this->mapper->fromArray(null));
+        $this->assertNull($this->mapper->fromArray([]));
 
         $this->assertEquals('grault', $this->mapper->fromArray('grault'));
     }
@@ -40,6 +40,8 @@ class L10nStringDataMapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testFromString()
     {
+        $this->assertNull($this->mapper->fromString(''));
+        $this->assertNull($this->mapper->fromString('a:0:{}'));
         $this->assertEquals('thud', $this->mapper->fromString('thud'));
         $this->assertEquals([
             'es' => 'wibble',
@@ -64,6 +66,8 @@ class L10nStringDataMapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testToString()
     {
+        $this->assertNull($this->mapper->toString(''));
+        $this->assertNull($this->mapper->toString([]));
         $this->assertEquals('thud', $this->mapper->toString('thud'));
         $this->assertEquals(
             'a:2:{s:2:"es";s:6:"wibble";s:2:"gl";s:3:"bar";}',

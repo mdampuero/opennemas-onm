@@ -35,10 +35,10 @@ class L10nStringDataMapper
     public function fromString($value)
     {
         if (PhpSerializer::isSerialized($value)) {
-            return PhpSerializer::unserialize($value);
+            $value = PhpSerializer::unserialize($value);
         }
 
-        return $value;
+        return empty($value) ? null : $value;
     }
 
     /**
@@ -62,6 +62,10 @@ class L10nStringDataMapper
      */
     public function toString($value)
     {
+        if (empty($value)) {
+            return null;
+        }
+
         if (is_array($value)) {
             return PhpSerializer::serialize($value);
         }
