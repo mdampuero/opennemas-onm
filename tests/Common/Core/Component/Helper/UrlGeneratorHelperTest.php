@@ -296,6 +296,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     {
         $content = new \Content();
 
+        $content->pk_content = 1;
         $content->content_type_name = 'glorp';
         $content->params            = [
             'bodyLink' => 'http://fred.flob/foobar/norf'
@@ -309,9 +310,13 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($helper, 'getUriForContent');
         $method->setAccessible(true);
 
+        $this->router->expects($this->once())->method('generate')
+            ->with('frontend_redirect_external_link', [ 'id' => $content->pk_content ])
+            ->willReturn('redirect/content/1');
+
         // Test relative url generation for article
         $this->assertEquals(
-            'redirect?to=' . urlencode('http://fred.flob/foobar/norf'),
+            'redirect/content/1',
             $method->invokeArgs($helper, [ $content ])
         );
     }
