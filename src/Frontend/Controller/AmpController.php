@@ -73,10 +73,7 @@ class AmpController extends Controller
             // TODO: Remove when target="_blank"' not included in URI for external
             $url = str_replace('" target="_blank', '', $article->params['bodyLink']);
 
-            return $this->forward(
-                'FrontendBundle:Redirector:externalLink',
-                [ 'to'  => $url ]
-            );
+            return $this->redirect($article->params['bodyLink'], 301);
         }
 
         // Avoid NewRelic js script

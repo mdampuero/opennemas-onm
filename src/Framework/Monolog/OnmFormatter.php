@@ -9,6 +9,8 @@
  */
 namespace Framework\Monolog;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class OnmFormatter
 {
     /**
@@ -57,11 +59,29 @@ class OnmFormatter
             return $record;
         }
 
-        $record['extra']['client_ip']  = $request->getClientIp();
+        $record['extra']['client_ip']  = $this->getClientIp($request);
         $record['extra']['user_agent'] = $request->headers->get('User-Agent');
         $record['extra']['url']        = $request->getUri();
 
         return $record;
+    }
+
+    /**
+     * Returns the "real" client IP basing on the request.
+     *
+     * @param Request $request The current request.
+     *
+     * @return string The "real" client IP
+     */
+    protected function getClientIp(Request $request)
+    {
+        $ips = $request->getClientIps();
+
+        if (!empty($ips)) {
+            return array_pop($ips);
+        }
+
+        return null;
     }
 
     /**

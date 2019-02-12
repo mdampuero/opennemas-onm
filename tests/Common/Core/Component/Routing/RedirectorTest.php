@@ -223,9 +223,9 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->cache->expects($this->once())->method('exists')
-            ->with('redirector-garply-norf')->willReturn(true);
+            ->with('redirector-' . md5('garply') . '-norf')->willReturn(true);
         $this->cache->expects($this->once())->method('get')
-            ->with('redirector-garply-norf')->willReturn($url);
+            ->with('redirector-' . md5('garply') . '-norf')->willReturn($url);
 
         $this->assertEquals($url, $this->redirector->getUrl('garply', 'norf'));
     }
@@ -260,9 +260,9 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->cache->expects($this->at(0))->method('exists')
-            ->with('redirector-baz-norf');
+            ->with('redirector-' . md5('baz') . '-norf');
         $this->cache->expects($this->at(1))->method('set')
-            ->with('redirector-baz-norf')->willReturn($url);
+            ->with('redirector-' . md5('baz') . '-norf')->willReturn($url);
 
         $redirector->expects($this->once())->method('getLiteralUrl')
             ->with('baz', [ 'norf' ])->willReturn($url);
@@ -273,7 +273,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests getUrl when an Url with the source value is found.
      */
-    public function testGetUrlWheniRegExpUrlFound()
+    public function testGetUrlWhenRegExpUrlFound()
     {
         $url = new Url([
             'content_type' => 'norf',
@@ -290,9 +290,9 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->cache->expects($this->at(0))->method('exists')
-            ->with('redirector-baz-quux-norf')->willReturn(false);
+            ->with('redirector-' . md5('baz-quux') . '-norf')->willReturn(false);
         $this->cache->expects($this->at(1))->method('set')
-            ->with('redirector-baz-quux-norf')->willReturn($url);
+            ->with('redirector-' . md5('baz-quux') . '-norf')->willReturn($url);
 
         $redirector->expects($this->once())->method('getLiteralUrl')
             ->with('baz-quux', [ 'norf' ])->willReturn(null);
@@ -311,17 +311,17 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $this->assertEquals(
-            'redirector--',
+            'redirector-' . md5(null) . '-',
             $method->invokeArgs($this->redirector, [ null, [ null ] ])
         );
 
         $this->assertEquals(
-            'redirector-mumble-',
+            'redirector-' . md5('mumble') . '-',
             $method->invokeArgs($this->redirector, [ 'mumble', [ null ] ])
         );
 
         $this->assertEquals(
-            'redirector-mumble-flob',
+            'redirector-' . md5('mumble') . '-flob',
             $method->invokeArgs($this->redirector, [ 'mumble', [ 'flob' ] ])
         );
     }

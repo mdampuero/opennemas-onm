@@ -132,12 +132,10 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(\Content::TRASHED, $content->getStatus());
 
         $content            = new \Content();
-        $content->available = 0;
         $this->assertEquals(\Content::PENDING, $content->getStatus());
 
         $content                 = new \Content();
         $content->content_status = 1;
-        $content->available      = 1;
         $this->assertEquals(\Content::AVAILABLE, $content->getStatus());
     }
 

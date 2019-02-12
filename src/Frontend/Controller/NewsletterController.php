@@ -43,8 +43,7 @@ class NewsletterController extends Controller
 
         $internalName = $this->get('core.instance')->internal_name;
         return new Response($item->html, 200, [
-            'x-instance' => $internalName,
-            'x-tags'     => 'instance-' . $internalName . ',newsletter-' . $id,
+            'x-tags' => 'newsletter-' . $id,
         ]);
     }
 

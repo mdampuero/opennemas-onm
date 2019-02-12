@@ -26,7 +26,7 @@ function smarty_outputfilter_comscore($output, $smarty)
         && !preg_match('/\/sharrre/', $uri)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
-        && !preg_match('/\/fb\/instant-articles/', $uri)
+        && !preg_match('/\/rss/', $uri)
     ) {
         $isAmp = preg_match('@\.amp\.html$@', $uri);
         if ($isAmp) {

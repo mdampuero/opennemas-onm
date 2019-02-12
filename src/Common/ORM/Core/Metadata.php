@@ -175,6 +175,22 @@ class Metadata extends DataObject implements Validable
     }
 
     /**
+     * Returns the list of properties defined as l10n_string.
+     *
+     * @return array The list of properties defined as l10n_string.
+     */
+    public function getL10nKeys()
+    {
+        if (empty($this->properties)) {
+            return [];
+        }
+
+        return array_keys(array_filter($this->properties, function ($a) {
+            return $a === 'l10n_string';
+        }));
+    }
+
+    /**
      * Returns the meta key name.
      *
      * @return string The meta key name.

@@ -75,29 +75,6 @@ class RedirectorController extends Controller
     }
 
     /**
-     * Redirects the article given an external link as query parameter or
-     * request attribute.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     */
-    public function externalLinkAction(Request $request)
-    {
-        $url = $request->query->filter('to', '', FILTER_VALIDATE_URL);
-
-        if ($request->attributes->has('to')) {
-            $url = $request->attributes->filter('to', '', FILTER_VALIDATE_URL);
-        }
-
-        if (empty($url)) {
-            throw new ResourceNotFoundException();
-        }
-
-        return $this->redirect($url);
-    }
-
-    /**
      * Returns a response when a content was not found basing on a setting from
      * the instance.
      *

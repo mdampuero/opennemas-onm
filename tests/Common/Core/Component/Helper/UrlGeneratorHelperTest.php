@@ -290,33 +290,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getUriForContent when the content has no body link property.
-     */
-    public function testGetUriForContentWhenBodyLink()
-    {
-        $content = new \Content();
-
-        $content->content_type_name = 'glorp';
-        $content->params            = [
-            'bodyLink' => 'http://fred.flob/foobar/norf'
-        ];
-
-        $helper = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
-            ->setMethods([ 'getUriForGlorp' ])
-            ->setConstructorArgs([ $this->container ])
-            ->getMock();
-
-        $method = new \ReflectionMethod($helper, 'getUriForContent');
-        $method->setAccessible(true);
-
-        // Test relative url generation for article
-        $this->assertEquals(
-            'redirect?to=' . urlencode('http://fred.flob/foobar/norf'),
-            $method->invokeArgs($helper, [ $content ])
-        );
-    }
-
-    /**
      * Tests getUriForContent when created property is a DateTime object.
      */
     public function testGetUriForContentWhenCreatedAsObject()
@@ -343,7 +316,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests getUriForContent when the content has no body link property.
      */
-    public function testGetUriForContentWhenNoBodyLink()
+    public function testGetUriForContentWhithValidCustomContentTypeName()
     {
         $content = new \Content();
 
@@ -640,8 +613,8 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     {
         $user = new \Common\ORM\Entity\User();
 
-        $user->id   = 252;
-        $user->name = 'pepito';
+        $user->id      = 252;
+        $user->name    = 'pepito';
         $user->is_blog = 1;
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForUser');

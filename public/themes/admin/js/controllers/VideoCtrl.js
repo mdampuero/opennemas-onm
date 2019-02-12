@@ -2,12 +2,22 @@
  * Handle actions for poll inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
-  '$compile', '$controller', '$rootScope', '$scope', '$sce', '$timeout', 'http',
-  function($compile, $controller, $rootScope, $scope, $sce, $timeout, http) {
+  '$controller', '$sce', '$rootScope', '$scope', '$timeout', 'http',
+  function($controller, $sce, $rootScope, $scope, $timeout, http) {
     'use strict';
 
     // Initialize the super class and extend it.
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+
+    /**
+     * @memberOf VideoCtrl
+     *
+     * @description
+     *  The list of external video properties.
+     *
+     * @type {Array}
+     */
+    $scope.information = {};
 
     /**
      * @function init
@@ -24,9 +34,17 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       $scope.locale = locale;
       $scope.tags   = tags;
 
+      if (video && video.information) {
+        $scope.information = video.information;
+
+        if ($scope.information.embedHTML) {
+          $scope.information.embedHTML =
+            $sce.trustAsHtml($scope.information.embedHTML);
+        }
+      }
+
       if (!$scope.title) {
-        $scope.loading_data     = false;
-        $scope.external_content = '';
+        $scope.loading_data = false;
       }
     };
 
@@ -44,21 +62,36 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       return $('#title').val();
     };
 
+    /**
+     * @function getVideoData
+     * @memberOf VideoCtrl
+     *
+     * @description
+     *   Gets the video information from the external service.
+     */
     $scope.getVideoData = function() {
       var route = {
-        name: 'admin_videos_get_info',
-        params: {
-          url: $scope.video_url
-        }
+        name:   'admin_videos_get_info',
+        params: { url: $scope.video_url }
       };
 
-      $scope.loading_data     = true;
-      $scope.external_content = '';
+      $scope.loading_data = true;
 
       http.get(route).then(
         function(response) {
-          $scope.external_content = $sce.trustAsHtml(response.data);
-          $scope.loading_data     = false;
+          $scope.information     = response.data;
+          $scope.informationJson = JSON.stringify($scope.information);
+
+          if ($scope.information.title && !$scope.title) {
+            $scope.title = $scope.information.title;
+          }
+
+          if ($scope.information.embedHTML) {
+            $scope.information.embedHTML =
+              $sce.trustAsHtml($scope.information.embedHTML);
+          }
+
+          $scope.loading_data = false;
 
           $timeout(function() {
             angular.element('.tags-input-buttons .btn-info').triggerHandler('click');

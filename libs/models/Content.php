@@ -21,13 +21,6 @@ class Content implements \JsonSerializable, CsvSerializable
     const POSTPONED     = 'postponed';
 
     /**
-     * Whether if this content is available
-     *
-     * @var int 0|1
-     */
-    public $available = null;
-
-    /**
      * The main text of the content
      *
      * @var string
@@ -598,8 +591,7 @@ class Content implements \JsonSerializable, CsvSerializable
             'position'            => empty($data['position'])
                 ? 2 : (int) $data['position'],
             'with_comment'        => $data['with_comment'],
-            'urn_source'          => empty($data['urn_source'])
-                ? null : $data['urn_source'],
+            'urn_source'          => (empty($data['urn_source'])) ? null : $data['urn_source'],
         ];
 
         $conn = getService('dbal_connection');
@@ -703,8 +695,6 @@ class Content implements \JsonSerializable, CsvSerializable
 
         $contentData = [
             'title'               => $data['title'],
-            'available'           => !isset($data['content_status'])
-                ? $this->content_status : (int) $data['content_status'],
             'body'                => !array_key_exists('body', $data)
                 ? '' : $data['body'],
             'category_name'       => $catName,
@@ -865,7 +855,6 @@ class Content implements \JsonSerializable, CsvSerializable
                     'fk_user_last_editor' => $lastEditor,
                     'in_litter' => 1,
                     'content_status' => 0,
-                    'available' => 0,
                     'changed' => date("Y-m-d H:i:s"),
                 ],
                 [ 'pk_content' => $id ]
@@ -921,10 +910,6 @@ class Content implements \JsonSerializable, CsvSerializable
     {
         if (empty($this->category_name)) {
             $this->category_name = $this->loadCategoryName();
-        }
-
-        if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
-            return 'redirect?to=' . urlencode($this->params['bodyLink']) . '" target="_blank';
         }
 
         $type     = $this->content_type_name;
@@ -1050,12 +1035,10 @@ class Content implements \JsonSerializable, CsvSerializable
             $date                 = date("Y-m-d H:i:s");
             $this->changed        = $date;
             $this->content_status = $status;
-            $this->available      = $status;
 
             getService('dbal_connection')->update(
                 'contents',
                 [
-                    'available'      => $this->available,
                     'content_status' => $this->content_status,
                     'changed'        => $date,
                 ],
@@ -1210,7 +1193,6 @@ class Content implements \JsonSerializable, CsvSerializable
 
                 $values = [
                     $status,
-                    $status,
                     $this->starttime,
                     $lastEditor,
                     $this->id
@@ -1225,7 +1207,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
             getService('dbal_connection')->executeUpdate(
                 'UPDATE contents '
-                . 'SET `available`=?, `content_status`=?, `starttime`=?, '
+                . 'SET `content_status`=?, `starttime`=?, '
                 . '`fk_user_last_editor`=? WHERE `pk_content`=?',
                 $values
             );
@@ -1240,7 +1222,6 @@ class Content implements \JsonSerializable, CsvSerializable
 
             // Set status for it's updated to next event
             if (!empty($this)) {
-                $this->available      = $status;
                 $this->content_status = $status;
             }
 
@@ -1328,7 +1309,6 @@ class Content implements \JsonSerializable, CsvSerializable
                 'contents',
                 [
                     'content_status'      => 0,
-                    'available'           => 0,
                     'fk_user_last_editor' => (int) getService('core.user')->id,
                     'changed'             => date("Y-m-d H:i:s"),
                 ],
@@ -1336,7 +1316,6 @@ class Content implements \JsonSerializable, CsvSerializable
             );
 
             // Set status for it's updated state to next event
-            $this->available      = 0;
             $this->content_status = 0;
 
             /* Notice log of this action */
@@ -1987,18 +1966,6 @@ class Content implements \JsonSerializable, CsvSerializable
             error_log('Error on Content::isInFrontpageOfCategory (ID:' . $categoryID . ')');
             return false;
         }
-    }
-
-    /**
-     * Returns a metaproperty value from the current content
-     *
-     * @param string $metaName the property name to fetch
-     *
-     * @return mixed the meta value or false if it's not available
-     */
-    public function getMetadata($metaName)
-    {
-        return $this->{$metaName};
     }
 
     /**

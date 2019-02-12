@@ -28,7 +28,7 @@
     </label>
     <div class="controls">
       <div class="input-group">
-        <input class="form-control" datetime-picker datetime-picker-timezone="{$app.locale->getTimeZone()->getName()}" datetime-picker-use-current=true datetime-picker-min="item.starttime" id="endtime" name="endtime" ng-model="item.endtime" type="datetime">
+        <input class="form-control" datetime-picker datetime-picker-timezone="{$app.locale->getTimeZone()->getName()}" datetime-picker-min="item.starttime" id="endtime" name="endtime" ng-model="item.endtime" type="datetime">
         <span class="input-group-addon add-on">
           <span class="fa fa-calendar"></span>
         </span>

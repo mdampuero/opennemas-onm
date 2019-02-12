@@ -269,6 +269,13 @@ services:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
         public:    true
 
+    core.listener.http_cache_headers:
+        class:     Common\Core\EventListener\HttpCacheHeadersListener
+        arguments: [ '@core.instance', '@core.locale', '@core.template' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 0 }
+        public: true
+
     core.loader:
         class:     Common\Core\Component\Loader\Loader
         arguments: [ '@service_container' ]

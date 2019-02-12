@@ -207,11 +207,6 @@ class UrlGeneratorHelper
      */
     protected function getUriForContent($content)
     {
-        // If the content has a bodyLink parameter then that it is the final uri.
-        if (isset($content->params['bodyLink']) && !empty($content->params['bodyLink'])) {
-            return 'redirect?to=' . urlencode($content->params['bodyLink']);
-        }
-
         $methodName = 'getUriFor' . ucfirst($content->content_type_name);
 
         if (method_exists($this, $methodName)) {
