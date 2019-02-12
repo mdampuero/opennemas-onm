@@ -58,7 +58,7 @@ class FrontendController extends Controller
         $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
 
         if ($request->getPathInfo() !== $expected) {
-            return new RedirectResponse($expected);
+            return new RedirectResponse($expected, 301);
         }
 
         $params = $this->getParameters($request);
@@ -94,13 +94,13 @@ class FrontendController extends Controller
         if ($request->getPathInfo() !== $expected
             && empty($this->get('request_stack')->getParentRequest())
         ) {
-            return new RedirectResponse($expected);
+            return new RedirectResponse($expected, 301);
         }
 
         $params = $this->getParameters($request, $item);
 
         if ($this->hasExternalLink($params)) {
-            return new RedirectResponse($this->getExternalLink($params));
+            return new RedirectResponse($this->getExternalLink($params), 301);
         }
 
         if ($this->hasSubscription($params)
