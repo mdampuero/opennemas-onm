@@ -314,33 +314,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getUriForContent when the content has no body link property.
-     */
-    public function testGetUriForContentWhenNoBodyLink()
-    {
-        $content = new \Content();
-
-        $content->content_type_name = 'glorp';
-
-        $helper = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
-            ->setMethods([ 'getUriForGlorp' ])
-            ->setConstructorArgs([ $this->container ])
-            ->getMock();
-
-        $helper->expects($this->once())->method('getUriForGlorp')
-            ->with($content)->willReturn('/glorp/waldo/corge');
-
-        $method = new \ReflectionMethod($helper, 'getUriForContent');
-        $method->setAccessible(true);
-
-        // Test relative url generation for article
-        $this->assertEquals(
-            '/glorp/waldo/corge',
-            $method->invokeArgs($helper, [ $content ])
-        );
-    }
-
-    /**
      * Tests getUriForLetter.
      */
     public function testGetUriForLetter()
