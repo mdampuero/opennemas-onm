@@ -46,7 +46,7 @@
         <div class="row">
           <div class="col-md-6">
 
-            <h4>{t}Opinion fronpage{/t}</h4>
+            <h4>{t}Opinion frontpage{/t}</h4>
             <div class="form-group">
               <label class="form-label" for="opinion_settings[total_editorial]">
                 {t}Editorial opinions in Opinion frontpage{/t}
