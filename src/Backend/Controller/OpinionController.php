@@ -24,6 +24,13 @@ class OpinionController extends Controller
     const EXTRA_INFO_TYPE = 'extraInfoContents.OPINION_MANAGER';
 
     /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'preview' => 'opinion_inner'
+    ];
+
+    /**
      * Lists all the opinions.
      *
      * @return Response The response object.
@@ -409,32 +416,26 @@ class OpinionController extends Controller
      */
     public function previewAction(Request $request)
     {
-        $opinion    = new \Opinion();
-        $cm         = new \ContentManager();
-        $this->view = $this->get('core.template');
+        $this->get('core.locale')->setContext('frontend')
+            ->setRequestLocale($request->get('locale'));
 
-        $this->view->setCaching(0);
-        $this->get('core.locale')->setContext('frontend');
+        $opinion     = new \Opinion();
+        $cm          = new \ContentManager();
+        $opinion->id = 0;
 
-        $opinionContents = $request->request->filter('contents');
-
-        // Fetch all opinion properties and generate a new object
-        foreach ($opinionContents as $value) {
+        $data = $request->request->filter('contents');
+        foreach ($data as $value) {
             if (isset($value['name']) && !empty($value['name'])) {
                 $opinion->{$value['name']} = $value['value'];
             }
         }
 
+        $this->view = $this->get('core.template');
+        $this->view->setCaching(0);
+
         $opinion->tag_ids = json_decode($opinion->tag_ids);
 
-        // Set a dummy Id for the opinion if doesn't exists
-        if (empty($opinion->pk_article) && empty($opinion->id)) {
-            $opinion->pk_opinion = 0;
-            $opinion->id         = 0;
-        }
-
-        list($positions, $advertisements) =
-            \Frontend\Controller\OpinionsController::getAds('inner');
+        list($positions, $advertisements) = $this->getAdvertisements();
 
         try {
             if (!empty($opinion->fk_author)) {
@@ -494,7 +495,7 @@ class OpinionController extends Controller
             $otOpinion->uri              = $otOpinion->uri;
         }
 
-        $this->view->assign([
+        $params = [
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
             'opinion'        => $opinion,
@@ -506,7 +507,9 @@ class OpinionController extends Controller
             'suggested'      => $machineSuggestedContents,
             'tags'           => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($opinion->tag_ids)['items']
-        ]);
+        ];
+
+        $this->view->assign($params);
 
         $this->get('session')->set(
             'last_preview',
