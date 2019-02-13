@@ -26,6 +26,8 @@ class BackendController extends Controller
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('create'));
 
+        $params = [];
+
         if ($this->get('core.helper.locale')->hasMultilanguage()) {
             $params['locale'] = $request->query->get('locale');
         }
@@ -43,6 +45,8 @@ class BackendController extends Controller
     public function listAction(Request $request)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('list'));
+
+        $params = [];
 
         if ($this->get('core.helper.locale')->hasMultilanguage()) {
             $params['locale'] = $request->query->get('locale');
