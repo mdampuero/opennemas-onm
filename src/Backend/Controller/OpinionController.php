@@ -295,51 +295,6 @@ class OpinionController extends Controller
         ]));
     }
 
-    /**
-     * Change in_home status for one opinion given its id.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('OPINION_HOME')")
-     */
-    public function toggleInHomeAction(Request $request)
-    {
-        $id     = $request->query->getDigits('id', 0);
-        $status = $request->query->getDigits('status', 0);
-        $type   = $request->query->filter('type', 0, FILTER_SANITIZE_STRING);
-        $page   = $request->query->getDigits('page', 1);
-
-        $opinion = new \Opinion($id);
-
-        if (is_null($opinion->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Unable to find an opinion with the id "%d"'), $id)
-            );
-        } else {
-            $opinion->setInHome($status, $this->getUser()->id);
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                sprintf(_('Successfully changed in home state for the opinion "%s"'), $opinion->title)
-            );
-        }
-
-        if ($type != 'frontpage') {
-            $url = $this->generateUrl('admin_opinions', [
-                'type' => $type,
-                'page' => $page
-            ]);
-        } else {
-            $url = $this->generateUrl('admin_opinions_frontpage', [
-                'page' => $page
-            ]);
-        }
-
-         return $this->redirect($url);
-    }
 
     /**
      * Lists the available opinions for the frontpage manager.
@@ -390,47 +345,6 @@ class OpinionController extends Controller
             'opinions'   => $opinions,
             'pagination' => $pagination,
         ]);
-    }
-
-    /**
-     * Lists the latest opinions for the related manager.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')")
-     */
-    public function contentProviderRelatedAction(Request $request)
-    {
-        $page = $request->query->getDigits('page', 1);
-        $epp  = $this->get('orm.manager')->getDataSet('Settings')
-            ->get('items_per_page') ?: 20;
-
-        $total    = true;
-        $opinions = $this->get('entity_repository')->findBy([
-            'content_type_name' => [ [ 'value' => 'opinion' ] ],
-            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ]
-        ], [ 'created' => 'desc' ], $epp, $page, 0, $total);
-
-        $pagination = $this->get('paginator')->get([
-            'boundary'    => true,
-            'directional' => true,
-            'epp'         => $epp,
-            'page'        => $page,
-            'total'       => $total,
-            'route'       => 'admin_opinions_content_provider_related',
-        ]);
-
-        return $this->render(
-            'common/content_provider/_container-content-list.tpl',
-            [
-                'contentType'        => 'Opinion',
-                'contents'           => $opinions,
-                'pagination'         => $pagination,
-                'contentProviderUrl' => $this
-                    ->generateUrl('admin_opinions_content_provider_related'),
-            ]
-        );
     }
 
     /**
