@@ -226,7 +226,7 @@
                     <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.logo_path" only-image="true"></dynamic-image>
                   </td>
                   <td class="hidden-xs text-center v-align-middle">
-                    <div style="border: 1px solid #d1dade; border-radius: 4px; float: left; height: 38px; width: 38px;" ng-style="{ 'background-color': item.color}"></div>
+                    <span class="inline" style="border: 1px solid #d1dade; border-radius: 4px; height: 38px; width: 38px;" ng-style="{ 'background-color': item.color}"></span>
                   </td>
                   <td class="hidden-sm hidden-xs text-center v-align-middle">
                     <span class="badge badge-default" ng-class="{ 'badge-danger': !data.extra.stats[getId(item)] || data.extra.stats[getId(item)] == 0 }">

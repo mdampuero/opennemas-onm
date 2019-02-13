@@ -163,16 +163,27 @@
                       <label for="title" class="form-label">
                         {t}Title{/t}
                       </label>
-                      <div class="controls">
-                        <input class="form-control" id="title" name="title" ng-blur="loadSlug()" ng-model="item.title" type="text" required uib-tooltip="[% data.item.title[data.extra.locale.default] %]" tooltip-enable="data.extra.locale.default !== config.locale">
+                      <div class="controls input-with-icon right">
+                        <input class="form-control" id="title" name="title" ng-blur="generate()" ng-model="item.title" type="text" required uib-tooltip="[% data.item.title[data.extra.locale.default] %]" tooltip-enable="data.extra.locale.default !== config.locale.selected">
+                        <span class="icon right ng-cloak" ng-if="!flags.http.loading">
+                          <span class="fa fa-check text-success" ng-if="form.title.$dirty && form.title.$valid"></span>
+                          <span class="fa fa-info-circle text-info" ng-if="!form.title.$dirty && form.title.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                          <span class="fa fa-times text-error" ng-if="form.title.$dirty && form.title.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
+                        </span>
                       </div>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="name" class="form-label">{t}Slug{/t}</label>
-                      <div class="controls">
-                        <input class="form-control" id="name" name="name" ng-model="item.name" ng-readonly="itemHasId(item)" type="text" required>
+                      <div class="controls input-with-icon right">
+                        <input class="form-control" id="name" name="name" ng-model="item.name" required type="text" uib-tooltip="[% data.item.name[data.extra.locale.default] %]" tooltip-enable="data.extra.locale.default !== config.locale.selected">
+                        <span class="icon right ng-cloak" ng-if="!flags.http.loading">
+                          <span class="fa fa-circle-o-notch fa-spin" ng-if="flags.http.slug"></span>
+                          <span class="fa fa-check text-success" ng-if="!flags.http.slug && form.name.$dirty && form.name.$valid"></span>
+                          <span class="fa fa-info-circle text-info" ng-if="!flags.http.slug && !form.name.$dirty && form.name.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                          <span class="fa fa-times text-error" ng-if="!flags.http.slug && form.name.$dirty && form.name.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
+                        </span>
                       </div>
                     </div>
                   </div>
