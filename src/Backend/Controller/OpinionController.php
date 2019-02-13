@@ -14,7 +14,7 @@ use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class OpinionsController extends Controller
+class OpinionController extends Controller
 {
     /**
      * The name of the setting to save extra field configuration.
@@ -57,7 +57,7 @@ class OpinionsController extends Controller
                 sprintf(_('Unable to find the opinion with the id "%d"'), $id)
             );
 
-            return $this->redirect($this->generateUrl('admin_opinions'));
+            return $this->redirect($this->generateUrl('backend_opinions_list'));
         }
 
         // Check if you can see others opinions
@@ -69,7 +69,7 @@ class OpinionsController extends Controller
                 _("You can't modify this opinion because you don't have enought privileges.")
             );
 
-            return $this->redirect($this->generateUrl('admin_opinions'));
+            return $this->redirect($this->generateUrl('backend_opinions_list'));
         }
 
         $authors = $this->getAuthors();
@@ -89,7 +89,7 @@ class OpinionsController extends Controller
         if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
             $extraFields = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
-                ->get(OpinionsController::EXTRA_INFO_TYPE);
+                ->get(self::EXTRA_INFO_TYPE);
         }
 
         $tags = [];
@@ -131,7 +131,7 @@ class OpinionsController extends Controller
             if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
                 $extraFields = $this->get('orm.manager')
                     ->getDataSet('Settings', 'instance')
-                    ->get(OpinionsController::EXTRA_INFO_TYPE);
+                    ->get(self::EXTRA_INFO_TYPE);
             }
 
             return $this->render('opinion/new.tpl', [
@@ -179,7 +179,7 @@ class OpinionsController extends Controller
             'tags'             => json_decode($request->request->get('tags', ''), true)
         ];
 
-        $data = $this->loadMetaDataFields($data, $request->request, OpinionsController::EXTRA_INFO_TYPE);
+        $data = $this->loadMetaDataFields($data, $request->request, self::EXTRA_INFO_TYPE);
 
         if ($opinion->create($data)) {
             $this->get('session')->getFlashBag()->add(
@@ -194,7 +194,7 @@ class OpinionsController extends Controller
         }
 
         return $this->redirect(
-            $this->generateUrl('admin_opinion_show', [ 'id' => $opinion->id ])
+            $this->generateUrl('backend_opinion_show', [ 'id' => $opinion->id ])
         );
     }
 
@@ -220,7 +220,7 @@ class OpinionsController extends Controller
                 sprintf(_('Unable to find the opinion with the id "%d"'), $id)
             );
 
-            return $this->redirect($this->generateUrl('admin_opinions'));
+            return $this->redirect($this->generateUrl('backend_opinions_list'));
         }
 
         if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
@@ -231,7 +231,7 @@ class OpinionsController extends Controller
                 _("You can't modify this opinion because you don't have enought privileges.")
             );
 
-            return $this->redirect($this->generateUrl('admin_opinions'));
+            return $this->redirect($this->generateUrl('backend_opinions_list'));
         }
 
         $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
@@ -245,7 +245,7 @@ class OpinionsController extends Controller
                 _("Opinion data sent not valid.")
             );
 
-            return $this->redirect($this->generateUrl('admin_opinion_show', [ 'id' => $id ]));
+            return $this->redirect($this->generateUrl('backend_opinion_show', [ 'id' => $id ]));
         }
 
         $data = [
@@ -276,7 +276,7 @@ class OpinionsController extends Controller
             'tags'             => json_decode($request->request->get('tags', ''), true)
         ];
 
-        $data = $this->loadMetaDataFields($data, $request->request, OpinionsController::EXTRA_INFO_TYPE);
+        $data = $this->loadMetaDataFields($data, $request->request, self::EXTRA_INFO_TYPE);
 
         if ($opinion->update($data)) {
             $this->get('session')->getFlashBag()->add(
@@ -290,7 +290,7 @@ class OpinionsController extends Controller
             );
         }
 
-        return $this->redirect($this->generateUrl('admin_opinion_show', [
+        return $this->redirect($this->generateUrl('backend_opinion_show', [
             'id' => $opinion->id
         ]));
     }
@@ -381,7 +381,7 @@ class OpinionsController extends Controller
             'page'        => $page,
             'total'       => $countOpinions,
             'route'       => [
-                'name'   => 'admin_opinions_content_provider',
+                'name'   => 'backend_opinions_content_provider',
                 'params' => [ 'category' => $categoryId ]
             ],
         ]);
@@ -451,7 +451,7 @@ class OpinionsController extends Controller
                 'configs'      => $ds->get([ 'opinion_settings' ]),
                 'extra_fields' => $this->get('orm.manager')
                     ->getDataSet('Settings', 'instance')
-                    ->get(OpinionsController::EXTRA_INFO_TYPE)
+                    ->get(self::EXTRA_INFO_TYPE)
             ]);
         }
 
@@ -475,12 +475,12 @@ class OpinionsController extends Controller
             $this->get('session')->getFlashBag()
                 ->add('success', _('Settings saved successfully.'));
 
-            return $this->redirect($this->generateUrl('admin_opinions_config'));
+            return $this->redirect($this->generateUrl('backend_opinions_config'));
         } catch (\Exception $e) {
             $this->get('session')->getFlashBag()
                 ->add('error', _('Unable to save the settings.'));
 
-            return $this->redirect($this->generateUrl('admin_opinions_config'));
+            return $this->redirect($this->generateUrl('backend_opinions_config'));
         }
     }
 

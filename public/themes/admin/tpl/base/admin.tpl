@@ -142,7 +142,7 @@
                       {is_module_activated name="OPINION_MANAGER"}
                         {acl isAllowed="OPINION_CREATE"}
                           <div class="quick-item">
-                            <a href="{url name=admin_opinion_create}">
+                            <a href="{url name=backend_opinion_create}">
                               <i class="fa fa-quote-right"></i>
                               <span class="title">{t}Opinion{/t}</span>
                             </a>

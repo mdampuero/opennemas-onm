@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form action="{url name=admin_opinions}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="OpinionListCtrl" ng-init="init('opinion', 'backend_ws_opinions_list')">
+  <form action="{url name=backend_opinions_list}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="OpinionListCtrl" ng-init="init('opinion', 'backend_ws_opinions_list')">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -21,7 +21,7 @@
             <ul class="nav quick-section">
               {acl isAllowed="OPINION_SETTINGS"}
                 <li class="quicklinks">
-                  <a class="btn btn-link" href="{url name=admin_opinions_config}" title="{t}Config opinion module{/t}">
+                  <a class="btn btn-link" href="{url name=backend_opinions_config}" title="{t}Config opinion module{/t}">
                     <i class="fa fa-cog fa-lg"></i>
                   </a>
                 </li>
@@ -31,7 +31,7 @@
               {/acl}
               {acl isAllowed="OPINION_CREATE"}
                 <li class="quicklinks">
-                  <a class="btn btn-primary" href="{url name=admin_opinion_create}" title="{t}New opinion{/t}" id="create-button">
+                  <a class="btn btn-primary" href="{url name=backend_opinion_create}" title="{t}New opinion{/t}" id="create-button">
                     <i class="fa fa-plus"></i>
                     {t}Create{/t}
                   </a>

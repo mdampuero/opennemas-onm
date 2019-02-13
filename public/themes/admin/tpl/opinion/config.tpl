@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_opinions_config}" method="POST" name="formulario" id="formulario">
+<form action="{url name=backend_opinions_config}" method="POST" name="formulario" id="formulario">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -22,7 +22,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <a class="btn btn-link" href="{url name=admin_opinions}" title="{t}Go back to list{/t}">
+              <a class="btn btn-link" href="{url name=backend_opinions_list}" title="{t}Go back to list{/t}">
                 <i class="fa fa-reply"></i>
               </a>
             </li>
@@ -70,7 +70,7 @@
               </div>
             </div>
             {is_module_activated name="BLOG_MANAGER"}
-            <h4>{t}Blogs fronpage{/t}</h4>
+            <h4>{t}Blogs frontpage{/t}</h4>
               <div class="form-group">
                 <label class="form-label" for="blog_orderFrontpage">
                   {t}Order blog's frontpage by{/t}
