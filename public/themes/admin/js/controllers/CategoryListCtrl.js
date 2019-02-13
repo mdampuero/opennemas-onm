@@ -15,8 +15,8 @@
      *   Handles all actions in category list.
      */
     .controller('CategoryListCtrl', [
-      '$controller', '$scope', '$timeout', '$uibModal', 'http', 'linker', 'localizer', 'messenger', 'oqlEncoder',
-      function($controller, $scope, $timeout, $uibModal, http, linker, localizer, messenger, oqlEncoder) {
+      '$controller', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlEncoder',
+      function($controller, $scope, $timeout, $uibModal, http, messenger, oqlEncoder) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -324,29 +324,7 @@
           }
 
           $scope.configure(data.extra);
-          $scope.localize();
-        };
-
-        /**
-         * @function localize
-         * @memberOf CategoryListCtrl
-         *
-         * @description
-         *   Configures multilanguage-related services basing on the scope.
-         */
-        $scope.localize = function() {
-          var lz = localizer.get($scope.data.extra.locale);
-
-          $scope.items = lz.localize($scope.data.items,
-            $scope.data.extra.keys, $scope.config.locale);
-
-          if (!$scope.config.linkers.items) {
-            $scope.config.linkers.items = linker.get($scope.data.extra.keys,
-              $scope.config.locale.default, $scope, false);
-          }
-
-          $scope.config.linkers.items.setKey($scope.config.locale.selected);
-          $scope.config.linkers.items.link($scope.data.items, $scope.items);
+          $scope.localize($scope.data.items, 'items');
         };
 
         /**

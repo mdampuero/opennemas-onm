@@ -19,8 +19,8 @@
      *   and inners will need. All controllers should extend this.
      */
     .controller('BaseCtrl', [
-      '$rootScope', '$scope', '$timeout', '$uibModal', '$window', 'Editor', 'http', 'messenger', 'Renderer',
-      function($rootScope, $scope, $timeout, $uibModal, $window, Editor, http, messenger, Renderer) {
+      '$rootScope', '$scope', '$timeout', '$uibModal', '$window', 'Editor', 'http', 'linker', 'localizer', 'messenger', 'Renderer',
+      function($rootScope, $scope, $timeout, $uibModal, $window, Editor, http, linker, localizer, messenger, Renderer) {
         /**
          * @memberOf BaseCtrl
          *
@@ -305,6 +305,35 @@
           modal.result.then(function(image) {
             $scope.uploadMediaImg(image, imgData);
           });
+        };
+
+        /**
+         * @function localize
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Configures multilanguage-related services basing on the scope.
+         *
+         * @param {Object} The item or list of items to localize.
+         * @param {String} The name of the property where localized items will
+         *                 be stored in scope.
+         */
+        $scope.localize = function(items, key, clean) {
+          var lz = localizer.get($scope.config.locale);
+
+          // Localize items
+          $scope[key] = lz.localize(items,
+            $scope.data.extra.keys, $scope.config.locale);
+
+          // Initialize linker
+          if (!$scope.config.linkers[key]) {
+            $scope.config.linkers[key] = linker.get($scope.data.extra.keys,
+              $scope.config.locale.default, $scope, clean);
+          }
+
+          // Link original and localized items
+          $scope.config.linkers[key].setKey($scope.config.locale.selected);
+          $scope.config.linkers[key].link(items, $scope[key]);
         };
 
         $scope.uploadMediaImg = function(image, imgData) {
