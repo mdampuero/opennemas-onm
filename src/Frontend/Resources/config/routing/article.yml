@@ -20,14 +20,6 @@ frontend_article_show:
     options:
         l10n: true
 
-frontend_article_show_amp:
-    path: /articulo/{id}.amp.html
-    defaults: { _controller: FrontendBundle:Article:showAmp, page: 1 }
-    requirements:
-        id:            '[0-9]+'
-    options:
-        l10n: true
-
 frontend_article_show_amp_old:
     path: /articulo/{category_name}/{slug}/{created}{id}.amp.html
     defaults: { _controller: FrontendBundle:Article:showAmp, _format: amp }
