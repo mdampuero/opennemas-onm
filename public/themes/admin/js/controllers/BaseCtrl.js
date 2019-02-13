@@ -74,16 +74,6 @@
          * @memberOf InnerCtrl
          *
          * @description
-         *  List of suggested tags
-         *
-         * @type {Array}
-         */
-        $scope.suggestedTags = {};
-
-        /**
-         * @memberOf InnerCtrl
-         *
-         * @description
          *  The list of overlays.
          *
          * @type {Object}
