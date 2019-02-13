@@ -187,6 +187,8 @@ class OrmService implements Service
         try {
             $item = $this->em->getRepository($this->entity, $this->origin)->find($id);
 
+            $this->localizeItem($item);
+
             $this->dispatcher->dispatch($this->getEventName('getItem'), [
                 'id'   => $id,
                 'item' => $item
@@ -227,7 +229,7 @@ class OrmService implements Service
             throw new GetItemException();
         }
 
-        $item = array_pop($response['items']);
+        $item = $this->localizeItem(array_pop($response['items']));
 
         $this->dispatcher->dispatch($this->getEventName('getItemBy'), [
             'item' => $item,
@@ -252,6 +254,8 @@ class OrmService implements Service
             if ($this->count) {
                 $response['total'] = $repository->countBy($oql);
             }
+
+            $this->localizeList($response['items']);
 
             $this->dispatcher->dispatch($this->getEventName('getList'), [
                 'items' => $response['items'],
@@ -286,6 +290,8 @@ class OrmService implements Service
         }
 
         $items = $this->em->getRepository($this->entity, $this->origin)->find($ids);
+
+        $this->localizeList($items);
 
         $this->dispatcher->dispatch($this->getEventName('getListByIds'), [
             'ids'   => $ids,
@@ -490,6 +496,51 @@ class OrmService implements Service
     protected function getEventName($action)
     {
         return \underscore(basename($this->entity)) . '.' . $action;
+    }
+    /**
+     * Localizes all l10n_string properties of an Entity basing on the current
+     * context.
+     *
+     * @param Entity $item An item to localize.
+     *
+     * @return Entity The localized item.
+     */
+    protected function localizeItem($item)
+    {
+        if (empty($this->getL10nKeys())
+            || $this->container->get('core.locale')->getContext() !== 'frontend'
+        ) {
+            return $item;
+        }
+
+        $fm = $this->container->get('data.manager.filter');
+
+        foreach ($this->getL10nKeys() as $key) {
+            if (!empty($item->{$key})) {
+                $item->{$key} = $fm->set($item->{$key})
+                    ->filter('localize')
+                    ->get();
+            }
+        }
+
+        return $item;
+    }
+
+    /**
+     * Localizes all l10n_string properties of a list of Entities basing on the
+     * current context.
+     *
+     * @param array $items The list of itemx to localize.
+     *
+     * @return array The localized list of items.
+     */
+    protected function localizeList($items)
+    {
+        foreach ($items as $item) {
+            $item = $this->localizeItem($item);
+        }
+
+        return $items;
     }
 
     /**

@@ -44,11 +44,11 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->locale = $this->getMockBuilder('Locale')
-            ->setMethods([ 'getLocale' ])
+            ->setMethods([ 'getContext', 'getLocale' ])
             ->getMock();
 
         $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
-            ->setMethods([ 'getId', 'getIdKeys' ])
+            ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())

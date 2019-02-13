@@ -40,8 +40,16 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
                 'remove'
             ])->getMock();
 
+        $this->fm = $this->getMockBuilder('FilterManager')
+            ->setMethods([ 'filter', 'get', 'set' ])
+            ->getMock();
+
         $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
             ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
+            ->getMock();
+
+        $this->locale = $this->getMockBuilder('Locale')
+            ->setMethods([ 'getContext' ])
             ->getMock();
 
         $this->logger = $this->getMockBuilder('Logger' . uniqid())
@@ -85,6 +93,12 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'core.dispatcher':
                 return $this->dispatcher;
+
+            case 'core.locale':
+                return $this->locale;
+
+            case 'data.manager.filter':
+                return $this->fm;
 
             case 'error.log':
                 return $this->logger;
@@ -207,9 +221,11 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $itemA = new Entity([ 'name' => 'wubble']);
         $itemB = new Entity([ 'name' => 'xyzzy' ]);
 
-        $this->metadata->expects($this->at(0))->method('getId')
+        $this->metadata->expects($this->at(0))->method('getL10nKeys')
+            ->willReturn([]);
+        $this->metadata->expects($this->at(2))->method('getId')
             ->with($itemA)->willReturn([ 'id' => 1 ]);
-        $this->metadata->expects($this->at(1))->method('getId')
+        $this->metadata->expects($this->at(3))->method('getId')
             ->with($itemB)->willReturn([ 'id' => 2 ]);
 
         $this->repository->expects($this->once())->method('find')
@@ -250,15 +266,17 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $itemA = new Entity([ 'name' => 'wubble']);
         $itemB = new Entity([ 'name' => 'xyzzy' ]);
 
-        $this->metadata->expects($this->at(0))->method('getId')
+        $this->metadata->expects($this->at(0))->method('getL10nKeys')
+            ->willReturn([]);
+        $this->metadata->expects($this->at(2))->method('getId')
             ->with($itemA)->willReturn([ 'id' => 1 ]);
 
         $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);
 
-        $this->em->expects($this->at(1))->method('remove');
-        $this->em->expects($this->at(3))->method('remove')
+        $this->em->expects($this->at(3))->method('remove')->willReturn('foobar');
+        $this->em->expects($this->at(5))->method('remove')
             ->will($this->throwException(new \Exception()));
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
@@ -606,9 +624,11 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $itemB = new Entity([ 'name' => 'xyzzy', 'enabled' => false  ]);
         $data  = [ 'enabled' => true ];
 
-        $this->metadata->expects($this->at(0))->method('getId')
+        $this->metadata->expects($this->at(0))->method('getL10nKeys')
+            ->willReturn([]);
+        $this->metadata->expects($this->at(2))->method('getId')
             ->with($itemA)->willReturn([ 'id' => 1 ]);
-        $this->metadata->expects($this->at(1))->method('getId')
+        $this->metadata->expects($this->at(3))->method('getId')
             ->with($itemB)->willReturn([ 'id' => 2 ]);
 
         $this->repository->expects($this->once())->method('find')
@@ -654,17 +674,19 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $itemB = new Entity([ 'name' => 'xyzzy' ]);
         $data  = [ 'enabled' => true ];
 
-        $this->metadata->expects($this->once())->method('getId')
+        $this->metadata->expects($this->at(0))->method('getL10nKeys')
+            ->willReturn([]);
+        $this->metadata->expects($this->at(2))->method('getId')
             ->willReturn([ 'id' => 2 ]);
 
         $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);
 
-        $this->em->expects($this->at(2))->method('persist')
+        $this->em->expects($this->at(4))->method('persist')
             ->will($this->throwException(new \Exception()));
 
-        $this->em->expects($this->at(3))->method('persist');
+        $this->em->expects($this->at(4))->method('persist');
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
             ->with('entity.getListByIds', [
@@ -864,5 +886,67 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $method->invokeArgs($service, [ new Entity() ]);
 
         $this->addToAssertionCount(1);
+    }
+
+    /**
+     * Tests localizeItem when the entity has no l10n_string values.
+     */
+    public function testLocalizeItemWhenNoL10nStringValues()
+    {
+        $item = new Entity([ 'name' => 'foobar' ]);
+
+        $this->metadata->expects($this->once())->method('getL10nKeys')
+            ->willReturn([]);
+
+        $method = new \ReflectionMethod($this->service, 'localizeItem');
+        $method->setAccessible(true);
+
+        $this->assertEquals($item, $method->invokeArgs($this->service, [ $item ]));
+    }
+
+    /**
+     * Tests localizeItem when no frontend context.
+     */
+    public function testLocalizeItemWhenNoFrontendContext()
+    {
+        $item = new Entity([ 'name' => 'foobar' ]);
+
+        $this->locale->expects($this->once())->method('getContext')
+            ->willReturn('plugh');
+        $this->metadata->expects($this->once())->method('getL10nKeys')
+            ->willReturn([ 'title', 'name' ]);
+
+        $method = new \ReflectionMethod($this->service, 'localizeItem');
+        $method->setAccessible(true);
+
+        $this->assertEquals($item, $method->invokeArgs($this->service, [ $item ]));
+    }
+
+    /**
+     * Tests localizeItem when keys provided and context is frontend.
+     */
+    public function testLocalizeItem()
+    {
+        $item = new Entity([ 'name' => [ 'en' => 'foobar', 'es' => 'fubar' ] ]);
+
+        $this->locale->expects($this->once())->method('getContext')
+            ->willReturn('frontend');
+        $this->metadata->expects($this->any())->method('getL10nKeys')
+            ->willReturn([ 'title', 'name' ]);
+
+        $this->fm->expects($this->once())->method('set')
+            ->with([ 'en' => 'foobar', 'es' => 'fubar' ])
+            ->willReturn($this->fm);
+        $this->fm->expects($this->once())->method('filter')
+            ->with('localize')->willReturn($this->fm);
+        $this->fm->expects($this->once())->method('get')
+            ->willReturn('fubar');
+
+        $method = new \ReflectionMethod($this->service, 'localizeItem');
+        $method->setAccessible(true);
+
+        $method->invokeArgs($this->service, [ $item ]);
+
+        $this->assertEquals('fubar', $item->name);
     }
 }
