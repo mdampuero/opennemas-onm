@@ -48,15 +48,6 @@ class ArticleController extends FrontendController
     ];
 
     /**
-     * The list of templates per action.
-     *
-     * @var array
-     */
-    protected $templates = [
-        'showamp' => 'amp/content.tpl',
-    ];
-
-    /**
      * Displays the external article given its id
      *
      * @param Request $request the request object
