@@ -325,11 +325,10 @@ class FrontendController extends Controller
 
             $params['x-tags'][] = $item->id;
 
-            $params[$item->content_type_name] = $item;
-            $params['content']                = $item;
-            $params['contentId']              = $item->id;
-            $params['o_content']              = $item;
-            $params['x-cacheable']            = empty($params['o_token']);
+            $params['content']     = $item;
+            $params['contentId']   = $item->id;
+            $params['o_content']   = $item;
+            $params['x-cacheable'] = empty($params['o_token']);
         }
 
         if (array_key_exists('category_name', $params)) {
@@ -491,7 +490,7 @@ class FrontendController extends Controller
 
         $this->view->assign([
             'related_contents'   => $this->getRelated($item),
-            'suggested_contents' => $this->getSuggested($item)
+            'suggested_contents' => $this->getSuggested($item, $params['o_category'])
         ]);
     }
 
@@ -573,9 +572,9 @@ class FrontendController extends Controller
                 continue;
             }
 
-            if ($content->content_type == 1 && !empty($content->img1)) {
+            if ($content->fk_content_type == 1 && !empty($content->img1)) {
                 $content->photo = $em->find('Photo', $content->img1);
-            } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
+            } elseif ($content->fk_content_type == 1 && !empty($content->fk_video)) {
                 $content->video = $em->find('Video', $content->fk_video);
             }
 

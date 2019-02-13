@@ -131,7 +131,7 @@ class ArticleController extends FrontendController
         }
 
         if (!empty($item)) {
-            $params['article'] = $item;
+            $params[$item->content_type_name] = $item;
 
             $params['tags'] = $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($item->tag_ids, $locale)['items'];

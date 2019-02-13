@@ -35,10 +35,10 @@ class OpinionController extends FrontendController
      * {@inheritdoc}
      */
     protected $groups = [
-        'showamp'         => 'amp_inner',
-        'frontpage'       => 'opinion_frontpage',
-        'frontpageauthor' => 'opinion_frontpage',
-        'show'            => 'opinion_inner',
+        'showamp'    => 'amp_inner',
+        'list'       => 'opinion_frontpage',
+        'listauthor' => 'opinion_frontpage',
+        'show'       => 'opinion_inner',
     ];
 
     /**
@@ -55,9 +55,9 @@ class OpinionController extends FrontendController
      * @var array
      */
     protected $queries = [
-        'frontpage'       => [ 'page' ],
-        'frontpageauthor' => [ 'author_id' ],
-        'showamp'         => [ '_format' ],
+        'list'       => [ 'page' ],
+        'listauthor' => [ 'author_id', 'page' ],
+        'showamp'    => [ '_format' ],
     ];
 
     /**
@@ -66,8 +66,8 @@ class OpinionController extends FrontendController
      * @var array
      */
     protected $routes = [
-        'frontpageauthor' => 'frontend_opinion_author_frontpage',
-        'list'            => 'frontend_opinion_frontpage'
+        'listauthor' => 'frontend_opinion_author_frontpage',
+        'list'       => 'frontend_opinion_frontpage'
     ];
 
     /**
@@ -133,40 +133,23 @@ class OpinionController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    protected function hydrateShow($params = [], $item = null)
+    protected function getParameters($params, $item = null)
     {
-        $author = $this->get('user_repository')->find((int) $item->fk_author);
+        $locale = $this->get('core.locale')->getRequestLocale();
+        $params = parent::getParameters($params, $item);
 
-        $item->author = $author;
-        if (is_object($author)
-            && is_array($author->meta)
-            && array_key_exists('is_blog', $author->meta)
-            && $author->meta['is_blog'] == 1
-        ) {
-            return new RedirectResponse(
-                $this->generateUrl('frontend_blog_show', [
-                    'blog_id'     => $item->pk_content,
-                    'author_name' => $author->username,
-                    'blog_title'  => $item->slug,
-                ])
-            );
+        if (!empty($item)) {
+            $params[$item->content_type_name] = $item;
+
+            $params['tags'] = $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($item->tag_ids, $locale)['items'];
+
+            if (array_key_exists('bodyLink', $item->params)) {
+                $params['o_external_link'] = $item->params['bodyLink'];
+            }
         }
 
-        // Associated media code
-        if (isset($item->img2) && ($item->img2 > 0)) {
-            $photo = $this->get('opinion_repository')->find('Photo', $item->img2);
-
-            $params['photo'] = $photo;
-        }
-
-        // Fran is sad about this
-        $item->author_name_slug = \Onm\StringUtils::getTitle($item->name);
-
-        $params = array_merge($params, [
-            'author' => $author,
-        ]);
-
-        $this->view->assign($params);
+        return $params;
     }
 
     /**
@@ -389,5 +372,44 @@ class OpinionController extends FrontendController
             'author'     => $author,
             'page'       => $page,
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function hydrateShow($params = [], $item = null)
+    {
+        $author = $this->get('user_repository')->find((int) $item->fk_author);
+
+        $item->author = $author;
+        if (is_object($author)
+            && is_array($author->meta)
+            && array_key_exists('is_blog', $author->meta)
+            && $author->meta['is_blog'] == 1
+        ) {
+            return new RedirectResponse(
+                $this->generateUrl('frontend_blog_show', [
+                    'blog_id'     => $item->pk_content,
+                    'author_name' => $author->username,
+                    'blog_title'  => $item->slug,
+                ])
+            );
+        }
+
+        // Associated media code
+        if (isset($item->img2) && ($item->img2 > 0)) {
+            $photo = $this->get('opinion_repository')->find('Photo', $item->img2);
+
+            $params['photo'] = $photo;
+        }
+
+        // TODO: Remove this ASAP
+        $item->author_name_slug = \Onm\StringUtils::getTitle($item->name);
+
+        $params = array_merge($params, [
+            'author' => $author,
+        ]);
+
+        $this->view->assign($params);
     }
 }

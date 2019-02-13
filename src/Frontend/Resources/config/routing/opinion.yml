@@ -9,12 +9,17 @@ frontend_opinion_show:
         id:            '[0-9]+'
     options:
         l10n: true
+        expose: true
 
 frontend_opinion_show_amp:
-    path: /opinion/{id}.amp.html
+    path: /opinion/{author_name}/{opinion_title}/{created}{id}.amp.html
     defaults: { _controller: FrontendBundle:Opinion:showAmp }
     requirements:
-        id : '[0-9]+'
+        author_name   : '[^/]+'
+        opinion_title : '[^/]+'
+        opinion_id    : '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
     options:
         l10n: true
 

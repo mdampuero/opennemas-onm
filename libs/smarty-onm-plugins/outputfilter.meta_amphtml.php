@@ -32,11 +32,11 @@ function smarty_outputfilter_meta_amphtml($output, $smarty)
     }
 
     $url = $container->get('core.helper.l10n_route')->localizeUrl(
-        $container->get('router')->generate(
-            'frontend_' . $content->content_type_name . '_show_amp',
-            [ 'id' => $content->pk_content, ],
-            UrlGeneratorInterface::ABSOLUTE_URL
-        )
+        $container->get('core.helper.url_generator')
+            ->generate(
+                $content,
+                ['_format' => 'amp', 'absolute' => true ]
+            )
     );
 
     return str_replace('</head>', sprintf($tpl, $url) . '</head>', $output);

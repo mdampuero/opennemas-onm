@@ -115,6 +115,10 @@ class UrlGeneratorHelper
 
         $this->locale->setContext($context);
 
+        if (array_key_exists('_format', $params) && $params['_format'] == 'amp') {
+            $uri = preg_replace('@\.html$@', '.amp.html', $uri);
+        }
+
         return $uri;
     }
 

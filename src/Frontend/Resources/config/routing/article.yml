@@ -20,7 +20,7 @@ frontend_article_show:
     options:
         l10n: true
 
-frontend_article_show_amp_old:
+frontend_article_show_amp:
     path: /articulo/{category_name}/{slug}/{created}{id}.amp.html
     defaults: { _controller: FrontendBundle:Article:showAmp, _format: amp }
     requirements:
