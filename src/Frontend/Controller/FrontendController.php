@@ -66,6 +66,10 @@ class FrontendController extends Controller
         $expected = $this->get('router')->generate($route);
         $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
 
+        if (!$this->get('core.security')->hasExtension($this->extension)) {
+            throw new ResourceNotFoundException();
+        }
+
         if ($request->getPathInfo() !== $expected) {
             return new RedirectResponse($expected);
         }
@@ -75,7 +79,7 @@ class FrontendController extends Controller
         $this->view->setConfig($this->getCacheConfiguration($action));
 
         if (!$this->isCached($params)) {
-            $this->hydrate($params);
+            $this->hydrateList($params);
         }
 
         return $this->render($this->getTemplate($action), $params);
@@ -418,6 +422,16 @@ class FrontendController extends Controller
      * the current request is not cached.
      */
     protected function hydrateShow()
+    {
+    }
+
+    /**
+     * Updates the list of parameters and/or the item when the response for
+     * the current request is not cached.
+     *
+     * @param array $params the list of parameters already in set.
+     */
+    protected function hydrateList(array $params): void
     {
     }
 

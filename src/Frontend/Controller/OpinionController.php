@@ -66,7 +66,8 @@ class OpinionController extends FrontendController
      * @var array
      */
     protected $routes = [
-        'frontpageauthor' => 'frontend_opinion_author_frontpage'
+        'frontpageauthor' => 'frontend_opinion_author_frontpage',
+        'list'            => 'frontend_opinion_frontpage'
     ];
 
     /**
@@ -75,43 +76,10 @@ class OpinionController extends FrontendController
      * @var array
      */
     protected $templates = [
-        'frontpage'       => 'opinion/opinion_frontpage.tpl',
-        'frontpageauthor' => 'opinion/opinion_author_index.tpl',
-        'showamp'         => 'amp/content.tpl',
+        'list'       => 'opinion/opinion_frontpage.tpl',
+        'listauthor' => 'opinion/opinion_author_index.tpl',
+        'showamp'    => 'amp/content.tpl',
     ];
-
-    /**
-     * Renders the opinion frontpage.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     */
-    public function frontpageAction(Request $request)
-    {
-        $action = $this->get('core.globals')->getAction();
-        $route  = $this->getRoute($action);
-
-        $expected = $this->get('router')->generate($route);
-        $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
-
-        if (!$this->get('core.security')->hasExtension($this->extension)) {
-            throw new ResourceNotFoundException();
-        }
-
-        if ($request->getPathInfo() !== $expected) {
-            return new RedirectResponse($expected);
-        }
-
-        $params = $this->getParameters($request);
-        $this->view->setConfig($this->getCacheConfiguration($action));
-
-        if (!$this->isCached($params)) {
-            $this->hydrateFrontpage($params);
-        }
-
-        return $this->render($this->getTemplate($action), $params);
-    }
 
     /**
      * Renders the opinion author's frontpage
@@ -120,7 +88,7 @@ class OpinionController extends FrontendController
      *
      * @return Response the response object
      */
-    public function frontpageAuthorAction(Request $request)
+    public function listAuthorAction(Request $request)
     {
         $authorID = (int) $request->get('author_id', null);
         $author   = $this->get('user_repository')->find($authorID);
@@ -156,7 +124,7 @@ class OpinionController extends FrontendController
         $this->view->setConfig($this->getCacheConfiguration($action));
 
         if (!$this->isCached($params)) {
-            $this->hydrateFrontpageAuthor($params, $author);
+            $this->hydrateListAuthor($params, $author);
         }
 
         return $this->render($this->getTemplate($action), $params);
@@ -206,7 +174,7 @@ class OpinionController extends FrontendController
      *
      * Action specific for the frontpage
      */
-    protected function hydrateFrontpage(array $params) : void
+    protected function hydrateList(array $params) : void
     {
         $epp  = $this->get('orm.manager')->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
@@ -328,7 +296,7 @@ class OpinionController extends FrontendController
      *
      * Action specific for the opinion author frontpage
      */
-    protected function hydrateFrontpageAuthor(array $params, $author)
+    protected function hydrateListAuthor(array $params, $author)
     {
         $page = $params['page'] ?? 1;
 
