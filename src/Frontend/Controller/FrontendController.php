@@ -131,12 +131,12 @@ class FrontendController extends Controller
     }
 
     /**
-     * Displays a conetnt in amp format basing on the parameters in the request.
+     * Displays a content amp format basing on the parameters in the request.
      *
      * @param Request $request The request object.
      *
      * @return Response The response object.
-     **/
+     */
     public function showAmpAction(Request $request)
     {
         if (!$this->get('core.security')->hasExtension('AMP_MODULE')) {
@@ -311,7 +311,7 @@ class FrontendController extends Controller
             'o_category' => null,
             'x-tags'     => [
                 $this->get('core.globals')->getExtension(),
-                $this->get('core.globals')->getExtension() . '-' . $this->get('core.globals')->getAction()
+                $this->get('core.globals')->getAction()
             ]
         ]);
 
@@ -573,17 +573,14 @@ class FrontendController extends Controller
     /**
      * Returns the list of suggested contents for a content.
      *
-     * @param Contetn  $content  The current content.
-     * @param Category $category The content category.
+     * @param Content  $content  The content to skip while fetching suggestions.
+     * @param Category $category The category to filter from.
      *
      * @return array The list of suggested contents.
      */
     protected function getSuggested($content, $category = null)
     {
-        $query = sprintf(
-            'pk_content <> %s',
-            $content->id
-        );
+        $query = sprintf('pk_content <> %s', $content->id);
 
         return $this->get('automatic_contents')
             ->searchSuggestedContents($content->content_type_name, $query);
