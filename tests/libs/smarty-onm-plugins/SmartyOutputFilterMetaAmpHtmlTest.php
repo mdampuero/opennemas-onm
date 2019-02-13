@@ -37,7 +37,7 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getCurrentRequest' ])
             ->getMock();
 
-        $this->router = $this->getMockBuilder('Router')
+        $this->urlGenerator = $this->getMockBuilder('UrlGenerator')
             ->setMethods([ 'generate' ])
             ->getMock();
 
@@ -54,7 +54,6 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
-
 
         $this->smartySource = $this->getMockBuilder('Smarty_Template_Source')
             ->disableOriginalConstructor()
@@ -80,8 +79,8 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'request':
                 return $this->request;
-            case 'router':
-                return $this->router;
+            case 'core.helper.url_generator':
+                return $this->urlGenerator;
             case 'core.helper.l10n_route':
                 return $this->helper;
             case 'core.security':
@@ -142,7 +141,7 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->any())->method('getRequestUri')
             ->willReturn('wibble.html');
 
-        $this->router->expects($this->any())->method('generate')
+        $this->urlGenerator->expects($this->any())->method('generate')
             ->willReturn('/wibble/wubble');
 
         $this->rs->expects($this->any())->method('getCurrentRequest')
