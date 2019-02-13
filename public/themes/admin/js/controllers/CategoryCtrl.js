@@ -14,8 +14,8 @@
      *   Handles actions for category edit form.
      */
     .controller('CategoryCtrl', [
-      '$controller', '$location', '$scope', '$window', 'http', 'linker', 'localizer',
-      function($controller, $location, $scope, $window, http, linker, localizer) {
+      '$controller', '$location', '$scope', '$timeout', '$window', 'http', 'linker', 'localizer',
+      function($controller, $location, $scope, $timeout, $window, http, linker, localizer) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
@@ -98,6 +98,28 @@
           }
 
           $scope.item.logo_path = nv ? nv.path_img : null;
+        }, true);
+
+        // Generates slug when flag changes
+        $scope.$watch('flags.generate.slug', function(nv) {
+          if ($scope.itemHasId($scope.item) || $scope.item.name || !nv) {
+            $scope.flags.generate.slug = false;
+
+            return;
+          }
+
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+          }
+
+          $scope.tm = $timeout(function() {
+            $scope.getSlug($scope.item.title, function(response) {
+              $scope.item.name = response.data.slug;
+              $scope.flags.generate.slug = false;
+
+              $scope.form.name.$setDirty(true);
+            });
+          }, 250);
         }, true);
       }
     ]);
