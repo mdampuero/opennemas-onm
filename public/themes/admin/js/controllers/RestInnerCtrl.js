@@ -24,6 +24,17 @@
         $.extend(this, $controller('BaseCtrl', { $scope: $scope }));
 
         /**
+         * @function generate
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Forces automatic field generation.
+         */
+        $scope.generate = function() {
+          $scope.flags.generate = { slug: true, tags: true };
+        };
+
+        /**
          * @memberOf RestInnerCtrl
          *
          * @description
