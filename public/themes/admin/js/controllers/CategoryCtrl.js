@@ -102,7 +102,7 @@
 
         // Generates slug when flag changes
         $scope.$watch('flags.generate.slug', function(nv) {
-          if ($scope.itemHasId($scope.item) || $scope.item.name || !nv) {
+          if ($scope.item.name || !nv || !$scope.item.title) {
             $scope.flags.generate.slug = false;
 
             return;
