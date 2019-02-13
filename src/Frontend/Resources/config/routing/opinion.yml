@@ -13,7 +13,7 @@ frontend_opinion_show:
 
 frontend_opinion_show_amp:
     path: /opinion/{author_name}/{opinion_title}/{created}{id}.amp.html
-    defaults: { _controller: FrontendBundle:Opinion:showAmp }
+    defaults: { _controller: FrontendBundle:Opinion:showAmp, _format: amp }
     requirements:
         author_name   : '[^/]+'
         opinion_title : '[^/]+'

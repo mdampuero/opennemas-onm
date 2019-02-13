@@ -21,9 +21,10 @@ class OpinionController extends FrontendController
      * {@inheritdoc}
      */
     protected $caches = [
-        'frontpage' => 'opinion',
-        'show'      => 'opinion',
-        'showamp'   => 'opinion',
+        'list'       => 'opinion',
+        'listauthor' => 'opinion',
+        'show'       => 'opinion',
+        'showamp'    => 'opinion',
     ];
 
     /**
