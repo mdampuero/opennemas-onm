@@ -243,10 +243,8 @@
             resolve: {
               template: function() {
                 return {
-                  source: item,
-                  categories: angular.copy($scope.items).filter(function(e) {
-                    return $scope.getId(e) !== id;
-                  })
+                  exclude: [ id ],
+                  source: item
                 };
               },
               success: function() {
@@ -288,10 +286,8 @@
             resolve: {
               template: function() {
                 return {
-                  selected: $scope.selected.items.length,
-                  categories: angular.copy($scope.items).filter(function(e) {
-                    return $scope.selected.items.indexOf($scope.getId(e)) === -1;
-                  })
+                  exclude: $scope.selected.items,
+                  selected: $scope.selected.items.length
                 };
               },
               success: function() {
