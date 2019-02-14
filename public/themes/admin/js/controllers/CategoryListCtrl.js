@@ -197,11 +197,9 @@
           $scope.backup.criteria = $scope.criteria;
 
           $scope.criteria.orderBy = { name: 'asc' };
-
-          $scope.criteria.epp = null;
+          $scope.criteria.epp     = null;
 
           oqlEncoder.configure({ placeholder: {
-            internal_category: '[key] = [value] and [key] != 0',
             name: '[key] ~ "[value]"',
           } });
 
