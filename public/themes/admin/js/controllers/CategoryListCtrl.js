@@ -323,6 +323,8 @@
             $scope.config.locale = data.extra.locale;
           }
 
+          $scope.data.items = $scope.sortItems($scope.data.items, 0, 0);
+
           $scope.configure(data.extra);
           $scope.localize($scope.data.items, 'items');
         };
