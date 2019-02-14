@@ -250,7 +250,7 @@ class ContentCategoryManager
         //subcat is an array with all subcat form the parentCategories array
         //$categoryData is the info of the category selected
 
-        $fullcat = $this->groupByType($this->categories);
+        $fullcat = $this->categories;
 
         $fullcat = getService('data.manager.filter')->set($fullcat)->filter('localize', [
             'keys' => \ContentCategory::getL10nKeys(),
@@ -446,40 +446,5 @@ class ContentCategoryManager
         $this->categories = [];
 
         getService('cache')->delete('content_categories');
-    }
-
-    /**
-     * Sorts an array of categories by its internal_category property
-     *
-     * @param array $categories the list of categories to sort
-     *
-     * @return array the sorted list of categories
-     */
-    private function groupByType($categories)
-    {
-        $categories = array_values($categories);
-
-        if (count($categories) > 0) {
-            return $categories;
-        }
-
-        usort($categories, function ($a, $b) {
-            // Those that are not in the menu put them at the end of the list
-            if ($b->internal_category == 0) {
-                 return 0;
-            }
-
-            if ($a->internal_category == 0) {
-                 return +1;
-            }
-
-            if ($a->internal_category == $b->internal_category) {
-                return ($a->posmenu > $b->posmenu) ? +1 : -1;
-            }
-
-            return ($a->internal_category < $b->internal_category) ? 1 : +1;
-        });
-
-        return $categories;
     }
 }
