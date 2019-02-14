@@ -240,7 +240,7 @@
                       {t}Category{/t} *
                     </label>
                     <div class="controls">
-                      <onm-category-selector class="block" categories="categories" default-value-text="{t}Select a category{/t}..." ng-model="article.pk_fk_content_category" placeholder="{t}Select a category{/t}"></onm-category-selector>
+                      <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" ng-model="article.pk_fk_content_category" placeholder="{t}Select a category{/t}…"></onm-category-selector>
                     </div>
                   </div>
                   <div class="form-group">

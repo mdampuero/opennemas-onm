@@ -11,7 +11,7 @@
   <p class="text-center" ng-if="template.selected > 1">
     {t escape=off}This means that all contents assigned to the selected categories will be assigned to the category you select in the selector.{/t}
   </p>
-  <onm-category-selector class="block" label-text="{t}Category{/t}" exclude="template.exclude" ng-model="template.target" placeholder="{t}Select a category{/t}" required></onm-category-selector>
+  <onm-category-selector class="block" label-text="{t}Category{/t}" exclude="template.exclude" ng-model="template.target" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
 </div>
 <div class="modal-footer row">
   <div class="col-xs-6">

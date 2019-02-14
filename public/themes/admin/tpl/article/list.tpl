@@ -127,14 +127,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks dropdown hidden-xs ng-cloak">
-            <ui-select name="category" theme="select2" ng-model="criteria.pk_fk_content_category">
-              <ui-select-match>
-                <strong>{t}Category{/t}:</strong> [% $select.selected.title %]
-              </ui-select-match>
-              <ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in categories | filter: { title: $select.search }">
-                <div ng-bind-html="item.title | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
+            <onm-category-selector class="block" default-value-text="{t}Any{/t}" label-text="{t}Category{/t}" locale="config.locale.selected" ng-model="criteria.pk_fk_content_category" placeholder="{t}Any{/t}"></onm-category-selector>
           </li>
           <li class="quicklinks hidden-xs ng-cloak">
             {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
