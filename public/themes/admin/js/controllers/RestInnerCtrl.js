@@ -76,10 +76,13 @@
          *   Returns the data to send when saving/updating an item.
          */
         $scope.getData = function() {
-          // Do not use angular.copy as it doesnt copy some keys in the object
-          var eltoClean = angular.extend({}, $scope.data.item);
+          var data = angular.extend({}, $scope.item);
 
-          return cleaner.clean(eltoClean);
+          if ($scope.config.locale) {
+            data = angular.extend({}, $scope.data.item);
+          }
+
+          return cleaner.clean(data);
         };
 
         /**
