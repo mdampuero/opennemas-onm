@@ -337,35 +337,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Returns the father of a category given its name
-     *
-     * @param string $category_name the category name
-     *
-     * @return string the parent category name
-     */
-    public function getFather($categoryName)
-    {
-        // Singleton version
-        $fk_content_category = '';
-        // Search fk_content_category
-        foreach ($this->categories as $category) {
-            if ($category->name == $categoryName) {
-                $fk_content_category = $category->fk_content_category;
-                break;
-            }
-        }
-
-        foreach ($this->categories as $category) {
-            if ($category->pk_content_category == $fk_content_category) {
-                return $category->name;
-            }
-        }
-
-        // FIXME: if flow of code could arrive here then throw a exception
-        return '';
-    }
-
-    /**
      * Returns the category name given its id.
      *
      * @param integer $id The category id.
@@ -405,15 +376,5 @@ class ContentCategoryManager
         }
 
         return '';
-    }
-
-    /**
-     * Resets ContentCategoryManager.
-     */
-    public function reset()
-    {
-        $this->categories = [];
-
-        getService('cache')->delete('content_categories');
     }
 }
