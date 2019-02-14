@@ -348,62 +348,6 @@ class PollsController extends Controller
     }
 
     /**
-     * Lists all the polls withing a category for the related manager.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('POLL_MANAGER')")
-     */
-    public function contentProviderRelatedAction(Request $request)
-    {
-        $categoryId = $request->query->getDigits('category', 0);
-        $page       = $request->query->getDigits('page', 1);
-        $em         = $this->get('entity_repository');
-        $category   = $this->get('category_repository')->find($categoryId);
-        $epp        = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page') ?: 20;
-
-        $order   = [ 'created' => 'desc' ];
-        $filters = [
-            'content_type_name' => [ [ 'value' => 'poll' ] ],
-            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ]
-        ];
-
-        if ($categoryId != 0) {
-            $filters['category_name'] = [ [ 'value' => $category->name ] ];
-        }
-
-        $count = true;
-        $polls = $em->findBy($filters, $order, $epp, $page, 0, $count);
-
-        $pagination = $this->get('paginator')->get([
-            'epp'   => $epp,
-            'total' => $count,
-            'page'  => $page,
-            'route' => [
-                'name'  => 'admin_polls_content_provider_related',
-                'param' => [ 'category' => $categoryId ]
-            ],
-        ]);
-
-        return $this->render(
-            'common/content_provider/_container-content-list.tpl',
-            [
-                'contentType'           => 'Poll',
-                'contents'              => $polls,
-                'contentTypeCategories' => $this->parentCategories,
-                'category'              => $categoryId,
-                'pagination'            => $pagination,
-                'contentProviderUrl'    => $this->generateUrl(
-                    'admin_polls_content_provider_related'
-                ),
-            ]
-        );
-    }
-
-    /**
      * Handles the configuration for the polls module.
      *
      * @param  Request  $request The request object.

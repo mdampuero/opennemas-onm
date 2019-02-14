@@ -423,60 +423,6 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Lists all the albums withing a category for the related manager.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('ALBUM_MANAGER')")
-     */
-    public function contentProviderRelatedAction(Request $request)
-    {
-        $categoryId   = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = $this->get('orm.manager')->getDataSet('Settings')
-            ->get('items_per_page') ?: 20;
-
-        $em       = $this->get('entity_repository');
-        $category = $this->get('category_repository')->find($categoryId);
-
-        $filters = [
-            'content_type_name' => [['value' => 'album']],
-            'in_litter'         => [['value' => 1, 'operator' => '!=']]
-        ];
-
-        if ($categoryId != 0) {
-            $filters['category_name'] = [['value' => $category->name]];
-        }
-
-        $countAlbums = true;
-        $albums      = $em->findBy($filters, ['created' => 'desc'], $itemsPerPage, $page, 0, $countAlbums);
-
-        // Build the pagination
-        $pagination = $this->get('paginator')->get([
-            'epp'   => $itemsPerPage,
-            'page'  => $page,
-            'total' => $countAlbums,
-            'route' => [
-                'name'   => 'admin_albums_content_provider_related',
-                'params' => ['category' => $categoryId]
-            ],
-        ]);
-
-        return $this->render(
-            'common/content_provider/_container-content-list.tpl',
-            [
-                'contentType'           => 'Album',
-                'contents'              => $albums,
-                'contentTypeCategories' => $this->parentCategories,
-                'category'              => $categoryId,
-                'pagination'            => $pagination,
-                'contentProviderUrl'    => $this->generateUrl('admin_albums_content_provider_related'),
-            ]
-        );
-    }
-
-    /**
      * Handles and shows the album configuration form.
      *
      * @param  Request  $request The request object.

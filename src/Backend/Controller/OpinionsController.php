@@ -488,47 +488,6 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Lists the latest opinions for the related manager.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')")
-     */
-    public function contentProviderRelatedAction(Request $request)
-    {
-        $page = $request->query->getDigits('page', 1);
-        $epp  = $this->get('orm.manager')->getDataSet('Settings')
-            ->get('items_per_page') ?: 20;
-
-        $total    = true;
-        $opinions = $this->get('entity_repository')->findBy([
-            'content_type_name' => [ [ 'value' => 'opinion' ] ],
-            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ]
-        ], [ 'created' => 'desc' ], $epp, $page, 0, $total);
-
-        $pagination = $this->get('paginator')->get([
-            'boundary'    => true,
-            'directional' => true,
-            'epp'         => $epp,
-            'page'        => $page,
-            'total'       => $total,
-            'route'       => 'admin_opinions_content_provider_related',
-        ]);
-
-        return $this->render(
-            'common/content_provider/_container-content-list.tpl',
-            [
-                'contentType'        => 'Opinion',
-                'contents'           => $opinions,
-                'pagination'         => $pagination,
-                'contentProviderUrl' => $this
-                    ->generateUrl('admin_opinions_content_provider_related'),
-            ]
-        );
-    }
-
-    /**
      * Handles the configuration for the opinion manager.
      *
      * @param  Request  $request The request object.

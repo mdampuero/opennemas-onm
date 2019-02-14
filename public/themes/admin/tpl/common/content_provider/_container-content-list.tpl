@@ -1,18 +1,3 @@
-{if isset($contentTypeCategories) && !empty($contentTypeCategories)}
-<select id="contentTypeCategories" class="selector" data-href="{$contentProviderUrl}">
-        <option value="0">{t}-- All categories --{/t}</option>
-        {section name=as loop=$contentTypeCategories}
-            <option value="{$contentTypeCategories[as]->pk_content_category}"
-                {if $category eq $contentTypeCategories[as]->pk_content_category}selected{/if}>
-                {$contentTypeCategories[as]->title}
-            </option>
-            {section name=su loop=$subcat[as]}
-                    <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-            {/section}
-        {/section}
-</select>
-{/if}
-
 <div class="contents">
     {if !empty($pagination)}
         <div class="pagination"> {$pagination} </div>

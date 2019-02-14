@@ -119,10 +119,6 @@ admin_polls_content_provider:
     path:     /polls/content-provider
     defaults: { _controller: BackendBundle:Polls:contentProvider }
 
-admin_polls_content_provider_related:
-    path:     /polls/content-provider-related
-    defaults: { _controller: BackendBundle:Polls:contentProviderRelated }
-
 # Ads manager routes
 admin_ads:
     path:     /ads
@@ -208,9 +204,6 @@ admin_letters_content_provider:
     path:     /letters/content-provider
     defaults: { _controller: BackendBundle:Letters:contentProvider }
 
-admin_letters_content_provider_related:
-    path:     /letters/content-provider-related
-    defaults: { _controller: BackendBundle:Letters:contentProviderRelated }
 # Image manager routes
 admin_images:
     path:     /images
@@ -281,10 +274,6 @@ admin_videos_content_provider:
     path:     /videos/content-provider
     defaults: { _controller: BackendBundle:Videos:contentProvider }
 
-admin_videos_content_provider_related:
-    path:     /videos/content-provider-related
-    defaults: { _controller: BackendBundle:Videos:contentProviderRelated }
-
 # Album controller routes
 admin_albums:
     path:     /albums
@@ -319,10 +308,6 @@ admin_albums_savepositions:
 admin_albums_content_provider:
     path:     /albums/content-provider
     defaults: { _controller: BackendBundle:Albums:contentProvider }
-
-admin_albums_content_provider_related:
-    path:     /albums/content-provider-related
-    defaults: { _controller: BackendBundle:Albums:contentProviderRelated }
 
 # Books controller routes
 admin_books:
@@ -383,10 +368,6 @@ admin_files_update:
 admin_file_save_positions:
     path:     /files/save-positions
     defaults: { _controller: BackendBundle:Files:savePositions }
-
-admin_files_content_provider_related:
-    path:     /files/content-provider-related
-    defaults: { _controller: BackendBundle:Files:contentProviderRelated }
 
 # Search controller routes
 admin_search:
@@ -459,10 +440,6 @@ admin_articles_content_provider_category:
     path:     /articles/content-provider-category
     defaults: { _controller: BackendBundle:Articles:contentProviderCategory }
 
-admin_articles_content_provider_related:
-    path:     /articles/content-provider-related
-    defaults: { _controller: BackendBundle:Articles:contentProviderRelated }
-
 admin_articles_content_provider_in_frontpage:
     path:     /articles/content-provider-in-frontpage
     defaults: { _controller: BackendBundle:Articles:contentProviderInFrontpage }
@@ -522,10 +499,6 @@ admin_opinions_savepositions:
 admin_opinions_content_provider:
     path:     /opinions/content-provider
     defaults: { _controller: BackendBundle:Opinions:contentProvider }
-
-admin_opinions_content_provider_related:
-    path:     /opinions/content-provider-related
-    defaults: { _controller: BackendBundle:Opinions:contentProviderRelated }
 
 admin_opinions_config:
     path:     /opinions/config
