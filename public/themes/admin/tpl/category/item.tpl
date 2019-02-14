@@ -95,7 +95,7 @@
                 </div>
                 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.category }">
                   <div class="form-group no-margin">
-                    <onm-category-selector class="block" categories="categories" default-value-text="{t}Select a category{/t}..." ng-model="item.fk_content_category" placeholder="{t}Select a category{/t}"></onm-category-selector>
+                    <onm-category-selector class="block" default-value-text="{t}Select a category{/t}..." exclude="[ item.pk_content_category ]" locale="config.locale.selected" ng-model="item.fk_content_category" placeholder="{t}Select a category{/t}"></onm-category-selector>
                   </div>
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.color }" ng-click="expanded.color = !expanded.color">

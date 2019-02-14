@@ -57,12 +57,6 @@
          * @inheritdoc
          */
         $scope.parseItem = function(data) {
-          http.get('api_v1_backend_categories_list').then(function(response) {
-            data.extra.categories = response.data.items;
-
-            $scope.localize(data.extra.categories, 'categories');
-          });
-
           if (data.item && data.item.logo_path) {
             $scope.cover = data.item.logo_path.replace($window.instanceMedia, '');
           }
