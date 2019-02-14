@@ -160,11 +160,16 @@ class OpinionController extends FrontendController
      */
     protected function hydrateList(array $params) : void
     {
-        $epp  = $this->get('orm.manager')->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 10);
         $page = array_key_exists('page', $params) ? $params['page'] : 1;
 
-        $date    = date('Y-m-d H:i:s');
+        $epp  = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+            ->get('items_per_page', 10);
+
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')->get('opinion_settings', [
+                'total_opinions'  => $epp
+            ]);
+
         $filters = [
             'content_status' => [['value' => 1]],
             'in_litter'      => [['value' => 0]],
@@ -172,41 +177,19 @@ class OpinionController extends FrontendController
                 'union' => 'OR',
                 [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
                 [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => $date, 'operator' => '<=' ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
             ],
             'endtime' => [
                 'union'   => 'OR',
                 [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
-                [ 'value' => $date, 'operator' => '>' ]
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ]
             ],
         ];
 
         $order['starttime'] = 'DESC';
 
         $em = $this->get('opinion_repository');
-
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')->get('opinion_settings', [
-                'total_editorial' => 2,
-                'total_opinions'  => $epp
-            ]);
-
-        // Fetch last editorial opinions from editorial
-        if ($settings['total_editorial'] > 0) {
-            $filters['type_opinion'] = [['value' => 1]];
-
-            $editorialContents = $em->findBy($filters, $order, $settings['total_editorial'], $page);
-
-            foreach ($editorialContents as &$opinion) {
-                if (isset($opinion->img1) && ($opinion->img1 > 0)) {
-                    $opinion->img1 = $this->get('entity_repository')
-                        ->find('Photo', $opinion->img1);
-                }
-            }
-
-            $params['editorial'] = $editorialContents;
-        }
 
         $bloggers = $this->get('api.service.author')
             ->getList('is_blog = 1 order by name asc');
@@ -222,8 +205,7 @@ class OpinionController extends FrontendController
             ]);
         }
 
-        $filters['type_opinion'] = [['value' => 0]];
-        $epp                     = $settings['total_opinions'] ?? $epp;
+        $epp = $settings['total_opinions'] ?? $epp;
 
         $opinions      = $em->findBy($filters, $order, $epp, $page);
         $countOpinions = $em->countBy($filters);

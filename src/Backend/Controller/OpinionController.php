@@ -381,9 +381,7 @@ class OpinionController extends Controller
 
         $configs = [
             'opinion_settings' => [
-                'total_editorial'       => filter_var($configsRAW['total_editorial'], FILTER_VALIDATE_INT),
                 'total_opinions'        => filter_var($configsRAW['total_opinions'], FILTER_VALIDATE_INT),
-                'total_opinion_authors' => filter_var($configsRAW['total_opinion_authors'], FILTER_VALIDATE_INT),
                 'blog_orderFrontpage'   => filter_var($configsRAW['blog_orderFrontpage'], FILTER_SANITIZE_STRING),
                 'blog_itemsFrontpage'   => filter_var($configsRAW['blog_itemsFrontpage'], FILTER_VALIDATE_INT),
             ],
