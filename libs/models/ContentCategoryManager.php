@@ -44,45 +44,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Counts the contents from a group type.
-     *
-     * @param string $type The group type where to search from.
-     *
-     * @return array The counters for all the group types.
-     */
-    public static function countContentsByGroupType($type)
-    {
-        try {
-            $rs = getService('dbal_connection')->fetchAll(
-                "SELECT
-                    count(contents.pk_content) AS number,
-                    `contents_categories`.`pk_fk_content_category` AS cat
-                FROM
-                    `contents`
-                INNER JOIN
-                    `contents_categories`
-                ON
-                    `contents`.`pk_content`=`contents_categories`.`pk_fk_content`
-                WHERE
-                    `in_litter`=0 AND `contents`.`fk_content_type`=?
-                GROUP BY `contents_categories`.`pk_fk_content_category`",
-                [ $type ]
-            );
-
-            $groups = [];
-            foreach ($rs as $row) {
-                $groups[$row['cat']] = $row['number'];
-            }
-
-            return $groups;
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
-
-            return false;
-        }
-    }
-
-    /**
      * Checks if exists one category given its name
      *
      * @param string $category_name the name of the category
