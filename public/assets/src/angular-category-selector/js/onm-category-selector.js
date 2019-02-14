@@ -17,20 +17,20 @@
           restrict: 'E',
           transclude: true,
           scope: {
-            ngModel: '=',
-            locale: '=',
-            exclude: '=',
+            defaultValueText: '@',
+            exclude: '=?',
             labelText: '@',
+            locale: '=',
+            ngModel: '=',
             placeholder: '@',
-            defaultValueText: '@'
+            selected: '=?'
           },
           template: function() {
             return '<ui-select class="[% cssClass %]" ng-required="required" name="category" ng-model="$parent.ngModel" theme="select2">' +
                 '<ui-select-match placeholder="[% $parent.placeholder %]">' +
                 '  <strong ng-if="labelText">[% labelText %]: </strong>[% $select.selected.title %]' +
                 '</ui-select-match>' +
-                '<ui-select-choices group-by="groupCategories" ' +
-                  'repeat="item.pk_content_category as item in (categories | filter: { title: $select.search })">' +
+                '<ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in (categories | filter: { title: $select.search })">' +
                 '  <div ng-bind-html="item.title | highlight: $select.search"></div>' +
                 '</ui-select-choices>' +
               '</ui-select>';
@@ -41,7 +41,7 @@
 
             http.get('api_v1_backend_categories_list').then(function(response) {
               response.data.items = response.data.items.filter(function(e) {
-                return !$scope.exclude ||
+                return !$scope.exclude || $scope.exclude.length === 0 ||
                   $scope.exclude.indexOf(e.pk_content_category) === -1;
               });
 
@@ -70,6 +70,20 @@
               $scope.linker.setKey($scope.locale);
               $scope.linker.link(response.data.items, $scope.categories);
             });
+
+            // Updates the selected item when model or categories change
+            $scope.$watch('[ categories, ngModel ]', function() {
+              if (!$scope.ngModel || !$scope.categories) {
+                $scope.selected = null;
+                return;
+              }
+
+              var selected = $scope.categories.filter(function(e) {
+                return e.pk_content_category === $scope.ngModel;
+              });
+
+              $scope.selected = selected.length > 0 ? selected[0] : null;
+            }, true);
 
             // Updates linker when locale changes
             $scope.$watch('locale', function(nv, ov) {
