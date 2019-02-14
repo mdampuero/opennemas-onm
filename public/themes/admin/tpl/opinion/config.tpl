@@ -48,17 +48,6 @@
 
             <h4>{t}Opinion frontpage{/t}</h4>
             <div class="form-group">
-              <label class="form-label" for="opinion_settings[total_editorial]">
-                {t}Editorial opinions in Opinion frontpage{/t}
-              </label>
-              <span class="help">
-                {t}How many editorial opinions will be shown in the opinion frontpage.{/t}
-              </span>
-              <div class="controls">
-                <input id="opinion_settings[total_editorial]" name="opinion_settings[total_editorial]" required type="number" value="{$configs['opinion_settings']['total_editorial']|default:"2"}" />
-              </div>
-            </div>
-            <div class="form-group">
               <label class="form-label" for="opinion_settings[total_opinions]">
                 {t}Opinions in Opinion frontpage{/t}
               </label>

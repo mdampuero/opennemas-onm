@@ -1,8 +1,6 @@
 <?php
-/* -------------------------------------------------------------
- * File:        function.get_url.php
+/**
  * Returns the url for a given content
- * -------------------------------------------------------------
  */
 function smarty_function_get_url($params, &$smarty)
 {
@@ -13,10 +11,11 @@ function smarty_function_get_url($params, &$smarty)
         return '';
     }
 
-    $content  = $params['item'];
-    $absolute = array_key_exists('absolute', $params) && $params['absolute'];
-    $escape   = array_key_exists('escape', $params) && $params['escape'];
-    $isAmp    = array_key_exists('amp', $params) && $params['amp'];
+    $content   = $params['item'];
+    $absolute  = array_key_exists('absolute', $params) && $params['absolute'];
+    $escape    = array_key_exists('escape', $params) && $params['escape'];
+    $isAmp     = array_key_exists('amp', $params) && $params['amp'];
+    $container = $smarty->getContainer();
 
     // If the article has an external link return it
     if (!empty($content->params)
@@ -24,23 +23,24 @@ function smarty_function_get_url($params, &$smarty)
         && array_key_exists('bodyLink', $content->params)
         && !empty($content->params['bodyLink'])
     ) {
-        return $smarty->getContainer()
+        return $container
             ->get('router')
             ->generate(
                 'frontend_redirect_external_link',
                 [ 'to' => $content->params['bodyLink'] ]
-            ) . '" target="_blank';
+            )
+            . '" target="_blank';
     }
 
-    $url = $smarty->getContainer()->get('core.helper.url_generator')
-        ->generate($params['item'], [ 'absolute' => $absolute ]);
+    $routeParams = [
+        'absolute' => $absolute,
+        '_format'  => (($isAmp) ? 'amp' : null)
+    ];
 
-    $url = $smarty->getContainer()->get('core.helper.l10n_route')
+    $url = $container->get('core.helper.url_generator')
+        ->generate($params['item'], $routeParams);
+    $url = $container->get('core.helper.l10n_route')
         ->localizeUrl($url, '');
-
-    if ($isAmp && $content->content_type_name == 'article') {
-        $url = str_replace('.html', '.amp.html', $url);
-    }
 
     return $escape ? rawurlencode($url) : $url;
 }

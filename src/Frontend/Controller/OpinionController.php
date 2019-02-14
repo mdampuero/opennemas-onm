@@ -162,7 +162,7 @@ class OpinionController extends FrontendController
     {
         $page = array_key_exists('page', $params) ? $params['page'] : 1;
 
-        $epp  = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+        $epp = $this->get('orm.manager')->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
 
         $settings = $this->get('orm.manager')
@@ -365,19 +365,6 @@ class OpinionController extends FrontendController
         $author = $this->get('user_repository')->find((int) $item->fk_author);
 
         $item->author = $author;
-        if (is_object($author)
-            && is_array($author->meta)
-            && array_key_exists('is_blog', $author->meta)
-            && $author->meta['is_blog'] == 1
-        ) {
-            return new RedirectResponse(
-                $this->generateUrl('frontend_blog_show', [
-                    'blog_id'     => $item->pk_content,
-                    'author_name' => $author->username,
-                    'blog_title'  => $item->slug,
-                ])
-            );
-        }
 
         // Associated media code
         if (isset($item->img2) && ($item->img2 > 0)) {
