@@ -68,7 +68,7 @@
           }
 
           $scope.configure(data.extra);
-          $scope.localize($scope.item, 'item', true);
+          $scope.localize($scope.data.item, 'item', true);
         };
 
         // Updates the logo_path when an image is selected
