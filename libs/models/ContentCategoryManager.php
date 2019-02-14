@@ -408,37 +408,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Returns true if there is no contents in category given its name
-     *
-     * @param string $categoryName the category name
-     *
-     * @return boolean true if the category has no contents
-     */
-    public function isEmpty($categoryName)
-    {
-        $pkCategory = $this->get_id($categoryName);
-
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT count(*) as content_count FROM `content_positions` WHERE `fk_category`=?',
-                [ $pkCategory ]
-            );
-
-            $rs2 = getService('dbal_connection')->fetchAssoc(
-                'SELECT count(pk_content) as content_count FROM `contents`, `contents_categories` '
-                . 'WHERE`contents_categories`.`pk_fk_content_category`=? '
-                . 'AND `contents`.`pk_content`=`contents_categories`.`pk_fk_content`',
-                [ $pkCategory ]
-            );
-
-            return $rs['content_count'] == 0 && $rs2['content_count'] == 0;
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
-            return false;
-        }
-    }
-
-    /**
      * Resets ContentCategoryManager.
      */
     public function reset()
