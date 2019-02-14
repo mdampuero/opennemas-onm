@@ -67,7 +67,7 @@
           <ul class="nav quick-section pull-right">
             <li class="quicklinks" ng-if="selected.items.length < items.length && areSelectedNotEmpty()">
               <button class="btn btn-link" ng-click="moveSelected()" uib-tooltip="{t}Move contents{/t}" tooltip-placement="bottom">
-                <i class="fa fa-exchange fa-lg"></i>
+                <i class="fa fa-flip-horizontal fa-reply fa-lg"></i>
               </button>
             </li>
             <li class="quicklinks hidden-xs" ng-if="selected.items.length < items.length && areSelectedNotEmpty()">
@@ -204,7 +204,7 @@
                           <ul class="dropdown-menu no-padding">
                             <li>
                               <a href="#" ng-click="move(getId(item), item)">
-                                <i class="fa fa-exchange"></i>
+                                <i class="fa fa-flip-horizontal fa-reply"></i>
                                 {t}Move contents{/t}
                               </a>
                             </li>
@@ -226,7 +226,7 @@
                     <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.logo_path" only-image="true"></dynamic-image>
                   </td>
                   <td class="hidden-xs text-center v-align-middle">
-                    <span class="inline" style="border: 1px solid #d1dade; border-radius: 4px; height: 38px; width: 38px;" ng-style="{ 'background-color': item.color}"></span>
+                    <span class="badge badge-white" ng-if="item.color" ng-style="{ 'background-color': item.color}">&nbsp;&nbsp;</span>
                   </td>
                   <td class="hidden-sm hidden-xs text-center v-align-middle">
                     <span class="badge badge-default" ng-class="{ 'badge-danger': !data.extra.stats[getId(item)] || data.extra.stats[getId(item)] == 0 }">

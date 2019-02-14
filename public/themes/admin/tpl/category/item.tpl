@@ -92,15 +92,22 @@
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.category }" ng-click="expanded.category = !expanded.category">
                   <i class="fa fa-bookmark m-r-10"></i>{t}Category{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
+                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-show="!expanded.category">
+                    <strong ng-show="!data.extra.selected">{t}Not selected{/t}</strong>
+                    <strong ng-show="data.extra.selected">[% data.extra.selected.title %]</strong>
+                  </span>
                 </div>
                 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.category }">
                   <div class="form-group no-margin">
-                    <onm-category-selector class="block" default-value-text="{t}Select a category{/t}..." exclude="[ item.pk_content_category ]" locale="config.locale.selected" ng-model="item.fk_content_category" placeholder="{t}Select a category{/t}"></onm-category-selector>
+                    <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" exclude="[ item.pk_content_category ]" locale="config.locale.selected" ng-model="item.fk_content_category" selected="data.extra.selected" placeholder="{t}Select a category{/t}…"></onm-category-selector>
                   </div>
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.color }" ng-click="expanded.color = !expanded.color">
                   <i class="fa fa-paint-brush m-r-10"></i>{t}Color{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.color }"></i>
+                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-style="{ 'background-color': item.color }" ng-show="!expanded.color && item.color">
+                    &nbsp;&nbsp;
+                  </span>
                 </div>
                 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.color }">
                   <div class="form-group no-margin">
