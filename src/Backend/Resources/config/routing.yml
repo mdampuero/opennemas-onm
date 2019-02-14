@@ -356,10 +356,6 @@ admin_files:
     path:     /files
     defaults: { _controller: BackendBundle:Files:list }
 
-admin_files_statistics:
-    path:     /files/statistics
-    defaults: { _controller: BackendBundle:Files:statistics }
-
 admin_files_widget:
     path:     /files/widget
     defaults: { _controller: BackendBundle:Files:widget }
