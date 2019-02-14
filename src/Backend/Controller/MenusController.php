@@ -70,19 +70,13 @@ class MenusController extends Controller
 
         $menu->items = $menu->unlocalize($menu->getRawItems());
 
-        $categories = $this->getCategoriesByType();
-
         return $this->render('menues/new.tpl', [
-            'categories'       => $categories['categories'],
-            'categories_album' => $categories['categories_album'],
-            'categories_poll'  => $categories['categories_poll'],
-            'categories_video' => $categories['categories_video'],
+            'categories'       => $this->getCategories(),
             'language_data'    => $this->getLocaleData('frontend', $request),
             'menu'             => $menu,
             'menu_positions'   => $this->getMenuPositions(),
             'pages'            => $this->getModulePages(),
             'static_pages'     => $this->getStaticPages(),
-            'subcat'           => $categories['subcategories'],
             'sync_sites'       => $this->getSyncSites(),
             'multilanguage'    => in_array(
                 'es.openhost.module.multilanguage',
@@ -132,21 +126,15 @@ class MenusController extends Controller
             ]));
         }
 
-        $categories = $this->getCategoriesByType();
-
         return $this->render('menues/new.tpl', [
-            'menu'             => new \Menu(),
-            'categories'       => $categories['categories'],
-            'categories_album' => $categories['categories_album'],
-            'categories_poll'  => $categories['categories_poll'],
-            'categories_video' => $categories['categories_video'],
-            'language_data'    => $this->getLocaleData('frontend', $request),
-            'menu_positions'   => $this->getMenuPositions(),
-            'pages'            => $this->getModulePages(),
-            'static_pages'     => $this->getStaticPages(),
-            'subcat'           => $categories['subcategories'],
-            'sync_sites'       => $this->getSyncSites(),
-            'multilanguage'    => in_array(
+            'menu'           => new \Menu(),
+            'categories'     => $this->getCategories(),
+            'language_data'  => $this->getLocaleData('frontend', $request),
+            'menu_positions' => $this->getMenuPositions(),
+            'pages'          => $this->getModulePages(),
+            'static_pages'   => $this->getStaticPages(),
+            'sync_sites'     => $this->getSyncSites(),
+            'multilanguage'  => in_array(
                 'es.openhost.module.multilanguage',
                 $this->get('core.instance')->activated_modules
             )
@@ -214,40 +202,16 @@ class MenusController extends Controller
     }
 
     /**
-     * Returns the category listings by content type
-     *
-     * @return array the list of category listings
+     * {@inheritdoc}
      */
-    private function getCategoriesByType()
+    protected function getCategories()
     {
-        $ccm = \ContentCategoryManager::get_instance();
+        $this->get('core.locale')->setContext('frontend');
+        $categories = $this->get('api.service.category')->getList();
+        $this->get('core.locale')->setContext('backend');
 
-        list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
-        // Unused var  $categoryData
-        unset($categoryData);
-
-        foreach ($subcat as $subcategory) {
-            $parentCategories = array_merge($parentCategories, $subcategory);
-        }
-
-        $albumCategories = $videoCategories = $pollCategories = [];
-        foreach ($ccm->categories as $category) {
-            if ($category->internal_category == \ContentManager::getContentTypeIdFromName('album')) {
-                $albumCategories[] = $category;
-            } elseif ($category->internal_category == \ContentManager::getContentTypeIdFromName('video')) {
-                $videoCategories[] = $category;
-            } elseif ($category->internal_category == \ContentManager::getContentTypeIdFromName('poll')) {
-                $pollCategories[] = $category;
-            }
-        }
-
-        return [
-            'categories'       => $parentCategories,
-            'subcategories'    => $subcat,
-            'categories_album' => $albumCategories,
-            'categories_video' => $videoCategories,
-            'categories_poll'  => $pollCategories,
-        ];
+        return $this->get('api.service.category')
+            ->responsify($categories['items']);
     }
 
     /**
