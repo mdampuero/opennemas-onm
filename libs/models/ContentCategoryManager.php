@@ -83,35 +83,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Counts the contents from a category.
-     *
-     * @param integer $category The category id.
-     * @param string  $type The group type where to search from.
-     *
-     * @return array The counters for a category.
-     */
-    public function countContentByType($category, $type)
-    {
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT count(pk_content) AS number FROM `contents`,`contents_categories` '
-                . 'WHERE contents.pk_content=pk_fk_content '
-                . 'AND pk_fk_content_category=? AND `fk_content_type`=?',
-                [ $category, $type ]
-            );
-
-            if (array_key_exists('number', $rs) && $rs['number']) {
-                return $rs['number'];
-            } else {
-                return 0;
-            }
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
-            return false;
-        }
-    }
-
-    /**
      * Checks if exists one category given its name
      *
      * @param string $category_name the name of the category
@@ -336,7 +307,7 @@ class ContentCategoryManager
      */
     public function getCategoriesTreeMenu()
     {
-        $categories = $this->orderByPosmenu($this->categories);
+        $categories = $this->categories;
 
         // Loop categories, and build the tree down
         $tree = [];
@@ -465,36 +436,6 @@ class ContentCategoryManager
             getService('error.log')->error($e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString());
             return false;
         }
-    }
-
-    /**
-     * Sorts an array of categories by its posmenu property
-     *
-     * @param array $categories the list of categories to sort
-     *
-     * @return array the sorted list of categories
-     */
-    public function orderByPosmenu($categories)
-    {
-        $categories = array_values($categories);
-
-        if (count($categories) == 0) {
-            return $categories;
-        }
-
-        usort($categories, function ($a, $b) {
-            if ($b->inmenu == 0) {
-                return 0;
-            }
-
-            if ($a->inmenu == 0) {
-                return +1;
-            }
-
-            return ($a->posmenu > $b->posmenu) ? +1 : -1;
-        });
-
-        return $categories;
     }
 
     /**
