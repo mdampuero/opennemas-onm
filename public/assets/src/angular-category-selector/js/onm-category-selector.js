@@ -78,11 +78,9 @@
                 return;
               }
 
-              var selected = $scope.categories.filter(function(e) {
+              $scope.selected = $scope.categories.filter(function(e) {
                 return e.pk_content_category === $scope.ngModel;
               });
-
-              $scope.selected = selected.length > 0 ? selected[0] : null;
             }, true);
 
             // Updates linker when locale changes

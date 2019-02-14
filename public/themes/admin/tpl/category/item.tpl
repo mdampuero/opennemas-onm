@@ -93,13 +93,16 @@
                   <i class="fa fa-bookmark m-r-10"></i>{t}Category{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
                   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-show="!expanded.category">
-                    <strong ng-show="!data.extra.selected">{t}Not selected{/t}</strong>
-                    <strong ng-show="data.extra.selected">[% data.extra.selected.title %]</strong>
+                    <strong ng-show="!selectedCategories">{t}Not selected{/t}</strong>
+                    <strong ng-show="selectedCategories">[% data.extra.selected.title %]</strong>
+                    <span ng-show="selectedCategories.length !== 0">
+                      <strong><span ng-repeat="category in selectedCategories">[% category.title %]</span></strong>
+                    </span>
                   </span>
                 </div>
                 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.category }">
                   <div class="form-group no-margin">
-                    <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" exclude="[ item.pk_content_category ]" locale="config.locale.selected" ng-model="item.fk_content_category" selected="data.extra.selected" placeholder="{t}Select a category{/t}…"></onm-category-selector>
+                    <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" exclude="[ item.pk_content_category ]" locale="config.locale.selected" ng-model="item.fk_content_category" selected="selectedCategories" placeholder="{t}Select a category{/t}…"></onm-category-selector>
                   </div>
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.color }" ng-click="expanded.color = !expanded.color">
