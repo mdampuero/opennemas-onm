@@ -489,7 +489,7 @@ class Redirector
             }
 
             if ($target instanceof Category) {
-                return $target->internal_category === 1;
+                return !empty($target->inmenu);
             }
 
             return true;
