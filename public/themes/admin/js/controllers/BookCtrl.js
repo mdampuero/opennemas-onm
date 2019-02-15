@@ -21,6 +21,7 @@ angular.module('BackendApp.controllers').controller('BookCtrl', [
      * @param {Array}  tags     Array with all the tags needed for the book
      */
     $scope.init = function(book, locale, tags) {
+      $scope.book   = book;
       $scope.locale = locale;
       $scope.tags   = tags;
     };
@@ -31,7 +32,7 @@ angular.module('BackendApp.controllers').controller('BookCtrl', [
      * @param array nv The new values.
      * @param array ov The old values.
      */
-    $scope.$watch('book_cover', function(nv, ov) {
+    $scope.$watch('book_cover', function() {
       $scope.book_cover_id = null;
 
       if ($scope.book_cover) {

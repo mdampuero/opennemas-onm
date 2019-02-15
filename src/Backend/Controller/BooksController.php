@@ -48,7 +48,7 @@ class BooksController extends Controller
         $this->view->assign([
             'category'     => $this->category,
             'subcat'       => $this->subcat,
-            'allcategorys' => $this->bookCategories,
+            'allcategorys' => $this->parentCategories,
             'datos_cat'    => $this->categoryData,
         ]);
     }
@@ -137,16 +137,10 @@ class BooksController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
-            $this->view->assign('category', $this->category);
-
-            $ls = $this->get('core.locale');
-            return $this->render(
-                'book/new.tpl',
-                [
-                    'locale' => $ls->getLocale('frontend'),
-                    'tags'   => []
-                ]
-            );
+            return $this->render('book/new.tpl', [
+                'locale' => $this->get('core.locale')->getLocale('frontend'),
+                'tags'   => []
+            ]);
         }
 
         $data = [
