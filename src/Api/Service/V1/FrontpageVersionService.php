@@ -234,10 +234,6 @@ class FrontpageVersionService extends OrmService
         $frontpagesAut = !$existMainFrontPage ? [$mainFrontpage] : [];
 
         foreach ($categories as $category) {
-            if ($category->internal_category === 0) {
-                continue;
-            }
-
             if (array_key_exists($category->id, $catFrontpagesRel)) {
                 $frontpages[$category->id] = [
                     'id'           => $category->id,
