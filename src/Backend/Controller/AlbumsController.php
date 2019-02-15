@@ -22,28 +22,6 @@ use Common\Core\Annotation\Security;
 class AlbumsController extends Controller
 {
     /**
-     * Common code for all the actions.
-     */
-    public function init()
-    {
-        $request     = $this->get('request_stack')->getCurrentRequest();
-        $contentType = \ContentManager::getContentTypeIdFromName('album');
-        $category    = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-
-        $this->ccm = \ContentCategoryManager::get_instance();
-
-        list($this->parentCategories, $this->subcat, $this->categoryData)
-            = $this->ccm->getArraysMenu($category, $contentType);
-
-        $this->view->assign([
-            'category'     => $category,
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->categoryData,
-        ]);
-    }
-
-    /**
      * Lists all albums.
      *
      * @return Response The response object.
@@ -53,23 +31,7 @@ class AlbumsController extends Controller
      */
     public function listAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
-
-        foreach ($this->parentCategories as $key => $category) {
-            $categories[] = [
-                'name' => $category->title,
-                'value' => $category->pk_content_category
-            ];
-
-            foreach ($this->subcat[$key] as $subcategory) {
-                $categories[] = [
-                    'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->pk_content_category
-                ];
-            }
-        }
-
-        return $this->render('album/list.tpl', [ 'categories' => $categories ]);
+        return $this->render('album/list.tpl');
     }
 
     /**

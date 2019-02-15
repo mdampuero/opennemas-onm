@@ -22,35 +22,6 @@ use Common\Core\Controller\Controller;
 class FilesController extends Controller
 {
     /**
-     * Common code for all the actions.
-     */
-    public function init()
-    {
-        $this->contentType = \ContentManager::getContentTypeIdFromName('attachment');
-        $this->category    = $this->get('request_stack')->getCurrentRequest()
-            ->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $this->ccm         = \ContentCategoryManager::get_instance();
-
-        list($this->parentCategories, $this->subcat, $this->datos_cat) =
-            $this->ccm->getArraysMenu($this->category, $this->contentType);
-
-        $this->view->assign([
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->datos_cat,
-            'category'     => $this->category,
-        ]);
-
-        // Optimize  this crap from this ---------------------------------------
-        $this->fileSavePath = INSTANCE_MEDIA_PATH . FILE_DIR;
-
-        // Create folder if it doesn't exist
-        if (!file_exists($this->fileSavePath)) {
-            \Onm\FilesManager::createDirectory($this->fileSavePath);
-        }
-    }
-
-    /**
      * Lists the files for a given category.
      *
      * @return Response          The response object.
@@ -60,23 +31,7 @@ class FilesController extends Controller
      */
     public function listAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
-
-        foreach ($this->parentCategories as $key => $category) {
-            $categories[] = [
-                'name' => $category->title,
-                'value' => $category->pk_content_category
-            ];
-
-            foreach ($this->subcat[$key] as $subcategory) {
-                $categories[] = [
-                    'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->pk_content_category
-                ];
-            }
-        }
-
-        return $this->render('files/list.tpl', [ 'categories' => $categories ]);
+        return $this->render('files/list.tpl');
     }
 
     /**

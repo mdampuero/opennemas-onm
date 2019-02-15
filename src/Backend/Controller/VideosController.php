@@ -23,32 +23,6 @@ use Common\Core\Controller\Controller;
 class VideosController extends Controller
 {
     /**
-     * Common code for all the actions.
-     */
-    public function init()
-    {
-        $this->contentType = \ContentManager::getContentTypeIdFromName('video');
-
-        $this->category = $this->get('request_stack')->getCurrentRequest()
-            ->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-
-        $this->ccm = \ContentCategoryManager::get_instance();
-
-        list($this->parentCategories, $this->subcat, $this->categoryData) =
-            $this->ccm->getArraysMenu($this->category, $this->contentType);
-        if (empty($this->category)) {
-            $this->category = 'widget';
-        }
-
-        $this->view->assign([
-            'category'     => $this->category,
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->categoryData,
-        ]);
-    }
-
-    /**
      * List videos.
      *
      * @Security("hasExtension('VIDEO_MANAGER')
@@ -56,23 +30,7 @@ class VideosController extends Controller
      */
     public function listAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
-
-        foreach ($this->parentCategories as $key => $category) {
-            $categories[] = [
-                'name' => $category->title,
-                'value' => $category->pk_content_category
-            ];
-
-            foreach ($this->subcat[$key] as $subcategory) {
-                $categories[] = [
-                    'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->pk_content_category
-                ];
-            }
-        }
-
-        return $this->render('video/list.tpl', [ 'categories' => $categories ]);
+        return $this->render('video/list.tpl');
     }
 
     /**

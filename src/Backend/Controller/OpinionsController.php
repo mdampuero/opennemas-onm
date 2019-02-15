@@ -218,9 +218,6 @@ class OpinionsController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
-            // Fetch categories
-            $this->loadCategories();
-
             $extraFields = null;
 
             if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
@@ -673,21 +670,6 @@ class OpinionsController extends Controller
         $session->remove('last_preview');
 
         return new Response($content);
-    }
-
-    /**
-     * Common code for all the actions
-     */
-    public function loadCategories()
-    {
-        $this->ccm = \ContentCategoryManager::get_instance();
-
-        list($this->parentCategories, $this->subcat, $this->categoryData)
-            = $this->ccm->getArraysMenu();
-
-        $this->view->assign([
-            'allcategorys' => $this->parentCategories,
-        ]);
     }
 
     /**
