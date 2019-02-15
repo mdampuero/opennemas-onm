@@ -537,7 +537,7 @@ class OrmService implements Service
     protected function localizeList($items)
     {
         foreach ($items as $item) {
-            $item = $this->localizeItem($item);
+            $this->localizeItem($item);
         }
 
         return $items;
