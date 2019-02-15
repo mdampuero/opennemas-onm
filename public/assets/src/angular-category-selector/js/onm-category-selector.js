@@ -53,12 +53,12 @@
                   '[% defaultValueText %]' +
                 '</a>' +
                 '<ul class="ui-select-choices select2-results">' +
-                  '<li class="ui-select-choices-group select2-result-with-children" ng-repeat="(key, items) in categories | groupBy: \'fk_content_category\'" ng-class="{ \'select2-highlighted\': angular.isArray(ngModel) && ngModel.indexOf(item.pk_content_category) !== -1 }">' +
+                  '<li class="ui-select-choices-group select2-result-with-children" ng-repeat="(key, items) in categories | groupBy: \'fk_content_category\'">' +
                     '<div class="ui-select-choices-group-label select2-result-label" ng-show="groupCategories(items[0])">' +
                       '[% groupCategories(items[0]) %]' +
                     '</div>' +
                     '<ul class="select2-result-single select2-result-sub">' +
-                      '<li class="ui-select-choices-row" ng-repeat="item in items" ng-class="{ \'select2-highlighted\': ngModel.indexOf(item.pk_content_category) !== -1 }" ng-click="toggle(item)">' +
+                      '<li class="ui-select-choices-row" ng-repeat="item in items" ng-class="{ \'select2-highlighted\': isSelected(item) }" ng-click="toggle(item)">' +
                         '<div class="select2-result-label ui-select-choices-row-inner">' +
                           '[% item.title %]' +
                         '</div>' +
@@ -159,6 +159,27 @@
               }
 
               return '';
+            };
+
+            /**
+             * @function isSelected
+             * @memberOf onmCategorySelector
+             *
+             * @description
+             *   Checks if an item is selected.
+             *
+             * @param {Object} item The item to check.
+             *
+             * @return {Boolean} True if the item is selected. False otherwise.
+             */
+            $scope.isSelected = function(item) {
+              if (!item || !angular.isArray($scope.ngModel)) {
+                return false;
+              }
+
+              return $scope.ngModel.indexOf(item.pk_content_category) !== -1 ||
+                $scope.ngModel.indexOf(
+                  item.pk_content_category.toString()) !== -1;
             };
 
             /**
