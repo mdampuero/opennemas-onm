@@ -260,44 +260,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Get a tree with categories and subcategories for menu
-     *
-     * TODO: To do work recursive for varios nested levels
-     *
-     * @return array Tree structure
-     */
-    public function getCategoriesTreeMenu()
-    {
-        $categories = $this->categories;
-
-        // Loop categories, and build the tree down
-        $tree = [];
-        foreach ($categories as $category) {
-            if ($category->fk_content_category == 0
-                && $category->internal_category == 1
-                && $category->inmenu == 1
-            ) {
-                $tree[$category->pk_content_category] = $category;
-
-                $tree[$category->pk_content_category]->childNodes = [];
-            }
-        }
-
-        // Loop on subcategories, add them to the tree
-        foreach ($categories as $category) {
-            if ($category->fk_content_category != 0
-                && $category->internal_category != 0
-                && isset($tree[$category->fk_content_category])
-            ) {
-                $tree[$category->fk_content_category]
-                    ->childNodes[$category->pk_content_category] = $category;
-            }
-        }
-
-        return $tree;
-    }
-
-    /**
      * Returns the category name given its id.
      *
      * @param integer $id The category id.
