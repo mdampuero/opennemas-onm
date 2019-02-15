@@ -37,14 +37,16 @@
             '</ui-select>' +
             '<div class="[% cssClass %] ui-select-container select2 select2-container" ng-if="multiple">' +
               '<a class="select2-choice ui-select-match" data-toggle="dropdown">' +
-                '<strong ng-if="labelText">[% labelText %]:</strong>' +
-                '<span ng-show="!ngModel || ngModel.length === 0">' +
-                  ' [% placeholder %]' +
+                '<span class="select2-chosen">' +
+                  '<strong ng-if="labelText">[% labelText %]:</strong>' +
+                  '<span ng-show="!ngModel || ngModel.length === 0">' +
+                    ' [% placeholder %]' +
+                  '</span>' +
+                  '<span ng-show="ngModel && ngModel.length !== 0">' +
+                    ' [% ngModel.length ? ngModel.length : 1 %] selected' +
+                  '</span>' +
+                  '<span class="select2-arrow"><b></b></span>' +
                 '</span>' +
-                '<span ng-show="ngModel && ngModel.length !== 0">' +
-                  ' [% ngModel.length ? ngModel.length : 1 %] selected' +
-                '</span>' +
-                '<span class="select2-arrow"><b></b></span>' +
               '</a>' +
               '<div class="block ui-select-dropdown select2-with-searchbox dropdown-menu keepopen">' +
                 '<a class="select2-btn" ng-click="toggleAll()">' +
