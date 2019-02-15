@@ -144,7 +144,7 @@
                     <div class="form-group">
                       <label class="form-label" for="category">{t}Category{/t}</label>
                       <div class="controls">
-                        {include file="common/selector_categories.tpl" name="category" item=$poll}
+                        <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" locale="config.locale.selected" ng-model="poll.pk_fk_content_category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
                       </div>
                     </div>
                   </div>
