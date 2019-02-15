@@ -518,6 +518,7 @@
       @Common/components/angular-bootstrap-multiselect/angular-bootstrap-multiselect.js,
       @Common/components/angular-file-upload/dist/angular-file-upload.min.js,
       @Common/components/angular-file-model/angular-file-model.js,
+      @Common/components/angular-filter/dist/angular-filter.min.js,
       @Common/components/angular-ui-sortable/sortable.min.js,
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.js,
       @Common/components/angular-ui-tab-scroll/angular-ui-tab-scroll.js,

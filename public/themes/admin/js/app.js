@@ -1,6 +1,7 @@
 angular.module(
   'BackendApp',
   [
+    'angular.filter',
     'angularFileUpload',
     'angularTinycon',
     'angulartics',

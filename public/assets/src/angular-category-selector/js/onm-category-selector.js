@@ -21,23 +21,56 @@
             exclude: '=?',
             labelText: '@',
             locale: '=',
+            multiple: '@',
             ngModel: '=',
             placeholder: '@',
             selected: '=?'
           },
           template: function() {
-            return '<ui-select class="[% cssClass %]" ng-required="required" name="category" ng-model="$parent.ngModel" theme="select2">' +
-                '<ui-select-match placeholder="[% $parent.placeholder %]">' +
-                '  <strong ng-if="labelText">[% labelText %]: </strong>[% $select.selected.title %]' +
-                '</ui-select-match>' +
-                '<ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in (categories | filter: { title: $select.search })">' +
-                '  <div ng-bind-html="item.title | highlight: $select.search"></div>' +
-                '</ui-select-choices>' +
-              '</ui-select>' +
-              '<input id="category" name="category" type="hidden" value="[% ngModel %]">';
+            return '<ui-select class="[% cssClass %]" ng-required="required" name="category" ng-if="!multiple" ng-model="$parent.$parent.ngModel" theme="select2">' +
+              '<ui-select-match placeholder="[% $parent.placeholder %]">' +
+              '  <strong ng-if="labelText">[% labelText %]: </strong>[% $select.selected.title %]' +
+              '</ui-select-match>' +
+              '<ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in (categories | filter: { title: $select.search })">' +
+              '  <div ng-bind-html="item.title | highlight: $select.search"></div>' +
+              '</ui-select-choices>' +
+            '</ui-select>' +
+            '<div class="[% cssClass %] ui-select-container select2 select2-container" ng-if="multiple">' +
+              '<a class="select2-choice ui-select-match" data-toggle="dropdown">' +
+                '<strong ng-if="labelText">[% labelText %]:</strong>' +
+                '<span ng-show="!ngModel || ngModel.length === 0">' +
+                  ' [% placeholder %]' +
+                '</span>' +
+                '<span ng-show="ngModel && ngModel.length !== 0">' +
+                  ' [% ngModel.length ? ngModel.length : 1 %] selected' +
+                '</span>' +
+                '<span class="select2-arrow"><b></b></span>' +
+              '</a>' +
+              '<div class="block ui-select-dropdown select2-with-searchbox dropdown-menu keepopen">' +
+                '<a class="select2-btn" ng-click="toggleAll()">' +
+                  '[% defaultValueText %]' +
+                '</a>' +
+                '<ul class="ui-select-choices select2-results">' +
+                  '<li class="ui-select-choices-group select2-result-with-children" ng-repeat="(key, items) in categories | groupBy: \'fk_content_category\'" ng-class="{ \'select2-highlighted\': angular.isArray(ngModel) && ngModel.indexOf(item.pk_content_category) !== -1 }">' +
+                    '<div class="ui-select-choices-group-label select2-result-label" ng-show="groupCategories(items[0])">' +
+                      '[% groupCategories(items[0]) %]' +
+                    '</div>' +
+                    '<ul class="select2-result-single select2-result-sub">' +
+                      '<li class="ui-select-choices-row" ng-repeat="item in items" ng-class="{ \'select2-highlighted\': ngModel.indexOf(item.pk_content_category) !== -1 }" ng-click="toggle(item)">' +
+                        '<div class="select2-result-label ui-select-choices-row-inner">' +
+                          '[% item.title %]' +
+                        '</div>' +
+                      '</li>' +
+                    '</ul>' +
+                  '</li>' +
+                '</ul>' +
+              '</div>' +
+            '</div>' +
+            '<input id="category" name="category" type="hidden" value="[% ngModel %]">';
           },
           link: function($scope, elem, $attrs) {
             $scope.cssClass = $attrs.class ? $attrs.class : '';
+            $scope.multiple = $attrs.multiple;
             $scope.required = $attrs.required ? $attrs.required : false;
 
             http.get('api_v1_backend_categories_list').then(function(response) {
@@ -46,7 +79,7 @@
                   $scope.exclude.indexOf(e.pk_content_category) === -1;
               });
 
-              if (angular.isArray(response.data.items) &&
+              if (!$scope.multiple && angular.isArray(response.data.items) &&
                   response.data.items.length > 0 &&
                   response.data.items[0].pk_content_category !== null) {
                 response.data.items.unshift({
@@ -77,6 +110,11 @@
               if (!$scope.ngModel || !$scope.categories) {
                 $scope.selected = null;
                 return;
+              }
+
+              if ($scope.multiple && $scope.ngModel &&
+                !angular.isArray($scope.ngModel)) {
+                $scope.ngModel = [ $scope.ngModel ];
               }
 
               $scope.selected = $scope.categories.filter(function(e) {
@@ -119,6 +157,51 @@
               }
 
               return '';
+            };
+
+            /**
+             * @function toggle
+             * @memberOf onmCategorySelector
+             *
+             * @description
+             *   Adds/removes an item from ngModel.
+             *
+             * @param {Object} item The item to toggle.
+             */
+            $scope.toggle = function(item) {
+              if (!$scope.ngModel) {
+                $scope.ngModel = [];
+              }
+
+              var position = $scope.ngModel.indexOf(item.pk_content_category);
+
+              if (position < 0) {
+                $scope.ngModel.push(item.pk_content_category);
+              } else {
+                $scope.ngModel.splice(position, 1);
+              }
+            };
+
+            /**
+             * @function toggleAll
+             * @memberOf onmCategorySelector
+             *
+             * @description
+             *   Adds/removes all items from ngModel.
+             */
+            $scope.toggleAll = function() {
+              if (!$scope.ngModel) {
+                $scope.ngModel = [];
+                return;
+              }
+
+              if ($scope.ngModel.length !== $scope.categories.length) {
+                $scope.ngModel = $scope.categories.map(function(item) {
+                  return item.pk_content_category;
+                });
+              } else {
+                $scope.ngModel = [];
+              }
             };
           },
         };
