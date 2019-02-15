@@ -1,13 +1,15 @@
 <?php
 function smarty_function_uservoice_widget($params, &$smarty)
 {
+    if ($smarty->getContainer()->getParameter('environment') === 'development') {
+        return $output;
+    };
+
     $supportActivated = true;
 
     if (!defined('INSTANCE_UNIQUE_NAME')) {
         define('INSTANCE_UNIQUE_NAME', 'unknown-instance');
     }
-
-    $instanceName = INSTANCE_UNIQUE_NAME;
 
     $output = '';
     if ($supportActivated == true) {
