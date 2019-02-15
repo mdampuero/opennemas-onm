@@ -85,10 +85,6 @@ backend_ws_image:
     resource: '@BackendWebServiceBundle/Resources/config/routing/image.yml'
     prefix:   /
 
-backend_ws_content_v2:
-    resource: '@BackendWebServiceBundle/Resources/config/routing/content_v2.yml'
-    prefix:   /
-
 backend_ws_content:
     resource: '@BackendWebServiceBundle/Resources/config/routing/content.yml'
     prefix:   /
