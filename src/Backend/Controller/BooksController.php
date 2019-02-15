@@ -10,49 +10,12 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Onm\StringUtils;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
 class BooksController extends Controller
 {
-    /**
-     * Common code for all the actions
-     */
-    public function init()
-    {
-        // Take out this crap from this PLEASE ---------------------------------
-        $contentType = \ContentManager::getContentTypeIdFromName('book');
-
-        $this->category = $this->get('request_stack')->getCurrentRequest()
-            ->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-
-        $this->ccm = \ContentCategoryManager::get_instance();
-
-        list($this->parentCategories, $this->subcat, $this->categoryData) =
-            $this->ccm->getArraysMenu($this->category, $contentType);
-
-        $this->bookCategories = [];
-        foreach ($this->parentCategories as $bCat) {
-            if ($bCat->internal_category == $contentType) {
-                $this->bookCategories[] = $bCat;
-            }
-        }
-
-        $this->view->assign([
-            'category'     => $this->category,
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->categoryData,
-        ]);
-    }
-
     /**
      * Lists all the
      *
@@ -76,26 +39,7 @@ class BooksController extends Controller
             );
         }
 
-        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
-
-        foreach ($this->parentCategories as $key => $category) {
-            $categories[] = [
-                'name' => $category->title,
-                'value' => $category->pk_content_category
-            ];
-
-            foreach ($this->subcat[$key] as $subcategory) {
-                $categories[] = [
-                    'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->pk_content_category
-                ];
-            }
-        }
-
-        return $this->render(
-            'book/list.tpl',
-            [ 'categories' => $categories ]
-        );
+        return $this->render('book/list.tpl');
     }
 
     /**
@@ -230,12 +174,10 @@ class BooksController extends Controller
             return $this->redirect($this->generateUrl('admin_books'));
         }
 
-        $ls = $this->get('core.locale');
         return $this->render('book/new.tpl', [
-            'book'     => $book,
-            'category' => $book->category,
-            'locale'   => $ls->getRequestLocale('frontend'),
-            'tags'     => $tags
+            'book'   => $book,
+            'locale' => $this->get('core.locale')->getRequestLocale('frontend'),
+            'tags'   => $tags
         ]);
     }
 
@@ -310,8 +252,7 @@ class BooksController extends Controller
         }
 
         return $this->redirect($this->generateUrl('admin_book_show', [
-            'category' => $this->category,
-            'id'       => $book->id,
+            'id' => $book->id,
         ]));
     }
 
@@ -344,9 +285,7 @@ class BooksController extends Controller
             sprintf(_("Book '%s' deleted successfully."), $book->title)
         );
 
-        return $this->redirect($this->generateUrl('admin_books', [
-            'category' => $book->category
-        ]));
+        return $this->redirect($this->generateUrl('admin_books'));
     }
 
     /**
