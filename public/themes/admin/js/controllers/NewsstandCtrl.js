@@ -105,27 +105,12 @@
          * @param {Object} data The data in the response.
          */
         $scope.parseItem = function(data) {
-          var lz = localizer.get({
-            default: data.extra.default,
-            available: data.extra.available,
-            translators: data.extra.translators
-          });
-
-          $scope.categories = lz.localize(data.extra.categories,
-            [ 'title' ], $scope.config.locale);
-
-          $scope.config.linkers.categories =
-            linker.get('categories', $scope, false, 'title');
-
-          $scope.config.linkers.categories.setKey($scope.config.locale);
-          $scope.config.linkers.categories.link($scope.data.extra.categories, $scope.categories);
-
           if (!data.item) {
             return;
           }
 
           data.item.type = Number(data.item.type);
-          if (data.item.thumb_url.length > 0) {
+          if (data.item.thumb_url && data.item.thumb_url.length > 0) {
             data.item.thumbnail_url = data.extra.KIOSKO_IMG_URL + data.item.path + '/' + data.item.thumb_url;
           }
 

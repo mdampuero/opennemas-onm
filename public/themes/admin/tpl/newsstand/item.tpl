@@ -34,11 +34,11 @@ jQuery(document).ready(function($) {
             </h4>
           </li>
           <li class="quicklinks">
-            <a class="no-padding" href="{url name=backend_newsstands}" title="{t}Go back to list{/t}">
-              <h4>
+            <h4>
+              <a class="no-padding" href="{url name=backend_newsstands}" title="{t}Go back to list{/t}">
                 {t}Newsstand{/t}
-              </h4>
-            </a>
+              </a>
+            </h4>
           </li>
           <li class="quicklinks hidden-xs m-l-5 m-r-5">
             <h4>

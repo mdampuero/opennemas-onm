@@ -13,9 +13,7 @@
           </li>
           <li class="quicklinks">
             <h4>
-              <a class="no-padding" href="{url name=backend_newsstands}" title="{t}Go back to list{/t}">
-                {t}Newsstand{/t}
-              </a>
+              {t}Newsstand{/t}
             </h4>
           </li>
         </ul>

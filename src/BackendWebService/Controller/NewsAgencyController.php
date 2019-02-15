@@ -266,23 +266,6 @@ class NewsAgencyController extends Controller
             );
         }
 
-        // Get categories
-        $ccm = \ContentCategoryManager::get_instance();
-        $fm  = $this->get('data.manager.filter');
-
-        $categories = array_filter($ccm->findAll(), function ($category) {
-            return $category->internal_category == '1';
-        });
-
-        $params['categories'] = array_map(function ($category) use ($fm) {
-            return [
-                'name' => $fm->set($category->title)
-                    ->filter('localize')
-                    ->get(),
-                'value' => $category->id
-            ];
-        }, $categories);
-
         // Get servers
         $params['servers'] = $this->get('orm.manager')->getDataSet('Settings')
             ->get('news_agency_config');
