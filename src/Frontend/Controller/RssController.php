@@ -35,14 +35,15 @@ class RssController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('rss/index.tpl', $cacheID)
         ) {
-            $ccm = \ContentCategoryManager::get_instance();
+            // Get categories with inrss = 1
+            $categories = $this->get('api.service.category')
+                ->getList('params regexp ".*\"inrss\";(s|i):1:(\")?1(\")?;.*"');
 
-            $categories = $ccm->getCategoriesTreeMenu();
-            $authors    = $this->get('api.service.author')
+            $authors = $this->get('api.service.author')
                 ->getList('order by name asc');
 
             $this->view->assign([
-                'categoriesTree' => $categories,
+                'categoriesTree' => $categories['items'],
                 'opinionAuthors' => $authors['items'],
             ]);
         }
@@ -378,22 +379,20 @@ class RssController extends Controller
             ]
         ];
 
-        // Fetch contents only on categories set inrss
-        $categories = \ContentCategoryManager::get_instance()->findAll();
-        $categories = array_map(function ($a) {
+        // Get categories with inrss = 1
+        $categories = $this->get('api.service.category')
+            ->getList('params regexp ".*\"inrss\";(s|i):1:(\")?1(\")?;.*"');
+
+        $ids = array_map(function ($a) {
             return $a->name;
-        }, array_filter($categories, function ($a) {
-            return $a->internal_category == 1
-                && is_array($a->params)
-                && !empty($a->params['inrss']);
-        }));
+        }, $categories['items']);
 
         // Fix condition for IN operator when no categories
-        $categories = empty($categories) ? [ '' ] : $categories;
+        $ids = empty($ids) ? [ '' ] : $ids;
 
         if ($contentType !== 'opinion') {
             $filters['category_name'] = [
-                [ 'value' => $categories, 'operator' => 'IN' ]
+                [ 'value' => $ids, 'operator' => 'IN' ]
             ];
 
             if (!empty($category)) {
