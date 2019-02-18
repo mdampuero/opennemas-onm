@@ -1493,8 +1493,7 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * TODO:  move to ContentCategory class
-     * TODO: Remove the $pkContent parameter
+     * TODO: Move to ContentCategory class
      *
      * Loads the category name for a given content id
      *
@@ -1502,10 +1501,10 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function loadCategoryName()
     {
-        $category = ContentCategoryManager::get_instance()
-             ->findById($this->category);
-
-        if (!is_object($category)) {
+        try {
+            $category = getService('api.service.category')
+                ->getItem($this->pk_fk_content_category);
+        } catch (\Exception $e) {
             return null;
         }
 
@@ -1515,8 +1514,7 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * TODO:  move to ContentCategory class
-     * TODO: Remove the $pkContent parameter
+     * TODO: Move to ContentCategory class
      *
      * Loads the category title for a given content id
      *
@@ -1524,17 +1522,14 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function loadCategoryTitle()
     {
-        $category = ContentCategoryManager::get_instance()
-             ->findById($this->category);
-
-        if (!is_object($category)) {
+        try {
+            $category = getService('api.service.category')
+                ->getItem($this->pk_fk_content_category);
+        } catch (\Exception $e) {
             return null;
         }
 
-        $this->category_title = getService('data.manager.filter')
-            ->set($category->title)
-            ->filter('localize')
-            ->get();
+        $this->category_title = $category->title;
 
         return $this->category_title;
     }
