@@ -302,9 +302,6 @@ EOF
     {
         foreach ($contents as $content) {
             $this->output->write('Processing ' . $content->content_type_name . ' ');
-            // Load category related information
-            $content->category_name  = $content->loadCategoryName($content->id);
-            $content->category_title = $content->loadCategoryTitle($content->id);
 
             $content->created_datetime   =
                 \DateTime::createFromFormat(

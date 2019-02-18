@@ -220,9 +220,6 @@ class MonographsController extends Controller
                             $content->placeholder = 'placeholder_1_1';
                         }
 
-                        $content->category_name  = $content->loadCategoryName();
-                        $content->category_title = $content->loadCategoryTitle();
-
                          // Load attached and related contents from array
                         $content->loadAttachedVideo()
                             ->loadRelatedContents($this->categoryName);

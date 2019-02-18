@@ -70,10 +70,6 @@ class Frontpages
             $ur = getService('user_repository');
             // Overloading information for contents
             foreach ($contentsInHomepage as &$content) {
-                // Load category related information
-                $content->category_name  = $content->loadCategoryName($content->id);
-                $content->category_title = $content->loadCategoryTitle($content->id);
-
                 $content->author = $ur->find($content->fk_author);
                 if (!is_null($content->author)) {
                     $content->author->external = 1;
@@ -198,8 +194,6 @@ class Frontpages
         // Overloading information for contents
         foreach ($articles as &$content) {
             // Load category related information
-            $content->category_name  = $content->loadCategoryName($content->id);
-            $content->category_title = $content->loadCategoryTitle($content->id);
             $content->author         = $ur->find($content->fk_author);
             if (!is_null($content->author)) {
                 $content->author->photo            = $content->author->getPhoto();

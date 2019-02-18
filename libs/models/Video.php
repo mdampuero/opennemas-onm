@@ -477,10 +477,6 @@ class Video extends Content
      */
     public function getUri()
     {
-        if (empty($this->category_name)) {
-            $this->category_name = $this->loadCategoryName();
-        }
-
         $uri = Uri::generate('video', [
             'id'       => sprintf('%06d', $this->id),
             'date'     => date('YmdHis', strtotime($this->created)),
