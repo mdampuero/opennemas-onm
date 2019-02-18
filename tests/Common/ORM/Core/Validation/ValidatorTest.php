@@ -60,6 +60,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->methods['isEnum']           = $reflection->getMethod('isEnum');
         $this->methods['isFloat']          = $reflection->getMethod('isFloat');
         $this->methods['isInteger']        = $reflection->getMethod('isInteger');
+        $this->methods['isL10nString']     = $reflection->getMethod('isL10nString');
         $this->methods['isNull']           = $reflection->getMethod('isNull');
         $this->methods['isObject']         = $reflection->getMethod('isObject');
         $this->methods['isString']         = $reflection->getMethod('isString');
@@ -213,6 +214,19 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->methods['isInteger']->invokeArgs($this->validator, [ 1 ]));
         $this->assertFalse($this->methods['isInteger']->invokeArgs($this->validator, [ [] ]));
         $this->assertFalse($this->methods['isInteger']->invokeArgs($this->validator, [ 'foo' ]));
+    }
+
+    /**
+     * Tests isL10nString with valid and invalid data.
+     */
+    public function testIsL10nString()
+    {
+        $this->assertFalse($this->methods['isL10nString']->invokeArgs($this->validator, [ 1 ]));
+        $this->assertFalse($this->methods['isL10nString']->invokeArgs($this->validator, [ [ 'flob' => 'norf' ] ]));
+        $this->assertFalse($this->methods['isL10nString']->invokeArgs($this->validator, [ [ 'es' => 3 ] ]));
+        $this->assertTrue($this->methods['isL10nString']->invokeArgs($this->validator, [ [ 'es' => 'norf' ] ]));
+        $this->assertTrue($this->methods['isL10nString']->invokeArgs($this->validator, [ [] ]));
+        $this->assertTrue($this->methods['isL10nString']->invokeArgs($this->validator, [ 'foo' ]));
     }
 
     /**

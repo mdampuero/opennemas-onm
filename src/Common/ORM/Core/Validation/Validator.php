@@ -212,7 +212,7 @@ class Validator
      *
      * @param mixed $value The value to check.
      *
-     * @return boolean True if the value is a integer. Otherwise, return false.
+     * @return boolean True if the value is a integer. Otherwise, returns false.
      */
     protected function isInteger($value)
     {
@@ -220,11 +220,39 @@ class Validator
     }
 
     /**
+     * Checks if the value is a l10n_string.
+     *
+     * A l10n_string is a string or an array of strings where the key is a
+     * valid PHP locale.
+     *
+     * @param mixed $value The value to check.
+     *
+     * @return boolean True if the value is a string or a l10n_string.
+     *                 Otherwise, returns false.
+     */
+    protected function isL10nString($value)
+    {
+        if (is_array($value)) {
+            foreach ($value as $key => $value) {
+                if (!in_array($key, \ResourceBundle::getLocales(''))
+                    || !is_string($value)
+                ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return is_string($value);
+    }
+
+    /**
      * Checks if the value is null.
      *
      * @param mixed $value The value to check.
      *
-     * @return boolean True if the value is null. Otherwise, return false.
+     * @return boolean True if the value is null. Otherwise, returns false.
      */
     protected function isNull($ruleset, $property, $value)
     {
@@ -310,7 +338,9 @@ class Validator
                 $type = 'array';
             }
 
-            $checkType = 'is' . ucfirst($type);
+            $checkType = 'is' . implode('', array_map(function ($a) {
+                return ucfirst($a);
+            }, explode('_', $type)));
 
             if (method_exists($this, $checkType)
                 && $this->{$checkType}($value, $ruleset, $property)
