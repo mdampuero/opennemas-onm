@@ -218,8 +218,8 @@ class FrontpageVersionService extends OrmService
     public function getFrontpageWithCategory($categoryId)
     {
         $categoryIdAux      = empty($categoryId) ? 0 : $categoryId;
-        $ccm                = \ContentCategoryManager::get_instance();
-        $categories         = $ccm->findAll();
+        $categories         = $this->container->get('api.service.category')
+            ->getList();
         $catFrontpagesRel   = $this->getCatFrontpagesRel();
         $catWithFrontpage   = $this->contentPositionService->getCategoriesWithManualFrontpage();
         $frontpages         = null;
@@ -233,12 +233,12 @@ class FrontpageVersionService extends OrmService
         $frontpages    = $existMainFrontPage ? [$mainFrontpage] : [];
         $frontpagesAut = !$existMainFrontPage ? [$mainFrontpage] : [];
 
-        foreach ($categories as $category) {
-            if (array_key_exists($category->id, $catFrontpagesRel)) {
-                $frontpages[$category->id] = [
-                    'id'           => $category->id,
+        foreach ($categories['items'] as $category) {
+            if (array_key_exists($category->pk_content_category, $catFrontpagesRel)) {
+                $frontpages[$category->pk_content_category] = [
+                    'id'           => $category->pk_content_category,
                     'name'         => $category->name,
-                    'frontpage_id' => $catFrontpagesRel[$category->id],
+                    'frontpage_id' => $catFrontpagesRel[$category->pk_content_category],
                     'manual'       => true
                 ];
             } else {
@@ -246,10 +246,10 @@ class FrontpageVersionService extends OrmService
                     ->set($category->title)
                     ->filter('localize')->get();
 
-                $frontpagesAut[$category->id] = [
-                    'id'     => $category->id,
+                $frontpagesAut[$category->pk_content_category] = [
+                    'id'     => $category->pk_content_category,
                     'name'   => $name,
-                    'manual' => in_array($category->id, $catWithFrontpage)
+                    'manual' => in_array($category->pk_content_category, $catWithFrontpage)
                 ];
             }
         }
@@ -335,9 +335,9 @@ class FrontpageVersionService extends OrmService
             if (empty($frontpageVersion['frontpage_id'])) {
                 $frontpage = ['name' => _('Frontpage')];
                 if ($frontpageVersion['category_id'] != '0') {
-                    $ccm               = \ContentCategoryManager::get_instance();
-                    $category          =
-                        $ccm->findById($frontpageVersion['category_id']);
+                    $category = $this->container->get('api.service.category')
+                        ->getItem($frontpageVersion['category_id']);
+
                     $frontpage['name'] = $category->name;
                 }
                 $frontpage                        = $this->container
