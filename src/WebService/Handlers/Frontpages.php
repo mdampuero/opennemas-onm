@@ -27,9 +27,7 @@ class Frontpages
         $contentsInHomepage = null;
 
         try {
-            $oql      = sprintf('name regexp "(%%\"|^)%s(\"%%|$)"', $category);
-            $category = getService('api.service.category')
-                ->getItemBy($oql);
+            $category = getService('api.service.category')->getItemBySlug($category);
 
             list($contentPositions, $contentsInHomepage, $invalidationDt, $lastSaved) =
                 getService('api.service.frontpage')

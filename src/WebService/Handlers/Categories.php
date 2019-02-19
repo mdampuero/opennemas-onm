@@ -83,7 +83,7 @@ class Categories
         try {
             $item = getService('api.service.category')->getItemBySlug($slug);
 
-            return serialize($item->getData());
+            return serialize($item);
         } catch (\Exception $e) {
             throw new RestException(404, 'Category not found');
         }
