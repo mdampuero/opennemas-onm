@@ -537,8 +537,12 @@ class Content implements \JsonSerializable, CsvSerializable
 
         $catName = '';
         if (array_key_exists('category', $data) && !empty($data['category'])) {
+            getService('core.locale')->setContext('frontend');
+
             $catName = getService('api.service.category')
                 ->getItem($data['category'])->name;
+
+            getService('core.locale')->setContext('backend');
         }
 
         foreach ($this->getL10nKeys() as $key) {
@@ -683,8 +687,12 @@ class Content implements \JsonSerializable, CsvSerializable
         if (array_key_exists('category', $data)
             && $data['category'] != $this->category
         ) {
+            getService('core.locale')->setContext('frontend');
+
             $catName = getService('api.service.category')
                 ->getItem($data['category'])->name;
+
+            getService('core.locale')->setContext('backend');
         } else {
             $catName = $this->category_name;
         }
