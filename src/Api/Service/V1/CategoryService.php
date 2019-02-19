@@ -80,6 +80,20 @@ class CategoryService extends OrmService
     }
 
     /**
+     * Returns a category basing on a slug.
+     *
+     * @param string $slug The category slug.
+     *
+     * @return Category The category.
+     */
+    public function getItemBySlug($slug)
+    {
+        $oql = sprintf('name regexp "(%%\"|^)%s(\"%%|$)"', $slug);
+
+        return $this->getItemBy($oql);
+    }
+
+    /**
      * Moves all contents assigned to a category to another category.
      *
      * @param integer $id The category id of the source category.

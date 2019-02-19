@@ -49,7 +49,7 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->repository);
 
         $this->service = $this->getMockBuilder('Api\Service\V1\CategoryService')
-            ->setMethods([ 'getItem', 'getListByIds' ])
+            ->setMethods([ 'getItem', 'getItemBy', 'getListByIds' ])
             ->setConstructorArgs([ $this->container, 'Common\ORM\Entity\Category' ])
             ->getMock();
     }
@@ -179,6 +179,20 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $this->service->emptyList([ 1, 2 ]);
+    }
+
+    /**
+     * Tests getItemBySlug.
+     */
+    public function testGetItemBySlug()
+    {
+        $this->service->expects($this->once())->method('getItemBy')
+            ->with('name regexp "(%\"|^)flob(\"%|$)"')
+            ->willReturn(new Category([ 'name' => 'flob' ]));
+
+        $item = $this->service->getItemBySlug('flob');
+
+        $this->assertEquals('flob', $item->name);
     }
 
     /**
