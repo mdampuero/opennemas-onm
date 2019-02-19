@@ -24,24 +24,16 @@ class Frontpages
     */
     public function allContent($category)
     {
-        $ccm = \ContentCategoryManager::get_instance();
-
-        // Check if category exists and initialize contents var
         $contentsInHomepage = null;
-        $existsCategory     = $ccm->exists($category);
-        if (!$existsCategory) {
-            throw new RestException(404, 'parameter is not valid');
-        } else {
-            // Run entire logic
-            $actualCategoryId = $ccm->get_id($category);
-            $categoryData     = null;
-            if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $ccm->categories)) {
-                $categoryData = $ccm->categories[$actualCategoryId];
-            }
+
+        try {
+            $oql      = sprintf('name regexp "(%%\"|^)%s(\"%%|$)"', $category);
+            $category = getService('api.service.category')
+                ->getItemBy($oql);
 
             list($contentPositions, $contentsInHomepage, $invalidationDt, $lastSaved) =
                 getService('api.service.frontpage')
-                    ->getCurrentVersionForCategory($actualCategoryId);
+                    ->getCurrentVersionForCategory($category->pk_content_category);
 
             // Get all frontpages images
             $imageIdsList = [];
@@ -119,10 +111,12 @@ class Frontpages
                     }
                 }
             }
-
-            // Use htmlspecialchars to avoid utf-8 erros with json_encode
-            return htmlspecialchars(utf8_encode(serialize($contentsInHomepage)));
+        } catch (\Exception  $e) {
+            throw new RestException(404, $e->getMessage());
         }
+
+        // Use htmlspecialchars to avoid utf-8 erros with json_encode
+        return htmlspecialchars(utf8_encode(serialize($contentsInHomepage)));
     }
 
     /*
