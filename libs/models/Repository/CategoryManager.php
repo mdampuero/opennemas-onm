@@ -166,11 +166,4 @@ class CategoryManager extends BaseManager
 
         return $rs[0];
     }
-
-    public function sortCategories(&$categoryList)
-    {
-        usort($categoryList, function ($a, $b) {
-            return strcmp($a->name, $b->name);
-        });
-    }
 }
