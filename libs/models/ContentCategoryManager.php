@@ -157,26 +157,4 @@ class ContentCategoryManager
 
         return self::$instance;
     }
-
-    /**
-     * Returns the title "Human readable name" of a category given its name.
-     *
-     * @param string $categoryName The category name.
-     *
-     * @return string The category title.
-     */
-    public function getTitle($categoryName)
-    {
-        if (empty($categoryName)) {
-            return '';
-        }
-
-        foreach ($this->categories as $category) {
-            if ($category->name == $categoryName) {
-                return $category->title;
-            }
-        }
-
-        return '';
-    }
 }
