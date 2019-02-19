@@ -127,24 +127,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Returns the category id from its name
-     *
-     * @param string $categoryName the category name
-     *
-     * @return int the category id, 0 if not found
-     */
-    public function get_id($categoryName)
-    {
-        foreach ($this->categories as $category) {
-            if ($category->name == $categoryName) {
-                return $category->pk_content_category;
-            }
-        }
-
-        return 0;
-    }
-
-    /**
      * Returns an unique instance, Singleton pattern
      *
      * @return ContentCategoryManager the object instance
