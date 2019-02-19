@@ -547,7 +547,6 @@ class RssController extends Controller
                 // Filter out not ready for publish contents.
                 foreach ($relateds as $related) {
                     if ($related->isReadyForPublish()) {
-                        $related->category_name = $ccm->getName($related->category);
                         if ($related->content_type == 1 && !empty($related->img1)) {
                             $related->photo = $er->find('Photo', $related->img1);
                         } elseif ($related->content_type == 1 && !empty($related->fk_video)) {
