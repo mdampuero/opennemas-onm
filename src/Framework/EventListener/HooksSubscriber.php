@@ -597,14 +597,15 @@ class HooksSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $ccm = \ContentCategoryManager::get_instance();
+        if ($category != '0' && $category != 'home') {
+            $this->container->get('core.locale')->setContext('frontend');
 
-        if ($category == '0' || $category == 'home') {
-            $categoryName = 'home';
-        } elseif ($category == 'opinion') {
-            $categoryName = 'opinion';
-        } else {
-            $categoryName = $ccm->getName($category);
+            $category = $this->container->get('api.service.category')
+                ->getItem($category);
+
+            $this->container->get('core.locale')->setContext('backend');
+
+            $category = $category->name;
         }
 
         $this->initializeSmartyCacheHandler();
@@ -613,13 +614,13 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $this->smartyCacheHandler
             // Deleting frontpage cache files
-            ->deleteGroup($this->view->getCacheId('frontpage', $categoryName))
-            ->deleteGroup($this->view->getCacheId('frontpage', 'category', $categoryName))
+            ->deleteGroup($this->view->getCacheId('frontpage', $category))
+            ->deleteGroup($this->view->getCacheId('frontpage', 'category', $category))
             // Deleting rss cache files
             ->deleteGroup($this->view->getCacheId('rss', 'frontpage', 'home'))
             ->deleteGroup($this->view->getCacheId('rss', 'last'))
             ->deleteGroup($this->view->getCacheId('rss', 'fia'));
-        $this->logger->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
+        $this->logger->notice("Cleaning frontpage cache for category: {$category} ($category)");
 
         $this->view->setLocale(true);
 

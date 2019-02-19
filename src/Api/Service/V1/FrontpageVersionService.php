@@ -38,7 +38,7 @@ class FrontpageVersionService extends OrmService
         $this->locale                 = $this->container->get('core.locale');
         $this->dispatcher             = $this->container->get('core.dispatcher');
         $this->cache                  = $this->container->get('cache');
-        $this->filterManager          = $this->container->geT('data.manager.filter');
+        $this->filterManager          = $this->container->get('data.manager.filter');
 
         $this->frontpageVersionsRepository = $this->ormManager
             ->getRepository($this->entity, $this->origin);
@@ -335,13 +335,19 @@ class FrontpageVersionService extends OrmService
             if (empty($frontpageVersion['frontpage_id'])) {
                 $frontpage = ['name' => _('Frontpage')];
                 if ($frontpageVersion['category_id'] != '0') {
+                    $this->container->get('core.locale')->setContext('frontend');
+
                     $category = $this->container->get('api.service.category')
                         ->getItem($frontpageVersion['category_id']);
 
+                    $this->container->get('core.locale')->setContext('backend');
+
                     $frontpage['name'] = $category->name;
                 }
-                $frontpage                        = $this->container
-                    ->get('api.service.frontpage')->createItem($frontpage);
+
+                $frontpage = $this->container->get('api.service.frontpage')
+                    ->createItem($frontpage);
+
                 $frontpageVersion['frontpage_id'] = $frontpage->id;
             }
 
