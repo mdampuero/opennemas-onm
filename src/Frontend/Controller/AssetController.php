@@ -86,10 +86,16 @@ class AssetController extends Controller
      */
     public function customCssFrontpageAction(Request $request)
     {
-        $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $categoryName      = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $currentCategoryId = 0;
 
-        $ccm               = \ContentCategoryManager::get_instance();
-        $currentCategoryId = $ccm->get_id($categoryName);
+        try {
+            $category = $this->get('api.service.category')
+                ->getItemBySlug($categoryName);
+
+            $currentCategoryId = $category->pk_content_category;
+        } catch (\Exception $e) {
+        }
 
         list(, , $contentsInHomepage) =
             $this->get('api.service.frontpage_version')
