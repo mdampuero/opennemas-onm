@@ -217,13 +217,6 @@ class ImagesController extends Controller
             return new JsonResponse([], 200);
         }
 
-        $category = $request->request->getDigits('category', 0);
-        if (empty($category) || !array_key_exists($category, $this->ccm->categories)) {
-            $category_name = '';
-        } else {
-            $category_name = $this->ccm->categories[$category]->name;
-        }
-
         $files = isset($_FILES) ? $_FILES : null;
         $info  = [];
 
@@ -257,7 +250,7 @@ class ImagesController extends Controller
                 'description'       => $tempName,
                 'fk_category'       => $category,
                 'category'          => $category,
-                'category_name'     => $category_name,
+                'category_name'     => '',
                 'tag_ids'           => json_decode($request->request->get('tag_ids', ''), true)
             ];
 
