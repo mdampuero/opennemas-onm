@@ -31,27 +31,23 @@ class MonographsController extends Controller
      */
     public function init()
     {
-        // Only is used by cronicas, no one has templates to support specials.
-        // https://openhost.atlassian.net/browse/ONM-1995
         if (!$this->get('core.security')->hasExtension('SPECIAL_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
-        // Setting up available categories for menu.
-        $this->ccm = new \ContentCategoryManager();
-        $this->cm  = new \ContentManager();
-
+        $category_real_name = 'Portada';
+        $this->category     = 0;
+        $actual_category_id = 0;
         $this->categoryName = $this->get('request_stack')->getCurrentRequest()
             ->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
         if (!empty($this->categoryName)) {
-            $this->category     = $this->ccm->get_id($this->categoryName);
-            $actual_category_id = $this->category;
-            $category_real_name = $this->ccm->getTitle($this->categoryName);
-        } else {
-            $category_real_name = 'Portada';
-            $this->category     = 0;
-            $actual_category_id = 0;
+            $category = $this->get('api.service.category')
+                ->getItemBySlug($this->categoryName);
+
+            $this->category     = $category->pk_content_category;
+            $actual_category_id = $category->pk_content_category;
+            $category_real_name = $category->title;
         }
 
         $this->view->assign([

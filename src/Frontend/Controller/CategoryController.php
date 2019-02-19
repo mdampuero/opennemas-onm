@@ -184,22 +184,21 @@ class CategoryController extends Controller
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
 
-        // Get sync params
-        $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
+        $wsUrl = $this->get('core.helper.instance_sync')
+            ->getSyncUrl($categoryName);
+
         if (empty($wsUrl)) {
             throw new ResourceNotFoundException();
         }
 
-        $cm = new \ContentManager();
-
-        // Setup templating cache layer
         $this->view->setConfig('frontpages');
+
         $cacheId = $this->view->getCacheId('sync', 'frontpage', 'category', $categoryName, $page);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('blog/blog.tpl', $cacheId)
         ) {
-            $ccm = \ContentCategoryManager::get_instance();
+            $cm = new \ContentManager();
 
             // Get category object
             $category = unserialize(
@@ -223,7 +222,7 @@ class CategoryController extends Controller
                 'articles'              => $articles,
                 'category'              => $category,
                 'pagination'            => $pagination,
-                'actual_category_title' => $ccm->getTitle($categoryName),
+                'actual_category_title' => $category->title,
                 'actual_category'       => $categoryName
             ]);
         }
