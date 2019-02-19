@@ -159,26 +159,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Returns the category name given its id.
-     *
-     * @param integer $id The category id.
-     *
-     * @return mixed The category name if it exists. False otherwise.
-     */
-    public function getName($id)
-    {
-        if (!empty($id)
-            && array_key_exists($id, $this->categories)
-            && !empty($this->categories[$id])
-            && isset($this->categories[$id]->name)
-        ) {
-            return $this->categories[$id]->name;
-        }
-
-        return null;
-    }
-
-    /**
      * Returns the title "Human readable name" of a category given its name.
      *
      * @param string $categoryName The category name.
