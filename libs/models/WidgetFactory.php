@@ -46,8 +46,7 @@ class WidgetFactory
         $this->tpl       = $this->container->get('core.template');
 
         // TODO: Remove when no usage in widgets
-        $this->cm  = new ContentManager();
-        $this->ccm = ContentCategoryManager::get_instance();
+        $this->cm = new ContentManager();
 
         // Append the widget id to the cached id
         if ($this->content && $this->content->pk_content) {
