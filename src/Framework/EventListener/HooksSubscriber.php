@@ -49,21 +49,19 @@ class HooksSubscriber implements EventSubscriberInterface
                 [ 'removeVarnishCacheForAdvertisement', 5 ],
             ],
             // Category hooks
-            'category.create' => [
+            'category.createItem' => [
                 ['removeSmartyCacheGlobalCss', 5],
                 ['removeObjectCacheCategoriesArray', 5]
             ],
-            'category.update' => [
+            'category.updateItem' => [
                 ['removeSmartyCacheGlobalCss', 5],
                 ['removeSmartyCacheCategories', 5],
-                ['removeObjectCacheCategory', 5],
                 ['removeObjectCacheCategoriesArray', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
-            'category.delete' => [
+            'category.deleteItem' => [
                 ['removeSmartyCacheGlobalCss', 5],
                 ['removeSmartyCacheCategories', 5],
-                ['removeObjectCacheCategory', 5],
                 ['removeObjectCacheCategoriesArray', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
@@ -337,29 +335,6 @@ class HooksSubscriber implements EventSubscriberInterface
     public function removeObjectCacheCategoriesArray()
     {
         $this->objectCacheHandler->delete('content_categories');
-    }
-
-    /**
-     * Deletes a category from cache when it is updated.
-     *
-     * @param Event $event The event to handle.
-     *
-     * @return null
-     */
-    public function removeObjectCacheCategory(Event $event)
-    {
-        if (!$event->hasArgument('category')) {
-            return;
-        }
-
-        $category = $event->getArgument('category');
-
-        // TODO: Remove when using only new orm for category
-        $this->container->get('cache.manager')->getConnection('instance')
-            ->remove('category-' . $category->id);
-
-        // Delete object cache
-        $this->objectCacheHandler->delete('category-' . $category->id);
     }
 
     /**
