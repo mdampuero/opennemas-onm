@@ -1468,7 +1468,6 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function getQuickInfo()
     {
-        $ccm = ContentCategoryManager::get_instance();
         if (!empty($this->fk_user_last_editor)) {
             $author = getService('user_repository')->find($this->fk_user_last_editor);
         } else {
@@ -1814,7 +1813,6 @@ class Content implements \JsonSerializable, CsvSerializable
     {
         $this->related_contents = [];
 
-        $ccm              = new ContentCategoryManager();
         $relationsHandler = getService('related_contents');
         if (getService('core.security')->hasExtension('CRONICAS_MODULES')
             && ($categoryName == 'home')) {
