@@ -89,7 +89,7 @@ class RssController extends Controller
                 $rssTitle = $category->title;
             }
 
-            list($contentPositions, $contents, $invalidationDt, $lastSaved) =
+            list($contentPositions, $contents, , ) =
                 $this->get('api.service.frontpage')
                     ->getCurrentVersionForCategory($id);
 
@@ -542,7 +542,6 @@ class RssController extends Controller
             if (count($relations) > 0) {
                 $relatedContents = [];
                 $relateds        = $this->get('entity_repository')->findMulti($relations);
-                $ccm             = \ContentCategoryManager::get_instance();
 
                 // Filter out not ready for publish contents.
                 foreach ($relateds as $related) {
