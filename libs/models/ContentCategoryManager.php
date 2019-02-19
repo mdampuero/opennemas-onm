@@ -44,24 +44,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Checks if exists one category given its name
-     *
-     * @param string $category_name the name of the category
-     *
-     * @return boolean true if the category exists
-     */
-    public function exists($categoryName)
-    {
-        foreach ($this->categories as $category) {
-            if ($category->name == $categoryName) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Find objects of category and subcategory.
      *
      * @param string $filter  SQL WHERE clause.
