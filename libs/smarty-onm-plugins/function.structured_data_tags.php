@@ -3,17 +3,19 @@
 function smarty_function_structured_data_tags($params, &$smarty)
 {
     // Only generate tags if is a content page
-    if (!array_key_exists('content', $smarty->tpl_vars)) {
+    if (!array_key_exists('content', $smarty->getTemplateVars())) {
         return '';
     }
 
-    $content    = $smarty->tpl_vars['content']->value;
+    $content    = $smarty->getTemplateVars()['content'];
     $container  = $smarty->getContainer();
     $ds         = $container->get('orm.manager')->getDataSet('Settings', 'instance');
-    $category   = $container->get('category_repository')->find($content->category);
     $user       = $container->get('user_repository')->find($content->fk_author);
     $url        = $container->get('request_stack')->getCurrentRequest()->getUri();
     $structData = $container->get('core.helper.structured_data');
+
+    $category = $container->get('api.service.category')
+        ->getItem($content->pk_fk_content_category);
 
     // Set content data for tags
     $title = htmlspecialchars(html_entity_decode($content->title, ENT_COMPAT, 'UTF-8'));

@@ -9,6 +9,8 @@
  */
 namespace Tests\Libs\Smarty;
 
+use Common\ORM\Entity\Category;
+
 /**
  * Defines test cases for SmartyStructuredDataTagsTest class.
  */
@@ -22,7 +24,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         include_once './libs/smarty-onm-plugins/function.structured_data_tags.php';
 
         $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer' ])
+            ->setMethods([ 'getContainer', 'getTemplateVars' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('Container')
@@ -49,8 +51,8 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cm = $this->getMockBuilder('CategoryManager')
-            ->setMethods([ 'find' ])
+        $this->cs = $this->getMockBuilder('CategoryService')
+            ->setMethods([ 'getItem' ])
             ->getMock();
 
         $this->um = $this->getMockBuilder('UserManager')
@@ -87,8 +89,8 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
-        $this->cm->expects($this->any())->method('find')
-            ->willReturn(json_decode(json_encode([ 'title' => 'Mundo' ])));
+        $this->cs->expects($this->any())->method('getItem')
+            ->willReturn(new Category([ 'title' => 'Mundo' ]));
 
         $this->em->expects($this->any())->method('getDataset')
             ->with('Settings', 'instance')->willReturn($this->ds);
@@ -108,8 +110,8 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'category_repository':
-                return $this->cm;
+            case 'api.service.category':
+                return $this->cs;
 
             case 'core.helper.content_media':
                 return $this->helper;
@@ -138,6 +140,9 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testStructuredDataWhenNoContent()
     {
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([]);
+
         $this->assertEquals(
             '',
             smarty_function_structured_data_tags(null, $this->smarty)
@@ -150,29 +155,25 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testStructuredDataWhenContent()
     {
-        $this->smarty->tpl_vars = [ 'content' => json_decode(
-            json_encode([
-                'value' => json_decode(
-                    json_encode([
-                        'pk_content'        => 145,
-                        'title'             => 'This is the title',
-                        'summary'           => 'This is the summary',
-                        'body'              => 'This is the body',
-                        'category_name'     => 'gorp',
-                        'category'          => 23,
-                        'fk_author'         => 4,
-                        'slug'              => 'foobar-thud',
-                        'agency'            => 'Onm Agency',
-                        'tag_ids'           => [1,2,3,4],
-                        'content_type_name' => 'album',
-                        'created'           => '2016-10-13 11:40:32',
-                        'changed'           => '2016-10-13 11:40:32',
-                    ]),
-                    false
-                )
-            ]),
-            false
-        )];
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([
+                'content' => json_decode(json_encode([
+                    'pk_content'             => 145,
+                    'title'                  => 'This is the title',
+                    'summary'                => 'This is the summary',
+                    'body'                   => 'This is the body',
+                    'category_name'          => 'gorp',
+                    'pk_fk_content_category' => 10633,
+                    'category'               => 23,
+                    'fk_author'              => 4,
+                    'slug'                   => 'foobar-thud',
+                    'agency'                 => 'Onm Agency',
+                    'tag_ids'                => [1,2,3,4],
+                    'content_type_name'      => 'album',
+                    'created'                => '2016-10-13 11:40:32',
+                    'changed'                => '2016-10-13 11:40:32',
+                ]), false)
+            ]);
 
         $this->um->expects($this->once())
             ->method('find')
@@ -233,29 +234,24 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testStructuredDataWhenContentWithImage()
     {
-        $this->smarty->tpl_vars = [ 'content' => json_decode(
-            json_encode([
-                'value' => json_decode(
-                    json_encode([
-                        'pk_content'        => 145,
-                        'title'             => 'This is the title',
-                        'summary'           => 'This is the summary',
-                        'body'              => 'This is the body',
-                        'category_name'     => 'gorp',
-                        'category'          => 23,
-                        'fk_author'         => 4,
-                        'slug'              => 'foobar-thud',
-                        'agency'            => 'Onm Agency',
-                        'tag_ids'           => [1,2,3,4,5],
-                        'content_type_name' => 'article',
-                        'created'           => '2016-10-13 11:40:32',
-                        'changed'           => '2016-10-13 11:40:32',
-                    ]),
-                    false
-                )
-            ]),
-            false
-        )];
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([
+                'content' => json_decode(json_encode([
+                    'pk_content'             => 145,
+                    'title'                  => 'This is the title',
+                    'summary'                => 'This is the summary',
+                    'body'                   => 'This is the body',
+                    'category_name'          => 'gorp',
+                    'pk_fk_content_category' => 10633,
+                    'fk_author'              => 4,
+                    'slug'                   => 'foobar-thud',
+                    'agency'                 => 'Onm Agency',
+                    'tag_ids'                => [1,2,3,4,5],
+                    'content_type_name'      => 'article',
+                    'created'                => '2016-10-13 11:40:32',
+                    'changed'                => '2016-10-13 11:40:32',
+                ]), false)
+            ]);
 
         $this->um->expects($this->once())
             ->method('find')
@@ -335,29 +331,24 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testStructuredDataWhenContentNoUser()
     {
-        $this->smarty->tpl_vars = [ 'content' => json_decode(
-            json_encode([
-                'value' => json_decode(
-                    json_encode([
-                        'pk_content'        => 145,
-                        'title'             => 'This is the title',
-                        'summary'           => 'This is the summary',
-                        'body'              => 'This is the body',
-                        'category_name'     => 'gorp',
-                        'category'          => 23,
-                        'fk_author'         => 4,
-                        'agency'            => '',
-                        'slug'              => 'foobar-thud',
-                        'metadata'          => [1,2,3,4,5],
-                        'content_type_name' => 'video',
-                        'created'           => '2016-10-13 11:40:32',
-                        'changed'           => '2016-10-13 11:40:32',
-                    ]),
-                    false
-                )
-            ]),
-            false
-        )];
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([
+                'content' => json_decode(json_encode([
+                    'pk_content'             => 145,
+                    'title'                  => 'This is the title',
+                    'summary'                => 'This is the summary',
+                    'body'                   => 'This is the body',
+                    'category_name'          => 'gorp',
+                    'pk_fk_content_category' => 10633,
+                    'fk_author'              => 4,
+                    'agency'                 => '',
+                    'slug'                   => 'foobar-thud',
+                    'metadata'               => [1,2,3,4,5],
+                    'content_type_name'      => 'video',
+                    'created'                => '2016-10-13 11:40:32',
+                    'changed'                => '2016-10-13 11:40:32',
+                ]), false)
+            ]);
 
         $this->um->expects($this->once())
             ->method('find')
@@ -427,29 +418,24 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testStructuredDataWhenContentNoLogo()
     {
-        $this->smarty->tpl_vars = [ 'content' => json_decode(
-            json_encode([
-                'value' => json_decode(
-                    json_encode([
-                        'pk_content'        => 145,
-                        'title'             => 'This is the title',
-                        'summary'           => 'This is the summary',
-                        'body'              => 'This is the body',
-                        'category_name'     => 'gorp',
-                        'category'          => 23,
-                        'fk_author'         => 4,
-                        'agency'            => 'Onm Agency',
-                        'slug'              => 'foobar-thud',
-                        'metadata'          => [1,2,3,4],
-                        'content_type_name' => 'video',
-                        'created'           => '2016-10-13 11:40:32',
-                        'changed'           => '2016-10-13 11:40:32',
-                    ]),
-                    false
-                )
-            ]),
-            false
-        )];
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([
+                'content' => json_decode(json_encode([
+                    'pk_content'             => 145,
+                    'title'                  => 'This is the title',
+                    'summary'                => 'This is the summary',
+                    'body'                   => 'This is the body',
+                    'category_name'          => 'gorp',
+                    'pk_fk_content_category' => 10633,
+                    'fk_author'              => 4,
+                    'agency'                 => 'Onm Agency',
+                    'slug'                   => 'foobar-thud',
+                    'metadata'               => [1,2,3,4],
+                    'content_type_name'      => 'video',
+                    'created'                => '2016-10-13 11:40:32',
+                    'changed'                => '2016-10-13 11:40:32',
+                ]), false)
+            ]);
 
         $this->um->expects($this->once())
             ->method('find')
@@ -514,29 +500,24 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testStructuredDataWhenContentNoSummaryWithBody()
     {
-        $this->smarty->tpl_vars = [ 'content' => json_decode(
-            json_encode([
-                'value' => json_decode(
-                    json_encode([
-                        'pk_content'        => 145,
-                        'title'             => 'This is the title',
-                        'summary'           => '',
-                        'body'              => 'This is the body',
-                        'category_name'     => 'gorp',
-                        'category'          => 23,
-                        'fk_author'         => 4,
-                        'slug'              => 'foobar-thud',
-                        'agency'            => 'Onm Agency',
-                        'metadata'          => [1,2,3,4],
-                        'content_type_name' => 'video',
-                        'created'           => '2016-10-13 11:40:32',
-                        'changed'           => '2016-10-13 11:40:32',
-                    ]),
-                    false
-                )
-            ]),
-            false
-        )];
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([
+                'content' => json_decode(json_encode([
+                    'pk_content'             => 145,
+                    'title'                  => 'This is the title',
+                    'summary'                => '',
+                    'body'                   => 'This is the body',
+                    'category_name'          => 'gorp',
+                    'pk_fk_content_category' => 10633,
+                    'fk_author'              => 4,
+                    'slug'                   => 'foobar-thud',
+                    'agency'                 => 'Onm Agency',
+                    'metadata'               => [1,2,3,4],
+                    'content_type_name'      => 'video',
+                    'created'                => '2016-10-13 11:40:32',
+                    'changed'                => '2016-10-13 11:40:32',
+                ]), false)
+            ]);
 
         $this->um->expects($this->once())
             ->method('find')
@@ -604,30 +585,25 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testStructuredDataWhenContentNoSummaryNoBody()
     {
-        $this->smarty->tpl_vars = [ 'content' => json_decode(
-            json_encode([
-                'value' => json_decode(
-                    json_encode([
-                        'pk_content'        => 145,
-                        'title'             => 'This is the title',
-                        'summary'           => '',
-                        'body'              => '',
-                        'description'       => 'This is the description',
-                        'category_name'     => 'gorp',
-                        'category'          => 23,
-                        'fk_author'         => 4,
-                        'slug'              => 'foobar-thud',
-                        'agency'            => 'Onm Agency',
-                        'metadata'          => 'foo, bar, baz, thud',
-                        'content_type_name' => 'video',
-                        'created'           => '2016-10-13 11:40:32',
-                        'changed'           => '2016-10-13 11:40:32',
-                    ]),
-                    false
-                )
-            ]),
-            false
-        )];
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([
+                'content' => json_decode(json_encode([
+                    'pk_content'             => 145,
+                    'title'                  => 'This is the title',
+                    'summary'                => '',
+                    'body'                   => '',
+                    'description'            => 'This is the description',
+                    'category_name'          => 'gorp',
+                    'pk_fk_content_category' => 10633,
+                    'fk_author'              => 4,
+                    'slug'                   => 'foobar-thud',
+                    'agency'                 => 'Onm Agency',
+                    'metadata'               => 'foo, bar, baz, thud',
+                    'content_type_name'      => 'video',
+                    'created'                => '2016-10-13 11:40:32',
+                    'changed'                => '2016-10-13 11:40:32',
+                ]), false)
+            ]);
 
         $this->um->expects($this->once())
             ->method('find')
