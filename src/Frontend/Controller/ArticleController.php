@@ -29,7 +29,7 @@ class ArticleController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    protected $extension = 'article';
+    protected $extension = 'ARTICLE_MANAGER';
 
     /**
      * {@inheritdoc}
