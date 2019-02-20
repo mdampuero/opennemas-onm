@@ -577,7 +577,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 // Deleting frontpage cache files
                 ->deleteGroup($this->view->getCacheId('blog', 'list'))
                 ->deleteGroup($this->view->getCacheId('blog', 'listauthor'))
-                ->deleteGroup($this->view->getCacheId($content->conetnt_type_name, 'list'))
+                ->deleteGroup($this->view->getCacheId($content->content_type_name, 'list'))
                 ->deleteGroup($this->view->getCacheId($content->content_type_name, 'listauthor', $content->fk_author))
                 // Deleting sitemap cache files
                 ->deleteGroup($this->view->getCacheId('sitemap', 'news'))
