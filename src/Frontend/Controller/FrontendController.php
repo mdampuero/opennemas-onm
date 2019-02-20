@@ -144,9 +144,8 @@ class FrontendController extends Controller
      */
     public function showAmpAction(Request $request)
     {
-        if (!$this->get('core.security')->hasExtension('AMP_MODULE')) {
-            throw new ResourceNotFoundException();
-        }
+        $this->checkSecurity($this->extension);
+        $this->checkSecurity('AMP_MODULE');
 
         // Avoid NewRelic js script
         if (extension_loaded('newrelic')) {
