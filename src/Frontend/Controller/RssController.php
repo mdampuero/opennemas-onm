@@ -28,7 +28,6 @@ class RssController extends Controller
      */
     public function indexAction()
     {
-        // Setup templating cache layer
         $this->view->setConfig('rss');
         $cacheID = $this->view->getCacheId('rss', 'index');
 
@@ -37,7 +36,7 @@ class RssController extends Controller
         ) {
             // Get categories with inrss = 1
             $categories = $this->get('api.service.category')
-                ->getList('params regexp ".*\"inrss\";(s|i):1:(\")?1(\")?;.*"');
+                ->getList('params regexp ".*\"inrss\";(s:1:\"1\"|i:1);.*"');
 
             $authors = $this->get('api.service.author')
                 ->getList('order by name asc');
@@ -142,10 +141,6 @@ class RssController extends Controller
             'video'   => _('Latest Videos'),
         ];
 
-        if ($category === 'last') {
-            $category = null;
-        }
-
         // Setup templating cache layer
         $this->view->setConfig('rss');
         $cacheID = $this->view->getCacheId('rss', $type, $category);
@@ -153,28 +148,30 @@ class RssController extends Controller
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
+            if (!empty($category)) {
+                try {
+                    $c = $this->get('api.service.category')
+                        ->getItemBySlug($category);
+
+                    $rssTitle = $rssTitle . ' - ' . $c->title;
+                } catch (\Exception $e) {
+                    throw new ResourceNotFoundException();
+                }
+            }
+
             $rssTitle = $titles[$type];
             $total    = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('elements_in_rss', 10);
+
             $contents = $this->getLatestContents($type, $category, $total);
 
             $this->getRelatedContents($contents);
 
-            if (!empty($category)) {
-                $c = getService('category_repository')
-                    ->findOneBy([ 'name' => [[ 'value' => $category ]] ]);
-
-                if (!empty($c)) {
-                    $rssTitle = $rssTitle . ' - ' . $c->title;
-                }
-            }
-
             $this->view->assign([
-                'rss_title' => $rssTitle,
                 'contents'  => $contents,
-                'type'      => $type,
-                'category'  => $category
+                'rss_title' => $rssTitle,
+                'type'      => $type
             ]);
         }
 
@@ -264,7 +261,7 @@ class RssController extends Controller
      *
      * @return Response The response object.
      */
-    public function facebookInstantArticlesRSSAction()
+    public function facebookInstantArticlesAction()
     {
         if (!$this->get('core.security')->hasExtension('FIA_MODULE')) {
             throw new ResourceNotFoundException();
@@ -381,7 +378,7 @@ class RssController extends Controller
 
         // Get categories with inrss = 1
         $categories = $this->get('api.service.category')
-            ->getList('params regexp ".*\"inrss\";(s|i):1:(\")?1(\")?;.*"');
+            ->getList('params regexp ".*\"inrss\";(s:1:\"1\"|i:1);.*"');
 
         $ids = array_map(function ($a) {
             return $a->name;
