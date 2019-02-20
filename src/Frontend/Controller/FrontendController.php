@@ -66,9 +66,7 @@ class FrontendController extends Controller
         $expected = $this->get('router')->generate($route);
         $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
 
-        if (!$this->get('core.security')->hasExtension($this->extension)) {
-            throw new ResourceNotFoundException();
-        }
+        $this->checkSecurity($this->extension);
 
         if ($request->getPathInfo() !== $expected) {
             return new RedirectResponse($expected);
@@ -181,6 +179,28 @@ class FrontendController extends Controller
             $this->getTemplate($this->get('core.globals')->getAction()),
             $params
         );
+    }
+
+    /**
+     * Checks if the action can be executed basing on the extension and action
+     * to execute.
+     *
+     * @param string $extension  The required extension.
+     * @param string $permission The required permission.
+     *
+     * @throws ResourceNotFoundException If the action can not be executed.
+     */
+    protected function checkSecurity($extension, $permission = null)
+    {
+        if (!empty($extension)
+            && !$this->get('core.security')->hasExtension($extension)) {
+            throw new ResourceNotFoundException();
+        }
+
+        if (!empty($permission)
+            && !$this->get('core.security')->hasPermission($permission)) {
+            throw new ResourceNotFoundException();
+        }
     }
 
     /**
