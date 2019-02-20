@@ -62,7 +62,7 @@ class RssController extends Controller
      */
     public function frontpageRssAction(Request $request)
     {
-        $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
         // Setup templating cache layer
         $this->view->setConfig('rss');
@@ -74,18 +74,22 @@ class RssController extends Controller
             $id       = 0;
             $rssTitle = _('Homepage News');
 
-            if (!empty($categoryName) && $categoryName !== 'home') {
-                $category = getService('category_repository')->findOneBy(
-                    [ 'name' => [[ 'value' => $categoryName ]] ],
-                    'name ASC'
-                );
+            if (!empty($categoryName)) {
+                try {
+                    $oql = sprintf(
+                        'params regexp ".*\"inrss\";(s:1:\"1\"|i:1);.*" '
+                        . 'and name regexp "(%%\"|^)%s(\"%%|$)"',
+                        $categoryName
+                    );
 
-                if (is_null($category)) {
+                    $c = $this->get('api.service.category')
+                        ->getItemBy($oql);
+
+                    $id       = $c->id;
+                    $rssTitle = $c->title;
+                } catch (\Exception $e) {
                     throw new ResourceNotFoundException();
                 }
-
-                $id       = $category->id;
-                $rssTitle = $category->title;
             }
 
             list($contentPositions, $contents, , ) =
@@ -148,10 +152,18 @@ class RssController extends Controller
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
+            $rssTitle = $titles[$type];
+
             if (!empty($category)) {
                 try {
+                    $oql = sprintf(
+                        'params regexp ".*\"inrss\";(s:1:\"1\"|i:1);.*" '
+                        . 'and name regexp "(%%\"|^)%s(\"%%|$)"',
+                        $category
+                    );
+
                     $c = $this->get('api.service.category')
-                        ->getItemBySlug($category);
+                        ->getItemBy($oql);
 
                     $rssTitle = $rssTitle . ' - ' . $c->title;
                 } catch (\Exception $e) {
@@ -159,8 +171,7 @@ class RssController extends Controller
                 }
             }
 
-            $rssTitle = $titles[$type];
-            $total    = $this->get('orm.manager')
+            $total = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('elements_in_rss', 10);
 
