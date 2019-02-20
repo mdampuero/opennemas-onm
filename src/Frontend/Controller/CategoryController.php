@@ -26,12 +26,13 @@ use Common\Core\Controller\Controller;
 class CategoryController extends Controller
 {
     /**
-     * Shows the latest contents in a category given its name and page number
+     * Shows the latest contents in a category given its name and page number.
      *
-     * @param \Symfony\Component\HttpFoundation\Request the request object
+     * @param Request $request The request object.
      *
-     * @return \Symfony\Component\HttpFoundation\Response the response object
-     * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException if the category is not available
+     * @return Response The response object.
+     *
+     * @throws ResourceNotFoundException If the category is not available.
      */
     public function categoryAction(Request $request)
     {
@@ -46,13 +47,14 @@ class CategoryController extends Controller
             $page = 2;
         }
 
-        $categoryManager = $this->get('category_repository');
-        $category        = $categoryManager->findOneBy(
-            [ 'name' => [ [ 'value' => $categoryName ] ] ],
-            [ 'name' => 'ASC' ]
-        );
+        try {
+            $category = $this->get('api.service.category')
+                ->getItemBySlug($categoryName);
+        } catch (\Exception $e) {
+            throw new ResourceNotFoundException();
+        }
 
-        if (empty($category)) {
+        if (empty($category->inmenu)) {
             throw new ResourceNotFoundException();
         }
 
