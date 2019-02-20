@@ -61,11 +61,12 @@ class ArchiveController extends Controller
             $total    = $er->countBy($criteria);
             $library  = [];
 
-            $cr = $this->get('category_repository');
             foreach ($contents as $content) {
                 // Create category group
                 if (!isset($library[$content->category])) {
-                    $library[$content->category] = $cr->find($content->category);
+                    $library[$content->category] = $this->get('api.service.category')
+                        ->getItem($content->pk_fk_content_category);
+
                     $library[$content->category]->contents = [];
                 }
 
