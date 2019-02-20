@@ -120,6 +120,8 @@ class BlogController extends FrontendController
      */
     public function listAuthorAction(Request $request)
     {
+        $this->checkSecurity($this->extension);
+
         $slug = $request->get('author_slug', null);
 
         $criteria = [ 'username' => [ [ 'value' => $slug] ] ];

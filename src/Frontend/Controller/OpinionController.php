@@ -91,6 +91,8 @@ class OpinionController extends FrontendController
      */
     public function listAuthorAction(Request $request)
     {
+        $this->checkSecurity($this->extension);
+
         $authorID = (int) $request->get('author_id', null);
         $author   = $this->get('user_repository')->find($authorID);
         if (is_null($author)) {

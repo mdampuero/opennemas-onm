@@ -60,13 +60,14 @@ class FrontendController extends Controller
      */
     public function listAction(Request $request)
     {
+        $this->checkSecurity($this->extension);
+
         $action = $this->get('core.globals')->getAction();
         $route  = $this->getRoute($action);
 
         $expected = $this->get('router')->generate($route);
         $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
 
-        $this->checkSecurity($this->extension);
 
         if ($request->getPathInfo() !== $expected) {
             return new RedirectResponse($expected, 301);
@@ -92,6 +93,8 @@ class FrontendController extends Controller
      */
     public function showAction(Request $request)
     {
+        $this->checkSecurity($this->extension);
+
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
 
