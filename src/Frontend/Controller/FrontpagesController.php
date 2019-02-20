@@ -30,21 +30,25 @@ class FrontpagesController extends Controller
      */
     public function showAction(Request $request)
     {
-        $categoryName  = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-        $page          = $request->query->get('page', 1);
+        $categoryName  = $request->query->get('category', null);
+        $category      = null;
         $categoryId    = 0;
         $categoryTitle = 0;
-        $category      = null;
 
-        if ($categoryName !== 'home') {
-            $category = $this->get('category_repository')->findOneBy([
-                'name' => [ [ 'value' => $categoryName ] ]
-            ]);
-
-            if (!empty($category)) {
-                $categoryId    = $category->id;
-                $categoryTitle = $category->title;
+        if (!empty($categoryName)) {
+            try {
+                $category = $this->get('api.service.category')
+                    ->getItemBySlug($categoryName);
+            } catch (\Exception $e) {
+                throw new ResourceNotFoundException();
             }
+
+            if (!$category->inmenu) {
+                throw new ResourceNotFoundException();
+            }
+
+            $categoryId    = $category->pk_content_category;
+            $categoryTitle = $category->title;
         }
 
         list($contentPositions, $contents, $invalidationDt, $lastSaved) =
@@ -62,16 +66,11 @@ class FrontpagesController extends Controller
             }
         }
 
-        $cacheId = $this->view->getCacheId('frontpage', $categoryName, $lastSaved, $page);
+        $cacheId = $this->view->getCacheId('frontpage', $categoryName, $lastSaved);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheId)
         ) {
-            // If no home category name
-            if ($categoryName !== 'home' && (empty($category))) {
-                throw new ResourceNotFoundException();
-            }
-
             $this->view->assign([
                 'actual_category_id'    => $categoryId,
                 'actual_category_title' => $categoryTitle,
@@ -97,7 +96,7 @@ class FrontpagesController extends Controller
             $relatedMap = $this->get('related_contents')
                 ->getRelatedContents($ids, $categoryId);
 
-            foreach ($relatedMap as $id => $ids) {
+            foreach ($relatedMap as $ids) {
                 $relatedIds = array_merge($relatedIds, $ids);
             }
 
@@ -188,7 +187,6 @@ class FrontpagesController extends Controller
             'cache_id'        => $cacheId,
             'category_name'   => $categoryName,
             'actual_category' => $categoryName,
-            'page'            => $page,
             'x-tags'          => 'frontpage-page,' . $categoryName,
             'x-cache-for'     => $invalidationDt->format('Y-m-d H:i:s')
         ]);
