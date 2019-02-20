@@ -285,6 +285,35 @@ class Template extends \Smarty
     }
 
     /**
+     * Returns a value assigned to template.
+     *
+     * @param string $name The value name.
+     *
+     * @return mixed The value if it was assigned to template or null if it was
+     *               not assigned to template.
+     */
+    public function getValue($name)
+    {
+        $values = $this->getTemplateVars();
+
+        return array_key_exists($name, $values) && !empty($values[$name])
+            ? $values[$name] : null;
+    }
+
+    /**
+     * Checks if a value is already assigned to template.
+     *
+     * @param string $name The value name.
+     *
+     * @return boolean True if the value is assigned to template. False if the
+     *                 value is not assigned or it is empty.
+     */
+    public function hasValue($name)
+    {
+        return !empty($this->getValue($name));
+    }
+
+    /**
      * Configures the Smarty cache for the section.
      *
      * @param string $section The section.

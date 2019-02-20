@@ -88,8 +88,9 @@ class RssController extends Controller
                 $rssTitle = $category->title;
             }
 
-            list($contentPositions, $contents, $invalidationDt, $lastSaved) = $this->get('api.service.frontpage')
-                ->getCurrentVersionForCategory($id);
+            list($contentPositions, $contents, $invalidationDt, $lastSaved) =
+                $this->get('api.service.frontpage')
+                    ->getCurrentVersionForCategory($id);
 
             // Remove advertisements and widgets
             $contents = array_filter(
@@ -112,11 +113,14 @@ class RssController extends Controller
             ]);
         }
 
-        return $this->render(
-            'rss/rss.tpl',
-            [ 'cache_id' => $cacheID, 'x-tags' => 'rss,frontpage-' . $categoryName ],
-            new Response('', 200, ['Content-Type' => 'text/xml; charset=UTF-8'])
-        );
+        $response = $this->render('rss/rss.tpl', [
+            'cache_id' => $cacheID,
+            'x-tags'   => 'rss,frontpage-' . $categoryName
+        ]);
+
+        $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
+
+        return $response;
     }
 
     /**
@@ -173,11 +177,14 @@ class RssController extends Controller
             ]);
         }
 
-        return $this->render(
-            'rss/rss.tpl',
-            [ 'cache_id' => $cacheID, 'x-tags' => 'rss,' . $type . ',' . $category ],
-            new Response('', 200, ['Content-Type' => 'text/xml; charset=UTF-8'])
-        );
+        $response = $this->render('rss/rss.tpl', [
+            'cache_id' => $cacheID,
+            'x-tags'   => 'rss,' . $type . ',' . $category
+        ]);
+
+        $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
+
+        return $response;
     }
 
     /**
@@ -239,11 +246,14 @@ class RssController extends Controller
             $this->view->assign(['contents' => $contents, 'rss_title' => $rssTitle]);
         }
 
-        return $this->render(
-            'rss/rss.tpl',
-            [ 'cache_id' => $cacheID, 'x-tags' => 'rss,author-' . $slug ],
-            new Response('', 200, ['Content-Type' => 'text/xml; charset=UTF-8'])
-        );
+        $response = $this->render('rss/rss.tpl', [
+            'cache_id' => $cacheID,
+            'x-tags'   => 'rss,author-' . $slug
+        ]);
+
+        $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
+
+        return $response;
     }
 
     /**
@@ -323,11 +333,14 @@ class RssController extends Controller
 
         $this->view->assign('advertisements', $this->getAds());
 
-        return $this->render(
-            'rss/fb_instant_articles.tpl',
-            [ 'cache_id' => $cacheID, 'x-tags' => 'rss,instant-articles' ],
-            new Response('', 200, ['Content-Type' => 'text/xml; charset=UTF-8'])
-        );
+        $response = $this->render('rss/fb_instant_articles.tpl', [
+            'cache_id' => $cacheID,
+            'x-tags'   => 'rss,instant-articles'
+        ]);
+
+        $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
+
+        return $response;
     }
 
     /**

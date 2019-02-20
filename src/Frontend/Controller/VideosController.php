@@ -386,7 +386,7 @@ class VideosController extends Controller
             'x-tags'        => 'video,' . $video->id,
             'x-cache-for'   => '+1 day',
             'x-cacheable'   => $cacheable,
-            'tags'            => $this->get('api.service.tag')
+            'tags'          => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($video->tag_ids)['items']
         ]);
     }

@@ -34,7 +34,7 @@ function smarty_outputfilter_cmp_script($output, $smarty)
         && !preg_match('/\/sharrre/', $uri)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
-        && !preg_match('/\/fb\/instant-articles/', $uri)
+        && !preg_match('/\/rss/', $uri)
         && !preg_match('@\.amp\.html$@', $uri)
     ) {
         $code = $smarty->getContainer()->get('core.template.admin')->fetch(

@@ -1,11 +1,11 @@
 <div class="contentform-main">
-  <div class="form-group">
+  <div class="form-group no-margin">
     <label for="video_url" class="form-label">{t}Video URL{/t}</label>
     <div class="controls">
       <div class="input-group">
         <input type="text" id="video_url" name="video_url" ng-model="video_url" value="{$video->video_url|default:""}" required class="form-control" />
         <span class="input-group-btn">
-          <button class="btn btn-primary" id="video_url_button" type="button" ng-click="getVideoData()">
+          <button class="btn btn-primary" id="video_url_button" type="button" ng-click="getVideoData()" ng-disabled="!video_url">
             <span class="fa fa-refresh"></span>
             <span class="hidden-xs">{t}Get information{/t}</span>
           </button>
@@ -37,10 +37,14 @@
     </div>
   </div>
   <div id="video-information">
-    {if isset($video)}
+    <div class="listing-no-contents" ng-if="loading_data">
+      <div class="text-center p-b-15 p-t-15">
+        <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
+        <h3 class="spinner-text">{t}Loading{/t}...</h3>
+      </div>
+    </div>
+    <div class="ng-cloak" ng-show="information.service && !loading_data">
       {include file="video/partials/_video_information.tpl"}
-    {/if}
-    <div ng-if="loading_data"><div class="spinner"></div>Loading request...</div>
-    <div ng-bind-html="external_content"></div>
+    </div>
   </div>
 </div>

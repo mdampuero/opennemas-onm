@@ -85,25 +85,6 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests smarty_function_get_url when item has an external link.
-     */
-    public function testGetUrlWhenExternalLink()
-    {
-        $item = json_decode(json_encode([ 'id' => '1' ]));
-
-        $item->params = [ 'bodyLink' => 'baz' ];
-
-        $this->router->expects($this->once())->method('generate')
-            ->with('frontend_redirect_external_link', [ 'to' => 'baz' ])
-            ->willReturn('/redirect?to=baz');
-
-        $this->assertEquals(
-            '/redirect?to=baz" target="_blank',
-            smarty_function_get_url([ 'item' => $item ], $this->smarty)
-        );
-    }
-
-    /**
      * Tests smarty_function_get_url when item has no external link.
      */
     public function testGetUrlWhenNoExternal()

@@ -255,8 +255,7 @@ class SitemapController extends Controller
      */
     protected function getResponse($format, $action, $cacheId)
     {
-        $headers  = [ 'Content-Type' => 'application/xml; charset=utf-8' ];
-        $instance = $this->get('core.instance')->internal_name;
+        $headers = [ 'Content-Type' => 'application/xml; charset=utf-8' ];
 
         $contents = $this->renderView('sitemap/sitemap.tpl', [
             'action'   => $action,
@@ -276,8 +275,7 @@ class SitemapController extends Controller
         $headers = array_merge($headers, [
             'x-cache-for' => self::EXPIRE[$action],
             'x-cacheable' => true,
-            'x-instance'  => $instance,
-            'x-tags'      => sprintf('instance-%s,sitemap,%s', $instance, $action)
+            'x-tags'      => sprintf('sitemap,%s', $action)
         ]);
 
         return new Response($contents, 200, $headers);

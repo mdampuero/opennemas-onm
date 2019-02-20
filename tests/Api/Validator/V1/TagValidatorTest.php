@@ -65,6 +65,8 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
         $this->coreValidator->expects($this->any())->method('validate')
             ->willReturn([]);
 
+        $this->addToAssertionCount(1);
+
         $this->validator->validate($item);
 
         $this->addToAssertionCount(1);
