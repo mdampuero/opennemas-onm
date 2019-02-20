@@ -9,6 +9,7 @@
 namespace WebService\Handlers;
 
 use Luracast\Restler\RestException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Handles REST actions for frontpages.
@@ -29,7 +30,7 @@ class Frontpages
         try {
             $category = getService('api.service.category')->getItemBySlug($category);
 
-            list($contentPositions, $contentsInHomepage, $invalidationDt, $lastSaved) =
+            list(, $contentsInHomepage, , ) =
                 getService('api.service.frontpage')
                     ->getCurrentVersionForCategory($category->pk_content_category);
 
@@ -122,14 +123,11 @@ class Frontpages
     */
     public function allContentBlog($categoryName, $page = 1)
     {
-        // Get category object
-        $category = getService('category_repository')->findBy(
-            [ 'name' => [[ 'value' => $categoryName ]] ],
-            '1'
-        );
-
-        if (empty($category)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        try {
+            $category = getService('api.service.category')
+                ->getItemBySlug($categoryName);
+        } catch (\Exception $e) {
+            throw new resourceNotFoundException();
         }
 
         $category = $category[0];
@@ -186,7 +184,8 @@ class Frontpages
         // Overloading information for contents
         foreach ($articles as &$content) {
             // Load category related information
-            $content->author         = $ur->find($content->fk_author);
+            $content->author = $ur->find($content->fk_author);
+
             if (!is_null($content->author)) {
                 $content->author->photo            = $content->author->getPhoto();
                 $content->author->photo->media_url = MEDIA_IMG_ABSOLUTE_URL;
