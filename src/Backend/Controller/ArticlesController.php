@@ -175,18 +175,13 @@ class ArticlesController extends Controller
         $ids = $this->get('api.service.frontpage_version')
             ->getContentIds($categoryId, $frontpageVersionId, 'Article');
 
-        $category = $this->get('category_repository')->find($categoryId);
-
         $filters = [
-            'content_type_name' => [ [ 'value' => 'article' ] ],
-            'content_status'    => [ [ 'value' => 1 ] ],
-            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ],
-            'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ],
+            'content_type_name'      => [ [ 'value' => 'article' ] ],
+            'content_status'         => [ [ 'value' => 1 ] ],
+            'in_litter'              => [ [ 'value' => 1, 'operator' => '!=' ] ],
+            'pk_content'             => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ],
+            'pk_fk_content_category' => [ [ 'value' => $categoryId ] ],
         ];
-
-        if ($categoryId != 0) {
-            $filters['category_name'] = [ [ 'value' => $category->name ] ];
-        }
 
         $countArticles = true;
         $articles      = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page, 0, $countArticles);
@@ -203,7 +198,7 @@ class ArticlesController extends Controller
             'route'       => [
                 'name'   => 'admin_articles_content_provider_category',
                 'params' => [
-                    'category'           => $categoryId
+                    'category' => $categoryId
                 ]
             ],
         ]);
