@@ -231,31 +231,48 @@
 
             for (var i = 0; i < this.properties.length; i++) {
               var property = this.properties[i];
+              var newValue = localized[property];
 
-              // Value missing, no localize
+              // Value missing, initialize as string
               if (!original[property]) {
-                original[property] = localized[property];
+                original[property] = '';
+              }
+
+              // Not changed, skip
+              if (original[property] === newValue) {
                 continue;
               }
 
               if (angular.isString(original[property])) {
-                var value = original[property];
+                var oldValue = original[property];
 
-                // If locale changed, convert string to l10n_string
-                if (this.previousKey) {
+                // Locale changed or not default, convert string to l10n_string
+                if (this.previousKey || this.key !== this.defaultKey) {
                   original[property] = {};
-                  original[property][this.previousKey] = value;
+
+                  // Keep old value in default key
+                  if (oldValue) {
+                    original[property][this.defaultKey] = oldValue;
+                  }
+
+                  // Set new value in current key
+                  original[property][this.key] = newValue;
                   continue;
                 }
 
-                // If locale not changed, update string
-                original[property] = localized[property];
-                continue;
+                // Locale not changed, update string
+                original[property] = newValue;
               }
 
               // Update current key in the l10n_string
               if (angular.isObject(original[property])) {
-                original[property][this.key] = localized[property];
+                original[property][this.key] = newValue;
+              }
+
+              if (this.clean && original[property]) {
+                if (!original[property][this.key]) {
+                  delete original[property][this.key];
+                }
               }
             }
 
