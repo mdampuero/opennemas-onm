@@ -296,7 +296,6 @@ services:
         arguments:
             - '@core.template'
             - '@entity_repository'
-            - '@category_repository'
             - '@api.service.author'
             - '@orm.manager'
             - '@core.helper.advertisement'

@@ -31,7 +31,6 @@ class NewsletterRenderer
      *
      * @param Template            $template        The template service.
      * @param EntityRepository    $entityManager   The entity manager.
-     * @param CategoryRepository  $categoryManager The category manager.
      * @param AuthorService       $authorService   The author service.
      * @param SettingRepository   $settinManager   The settings repository.
      * @param AdvertisementHelper $adsHelper       The advertisement helper.
@@ -41,7 +40,6 @@ class NewsletterRenderer
     public function __construct(
         $tpl,
         EntityManager $entityManager,
-        CategoryManager $categoryManager,
         AuthorService $authorService,
         $em,
         $adsHelper,
@@ -50,7 +48,6 @@ class NewsletterRenderer
     ) {
         $this->tpl      = $tpl;
         $this->er       = $entityManager;
-        $this->cr       = $categoryManager;
         $this->as       = $authorService;
         $this->ds       = $em->getDataSet('Settings', 'instance');
         $this->adHelper = $adsHelper;
