@@ -475,6 +475,11 @@ class HooksSubscriber implements EventSubscriberInterface
         }
 
         $category = $event->getArgument('item');
+        $names    = $category->name;
+
+        if (!is_array($names)) {
+            $names = [ $names ];
+        }
 
         $this->initializeSmartyCacheHandler();
 
@@ -482,10 +487,12 @@ class HooksSubscriber implements EventSubscriberInterface
 
         // Delete smarty cache for frontpage RSS, manual frontpage
         // and blog frontpage frontpage of category
-        $this->smartyCacheHandler
-            ->deleteGroup($this->view->getCacheId('rss', $category->name))
-            ->deleteGroup($this->view->getCacheId('frontpage', $category->name))
-            ->deleteGroup($this->view->getCacheId('frontpage', 'category', $category->name));
+        foreach ($names as $name) {
+            $this->smartyCacheHandler
+                ->deleteGroup($this->view->getCacheId('rss', $name))
+                ->deleteGroup($this->view->getCacheId('frontpage', $name))
+                ->deleteGroup($this->view->getCacheId('frontpage', 'category', $name));
+        }
 
         $this->view->setLocale(true);
     }
