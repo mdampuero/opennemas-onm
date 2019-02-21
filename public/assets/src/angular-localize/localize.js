@@ -20,7 +20,7 @@
        *
        * @return {Object} The linker
        */
-      this.get = function(keys, defaultKey, scope, clean, ignore) {
+      this.get = function(properties, defaultKey, scope, clean, ignore) {
         return {
 
           /**
@@ -38,7 +38,7 @@
           defaultKey: defaultKey,
 
           /**
-           * List of keys to ignore in this linker.
+           * List of properties to ignore in this linker.
            *
            * @type {Array}
            */
@@ -59,13 +59,6 @@
           previousKey: null,
 
           /**
-           * The list of keys that have to be updated on change.
-           *
-           * @type {Array}
-           */
-          keys: keys,
-
-          /**
            * The localized item or list of localized items
            *
            * @type {Object}
@@ -78,6 +71,13 @@
            * @type {Object}
            */
           original: null,
+
+          /**
+           * The list of properties that have to be updated on change.
+           *
+           * @type {Array}
+           */
+          properties: properties,
 
           /**
            * The scope who watches source and target.
@@ -181,8 +181,8 @@
           updateLocalized: function(localized, original) {
             var that = this;
 
-            for (var i = 0; i < this.keys.length; i++) {
-              var property = this.keys[i];
+            for (var i = 0; i < this.properties.length; i++) {
+              var property = this.properties[i];
 
               if (!original[property]) {
                 continue;
@@ -212,7 +212,7 @@
             }
 
             var ukeys = Object.keys(original).filter(function(e) {
-              return that.keys.indexOf(e) < 0 && that.ignore.indexOf(e) < 0;
+              return that.properties.indexOf(e) < 0 && that.ignore.indexOf(e) < 0;
             });
 
             for (var i = 0; i < ukeys.length; i++) {
@@ -229,38 +229,41 @@
           updateOriginal: function(original, localized) {
             var that = this;
 
-            for (var i = 0; i < this.keys.length; i++) {
-              // Value missing
-              if (!original[this.keys[i]]) {
-                original[this.keys[i]] = {};
+            for (var i = 0; i < this.properties.length; i++) {
+              var property = this.properties[i];
+
+              // Value missing, no localize
+              if (!original[property]) {
+                original[property] = localized[property];
                 continue;
               }
 
-              if (angular.isString(original[this.keys[i]])) {
-                var value = original[this.keys[i]];
+              if (angular.isString(original[property])) {
+                var value = original[property];
 
-                // If locale changed, convert string
+                // If locale changed, convert string to l10n_string
                 if (this.previousKey) {
-                  original[this.keys[i]] = {};
-                  original[this.keys[i]][this.previousKey] = value;
+                  original[property] = {};
+                  original[property][this.previousKey] = value;
                   continue;
                 }
 
                 // If locale not changed, update string
-                original[this.keys[i]] = localized[this.keys[i]];
+                original[property] = localized[property];
                 continue;
               }
 
-              // Convert string to l10n_string
-              if (angular.isObject(original[this.keys[i]])) {
-                original[this.keys[i]][this.key] = localized[this.keys[i]];
+              // Update current key in the l10n_string
+              if (angular.isObject(original[property])) {
+                original[property][this.key] = localized[property];
               }
             }
 
             var ukeys = Object.keys(localized).filter(function(e) {
-              return that.keys.indexOf(e) < 0 && that.ignore.indexOf(e) < 0;
+              return that.properties.indexOf(e) < 0 && that.ignore.indexOf(e) < 0;
             });
 
+            // Do not parse unlocalized keys
             for (var i = 0; i < ukeys.length; i++) {
               original[ukeys[i]] = localized[ukeys[i]];
             }
