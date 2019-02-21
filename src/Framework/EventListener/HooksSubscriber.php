@@ -51,18 +51,15 @@ class HooksSubscriber implements EventSubscriberInterface
             // Category hooks
             'category.createItem' => [
                 ['removeSmartyCacheGlobalCss', 5],
-                ['removeObjectCacheCategoriesArray', 5]
             ],
             'category.updateItem' => [
                 ['removeSmartyCacheGlobalCss', 5],
                 ['removeSmartyCacheCategories', 5],
-                ['removeObjectCacheCategoriesArray', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             'category.deleteItem' => [
                 ['removeSmartyCacheGlobalCss', 5],
                 ['removeSmartyCacheCategories', 5],
-                ['removeObjectCacheCategoriesArray', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             // Comment hooks
@@ -325,16 +322,6 @@ class HooksSubscriber implements EventSubscriberInterface
         $this->view->setLocale(true);
 
         $this->cleanOpcode();
-    }
-
-    /**
-     * Deletes cache for content_categories object
-     *
-     * @return null
-     */
-    public function removeObjectCacheCategoriesArray()
-    {
-        $this->objectCacheHandler->delete('content_categories');
     }
 
     /**
