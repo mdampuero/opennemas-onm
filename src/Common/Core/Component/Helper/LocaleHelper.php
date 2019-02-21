@@ -96,7 +96,7 @@ class LocaleHelper
     {
         return !empty($this->instance)
             ? $this->instance->hasMultilanguage()
-            : null;
+            : false;
     }
 
     /**
