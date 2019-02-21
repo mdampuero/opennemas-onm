@@ -64,7 +64,7 @@ function smarty_function_renderTags($params, &$smarty)
             ->localizeUrl($url, '');
 
         $output .= sprintf(
-            '<a href="%s" title="%s">%s</a>%s',
+            '<a href="%s" class="tag-item" title="%s">%s</a>%s',
             $url,
             $tags[$tagId]['name'],
             $tags[$tagId]['name'],
