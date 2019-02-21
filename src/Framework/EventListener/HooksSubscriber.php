@@ -470,11 +470,11 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheCategories(Event $event)
     {
-        if (!$event->hasArgument('category')) {
+        if (!$event->hasArgument('item')) {
             return;
         }
 
-        $category = $event->getArgument('category');
+        $category = $event->getArgument('item');
 
         $this->initializeSmartyCacheHandler();
 
@@ -713,8 +713,6 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $this->container->get('varnish_ban_message_exchanger')
             ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s', $instanceName));
-            // ->addBanMessage(sprintf('obj.http.x-tags ~ "instance-%s.*frontpage-page"', $instanceName))
-            // ->addBanMessage(sprintf('obj.http.x-tags ~ "instance-%s.*globalcss"', $instanceName));
     }
 
     /**
