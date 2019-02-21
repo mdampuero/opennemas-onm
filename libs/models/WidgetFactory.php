@@ -118,4 +118,25 @@ class WidgetFactory
             $this->params = array_merge($this->params, $params);
         }
     }
+
+    /**
+     * Returns the list of categories ready to use in a category selector in
+     * the widget form.
+     *
+     * @return array The list of categories.
+     */
+    protected function getCategories()
+    {
+        $this->container->get('core.locale')->setContext('frontend');
+        $items = $this->container->get('api.service.category')->getList();
+        $this->container->get('core.locale')->setContext('backend');
+
+        $categories = [ 0 => _('Select a category...') ];
+
+        foreach ($items['items'] as $category) {
+            $categories[$category->name] = $category->title;
+        }
+
+        return $categories;
+    }
 }
