@@ -111,7 +111,8 @@
               $scope.data.item = {};
             }
 
-            $scope.item = angular.extend($scope.item, response.data.item);
+            $scope.data.item = angular.extend($scope.data.item, $scope.item);
+            $scope.item      = angular.extend({}, response.data.item);
 
             $scope.parseItem($scope.data);
             $scope.disableFlags('http');
