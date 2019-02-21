@@ -16,12 +16,12 @@
                 {t}Categories{/t}
               </h4>
             </li>
-            <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available && data.extra.locale.available.length">
+            <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
               <h4>
                 <i class="fa fa-angle-right"></i>
               </h4>
             </li>
-            <li class="quicklinks ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available && data.extra.locale.available.length">
+            <li class="quicklinks ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
               <translator keys="data.extra.keys" ng-model="config.locale.selected" options="data.extra.locale"></translator>
             </li>
           </ul>
@@ -188,8 +188,8 @@
                         [% item.title %]
                       </strong>
                       <div class="listing-inline-actions">
-                        <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_category_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available && data.extra.locale.available.length" options="data.extra.locale" text="{t}Edit{/t}"></translator>
-                        <a class="btn btn-default btn-small" href="[% routing.generate('backend_category_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available || data.extra.locale.available.length === 0">
+                        <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_category_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+                        <a class="btn btn-default btn-small" href="[% routing.generate('backend_category_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
                           <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                         </a>
                         <div uib-tooltip="{t}Only empty categories can be deleted{/t}" tooltip-enable="data.extra.stats[getId(item)] > 0">

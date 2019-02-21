@@ -28,12 +28,12 @@
                 {if empty($id)}{t}Create{/t}{else}{t}Edit{/t}{/if}
               </h4>
             </li>
-            <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="config.locale.multilanguage && config.locale.available && config.locale.available.length">
+            <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="config.locale.multilanguage && config.locale.available">
               <h4>
                 <i class="fa fa-angle-right"></i>
               </h4>
             </li>
-            <li class="quicklinks ng-cloak" ng-if="config.locale.multilanguage && config.locale.available && config.locale.available.length">
+            <li class="quicklinks ng-cloak" ng-if="config.locale.multilanguage && config.locale.available">
               <translator item="data.item" keys="data.extra.keys" ng-model="config.locale.selected" options="config.locale"></translator>
             </li>
           </ul>
