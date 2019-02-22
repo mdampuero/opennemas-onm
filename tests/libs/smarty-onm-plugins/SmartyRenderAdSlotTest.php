@@ -185,7 +185,10 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             '<div class="ad-slot oat oat-visible oat-left corge" data-mark="Advertisement">foo garply</div>',
-            smarty_function_render_ad_slot([ 'format' => 'inline', 'position' => 123 ], $this->smarty)
+            smarty_function_render_ad_slot(
+                [ 'format' => 'inline', 'position' => 123, 'mode' => 'consume' ],
+                $this->smarty
+            )
         );
     }
 
