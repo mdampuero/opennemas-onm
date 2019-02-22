@@ -52,10 +52,9 @@ class FrontendController extends Controller
     public function listAction(Request $request)
     {
         $action = $this->get('core.globals')->getAction();
-        $route  = $this->getRoute($action);
+        $params = $this->getQueryParameters($action, $request);
 
-        $expected = $this->get('router')->generate($route);
-        $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
+        $expected = $this->getExpectedUri($action, $params);
 
         if ($request->getPathInfo() !== $expected) {
             return new RedirectResponse($expected, 301);
@@ -84,8 +83,7 @@ class FrontendController extends Controller
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
 
-        $expected = $this->get('core.helper.url_generator')->generate($item);
-        $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
+        $expected = $this->getExpectedUri($action, [ 'item' => $item ]);
 
         if ($request->getPathInfo() !== $expected
             && empty($this->get('request_stack')->getParentRequest())
@@ -168,6 +166,36 @@ class FrontendController extends Controller
         } catch (ApiException $e) {
             throw new ResourceNotFoundException();
         }
+    }
+
+    /**
+     * Returns the expected URI for the list action basing on the current
+     * action and a list of parameters.
+     *
+     * @param string $action The current action.
+     * @param array  $params The list of parameters.
+     *
+     * @return string The expected URI.
+     */
+    protected function getExpectedUri($action, $params = [])
+    {
+        if ($action === 'list') {
+            $route = $this->getRoute($action);
+
+            // Do not support page=1 in query string
+            if (array_key_exists('page', $params) && $params['page'] == 1) {
+                unset($params['page']);
+            }
+
+            $expected = $this->get('router')->generate($route, $params);
+
+            return $this->get('core.helper.l10n_route')->localizeUrl($expected);
+        }
+
+        $expected = $this->get('core.helper.url_generator')
+            ->generate($params['item']);
+
+        return $this->get('core.helper.l10n_route')->localizeUrl($expected);
     }
 
     /**
