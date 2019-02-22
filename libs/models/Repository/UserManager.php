@@ -90,7 +90,7 @@ class UserManager extends BaseManager
      *
      * @return array The matched elements.
      */
-    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null)
     {
         // Building the SQL filter
         $whereSQL = $this->getFilterSQL($criteria);
