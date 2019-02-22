@@ -67,6 +67,11 @@ services:
         arguments: [ '@core.locale' ]
         public:    true
 
+    core.globals:
+        class:     Common\Core\Component\Core\GlobalVariables
+        arguments: [ '@service_container' ]
+        public:    true
+
     core.helper.advertisement:
         class:     Common\Core\Component\Helper\AdvertisementHelper
         arguments: [ '@service_container' ]
@@ -367,14 +372,14 @@ services:
         arguments: [ '@service_container', '%core.template.filters%' ]
         public:    true
 
-    core.globals:
-        class:     Common\Core\Component\Core\GlobalVariables
-        arguments: [ '@service_container' ]
-        public:    true
-
     core.template.admin:
         class:     Common\Core\Component\Template\Template
         arguments: [ '@service_container', '%core.template.admin.filters%' ]
+        public:    true
+
+    core.template.cache:
+        class:     Common\Core\Component\Template\Cache\CacheManager
+        arguments: [ '@core.template' ]
         public:    true
 
     core.template.manager:
