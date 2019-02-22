@@ -1,13 +1,8 @@
 <?php
 /**
- * Contains the class Frontend\Controller\CategoryController
- *
- * @package Frontend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,179 +10,91 @@
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Common\Core\Controller\Controller;
 
-/**
- * Shows a paginated page for contents that share a property
- *
- * @package Backend_Controllers
- */
-class CategoryController extends Controller
+class CategoryController extends FrontendController
 {
     /**
-     * Shows the latest contents in a category given its name and page number.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     *
-     * @throws ResourceNotFoundException If the category is not available.
+     * {@inheritdoc}
      */
-    public function categoryAction(Request $request)
+    protected $caches = [
+        'list' => 'frontpages'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'list' => 'frontpage_category'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $positions = [
+        'list' => [ 7, 9 ]
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $queries = [
+        'list' => [ 'category_name', 'page' ]
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $routes = [
+        'list' => 'category_frontpage'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $templates = [
+        'list' => 'blog/blog.tpl'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function listAction(Request $request)
     {
-        $categoryName = $request->get('category_name', '', FILTER_SANITIZE_STRING);
-        $page         = (int) $request->get('page', 1);
-        $epp          = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_in_blog', 10);
-        $epp          = (is_null($epp) || $epp <= 0) ? 10 : $epp;
+        $action = $this->get('core.globals')->getAction();
+        $item   = $this->getItem($request);
+        $params = $this->getQueryParameters($action, $request);
 
-        if ($page > 1) {
-            $page = 2;
+        $expected = $this->getExpectedUri($action, $params);
+
+        if (strpos($expected, $request->getRequestUri()) !== 0) {
+            return new RedirectResponse($expected, 301);
         }
 
-        try {
-            $category = $this->get('api.service.category')
-                ->getItemBySlug($categoryName);
-        } catch (\Exception $e) {
-            throw new ResourceNotFoundException();
+        $params = $this->getParameters($request, $item);
+
+        $this->view->setConfig($this->getCacheConfiguration($action));
+
+        if (!$this->isCached($params)) {
+            $this->hydrateShow($params, $item);
         }
 
-        if (empty($category->inmenu)) {
-            throw new ResourceNotFoundException();
-        }
-
-        $em      = $this->get('entity_repository');
-        $order   = [ 'starttime' => 'DESC' ];
-        $filters = [
-            'pk_fk_content_category' => [ [ 'value' => $category->pk_content_category ] ],
-            'fk_content_type'        => [ [ 'value' => [1, 7, 9], 'operator' => 'IN' ] ],
-            'content_status'         => [ [ 'value' => 1 ] ],
-            'in_litter'              => [[ 'value' => 1, 'operator' => '!=' ]],
-            'starttime'              => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-            ],
-            'endtime'                => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-            ]
-        ];
-
-        $articles = $em->findBy($filters, $order, $epp, $page);
-        $total    = count($articles) + 1;
-
-        $starttime = \ContentManager::getEarlierStarttimeOfScheduledContents($articles);
-        $endtime   = \ContentManager::getEarlierEndtimeOfScheduledContents($articles);
-        $expires   = $starttime;
-
-        if (!empty($endtime) && (empty($expires) || $endtime < $starttime)) {
-            $expires = $endtime;
-        }
-
-        if (!empty($expires)) {
-            $lifetime = strtotime($expires) - time();
-
-            if ($lifetime < $this->view->getCacheLifetime()) {
-                $this->view->setCacheLifetime($lifetime);
-            }
-        }
-
-        $cm       = new \ContentManager();
-        $articles = $cm->getInTime($articles);
-
-        // Setup templating cache layer
-        $this->view->setConfig('frontpages');
-        $cacheId = $this->view->getCacheId('frontpage', 'category', $categoryName, $page);
-
-        if ($this->view->getCaching() === 0
-            || !$this->view->isCached('blog/blog.tpl', $cacheId)
-        ) {
-            $imageIdsList = [];
-            foreach ($articles as &$content) {
-                if (isset($content->img1) && !empty($content->img1)) {
-                    $imageIdsList[] = $content->img1;
-                } elseif (!empty($content->fk_video)) {
-                    $content->video = $em->find('Video', $content->fk_video);
-                }
-            }
-
-            // Fetch images
-            $imageIdsList = array_unique($imageIdsList);
-            if (count($imageIdsList) > 0) {
-                $imageList = $em->findBy([
-                    'content_type_name' => [ [ 'value' => 'photo' ] ],
-                    'pk_content'        => [ [ 'value' => $imageIdsList, 'operator' => 'IN' ] ]
-                ]);
-            } else {
-                $imageList = [];
-            }
-
-            // Overloading information for contents
-            foreach ($articles as &$content) {
-                // Load category related information
-                $content->author = $this->get('user_repository')->find($content->fk_author);
-
-                // Load attached and related contents from array
-                $content->loadFrontpageImageFromHydratedArray($imageList)
-                    ->loadAttachedVideo()
-                    ->loadRelatedContents($categoryName);
-            }
-
-            $pagination = $this->get('paginator')->get([
-                'directional' => true,
-                'epp'         => $epp,
-                'maxLinks'    => 0,
-                'page'        => $page,
-                'total'       => $total + 1,
-                'route'       => [
-                    'name'   => 'category_frontpage',
-                    'params' => [ 'category_name' => $categoryName ]
-                ]
-            ]);
-
-            $this->view->assign([
-                'articles'              => $articles,
-                'category'              => $category,
-                'time'                  => time(),
-                'pagination'            => $pagination,
-                'page'                  => $page,
-                'actual_category_title' => $category->title
-            ]);
-        }
-
-        list($positions, $advertisements) = $this->getInnerAds($category->id);
-
-        return $this->render('blog/blog.tpl', [
-            'actual_category' => $categoryName,
-            'ads_positions'   => $positions,
-            'advertisements'  => $advertisements,
-            'cache_id'        => $cacheId,
-            'category_name'   => $categoryName,
-            'x-cache-for'     => $expires,
-            'x-tags'          => 'category-frontpage,' . $categoryName . ',' . $page,
-        ]);
+        return $this->render($this->getTemplate($action), $params);
     }
 
     /**
-     * Action for synchronized blog frontpage
+     * Action for synchronized blog frontpage.
      *
-     * @param \Symfony\Component\HttpFoundation\Request the request object
+     * @param Request The request object.
      *
-     * @return \Symfony\Component\HttpFoundation\Response the response object
+     * @return Response The response object.
      */
     public function extCategoryAction(Request $request)
     {
-        $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
-        $page         = $request->query->getDigits('page', 1);
-
-        $wsUrl = $this->get('core.helper.instance_sync')
-            ->getSyncUrl($categoryName);
+        $slug  = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $page  = (int) $request->query->get('page', 1);
+        $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($slug);
 
         if (empty($wsUrl)) {
             throw new ResourceNotFoundException();
@@ -195,7 +102,7 @@ class CategoryController extends Controller
 
         $this->view->setConfig('frontpages');
 
-        $cacheId = $this->view->getCacheId('sync', 'frontpage', 'category', $categoryName, $page);
+        $cacheId = $this->view->getCacheId('category', 'sync', $slug, $page);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('blog/blog.tpl', $cacheId)
@@ -205,7 +112,7 @@ class CategoryController extends Controller
             // Get category object
             $category = unserialize(
                 $cm->getUrlContent(
-                    $wsUrl . '/ws/categories/object/' . $categoryName,
+                    $wsUrl . '/ws/categories/object/' . $slug,
                     true
                 )
             );
@@ -214,7 +121,7 @@ class CategoryController extends Controller
             list($pagination, $articles) = unserialize(
                 utf8_decode(
                     $cm->getUrlContent(
-                        $wsUrl . '/ws/frontpages/allcontentblog/' . $categoryName . '/' . $page,
+                        $wsUrl . '/ws/frontpages/allcontentblog/' . $slug . '/' . $page,
                         true
                     )
                 )
@@ -225,42 +132,315 @@ class CategoryController extends Controller
                 'category'              => $category,
                 'pagination'            => $pagination,
                 'actual_category_title' => $category->title,
-                'actual_category'       => $categoryName
+                'actual_category'       => $slug
             ]);
         }
 
-        list($positions, $advertisements) = $this->getInnerAds();
+        list($positions, $advertisements) = $this->getAdvertisements();
 
         return $this->render('blog/blog.tpl', [
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
             'cache_id'       => $cacheId,
             'x-cache-for'    => '+3 hour',
-            'x-tags'         => 'ext-category,' . $categoryName . ',' . $page,
+            'x-tags'         => 'ext-category,' . $slug . ',' . $page,
         ]);
     }
 
     /**
-     * Fetches advertisements for article inner
+     * Extracts a list of media ids and a list of user ids from every content in
+     * the list of contents.
      *
-     * @param string category the category identifier
+     * @param array $contents The list of contents.
      *
-     * @return array
+     * @return array The list with the list of media ids and the list of user
+     *               ids.
      */
-    public function getInnerAds($category = 'home')
+    protected function extractIds($contents)
     {
-        $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
+        $media = [];
+        $users = [];
 
-        // Get article_inner and category_frontpage positions
-        $positionManager = $this->get('core.helper.advertisement');
-        $positions       = array_merge(
-            $positionManager->getPositionsForGroup('category_frontpage'),
-            $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ])
+        foreach ($contents as $content) {
+            $users[] = $content->fk_author;
+
+            if (isset($content->img1) && !empty($content->img1)) {
+                $media[] = $content->img1;
+            } elseif (!empty($content->fk_video)) {
+                $media[] = $content->fk_video;
+            }
+        }
+
+        return [ $media, $users ];
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * TODO: Remove when only an advertisement group.
+     */
+    protected function getAdvertisements($category = null)
+    {
+        $categoryId = empty($category) ? 0 : $category->pk_content_category;
+        $action     = $this->get('core.globals')->getAction();
+        $group      = $this->getAdvertisementGroup($action);
+
+        $positions = array_merge(
+            $this->get('core.helper.advertisement')->getPositionsForGroup($group),
+            $this->get('core.helper.advertisement')->getPositionsForGroup('article_inner'),
+            $this->getAdvertisementPositions($group)
         );
 
         $advertisements = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions, $category);
+            ->findByPositionsAndCategory($positions, $categoryId);
 
         return [ $positions, $advertisements ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getCacheId($params)
+    {
+        return $this->view->getCacheId(
+            $this->get('core.globals')->getExtension(),
+            $this->get('core.globals')->getAction(),
+            $params['category']->pk_content_category,
+            $params['page']
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getItem(Request $request)
+    {
+        $item = $this->getCategory($request->get('category_name'));
+
+        if (!$item->inmenu) {
+            throw new ResourceNotFoundException();
+        }
+
+        return $item;
+    }
+
+    /**
+     * Returns the list of items basing on a list of parameters.
+     *
+     * @param array $params The list of parameters.
+     *
+     * @return array The list of items.
+     */
+    protected function getItems($params)
+    {
+        $em = $this->get('entity_repository');
+
+        $now      = date('Y-m-d H:i:s');
+        $order    = [ 'starttime' => 'DESC' ];
+        $criteria = [
+            'pk_fk_content_category' => [
+                [ 'value' => $params['category']->pk_content_category ]
+            ],
+            'fk_content_type' => [
+                [ 'value' => [1, 7, 9], 'operator' => 'IN' ]
+            ],
+            'content_status' => [ [ 'value' => 1 ] ],
+            'in_litter'      => [ [ 'value' => 1, 'operator' => '!=' ]],
+            'starttime'      => [
+                'union' => 'OR',
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => $now, 'operator' => '<=' ],
+            ],
+            'endtime' => [
+                'union' => 'OR',
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => $now, 'operator' => '>' ],
+            ]
+        ];
+
+        return [
+            $em->findBy($criteria, $order, $params['epp'], $params['page']),
+            $em->countBy($criteria)
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getParameters($request, $item = null)
+    {
+        $params = array_merge($request->query->all(), [
+            'category'   => $item,
+            'time'       => time(),
+            'o_category' => $item,
+            'x-tags'     => $this->get('core.globals')->getExtension()
+                . ',' . $item->pk_content_category,
+
+            // TODO: Remove this ASAP
+            'actual_category_title' => $item->title,
+            'category_name'         => $item->title,
+        ]);
+
+        if (!array_key_exists('page', $params)) {
+            $params['page'] = 1;
+        }
+
+        $params['epp'] = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_in_blog', 10);
+
+        // Prevent invalid page when page is not numeric
+        $params['page'] = (int) $params['page'];
+
+        list($positions, $advertisements) = $this->getAdvertisements($item);
+
+        return array_merge($this->params, $params, [
+            'cache_id'       => $this->getCacheId($params),
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements
+        ]);
+    }
+
+    /**
+     * Returns a list of contents, where the key is the pk_content and the value
+     * is the content, basing on a list of ids.
+     *
+     * @param array $ids The list of ids.
+     *
+     * @return array The list of contents.
+     */
+    protected function getMedia($ids)
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        $media = $this->get('entity_repository')->findBy([
+            'pk_content' => [ [ 'value' => $ids, 'operator' => 'IN' ] ]
+        ], []);
+
+        return $this->get('data.manager.filter')
+            ->set($media)
+            ->filter('mapify', [ 'key' => 'pk_content' ])
+            ->get();
+    }
+
+    /**
+     * Returns a list of users, where the key is the id and the value is the
+     * user, basing on a list of ids.
+     *
+     * @param array $ids The list of ids.
+     *
+     * @return array The list of users.
+     */
+    protected function getUsers($ids)
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        $users = $this->get('user_repository')->findBy([
+            'id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ]
+        ]);
+
+        return $this->get('data.manager.filter')
+            ->set($users)
+            ->filter('mapify', [ 'key' => 'id' ])
+            ->get();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function hydrateShow(&$params = [], $item = null)
+    {
+        // Invalid page provided as parameter
+        if ($params['page'] <= 0) {
+            throw new ResourceNotFoundException();
+        }
+
+        list($contents, $total) = $this->getItems($params);
+
+        // No first page and no contents
+        if ($params['page'] > 1 && $total > 0 && empty($contents)) {
+            throw new ResourceNotFoundException();
+        }
+
+        // Configure cache lifetime
+        $expires = min(array_map(function ($a) {
+            return $a->endtime;
+        }, $contents));
+
+        if (!empty($expires)) {
+            $lifetime = strtotime($expires) - time();
+
+            if ($lifetime < $this->view->getCacheLifetime()) {
+                $this->view->setCacheLifetime($lifetime);
+            }
+
+            $params['x-cache-for'] = $expires;
+        }
+
+        list($mediaIds, $userIds) = $this->extractIds($contents);
+
+        $params['o_media'] = $this->getMedia($mediaIds);
+        $params['o_users'] = $this->getUsers($userIds);
+
+        $this->hydrateContents($contents, $params);
+
+        $params['articles']   = $contents;
+        $params['pagination'] = $this->get('paginator')->get([
+            'directional' => true,
+            'boundary'    => true,
+            'epp'         => $params['epp'],
+            'maxLinks'    => 5,
+            'page'        => $params['page'],
+            'total'       => $total,
+            'route'       => [
+                'name'   => 'category_frontpage',
+                'params' => [
+                    'category_name' => $params['category']->name
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * Adds more information to contents in the list of contents by using all
+     * parameters collected during the current request.
+     *
+     * @param array $contents The list of contents.
+     * @param array $params   The list of parameters.
+     */
+    protected function hydrateContents($contents, $params)
+    {
+        foreach ($contents as &$content) {
+            if (array_key_exists($content->fk_author, $params['o_users'])) {
+                $content->author = $params['o_users'][$content->fk_author];
+            }
+
+            $content->loadRelatedContents($params['category']->name);
+
+            if (isset($content->img1)
+                && !empty($content->img1)
+                && array_key_exists($content->img1, $params['o_media'])
+            ) {
+                $image = $params['o_media'][$content->img1];
+
+                $content->img1_path = $image->path_file . $image->name;
+                $content->img1      = $image;
+
+                continue;
+            }
+
+            if (!empty($content->fk_video)
+                && array_key_exists($content->fk_video, $params['o_media'])
+            ) {
+                $video = $params['o_media'][$content->img1];
+
+                $content->video     = $video;
+                $content->obj_video = $video;
+            }
+        }
     }
 }
