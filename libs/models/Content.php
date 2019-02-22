@@ -1814,8 +1814,10 @@ class Content implements \JsonSerializable, CsvSerializable
         $this->related_contents = [];
 
         $relationsHandler = getService('related_contents');
+
         if (getService('core.security')->hasExtension('CRONICAS_MODULES')
-            && ($categoryName == 'home')) {
+            && $categoryName == 'home'
+        ) {
             $relations = $relationsHandler->getRelations($this->id, 'home');
         } else {
             $relations = $relationsHandler->getRelations($this->id, 'frontpage');
@@ -1935,7 +1937,11 @@ class Content implements \JsonSerializable, CsvSerializable
         if (($force || empty($this->img1))
             && !empty($this->fk_video)
         ) {
-            $this->obj_video = new Video($this->fk_video);
+            $video = getService('entity_repository')
+                ->find('Video', $content->fk_video);
+
+            $this->video     = $video;
+            $this->obj_video = $video;
         }
 
         return $this;
