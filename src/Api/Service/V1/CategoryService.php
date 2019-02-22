@@ -88,7 +88,7 @@ class CategoryService extends OrmService
      */
     public function getItemBySlug($slug)
     {
-        $oql = sprintf('name regexp "(%%\"|^)%s(\"%%|$)"', $slug);
+        $oql = sprintf('name regexp "(.+\"|^)%s(\".+|$)"', $slug);
 
         return $this->getItemBy($oql);
     }

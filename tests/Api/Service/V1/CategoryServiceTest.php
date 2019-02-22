@@ -187,7 +187,7 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
     public function testGetItemBySlug()
     {
         $this->service->expects($this->once())->method('getItemBy')
-            ->with('name regexp "(%\"|^)flob(\"%|$)"')
+            ->with('name regexp "(.+\"|^)flob(\".+|$)"')
             ->willReturn(new Category([ 'name' => 'flob' ]));
 
         $item = $this->service->getItemBySlug('flob');
