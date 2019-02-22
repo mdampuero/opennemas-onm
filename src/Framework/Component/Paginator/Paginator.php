@@ -235,7 +235,9 @@ class Paginator
             $route = $route['name'];
         }
 
-        $params = array_merge($params, [ 'page' => $page ]);
+        if ($page > 1) {
+            $params = array_merge($params, [ 'page' => $page ]);
+        }
 
         return $this->router->generate($route, $params);
     }

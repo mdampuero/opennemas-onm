@@ -58,6 +58,25 @@ class PaginatorTest extends \PHPUnit\Framework\TestCase
 
         // Test if passing epp=0 the return is empty.
         $this->assertEquals('', $this->paginator->get([ 'epp' => 0, 'maxLinks' => 5, 'total' => 100 ]));
+
+        $this->paginator->get([
+            'epp'         => 10,
+            'directional' => true,
+            'boundary'    => true,
+            'page'        => 2,
+            'templates'   => [
+                'first'    => 'foobar',
+                'last'     => 'thud',
+                'next'     => 'wobble',
+                'previous' => 'gorp'
+            ],
+            'total' => 100
+        ]);
+
+        $this->assertContains('foobar', $this->paginator->links);
+        $this->assertContains('thud', $this->paginator->links);
+        $this->assertContains('wobble', $this->paginator->links);
+        $this->assertContains('gorp', $this->paginator->links);
     }
 
     public function testGetFirstLink()
@@ -140,13 +159,13 @@ class PaginatorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetUrl()
     {
-        $this->router->expects($this->exactly(2))->method('generate')
-            ->with('foo', [ 'page' => 1 ]);
+        $this->router->expects($this->at(0))->method('generate')->with('foo');
+        $this->router->expects($this->at(1))->method('generate')->with('foo', [ 'page' => 2 ]);
 
         $this->paginator->get([ 'route' => 'foo' ]);
         $this->methods['getUrl']->invokeArgs($this->paginator, [ 1 ]);
 
         $this->paginator->get([ 'route' => [ 'name' => 'foo', 'params' => [] ] ]);
-        $this->methods['getUrl']->invokeArgs($this->paginator, [ 1 ]);
+        $this->methods['getUrl']->invokeArgs($this->paginator, [ 2 ]);
     }
 }
