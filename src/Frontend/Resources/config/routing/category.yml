@@ -1,13 +1,13 @@
 category_frontpage:
-    path: /blog/section/{category_name}
-    defaults: { _controller: FrontendBundle:Category:category }
+    path:     /blog/section/{category_name}
+    defaults: { _controller: FrontendBundle:Category:show }
     requirements:
         category: '[^/]+'
     options:
         l10n: true
 
 categ_sync_frontpage:
-    path: /extseccion/blog/{category_name}
+    path:     /extseccion/blog/{category_name}
     defaults: { _controller: FrontendBundle:Category:extCategory }
     requirements:
         category: '[^/]+'
