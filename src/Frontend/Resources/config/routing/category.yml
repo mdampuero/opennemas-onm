@@ -1,6 +1,6 @@
 category_frontpage:
     path:     /blog/section/{category_name}
-    defaults: { _controller: FrontendBundle:Category:show }
+    defaults: { _controller: FrontendBundle:Category:list }
     requirements:
         category: '[^/]+'
     options:
