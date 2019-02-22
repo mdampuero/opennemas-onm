@@ -55,6 +55,12 @@ function smarty_function_render_ad_slot($params, $smarty)
     }
 
     $ad = $ads[array_rand($ads)];
+    if (array_key_exists('mode', $params) && $params['mode'] === 'consume') {
+        $ad = array_pop($ads);
+
+        // Save advertisement array state
+        $smarty->assign('advertisements', $ads);
+    }
 
     $renderer    = $smarty->getContainer()->get('core.renderer.advertisement');
     $orientation = empty($ad->params['orientation']) ?
