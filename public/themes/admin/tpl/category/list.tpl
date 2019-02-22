@@ -192,7 +192,7 @@
                         <a class="btn btn-default btn-small" href="[% routing.generate('backend_category_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
                           <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                         </a>
-                        <div uib-tooltip="{t}Only empty categories can be deleted{/t}" tooltip-enable="data.extra.stats[getId(item)] > 0">
+                        <div uib-tooltip="{t}Only empty categories can be deleted{/t}" tooltip-enable="data.extra.stats[getId(item)] > 0" tooltip-class="tooltip-danger">
                           <button class="btn btn-danger btn-small" ng-click="delete(getId(item))" ng-disabled="data.extra.stats[getId(item)] > 0" type="button">
                             <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                           </button>

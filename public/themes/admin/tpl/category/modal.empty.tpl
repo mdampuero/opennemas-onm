@@ -14,7 +14,7 @@
   <div class="m-t-30 no-margin text-center">
     <div><i class="fa fa-3x fa-warning text-warning"></i></div>
     <p class="bold m-t-10 text-uppercase">
-      {t}This action can not be undone.{/t}
+      {t}This action can not be undone{/t}
     </p>
   </div>
 </div>

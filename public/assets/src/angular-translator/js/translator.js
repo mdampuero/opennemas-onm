@@ -45,7 +45,7 @@
                 '</ul>' +
               '</div>' +
               '<div class="translator btn-group btn-group-sm" role="group" ng-if="!collapsed && size <= max">' +
-                '<a class="btn btn-{{language.class}} btn-{{language.translated ? \'solid\' : \'transparent\' }}"' +
+                '<a class="btn btn-{{language.class}}"' +
                     ' href="{{link + \'?locale=\' + language.value}}" ng-repeat="language in languages">' +
                   '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>{{language.name}}' +
                 '</a>' +
