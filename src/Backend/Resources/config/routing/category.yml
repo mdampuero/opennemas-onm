@@ -10,6 +10,8 @@ backend_category_show:
     defaults: { _controller: BackendBundle:Category:show }
     options:
         expose: true
+    requirements:
+        id: \d+
 
 backend_categories_configure:
     path:     /categories/configuration
