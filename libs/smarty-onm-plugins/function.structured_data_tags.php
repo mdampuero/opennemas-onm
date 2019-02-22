@@ -14,8 +14,16 @@ function smarty_function_structured_data_tags($params, &$smarty)
     $url        = $container->get('request_stack')->getCurrentRequest()->getUri();
     $structData = $container->get('core.helper.structured_data');
 
-    $category = $container->get('api.service.category')
-        ->getItem($content->pk_fk_content_category);
+    if (!$content instanceof Content) {
+        return '';
+    }
+
+    try {
+        $category = $container->get('api.service.category')
+            ->getItem($content->pk_fk_content_category);
+    } catch (\Exception $e) {
+        return '';
+    }
 
     // Set content data for tags
     $title = htmlspecialchars(html_entity_decode($content->title, ENT_COMPAT, 'UTF-8'));
