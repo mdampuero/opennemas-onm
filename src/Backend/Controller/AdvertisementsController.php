@@ -445,6 +445,8 @@ class AdvertisementsController extends Controller
                     'album_inner'       => $formValues->getDigits('smart_ad_server_page_id_album_inner'),
                     'polls_frontpage'   => $formValues->getDigits('smart_ad_server_page_id_polls_frontpage'),
                     'polls_inner'       => $formValues->getDigits('smart_ad_server_page_id_polls_inner'),
+                    'comment'           => $formValues->getDigits('smart_ad_server_page_id_comment'),
+                    'other'             => $formValues->getDigits('smart_ad_server_page_id_other'),
                 ],
                 'category_targeting' =>
                     $formValues->filter('smart_ad_server_category_targeting', '', FILTER_SANITIZE_STRING),
