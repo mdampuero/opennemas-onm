@@ -9,8 +9,8 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\ApiException;
 use Common\Core\Controller\Controller;
-use Common\ORM\Core\Exception\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -168,16 +168,8 @@ class FrontendController extends Controller
     protected function getCategory($name)
     {
         try {
-            $category = $this->get('orm.manager')->getRepository('Category')
-                ->findOneBy(sprintf('name = "%s"', $name));
-
-            $category->title = $this->get('data.manager.filter')
-                ->set($category->title)
-                ->filter('localize')
-                ->get();
-
-            return $category;
-        } catch (EntityNotFoundException $e) {
+            return $this->get('api.service.category')->getItemBySlug($name);
+        } catch (ApiException $e) {
             throw new ResourceNotFoundException();
         }
     }
