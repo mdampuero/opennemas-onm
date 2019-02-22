@@ -84,10 +84,6 @@ class FrontendController extends Controller
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
 
-        if (empty($item) || !$item->isReadyForPublish()) {
-            throw new ResourceNotFoundException();
-        }
-
         $expected = $this->get('core.helper.url_generator')->generate($item);
         $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
 
@@ -211,10 +207,16 @@ class FrontendController extends Controller
      */
     protected function getItem(Request $request)
     {
-        return $this->get('entity_repository')->find(
+        $item = $this->get('entity_repository')->find(
             \classify($this->get('core.globals')->getExtension()),
             $this->getIdFromRequest($request)
         );
+
+        if (empty($item) || !$item->isReadyForPublish()) {
+            throw new ResourceNotFoundException();
+        }
+
+        return $item;
     }
 
     /**
