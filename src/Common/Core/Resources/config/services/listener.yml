@@ -1,0 +1,84 @@
+services:
+    core.listener.access_denied.exception:
+        class:     Common\Core\EventListener\AccessDeniedExceptionListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+        public:    true
+
+    core.listener.controller:
+        class:     Common\Core\EventListener\ControllerListener
+        arguments: [ '@core.globals', '@core.locale' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 0 }
+        public:    true
+
+    core.listener.core:
+        class:     Common\Core\EventListener\CoreListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 99 }
+        public:    true
+
+    core.listener.locale:
+        class:     Common\Core\EventListener\LocaleListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
+        public:    true
+
+    core.listener.maintenance:
+        class:     Common\Core\EventListener\MaintenanceListener
+        arguments: [ '%core.maintenance.file%' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 100 }
+        public:    true
+
+    core.listener.response:
+        class:     Common\Core\EventListener\ResponseListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.view, method: onKernelView, priority: 0 }
+        public:    true
+
+    core.listener.security:
+        class:     Common\Core\EventListener\SecurityListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 5 }
+        public:    true
+
+    core.listener.security.annotation:
+        class:     Common\Core\EventListener\SecurityAnnotationListener
+        arguments: [ '@annotation_reader', '@core.security' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 0 }
+        public:    true
+
+    core.listener.bot_detector.annotation:
+        class:     Common\Core\EventListener\BotDetectorAnnotationListener
+        arguments: [ '@annotation_reader', '@router' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 0 }
+        public:    true
+
+    kernel.listener.bot_detector.exception:
+        class: Common\Core\EventListener\BotDetectorExceptionListener
+        arguments: [ '@router' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+        public:    true
+
+    core.listener.template.annotation:
+        class:     Common\Core\EventListener\TemplateAnnotationListener
+        arguments: [ '@service_container', '@annotation_reader' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+        public:    true
+
+    core.listener.http_cache_headers:
+        class:     Common\Core\EventListener\HttpCacheHeadersListener
+        arguments: [ '@core.instance', '@core.locale', '@core.template' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 0 }
+        public: true
