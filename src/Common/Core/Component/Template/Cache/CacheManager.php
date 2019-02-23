@@ -41,11 +41,16 @@ class CacheManager
      */
     public function delete()
     {
+        // Do not add locale to the cache id
+        $this->template->setLocale(false);
+
         // Get cache id basing on function arguments
         $cacheId = call_user_func_array(
             [ $this->template, 'getCacheId' ],
             func_get_args()
         );
+
+        $this->template->setLocale(true);
 
         // Template converts "|" to "^"
         $cacheId = str_replace('|', '^', $cacheId);
