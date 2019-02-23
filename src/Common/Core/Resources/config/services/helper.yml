@@ -108,3 +108,8 @@ services:
         class:     Common\Core\Component\Helper\UserHelper
         arguments: [ '@service_container' ]
         public:    true
+
+    core.helper.varnish:
+        class:     Common\Core\Component\Helper\VarnishHelper
+        arguments: [ '@varnish_ban_message_exchanger' ]
+        public:    true
