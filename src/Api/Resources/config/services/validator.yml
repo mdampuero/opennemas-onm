@@ -1,0 +1,25 @@
+services:
+    api.validator.subscriber:
+        class:     Api\Validator\V1\SubscriberValidator
+        arguments: [ '@service_container' ]
+        public: true
+
+    api.validator.subscription:
+        class:     Api\Validator\V1\SubscriptionValidator
+        arguments: [ '@service_container' ]
+        public: true
+
+    api.validator.tag:
+        class:     Api\Validator\V1\TagValidator
+        arguments: [ '@service_container' ]
+        public: true
+
+    api.validator.user:
+        class:     Api\Validator\V1\UserValidator
+        arguments: [ '@service_container' ]
+        public: true
+
+    api.validator.user_group:
+        class:     Api\Validator\V1\UserGroupValidator
+        arguments: [ '@service_container' ]
+        public: true
