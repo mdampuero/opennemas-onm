@@ -9,7 +9,7 @@
  */
 namespace Common\Core\Component\Template\Cache;
 
-use Common\Core\Component\Template\Template;
+use Onm\Templating\Templating;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
@@ -27,9 +27,9 @@ class CacheManager
      *
      * @param Template $template The Template service.
      */
-    public function __construct(Template $template)
+    public function __construct(Templating $templating)
     {
-        $this->template = $template;
+        $this->template = $templating->getTemplate();
         $this->finder   = new Finder();
         $this->fs       = new Filesystem();
     }

@@ -34,10 +34,18 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'clearAllCache', 'getCacheDir', 'getCacheId' ])
             ->getMock();
 
+        $this->templating = $this->getMockBuilder('Onm\Templating\Templating')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getTemplate' ])
+            ->getMock();
+
         $this->smarty->expects($this->any())->method('getCacheDir')
             ->willReturn('/glork/quux/corge');
 
-        $this->manager = new CacheManager($this->smarty);
+        $this->templating->expects($this->any())->method('getTemplate')
+            ->willReturn($this->smarty);
+
+        $this->manager = new CacheManager($this->templating);
 
         $finder = new \ReflectionProperty($this->manager, 'finder');
         $fs     = new \ReflectionProperty($this->manager, 'fs');
@@ -54,7 +62,7 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $manager = new CacheManager($this->smarty);
+        $manager = new CacheManager($this->templating);
 
         $finder = new \ReflectionProperty($manager, 'finder');
         $fs     = new \ReflectionProperty($manager, 'fs');
