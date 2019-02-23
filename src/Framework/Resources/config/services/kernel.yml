@@ -34,7 +34,7 @@ services:
 
     kernel.listener.hooks_subscriber:
         class: Framework\EventListener\HooksSubscriber
-        arguments: [ '@service_container', '@cache', '@logger' ]
+        arguments: [ '@service_container', '@cache', '@logger', '@core.template.cache' ]
         tags:
             - { name: kernel.event_subscriber }
 
