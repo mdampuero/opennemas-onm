@@ -9,47 +9,52 @@
  */
 namespace Common\Core\Component\Template\Cache;
 
+use Common\Core\Component\Template\Template;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
 class CacheManager
 {
     /**
-     * Smarty instance used to interact with the cache layer
+     * The Template service.
      *
-     * @var Smarty
+     * @var Template
      */
-    protected $smarty = null;
+    protected $template = null;
 
     /**
-     * Initializes the object instance, assigns the theme dir and smarty instance
+     * Initializes the current CacheManager.
      *
-     * @param Smarty $smarty Smarty class
+     * @param Template $template The Template service.
      */
-    public function __construct($smarty = null)
+    public function __construct(Template $template)
     {
-        $this->smarty = $smarty;
-        $this->finder = new Finder();
-        $this->fs     = new Filesystem();
+        $this->template = $template;
+        $this->finder   = new Finder();
+        $this->fs       = new Filesystem();
     }
 
     /**
-     * Deletes a cache in file system given a cache id pattern and base tpl filename
-     *
-     * @param string $cacheId The cache id.
+     * Deletes a cache in file system basing on the function arguments.
      *
      * @return CacheManager The current CacheManager.
      */
-    public function delete($cacheId)
+    public function delete()
     {
-        // Smarty convert the "|" character for a "^" character
+        // Get cache id basing on function arguments
+        $cacheId = call_user_func_array(
+            [ $this->template, 'getCacheId' ],
+            func_get_args()
+        );
+
+        // Template converts "|" to "^"
         $cacheId = str_replace('|', '^', $cacheId);
 
         // Make a regular expression to filter
         $cacheId = '/^' . preg_quote($cacheId) . '\^.*?' . '/';
 
         $files = $this->finder
-            ->in($this->smarty->getCacheDir())
+            ->in($this->template->getCacheDir())
             ->name($cacheId)
             ->files();
 
@@ -67,7 +72,7 @@ class CacheManager
      */
     public function deleteAll()
     {
-        $this->smarty->clearAllCache();
+        $this->template->clearAllCache();
 
         return $this;
     }

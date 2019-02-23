@@ -31,7 +31,7 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->smarty = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
-            ->setMethods([ 'clearAllCache', 'getCacheDir' ])
+            ->setMethods([ 'clearAllCache', 'getCacheDir', 'getCacheId' ])
             ->getMock();
 
         $this->smarty->expects($this->any())->method('getCacheDir')
@@ -71,6 +71,9 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testDelete()
     {
+        $this->smarty->expects($this->once())->method('getCacheId')
+            ->with('garply', 'plugh')->willReturn('garply|plugh');
+
         $this->finder->expects($this->once())->method('in')
             ->with('/glork/quux/corge')->willReturn($this->finder);
         $this->finder->expects($this->once())->method('name')
@@ -78,7 +81,7 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
         $this->finder->expects($this->once())->method('files')
             ->willReturn([ new \SplFileInfo('/glork/quux/corge/garply^plugh.tpl.php') ]);
 
-        $this->manager->delete('garply|plugh');
+        $this->manager->delete('garply', 'plugh');
     }
 
     /**
