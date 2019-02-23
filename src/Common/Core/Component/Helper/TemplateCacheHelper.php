@@ -14,16 +14,16 @@ use Common\Core\Component\Template\Cache\CacheManager;
 class TemplateCacheHelper
 {
     /**
-     * The TemplateCacheManager service.
+     * The CacheManager service.
      *
-     * @var TemplateCacheManager
+     * @var CacheManager
      */
     protected $cache;
 
     /**
      * Initializes the TemplateCacheHelper.
      *
-     * @param TemplateCacheManager $cache The TemplateCacheManager service.
+     * @param CacheManager $cache The CacheManager service.
      */
     public function __construct(CacheManager $cache)
     {
