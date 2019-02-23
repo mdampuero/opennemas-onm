@@ -391,7 +391,7 @@ class CategoryController extends FrontendController
         $params['articles']   = $contents;
         $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,
-            'boundary'    => true,
+            'boundary'    => false,
             'epp'         => $params['epp'],
             'maxLinks'    => 5,
             'page'        => $params['page'],
