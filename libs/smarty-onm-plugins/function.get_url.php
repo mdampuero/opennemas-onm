@@ -11,26 +11,10 @@ function smarty_function_get_url($params, &$smarty)
         return '';
     }
 
-    $content   = $params['item'];
     $absolute  = array_key_exists('absolute', $params) && $params['absolute'];
     $escape    = array_key_exists('escape', $params) && $params['escape'];
     $isAmp     = array_key_exists('amp', $params) && $params['amp'];
     $container = $smarty->getContainer();
-
-    // If the article has an external link return it
-    if (!empty($content->params)
-        && is_array($content->params)
-        && array_key_exists('bodyLink', $content->params)
-        && !empty($content->params['bodyLink'])
-    ) {
-        return $container
-            ->get('router')
-            ->generate(
-                'frontend_redirect_external_link',
-                [ 'to' => $content->params['bodyLink'] ]
-            )
-            . '" target="_blank';
-    }
 
     $routeParams = [
         'absolute' => $absolute,
