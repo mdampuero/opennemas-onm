@@ -213,6 +213,18 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getL10nKeys with valid and empty values in metadata.
+     */
+    public function testGetL10nKeys()
+    {
+        $this->metadata->properties = [];
+        $this->assertEmpty($this->metadata->getL10nKeys());
+
+        $this->metadata->properties = [ 'frog' => 'integer', 'xyzzy' => 'l10n_string' ];
+        $this->assertEquals([ 'xyzzy' ], $this->metadata->getL10nKeys());
+    }
+
+    /**
      * Tests getMetaKeyName with empty and non-empty meta definition in Metadata.
      */
     public function testGetMetaKeyName()
