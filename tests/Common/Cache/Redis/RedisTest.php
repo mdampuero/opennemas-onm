@@ -39,18 +39,37 @@ class RedisTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests deleteByPattern.
-     *
-     * TODO: Uncomment when updating PHP to version 7.0
      */
-    //public function testDeleteByPattern()
-    //{
-        //$this->baseRedis->expects($this->once())->method('eval')->with(
-            //'redis.call("del", unpack(redis.call("keys", ARGV[1])))',
-            //['foo*']
-        //);
+    public function testDeleteByPattern()
+    {
+        $script = "redis.replicate_commands()
+            local cursor = 0
+            local done   = false
+            local keys   = nil
+            local values = {}
 
-        //$this->redis->deleteByPattern('foo*');
-    //}
+            repeat
+                local result = redis.call('SCAN', cursor, 'MATCH', ARGV[1])
+
+                cursor = result[1]
+                keys   = result[2]
+
+                for i, key in ipairs(keys) do
+                    table.insert(values, key)
+                    redis.call('DEL', key)
+                end
+
+            until cursor == '0'
+            return values";
+
+        $this->baseRedis->expects($this->once())->method('eval')
+            ->with($script, ['foo*']);
+
+        $method = new \ReflectionMethod($this->redis, 'deleteByPattern');
+        $method->setAccessible(true);
+
+        $method->invokeArgs($this->redis, [ 'foo*' ]);
+    }
 
     /**
      * Tests execute.
