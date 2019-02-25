@@ -53,6 +53,10 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'generate' ])
             ->getMock();
 
+        $this->authorService = $this->getMockBuilder('AuthorService')
+            ->setMethods([ 'getItem' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -73,6 +77,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'api.service.author':
+                return $this->authorService;
+
             case 'data.manager.filter':
                 return $this->fm;
 
@@ -392,13 +399,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForOpinionWhenAuthorNotPresent()
     {
-        $author = new \User();
-
-        $author->name = 'name';
-        $author->slug = 'opinion-author-slug';
-
-        $content = new \Opinion();
-
+        $content                    = new \Opinion();
         $content->id                = 252;
         $content->fk_author         = 1;
         $content->type_opinion      = 0;
@@ -409,11 +410,13 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForOpinion');
         $method->setAccessible(true);
 
-        $this->um->expects($this->once())->method('find')
+        $author = null;
+
+        $this->authorService->expects($this->once())->method('getItem')
             ->with(1)->willReturn($author);
 
         $this->assertEquals(
-            'opinion/name/opinion-author-slug/20150114234940000252.html',
+            'opinion/author/opinion-author-slug/20150114234940000252.html',
             $method->invokeArgs($this->urlGenerator, [ $content ])
         );
     }
@@ -428,8 +431,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $content->id                = 252;
         $content->fk_author         = 1;
         $content->type_opinion      = 0;
-        $content->author            = new \User();
-        $content->author->name      = 'Name';
         $content->created           = '2015-01-14 23:49:40';
         $content->content_type_name = 'opinion';
         $content->slug              = 'opinion-author-slug';
@@ -437,8 +438,14 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForOpinion');
         $method->setAccessible(true);
 
+        $author       = new \User();
+        $author->name = 'Author name';
+
+        $this->authorService->expects($this->any())->method('getItem')
+            ->willReturn($author);
+
         $this->assertEquals(
-            'opinion/name/opinion-author-slug/20150114234940000252.html',
+            'opinion/author-name/opinion-author-slug/20150114234940000252.html',
             $method->invokeArgs($this->urlGenerator, [ $content ])
         );
     }
@@ -453,18 +460,22 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $content->id                = 252;
         $content->fk_author         = 1;
         $content->type_opinion      = 0;
-        $content->author            = new \User();
-        $content->author->name      = 'Name';
-        $content->author->meta      = ['is_blog' => 1];
         $content->created           = '2015-01-14 23:49:40';
         $content->content_type_name = 'opinion';
         $content->slug              = 'opinion-author-slug';
+
+        $author          = new \User();
+        $author->name    = 'Author name';
+        $author->is_blog = 1;
+
+        $this->authorService->expects($this->any())->method('getItem')
+            ->willReturn($author);
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForOpinion');
         $method->setAccessible(true);
 
         $this->assertEquals(
-            'blog/name/opinion-author-slug/20150114234940000252.html',
+            'blog/author-name/opinion-author-slug/20150114234940000252.html',
             $method->invokeArgs($this->urlGenerator, [ $content ])
         );
     }

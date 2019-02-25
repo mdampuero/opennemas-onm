@@ -222,29 +222,31 @@ class BlogController extends FrontendController
         ]);
 
         foreach ($blogs as &$blog) {
-            if (array_key_exists($blog->fk_author, $authors)) {
-                $blog->author           = $authors[$blog->fk_author];
-                $blog->name             = $blog->author->name;
-                $blog->author_name_slug = $blog->author->username;
-
-                if (array_key_exists($blog->author->avatar_img_id, $photos)) {
-                    $blog->author->photo =
-                        $photos[$blog->author->avatar_img_id];
-                }
-
-                if (isset($blog->img1) && !empty($blog->img1)) {
-                    $blog->img1 = $this->get('entity_repository')
-                        ->find('Photo', $blog->img1);
-                }
-
-                $blog->author->uri = \Uri::generate(
-                    'frontend_blog_author_frontpage',
-                    [
-                        'slug' => urlencode($blog->author->username),
-                        'id'   => $blog->author->id
-                    ]
-                );
+            if (!array_key_exists($blog->fk_author, $authors)) {
+                continue;
             }
+
+            $blog->author           = $authors[$blog->fk_author];
+            $blog->name             = $blog->author->name;
+            $blog->author_name_slug = $blog->author->username;
+
+            if (array_key_exists($blog->author->avatar_img_id, $photos)) {
+                $blog->author->photo =
+                    $photos[$blog->author->avatar_img_id];
+            }
+
+            if (isset($blog->img1) && !empty($blog->img1)) {
+                $blog->img1 = $this->get('entity_repository')
+                    ->find('Photo', $blog->img1);
+            }
+
+            $blog->author->uri = \Uri::generate(
+                'frontend_blog_author_frontpage',
+                [
+                    'slug' => urlencode($blog->author->username),
+                    'id'   => $blog->author->id
+                ]
+            );
         }
 
         $this->view->assign([

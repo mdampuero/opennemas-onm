@@ -261,19 +261,26 @@ class UrlGeneratorHelper
     {
         $type = 'opinion';
 
-        if (is_object($content->author)
-            && is_array($content->author->meta) &&
-            array_key_exists('is_blog', $content->author->meta) &&
-            $content->author->meta['is_blog'] == 1
+        $author = $this->container->get('api.service.author')
+            ->getItem($content->fk_author);
+
+        // If the opinion is not for editorial or director
+        // and the author is a blog
+        if (!in_array($content->type_opinion, [ 1, 2 ])
+            && is_object($author)
+            && isset($author->is_blog)
+            && $author->is_blog == 1
         ) {
             $type = 'blog';
         }
+
+        $authorName = $this->getAuthorName($content, $author);
 
         return $this->generateUriFromConfig($type, [
             'id'       => sprintf('%06d', $content->id),
             'date'     => date('YmdHis', strtotime($content->created)),
             'slug'     => urlencode($content->slug),
-            'category' => urlencode($this->getAuthorName($content)),
+            'category' => urlencode($authorName),
         ]);
     }
 
@@ -366,28 +373,21 @@ class UrlGeneratorHelper
      *
      * @return string The author name.
      */
-    protected function getAuthorName($opinion)
+    protected function getAuthorName($opinion, $author)
     {
-        if (!empty($opinion->fk_author)) {
-            if (!is_object($opinion->author)) {
-                $opinion->author = $this->container->get('user_repository')
-                    ->find($opinion->fk_author);
-            }
-
-            if (!empty($opinion->author)) {
-                return $this->container->get('data.manager.filter')
-                    ->set($opinion->author->name)
-                    ->filter('slug')
-                    ->get();
-            }
-        }
-
         if ((int) $opinion->type_opinion == 1) {
             return 'editorial';
         }
 
         if ((int) $opinion->type_opinion == 2) {
             return 'director';
+        }
+
+        if (!empty($author)) {
+            return $this->container->get('data.manager.filter')
+                ->set($author->name)
+                ->filter('slug')
+                ->get();
         }
 
         return 'author';
