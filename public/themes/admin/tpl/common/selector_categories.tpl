@@ -22,5 +22,4 @@
             {/acl}
         {/section}
     {/section}
-    <option value="20" data-name="{t}Unknown{/t}" {if ($category eq '20')}selected{/if}>{t}Unknown{/t}</option>
 </select>
