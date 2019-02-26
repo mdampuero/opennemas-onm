@@ -21,13 +21,7 @@ define('SRC_PATH', APPLICATION_PATH . '/src/');
 define('SITE_PATH', APPLICATION_PATH . '/public/');
 define('SITE_VENDOR_PATH', APPLICATION_PATH . '/vendor/');
 define('SITE_LIBS_PATH', APPLICATION_PATH . '/libs/');
-define('SITE_CORE_PATH', SITE_LIBS_PATH . '/core/');
-define('SITE_MODELS_PATH', APPLICATION_PATH . '/app/models/');
 define('APP_PATH', APPLICATION_PATH . '/app/');
-define('SITE_WS_API_PATH', SRC_PATH . '/WebService/Handlers/');
-
-define('SMARTY_DIR', SITE_VENDOR_PATH . 'smarty/smarty/libs/');
-define('INSTALLATION_HASH', substr(hash('md5', APPLICATION_PATH), 0, 8));
 
 if (file_exists(APPLICATION_PATH . '/.deploy.php')) {
     include_once APPLICATION_PATH . '/.deploy.php';
@@ -46,8 +40,6 @@ if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
     $protocol = 'http://';
 }
 
-define('SS', '/');
-
 if (!defined('DS')) {
     define('DS', DIRECTORY_SEPARATOR);
 }
@@ -61,22 +53,11 @@ define('ADMIN_DIR', 'admin');
 define('SITE_URL', $protocol . SITE . BASE_URL);
 define('SITE_URL_ADMIN', SITE_URL . ADMIN_DIR);
 
-define('SYS_NAME_GROUP_ADMIN', 'Administrador');
-
 define('IMG_DIR', 'images');
 define('FILE_DIR', 'files');
-define('ADS_DIR', 'advertisements');
-define('OPINION_DIR', 'opinions');
-define('KIOSKO_DIR', 'kiosko' . SS);
-
-define('TEMPLATE_MANAGER', 'manager');
+define('KIOSKO_DIR', 'kiosko' . DS);
 
 define('ITEMS_PAGE', '20'); // TODO: delete from application
-
-define('TEMPLATE_ADMIN', 'admin');
-define('TEMPLATE_ADMIN_PATH', SITE_PATH . '/themes/' . TEMPLATE_ADMIN . SS);
-define('TEMPLATE_ADMIN_PATH_WEB', '/themes/' . TEMPLATE_ADMIN . SS);
-define('TEMPLATE_ADMIN_URL', '/themes/' . TEMPLATE_ADMIN . SS);
 
 define('STATIC_PAGE_PATH', 'estaticas');
 
