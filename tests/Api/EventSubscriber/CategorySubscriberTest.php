@@ -110,4 +110,19 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
 
         $this->subscriber->onCategoryUpdate($this->event);
     }
+
+    /**
+     * Tests onCategoryDelete.
+     */
+    public function testOnCategoryDelete()
+    {
+        $subscriber = $this->getMockBuilder('Api\EventSubscriber\CategorySubscriber')
+            ->setConstructorArgs([ $this->instance, $this->th, $this->vh ])
+            ->setMethods([ 'onCategoryUpdate' ])
+            ->getMock();
+
+        $subscriber->expects($this->once())->method('onCategoryUpdate');
+
+        $subscriber->onCategoryDelete($this->event);
+    }
 }
