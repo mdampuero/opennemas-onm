@@ -106,7 +106,7 @@ $menuXml = [
                 'id'          => 'opinion_manager',
                 'title'       => _('Opinions'),
                 'icon'        => 'fa fa-quote-right',
-                'link'        => url('admin_opinions'),
+                'link'        => url('backend_opinions_list'),
                 'module_name' => 'OPINION_MANAGER',
                 'privilege'   => 'OPINION_ADMIN',
             ],
@@ -166,7 +166,7 @@ $menuXml = [
 
             [
                 'id'          => 'category_manager',
-                'title'       => _('Category manager'),
+                'title'       => _('Categories'),
                 'icon'        => 'fa fa-bookmark',
                 'link'        => url('admin_categories'),
                 'module_name' => 'CATEGORY_MANAGER',

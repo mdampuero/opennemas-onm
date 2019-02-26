@@ -466,8 +466,8 @@ class HooksSubscriber implements EventSubscriberInterface
 
         // Delete caches for opinion frontpage and author frontpages
         $this->smartyCacheHandler
-            ->deleteGroup($this->view->getCacheId('frontpage', 'opinion', sprintf('%06d', $authorId)))
-            ->deleteGroup($this->view->getCacheId('frontpage', 'blog', sprintf('%06d', $authorId)));
+            ->deleteGroup($this->view->getCacheId('opinion', 'list', $authorId))
+            ->deleteGroup($this->view->getCacheId('blog', 'list', $authorId));
 
         $this->view->setLocale(true);
 
@@ -550,7 +550,9 @@ class HooksSubscriber implements EventSubscriberInterface
             ->deleteGroup($this->view->getCacheId('content', $content->pk_content))
             ->deleteGroup($this->view->getCacheId('archive', date('Ymd')))
             ->deleteGroup($this->view->getCacheId('rss', $content->content_type_name))
-            ->deleteGroup($this->view->getCacheId('frontpage', $content->content_type_name));
+            ->deleteGroup($this->view->getCacheId('frontpage', $content->content_type_name))
+            ->deleteGroup($this->view->getCacheId($content->content_type_name, 'frontpage'))
+            ->deleteGroup($this->view->getCacheId($content->content_type_name, 'list'));
 
         if ($content->content_type_name == 'article') {
             $this->smartyCacheHandler
@@ -573,7 +575,10 @@ class HooksSubscriber implements EventSubscriberInterface
         } elseif ($content->content_type_name == 'opinion') {
             $this->smartyCacheHandler
                 // Deleting frontpage cache files
-                ->deleteGroup($this->view->getCacheId('frontpage', 'blog'))
+                ->deleteGroup($this->view->getCacheId('blog', 'list'))
+                ->deleteGroup($this->view->getCacheId('blog', 'listauthor'))
+                ->deleteGroup($this->view->getCacheId($content->content_type_name, 'list'))
+                ->deleteGroup($this->view->getCacheId($content->content_type_name, 'listauthor', $content->fk_author))
                 // Deleting sitemap cache files
                 ->deleteGroup($this->view->getCacheId('sitemap', 'news'))
                 ->deleteGroup($this->view->getCacheId('sitemap', 'web'));

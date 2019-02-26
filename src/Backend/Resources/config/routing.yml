@@ -475,66 +475,6 @@ admin_articles_config:
     path:     /articles/config
     defaults: { _controller: BackendBundle:Articles:config }
 
-# Opinion controller routes
-admin_opinions:
-    path:     /opinions
-    defaults: { _controller: BackendBundle:Opinions:list, blog  : 0 }
-
-admin_blogs:
-    path:     /opinions/blog
-    defaults: { _controller: BackendBundle:Opinions:list, blog  : 1 }
-
-admin_opinions_frontpage:
-    path:     /opinions/frontpage
-    defaults: { _controller: BackendBundle:Opinions:frontpage }
-
-admin_opinion_create:
-    path:     /opinions/create
-    defaults: { _controller: BackendBundle:Opinions:create }
-
-admin_opinion_show:
-    path:     /opinions/{id}/show
-    defaults: { _controller: BackendBundle:Opinions:show }
-    options:
-        expose: true
-
-admin_opinion_preview:
-    path:     /opinion/preview
-    defaults: { _controller: BackendBundle:Opinions:preview }
-    options:
-        expose: true
-
-admin_opinion_get_preview:
-    path:     /opinion/get-preview
-    defaults: { _controller: BackendBundle:Opinions:getPreview }
-    options:
-        expose: true
-
-admin_opinion_update:
-    path:     /opinion/{id}/update
-    defaults: { _controller: BackendBundle:Opinions:update }
-
-admin_opinion_toggleinhome:
-    path:     /opinion/{id}/toggle-in-home
-    defaults: { _controller: BackendBundle:Opinions:toggleInHome }
-
-
-admin_opinions_savepositions:
-    path:     /opinions/save-positions
-    defaults: { _controller: BackendBundle:Opinions:savePositions }
-
-admin_opinions_content_provider:
-    path:     /opinions/content-provider
-    defaults: { _controller: BackendBundle:Opinions:contentProvider }
-
-admin_opinions_content_provider_related:
-    path:     /opinions/content-provider-related
-    defaults: { _controller: BackendBundle:Opinions:contentProviderRelated }
-
-admin_opinions_config:
-    path:     /opinions/config
-    defaults: { _controller: BackendBundle:Opinions:config }
-
 # Trash controller routes
 admin_trash:
     path:     /trash
@@ -704,6 +644,9 @@ backend_notification:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/notification.yml'
 
+backend_opinion:
+    prefix:    /
+    resource: '@BackendBundle/Resources/config/routing/opinion.yml'
 backend_password:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/password.yml'

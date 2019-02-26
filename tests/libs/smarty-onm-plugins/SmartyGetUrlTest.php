@@ -92,7 +92,7 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
         $item = json_decode(json_encode([ 'id' => '1' ]));
 
         $this->generator->expects($this->once())->method('generate')
-            ->with($item, [ 'absolute' => true ])
+            ->with($item, [ 'absolute' => true,'_format'  => null ])
             ->willReturn('http://grault.com/glorp/1');
 
         $this->helper->expects($this->once())->method('localizeUrl')
@@ -103,7 +103,8 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
             'http://grault.com/es/glorp/1',
             smarty_function_get_url([
                 'item'     => $item,
-                'absolute' => true
+                'absolute' => true,
+                '_format'  => null
             ], $this->smarty)
         );
     }
@@ -114,17 +115,17 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
     public function testGetUrlWhenAMP()
     {
         $item = json_decode(json_encode([
-            'id' => '1',
+            'id'                => '1',
             'content_type_name' => 'article'
         ]));
 
         $this->generator->expects($this->once())->method('generate')
-            ->with($item, [ 'absolute' => true ])
-            ->willReturn('http://grault.com/glorp.html');
+            ->with($item, [ 'absolute' => true, '_format' => 'amp', ])
+            ->willReturn('http://grault.com/glorp.amp.html');
 
         $this->helper->expects($this->once())->method('localizeUrl')
-            ->with('http://grault.com/glorp.html', '')
-            ->willReturn('http://grault.com/es/glorp.html');
+            ->with('http://grault.com/glorp.amp.html', '')
+            ->willReturn('http://grault.com/es/glorp.amp.html');
 
         $this->assertEquals(
             'http://grault.com/es/glorp.amp.html',

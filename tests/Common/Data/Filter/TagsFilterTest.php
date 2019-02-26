@@ -86,4 +86,25 @@ class TagsFilterTest extends \PHPUnit\Framework\TestCase
             $this->filter->filter("Sánchez obligará españa español! con letras você tildes?")
         );
     }
+
+    /**
+     * Tests filter with shorts strings that should be removed in Spanish
+     * language.
+     */
+    public function testTokenizeJapanese()
+    {
+        $method = new \ReflectionMethod($this->filter, 'tokenizeJapannese');
+        $method->setAccessible(true);
+        $method->invokeArgs($this->filter, [ '' ]);
+
+        $method = new \ReflectionMethod($this->filter, 'tokenizeJapannese');
+        $method->setAccessible(true);
+        $method->invokeArgs($this->filter, [ 'あ' ]);
+
+        $method = new \ReflectionMethod($this->filter, 'tokenizeJapannese');
+        $method->setAccessible(true);
+        $method->invokeArgs($this->filter, [ 'ア' ]);
+
+        $this->addToAssertionCount(1);
+    }
 }

@@ -293,7 +293,7 @@
           {/is_module_activated}
           {is_module_activated name="OPINION_MANAGER"}
           <li>
-            <a href="{url name=admin_opinions_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Opinions{/t}</a>
+            <a href="{url name=backend_opinions_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Opinions{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="VIDEO_MANAGER"}

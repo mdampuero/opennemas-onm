@@ -93,7 +93,7 @@ class NewsAgencyController extends Controller
             $route = 'admin_article_show';
 
             if ($type === 'Opinion') {
-                $route = 'admin_opinion_show';
+                $route = 'backend_opinion_show';
             }
 
             $response->headers->add(

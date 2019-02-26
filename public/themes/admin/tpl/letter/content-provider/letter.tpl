@@ -24,7 +24,7 @@
         </a>
         <ul class="dropdown-menu pull-right dropdown-menu-right no-padding">
             <li>
-                <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=admin_opinion_show id=$content->id}">
+                <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=admin_letter_show id=$content->id}">
                     <i class="fa fa-pencil"></i> {t}Edit{/t}
                 </a>
             </li>
