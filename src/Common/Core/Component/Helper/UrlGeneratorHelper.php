@@ -261,8 +261,12 @@ class UrlGeneratorHelper
     {
         $type = 'opinion';
 
-        $author = $this->container->get('api.service.author')
-            ->getItem($content->fk_author);
+        try {
+            $author = $this->container->get('api.service.author')
+                ->getItem($content->fk_author);
+        } catch (\Exception $e) {
+            $author = null;
+        }
 
         // If the opinion is not for editorial or director
         // and the author is a blog
@@ -316,7 +320,7 @@ class UrlGeneratorHelper
     {
         $routeName   = 'frontend_opinion_author_frontpage';
         $routeParams = [
-            'author_slug' => $user->name,
+            'author_slug' => \Onm\StringUtils::generateSlug($user->name),
             'author_id'   => $user->id,
         ];
 
