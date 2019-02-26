@@ -295,7 +295,8 @@ class ContentCategory implements \JsonSerializable
                         ? null : (int) $data['subcategory'],
                     'internal_category'   => (int) $data['internal_category'],
                     'logo_path'           => $data['logo_path'],
-                    'color'               => $data['color'],
+                    'color'               => empty($data['color'])
+                        ? null : $data['color'],
                     'params'              => $data['params']
                 ]
             );
@@ -358,7 +359,8 @@ class ContentCategory implements \JsonSerializable
                         ? null : (int) $data['subcategory'],
                     'internal_category'   => (int) $data['internal_category'],
                     'logo_path'           => $data['logo_path'],
-                    'color'               => $data['color'],
+                    'color'               => empty($data['color'])
+                        ? null: $data['color'],
                     'params'              => $data['params']
                 ],
                 [ 'pk_content_category' => $data['id'] ]
