@@ -37,7 +37,7 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getCurrentRequest' ])
             ->getMock();
 
-        $this->router = $this->getMockBuilder('Router')
+        $this->urlGenerator = $this->getMockBuilder('UrlGenerator')
             ->setMethods([ 'generate' ])
             ->getMock();
 
@@ -54,7 +54,6 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
-
 
         $this->smartySource = $this->getMockBuilder('Smarty_Template_Source')
             ->disableOriginalConstructor()
@@ -80,8 +79,8 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'request':
                 return $this->request;
-            case 'router':
-                return $this->router;
+            case 'core.helper.url_generator':
+                return $this->urlGenerator;
             case 'core.helper.l10n_route':
                 return $this->helper;
             case 'core.security':
@@ -142,7 +141,7 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->any())->method('getRequestUri')
             ->willReturn('wibble.html');
 
-        $this->router->expects($this->any())->method('generate')
+        $this->urlGenerator->expects($this->any())->method('generate')
             ->willReturn('/wibble/wubble');
 
         $this->rs->expects($this->any())->method('getCurrentRequest')
@@ -151,16 +150,17 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
         $this->security->expects($this->once())->method('hasExtension')
             ->with('AMP_MODULE')->willReturn(true);
 
-        $this->smarty->expects($this->exactly(3))->method('getTemplateVars')
-            ->willReturn([
-                'o_content' => json_decode(json_encode([
-                    'category_name'     => 'gorp',
-                    'pk_content'        => 145,
-                    'created'           => '1999-12-31 23:59:59',
-                    'content_type_name' => 'article',
-                    'slug'              => 'foobar-thud'
-                ]), false)
-            ]);
+        $content = new \Content();
+        $content->load([
+            'category_name'     => 'gorp',
+            'pk_content'        => rand(),
+            'created'           => '1999-12-31 23:59:59',
+            'content_type_name' => 'opinion',
+            'slug'              => 'foobar-thud'
+        ]);
+
+        $this->smarty->expects($this->exactly(1))->method('getTemplateVars')
+            ->willReturn([ 'o_content' => $content]);
 
         $this->assertEquals(
             '<html><head><link rel="amphtml" href="/wibble/wubble"/></head><body>Hello World!</body></html>',
@@ -175,7 +175,7 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
      * Tests smarty_outputfilter_meta_amphtml when there is a content but it is
      * not an article.
      */
-    public function testMetaAmpHtmlWhenNoArticle()
+    public function testMetaAmpHtmlWhenNoValidContentType()
     {
         $this->rs->expects($this->any())
             ->method('getCurrentRequest')
@@ -189,12 +189,13 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
 
         $output = '<html><head></head><body>Hello World!</body></html>';
 
-        $this->smarty->expects($this->exactly(2))->method('getTemplateVars')
-            ->willReturn([
-                'o_content' => json_decode(json_encode([
-                    'content_type_name' => 'opinion'
-                ]), false)
-            ]);
+        $content = new \Content();
+        $content->load([
+            'content_type_name' => 'invalidtype'
+        ]);
+
+        $this->smarty->expects($this->exactly(1))->method('getTemplateVars')
+            ->willReturn([ 'o_content' => $content ]);
 
         $this->assertEquals($output, smarty_outputfilter_meta_amphtml($output, $this->smarty));
     }

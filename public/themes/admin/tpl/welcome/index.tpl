@@ -72,7 +72,7 @@
             {is_module_activated name="OPINION_MANAGER"}
             {acl isAllowed="OPINION_CREATE"}
             <div class="button">
-              <a href="{url name=admin_opinion_create}" title="{t}New opinion{/t}" class="btn btn-white btn-large col-xs-12">
+              <a href="{url name=backend_opinion_create}" title="{t}New opinion{/t}" class="btn btn-white btn-large col-xs-12">
                 <i class="fa fa-comment-o"></i>{t}New opinion{/t}
               </a>
             </div>

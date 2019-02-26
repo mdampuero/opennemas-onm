@@ -22,20 +22,22 @@ class ArticleController extends FrontendController
      * {@inheritdoc}
      */
     protected $caches = [
-        'show' => 'articles'
+        'show'    => 'articles',
+        'showamp' => 'articles',
     ];
 
     /**
      * {@inheritdoc}
      */
-    protected $extension = 'article';
+    protected $extension = 'ARTICLE_MANAGER';
 
     /**
      * {@inheritdoc}
      */
     protected $groups = [
         'extShow' => 'article_inner',
-        'show'    => 'article_inner'
+        'show'    => 'article_inner',
+        'showamp' => 'amp_inner',
     ];
 
     /**
@@ -120,7 +122,7 @@ class ArticleController extends FrontendController
         $locale = $this->get('core.locale')->getRequestLocale();
         $params = parent::getParameters($params, $item);
 
-        if (array_key_exists('o_category', $params)) {
+        if (array_key_exists('o_category', $params) && !empty($params['o_category'])) {
             $params['o_layout'] = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')->get(
                     'frontpage_layout_' . $params['o_category']->pk_content_category,
@@ -129,7 +131,7 @@ class ArticleController extends FrontendController
         }
 
         if (!empty($item)) {
-            $params['article'] = $item;
+            $params[$item->content_type_name] = $item;
 
             $params['tags'] = $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($item->tag_ids, $locale)['items'];
@@ -145,7 +147,7 @@ class ArticleController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    protected function hydrate($params = [], $item = null)
+    protected function hydrateShow($params = [], $item = null)
     {
         $params = [
             'relationed' => $this->getRelated($item),
@@ -172,7 +174,7 @@ class ArticleController extends FrontendController
      *
      * @return array The list of rellated contents.
      */
-    private function getRelated($article)
+    protected function getRelated($article)
     {
         $relations = $this->get('related_contents')
             ->getRelations($article->id, 'inner');
@@ -212,7 +214,7 @@ class ArticleController extends FrontendController
      *
      * @return array The list of suggested contents.
      */
-    private function getSuggested($article, $category)
+    protected function getSuggested($article, $category = null)
     {
         $query = sprintf(
             'category_name = "%s" AND pk_content <> %s',

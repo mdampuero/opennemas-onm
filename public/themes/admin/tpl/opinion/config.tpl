@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_opinions_config}" method="POST" name="formulario" id="formulario">
+<form action="{url name=backend_opinions_config}" method="POST" name="formulario" id="formulario">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -22,7 +22,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <a class="btn btn-link" href="{url name=admin_opinions}" title="{t}Go back to list{/t}">
+              <a class="btn btn-link" href="{url name=backend_opinions_list}" title="{t}Go back to list{/t}">
                 <i class="fa fa-reply"></i>
               </a>
             </li>
@@ -45,28 +45,8 @@
       <div class="grid-body">
         <div class="row">
           <div class="col-md-6">
-            <div class="form-group">
-              <label class="form-label" for="opinion_settings[total_director]">
-                {t}Director opinions in Opinion frontpage{/t}
-              </label>
-              <span class="help">
-                {t}How many director opinions will be shown in the opinion frontpage.{/t}
-              </span>
-              <div class="controls">
-                <input id="opinion_settings[total_director]" name="opinion_settings[total_director]" required type="number" value="{$configs['opinion_settings']['total_director']|default:"1"}" />
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="opinion_settings[total_editorial]">
-                {t}Editorial opinions in Opinion frontpage{/t}
-              </label>
-              <span class="help">
-                {t}How many editorial opinions will be shown in the opinion frontpage.{/t}
-              </span>
-              <div class="controls">
-                <input id="opinion_settings[total_editorial]" name="opinion_settings[total_editorial]" required type="number" value="{$configs['opinion_settings']['total_editorial']|default:"2"}" />
-              </div>
-            </div>
+
+            <h4>{t}Opinion frontpage{/t}</h4>
             <div class="form-group">
               <label class="form-label" for="opinion_settings[total_opinions]">
                 {t}Opinions in Opinion frontpage{/t}
@@ -78,18 +58,8 @@
                 <input id="opinion_settings[total_opinions]" name="opinion_settings[total_opinions]" required type="number"  value="{$configs['opinion_settings']['total_opinions']|default:"16"}" />
               </div>
             </div>
-            <div class="form-group">
-              <label class="form-label" for="opinion_settings[total_opinion_authors]">
-                {t}Author opinions in frontpage opinion widget{/t}
-              </label>
-              <span class="help">
-                {t}How many author opinions will be shown in the widget.{/t}
-              </span>
-              <div class="controls">
-                <input id="opinion_settings[total_opinion_authors]" name="opinion_settings[total_opinion_authors]" required type="number" value="{$configs['opinion_settings']['total_opinion_authors']|default:"6"}" />
-              </div>
-            </div>
             {is_module_activated name="BLOG_MANAGER"}
+            <h4>{t}Blogs frontpage{/t}</h4>
               <div class="form-group">
                 <label class="form-label" for="blog_orderFrontpage">
                   {t}Order blog's frontpage by{/t}

@@ -17,8 +17,13 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Displays events.
  */
-class EventController extends Controller
+class EventController extends FrontendController
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected $extension = 'es.openhost.module.events';
+
     /**
      * Displays the list of the latest events.
      *
@@ -27,6 +32,8 @@ class EventController extends Controller
     public function frontpageAction(Request $request)
     {
         $page = $request->get('page', 1);
+
+        $this->checkSecurity($this->extension);
 
         $this->view->setConfig('frontpages');
         $cacheID = $this->view->getCacheId('frontpage', 'event', $page);
@@ -96,8 +103,12 @@ class EventController extends Controller
      *
      * @return Response The response object.
      */
-    public function showAction($slug)
+    public function showAction(Request $request)
     {
+        $this->checkSecurity($this->extension);
+
+        $slug = $request->query->get('slug');
+
         $oql = 'content_type_name = "event"'
             . ' and slug = "%s" and content_status = "1" and in_litter = "0"'
             . ' and (starttime is null or starttime <= "%s" )'
