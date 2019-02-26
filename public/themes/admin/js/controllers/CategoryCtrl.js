@@ -66,8 +66,8 @@
         };
 
         // Updates the logo_path when an image is selected
-        $scope.$watch('cover', function(nv) {
-          if (nv && !angular.isObject(nv)) {
+        $scope.$watch('cover', function(nv, ov) {
+          if (!ov && !nv || nv && !angular.isObject(nv)) {
             return;
           }
 
