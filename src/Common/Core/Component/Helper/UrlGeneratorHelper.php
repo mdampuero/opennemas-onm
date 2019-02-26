@@ -316,7 +316,7 @@ class UrlGeneratorHelper
     {
         $routeName   = 'frontend_opinion_author_frontpage';
         $routeParams = [
-            'author_slug' => \Onm\StringUtils::generateSlug($user->name),
+            'author_slug' => $user->name,
             'author_id'   => $user->id,
         ];
 
@@ -327,7 +327,7 @@ class UrlGeneratorHelper
             )
         ) {
             $routeName   = 'frontend_blog_author_frontpage';
-            $routeParams = [ 'author_slug' => \Onm\StringUtils::generateSlug($user->name) ];
+            $routeParams = [ 'author_slug' => $user->username ];
         }
 
         $uri = $this->container->get('router')->generate($routeName, $routeParams);

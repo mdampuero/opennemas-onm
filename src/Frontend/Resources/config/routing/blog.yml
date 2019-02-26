@@ -8,7 +8,7 @@ frontend_blog_author_frontpage:
     path: /blog/author/{author_slug}
     defaults: { _controller: FrontendBundle:Blog:listAuthor }
     requirements:
-        author_slug: '[a-z0-9\-.]+'
+        author_slug: '[a-z0-9\-\.]+'
     options:
         l10n: true
 
