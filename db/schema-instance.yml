@@ -419,7 +419,7 @@ content_categories:
             options: { length: 1, unsigned: true, default: 0, comment: 'Equal content_type & global=0 ' }
         fk_content_category:
             type: bigint
-            options: { length: 20, unsigned: true, default: 0, notnull: false }
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         params:
             type: text
             options: { length: 65532, default: null, notnull: false }
