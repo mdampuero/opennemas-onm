@@ -27,12 +27,6 @@
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
-              <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=backend_categories_configure}" class="admin_add" title="{t}Config categories module{/t}">
-                  <span class="fa fa-cog fa-lg"></span>
-                </a>
-              </li>
-              <li class="quicklinks"><span class="h-seperate"></span></li>
               {acl isAllowed="CATEGORY_CREATE"}
               <li class="quicklinks">
                 <a class="btn btn-success text-uppercase" href="[% routing.generate('backend_category_create') %]">

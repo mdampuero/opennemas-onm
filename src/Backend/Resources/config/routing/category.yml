@@ -13,13 +13,6 @@ backend_category_show:
     requirements:
         id: \d+
 
-backend_categories_configure:
-    path:     /categories/configuration
-    defaults: { _controller: BackendBundle:Category:configure }
-    methods:  [ GET ]
-    options:
-        expose: true
-
 backend_categories_list:
     path:     /categories
     defaults: { _controller: BackendBundle:Category:list }
