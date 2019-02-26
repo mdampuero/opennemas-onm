@@ -291,7 +291,8 @@ class ContentCategory implements \JsonSerializable
                     'name'                => $data['name'],
                     'title'               => $data['title'],
                     'inmenu'              => (int) $data['inmenu'],
-                    'fk_content_category' => (int) $data['subcategory'],
+                    'fk_content_category' => empty($data['subcategory'])
+                        ? null : (int) $data['subcategory'],
                     'internal_category'   => (int) $data['internal_category'],
                     'logo_path'           => $data['logo_path'],
                     'color'               => $data['color'],
@@ -353,7 +354,8 @@ class ContentCategory implements \JsonSerializable
                     'title'               => $data['title'],
                     'name'                => $data['name'],
                     'inmenu'              => (int) $data['inmenu'],
-                    'fk_content_category' => (int) $data['subcategory'],
+                    'fk_content_category' => empty($data['subcategory'])
+                        ? null : (int) $data['subcategory'],
                     'internal_category'   => (int) $data['internal_category'],
                     'logo_path'           => $data['logo_path'],
                     'color'               => $data['color'],
