@@ -49,7 +49,7 @@ class CategorySubscriber implements EventSubscriberInterface
      */
     public function onCategoryCreate()
     {
-        $this->template->deleteGlobalCss();
+        $this->template->deleteDynamicCss();
     }
 
     /**
