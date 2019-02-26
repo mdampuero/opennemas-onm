@@ -61,10 +61,10 @@ class Redis extends Cache
     protected function deleteByPattern($pattern)
     {
         $script = "redis.replicate_commands()
-            local cursor = 0
-            local done   = false
-            local keys   = nil
-            local values = {}
+            local cursor  = 0
+            local deleted = 0
+            local done    = false
+            local keys    = nil
 
             repeat
                 local result = redis.call('SCAN', cursor, 'MATCH', ARGV[1])
@@ -73,12 +73,12 @@ class Redis extends Cache
                 keys   = result[2]
 
                 for i, key in ipairs(keys) do
-                    table.insert(values, key)
                     redis.call('DEL', key)
+                    deleted = deleted + 1
                 end
 
             until cursor == '0'
-            return values";
+            return deleted";
 
         return $this->getRedis()->eval($script, [ $pattern ]);
     }

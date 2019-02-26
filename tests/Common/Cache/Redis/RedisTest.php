@@ -43,10 +43,10 @@ class RedisTest extends \PHPUnit\Framework\TestCase
     public function testDeleteByPattern()
     {
         $script = "redis.replicate_commands()
-            local cursor = 0
-            local done   = false
-            local keys   = nil
-            local values = {}
+            local cursor  = 0
+            local deleted = 0
+            local done    = false
+            local keys    = nil
 
             repeat
                 local result = redis.call('SCAN', cursor, 'MATCH', ARGV[1])
@@ -55,12 +55,12 @@ class RedisTest extends \PHPUnit\Framework\TestCase
                 keys   = result[2]
 
                 for i, key in ipairs(keys) do
-                    table.insert(values, key)
                     redis.call('DEL', key)
+                    deleted = deleted + 1
                 end
 
             until cursor == '0'
-            return values";
+            return deleted";
 
         $this->baseRedis->expects($this->once())->method('eval')
             ->with($script, ['foo*']);
@@ -70,19 +70,6 @@ class RedisTest extends \PHPUnit\Framework\TestCase
 
         $method->invokeArgs($this->redis, [ 'foo*' ]);
     }
-
-    /**
-     * Tests execute.
-     *
-     * TODO: Uncomment when updating PHP to version 7.0
-     */
-    //public function testExecute()
-    //{
-        //$this->baseRedis->expects($this->once())->method('eval')
-            //->with('foo' , [ 'bar' ]);
-
-        //$this->redis->execute('foo', [ 'bar' ]);
-    //}
 
     /**
      * Tests getPrefix with default and custom values.
