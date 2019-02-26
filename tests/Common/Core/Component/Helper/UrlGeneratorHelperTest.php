@@ -133,6 +133,25 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests generate when the content provided has an external URI.
      */
+    public function testGenerateForArticleWithAmp()
+    {
+        $content = new \Article();
+
+        $content->id                = 252;
+        $content->category_name     = 'actualidad';
+        $content->created           = '2015-01-14 23:49:40';
+        $content->content_type_name = 'article';
+        $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+
+        $this->assertEquals(
+            '/articulo/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/20150114234940000252.amp.html',
+            $this->urlGenerator->generate($content, ['_format' => 'amp'])
+        );
+    }
+
+    /**
+     * Tests generate when the content provided has an external URI.
+     */
     public function testGenerateForExternal()
     {
         $content = new \Content();
