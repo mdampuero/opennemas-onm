@@ -94,6 +94,24 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderAdSlotWhenSafeFrameInSettings()
     {
+        $params = new \StdClass();
+        $ads    = new \StdClass();
+        $ad     = new \Advertisement();
+
+        $ad->positions          = [ 123 ];
+        $ad->type_advertisement = [ 123 ];
+        $ad->starttime          = '2000-01-01 00:00:00';
+        $ad->endtime            = null;
+        $ad->params             = [ 'orientation' => 'left' ];
+
+        $params->value = [ 'ads-format' => 'safeframe' ];
+        $ads->value    = [ $ad ];
+
+        $this->smarty->tpl_vars = [
+            'render_params'  => $params,
+            'advertisements' => $ads
+        ];
+
         $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 1 ]);
 
