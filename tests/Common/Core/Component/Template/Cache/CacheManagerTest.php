@@ -36,7 +36,7 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->templating = $this->getMockBuilder('Onm\Templating\Templating')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getTemplate' ])
+            ->setMethods([ 'getBundleName', 'getTemplate' ])
             ->getMock();
 
         $this->smarty->expects($this->any())->method('getCacheDir')

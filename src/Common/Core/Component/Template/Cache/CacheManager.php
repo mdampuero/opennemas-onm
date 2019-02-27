@@ -25,11 +25,11 @@ class CacheManager
     /**
      * Initializes the current CacheManager.
      *
-     * @param Template $template The Template service.
+     * @param Templating $template The Templating service.
      */
-    public function __construct(Templating $templating)
+    public function __construct(Templating $template)
     {
-        $this->template = $templating->getTemplate();
+        $this->template = $template;
         $this->finder   = new Finder();
         $this->fs       = new Filesystem();
     }
