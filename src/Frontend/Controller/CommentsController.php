@@ -378,7 +378,7 @@ class CommentsController extends Controller
     public function getAds()
     {
         // Get static_pages positions
-        $positionManager = getService('core.helper.advertisement');
+        $positionManager = $this->get('core.helper.advertisement');
         $positions       = $positionManager
             ->getPositionsForGroup('comment');
 
