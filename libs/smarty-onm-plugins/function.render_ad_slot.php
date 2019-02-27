@@ -33,10 +33,6 @@ function smarty_function_render_ad_slot($params, $smarty)
         $format = $params['format'];
     }
 
-    if ($safeframeEnabled && $format === 'safeframe') {
-        return sprintf($tpl, $class, '');
-    }
-
     $ads    = $smarty->tpl_vars['advertisements']->value;
     $slotId = $params['position'];
 
@@ -60,6 +56,10 @@ function smarty_function_render_ad_slot($params, $smarty)
 
         // Save advertisement array state
         $smarty->assign('advertisements', $ads);
+    }
+
+    if ($safeframeEnabled && $format === 'safeframe') {
+        return sprintf($tpl, $class, '');
     }
 
     $renderer    = $smarty->getContainer()->get('core.renderer.advertisement');
