@@ -370,6 +370,10 @@ class FrontendController extends Controller
             ]);
         }
 
+        if ($this->get('core.globals')->getAction() == 'showamp') {
+            $params['render_params'] = ['ads-format' => 'amp'];
+        }
+
         $params['x-tags'] = implode(',', $params['x-tags']);
 
         list($positions, $advertisements) =
