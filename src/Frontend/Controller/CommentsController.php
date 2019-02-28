@@ -65,7 +65,11 @@ class CommentsController extends Controller
             $comment->votes = $vote;
         }
 
+        list($positions, $advertisements) = $this->getAds();
+
         return $this->render('comments/loader.tpl', [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
             'total'          => $total,
             'comments'       => $comments,
             'contentId'      => $contentID,
@@ -364,5 +368,23 @@ class CommentsController extends Controller
         $response->headers->set('x-cache-for', '+300 sec');
 
         return $response;
+    }
+
+    /**
+     * Returns all the advertisements for comments.
+     *
+     * @return array A list of Advertisements.
+     */
+    public function getAds()
+    {
+        // Get static_pages positions
+        $positionManager = $this->get('core.helper.advertisement');
+        $positions       = $positionManager
+            ->getPositionsForGroup('comment');
+
+        $advertisements = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, 0);
+
+        return [ $positions, $advertisements ];
     }
 }
