@@ -12,17 +12,6 @@ namespace Common\Data\Filter;
 class ExtractImageFromBodyFilter extends Filter
 {
     /**
-     * Initializes the ExtractImageFromBodyFilter.
-     *
-     * @param ServiceContainer $container The service container.
-     * @param array            $params    The filter parameters.
-     */
-    public function __construct($container, $params = [])
-    {
-        parent::__construct($container, $params);
-    }
-
-    /**
      * Import all images from a text.
      *
      * @param string $str The text string.
@@ -101,19 +90,19 @@ class ExtractImageFromBodyFilter extends Filter
     /**
      * Checks if exists an image in the database and returns its id if exists.
      *
-     * @param string $fileName The photo filename.
+     * @param string $filename The photo filename.
      *
      * @return integer The photo id or null if it doesnt exists.
      */
-    public function checkPhotoExists($fileName)
+    protected function checkPhotoExists($filename)
     {
         $conn = $this->container->get('dbal_connection');
 
         try {
             $photo = $conn->fetchAssoc(
-                "SELECT * FROM `contents` WHERE `content_type_name` = 'photo'"
-                . " AND `title`=?",
-                [ $fileName ]
+                "SELECT `pk_content` FROM `contents` WHERE `content_type_name` = 'photo'"
+                . " AND `title` = ?",
+                [ $filename ]
             );
 
             return $photo['pk_content'];
@@ -123,27 +112,22 @@ class ExtractImageFromBodyFilter extends Filter
     }
 
     /**
-     * Insert photo data in translation_ids table.
+     * Insert photo data in url table.
      *
-     * @param integer $id The photo id.
+     * @param integer $id       The photo id.
+     * @param string  $filename The photo original filename.
      *
      * @return mixed True if inserted or null if not.
      */
-    public function insertPhotoTranslation($id, $fileName)
+    protected function insertPhotoTranslation($id, $filename)
     {
-        $conn = $this->container->get('dbal_connection');
-
-        try {
-            $conn->insert('translation_ids', [
-                'pk_content'     => $id,
-                'pk_content_old' => 'none',
-                'type'           => 'photo',
-                'slug'           => $fileName
-            ]);
-
-            return true;
-        } catch (\Exception $e) {
-            return null;
-        }
+        $this->container->get('dbal_connection')->insert('url', [
+            'content_type' => 'photo',
+            'source'       => $filename,
+            'target'       => $id,
+            'type'         => 1,
+            'redirection'  => 1,
+            'enabled'      => 1
+        ]);
     }
 }
