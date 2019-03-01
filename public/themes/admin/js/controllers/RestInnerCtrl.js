@@ -111,7 +111,7 @@
               $scope.data.item = {};
             }
 
-            $scope.data.item = angular.extend($scope.data.item, $scope.item);
+            $scope.data.item = angular.extend($scope.item, $scope.data.item);
             $scope.item      = angular.extend({}, response.data.item);
 
             $scope.parseItem($scope.data);
