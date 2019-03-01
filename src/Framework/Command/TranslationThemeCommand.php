@@ -29,11 +29,13 @@ class TranslationThemeCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setDefinition(
-                array(
-                    new InputArgument('uuid', InputArgument::REQUIRED, 'The theme UUID in format es.openhost.theme.name'),
-                )
-            )
+            ->setDefinition([
+                new InputArgument(
+                    'uuid',
+                    InputArgument::REQUIRED,
+                    'The theme UUID in format es.openhost.theme.name'
+                ),
+            ])
             ->setName('translation:theme')
             ->setDescription('Extracts and updates the localized strings for a theme')
             ->setHelp(
@@ -69,7 +71,7 @@ EOF
 
         $this->themeFolder = 'public/' . $theme->path;
 
-        $path  = $this->getContainer()->getParameter('core.paths.themes') . '/'
+        $path = $this->getContainer()->getParameter('core.paths.themes') . '/'
             . str_replace('es.openhost.theme.', '', $theme->uuid) . '/locale';
 
         $this->translationsDir    = $path;
@@ -96,65 +98,67 @@ EOF
         $output->writeln(" * Extracting strings");
         $phpBinary = trim(shell_exec('which php'));
 
-        $tplTranslationsFile = $this->translationsDir."/strings_from_tpl.pot";
-        $phpTranslationsFile = $this->translationsDir."/strings_from_php.pot";
-        $finalTranslationFile = $this->translationsDir."/".$this->translationsDomain.".pot ";
+        $tplTranslationsFile  = $this->translationsDir . "/strings_from_tpl.pot";
+        $phpTranslationsFile  = $this->translationsDir . "/strings_from_php.pot";
+        $finalTranslationFile = $this->translationsDir . "/" . $this->translationsDomain . ".pot ";
 
         $tplFolder = [
-            $this->themeFolder.'/tpl/',
+            $this->themeFolder . '/tpl/',
         ];
 
-        $command =
-            $phpBinary.' '.APPLICATION_PATH."/bin/tsmarty2c.php -o "
-            .$tplTranslationsFile.' '.implode(' ', $tplFolder);
+        $command = $phpBinary . ' ' . APPLICATION_PATH . "/bin/tsmarty2c.php -o "
+            . $tplTranslationsFile . ' ' . implode(' ', $tplFolder);
 
         $output->writeln("\t- From templates");
         $commandOutput = shell_exec($command);
         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-            $this->output->writeln($command .'>> '.$commandOutput);
+            $this->output->writeln($command . '>> ' . $commandOutput);
         }
 
-        $command = 'msgattrib --no-location -o '.$tplTranslationsFile.' '.$tplTranslationsFile;
+        $command       = 'msgattrib --no-location -o ' . $tplTranslationsFile
+            . ' ' . $tplTranslationsFile;
         $commandOutput = shell_exec($command);
         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-            $this->output->writeln($command .'>> '.$commandOutput);
+            $this->output->writeln($command . '>> ' . $commandOutput);
         }
 
-        $files = glob($this->themeFolder.'/**/*.php');
+        $files = glob($this->themeFolder . '/**/*.php');
 
         if (count($files) > 0) {
             $output->writeln("\t- From PHP files");
             $command =
                 "xgettext "
-                .implode(' ', $files)
-                ." -o ".$phpTranslationsFile." --no-location  --from-code=UTF-8 2>&1";
+                . implode(' ', $files)
+                . " -o " . $phpTranslationsFile . " --no-location  --from-code=UTF-8 2>&1";
 
             $commandOutput = shell_exec($command);
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-                $this->output->writeln($command .'>> '.$commandOutput);
+                $this->output->writeln($command . '>> ' . $commandOutput);
             }
 
-            $command = "msgattrib --no-location -o ".$phpTranslationsFile.' '.$phpTranslationsFile;
+            $command       = "msgattrib --no-location -o " . $phpTranslationsFile
+                . ' ' . $phpTranslationsFile;
             $commandOutput = shell_exec($command);
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-                $this->output->writeln($command .'>> '.$commandOutput);
+                $this->output->writeln($command . '>> ' . $commandOutput);
             }
         }
 
         $extractedtranslationsFiles = [];
         if (file_exists($phpTranslationsFile)) {
-            $extractedtranslationsFiles []= $phpTranslationsFile;
+            $extractedtranslationsFiles[] = $phpTranslationsFile;
         }
 
         if (file_exists($tplTranslationsFile)) {
-            $extractedtranslationsFiles []= $tplTranslationsFile;
+            $extractedtranslationsFiles[] = $tplTranslationsFile;
         }
 
         if (count($extractedtranslationsFiles)) {
-            $command = "msgcat -o ".$finalTranslationFile.' '.implode(' ', $extractedtranslationsFiles);
+            $command       = "msgcat -o " . $finalTranslationFile . ' '
+                . implode(' ', $extractedtranslationsFiles);
             $commandOutput = shell_exec($command);
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-                $this->output->writeln($command .'>> $commandOutput');
+                $this->output->writeln($command . '>> $commandOutput');
             }
         }
     }
@@ -169,19 +173,19 @@ EOF
         $output->writeln(" * Updating translation files");
 
         foreach ($this->supportedLanguages as $language) {
-            $output->writeln("\t- Language ".$language);
-            $languageDir = $this->translationsDir.'/'.$language.'/LC_MESSAGES';
+            $output->writeln("\t- Language " . $language);
+            $languageDir = $this->translationsDir . '/' . $language . '/LC_MESSAGES';
 
             if (!is_dir($languageDir)) {
                 $output->writeln("\t\t- Creating target directory");
                 mkdir($languageDir, 0770, true);
             }
 
-            $targetFile = $languageDir."/".$this->translationsDomain.".po";
+            $targetFile = $languageDir . "/" . $this->translationsDomain . ".po";
             if (!file_exists($targetFile)) {
                 touch($targetFile);
             }
-            $command = "msgmerge -U ".$targetFile. " {$this->translationsDir}/{$this->translationsDomain}.pot 2>&1";
+            $command = "msgmerge -U " . $targetFile . " {$this->translationsDir}/{$this->translationsDomain}.pot 2>&1";
 
             shell_exec($command);
         }
@@ -197,24 +201,24 @@ EOF
         $output->writeln(" * Compiling translation databases");
 
         foreach ($this->supportedLanguages as $language) {
-            $output->writeln("\t- Language ".$language);
-            $languageDir = $this->translationsDir.'/'.$language.'/LC_MESSAGES';
+            $output->writeln("\t- Language " . $language);
+            $languageDir       = $this->translationsDir . '/' . $language . '/LC_MESSAGES';
             $translationDomain = $this->translationsDomain;
 
-            $targetFile = $languageDir."/".$this->translationsDomain.".mo";
+            $targetFile = $languageDir . "/" . $this->translationsDomain . ".mo";
             if (!file_exists($targetFile)) {
                 touch($targetFile);
             }
 
             $command =
                 "LC_ALL=en msgfmt -vf $languageDir/$translationDomain.po "
-                ."-o $targetFile 2>&1";
+                . "-o $targetFile 2>&1";
 
             $commandOutput = shell_exec($command);
 
             $parts = explode(', ', $commandOutput);
             foreach ($parts as $part) {
-                $output->writeln("\t\t+ ".$part);
+                $output->writeln("\t\t+ " . $part);
             }
         }
     }
