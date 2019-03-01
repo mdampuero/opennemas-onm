@@ -19,8 +19,8 @@ class UserGroupService extends OrmService
     public function getItem($id)
     {
         try {
-            if ($id == 0) {
-                return null;
+            if (empty($id)) {
+                throw new \InvalidArgumentException();
             }
 
             $oql = sprintf('pk_user_group = %s and type = 0', $id);

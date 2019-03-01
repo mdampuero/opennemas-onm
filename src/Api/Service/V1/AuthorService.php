@@ -20,8 +20,8 @@ class AuthorService extends UserService
     public function getItem($id)
     {
         try {
-            if ($id == 0) {
-                return null;
+            if (empty($id)) {
+                throw new \InvalidArgumentException();
             }
 
             $oql = sprintf('id = %s and type != 1 and user_group_id = 3', $id);

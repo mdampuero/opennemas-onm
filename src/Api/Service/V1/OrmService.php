@@ -185,8 +185,8 @@ class OrmService implements Service
     public function getItem($id)
     {
         try {
-            if ($id == 0) {
-                return null;
+            if (empty($id)) {
+                throw new \InvalidArgumentException();
             }
 
             $item = $this->container->get('orm.manager')

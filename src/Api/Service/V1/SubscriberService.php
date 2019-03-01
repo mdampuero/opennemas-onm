@@ -29,8 +29,8 @@ class SubscriberService extends UserService
     public function getItem($id)
     {
         try {
-            if ($id == 0) {
-                return null;
+            if (empty($id)) {
+                throw new \InvalidArgumentException();
             }
 
             $oql = sprintf('id = %s and type != 0', $id);
