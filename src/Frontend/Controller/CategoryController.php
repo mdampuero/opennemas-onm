@@ -279,6 +279,7 @@ class CategoryController extends FrontendController
             // TODO: Remove this ASAP
             'actual_category_title' => $item->title,
             'category_name'         => $item->title,
+            'actual_category'       => $item->name,
         ]);
 
         if (!array_key_exists('page', $params)) {
