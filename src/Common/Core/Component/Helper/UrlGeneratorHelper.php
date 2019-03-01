@@ -260,10 +260,9 @@ class UrlGeneratorHelper
     protected function getUriForOpinion($content)
     {
         $type = 'opinion';
-
         try {
             $author = $this->container->get('api.service.author')
-                ->getItem($content->fk_author);
+                ->getItem($content->fk_author ?? 0);
         } catch (\Exception $e) {
             $author = null;
         }

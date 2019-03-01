@@ -185,6 +185,10 @@ class OrmService implements Service
     public function getItem($id)
     {
         try {
+            if ($id == 0) {
+                return null;
+            }
+
             $item = $this->container->get('orm.manager')
                 ->getRepository($this->entity, $this->origin)->find($id);
 
