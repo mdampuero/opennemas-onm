@@ -263,7 +263,7 @@ class UrlGeneratorHelper
 
         try {
             $author = $this->container->get('api.service.author')
-                ->getItem($content->fk_author ?? 0);
+                ->getItem($content->fk_author);
         } catch (\Exception $e) {
             $author = null;
         }
