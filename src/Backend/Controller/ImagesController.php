@@ -90,7 +90,7 @@ class ImagesController extends Controller
 
         return $this->render('image/new.tpl', [
             'photo'         => $photo,
-            'MEDIA_IMG_URL' => MEDIA_URL . MEDIA_DIR . SS . IMG_DIR,
+            'MEDIA_IMG_URL' => MEDIA_URL . MEDIA_DIR . DS . IMG_DIR,
             'locale'        => $ls->getRequestLocale('frontend'),
             'tags'          => $tags
         ]);
