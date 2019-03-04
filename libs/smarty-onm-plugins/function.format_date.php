@@ -16,40 +16,29 @@ function smarty_function_format_date($params, &$smarty)
         return '';
     }
 
-    $date = $params['date'];
-    if (!($date instanceof \DateTime)) {
+    $defaultParams = [
+        'locale'   => $smarty->getContainer()->get('core.locale')->getLocale('frontend'),
+        'timezone' => $smarty->getContainer()->get('core.locale')->getTimezone(),
+        'format'   => null,
+        'type'     => 'long|short',
+    ];
+
+    if (!($params['date'] instanceof \DateTime)) {
         $date = new \DateTime($date);
     }
 
-    $type         = 'long|long';
-    $customFormat = null;
-    if (array_key_exists('type', $params)) {
-        $type = $params['type'];
+    $params = array_merge($defaultParams, $params);
 
-        $formatRegexp = '@()(?<date>none|short|medium|long)\|(?<hour>none|short|medium|long)@';
+    $date = $params['date'];
 
-        if (preg_match($formatRegexp, $type, $matches)) {
-            $dateFormatName = strtoupper($matches['date']);
-            $hourFormatName = strtoupper($matches['hour']);
+    unset($params['date']);
 
-            $dateFormat = constant("IntlDateFormatter::$dateFormatName");
-            $hourFormat = constant("IntlDateFormatter::$hourFormatName");
-        }
-
-        if ($type === 'custom') {
-            $customFormat = $params['format'];
-        }
+    try {
+        return $smarty->getContainer()->get('data.manager.filter')
+            ->set($date)
+            ->filter('format_date', $params)
+            ->get();
+    } catch (Exception $e) {
+        return '';
     }
-
-
-    $locale = $smarty->getContainer()->get('core.locale')->getLocale('frontend');
-
-
-    $formatter = new IntlDateFormatter($locale, $dateFormat, $hourFormat);
-
-    if ($type == 'custom') {
-        $formatter->setPattern($customFormat);
-    }
-
-    return $formatter->format($date);
 }
