@@ -248,8 +248,8 @@ class ImagesController extends Controller
                 'original_filename' => $file['name'],
                 'title'             => $tempName,
                 'description'       => $tempName,
-                'fk_category'       => $category,
-                'category'          => $category,
+                'fk_category'       => null,
+                'category'          => null,
                 'category_name'     => '',
                 'tag_ids'           => json_decode($request->request->get('tag_ids', ''), true)
             ];
