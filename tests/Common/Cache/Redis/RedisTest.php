@@ -19,8 +19,10 @@ class RedisTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->baseRedis = $this->getMockBuilder('Redis')
-            ->setMethods([ 'auth', 'delete', 'exists', 'eval', 'expire', 'get', 'mGet', 'mSet', 'pconnect', 'set' ])
-            ->getMock();
+            ->setMethods([
+                'auth', 'delete', 'exists', 'eval', 'expire', 'get', 'mGet',
+                'mSet', 'pconnect', 'scan', 'set', 'setOption'
+            ])->getMock();
 
         $this->redis = $this->getMockBuilder('Common\Cache\Redis\Redis')
             ->setMethods([ 'getRedis' ])
@@ -42,28 +44,19 @@ class RedisTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteByPattern()
     {
-        $script = "redis.replicate_commands()
-            local cursor  = 0
-            local deleted = 0
-            local done    = false
-            local keys    = nil
-
-            repeat
-                local result = redis.call('SCAN', cursor, 'MATCH', ARGV[1])
-
-                cursor = result[1]
-                keys   = result[2]
-
-                for i, key in ipairs(keys) do
-                    redis.call('DEL', key)
-                    deleted = deleted + 1
-                end
-
-            until cursor == '0'
-            return deleted";
-
-        $this->baseRedis->expects($this->once())->method('eval')
-            ->with($script, ['foo*']);
+        $this->baseRedis->expects($this->at(0))->method('scan')
+            ->with(null, 'foo*')->willReturn([
+                'thud-foo-corge',
+                'baz-foo-wubble',
+            ]);
+        $this->baseRedis->expects($this->at(1))->method('delete')
+            ->with('thud-foo-corge');
+        $this->baseRedis->expects($this->at(2))->method('delete')
+            ->with('baz-foo-wubble');
+        $this->baseRedis->expects($this->at(3))->method('scan')
+            ->with(null, 'foo*')->willReturn([ 'quux-foo-31584' ]);
+        $this->baseRedis->expects($this->at(4))->method('delete')
+            ->with('quux-foo-31584');
 
         $method = new \ReflectionMethod($this->redis, 'deleteByPattern');
         $method->setAccessible(true);
