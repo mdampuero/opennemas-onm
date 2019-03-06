@@ -60,10 +60,17 @@ class Redis extends Cache
      */
     protected function deleteByPattern($pattern)
     {
-        return $this->getRedis()->eval(
-            'for i, name in ipairs(redis.call(\'KEYS\', ARGV[1])) do redis.call(\'DEL\', name); end',
-            [ $pattern ]
-        );
+        $cursor  = null;
+        $deleted = 0;
+
+        while ($keys = $this->getRedis()->scan($cursor, $pattern)) {
+            foreach ($keys as $key) {
+                $this->getRedis()->delete($key);
+                $deleted = $deleted + 1;
+            }
+        }
+
+        return $deleted;
     }
 
     /**
@@ -113,6 +120,8 @@ class Redis extends Cache
             if (!empty($this->auth)) {
                 $this->redis->auth($this->auth);
             }
+
+            $this->redis->setOption(RedisBase::OPT_SCAN, RedisBase::SCAN_RETRY);
         }
 
         return $this->redis;

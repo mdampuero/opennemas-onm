@@ -19,8 +19,10 @@ class RedisTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->baseRedis = $this->getMockBuilder('Redis')
-            ->setMethods([ 'auth', 'delete', 'exists', 'eval', 'expire', 'get', 'mGet', 'mSet', 'pconnect', 'set' ])
-            ->getMock();
+            ->setMethods([
+                'auth', 'delete', 'exists', 'eval', 'expire', 'get', 'mGet',
+                'mSet', 'pconnect', 'scan', 'set', 'setOption'
+            ])->getMock();
 
         $this->redis = $this->getMockBuilder('Common\Cache\Redis\Redis')
             ->setMethods([ 'getRedis' ])
@@ -39,31 +41,28 @@ class RedisTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests deleteByPattern.
-     *
-     * TODO: Uncomment when updating PHP to version 7.0
      */
-    //public function testDeleteByPattern()
-    //{
-        //$this->baseRedis->expects($this->once())->method('eval')->with(
-            //'redis.call("del", unpack(redis.call("keys", ARGV[1])))',
-            //['foo*']
-        //);
+    public function testDeleteByPattern()
+    {
+        $this->baseRedis->expects($this->at(0))->method('scan')
+            ->with(null, 'foo*')->willReturn([
+                'thud-foo-corge',
+                'baz-foo-wubble',
+            ]);
+        $this->baseRedis->expects($this->at(1))->method('delete')
+            ->with('thud-foo-corge');
+        $this->baseRedis->expects($this->at(2))->method('delete')
+            ->with('baz-foo-wubble');
+        $this->baseRedis->expects($this->at(3))->method('scan')
+            ->with(null, 'foo*')->willReturn([ 'quux-foo-31584' ]);
+        $this->baseRedis->expects($this->at(4))->method('delete')
+            ->with('quux-foo-31584');
 
-        //$this->redis->deleteByPattern('foo*');
-    //}
+        $method = new \ReflectionMethod($this->redis, 'deleteByPattern');
+        $method->setAccessible(true);
 
-    /**
-     * Tests execute.
-     *
-     * TODO: Uncomment when updating PHP to version 7.0
-     */
-    //public function testExecute()
-    //{
-        //$this->baseRedis->expects($this->once())->method('eval')
-            //->with('foo' , [ 'bar' ]);
-
-        //$this->redis->execute('foo', [ 'bar' ]);
-    //}
+        $method->invokeArgs($this->redis, [ 'foo*' ]);
+    }
 
     /**
      * Tests getPrefix with default and custom values.
