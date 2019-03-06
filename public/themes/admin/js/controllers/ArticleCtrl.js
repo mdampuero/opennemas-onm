@@ -44,7 +44,7 @@
           created: new Date(),
           fk_author: null,
           params: {},
-          starttime: new Date(),
+          starttime: null,
           summary: '',
           tag_ids: []
         };
