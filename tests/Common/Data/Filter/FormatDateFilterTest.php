@@ -89,7 +89,9 @@ class FormatDateFilterTest extends \PHPUnit\Framework\TestCase
         ];
         $filter = new FormatDateFilter($this->container, $params);
 
-        $this->assertEquals('September 23, 2011 at 5:44:09 PM GMT', $filter->filter($date));
+        // I use assert contains as in PHP 7.1 the string returned is September 23, 2011 at 5:44:09 PM GTM
+        // and in PHP 7.3 September 23, 2011 at 5:44:09 PM UTC
+        $this->assertContains('September 23, 2011 at 5:44:09 PM', $filter->filter($date));
     }
 
     public function testFilterWithCustomFormat()
