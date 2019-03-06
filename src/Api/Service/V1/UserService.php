@@ -138,6 +138,10 @@ class UserService extends OrmService
     public function getItem($id)
     {
         try {
+            if (empty($id)) {
+                throw new \InvalidArgumentException();
+            }
+
             $oql = sprintf('id = %s and type != 1', $id);
 
             return $this->container->get('orm.manager')

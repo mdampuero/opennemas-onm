@@ -185,6 +185,10 @@ class OrmService implements Service
     public function getItem($id)
     {
         try {
+            if (empty($id)) {
+                throw new \InvalidArgumentException();
+            }
+
             $item = $this->container->get('orm.manager')
                 ->getRepository($this->entity, $this->origin)->find($id);
 

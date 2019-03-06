@@ -19,6 +19,10 @@ class UserGroupService extends OrmService
     public function getItem($id)
     {
         try {
+            if (empty($id)) {
+                throw new \InvalidArgumentException();
+            }
+
             $oql = sprintf('pk_user_group = %s and type = 0', $id);
 
             return $this->container->get('orm.manager')
