@@ -28,16 +28,12 @@ class FormatDateFilter extends Filter
         $type     = $this->getParameter('type');
 
         // Check valid
-        if (empty($date)) {
+        if (empty($date) || empty($type)) {
             throw new \InvalidArgumentException();
         }
 
         if (!($date instanceof \DateTime)) {
             $date = new \DateTime($date);
-        }
-
-        if (empty($type)) {
-            throw new \InvalidArgumentException();
         }
 
         $dateFormat = $hourFormat = null;
