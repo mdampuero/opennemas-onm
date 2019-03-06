@@ -64,11 +64,17 @@ class CategoryController extends FrontendController
     {
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
-        $params = $this->getQueryParameters($action, $request);
+        $params = $this->getQueryParameters($action, $request->query->all());
+
+        // Fix category_name from query basing on item
+        $params['category_name'] = $item->name;
 
         $expected = $this->getExpectedUri($action, $params);
 
-        if (strpos($expected, $request->getRequestUri()) !== 0) {
+        if (!preg_match(
+            '@^' . preg_quote($expected) . '($|\?.+)@',
+            $request->getRequestUri()
+        )) {
             return new RedirectResponse($expected, 301);
         }
 
