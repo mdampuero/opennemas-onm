@@ -60,10 +60,6 @@ class FormatDateFilter extends Filter
             $formatter->setPattern($format);
         }
 
-        try {
-            return $formatter->format($date);
-        } catch (\Exception $e) {
-            return;
-        }
+        return $formatter->format($date);
     }
 }
