@@ -40,8 +40,8 @@ orm:
                             type: string
                             options: { default: null, notnull: false, length: 255 }
                         description:
-                            type: string
-                            options: { default: null, notnull: false, length: 65532 }
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
                         inmenu:
                             type: integer
                             options: { default: '0', notnull: false }

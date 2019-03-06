@@ -250,13 +250,6 @@ class Privilege
                 'module'       => 'OPINION_MANAGER',
                 'enabled'      => 1
             ],
-            27 => [
-                'pk_privilege' => 27,
-                'name'         => 'OPINION_FRONTPAGE',
-                'description'  => _('Manage frontpage'),
-                'module'       => 'OPINION_MANAGER',
-                'enabled'      => 1
-            ],
             28 => [
                 'pk_privilege' => 28,
                 'name'         => 'OPINION_AVAILABLE',

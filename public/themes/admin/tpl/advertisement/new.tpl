@@ -690,7 +690,7 @@ jQuery(document).ready(function($) {
               {is_module_activated name="FIA_MODULE"}
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Facebook Instant Articles{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1075, 1099) > 0">[% countPositionsSelectedbyRange(1075, 1099) %]</span>
+                  {t}Facebook Instant Articles{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1075, 1089) > 0">[% countPositionsSelectedbyRange(1075, 1089) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   {include file="advertisement/partials/advertisement_positions_fia.tpl"}
@@ -700,7 +700,7 @@ jQuery(document).ready(function($) {
 
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Others{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1100, null) > 0">[% countPositionsSelectedbyRange(1100, null) %]</span>
+                  {t}Others{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1090, null) > 0">[% countPositionsSelectedbyRange(1090, null) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   <div class="row">

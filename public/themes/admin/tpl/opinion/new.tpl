@@ -37,7 +37,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if $opinion->id}{url name=admin_opinion_update id=$opinion->id}{else}{url name=admin_opinion_create}{/if}" method="POST" id="formulario" ng-controller="OpinionCtrl" ng-init="init({json_encode($opinion)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
+  <form action="{if $opinion->id}{url name=backend_opinion_update id=$opinion->id}{else}{url name=backend_opinion_create}{/if}" method="POST" id="formulario" ng-controller="OpinionCtrl" ng-init="init({json_encode($opinion)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -64,7 +64,7 @@
           <div class="all-actions pull-right">
             <div class="nav quick-section">
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_opinions}" title="{t}Go back{/t}">
+                <a class="btn btn-link" href="{url name=backend_opinions_list}" title="{t}Go back{/t}">
                   <i class="fa fa-reply"></i>
                 </a>
               </li>
@@ -72,7 +72,7 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks hidden-xs">
-                <button class="btn btn-white" id="preview-button" ng-click="preview('admin_opinion_preview', 'admin_opinion_get_preview')" type="button" id="preview_button">
+                <button class="btn btn-white" id="preview-button" ng-click="preview('backend_opinion_preview', 'backend_opinion_get_preview')" type="button" id="preview_button">
                   <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': loading }" ></i>
                   {t}Preview{/t}
                 </button>

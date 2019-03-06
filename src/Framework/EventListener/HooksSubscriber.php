@@ -401,8 +401,8 @@ class HooksSubscriber implements EventSubscriberInterface
 
         // Delete caches for opinion frontpage and author frontpages
         $this->template
-            ->delete('frontpage', 'opinion', sprintf('%06d', $authorId))
-            ->delete('frontpage', 'blog', sprintf('%06d', $authorId));
+            ->delete('opinion', 'list', $authorId)
+            ->delete('blog', 'list', $authorId);
 
         $this->cleanOpcode();
     }
@@ -446,7 +446,9 @@ class HooksSubscriber implements EventSubscriberInterface
             ->delete('content', $content->pk_content)
             ->delete('archive', date('Ymd'))
             ->delete('rss', $content->content_type_name)
-            ->delete('frontpage', $content->content_type_name);
+            ->delete('frontpage', $content->content_type_name)
+            ->delete($content->content_type_name, 'frontpage')
+            ->delete($content->content_type_name, 'list');
 
         if ($content->content_type_name == 'article') {
             $this->template
@@ -463,7 +465,10 @@ class HooksSubscriber implements EventSubscriberInterface
             $this->template->delete('sitemap', 'video');
         } elseif ($content->content_type_name == 'opinion') {
             $this->template
-                ->delete('frontpage', 'blog')
+                ->delete('blog', 'list')
+                ->delete('blog', 'listauthor')
+                ->delete($content->content_type_name, 'list')
+                ->delete($content->content_type_name, 'listauthor', $content->fk_author)
                 ->delete('sitemap', 'news')
                 ->delete('sitemap', 'web');
         }

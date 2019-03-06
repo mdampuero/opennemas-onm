@@ -185,6 +185,10 @@ class OrmService implements Service
     public function getItem($id)
     {
         try {
+            if (empty($id)) {
+                throw new \InvalidArgumentException();
+            }
+
             $item = $this->em->getRepository($this->entity, $this->origin)->find($id);
 
             $this->localizeItem($item);
@@ -497,6 +501,7 @@ class OrmService implements Service
     {
         return \underscore(basename($this->entity)) . '.' . $action;
     }
+
     /**
      * Localizes all l10n_string properties of an Entity basing on the current
      * context.

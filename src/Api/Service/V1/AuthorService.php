@@ -20,6 +20,10 @@ class AuthorService extends UserService
     public function getItem($id)
     {
         try {
+            if (empty($id)) {
+                throw new \InvalidArgumentException();
+            }
+
             $oql = sprintf('id = %s and type != 1 and user_group_id = 3', $id);
 
             return $this->container->get('orm.manager')

@@ -55,7 +55,7 @@
     {t 1=$smarty.capture.article_list_url 2=$smarty.capture.frontpage_list_url escape=off}Your articles have been published, check them in the <a href="%1">article list</a> or you can add them to one of your <a href="%2">frontpages</a>{/t}
   </span>
   <span ng-show="template.type == 'Opinion'">
-    {capture name=opinion_list_url}{url name=admin_opinions}{/capture}
+    {capture name=opinion_list_url}{url name=backend_opinions_list}{/capture}
     {t 1=$smarty.capture.opinion_list_url 2=$smarty.capture.frontpage_list_url escape=off}Your opinions have been published, check them in the <a href="%1">opinions list</a>or you can add them to one of your <a href="%2">frontpages</a>{/t}
   </span>
   <span ng-show="!template.type || template.type == 'photo'">

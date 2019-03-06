@@ -209,6 +209,20 @@
                     </div>
                   </div>
                   {/is_module_activated}
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="page_id_comment" class="col-sm-4 col-form-label">{t}Comments{/t}</label>
+                      <div class="col-sm-8">
+                        <input class="form-control" id="page_id_comment" type="number" ng-required="smart.domain" name="smart_ad_server_page_id_comment" value="{$configs['smart_ad_server']['page_id']['comment']}">
+                      </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="page_id_other" class="col-sm-4 col-form-label">{t}Others{/t}</label>
+                      <div class="col-sm-8">
+                        <input class="form-control" id="page_id_other" type="number" ng-required="smart.domain" name="smart_ad_server_page_id_other" value="{$configs['smart_ad_server']['page_id']['other']}">
+                      </div>
+                    </div>
+                  </div>
                   <div class="help">{t}The ad server pages ID{/t}</div>
                 </div>
                 <div class="form-group">

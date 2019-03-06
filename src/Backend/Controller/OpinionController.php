@@ -14,7 +14,7 @@ use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class OpinionsController extends Controller
+class OpinionController extends Controller
 {
     /**
      * The name of the setting to save extra field configuration.
@@ -22,6 +22,13 @@ class OpinionsController extends Controller
      * @var string
      */
     const EXTRA_INFO_TYPE = 'extraInfoContents.OPINION_MANAGER';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'preview' => 'opinion_inner'
+    ];
 
     /**
      * Lists all the opinions.
@@ -34,101 +41,6 @@ class OpinionsController extends Controller
     public function listAction()
     {
         return $this->render('opinion/list.tpl', [ 'home' => false ]);
-    }
-
-    /**
-     * Manages the frontpage of opinion.
-     *
-     * @param  Request $request The request object.
-     * @return Response         The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('OPINION_FRONTPAGE')")
-     */
-    public function frontpageAction(Request $request)
-    {
-        $page   = $request->query->getDigits('page', 1);
-        $config = $this->get('orm.manager')->getDataSet('Settings')
-            ->get([ 'opinion_settings', 'items_per_page']);
-
-        $numEditorial = $config['opinion_settings']['total_editorial'];
-        $numDirector  = $config['opinion_settings']['total_director'];
-        $numOpinions  = $config['items_per_page'];
-
-        if (!empty($config['opinion_settings'])
-            && array_key_exists('total_opinions', $config['opinion_settings'])
-        ) {
-            $numOpinions = $config['opinion_settings']['total_opinions'];
-        }
-
-        $authors   = $this->getAuthors();
-        $cm        = new \ContentManager();
-        $director  = [];
-        $editorial = [];
-        $where     = '';
-
-        $bloggerIds = array_map(function ($a) {
-            return $a->id;
-        }, array_filter($authors, function ($a) {
-            return !empty($a->is_blog);
-        }));
-
-        if (!empty($bloggerIds)) {
-            $where .= ' AND opinions.fk_author NOT IN (' . implode(', ', $bloggerIds) . ") ";
-        }
-
-        $opinions = $cm->find(
-            'Opinion',
-            'in_home=1 and content_status=1 and type_opinion=0 ' . $where,
-            'ORDER BY position ASC , created DESC LIMIT ' . $numOpinions
-        );
-
-        if ($numEditorial > 0) {
-            $editorial = $cm->find(
-                'Opinion',
-                'in_home=1 and content_status=1 and type_opinion=1',
-                'ORDER BY position ASC, created DESC LIMIT ' . $numEditorial
-            );
-        }
-
-        if ($numDirector > 0) {
-            $director = $cm->find(
-                'Opinion',
-                'in_home=1 and content_status=1 and type_opinion=2',
-                'ORDER BY position ASC , created DESC LIMIT ' . $numDirector
-            );
-        }
-
-        if ($numOpinions > 0 && count($opinions) > $numOpinions) {
-            $this->get('session')->getFlashBag()->add(
-                'notice',
-                sprintf(_("You must put %d opinions %s in the frontpage "), $numOpinions, 'opinions')
-            );
-        }
-
-        if ($numEditorial > 0 && count($editorial) != $numEditorial) {
-            $this->get('session')->getFlashBag()->add(
-                'notice',
-                sprintf(_("You must put %d opinions %s in the frontpage "), $numEditorial, 'editorial')
-            );
-        }
-
-        if ($numDirector > 0 && count($director) != $numDirector) {
-            $this->get('session')->getFlashBag()->add(
-                'notice',
-                sprintf(_("You must put %d opinions %s in the frontpage "), $numDirector, 'opinion del director')
-            );
-        }
-
-        return $this->render('opinion/list.tpl', [
-            'authors'   => $this->get('api.service.author')->responsify($authors),
-            'opinions'  => \Onm\StringUtils::convertToUtf8($opinions),
-            'director'  => \Onm\StringUtils::convertToUtf8($director),
-            'editorial' => \Onm\StringUtils::convertToUtf8($editorial),
-            'type'      => 'frontpage',
-            'page'      => $page,
-            'home'      => true,
-        ]);
     }
 
     /**
@@ -152,7 +64,7 @@ class OpinionsController extends Controller
                 sprintf(_('Unable to find the opinion with the id "%d"'), $id)
             );
 
-            return $this->redirect($this->generateUrl('admin_opinions'));
+            return $this->redirect($this->generateUrl('backend_opinions_list'));
         }
 
         // Check if you can see others opinions
@@ -164,7 +76,7 @@ class OpinionsController extends Controller
                 _("You can't modify this opinion because you don't have enought privileges.")
             );
 
-            return $this->redirect($this->generateUrl('admin_opinions'));
+            return $this->redirect($this->generateUrl('backend_opinions_list'));
         }
 
         $authors = $this->getAuthors();
@@ -184,7 +96,7 @@ class OpinionsController extends Controller
         if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
             $extraFields = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
-                ->get(OpinionsController::EXTRA_INFO_TYPE);
+                ->get(self::EXTRA_INFO_TYPE);
         }
 
         $tags = [];
@@ -223,7 +135,7 @@ class OpinionsController extends Controller
             if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
                 $extraFields = $this->get('orm.manager')
                     ->getDataSet('Settings', 'instance')
-                    ->get(OpinionsController::EXTRA_INFO_TYPE);
+                    ->get(self::EXTRA_INFO_TYPE);
             }
 
             return $this->render('opinion/new.tpl', [
@@ -271,7 +183,7 @@ class OpinionsController extends Controller
             'tags'             => json_decode($request->request->get('tags', ''), true)
         ];
 
-        $data = $this->loadMetaDataFields($data, $request->request, OpinionsController::EXTRA_INFO_TYPE);
+        $data = $this->loadMetaDataFields($data, $request->request, self::EXTRA_INFO_TYPE);
 
         if ($opinion->create($data)) {
             $this->get('session')->getFlashBag()->add(
@@ -286,7 +198,7 @@ class OpinionsController extends Controller
         }
 
         return $this->redirect(
-            $this->generateUrl('admin_opinion_show', [ 'id' => $opinion->id ])
+            $this->generateUrl('backend_opinion_show', [ 'id' => $opinion->id ])
         );
     }
 
@@ -312,7 +224,7 @@ class OpinionsController extends Controller
                 sprintf(_('Unable to find the opinion with the id "%d"'), $id)
             );
 
-            return $this->redirect($this->generateUrl('admin_opinions'));
+            return $this->redirect($this->generateUrl('backend_opinions_list'));
         }
 
         if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
@@ -323,7 +235,7 @@ class OpinionsController extends Controller
                 _("You can't modify this opinion because you don't have enought privileges.")
             );
 
-            return $this->redirect($this->generateUrl('admin_opinions'));
+            return $this->redirect($this->generateUrl('backend_opinions_list'));
         }
 
         $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
@@ -337,7 +249,7 @@ class OpinionsController extends Controller
                 _("Opinion data sent not valid.")
             );
 
-            return $this->redirect($this->generateUrl('admin_opinion_show', [ 'id' => $id ]));
+            return $this->redirect($this->generateUrl('backend_opinion_show', [ 'id' => $id ]));
         }
 
         $data = [
@@ -368,7 +280,7 @@ class OpinionsController extends Controller
             'tags'             => json_decode($request->request->get('tags', ''), true)
         ];
 
-        $data = $this->loadMetaDataFields($data, $request->request, OpinionsController::EXTRA_INFO_TYPE);
+        $data = $this->loadMetaDataFields($data, $request->request, self::EXTRA_INFO_TYPE);
 
         if ($opinion->update($data)) {
             $this->get('session')->getFlashBag()->add(
@@ -382,56 +294,11 @@ class OpinionsController extends Controller
             );
         }
 
-        return $this->redirect($this->generateUrl('admin_opinion_show', [
+        return $this->redirect($this->generateUrl('backend_opinion_show', [
             'id' => $opinion->id
         ]));
     }
 
-    /**
-     * Change in_home status for one opinion given its id.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('OPINION_HOME')")
-     */
-    public function toggleInHomeAction(Request $request)
-    {
-        $id     = $request->query->getDigits('id', 0);
-        $status = $request->query->getDigits('status', 0);
-        $type   = $request->query->filter('type', 0, FILTER_SANITIZE_STRING);
-        $page   = $request->query->getDigits('page', 1);
-
-        $opinion = new \Opinion($id);
-
-        if (is_null($opinion->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Unable to find an opinion with the id "%d"'), $id)
-            );
-        } else {
-            $opinion->setInHome($status, $this->getUser()->id);
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                sprintf(_('Successfully changed in home state for the opinion "%s"'), $opinion->title)
-            );
-        }
-
-        if ($type != 'frontpage') {
-            $url = $this->generateUrl('admin_opinions', [
-                'type' => $type,
-                'page' => $page
-            ]);
-        } else {
-            $url = $this->generateUrl('admin_opinions_frontpage', [
-                'page' => $page
-            ]);
-        }
-
-         return $this->redirect($url);
-    }
 
     /**
      * Lists the available opinions for the frontpage manager.
@@ -473,7 +340,7 @@ class OpinionsController extends Controller
             'page'        => $page,
             'total'       => $countOpinions,
             'route'       => [
-                'name'   => 'admin_opinions_content_provider',
+                'name'   => 'backend_opinions_content_provider',
                 'params' => [ 'category' => $categoryId ]
             ],
         ]);
@@ -502,7 +369,7 @@ class OpinionsController extends Controller
                 'configs'      => $ds->get([ 'opinion_settings' ]),
                 'extra_fields' => $this->get('orm.manager')
                     ->getDataSet('Settings', 'instance')
-                    ->get(OpinionsController::EXTRA_INFO_TYPE)
+                    ->get(self::EXTRA_INFO_TYPE)
             ]);
         }
 
@@ -511,10 +378,7 @@ class OpinionsController extends Controller
 
         $configs = [
             'opinion_settings' => [
-                'total_director'        => filter_var($configsRAW['total_director'], FILTER_VALIDATE_INT),
-                'total_editorial'       => filter_var($configsRAW['total_editorial'], FILTER_VALIDATE_INT),
                 'total_opinions'        => filter_var($configsRAW['total_opinions'], FILTER_VALIDATE_INT),
-                'total_opinion_authors' => filter_var($configsRAW['total_opinion_authors'], FILTER_VALIDATE_INT),
                 'blog_orderFrontpage'   => filter_var($configsRAW['blog_orderFrontpage'], FILTER_SANITIZE_STRING),
                 'blog_itemsFrontpage'   => filter_var($configsRAW['blog_itemsFrontpage'], FILTER_VALIDATE_INT),
             ],
@@ -527,12 +391,12 @@ class OpinionsController extends Controller
             $this->get('session')->getFlashBag()
                 ->add('success', _('Settings saved successfully.'));
 
-            return $this->redirect($this->generateUrl('admin_opinions_config'));
+            return $this->redirect($this->generateUrl('backend_opinions_config'));
         } catch (\Exception $e) {
             $this->get('session')->getFlashBag()
                 ->add('error', _('Unable to save the settings.'));
 
-            return $this->redirect($this->generateUrl('admin_opinions_config'));
+            return $this->redirect($this->generateUrl('backend_opinions_config'));
         }
     }
 
@@ -547,32 +411,26 @@ class OpinionsController extends Controller
      */
     public function previewAction(Request $request)
     {
-        $opinion    = new \Opinion();
-        $cm         = new \ContentManager();
-        $this->view = $this->get('core.template');
+        $this->get('core.locale')->setContext('frontend')
+            ->setRequestLocale($request->get('locale'));
 
-        $this->view->setCaching(0);
-        $this->get('core.locale')->setContext('frontend');
+        $opinion     = new \Opinion();
+        $cm          = new \ContentManager();
+        $opinion->id = 0;
 
-        $opinionContents = $request->request->filter('contents');
-
-        // Fetch all opinion properties and generate a new object
-        foreach ($opinionContents as $value) {
+        $data = $request->request->filter('contents');
+        foreach ($data as $value) {
             if (isset($value['name']) && !empty($value['name'])) {
                 $opinion->{$value['name']} = $value['value'];
             }
         }
 
+        $this->view = $this->get('core.template');
+        $this->view->setCaching(0);
+
         $opinion->tag_ids = json_decode($opinion->tag_ids);
 
-        // Set a dummy Id for the opinion if doesn't exists
-        if (empty($opinion->pk_article) && empty($opinion->id)) {
-            $opinion->pk_opinion = 0;
-            $opinion->id         = 0;
-        }
-
-        list($positions, $advertisements) =
-            \Frontend\Controller\OpinionsController::getAds('inner');
+        list($positions, $advertisements) = $this->getAdvertisements();
 
         try {
             if (!empty($opinion->fk_author)) {
@@ -632,7 +490,7 @@ class OpinionsController extends Controller
             $otOpinion->uri              = $otOpinion->uri;
         }
 
-        $this->view->assign([
+        $params = [
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
             'opinion'        => $opinion,
@@ -644,7 +502,9 @@ class OpinionsController extends Controller
             'suggested'      => $machineSuggestedContents,
             'tags'           => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($opinion->tag_ids)['items']
-        ]);
+        ];
+
+        $this->view->assign($params);
 
         $this->get('session')->set(
             'last_preview',
