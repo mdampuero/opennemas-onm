@@ -43,10 +43,10 @@ class CategoryController extends ContentController
             'name'                => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
             'title'               => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
             'inmenu'              => $request->request->getDigits('inmenu', 0),
-            'subcategory'         => $request->request->getDigits('subcategory', 0),
+            'subcategory'         => $request->request->get('subcategory'),
             'internal_category'   => $request->request->getDigits('internal_category'),
-            'logo_path'           => $request->request->filter('logo_path', '', FILTER_SANITIZE_STRING),
-            'color'               => $request->request->filter('color', '', FILTER_SANITIZE_STRING),
+            'logo_path'           => $request->request->filter('logo_path', null, FILTER_SANITIZE_STRING),
+            'color'               => $request->request->get('color', null),
             'params'  => [
                 'inrss'           => $inrss,
             ],
@@ -82,7 +82,7 @@ class CategoryController extends ContentController
                 $data['logo_path'] = $nameFile;
             }
         } else {
-            $data['logo_path'] = '';
+            $data['logo_path'] = null;
         }
 
         $category   = null;

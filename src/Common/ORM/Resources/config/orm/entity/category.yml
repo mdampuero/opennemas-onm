@@ -38,6 +38,9 @@ orm:
                         name:
                             type: string
                             options: { default: null, notnull: false, length: 255 }
+                        description:
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
                         inmenu:
                             type: integer
                             options: { default: '0', notnull: false }
@@ -49,7 +52,7 @@ orm:
                             options: { default: '0', comment: 'equal content_type & global=0 ' }
                         fk_content_category:
                             type: integer
-                            options: { default: '0', notnull: false }
+                            options: { default: null, notnull: false }
                         params:
                             type: text
                             options: { default: null, length: 65532, notnull: false }
