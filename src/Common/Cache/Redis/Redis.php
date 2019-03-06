@@ -63,7 +63,7 @@ class Redis extends Cache
         $cursor  = null;
         $deleted = 0;
 
-        while ($keys = $this->getRedis()->scan($cursor, $pattern)) {
+        while ($keys = $this->getRedis()->scan($cursor, $pattern, 10000)) {
             foreach ($keys as $key) {
                 $this->getRedis()->delete($key);
                 $deleted = $deleted + 1;
