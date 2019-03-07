@@ -108,6 +108,12 @@
             $scope.article[keys[i]] = $scope.data.extra[keys[i]];
           }
 
+          // Force params to be an object when empty array from server
+          if (angular.isArray($scope.data.article.params) &&
+              $scope.data.article.params.length === 0) {
+            $scope.data.article.params = {};
+          }
+
           keys = [
             'imageHome', 'withGallery', 'withGalleryInt',
             'withGalleryHome'
@@ -681,7 +687,6 @@
           }
 
           // Show a message when leaving before saving
-
           $($window).bind('beforeunload', function() {
             if ($scope.articleForm.$dirty) {
               return $window.leaveMessage;
