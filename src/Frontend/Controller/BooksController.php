@@ -112,7 +112,7 @@ class BooksController extends Controller
             $this->view->assign([
                 'books'    => $books,
                 'category' => $this->get('api.service.category')
-                    ->getItem($book->pk_fk_content_category)
+                    ->getItem($content->pk_fk_content_category)
             ]);
         }
 
