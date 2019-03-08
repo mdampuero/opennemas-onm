@@ -24,7 +24,8 @@
             multiple: '@',
             ngModel: '=',
             placeholder: '@',
-            selected: '=?'
+            selected: '=?',
+            selectedText: '@'
           },
           template: function() {
             return '<ui-select class="[% cssClass %]" ng-required="required" name="category" ng-if="!multiple" ng-model="$parent.$parent.ngModel" theme="select2">' +
@@ -43,7 +44,7 @@
                     ' [% placeholder %]' +
                   '</span>' +
                   '<span ng-show="ngModel && ngModel.length !== 0">' +
-                    ' [% ngModel.length ? ngModel.length : 1 %] selected' +
+                    ' [% ngModel.length ? ngModel.length : 1 %] [% selectedText %]' +
                   '</span>' +
                   '<span class="select2-arrow"><b></b></span>' +
                 '</span>' +
@@ -71,9 +72,10 @@
             '<input id="category" name="category" type="hidden" value="[% ngModel %]">';
           },
           link: function($scope, elem, $attrs) {
-            $scope.cssClass = $attrs.class ? $attrs.class : '';
-            $scope.multiple = $attrs.multiple;
-            $scope.required = $attrs.required ? $attrs.required : false;
+            $scope.cssClass     = $attrs.class ? $attrs.class : '';
+            $scope.multiple     = $attrs.multiple;
+            $scope.required     = $attrs.required ? $attrs.required : false;
+            $scope.selectedText = $scope.selectedText || 'selected';
 
             http.get('api_v1_backend_categories_list').then(function(response) {
               response.data.items = response.data.items.filter(function(e) {
