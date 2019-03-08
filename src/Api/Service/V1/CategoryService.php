@@ -10,8 +10,6 @@
 namespace Api\Service\V1;
 
 use Api\Exception\ApiException;
-use Common\ORM\Entity\Tag;
-use Common\Core\Component\Validator\Validator;
 
 class CategoryService extends OrmService
 {
