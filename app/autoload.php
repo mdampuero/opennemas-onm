@@ -51,7 +51,6 @@ define('SITE', $serverName);
 define('BASE_URL', '/');
 define('ADMIN_DIR', 'admin');
 define('SITE_URL', $protocol . SITE . BASE_URL);
-define('SITE_URL_ADMIN', SITE_URL . ADMIN_DIR);
 
 define('IMG_DIR', 'images');
 define('FILE_DIR', 'files');
