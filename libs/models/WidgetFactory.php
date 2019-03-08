@@ -127,9 +127,11 @@ class WidgetFactory
      */
     protected function getCategories()
     {
+        $context = $this->container->get('core.locale')->getContext();
         $this->container->get('core.locale')->setContext('frontend');
+
         $items = $this->container->get('api.service.category')->getList();
-        $this->container->get('core.locale')->setContext('backend');
+        $this->container->get('core.locale')->setContext($context);
 
         $categories = [ 0 => _('Select a category...') ];
 
