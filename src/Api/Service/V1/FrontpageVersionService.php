@@ -335,12 +335,13 @@ class FrontpageVersionService extends OrmService
             if (empty($frontpageVersion['frontpage_id'])) {
                 $frontpage = ['name' => _('Frontpage')];
                 if ($frontpageVersion['category_id'] != '0') {
+                    $context = $this->container->get('core.locale')->getContext();
                     $this->container->get('core.locale')->setContext('frontend');
 
                     $category = $this->container->get('api.service.category')
                         ->getItem($frontpageVersion['category_id']);
 
-                    $this->container->get('core.locale')->setContext('backend');
+                    $this->container->get('core.locale')->setContext($context);
 
                     $frontpage['name'] = $category->name;
                 }
