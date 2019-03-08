@@ -206,9 +206,11 @@ class MenusController extends Controller
      */
     protected function getCategories()
     {
+        $context = $this->get('core.locale')->getContext();
         $this->get('core.locale')->setContext('frontend');
+
         $categories = $this->get('api.service.category')->getList();
-        $this->get('core.locale')->setContext('backend');
+        $this->get('core.locale')->setContext($context);
 
         return $this->get('api.service.category')
             ->responsify($categories['items']);
