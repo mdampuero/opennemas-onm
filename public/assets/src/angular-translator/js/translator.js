@@ -60,7 +60,7 @@
               '</button>' +
               '<ul class="dropdown-menu no-padding" role="menu">' +
                 '<li ng-repeat="language in languages" ng-if="language.value != ngModel">' +
-                  '<a href="#" ng-click="changeSelected($event, language.value)">' +
+                  '<a href="#" ng-click="changeCurrentLanguage($event, language.value)">' +
                     '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>' +
                     '{{language.name}}' +
                   '</a>' +
@@ -68,11 +68,12 @@
               '</ul>' +
             '</div>';
           },
-          link: function($scope, element) {
-            $scope.max       = 4;
-            $scope.collapsed = $window.innerWidth < 992;
-            $scope.languages = {};
-            $scope.size      = Object.keys($scope.options.available).length;
+          link: function($scope) {
+            $scope.max           = 4;
+            $scope.collapseWidth = 992;
+            $scope.collapsed     = $window.innerWidth < $scope.collapseWidth;
+            $scope.languages     = {};
+            $scope.size          = Object.keys($scope.options.available).length;
 
             var getOption = function(name, value, main, translators, keys, item) {
               var option = {
@@ -124,14 +125,14 @@
              *
              * @param {String} The language value.
              */
-            $scope.changeSelected = function(e, language) {
+            $scope.changeCurrentLanguage = function(e, language) {
               e.preventDefault();
               $scope.ngModel = language;
             };
 
             // Collapse directive when window width changes
             angular.element($window).bind('resize', function() {
-              $scope.collapsed = $window.innerWidth < 992;
+              $scope.collapsed = $window.innerWidth < $scope.collapseWidth;
 
               $scope.$apply();
             });
