@@ -373,10 +373,7 @@ class CategoryController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        // Configure cache lifetime
-        $expires = min(array_map(function ($a) {
-            return $a->endtime;
-        }, $contents));
+        $expires = $this->getExpires($contents);
 
         if (!empty($expires)) {
             $lifetime = strtotime($expires) - time();
