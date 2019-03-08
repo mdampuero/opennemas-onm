@@ -474,7 +474,7 @@ class FrontendController extends Controller
      *
      * @param array $params the list of parameters already in set.
      */
-    protected function hydrateList(array $params): void
+    protected function hydrateList(array &$params) : void
     {
     }
 

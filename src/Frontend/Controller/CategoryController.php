@@ -83,7 +83,7 @@ class CategoryController extends FrontendController
         $this->view->setConfig($this->getCacheConfiguration($action));
 
         if (!$this->isCached($params)) {
-            $this->hydrateShow($params, $item);
+            $this->hydrateList($params);
         }
 
         return $this->render($this->getTemplate($action), $params);
@@ -359,7 +359,7 @@ class CategoryController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    protected function hydrateShow(&$params = [], $item = null)
+    protected function hydrateList(array &$params = []) : void
     {
         // Invalid page provided as parameter
         if ($params['page'] <= 0) {
