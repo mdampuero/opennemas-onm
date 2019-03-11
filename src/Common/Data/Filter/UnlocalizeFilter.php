@@ -20,6 +20,11 @@ class UnlocalizeFilter extends LocalizeFilter
      */
     public function filterValue($value)
     {
+        // If array, already unlocalized
+        if (is_array($value)) {
+            return $value;
+        }
+
         // Locales from direct parameters
         $locales = $this->getParameter('locales', null, false);
         $locale  = $this->container->get('core.locale');
@@ -30,15 +35,6 @@ class UnlocalizeFilter extends LocalizeFilter
                 array_keys($locale->getAvailableLocales('frontend')) : [];
         }
 
-        // Already unlocalized
-        if (is_array($value)
-            && (count(array_diff($locales, array_keys($value))) < count($locales)
-            || in_array($locale->getLocale('frontend'), array_keys($value), true))
-        ) {
-            return $value;
-        }
-
         return [ $locale->getLocale('frontend') => $value ];
-
     }
 }
