@@ -386,8 +386,16 @@
               return value[locale];
             }
 
+            // Return first locale found in available
             for (var key in this.config.available) {
               if (value[key] && value[key] !== '') {
+                return value[key];
+              }
+            }
+
+            // Return first valid locale basing on key pattern
+            for (var key in value) {
+              if (/[a-z]{2}(_[A-Z]{2})?/.test(key)) {
                 return value[key];
               }
             }
