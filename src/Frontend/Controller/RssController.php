@@ -136,9 +136,10 @@ class RssController extends Controller
      */
     public function generalRssAction(Request $request)
     {
-        $type     = $request->query->filter('type', 'article', FILTER_SANITIZE_STRING);
-        $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
-        $titles   = [
+        $id     = null;
+        $slug   = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
+        $type   = $request->query->filter('type', 'article', FILTER_SANITIZE_STRING);
+        $titles = [
             'album'   => _('Latest Albums'),
             'article' => _('Latest News'),
             'opinion' => _('Latest Opinions'),
@@ -147,25 +148,27 @@ class RssController extends Controller
 
         // Setup templating cache layer
         $this->view->setConfig('rss');
-        $cacheID = $this->view->getCacheId('rss', $type, $category);
+        $cacheID = $this->view->getCacheId('rss', $type, $slug);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
             $rssTitle = $titles[$type];
 
-            if (!empty($category)) {
+            if (!empty($slug)) {
                 try {
                     $oql = sprintf(
                         'params regexp ".*\"inrss\";(s:1:\"1\"|i:1);.*" '
                         . 'and name regexp "(.*\"|^)%s(\".*|$)"',
-                        $category
+                        $slug
                     );
 
-                    $c = $this->get('api.service.category')
+                    $category = $this->get('api.service.category')
                         ->getItemBy($oql);
 
-                    $rssTitle = $rssTitle . ' - ' . $c->title;
+                    $id       = $category->pk_content_category;
+                    $slug     = $category->name;
+                    $rssTitle = $rssTitle . ' - ' . $category->title;
                 } catch (\Exception $e) {
                     throw new ResourceNotFoundException();
                 }
@@ -175,7 +178,7 @@ class RssController extends Controller
                 ->getDataSet('Settings', 'instance')
                 ->get('elements_in_rss', 10);
 
-            $contents = $this->getLatestContents($type, $category, $total);
+            $contents = $this->getLatestContents($type, $id, $total);
 
             $this->getRelatedContents($contents);
 
@@ -188,7 +191,7 @@ class RssController extends Controller
 
         $response = $this->render('rss/rss.tpl', [
             'cache_id' => $cacheID,
-            'x-tags'   => 'rss,' . $type . ',' . $category
+            'x-tags'   => 'rss,' . $type . ',' . $slug
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
@@ -355,17 +358,18 @@ class RssController extends Controller
     /**
      * Get latest contents given a type of content.
      *
-     * @param int $contentType The type of the contents to fetch.
-     * @param int $total The total number of contents.
+     * @param string  $contentType The content type name of the contents.
+     * @param integer $category    The category id.
+     * @param integer $total       The total number of contents.
      *
      * @return Array Latest contents.
      */
     public function getLatestContents($contentType = 'article', $category = null, $total = 10)
     {
-        $em = getService('entity_repository');
+        $em = $this->get('entity_repository');
 
         if ($contentType === 'opinion') {
-            $em = getService('opinion_repository');
+            $em = $this->get('opinion_repository');
         }
 
         $order   = [ 'starttime' => 'DESC' ];
@@ -375,13 +379,11 @@ class RssController extends Controller
             'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
             'starttime'         => [
                 'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
                 [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
             ],
             'endtime'           => [
                 'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
                 [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
             ]
@@ -392,19 +394,19 @@ class RssController extends Controller
             ->getList('params regexp ".*\"inrss\";(s:1:\"1\"|i:1);.*"');
 
         $ids = array_map(function ($a) {
-            return $a->name;
+            return $a->pk_content_category;
         }, $categories['items']);
 
         // Fix condition for IN operator when no categories
         $ids = empty($ids) ? [ '' ] : $ids;
 
         if ($contentType !== 'opinion') {
-            $filters['category_name'] = [
+            $filters['pk_fk_content_category'] = [
                 [ 'value' => $ids, 'operator' => 'IN' ]
             ];
 
             if (!empty($category)) {
-                $filters['category_name'] = [ [ 'value' => $category ] ];
+                $filters['pk_fk_content_category'] = [ [ 'value' => $category ] ];
             }
         }
 
