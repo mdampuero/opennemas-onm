@@ -727,7 +727,7 @@
 
         // Generates slug when flag changes
         $scope.$watch('flags.generate.slug', function(nv) {
-          if ($scope.article.slug || !nv) {
+          if (!nv || $scope.article.slug || !$scope.article.title) {
             $scope.flags.generate.slug = false;
 
             return;
