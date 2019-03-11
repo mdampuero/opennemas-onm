@@ -90,7 +90,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group">
-                    <input class="form-control" id="title" name="title" ng-blur="generate()" ng-model="article.title" ng-trim="false" placeholder="[% data.article.title[data.extra.options.default] %]" required tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.title[data.extra.options.default] %]">
+                    <input class="form-control" id="title" name="title" ng-blur="generate()" ng-model="article.title" ng-trim="false" placeholder="[% data.article.title[config.locale.default] %]" required tooltip-enable="config.locale.selected != config.locale.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.title[config.locale.default] %]">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.title.length >= 50 && article.title.length < 80, 'text-danger': article.title.length >= 80 }">
                         [% article.title ? article.title.length : 0 %]
@@ -105,7 +105,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group">
-                    <input class="form-control" id="title-int" maxlength="256" name="title_int" ng-model="article.title_int" ng-trim="false" placeholder="[% data.article.title_int[data.extra.options.default] %]" required tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.title_int[data.extra.options.default] %]">
+                    <input class="form-control" id="title-int" maxlength="256" name="title_int" ng-model="article.title_int" ng-trim="false" placeholder="[% data.article.title_int[config.locale.default] %]" required tooltip-enable="config.locale.selected != config.locale.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.title_int[config.locale.default] %]">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.title_int.length >= 50 && article.title_int.length < 100, 'text-danger': article.title_int.length >= 100 }">
                         [% article.title_int ? article.title_int.length : 0 %]
@@ -140,7 +140,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="pretitle">
-                    <input class="form-control" name="pretitle" ng-model="article.pretitle" ng-trim="false" placeholder="[% data.article.pretitle[data.extra.options.default] %]" tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.pretitle[data.extra.options.default] %]">
+                    <input class="form-control" name="pretitle" ng-model="article.pretitle" ng-trim="false" placeholder="[% data.article.pretitle[config.locale.default] %]" tooltip-enable="config.locale.selected != config.locale.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.pretitle[config.locale.default] %]">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.pretitle.length >= 50 && article.pretitle.length < 100, 'text-danger': article.pretitle.length >= 100 }">
                         [% article.pretitle ? article.pretitle.length : 0 %]
