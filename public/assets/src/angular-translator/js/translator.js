@@ -92,7 +92,7 @@
                 if (keys) {
                   for (var i = 0; i < keys.length; i++) {
                     if (!item[keys[i]]) {
-                      return option;
+                      continue;
                     }
 
                     if (angular.isString(item[keys[i]]) && value === main ||
