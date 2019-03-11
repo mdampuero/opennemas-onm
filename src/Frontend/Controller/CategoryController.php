@@ -373,7 +373,7 @@ class CategoryController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $expires = $this->getExpires($contents);
+        $expires = $this->getCacheExpire($contents);
 
         if (!empty($expires)) {
             $lifetime = strtotime($expires) - time();

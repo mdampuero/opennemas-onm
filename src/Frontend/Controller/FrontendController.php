@@ -218,13 +218,18 @@ class FrontendController extends Controller
      */
     protected function getCacheExpire(array $items)
     {
+        $listOfExpires = array_filter($items, function ($a) {
+            return !empty($a->endtime);
+        });
+
+        if (empty($listOfExpires)) {
+            return null;
+        }
         return min(array_map(function ($a) {
             return $a->endtime instanceof \Datetime
                 ? $a->endtime->format('Y-m-d H:i:s')
                 : $a->endtime;
-        }, array_filter($items, function ($a) {
-            return !empty($a->endtime);
-        })));
+        }, $listOfExpires));
     }
 
     /**
