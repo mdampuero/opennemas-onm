@@ -158,7 +158,7 @@ class RssController extends Controller
                 try {
                     $oql = sprintf(
                         'params regexp ".*\"inrss\";(s:1:\"1\"|i:1);.*" '
-                        . 'and name regexp "(%%\"|^)%s(\"%%|$)"',
+                        . 'and name regexp "(.*\"|^)%s(\".*|$)"',
                         $category
                     );
 
