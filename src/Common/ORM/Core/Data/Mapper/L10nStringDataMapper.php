@@ -48,6 +48,18 @@ class L10nStringDataMapper
      *
      * @return array The coverted array.
      */
+    public function fromText($value)
+    {
+        return $this->fromSTring($value);
+    }
+
+    /**
+     * Converts l10n_string to an array.
+     *
+     * @return string The l10n_string to convert.
+     *
+     * @return array The coverted array.
+     */
     public function toArray($value)
     {
         return $this->fromString($value);
