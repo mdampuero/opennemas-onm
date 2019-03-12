@@ -586,7 +586,7 @@ class Content implements \JsonSerializable, CsvSerializable
             'params'              => !isset($data['params']) || empty($data['params'])
                 ? null : serialize($data['params']),
             'slug'                => $data['slug'],
-            'starttime'           => empty($data['starttime']) || $data['starttime'] < date('Y-m-d H:i:s')
+            'starttime'           => !empty($data['starttime']) && $data['starttime'] < date('Y-m-d H:i:s')
                 ? date('Y-m-d H:i:s') : $data['starttime'],
             'position'            => empty($data['position'])
                 ? 2 : (int) $data['position'],
