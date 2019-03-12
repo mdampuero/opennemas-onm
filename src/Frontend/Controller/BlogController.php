@@ -105,8 +105,10 @@ class BlogController extends FrontendController
     {
         $content = parent::getItem($request);
 
-        $content->author = $this->get('user_repository')
-            ->find((int) $content->fk_author);
+        if (!empty($content)) {
+            $content->author = $this->get('user_repository')
+                ->find((int) $content->fk_author);
+        }
 
         return $content;
     }
