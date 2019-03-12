@@ -30,12 +30,12 @@ class FrontpagesController extends Controller
      */
     public function showAction(Request $request)
     {
-        $categoryName  = $request->query->get('category', null);
+        $categoryName  = $request->query->get('category', 'home');
         $category      = null;
         $categoryId    = 0;
         $categoryTitle = 0;
 
-        if (!empty($categoryName)) {
+        if (!empty($categoryName) && $categoryName !== 'home') {
             try {
                 $category = $this->get('api.service.category')
                     ->getItemBySlug($categoryName);
@@ -49,6 +49,7 @@ class FrontpagesController extends Controller
 
             $categoryId    = $category->pk_content_category;
             $categoryTitle = $category->title;
+            $categoryName  = $category->name;
         }
 
         list($contentPositions, $contents, $invalidationDt, $lastSaved) =
@@ -71,13 +72,6 @@ class FrontpagesController extends Controller
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheId)
         ) {
-            $this->view->assign([
-                'actual_category_id'    => $categoryId,
-                'actual_category_title' => $categoryTitle,
-                'category_data'         => $category,
-                'time'                  => $systemDate->getTimestamp()
-            ]);
-
             $ids        = array_keys($contents);
             $relatedIds = [];
 
@@ -182,13 +176,17 @@ class FrontpagesController extends Controller
         $invalidationDt->setTimeZone($this->get('core.locale')->getTimeZone());
 
         return $this->render('frontpage/frontpage.tpl', [
-            'advertisements'  => $advertisements,
-            'ads_positions'   => $adsPositions,
-            'cache_id'        => $cacheId,
-            'category_name'   => $categoryName,
-            'actual_category' => $categoryName,
-            'x-tags'          => 'frontpage-page,' . $categoryName,
-            'x-cache-for'     => $invalidationDt->format('Y-m-d H:i:s')
+            'actual_category'       => $categoryName,
+            'actual_category_id'    => $categoryId,
+            'actual_category_title' => $categoryTitle,
+            'ads_positions'         => $adsPositions,
+            'advertisements'        => $advertisements,
+            'cache_id'              => $cacheId,
+            'category_data'         => $category,
+            'category_name'         => $categoryName,
+            'time'                  => $systemDate->getTimestamp(),
+            'x-cache-for'           => $invalidationDt->format('Y-m-d H:i:s'),
+            'x-tags'                => 'frontpage-page,' . $categoryName
         ]);
     }
 
