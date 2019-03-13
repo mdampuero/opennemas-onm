@@ -11,6 +11,7 @@ namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Displays static pages.
@@ -80,6 +81,10 @@ class StaticPageController extends FrontendController
     {
         $item = $this->get('api.service.content')
             ->getItemBySlug($request->get('slug'));
+
+        if (!$item->isReadyForPublish()) {
+            throw new ResourceNotFoundException();
+        }
 
         return $item;
     }
