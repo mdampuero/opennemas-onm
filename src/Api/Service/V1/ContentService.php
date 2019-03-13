@@ -11,4 +11,17 @@ namespace Api\Service\V1;
 
 class ContentService extends OrmService
 {
+    /**
+     * Returns a category basing on a slug.
+     *
+     * @param string $slug The category slug.
+     *
+     * @return Category The category.
+     */
+    public function getItemBySlug($slug)
+    {
+        $oql = sprintf('slug regexp "(.+\"|^)%s(\".+|$)"', $slug);
+
+        return $this->getItemBy($oql);
+    }
 }
