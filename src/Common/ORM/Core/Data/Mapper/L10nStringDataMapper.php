@@ -84,4 +84,16 @@ class L10nStringDataMapper
 
         return $value;
     }
+
+    /**
+     * Converts an array to a l10n_string.
+     *
+     * @param array $value The array to convert.
+     *
+     * @return string The converted l10n_string value.
+     */
+    public function toText($value)
+    {
+        return $this->toString($value);
+    }
 }
