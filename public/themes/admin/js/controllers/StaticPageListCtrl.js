@@ -55,12 +55,31 @@
          * @description
          *   Configures the controller.
          */
-        $scope.init = function() {
+        $scope.init = function(locale) {
+          $scope.locale          = locale;
           $scope.columns.key     = 'static_page-columns';
           $scope.backup.criteria = $scope.criteria;
 
-          oqlEncoder.configure({ placeholder: { title: '[key] ~ "%[value]%"' } });
+          $scope.criteria.orderBy = { created: 'asc' };
+          $scope.criteria.epp     = null;
+
+          oqlEncoder.configure({ placeholder: {
+            title: '[key] ~ "%[value]%"'
+          } });
+
           $scope.list();
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.parseList = function(data) {
+          if (data.extra.locale) {
+            $scope.config.locale = data.extra.locale;
+          }
+
+          $scope.configure(data.extra);
+          $scope.localize($scope.data.items, 'items');
         };
       }
     ]);
