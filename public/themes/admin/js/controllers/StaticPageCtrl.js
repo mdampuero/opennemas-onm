@@ -98,7 +98,7 @@ angular.module('BackendApp.controllers')
       $scope.parseItem = function(data) {
         if (data.item) {
           $scope.item      = angular.extend($scope.item, data.item);
-          $scope.item.tags = $scope.item.tags.map(function(id) {
+          $scope.data.item.tags = $scope.data.item.tags.map(function(id) {
             return data.extra.tags[id];
           });
         }
