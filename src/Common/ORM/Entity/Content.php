@@ -96,6 +96,7 @@ class Content extends Entity
             && $this->content_status == 1
             && $this->in_litter == 0);
     }
+
     /**
      * Check if a content is in time for publishing
      *
@@ -103,7 +104,7 @@ class Content extends Entity
      *
      * @return boolean
      */
-    public function isInTime($now = null)
+    protected function isInTime($now = null)
     {
         $now = new \DateTime($now);
 
