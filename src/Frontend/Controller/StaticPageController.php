@@ -9,81 +9,90 @@
  */
 namespace Frontend\Controller;
 
-use Common\Core\Controller\Controller;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Displays static pages.
  */
-class StaticPageController extends Controller
+class StaticPageController extends FrontendController
 {
     /**
-     * Displays a static page.
-     *
-     * @param string $slug The static page slug.
-     *
-     * @return Response The response object.
+     * {@inheritdoc}
      */
-    public function showAction($slug)
+    protected $caches = [
+        'show' => 'articles'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'list' => 'article_inner'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $positions = [
+        'list' => [ 1, 2, 5, 6, 7 ]
+    ];
+    /**
+     * {@inheritdoc}
+     */
+    protected $routes = [
+        'show' => 'frontend_staticpage'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $templates = [
+        'show' => 'static_pages/statics.tpl'
+    ];
+
+    //     $contentAux       = new \Content();
+    //     $contentAux->id   = $content->id;
+    //     $auxTagIds        = $contentAux->getContentTags($content->id);
+    //     $content->tag_ids = array_key_exists($content->id, $auxTagIds) ?
+    //         $auxTagIds[$content->id] :
+    //         [];
+
+    //     return $this->render('static_pages/statics.tpl', [
+    //         'ads_positions'      => $positions,
+    //         'advertisements'     => $advertisements,
+    //         'category_real_name' => $content->title,
+    //         'content'            => $content,
+    //         'content_id'         => $content->id,
+    //         'page'               => $content,
+    //         'cache_id'           => $cacheID,
+    //         'o_content'          => $content,
+    //         'x-tags'             => 'static-page,' . $content->id,
+    //         'tags'               => $this->get('api.service.tag')
+    //             ->getListByIdsKeyMapped($content->tag_ids)['items']
+    //     ]);
+    // }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getItem(Request $request)
     {
-        $oql = 'content_type_name = "static_page"'
-            . ' and slug = "%s" and content_status = "1" and in_litter = "0"'
-            . ' order by pk_content desc';
+        $item = $this->get('api.service.content')
+            ->getItemBySlug($request->get('slug'));
 
-        try {
-            $content = $this->get('orm.manager')->getRepository('Content')
-                ->findOneBy(sprintf($oql, $slug));
-        } catch (\Exception $e) {
-            // If static page does not exist or is not published raise an error
-            throw new ResourceNotFoundException();
-        }
-
-        // TODO: Remove when pk_content column renamed to id
-        $content->id = $content->pk_content;
-
-        $contentAux       = new \Content();
-        $contentAux->id   = $content->id;
-        $auxTagIds        = $contentAux->getContentTags($content->id);
-        $content->tag_ids = array_key_exists($content->id, $auxTagIds) ?
-            $auxTagIds[$content->id] :
-            [];
-
-        // Setup templating cache layer
-        $this->view->setConfig('articles');
-        $cacheID = $this->view->getCacheId('content', $content->id);
-
-        list($positions, $advertisements) = $this->getAds();
-        return $this->render('static_pages/statics.tpl', [
-            'ads_positions'      => $positions,
-            'advertisements'     => $advertisements,
-            'category_real_name' => $content->title,
-            'content'            => $content,
-            'content_id'         => $content->id,
-            'page'               => $content,
-            'cache_id'           => $cacheID,
-            'o_content'          => $content,
-            'x-tags'             => 'static-page,' . $content->id,
-            'tags'               => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($content->tag_ids)['items']
-        ]);
+        return $item;
     }
 
     /**
-     * Returns all the advertisements for an static page.
-     *
-     * @return array A list of Advertisements.
+     * {@inheritdoc}
      */
-    public function getAds()
+    protected function getParameters($request, $item = null)
     {
-        // Get static_pages positions
-        $positionManager = getService('core.helper.advertisement');
-        $positions       = $positionManager
-            ->getPositionsForGroup('article_inner', [ 1, 2, 5, 6, 7 ]);
+        $params = parent::getParameters($request, $item);
 
-        $advertisements = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions, 0);
-
-        return [ $positions, $advertisements ];
+        return array_merge($params, [
+            'page' => $params['content'],
+        ]);
     }
 }
