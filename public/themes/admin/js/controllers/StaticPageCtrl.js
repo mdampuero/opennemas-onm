@@ -102,6 +102,9 @@ angular.module('BackendApp.controllers')
             return data.extra.tags[id];
           });
         }
+
+        $scope.configure(data.extra);
+        $scope.localize($scope.data.item, 'item', true);
       };
 
       // Update slug when title is updated

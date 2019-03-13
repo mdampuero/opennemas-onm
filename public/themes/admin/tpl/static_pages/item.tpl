@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form name="form" ng-controller="StaticPageCtrl" ng-init="getItem({$id});">
+<form name="form" ng-controller="StaticPageCtrl" ng-init="forcedLocale = '{$locale}'; getItem({$id});">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -16,7 +16,7 @@
           </li>
           <li class="quicklinks">
             <h4>
-              <a class="no-padding" href="{url name=backend_static_pages_list}" title="{t}Go back to list{/t}">
+              <a class="no-padding" href="[% routing.generate('backend_static_pages_list') %]" title="{t}Go back to list{/t}">
                 {t}Static Pages{/t}
               </a>
             </h4>
@@ -28,6 +28,14 @@
           </li>
           <li class="quicklinks hidden-xs">
             <h4>{if empty($id)}{t}Create{/t}{else}{t}Edit{/t}{/if}</h4>
+          </li>
+          <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="config.locale.multilanguage && config.locale.available">
+            <h4>
+              <i class="fa fa-angle-right"></i>
+            </h4>
+          </li>
+          <li class="quicklinks ng-cloak" ng-if="config.locale.multilanguage && config.locale.available">
+            <translator item="data.item" keys="data.extra.keys" ng-model="config.locale.selected" options="config.locale"></translator>
           </li>
         </ul>
         <div class="all-actions pull-right">
