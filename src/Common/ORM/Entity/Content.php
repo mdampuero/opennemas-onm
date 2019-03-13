@@ -50,20 +50,6 @@ class Content extends Entity
     }
 
     /**
-     * Returns true if content has objects associated to an specific position
-     *
-     * @param string $name The position name
-     *
-     * @return boolean
-     **/
-    public function hasRelated($name)
-    {
-        return count(array_filter($this->related_contents, function ($element) use ($name) {
-            return $element['relationship'] == $name;
-        })) > 0;
-    }
-
-    /**
      * Returns the objects associated to an specific position
      *
      * @param string $name The position name
@@ -83,5 +69,54 @@ class Content extends Entity
         }
 
         return $related;
+    }
+
+    /**
+     * Returns true if content has objects associated to an specific position
+     *
+     * @param string $name The position name
+     *
+     * @return boolean
+     **/
+    public function hasRelated($name)
+    {
+        return count(array_filter($this->related_contents, function ($element) use ($name) {
+            return $element['relationship'] == $name;
+        })) > 0;
+    }
+
+    /**
+     * Returns true if a match time constraints, is available and is not in trash
+     *
+     * @return boolean true if is ready
+     */
+    public function isReadyForPublish()
+    {
+        return ($this->isInTime()
+            && $this->content_status == 1
+            && $this->in_litter == 0);
+    }
+    /**
+     * Check if a content is in time for publishing
+     *
+     * @param string $now the current time
+     *
+     * @return boolean
+     */
+    public function isInTime($now = null)
+    {
+        $now = new \DateTime($now);
+
+        $dued = (
+            !empty($this->endtime)
+            && $now->getTimeStamp() > $this->endtime->getTimeStamp()
+        );
+
+        $postponed = (
+            !empty($this->starttime)
+            && $now->getTimeStamp() < $this->starttime->getTimeStamp()
+        );
+
+        return (!$dued && !$postponed);
     }
 }
