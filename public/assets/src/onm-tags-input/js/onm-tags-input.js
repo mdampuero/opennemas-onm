@@ -17,7 +17,7 @@
           controller: 'OnmTagsInputCtrl',
           restrict: 'E',
           scope: {
-            autoGenerate:  '=',
+            autoGenerate:  '=?',
             generateFrom:  '=',
             locale:        '=',
             maxTags:       '=',
