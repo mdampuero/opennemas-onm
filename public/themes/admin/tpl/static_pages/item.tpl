@@ -85,8 +85,8 @@
       <div class="col-md-8 col-md-pull-4">
         <div class="grid simple">
           <div class="grid-body">
-            {include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true}
             {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=30 required=true imagepicker=true}
+            {include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true l10n=true}
           </div>
         </div>
       </div>
