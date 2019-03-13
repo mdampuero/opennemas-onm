@@ -666,4 +666,28 @@ class FrontendController extends Controller
         return $this->get('automatic_contents')
             ->searchSuggestedContents($content->content_type_name, $query);
     }
+
+    /**
+     * Returns the list of tags from a list of contents
+     *
+     * @param array $contents The list of contents to fetch tags from
+     *
+     * @return array
+     */
+    public function getTags($contents)
+    {
+        if (!is_array($contents)) {
+            $contents = [ $contents ];
+        }
+
+        $tagIds = [];
+        foreach ($contents as $content) {
+            $tagIds = array_merge($tagIds, $content->tags);
+        }
+
+        $tags = $this->get('api.service.tag')
+            ->getListByIdsKeyMapped($tagIds)['items'];
+
+        return $tags;
+    }
 }

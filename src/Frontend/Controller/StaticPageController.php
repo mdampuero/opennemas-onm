@@ -52,28 +52,6 @@ class StaticPageController extends FrontendController
         'show' => 'static_pages/statics.tpl'
     ];
 
-    //     $contentAux       = new \Content();
-    //     $contentAux->id   = $content->id;
-    //     $auxTagIds        = $contentAux->getContentTags($content->id);
-    //     $content->tag_ids = array_key_exists($content->id, $auxTagIds) ?
-    //         $auxTagIds[$content->id] :
-    //         [];
-
-    //     return $this->render('static_pages/statics.tpl', [
-    //         'ads_positions'      => $positions,
-    //         'advertisements'     => $advertisements,
-    //         'category_real_name' => $content->title,
-    //         'content'            => $content,
-    //         'content_id'         => $content->id,
-    //         'page'               => $content,
-    //         'cache_id'           => $cacheID,
-    //         'o_content'          => $content,
-    //         'x-tags'             => 'static-page,' . $content->id,
-    //         'tags'               => $this->get('api.service.tag')
-    //             ->getListByIdsKeyMapped($content->tag_ids)['items']
-    //     ]);
-    // }
-
     /**
      * {@inheritdoc}
      */
@@ -98,6 +76,7 @@ class StaticPageController extends FrontendController
 
         return array_merge($params, [
             'page' => $params['content'],
+            'tags' => $this->getTags([ $item])
         ]);
     }
 }
