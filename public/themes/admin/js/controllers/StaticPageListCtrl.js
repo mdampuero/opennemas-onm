@@ -61,7 +61,6 @@
           $scope.backup.criteria = $scope.criteria;
 
           $scope.criteria.orderBy = { created: 'asc' };
-          $scope.criteria.epp     = null;
 
           oqlEncoder.configure({ placeholder: {
             title: '[key] ~ "%[value]%"'
