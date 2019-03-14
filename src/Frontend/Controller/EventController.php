@@ -22,147 +22,193 @@ class EventController extends FrontendController
     /**
      * {@inheritdoc}
      */
+    protected $caches = [
+        'list' => 'articles',
+        'show' => 'articles'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'list' => 'article_inner',
+        'show' => 'article_inner'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $positions = [
+        'list' => [ 1, 2, 5, 6, 7 ],
+        'show' => [ 1, 2, 5, 6, 7 ]
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $queries = [
+        'list' => [ 'page' ]
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $routes = [
+        'list' => 'frontend_events',
+        'show' => 'frontend_event_show'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $templates = [
+        'list' => 'event/list.tpl',
+        'show' => 'event/item.tpl'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $extension = 'es.openhost.module.events';
 
     /**
-     * Displays the list of the latest events.
+     * Returns the list of items basing on a list of parameters.
      *
-     * @return Response The response object.
+     * @param array $params The list of parameters.
+     *
+     * @return array The list of items.
      */
-    public function frontpageAction(Request $request)
+    protected function getItem(Request $request)
     {
-        $page = $request->get('page', 1);
-
-        $this->checkSecurity($this->extension);
-
-        $this->view->setConfig('frontpages');
-        $cacheID = $this->view->getCacheId('frontpage', 'event', $page);
-
-        if ($this->view->getCaching() === 0
-            || !$this->view->isCached("event/list.tpl", $cacheID)
-        ) {
-            $date   = date('Y-m-d H:i:s');
-            $epp    = $this->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get('items_per_page');
-            $offset = ($page <= 2) ? 0 : ($page - 1) * $epp;
-
-            $eventIds = $this->get('orm.manager')->getConnection('instance')
-                ->executeQuery(
-                    "SELECT SQL_CALC_FOUND_ROWS DISTINCT pk_content, contentmeta.meta_value as event_start_date "
-                    . "FROM contents join contentmeta "
-                    . "ON contentmeta.meta_name = 'event_start_date' "
-                    . "AND contents.pk_content = contentmeta.fk_content "
-                    . "WHERE fk_content_type = 5 AND content_status = 1 and in_litter = 0 "
-                    . "AND (starttime IS NULL OR starttime <= ? ) "
-                    . "AND (endtime IS NULL OR endtime > ?) "
-                    . " ORDER BY event_start_date DESC LIMIT ? OFFSET ?",
-                    [ $date, $date, $epp, $offset ]
-                )
-                ->fetchAll();
-
-            $sql = 'SELECT FOUND_ROWS()';
-
-            $total = $this->get('dbal_connection')->fetchAssoc($sql);
-            $total = array_pop($total);
-
-            $contents = $this->get('api.service.content')
-                ->getListByIds(array_map(function ($event) {
-                    return $event['pk_content'];
-                }, $eventIds));
-
-            $this->view->assign([
-                'contents'        => $contents['items'],
-                'pagination'      => $this->get('paginator')->get([
-                    'directional' => true,
-                    'epp'         => 5,
-                    'page'        => $page,
-                    'total'       => $total,
-                    'route'       => 'frontend_events_frontpage'
-                ]),
-                'related_contents' => $this->getRelations($contents['items']),
-                'tags'             => $this->getTags($contents['items']),
-            ]);
-        }
-
-        list($positions, $advertisements) = $this->getAds();
-
-        return $this->render('event/list.tpl', [
-            'ads_positions'      => $positions,
-            'advertisements'     => $advertisements,
-            'page'               => $page,
-            'cache_id'           => $cacheID,
-            'x-tags'             => 'event-frontpage,' . $page,
-        ]);
-    }
-
-    /**
-     * Displays an event.
-     *
-     * @param string $slug The event slug.
-     *
-     * @return Response The response object.
-     */
-    public function showAction(Request $request)
-    {
-        $this->checkSecurity($this->extension);
-
         $slug = $request->query->get('slug');
 
-        $oql = 'content_type_name = "event"'
-            . ' and slug = "%s" and content_status = "1" and in_litter = "0"'
-            . ' and (starttime is null or starttime <= "%s" )'
-            . ' and (endtime is null or endtime > "%s")';
+        $item = $this->get('api.service.content')
+            ->getItemBySlug($slug);
 
-        try {
-            $content = $this->get('api.service.content')
-                ->getItemBy(sprintf(
-                    $oql,
-                    $slug,
-                    date('Y-m-d H:i:s'),
-                    date('Y-m-d H:i:s')
-                ));
-        } catch (\Exception $e) {
-            // If the content does not exist or is not published raise an error
+        if (!$item->isReadyForPublish()) {
             throw new ResourceNotFoundException();
         }
 
-        // Setup templating cache layer
-        $this->view->setConfig('articles');
-        $cacheID = $this->view->getCacheId('content', $content->id);
+        return $item;
+    }
 
-        list($positions, $advertisements) = $this->getAds();
 
-        return $this->render('event/item.tpl', [
-            'ads_positions'      => $positions,
-            'advertisements'     => $advertisements,
-            'category_real_name' => $content->title,
-            'content'            => $content,
-            'content_id'         => $content->id,
-            'cache_id'           => $cacheID,
-            'o_content'          => $content,
-            'x-tags'             => 'event,' . $content->id,
-            'tags'               => $this->getTags($content),
-            'related_contents'   => $this->getRelations($content),
+    /**
+     * Returns the list of items basing on a list of parameters.
+     *
+     * @param array $params The list of parameters.
+     *
+     * @return array The list of items.
+     */
+    protected function getItems($params)
+    {
+        $date   = date('Y-m-d H:i:s');
+        $epp    = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_per_page');
+        $offset = ($params['page'] <= 2) ? 0 : ($params['page'] - 1) * $epp;
+
+        $eventIds = $this->get('orm.manager')->getConnection('instance')
+            ->executeQuery(
+                "SELECT SQL_CALC_FOUND_ROWS DISTINCT pk_content, contentmeta.meta_value as event_start_date "
+                . "FROM contents join contentmeta "
+                . "ON contentmeta.meta_name = 'event_start_date' "
+                . "AND contents.pk_content = contentmeta.fk_content "
+                . "WHERE fk_content_type = 5 AND content_status = 1 and in_litter = 0 "
+                . "AND (starttime IS NULL OR starttime <= ? ) "
+                . "AND (endtime IS NULL OR endtime > ?) "
+                . " ORDER BY event_start_date DESC LIMIT ? OFFSET ?",
+                [ $date, $date, $epp, $offset ]
+            )
+            ->fetchAll();
+
+        $sql = 'SELECT FOUND_ROWS()';
+
+        $total = $this->get('dbal_connection')->fetchAssoc($sql);
+        $total = array_pop($total);
+
+        $contents = $this->get('api.service.content')
+            ->getListByIds(array_map(function ($event) {
+                return $event['pk_content'];
+            }, $eventIds));
+
+        return [
+            $contents['items'],
+            $contents['total']
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getParameters($request, $item = null)
+    {
+        $params = parent::getParameters($request, $item);
+
+        if (!array_key_exists('page', $params)) {
+            $params['page'] = 1;
+        }
+
+        $params['epp'] = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_in_blog', 10);
+
+        // Prevent invalid page when page is not numeric
+        $params['page'] = (int) $params['page'];
+
+        list($positions, $advertisements) = $this->getAdvertisements($item);
+
+        return array_merge($this->params, $params, [
+            'cache_id'       => $this->getCacheId($params),
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements
         ]);
     }
 
     /**
-     * Returns all the advertisements for an static page.
-     *
-     * @return array A list of Advertisements.
+     * {@inheritdoc}
      */
-    public function getAds()
+    protected function hydrateList(array &$params = []) : void
     {
-        // Get static_pages positions
-        $positionManager = getService('core.helper.advertisement');
-        $positions       = $positionManager
-            ->getPositionsForGroup('article_inner', [ 1, 2, 5, 6, 7 ]);
+        // Invalid page provided as parameter
+        if ($params['page'] <= 0) {
+            throw new ResourceNotFoundException();
+        }
 
-        $advertisements = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions, 0);
+        list($contents, $total) = $this->getItems($params);
 
-        return [ $positions, $advertisements ];
+        // No first page and no contents
+        if ($params['page'] > 1 && $total > 0 && empty($contents)) {
+            throw new ResourceNotFoundException();
+        }
+
+        $expires = $this->getCacheExpire($contents);
+
+        if (!empty($expires)) {
+            $lifetime = strtotime($expires) - time();
+
+            if ($lifetime < $this->view->getCacheLifetime()) {
+                $this->view->setCacheLifetime($lifetime);
+            }
+
+            $params['x-cache-for'] = $expires;
+        }
+
+        // $this->hydrateContents($contents, $params);
+
+        $params['contents']   = $contents;
+        $params['pagination'] = $this->get('paginator')->get([
+            'directional' => true,
+            'boundary'    => false,
+            'epp'         => $params['epp'],
+            'maxLinks'    => 5,
+            'page'        => $params['page'],
+            'total'       => $total,
+            'route'       => 'frontend_events',
+        ]);
+
+        $params['related_contents'] = $this->getRelations($contents);
+        $params['tags']             = $this->getTags($contents);
     }
 
     /**
