@@ -90,13 +90,16 @@
          */
         $scope.parseItem = function(data) {
           if (data.item) {
-            $scope.item      = angular.extend($scope.item, data.item);
-            $scope.item.tags = $scope.item.tags.map(function(id) {
+            $scope.data.item      = angular.extend($scope.item, data.item);
+            $scope.data.item.tags = $scope.item.tags.map(function(id) {
               return data.extra.tags[id];
             });
           }
 
-          var coverId = $scope.item.related_contents.filter(function(el) {
+          $scope.configure(data.extra);
+          $scope.localize($scope.data.item, 'item', true);
+
+          var coverId = $scope.data.item.related_contents.filter(function(el) {
             return el.relationship === 'cover';
           }).shift();
 
