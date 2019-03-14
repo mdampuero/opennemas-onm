@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form name="form" ng-controller="EventCtrl" ng-init="getItem({$id});">
+<form name="form" ng-controller="EventCtrl" ng-init="forcedLocale = '{$locale}'; getItem({$id});">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
