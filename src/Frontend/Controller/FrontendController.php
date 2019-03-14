@@ -98,7 +98,10 @@ class FrontendController extends Controller
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
 
-        if (empty($item) || !$item->isReadyForPublish()) {
+        if (empty($item)
+            || !$item instanceof \Content
+            || !$item->isReadyForPublish()
+        ) {
             throw new ResourceNotFoundException();
         }
 
