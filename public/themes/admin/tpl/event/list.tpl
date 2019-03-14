@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="EventListCtrl" ng-init="init()">
+<div ng-app="BackendApp" ng-controller="EventListCtrl" ng-init="forcedLocale = '{$locale}'; init()">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -17,6 +17,14 @@
                 {t}Events{/t}
               </a>
             </h4>
+          </li>
+          <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
+            <h4>
+              <i class="fa fa-angle-right"></i>
+            </h4>
+          </li>
+          <li class="quicklinks ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
+            <translator keys="data.extra.keys" ng-model="config.locale.selected" options="data.extra.locale"></translator>
           </li>
         </ul>
         <div class="all-actions pull-right">
@@ -198,10 +206,8 @@
                     <div ng-show="item.event_place">{t}Place{/t}: [% item.event_place%]</div>
                   </small>
                   <div class="listing-inline-actions">
-                    {acl isAllowed="EVENT_UPDATE"}
-                      <a class="btn btn-small" href="[% routing.generate('backend_event_show', { id: getId(item) }) %]">
-                        <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
-                      </a>
+                    {acl isAllowed="STATIC_PAGE_UPDATE"}
+                    <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_event_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
                     {/acl}
                     {acl isAllowed="EVENT_DELETE"}
                       <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">
