@@ -52,6 +52,17 @@ EOF
 
         $loader->init();
 
+        // Set base url from instance information to fix url generation
+        $context = $this->getContainer()->get('router')->getContext();
+        $context->setHost($instance->getMainDomain());
+        $context->setBaseUrl('');
+        $context->setScheme(
+            in_array(
+                'es.openhost.module.frontendSsl',
+                $this->activated_modules
+            ) ? 'https' : 'http'
+        );
+
         $this->getContainer()->get('core.helper.url_generator')->forceHttp(true);
 
         $timezone = $this->getContainer()->get('orm.manager')
