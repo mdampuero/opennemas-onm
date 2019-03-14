@@ -92,7 +92,6 @@ class EventController extends FrontendController
         return $item;
     }
 
-
     /**
      * Returns the list of items basing on a list of parameters.
      *
@@ -194,8 +193,6 @@ class EventController extends FrontendController
             $params['x-cache-for'] = $expires;
         }
 
-        // $this->hydrateContents($contents, $params);
-
         $params['contents']   = $contents;
         $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,
@@ -212,13 +209,22 @@ class EventController extends FrontendController
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function hydrateShow(array &$params = []) : void
+    {
+        $params['related_contents'] = $this->getRelations($params['content']);
+        $params['tags']             = $this->getTags($params['content']);
+    }
+
+    /**
      * Returns the list of covers
      *
      * @param array $coverIds the list of contents to fetch related from
      *
      * @return array
      */
-    public function getRelations(&$contents)
+    public function getRelations($contents)
     {
         if (!is_array($contents)) {
             $contents = [ $contents ];
