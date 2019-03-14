@@ -65,7 +65,8 @@ class CommentsController extends Controller
             $comment->votes = $vote;
         }
 
-        $positions = $advertisements = [];
+        $positions      = [];
+        $advertisements = [];
         if ($this->get('core.helper.subscription')->hasAdvertisements()) {
             list($positions, $advertisements) = $this->getAds();
         }
