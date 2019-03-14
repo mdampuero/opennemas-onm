@@ -182,6 +182,7 @@ class FrontpagesController extends Controller
             'ads_positions'         => $adsPositions,
             'advertisements'        => $advertisements,
             'cache_id'              => $cacheId,
+            'category'              => $category,
             'category_data'         => $category,
             'category_name'         => $categoryName,
             'time'                  => $systemDate->getTimestamp(),
