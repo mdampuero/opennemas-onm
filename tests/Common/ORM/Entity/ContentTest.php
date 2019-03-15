@@ -73,7 +73,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($entity->getRelated('photo'), [ 2, 3 ]);
     }
 
-    public function testhasRelated()
+    public function testHasRelated()
     {
         $data   = [ 'related_contents' => [
             [
@@ -90,7 +90,6 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($entity->hasRelated('photo'));
     }
 
-
     public function testIsReadyForPublish()
     {
         // Entity with all valid
@@ -103,7 +102,10 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $entity = new Content($data);
 
         $this->assertTrue($entity->isReadyForPublish($entity));
+    }
 
+    public function testIsReadyForPublishWithContentStatusZero()
+    {
         // Entity with content_status = 0
         $data   = [
             'starttime'      => (new \DateTime())->sub(new \DateInterval('P7D')),
@@ -114,7 +116,10 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $entity = new Content($data);
 
         $this->assertFalse($entity->isReadyForPublish($entity));
+    }
 
+    public function testIsReadyForPublishWithInLitter()
+    {
         // Entity with in_litter = 1
         $data   = [
             'starttime'      => (new \DateTime())->sub(new \DateInterval('P7D')),
@@ -125,7 +130,10 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $entity = new Content($data);
 
         $this->assertFalse($entity->isReadyForPublish($entity));
+    }
 
+    public function testIsReadyForPublishWithContentDued()
+    {
         // Entity dued
         $data   = [
             'starttime'      => (new \DateTime())->sub(new \DateInterval('P8D')),
@@ -136,7 +144,10 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $entity = new Content($data);
 
         $this->assertFalse($entity->isReadyForPublish($entity));
+    }
 
+    public function testIsReadyForPublishWithContentPostponed()
+    {
         // Entity postponed
         $data   = [
             'starttime'      => (new \DateTime())->add(new \DateInterval('P8D')),
@@ -147,16 +158,5 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $entity = new Content($data);
 
         $this->assertFalse($entity->isReadyForPublish($entity));
-
-        // Entity dued
-        $data   = [
-            'starttime'      => (new \DateTime())->sub(new \DateInterval('P8D')),
-            'endtime'        => null,
-            'in_litter'      => 0,
-            'content_status' => 1,
-         ];
-        $entity = new Content($data);
-
-        $this->assertTrue($entity->isReadyForPublish($entity));
     }
 }
