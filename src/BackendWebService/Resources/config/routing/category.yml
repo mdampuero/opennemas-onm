@@ -1,7 +1,0 @@
-
-backend_ws_category_save:
-    path:     /category
-    defaults: { _controller: BackendWebServiceBundle:Category:save }
-    methods:  [ PUT ]
-    options:
-        expose: true
