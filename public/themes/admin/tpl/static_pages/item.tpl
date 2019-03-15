@@ -16,7 +16,7 @@
           </li>
           <li class="quicklinks">
             <h4>
-              <a class="no-padding" href="[% routing.generate('backend_static_pages_list') %]" title="{t}Go back to list{/t}">
+              <a class="no-padding" href="[% routing.generate('backend_static_pages_list') %]">
                 {t}Static Pages{/t}
               </a>
             </h4>
