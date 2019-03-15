@@ -125,7 +125,7 @@
           }
 
           if ($scope.forcedLocale && Object.keys(data.locale.available)
-            .indexOf($scope.forcedLocale)) {
+            .indexOf($scope.forcedLocale) !== -1) {
             $scope.config.locale.selected = $scope.forcedLocale;
           }
         };
