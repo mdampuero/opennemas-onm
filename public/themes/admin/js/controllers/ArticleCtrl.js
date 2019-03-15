@@ -44,7 +44,7 @@
           created: new Date(),
           fk_author: null,
           params: {},
-          starttime: new Date(),
+          starttime: null,
           summary: '',
           tag_ids: []
         };
@@ -106,6 +106,12 @@
             }
 
             $scope.article[keys[i]] = $scope.data.extra[keys[i]];
+          }
+
+          // Force params to be an object when empty array from server
+          if (angular.isArray($scope.data.article.params) &&
+              $scope.data.article.params.length === 0) {
+            $scope.data.article.params = {};
           }
 
           keys = [
@@ -680,7 +686,6 @@
           }
 
           // Show a message when leaving before saving
-
           $($window).bind('beforeunload', function() {
             if ($scope.articleForm.$dirty) {
               return $window.leaveMessage;

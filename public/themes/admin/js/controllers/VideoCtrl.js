@@ -36,7 +36,8 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       $scope.tags   = tags;
 
       if (video && video.information) {
-        $scope.information = video.information;
+        $scope.information     = video.information;
+        $scope.informationJson = JSON.stringify($scope.information);
 
         if ($scope.information.embedHTML) {
           $scope.information.embedHTML =

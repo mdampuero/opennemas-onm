@@ -345,7 +345,7 @@ class OpinionController extends FrontendController
             'route'       => [
                 'name'   => 'frontend_opinion_author_frontpage',
                 'params' => [
-                    'author_id'   => sprintf('%06d', $author->id),
+                    'author_id'   => $author->id,
                     'author_slug' => $author->slug,
                 ]
             ]
