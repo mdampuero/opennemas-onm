@@ -191,8 +191,8 @@
               </div>
             </td>
             <td class="hidden-sm hidden-xs">
-              <a href="[% routing.generate('frontend_static_page', { slug: item.slug }, true) %]" target="_blank">
-                [% routing.generate('frontend_static_page', { slug: item.slug }, true) %]
+              <a href="[% getL10nUrl(routing.generate('frontend_static_page', { slug: item.slug }, true)) %]" target="_blank">
+                [% getL10nUrl(routing.generate('frontend_static_page', { slug: item.slug }, true)) %]
               </a>
             </td>
             <td class="text-center">

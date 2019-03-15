@@ -169,6 +169,28 @@
         };
 
         /**
+         * @function getL10nUrl
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Returns the localized url given the multilanguage and current url status
+         *
+         * @param {String}   url     The value of the url to "localize".
+         */
+        $scope.getL10nUrl = function(url) {
+          var baseUrl = '';
+
+          if ($scope.data &&
+            $scope.data.extra.locale.multilanguage &&
+            $scope.data.extra.locale.default !== $scope.config.locale.selected
+          ) {
+            baseUrl = '/' + $scope.config.locale.selected;
+          }
+
+          return baseUrl + url;
+        };
+
+        /**
          * @function getSlug
          * @memberOf BaseCtrl
          *
