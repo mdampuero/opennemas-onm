@@ -85,18 +85,4 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($this->service->getItemBySlug('content_slug'), $content);
     }
-
-    /**
-     * Tests emptyItem when the item was not found.
-     *
-     * @expectedException \Api\Exception\ApiException
-     */
-    public function testGetItemBySlugWithNoResults()
-    {
-        $this->service->expects($this->once())->method('getItemBy')
-            ->with('slug regexp "(.+\"|^)content_slug(\".+|$)"')
-            ->will($this->throwException(new \Api\Exception\ApiException()));
-
-        $this->service->getItemBySlug('content_slug');
-    }
 }
