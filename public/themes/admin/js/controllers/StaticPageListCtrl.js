@@ -55,12 +55,11 @@
          * @description
          *   Configures the controller.
          */
-        $scope.init = function(locale) {
-          $scope.locale          = locale;
+        $scope.init = function() {
           $scope.columns.key     = 'static_page-columns';
           $scope.backup.criteria = $scope.criteria;
 
-          $scope.criteria.orderBy = { created: 'asc' };
+          $scope.criteria.orderBy = { title: 'asc' };
 
           oqlEncoder.configure({ placeholder: {
             title: '[key] ~ "%[value]%"'
