@@ -147,7 +147,7 @@
                         </div>
                       </div>
                       <div class="dynamic-image-placeholder" ng-show="cover">
-                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="cover">
+                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$app.instance->getMediaShortPath()}/" ng-model="cover">
                           <div class="thumbnail-actions">
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('cover')">
                               <i class="fa fa-trash-o fa-2x"></i>
