@@ -175,6 +175,9 @@
                </span>
                <div class="listing-inline-actions">
                 {acl isAllowed="STATIC_PAGE_UPDATE"}
+                <a class="btn btn-default btn-small" href="[% routing.generate('backend_static_page_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
+                  <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+                </a>
                 <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_static_page_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
                 {/acl}
                 {acl isAllowed="STATIC_PAGE_DELETE"}
@@ -182,7 +185,7 @@
                     <i class="fa m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': item.in_litterLoading, 'fa-trash-o': !item.in_litterLoading }"></i>{t}Delete{/t}
                   </button>
                 {/acl}
-                <a class="btn btn-small btn-white hidden-md hidden-lg" href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% item.slug %]/" target="_blank" title="{t}Open in a new window{/t}">
+                <a class="btn btn-small btn-white hidden-md hidden-lg" href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/{$smarty.const.STATIC_PAGE_PATH}/[% item.slug %]/" target="_blank">
                   <span class="fa fa-external-link"></span>
                 </a>
               </div>
