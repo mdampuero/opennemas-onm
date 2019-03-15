@@ -3,7 +3,7 @@ imports:
     - { resource: services/listener.yml }
     - { resource: services/subscriber.yml }
 parameters:
-    core.locale.available: [ 'en_US', 'es_ES', 'gl_ES' ]
+    core.locale.available: [ 'en_US', 'es_ES', 'ca_ES', 'gl_ES' ]
     core.locale.path:      '%kernel.root_dir%/Resources/locale'
     core.maintenance.file: '%kernel.root_dir%/../.maintenance'
     core.template.filters:
