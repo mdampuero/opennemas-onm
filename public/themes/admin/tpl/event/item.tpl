@@ -38,7 +38,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving || form.$invalid" type="button">
+              <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
                 <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                 {t}Save{/t}
               </button>
@@ -75,7 +75,7 @@
 
             {include file="ui/component/content-editor/accordion/category.tpl"}
             {include file="ui/component/content-editor/accordion/tags.tpl"}
-            {include file="ui/component/content-editor/accordion/slug.tpl" route="[% routing.generate('frontend_event_show', { slug: item.slug }) %]"}
+            {include file="ui/component/content-editor/accordion/slug.tpl" route="[% getL10nUrl(routing.generate('frontend_event_show', { slug: item.slug })) %]"}
             {include file="ui/component/content-editor/accordion/scheduling.tpl"}
           </div>
         </div>
