@@ -59,19 +59,21 @@
             </li>
           </ul>
           <ul class="nav quick-section pull-right">
-            <li class="quicklinks" ng-if="selected.items.length < items.length && areSelectedNotEmpty()">
-              <button class="btn btn-link" ng-click="moveSelected()" uib-tooltip="{t}Move contents{/t}" tooltip-placement="bottom">
-                <i class="fa fa-flip-horizontal fa-reply fa-lg"></i>
-              </button>
-            </li>
-            <li class="quicklinks hidden-xs" ng-if="selected.items.length < items.length && areSelectedNotEmpty()">
-              <span class="h-seperate"></span>
-            </li>
-            <li class="quicklinks">
-              <button class="btn btn-link" ng-click="emptySelected()" uib-tooltip="{t}Empty{/t}" tooltip-placement="bottom">
-                <i class="fa fa-fire fa-lg"></i>
-              </button>
-            </li>
+            {acl isAllowed="MASTER"}
+              <li class="quicklinks" ng-if="selected.items.length < items.length && areSelectedNotEmpty()">
+                <button class="btn btn-link" ng-click="moveSelected()" uib-tooltip="{t}Move contents{/t}" tooltip-placement="bottom">
+                  <i class="fa fa-flip-horizontal fa-reply fa-lg"></i>
+                </button>
+              </li>
+              <li class="quicklinks hidden-xs" ng-if="selected.items.length < items.length && areSelectedNotEmpty()">
+                <span class="h-seperate"></span>
+              </li>
+              <li class="quicklinks">
+                <button class="btn btn-link" ng-click="emptySelected()" uib-tooltip="{t}Empty{/t}" tooltip-placement="bottom">
+                  <i class="fa fa-fire fa-lg"></i>
+                </button>
+              </li>
+            {/acl}
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
@@ -191,25 +193,27 @@
                             <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                           </button>
                         </div>
-                        <span>
-                          <button class="btn btn-white btn-small dropdown-toggle" data-toggle="dropdown" ng-disabled="isEmpty(item)" type="button">
-                            <i class="fa fa-ellipsis-h"></i>
-                          </button>
-                          <ul class="dropdown-menu no-padding">
-                            <li>
-                              <a href="#" ng-click="move(getId(item), item)">
-                                <i class="fa fa-flip-horizontal fa-reply"></i>
-                                {t}Move contents{/t}
-                              </a>
-                            </li>
-                            <li>
-                              <a href="#" ng-click="empty(getId(item))">
-                                <i class="fa fa-fire"></i>
-                                {t}Empty{/t}
-                              </a>
-                            </li>
-                          </ul>
-                        </span>
+                        {acl isAllowed="MASTER"}
+                          <span>
+                            <button class="btn btn-white btn-small dropdown-toggle" data-toggle="dropdown" ng-disabled="isEmpty(item)" type="button">
+                              <i class="fa fa-ellipsis-h"></i>
+                            </button>
+                            <ul class="dropdown-menu no-padding">
+                              <li>
+                                <a href="#" ng-click="move(getId(item), item)">
+                                  <i class="fa fa-flip-horizontal fa-reply"></i>
+                                  {t}Move contents{/t}
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#" ng-click="empty(getId(item))">
+                                  <i class="fa fa-fire"></i>
+                                  {t}Empty{/t}
+                                </a>
+                              </li>
+                            </ul>
+                          </span>
+                        {/acl}
                       </div>
                     </div>
                   </td>
