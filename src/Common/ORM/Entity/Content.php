@@ -50,7 +50,21 @@ class Content extends Entity
     }
 
     /**
-     * Returns the objects associated to an specific position
+     * Returns one media object to an specific position name
+     *
+     * @param string $name The position name
+     *
+     * @return array
+     */
+    public function getMedia($name)
+    {
+        $media = $this->getRelated($name);
+
+        return array_pop($media);
+    }
+
+    /**
+     * Returns a list of objects associated to an specific position
      *
      * @param string $name The position name
      *
@@ -63,10 +77,6 @@ class Content extends Entity
         }, array_filter($this->related_contents, function ($element) use ($name) {
             return $element['relationship'] == $name;
         }));
-
-        if (count($related) == 1) {
-            $related = array_pop($related);
-        }
 
         return $related;
     }

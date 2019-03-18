@@ -41,6 +41,24 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($entity->__isset('id'));
     }
 
+    public function testGetMedia()
+    {
+        $data   = [ 'related_contents' => [] ];
+        $entity = new Content($data);
+
+        $this->assertEmpty($entity->getMedia('photo'));
+
+        $data   = [ 'related_contents' => [
+            [
+                'pk_content2'  => 2,
+                'relationship' => 'photo',
+            ]
+        ] ];
+        $entity = new Content($data);
+
+        $this->assertEquals($entity->getMedia('photo'), 2);
+    }
+
     public function testGetRelated()
     {
         $data   = [ 'related_contents' => [] ];
@@ -56,7 +74,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         ] ];
         $entity = new Content($data);
 
-        $this->assertEquals($entity->getRelated('photo'), 2);
+        $this->assertEquals($entity->getRelated('photo'), [2]);
 
         $data   = [ 'related_contents' => [
             [

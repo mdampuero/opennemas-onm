@@ -236,7 +236,7 @@ class EventController extends FrontendController
                 continue;
             }
 
-            $ids[] = $content->getRelated('cover');
+            $ids[] = $content->getMedia('cover');
         }
 
         if (empty($ids)) {
