@@ -117,13 +117,12 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->at(0))->method('countContents')
             ->with(18752)->willReturn([ 18752 => 10 ]);
         $this->repository->expects($this->at(1))->method('removeContents')
-            ->with(1)->willReturn($contents);
+            ->with(1);
 
         $this->dispatcher->expects($this->once())->method('dispatch')
             ->with('category.emptyItem', [
-                'id'       => 1,
-                'item'     => $category,
-                'contents' => $contents
+                'id'   => 1,
+                'item' => $category,
             ]);
 
         $this->service->emptyItem(1);
@@ -169,13 +168,12 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $this->repository->expects($this->once())->method('removeContents')
-            ->with([ 1 ])->willReturn([ [ 'id' => 17427, 'type' => 'flob' ] ]);
+            ->with([ 1 ]);
 
         $this->dispatcher->expects($this->once())->method('dispatch')
             ->with('category.emptyList', [
-                'ids'      => [ 1, 2 ],
-                'items'    => $items,
-                'contents' => [ [ 'id' => 17427, 'type' => 'flob' ] ]
+                'ids'   => [ 1, 2 ],
+                'items' => $items,
             ]);
 
         $this->service->emptyList([ 1, 2 ]);

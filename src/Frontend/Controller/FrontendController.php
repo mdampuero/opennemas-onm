@@ -396,6 +396,7 @@ class FrontendController extends Controller
 
         if (array_key_exists('category_name', $params)) {
             $params['o_category'] = $this->getCategory($params['category_name']);
+            $params['category']   = $this->getCategory($params['category_name']);
         }
 
         // TODO: Clean this ASAP
