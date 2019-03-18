@@ -219,34 +219,22 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testMoveContentsWhenId()
     {
-        $repository = $this->getMockBuilder('Common\ORM\Database\Repository\CategoryRepository')
-            ->setMethods([ 'findContents' ])
-            ->setConstructorArgs([ 'foo', $this->conn, $this->metadata, $this->cache ])
-            ->getMock();
-
-        $repository->expects($this->once())->method('findContents')
-            ->with([ 4 ])->willReturn([ [ 'id' => 52, 'type' => 'wobble' ] ]);
-
         $this->conn->expects($this->at(0))->method('executeQuery')
             ->with(
-                'REPLACE INTO contents_categories (pk_fk_content_category, pk_fk_content) '
-                    . 'VALUES (?,?)',
-                [ 7, 52 ],
-                [ \PDO::PARAM_INT, \PDO::PARAM_INT ]
-            )->willReturn([ [ 'id' => 1, 'type' => 'flob' ] ]);
+                'UPDATE IGNORE contents_categories SET pk_fk_content_category = ?'
+                    . ' WHERE pk_fk_content_category IN (?)',
+                [ 7, [ 4 ] ],
+                [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+            );
 
         $this->conn->expects($this->at(1))->method('executeQuery')
             ->with(
                 'DELETE FROM contents_categories WHERE pk_fk_content_category IN (?)',
                 [ [ 4 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
-            )->willReturn([ [ 'id' => 1, 'type' => 'flob' ] ]);
+            );
 
-
-        $this->assertEquals(
-            [ [ 'id' => 52, 'type' => 'wobble' ] ],
-            $repository->moveContents(4, 7)
-        );
+        $this->repository->moveContents(4, 7);
     }
 
     /**
@@ -254,36 +242,23 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testMoveContentsWhenList()
     {
-        $repository = $this->getMockBuilder('Common\ORM\Database\Repository\CategoryRepository')
-            ->setMethods([ 'findContents' ])
-            ->setConstructorArgs([ 'foo', $this->conn, $this->metadata, $this->cache ])
-            ->getMock();
-
-        $contents = [
-            [ 'id' => 94, 'type' => 'grault' ],
-            [ 'id' => 105, 'type' => 'thud' ]
-        ];
-
-        $repository->expects($this->once())->method('findContents')
-            ->with([ 4, 5 ])->willReturn($contents);
-
         $this->conn->expects($this->at(0))->method('executeQuery')
             ->with(
-                'REPLACE INTO contents_categories (pk_fk_content_category, pk_fk_content) '
-                    . 'VALUES (?,?),(?,?)',
-                [ 7, 94, 7, 105 ],
-                [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
-            )->willReturn([ [ 'id' => 1, 'type' => 'flob' ] ]);
+                'UPDATE IGNORE contents_categories SET pk_fk_content_category = ?'
+                    . ' WHERE pk_fk_content_category IN (?)',
+                [ 7, [ 4, 5 ] ],
+                [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+            );
 
         $this->conn->expects($this->at(1))->method('executeQuery')
             ->with(
                 'DELETE FROM contents_categories WHERE pk_fk_content_category IN (?)',
                 [ [ 4, 5 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
-            )->willReturn([ [ 'id' => 1, 'type' => 'flob' ] ]);
+            );
 
 
-        $this->assertEquals($contents, $repository->moveContents([ 4, 5 ], 7));
+        $this->repository->moveContents([ 4, 5 ], 7);
     }
 
     /**
@@ -294,22 +269,6 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testMoveContentsWhenNoIdsProvided()
     {
         $this->repository->moveContents(null, null);
-    }
-
-    /**
-     * Tests moveContents when a list of ids provided but no contents found.
-     */
-    public function testMoveContentsWhenNoContentsFound()
-    {
-        $repository = $this->getMockBuilder('Common\ORM\Database\Repository\CategoryRepository')
-            ->setMethods([ 'findContents' ])
-            ->setConstructorArgs([ 'foo', $this->conn, $this->metadata, $this->cache ])
-            ->getMock();
-
-        $repository->expects($this->once())->method('findContents')
-            ->with([ 4 ])->willReturn([]);
-
-        $this->assertEmpty($repository->moveContents(4, 7));
     }
 
     /**

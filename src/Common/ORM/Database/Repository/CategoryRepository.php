@@ -101,24 +101,14 @@ class CategoryRepository extends BaseRepository
             $ids = [ $ids ];
         }
 
-        $params = [];
-        $types  = [];
+        $sql = 'UPDATE IGNORE contents_categories SET pk_fk_content_category = ?'
+            . ' WHERE pk_fk_content_category IN (?)';
 
-        $data = $this->findContents($ids);
-
-        if (empty($data)) {
-            return [];
-        }
-
-        $sql = 'REPLACE INTO contents_categories (pk_fk_content_category, pk_fk_content)'
-            . ' VALUES ' . rtrim(str_repeat('(?,?),', count($data)), ',');
-
-        foreach ($data as $value) {
-            $params = array_merge($params, [ $target, $value['id'] ]);
-            $types  = array_merge($types, [ \PDO::PARAM_INT, \PDO::PARAM_INT ]);
-        }
-
-        $this->conn->executeQuery($sql, $params, $types);
+        $this->conn->executeQuery(
+            $sql,
+            [ $target, $ids ],
+            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
 
         $sql = 'DELETE FROM contents_categories WHERE pk_fk_content_category IN (?)';
 
@@ -127,8 +117,6 @@ class CategoryRepository extends BaseRepository
             [ $ids ],
             [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
-
-        return $data;
     }
 
     /**
