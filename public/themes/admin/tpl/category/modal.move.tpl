@@ -3,14 +3,8 @@
     <i class="fa fa-times"></i>
   </button>
   <h3 class="p-b-30 p-t-30 text-center">{t}Are you sure?{/t}</h3>
-  <h4 class="p-b-30 text-center" ng-if="!template.selected">{t}Do you want to move the contents assigned to the item?{/t}</h4>
-  <h4 class="p-b-30 text-center" ng-if="template.selected">{t}Do you want to move the contents assigned to the selected items?{/t}</h4>
-  <p class="text-center" ng-if="!template.selected">
-    {t escape=off}This means that all contents assigned to the category will be assigned to the category you select in the selector.{/t}
-  </p>
-  <p class="text-center" ng-if="template.selected">
-    {t escape=off}This means that all contents assigned to the selected categories will be assigned to the category you select in the selector.{/t}
-  </p>
+  <h4 class="p-b-30 text-center" ng-if="!template.selected">{t}Do you want to move contents in category?{/t}</h4>
+  <h4 class="p-b-30 text-center" ng-if="template.selected">{t}Do you want to move contents in selected categories?{/t}</h4>
   <div class="row m-t-15">
     <div class="col-xs-5 form-group" ng-show="!template.selected">
       <label class="form-label semi-bold" for="category">{t}Source{/t}</label>

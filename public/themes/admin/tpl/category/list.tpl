@@ -207,7 +207,7 @@
                               </li>
                               <li>
                                 <a href="#" ng-click="empty(getId(item))">
-                                  <i class="fa fa-trash-o"></i>
+                                  <i class="fa fa-fire"></i>
                                   {t}Delete contents{/t}
                                 </a>
                               </li>
