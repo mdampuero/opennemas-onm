@@ -317,25 +317,15 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testRemoveContentsWhenId()
     {
-        $repository = $this->getMockBuilder('Common\ORM\Database\Repository\CategoryRepository')
-            ->setMethods([ 'findContents' ])
-            ->setConstructorArgs([ 'foo', $this->conn, $this->metadata, $this->cache ])
-            ->getMock();
-
-        $repository->expects($this->once())->method('findContents')
-            ->with([ 4 ])->willReturn([ [ 'id' => 52, 'type' => 'wobble' ] ]);
-
         $this->conn->expects($this->once())->method('executeQuery')
             ->with(
-                'DELETE FROM contents WHERE pk_content IN (?)',
-                [ [ 52 ] ],
+                'DELETE FROM contents WHERE pk_content IN (SELECT pk_fk_content'
+                . ' FROM contents_categories WHERE pk_fk_content_category IN (?))',
+                [ [ 4 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             );
 
-        $this->assertEquals(
-            [ [ 'id' => 52, 'type' => 'wobble' ] ],
-            $repository->removeContents(4)
-        );
+        $this->repository->removeContents(4);
     }
 
     /**
@@ -343,28 +333,15 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testRemoveContentsWhenList()
     {
-        $repository = $this->getMockBuilder('Common\ORM\Database\Repository\CategoryRepository')
-            ->setMethods([ 'findContents' ])
-            ->setConstructorArgs([ 'foo', $this->conn, $this->metadata, $this->cache ])
-            ->getMock();
-
-        $contents = [
-            [ 'id' => 94, 'type' => 'grault' ],
-            [ 'id' => 105, 'type' => 'thud' ]
-        ];
-
-        $repository->expects($this->once())->method('findContents')
-            ->with([ 4, 5 ])->willReturn($contents);
-
         $this->conn->expects($this->once())->method('executeQuery')
             ->with(
-                'DELETE FROM contents WHERE pk_content IN (?)',
-                [ [ 94, 105 ] ],
+                'DELETE FROM contents WHERE pk_content IN (SELECT pk_fk_content'
+                . ' FROM contents_categories WHERE pk_fk_content_category IN (?))',
+                [ [ 4, 5 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
-            )->willReturn([ [ 'id' => 1, 'type' => 'flob' ] ]);
+            );
 
-
-        $this->assertEquals($contents, $repository->removeContents([ 4, 5 ]));
+        $this->repository->removeContents([ 4, 5 ]);
     }
 
     /**
@@ -375,21 +352,5 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testRemoveContentsWhenNoIdsProvided()
     {
         $this->repository->removeContents(null, null);
-    }
-
-    /**
-     * Tests moveContents when a list of ids provided but no contents found.
-     */
-    public function testRemoveContentsWhenNoContentsFound()
-    {
-        $repository = $this->getMockBuilder('Common\ORM\Database\Repository\CategoryRepository')
-            ->setMethods([ 'findContents' ])
-            ->setConstructorArgs([ 'foo', $this->conn, $this->metadata, $this->cache ])
-            ->getMock();
-
-        $repository->expects($this->once())->method('findContents')
-            ->with([ 4, 7 ])->willReturn([]);
-
-        $this->assertEmpty($repository->removeContents([ 4, 7 ]));
     }
 }
