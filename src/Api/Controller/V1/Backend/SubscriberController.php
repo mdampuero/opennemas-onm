@@ -338,6 +338,11 @@ class SubscriberController extends Controller
         $ss   = $this->get('api.service.subscriber');
         $item = $ss->getItem($id);
 
+        $item->user_groups = $this->get('data.manager.filter')
+            ->set($item->user_groups)
+            ->filter('mapify', [ 'key' => 'user_group_id' ])
+            ->get();
+
         return new JsonResponse([
             'item'  => $ss->responsify($item),
             'extra' => $this->getExtraData([ $item ])
