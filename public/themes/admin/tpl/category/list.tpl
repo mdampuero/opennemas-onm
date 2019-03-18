@@ -69,7 +69,7 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-link" ng-click="emptySelected()" uib-tooltip="{t}Empty{/t}" tooltip-placement="bottom">
+                <button class="btn btn-link" ng-click="emptySelected()" uib-tooltip="{t}Delete contents{/t}" tooltip-placement="bottom">
                   <i class="fa fa-fire fa-lg"></i>
                 </button>
               </li>
@@ -207,8 +207,8 @@
                               </li>
                               <li>
                                 <a href="#" ng-click="empty(getId(item))">
-                                  <i class="fa fa-fire"></i>
-                                  {t}Empty{/t}
+                                  <i class="fa fa-trash-o"></i>
+                                  {t}Delete contents{/t}
                                 </a>
                               </li>
                             </ul>
