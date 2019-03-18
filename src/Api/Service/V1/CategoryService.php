@@ -27,13 +27,12 @@ class CategoryService extends OrmService
                 throw new ApiException('The item is already empty', 400);
             }
 
-            $deleted = $this->em->getRepository($this->entity, $this->origin)
+            $this->em->getRepository($this->entity, $this->origin)
                 ->removeContents($id);
 
             $this->dispatcher->dispatch($this->getEventName('emptyItem'), [
-                'id'       => $id,
-                'item'     => $item,
-                'contents' => $deleted
+                'id'   => $id,
+                'item' => $item,
             ]);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
@@ -61,13 +60,12 @@ class CategoryService extends OrmService
                 return $a->pk_content_category;
             }, $response['items']);
 
-            $deleted = $this->em->getRepository($this->entity, $this->origin)
+            $this->em->getRepository($this->entity, $this->origin)
                 ->removeContents($toDelete);
 
             $this->dispatcher->dispatch($this->getEventName('emptyList'), [
-                'ids'      => $ids,
-                'items'    => $response['items'],
-                'contents' => $deleted
+                'ids'   => $ids,
+                'items' => $response['items'],
             ]);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
