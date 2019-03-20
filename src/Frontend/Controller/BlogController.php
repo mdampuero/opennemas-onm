@@ -220,6 +220,7 @@ class BlogController extends FrontendController
             'directional' => true,
             'epp'         => $epp,
             'total'       => $countItems,
+            'page'        => $page,
             'route'       => 'frontend_blog_frontpage',
         ]);
 
