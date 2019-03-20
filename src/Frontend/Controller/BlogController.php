@@ -177,6 +177,9 @@ class BlogController extends FrontendController
     {
         $page = array_key_exists('page', $params) ? $params['page'] : 1;
 
+        $epp = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+            ->get('items_per_page', 10);
+
         $authors = $this->get('api.service.author')
             ->getList('is_blog = 1 order by name asc');
 
@@ -184,11 +187,6 @@ class BlogController extends FrontendController
             ->set($authors['items'])
             ->filter('mapify', [ 'key' => 'id' ])
             ->get();
-
-        $epp = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_in_blog', 10);
-        $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
         $order   = [ 'starttime' => 'DESC' ];
         $date    = date('Y-m-d H:i:s');
