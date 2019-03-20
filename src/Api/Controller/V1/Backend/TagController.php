@@ -124,10 +124,6 @@ class TagController extends ApiController
             ->filter('slug')
             ->get();
 
-        if (!array_key_exists('locale', $data)) {
-            $data['locale'] = $this->get('core.locale')->getLocale('frontend');
-        }
-
         $item = new Tag($data);
 
         try {
