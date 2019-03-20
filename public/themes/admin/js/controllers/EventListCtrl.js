@@ -55,8 +55,7 @@
          * @description
          *   Configures the controller.
          */
-        $scope.init = function(locale) {
-          $scope.locale          = locale;
+        $scope.init = function() {
           $scope.columns.key     = 'event-columns';
           $scope.backup.criteria = $scope.criteria;
 
