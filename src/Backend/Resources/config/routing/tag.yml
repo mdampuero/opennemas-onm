@@ -1,11 +1,25 @@
-backend_tags_list:
-    path:     /tags
-    defaults: { _controller: BackendBundle:Tag:list }
+backend_tag_create:
+    path:     /tags/new
+    defaults: { _controller: BackendBundle:Tag:create }
+    options:
+        expose: true
+
+backend_tag_show:
+    path:     /tags/{id}
+    defaults: { _controller: BackendBundle:Tag:show }
+    requirements:
+        id: \d+
     options:
         expose: true
 
 backend_tags_config:
     path:     /tags/config
     defaults: { _controller: BackendBundle:Tag:config }
+    options:
+        expose: true
+
+backend_tags_list:
+    path:     /tags
+    defaults: { _controller: BackendBundle:Tag:list }
     options:
         expose: true
