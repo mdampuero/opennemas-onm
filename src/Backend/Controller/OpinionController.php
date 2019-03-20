@@ -10,18 +10,29 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
-use Common\Core\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
-class OpinionController extends Controller
+class OpinionController extends BackendController
 {
     /**
-     * The name of the setting to save extra field configuration.
+     * The extension name required by this controller.
      *
      * @var string
      */
-    const EXTRA_INFO_TYPE = 'extraInfoContents.OPINION_MANAGER';
+    protected $extension = 'OPINION_MANAGER';
+
+    /**
+     * The list of permissions for every action.
+     *
+     * @var type
+     */
+    protected $permissions = [
+        'create' => 'EVENT_CREATE',
+        'update' => 'EVENT_UPDATE',
+        'list'   => 'EVENT_ADMIN',
+        'show'   => 'EVENT_CREATE',
+    ];
 
     /**
      * {@inheritdoc}
@@ -31,17 +42,18 @@ class OpinionController extends Controller
     ];
 
     /**
-     * Lists all the opinions.
+     * The resource name.
      *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('OPINION_ADMIN')")
+     * @var string
      */
-    public function listAction()
-    {
-        return $this->render('opinion/list.tpl', [ 'home' => false ]);
-    }
+    protected $resource = 'opinion';
+
+    /**
+     * The name of the setting to save extra field configuration.
+     *
+     * @var string
+     */
+    const EXTRA_INFO_TYPE = 'extraInfoContents.OPINION_MANAGER';
 
     /**
      * Shows the information form for a opinion given its id.
@@ -52,8 +64,19 @@ class OpinionController extends Controller
      * @Security("hasExtension('OPINION_MANAGER')
      *     and hasPermission('OPINION_UPDATE')")
      */
-    public function showAction(Request $request)
+    public function showAction(Request $request, $id)
     {
+
+        $this->checkSecurity($this->extension, $this->getActionPermission('update'));
+
+        $params = [ 'id' => $id ];
+
+        if ($this->get('core.helper.locale')->hasMultilanguage()) {
+            $params['locale'] = $request->query->get('locale');
+        }
+
+        return $this->render($this->resource . '/item.tpl', $params);
+
         $id      = $request->query->getDigits('id', null);
         $opinion = $this->get('entity_repository')->find('Opinion', $id);
 
