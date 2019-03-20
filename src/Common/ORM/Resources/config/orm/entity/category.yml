@@ -34,13 +34,13 @@ orm:
                             type: integer
                             options: { default: null, unsigned: true, autoincrement: true }
                         title:
-                            type: string
-                            options: { default: null, length: 255 }
+                            type: text
+                            options: { default: null, length: 65532 }
                         name:
-                            type: string
-                            options: { default: null, notnull: false, length: 255 }
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
                         description:
-                            type: string
+                            type: text
                             options: { default: null, length: 65532, notnull: false }
                         inmenu:
                             type: integer

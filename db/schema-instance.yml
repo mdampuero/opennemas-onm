@@ -403,11 +403,11 @@ content_categories:
             type: bigint
             options: { length: 20, unsigned: true, autoincrement: true }
         title:
-            type: string
-            options: { length: 255, default: null }
+            type: text
+            options: { default: null, length: 65532 }
         name:
-            type: string
-            options: { length: 255, default: null, notnull: false }
+            type: text
+            options: { default: null, length: 65532, notnull: false }
         description:
             type: text
             options: { default: null, length: 65532, notnull: false }

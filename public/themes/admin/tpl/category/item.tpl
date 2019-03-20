@@ -40,7 +40,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.loading && flags.http.saving" type="button">
+                <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
                   <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                   {t}Save{/t}
                 </button>
@@ -147,7 +147,7 @@
                         </div>
                       </div>
                       <div class="dynamic-image-placeholder" ng-show="cover">
-                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="cover">
+                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$app.instance->getMediaShortPath()}/" ng-model="cover">
                           <div class="thumbnail-actions">
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('cover')">
                               <i class="fa fa-trash-o fa-2x"></i>
@@ -174,7 +174,7 @@
                         {t}Title{/t}
                       </label>
                       <div class="controls input-with-icon right">
-                        <input class="form-control" id="title" name="title" ng-blur="generate()" ng-model="item.title" type="text" required uib-tooltip="[% data.item.title[data.extra.locale.default] %]" tooltip-enable="data.extra.locale.default !== config.locale.selected">
+                        <input class="form-control" id="title" name="title" ng-blur="generate()" ng-model="item.title" placeholder="[% config.locale.multilanguage && config.locale.default !== config.locale.selected ? data.item.title[config.locale.default] : '' %]" required type="text" uib-tooltip="[% data.item.title[data.extra.locale.default] %]" tooltip-enable="data.extra.locale.default !== config.locale.selected">
                         <span class="icon right ng-cloak" ng-if="!flags.http.loading">
                           <span class="fa fa-check text-success" ng-if="form.title.$dirty && form.title.$valid"></span>
                           <span class="fa fa-info-circle text-info" ng-if="!form.title.$dirty && form.title.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
@@ -187,7 +187,7 @@
                     <div class="form-group">
                       <label for="name" class="form-label">{t}Slug{/t}</label>
                       <div class="controls input-with-icon right">
-                        <input class="form-control" id="name" name="name" ng-model="item.name" required type="text" uib-tooltip="[% data.item.name[data.extra.locale.default] %]" tooltip-enable="data.extra.locale.default !== config.locale.selected">
+                        <input class="form-control" id="name" name="name" ng-model="item.name" placeholder="[% config.locale.multilanguage && config.locale.default !== config.locale.selected ? data.item.name[config.locale.default] : '' %]" required type="text" uib-tooltip="[% data.item.name[data.extra.locale.default] %]" tooltip-enable="data.extra.locale.default !== config.locale.selected">
                         <span class="icon right ng-cloak" ng-if="!flags.http.loading">
                           <span class="fa fa-circle-o-notch fa-spin" ng-if="flags.http.slug"></span>
                           <span class="fa fa-check text-success" ng-if="!flags.http.slug && form.name.$dirty && form.name.$valid"></span>

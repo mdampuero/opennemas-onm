@@ -41,9 +41,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <button class="btn btn-loading btn-success text-uppercase" ng-click="save()"
-                ng-disabled="flags.http.loading || flags.http.saving" type="button"
-                >
+              <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
                 <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                 {t}Save{/t}
               </button>
@@ -88,7 +86,7 @@
         <div class="grid simple">
           <div class="grid-body">
             {include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true}
-            {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=30 required=true imagepicker=true l10n=true}
+            {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=30 required=true imagepicker=true}
           </div>
         </div>
       </div>
