@@ -29,25 +29,37 @@ class TagValidator extends Validator
             throw new InvalidArgumentException('Invalid tag', 400);
         }
 
-        if (!$item->exists()) {
-            $oql = sprintf(
-                'name = "%s" and locale = "%s"',
-                $item->name,
-                $item->locale
-            );
+        if ($item->exists()) {
+            return;
+        }
 
-            try {
-                $tag = $this->container->get('api.service.tag')->getItemBy($oql);
+        $locales = $this->container->get('core.locale')
+            ->getAvailableLocales('frontend');
 
-                // Tags with different names are considered different
-                if ($tag->name !== $item->name) {
-                    return;
-                }
-            } catch (\Exception $e) {
-                return;
-            }
-
+        // Locale invalid
+        if (!empty($item->locale)
+            && !in_array($item->locale, array_keys($locales))
+        ) {
             throw new InvalidArgumentException('Invalid tag', 400);
         }
+
+        $oql = sprintf(
+            'name = "%s" and locale = "%s"',
+            $item->name,
+            $item->locale
+        );
+
+        try {
+            $tag = $this->container->get('api.service.tag')->getItemBy($oql);
+
+            // Tags with different names are considered different
+            if ($tag->name !== $item->name) {
+                return;
+            }
+        } catch (\Exception $e) {
+            return;
+        }
+
+        throw new InvalidArgumentException('Invalid tag', 400);
     }
 }

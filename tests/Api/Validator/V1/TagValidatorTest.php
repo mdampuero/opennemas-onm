@@ -34,8 +34,19 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'validate' ])
             ->getMock();
 
+        $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getAvailableLocales' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->locale->expects($this->any())->method('getAvailableLocales')
+            ->with('frontend')->willReturn([
+                'es_ES' => 'Spanish',
+                'gl_ES' => 'Galician'
+            ]);
 
         $this->validator = new TagValidator($this->container);
     }
@@ -45,6 +56,9 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'api.service.tag':
                 return $this->tagService;
+
+            case 'core.locale':
+                return $this->locale;
 
             case 'core.validator':
                 return $this->coreValidator;
@@ -97,6 +111,22 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
         $this->validator->validate(new Entity([
             'name'   => 'plugh',
             'locale' => 'es_ES'
+        ]));
+    }
+
+    /**
+     * Tests validate when the provided locale is not valid.
+     *
+     * @expectedException \Api\Exception\InvalidArgumentException
+     */
+    public function testValidateWhenLocaleInvalid()
+    {
+        $this->coreValidator->expects($this->once())->method('validate')
+            ->willReturn([]);
+
+        $this->validator->validate(new Entity([
+            'name'   => 'baz',
+            'locale' => 'en_US'
         ]));
     }
 
