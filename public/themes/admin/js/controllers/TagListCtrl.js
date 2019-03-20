@@ -63,10 +63,10 @@
 
           if (tag) {
             $scope.editedTag = {
-              id: tag.id,
-              name: tag.name,
-              language_id: tag.language_id,
-              slug: tag.slug
+              id:     tag.id,
+              name:   tag.name,
+              locale: tag.locale,
+              slug:   tag.slug
             };
           }
         };
@@ -79,7 +79,7 @@
          *   Show form for tags.
          */
         $scope.createTag = function() {
-          $scope.editedTag = { name: '', language_id: $scope.locale };
+          $scope.editedTag = { name: '', locale: $scope.locale };
         };
 
         /**

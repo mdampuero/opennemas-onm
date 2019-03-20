@@ -66,7 +66,7 @@ class TagService extends OrmService
         $oql = sprintf('slug in ["%s"]', implode('","', $slugs));
 
         if (!empty($locale)) {
-            $oql .= sprintf(' and language_id = "%s"', $locale);
+            $oql .= sprintf(' and locale = "%s"', $locale);
         }
 
         return $this->getList($oql);
@@ -107,7 +107,7 @@ class TagService extends OrmService
         $returnArr = [];
 
         foreach ($tags['items'] as $tag) {
-            if (is_null($locale) || $tag->language_id == $locale) {
+            if (is_null($locale) || $tag->locale == $locale) {
                 $returnArr[$tag->id] = \Onm\StringUtils::convertToUtf8($tag);
             }
         }
@@ -174,10 +174,10 @@ class TagService extends OrmService
             ->filter('slug')
             ->get();
 
-        if (!array_key_exists('language_id', $data)
-            || empty($data['language_id'])
+        if (!array_key_exists('locale', $data)
+            || empty($data['locale'])
         ) {
-            $data['language_id'] = $this->container->get('core.locale')
+            $data['locale'] = $this->container->get('core.locale')
                 ->getLocale('frontend');
         }
 

@@ -31,9 +31,9 @@ class TagValidator extends Validator
 
         if (!$item->exists()) {
             $oql = sprintf(
-                'name = "%s" and language_id = "%s"',
+                'name = "%s" and locale = "%s"',
                 $item->name,
-                $item->language_id
+                $item->locale
             );
 
             try {

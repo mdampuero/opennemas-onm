@@ -82,7 +82,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-if="data.extra.locales.length > 2">
-              <ui-select name="language" theme="select2" ng-model="criteria.language_id">
+              <ui-select name="language" theme="select2" ng-model="criteria.locale">
                 <ui-select-match>
                   <strong>{t}Language{/t}:</strong> [% $select.selected.name %]
                 </ui-select-match>
@@ -167,7 +167,7 @@
                             {t}Language{/t}
                           </label>
                           <div class="controls">
-                            <select class="form-control" name="locale" ng-model="editedTag.language_id">
+                            <select class="form-control" name="locale" ng-model="editedTag.locale">
                               <option value="[% locale.id %]" ng-repeat="locale in data.extra.locales">[% locale.name %]</option>
                             </select>
                           </div>
@@ -232,7 +232,7 @@
                             {t}Language{/t}
                           </label>
                           <div class="controls">
-                            <select class="form-control" name="locale" ng-model="editedTag.language_id">
+                            <select class="form-control" name="locale" ng-model="editedTag.locale">
                               <option value="[% locale.id %]" ng-repeat="locale in data.extra.locales">[% locale.name %]</option>
                             </select>
                           </div>

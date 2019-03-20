@@ -219,9 +219,9 @@
 
               if (found.length === 0) {
                 items.push({
-                  id: query,
-                  language_id: $scope.locale,
-                  name: query
+                  id:     query,
+                  locale: $scope.locale,
+                  name:   query
                 });
 
                 items = items.sort(function(a, b) {

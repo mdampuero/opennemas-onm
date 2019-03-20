@@ -104,11 +104,11 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->converter->expects($this->any())->method('objectify')
             ->with(array_merge($data, [
-                'slug'        => 'plugh',
-                'language_id' => 'es_ES'
+                'slug'   => 'plugh',
+                'locale' => 'es_ES'
             ]))->willReturn(array_merge($data, [
-                'slug'        => 'plugh',
-                'language_id' => 'es_ES'
+                'slug'   => 'plugh',
+                'locale' => 'es_ES'
             ]));
 
         $this->locale->expects($this->once())->method('getLocale')
@@ -185,11 +185,11 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $tags = [ new Tag([ 'slug' => 'wobble' ]) ];
 
         $this->repository->expects($this->once())->method('findBy')
-            ->with('slug in ["wobble"] and language_id = "es_ES"')
+            ->with('slug in ["wobble"] and locale = "es_ES"')
             ->willReturn($tags);
 
         $this->repository->expects($this->once())->method('countBy')
-            ->with('slug in ["wobble"] and language_id = "es_ES"')
+            ->with('slug in ["wobble"] and locale = "es_ES"')
             ->willReturn(1);
 
         $response = $this->service->getListBySlugs([ 'wobble' ], 'es_ES');
@@ -331,11 +331,11 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->converter->expects($this->any())->method('objectify')
             ->with(array_merge($data, [
-                'slug'        => 'wibble',
-                'language_id' => 'es_ES'
+                'slug'   => 'wibble',
+                'locale' => 'es_ES'
             ]))->willReturn(array_merge($data, [
-                'slug'        => 'wibble',
-                'language_id' => 'es_ES'
+                'slug'   => 'wibble',
+                'locale' => 'es_ES'
             ]));
 
         $this->locale->expects($this->once())->method('getLocale')
@@ -360,9 +360,9 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
     public function testParseWhenAllDataProvided()
     {
         $data = [
-            'name'        => 'Wibble',
-            'slug'        => 'wobble',
-            'language_id' => 'es_ES'
+            'name'   => 'Wibble',
+            'slug'   => 'wobble',
+            'locale' => 'es_ES'
         ];
 
         $this->fm->expects($this->once())->method('set')
@@ -401,7 +401,7 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $this->assertEquals(
-            array_merge($data, [ 'slug' => 'wibble', 'language_id' => 'en' ]),
+            array_merge($data, [ 'slug' => 'wibble', 'locale' => 'en' ]),
             $method->invokeArgs($this->service, [ $data ])
         );
     }
