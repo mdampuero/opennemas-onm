@@ -102,10 +102,7 @@ class EventController extends FrontendController
     protected function getItems($params)
     {
         $date   = date('Y-m-d H:i:s');
-        $epp    = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page');
-        $offset = ($params['page'] <= 2) ? 0 : ($params['page'] - 1) * $epp;
+        $offset = ($params['page'] <= 2) ? 0 : ($params['page'] - 1) * $params['epp'];
 
         $eventIds = $this->get('orm.manager')->getConnection('instance')
             ->executeQuery(
@@ -150,7 +147,7 @@ class EventController extends FrontendController
 
         $params['epp'] = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('items_in_blog', 10);
+            ->get('items_in_page', 10);
 
         // Prevent invalid page when page is not numeric
         $params['page'] = (int) $params['page'];
