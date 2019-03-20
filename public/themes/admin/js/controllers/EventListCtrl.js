@@ -91,10 +91,6 @@
          * @inheritdoc
          */
         $scope.parseList = function(data) {
-          if (data.extra.locale) {
-            $scope.config.locale = data.extra.locale;
-          }
-
           $scope.configure(data.extra);
           $scope.localize($scope.data.items, 'items');
         };
