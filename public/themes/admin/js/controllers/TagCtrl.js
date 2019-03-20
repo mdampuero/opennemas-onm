@@ -16,8 +16,8 @@
      *   Handles actions for tag edit form.
      */
     .controller('TagCtrl', [
-      '$controller', '$scope', '$timeout', 'cleaner',
-      function($controller, $scope, $timeout, cleaner) {
+      '$controller', '$scope', '$timeout', 'cleaner', 'http',
+      function($controller, $scope, $timeout, cleaner, http) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
@@ -46,6 +46,45 @@
           var data = angular.extend({}, $scope.item);
 
           return cleaner.clean(data);
+        };
+
+        /**
+         * @function isValid
+         * @memberOf TagCtrl
+         *
+         * @description
+         *   Validates the tag.
+         */
+        $scope.isValid = function() {
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+            $scope.disableFlags('http');
+          }
+
+          if (!$scope.item.name) {
+            return;
+          }
+
+          $scope.flags.http.validating = true;
+
+          var route = {
+            name:   'api_v1_backend_tags_validate',
+            params: { name: $scope.item.name, locale: $scope.item.locale }
+          };
+
+          $scope.tm = $timeout(function() {
+            http.get(route).then(function() {
+              $scope.disableFlags('http');
+              $scope.form.name.$setValidity('exists', true);
+            }, function(response) {
+              $scope.disableFlags('http');
+              $scope.form.name.$setValidity('exists', false);
+
+              $scope.error = '<ul><li>' + response.data.map(function(e) {
+                return e.message;
+              }).join('</li><li>') + '</li></ul>';
+            });
+          }, 500);
         };
 
         // Generates slug when flag changes
