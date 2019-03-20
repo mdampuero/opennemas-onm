@@ -158,6 +158,8 @@
          * @param {Object} data The data in the response.
          */
         $scope.parseItem = function(data) {
+          $scope.configure(data.extra);
+
           return data;
         };
 
