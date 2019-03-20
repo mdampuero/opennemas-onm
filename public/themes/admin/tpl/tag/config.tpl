@@ -23,7 +23,7 @@
               </h4>
             </li>
             <li class="quicklinks">
-              <h4>{t}Settings{/t}</h4>
+              <h4>{t}Configuration{/t}</h4>
             </li>
           </ul>
           <div class="all-actions pull-right">
