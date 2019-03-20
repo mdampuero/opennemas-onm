@@ -443,6 +443,7 @@ class OrmService implements Service
         try {
             $data = $this->em->getConverter($this->entity)
                 ->objectify($data);
+
             $item = $this->getItem($id);
             $item->setData($data);
 

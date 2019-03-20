@@ -43,10 +43,6 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'filter', 'get', 'set' ])
             ->getMock();
 
-        $this->locale = $this->getMockBuilder('Locale')
-            ->setMethods([ 'getContext', 'getLocale' ])
-            ->getMock();
-
         $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
             ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
             ->getMock();
@@ -82,9 +78,6 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
             case 'core.dispatcher':
                 return $this->dispatcher;
 
-            case 'core.locale':
-                return $this->locale;
-
             case 'data.manager.filter':
                 return $this->fm;
 
@@ -103,16 +96,8 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $data = [ 'name' => 'Plugh' ];
 
         $this->converter->expects($this->any())->method('objectify')
-            ->with(array_merge($data, [
-                'slug'   => 'plugh',
-                'locale' => 'es_ES'
-            ]))->willReturn(array_merge($data, [
-                'slug'   => 'plugh',
-                'locale' => 'es_ES'
-            ]));
-
-        $this->locale->expects($this->once())->method('getLocale')
-            ->with('frontend')->willReturn('es_ES');
+            ->with(array_merge($data, [ 'slug'   => 'plugh', ]))
+            ->willReturn(array_merge($data, [ 'slug'   => 'plugh' ]));
 
         $this->em->expects($this->once())->method('persist');
 
@@ -330,16 +315,8 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $data = [ 'name' => 'Wibble' ];
 
         $this->converter->expects($this->any())->method('objectify')
-            ->with(array_merge($data, [
-                'slug'   => 'wibble',
-                'locale' => 'es_ES'
-            ]))->willReturn(array_merge($data, [
-                'slug'   => 'wibble',
-                'locale' => 'es_ES'
-            ]));
-
-        $this->locale->expects($this->once())->method('getLocale')
-            ->with('frontend')->willReturn('es_ES');
+            ->with(array_merge($data, [ 'slug'   => 'wibble' ]))
+            ->willReturn(array_merge($data, [ 'slug'   => 'wibble' ]));
 
         $this->repository->expects($this->once())->method('find')
             ->with(1)->willReturn($item);
@@ -355,9 +332,9 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests parse when all tag information is provided.
+     * Tests parse.
      */
-    public function testParseWhenAllDataProvided()
+    public function testParse()
     {
         $data = [
             'name'   => 'Wibble',
@@ -376,33 +353,5 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $this->assertEquals($data, $method->invokeArgs($this->service, [ $data ]));
-    }
-
-    /**
-     * Tests parse when only some tag information is provided.
-     */
-    public function testParseWhenLimitedDataProvided()
-    {
-        $data = [
-            'name' => 'Wibble',
-        ];
-
-        $this->fm->expects($this->once())->method('set')
-            ->with('Wibble')->willReturn($this->fm);
-        $this->fm->expects($this->once())->method('filter')
-            ->with('slug')->willReturn($this->fm);
-        $this->fm->expects($this->once())->method('get')
-            ->willReturn('wibble');
-
-        $this->locale->expects($this->once())->method('getLocale')
-            ->with('frontend')->willReturn('en');
-
-        $method = new \ReflectionMethod($this->service, 'parse');
-        $method->setAccessible(true);
-
-        $this->assertEquals(
-            array_merge($data, [ 'slug' => 'wibble', 'locale' => 'en' ]),
-            $method->invokeArgs($this->service, [ $data ])
-        );
     }
 }

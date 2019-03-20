@@ -174,13 +174,6 @@ class TagService extends OrmService
             ->filter('slug')
             ->get();
 
-        if (!array_key_exists('locale', $data)
-            || empty($data['locale'])
-        ) {
-            $data['locale'] = $this->container->get('core.locale')
-                ->getLocale('frontend');
-        }
-
         return $data;
     }
 }
