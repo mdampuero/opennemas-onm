@@ -43,11 +43,15 @@ class TagValidator extends Validator
             throw new InvalidArgumentException('Invalid tag', 400);
         }
 
-        $oql = sprintf(
-            'name = "%s" and locale = "%s"',
-            $item->name,
-            $item->locale
-        );
+        $oql = sprintf('name = "%s" and locale is null', $item->name);
+
+        if (!empty($item->locale)) {
+            $oql = sprintf(
+                'name = "%s" and locale = "%s"',
+                $item->name,
+                $item->locale
+            );
+        }
 
         try {
             $tag = $this->container->get('api.service.tag')->getItemBy($oql);

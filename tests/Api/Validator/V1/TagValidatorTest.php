@@ -95,17 +95,15 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $this->tagService->expects($this->at(0))->method('getItemBy')
-            ->with('name = "flob" and locale = "es_ES"')
+            ->with('name = "flob" and locale is null')
             ->will($this->throwException(new \Exception()));
 
         $this->tagService->expects($this->at(1))->method('getItemBy')
             ->with('name = "plugh" and locale = "es_ES"')
             ->willReturn(new Entity([ 'name' => 'Plugh' ]));
 
-
         $this->validator->validate(new Entity([
-            'name'   => 'flob',
-            'locale' => 'es_ES'
+            'name' => 'flob',
         ]));
 
         $this->validator->validate(new Entity([
