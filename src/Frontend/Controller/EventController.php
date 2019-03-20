@@ -114,7 +114,7 @@ class EventController extends FrontendController
                 . "AND (starttime IS NULL OR starttime <= ? ) "
                 . "AND (endtime IS NULL OR endtime > ?) "
                 . " ORDER BY event_start_date DESC LIMIT ? OFFSET ?",
-                [ $date, $date, $epp, $offset ]
+                [ $date, $date, $params['epp'], $offset ]
             )
             ->fetchAll();
 
