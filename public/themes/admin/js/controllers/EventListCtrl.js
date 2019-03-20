@@ -55,8 +55,7 @@
          * @description
          *   Configures the controller.
          */
-        $scope.init = function(locale) {
-          $scope.locale          = locale;
+        $scope.init = function() {
           $scope.columns.key     = 'event-columns';
           $scope.backup.criteria = $scope.criteria;
 
@@ -92,10 +91,6 @@
          * @inheritdoc
          */
         $scope.parseList = function(data) {
-          if (data.extra.locale) {
-            $scope.config.locale = data.extra.locale;
-          }
-
           $scope.configure(data.extra);
           $scope.localize($scope.data.items, 'items');
         };
