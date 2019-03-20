@@ -22,10 +22,9 @@ class CategoryController extends BackendController
      * {@inheritdoc}
      */
     protected $permissions = [
-        'create'    => 'CATEGORY_CREATE',
-        'configure' => 'CATEGORY_SETTINGS',
-        'list'      => 'CATEGORY_ADMIN',
-        'show'      => 'CATEGORY_UPDATE'
+        'create' => 'CATEGORY_CREATE',
+        'list'   => 'CATEGORY_ADMIN',
+        'show'   => 'CATEGORY_UPDATE'
     ];
 
     /**

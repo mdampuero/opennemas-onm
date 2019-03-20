@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-18 15:30+0000\n"
+"POT-Creation-Date: 2019-03-20 18:42+0000\n"
 "PO-Revision-Date: 2019-03-18 16:38+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
@@ -240,6 +240,7 @@ msgstr "Non se puido atopar o ficheiro co identificador «%s»"
 msgid "File successfully updated."
 msgstr "Artigo actualizado correctamente."
 
+#, php-format
 msgid "There was a problem while saving the file information."
 msgstr "Produciuse un erro ao gardar a información do ficheiro."
 
@@ -7337,6 +7338,9 @@ msgstr "¿Queres mover os contidos na categoría?"
 msgid "Do you want to move contents in selected categories?"
 msgstr "¿Queres mover os contidos nas categorías seleccionadas?"
 
+msgid "Subsection of"
+msgstr "Subsección de"
+
 msgid "Not selected"
 msgstr "Non seleccionado"
 
@@ -9146,9 +9150,6 @@ msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
 
 #~ msgid "Creating category"
 #~ msgstr "Creando categoría"
-
-#~ msgid "Subsection of"
-#~ msgstr "Subsección de"
 
 #~ msgid "Subsections"
 #~ msgstr "Subseccións"
