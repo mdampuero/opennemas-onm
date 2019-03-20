@@ -1,8 +1,8 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form name="form" ng-controller="CategoryCtrl" ng-init="forcedLocale = '{$locale}'; getItem({$id})">
-    <div class="page-navbar actions-navbar ng-cloak" ng-show="!loading">
+  <form name="form" ng-controller="CategoryCtrl" ng-init="forcedLocale = '{$locale}'; getItem({$id}); flags.block.slug = true">
+    <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
@@ -18,7 +18,7 @@
                 </a>
               </h4>
             </li>
-            <li class="quicklinks m-l-5 m-r-5 ng-cloak">
+            <li class="quicklinks m-l-5 m-r-5">
               <h4>
                 <i class="fa fa-angle-right"></i>
               </h4>
@@ -37,7 +37,7 @@
               <translator item="data.item" keys="data.extra.keys" ng-model="config.locale.selected" options="config.locale"></translator>
             </li>
           </ul>
-          <div class="all-actions pull-right">
+          <div class="ng-cloak pull-right" ng-if="!flags.http.loading">
             <ul class="nav quick-section">
               <li class="quicklinks">
                 <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="form.$invalid" type="button">
@@ -90,7 +90,7 @@
                   </div>
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.category }" ng-click="expanded.category = !expanded.category">
-                  <i class="fa fa-bookmark m-r-10"></i>{t}Category{/t}
+                  <i class="fa fa-bookmark m-r-10"></i>{t}Subsection of{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
                   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-show="!expanded.category">
                     <strong ng-show="!selectedCategories">{t}Not selected{/t}</strong>
@@ -177,8 +177,8 @@
                         <input class="form-control" id="title" name="title" ng-blur="generate()" ng-model="item.title" placeholder="[% config.locale.multilanguage && config.locale.default !== config.locale.selected ? data.item.title[config.locale.default] : '' %]" required type="text" uib-tooltip="[% data.item.title[data.extra.locale.default] %]" tooltip-enable="data.extra.locale.default !== config.locale.selected">
                         <span class="icon right ng-cloak" ng-if="!flags.http.loading">
                           <span class="fa fa-check text-success" ng-if="form.title.$dirty && form.title.$valid"></span>
-                          <span class="fa fa-info-circle text-info" ng-if="!form.title.$dirty && form.title.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
-                          <span class="fa fa-times text-error" ng-if="form.title.$dirty && form.title.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
+                          <span class="fa fa-info-circle text-info" ng-if="!form.title.$dirty && form.title.$invalid" tooltip-class="tooltip-info" uib-tooltip="{t}This field is required{/t}"></span>
+                          <span class="fa fa-times text-error" ng-if="form.title.$dirty && form.title.$invalid" tooltip-class="tooltip-danger" uib-tooltip="{t}This field is invalid{/t}"></span>
                         </span>
                       </div>
                     </div>
@@ -186,14 +186,23 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="name" class="form-label">{t}Slug{/t}</label>
-                      <div class="controls input-with-icon right">
-                        <input class="form-control" id="name" name="name" ng-model="item.name" placeholder="[% config.locale.multilanguage && config.locale.default !== config.locale.selected ? data.item.name[config.locale.default] : '' %]" required type="text" uib-tooltip="[% data.item.name[data.extra.locale.default] %]" tooltip-enable="data.extra.locale.default !== config.locale.selected">
-                        <span class="icon right ng-cloak" ng-if="!flags.http.loading">
-                          <span class="fa fa-circle-o-notch fa-spin" ng-if="flags.http.slug"></span>
-                          <span class="fa fa-check text-success" ng-if="!flags.http.slug && form.name.$dirty && form.name.$valid"></span>
-                          <span class="fa fa-info-circle text-info" ng-if="!flags.http.slug && !form.name.$dirty && form.name.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
-                          <span class="fa fa-times text-error" ng-if="!flags.http.slug && form.name.$dirty && form.name.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
-                        </span>
+                      <div class="controls">
+                        <div class="input-group">
+                          <div class="input-group-btn">
+                            <button class="btn btn-default" ng-click="flags.block.slug = !flags.block.slug" type="button">
+                              <i class="fa" ng-class="{ 'fa-lock': flags.block.slug, 'fa-unlock-alt': !flags.block.slug }"></i>
+                            </button>
+                          </div>
+                          <div class="input-with-icon right">
+                            <input class="form-control" id="name" name="name" ng-disabled="flags.block.slug" ng-model="item.name" placeholder="[% config.locale.multilanguage && config.locale.default !== config.locale.selected ? data.item.name[config.locale.default] : '' %]" required type="text" uib-tooltip="[% data.item.name[data.extra.locale.default] %]" tooltip-enable="data.extra.locale.default !== config.locale.selected">
+                            <span class="icon right ng-cloak" ng-if="!flags.http.loading">
+                              <span class="fa fa-circle-o-notch fa-spin" ng-if="flags.http.slug"></span>
+                              <span class="fa fa-check text-success" ng-if="!flags.http.slug && form.name.$dirty && form.name.$valid"></span>
+                              <span class="fa fa-info-circle text-info" ng-if="!flags.http.slug && !form.name.$dirty && form.name.$invalid" tooltip-class="tooltip-info" uib-tooltip="{t}This field is required{/t}"></span>
+                              <span class="fa fa-times text-error" ng-if="!flags.http.slug && form.name.$dirty && form.name.$invalid" tooltip-class="tooltip-danger" uib-tooltip="{t}This field is invalid{/t}"></span>
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
