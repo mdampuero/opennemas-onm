@@ -1,6 +1,6 @@
 {extends file="base/admin.tpl"}
 {block name="content"}
-  <form  method="POST" name="formulario" id="formulario" ng-controller="TagConfigCtrl" ng-init="init()">
+  <form  method="POST" name="formulario" id="formulario" ng-controller="TagConfigCtrl" ng-init="list()">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -26,11 +26,12 @@
               <h4>{t}Configuration{/t}</h4>
             </li>
           </ul>
-          <div class="all-actions pull-right">
+          <div class="ng-cloak pull-right" ng-if="!flags.http.loading">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-primary" type="button" ng-click="saveConf($event)">
-                  <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+                <button class="btn btn-loading btn-success text-uppercase" ng-click="save($event)" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+                  <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
+                  {t}Save{/t}
                 </button>
               </li>
             </ul>

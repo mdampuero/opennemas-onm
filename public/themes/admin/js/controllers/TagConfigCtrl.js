@@ -35,45 +35,40 @@
          */
         $scope.saving = false;
 
-        $scope.init = function() {
-          $scope.list();
-        };
-
         /**
          * @function list
          * @memberOf TagConfigCtrl
          *
          * @description
-         *   get the tag config.
+         *   Reloads the tag configuration.
          */
         $scope.list = function() {
-          $scope.loading = true;
+          $scope.flags.http.loading = true;
 
-          http.get('api_v1_backend_tags_config').then(function(response) {
+          http.get('api_v1_backend_tags_config_show').then(function(response) {
             $scope.settings = response.data;
-            $scope.loading  = false;
+            $scope.disableFlags('http');
           }, function() {
-            $scope.loading = false;
+            $scope.disableFlags('http');
           });
         };
 
         /**
-         * Updates an item.
+         * @function save
+         * @memberOf TagConfigCtrl
          *
-         * @param event    $event    triggering event .
+         * @description
+         *   Saves the configuration.
          */
-        $scope.saveConf = function($event) {
-          $event.preventDefault();
+        $scope.save = function() {
+          $scope.flags.http.saving = true;
 
-          $scope.saving = false;
-          http.put('api_v1_backend_tag_conf_save', $scope.settings)
+          http.put('api_v1_backend_tags_config_save', $scope.settings)
             .then(function(response) {
-              $scope.saving = false;
-
+              $scope.disableFlags('http');
               messenger.post(response.data);
             }, function(response) {
-              $scope.saving = false;
-
+              $scope.disableFlags('http');
               messenger.post(response.data);
             });
         };
