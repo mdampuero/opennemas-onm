@@ -9,35 +9,37 @@
  */
 namespace Backend\Controller;
 
-use Common\Core\Annotation\Security;
-use Common\Core\Controller\Controller;
-
-class TagController extends Controller
+class TagController extends BackendController
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected $extension = 'es.openhost.module.tags';
 
     /**
-     * Show a paginated list of backend tags.
+     * {@inheritdoc}
+     */
+    protected $permissions = [
+        'create' => 'TAG_CREATE',
+        'config' => 'TAG_ADMIN',
+        'list'   => 'TAG_ADMIN',
+        'show'   => 'TAG_UPDATE'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $resource = 'tag';
+
+    /**
+     * Displays the configuration form for tags.
      *
      * @return Response The response object.
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
-     */
-    public function listAction()
-    {
-        return $this->render('tag/list.tpl', [
-            'locale' => $this->get('core.locale')->getLocale('frontend')
-        ]);
-    }
-
-    /**
-     * Config for article system
-     *
-     * @return Response the response object
-     *
-     * @Security("hasPermission('TAG_ADMIN')")
      */
     public function configAction()
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('config'));
+
         return $this->render('tag/config.tpl');
     }
 }
