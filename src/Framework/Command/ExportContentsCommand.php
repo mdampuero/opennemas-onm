@@ -228,7 +228,7 @@ EOF
     public function exportContents()
     {
         // Sql order, limit and filters
-        $order   = [ 'created' => 'ASC' ];
+        $order = [ 'created' => 'ASC' ];
 
         // Get entity repository
         $this->er = getService('entity_repository');
@@ -284,7 +284,8 @@ EOF
 
 
         $this->output->writeln(implode(PHP_EOL, [
-            PHP_EOL . "Saved contents with <info>$this->imagesCounter</info> images into ". $this->targetDir . PHP_EOL,
+            PHP_EOL . "Saved contents with <info>$this->imagesCounter</info> images into "
+                . $this->targetDir . PHP_EOL,
             "\tArticles -> <info>$this->articlesCounter</info>\n",
             "\tOpinions -> <info>$this->opinionsCounter</info>\n",
             "\tAlbums -> <info>$this->albumsCounter</info>\n",

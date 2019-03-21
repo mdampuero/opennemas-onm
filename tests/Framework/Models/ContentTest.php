@@ -138,7 +138,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $content->in_litter = 1;
         $this->assertEquals(\Content::TRASHED, $content->getStatus());
 
-        $content            = new \Content();
+        $content = new \Content();
         $this->assertEquals(\Content::PENDING, $content->getStatus());
 
         $content                 = new \Content();
