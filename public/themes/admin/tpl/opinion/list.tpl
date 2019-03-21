@@ -37,7 +37,7 @@
               {/acl}
               {acl isAllowed="OPINION_CREATE"}
                 <li class="quicklinks">
-                  <a class="btn btn-success" href="{url name=backend_opinion_create}" title="{t}New opinion{/t}" id="create-button">
+                  <a class="btn btn-success text-uppercase" href="{url name=backend_opinion_create}" title="{t}New opinion{/t}" id="create-button">
                     <i class="fa fa-plus"></i>
                     {t}Create{/t}
                   </a>
