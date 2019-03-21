@@ -46,14 +46,13 @@
                 '<auto-complete debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
               '</tags-input>' +
               '<i class="fa fa-circle-o-notch fa-spin tags-input-loading" ng-if="loading"></i>' +
-              '<input name="tags" type="hidden" ng-value="getJsonValue()">' +
+              '<input name="tag_ids" type="hidden" ng-value="getJsonValue()">' +
             '</div>' +
             '<script type="text/ng-template" id="tag">' +
               '<span class="tag-item-text" ng-bind-html="$highlight($getDisplayText())"></span>' +
               '<span class="badge badge-success pull-right text-uppercase" ng-if="$parent.$parent.$parent.$parent.$parent.isNewTag(data)">' +
                 '<strong>' + $window.strings.tags.newItem + '</strong>' +
               '</span>' +
-
               '<span class="badge badge-default pull-right" ng-class="{ \'badge-danger\': !$parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] }" ng-show="!$parent.$parent.$parent.$parent.$parent.isNewTag(data)">' +
                 '<strong>[% $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] ? $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] : 0 %]</strong>' +
               '</span>' +
@@ -232,7 +231,7 @@
               if (found.length === 0) {
                 var item = { id: query, name: query };
 
-                if ($scope.locale.multilanguage) {
+                if ($scope.locale && $scope.locale.multilanguage) {
                   item.locale = $scope.locale.selected;
                 }
 
