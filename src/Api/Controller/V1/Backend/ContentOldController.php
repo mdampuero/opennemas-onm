@@ -34,6 +34,30 @@ class ContentOldController extends ContentController
     }
 
     /**
+     * Returns a list of items.
+     *
+     * @param Request $request The request object.
+     *
+     * @return array The list of items and all extra information.
+     */
+    public function listAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
+
+        $us  = $this->get($this->service);
+        $oql = $request->query->get('oql', '');
+
+        $response = $us->getList($oql);
+
+        return [
+            'items'      => $response['items'],
+            'total'      => $response['total'],
+            'extra'      => $this->getExtraData($response['items']),
+            'o-filename' => $this->filename,
+        ];
+    }
+
+    /**
      * Saves a new item.
      *
      * @param Request $request The request object.
