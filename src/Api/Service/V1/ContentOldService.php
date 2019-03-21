@@ -414,9 +414,8 @@ class ContentOldService
      */
     public function responsify($item)
     {
+        // var_dump($item);die();
         return $item;
-
-        // return $this->em->getConverter('content')->responsify($item);
     }
 
     /**
