@@ -350,17 +350,12 @@ class ContentOldService
      */
     public function patchItem($id, $data)
     {
-        throw new \Exception('Not implemented');
         try {
-            $data = $this->em->getConverter($this->entity)
-                ->objectify($data);
-
             $item = $this->getItem($id);
 
-            $item->merge($data);
+            $item->patch($data);
 
             $this->validate($item);
-            $this->em->persist($item, $this->getOrigin());
 
             $this->dispatcher->dispatch($this->getEventName('patchItem'), [
                 'id'   => $id,
@@ -377,12 +372,9 @@ class ContentOldService
      */
     public function patchList($ids, $data)
     {
-        throw new \Exception('Not implemented');
         if (!is_array($ids) || empty($ids)) {
             throw new PatchListException('Invalid ids', 400);
         }
-
-        $data = $this->em->getConverter($this->entity)->objectify($data);
 
         try {
             $response = $this->getListByIds($ids);
@@ -395,13 +387,9 @@ class ContentOldService
         $items   = [];
         foreach ($response['items'] as $item) {
             try {
-                $item->merge($data);
-                $this->validate($item);
-                $this->em->persist($item, $this->getOrigin());
+                $item->patch($data);
 
-                $id = $this->em->getMetadata($item)->getId($item);
-
-                $updated[] = array_pop($id);
+                $updated[] = $item->pk_content;
                 $items[]   = $item;
             } catch (\Exception $e) {
                 $this->container->get('error.log')->error($e->getMessage());

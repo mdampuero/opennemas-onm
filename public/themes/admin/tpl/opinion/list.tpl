@@ -237,15 +237,15 @@
                   </td>
                   <td class="text-center hidden-xs">
                     {acl isAllowed="OPINION_FAVORITE"}
-                    <button class="btn btn-white" ng-click="updateItem($index, item.id, 'backend_ws_content_toggle_favorite', 'favorite', item.favorite != 1 ? 1 : 0, 'favorite_loading')" ng-if="item.type_opinion == 0" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.favorite_loading == 1, 'fa-star text-warning': !item.favorite_loading && item.favorite == 1, 'fa-star-o': !item.favorite_loading && item.favorite != 1 }"></i>
+                    <button class="btn btn-white" ng-click="patch(item, 'favorite', item.favorite != 1 ? 1 : 0)" ng-if="item.type_opinion == 0" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.favoriteLoading == 1, 'fa-star text-warning': !item.favoriteLoading && item.favorite == 1, 'fa-star-o': !item.favoriteLoading && item.favorite != 1 }"></i>
                     </button>
                     {/acl}
                   </td>
                   <td class="text-center">
                     {acl isAllowed="OPINION_AVAILABLE"}
-                    <button class="btn btn-white" {acl isNotAllowed="CONTENT_OTHER_UPDATE"} ng-if="item.fk_author == {$app.user->id}"{/acl} ng-click="updateItem($index, item.id, 'backend_ws_content_set_content_status', 'content_status', item.content_status != 1 ? 1 : 0, 'loading')" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.loading == 1, 'fa-check text-success': !item.loading && item.content_status == 1, 'fa-times text-danger': !item.loading && item.content_status == 0 }"></i>
+                    <button class="btn btn-white" {acl isNotAllowed="CONTENT_OTHER_UPDATE"} ng-if="item.fk_author == {$app.user->id}"{/acl} ng-click="patch(item, 'content_status', item.content_status != 1 ? 1 : 0)" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.content_statusLoading == 1, 'fa-check text-success': !item.content_statusLoading && item.content_status == 1, 'fa-times text-danger': !item.content_statusLoading && item.content_status == 0 }"></i>
                     </button>
                     {/acl}
                   </td>
