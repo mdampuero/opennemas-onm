@@ -63,7 +63,7 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving || articleForm.$invalid" type="button">
+                <button class="btn btn-loading btn-primary" ng-click="submit()" ng-disabled="flags.saving || articleForm.$invalid" type="button">
                   <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>
@@ -248,7 +248,7 @@
                       {t}Tags{/t}
                     </label>
                     <div class="controls">
-                      {include file="ui/component/tags-input/tags.tpl" ngModel="article.tags"}
+                      {include file="ui/component/tags-input/tags.tpl" ngModel="article.tag_ids"}
                     </div>
                   </div>
                   <div class="form-group">
