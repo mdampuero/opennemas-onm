@@ -320,6 +320,32 @@
         };
 
         /**
+         * @function patchRss
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Update the inrss value for an item.
+         */
+        $scope.patchRss = function(item, value) {
+          item.inrssLoading = true;
+
+          var data  = angular.copy(item);
+          var route = {
+            name: $scope.routes.patchRss,
+            params: { id: $scope.getId(item) }
+          };
+
+          data.params.inrss = value;
+
+          http.put(route, data).then(function(response) {
+            messenger.post(response.data);
+
+            item.params.inrss = value;
+            item.inrssLoading = false;
+          }, $scope.errorCb);
+        };
+
+        /**
          * @function sortItems
          * @memberOf CategoryListCtrl
          *
@@ -352,32 +378,6 @@
           }
 
           return sorted;
-        };
-
-        /**
-         * @function patchRss
-         * @memberOf RestInnerCtrl
-         *
-         * @description
-         *   Update the inrss value for an item.
-         */
-        $scope.patchRss = function(item, value) {
-          item.inrssLoading = true;
-
-          var data  = angular.copy(item);
-          var route = {
-            name: $scope.routes.patchRss,
-            params: { id: $scope.getId(item) }
-          };
-
-          data.params.inrss = value;
-
-          http.put(route, data).then(function(response) {
-            messenger.post(response.data);
-
-            item.params.inrss = value;
-            item.inrssLoading = false;
-          }, $scope.errorCb);
         };
       }
     ]);
