@@ -58,8 +58,7 @@
          * @description
          *   Configures the controller.
          */
-        $scope.init = function(locale) {
-          $scope.locale          = locale;
+        $scope.init = function() {
           $scope.columns.key     = 'opinion-columns';
           $scope.backup.criteria = $scope.criteria;
 
@@ -70,6 +69,14 @@
           } });
 
           $scope.list();
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.parseList = function(data) {
+          $scope.configure(data.extra);
+          $scope.localize($scope.data.items, 'items');
         };
 
         /**
