@@ -102,7 +102,8 @@ class ContentOldController extends ContentController
 
         $msg = $this->get('core.messenger');
 
-        $data         = $request->request->all();
+        $data = $request->request->all();
+
         $data['tags'] = $this->parseTags($data['tags']);
 
         $this->get($this->service)
@@ -212,12 +213,14 @@ class ContentOldController extends ContentController
      **/
     public function getAuthors()
     {
-        $response = $this->get('api.service.author')
-            ->getList('order by name asc');
+        $us = $this->get('api.service.author');
 
-        return $this->get('data.manager.filter')
+        $response = $us->getList('order by name asc');
+        $authors  = $this->get('data.manager.filter')
             ->set($response['items'])
             ->filter('mapify', [ 'key' => 'id'])
             ->get();
+
+        return $us->responsify($authors);
     }
 }
