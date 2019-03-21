@@ -147,7 +147,7 @@ class EventController extends FrontendController
 
         $params['epp'] = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('items_in_page', 10);
+            ->get('items_per_page', 10);
 
         // Prevent invalid page when page is not numeric
         $params['page'] = (int) $params['page'];
@@ -251,29 +251,5 @@ class EventController extends FrontendController
             ->get();
 
         return $relations;
-    }
-
-    /**
-     * Returns the list of tags from a list of contents
-     *
-     * @param array $contents The list of contents to fetch tags from
-     *
-     * @return array
-     */
-    public function getTags($contents)
-    {
-        if (!is_array($contents)) {
-            $contents = [ $contents ];
-        }
-
-        $tagIds = [];
-        foreach ($contents as $content) {
-            $tagIds = array_merge($tagIds, $content->tags);
-        }
-
-        $tags = $this->get('api.service.tag')
-            ->getListByIdsKeyMapped($tagIds)['items'];
-
-        return $tags;
     }
 }

@@ -447,7 +447,6 @@ class Article extends Content
 
             return false;
         }
-
     }
 
     /**

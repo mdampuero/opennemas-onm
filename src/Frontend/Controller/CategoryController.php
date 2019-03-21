@@ -369,7 +369,7 @@ class CategoryController extends FrontendController
         list($contents, $total) = $this->getItems($params);
 
         // No first page and no contents
-        if ($params['page'] > 1 && $total > 0 && empty($contents)) {
+        if ($params['page'] > 1 && empty($contents)) {
             throw new ResourceNotFoundException();
         }
 
