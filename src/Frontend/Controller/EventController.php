@@ -147,7 +147,7 @@ class EventController extends FrontendController
 
         $params['epp'] = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('items_in_page', 10);
+            ->get('items_per_page', 10);
 
         // Prevent invalid page when page is not numeric
         $params['page'] = (int) $params['page'];
