@@ -75,6 +75,24 @@
           model[keys[i]] = null;
         };
 
+        /**
+         * @function submit
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *   Saves tags and, then, submits the form.
+         */
+        $scope.submit = function(e) {
+          e.preventDefault();
+
+          $scope.$broadcast('onmTagsInput.save', {
+            onSuccess: function(ids) {
+              $('[name=tag_ids]').val(JSON.stringify(ids));
+              $('[name=form]').submit();
+            }
+          });
+        };
+
         // Initialize the scope with the input/select values.
         $('input, select, textarea').each(function(index, element) {
           var name = $(element).attr('name');
