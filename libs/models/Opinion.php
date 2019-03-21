@@ -18,6 +18,11 @@
 class Opinion extends Content
 {
 
+    /**
+     * The name of the setting to save extra field configuration.
+     *
+     * @var string
+     */
     const EXTRA_INFO_TYPE = 'extraInfoContents.OPINION_MANAGER';
 
     /**
