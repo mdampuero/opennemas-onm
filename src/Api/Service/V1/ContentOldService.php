@@ -187,13 +187,20 @@ class ContentOldService
      */
     public function getItem($id)
     {
-        throw new \Exception('Not implemented');
         try {
             if (empty($id)) {
                 throw new \InvalidArgumentException();
             }
 
-            $item = $this->em->getRepository($this->entity, $this->origin)->find($id);
+            $item = $this->container->get('entity_repository')->findBy([
+                'pk_content' => [['value' => $id]],
+            ]);
+
+            if (empty($item)) {
+                throw new \Exception(sprintf('Unable to find an element with id %s', $id));
+            }
+
+            $item = array_pop($item);
 
             $this->localizeItem($item);
 
@@ -294,7 +301,6 @@ class ContentOldService
      */
     public function getListByIds($ids)
     {
-        throw new \Exception('Not implemented');
         if (!is_array($ids)) {
             throw new GetListException('Invalid ids', 400);
         }
@@ -303,8 +309,10 @@ class ContentOldService
             return [ 'items' => [], 'total' => 0 ];
         }
 
-        $items = $this->em->getRepository($this->entity, $this->origin)->find($ids);
-
+        $criteria['pk_content'] = [
+            [ 'value' => $ids, 'operator' => 'IN']
+        ];
+        $items = $this->em->findBy($criteria);
         $this->localizeList($items);
 
         $this->dispatcher->dispatch($this->getEventName('getListByIds'), [
