@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   /**
@@ -10,6 +10,7 @@
    *   create pagination controls for lists.
    */
   angular.module('onm.pagination', [])
+
     /**
      * @ngdoc directive
      * @name  onmPagination
@@ -28,8 +29,9 @@
      * <onm-pagination items-per-page="pagination.epp" ng-model="pagination.page" total-items="pagination.total">
      * </onm-pagination>
      */
-    .directive('onmPagination', ['$compile',
-      function ($compile) {
+    .directive('onmPagination', [
+      '$compile', '$window',
+      function($compile, $window) {
         return {
           controller: 'PaginationCtrl',
           restrict: 'E',
@@ -38,9 +40,9 @@
             ngModel: '=',
             totalItems: '='
           },
-          link: function ($scope, $element) {
+          link: function($scope, $element) {
             var paginationTpl = '<span class="pagination-status">' +
-              '[% from %]-[% to %] of [% totalItems %]' +
+              '[% from %]-[% to %] ' + $window.strings.pagination.of + ' [% totalItems %]' +
             '</span>' +
             '<div class="pagination-controls">' +
               '<button class="btn btn-white" ng-click="previous()" ng-disabled="isFirstPage()" type="button">' +
@@ -53,6 +55,7 @@
             '</div>';
 
             var e = $compile(paginationTpl)($scope);
+
             $element.replaceWith(e);
           }
         };
@@ -68,8 +71,9 @@
      *
      * @requires $scope
      */
-    .controller('PaginationCtrl', ['$scope',
-      function ($scope) {
+    .controller('PaginationCtrl', [
+      '$scope',
+      function($scope) {
         /**
          * @memberof PaginationCtrl
          *
