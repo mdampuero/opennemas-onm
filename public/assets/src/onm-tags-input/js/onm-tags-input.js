@@ -264,8 +264,10 @@
           delete data.id;
 
           return http.post(route, data).then(function(response) {
-            return response.headers().location
+            var id = response.headers().location
               .substring(response.headers().location.lastIndexOf('/') + 1);
+
+            return parseInt(id);
           });
         };
 
