@@ -68,6 +68,10 @@
           value = value.replace(/"/g, '\\"');
         }
 
+        if (value instanceof Array) {
+          value = value.join(',');
+        }
+
         // If placeholder
         if (this.config.placeholder[key]) {
           var condition = this.config.placeholder[key];
