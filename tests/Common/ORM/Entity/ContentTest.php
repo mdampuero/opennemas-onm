@@ -56,7 +56,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         ] ];
         $entity = new Content($data);
 
-        $this->assertEquals($entity->getMedia('photo'), 2);
+        $this->assertEquals(2, $entity->getMedia('photo'));
     }
 
     public function testGetRelated()
@@ -74,7 +74,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         ] ];
         $entity = new Content($data);
 
-        $this->assertEquals($entity->getRelated('photo'), [2]);
+        $this->assertEquals([2], $entity->getRelated('photo'));
 
         $data   = [ 'related_contents' => [
             [
