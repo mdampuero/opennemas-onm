@@ -17,7 +17,7 @@ angular.module('BackendApp.controllers')
       'use strict';
 
       // Initialize the super class and extend it.
-      $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
+      $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
       /**
        * @memberOf StaticPageCtrl

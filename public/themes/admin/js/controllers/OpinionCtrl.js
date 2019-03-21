@@ -7,23 +7,112 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     'use strict';
 
     // Initialize the super class and extend it.
-    $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+    $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
     /**
-     * @function init
-     * @memberOf OpinionCtrl
+     * @memberOf EventCtrl
      *
      * @description
-     * Method to init the opinion controller
+     *  The cover object.
      *
-     * @param {object} opinion  Opinion to edit
-     * @param {String} locale   Locale for the opinion
-     * @param {Array}  tags     Array with all the tags needed for the opinion
+     * @type {Object}
      */
-    $scope.init = function(opinion, locale, tags) {
-      $scope.locale = locale;
-      $scope.tags   = tags;
+    $scope.item = {
+      body: '',
+      content_type_name: 'opinion',
+      fk_content_type: 5,
+      content_status: 0,
+      description: '',
+      favorite: 0,
+      frontpage: 0,
+      created: new Date(),
+      starttime: null,
+      endtime: null,
+      thumbnail: null,
+      title: '',
+      type: 0,
+      with_comments: 0,
+      categories: [],
+      related_contents: [],
+      tags: [],
+      external_link: '',
     };
+
+    /**
+     * @memberOf EventCtrl
+     *
+     * @description
+     *  Whether to refresh the item after a successful update.
+     *
+     * @type {Boolean}
+     */
+    $scope.refreshOnUpdate = true;
+
+    /**
+     * @memberOf EventCtrl
+     *
+     * @description
+     *  The list of routes for the controller.
+     *
+     * @type {Object}
+     */
+    $scope.routes = {
+      create:   'api_v1_backend_opinion_create',
+      redirect: 'backend_opinion_show',
+      save:     'api_v1_backend_opinion_save',
+      show:     'api_v1_backend_opinion_show',
+      update:   'api_v1_backend_opinion_update'
+    };
+
+    /**
+     * @function parseItem
+     * @memberOf RestInnerCtrl
+     *
+     * @description
+     *   Parses the response and adds information to the scope.
+     *
+     * @param {Object} data The data in the response.
+     */
+    $scope.parseItem = function(data) {
+      if (data.item) {
+        $scope.data.item      = angular.extend($scope.item, data.item);
+        $scope.data.item.tags = $scope.item.tags.map(function(id) {
+          return data.extra.tags[id];
+        });
+      }
+
+      $scope.configure(data.extra);
+      $scope.localize($scope.data.item, 'item', true);
+
+      var coverId = $scope.data.item.related_contents.filter(function(el) {
+        return el.relationship === 'cover';
+      }).shift();
+
+      if (!coverId) {
+        return;
+      }
+
+      $scope.cover = data.extra.related_contents[coverId.pk_content2];
+    };
+
+    // Update slug when title is updated
+    $scope.$watch('item.title', function(nv, ov) {
+      if (!nv) {
+        return;
+      }
+
+      if (!$scope.item.slug || $scope.item.slug === '') {
+        if ($scope.tm) {
+          $timeout.cancel($scope.tm);
+        }
+
+        $scope.tm = $timeout(function() {
+          $scope.getSlug(nv, function(response) {
+            $scope.item.slug = response.data.slug;
+          });
+        }, 2500);
+      }
+    }, true);
 
     /**
      * Opens a modal with the preview of the article.
@@ -62,15 +151,6 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       }).error(function() {
         $scope.loading = false;
       });
-    };
-
-    /**
-     * Removes an album.
-     *
-     * @param string from The album name in the current scope.
-     */
-    $scope.removeAlbum = function(from) {
-      delete $scope[from];
     };
 
     /**
@@ -117,176 +197,6 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
         ) {
           $scope.img2_footer = $scope.photo2.description;
         }
-      }
-    }, true);
-
-    /**
-     * Updates scope when photo3 changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('photo3', function(nv, ov) {
-      $scope.imageHome = null;
-
-      if ($scope.photo3) {
-        $scope.imageHome = $scope.photo3.id;
-
-        if (angular.isUndefined($scope.imageHomeFooter) ||
-          angular.isUndefined(ov) ||
-          nv.id !== ov.id
-        ) {
-          $scope.imageHomeFooter = $scope.photo3.description;
-        }
-      }
-    }, true);
-
-    /**
-     * Updates scope when video1 changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('video1', function(nv, ov) {
-      $scope.fk_video     = null;
-      $scope.footer_video = null;
-
-      if ($scope.video1) {
-        $scope.fk_video     = $scope.video1.id;
-        $scope.footer_video = $scope.video1.description;
-
-        // Set inner video if empty
-        if (angular.isUndefined($scope.video2) && nv !== ov) {
-          $scope.video2 = $scope.video1;
-        }
-      }
-    }, true);
-
-    /**
-     * Updates scope when video2 changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('video2', function() {
-      $scope.fk_video2     = null;
-      $scope.footer_video2 = null;
-
-      if ($scope.video2) {
-        $scope.fk_video2     = $scope.video2.id;
-        $scope.footer_video2 = $scope.video2.description;
-      }
-    }, true);
-
-    /**
-     * Updates scope when relatedInFrontpage changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('relatedInFrontpage', function(nv, ov) {
-      // Set inner related if empty or equal to front
-      if ((!$scope.relatedInInner ||
-        $scope.relatedInner === $scope.relatedFront) && nv !== ov
-      ) {
-        $scope.relatedInInner = angular.copy(nv);
-      }
-
-      $scope.relatedFront = [];
-      var items           = [];
-
-      if (nv instanceof Array) {
-        for (var i = 0; i < nv.length; i++) {
-          items.push({
-            id: nv[i].id, position: i, content_type: nv[i].content_type_name
-          });
-        }
-      }
-
-      $scope.relatedFront = angular.toJson(items);
-    }, true);
-
-    /**
-     * Updates scope when relatedInInner changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('relatedInInner', function(nv) {
-      $scope.relatedInner = [];
-      var items           = [];
-
-      if (nv instanceof Array) {
-        for (var i = 0; i < nv.length; i++) {
-          items.push({
-            id: nv[i].id, position: i, content_type: nv[i].content_type_name
-          });
-        }
-      }
-
-      $scope.relatedInner = angular.toJson(items);
-    }, true);
-
-    /**
-     * Updates scope when relatedInHome changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('relatedInHome', function(nv) {
-      $scope.relatedHome = [];
-      var items          = [];
-
-      if (nv instanceof Array) {
-        for (var i = 0; i < nv.length; i++) {
-          items.push({
-            id: nv[i].id, position: i, content_type: nv[i].content_type_name
-          });
-        }
-      }
-
-      $scope.relatedHome = angular.toJson(items);
-    }, true);
-
-    /**
-     * Updates the model when galleryForFrontpage changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('galleryForFrontpage', function(nv) {
-      delete $scope.withGallery;
-
-      if (nv) {
-        $scope.withGallery = nv.id;
-      }
-    }, true);
-
-    /**
-     * Updates the model when galleryForInner changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('galleryForInner', function(nv) {
-      delete $scope.withGalleryInt;
-
-      if (nv) {
-        $scope.withGalleryInt = nv.id;
-      }
-    }, true);
-
-    /**
-     * Updates the model when galleryForHome changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('galleryForHome', function(nv) {
-      delete $scope.withGalleryHome;
-
-      if (nv) {
-        $scope.withGalleryHome = nv.id;
       }
     }, true);
   }

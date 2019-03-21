@@ -110,19 +110,6 @@
           $scope.cover = data.extra.related_contents[coverId.pk_content2];
         };
 
-        /**
-         * @function getItemId
-         * @memberOf EventCtrl
-         *
-         * @description
-         *   Returns the item id.
-         *
-         * @return {Integer} The item id.
-         */
-        $scope.getItemId = function() {
-          return $scope.item.pk_content;
-        };
-
         // Update slug when title is updated
         $scope.$watch('cover', function(nv, ov) {
           $scope.item.related_contents = [];
