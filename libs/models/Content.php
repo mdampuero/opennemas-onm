@@ -610,10 +610,9 @@ class Content implements \JsonSerializable, CsvSerializable
             $this->pk_content   = $this->id;
             $data['pk_content'] = $this->id;
             $data['id']         = $this->id;
-            $data['tag_ids']    = [];
 
-            if (array_key_exists('tags', $data)) {
-                $data['tag_ids'] = $this->addTags($data['tags']);
+            if (array_key_exists('tag_ids', $data)) {
+                $data['tag_ids'] = $this->addTags($data['tag_ids']);
             }
 
             self::load($contentData);
@@ -763,10 +762,8 @@ class Content implements \JsonSerializable, CsvSerializable
                 );
             }
 
-            $this->tag_ids = [];
-
-            if (array_key_exists('tags', $data)) {
-                $this->tag_ids = $this->addTags($data['tags']);
+            if (array_key_exists('tag_ids', $data)) {
+                $this->tag_ids = $this->addTags($data['tag_ids']);
             }
 
             logContentEvent(__METHOD__, $this);
@@ -2248,29 +2245,10 @@ class Content implements \JsonSerializable, CsvSerializable
             return [];
         }
 
-        $ts  = getService('api.service.tag');
-        $ids = [];
-
-        foreach ($tags as $tag) {
-            if (!array_key_exists('id', $tag) || !is_numeric($tag['id'])) {
-                unset($tag['id']);
-
-                try {
-                    $tag = $ts->responsify($ts->createItem($tag));
-                } catch (\Exception $e) {
-                    continue;
-                }
-            }
-
-            $ids[] = (int) $tag['id'];
-        }
-
-        $ids = array_unique($ids);
-
         self::deleteTags($this->id);
-        self::saveTags($ids, $this->id);
+        self::saveTags($tags, $this->id);
 
-        return $ids;
+        return $tags;
     }
 
     /**
