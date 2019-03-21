@@ -20,7 +20,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if $poll->id}{url name=admin_poll_update id=$poll->id}{else}{url name=admin_poll_create}{/if}" id="formulario" name="form" method="post"  ng-controller="PollCtrl" ng-init="poll = {json_encode($poll)|clear_json}">
+  <form action="{if $poll->id}{url name=admin_poll_update id=$poll->id}{else}{url name=admin_poll_create}{/if}" id="formulario" name="form" method="POST" ng-controller="PollCtrl" ng-init="poll = {json_encode($poll)|clear_json}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
