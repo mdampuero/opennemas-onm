@@ -313,10 +313,6 @@
          * @inheritdoc
          */
         $scope.parseList = function(data) {
-          if (data.extra.locale) {
-            $scope.config.locale = data.extra.locale;
-          }
-
           $scope.data.items = $scope.sortItems($scope.data.items, null, 0);
 
           $scope.configure(data.extra);
