@@ -49,7 +49,6 @@ class LettersController extends Controller
             return $this->render('letter/new.tpl', [
                 'locale'         => $this->get('core.locale')->getLocale('frontend'),
                 'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
-                'tags'           => []
             ]);
         }
 
@@ -66,7 +65,7 @@ class LettersController extends Controller
             'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
             'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'body'           => $request->request->get('body', ''),
-            'tags'           => json_decode($request->request->get('tags', ''), true)
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         if ($letter->create($data)) {
@@ -115,20 +114,12 @@ class LettersController extends Controller
             return $this->redirect($this->generateUrl('admin_letters'));
         }
 
-        $tags = [];
-
-        if (!empty($letter->tag_ids)) {
-            $ts   = $this->get('api.service.tag');
-            $tags = $ts->responsify($ts->getListByIds($letter->tag_ids)['items']);
-        }
-
         $ls = $this->get('core.locale');
         return $this->render('letter/new.tpl', [
             'letter'         => $letter,
             'enableComments' => $this->get('core.helper.comment')
                 ->enableCommentsByDefault(),
             'locale'         => $ls->getRequestLocale('frontend'),
-            'tags'           => $tags
         ]);
     }
 
@@ -169,7 +160,7 @@ class LettersController extends Controller
             'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
             'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'body'           => $request->request->filter('body', ''),
-            'tags'           => json_decode($request->request->get('tags', ''), true)
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         if ($letter->update($data)) {
