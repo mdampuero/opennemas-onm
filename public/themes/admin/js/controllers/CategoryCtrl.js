@@ -88,8 +88,9 @@
 
           $scope.tm = $timeout(function() {
             $scope.getSlug($scope.item.title, function(response) {
-              $scope.item.name = response.data.slug;
+              $scope.item.name           = response.data.slug;
               $scope.flags.generate.slug = false;
+              $scope.flags.block.slug    = true;
 
               $scope.form.name.$setDirty(true);
             });

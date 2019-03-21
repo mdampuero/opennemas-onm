@@ -1,3 +1,7 @@
+.tooltip.in {
+  opacity: 1;
+}
+
 .tooltip-danger {
   font-weight: bold;
 
@@ -24,4 +28,32 @@
 
 .tooltip-danger.top .tooltip-arrow {
   border-top-color: @error-color;
+}
+
+.tooltip-info {
+  font-weight: bold;
+
+  .tooltip-inner {
+    background-color: @info-color;
+  }
+
+  .tooltip-arrow {
+    border-top-color: @info-color;
+  }
+}
+
+.tooltip-info.bottom .tooltip-arrow {
+  border-bottom-color: @info-color;
+}
+
+.tooltip-info.left .tooltip-arrow {
+  border-left-color: @info-color;
+}
+
+.tooltip-info.right .tooltip-arrow {
+  border-right-color: @info-color;
+}
+
+.tooltip-info.top .tooltip-arrow {
+  border-top-color: @info-color;
 }
