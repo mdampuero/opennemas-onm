@@ -10,22 +10,6 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
     /**
-     * @function init
-     * @memberOf OpinionCtrl
-     *
-     * @description
-     * Method to init the opinion controller
-     *
-     * @param {object} opinion  Opinion to edit
-     * @param {String} locale   Locale for the opinion
-     * @param {Array}  tags     Array with all the tags needed for the opinion
-     */
-    $scope.init = function(opinion, locale, tags) {
-      $scope.locale = locale;
-      $scope.tags   = tags;
-    };
-
-    /**
      * Opens a modal with the preview of the article.
      *
      * @param {String} previewUrl    The URL to generate the preview.

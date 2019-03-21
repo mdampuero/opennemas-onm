@@ -37,7 +37,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if $opinion->id}{url name=backend_opinion_update id=$opinion->id}{else}{url name=backend_opinion_create}{/if}" method="POST" id="formulario" ng-controller="OpinionCtrl" ng-init="init({json_encode($opinion)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
+  <form action="{if $opinion->id}{url name=backend_opinion_update id=$opinion->id}{else}{url name=backend_opinion_create}{/if}" id="formulario" method="POST" name="form" ng-controller="OpinionCtrl" ng-init="opinion = {json_encode($opinion)|clear_json}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -81,7 +81,7 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." ng-click="submit($event)" type="submit">
                   <i class="fa fa-save"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>
@@ -210,7 +210,7 @@
                       {t}Tags{/t}
                     </label>
                     <div class="controls">
-                      {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
+                      {include file="ui/component/tags-input/tags.tpl" ngModel="opinion.tag_ids"}
                     </div>
                   </div>
                   {if is_object($opinion)}
