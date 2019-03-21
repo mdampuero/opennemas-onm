@@ -125,7 +125,7 @@ class AdvertisementRenderer
      *
      * @return string The HTML for the slot.
      */
-    public function renderInline(\Advertisement $ad, $format = null)
+    public function renderInline(\Advertisement $ad, $format = null, $params = [])
     {
         if ($ad->with_script == 1) {
             return $this->getHtml($ad);
@@ -134,7 +134,7 @@ class AdvertisementRenderer
         } elseif ($ad->with_script == 3) {
             return $this->renderInlineDFPSlot($ad);
         } elseif ($ad->with_script == 4) {
-            return $this->renderInlineSmartSlot($ad);
+            return $this->renderInlineSmartSlot($ad, $params);
         }
 
         $img = $this->getImage($ad);
@@ -345,12 +345,11 @@ class AdvertisementRenderer
             ];
         }
 
-        $template = 'smart.header.tpl';
+        $template = 'smart.header.onecall_async.tpl';
         if (is_array($config)
             && array_key_exists('tags_format', $config)
-            && $config['tags_format'] == 'onecall_sync'
         ) {
-            $template = 'smart.header.sync.tpl';
+            $template = 'smart.header.' . $config['tags_format'] . '.tpl';
         }
 
         return $this->tpl
@@ -374,21 +373,28 @@ class AdvertisementRenderer
      *
      * @return string the HTML content for the Smart slot.
      */
-    public function renderInlineSmartSlot($ad)
+    public function renderInlineSmartSlot($ad, $params)
     {
         $config = $this->ds->get('smart_ad_server');
 
-        $template = 'smart.slot.tpl';
+        $template = 'smart.slot.onecall_async.tpl';
         if (is_array($config)
             && array_key_exists('tags_format', $config)
-            && $config['tags_format'] == 'onecall_sync'
         ) {
-            $template = 'smart.slot.sync.tpl';
+            $template = 'smart.slot.' . $config['tags_format'] . '.tpl';
         }
 
         return $this->tpl
             ->fetch('advertisement/helpers/inline/' . $template, [
-                'id' => $ad->params['smart_format_id'],
+                'config'        => $config,
+                'id'            => $ad->params['smart_format_id'],
+                'page_id'       => $config['page_id'][$params['advertisementGroup']],
+                'rand'          => rand(),
+                'targetingCode' => $this->getSmartTargeting(
+                    $params['category'],
+                    $params['extension'],
+                    $params['content']->id
+                )
             ]);
     }
 

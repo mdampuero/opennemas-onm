@@ -62,11 +62,18 @@ function smarty_function_render_ad_slot($params, $smarty)
         return sprintf($tpl, $class, '');
     }
 
-    $renderer    = $smarty->getContainer()->get('core.renderer.advertisement');
-    $orientation = empty($ad->params['orientation']) ?
-        'top' : $ad->params['orientation'];
+    // Get targeting parameters for smart ajax format
+    $app             = $smarty->tpl_vars['app']->value;
+    $targetingParams = [
+        'category'           => $smarty->tpl_vars['actual_category']->value,
+        'extension'          => $app['extension'],
+        'advertisementGroup' => $app['advertisementGroup'],
+        'content'            => $smarty->tpl_vars['content']->value
+    ];
 
-    $content = $renderer->renderInline($ad, $format);
+    $renderer    = $smarty->getContainer()->get('core.renderer.advertisement');
+    $adOutput    = $renderer->renderInline($ad, $format, $targetingParams);
+    $orientation = empty($ad->params['orientation']) ? 'top' : $ad->params['orientation'];
 
     $class = ' oat-visible oat-' . $orientation . ' ' . $renderer->getDeviceCssClasses($ad);
     $mark  = $renderer->getMark($ad);
@@ -74,5 +81,5 @@ function smarty_function_render_ad_slot($params, $smarty)
         $class .= '" data-mark="' . $mark . '';
     }
 
-    return sprintf($tpl, $class, $content);
+    return sprintf($tpl, $class, $adOutput);
 }
