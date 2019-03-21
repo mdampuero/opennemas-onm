@@ -16,7 +16,7 @@
           </li>
           <li class="quicklinks">
             <h4>
-              <a class="no-padding" href="{url name=backend_static_pages_list}" title="{t}Go back to list{/t}">
+              <a class="no-padding" href="{url name=backend_static_pages_list}">
                 {t}Static Pages{/t}
               </a>
             </h4>
@@ -30,10 +30,10 @@
             <h4>{if empty($id)}{t}Create{/t}{else}{t}Edit{/t}{/if}</h4>
           </li>
         </ul>
-        <div class="all-actions pull-right">
+        <div class="ng-cloak pull-right" ng-if="!flags.http.loading">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving || form.$invalid" type="button">
+              <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving || form.$invalid" type="button">
                 <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                 {t}Save{/t}
               </button>
