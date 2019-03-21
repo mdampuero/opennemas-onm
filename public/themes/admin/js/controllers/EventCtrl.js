@@ -57,16 +57,6 @@
          * @memberOf EventCtrl
          *
          * @description
-         *  Whether to refresh the item after a successful update.
-         *
-         * @type {Boolean}
-         */
-        $scope.refreshOnUpdate = true;
-
-        /**
-         * @memberOf EventCtrl
-         *
-         * @description
          *  The list of routes for the controller.
          *
          * @type {Object}
@@ -90,10 +80,7 @@
          */
         $scope.parseItem = function(data) {
           if (data.item) {
-            $scope.item      = angular.extend($scope.item, data.item);
-            $scope.item.tags = $scope.item.tags.map(function(id) {
-              return data.extra.tags[id];
-            });
+            $scope.item = angular.extend($scope.item, data.item);
           }
 
           var coverId = $scope.item.related_contents.filter(function(el) {
@@ -120,8 +107,27 @@
           return $scope.item.pk_content;
         };
 
+        /**
+         * @function submit
+         * @memberOf EventCtrl
+         *
+         * @description
+         *   Saves tags and, then, saves the item.
+         */
+        $scope.submit = function() {
+          $scope.flags.http.saving = true;
+
+          $scope.$broadcast('onmTagsInput.save', {
+            onError: $scope.errorCb,
+            onSuccess: function(ids) {
+              $scope.item.tags = ids;
+              $scope.save();
+            }
+          });
+        };
+
         // Update slug when title is updated
-        $scope.$watch('cover', function(nv, ov) {
+        $scope.$watch('cover', function(nv) {
           $scope.item.related_contents = [];
 
           if (!nv) {
@@ -136,7 +142,7 @@
         }, true);
 
         // Update slug when title is updated
-        $scope.$watch('item.title', function(nv, ov) {
+        $scope.$watch('item.title', function(nv) {
           if (!nv) {
             return;
           }
