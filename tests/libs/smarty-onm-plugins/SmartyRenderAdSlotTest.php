@@ -172,11 +172,14 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
      * Tests smarty_function_render_ad_slot when safeframe is enabled but inline is
      * forced in template and enabled advertisements in list.
      */
-    public function testRenaderBannerWhenInlineForced()
+    public function testRenderBannerWhenInlineForced()
     {
-        $params = new \StdClass();
-        $ads    = new \StdClass();
-        $ad     = new \Advertisement();
+        $params   = new \StdClass();
+        $ads      = new \StdClass();
+        $ad       = new \Advertisement();
+        $app      = new \StdClass();
+        $category = new \StdClass();
+        $content  = new \StdClass();
 
         $ad->positions          = [ 123 ];
         $ad->type_advertisement = [ 123 ];
@@ -184,12 +187,21 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $ad->endtime            = null;
         $ad->params             = [ 'orientation' => 'left' ];
 
-        $params->value = [];
-        $ads->value    = [ $ad ];
+        $params->value   = [];
+        $ads->value      = [ $ad ];
+        $category->value = 'baz';
+        $content->value  = $content;
+        $app->value      = [
+            'extension'          => 'foo',
+            'advertisementGroup' => 'bar'
+        ];
 
         $this->smarty->tpl_vars = [
-            'render_params'  => $params,
-            'advertisements' => $ads
+            'render_params'   => $params,
+            'advertisements'  => $ads,
+            'actual_category' => $category,
+            'content'         => $content,
+            'app'             => $app
         ];
 
         $this->renderer->expects($this->once())->method('renderInline')
@@ -216,9 +228,12 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderAdSlotWhenInlineForcedWithCustomMark()
     {
-        $params = new \StdClass();
-        $ads    = new \StdClass();
-        $ad     = new \Advertisement();
+        $params   = new \StdClass();
+        $ads      = new \StdClass();
+        $ad       = new \Advertisement();
+        $app      = new \StdClass();
+        $category = new \StdClass();
+        $content  = new \StdClass();
 
         $ad->positions          = [ 123 ];
         $ad->type_advertisement = [ 123 ];
@@ -226,12 +241,21 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $ad->endtime            = null;
         $ad->params             = [ 'orientation' => 'left' ];
 
-        $params->value = ['mark_text' => 'Sponsor'];
-        $ads->value    = [ $ad ];
+        $params->value   = [];
+        $ads->value      = [ $ad ];
+        $category->value = 'baz';
+        $content->value  = $content;
+        $app->value      = [
+            'extension'          => 'foo',
+            'advertisementGroup' => 'bar'
+        ];
 
         $this->smarty->tpl_vars = [
-            'render_params'  => $params,
-            'advertisements' => $ads
+            'render_params'   => $params,
+            'advertisements'  => $ads,
+            'actual_category' => $category,
+            'content'         => $content,
+            'app'             => $app
         ];
 
         $this->renderer->expects($this->once())->method('renderInline')
