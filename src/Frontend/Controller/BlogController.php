@@ -168,6 +168,28 @@ class BlogController extends FrontendController
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getParameters($params, $item = null)
+    {
+        $locale = $this->get('core.locale')->getRequestLocale();
+        $params = parent::getParameters($params, $item);
+
+        if (!empty($item)) {
+            $params[$item->content_type_name] = $item;
+
+            $params['tags'] = $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($item->tag_ids, $locale)['items'];
+
+            if (array_key_exists('bodyLink', $item->params)) {
+                $params['o_external_link'] = $item->params['bodyLink'];
+            }
+        }
+
+        return $params;
+    }
+
+    /**
      * Renders the blog opinion frontpage.
      *
      * @param  Request  $request The request object.
