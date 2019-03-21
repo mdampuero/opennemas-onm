@@ -20,7 +20,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if $poll->id}{url name=admin_poll_update id=$poll->id}{else}{url name=admin_poll_create}{/if}" method="post"  ng-controller="PollCtrl" id="formulario" ng-init="init({json_encode($poll)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
+  <form action="{if $poll->id}{url name=admin_poll_update id=$poll->id}{else}{url name=admin_poll_create}{/if}" id="formulario" name="form" method="post"  ng-controller="PollCtrl" ng-init="poll = {json_encode($poll)|clear_json}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -45,7 +45,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." ng-click="submit($event)" type="submit">
                   <i class="fa fa-save"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>
@@ -151,7 +151,7 @@
                   <div class="form-group">
                     <label for="metadata" class="form-label">{t}Tags{/t}</label>
                     <div class="controls">
-                      {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
+                      {include file="ui/component/tags-input/tags.tpl" ngModel="poll.tag_ids"}
                     </div>
                   </div>
                 </div>
