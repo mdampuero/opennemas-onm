@@ -32,12 +32,16 @@
             </li>
             <li class="quicklinks">
               <h4>
-                <a class="no-padding" href="{url name=admin_polls}" title="{t}Go back to list{/t}">
+                <a class="no-padding" href="{url name=admin_polls}">
                   {t}Polls{/t}
                 </a>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs m-l-5 m-r-5"> <h4> <i class="fa fa-angle-right"></i> </h4> </li>
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
+                <i class="fa fa-angle-right"></i>
+              </h4>
+            </li>
             <li class="quicklinks hidden-xs">
               <h4>{if $poll->id}{t}Edit{/t}{else}{t}Create{/t}{/if}</h4>
             </li>
