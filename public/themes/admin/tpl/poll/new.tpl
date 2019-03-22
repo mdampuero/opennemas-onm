@@ -45,9 +45,9 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." ng-click="submit($event)" type="submit">
-                  <i class="fa fa-save"></i>
-                  <span class="text">{t}Save{/t}</span>
+                <button class="btn btn-loading btn-success text-uppercase" ng-click="submit($event)" type="submit">
+                  <i class="fa fa-save m-r-5"></i>
+                  {t}Save{/t}
                 </button>
               </li>
             </ul>
