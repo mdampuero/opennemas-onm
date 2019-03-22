@@ -259,6 +259,30 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getListByIdsKeyMapped when ids provided.
+     */
+    public function testGetListByIdsKeyMappedWhenIdsProvidedForLocale()
+    {
+        $tags = [
+            new Tag([ 'id' => 30044, 'locale' => 'es', 'name' => 'glorp' ]),
+            new Tag([ 'id' => 2795,  'locale' => null, 'name' => 'xyzzy' ]),
+            new Tag([ 'id' => 26394, 'locale' => 'gl', 'name' => 'glorp' ]),
+        ];
+
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 30044, 2795, 26934 ])->willReturn($tags);
+
+        $this->converter->expects($this->once())->method('responsify')
+            ->with([ 30044 => $tags[0], 2795 => $tags[1] ])
+            ->willReturn([ 30044 => $tags[0], 2795 => $tags[1] ]);
+
+        $this->assertEquals(
+            [ 'items' => [ 30044 => $tags[0], 2795 => $tags[1] ], 'total' => 2 ],
+            $this->service->getListByIdsKeyMapped([ 30044, 2795, 26934 ], 'es')
+        );
+    }
+
+    /**
      * Tests getListByIdsKeyMapped when no ids provided.
      */
     public function testGetListByIdsKeyMappedWhenNoIdsProvided()
