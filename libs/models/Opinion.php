@@ -84,47 +84,6 @@ class Opinion extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'uri':
-                $type = 'opinion';
-                if ($this->fk_author == 0) {
-                    if ((int) $this->type_opinion == 1) {
-                        $authorName = 'Editorial';
-                    } elseif ((int) $this->type_opinion == 2) {
-                        $authorName = 'Director';
-                    } else {
-                        $authorName = 'author';
-                    }
-                } else {
-                    $author = $this->author;
-
-                    if (!is_object($author)) {
-                        $author = getService('user_repository')
-                            ->find($this->fk_author);
-                    }
-
-                    if (is_object($author)) {
-                        $authorName = $author->name;
-                    } else {
-                        $authorName = 'author';
-                    }
-
-                    if (is_object($author)
-                        && is_array($author->meta) &&
-                        array_key_exists('is_blog', $author->meta) &&
-                        $author->meta['is_blog'] == 1
-                    ) {
-                        $type = 'blog';
-                    }
-                }
-
-                $uri = Uri::generate($type, [
-                    'id'       => sprintf('%06d', $this->id),
-                    'date'     => date('YmdHis', strtotime($this->created)),
-                    'slug'     => urlencode($this->slug),
-                    'category' => urlencode(\Onm\StringUtils::generateSlug($authorName)),
-                ]);
-
-                return $uri;
             case 'content_type_name':
                 return 'Opinion';
             case 'author_object':
@@ -217,6 +176,63 @@ class Opinion extends Content
             error_log('Error on Opinion::create: ' . $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Returns the uri for the opinion
+     *
+     * @return string
+     **/
+    public function getUri()
+    {
+        $type       = 'opinion';
+        $authorName = 'author';
+        if ($this->fk_author == 0) {
+            if ((int) $this->type_opinion == 1) {
+                $authorName = 'Editorial';
+            } elseif ((int) $this->type_opinion == 2) {
+                $authorName = 'Director';
+            }
+        } else {
+            $author = $this->author;
+
+            if (!is_object($author)) {
+                $author = getService('user_repository')
+                    ->find($this->fk_author);
+            }
+
+            if (is_object($author)) {
+                $authorName = $author->name;
+            }
+
+            if (is_object($author)
+                && is_array($author->meta) &&
+                array_key_exists('is_blog', $author->meta) &&
+                $author->meta['is_blog'] == 1
+            ) {
+                $type = 'blog';
+            }
+        }
+
+        if (is_array($this->slug)) {
+            return array_map(function ($slugName) use ($type, $authorName) {
+                return Uri::generate($type, [
+                    'id'       => sprintf('%06d', $this->id),
+                    'date'     => date('YmdHis', strtotime($this->created)),
+                    'slug'     => urlencode($slugName),
+                    'category' => urlencode(\Onm\StringUtils::generateSlug($authorName)),
+                ]);
+            }, $this->slug);
+        }
+
+        $uri = Uri::generate($type, [
+            'id'       => sprintf('%06d', $this->id),
+            'date'     => date('YmdHis', strtotime($this->created)),
+            'slug'     => urlencode($this->slug),
+            'category' => urlencode(\Onm\StringUtils::generateSlug($authorName)),
+        ]);
+
+        return $uri;
     }
 
     /**
