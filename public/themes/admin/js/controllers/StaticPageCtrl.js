@@ -46,7 +46,7 @@ angular.module('BackendApp.controllers')
       $scope.item = {
         body: '',
         content_type_name: 'static_page',
-        fk_content_type: 5,
+        fk_content_type: 13,
         content_status: 0,
         description: '',
         favorite: 0,
