@@ -61,15 +61,9 @@ class FilesController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
-            $ls = $this->get('core.locale');
-            return $this->render(
-                'files/new.tpl',
-                [
-                    'category' => $this->category,
-                    'locale'   => $ls->getLocale('frontend'),
-                    'tags'     => []
-                ]
-            );
+            return $this->render('files/new.tpl', [
+                'locale' => $this->get('core.locale')->getLocale('frontend'),
+            ]);
         }
 
         set_time_limit(0);
@@ -84,9 +78,7 @@ class FilesController extends Controller
                 _('You must pick a file before submitting the form')
             );
 
-            return $this->redirect(
-                $this->generateUrl('admin_files_create', ['category' => $this->category])
-            );
+            return $this->redirect($this->generateUrl('admin_files_create'));
         }
 
         $uploadedFile = $files['path'];
@@ -102,9 +94,7 @@ class FilesController extends Controller
                 sprintf(_('You must pick a file smaller than %d Mb'), MAX_UPLOAD_FILE / 1024 / 1024)
             );
 
-            return $this->redirect(
-                $this->generateUrl('admin_files_create', ['category' => $this->category])
-            );
+            return $this->redirect($this->generateUrl('admin_files_create'));
         }
 
         $rtbMediaManager = '';
@@ -138,9 +128,7 @@ class FilesController extends Controller
                     . 'different file extension.'), $uploadedFile->getClientOriginalExtension())
             );
 
-            return $this->redirect(
-                $this->generateUrl('admin_files_create', ['category' => $this->category])
-            );
+            return $this->redirect($this->generateUrl('admin_files_create'));
         }
 
         $date          = new \DateTime();
@@ -156,9 +144,7 @@ class FilesController extends Controller
                     sprintf(_('Unable to create the directory to save the file'))
                 );
 
-                return $this->redirect(
-                    $this->generateUrl('admin_files_create', ['category' => $this->category])
-                );
+                return $this->redirect($this->generateUrl('admin_files_create'));
             }
         }
 
@@ -184,9 +170,7 @@ class FilesController extends Controller
                 _('There was an error while uploading the file.')
             );
 
-            return $this->redirect(
-                $this->generateUrl('admin_files_create', ['category' => $this->category])
-            );
+            return $this->redirect($this->generateUrl('admin_files_create'));
         }
 
         $attachment = new \Attachment();
@@ -206,9 +190,7 @@ class FilesController extends Controller
             );
         }
 
-        return $this->redirect(
-            $this->generateUrl('admin_files_create', ['category' => $this->category])
-        );
+        return $this->redirect($this->generateUrl('admin_files_create'));
     }
 
     /**
