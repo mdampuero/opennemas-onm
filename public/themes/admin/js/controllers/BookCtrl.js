@@ -10,23 +10,6 @@ angular.module('BackendApp.controllers').controller('BookCtrl', [
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
     /**
-     * @function init
-     * @memberOf BookCtrl
-     *
-     * @description
-     * Method to init the book controller
-     *
-     * @param {object} book     Book to edit
-     * @param {String} locale   Locale for the book
-     * @param {Array}  tags     Array with all the tags needed for the book
-     */
-    $scope.init = function(book, locale, tags) {
-      $scope.book   = book;
-      $scope.locale = locale;
-      $scope.tags   = tags;
-    };
-
-    /**
      * Updates scope when photo1 changes.
      *
      * @param array nv The new values.
