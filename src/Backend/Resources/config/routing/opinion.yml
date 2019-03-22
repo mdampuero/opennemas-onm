@@ -1,4 +1,8 @@
 # Opinion controller routes
+backend_opinions_config:
+    path:     /opinions/config
+    defaults: { _controller: BackendBundle:Opinion:config }
+
 backend_opinion_create:
     path:     /opinions/new
     defaults: { _controller: BackendBundle:Opinion:create }
@@ -12,7 +16,6 @@ backend_opinion_show:
 backend_opinions_list:
     path:     /opinions
     defaults: { _controller: BackendBundle:Opinion:list }
-
 
 backend_opinion_preview:
     path:     /opinion/preview
@@ -33,7 +36,3 @@ backend_opinion_update:
 backend_opinions_content_provider:
     path:     /opinions/content-provider
     defaults: { _controller: BackendBundle:Opinion:contentProvider }
-
-backend_opinions_config:
-    path:     /opinions/config
-    defaults: { _controller: BackendBundle:Opinion:config }
