@@ -96,7 +96,7 @@
 
         /**
          * @function submit
-         * @memberOf EventCtrl
+         * @memberOf StaticPageCtrl
          *
          * @description
          *   Saves tags and, then, saves the item.
@@ -114,7 +114,7 @@
         };
 
         // Update slug when title is updated
-        $scope.$watch('item.title', function(nv, ov) {
+        $scope.$watch('item.title', function(nv) {
           if (!nv) {
             return;
           }
