@@ -77,68 +77,6 @@ class OpinionController extends BackendController
 
         return $this->render($this->resource . '/item.tpl', $params);
 
-        $id      = $request->query->getDigits('id', null);
-        $opinion = $this->get('entity_repository')->find('Opinion', $id);
-
-        // Check if opinion id exists
-        if (!is_object($opinion) || is_null($opinion->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Unable to find the opinion with the id "%d"'), $id)
-            );
-
-            return $this->redirect($this->generateUrl('backend_opinions_list'));
-        }
-
-        // Check if you can see others opinions
-        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
-            && $opinion->fk_author != $this->getUser()->id
-        ) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("You can't modify this opinion because you don't have enought privileges.")
-            );
-
-            return $this->redirect($this->generateUrl('backend_opinions_list'));
-        }
-
-        $authors = $this->getAuthors();
-
-        if (!empty($opinion->img1)) {
-            $photo1 = $this->get('entity_repository')->find('Photo', $opinion->img1);
-            $this->view->assign('photo1', $photo1);
-        }
-
-        if (!empty($opinion->img2)) {
-            $photo2 = $this->get('entity_repository')->find('Photo', $opinion->img2);
-            $this->view->assign('photo2', $photo2);
-        }
-
-        $extraFields = null;
-
-        if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
-            $extraFields = $this->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get(self::EXTRA_INFO_TYPE);
-        }
-
-        $tags = [];
-
-        if (!empty($opinion->tag_ids)) {
-            $ts   = $this->get('api.service.tag');
-            $tags = $ts->responsify($ts->getListByIds($opinion->tag_ids)['items']);
-        }
-
-        return $this->render('opinion/new.tpl', [
-            'opinion'        => $opinion,
-            'authors'        => $authors,
-            'enableComments' => $this->get('core.helper.comment')
-                ->enableCommentsByDefault(),
-            'extra_fields'   => $extraFields,
-            'locale'         => $this->get('core.locale')
-                ->getRequestLocale('frontend'),
-            'tags'           => $tags
-        ]);
     }
 
     /**
@@ -152,25 +90,7 @@ class OpinionController extends BackendController
      */
     public function createAction(Request $request)
     {
-        if ('POST' !== $request->getMethod()) {
-            $extraFields = null;
-
-            if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
-                $extraFields = $this->get('orm.manager')
-                    ->getDataSet('Settings', 'instance')
-                    ->get(self::EXTRA_INFO_TYPE);
-            }
-
-            return $this->render('opinion/new.tpl', [
-                'authors'        => $this->getAuthors(),
-                'enableComments' => $this->get('core.helper.comment')
-                    ->enableCommentsByDefault(),
-                'extra_fields'   => $extraFields,
-                'locale'         => $this->get('core.locale')
-                    ->getLocale('frontend'),
-                'tags'           => []
-            ]);
-        }
+        return $this->render('opinion/item.tpl');
 
         $params  = $request->request->get('params', []);
         $opinion = new \Opinion();
