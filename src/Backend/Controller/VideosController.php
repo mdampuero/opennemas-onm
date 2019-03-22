@@ -78,7 +78,6 @@ class VideosController extends Controller
                     ->enableCommentsByDefault(),
                 'locale'         => $this->get('core.locale')
                     ->getLocale('frontend'),
-                'tags'           => []
             ]);
         }
 
@@ -103,7 +102,7 @@ class VideosController extends Controller
                 $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'video_url'      => $requestPost->filter('video_url', ''),
             'with_comment'   => (int) $requestPost->getDigits('with_comment', 0),
-            'tags'           => json_decode($request->request->get('tags', ''), true)
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         $videoData['information'] = is_string($videoData['information'])
@@ -189,7 +188,7 @@ class VideosController extends Controller
             'information'    => $requestPost->get('information', []),
             'video_url'      => $requestPost->filter('video_url', ''),
             'params'         => $request->request->get('params', []),
-            'tags'           => json_decode($request->request->get('tags', ''), true)
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         $videoData['information'] = is_string($videoData['information'])
@@ -284,13 +283,6 @@ class VideosController extends Controller
             return $this->redirect($this->generateUrl('admin_videos'));
         }
 
-        $tags = [];
-
-        if (!empty($video->tag_ids)) {
-            $ts   = $this->get('api.service.tag');
-            $tags = $ts->responsify($ts->getListByIds($video->tag_ids)['items']);
-        }
-
         if (is_object($video->information)) {
             $video->information = get_object_vars($video->information);
         }
@@ -311,7 +303,6 @@ class VideosController extends Controller
                 ->enableCommentsByDefault(),
             'locale'         => $this->get('core.locale')
                 ->getRequestLocale('frontend'),
-            'tags'           => $tags
         ]);
     }
 
