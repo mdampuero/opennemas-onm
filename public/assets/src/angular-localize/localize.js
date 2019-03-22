@@ -181,6 +181,10 @@
           updateLocalized: function(localized, original) {
             var that = this;
 
+            if (!original) {
+              return original;
+            }
+
             for (var i = 0; i < this.properties.length; i++) {
               var property = this.properties[i];
 
