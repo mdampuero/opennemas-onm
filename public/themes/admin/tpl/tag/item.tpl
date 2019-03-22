@@ -28,14 +28,6 @@
                 {if empty($id)}{t}Create{/t}{else}{t}Edit{/t}{/if}
               </h4>
             </li>
-            <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="config.locale.multilanguage && config.locale.available">
-              <h4>
-                <i class="fa fa-angle-right"></i>
-              </h4>
-            </li>
-            <li class="quicklinks ng-cloak" ng-if="config.locale.multilanguage && config.locale.available">
-              <translator item="data.item" keys="data.extra.keys" ng-model="config.locale.selected" options="config.locale"></translator>
-            </li>
           </ul>
           <div class="ng-cloak pull-right" ng-if="!flags.http.loading">
             <ul class="nav quick-section">
@@ -117,7 +109,8 @@
                     </label>
                     <div class="controls">
                       <select class="form-control" name="locale" ng-model="item.locale">
-                        <option value="[% locale.id %]" ng-repeat="locale in config.locales.available">[% locale.name %]</option>
+                        <option value="">{t}Any{/t}</option>
+                        <option value="[% id %]" ng-repeat="(id, name) in config.locale.available">[% name %]</option>
                       </select>
                     </div>
                   </div>

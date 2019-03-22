@@ -140,22 +140,9 @@ class TagController extends ApiController
      */
     protected function getExtraData($items = [])
     {
-        $ls      = $this->get('core.locale');
-        $locales = [ $ls->getLocale('frontend') => $ls->getLocaleName('frontend') ];
-
-        $multilanguage = in_array(
-            'es.openhost.module.multilanguage',
-            $this->get('core.instance')->activated_modules
-        );
-
-        if ($multilanguage) {
-            $locales = $ls->getAvailableLocales('frontend');
-        }
-
         $extraData = [
             'stats'   => $this->get('api.service.tag')->getStats($items),
-            'locale'  => $ls->getLocale('frontend'),
-            'locales' => $locales
+            'locale'  => $this->get('core.helper.locale')->getConfiguration(),
         ];
 
         return $extraData;
