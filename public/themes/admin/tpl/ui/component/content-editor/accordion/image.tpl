@@ -26,23 +26,31 @@
       </div>
     </div>
     <div class="thumbnail-placeholder">
-      <div class="img-thumbnail" ng-show="!cover">
-        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover">
+      <div class="img-thumbnail" ng-show="!{$field}">
+        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="{$field}">
           <i class="fa fa-picture-o fa-2x"></i>
           <h5>Pick an image</h5>
         </div>
       </div>
-      <div class="dynamic-image-placeholder" ng-show="cover">
+      <div class="dynamic-image-placeholder" ng-show="{$field}">
         <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="cover">
           <div class="thumbnail-actions">
-            <div class="thumbnail-action remove-action" ng-click="toggleOverlay('cover')">
+            <div class="thumbnail-action remove-action" ng-click="toggleOverlay('{$field}')">
               <i class="fa fa-trash-o fa-2x"></i>
             </div>
-            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover" media-picker-types="photo">
+            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="{$field}" media-picker-types="photo">
               <i class="fa fa-camera fa-2x"></i>
             </div>
           </div>
         </dynamic-image>
+      </div>
+    </div>
+    <div class="form-group ng-cloak" ng-show="{$field}">
+      <label class="form-label" for="{$field}_footer">
+        {t}Footer text{/t}
+      </label>
+      <div class="controls">
+        <textarea class="form-control" name="{$field}_footer" ng-model="{$field}_footer"></textarea>
       </div>
     </div>
   </div>
