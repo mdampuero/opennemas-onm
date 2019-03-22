@@ -99,6 +99,17 @@
             {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Inner image{/t}" field="item.img2" footer="item.img2_footer"}
           </div>
         </div>
+
+
+        <div class="grid simple ng-cloak" ng-if="data.extra.extra_fields !== undefined && data.extra.extra_fields">
+          <div class="grid-collapse-title">
+            <i class="fa fa-magic"></i>
+            {t}Additional data{/t}
+          </div>
+          <div class="grid-body">
+            <autoform ng-model="item" fields-by-module="data.extra.extra_fields"/>
+          </div>
+        </div>
       </div>
       <div class="col-md-8 col-md-pull-4">
         <div class="grid simple">
