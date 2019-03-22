@@ -83,16 +83,6 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
 
       $scope.configure(data.extra);
       $scope.localize($scope.data.item, 'item', true);
-
-      var coverId = $scope.data.item.related_contents.filter(function(el) {
-        return el.relationship === 'cover';
-      }).shift();
-
-      if (!coverId) {
-        return;
-      }
-
-      $scope.cover = data.extra.related_contents[coverId.pk_content2];
     };
 
     // Update slug when title is updated

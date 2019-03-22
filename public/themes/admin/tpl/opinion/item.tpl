@@ -95,8 +95,8 @@
             <div class="grid-collapse-title">
               <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
             </div>
-            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Frontpage image{/t}" field="item.img1" footer="item.img1_footer"}
-            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Inner image{/t}" field="item.img2" footer="item.img2_footer"}
+            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Frontpage image{/t}" field="img1"}
+            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Inner image{/t}" field="img2"}
           </div>
         </div>
 
@@ -119,11 +119,6 @@
             {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true}
           </div>
         </div>
-      </div>
-    </div>
-    <div class="row ng-cloak" ng-show="!flags.http.loading && item">
-      <div class="col-md-12">
-        {include  file="opinion/partials/_images.tpl" article=$opinion withoutVideo='true'}
       </div>
     </div>
     <div class="row ng-cloak" ng-show="!flags.http.loading && item" ng-init="fieldsByModule = {json_encode($extra_fields)|escape:"html"}">
