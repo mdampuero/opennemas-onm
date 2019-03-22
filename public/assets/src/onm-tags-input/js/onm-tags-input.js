@@ -37,12 +37,12 @@
                 '<i class="fa fa-trash-o m-r-5"></i>' +
                 $window.strings.tags.clear +
               '</button>' +
-              '<span class="tags-input-counter badge badge-default pull-right" ng-class="{ \'badge-danger\': ngModel.length == maxTags, \'badge-warning text-default\': ngModel.length > maxTags/2 && ngModel.length < maxTags }">' +
-                '[% ngModel ? ngModel.length : 0 %] / [% maxTags %]' +
+              '<span class="tags-input-counter badge badge-default pull-right" ng-class="{ \'badge-danger\': tagsInLocale.length == maxTags, \'badge-warning text-default\': tagsInLocale.length > maxTags/2 && tagsInLocale.length < maxTags }">' +
+                '[% tagsInLocale ? tagsInLocale.length : 0 %] / [% maxTags %]' +
               '</span>' +
             '</div>' +
             '<div>' +
-              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="tags" on-tag-adding="add($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
+              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="tagsInLocale" on-tag-adding="add($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
                 '<auto-complete debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
               '</tags-input>' +
               '<i class="fa fa-circle-o-notch fa-spin tags-input-loading" ng-if="loading"></i>' +
@@ -211,7 +211,16 @@
             page: 1
           };
 
-          oqlEncoder.configure({ placeholder: { name: '[key] ~ "%[value]%"' } });
+          if ($scope.locale.multilanguage) {
+            criteria.locale = $scope.locale.selected;
+          }
+
+          oqlEncoder.configure({
+            placeholder: {
+              name: '[key] ~ "%[value]%"',
+              locale: '([key] is null or [key] = "[value]")'
+            }
+          });
 
           var oql = oqlEncoder.getOql(criteria);
 
@@ -343,6 +352,17 @@
           }, 250);
         }, true);
 
+        // Updates ngModel when tags added/removed
+        $scope.$watch('locale', function(nv) {
+          $scope.tagsInLocale = $scope.tags;
+
+          if (nv.multilanguage) {
+            $scope.tagsInLocale = $scope.tags.filter(function(e) {
+              return !e.locale || e.locale === nv.selected;
+            });
+          }
+        }, true);
+
         // Gets the list of tags when ngModel changes
         $scope.$watch('ngModel', function(nv) {
           var ids = !$scope.tags ? [] : $scope.tags.map(function(e) {
@@ -370,7 +390,14 @@
             $scope.loading = false;
 
             if (response.data.items) {
-              $scope.tags = response.data.items;
+              $scope.tags         = response.data.items;
+              $scope.tagsInLocale = angular.copy($scope.tags);
+
+              if ($scope.locale.multilanguage) {
+                $scope.tagsInLocale = $scope.tags.filter(function(e) {
+                  return !e.locale || e.locale === $scope.locale.selected;
+                });
+              }
             }
           });
         }, true);
@@ -380,6 +407,38 @@
           $scope.ngModel = !nv ? [] : nv.map(function(e) {
             return e.id;
           });
+        }, true);
+
+        // Updates ngModel when tags added/removed
+        $scope.$watch('tagsInLocale', function(nv, ov) {
+          var nvIds = [];
+          var ovIds = [];
+
+          if (nv) {
+            nvIds = nv.map(function(e) {
+              return e.id;
+            });
+          }
+
+          if (ov) {
+            ovIds = ov.filter(function(e) {
+              // Only delete tags for all or current locale
+              return !e.locale || e.locale === $scope.locale.selected;
+            }).map(function(e) {
+              return e.id;
+            });
+          }
+
+          var toAdd    = _.difference(nvIds, ovIds);
+          var toDelete = _.difference(ovIds, nvIds);
+
+          $scope.tags = $scope.tags
+            .filter(function(e) {
+              return toDelete.indexOf(e.id) === -1;
+            }).concat(nv.filter(function(e) {
+              return toAdd.indexOf(e.id) !== -1 &&
+                $scope.ngModel.indexOf(e.id) === -1;
+            }));
         }, true);
       }
     ]);
