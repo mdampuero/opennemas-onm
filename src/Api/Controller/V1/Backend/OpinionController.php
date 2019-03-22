@@ -22,4 +22,26 @@ class OpinionController extends ContentOldController
      * @var string
      */
     protected $getItemRoute = 'api_v1_backend_opinion_show';
+
+    /**
+     * Returns a list of extra data
+     *
+     * @return array
+     **/
+    protected function getExtraData($items = null)
+    {
+        $extra = parent::getExtraData($items);
+
+        $extraFields = null;
+
+        if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
+            $extraFields = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get(\Opinion::EXTRA_INFO_TYPE);
+        }
+
+        return array_merge([
+            'extra_fields' => $extraFields,
+        ], $extra);
+    }
 }
