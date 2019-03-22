@@ -35,7 +35,7 @@ class ContentService extends OrmService
      */
     public function getItemBySlugAndContentType($slug, $contentType)
     {
-        $oql = sprintf('slug regexp "(.+\"|^)%s(\".+|$) and fk_content_type=%d"', $slug, $contentType);
+        $oql = sprintf('slug regexp "(.+\"|^)%s(\".+|$)" and fk_content_type=%d', $slug, $contentType);
 
         return $this->getItemBy($oql);
     }

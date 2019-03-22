@@ -97,7 +97,7 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->service->expects($this->once())->method('getItemBy')
-            ->with('slug regexp "(.+\"|^)content_slug(\".+|$) and fk_content_type=2"')
+            ->with('slug regexp "(.+\"|^)content_slug(\".+|$)" and fk_content_type=2')
             ->willReturn($content);
 
         $this->assertEquals($this->service->getItemBySlugAndContentType('content_slug', 2), $content);
