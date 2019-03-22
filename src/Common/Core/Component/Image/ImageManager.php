@@ -17,37 +17,39 @@ use Imagine\Image\ImageInterface;
 class ImageManager
 {
     /**
-     * It is responsible for calling by reference to any of the transformation methods available in the class.
+     * It is responsible for calling by reference to any of the transformation
+     * methods available in the class.
      *
-     * @param string  $method  Name of the method to call (crop, thumbnail, zoomCrop, resize).
-     * @param \Imagine\Image\ImageInterface $image      Image to transform.
-     * @param array $parameters Parameters needed for the transformation method.
+     * @param string         $method The transformation to apply.
+     * @param ImageInterface $image  The image to transform.
+     * @param array          $params The list of parameters.
      *
-     * @return Imagine the transformed image.
+     * @return ImageInterface The processed image.
      */
-    public function process($method, $image, $parameters)
+    public function process($method, $image, $params)
     {
         if (!method_exists($this, $method)) {
             $method = 'resize';
         }
 
-        return $this->{$method}($image, $parameters);
+        return $this->{$method}($image, $params);
     }
 
     /**
-     * Performs the crop transformation.
+     * Crops the image basing on a list of parameters.
      *
-     * @param \Imagine\Image\ImageInterface $image      Image to transform.
-     * @param array   $parameters Parameters needed for the transformation [topX, topY, width, height].
+     * @param ImageInterface $image  The image to process.
+     * @param array          $params The list of parameters (topX, topY, width,
+     *                               and height).
      *
-     * @return \Imagine\Image\ImageInterface The transformed image.
+     * @return ImageInterface The cropped image.
      */
-    public function crop($image, array $parameters)
+    public function crop($image, array $params)
     {
-        $topX   = $parameters[0];
-        $topY   = $parameters[1];
-        $width  = $parameters[2];
-        $height = $parameters[3];
+        $topX   = $params[0];
+        $topY   = $params[1];
+        $width  = $params[2];
+        $height = $params[3];
 
         return $image->crop(
             $this->getPoint($topX, $topY),
@@ -56,42 +58,39 @@ class ImageManager
     }
 
     /**
-     * Performs the thumbnail transformation.
+     * Thumbnails the image basing on a list of parameters.
      *
-     * @param \Imagine\Image\ImageInterface $image      Image to transform.
-     * @param array   $parameters Parameters needed for the transformation [width, height, *type]
-     *                             *type is not required.
+     * @param ImageInterface $image  The image to process.
+     * @param array          $params The list of parameters (width, height,
+     *                               and type).
      *
-     * @return \Imagine\Image\ImageInterface The transformed image.
+     * @return ImageInterface The thumbnailed image.
      */
-    public function thumbnail($image, array $parameters)
+    public function thumbnail($image, array $params)
     {
-        $width  = $parameters[0];
-        $height = $parameters[1];
+        $mode   = ImageInterface::THUMBNAIL_OUTBOUND;
+        $width  = $params[0];
+        $height = $params[1];
 
-        if (isset($parameters[2]) && $parameters[2] == 'in') {
+        if (array_key_exists(2, $params) && $params[2] == 'in') {
             $mode = ImageInterface::THUMBNAIL_INSET;
-        } else {
-            $mode = ImageInterface::THUMBNAIL_OUTBOUND;
         }
 
-        return $image->thumbnail(
-            $this->getBox($width, $height, $mode)
-        );
+        return $image->thumbnail($this->getBox($width, $height, $mode));
     }
 
     /**
-     * Performs the zoomCrop transformation.
+     * Zoom-crops an image basing on a list of parameters.
      *
-     * @param \Imagine\Image\ImageInterface $image      Image to transform.
-     * @param array   $parameters Parameters needed for the transformation [width, height].
+     * @param ImageInterface $image  The image to process.
+     * @param array          $params The list of parameters (width and height).
      *
-     * @return \Imagine\Image\ImageInterface The transformed image.
+     * @return ImageInterface The zoom-cropped image.
      */
-    public function zoomCrop($image, array $parameters)
+    public function zoomCrop($image, array $params)
     {
-        $width  = $parameters[0];
-        $height = $parameters[1];
+        $width  = $params[0];
+        $height = $params[1];
 
         $imageSize   = $image->getSize();
         $imageWidth  = $imageSize->getWidth();
@@ -117,34 +116,36 @@ class ImageManager
             $topY = 0;
         }
 
-        return $image->resize(
-            $this->getBox($widthResize, $heightResize, ImageInterface::THUMBNAIL_OUTBOUND)
-        )->crop(
+        return $image->resize($this->getBox(
+            $widthResize,
+            $heightResize,
+            ImageInterface::THUMBNAIL_OUTBOUND
+        ))->crop(
             $this->getPoint($topX, $topY),
             $this->getBox($width, $height)
         );
     }
 
     /**
-     * Performs the resize transformation.
+     * Resizes an image basing on a list of parameters.
      *
-     * @param \Imagine\Image\ImageInterface $image      Image to transform.
-     * @param array   $parameters Parameters needed for the transformation [width, height].
+     * @param ImageInterface $image  Image to resize.
+     * @param array          $params The list of parameters (width and height).
      *
-     * @return \Imagine\Image\ImageInterface The transformed image.
+     * @return ImageInterface The resized image.
      */
-    public function resize($image, array $parameters)
+    public function resize($image, array $params)
     {
-        $width  = $parameters[0];
-        $height = $parameters[1];
+        $width  = $params[0];
+        $height = $params[1];
 
         return $image->resize($this->getBox($width, $height));
     }
 
     /**
-     * Performs the strip transformation.
+     * Strips an image.
      *
-     * @return \Imagine\Imagick\Image the transformed image.
+     * @param ImageInterface $image The image to strip.
      */
     public function strip($image)
     {
@@ -152,16 +153,16 @@ class ImageManager
     }
 
     /*
-     * Sets parameters to an image.
+     * Sets parameters for an image.
      *
-     * @param Imagine $image      Image to parametrize.
-     * @param array   $parameters Parameters for the image.
+     * @param Imagine $image  The image set parameters for.
+     * @param array   $params The list of parameters.
      *
      * @return Imagine The parametrized image.
      */
-    public function get($image, array $parameters)
+    public function get($image, array $params)
     {
-        return $image->get($image->getImagick()->getImageFormat(), $parameters);
+        return $image->get($image->getImagick()->getImageFormat(), $params);
     }
 
     /**
@@ -175,7 +176,10 @@ class ImageManager
      */
     public function getImage($image)
     {
-        if (gettype($image) != 'string' || !file_exists($image) || !is_file($image)) {
+        if (gettype($image) != 'string'
+            || !file_exists($image)
+            || !is_file($image)
+        ) {
             return null;
         }
 
