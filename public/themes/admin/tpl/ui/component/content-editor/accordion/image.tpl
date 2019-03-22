@@ -1,0 +1,49 @@
+<div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.{$field} = !expanded.{$field}">
+  <i class="fa fa-image m-r-10"></i> {$title}
+  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.{$field} }"></i>
+  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.{$field}" ng-class="{ 'badge-danger' : item.{$field} == 0 }">
+      <span ng-show="item.{$field} === 0"><strong>{t}No image assigned{/t}</strong></span>
+      <span ng-show="item.{$field} != 0">
+      <strong>[% {$field}.length %] </span></strong>
+      </span>
+  </span>
+</div>
+
+<div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.{$field} }">
+  <div class="thumbnail-wrapper">
+    <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.{$field} }"></div>
+    <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.{$field} }">
+      <p>Are you sure?</p>
+      <div class="confirm-actions">
+        <button class="btn btn-link" ng-click="toggleOverlay('cover')" type="button">
+          <i class="fa fa-times fa-lg"></i>
+          {t}No{/t}
+        </button>
+        <button class="btn btn-link" ng-click="removeImage('cover');toggleOverlay('cover')" type="button">
+          <i class="fa fa-check fa-lg"></i>
+          {t}Yes{/t}
+        </button>
+      </div>
+    </div>
+    <div class="thumbnail-placeholder">
+      <div class="img-thumbnail" ng-show="!cover">
+        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover">
+          <i class="fa fa-picture-o fa-2x"></i>
+          <h5>Pick an image</h5>
+        </div>
+      </div>
+      <div class="dynamic-image-placeholder" ng-show="cover">
+        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="cover">
+          <div class="thumbnail-actions">
+            <div class="thumbnail-action remove-action" ng-click="toggleOverlay('cover')">
+              <i class="fa fa-trash-o fa-2x"></i>
+            </div>
+            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover" media-picker-types="photo">
+              <i class="fa fa-camera fa-2x"></i>
+            </div>
+          </div>
+        </dynamic-image>
+      </div>
+    </div>
+  </div>
+</div>

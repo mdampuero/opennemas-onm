@@ -89,6 +89,16 @@
             {include file="ui/component/content-editor/accordion/scheduling.tpl"}
           </div>
         </div>
+
+        <div class="grid simple">
+          <div class="grid-body no-padding">
+            <div class="grid-collapse-title">
+              <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
+            </div>
+            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Frontpage image{/t}" field="item.img1" footer="item.img1_footer"}
+            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Inner image{/t}" field="item.img2" footer="item.img2_footer"}
+          </div>
+        </div>
       </div>
       <div class="col-md-8 col-md-pull-4">
         <div class="grid simple">
