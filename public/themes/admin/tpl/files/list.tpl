@@ -8,12 +8,18 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-file-o"></i>
+                <i class="fa fa-file-o m-r-10"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
                 {t}Files{/t}
               </h4>
             </li>
-            <li class="quicklinks hidden-xs">
-              <span class="h-seperate"></span>
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
+                <i class="fa fa-angle-right"></i>
+              </h4>
             </li>
             <li class="quicklinks dropdown hidden-xs">
               <div data-toggle="dropdown">
@@ -38,7 +44,7 @@
               </ul>
             </li>
           </ul>
-          <div class="all-actions pull-right">
+          <div class="pull-right">
             <ul class="nav quick-section">
               {if $category eq 'widget'}
                 {acl isAllowed="ATTACHMENT_FRONTS"}
@@ -54,9 +60,9 @@
                 {/acl}
               {/if}
               {acl isAllowed="ATTACHMENT_CREATE"}
-                <li>
-                  <a class="btn btn-primary" href="{url name=admin_files_create}" title="{t}New file{/t}" id="create-button">
-                    <span class="fa fa-plus"></span>
+                <li class="quicklinks">
+                  <a class="btn btn-loading btn-success text-uppercase" href="{url name=admin_files_create}">
+                    <span class="fa fa-plus m-r-5"></span>
                     {t}Create{/t}
                   </a>
                 </li>
