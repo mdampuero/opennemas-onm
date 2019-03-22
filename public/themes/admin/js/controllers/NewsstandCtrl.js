@@ -49,16 +49,6 @@
         $scope.files = [];
 
         /**
-         * @memberOf NewsstandCtrl
-         *
-         * @description
-         *  Whether to refresh the item after a successful update.
-         *
-         * @type {Boolean}
-         */
-        $scope.refreshOnUpdate = true;
-
-        /**
          * @memberOf CoverCtrl
          *
          * @description
@@ -112,10 +102,6 @@
           data.item.type = Number(data.item.type);
           if (data.item.thumb_url && data.item.thumb_url.length > 0) {
             data.item.thumbnail_url = data.extra.KIOSKO_IMG_URL + data.item.path + '/' + data.item.thumb_url;
-          }
-
-          if (data.extra.tags) {
-            data.item.tags = data.extra.tags;
           }
 
           $scope.item = angular.extend($scope.item, data.item);
@@ -201,6 +187,25 @@
           };
 
           fileReader.readAsArrayBuffer(file);
+        };
+
+        /**
+         * @function submit
+         * @memberOf NewsstandCtrl
+         *
+         * @description
+         *   Saves tags and, then, saves the item.
+         */
+        $scope.submit = function() {
+          $scope.flags.http.saving = true;
+
+          $scope.$broadcast('onmTagsInput.save', {
+            onError: $scope.errorCb,
+            onSuccess: function(ids) {
+              $scope.item.tag_ids = ids;
+              $scope.save();
+            }
+          });
         };
       }
     ]);
