@@ -180,6 +180,7 @@ class VideosController extends Controller
                     'params' => [ 'category_name' => $this->category_name ]
                 ];
             }
+
             $pager = $this->get('paginator')->get([
                 'boundary'    => false,
                 'directional' => true,

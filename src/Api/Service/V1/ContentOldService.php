@@ -414,36 +414,7 @@ class ContentOldService
      */
     public function responsify($item)
     {
-        // var_dump($item);die();
         return $item;
-    }
-
-    /**
-     * Changes the value of the count flag.
-     *
-     * @param string $count The count flag value.
-     *
-     * @return BaseService The current service.
-     */
-    public function setCount($count)
-    {
-        $this->count = $count;
-
-        return $this;
-    }
-
-    /**
-     * Changes the name of the entities source.
-     *
-     * @param string $origin The name of the source.
-     *
-     * @return BaseService The current service.
-     */
-    public function setOrigin($origin)
-    {
-        $this->origin = $origin;
-
-        return $this;
     }
 
     /**
@@ -451,15 +422,14 @@ class ContentOldService
      */
     public function updateItem($id, $data)
     {
-        throw new \Exception('Not implemented');
         try {
-            $data = $this->em->getConverter($this->entity)
-                ->objectify($data);
             $item = $this->getItem($id);
-            $item->setData($data);
 
-            $this->validate($item);
-            $this->em->persist($item, $item->getOrigin());
+            if (!$item->update($data)) {
+                throw new \Exception(
+                    sprintf('Unable to update the item with id "%s"', $id)
+                );
+            }
 
             $this->dispatcher->dispatch($this->getEventName('updateItem'), [
                 'id'   => $id,
@@ -570,7 +540,6 @@ class ContentOldService
      */
     protected function validate($item)
     {
-        throw new \Exception('Not implemented');
         if (empty($this->validator)) {
             return;
         }
