@@ -294,7 +294,6 @@ class BlogController extends FrontendController
         $epp = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
-        $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
         $author->slug  = $author->username;
         $author->photo = $this->get('entity_repository')->find('Photo', $author->avatar_img_id);
