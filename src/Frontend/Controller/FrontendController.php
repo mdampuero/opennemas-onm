@@ -67,7 +67,7 @@ class FrontendController extends Controller
 
         $expected = $this->getExpectedUri($action, $params);
 
-        if ($request->getPathInfo() !== $expected) {
+        if (strpos($request->getRequestUri(), $expected) === false) {
             return new RedirectResponse($expected, 301);
         }
 
