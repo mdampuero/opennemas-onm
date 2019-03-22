@@ -2,8 +2,8 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('OpinionCtrl', [
-  '$controller', '$http', '$uibModal', '$rootScope', '$scope', 'routing',
-  function($controller, $http, $uibModal, $rootScope, $scope, routing) {
+  '$controller', '$http', '$uibModal', '$rootScope', '$scope', 'routing', '$timeout',
+  function($controller, $http, $uibModal, $rootScope, $scope, routing, $timeout) {
     'use strict';
 
     // Initialize the super class and extend it.
