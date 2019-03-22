@@ -27,7 +27,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if isset($album->id)}{url name=admin_album_update id=$album->id}{else}{url name=admin_album_create}{/if}" method="POST" id="formulario" ng-controller="AlbumCtrl" ng-init="init({json_encode($album)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})" ng-submit="validatePhotosAndCover($event);">
+  <form action="{if isset($album->id)}{url name=admin_album_update id=$album->id}{else}{url name=admin_album_create}{/if}" id="formulario" method="POST" name="form"  ng-controller="AlbumCtrl" ng-init="album = {json_encode($album)|clear_json}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -38,7 +38,13 @@
                 <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/745938-opennemas-c%C3%B3mo-crear-%C3%A1lbumes-galer%C3%ADas-de-imagene" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                   <i class="fa fa-question"></i>
                 </a>
-                {t}Albums{/t}
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
+                <a class="no-padding" href="{url name=admin_albums}">
+                  {t}Albums{/t}
+                </a>
               </h4>
             </li>
             <li class="quicklinks visible-xs">
@@ -46,45 +52,24 @@
                 <i class="fa fa-question fa-lg"></i>
               </a>
             </li>
-            <li class="quicklinks hidden-xs">
-              <span class="h-seperate"></span>
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
+                <i class="fa fa-angle-right"></i>
+              </h4>
             </li>
             <li class="quicklinks hidden-xs">
-              <h5>
-                {if isset($album->id)}
-                  {t}Editing album{/t}
-                {else}
-                  {t}Creating Album{/t}
-                {/if}
-              </h5>
+              <h4>
+                {if isset($album->id)}{t}Edit{/t}{else}{t}Create{/t}{/if}
+              </h4>
             </li>
           </ul>
-          <div class="all-actions pull-right">
+          <div class="pull-right">
             <ul class="quick-section">
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_albums}" title="{t}Go back{/t}">
-                  <i class="fa fa-reply"></i>
-                </a>
-              </li>
-              <li class="quicklinks">
-                <span class="h-seperate"></span>
-              </li>
-              <li class="quicklinks">
-                {if isset($album->id)}
-                  {acl isAllowed="ALBUM_UPDATE"}
-                    <button class="btn btn-primary" data-text="{t}Updating{/t}..." disabled data-text-original="{t}Update{/t}" type="submit" id="update-button">
-                      <i class="fa fa-save"></i>
-                      <span class="text">{t}Update{/t}</span>
-                    </button>
-                  {/acl}
-                {else}
-                  {acl isAllowed="ALBUM_CREATE"}
-                    <button class="btn btn-primary" data-text="{t}Saving{/t}..." data-text-original="{t}Save{/t}" type="submit" id="save-button">
-                      <i class="fa fa-save"></i>
-                      <span class="text">{t}Save{/t}</span>
-                    </button>
-                  {/acl}
-                {/if}
+                <button class="btn btn-loading btn-success text-uppercase" ng-click="submit($event)" type="submit">
+                  <i class="fa fa-save m-r-5"></i>
+                  {t}Save{/t}
+                </button>
               </li>
             </ul>
           </div>
@@ -176,7 +161,7 @@
                   {t}Tags{/t}
                 </label>
                 <div class="controls">
-                  {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
+                  {include file="ui/component/tags-input/tags.tpl" ngModel="album.tag_ids"}
                 </div>
               </div>
             </div>

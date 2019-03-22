@@ -12,23 +12,6 @@ angular.module('BackendApp.controllers')
       $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
       /**
-       * @function init
-       * @memberOf AlbumCtrl
-       *
-       * @description
-       * Method to init the album controller
-       *
-       * @param {object} album  Album to edit
-       * @param {String} locale Locale for the album
-       * @param {Array}  tags   Array with all the tags needed for the album
-       */
-      $scope.init = function(album, locale, tags) {
-        $scope.album  = album;
-        $scope.locale = locale;
-        $scope.tags   = tags;
-      };
-
-      /**
        * Parse the photos from template and initialize the scope properly
        *
        * @param Object photos The album photos.
@@ -42,6 +25,53 @@ angular.module('BackendApp.controllers')
         }
 
         $('.btn.btn-primary').attr('disabled', false);
+      };
+
+      /**
+       * @function submit
+       * @memberOf AlbumCtrl
+       *
+       * @description
+       *   Saves tags and, then, submits the form.
+       */
+      $scope.submit = function(e) {
+        e.preventDefault();
+
+        if (!$scope.validatePhotosAndCover(e)) {
+          return;
+        }
+
+        $scope.$broadcast('onmTagsInput.save', {
+          onSuccess: function(ids) {
+            $('[name=tag_ids]').val(JSON.stringify(ids));
+            $('[name=form]').submit();
+          }
+        });
+      };
+
+      /**
+       * Show modal warning for album missing photos
+       */
+      $scope.validatePhotosAndCover = function() {
+        if ($scope.photos && $scope.cover) {
+          return true;
+        }
+
+        $uibModal.open({
+          templateUrl: 'modal-edit-album-error',
+          backdrop: 'static',
+          controller: 'modalCtrl',
+          resolve: {
+            template: function() {
+              return null;
+            },
+            success: function() {
+              return null;
+            }
+          }
+        });
+
+        return false;
       };
 
       /**
@@ -62,32 +92,5 @@ angular.module('BackendApp.controllers')
         }
         return null;
       }, true);
-
-      /**
-       * Show modal warning for album missing photos
-       */
-      $scope.validatePhotosAndCover = function($event) {
-        if (!$scope.photos || !$scope.cover) {
-          $event.preventDefault();
-          $uibModal.open({
-            templateUrl: 'modal-edit-album-error',
-            backdrop: 'static',
-            controller: 'modalCtrl',
-            resolve: {
-              template: function() {
-                return null;
-              },
-              success: function() {
-                return null;
-              }
-            }
-          }).closed.then(function() {
-            var btn = $('.btn.btn-primary');
-
-            btn.attr('disabled', false);
-            $('.btn.btn-primary .text').html(btn.data('text-original'));
-          });
-        }
-      };
     }
   ]);
