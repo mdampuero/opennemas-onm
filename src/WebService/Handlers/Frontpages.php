@@ -130,13 +130,9 @@ class Frontpages
             throw new ResourceNotFoundException();
         }
 
-        $category = $category[0];
-
         $epp = getService('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('items_in_blog', 10);
-
-        $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
+            ->get('items_per_page', 10);
 
         $order   = [ 'starttime' => 'DESC' ];
         $filters = [
