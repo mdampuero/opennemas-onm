@@ -17,28 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 class SpecialsController extends Controller
 {
     /**
-     * Common code for all the actions
-     */
-    public function init()
-    {
-        $this->contentType = \ContentManager::getContentTypeIdFromName('special');
-
-        $this->category = $this->get('request_stack')->getCurrentRequest()
-            ->query->getDigits('category', null);
-        $this->ccm      = \ContentCategoryManager::get_instance();
-
-        list($this->parentCategories, $this->subcat, $this->categoryData) =
-                $this->ccm->getArraysMenu($this->category, $this->contentType);
-
-        $this->view->assign([
-            'category'     => $this->category,
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->categoryData,
-        ]);
-    }
-
-    /**
      * List all the specials in a category
      *
      * @Security("hasExtension('SPECIAL_MANAGER')
@@ -46,25 +24,7 @@ class SpecialsController extends Controller
      */
     public function listAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
-        foreach ($this->parentCategories as $key => $category) {
-            $categories[] = [
-                'name'  => $category->title,
-                'value' => $category->pk_content_category
-            ];
-
-            foreach ($this->subcat[$key] as $subcategory) {
-                $categories[] = [
-                    'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->name
-                ];
-            }
-        }
-
-        return $this->render(
-            'special/list.tpl',
-            [ 'categories' => $categories ]
-        );
+        return $this->render('special/list.tpl');
     }
 
     /**

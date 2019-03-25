@@ -9,6 +9,6 @@
  */
 namespace Api\Exception;
 
-class GetListException extends \Exception
+class GetListException extends ApiException
 {
 }

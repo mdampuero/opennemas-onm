@@ -34,7 +34,7 @@ class UserManager extends BaseManager
     public function countBy($criteria)
     {
         // Building the SQL filter
-        $whereSQL  = $this->getFilterSQL($criteria);
+        $whereSQL = $this->getFilterSQL($criteria);
 
         // Executing the SQL
         $sql = "SELECT COUNT(id) FROM `users` WHERE $whereSQL";
@@ -90,7 +90,7 @@ class UserManager extends BaseManager
      *
      * @return array The matched elements.
      */
-    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null)
     {
         // Building the SQL filter
         $whereSQL = $this->getFilterSQL($criteria);
@@ -106,7 +106,7 @@ class UserManager extends BaseManager
 
         $rs = $this->dbConn->fetchAll($sql);
 
-        $ids = array();
+        $ids = [];
         foreach ($rs as $resultElement) {
             $ids[] = $resultElement['id'];
         }
@@ -144,7 +144,7 @@ class UserManager extends BaseManager
 
         $rs = $this->dbConn->fetchAll($sql);
 
-        $ids = array();
+        $ids = [];
         foreach ($rs as $resultElement) {
             $ids[] = $resultElement['id'];
         }
@@ -163,16 +163,16 @@ class UserManager extends BaseManager
      */
     public function findMulti(array $data)
     {
-        $ids = array();
-        $keys = array();
+        $ids  = [];
+        $keys = [];
         foreach ($data as $value) {
-            $ids[] = 'user' . $this->cacheSeparator . $value;
+            $ids[]  = 'user' . $this->cacheSeparator . $value;
             $keys[] = $value;
         }
 
         $users = array_values($this->cache->fetch($ids));
 
-        $cachedIds = array();
+        $cachedIds = [];
         foreach ($users as $user) {
             $cachedIds[] = 'user' . $this->cacheSeparator . $user->id;
         }
@@ -190,7 +190,7 @@ class UserManager extends BaseManager
         // Unused var $contentType
         unset($contentType);
 
-        $ordered = array();
+        $ordered = [];
         foreach ($keys as $id) {
             $i = 0;
             while ($i < count($users) && $users[$i]->id != $id) {

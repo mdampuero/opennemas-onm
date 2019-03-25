@@ -64,6 +64,22 @@
         $scope.refreshOnUpdate = true;
 
         /**
+         * @memberOf EventCtrl
+         *
+         * @description
+         *  The list of routes for the controller.
+         *
+         * @type {Object}
+         */
+        $scope.routes = {
+          create:   'api_v1_backend_event_create',
+          redirect: 'backend_event_show',
+          save:     'api_v1_backend_event_save',
+          show:     'api_v1_backend_event_show',
+          update:   'api_v1_backend_event_update'
+        };
+
+        /**
          * @function parseItem
          * @memberOf RestInnerCtrl
          *
@@ -89,22 +105,6 @@
           }
 
           $scope.cover = data.extra.related_contents[coverId.pk_content2];
-        };
-
-        /**
-         * @memberOf EventCtrl
-         *
-         * @description
-         *  The list of routes for the controller.
-         *
-         * @type {Object}
-         */
-        $scope.routes = {
-          create:   'api_v1_backend_event_create',
-          redirect: 'backend_event_show',
-          save:     'api_v1_backend_event_save',
-          show:     'api_v1_backend_event_show',
-          update:   'api_v1_backend_event_update'
         };
 
         /**

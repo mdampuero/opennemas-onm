@@ -9,10 +9,6 @@ services:
         arguments: [ '@service_container', '@debug.stopwatch' ]
         public: true
 
-    template_cache_manager:
-        class: Onm\Templating\Cache\Manager
-        public: true
-
     template_cache_config_manager:
         class: Onm\Templating\Cache\Config
         public: true
@@ -20,4 +16,3 @@ services:
     view:
         alias: onm_templating
         public: true
-

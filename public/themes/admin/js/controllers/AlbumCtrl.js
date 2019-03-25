@@ -23,6 +23,7 @@ angular.module('BackendApp.controllers')
        * @param {Array}  tags   Array with all the tags needed for the album
        */
       $scope.init = function(album, locale, tags) {
+        $scope.album  = album;
         $scope.locale = locale;
         $scope.tags   = tags;
       };

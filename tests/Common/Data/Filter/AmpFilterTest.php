@@ -106,14 +106,14 @@ class AmpFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->filter->filter($str));
 
         // String with iframe
-        $str = '<div class="fb-post" data-href="{your-post-url}"></div>';
+        $str      = '<div class="fb-post" data-href="{your-post-url}"></div>';
         $expected = '<amp-facebook width=486 height=657 layout="responsive" '
             . 'data-embed-as="post" data-href="{your-post-url}"></amp-facebook>';
 
         $this->assertEquals($expected, $this->filter->filter($str));
 
         // String with instagram
-        $str = '<blockquote class="instagram-media" data-instgrm-captioned '
+        $str      = '<blockquote class="instagram-media" data-instgrm-captioned '
             . 'data-instgrm-permalink="https://www.instagram.com/p/tsxp1hhQTG/?utm_source=ig_embed&amp;'
             . 'utm_medium=loading" data-instgrm-version="12" style="">whatever</blockquote>';
         $expected = '<blockquote>whatever</blockquote>';

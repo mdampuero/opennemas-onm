@@ -218,13 +218,6 @@ class NewsletterTemplateController extends Controller
             $extra['hours'][] = sprintf("%02d:00", $i);
         }
 
-        $converter  = $this->get('orm.manager')->getConverter('Category');
-        $categories = $this->get('orm.manager')
-            ->getRepository('Category')
-            ->findBy('internal_category = 1');
-
-        $extra['categories'] = $converter->responsify($categories);
-
         return $extra;
     }
 }

@@ -26,21 +26,20 @@ class PollsController extends Controller
      */
     public function init()
     {
-        $this->cm = new \ContentManager();
-
-        $request            = $this->get('request_stack')->getCurrentRequest();
-        $this->categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $category_real_name = 'Portada';
+        $this->categoryName = 'home';
+        $this->category     = 0;
+        $actual_category_id = 0;
+        $this->categoryName = $this->get('request_stack')->getCurrentRequest()
+            ->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
         if (!empty($this->categoryName)) {
-            $this->ccm          = new \ContentCategoryManager();
-            $this->category     = $this->ccm->get_id($this->categoryName);
-            $actual_category_id = $this->category; // FOR WIDGETS
-            $category_real_name = $this->ccm->getTitle($this->categoryName); //used in title
-        } else {
-            $category_real_name = 'Portada';
-            $this->categoryName = 'home';
-            $this->category     = 0;
-            $actual_category_id = 0;
+            $category = $this->get('api.service.category')
+                ->getItemBySlug($this->categoryName);
+
+            $this->category     = $category->pk_content_category;
+            $actual_category_id = $category->pk_content_category;
+            $category_real_name = $category->title;
         }
 
         $this->view->assign([

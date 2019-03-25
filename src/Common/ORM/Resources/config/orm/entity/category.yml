@@ -4,8 +4,9 @@ orm:
             name: Category
             properties:
                 pk_content_category: integer
-                title:               multi_value
-                name:                multi_value
+                title:               l10n_string
+                description:         l10n_string
+                name:                l10n_string
                 inmenu:              boolean
                 posmenu:             integer
                 internal_category:   integer
@@ -18,11 +19,11 @@ orm:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter
                     arguments: [ '@orm.metadata.category' ]
             repositories:
-                database:
-                    class:     Common\ORM\Database\Repository\BaseRepository
+                instance:
+                    class:     Common\ORM\Database\Repository\CategoryRepository
                     arguments: [ '@orm.connection.instance', '@orm.metadata.category', '@cache.connection.instance' ]
             persisters:
-                database:
+                instance:
                     class:     Common\ORM\Database\Persister\BasePersister
                     arguments: [ '@orm.connection.instance', '@orm.metadata.category', '@cache.connection.instance' ]
             mapping:
@@ -33,11 +34,11 @@ orm:
                             type: integer
                             options: { default: null, unsigned: true, autoincrement: true }
                         title:
-                            type: string
-                            options: { default: null, length: 255 }
+                            type: text
+                            options: { default: null, length: 65532 }
                         name:
-                            type: string
-                            options: { default: null, notnull: false, length: 255 }
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
                         description:
                             type: text
                             options: { default: null, length: 65532, notnull: false }

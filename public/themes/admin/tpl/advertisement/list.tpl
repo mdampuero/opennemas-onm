@@ -102,14 +102,7 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks hidden-xs ng-cloak">
-            <ui-select name="author" theme="select2" ng-model="criteria.fk_content_categories">
-              <ui-select-match>
-                <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
-              </ui-select-match>
-              <ui-select-choices group-by="'group'" repeat="item.value as item in categories | filter: { name: $select.search }">
-                <div ng-bind-html="item.name | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
+            <onm-category-selector ng-model="criteria.fk_content_categories" label-text="{t}Category{/t}" default-value-text="{t}Any{/t}" placeholder="{t}Any{/t}" />
           </li>
           <li class="hidden-xs ng-cloak">
             <ui-select name="position" theme="select2" ng-model="criteria.position">

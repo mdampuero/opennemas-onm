@@ -189,8 +189,9 @@ class OrmService implements Service
                 throw new \InvalidArgumentException();
             }
 
-            $item = $this->container->get('orm.manager')
-                ->getRepository($this->entity, $this->origin)->find($id);
+            $item = $this->em->getRepository($this->entity, $this->origin)->find($id);
+
+            $this->localizeItem($item);
 
             $this->dispatcher->dispatch($this->getEventName('getItem'), [
                 'id'   => $id,
@@ -232,7 +233,7 @@ class OrmService implements Service
             throw new GetItemException();
         }
 
-        $item = array_pop($response['items']);
+        $item = $this->localizeItem(array_pop($response['items']));
 
         $this->dispatcher->dispatch($this->getEventName('getItemBy'), [
             'item' => $item,
@@ -250,14 +251,15 @@ class OrmService implements Service
         try {
             $oql = $this->getOqlForList($oql);
 
-            $repository = $this->container->get('orm.manager')
-                ->getRepository($this->entity, $this->origin);
+            $repository = $this->em->getRepository($this->entity, $this->origin);
 
             $response = [ 'items' => $repository->findBy($oql) ];
 
             if ($this->count) {
                 $response['total'] = $repository->countBy($oql);
             }
+
+            $this->localizeList($response['items']);
 
             $this->dispatcher->dispatch($this->getEventName('getList'), [
                 'items' => $response['items'],
@@ -291,8 +293,9 @@ class OrmService implements Service
             return [ 'items' => [], 'total' => 0 ];
         }
 
-        $items = $this->container->get('orm.manager')
-            ->getRepository($this->entity, $this->origin)->find($ids);
+        $items = $this->em->getRepository($this->entity, $this->origin)->find($ids);
+
+        $this->localizeList($items);
 
         $this->dispatcher->dispatch($this->getEventName('getListByIds'), [
             'ids'   => $ids,
@@ -300,6 +303,16 @@ class OrmService implements Service
         ]);
 
         return [ 'items' => $items, 'total' => count($items) ];
+    }
+
+    /**
+     * Returns the list of properties that support localization in this service.
+     *
+     * @return array The list of properties that support localization.
+     */
+    public function getL10nKeys()
+    {
+        return $this->em->getMetadata($this->entity)->getL10nKeys();
     }
 
     /**
@@ -487,6 +500,52 @@ class OrmService implements Service
     protected function getEventName($action)
     {
         return \underscore(basename($this->entity)) . '.' . $action;
+    }
+
+    /**
+     * Localizes all l10n_string properties of an Entity basing on the current
+     * context.
+     *
+     * @param Entity $item An item to localize.
+     *
+     * @return Entity The localized item.
+     */
+    protected function localizeItem($item)
+    {
+        if (empty($this->getL10nKeys())
+            || $this->container->get('core.locale')->getContext() !== 'frontend'
+        ) {
+            return $item;
+        }
+
+        $fm = $this->container->get('data.manager.filter');
+
+        foreach ($this->getL10nKeys() as $key) {
+            if (!empty($item->{$key})) {
+                $item->{$key} = $fm->set($item->{$key})
+                    ->filter('localize')
+                    ->get();
+            }
+        }
+
+        return $item;
+    }
+
+    /**
+     * Localizes all l10n_string properties of a list of Entities basing on the
+     * current context.
+     *
+     * @param array $items The list of itemx to localize.
+     *
+     * @return array The localized list of items.
+     */
+    protected function localizeList($items)
+    {
+        foreach ($items as $item) {
+            $this->localizeItem($item);
+        }
+
+        return $items;
     }
 
     /**

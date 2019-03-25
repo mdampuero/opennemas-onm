@@ -24,28 +24,15 @@ class SimpleMenu
      *
      * @var array
      */
-    private $menu         = null;
-
-    /**
-     * The nesting level when traversing the menu
-     *
-     * @var int
-     */
-    private $nestingLevel = 0;
+    private $menu = null;
 
     /**
      * Initilizes the object from an XML file
      *
      * @param string $menuArray the array with menu contents
-     * @param string $baseUrl the base url for the links
      */
-    public function __construct($menuArray, $baseUrl = null)
+    public function __construct($menuArray)
     {
-        if (!isset($baseUrl)) {
-            $baseUrl = SITE_URL_ADMIN;
-        }
-        $this->baseUrl = $baseUrl;
-
         $this->menu = $menuArray;
     }
 
@@ -56,7 +43,7 @@ class SimpleMenu
      *
      * @return string the final html content for the menu
      */
-    public function render($params = array())
+    public function render($params = [])
     {
         if (isset($params['contents'])) {
             $this->contents = $params['contents'];
@@ -64,11 +51,13 @@ class SimpleMenu
 
         $output = [];
         foreach ($this->menu as $element) {
-            list($content, $isCurrent) = $this->renderElement($element);
-            $output []= $content;
+            list($content,) = $this->renderElement($element);
+
+            $output[] = $content;
         }
 
-        $menu = "<ul ng-class=\"{ 'collapsed': mode && mode != 'list'}\">".implode("", $output)."</ul>";
+        $menu = "<ul ng-class=\"{ 'collapsed': mode && mode != 'list'}\">"
+            . implode("", $output) . "</ul>";
 
         return $menu;
     }
@@ -88,12 +77,12 @@ class SimpleMenu
             return $this->renderSeparator();
         }
 
-        $output = '';
+        $output         = '';
         $submenuContent = '';
-        $isCurrent = $isSubmenuCurrent = false;
+        $isCurrent      = $isSubmenuCurrent = false;
 
         // Render submenu
-        $hasSubmenu = array_key_exists('submenu', $element);
+        $hasSubmenu     = array_key_exists('submenu', $element);
         $submenuContent = '';
 
         if ($hasSubmenu) {
@@ -102,15 +91,17 @@ class SimpleMenu
             $submenuContent = [];
             foreach ($submenu as $subMenuElement) {
                 list($content, $isSubmenuElementCurrent) = $this->renderElement($subMenuElement);
+
                 $isSubmenuCurrent = $isSubmenuCurrent || $isSubmenuElementCurrent;
 
                 if (!empty($content)) {
-                    $submenuContent []= $content;
+                    $submenuContent[] = $content;
                 }
             }
 
             if (count($submenuContent) > 0) {
-                $submenuContent = "<ul class='sub-menu'>".implode('', $submenuContent)."</ul>";
+                $submenuContent = "<ul class='sub-menu'>"
+                    . implode('', $submenuContent) . "</ul>";
             }
         }
 
@@ -131,11 +122,17 @@ class SimpleMenu
         ) {
             $isCurrent = false;
             if (array_key_exists("link", $element)) {
-                $isCurrent = preg_match("@^".preg_quote($element['link'])."@", $_SERVER['REQUEST_URI']);
+                $isCurrent = preg_match(
+                    "@^" . preg_quote($element['link']) . "@",
+                    $_SERVER['REQUEST_URI']
+                );
             }
 
             if (array_key_exists('link', $element) && $element['link'] === '/admin') {
-                $isCurrent = preg_match("@^".preg_quote($element['link'])."$@", $_SERVER['REQUEST_URI']);
+                $isCurrent = preg_match(
+                    "@^" . preg_quote($element['link']) . "$@",
+                    $_SERVER['REQUEST_URI']
+                );
             }
 
             $classes = [];
@@ -156,36 +153,12 @@ class SimpleMenu
             }
 
             $output = "<li {$class}>"
-                    .$this->getHref($element, $hasSubmenu, $isCurrent || $isSubmenuCurrent)
-                    .$submenuContent
-                    ."</li>";
+                . $this->getHref($element, $hasSubmenu, $isCurrent || $isSubmenuCurrent)
+                . $submenuContent
+                . "</li>";
         }
 
         return [$output, ($isCurrent || $isSubmenuCurrent)];
-    }
-
-    /**
-     * Returns the class HTML property given a set of properties
-     *
-     * @param string $class the element class
-     * @param boolean $dropdown whether if the element is a dropdown element
-     *
-     * @return string the HTML generated
-     */
-    private function getClass($class, $dropdown = false)
-    {
-        if (isset($class) && !empty($class) || $dropdown) {
-            $dropdownClass = '';
-            if ($dropdown) {
-                if ($this->nestingLevel > 1) {
-                    $dropdownClass = ' dropdown-submenu';
-                } else {
-                    $dropdownClass = ' dropdown';
-                }
-            }
-
-            return "class=\"{$class}{$dropdownClass}\"";
-        }
     }
 
     /**
@@ -201,7 +174,7 @@ class SimpleMenu
      */
     private function getHref($element, $hasArrow, $isOpen)
     {
-        $id       = 'submenu_'.$element['id'];
+        $id       = 'submenu_' . $element['id'];
         $url      = (array_key_exists('link', $element)) ? $element['link'] : "";
         $title    = $element['title'];
         $external = isset($element['target']);
@@ -213,6 +186,7 @@ class SimpleMenu
         if (preg_match("@#@", $url)) {
             $url = $url;
         }
+
         $url = htmlentities($url);
 
         $target = '';
@@ -220,8 +194,8 @@ class SimpleMenu
             $target = "target=\"_blank\"";
         }
 
-        $attrTitle = "title=\"".sprintf(_("Go to %s"), $title)."\"";
-        $attrId    = "id=\"".sprintf(_("%s"), $id)."\"";
+        $attrTitle = "title=\"" . sprintf(_("Go to %s"), $title) . "\"";
+        $attrId    = "id=\"" . sprintf(_("%s"), $id) . "\"";
 
         $arrow = '';
         if ($hasArrow) {
@@ -235,7 +209,7 @@ class SimpleMenu
 
         $icon = '<i class="fa" ></i>';
         if (array_key_exists('icon', $element)) {
-            $icon = '<i class="'.$element['icon'].'" ></i>';
+            $icon = '<i class="' . $element['icon'] . '" ></i>';
         }
 
         if (!array_key_exists('link', $element)) {

@@ -22,35 +22,6 @@ use Common\Core\Controller\Controller;
 class FilesController extends Controller
 {
     /**
-     * Common code for all the actions.
-     */
-    public function init()
-    {
-        $this->contentType = \ContentManager::getContentTypeIdFromName('attachment');
-        $this->category    = $this->get('request_stack')->getCurrentRequest()
-            ->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $this->ccm         = \ContentCategoryManager::get_instance();
-
-        list($this->parentCategories, $this->subcat, $this->datos_cat) =
-            $this->ccm->getArraysMenu($this->category, $this->contentType);
-
-        $this->view->assign([
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->datos_cat,
-            'category'     => $this->category,
-        ]);
-
-        // Optimize  this crap from this ---------------------------------------
-        $this->fileSavePath = INSTANCE_MEDIA_PATH . FILE_DIR;
-
-        // Create folder if it doesn't exist
-        if (!file_exists($this->fileSavePath)) {
-            \Onm\FilesManager::createDirectory($this->fileSavePath);
-        }
-    }
-
-    /**
      * Lists the files for a given category.
      *
      * @return Response          The response object.
@@ -60,26 +31,7 @@ class FilesController extends Controller
      */
     public function listAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
-
-        foreach ($this->parentCategories as $key => $category) {
-            $categories[] = [
-                'name' => $category->title,
-                'value' => $category->pk_content_category
-            ];
-
-            foreach ($this->subcat[$key] as $subcategory) {
-                $categories[] = [
-                    'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->pk_content_category
-                ];
-            }
-        }
-
-        return $this->render(
-            'files/list.tpl',
-            [ 'categories' => $categories ]
-        );
+        return $this->render('files/list.tpl');
     }
 
     /**
@@ -98,109 +50,6 @@ class FilesController extends Controller
     }
 
     /**
-     * Shows the file usage statistics.
-     *
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('FILE_MANAGER')
-     *     and hasPermission('ATTACHMENT_ADMIN')")
-     */
-    public function statisticsAction()
-    {
-        $cm               = new \ContentManager();
-        $total_num_photos = 0;
-        $files            = $size = $sub_size = $num_photos = [];
-        $fullcat          = $this->ccm->orderByPosmenu($this->ccm->categories);
-
-        $num_sub_photos = [];
-        $sub_files      = [];
-        $aux_categories = [];
-
-        foreach ($this->parentCategories as $k => $v) {
-            $num_photos[$k]    =
-                $this->ccm->countContentByType($v->pk_content_category, $this->contentType);
-            $total_num_photos += $num_photos[$k];
-
-            $files[$v->pk_content_category] = $cm->findAll(
-                'Attachment',
-                'fk_content_type = 3 AND category = ' . $v->pk_content_category,
-                'ORDER BY created DESC'
-            );
-
-            if (!empty($fullcat)) {
-                foreach ($fullcat as $child) {
-                    if ($v->pk_content_category == $child->fk_content_category) {
-                        $num_sub_photos[$k][$child->pk_content_category] =
-                            $this->ccm->countContentByType($child->pk_content_category, 3);
-                        $total_num_photos                               +=
-                            $num_sub_photos[$k][$child->pk_content_category];
-                        $sub_files[$child->pk_content_category][]        =
-                            $cm->findAll(
-                                'Attachment',
-                                'fk_content_type = 3 AND category = ' . $child->pk_content_category,
-                                'ORDER BY created DESC'
-                            );
-                        $aux_categories[]                                = $child->pk_content_category;
-                        $sub_size[$k][$child->pk_content_category]       = 0;
-                        $this->view->assign('num_sub_photos', $num_sub_photos);
-                    }
-                }
-            }
-        }
-
-        //Calculo del tamaño de los ficheros por categoria/subcategoria
-        $i          = 0;
-        $total_size = 0;
-        foreach ($files as $categories => $contenido) {
-            $size[$i] = 0;
-            if (!empty($contenido)) {
-                foreach ($contenido as $value) {
-                    if ($categories == $value->category) {
-                        if (file_exists($this->fileSavePath . '/' . $value->path)) {
-                            $size[$i] += filesize($this->fileSavePath . '/' . $value->path);
-                        }
-                    }
-                }
-            }
-
-            $total_size += $size[$i];
-            $i++;
-        }
-
-        if (!empty($parentCategories) && !empty($aux_categories)) {
-            foreach ($parentCategories as $k => $v) {
-                foreach ($aux_categories as $ind) {
-                    if (empty($sub_files[$ind][0])) {
-                        continue;
-                    }
-                    foreach ($sub_files[$ind][0] as $value) {
-                        if ($v->pk_content_category != $this->ccm->get_id($this->ccm->getFather($value->catName))) {
-                            continue;
-                        }
-                        if ($this->ccm->get_id($this->ccm->getFather($value->catName))) {
-                            $sub_size[$k][$ind] += filesize(MEDIA_PATH . '/' . FILE_DIR . '/' . $value->path);
-                        }
-                    }
-
-                    if (isset($sub_size[$k][$ind])) {
-                        $total_size += $sub_size[$k][$ind];
-                    }
-                }
-            }
-        }
-
-        return $this->render('files/statistics.tpl', [
-            'total_img'    => $total_num_photos,
-            'total_size'   => $total_size,
-            'size'         => $size,
-            'sub_size'     => $sub_size,
-            'num_photos'   => $num_photos,
-            'categorys'    => $this->parentCategories,
-            'subcategorys' => $this->subcat,
-        ]);
-    }
-
-    /**
      * Creates a file.
      *
      * @param  Request  $request The request object.
@@ -212,15 +61,9 @@ class FilesController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
-            $ls = $this->get('core.locale');
-            return $this->render(
-                'files/new.tpl',
-                [
-                    'category' => $this->category,
-                    'locale'   => $ls->getLocale('frontend'),
-                    'tags'     => []
-                ]
-            );
+            return $this->render('files/new.tpl', [
+                'locale' => $this->get('core.locale')->getLocale('frontend'),
+            ]);
         }
 
         set_time_limit(0);
@@ -235,9 +78,7 @@ class FilesController extends Controller
                 _('You must pick a file before submitting the form')
             );
 
-            return $this->redirect(
-                $this->generateUrl('admin_files_create', ['category' => $this->category])
-            );
+            return $this->redirect($this->generateUrl('admin_files_create'));
         }
 
         $uploadedFile = $files['path'];
@@ -253,9 +94,7 @@ class FilesController extends Controller
                 sprintf(_('You must pick a file smaller than %d Mb'), MAX_UPLOAD_FILE / 1024 / 1024)
             );
 
-            return $this->redirect(
-                $this->generateUrl('admin_files_create', ['category' => $this->category])
-            );
+            return $this->redirect($this->generateUrl('admin_files_create'));
         }
 
         $rtbMediaManager = '';
@@ -289,9 +128,7 @@ class FilesController extends Controller
                     . 'different file extension.'), $uploadedFile->getClientOriginalExtension())
             );
 
-            return $this->redirect(
-                $this->generateUrl('admin_files_create', ['category' => $this->category])
-            );
+            return $this->redirect($this->generateUrl('admin_files_create'));
         }
 
         $date          = new \DateTime();
@@ -307,9 +144,7 @@ class FilesController extends Controller
                     sprintf(_('Unable to create the directory to save the file'))
                 );
 
-                return $this->redirect(
-                    $this->generateUrl('admin_files_create', ['category' => $this->category])
-                );
+                return $this->redirect($this->generateUrl('admin_files_create'));
             }
         }
 
@@ -335,9 +170,7 @@ class FilesController extends Controller
                 _('There was an error while uploading the file.')
             );
 
-            return $this->redirect(
-                $this->generateUrl('admin_files_create', ['category' => $this->category])
-            );
+            return $this->redirect($this->generateUrl('admin_files_create'));
         }
 
         $attachment = new \Attachment();
@@ -357,9 +190,7 @@ class FilesController extends Controller
             );
         }
 
-        return $this->redirect(
-            $this->generateUrl('admin_files_create', ['category' => $this->category])
-        );
+        return $this->redirect($this->generateUrl('admin_files_create'));
     }
 
     /**
@@ -476,60 +307,5 @@ class FilesController extends Controller
         }
 
         return new Response($msg);
-    }
-
-
-    /**
-     * Lists all the files within a category for the related manager.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('FILE_MANAGER')")
-     */
-    public function contentProviderRelatedAction(Request $request)
-    {
-        $categoryId   = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 20);
-
-        $em       = $this->get('entity_repository');
-        $category = $this->get('category_repository')->find($categoryId);
-
-        $filters = [
-            'content_type_name' => [ [ 'value' => 'attachment' ] ],
-            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ]
-        ];
-
-        if ($categoryId != 0) {
-            $filters['category_name'] = [ [ 'value' => $category->name ] ];
-        }
-
-        $countFiles = true;
-        $files      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countFiles);
-
-        $pagination = $this->get('paginator')->get([
-            'epp'   => $itemsPerPage,
-            'page'  => $page,
-            'total' => $countFiles,
-            'route' => [
-                'names'  => 'admin_files_content_provider_related',
-                'params' => [ 'category' => $categoryId ]
-            ],
-        ]);
-
-        return $this->render(
-            'common/content_provider/_container-content-list.tpl',
-            [
-                'contentType'           => 'Attachment',
-                'contents'              => $files,
-                'contentTypeCategories' => $this->parentCategories,
-                'category'              => $this->category,
-                'pagination'            => $pagination->links,
-                'contentProviderUrl'    => $this->generateUrl('admin_files_content_provider_related'),
-            ]
-        );
     }
 }

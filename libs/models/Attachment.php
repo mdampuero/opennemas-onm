@@ -76,22 +76,18 @@ class Attachment extends Content
     {
         switch ($name) {
             case 'uri':
-                if (empty($this->category_name)) {
-                    $this->category_name = $this->loadCategoryName();
-                }
-
                 $uri = "media" . DS . INSTANCE_UNIQUE_NAME . DS . FILE_DIR . $this->path;
 
                 return ($uri !== '') ? $uri : $this->permalink;
+
             case 'slug':
                 return \Onm\StringUtils::generateSlug($this->title);
+
             case 'file_path':
-                $instance = getService('core.instance');
-                return $instance->getSystemFilePath();
-            case '':
+                return getService('core.instance')->getFilesShortPath();
+
             default:
                 return parent::__get($name);
-                break;
         }
     }
 

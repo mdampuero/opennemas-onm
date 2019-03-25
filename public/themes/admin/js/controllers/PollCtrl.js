@@ -29,6 +29,7 @@ angular.module('BackendApp.controllers')
        * @param {Array}  tags   Array with all the tags needed for the poll
        */
       $scope.init = function(poll, locale, tags) {
+        $scope.poll   = poll;
         $scope.locale = locale;
         $scope.tags   = tags;
       };

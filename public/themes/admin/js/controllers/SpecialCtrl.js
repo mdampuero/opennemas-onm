@@ -21,8 +21,9 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
      * @param {Array}  tags     Array with all the tags needed for the special
      */
     $scope.init = function(special, locale, tags) {
-      $scope.locale = locale;
-      $scope.tags   = tags;
+      $scope.special = special;
+      $scope.locale  = locale;
+      $scope.tags    = tags;
     };
 
     /**

@@ -10,17 +10,13 @@
      * @requires $controller
      * @requires $scope
      * @requires $window
-     * @requires cleaner
-     * @requires http
-     * @requires messenger
-     * @requires routing
      *
      * @description
      *   Provides actions to edit, save and update subscriptions.
      */
     .controller('SubscriptionCtrl', [
-      '$controller', '$scope', '$window', 'cleaner', 'http', 'messenger', 'routing',
-      function($controller, $scope, $window, cleaner, http, messenger, routing) {
+      '$controller', '$scope',
+      function($controller, $scope) {
         // Initialize the super class and extend it
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
@@ -98,7 +94,7 @@
          * @description
          *   Checks if the current item has an id.
          *
-         * @return {Boolean} description
+         * @return {Boolean} True if the item has an id. False otherwise.
          */
         $scope.itemHasId = function() {
           return $scope.item.pk_user_group &&

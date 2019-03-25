@@ -21,6 +21,7 @@ angular.module('BackendApp.controllers').controller('FileCtrl', [
      * @param {Array}  tags     Array with all the tags needed for the file
      */
     $scope.init = function(file, locale, tags) {
+      $scope.file   = file;
       $scope.locale = locale;
       $scope.tags   = tags;
     };

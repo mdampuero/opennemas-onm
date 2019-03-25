@@ -10,10 +10,6 @@ backend_ws_client:
     resource: '@BackendWebServiceBundle/Resources/config/routing/client.yml'
     prefix:   /
 
-backend_ws_category:
-    resource: '@BackendWebServiceBundle/Resources/config/routing/category.yml'
-    prefix:   /
-
 backend_ws_comments:
     resource: '@BackendWebServiceBundle/Resources/config/routing/comments.yml'
     prefix:   /
@@ -83,10 +79,6 @@ backend_ws_notification:
 
 backend_ws_image:
     resource: '@BackendWebServiceBundle/Resources/config/routing/image.yml'
-    prefix:   /
-
-backend_ws_content_v2:
-    resource: '@BackendWebServiceBundle/Resources/config/routing/content_v2.yml'
     prefix:   /
 
 backend_ws_content:

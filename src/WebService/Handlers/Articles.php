@@ -41,11 +41,7 @@ class Articles
 
         $er       = getService('entity_repository');
         $this->cm = new \ContentManager();
-        $ccm      = \ContentCategoryManager::get_instance();
 
-        // Get category title used on tpl's
-        $article->category_title   = $ccm->getTitle($article->category_name);
-        $article->actualCategoryId = $ccm->get_id($article->category_name);
         // Assigned media_url used with author photo & related or machine articles with photo
         $article->media_url = MEDIA_IMG_ABSOLUTE_URL;
 
@@ -68,16 +64,6 @@ class Articles
         if (isset($article->fk_video2)) {
             $videoInt          = $er->find('Video', $article->fk_video2);
             $article->videoInt = $videoInt;
-        } else {
-            $video = $this->cm->find_by_category(
-                'Video',
-                $article->actualCategoryId,
-                'contents.content_status=1',
-                'ORDER BY created DESC LIMIT 0 , 1'
-            );
-            if (isset($video[0])) {
-                $article->videoInt = $video[0];
-            }
         }
 
         // Related contents code ---------------------------------------
@@ -91,8 +77,6 @@ class Articles
                 if (!$content->isReadyForPublish()) {
                     continue;
                 }
-
-                $content->category_name = $ccm->getName($content->category);
 
                 // Generate content uri if it's not an attachment
                 if ($content->fk_content_type == '4') {

@@ -28,11 +28,11 @@
                 {if !isset($id)}{t}Creating article{/t}{else}{t}Editing article{/t}{/if}
               </h5>
             </li>
-            <li class="quicklinks seperate hidden-xs ng-cloak" ng-if="config.multilanguage">
+            <li class="quicklinks seperate hidden-xs ng-cloak" ng-if="config.locale.multilanguage">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks ng-cloak" ng-if="config.multilanguage">
-              <translator keys="data.extra.keys" ng-model="config.locale" options="data.extra.options"></translator>
+            <li class="quicklinks ng-cloak" ng-if="config.locale.multilanguage">
+              <translator item="data.item" keys="data.extra.keys" ng-model="config.locale.selected" options="config.locale"></translator>
             </li>
           </ul>
           <div class="all-actions pull-right">
@@ -90,7 +90,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group">
-                    <input class="form-control" id="title" name="title" ng-blur="generate()" ng-model="article.title" ng-trim="false" placeholder="[% data.article.title[data.extra.options.default] %]" required tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.title[data.extra.options.default] %]">
+                    <input class="form-control" id="title" name="title" ng-blur="generate()" ng-model="article.title" ng-trim="false" placeholder="[% data.article.title[config.locale.default] %]" required tooltip-enable="config.locale.selected != config.locale.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.title[config.locale.default] %]">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.title.length >= 50 && article.title.length < 80, 'text-danger': article.title.length >= 80 }">
                         [% article.title ? article.title.length : 0 %]
@@ -105,7 +105,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group">
-                    <input class="form-control" id="title-int" maxlength="256" name="title_int" ng-model="article.title_int" ng-trim="false" placeholder="[% data.article.title_int[data.extra.options.default] %]" required tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.title_int[data.extra.options.default] %]">
+                    <input class="form-control" id="title-int" maxlength="256" name="title_int" ng-model="article.title_int" ng-trim="false" placeholder="[% data.article.title_int[config.locale.default] %]" required tooltip-enable="config.locale.selected != config.locale.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.title_int[config.locale.default] %]">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.title_int.length >= 50 && article.title_int.length < 100, 'text-danger': article.title_int.length >= 100 }">
                         [% article.title_int ? article.title_int.length : 0 %]
@@ -140,7 +140,7 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="pretitle">
-                    <input class="form-control" name="pretitle" ng-model="article.pretitle" ng-trim="false" placeholder="[% data.article.pretitle[data.extra.options.default] %]" tooltip-enable="config.locale != data.extra.options.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.pretitle[data.extra.options.default] %]">
+                    <input class="form-control" name="pretitle" ng-model="article.pretitle" ng-trim="false" placeholder="[% data.article.pretitle[config.locale.default] %]" tooltip-enable="config.locale.selected != config.locale.default" tooltip-trigger="focus" type="text" uib-tooltip="{t}Original{/t}: [% data.article.pretitle[config.locale.default] %]">
                     <span class="input-group-addon">
                       <span class="ng-cloak" ng-class="{ 'text-warning': article.pretitle.length >= 50 && article.pretitle.length < 100, 'text-danger': article.pretitle.length >= 100 }">
                         [% article.pretitle ? article.pretitle.length : 0 %]
@@ -240,14 +240,7 @@
                       {t}Category{/t} *
                     </label>
                     <div class="controls">
-                      <ui-select class="form-control" name="pk_fk_content_category" theme="select2" ng-model="article.pk_fk_content_category">
-                        <ui-select-match>
-                          [% $select.selected.title %]
-                        </ui-select-match>
-                        <ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in categories | filter: { title: $select.search }">
-                          <div ng-bind-html="item.title | highlight: $select.search"></div>
-                        </ui-select-choices>
-                      </ui-select>
+                      <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" ng-model="article.pk_fk_content_category" placeholder="{t}Select a category{/t}…"></onm-category-selector>
                     </div>
                   </div>
                   <div class="form-group">
@@ -263,7 +256,7 @@
                       {t}Slug{/t}
                     </label>
                     <span class="m-t-2 pull-right" ng-if="article.pk_article && backup.content_status != '0' && !articleForm.pk_fk_content_category.$dirty && !articleForm.content_status.$dirty">
-                      <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/[% data.extra.options.default === config.locale ? '' : config.locale + '/' %]articulo/[% (categories | filter : { pk_content_category: article.pk_fk_content_category } : true)[0].name %]/[% article.slug %]/[% article.created | moment : 'YYYYMMDDHHmmss' %][% article.pk_content.toString().length < 6 ? ('000000' + article.pk_content).substr(-6) : article.pk_content %].html" target="_blank">
+                      <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/[% config.locale && config.locale.default === config.locale.selected ? '' : config.locale.selected + '/' %]articulo/[% (categories | filter : { pk_content_category: article.pk_fk_content_category } : true)[0].name %]/[% article.slug %]/[% article.created | moment : 'YYYYMMDDHHmmss' %][% article.pk_content.toString().length < 6 ? ('000000' + article.pk_content).substr(-6) : article.pk_content %].html" target="_blank">
                         <i class="fa fa-external-link"></i>
                         {t}Link{/t}
                       </a>

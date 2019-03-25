@@ -99,41 +99,38 @@
             $scope.loading = 0;
             $scope.data    = response.data;
 
-            // Configure the list
-            if ($scope.config.multilanguage === null) {
-              $scope.config.multilanguage = response.data.extra.multilanguage;
-            }
-
-            if (!$scope.config.linkers.il) {
-              $scope.config.linkers.il =
-                linker.get(response.data.extra.keys, $scope, false);
-            }
-
-            if (!$scope.config.linkers.cl) {
-              $scope.config.linkers.cl = linker.get([ 'title' ], $scope, false);
-            }
-
-            if ($scope.config.locale === null) {
+            if (response.data.extra.locale) {
               $scope.config.locale = response.data.extra.locale;
             }
+
+            $scope.addEmptyValue($scope.data.extra.categories,
+              'pk_content_category', 'title');
 
             // Load items
             $scope.items      = response.data.results;
             $scope.categories = response.data.extra.categories;
 
-            if ($scope.config.multilanguage && $scope.config.locale) {
-              var lz = localizer.get({ keys: $scope.data.extra.keys,
-                available: $scope.data.extra.options.available });
+            if ($scope.config.locale.multilanguage) {
+              var lz = localizer.get($scope.data.extra.locale);
 
-              $scope.categories = lz.localize($scope.categories,
-                [ 'title' ], $scope.config.locale);
+              $scope.categories = lz.localize($scope.categories, [ 'title' ],
+                $scope.config.locale);
               $scope.items = lz.localize($scope.items, $scope.data.extra.keys,
                 $scope.config.locale);
 
-              $scope.config.linkers.cl.link(
-                $scope.data.extra.categories, $scope.categories);
-              $scope.config.linkers.il.link(
-                $scope.data.results, $scope.items);
+              if (!$scope.config.linkers.il) {
+                $scope.config.linkers.il = linker.get(response.data.extra.keys,
+                  $scope.config.locale.default, $scope, false);
+              }
+
+              if (!$scope.config.linkers.cl) {
+                $scope.config.linkers.cl = linker.get([ 'title' ],
+                  $scope.config.locale.default, $scope, false, [ 'pk_content_category' ]);
+              }
+
+              $scope.config.linkers.cl.link($scope.data.extra.categories,
+                $scope.categories);
+              $scope.config.linkers.il.link($scope.data.results, $scope.items);
             }
 
             // Scroll top

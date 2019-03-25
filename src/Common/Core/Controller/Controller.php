@@ -243,10 +243,7 @@ class Controller extends SymfonyController
     {
         $categories = $this->get('orm.manager')
             ->getRepository('Category')
-            ->findBy(
-                'internal_category in [1, 9, 7, 11]'
-                . ' order by internal_category asc, title asc'
-            );
+            ->findBy('order by name asc');
 
         $categories = array_map(function ($a) {
             // Sometimes category is array. When create & update advertisement
@@ -258,7 +255,6 @@ class Controller extends SymfonyController
             return [
                 'id'     => (int) $a->pk_content_category,
                 'name'   => $a->title,
-                'type'   => $a->internal_category,
                 'parent' => (int) $a->fk_content_category
             ];
         }, $categories);

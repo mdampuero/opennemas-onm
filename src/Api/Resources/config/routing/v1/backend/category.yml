@@ -1,0 +1,102 @@
+api_v1_backend_category_create:
+    path:     /categories/new
+    defaults: { _controller: ApiBundle:V1/Backend/Category:create }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_category_delete:
+    path:     /categories/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Category:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_category_empty:
+    path:     /categories/{id}/empty
+    defaults: { _controller: ApiBundle:V1/Backend/Category:empty }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_category_move:
+    path:     /categories/{id}/move
+    defaults: { _controller: ApiBundle:V1/Backend/Category:move }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_category_patch:
+    path:     /categories/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Category:patch }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_category_save:
+    path:     /categories
+    defaults: { _controller: ApiBundle:V1/Backend/Category:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_category_show:
+    path:     /categories/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Category:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_category_update:
+    path:     /categories/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Category:update }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_categories_delete:
+    path:     /categories
+    defaults: { _controller: ApiBundle:V1/Backend/Category:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_categories_empty:
+    path:     /categories/empty
+    defaults: { _controller: ApiBundle:V1/Backend/Category:emptySelected }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_categories_list:
+    path:     /categories
+    defaults: { _controller: ApiBundle:V1/Backend/Category:list, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_categories_move:
+    path:     /categories/move
+    defaults: { _controller: ApiBundle:V1/Backend/Category:moveSelected }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_categories_patch:
+    path:     /categories
+    defaults: { _controller: ApiBundle:V1/Backend/Category:patchSelected }
+    methods:  [ PATCH ]
+    options:
+        expose: true

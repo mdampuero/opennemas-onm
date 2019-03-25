@@ -219,7 +219,7 @@ class RedisCommand extends ContainerAwareCommand
                 $this->cache->get($key) : $this->cache->fetch($key);
 
             $result = is_object($result) || is_array($result) ?
-                json_encode($result) : $result;
+                serialize($result) : $result;
 
             $response[] = [ 'key' => $key, 'value' => $result ];
         }

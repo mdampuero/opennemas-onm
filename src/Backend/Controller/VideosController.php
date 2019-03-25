@@ -23,32 +23,6 @@ use Common\Core\Controller\Controller;
 class VideosController extends Controller
 {
     /**
-     * Common code for all the actions.
-     */
-    public function init()
-    {
-        $this->contentType = \ContentManager::getContentTypeIdFromName('video');
-
-        $this->category = $this->get('request_stack')->getCurrentRequest()
-            ->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-
-        $this->ccm = \ContentCategoryManager::get_instance();
-
-        list($this->parentCategories, $this->subcat, $this->categoryData) =
-            $this->ccm->getArraysMenu($this->category, $this->contentType);
-        if (empty($this->category)) {
-            $this->category = 'widget';
-        }
-
-        $this->view->assign([
-            'category'     => $this->category,
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->categoryData,
-        ]);
-    }
-
-    /**
      * List videos.
      *
      * @Security("hasExtension('VIDEO_MANAGER')
@@ -56,23 +30,7 @@ class VideosController extends Controller
      */
     public function listAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
-
-        foreach ($this->parentCategories as $key => $category) {
-            $categories[] = [
-                'name' => $category->title,
-                'value' => $category->pk_content_category
-            ];
-
-            foreach ($this->subcat[$key] as $subcategory) {
-                $categories[] = [
-                    'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->pk_content_category
-                ];
-            }
-        }
-
-        return $this->render('video/list.tpl', [ 'categories' => $categories ]);
+        return $this->render('video/list.tpl');
     }
 
     /**
@@ -512,59 +470,6 @@ class VideosController extends Controller
             [
                 'videos'     => $videos,
                 'pagination' => $pagination,
-            ]
-        );
-    }
-
-    /**
-     * Lists all the videos within a category for the related manager.
-     *
-     * @param  Request $request The request object.
-     * @return Response         The response object.
-     *
-     * @Security("hasExtension('VIDEO_MANAGER')")
-     */
-    public function contentProviderRelatedAction(Request $request)
-    {
-        $categoryId   = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = $this->get('orm.manager')->getDataSet('Settings')
-            ->get('items_per_page') ?: 20;
-
-        $em       = $this->get('entity_repository');
-        $category = $this->get('category_repository')->find($categoryId);
-
-        $filters = [
-            'content_type_name' => [['value' => 'video']],
-            'in_litter'         => [['value' => 1, 'operator' => '!=']]
-        ];
-
-        if ($categoryId != 0) {
-            $filters['category_name'] = [['value' => $category->name]];
-        }
-
-        $videos      = $em->findBy($filters, ['created' => 'desc'], $itemsPerPage, $page);
-        $countVideos = $em->countBy($filters);
-
-        $pagination = $this->get('paginator')->get([
-            'epp'   => $itemsPerPage,
-            'page'  => $page,
-            'total' => $countVideos,
-            'route' => [
-                'name'   => 'admin_videos_content_provider_related',
-                'params' => [ 'category' => $categoryId, ]
-            ],
-        ]);
-
-        return $this->render(
-            'common/content_provider/_container-content-list.tpl',
-            [
-                'contentType'           => 'Video',
-                'contents'              => $videos,
-                'contentTypeCategories' => $this->parentCategories,
-                'category'              => $this->category,
-                'pagination'            => $pagination,
-                'contentProviderUrl'    => $this->generateUrl('admin_videos_content_provider_related'),
             ]
         );
     }

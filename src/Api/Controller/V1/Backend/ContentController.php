@@ -97,18 +97,7 @@ class ContentController extends ApiController
      **/
     protected function getExtraData($items = null)
     {
-        $security   = $this->get('core.security');
-        $converter  = $this->get('orm.manager')->getConverter('Category');
-        $categories = $this->get('orm.manager')
-            ->getRepository('Category')
-            ->findBy('internal_category = 1');
-
-        $categories = array_filter($categories, function ($category) use ($security) {
-            return $security->hasCategory($category->pk_content_category);
-        });
-
         $extra = [
-            'categories'       => $converter->responsify($categories),
             'related_contents' => $this->getRelatedContents($items),
             'tags'             => $this->getTagsFromItems($items),
             'template_vars'    => [

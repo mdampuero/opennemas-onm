@@ -99,61 +99,6 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Shows the content provider with articles in newsletter.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('ARTICLE_MANAGER')")
-     */
-    public function contentProviderInFrontpageAction(Request $request)
-    {
-        $categoryId   = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 20);
-
-        $em       = $this->get('entity_repository');
-        $category = $this->get('category_repository')->find($categoryId);
-
-        $filters = [
-            'content_type_name' => [[ 'value' => 'article' ]],
-            'content_status'    => [[ 'value' => 1 ]],
-            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]]
-        ];
-
-        if ($categoryId != 0) {
-            $filters['category_name'] = [ [ 'value' => $category->name ] ];
-        }
-
-        $countArticles = true;
-        $articles      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countArticles);
-
-        $pagination = $this->get('paginator')->get([
-            'boundary'    => true,
-            'directional' => true,
-            'epp'         => $itemsPerPage,
-            'maxLinks'    => 5,
-            'page'        => $page,
-            'total'       => $countArticles,
-            'route'       => [
-                'name'   => 'admin_articles_content_provider_in_frontpage',
-                'params' => ['category' => $categoryId]
-            ]
-        ]);
-
-        return $this->render('common/content_provider/_container-content-list.tpl', [
-            'contentType'           => 'Article',
-            'contents'              => $articles,
-            'contentTypeCategories' => $this->parentCategories,
-            'category'              => $this->category,
-            'pagination'            => $pagination->links,
-            'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_in_frontpage'),
-        ]);
-    }
-
-    /**
      * Lists all the articles with the suggested flag activated.
      *
      * @param  Request  $request The request object.
@@ -230,18 +175,12 @@ class ArticlesController extends Controller
         $ids = $this->get('api.service.frontpage_version')
             ->getContentIds($categoryId, $frontpageVersionId, 'Article');
 
-        $category = $this->get('category_repository')->find($categoryId);
-
         $filters = [
-            'content_type_name' => [ [ 'value' => 'article' ] ],
-            'content_status'    => [ [ 'value' => 1 ] ],
-            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ],
-            'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ],
+            'content_type_name'      => [ [ 'value' => 'article' ] ],
+            'content_status'         => [ [ 'value' => 1 ] ],
+            'in_litter'              => [ [ 'value' => 1, 'operator' => '!=' ] ],
+            'pk_content'             => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ],
         ];
-
-        if ($categoryId != 0) {
-            $filters['category_name'] = [ [ 'value' => $category->name ] ];
-        }
 
         $countArticles = true;
         $articles      = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page, 0, $countArticles);
@@ -258,7 +197,7 @@ class ArticlesController extends Controller
             'route'       => [
                 'name'   => 'admin_articles_content_provider_category',
                 'params' => [
-                    'category'           => $categoryId
+                    'category' => $categoryId
                 ]
             ],
         ]);
@@ -266,62 +205,6 @@ class ArticlesController extends Controller
         return $this->render('article/content-provider-category.tpl', [
             'articles'   => $articles,
             'pagination' => $pagination,
-        ]);
-    }
-
-    /**
-     * Lists all the articles within a category for the related manager.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('ARTICLE_MANAGER')")
-     */
-    public function contentProviderRelatedAction(Request $request)
-    {
-        $categoryId   = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 20);
-
-        $em       = $this->get('entity_repository');
-        $category = $this->get('category_repository')->find($categoryId);
-
-        $filters = [
-            'content_type_name' => [ [ 'value' => 'article' ] ],
-            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ]
-        ];
-
-        if ($categoryId != 0) {
-            $filters['category_name'] = [ [ 'value' => $category->name ] ];
-        }
-
-        $countArticles = true;
-        $articles      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countArticles);
-
-        $this->get('core.locale')->setContext('frontend');
-
-        $pagination = $this->get('paginator')->get([
-            'boundary'    => true,
-            'directional' => true,
-            'epp'         => $itemsPerPage,
-            'maxLinks'    => 5,
-            'page'        => $page,
-            'total'       => $countArticles,
-            'route'       => [
-                'name'   => 'admin_articles_content_provider_related',
-                'params' => ['category' => $categoryId]
-            ],
-        ]);
-
-        return $this->render('common/content_provider/_container-content-list.tpl', [
-            'contentType'           => 'Article',
-            'contents'              => $articles,
-            'contentTypeCategories' => $this->parentCategories,
-            'category'              => $this->category,
-            'pagination'            => $pagination->links,
-            'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_related'),
         ]);
     }
 

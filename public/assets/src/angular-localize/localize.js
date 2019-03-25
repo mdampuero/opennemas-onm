@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   /**
@@ -20,8 +20,9 @@
        *
        * @return {Object} The linker
        */
-      this.get = function(keys, scope, clean, ignore) {
+      this.get = function(properties, defaultKey, scope, clean, ignore) {
         return {
+
           /**
            * Flag to delete objects not found in original values when enabled.
            *
@@ -30,7 +31,14 @@
           clean: clean,
 
           /**
-           * List of keys to ignore in this linker.
+           * The fallback key when current key has no value.
+           *
+           * @type {String}
+           */
+          defaultKey: defaultKey,
+
+          /**
+           * List of properties to ignore in this linker.
            *
            * @type {Array}
            */
@@ -44,11 +52,11 @@
           key: null,
 
           /**
-           * The list of keys that have to be updated on change.
+           * The last key name.
            *
-           * @type {Array}
+           * @type {String}
            */
-          keys: keys,
+          previousKey: null,
 
           /**
            * The localized item or list of localized items
@@ -63,6 +71,13 @@
            * @type {Object}
            */
           original: null,
+
+          /**
+           * The list of properties that have to be updated on change.
+           *
+           * @type {Array}
+           */
+          properties: properties,
 
           /**
            * The scope who watches source and target.
@@ -88,7 +103,8 @@
 
             // Link objects
             if (!angular.isArray(original) || !angular.isArray(localized)) {
-              return this.linkItem(original, localized);
+              this.linkItem(original, localized);
+              return;
             }
 
             // Different lists' length
@@ -109,7 +125,15 @@
            * @param {Object} localized The localized item.
            */
           linkItem: function(original, localized) {
-            var self = this;
+            var that = this;
+
+            this.scope.$watch(function() {
+              return that.key;
+            }, function(nv, ov) {
+              if (ov && nv && ov !== nv) {
+                that.previousKey = ov;
+              }
+            }, true);
 
             // Localized changes
             this.scope.$watch(function() {
@@ -119,7 +143,7 @@
                 return;
               }
 
-              self.updateOriginal(original, nv);
+              that.updateOriginal(original, nv);
             }, true);
 
             // Original changes
@@ -130,7 +154,7 @@
                 return;
               }
 
-              self.updateLocalized(localized, nv);
+              that.updateLocalized(localized, nv);
             }, true);
           },
 
@@ -155,22 +179,40 @@
            * @param {Object} original  The original item.
            */
           updateLocalized: function(localized, original) {
-            var self  = this;
+            var that = this;
 
-            for (var i = 0; i < this.keys.length; i++) {
-              if (original[this.keys[i]]) {
-                if (this.clean) {
-                  delete localized[this.keys[i]];
-                }
+            for (var i = 0; i < this.properties.length; i++) {
+              var property = this.properties[i];
 
-                if (original[this.keys[i]][this.key]) {
-                  localized[this.keys[i]] = original[this.keys[i]][this.key];
-                }
+              if (!original[property]) {
+                continue;
+              }
+
+              if (this.clean) {
+                delete localized[property];
+              }
+
+              // Use string in default key only
+              if (angular.isString(original[property]) &&
+                  this.defaultKey === this.key) {
+                localized[property] = original[property];
+                continue;
+              }
+
+              // Use value from key
+              if (original[property][this.key]) {
+                localized[property] = original[property][this.key];
+                continue;
+              }
+
+              // Fallback only when not cleaning
+              if (!this.clean && original[property][this.defaultKey]) {
+                localized[property] = original[property][this.defaultKey];
               }
             }
 
             var ukeys = Object.keys(original).filter(function(e) {
-              return self.keys.indexOf(e) < 0 && self.ignore.indexOf(e) < 0;
+              return that.properties.indexOf(e) < 0 && that.ignore.indexOf(e) < 0;
             });
 
             for (var i = 0; i < ukeys.length; i++) {
@@ -185,22 +227,60 @@
            * @param {Object} localized The localized item.
            */
           updateOriginal: function(original, localized) {
-            var self  = this;
+            var that = this;
 
-            for (var i = 0; i < this.keys.length; i++) {
-              if (!original[this.keys[i]]) {
-                original[this.keys[i]] = {};
+            for (var i = 0; i < this.properties.length; i++) {
+              var property = this.properties[i];
+              var newValue = localized[property];
+
+              // Value missing, initialize as string
+              if (!original[property]) {
+                original[property] = '';
               }
 
-              if (angular.isObject(original[this.keys[i]])) {
-                original[this.keys[i]][this.key] = localized[this.keys[i]];
+              // Not changed, skip
+              if (original[property] === newValue) {
+                continue;
+              }
+
+              if (angular.isString(original[property])) {
+                var oldValue = original[property];
+
+                // Locale changed or not default, convert string to l10n_string
+                if (this.previousKey || this.key !== this.defaultKey) {
+                  original[property] = {};
+
+                  // Keep old value in default key
+                  if (oldValue) {
+                    original[property][this.defaultKey] = oldValue;
+                  }
+
+                  // Set new value in current key
+                  original[property][this.key] = newValue;
+                  continue;
+                }
+
+                // Locale not changed, update string
+                original[property] = newValue;
+              }
+
+              // Update current key in the l10n_string
+              if (angular.isObject(original[property])) {
+                original[property][this.key] = newValue;
+              }
+
+              if (this.clean && original[property]) {
+                if (!original[property][this.key]) {
+                  delete original[property][this.key];
+                }
               }
             }
 
             var ukeys = Object.keys(localized).filter(function(e) {
-              return self.keys.indexOf(e) < 0 && self.ignore.indexOf(e) < 0;
+              return that.properties.indexOf(e) < 0 && that.ignore.indexOf(e) < 0;
             });
 
+            // Do not parse unlocalized keys
             for (var i = 0; i < ukeys.length; i++) {
               original[ukeys[i]] = localized[ukeys[i]];
             }
@@ -218,7 +298,7 @@
       };
 
       return this;
-    }).factory('localizer', function () {
+    }).factory('localizer', function() {
       /**
        * @function get
        * @memberOf linker
@@ -230,11 +310,12 @@
        */
       this.get = function(config) {
         return {
+
           /**
            * The localizer configuration.
            *
            * @type {Object}
-          */
+           */
           config: config,
 
           /**
@@ -252,6 +333,7 @@
             }
 
             var localized = [];
+
             for (var i = 0; i < item.length; i++) {
               localized.push(this.localizeItem(item[i], keys, locale));
             }
@@ -296,7 +378,7 @@
            * @return {String} The localized value.
            */
           localizeValue: function(value, locale) {
-            if (!angular.isObject(value)) {
+            if (angular.isString(value) || !angular.isObject(value)) {
               return value;
             }
 
@@ -304,8 +386,16 @@
               return value[locale];
             }
 
+            // Return first locale found in available
             for (var key in this.config.available) {
               if (value[key] && value[key] !== '') {
+                return value[key];
+              }
+            }
+
+            // Return first valid locale basing on key pattern
+            for (var key in value) {
+              if (/[a-z]{2}(_[A-Z]{2})?/.test(key)) {
                 return value[key];
               }
             }
@@ -316,5 +406,5 @@
       };
 
       return this;
-    }) ;
+    });
 })();

@@ -27,10 +27,7 @@
     </span>
     <span ng-show="template.type === 'Article' && texts > 0">
       &nbsp;{t}in{/t}&nbsp;
-      <select id="category" name="category" ng-model="template.category">
-        <option value="">{t}Choose a category...{/t}</option>
-        <option value="[% category.value %]" ng-repeat="category in template.categories">[% category.name %]</option>
-      </select>
+      <onm-category-selector class="select2-border" default-value-text="{t}Select a category{/t}…" ng-model="template.category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
     </span>
     <span ng-show="template.type === 'Opinion' && texts > 0">
       &nbsp;{t}by{/t}&nbsp;

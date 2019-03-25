@@ -10,6 +10,10 @@ api_v1_backend_event:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/event.yml'
     prefix:   /backend
 
+api_v1_backend_category:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/category.yml'
+    prefix:   /backend
+
 api_v1_backend_file:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/file.yml'
     prefix:   /backend

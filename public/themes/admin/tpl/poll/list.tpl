@@ -109,14 +109,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|clear_json}">
-              <ui-select name="author" theme="select2" ng-model="criteria.pk_fk_content_category">
-                <ui-select-match>
-                  <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
-                </ui-select-match>
-                <ui-select-choices repeat="item.value as item in categories | filter: { name: $select.search }">
-                  <div ng-bind-html="item.name | highlight: $select.search"></div>
-                </ui-select-choices>
-              </ui-select>
+              <onm-category-selector default-value-text="{t}Any{/t}" label-text="{t}Category{/t}" locale="config.locale.selected" ng-model="criteria.pk_fk_content_category" placeholder="{t}Any{/t}"></onm-category-selector>
             </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
               <ui-select name="status" theme="select2" ng-model="criteria.content_status">

@@ -29,10 +29,9 @@ class NewsAgencyServerController extends Controller
     public function createAction()
     {
         return $this->render('news_agency/config/new.tpl', [
-            'authors'    => $this->getAuthors(),
-            'categories' => $this->getCategories(),
-            'server'     => [],
-            'sync_from'  => $this->getSyncFrom()
+            'authors'   => $this->getAuthors(),
+            'server'    => [],
+            'sync_from' => $this->getSyncFrom()
         ]);
     }
 
@@ -142,10 +141,9 @@ class NewsAgencyServerController extends Controller
         }
 
         return $this->render('news_agency/config/new.tpl', [
-            'authors'    => $this->getAuthors(),
-            'categories' => $this->getCategories(),
-            'server'     => $servers[$id],
-            'sync_from'  => $this->getSyncFrom()
+            'authors'   => $this->getAuthors(),
+            'server'    => $servers[$id],
+            'sync_from' => $this->getSyncFrom()
         ]);
     }
 
@@ -216,28 +214,6 @@ class NewsAgencyServerController extends Controller
         }
 
         return $authors;
-    }
-
-    /**
-     * Returns the list of categories for the selector.
-     *
-     * @return array The list of categories.
-     */
-    protected function getCategories()
-    {
-        $items = $this->get('orm.manager')->getRepository('Category')
-            ->findBy('internal_category = 1 order by title asc');
-
-        $categories = [];
-        foreach ($items as $category) {
-            $categories[$category->pk_content_category] = $this
-                ->get('data.manager.filter')
-                ->set($category->title)
-                ->filter('localize')
-                ->get();
-        }
-
-        return $categories;
     }
 
     /**

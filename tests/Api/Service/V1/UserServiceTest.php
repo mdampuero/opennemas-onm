@@ -49,8 +49,12 @@ class UserServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'addCondition', 'fix', 'getOql' ])
             ->getMock();
 
+        $this->locale = $this->getMockBuilder('Locale')
+            ->setMethods([ 'getContext' ])
+            ->getMock();
+
         $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
-            ->setMethods([ 'getId', 'getIdKeys' ])
+            ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
             ->getMock();
 
         $this->logger = $this->getMockBuilder('Logger' . uniqid())
@@ -92,6 +96,9 @@ class UserServiceTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'core.dispatcher':
                 return $this->dispatcher;
+
+            case 'core.locale':
+                return $this->locale;
 
             case 'core.security.encoder.password':
                 return $this->encoder;
@@ -385,8 +392,8 @@ class UserServiceTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->once())->method('findBy')
             ->with('type != 0 and id in [1,2]')
             ->willReturn([ $itemA, $itemB ]);
-        $this->em->expects($this->at(2))->method('remove');
-        $this->em->expects($this->at(3))->method('remove')
+        $this->em->expects($this->at(3))->method('remove');
+        $this->em->expects($this->at(4))->method('remove')
             ->will($this->throwException(new \Exception()));
 
         $this->logger->expects($this->once())->method('error');

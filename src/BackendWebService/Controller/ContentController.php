@@ -924,30 +924,22 @@ class ContentController extends Controller
      */
     protected function loadExtraData($contents = [])
     {
-        $extra    = [];
-        $as       = $this->get('api.service.author');
-        $response = $as->getList('order by name asc');
+        $extra = [ 'options' => $this->getLocaleData('frontend', null, false) ];
 
+        $as = $this->get('api.service.author');
+        $cs = $this->get('api.service.category');
+
+        $response         = $as->getList('order by name asc');
         $extra['authors'] = $as->responsify($response['items']);
 
-        $ccm = \ContentCategoryManager::get_instance();
+        $this->get('core.locale')->setContext('frontend');
+        $response = $cs->getList();
+        $this->get('core.locale')->setContext('backend');
 
-        $categories          = $ccm->findAll();
-        $extra['categories'] = [];
-        $categories          = $this->get('data.manager.filter')
-            ->set($categories)->filter('localize', [
-                'keys' => \ContentCategory::getL10nKeys(),
-                'locale' => $this->getLocaleData('frontend')['default']
-            ])->get();
-
-        foreach ($categories as $category) {
-            $extra['categories'][$category->id] = $this->get('data.manager.filter')
-                ->set($category->title)
-                ->filter('localize')
-                ->get();
+        foreach ($response['items'] as $item) {
+            $extra['categories'][$item->pk_content_category] = $item->title;
         }
 
-        $extra['options'] = $this->getLocaleData('frontend', null, false);
 
         return $extra;
     }

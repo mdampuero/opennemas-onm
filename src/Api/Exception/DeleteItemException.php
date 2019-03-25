@@ -9,6 +9,6 @@
  */
 namespace Api\Exception;
 
-class DeleteItemException extends \Exception
+class DeleteItemException extends ApiException
 {
 }

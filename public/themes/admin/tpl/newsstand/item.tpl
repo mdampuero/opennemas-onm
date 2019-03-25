@@ -34,11 +34,11 @@ jQuery(document).ready(function($) {
             </h4>
           </li>
           <li class="quicklinks">
-            <a class="no-padding" href="{url name=backend_newsstands}" title="{t}Go back to list{/t}">
-              <h4>
+            <h4>
+              <a class="no-padding" href="{url name=backend_newsstands}" title="{t}Go back to list{/t}">
                 {t}Newsstand{/t}
-              </h4>
-            </a>
+              </a>
+            </h4>
           </li>
           <li class="quicklinks hidden-xs m-l-5 m-r-5">
             <h4>
@@ -196,7 +196,7 @@ jQuery(document).ready(function($) {
                 <div class="form-group">
                   <label for="category" class="form-label">{t}Category{/t}</label>
                   <div class="controls">
-                    <onm-category-selector class="block" ng-model="item.category" categories="categories" placeholder="{t}Select a category{/t}" default-value-text="{t}Select a category...{/t}" required />
+                    <onm-category-selector class="block" ng-model="item.category" categories="categories" placeholder="{t}Select a category{/t}…" default-value-text="{t}Select a category{/t}…" required />
                   </div>
                 </div>
 

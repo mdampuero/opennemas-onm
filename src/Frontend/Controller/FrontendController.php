@@ -9,8 +9,8 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\ApiException;
 use Common\Core\Controller\Controller;
-use Common\ORM\Core\Exception\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -63,13 +63,11 @@ class FrontendController extends Controller
         $this->checkSecurity($this->extension);
 
         $action = $this->get('core.globals')->getAction();
-        $route  = $this->getRoute($action);
+        $params = $this->getQueryParameters($action, $request->query->all());
 
-        $expected = $this->get('router')->generate($route);
-        $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
+        $expected = $this->getExpectedUri($action, $params);
 
-
-        if ($request->getPathInfo() !== $expected) {
+        if (strpos($request->getRequestUri(), $expected) === false) {
             return new RedirectResponse($expected, 301);
         }
 
@@ -98,15 +96,7 @@ class FrontendController extends Controller
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
 
-        if (empty($item)
-            || !$item instanceof \Content
-            || !$item->isReadyForPublish()
-        ) {
-            throw new ResourceNotFoundException();
-        }
-
-        $expected = $this->get('core.helper.url_generator')->generate($item);
-        $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
+        $expected = $this->getExpectedUri($action, [ 'item' => $item ]);
 
         if ($request->getPathInfo() !== $expected
             && empty($this->get('request_stack')->getParentRequest())
@@ -157,10 +147,6 @@ class FrontendController extends Controller
 
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
-
-        if (empty($item) || !$item->isReadyForPublish()) {
-            throw new ResourceNotFoundException();
-        }
 
         $params = $this->getParameters($request, $item);
 
@@ -223,6 +209,30 @@ class FrontendController extends Controller
     }
 
     /**
+     * Returns the expire time for cache basing on the endtime of all items in
+     * a list.
+     *
+     * @param array $items The list of items.
+     *
+     * @return string The expire time for cache.
+     */
+    protected function getCacheExpire(array $items)
+    {
+        $listOfExpires = array_filter($items, function ($a) {
+            return !empty($a->endtime);
+        });
+
+        if (empty($listOfExpires)) {
+            return null;
+        }
+        return min(array_map(function ($a) {
+            return $a->endtime instanceof \Datetime
+                ? $a->endtime->format('Y-m-d H:i:s')
+                : $a->endtime;
+        }, $listOfExpires));
+    }
+
+    /**
      * Returns the cache id basing on the list of parameters.
      *
      * @param array $params The list of parameters.
@@ -266,18 +276,40 @@ class FrontendController extends Controller
     protected function getCategory($name)
     {
         try {
-            $category = $this->get('orm.manager')->getRepository('Category')
-                ->findOneBy(sprintf('name = "%s"', $name));
-
-            $category->title = $this->get('data.manager.filter')
-                ->set($category->title)
-                ->filter('localize')
-                ->get();
-
-            return $category;
-        } catch (EntityNotFoundException $e) {
+            return $this->get('api.service.category')->getItemBySlug($name);
+        } catch (ApiException $e) {
             throw new ResourceNotFoundException();
         }
+    }
+
+    /**
+     * Returns the expected URI for the list action basing on the current
+     * action and a list of parameters.
+     *
+     * @param string $action The current action.
+     * @param array  $params The list of parameters.
+     *
+     * @return string The expected URI.
+     */
+    protected function getExpectedUri($action, $params = [])
+    {
+        if ($action === 'list') {
+            $route = $this->getRoute($action);
+
+            // Do not support page=1 in query string
+            if (array_key_exists('page', $params) && $params['page'] == 1) {
+                unset($params['page']);
+            }
+
+            $expected = $this->get('router')->generate($route, $params);
+
+            return $this->get('core.helper.l10n_route')->localizeUrl($expected);
+        }
+
+        $expected = $this->get('core.helper.url_generator')
+            ->generate($params['item']);
+
+        return $this->get('core.helper.l10n_route')->localizeUrl($expected);
     }
 
     /**
@@ -318,12 +350,18 @@ class FrontendController extends Controller
     protected function getItem(Request $request)
     {
         $contentType = $request->get('content_type')
-            ?? \classify($this->get('core.globals')->getExtension());
+            ?? $this->get('core.globals')->getExtension();
 
-        return $this->get('entity_repository')->find(
+        $item = $this->get('entity_repository')->find(
             \classify($contentType),
             $this->getIdFromRequest($request)
         );
+
+        if (empty($item) || !$item->isReadyForPublish()) {
+            throw new ResourceNotFoundException();
+        }
+
+        return $item;
     }
 
     /**
@@ -358,6 +396,7 @@ class FrontendController extends Controller
 
         if (array_key_exists('category_name', $params)) {
             $params['o_category'] = $this->getCategory($params['category_name']);
+            $params['category']   = $this->getCategory($params['category_name']);
         }
 
         // TODO: Clean this ASAP
@@ -393,8 +432,8 @@ class FrontendController extends Controller
      * Returns the list of valid query parameters from the request for the
      * provided action.
      *
-     * @param string  $action  The action name.
-     * @param Request $request The current request.
+     * @param string $action The action name.
+     * @param array  $params The list of parameters.
      *
      * @return array The list of valid parameters.
      */
@@ -460,7 +499,7 @@ class FrontendController extends Controller
      *
      * @param array $params the list of parameters already in set.
      */
-    protected function hydrateList(array $params): void
+    protected function hydrateList(array &$params) : void
     {
     }
 

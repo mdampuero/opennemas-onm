@@ -199,6 +199,10 @@
          *                   returns false
          */
         this.isFlash = function(image, property) {
+          if (!image) {
+            return false;
+          }
+
           if (typeof image === 'object') {
             if (property) {
               image = image[property];

@@ -30,17 +30,13 @@ class VideosController extends Controller
         $this->category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
         if (!empty($this->category_name) && $this->category_name != 'home') {
-            $categoryManager = $this->get('category_repository');
-            $category        = $categoryManager->findBy(
-                ['name' => [['value' => $this->category_name]]],
-                'name ASC'
-            );
-
-            if (empty($category)) {
+            try {
+                $category = $this->get('api.service.category')
+                    ->getItemBySlug($this->category_name);
+            } catch (\Exception $e) {
                 throw new ResourceNotFoundException();
             }
 
-            $category       = $category[0];
             $this->category = $category->pk_content_category;
 
             $this->view->assign([
@@ -106,20 +102,10 @@ class VideosController extends Controller
 
             $allVideos = [];
 
-            if ($categoryName != 'home') {
-                $categoryManager = $this->get('category_repository');
-                $category        = $categoryManager->findOneBy(
-                    [ 'name' => [['value' => $categoryName ]] ],
-                    'name ASC'
-                );
-
-                if (empty($category)) {
-                    throw new ResourceNotFoundException();
-                }
-
+            if ($this->category != 0) {
                 $criteria = array_merge(
                     $baseCriteria,
-                    ['pk_fk_content_category' => [[ 'value' => $category->id ]] ]
+                    ['pk_fk_content_category' => [[ 'value' => $this->category ]] ]
                 );
 
                 $allVideos = $em->findBy(
@@ -512,8 +498,9 @@ class VideosController extends Controller
         ];
 
         if ($this->category != 0) {
-            $category                 = $this->get('category_repository')->find($this->category);
-            $filters['category_name'] = [['value' => $category->name]];
+            $filters['pk_fk_content_category'] = [
+                [ 'value' => $this->category ]
+            ];
         }
 
         $em = $this->get('entity_repository');
