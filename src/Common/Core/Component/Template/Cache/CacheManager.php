@@ -10,8 +10,6 @@
 namespace Common\Core\Component\Template\Cache;
 
 use Onm\Templating\Templating;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 
 class CacheManager
 {
@@ -30,8 +28,6 @@ class CacheManager
     public function __construct(Templating $template)
     {
         $this->template = $template;
-        $this->finder   = new Finder();
-        $this->fs       = new Filesystem();
     }
 
     /**
@@ -58,13 +54,10 @@ class CacheManager
         // Make a regular expression to filter
         $cacheId = '/^' . preg_quote($cacheId) . '\^.*?' . '/';
 
-        $files = $this->finder
-            ->in($this->template->getCacheDir())
-            ->name($cacheId)
-            ->files();
+        $files = $this->getFiles($cacheId);
 
         foreach ($files as $file) {
-            $this->deleteFile($file->getPathName());
+            $this->deleteFile($file);
         }
 
         return $this;
@@ -86,17 +79,48 @@ class CacheManager
      * Removes a cache file  and cleans opcache internal cache.
      *
      * @param string $path The path to the file to remove.
+     *
+     * @codeCoverageIgnore
      */
     protected function deleteFile($path)
     {
-        if (!$this->fs->exists($path)) {
+        if (!file_exists($path)) {
             return;
         }
-
-        $this->fs->remove($path);
 
         if (function_exists('opcache_invalidate')) {
             opcache_invalidate($path, true);
         }
+
+        unlink($path);
+    }
+
+    /**
+     * Returns a list of files matching pattern.
+     *
+     * @param string $pattern The pattern to match.
+     *
+     * @return array The list of files.
+     *
+     * @codeCoverageIgnore
+     */
+    protected function getFiles($pattern = null)
+    {
+        $caches = [];
+        $files  = new \DirectoryIterator($this->template->cache_dir);
+
+        foreach ($files as $file) {
+            if ($files->isDot()) {
+                continue;
+            }
+
+            $filename = $file->current()->getFilename();
+
+            if (empty($pattern) || preg_match($pattern, $filename)) {
+                $caches[] = $filename;
+            }
+        }
+
+        return $caches;
     }
 }
