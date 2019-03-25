@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "34559a1375540e7d5503fcee37f44c6f",
+    "content-hash": "7e4b1f2a6e0e3dfefd50a3f44a70161c",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1257,7 +1257,7 @@
             "version": "1.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zikula/NativeSession",
+                "url": "https://github.com/openhost/NativeSession",
                 "reference": "81653296944b00be03364a6ccc111ccafa52f087"
             },
             "require": {
@@ -7725,7 +7725,7 @@
         "cometcult/braintree-bundle": 20,
         "rtconner/freshbooks-api": 20
     },
-    "prefer-stable": true,
+    "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=5.5.9"
