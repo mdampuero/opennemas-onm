@@ -127,7 +127,7 @@ class Frontpages
             $category = getService('api.service.category')
                 ->getItemBySlug($categoryName);
         } catch (\Exception $e) {
-            throw new resourceNotFoundException();
+            throw new ResourceNotFoundException();
         }
 
         $category = $category[0];
