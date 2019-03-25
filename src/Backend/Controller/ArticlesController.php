@@ -180,6 +180,7 @@ class ArticlesController extends Controller
             'content_status'         => [ [ 'value' => 1 ] ],
             'in_litter'              => [ [ 'value' => 1, 'operator' => '!=' ] ],
             'pk_content'             => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ],
+            'pk_fk_content_category' => [ [ 'value' => $categoryId ] ],
         ];
 
         $countArticles = true;
