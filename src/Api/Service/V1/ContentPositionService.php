@@ -121,7 +121,7 @@ class ContentPositionService extends OrmService
         } catch (\Exception $e) {
             $conn->rollback();
 
-            $this->applicationLog->error(spritnf(
+            $this->applicationLog->error(sprintf(
                 'User %d (%s) updated frontpage of category %s with error message: %s',
                 $this->user->username,
                 $this->user->id,
