@@ -46,6 +46,17 @@ class OpinionController extends ContentOldController
     }
 
     /**
+     * Returns the list of l10n keys
+     * @param Type $var Description
+     *
+     * @return array
+     **/
+    public function getL10nKeys()
+    {
+        return $this->get($this->service)->getL10nKeys('opinion');
+    }
+
+    /**
      * Returns the list of contents related with items.
      *
      * @param Content $content The content.
@@ -66,15 +77,12 @@ class OpinionController extends ContentOldController
         }
 
         foreach ($content as $element) {
-            $relations = [
-                [ 'pk_content' => $element->pk_content, 'pk_content2' => $element->img1, 'relationship' => 'img1'],
-                [ 'pk_content' => $element->pk_content, 'pk_content2' => $element->img2, 'relationship' => 'img2'],
-            ];
+            foreach (['img1', 'img2'] as $relation) {
+                if (!empty($element->{$relation})) {
+                    $photo = $em->find('Photo', $element->{$relation});
 
-            foreach ($relations as $relation) {
-                $photo = $em->find('Photo', $relation['pk_content2']);
-
-                $extra[] = \Onm\StringUtils::convertToUtf8($photo);
+                    $extra[] = \Onm\StringUtils::convertToUtf8($photo);
+                }
             }
         }
 

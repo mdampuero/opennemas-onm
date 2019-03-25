@@ -331,10 +331,14 @@ class ContentOldService
      *
      * @return array The list of properties that support localization.
      */
-    public function getL10nKeys()
+    public function getL10nKeys($entityName = 'Content')
     {
-        return [ 'body', 'description', 'slug', 'title' ];
-        // return $this->em->getMetadata($this->entity)->getL10nKeys();
+        $keys = [];
+        if (!empty($entityName) && class_exists(classify($entityName))) {
+            $keys = (new $entityName)->getL10nKeys();
+        }
+
+        return array_merge($keys);
     }
 
     /**

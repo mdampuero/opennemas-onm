@@ -420,6 +420,14 @@ class Opinion extends Content
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public static function getL10nKeys()
+    {
+        return array_merge(parent::getL10nKeys(), [ 'img1_footer', 'img2_footer' ]);
+    }
+
+    /**
     * Get latest Opinions without opinions present in frontpage
     *
     * @param array $params list of parameters

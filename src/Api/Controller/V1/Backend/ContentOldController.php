@@ -104,6 +104,7 @@ class ContentOldController extends ContentController
 
         $data = $request->request->all();
 
+        // $data['tags'] = $this->parseTags($data['tags']);
         $this->get($this->service)
             ->updateItem($id, $data);
 
@@ -122,13 +123,24 @@ class ContentOldController extends ContentController
         return [
             'related_contents' => $this->getRelatedContents($items),
             'tags'             => $this->getTagsFromItems($items),
-            'keys'             => $this->get($this->service)->getL10nKeys(),
+            'keys'             => $this->getL10nKeys(),
             'authors'          => $this->getAuthors(),
             'locale'           => $this->get('core.helper.locale')->getConfiguration(),
             'template_vars'    => [
                 'media_dir' => $this->get('core.instance')->getMediaShortPath() . '/images',
             ],
         ];
+    }
+
+    /**
+     * Returns the list of l10n keys
+     * @param Type $var Description
+     *
+     * @return array
+     **/
+    public function getL10nKeys()
+    {
+        return $this->get($this->service)->getL10nKeys();
     }
 
     /**

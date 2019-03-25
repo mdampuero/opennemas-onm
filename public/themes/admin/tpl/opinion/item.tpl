@@ -130,7 +130,7 @@
               {t}Additional data{/t}
             </h4>
           </div>
-          <div class="grid-body"{if !empty($opinion)} ng-init="opinion = {json_encode(get_object_vars($opinion))|escape:"html"}"{/if}>
+          <div class="grid-body">
             <autoform ng-model="item" fields-by-module="fieldsByModule"/>
           </div>
         </div>
