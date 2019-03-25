@@ -180,8 +180,11 @@ class ArticlesController extends Controller
             'content_status'         => [ [ 'value' => 1 ] ],
             'in_litter'              => [ [ 'value' => 1, 'operator' => '!=' ] ],
             'pk_content'             => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ],
-            'pk_fk_content_category' => [ [ 'value' => $categoryId ] ],
         ];
+
+        if (!empty($categoryId)) {
+            $filters[] = [ 'pk_fk_content_category' => [ [ 'value' => $categoryId ] ] ];
+        }
 
         $countArticles = true;
         $articles      = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page, 0, $countArticles);
