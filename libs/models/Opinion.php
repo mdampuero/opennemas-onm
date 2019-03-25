@@ -17,7 +17,6 @@
  */
 class Opinion extends Content
 {
-
     /**
      * The name of the setting to save extra field configuration.
      *

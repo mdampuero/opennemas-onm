@@ -44,4 +44,40 @@ class OpinionController extends ContentOldController
             'extra_fields' => $extraFields,
         ], $extra);
     }
+
+    /**
+     * Returns the list of contents related with items.
+     *
+     * @param Content $content The content.
+     *
+     * @return array The list of photos linked to the content.
+     */
+    protected function getRelatedContents($content)
+    {
+        $em    = $this->get('entity_repository');
+        $extra = [];
+
+        if (empty($content)) {
+            return $extra;
+        }
+
+        if (is_object($content)) {
+            $content = [ $content ];
+        }
+
+        foreach ($content as $element) {
+            $relations = [
+                [ 'pk_content' => $element->pk_content, 'pk_content2' => $element->img1, 'relationship' => 'img1'],
+                [ 'pk_content' => $element->pk_content, 'pk_content2' => $element->img2, 'relationship' => 'img2'],
+            ];
+
+            foreach ($relations as $relation) {
+                $photo = $em->find('Photo', $relation['pk_content2']);
+
+                $extra[] = \Onm\StringUtils::convertToUtf8($photo);
+            }
+        }
+
+        return $extra;
+    }
 }

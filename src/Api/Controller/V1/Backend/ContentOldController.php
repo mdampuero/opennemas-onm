@@ -104,8 +104,6 @@ class ContentOldController extends ContentController
 
         $data = $request->request->all();
 
-        $data['tags'] = $this->parseTags($data['tags']);
-
         $this->get($this->service)
             ->updateItem($id, $data);
 
@@ -134,7 +132,7 @@ class ContentOldController extends ContentController
     }
 
     /**
-     * Returns the list of photos linked to the article.
+     * Returns the list of contents related with items.
      *
      * @param Content $content The content.
      *

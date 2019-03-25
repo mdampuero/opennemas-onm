@@ -10,7 +10,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
     /**
-     * @memberOf EventCtrl
+     * @memberOf OpinionCtrl
      *
      * @description
      *  The cover object.
@@ -39,7 +39,27 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     };
 
     /**
-     * @memberOf EventCtrl
+     * @memberOf OpinionCtrl
+     *
+     * @description
+     *  The photo1 object.
+     *
+     * @type {Object}
+     */
+    $scope.photo1 = null;
+
+    /**
+     * @memberOf OpinionCtrl
+     *
+     * @description
+     *  The photo2 object.
+     *
+     * @type {Object}
+     */
+    $scope.photo2 = null;
+
+    /**
+     * @memberOf OpinionCtrl
      *
      * @description
      *  Whether to refresh the item after a successful update.
@@ -49,7 +69,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     $scope.refreshOnUpdate = true;
 
     /**
-     * @memberOf EventCtrl
+     * @memberOf OpinionCtrl
      *
      * @description
      *  The list of routes for the controller.
@@ -83,6 +103,22 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
 
       $scope.configure(data.extra);
       $scope.localize($scope.data.item, 'item', true);
+
+      var img1 = data.extra.related_contents.filter(function(el) {
+        return el.pk_photo === $scope.item.img1;
+      }).shift();
+
+      if (img1) {
+        $scope.photo1 = img1;
+      }
+
+      var img2 = data.extra.related_contents.filter(function(el) {
+        return el.pk_photo === $scope.item.img2;
+      }).shift();
+
+      if (img2) {
+        $scope.photo2 = img2;
+      }
     };
 
     // Update slug when title is updated
@@ -150,16 +186,16 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @param array ov The old values.
      */
     $scope.$watch('photo1', function(nv, ov) {
-      $scope.img1 = null;
+      $scope.item.img1 = null;
 
       if ($scope.photo1) {
-        $scope.img1 = $scope.photo1.id;
+        $scope.item.img1 = nv.id;
 
-        if (angular.isUndefined($scope.img1_footer) ||
+        if (angular.isUndefined($scope.item.img1_footer) ||
           angular.isUndefined(ov) ||
-          nv.id !== ov.id
+          nv.pk_photo !== ov.pk_photo
         ) {
-          $scope.img1_footer = $scope.photo1.description;
+          $scope.item.img1_footer = $scope.photo1.description;
         }
 
         // Set inner image if empty
@@ -176,16 +212,16 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @param array ov The old values.
      */
     $scope.$watch('photo2', function(nv, ov) {
-      $scope.img2 = null;
+      $scope.item.img2 = null;
 
       if ($scope.photo2) {
-        $scope.img2 = $scope.photo2.id;
+        $scope.item.img2 = nv.id;
 
-        if (angular.isUndefined($scope.img2_footer) ||
+        if (angular.isUndefined($scope.item.img2_footer) ||
           angular.isUndefined(ov) ||
-          nv.id !== ov.id
+          nv.pk_photo !== ov.pk_photo
         ) {
-          $scope.img2_footer = $scope.photo2.description;
+          $scope.item.img2_footer = $scope.photo2.description;
         }
       }
     }, true);

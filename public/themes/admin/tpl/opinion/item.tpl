@@ -95,8 +95,8 @@
             <div class="grid-collapse-title">
               <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
             </div>
-            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Frontpage image{/t}" field="img1"}
-            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Inner image{/t}" field="img2"}
+            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Frontpage image{/t}" field="photo1" footer="img1_footer"}
+            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Inner image{/t}" field="photo2" footer="img2_footer"}
           </div>
         </div>
 

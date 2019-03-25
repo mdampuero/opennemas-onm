@@ -15,11 +15,11 @@
     <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.{$field} }">
       <p>Are you sure?</p>
       <div class="confirm-actions">
-        <button class="btn btn-link" ng-click="toggleOverlay('cover')" type="button">
+        <button class="btn btn-link" ng-click="toggleOverlay('{$field}')" type="button">
           <i class="fa fa-times fa-lg"></i>
           {t}No{/t}
         </button>
-        <button class="btn btn-link" ng-click="removeImage('cover');toggleOverlay('cover')" type="button">
+        <button class="btn btn-link" ng-click="removeImage('{$field}');toggleOverlay('{$field}')" type="button">
           <i class="fa fa-check fa-lg"></i>
           {t}Yes{/t}
         </button>
@@ -29,11 +29,11 @@
       <div class="img-thumbnail" ng-show="!{$field}">
         <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="{$field}">
           <i class="fa fa-picture-o fa-2x"></i>
-          <h5>Pick an image</h5>
+          <h5>{t}Pick an image{/t}</h5>
         </div>
       </div>
       <div class="dynamic-image-placeholder" ng-show="{$field}">
-        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="cover">
+        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="{$field}">
           <div class="thumbnail-actions">
             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('{$field}')">
               <i class="fa fa-trash-o fa-2x"></i>
@@ -46,11 +46,11 @@
       </div>
     </div>
     <div class="form-group ng-cloak" ng-show="{$field}">
-      <label class="form-label" for="{$field}_footer">
+      <label class="form-label" for="{$footer}">
         {t}Footer text{/t}
       </label>
       <div class="controls">
-        <textarea class="form-control" name="{$field}_footer" ng-model="{$field}_footer"></textarea>
+        <textarea class="form-control" name="{$footer}" ng-model="{$footer}" ng-value="{$footer}"></textarea>
       </div>
     </div>
   </div>
