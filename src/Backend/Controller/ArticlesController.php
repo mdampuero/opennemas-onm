@@ -183,7 +183,7 @@ class ArticlesController extends Controller
         ];
 
         if (!empty($categoryId)) {
-            $filters[] = [ 'pk_fk_content_category' => [ [ 'value' => $categoryId ] ] ];
+            $filters['pk_fk_content_category'] = [ [ 'value' => $categoryId ] ];
         }
 
         $countArticles = true;
