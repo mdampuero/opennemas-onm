@@ -107,17 +107,17 @@ class CacheManager
     protected function getFiles($pattern = null)
     {
         $caches = [];
-        $files  = new \DirectoryIterator($this->template->cache_dir);
+        $files  = new \DirectoryIterator($this->template->getCacheDir());
 
         foreach ($files as $file) {
             if ($files->isDot()) {
                 continue;
             }
 
-            $filename = $file->current()->getFilename();
-
-            if (empty($pattern) || preg_match($pattern, $filename)) {
-                $caches[] = $filename;
+            if (empty($pattern)
+                || preg_match($pattern, $file->current()->getFileName())
+            ) {
+                $caches[] = $file->current()->getPathName();
             }
         }
 
