@@ -12,11 +12,11 @@ frontend_css_frontpage_category:
         cb : '[0-9]+'
 
 asset_image:
-    path: /asset/{parameters}/{real_path}
+    path: /asset/{params}/{path}
     defaults: { _controller: FrontendBundle:Asset:image }
     requirements:
         parameters : '[^/]+'
-        real_path : '.+'
+        path : '.+'
     options:
         expose: true
 
