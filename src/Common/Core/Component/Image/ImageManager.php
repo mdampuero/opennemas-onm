@@ -9,7 +9,11 @@
  */
 namespace Common\Core\Component\Image;
 
+use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
+use Imagine\Image\Point;
+use Imagine\Imagick\Imagine;
+use Symfony\Component\Filesystem\Filesystem;
 
 /*
  * This class in charge of image processing and transformation.
@@ -17,217 +21,262 @@ use Imagine\Image\ImageInterface;
 class ImageManager
 {
     /**
+     * Default image parameters.
+     *
+     * @var array
+     */
+    protected $defaults = [
+        'resolution-units' => ImageInterface::RESOLUTION_PIXELSPERINCH,
+        'resolution-x'     => 72,
+        'resolution-y'     => 72,
+        'quality'          => 85,
+    ];
+
+    /**
+     * The image to parse.
+     *
+     * @var ImageInterface
+     */
+    protected $image;
+
+    /**
+     * The image manipulator
+     *
+     * @var Imagine
+     */
+    protected $imagine;
+    /**
+     * The list of optimizations to apply on save.
+     *
+     * @var array
+     */
+    protected $optimization = [];
+
+    /**
+     * Initilizes the ImageManager.
+     */
+    public function __construct()
+    {
+        $this->fs = new Filesystem();
+    }
+
+    /*
+     * Sets parameters for an image.
+     *
+     * @param array $params The list of parameters.
+     *
+     * @return string The image content.
+     */
+    public function getContent(array $params = [])
+    {
+        $params = !empty($params) ? $params : $this->defaults;
+
+        return $this->image->get(
+            $this->image->getImagick()->getImageFormat(),
+            $params
+        );
+    }
+
+    /**
+     * Returns the image format.
+     *
+     * @return string The image format.
+     */
+    public function getFormat()
+    {
+        return strtolower($this->image->getImagick()->getImageFormat());
+    }
+
+    /**
+     * Returns the image mime-type.
+     *
+     * @return string The image mime-type.
+     */
+    public function getMimeType()
+    {
+        return $this->image->getImagick()->getImageMimeType();
+    }
+
+    /**
+     * Initializes and opens the image to process with the manager.
+     *
+     * @param string $path The path to the image.
+     *
+     * @return ImageManager The current ImageManager.
+     */
+    public function open($path)
+    {
+        if (!$this->fs->exists($path)) {
+            throw new \InvalidArgumentException();
+        }
+
+        $this->imagine = $this->getImagine();
+        $this->image   = $this->imagine->open($path);
+
+        return $this;
+    }
+
+    /**
+     * Configures the optimization to apply when saving an image. If no
+     * optimization provided, the default optimization will be applied.
+     *
+     * @param array $optimization The optimization to apply.
+     *
+     * @return ImageManager The current ImageManager.
+     */
+    public function optimize($optimization = [])
+    {
+        $this->optimization = $this->defaults;
+
+        if (!empty($optimization) && is_array($optimization)) {
+            $this->optimization = $optimization;
+        }
+
+        return $this;
+    }
+
+    /**
      * It is responsible for calling by reference to any of the transformation
      * methods available in the class.
      *
-     * @param string         $method The transformation to apply.
-     * @param ImageInterface $image  The image to transform.
-     * @param array          $params The list of parameters.
+     * @param string $method The transformation to apply.
+     * @param array  $params The list of parameters.
      *
-     * @return ImageInterface The processed image.
+     * @return ImageManager The current ImageManager.
      */
-    public function process($method, $image, $params)
+    public function process($method, $params)
     {
         if (!method_exists($this, $method)) {
-            $method = 'resize';
+            throw new \InvalidArgumentException('Invalid method');
         }
 
-        return $this->{$method}($image, $params);
+        $this->{$method}($params);
+
+        return $this;
+    }
+
+    /**
+     * Saves an image to the provided path.
+     *
+     * @param string $path The path to the image.
+     *
+     * @return ImageManager The current ImageManager.
+     */
+    public function save($path)
+    {
+        $this->image->save($path, $this->optimization);
+
+        return $this;
+    }
+
+    /**
+     * Strips an image.
+     *
+     * @return ImageManager The current ImageManager.
+     */
+    public function strip()
+    {
+        $this->image->strip();
+
+        return $this;
     }
 
     /**
      * Crops the image basing on a list of parameters.
      *
-     * @param ImageInterface $image  The image to process.
-     * @param array          $params The list of parameters (topX, topY, width,
-     *                               and height).
+     * @param array $params The list of parameters (topX, topY, width
+     *                      and height).
      *
-     * @return ImageInterface The cropped image.
+     * @return ImageManager The current ImageManager.
      */
-    public function crop($image, array $params)
+    protected function crop(array $params)
     {
         $topX   = $params[0];
         $topY   = $params[1];
         $width  = $params[2];
         $height = $params[3];
 
-        return $image->crop(
-            $this->getPoint($topX, $topY),
-            $this->getBox($width, $height)
-        );
+        $this->image->crop(new Point($topX, $topY), new Box($width, $height));
+
+        return $this;
     }
 
     /**
-     * Thumbnails the image basing on a list of parameters.
+     * Initializes the current ImageManager.
      *
-     * @param ImageInterface $image  The image to process.
-     * @param array          $params The list of parameters (width, height,
-     *                               and type).
-     *
-     * @return ImageInterface The thumbnailed image.
+     * @codeCoverageIgnore
      */
-    public function thumbnail($image, array $params)
+    protected function getImagine()
     {
-        $mode   = ImageInterface::THUMBNAIL_OUTBOUND;
-        $width  = $params[0];
-        $height = $params[1];
-
-        if (array_key_exists(2, $params) && $params[2] == 'in') {
-            $mode = ImageInterface::THUMBNAIL_INSET;
-        }
-
-        return $image->thumbnail($this->getBox($width, $height, $mode));
-    }
-
-    /**
-     * Zoom-crops an image basing on a list of parameters.
-     *
-     * @param ImageInterface $image  The image to process.
-     * @param array          $params The list of parameters (width and height).
-     *
-     * @return ImageInterface The zoom-cropped image.
-     */
-    public function zoomCrop($image, array $params)
-    {
-        $width  = $params[0];
-        $height = $params[1];
-
-        $imageSize   = $image->getSize();
-        $imageWidth  = $imageSize->getWidth();
-        $imageHeight = $imageSize->getHeight();
-
-        if ($imageWidth >= $imageHeight) {
-            $widthResize  = $height * $imageWidth / $imageHeight;
-            $heightResize = $height;
-            $topX         = $widthResize / 2 - $width / 2;
-            $topY         = 0;
-        } else {
-            $widthResize  = $width;
-            $heightResize = $width * $imageHeight / $imageWidth;
-            $topX         = 0;
-            $topY         = $heightResize / 2 - $height / 2;
-        }
-
-        if ($topX < 0) {
-            $topX = 0;
-        }
-
-        if ($topY < 0) {
-            $topY = 0;
-        }
-
-        return $image->resize($this->getBox(
-            $widthResize,
-            $heightResize,
-            ImageInterface::THUMBNAIL_OUTBOUND
-        ))->crop(
-            $this->getPoint($topX, $topY),
-            $this->getBox($width, $height)
-        );
+        return new Imagine();
     }
 
     /**
      * Resizes an image basing on a list of parameters.
      *
-     * @param ImageInterface $image  Image to resize.
-     * @param array          $params The list of parameters (width and height).
+     * @param array $params The list of parameters (width and height).
      *
-     * @return ImageInterface The resized image.
+     * @return ImageManager The current ImageManager.
      */
-    public function resize($image, array $params)
+    protected function resize(array $params)
     {
         $width  = $params[0];
         $height = $params[1];
 
-        return $image->resize($this->getBox($width, $height));
+        $this->image->resize(new Box($width, $height));
+
+        return $this;
     }
 
     /**
-     * Strips an image.
+     * Thumbnails the image basing on a list of parameters.
      *
-     * @param ImageInterface $image The image to strip.
+     * @param array $params The list of parameters (width, height).
+     *
+     * @return ImageManager The current ImageManager.
      */
-    public function strip($image)
+    protected function thumbnail(array $params)
     {
-        $image->strip();
-    }
+        $width  = $params[0];
+        $height = $params[1];
 
-    /*
-     * Sets parameters for an image.
-     *
-     * @param Imagine $image  The image set parameters for.
-     * @param array   $params The list of parameters.
-     *
-     * @return Imagine The parametrized image.
-     */
-    public function get($image, array $params)
-    {
-        return $image->get($image->getImagick()->getImageFormat(), $params);
+        $this->image = $this->image->thumbnail(new Box($width, $height));
+
+        return $this;
     }
 
     /**
-     * Get Image from filesystem.
+     * Zoom-crops the image basing on a list of parameters.
      *
-     * @param string $image path to the image.
+     * @param array $params The list of parameters (width, height).
      *
-     * @return \Imagine\Imagick\Imagine recover from the filesystem.
-     *
-     * @codeCoverageIgnore
+     * @return ImageManager The current ImageManager.
      */
-    public function getImage($image)
+    public function zoomCrop(array $params)
     {
-        if (gettype($image) != 'string'
-            || !file_exists($image)
-            || !is_file($image)
-        ) {
-            return null;
+        $width       = $params[0];
+        $height      = $params[1];
+        $imageWidth  = $this->image->getSize()->getWidth();
+        $imageHeight = $this->image->getSize()->getHeight();
+
+        $ratio = $width / $height;
+
+        // Crop basing on image width
+        $cropWidth  = $imageWidth;
+        $cropHeight = $imageWidth / $ratio;
+
+        // Height bigger so crop basing on image height
+        if ($cropHeight > $imageHeight) {
+            $cropHeight = $imageHeight;
+            $cropWidth  = $imageHeight * $ratio;
         }
 
-        $imagine = new \Imagine\Imagick\Imagine();
+        $x = ($imageWidth - $cropWidth) / 2;
+        $y = ($imageHeight - $cropHeight) / 2;
 
-        return $imagine->open($image);
-    }
+        $this->crop([ $x, $y, $cropWidth, $cropHeight ])
+            ->resize([ $width, $height ]);
 
-    /**
-     * Recover the image format.
-     *
-     * @param string $image  the image.
-     *
-     * @return string Image format.
-     */
-    public function getImageFormat($image)
-    {
-        return strtolower($image->getImagick()->getImageFormat());
-    }
-
-    /**
-     * Method for muckup propouses. This method create a new Box element.
-     *
-     * @param int    box width.
-     * @param int    box hegith.
-     * @param string box mode.
-     *
-     * @return \Imagine\Image\Box
-     *
-     * @codeCoverageIgnore
-     */
-    public function getBox($widthResize, $heightResize, $mode = null)
-    {
-        return new \Imagine\Image\Box($widthResize, $heightResize, $mode);
-    }
-
-    /**
-     * Method for muckup propouses. This method create a new Point element.
-     *
-     * @param int x point.
-     * @param int y point.
-     *
-     * @return \Imagine\Image\Point
-     *
-     * @codeCoverageIgnore
-     */
-    public function getPoint($topX, $topY)
-    {
-        return new \Imagine\Image\Point($topX, $topY);
+        return $this;
     }
 }
