@@ -17,7 +17,7 @@
     .controller('EventCtrl', [
       '$controller', '$scope', '$timeout',
       function($controller, $scope, $timeout) {
-        $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
+        $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
          * @memberOf EventCtrl
@@ -123,25 +123,6 @@
             relationship: 'cover',
             position: 0
           });
-        }, true);
-
-        // Update slug when title is updated
-        $scope.$watch('item.title', function(nv, ov) {
-          if (!nv) {
-            return;
-          }
-
-          if (!$scope.item.slug || $scope.item.slug === '') {
-            if ($scope.tm) {
-              $timeout.cancel($scope.tm);
-            }
-
-            $scope.tm = $timeout(function() {
-              $scope.getSlug(nv, function(response) {
-                $scope.item.slug = response.data.slug;
-              });
-            }, 2500);
-          }
         }, true);
       }
     ]);

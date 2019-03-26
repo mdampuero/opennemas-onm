@@ -32,12 +32,11 @@ class OpinionController extends ContentOldController
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('OPINION_ADMIN')")
      */
     public function previewAction(Request $request)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
+
         $this->get('core.locale')->setContext('frontend')
             ->setRequestLocale($request->get('locale'));
 
@@ -133,12 +132,11 @@ class OpinionController extends ContentOldController
      * Description of this action.
      *
      * @return Response The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('OPINION_ADMIN')")
      */
     public function getPreviewAction()
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
+
         $session = $this->get('session');
         $content = $session->get('last_preview');
 

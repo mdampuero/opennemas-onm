@@ -108,6 +108,8 @@ class Opinion extends Content
                 }
 
                 return $authorObj;
+            case 'uri':
+                return getService('core.helper.url_generator')->generate($this);
             default:
                 return parent::__get($name);
         }
@@ -166,63 +168,6 @@ class Opinion extends Content
             error_log('Error on Opinion::create: ' . $e->getMessage());
             return false;
         }
-    }
-
-    /**
-     * Returns the uri for the opinion
-     *
-     * @return string
-     **/
-    public function getUri()
-    {
-        $type       = 'opinion';
-        $authorName = 'author';
-        if ($this->fk_author == 0) {
-            if ((int) $this->type_opinion == 1) {
-                $authorName = 'Editorial';
-            } elseif ((int) $this->type_opinion == 2) {
-                $authorName = 'Director';
-            }
-        } else {
-            $author = $this->author;
-
-            if (!is_object($author)) {
-                $author = getService('user_repository')
-                    ->find($this->fk_author);
-            }
-
-            if (is_object($author)) {
-                $authorName = $author->name;
-            }
-
-            if (is_object($author)
-                && is_array($author->meta) &&
-                array_key_exists('is_blog', $author->meta) &&
-                $author->meta['is_blog'] == 1
-            ) {
-                $type = 'blog';
-            }
-        }
-
-        if (is_array($this->slug)) {
-            return array_map(function ($slugName) use ($type, $authorName) {
-                return Uri::generate($type, [
-                    'id'       => sprintf('%06d', $this->id),
-                    'date'     => date('YmdHis', strtotime($this->created)),
-                    'slug'     => urlencode($slugName),
-                    'category' => urlencode(\Onm\StringUtils::generateSlug($authorName)),
-                ]);
-            }, $this->slug);
-        }
-
-        $uri = Uri::generate($type, [
-            'id'       => sprintf('%06d', $this->id),
-            'date'     => date('YmdHis', strtotime($this->created)),
-            'slug'     => urlencode($this->slug),
-            'category' => urlencode(\Onm\StringUtils::generateSlug($authorName)),
-        ]);
-
-        return $uri;
     }
 
     /**

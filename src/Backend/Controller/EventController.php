@@ -27,7 +27,7 @@ class EventController extends BackendController
         'create' => 'EVENT_CREATE',
         'update' => 'EVENT_UPDATE',
         'list'   => 'EVENT_ADMIN',
-        'show'   => 'EVENT_CREATE',
+        'show'   => 'EVENT_UPDATE',
     ];
 
     /**

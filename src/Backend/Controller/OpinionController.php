@@ -28,10 +28,10 @@ class OpinionController extends BackendController
      * @var type
      */
     protected $permissions = [
-        'create' => 'EVENT_CREATE',
-        'update' => 'EVENT_UPDATE',
-        'list'   => 'EVENT_ADMIN',
-        'show'   => 'EVENT_CREATE',
+        'create' => 'OPINION_CREATE',
+        'update' => 'OPINION_UPDATE',
+        'list'   => 'OPINION_ADMIN',
+        'show'   => 'OPINION_UPDATE',
     ];
 
     /**
@@ -60,9 +60,6 @@ class OpinionController extends BackendController
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('OPINION_UPDATE')")
      */
     public function showAction(Request $request, $id)
     {

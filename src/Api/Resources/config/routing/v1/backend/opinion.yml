@@ -72,7 +72,7 @@ api_v1_backend_opinions_patch:
 api_v1_backend_opinion_preview:
     path:     /opinions/preview
     defaults: { _controller: ApiBundle:V1/Backend/Opinion:preview }
-    methods:  [ POST ]
+    methods:  [ PUT ]
     options:
         expose: true
 

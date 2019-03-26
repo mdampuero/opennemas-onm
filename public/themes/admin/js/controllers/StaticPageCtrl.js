@@ -74,19 +74,6 @@ angular.module('BackendApp.controllers')
       $scope.refreshOnUpdate = true;
 
       /**
-       * @function getItemId
-       * @memberOf StaticPageCtrl
-       *
-       * @description
-       *   Returns the item id.
-       *
-       * @return {Integer} The item id.
-       */
-      $scope.getItemId = function() {
-        return $scope.item.pk_content;
-      };
-
-      /**
        * @function parseItem
        * @memberOf StaticPageCtrl
        *

@@ -157,7 +157,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
 
       var data = { item: JSON.stringify(data), locale: $scope.config.locale.selected };
 
-      http.post(previewUrl, data).success(function() {
+      http.put(previewUrl, data).success(function() {
         $uibModal.open({
           templateUrl: 'modal-preview',
           windowClass: 'modal-fullscreen',
@@ -191,9 +191,9 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
         $scope.item.img1 = nv.pk_photo;
 
         if (angular.isUndefined($scope.item.img1_footer) ||
-        angular.isUndefined(ov) ||
-        ov === null ||
-        nv.pk_photo !== ov.pk_photo
+          angular.isUndefined(ov) ||
+          ov === null ||
+          nv.pk_photo !== ov.pk_photo
         ) {
           $scope.item.img1_footer = $scope.photo1.description;
         }

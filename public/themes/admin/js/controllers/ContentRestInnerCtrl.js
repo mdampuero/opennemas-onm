@@ -11,7 +11,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
     /**
      * @function getItemId
-     * @memberOf EventCtrl
+     * @memberOf ContentRestInnerCtrl
      *
      * @description
      *   Returns the item id.
