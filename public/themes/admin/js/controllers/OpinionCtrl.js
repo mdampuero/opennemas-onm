@@ -191,9 +191,9 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
         $scope.item.img1 = nv.pk_photo;
 
         if (angular.isUndefined($scope.item.img1_footer) ||
-        angular.isUndefined(ov) ||
-        ov === null ||
-        nv.pk_photo !== ov.pk_photo
+          angular.isUndefined(ov) ||
+          ov === null ||
+          nv.pk_photo !== ov.pk_photo
         ) {
           $scope.item.img1_footer = $scope.photo1.description;
         }
