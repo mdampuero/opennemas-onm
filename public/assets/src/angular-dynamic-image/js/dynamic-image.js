@@ -127,7 +127,7 @@
             prefix = instanceMedia + this.imageFolder;
           }
 
-          if (onlyImage && /.*\.(swf|gif)$/.test(image)) {
+          if (onlyImage && /.*\.(swf)$/.test(image)) {
             return this.brokenImage;
           }
 
