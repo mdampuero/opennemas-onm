@@ -7,7 +7,62 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     'use strict';
 
     // Initialize the super class and extend it.
-    $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+    $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
+    /**
+     * @memberOf OpinionCtrl
+     *
+     * @description
+     *  The cover object.
+     *
+     * @type {Object}
+     */
+    $scope.item = {
+      body: '',
+      content_type_name: 'video',
+      fk_content_type: 9,
+      content_status: 0,
+      description: '',
+      favorite: 0,
+      frontpage: 0,
+      created: new Date(),
+      starttime: null,
+      endtime: null,
+      thumbnail: null,
+      title: '',
+      type: 0,
+      with_comments: 0,
+      categories: [],
+      related_contents: [],
+      tags: [],
+      external_link: '',
+    };
+
+    /**
+     * @memberOf OpinionCtrl
+     *
+     * @description
+     *  Whether to refresh the item after a successful update.
+     *
+     * @type {Boolean}
+     */
+    $scope.refreshOnUpdate = true;
+
+    /**
+     * @memberOf OpinionCtrl
+     *
+     * @description
+     *  The list of routes for the controller.
+     *
+     * @type {Object}
+     */
+    $scope.routes = {
+      create:   'api_v1_backend_video_create',
+      redirect: 'backend_video_show',
+      save:     'api_v1_backend_video_save',
+      show:     'api_v1_backend_video_show',
+      update:   'api_v1_backend_video_update'
+    };
 
     /**
      * @memberOf VideoCtrl
@@ -20,48 +75,24 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     $scope.information = {};
 
     /**
-     * @function init
-     * @memberOf VideoCtrl
+     * @function parseItem
+     * @memberOf RestInnerCtrl
      *
      * @description
-     * Method to init the video controller
+     *   Parses the response and adds information to the scope.
      *
-     * @param {object} video    Video to edit
-     * @param {String} locale   Locale for the video
-     * @param {Array}  tags     Array with all the tags needed for the video
+     * @param {Object} data The data in the response.
      */
-    $scope.init = function(video, locale, tags) {
-      $scope.video  = video;
-      $scope.locale = locale;
-      $scope.tags   = tags;
-
-      if (video && video.information) {
-        $scope.information     = video.information;
-        $scope.informationJson = JSON.stringify($scope.information);
-
-        if ($scope.information.embedHTML) {
-          $scope.information.embedHTML =
-            $sce.trustAsHtml($scope.information.embedHTML);
-        }
+    $scope.parseItem = function(data) {
+      if (data.item) {
+        $scope.data.item      = angular.extend($scope.item, data.item);
+        $scope.data.item.tags = $scope.item.tags.map(function(id) {
+          return data.extra.tags[id];
+        });
       }
 
-      if (!$scope.title) {
-        $scope.loading_data = false;
-      }
-    };
-
-    /**
-     * @function generateTagsFrom
-     * @memberOf InnerCtrl
-     *
-     * @description
-     *   Returns a string to use when clicking on "Generate" button for
-     *   tags component.
-     *
-     * @return {String} The string to generate tags from.
-     */
-    $scope.generateTagsFrom = function() {
-      return $('#title').val();
+      $scope.configure(data.extra);
+      $scope.localize($scope.data.item, 'item', true);
     };
 
     /**
