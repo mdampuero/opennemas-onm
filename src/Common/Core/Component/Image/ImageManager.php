@@ -26,10 +26,11 @@ class ImageManager
      * @var array
      */
     protected $defaults = [
+        'flatten'          => false,
+        'quality'          => 85,
         'resolution-units' => ImageInterface::RESOLUTION_PIXELSPERINCH,
         'resolution-x'     => 72,
-        'resolution-y'     => 72,
-        'quality'          => 85,
+        'resolution-y'     => 72
     ];
 
     /**
