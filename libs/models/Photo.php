@@ -299,26 +299,13 @@ class Photo extends Content
         if (array_key_exists('extension', $filePathInfo) &&
             $filePathInfo['extension'] != 'swf'
         ) {
-            $imageCreated = new \Imagine\Imagick\Imagine();
-            $image        = $imageCreated->open($data['local_file']);
+            $target = realpath($uploadDir) . DS . $finalPhotoFileName;
 
             try {
-                if ($filePathInfo['extension'] == 'gif') {
-                    $image->save(
-                        realpath($uploadDir) . DIRECTORY_SEPARATOR . $finalPhotoFileName,
-                        [ 'flatten' => false ]
-                    );
-                } else {
-                    $image->save(
-                        realpath($uploadDir) . DIRECTORY_SEPARATOR . $finalPhotoFileName,
-                        [
-                            'resolution-units' => \Imagine\Image\ImageInterface::RESOLUTION_PIXELSPERINCH,
-                            'resolution-x'     => 72,
-                            'resolution-y'     => 72,
-                            'quality'          => 85,
-                        ]
-                    );
-                }
+                getService('core.image.image')
+                    ->open($data['local_file'])
+                    ->optimize()
+                    ->save($target);
             } catch (\RuntimeException $e) {
                 $logger = getService('application.log');
                 $logger->notice(
