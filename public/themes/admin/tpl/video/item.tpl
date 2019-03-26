@@ -31,6 +31,7 @@
 {/block}
 
 {block name="content"}
+{* <form name="form" ng-controller="VideoCtrl" ng-init="forcedLocale = '{$locale}'; getItem({$id});"> *}
 <form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" class="video-form" enctype="multipart/form-data" ng-controller="VideoCtrl" ng-init="init({json_encode($video)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})" id="formulario">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
