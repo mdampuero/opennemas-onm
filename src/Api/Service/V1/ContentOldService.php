@@ -17,8 +17,9 @@ use Api\Exception\GetListException;
 use Api\Exception\PatchItemException;
 use Api\Exception\PatchListException;
 use Api\Exception\UpdateItemException;
+use Api\Service\Service;
 
-class ContentOldService
+class ContentOldService implements Service
 {
    /**
      * The full class name.
@@ -195,8 +196,6 @@ class ContentOldService
 
             $item       = array_pop($item);
             $item->tags = $item->tag_ids;
-
-            $item->loadAllContentProperties();
 
             $this->localizeItem($item);
 
