@@ -60,6 +60,26 @@ class ImageManager
         $this->fs = new Filesystem();
     }
 
+    /**
+     * It is responsible for calling by reference to any of the transformation
+     * methods available in the class.
+     *
+     * @param string $method The transformation to apply.
+     * @param array  $params The list of parameters.
+     *
+     * @return ImageManager The current ImageManager.
+     */
+    public function apply($method, $params)
+    {
+        if (!method_exists($this, $method)) {
+            throw new \InvalidArgumentException('Invalid method');
+        }
+
+        $this->{$method}($params);
+
+        return $this;
+    }
+
     /*
      * Sets parameters for an image.
      *
@@ -131,26 +151,6 @@ class ImageManager
         if (!empty($optimization) && is_array($optimization)) {
             $this->optimization = $optimization;
         }
-
-        return $this;
-    }
-
-    /**
-     * It is responsible for calling by reference to any of the transformation
-     * methods available in the class.
-     *
-     * @param string $method The transformation to apply.
-     * @param array  $params The list of parameters.
-     *
-     * @return ImageManager The current ImageManager.
-     */
-    public function process($method, $params)
-    {
-        if (!method_exists($this, $method)) {
-            throw new \InvalidArgumentException('Invalid method');
-        }
-
-        $this->{$method}($params);
 
         return $this;
     }

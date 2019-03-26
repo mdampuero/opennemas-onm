@@ -66,6 +66,32 @@ class ImageManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests apply when provided method is implemented in ImageManager
+     */
+    public function testApplyWhenMethodExists()
+    {
+        $this->im = $this->getMockBuilder('Common\Core\Component\Image\ImageManager')
+            ->setConstructorArgs([])
+            ->setMethods([ 'glorp' ])
+            ->getMock();
+
+        $this->im->expects($this->once())->method('glorp')
+            ->with([ 'flob', 22474 ]);
+
+        $this->im->apply('glorp', [ 'flob', 22474 ]);
+    }
+
+    /**
+     * Tests process when provided method is implemented in ImageManager
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testApplyWhenMethodNotExists()
+    {
+        $this->im->apply('glorp', [ 'flob', 22474 ]);
+    }
+
+    /**
      * Tests getContent.
      */
     public function testGetContent()
@@ -147,32 +173,6 @@ class ImageManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->im->optimize([ 'frog' => 12230 ]);
         $this->assertEquals([ 'frog' => 12230 ], $optimization->getValue($this->im));
-    }
-
-    /**
-     * Tests process when provided method is implemented in ImageManager
-     */
-    public function testProcessWhenMethodExists()
-    {
-        $this->im = $this->getMockBuilder('Common\Core\Component\Image\ImageManager')
-            ->setConstructorArgs([])
-            ->setMethods([ 'glorp' ])
-            ->getMock();
-
-        $this->im->expects($this->once())->method('glorp')
-            ->with([ 'flob', 22474 ]);
-
-        $this->im->process('glorp', [ 'flob', 22474 ]);
-    }
-
-    /**
-     * Tests process when provided method is implemented in ImageManager
-     *
-     * @expectedException \InvalidArgumentException
-     */
-    public function testProcessWhenMethodNotExists()
-    {
-        $this->im->process('glorp', [ 'flob', 22474 ]);
     }
 
     /**
