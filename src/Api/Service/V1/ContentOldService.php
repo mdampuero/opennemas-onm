@@ -229,7 +229,6 @@ class ContentOldService
      */
     public function getItemBy($oql)
     {
-        throw new \Exception('Not implemented');
         try {
             $response = $this->getList($oql);
         } catch (\Exception $e) {
@@ -308,6 +307,7 @@ class ContentOldService
         $criteria['pk_content'] = [
             [ 'value' => $ids, 'operator' => 'IN']
         ];
+
         $items = $this->em->findBy($criteria);
         $this->localizeList($items);
 
@@ -332,17 +332,6 @@ class ContentOldService
         }
 
         return array_merge($keys);
-    }
-
-    /**
-     * Returns the current service origin.
-     *
-     * @return string The current service origin.
-     */
-    public function getOrigin()
-    {
-        throw new \Exception('Not implemented');
-        return $this->origin;
     }
 
     /**
@@ -442,23 +431,6 @@ class ContentOldService
     }
 
     /**
-     * Returns the OQL statement to find all entities with id in the list of
-     * ids.
-     *
-     * @param array $ids The list of ids.
-     *
-     * @return string The OQL statement.
-     */
-    protected function getOqlForIds($ids)
-    {
-        throw new \Exception('Not implemented');
-        $keys = $this->em->getMetadata($this->entity)->getIdKeys();
-        $key  = array_pop($keys);
-
-        return sprintf('%s in [%s]', $key, implode(',', $ids));
-    }
-
-    /**
      * Returns the OQL statement to find all entities basing on a OQL filter.
      *
      * This function will be overloaded in childs to fix the original OQL
@@ -546,5 +518,4 @@ class ContentOldService
 
         $this->validator->validate($item);
     }
-
 }
