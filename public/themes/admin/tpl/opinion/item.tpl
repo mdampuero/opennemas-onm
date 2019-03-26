@@ -83,7 +83,7 @@
               {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}In homepage{/t}" field="in_home"}
             </div>
 
-            {include file="ui/component/content-editor/accordion/author.tpl"}
+            {include file="ui/component/content-editor/accordion/author.tpl" required=true}
             {include file="ui/component/content-editor/accordion/tags.tpl"}
             {include file="ui/component/content-editor/accordion/slug.tpl" route="[% getL10nUrl(routing.generate('frontend_opinion_show', { id: item.pk_content, created: item.created, opinion_title: item.slug })) %]"}
             {include file="ui/component/content-editor/accordion/scheduling.tpl"}
@@ -95,8 +95,8 @@
             <div class="grid-collapse-title">
               <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
             </div>
-            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Frontpage image{/t}" field="photo1" footer="img1_footer"}
-            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Inner image{/t}" field="photo2" footer="img2_footer"}
+            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Frontpage image{/t}" field="photo1" footer="item.img1_footer"}
+            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Inner image{/t}" field="photo2" footer="item.img2_footer"}
           </div>
         </div>
 
