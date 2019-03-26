@@ -196,9 +196,8 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
         ) {
           $scope.item.img1_footer = $scope.photo1.description;
         }
-
         // Set inner image if empty
-        if (angular.isUndefined($scope.photo2) && nv !== ov) {
+        if (!angular.isObject($scope.photo2) && nv !== ov) {
           $scope.photo2 = $scope.photo1;
         }
       } else {
