@@ -38,7 +38,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks hidden-xs">
-              <button class="btn btn-white" id="preview-button" ng-click="preview('backend_opinion_preview', 'backend_opinion_get_preview')" type="button" id="preview_button">
+              <button class="btn btn-white" id="preview-button" ng-click="preview('api_v1_backend_opinion_preview', 'api_v1_backend_opinion_get_preview')" type="button" id="preview_button">
                 <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': loading }" ></i>
                 {t}Preview{/t}
               </button>
@@ -100,14 +100,16 @@
           </div>
         </div>
 
+        <div class="grid simple" ng-show="data.extra.extra_fields !== undefined && data.extra.extra_fields">
+          <div class="grid-body no-padding">
+            <div class="grid-collapse-title">
+              <i class="fa fa-magic"></i>
+              {t}Additional data{/t}
+            </div>
 
-        <div class="grid simple ng-cloak" ng-if="data.extra.extra_fields !== undefined && data.extra.extra_fields">
-          <div class="grid-collapse-title">
-            <i class="fa fa-magic"></i>
-            {t}Additional data{/t}
-          </div>
-          <div class="grid-body">
-            <autoform ng-model="item" fields-by-module="data.extra.extra_fields"/>
+            <div class="grid-collapse-body expanded">
+              <autoform ng-model="item" fields-by-module="data.extra.extra_fields"/>
+            </div>
           </div>
         </div>
       </div>
@@ -117,21 +119,6 @@
             {include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true counter=true}
             {include file="ui/component/content-editor/textarea.tpl" title="{t}Summary{/t}" field="summary" rows=5 imagepicker=true}
             {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row ng-cloak" ng-show="!flags.http.loading && item" ng-init="fieldsByModule = {json_encode($extra_fields)|escape:"html"}">
-      <div class="col-md-12" ng-if="fieldsByModule !== undefined && fieldsByModule">
-        <div class="grid simple">
-          <div class="grid-title">
-            <h4>
-              <i class="fa fa-magic"></i>
-              {t}Additional data{/t}
-            </h4>
-          </div>
-          <div class="grid-body">
-            <autoform ng-model="item" fields-by-module="fieldsByModule"/>
           </div>
         </div>
       </div>

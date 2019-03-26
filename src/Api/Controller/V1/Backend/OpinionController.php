@@ -9,6 +9,10 @@
  */
 namespace Api\Controller\V1\Backend;
 
+use Common\Core\Annotation\Security;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+
 class OpinionController extends ContentOldController
 {
     /**

@@ -64,7 +64,7 @@ class OpinionController extends BackendController
      * @Security("hasExtension('OPINION_MANAGER')
      *     and hasPermission('OPINION_UPDATE')")
      */
-    public function showAction($id)
+    public function showAction(Request $request, $id)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('update'));
 
