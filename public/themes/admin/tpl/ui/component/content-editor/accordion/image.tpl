@@ -3,9 +3,7 @@
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.{$field} }"></i>
   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.{$field}" ng-class="{ 'badge-danger' : item.{$field} == 0 }">
       <span ng-show="item.{$field} === 0"><strong>{t}No image assigned{/t}</strong></span>
-      <span ng-show="item.{$field} != 0">
-      <strong>[% {$field}.length %] </span></strong>
-      </span>
+      <span ng-show="item.{$field} != 0"><i class="fa fa-image"></i></span>
   </span>
 </div>
 
