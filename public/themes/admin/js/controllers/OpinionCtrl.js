@@ -153,14 +153,11 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       CKEDITOR.instances.body.updateElement();
       CKEDITOR.instances.summary.updateElement();
 
-      data = cleaner.clean($scope.item);
+      var data = cleaner.clean($scope.item);
 
-      var postData = { item: data, locale: $scope.config.locale };
+      var data = { item: JSON.stringify(data), locale: $scope.config.locale.selected };
 
-      var data = { item: JSON.stringify($scope.item) };
-      var url  = routing.generate(previewUrl);
-
-      $http.post(url, data).success(function() {
+      http.post(previewUrl, data).success(function() {
         $uibModal.open({
           templateUrl: 'modal-preview',
           windowClass: 'modal-fullscreen',
