@@ -84,7 +84,7 @@ class ContentOldService implements Service
         $this->class      = $entity;
         $this->container  = $container;
         $this->dispatcher = $container->get('core.dispatcher');
-        $this->em         = $container->get('opinion_repository');
+        $this->em         = $container->get('entity_repository');
         $this->entity     = substr($entity, strrpos($entity, '\\') + 1);
 
         if (!empty($validator)) {
