@@ -46,7 +46,7 @@ class GoogleTranslator extends Translator
 
         $from   = empty($from) ? $this->from : $from;
         $to     = empty($to) ? $this->to : $to;
-        $url    = sprintf($this->url, $this->key, $str, $from, $to);
+        $url    = sprintf($this->url, $this->key, urlencode($str), $from, $to);
         $client = $this->getClient();
 
         if (empty($client)
