@@ -157,7 +157,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
 
       var data = { item: JSON.stringify(data), locale: $scope.config.locale.selected };
 
-      http.post(previewUrl, data).success(function() {
+      http.put(previewUrl, data).success(function() {
         $uibModal.open({
           templateUrl: 'modal-preview',
           windowClass: 'modal-fullscreen',
