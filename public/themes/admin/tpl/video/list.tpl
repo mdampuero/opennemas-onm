@@ -35,7 +35,7 @@
 
             {acl isAllowed="VIDEO_CREATE"}
             <li class="quicklinks">
-              <a class="btn btn-success text-uppercase" href="{url name=admin_videos_create}" accesskey="N" tabindex="1" id="create-button">
+              <a class="btn btn-success text-uppercase" href="{url name=backend_videos_create}" accesskey="N" tabindex="1" id="create-button">
                 <span class="fa fa-plus"></span>
                 {t}Create{/t}
               </a>
@@ -112,19 +112,16 @@
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
-            <li class="quicklinks ng-cloak" ng-if="!mode || mode === 'grid'" uib-tooltip="{t}List{/t}" tooltip-placement="bottom">
-              <button class="btn btn-link" ng-click="setMode('list')">
-                <i class="fa fa-lg fa-list"></i>
-              </button>
-            </li>
-            <li class="quicklinks ng-cloak" ng-if="mode === 'list'" uib-tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
-              <button class="btn btn-link" ng-click="setMode('grid')">
-                <i class="fa fa-lg fa-th"></i>
-              </button>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
+          <li class="quicklinks" ng-if="mode === 'grid'" uib-tooltip="{t}List{/t}" tooltip-placement="bottom">
+            <button class="btn btn-link" ng-click="setMode('list')">
+              <i class="fa fa-lg fa-list"></i>
+            </button>
+          </li>
+          <li class="quicklinks ng-cloak" ng-if="!mode || mode === 'list'" uib-tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
+            <button class="btn btn-link" ng-click="setMode('grid')">
+              <i class="fa fa-lg fa-th"></i>
+            </button>
+          </li>
           <li class="m-r-10 input-prepend inside search-input no-boarder">
             <span class="add-on">
               <span class="fa fa-search fa-lg"></span>
@@ -134,26 +131,17 @@
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
+          {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
           <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|clear_json}">
             <onm-category-selector ng-model="criteria.pk_fk_content_category" label-text="{t}Category{/t}" default-value-text="{t}Any{/t}" placeholder="{t}Any{/t}" />
-          </li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
-            <ui-select name="status" theme="select2" ng-model="criteria.content_status">
-              <ui-select-match>
-                <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
-              </ui-select-match>
-              <ui-select-choices repeat="item.value as item in status | filter: { name: $select.search }">
-                <div ng-bind-html="item.name | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
           </li>
           <li class="quicklinks hidden-xs ng-cloak" ng-show="mode === 'list'">
             {include file="ui/component/select/epp.tpl" label="true" ngModel="criteria.epp"}
           </li>
         </ul>
-        <ul class="nav quick-section pull-right ng-cloak" ng-if="mode === 'list' && contents.length > 0">
+        <ul class="nav quick-section pull-right ng-cloak" ng-if="mode === 'list' && items.length > 0">
           <li class="quicklinks hidden-xs">
-            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </li>
         </ul>
       </div>
@@ -242,14 +230,14 @@
                 <td class="center nowrap hidden-xs hidden-sm">
                   [% item.author_name %]
                 </td>
-                {acl isAllowed="VIDEO_HOME"}
+                {* {acl isAllowed="VIDEO_HOME"}
                   <td class="hidden-xs text-center">
                     <button class="btn btn-white" ng-click="updateItem($index, item.id, 'backend_ws_content_toggle_in_home', 'in_home', item.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
                       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.home_loading == 1, 'fa-home text-info': !item.home_loading == 1 && item.in_home == 1, 'fa-home': !item.home_loading == 1 && item.in_home == 0 }"></i>
                       <i class="fa fa-times fa-sub text-danger" ng-if="!item.home_loading == 1 && item.in_home == 0"></i>
                     </button>
                   </td>
-                {/acl}
+                {/acl} *}
                 {acl isAllowed="VIDEO_FAVORITE"}
                   <td class="hidden-xs text-center">
                     <button class="btn btn-white" ng-click="updateItem($index, item.id, 'backend_ws_content_toggle_favorite', 'favorite', item.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
@@ -269,9 +257,9 @@
           </table>
         </div>
       </div>
-      <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
+      <div class="grid-footer clearfix ng-cloak" ng-if="!loading && items.length > 0">
         <div class="pull-right">
-          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
         </div>
       </div>
     </div>
