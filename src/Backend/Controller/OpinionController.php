@@ -64,9 +64,8 @@ class OpinionController extends BackendController
      * @Security("hasExtension('OPINION_MANAGER')
      *     and hasPermission('OPINION_UPDATE')")
      */
-    public function showAction(Request $request, $id)
+    public function showAction($id)
     {
-
         $this->checkSecurity($this->extension, $this->getActionPermission('update'));
 
         $params = [ 'id' => $id ];
@@ -76,7 +75,6 @@ class OpinionController extends BackendController
         }
 
         return $this->render($this->resource . '/item.tpl', $params);
-
     }
 
     /**
@@ -191,139 +189,6 @@ class OpinionController extends BackendController
 
             return $this->redirect($this->generateUrl('backend_opinions_config'));
         }
-    }
-
-    /**
-     * Previews an opinion in frontend by sending the opinion info by POST.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('OPINION_ADMIN')")
-     */
-    public function previewAction(Request $request)
-    {
-        $this->get('core.locale')->setContext('frontend')
-            ->setRequestLocale($request->get('locale'));
-
-        $opinion     = new \Opinion();
-        $cm          = new \ContentManager();
-        $opinion->id = 0;
-
-        $data = $request->request->filter('item');
-        var_dump($data);die();
-        foreach ($data as $value) {
-            if (isset($value['name']) && !empty($value['name'])) {
-                $opinion->{$value['name']} = $value['value'];
-            }
-        }
-
-        $this->view = $this->get('core.template');
-        $this->view->setCaching(0);
-
-        $opinion->tag_ids = json_decode($opinion->tag_ids);
-
-        list($positions, $advertisements) = $this->getAdvertisements();
-
-        try {
-            if (!empty($opinion->fk_author)) {
-                $opinion->author = $this->get('api.service.author')
-                    ->getItem($opinion->fk_author);
-            }
-        } catch (\Exception $e) {
-        }
-
-        // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
-        $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
-
-        $machineSuggestedContents = $this->get('automatic_contents')
-            ->searchSuggestedContents('opinion', "pk_content <> $opinion->id", 4);
-
-        // Get author slug for suggested opinions
-        foreach ($machineSuggestedContents as &$suggest) {
-            $element = new \Opinion($suggest['pk_content']);
-
-            $suggest['author_name_slug'] = "author";
-            $suggest['uri']              = $element->uri;
-
-            if (!empty($element->author)) {
-                $suggest['author_name']      = $element->author;
-                $suggest['author_name_slug'] =
-                    \Onm\StringUtils::getTitle($element->author);
-            }
-        }
-
-        // Associated media code --------------------------------------
-        $photo = '';
-        if (isset($opinion->img2) && ($opinion->img2 > 0)) {
-            $photo = new \Photo($opinion->img2);
-        }
-
-        // Fetch the other opinions for this author
-        if ($opinion->type_opinion == 1) {
-            $where         = ' opinions.type_opinion = 1';
-            $opinion->name = 'Editorial';
-            $this->view->assign('actual_category', 'editorial');
-        } elseif ($opinion->type_opinion == 2) {
-            $where         = ' opinions.type_opinion = 2';
-            $opinion->name = 'Director';
-        } else {
-            $where = ' opinions.fk_author=' . (int) $opinion->fk_author;
-        }
-
-        $otherOpinions = $cm->find(
-            'Opinion',
-            $where . ' AND `pk_opinion` <>' . $opinion->id . ' AND content_status=1',
-            ' ORDER BY created DESC LIMIT 0,9'
-        );
-
-        foreach ($otherOpinions as &$otOpinion) {
-            $otOpinion->author           = $opinion->author;
-            $otOpinion->author_name_slug = $opinion->author_name_slug;
-            $otOpinion->uri              = $otOpinion->uri;
-        }
-
-        $params = [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'opinion'        => $opinion,
-            'content'        => $opinion,
-            'other_opinions' => $otherOpinions,
-            'author'         => $opinion->author,
-            'contentId'      => $opinion->id,
-            'photo'          => $photo,
-            'suggested'      => $machineSuggestedContents,
-            'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($opinion->tag_ids)['items']
-        ];
-
-        $this->view->assign($params);
-
-        $this->get('session')->set(
-            'last_preview',
-            $this->view->fetch('opinion/opinion.tpl')
-        );
-
-        return new Response('OK');
-    }
-
-    /**
-     * Description of this action.
-     *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('OPINION_ADMIN')")
-     */
-    public function getPreviewAction()
-    {
-        $session = $this->get('session');
-        $content = $session->get('last_preview');
-
-        $session->remove('last_preview');
-
-        return new Response($content);
     }
 
     /**

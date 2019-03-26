@@ -17,22 +17,6 @@ backend_opinions_list:
     path:     /opinions
     defaults: { _controller: BackendBundle:Opinion:list }
 
-backend_opinion_preview:
-    path:     /opinion/preview
-    defaults: { _controller: BackendBundle:Opinion:preview }
-    options:
-        expose: true
-
-backend_opinion_get_preview:
-    path:     /opinion/get-preview
-    defaults: { _controller: BackendBundle:Opinion:getPreview }
-    options:
-        expose: true
-
-backend_opinion_update:
-    path:     /opinion/{id}/update
-    defaults: { _controller: BackendBundle:Opinion:update }
-
 backend_opinions_content_provider:
     path:     /opinions/content-provider
     defaults: { _controller: BackendBundle:Opinion:contentProvider }
