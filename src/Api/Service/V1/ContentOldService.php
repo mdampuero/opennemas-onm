@@ -96,21 +96,16 @@ class ContentOldService
      */
     public function createItem($data)
     {
-        throw new \Exception('Not implemented');
-
         try {
-            $data = $this->em->getConverter($this->entity)
-                ->objectify($data);
+            $className = classify($data['content_type_name']);
+            $item      = new $className;
 
-            $item = new $this->class($data);
-
-            $this->validate($item);
-            $this->em->persist($item, $this->getOrigin());
-
-            $id = $this->em->getMetadata($item)->getId($item);
+            if (!$id = $item->create($data)) {
+                throw new \Exception( 'Unable to create the item  "%s"');
+            }
 
             $this->dispatcher->dispatch($this->getEventName('createItem'), [
-                'id'   => array_pop($id),
+                'id'   => $id,
                 'item' => $item
             ]);
 
