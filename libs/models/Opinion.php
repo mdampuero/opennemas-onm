@@ -386,7 +386,7 @@ class Opinion extends Content
      */
     public static function getL10nKeys()
     {
-        return array_merge(parent::getL10nKeys(), [ 'img1_footer', 'img2_footer' ]);
+        return array_merge(parent::getL10nKeys(), [ 'summary', 'img1_footer', 'img2_footer' ]);
     }
 
     /**
