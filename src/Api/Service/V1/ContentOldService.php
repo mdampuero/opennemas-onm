@@ -101,7 +101,7 @@ class ContentOldService
             $item      = new $className;
 
             if (!$id = $item->create($data)) {
-                throw new \Exception( 'Unable to create the item  "%s"');
+                throw new \Exception('Unable to create the item  "%s"');
             }
 
             $this->dispatcher->dispatch($this->getEventName('createItem'), [
@@ -121,11 +121,10 @@ class ContentOldService
      */
     public function deleteItem($id)
     {
-        throw new \Exception('Not implemented');
         try {
             $item = $this->getItem($id);
 
-            $this->em->remove($item, $item->getOrigin());
+            $item->remove();
 
             $this->dispatcher->dispatch($this->getEventName('deleteItem'), [
                 'id'   => $id,
@@ -142,7 +141,6 @@ class ContentOldService
      */
     public function deleteList($ids)
     {
-        throw new \Exception('Not implemented');
         if (!is_array($ids)) {
             throw new DeleteListException('Invalid ids', 400);
         }
@@ -158,11 +156,11 @@ class ContentOldService
         $items   = [];
         foreach ($response['items'] as $item) {
             try {
-                $this->em->remove($item, $item->getOrigin());
+                $id = $item->pk_content;
 
-                $id = $this->em->getMetadata($item)->getId($item);
+                $item->remove();
 
-                $deleted[] = array_pop($id);
+                $deleted[] = $id;
                 $items[]   = $item;
             } catch (\Exception $e) {
                 $this->container->get('error.log')->error($e->getMessage());
