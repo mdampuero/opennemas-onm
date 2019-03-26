@@ -21,14 +21,6 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->finder = $this->getMockBuilder('Symfony\Component\Finder\Finder')
-            ->setMethods([ 'files', 'in', 'name' ])
-            ->getMock();
-
-        $this->fs = $this->getMockBuilder('Symfony\Component\Filesystem\Filesystem')
-            ->setMethods([ 'exists', 'remove' ])
-            ->getMock();
-
         $this->smarty = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
             ->setMethods([ 'clearAllCache', 'getCacheDir', 'getCacheId' ])
@@ -45,16 +37,10 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
         $this->templating->expects($this->any())->method('getTemplate')
             ->willReturn($this->smarty);
 
-        $this->manager = new CacheManager($this->templating);
-
-        $finder = new \ReflectionProperty($this->manager, 'finder');
-        $fs     = new \ReflectionProperty($this->manager, 'fs');
-
-        $finder->setAccessible(true);
-        $fs->setAccessible(true);
-
-        $finder->setValue($this->manager, $this->finder);
-        $fs->setValue($this->manager, $this->fs);
+        $this->manager = $this->getMockBuilder('Common\Core\Component\Template\Cache\CacheManager')
+            ->setConstructorArgs([ $this->templating ])
+            ->setMethods([ 'deleteFile', 'getFiles' ])
+            ->getMock();
     }
 
     /**
@@ -62,16 +48,12 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $manager = new CacheManager($this->templating);
+        $manager  = new CacheManager($this->templating);
+        $template = new \ReflectionProperty($manager, 'template');
 
-        $finder = new \ReflectionProperty($manager, 'finder');
-        $fs     = new \ReflectionProperty($manager, 'fs');
+        $template->setAccessible(true);
 
-        $finder->setAccessible(true);
-        $fs->setAccessible(true);
-
-        $this->assertInstanceOf('Symfony\Component\Finder\Finder', $finder->getValue($manager));
-        $this->assertInstanceOf('Symfony\Component\Filesystem\Filesystem', $fs->getValue($manager));
+        $this->assertInstanceOf('Onm\Templating\Templating', $template->getValue($manager));
     }
 
     /**
@@ -82,12 +64,12 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
         $this->smarty->expects($this->once())->method('getCacheId')
             ->with('garply', 'plugh')->willReturn('garply|plugh');
 
-        $this->finder->expects($this->once())->method('in')
-            ->with('/glork/quux/corge')->willReturn($this->finder);
-        $this->finder->expects($this->once())->method('name')
-            ->with('/^garply\^plugh\^.*?/')->willReturn($this->finder);
-        $this->finder->expects($this->once())->method('files')
-            ->willReturn([ new \SplFileInfo('/glork/quux/corge/garply^plugh.tpl.php') ]);
+        $this->manager->expects($this->once())->method('getFiles')
+            ->with('/^garply\^plugh\^.*?/')
+            ->willReturn([ '/glork/quux/corge/garply^plugh.tpl.php' ]);
+
+        $this->manager->expects($this->once())->method('deleteFile')
+            ->with('/glork/quux/corge/garply^plugh.tpl.php');
 
         $this->manager->delete('garply', 'plugh');
     }
@@ -100,36 +82,5 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
         $this->smarty->expects($this->once())->method('clearAllCache');
 
         $this->manager->deleteAll();
-    }
-
-    /**
-     * Tests delete when the file exists.
-     */
-    public function testDeleteFileWhenFileExists()
-    {
-        $method = new \ReflectionMethod($this->manager, 'deleteFile');
-        $method->setAccessible(true);
-
-        $this->fs->expects($this->once())->method('exists')
-            ->willReturn(true);
-        $this->fs->expects($this->once())->method('remove')
-            ->with('/glork/quux/corge/wubble^garply');
-
-        $method->invokeArgs($this->manager, [ '/glork/quux/corge/wubble^garply' ]);
-    }
-
-    /**
-     * Tests delete when the file not exists.
-     */
-    public function testDeleteFileWhenFileNotExists()
-    {
-        $method = new \ReflectionMethod($this->manager, 'deleteFile');
-        $method->setAccessible(true);
-
-        $this->fs->expects($this->once())->method('exists')
-            ->willReturn(false);
-        $this->fs->expects($this->never())->method('remove');
-
-        $method->invokeArgs($this->manager, [ '/glork/quux/corge/wubble^garply' ]);
     }
 }
