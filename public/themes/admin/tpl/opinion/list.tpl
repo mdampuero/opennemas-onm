@@ -1,14 +1,14 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div ng-app="BackendApp" ng-controller="OpinionListCtrl" ng-init="forcedLocale = '{$locale}'; init()">
+  <div ng-controller="OpinionListCtrl" ng-init="forcedLocale = '{$locale}'; init()">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <a class="no-padding" href="{url name=backend_opinion_list}" title="{t}Go back to list{/t}">
+                <a class="no-padding" href="{url name=backend_opinion_list}">
                   <i class="fa fa-quote-right"></i>
                     {t}Opinions{/t}
                 </a>
@@ -70,7 +70,7 @@
             {acl isAllowed="CONTENT_OTHER_UPDATE"}
               {acl isAllowed="OPINION_AVAILABLE"}
                 <li class="quicklinks">
-                  <button class="btn btn-link" href="#" ng-click="patchSelected('content_status', 0)" uib-tooltip="{t}Publish{/t}" tooltip-placement="bottom" type="button">
+                  <button class="btn btn-link" ng-click="patchSelected('content_status', 0)" uib-tooltip="{t}Publish{/t}" tooltip-placement="bottom" type="button">
                     <i class="fa fa-check fa-lg"></i>
                   </button>
                 </li>
