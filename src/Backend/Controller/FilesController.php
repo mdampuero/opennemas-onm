@@ -133,7 +133,7 @@ class FilesController extends Controller
 
         $date          = new \DateTime();
         $directoryDate = $date->format("/Y/m/d/");
-        $basePath      = $this->fileSavePath . $directoryDate;
+        $basePath      = SITE_PATH . $this->get('core.instance')->getFilesShortPath() . $directoryDate;
         $fileName      = \Onm\StringUtils::cleanFileName($uploadedFile->getClientOriginalName());
         // Create folder if it doesn't exist
         if (!file_exists($basePath)) {
