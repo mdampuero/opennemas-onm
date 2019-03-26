@@ -137,12 +137,10 @@ class LocaleHelper
             $translators = [];
         }
 
-        $translators = array_map(function ($a) {
-            return $a['to'];
-        }, array_filter($translators, function ($a) use ($locale) {
+        $translators = array_filter($translators, function ($a) use ($locale) {
             return $a['from'] === $locale;
-        }));
+        });
 
-        return array_unique(array_values($translators));
+        return array_values($translators);
     }
 }
