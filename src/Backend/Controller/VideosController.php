@@ -264,6 +264,8 @@ class VideosController extends BackendController
     public function showAction(Request $request, $id)
     {
         $id    = $request->query->getDigits('id', null);
+        return $this->render('video/item.tpl', [ 'id' => $id]);
+
         $video = $this->get('entity_repository')->find('Video', $id);
 
         if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')

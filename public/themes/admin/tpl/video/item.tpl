@@ -31,47 +31,35 @@
 {/block}
 
 {block name="content"}
-{* <form name="form" ng-controller="VideoCtrl" ng-init="forcedLocale = '{$locale}'; getItem({$id});"> *}
-<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" class="video-form" enctype="multipart/form-data" ng-controller="VideoCtrl" ng-init="init({json_encode($video)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})" id="formulario">
+<form name="form" ng-controller="VideoCtrl" ng-init="forcedLocale = '{$locale}'; getItem({$id});">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-film"></i>
-              {t}Videos{/t}
+              <a class="no-padding" href="{url name=backend_videos_list}">
+                <i class="fa fa-quote-right"></i>
+                  {t}Videos{/t}
+              </a>
             </h4>
           </li>
-          <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
-          <li class="quicklinks hidden-xs">
-            <h5>{if !isset($video)}{t}Creating video{/t}{else}{t}Editing video{/t}{/if}</h5>
+          <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
+            <h4>
+              <i class="fa fa-angle-right"></i>
+            </h4>
+          </li>
+          <li class="quicklinks ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
+            <translator keys="data.extra.keys" ng-model="config.locale.selected" options="data.extra.locale"></translator>
           </li>
         </ul>
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <a href="{url name=admin_videos}" class="btn btn-link" title="{t}Go Back{/t}">
-                <span class="fa fa-reply"></span>
-              </a>
-            </li>
-            <li class="quicklinks"><span class="h-seperate"></span></li>
-            <li class="quicklinks">
-              {if isset($video->id)}
-              {acl isAllowed="VIDEO_UPDATE"}
-                <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit" id="update-button">
-                  <i class="fa fa-save"></i>
-                  <span class="text">{t}Update{/t}</span>
-                </button>
-              {/acl}
-              {else}
-              {acl isAllowed="VIDEO_CREATE"}
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
-                  <i class="fa fa-save"></i>
-                  <span class="text">{t}Save{/t}</span>
-                </button>
-              {/acl}
-              {/if}
+              <button class="btn btn-success text-uppercase" data-text="{t}Saving{/t}..." type="submit">
+                <i class="fa fa-save"></i>
+                <span class="text">{t}Save{/t}</span>
+              </button>
             </li>
           </ul>
         </div>
@@ -80,144 +68,25 @@
   </div>
   <div class="content">
     <div class="row">
-      <div class="col-md-8">
+
+      <div class="col-md-4 col-md-push-8">
         <div class="grid simple">
-          <div class="grid-body">
-            {if $type == "external" || (isset($video) && $video->author_name == 'external')}
-              {include file="video/partials/_form_video_external.tpl"}
-            {elseif $type == "script" || (isset($video) && $video->author_name == 'script')}
-              {include file="video/partials/_form_video_script.tpl"}
-            {else}
-              {include file="video/partials/_form_video_panorama.tpl"}
-            {/if}
+          <div class="grid-body no-padding">
+            <div class="grid-collapse-title">
+              {acl isAllowed="VIDEO_AVAILABLE"}
+                {include file="ui/component/content-editor/accordion/published.tpl"}
+              {/acl}
+              {include file="ui/component/content-editor/accordion/allow_comments.tpl"}
+            </div>
+
+            {include file="ui/component/content-editor/accordion/author.tpl" required=true}
+            {include file="ui/component/content-editor/accordion/category.tpl"}
+            {include file="ui/component/content-editor/accordion/tags.tpl"}
+            {include file="ui/component/content-editor/accordion/slug.tpl" route="[% getL10nUrl(routing.generate('frontend_video_show', { slug: item.slug })) %]"}
+            {include file="ui/component/content-editor/accordion/scheduling.tpl"}
+
           </div>
         </div>
-      </div>
-      <div class="col-md-4">
-        <div class="grid simple">
-          <div class="grid-title">{t}Attributes{/t}</div>
-          <div class="grid-body">
-            {acl isAllowed="VIDEO_AVAILABLE"}
-            <div class="form-group">
-              <div class="checkbox">
-                <input id="content_status" name="content_status" {if $video->content_status eq 1}checked="checked"{/if}  value="1" type="checkbox"/>
-                <label for="content_status">
-                  {t}Published{/t}
-                </label>
-              </div>
-            </div>
-            {/acl}
-            {is_module_activated name="COMMENT_MANAGER"}
-            <div class="form-group">
-              <div class="checkbox">
-                  <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($video) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($video) && $video->with_comment eq 1)}checked{/if} value="1" />
-                <label for="with_comment">
-                  {t}Allow comments{/t}
-                </label>
-              </div>
-            </div>
-            {/is_module_activated}
-            <div class="form-group">
-              <label for="category" class="form-label">{t}Category{/t}</label>
-              <div class="controls">
-                <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" locale="config.locale.selected" ng-model="video.pk_fk_content_category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="fk_author" class="form-label">{t}Author{/t}</label>
-              <div class="controls">
-                {acl isAllowed="CONTENT_OTHER_UPDATE"}
-                  <select id="fk_author" name="fk_author">
-                    <option value="" {if empty($opinion->fk_author)}selected{/if}>{t}Select an author...{/t}</option>
-                    {foreach from=$authors item=author}
-                      <option value="{$author->id}" {if $video->fk_author eq $author->id}selected{/if}>{$author->name}</option>
-                    {/foreach}
-                  </select>
-                {aclelse}
-                  {if !isset($video->fk_author) || empty($video->fk_author)}
-                    {$app.user->name}
-                    <input type="hidden" name="fk_author" value="{$app.user->id}">
-                  {else}
-                    {$authors[$video->fk_author]->name}
-                    <input type="hidden" name="fk_author" value="{$video->fk_author}">
-                  {/if}
-                {/acl}
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="tag_ids" class="form-label">{t}Tags{/t}</label>
-              <div class="controls">
-                {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
-              </div>
-            </div>
-            {if isset($video)}
-            <div class="form-group">
-              <span class="help">
-                {t}URL{/t}: <a href="{$smarty.const.SITE_URL}{$video->uri}" target="_blank">{t}Video{/t} <span class="fa fa-external-link"></span></a>
-              </span>
-            </div>
-            {/if}
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="grid simple">
-              <div class="grid-title">
-                <h4>{t}Schedule{/t}</h4>
-              </div>
-              <div class="grid-body">
-                <div class="form-group">
-                  <label class="form-label" for="starttime">
-                    {t}Publication start date{/t}
-                  </label>
-                  <div class="controls">
-                    <div class="input-group">
-                      <input class="form-control" id="starttime" name="starttime" type="datetime" value="{if $video->starttime neq '0000-00-00 00:00:00'}{$video->starttime}{/if}">
-                      <span class="input-group-addon add-on">
-                        <span class="fa fa-calendar"></span>
-                      </span>
-                    </div>
-                    <span class="help-block">
-                      {t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}
-                    </span>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="endtime">
-                    {t}Publication end date{/t}
-                  </label>
-                  <div class="controls">
-                    <div class="input-group">
-                      <input class="form-control" id="endtime" name="endtime" type="datetime" value="{if $video->endtime neq '0000-00-00 00:00:00'}{$video->endtime}{/if}">
-                      <span class="input-group-addon add-on">
-                        <span class="fa fa-calendar"></span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {is_module_activated name="CONTENT_SUBSCRIPTIONS"}
-        <div class="row">
-          <div class="col-md-12">
-            <div class="grid simple">
-              <div class="grid-title">
-                <h4>{t}Subscription{/t}</h4>
-              </div>
-              <div class="grid-body">
-                <div class="checkbox">
-                  <input {if (is_array($video->params) && $video->params["only_registered"] == "1")}checked=checked{/if} id="only_registered" name="params[only_registered]" type="checkbox" value="1">
-                  <label for="only_registered">
-                    {t}Only available for registered users{/t}
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/is_module_activated}
         {if $type == "script" || $type == "external" || (isset($video) && ($video->author_name == 'script' || $video->author_name == 'external'))}
         <div class="grid simple">
           <div class="grid-title">
@@ -255,11 +124,30 @@
         </div>
         {/if}
       </div>
+      <div class="col-md-8 col-md-pull-4">
+        <div class="grid simple">
+          <div class="grid-body">
+            {if $type == "external" || (isset($video) && $video->author_name == 'external')}
+              {include file="video/partials/_form_video_external.tpl"}
+            {elseif $type == "script" || (isset($video) && $video->author_name == 'script')}
+              {include file="video/partials/_form_video_script.tpl"}
+            {else}
+              {include file="video/partials/_form_video_panorama.tpl"}
+            {/if}
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="form-vertical video-edit-form">
+    {* <div class="form-vertical video-edit-form">
       <input type="hidden" name="type" value="{$smarty.get.type}">
       <input type="hidden" name="id" id="id" value="{$video->id|default:""}" />
-    </div>
+    </div> *}
   </div>
+
+
+  <script type="text/ng-template" id="modal-select-type">
+    {include file="video/partials/modal.select_type.tpl"}
+  </script>
+
 </form>
 {/block}
