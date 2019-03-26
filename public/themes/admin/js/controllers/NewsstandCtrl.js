@@ -114,7 +114,7 @@
             data.item.thumbnail_url = data.extra.KIOSKO_IMG_URL + data.item.path + '/' + data.item.thumb_url;
           }
 
-          if (data.extra.tags) {
+          if (data.extra && data.extra.tags) {
             data.item.tags = data.extra.tags;
           }
 

@@ -180,7 +180,7 @@ class LocaleHelperTest extends \PHPUnit\Framework\TestCase
                 [ 'from' => 'en', 'to' => 'es' ],
             ]);
 
-        $this->assertEquals([ 'gl' ], $this->helper->getTranslators('es'));
+        $this->assertEquals([ [ 'from' => 'es', 'to' => 'gl' ] ], $this->helper->getTranslators('es'));
     }
 
     /**
