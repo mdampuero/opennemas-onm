@@ -20,7 +20,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     $scope.item = {
       body: '',
       content_type_name: 'opinion',
-      fk_content_type: 5,
+      fk_content_type: 4,
       content_status: 0,
       description: '',
       favorite: 0,
