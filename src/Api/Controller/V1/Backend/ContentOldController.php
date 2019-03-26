@@ -9,9 +9,6 @@
  */
 namespace Api\Controller\V1\Backend;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-
 class ContentOldController extends ContentController
 {
     /**
