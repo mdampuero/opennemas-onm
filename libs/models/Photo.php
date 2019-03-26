@@ -302,10 +302,6 @@ class Photo extends Content
             $imageCreated = new \Imagine\Imagick\Imagine();
             $image        = $imageCreated->open($data['local_file']);
 
-            // Doesn't work as expected. Commented for now
-            // $filter = new \Onm\Imagine\Filter\CorrectExifRotation();
-            // $image = $filter->apply($image);
-
             try {
                 if ($filePathInfo['extension'] == 'gif') {
                     $image->save(
