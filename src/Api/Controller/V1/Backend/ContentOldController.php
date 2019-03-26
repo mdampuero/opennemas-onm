@@ -71,7 +71,6 @@ class ContentOldController extends ContentController
         $msg = $this->get('core.messenger');
 
         $data         = $request->request->all();
-        $data['tags'] = $this->parseTags($data['tags']);
 
         $item = $this->get($this->service)
             ->createItem($data);
@@ -104,7 +103,6 @@ class ContentOldController extends ContentController
 
         $data = $request->request->all();
 
-        // $data['tags'] = $this->parseTags($data['tags']);
         $this->get($this->service)
             ->updateItem($id, $data);
 
@@ -181,39 +179,6 @@ class ContentOldController extends ContentController
 
         return $this->get('api.service.tag')
             ->getListByIdsKeyMapped($tagIds)['items'];
-    }
-
-    /**
-     * Parses the tags provided from the request and transforms them into
-     * ids
-     *
-     * @param array $tags The lis tof tag objects
-     * @return array
-     **/
-    private function parseTags($tags = [])
-    {
-        if (empty($tags)) {
-            return [];
-        }
-
-        $ts = $this->get('api.service.tag');
-
-        $ids = [];
-        foreach ($tags as $tag) {
-            if (!array_key_exists('id', $tag) || !is_numeric($tag['id'])) {
-                unset($tag['id']);
-
-                try {
-                    $tag = $ts->responsify($ts->createItem($tag));
-                } catch (\Exception $e) {
-                    continue;
-                }
-            }
-
-            $ids[] = (int) $tag['id'];
-        }
-
-        return array_unique($ids);
     }
 
     /**
