@@ -21,6 +21,7 @@
           </li>
           <li class="quicklinks ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
             <translator keys="data.extra.keys" ng-model="config.locale.selected" options="data.extra.locale"></translator>
+            [% mode %]
           </li>
         </ul>
         <div class="all-actions pull-right">
@@ -66,6 +67,20 @@
           </li>
         </ul>
         <ul class="nav quick-section pull-right">
+          <li class="quicklinks hidden-xs">
+            <button class="btn btn-link" href="#" ng-click="patchSelected('favorite', 1)" uib-tooltip="{t escape="off"}Favorite{/t}" tooltip-placement="bottom">
+              <i class="fa fa-star"></i>
+            </button>
+          </li>
+          <li class="quicklinks hidden-xs">
+            <button class="btn btn-link" href="#" ng-click="patchSelected('favorite', 0)" uib-tooltip="{t escape="off"}Unfavorite{/t}" tooltip-placement="bottom">
+              <i class="fa fa-star"></i>
+              <i class="fa fa-times fa-sub text-danger"></i>
+            </button>
+          </li>
+          <li class="quicklinks hidden-xs">
+            <span class="h-seperate"></span>
+          </li>
           {acl isAllowed="VIDEO_AVAILABLE"}
           <li class="quicklinks">
             <button class="btn btn-link" ng-click="patchSelected('content_status', 0)" uib-tooltip="{t}Unpublish{/t}" tooltip-placement="bottom" type="button">
@@ -75,20 +90,6 @@
           <li class="quicklinks">
             <button class="btn btn-link" ng-click="patchSelected('content_status', 1)" uib-tooltip="{t}Publish{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-check fa-lg"></i>
-            </button>
-          </li>
-          <li class="quicklinks hidden-xs">
-            <span class="h-seperate"></span>
-          </li>
-          <li class="quicklinks hidden-xs">
-            <button class="btn btn-link" href="#" ng-click="patchSelected('in_home', 1)" uib-tooltip="{t escape="off"}In home{/t}" uib-tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
-              <i class="fa fa-home"></i>
-            </button>
-          </li>
-          <li class="quicklinks hidden-xs">
-            <button class="btn btn-link" href="#" ng-click="patchSelected('in_home', 0)" uib-tooltip="{t escape="off"}Drop from home{/t}" uib-tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
-              <i class="fa fa-home"></i>
-              <i class="fa fa-times fa-sub text-danger"></i>
             </button>
           </li>
           {acl isAllowed="VIDEO_DELETE"}
@@ -131,7 +132,9 @@
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
+          <li class="quicklinks hidden-xs">
           {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
+          </li>
           <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|clear_json}">
             <onm-category-selector ng-model="criteria.pk_fk_content_category" label-text="{t}Category{/t}" default-value-text="{t}Any{/t}" placeholder="{t}Any{/t}" />
           </li>
@@ -176,7 +179,7 @@
                 <th class="hidden-xs hidden-sm"></th>
                 <th>{t}Title{/t}</th>
                 <th class="center hidden-xs">{t}Section{/t}</th>
-                <th class="center nowrap hidden-xs hidden-sm">{t}Author{/t}</th>
+                {* <th class="center nowrap hidden-xs hidden-sm">{t}Author{/t}</th> *}
                 {* {acl isAllowed="VIDEO_HOME"}
                   <th class="hidden-xs text-center" width="100">{t}Home{/t}</th>
                 {/acl} *}
@@ -192,7 +195,7 @@
               <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }" data-id="[% item.id %]">
                 <td class="checkbox-cell">
                   <div class="checkbox check-default">
-                    <input id="checkbox[%$index%]" checklist-model="selected.content" checklist-value="item.id" type="checkbox">
+                    <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
                     <label for="checkbox[%$index%]"></label>
                   </div>
                 </td>
@@ -220,8 +223,8 @@
                     {/acl}
 
                     {acl isAllowed="VIDEO_DELETE"}
-                    <button class="btn btn-danger btn-small" ng-click="sendToTrash(content)" type="button">
-                      <i class="fa fa-trash-o"></i> {t}Remove{/t}
+                    <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">
+                      <i class="fa fa-trash-o m-r-5"></i> {t}Remove{/t}
                     </button>
                     {/acl}
                   </div>
@@ -229,9 +232,9 @@
                 <td class="center hidden-xs hidden-sm">
                   [% extra.categories[item.category] %]
                 </td>
-                <td class="center nowrap hidden-xs hidden-sm">
+                {* <td class="center nowrap hidden-xs hidden-sm">
                   [% item.author_name %]
-                </td>
+                </td> *}
                 {* {acl isAllowed="VIDEO_HOME"}
                   <td class="hidden-xs text-center">
                     <button class="btn btn-white" ng-click="updateItem($index, item.id, 'backend_ws_content_toggle_in_home', 'in_home', item.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
@@ -242,15 +245,15 @@
                 {/acl} *}
                 {acl isAllowed="VIDEO_FAVORITE"}
                   <td class="hidden-xs text-center">
-                    <button class="btn btn-white" ng-click="updateItem($index, item.id, 'backend_ws_content_toggle_favorite', 'favorite', item.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.favorite_loading == 1, 'fa-star text-warning': !item.favorite_loading == 1 && item.favorite == 1, 'fa-star-o': !item.favorite_loading == 1 && item.favorite != 1 }"></i>
+                    <button class="btn btn-white" ng-click="patch(item, 'favorite', item.favorite != 1 ? 1 : 0)" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.favoriteLoading == 1, 'fa-star text-warning': !item.favoritLoading == 1 && item.favorite == 1, 'fa-star-o': !item.favoriteLoading == 1 && item.favorite != 1 }"></i>
                     </button>
                   </td>
                 {/acl}
                 {acl isAllowed="VIDEO_AVAILABLE"}
                   <td class="text-center">
-                    <button class="btn btn-white" ng-click="updateItem($index, item.id, 'backend_ws_content_set_content_status', 'content_status', item.content_status != 1 ? 1 : 0, 'loading')" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.loading == 1, 'fa-check text-success': !item.loading == 1 && item.content_status == 1, 'fa-times text-danger': !item.loading == 1 && item.content_status == 0 }"></i>
+                    <button class="btn btn-white" ng-click="patch(item, 'content_status', item.content_status != 1 ? 1 : 0)" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.content_statusLoading == 1, 'fa-check text-success': !item.content_statusLoading == 1 && item.content_status == 1, 'fa-times text-danger': !item.content_statusLoading == 1 && item.content_status == 0 }"></i>
                     </button>
                   </td>
                 {/acl}
@@ -361,9 +364,8 @@
     </div>
   </div>
 
-
   <script type="text/ng-template" id="modal-delete">
-    {include file="common/modals/_modalDelete.tpl"}
+    {include file="common/modals/modal.trash.tpl"}
   </script>
 
   <script type="text/ng-template" id="modal-delete-selected">

@@ -74,6 +74,17 @@
         };
 
         /**
+         * @function setMode
+         * @memberOf VideoListCtrl
+         *
+         * @description
+         *   Sets the listing mode.
+         */
+        $scope.setMode = function(mode) {
+          $scope.mode = mode === 'list' ? 'list' : 'grid';
+        };
+
+        /**
          * @inheritdoc
          */
         $scope.parseList = function(data) {
