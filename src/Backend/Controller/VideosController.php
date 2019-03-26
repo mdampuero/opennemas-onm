@@ -20,38 +20,40 @@ use Common\Core\Controller\Controller;
  *
  * @package Backend_Controllers
  */
-class VideosController extends Controller
+class VideosController extends BackendController
 {
     /**
-     * List videos.
+     * The extension name required by this controller.
      *
-     * @Security("hasExtension('VIDEO_MANAGER')
-     *     and hasPermission('VIDEO_ADMIN')")
+     * @var string
      */
-    public function listAction()
-    {
-        return $this->render('video/list.tpl');
-    }
+    protected $extension = 'VIDEO_MANAGER';
 
     /**
-     * List videos available for widget.
+     * The list of permissions for every action.
      *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('VIDEO_MANAGER')
-     *     and hasPermission('VIDEO_ADMIN')")
+     * @var type
      */
-    public function widgetAction()
-    {
-        $configurations = $this->get('orm.manager')
-            ->getDataSet('Settings')
-            ->get('video_settings');
+    protected $permissions = [
+        'create' => 'VIDEO_CREATE',
+        'update' => 'VIDEO_UPDATE',
+        'list'   => 'VIDEO_ADMIN',
+        'show'   => 'VIDEO_UPDATE',
+    ];
 
-        return $this->render('video/list.tpl', [
-            'total_elements_widget' => $configurations['total_widget'],
-            'category'              => 'widget',
-        ]);
-    }
+    /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'preview' => 'video_inner'
+    ];
+
+    /**
+     * The resource name.
+     *
+     * @var string
+     */
+    protected $resource = 'video';
 
     /**
      * Handles the form for create a new video.
@@ -259,7 +261,7 @@ class VideosController extends Controller
      * @Security("hasExtension('VIDEO_MANAGER')
      *     and hasPermission('VIDEO_UPDATE')")
      */
-    public function showAction(Request $request)
+    public function showAction(Request $request, $id)
     {
         $id    = $request->query->getDigits('id', null);
         $video = $this->get('entity_repository')->find('Video', $id);
