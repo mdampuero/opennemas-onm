@@ -229,51 +229,6 @@ admin_photo_update:
     path:     /image/{id}/update
     defaults: { _controller: BackendBundle:Images:update }
 
-# Videos controller routes
-admin_videos:
-    path:     /videos
-    defaults: { _controller: BackendBundle:Videos:list }
-
-admin_videos_create:
-    path:     /videos/create
-    defaults: { _controller: BackendBundle:Videos:create }
-
-admin_videos_get_info:
-    path:     /videos/get-video-information
-    defaults: { _controller: BackendBundle:Videos:videoInformation }
-    options:
-        expose: true
-
-admin_video_show:
-    path:     /videos/{id}/show
-    defaults: { _controller: BackendBundle:Videos:show }
-    options:
-        expose: true
-
-admin_videos_update:
-    path:     /videos/{id}/update
-    defaults: { _controller: BackendBundle:Videos:update }
-
-admin_videos_widget:
-    path:     /videos/widget
-    defaults: { _controller: BackendBundle:Videos:widget }
-
-admin_videos_config:
-    path:     /videos/config
-    defaults: { _controller: BackendBundle:Videos:config }
-
-admin_video_save_positions:
-    path:     /videos/save-positions
-    defaults: { _controller: BackendBundle:Videos:savePositions }
-
-admin_video_get_relations:
-    path:     /videos/{id}/relations
-    defaults: { _controller: BackendBundle:Videos:relations }
-
-admin_videos_content_provider:
-    path:     /videos/content-provider
-    defaults: { _controller: BackendBundle:Videos:contentProvider }
-
 # Album controller routes
 admin_albums:
     path:     /albums
@@ -652,6 +607,10 @@ backend_tag:
 backend_theme:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/theme.yml'
+
+backend_video:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/video.yml'
 
 backend_url:
     prefix:   /

@@ -305,7 +305,7 @@ class VideosController extends BackendController
             }
         }
 
-        return $this->render('video/new.tpl', [
+        return $this->render('video/item.tpl', [
             'information'    => $video->information,
             'video'          => $video,
             'authors'        => $this->getAuthors(),

@@ -1,0 +1,44 @@
+# Videos controller routes
+backend_videos_list:
+    path:     /videos
+    defaults: { _controller: BackendBundle:Videos:list }
+
+backend_videos_create:
+    path:     /videos/create
+    defaults: { _controller: BackendBundle:Videos:create }
+
+backend_videos_get_info:
+    path:     /videos/get-video-information
+    defaults: { _controller: BackendBundle:Videos:videoInformation }
+    options:
+        expose: true
+
+backend_video_show:
+    path:     /videos/{id}/show
+    defaults: { _controller: BackendBundle:Videos:show }
+    options:
+        expose: true
+
+backend_videos_update:
+    path:     /videos/{id}/update
+    defaults: { _controller: BackendBundle:Videos:update }
+
+backend_videos_widget:
+    path:     /videos/widget
+    defaults: { _controller: BackendBundle:Videos:widget }
+
+backend_videos_config:
+    path:     /videos/config
+    defaults: { _controller: BackendBundle:Videos:config }
+
+backend_video_save_positions:
+    path:     /videos/save-positions
+    defaults: { _controller: BackendBundle:Videos:savePositions }
+
+backend_video_get_relations:
+    path:     /videos/{id}/relations
+    defaults: { _controller: BackendBundle:Videos:relations }
+
+backend_videos_content_provider:
+    path:     /videos/content-provider
+    defaults: { _controller: BackendBundle:Videos:contentProvider }
