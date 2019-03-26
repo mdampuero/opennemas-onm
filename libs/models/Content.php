@@ -269,22 +269,40 @@ class Content implements \JsonSerializable, CsvSerializable
                     $this->slug = \Onm\StringUtils::generateSlug($this->title);
                 }
 
-                if ($this->content_type_name === 'article'
+                if (in_array($this->content_type_name, ['article', 'opinion'])
                     && in_array($name, $this->getL10nKeys())
                 ) {
                     if (!getService('core.instance')->hasMultilanguage()
                         || getService('core.locale')->getContext() !== 'backend'
                     ) {
+                        if (property_exists($this, $name)) {
+                            return getService('data.manager.filter')
+                                ->set($this->{$name})
+                                ->filter('localize')
+                                ->get();
+                        }
+
+                        if (is_array($this->meta) && array_key_exists($name, $this->meta)) {
+                            return getService('data.manager.filter')
+                                ->set($this->meta[$name])
+                                ->filter('localize')
+                                ->get();
+                        }
+                    }
+
+                    if (property_exists($this, $name)) {
                         return getService('data.manager.filter')
                             ->set($this->{$name})
-                            ->filter('localize')
+                            ->filter('unlocalize')
                             ->get();
                     }
 
-                    return getService('data.manager.filter')
-                        ->set($this->{$name})
-                        ->filter('unlocalize')
-                        ->get();
+                    if (is_array($this->meta) && array_key_exists($name, $this->meta)) {
+                        return getService('data.manager.filter')
+                            ->set($this->meta[$name])
+                            ->filter('unlocalize')
+                            ->get();
+                    }
                 }
 
                 if (property_exists($this, $name)) {
