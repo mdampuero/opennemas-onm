@@ -124,25 +124,16 @@ class Opinion extends Content
     public function create($data)
     {
         $data['position'] = 1;
-        $data['category'] = 4; // force internal category name
-
-        // Editorial or director
-        if (!isset($data['fk_author'])) {
-            $data['fk_author'] = $data['type_opinion'];
-        }
-
-        // Set author img to null if not exist
-        $data['fk_author_img'] = isset($data['fk_author_img']) ?
-            $data['fk_author_img'] : null;
 
         parent::create($data);
+
+        $this->pk_opinion = $this->id;
 
         try {
             getService('dbal_connection')->insert('opinions', [
                 'pk_opinion'    => $this->id,
                 'fk_author'     => (int) $data['fk_author'],
-                'fk_author_img' => (int) $data['fk_author_img'],
-                'type_opinion'  => $data['type_opinion'],
+                'type_opinion'  => 0,
             ]);
 
             if (array_key_exists('summary', $data) && !empty($data['summary'])) {
@@ -250,9 +241,8 @@ class Opinion extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT contents.*, opinions.*, contents_categories.*, users.name, users.bio, users.url, '
-                . 'users.avatar_img_id FROM contents '
-                . 'LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                'SELECT contents.*, opinions.*, users.name, users.bio, users.url, users.avatar_img_id '
+                . 'FROM contents '
                 . 'LEFT JOIN opinions ON pk_content = pk_opinion '
                 . 'LEFT JOIN users ON opinions.fk_author = users.id WHERE pk_content=?',
                 [ $id ]
@@ -290,50 +280,22 @@ class Opinion extends Content
      */
     public function update($data)
     {
-        if (!isset($data['fk_author'])) {
-            $data['fk_author'] = $data['type_opinion'];
-        } // Editorial o director
-
-        $data['fk_author_img'] = isset($data['fk_author_img']) ?
-            $data['fk_author_img'] : null;
-
         parent::update($data);
 
         try {
             getService('dbal_connection')->update('opinions', [
                 'fk_author'     => (int) $data['fk_author'],
                 'fk_author_img' => (int) $data['fk_author_img'],
-                'type_opinion'  => $data['type_opinion'],
             ], [ 'pk_opinion' => (int) $data['id'] ]);
 
-            if (array_key_exists('summary', $data) && !empty($data['summary'])) {
-                parent::setMetadata('summary', $data['summary']);
-            } else {
-                parent::removeMetadata('summary');
-            }
+            $metaKeys = ['summary', 'img1', 'img2', 'img1_footer', 'img2_footer'];
 
-            if (array_key_exists('img1', $data) && !empty($data['img1'])) {
-                parent::setMetadata('img1', $data['img1']);
-            } else {
-                parent::removeMetadata('img1');
-            }
-
-            if (array_key_exists('img2', $data) && !empty($data['img2'])) {
-                parent::setMetadata('img2', $data['img2']);
-            } else {
-                parent::removeMetadata('img2');
-            }
-
-            if (array_key_exists('img1_footer', $data) && !empty($data['img1_footer'])) {
-                parent::setMetadata('img1_footer', $data['img1_footer']);
-            } else {
-                parent::removeMetadata('img1_footer');
-            }
-
-            if (array_key_exists('img2_footer', $data) && !empty($data['img2_footer'])) {
-                parent::setMetadata('img2_footer', $data['img2_footer']);
-            } else {
-                parent::removeMetadata('img2_footer');
+            foreach ($metaKeys as $key) {
+                if (array_key_exists($key, $data) && !empty($data[$key])) {
+                    parent::setMetadata($key, $data[$key]);
+                } else {
+                    parent::removeMetadata($key);
+                }
             }
 
             $this->saveMetadataFields($data, Opinion::EXTRA_INFO_TYPE);
