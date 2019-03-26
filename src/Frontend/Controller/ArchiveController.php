@@ -53,13 +53,11 @@ class ArchiveController extends Controller
                 'DATE(starttime)' => [[ 'value' => '"' . $date . '"', 'field' => true ]],
                 'starttime'              => [
                     'union' => 'OR',
-                    [ 'value' => '0000-00-00 00:00:00' ],
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                     [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
                 ],
                 'endtime'                => [
                     'union' => 'OR',
-                    [ 'value' => '0000-00-00 00:00:00' ],
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                     [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
                 ]
@@ -73,11 +71,12 @@ class ArchiveController extends Controller
             $total    = $er->countBy($criteria);
             $library  = [];
 
-            $cr = $this->get('category_repository');
             foreach ($contents as $content) {
                 // Create category group
                 if (!isset($library[$content->category])) {
-                    $library[$content->category]           = $cr->find($content->category);
+                    $library[$content->category] = $this->get('api.service.category')
+                        ->getItem($content->pk_fk_content_category);
+
                     $library[$content->category]->contents = [];
                 }
 

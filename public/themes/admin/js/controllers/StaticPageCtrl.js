@@ -46,7 +46,7 @@ angular.module('BackendApp.controllers')
       $scope.item = {
         body: '',
         content_type_name: 'static_page',
-        fk_content_type: 5,
+        fk_content_type: 13,
         content_status: 0,
         description: '',
         favorite: 0,
@@ -98,10 +98,13 @@ angular.module('BackendApp.controllers')
       $scope.parseItem = function(data) {
         if (data.item) {
           $scope.item      = angular.extend($scope.item, data.item);
-          $scope.item.tags = $scope.item.tags.map(function(id) {
+          $scope.data.item.tags = $scope.data.item.tags.map(function(id) {
             return data.extra.tags[id];
           });
         }
+
+        $scope.configure(data.extra);
+        $scope.localize($scope.data.item, 'item', true);
       };
 
       // Update slug when title is updated

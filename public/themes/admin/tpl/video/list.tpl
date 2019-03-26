@@ -20,10 +20,8 @@
             <div data-toggle="dropdown">
               {if $category == 'widget'}
                 {t}Widget home{/t}
-              {elseif $category == 'all'}
-                {t}Listing{/t}
               {else}
-                {$datos_cat[0]->title}
+                {t}Listing{/t}
               {/if}
               <span class="caret"></span>
             </div>

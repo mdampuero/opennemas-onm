@@ -13,23 +13,11 @@
         <option value="internal">{t}Module{/t}</option>
       {/if}
       {if count($categories) > 0}
-        <option value="category">{t}Frontpage{/t}</option>
+        <option value="category">{t}Categories{/t}</option>
       {/if}
-      {is_module_activated name="ALBUM_MANAGER"}
-        {if count($categories_album) > 0}
-          <option value="albumCategory">{t}Album Category{/t}</option>
-        {/if}
-      {/is_module_activated}
-      {is_module_activated name="VIDEO_MANAGER"}
-        {if count($categories_video) > 0}
-          <option value="videoCategory">{t}Video Category{/t}</option>
-        {/if}
-      {/is_module_activated}
-      {is_module_activated name="POLL_MANAGER"}
-        {if count($categories_poll) > 0}
-          <option value="pollCategory">{t}Poll Category{/t}</option>
-        {/if}
-      {/is_module_activated}
+      {if count($categories) > 0}
+        <option value="blog-category">{t}Category blog{/t}</option>
+      {/if}
       {if count($static_pages) > 0}
         <option value="static">{t}Static Page{/t}</option>
       {/if}
@@ -38,9 +26,6 @@
           <option value="syncCategory">{t}Synchronized Category{/t}</option>
         {/if}
       {/is_module_activated}
-      {if count($categories) > 0}
-        <option value="blog-category">{t}Category blog{/t}</option>
-      {/if}
       {is_module_activated name="SYNC_MANAGER"}
         {if count($sync_sites) > 0}
           <option value="syncBlogCategory">{t}Sync Automatic Categories{/t}</option>
@@ -79,48 +64,6 @@
       </div>
     </div>
   {/if}
-  {is_module_activated name="ALBUM_MANAGER"}
-    {if count($categories_album) > 0}
-      <div ng-if="type == 'albumCategory'" ng-init="albumCategories = {json_encode($categories_album)|clear_json}">
-        <div class="form-group" ng-repeat="category in albumCategories">
-          <div class="checkbox col-md-6">
-            <input id="checkbox-album-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
-            <label for="checkbox-album-[% $index %]">
-              [% category.title %]
-            </label>
-          </div>
-        </div>
-      </div>
-    {/if}
-  {/is_module_activated}
-  {is_module_activated name="VIDEO_MANAGER"}
-    {if count($categories_video) > 0}
-      <div ng-if="type == 'videoCategory'" ng-init="videoCategories = {json_encode($categories_video)|clear_json}">
-        <div class="form-group" ng-repeat="category in videoCategories">
-          <div class="checkbox col-md-6">
-            <input id="checkbox-video-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
-            <label for="checkbox-video-[% $index %]">
-              [% category.title %]
-            </label>
-          </div>
-        </div>
-      </div>
-    {/if}
-  {/is_module_activated}
-  {is_module_activated name="POLL_MANAGER"}
-    {if count($categories_poll) > 0}
-      <div ng-if="type == 'pollCategory'" ng-init="pollCategories = {json_encode($categories_poll)|clear_json}">
-        <div class="form-group" ng-repeat="category in pollCategories">
-          <div class="checkbox col-md-6">
-            <input id="checkbox-poll-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
-            <label for="checkbox-poll-[% $index %]">
-              [% category.title %]
-            </label>
-          </div>
-        </div>
-      </div>
-    {/if}
-  {/is_module_activated}
   {if count($pages) > 0}
     <div ng-if="type == 'internal'" ng-init="pages = {json_encode($pages)|clear_json}">
       <div class="form-group" ng-repeat="page in pages">

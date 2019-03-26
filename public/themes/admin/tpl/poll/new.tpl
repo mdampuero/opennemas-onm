@@ -144,18 +144,7 @@
                     <div class="form-group">
                       <label class="form-label" for="category">{t}Category{/t}</label>
                       <div class="controls">
-                        <select name="category" id="category">
-                          {section name=as loop=$allcategorys}
-                          <option value="{$allcategorys[as]->pk_content_category}"
-                                  {if $allcategorys[as]->inmenu eq 0} class="unavailable" disabled {/if}
-                                  {if $poll->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
-                          {section name=su loop=$subcat[as]}
-                          <option value="{$subcat[as][su]->pk_content_category}"
-                                  {if $subcat[as][su]->inmenu eq 0} class="unavailable" disabled {/if}
-                                  {if $poll->category eq $subcat[as][su]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                          {/section}
-                          {/section}
-                        </select>
+                        <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" locale="config.locale.selected" ng-model="poll.pk_fk_content_category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
                       </div>
                     </div>
                   </div>

@@ -9,6 +9,6 @@
  */
 namespace Api\Exception;
 
-class UpdateItemException extends \Exception
+class UpdateItemException extends ApiException
 {
 }

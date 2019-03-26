@@ -702,13 +702,11 @@ class ContentManager
         $order = [ 'content_views.views' => 'desc' ];
 
         if ($category) {
-            $category = getService('category_repository')->find($category);
+            $category = getService('api.service.category')->getItem($category);
 
-            if ($category) {
-                $category = $category->name;
-            }
-
-            $criteria['category_name'] = [ [ 'value' => $category ] ];
+            $criteria['pk_fk_content_category'] = [
+                [ 'value' => $category->pk_content_category ]
+            ];
         }
 
         if (!$all) {

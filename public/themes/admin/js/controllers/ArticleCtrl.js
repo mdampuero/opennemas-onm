@@ -281,11 +281,12 @@
             { name: 'api_v1_backend_article_show', params: { id: id } };
 
           http.get(route).then(function(response) {
+            $scope.disableFlags();
+
             $scope.data   = response.data;
             $scope.backup = { content_status: 0 };
 
             $scope.configure(response.data.extra);
-            $scope.disableFlags();
 
             if ($scope.data.article) {
               $scope.backup.content_status = $scope.data.article.content_status;
@@ -308,7 +309,7 @@
 
             $scope.build();
 
-            if ($scope.config.multilanguage && $scope.config.locale) {
+            if ($scope.config.locale.multilanguage) {
               $scope.localize();
             }
 
@@ -343,25 +344,23 @@
          *   Configures the localization for the current form.
          */
         $scope.localize = function() {
-          var lz   = localizer.get($scope.data.extra.options);
+          var lz   = localizer.get($scope.data.extra.locale);
           var keys = [ 'relatedFront', 'relatedInner', 'relatedHome' ];
 
           // Localize original items
           $scope.article = lz.localize($scope.data.article,
-            $scope.data.extra.keys, $scope.config.locale);
-          $scope.config.linkers.article =
-            linker.get($scope.data.extra.keys, $scope, true, keys);
-
-          $scope.config.linkers.article.setKey($scope.config.locale);
-          $scope.config.linkers.article.link($scope.data.article, $scope.article);
-
+            $scope.data.extra.keys, $scope.config.locale.selected);
           $scope.categories = lz.localize($scope.data.extra.categories,
-            [ 'title' ], $scope.config.locale);
+            [ 'title' ], $scope.config.locale.selected);
 
-          $scope.config.linkers.categories =
-            linker.get($scope.data.extra.keys, $scope, false, keys);
+          $scope.config.linkers.article = linker.get($scope.data.extra.keys,
+            $scope.config.locale.default, $scope, true, keys);
+          $scope.config.linkers.categories = linker.get($scope.data.extra.keys,
+            $scope.config.locale.default, $scope, false, keys);
 
-          $scope.config.linkers.categories.setKey($scope.config.locale);
+          $scope.config.linkers.article.setKey($scope.config.locale.selected);
+          $scope.config.linkers.article.link($scope.data.article, $scope.article);
+          $scope.config.linkers.categories.setKey($scope.config.locale.selected);
           $scope.config.linkers.categories.link($scope.data.extra.categories, $scope.categories);
 
           for (var i = 0; i < keys.length; i++) {
@@ -733,7 +732,7 @@
 
         // Generates slug when flag changes
         $scope.$watch('flags.generate.slug', function(nv) {
-          if ($scope.article.id || $scope.article.slug || !nv) {
+          if (!nv || $scope.article.slug || !$scope.article.title) {
             $scope.flags.generate.slug = false;
 
             return;
@@ -753,7 +752,7 @@
         });
 
         // Shows a modal window to translate content automatically
-        $scope.$watch('config.locale', function(nv, ov) {
+        $scope.$watch('config.locale.selected', function(nv, ov) {
           if (!nv || nv === ov ||
             $scope.isTranslated($scope.data.article,
               $scope.data.extra.keys, nv)) {
@@ -761,7 +760,7 @@
           }
 
           // Filter for selected locale and translated in original language
-          var translators = $scope.config.translators.filter(function(e) {
+          var translators = $scope.config.locale.translators.filter(function(e) {
             return e.to === nv && $scope.isTranslated($scope.data.article,
               $scope.data.extra.keys, e.from);
           });
@@ -771,7 +770,7 @@
           }
 
           var config = {
-            locales: $scope.data.extra.options.available,
+            locales: $scope.config.locale.available,
             translators: translators
           };
 

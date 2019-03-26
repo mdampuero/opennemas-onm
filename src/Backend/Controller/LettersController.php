@@ -98,7 +98,7 @@ class LettersController extends Controller
      */
     public function showAction(Request $request)
     {
-        $id    = $request->query->getDigits('id', null);
+        $id     = $request->query->getDigits('id', null);
         $letter = $this->get('entity_repository')->find('Letter', $id);
 
         if (!empty($letter->image)) {
@@ -231,53 +231,6 @@ class LettersController extends Controller
         return $this->render('letter/content-provider.tpl', [
             'letters'    => $letters,
             'pagination' => $pagination,
-        ]);
-    }
-
-    /**
-     * Lists all the letters within a category for the related manager.
-     *
-     * @param  Request $request The request object.
-     * @return Response         The response object.
-     *
-     * @Security("hasExtension('LETTER_MANAGER')")
-     */
-    public function contentProviderRelatedAction(Request $request)
-    {
-        $categoryId   = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 20);
-
-        $em       = $this->get('entity_repository');
-        $category = $this->get('category_repository')->find($categoryId);
-
-        $filters = [
-            'content_type_name' => [ ['value' => 'letter'] ],
-            'in_litter'         => [ ['value' => 1, 'operator' => '!='] ]
-        ];
-
-        if ($categoryId != 0) {
-            $filters['category_name'] = [ [ 'value' => $category->name ] ];
-        }
-
-        $countLetters = true;
-        $letters      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countLetters);
-
-        // Build the pagination
-        $pagination = $this->get('paginator')->get([
-            'directional' => true,
-            'boundary'    => true,
-            'epp'         => $itemsPerPage,
-            'page'        => $page,
-            'total'       => $countLetters,
-            'route'       => 'admin_letters_content_provider_related'
-        ]);
-
-        return $this->render("common/content_provider/_container-content-list.tpl", [
-            'contents'   => $letters,
-            'pagination' => $pagination
         ]);
     }
 }

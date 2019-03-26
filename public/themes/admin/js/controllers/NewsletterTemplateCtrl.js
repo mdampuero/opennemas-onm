@@ -89,14 +89,16 @@
             return;
           }
 
-          // Force integer values in id property
-          for (var i = 0; i < data.item.recipients.length; i++) {
-            if (data.item.recipients[i].id) {
-              data.item.recipients[i].id = data.item.recipients[i].id.toString();
-            }
+          if (data.item.recipients) {
+            // Force integer values in id property
+            for (var i = 0; i < data.item.recipients.length; i++) {
+              if (data.item.recipients[i].id) {
+                data.item.recipients[i].id = data.item.recipients[i].id.toString();
+              }
 
-            // TODO: Remove when not subscribers stored in settings in production
-            delete data.item.recipients[i].subscribers;
+              // TODO: Remove when not subscribers stored in settings in production
+              delete data.item.recipients[i].subscribers;
+            }
           }
 
           if (data.item.contents) {

@@ -34,69 +34,77 @@ class Categories
     }
 
     /*
-    * @url GET /categories/id/:title
+    * @url GET /categories/id/:slug
     */
-    public function id($actualCategory)
+    public function id($slug)
     {
-        $ccm              = new \ContentCategoryManager();
-        $actualCategoryId = $ccm->get_id($actualCategory);
+        try {
+            $item = getService('api.service.category')->getItemBySlug($slug);
 
-        return (int) $actualCategoryId;
-    }
-
-    /*
-    * @url GET /categories/exist/:category_name
-    */
-    public function exist($actualCategory)
-    {
-        $ccm = new \ContentCategoryManager();
-
-        return $ccm->exists($actualCategory);
-    }
-
-    /*
-    * @url GET /categories/title/:category_name
-    */
-    public function title($actualCategory)
-    {
-        $ccm = new \ContentCategoryManager();
-
-        return $ccm->getTitle($actualCategory);
-    }
-
-    /*
-    * @url GET /categories/object/:category_name
-    */
-    public function object($categoryName)
-    {
-        // Get category object
-        $categoryManager = getService('category_repository');
-        $category        = $categoryManager->findBy(
-            ['name' => [['value' => $categoryName]]],
-            '1'
-        );
-
-        if (empty($category)) {
-            throw new RestException(404, 'category not found');
+            return $item->pk_content_category;
+        } catch (\Exception $e) {
+            throw new RestException(404, 'Category not found');
         }
-        $category = $category[0];
-
-        return serialize($category);
     }
 
     /*
-    * @url GET /categories/layout/:category_id
+    * @url GET /categories/exist/:slug
     */
-    public function layout($actualCategory)
+    public function exist($slug)
     {
-        $ccm              = new \ContentCategoryManager();
-        $actualCategoryId = $ccm->get_id($actualCategory);
+        try {
+            getService('api.service.category')->getItemBySlug($slug);
 
-        $layout = getService('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('frontpage_layout_' . $actualCategoryId, 'default');
+            return true;
+        } catch (\Exception  $e) {
+            return false;
+        }
+    }
 
-        return $layout;
+    /*
+    * @url GET /categories/title/:slug
+    */
+    public function title($slug)
+    {
+        try {
+            $item = getService('api.service.category')->getItemBySlug($slug);
+
+            return $item->title;
+        } catch (\Exception $e) {
+            throw new RestException(404, 'Category not found');
+        }
+    }
+
+    /*
+    * @url GET /categories/object/:slug
+    */
+    public function object($slug)
+    {
+        try {
+            $item = getService('api.service.category')->getItemBySlug($slug);
+
+            return serialize($item);
+        } catch (\Exception $e) {
+            throw new RestException(404, 'Category not found');
+        }
+    }
+
+    /*
+    * @url GET /categories/layout/:slug
+    */
+    public function layout($slug)
+    {
+        try {
+            $item = getService('api.service.category')->getItemBySlug($slug);
+
+            $layout = getService('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('frontpage_layout_' . $item->pk_content_category, 'default');
+
+            return $layout;
+        } catch (\Exception $e) {
+            throw new RestException(404, 'Category not found');
+        }
     }
 
     /*

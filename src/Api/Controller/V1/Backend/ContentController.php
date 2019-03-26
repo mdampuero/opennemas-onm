@@ -97,26 +97,15 @@ class ContentController extends ApiController
      **/
     protected function getExtraData($items = null)
     {
-        $security   = $this->get('core.security');
-        $converter  = $this->get('orm.manager')->getConverter('Category');
-        $categories = $this->get('orm.manager')
-            ->getRepository('Category')
-            ->findBy('internal_category = 1');
-
-        $categories = array_filter($categories, function ($category) use ($security) {
-            return $security->hasCategory($category->pk_content_category);
-        });
-
-        $extra = [
-            'categories'       => $converter->responsify($categories),
+        return [
             'related_contents' => $this->getRelatedContents($items),
             'tags'             => $this->getTagsFromItems($items),
+            'keys'             => $this->get($this->service)->getL10nKeys(),
+            'locale'           => $this->get('core.helper.locale')->getConfiguration(),
             'template_vars'    => [
                 'media_dir' => $this->get('core.instance')->getMediaShortPath() . '/images',
             ],
         ];
-
-        return array_merge($extra, $this->getLocaleData('frontend'));
     }
 
     /**

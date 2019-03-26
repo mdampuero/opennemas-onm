@@ -64,34 +64,6 @@
         $scope.refreshOnUpdate = true;
 
         /**
-         * @function parseItem
-         * @memberOf RestInnerCtrl
-         *
-         * @description
-         *   Parses the response and adds information to the scope.
-         *
-         * @param {Object} data The data in the response.
-         */
-        $scope.parseItem = function(data) {
-          if (data.item) {
-            $scope.item      = angular.extend($scope.item, data.item);
-            $scope.item.tags = $scope.item.tags.map(function(id) {
-              return data.extra.tags[id];
-            });
-          }
-
-          var coverId = $scope.item.related_contents.filter(function(el) {
-            return el.relationship === 'cover';
-          }).shift();
-
-          if (!coverId) {
-            return;
-          }
-
-          $scope.cover = data.extra.related_contents[coverId.pk_content2];
-        };
-
-        /**
          * @memberOf EventCtrl
          *
          * @description
@@ -105,6 +77,37 @@
           save:     'api_v1_backend_event_save',
           show:     'api_v1_backend_event_show',
           update:   'api_v1_backend_event_update'
+        };
+
+        /**
+         * @function parseItem
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Parses the response and adds information to the scope.
+         *
+         * @param {Object} data The data in the response.
+         */
+        $scope.parseItem = function(data) {
+          if (data.item) {
+            $scope.data.item      = angular.extend($scope.item, data.item);
+            $scope.data.item.tags = $scope.item.tags.map(function(id) {
+              return data.extra.tags[id];
+            });
+          }
+
+          $scope.configure(data.extra);
+          $scope.localize($scope.data.item, 'item', true);
+
+          var coverId = $scope.data.item.related_contents.filter(function(el) {
+            return el.relationship === 'cover';
+          }).shift();
+
+          if (!coverId) {
+            return;
+          }
+
+          $scope.cover = data.extra.related_contents[coverId.pk_content2];
         };
 
         /**

@@ -128,7 +128,7 @@ class AdvertisementController extends Controller
      * Returns the list of advertisements.
      *
      * @param array   $places   The list of places.
-     * @param integer $category The category id.
+     * @param string  $category The category name.
      *
      * @return array The list of advertisements.
      */
@@ -138,14 +138,14 @@ class AdvertisementController extends Controller
         $excluded = [ 'home', 'opinion', 'blog', 'newsletter' ];
 
         if (!empty($category) && !in_array($category, $excluded)) {
-            $category = $this->get('category_repository')
-                ->findOneBy([ 'name' => [ [ 'value' => $category ] ] ]);
+            try {
+                $category = $this->get('api.service.category')
+                    ->getItemBySlug($category);
 
-            if (empty($category)) {
+                $id = $category->pk_content_category;
+            } catch (\Exception $e) {
                 return [];
             }
-
-            $id = $category->pk_content_category;
         }
 
         return $this->get('advertisement_repository')

@@ -213,9 +213,6 @@ class Content implements \JsonSerializable, CsvSerializable
     public function __get($name)
     {
         switch ($name) {
-            case 'category_title':
-                return $this->category_title = $this->loadCategoryTitle();
-
             case 'comments':
                 return 0;
 
@@ -408,8 +405,13 @@ class Content implements \JsonSerializable, CsvSerializable
         if (empty($this->category_name)
             && !empty($this->pk_fk_content_category)
         ) {
-            $this->category_name = ContentCategoryManager::get_instance()
-                ->getName($this->pk_fk_content_category);
+            $this->loadCategoryName();
+        }
+
+        if (empty($this->category_title)
+            && !empty($this->pk_fk_content_category)
+        ) {
+            $this->loadCategoryTitle();
         }
 
         if (!empty($this->params) && is_string($this->params)) {
@@ -535,8 +537,12 @@ class Content implements \JsonSerializable, CsvSerializable
 
         $catName = '';
         if (array_key_exists('category', $data) && !empty($data['category'])) {
-            $ccm     = ContentCategoryManager::get_instance();
-            $catName = $ccm->getName($data['category']);
+            getService('core.locale')->setContext('frontend');
+
+            $catName = getService('api.service.category')
+                ->getItem($data['category'])->name;
+
+            getService('core.locale')->setContext('backend');
         }
 
         foreach ($this->getL10nKeys() as $key) {
@@ -681,8 +687,12 @@ class Content implements \JsonSerializable, CsvSerializable
         if (array_key_exists('category', $data)
             && $data['category'] != $this->category
         ) {
-            $ccm     = ContentCategoryManager::get_instance();
-            $catName = $ccm->getName($data['category']);
+            getService('core.locale')->setContext('frontend');
+
+            $catName = getService('api.service.category')
+                ->getItem($data['category'])->name;
+
+            getService('core.locale')->setContext('backend');
         } else {
             $catName = $this->category_name;
         }
@@ -908,10 +918,6 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function getUri()
     {
-        if (empty($this->category_name)) {
-            $this->category_name = $this->loadCategoryName();
-        }
-
         $type     = $this->content_type_name;
         $id       = sprintf('%06d', $this->id);
         $date     = date('YmdHis', strtotime($this->created));
@@ -1462,7 +1468,6 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function getQuickInfo()
     {
-        $ccm = ContentCategoryManager::get_instance();
         if (!empty($this->fk_user_last_editor)) {
             $author = getService('user_repository')->find($this->fk_user_last_editor);
         } else {
@@ -1481,7 +1486,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return [
                 'title'           => $this->__get('title'),
-                'category'        => $ccm->getName($this->category),
+                'category'        => $this->category_name,
                 'views'           => $this->views,
                 'starttime'       => $this->starttime,
                 'endtime'         => $this->endtime,
@@ -1493,8 +1498,7 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * TODO:  move to ContentCategory class
-     * TODO: Remove the $pkContent parameter
+     * TODO: Move to ContentCategory class
      *
      * Loads the category name for a given content id
      *
@@ -1502,10 +1506,10 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function loadCategoryName()
     {
-        $category = ContentCategoryManager::get_instance()
-             ->findById($this->category);
-
-        if (!is_object($category)) {
+        try {
+            $category = getService('api.service.category')
+                ->getItem($this->pk_fk_content_category);
+        } catch (\Exception $e) {
             return null;
         }
 
@@ -1515,8 +1519,7 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * TODO:  move to ContentCategory class
-     * TODO: Remove the $pkContent parameter
+     * TODO: Move to ContentCategory class
      *
      * Loads the category title for a given content id
      *
@@ -1524,17 +1527,14 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function loadCategoryTitle()
     {
-        $category = ContentCategoryManager::get_instance()
-             ->findById($this->category);
-
-        if (!is_object($category)) {
+        try {
+            $category = getService('api.service.category')
+                ->getItem($this->pk_fk_content_category);
+        } catch (\Exception $e) {
             return null;
         }
 
-        $this->category_title = getService('data.manager.filter')
-            ->set($category->title)
-            ->filter('localize')
-            ->get();
+        $this->category_title = $category->title;
 
         return $this->category_title;
     }
@@ -1813,10 +1813,11 @@ class Content implements \JsonSerializable, CsvSerializable
     {
         $this->related_contents = [];
 
-        $ccm              = new ContentCategoryManager();
         $relationsHandler = getService('related_contents');
+
         if (getService('core.security')->hasExtension('CRONICAS_MODULES')
-            && ($categoryName == 'home')) {
+            && $categoryName == 'home'
+        ) {
             $relations = $relationsHandler->getRelations($this->id, 'home');
         } else {
             $relations = $relationsHandler->getRelations($this->id, 'frontpage');
@@ -1827,11 +1828,11 @@ class Content implements \JsonSerializable, CsvSerializable
 
             // Filter out not ready for publish contents.
             foreach ($relatedContents as $content) {
-                if (!$content->isReadyForPublish() && $content->fk_content_type !== 4) {
+                if (!$content->isReadyForPublish()
+                    && $content->fk_content_type !== 4
+                ) {
                     continue;
                 }
-
-                $content->categoryName = $ccm->getName($content->category);
 
                 $this->related_contents[] = $content;
             }
@@ -1936,7 +1937,11 @@ class Content implements \JsonSerializable, CsvSerializable
         if (($force || empty($this->img1))
             && !empty($this->fk_video)
         ) {
-            $this->obj_video = new Video($this->fk_video);
+            $video = getService('entity_repository')
+                ->find('Video', $content->fk_video);
+
+            $this->video     = $video;
+            $this->obj_video = $video;
         }
 
         return $this;

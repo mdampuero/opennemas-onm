@@ -19,6 +19,14 @@
               <a class="no-padding" href="{url name=backend_news_agency_servers_list}" title="{t}Go back to list{/t}">{t}News Agency{/t}</a>
             </h4>
           </li>
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
+                <i class="fa fa-angle-right"></i>
+              </h4>
+            </li>
+            <li class="quicklinks hidden-xs">
+              <h4><a class="no-padding" href="{url name=backend_news_agency_servers_list}" title="{t}Go back to list{/t}">{t}Sources{/t}</a></h4>
+            </li>
           <li class="quicklinks hidden-xs m-l-5 m-r-5">
             <h4>
               <i class="fa fa-angle-right"></i>
@@ -26,11 +34,7 @@
           </li>
           <li class="quicklinks">
             <h4>
-              {if array_key_exists('id', $server)}
-                {t}Edit source{/t}
-              {else}
-                {t}Create source{/t}
-              {/if}
+              {if array_key_exists('id', $server)}{t}Edit{/t}{else}{t}Create{/t}{/if}
             </h4>
           </li>
         </ul>
@@ -216,13 +220,11 @@
               </div>
             </div>
             <div ng-show="auto_import === '1'">
-              <div class="form-group" ng-init="category = '{$server['category']}'; categories = {json_encode($categories)|clear_json}">
+              <div class="form-group" ng-init="category = '{$server['category']}'">
                 <label class="form-label" for="category">{t}Category{/t}</label>
                 <span class="help m-l-5">{t}Default category to import{/t}</span>
                 <div class="controls">
-                  <select id="category" name="category" ng-disabled="!auto_import">
-                    <option value="[% key %]" ng-repeat="(key, value) in categories" ng-selected="category === key">[% value %]</option>
-                  </select>
+                  <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" ng-model="category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
                 </div>
               </div>
               <div class="form-group" {if !empty($server['categories_map'])}ng-init="categoriesMap = {json_encode($server['categories_map'])|clear_json}"{/if}>
@@ -234,9 +236,7 @@
                       <input class="form-control" ng-model="categoryMap.slug" placeholder="{t}Category name from source{/t}" type="text">
                     </div>
                     <div class="col-md-4 col-sm-9">
-                      <select id="category_mapping" ng-model="categoryMap.id" ng-disabled="!auto_import">
-                        <option value="[% key %]" ng-repeat="(key, value) in categories" ng-selected="category === key">[% value %]</option>
-                      </select>
+                      <onm-category-selector class="block select2-border" default-value-text="{t}Select a category{/t}…" ng-model="categoryMap.id" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
                     </div>
                     <div class="col-md-2 col-sm-3">
                       <button class="btn btn-block btn-danger ng-cloak" ng-click="removeCategoryMap($index)" type="button">

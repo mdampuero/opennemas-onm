@@ -30,21 +30,26 @@ class FrontpagesController extends Controller
      */
     public function showAction(Request $request)
     {
-        $categoryName  = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-        $page          = $request->query->get('page', 1);
+        $categoryName  = $request->query->get('category', 'home');
+        $category      = null;
         $categoryId    = 0;
         $categoryTitle = 0;
-        $category      = null;
 
-        if ($categoryName !== 'home') {
-            $category = $this->get('category_repository')->findOneBy([
-                'name' => [ [ 'value' => $categoryName ] ]
-            ]);
-
-            if (!empty($category)) {
-                $categoryId    = $category->id;
-                $categoryTitle = $category->title;
+        if (!empty($categoryName) && $categoryName !== 'home') {
+            try {
+                $category = $this->get('api.service.category')
+                    ->getItemBySlug($categoryName);
+            } catch (\Exception $e) {
+                throw new ResourceNotFoundException();
             }
+
+            if (!$category->inmenu) {
+                throw new ResourceNotFoundException();
+            }
+
+            $categoryId    = $category->pk_content_category;
+            $categoryTitle = $category->title;
+            $categoryName  = $category->name;
         }
 
         list($contentPositions, $contents, $invalidationDt, $lastSaved) =
@@ -62,23 +67,11 @@ class FrontpagesController extends Controller
             }
         }
 
-        $cacheId = $this->view->getCacheId('frontpage', $categoryName, $lastSaved, $page);
+        $cacheId = $this->view->getCacheId('frontpage', $categoryName, $lastSaved);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheId)
         ) {
-            // If no home category name
-            if ($categoryName !== 'home' && (empty($category))) {
-                throw new ResourceNotFoundException();
-            }
-
-            $this->view->assign([
-                'actual_category_id'    => $categoryId,
-                'actual_category_title' => $categoryTitle,
-                'category_data'         => $category,
-                'time'                  => $systemDate->getTimestamp()
-            ]);
-
             $ids        = array_keys($contents);
             $relatedIds = [];
 
@@ -97,7 +90,7 @@ class FrontpagesController extends Controller
             $relatedMap = $this->get('related_contents')
                 ->getRelatedContents($ids, $categoryId);
 
-            foreach ($relatedMap as $id => $ids) {
+            foreach ($relatedMap as $ids) {
                 $relatedIds = array_merge($relatedIds, $ids);
             }
 
@@ -183,14 +176,18 @@ class FrontpagesController extends Controller
         $invalidationDt->setTimeZone($this->get('core.locale')->getTimeZone());
 
         return $this->render('frontpage/frontpage.tpl', [
-            'advertisements'  => $advertisements,
-            'ads_positions'   => $adsPositions,
-            'cache_id'        => $cacheId,
-            'category_name'   => $categoryName,
-            'actual_category' => $categoryName,
-            'page'            => $page,
-            'x-tags'          => 'frontpage-page,' . $categoryName,
-            'x-cache-for'     => $invalidationDt->format('Y-m-d H:i:s')
+            'actual_category'       => $categoryName,
+            'actual_category_id'    => $categoryId,
+            'actual_category_title' => $categoryTitle,
+            'ads_positions'         => $adsPositions,
+            'advertisements'        => $advertisements,
+            'cache_id'              => $cacheId,
+            'category'              => $category,
+            'category_data'         => $category,
+            'category_name'         => $categoryName,
+            'time'                  => $systemDate->getTimestamp(),
+            'x-cache-for'           => $invalidationDt->format('Y-m-d H:i:s'),
+            'x-tags'                => 'frontpage-page,' . $categoryName
         ]);
     }
 
@@ -203,18 +200,16 @@ class FrontpagesController extends Controller
      */
     public function extShowAction(Request $request)
     {
-        // Fetch HTTP variables
         $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
 
-        // Get sync params
-        $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
+        $wsUrl = $this->get('core.helper.instance_sync')
+            ->getSyncUrl($categoryName);
+
         if (empty($wsUrl)) {
             throw new ResourceNotFoundException();
         }
 
-        // Get category id correspondence
-        $cm                 = new \ContentManager;
-        $wsActualCategoryId = $cm->getUrlContent($wsUrl . '/ws/categories/id/' . $categoryName);
+        $cm = new \ContentManager();
 
         // Setup templating cache layer
         $this->view->setConfig('frontpages');
@@ -223,47 +218,47 @@ class FrontpagesController extends Controller
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
         ) {
-            $ccm = \ContentCategoryManager::get_instance();
+            $category = unserialize(
+                $cm->getUrlContent(
+                    $wsUrl . '/ws/categories/object/' . $categoryName,
+                    true
+                )
+            );
 
-            // Check if category exists
-            $existsCategory = $cm->getUrlContent($wsUrl . '/ws/categories/exist/' . $categoryName);
-
-            // If no home category name
-            if ($categoryName != 'home') {
-                // Redirect to home page if the desired category doesn't exist
-                if (empty($categoryName) || !$existsCategory) {
-                    throw new ResourceNotFoundException();
-                }
+            if (empty($category)) {
+                throw new ResourceNotFoundException();
             }
 
-            $actualCategory = (empty($subcategory_name)) ? $categoryName : $subcategory_name;
-            $this->view->assign([
-                'category_name'         => $categoryName,
-                'actual_category'       => $actualCategory,
-                'actual_category_id'    => $wsActualCategoryId,
-                'actual_category_title' => $ccm->getTitle($categoryName),
-            ]);
-
             // Get all contents for this frontpage
-            $allContentsInHomepage = $cm->getUrlContent(
+            $contents = $cm->getUrlContent(
                 $wsUrl . '/ws/frontpages/allcontent/' . $categoryName,
                 true
             );
 
-            $this->view->assign('column', unserialize(utf8_decode(htmlspecialchars_decode($allContentsInHomepage))));
+            $this->view->assign('column', unserialize(utf8_decode(
+                htmlspecialchars_decode($contents)
+            )));
 
             // Fetch layout for categories
             $layout = $cm->getUrlContent($wsUrl . '/ws/categories/layout/' . $categoryName, true);
+
             if (!$layout) {
                 $layout = 'default';
             }
 
-            $layoutFile = 'layouts/' . $layout . '.tpl';
-
-            $this->view->assign('layoutFile', $layoutFile);
+            $this->view->assign([
+                'category_name'         => $category->name,
+                'actual_category'       => $category->name,
+                'actual_category_id'    => $category->pk_content_category,
+                'actual_category_title' => $category->title,
+                'layoutFile'            => 'layouts/' . $layout . '.tpl',
+            ]);
         }
 
-        $ads = unserialize($cm->getUrlContent($wsUrl . '/ws/ads/frontpage/' . $wsActualCategoryId, true));
+        $ads = unserialize($cm->getUrlContent(
+            $wsUrl . '/ws/ads/frontpage/' . $category->pk_content_category,
+            true
+        ));
 
         return $this->render('frontpage/frontpage.tpl', [
             'advertisements' => $ads,

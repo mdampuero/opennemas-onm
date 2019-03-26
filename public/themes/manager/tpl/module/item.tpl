@@ -79,7 +79,7 @@
                   <label class="form-label" for="type">{t}Type{/t}</label>
                   <div class="controls">
                     <select id="type" name="type" ng-model="module.type">
-                      <option value="">{t}Select a type...{/t}</option>
+                      <option value="">{t}Select a type{/t}…</option>
                       <option value="domain">{t}Domain{/t}</option>
                       <option value="module">{t}Module{/t}</option>
                       <option value="theme">{t}Theme{/t}</option>
@@ -96,7 +96,7 @@
                   <label class="form-label" for="category">{t}Category{/t}</label>
                   <div class="controls">
                     <select id="category" name="category" ng-model="module.category">
-                      <option value="">{t}Select a category...{/t}</option>
+                      <option value="">{t}Select a category{/t}…</option>
                       <option value="domain">{t}Domain{/t}</option>
                       <option value="module">{t}Module{/t}</option>
                       <option value="pack">{t}Pack{/t}</option>

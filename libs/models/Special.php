@@ -68,10 +68,6 @@ class Special extends Content
     {
         switch ($name) {
             case 'uri':
-                if (empty($this->category_name)) {
-                    $this->category_name =
-                        $this->loadCategoryName();
-                }
                 $uri = Uri::generate('special', [
                     'id'       => sprintf('%06d', $this->id),
                     'date'     => date('YmdHis', strtotime($this->created)),

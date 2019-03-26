@@ -138,20 +138,14 @@ class ArticleController extends Controller
         $extra = [ 'tags' => [] ];
 
         $security   = $this->get('core.security');
-        $converter  = $this->get('orm.manager')->getConverter('Category');
-        $categories = $this->get('orm.manager')
-            ->getRepository('Category')
-            ->findBy('internal_category = 1');
+        $categories = $this->get('api.service.category')->getList();
 
-        $categories = array_filter($categories, function ($a) use ($security) {
+        $categories = array_filter($categories['items'], function ($a) use ($security) {
             return $security->hasCategory($a->pk_content_category);
         });
 
-        $extra['categories'] = $converter->responsify($categories);
-        array_unshift($extra['categories'], [
-            'pk_content_category' => null,
-            'title' => $all ? _('All') : _('Select a category...')
-        ]);
+        $extra['categories'] = $this->get('api.service.category')
+            ->responsify($categories);
 
         $ss = $this->get('api.service.subscription');
         $as = $this->get('api.service.author');
@@ -162,52 +156,8 @@ class ArticleController extends Controller
         $extra['subscriptions'] = $ss->responsify($subscriptions['items']);
         $extra['authors']       = $as->responsify($response['items']);
         $extra['keys']          = \Article::getL10nKeys();
-        $extra['multilanguage'] = in_array(
-            'es.openhost.module.multilanguage',
-            $this->get('core.instance')->activated_modules
-        );
-
-        $ls          = $this->get('core.locale');
-        $translators = null;
-        $default     = $ls->getLocale('frontend');
-
-        $extra['locale'] = $ls->getRequestLocale('frontend');
-
-        if ($this->get('core.security')->hasExtension('es.openhost.module.translation')) {
-            $translators = $this->get('orm.manager')
-                ->getDataSet('Settings', 'instance')->get('translators');
-        }
-
-        if (empty($translators)) {
-            $translators = [];
-        }
-
-        $extra['translators'] = array_map(function ($a) {
-            unset($a['config']);
-
-            return $a;
-        }, array_filter($translators, function ($a) use ($default) {
-            return $a['from'] === $default;
-        }));
-
-        $toList = [];
-
-        $extra['options'] = [
-            'default'     => $default,
-            'available'   => $ls->getAvailableLocales('frontend'),
-            'translators' => array_filter(
-                $extra['translators'],
-                function ($a) use (&$toList) {
-                    if (!empty($a['to']) && !in_array($a['to'], $toList)) {
-                        $toList[] = $a['to'];
-                        return true;
-                    }
-                    return false;
-                }
-            )
-        ];
-
-        $extra['tags'] = [];
+        $extra['locale']        = $this->get('core.helper.locale')
+            ->getConfiguration();
 
         if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
             $extra['moduleFields'] = $this->get('orm.manager')

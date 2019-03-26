@@ -104,13 +104,15 @@ class BaseDataSetTest extends \PHPUnit\Framework\TestCase
     public function testGet()
     {
         $this->cache->expects($this->once())->method('get')
-            ->willReturn([ 'foo' => 'bar' ]);
+            ->willReturn([ 'foo' => 'bar', 'glork' => null, 'garply' => '' ]);
 
         $dataset = new BaseDataSet($this->conn, $this->metadata, $this->cache);
 
         $this->assertEquals('bar', $dataset->get('foo'));
         $this->assertEmpty($dataset->get('mumble'));
         $this->assertEquals('flob', $dataset->get('mumble', 'flob'));
+        $this->assertEquals(8077, $dataset->get('glork', 8077));
+        $this->assertEquals(8077, $dataset->get('garply', 8077));
 
         $this->assertEquals(
             [ 'mumble' => 'flob' ],

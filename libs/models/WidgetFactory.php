@@ -46,8 +46,7 @@ class WidgetFactory
         $this->tpl       = $this->container->get('core.template');
 
         // TODO: Remove when no usage in widgets
-        $this->cm  = new ContentManager();
-        $this->ccm = ContentCategoryManager::get_instance();
+        $this->cm = new ContentManager();
 
         // Append the widget id to the cached id
         if ($this->content && $this->content->pk_content) {
@@ -118,5 +117,28 @@ class WidgetFactory
         if (is_array($params)) {
             $this->params = array_merge($this->params, $params);
         }
+    }
+
+    /**
+     * Returns the list of categories ready to use in a category selector in
+     * the widget form.
+     *
+     * @return array The list of categories.
+     */
+    protected function getCategories()
+    {
+        $context = $this->container->get('core.locale')->getContext();
+        $this->container->get('core.locale')->setContext('frontend');
+
+        $items = $this->container->get('api.service.category')->getList();
+        $this->container->get('core.locale')->setContext($context);
+
+        $categories = [ 0 => _('Select a category...') ];
+
+        foreach ($items['items'] as $category) {
+            $categories[$category->name] = $category->title;
+        }
+
+        return $categories;
     }
 }

@@ -1,13 +1,8 @@
 <?php
 /**
- * Handles the actions for the poll manager
- *
- * @package Backend_Controllers
- */
-/**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -27,31 +22,6 @@ use Common\Core\Controller\Controller;
 class PollsController extends Controller
 {
     /**
-     * Common code for all the actions.
-     */
-    public function init()
-    {
-        $contentType = \ContentManager::getContentTypeIdFromName('poll');
-        $category    = $this->get('request_stack')->getCurrentRequest()
-            ->query->filter(INPUT_GET, 0, FILTER_SANITIZE_STRING);
-        $ccm         = \ContentCategoryManager::get_instance();
-
-        list($this->parentCategories, $this->subcat, $this->categoryData) =
-            $ccm->getArraysMenu($category, $contentType);
-
-        if (empty($category)) {
-            $category = 'home';
-        }
-
-        $this->view->assign([
-            'category'     => $category,
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->categoryData,
-        ]);
-    }
-
-    /**
      * Lists all the available polls.
      *
      * @return Response The response object.
@@ -61,23 +31,7 @@ class PollsController extends Controller
      */
     public function listAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
-
-        foreach ($this->parentCategories as $key => $category) {
-            $categories[] = [
-                'name' => $category->title,
-                'value' => $category->pk_content_category
-            ];
-
-            foreach ($this->subcat[$key] as $subcategory) {
-                $categories[] = [
-                    'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->name
-                ];
-            }
-        }
-
-        return $this->render('poll/list.tpl', [ 'categories' => $categories ]);
+        return $this->render('poll/list.tpl');
     }
 
     /**
@@ -93,10 +47,9 @@ class PollsController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
-            $ls = $this->get('core.locale');
             return $this->render('poll/new.tpl', [
                 'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
-                'locale'         => $ls->getLocale('frontend'),
+                'locale'         => $this->get('core.locale')->getLocale('frontend'),
                 'tags'           => []
             ]);
         }
@@ -137,9 +90,7 @@ class PollsController extends Controller
             _('Unable to create the new poll.')
         );
 
-        return $this->redirect(
-            $this->generateUrl('admin_polls', ['category' => $data['category']])
-        );
+        return $this->redirect($this->generateUrl('admin_polls'));
     }
 
     /**
@@ -176,16 +127,15 @@ class PollsController extends Controller
             $poll->params = unserialize($poll->params);
         }
 
-        $ls = $this->get('core.locale');
-
         return $this->render('poll/new.tpl', [
-            'poll'  => $poll,
-            'items' => $poll->items,
+            'poll'           => $poll,
+            'items'          => $poll->items,
             'commentsConfig' => $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('comments_config'),
-            'locale'         => $ls->getRequestLocale('frontend'),
-            'tags'           => $tags
+            'locale' => $this->get('core.locale')
+                ->getRequestLocale('frontend'),
+            'tags' => $tags
         ]);
     }
 
@@ -250,9 +200,9 @@ class PollsController extends Controller
             );
         }
 
-        return $this->redirect(
-            $this->generateUrl('admin_poll_show', [ 'id' => $poll->id ])
-        );
+        return $this->redirect($this->generateUrl('admin_poll_show', [
+            'id' => $poll->id
+        ]));
     }
 
     /**
@@ -345,62 +295,6 @@ class PollsController extends Controller
             'polls'      => $polls,
             'pagination' => $pagination,
         ]);
-    }
-
-    /**
-     * Lists all the polls withing a category for the related manager.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('POLL_MANAGER')")
-     */
-    public function contentProviderRelatedAction(Request $request)
-    {
-        $categoryId = $request->query->getDigits('category', 0);
-        $page       = $request->query->getDigits('page', 1);
-        $em         = $this->get('entity_repository');
-        $category   = $this->get('category_repository')->find($categoryId);
-        $epp        = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page') ?: 20;
-
-        $order   = [ 'created' => 'desc' ];
-        $filters = [
-            'content_type_name' => [ [ 'value' => 'poll' ] ],
-            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ]
-        ];
-
-        if ($categoryId != 0) {
-            $filters['category_name'] = [ [ 'value' => $category->name ] ];
-        }
-
-        $count = true;
-        $polls = $em->findBy($filters, $order, $epp, $page, 0, $count);
-
-        $pagination = $this->get('paginator')->get([
-            'epp'   => $epp,
-            'total' => $count,
-            'page'  => $page,
-            'route' => [
-                'name'  => 'admin_polls_content_provider_related',
-                'param' => [ 'category' => $categoryId ]
-            ],
-        ]);
-
-        return $this->render(
-            'common/content_provider/_container-content-list.tpl',
-            [
-                'contentType'           => 'Poll',
-                'contents'              => $polls,
-                'contentTypeCategories' => $this->parentCategories,
-                'category'              => $categoryId,
-                'pagination'            => $pagination,
-                'contentProviderUrl'    => $this->generateUrl(
-                    'admin_polls_content_provider_related'
-                ),
-            ]
-        );
     }
 
     /**

@@ -119,10 +119,6 @@ admin_polls_content_provider:
     path:     /polls/content-provider
     defaults: { _controller: BackendBundle:Polls:contentProvider }
 
-admin_polls_content_provider_related:
-    path:     /polls/content-provider-related
-    defaults: { _controller: BackendBundle:Polls:contentProviderRelated }
-
 # Ads manager routes
 admin_ads:
     path:     /ads
@@ -208,9 +204,6 @@ admin_letters_content_provider:
     path:     /letters/content-provider
     defaults: { _controller: BackendBundle:Letters:contentProvider }
 
-admin_letters_content_provider_related:
-    path:     /letters/content-provider-related
-    defaults: { _controller: BackendBundle:Letters:contentProviderRelated }
 # Image manager routes
 admin_images:
     path:     /images
@@ -281,10 +274,6 @@ admin_videos_content_provider:
     path:     /videos/content-provider
     defaults: { _controller: BackendBundle:Videos:contentProvider }
 
-admin_videos_content_provider_related:
-    path:     /videos/content-provider-related
-    defaults: { _controller: BackendBundle:Videos:contentProviderRelated }
-
 # Album controller routes
 admin_albums:
     path:     /albums
@@ -320,10 +309,6 @@ admin_albums_content_provider:
     path:     /albums/content-provider
     defaults: { _controller: BackendBundle:Albums:contentProvider }
 
-admin_albums_content_provider_related:
-    path:     /albums/content-provider-related
-    defaults: { _controller: BackendBundle:Albums:contentProviderRelated }
-
 # Books controller routes
 admin_books:
     path:     /books
@@ -356,10 +341,6 @@ admin_files:
     path:     /files
     defaults: { _controller: BackendBundle:Files:list }
 
-admin_files_statistics:
-    path:     /files/statistics
-    defaults: { _controller: BackendBundle:Files:statistics }
-
 admin_files_widget:
     path:     /files/widget
     defaults: { _controller: BackendBundle:Files:widget }
@@ -387,10 +368,6 @@ admin_files_update:
 admin_file_save_positions:
     path:     /files/save-positions
     defaults: { _controller: BackendBundle:Files:savePositions }
-
-admin_files_content_provider_related:
-    path:     /files/content-provider-related
-    defaults: { _controller: BackendBundle:Files:contentProviderRelated }
 
 # Search controller routes
 admin_search:
@@ -462,10 +439,6 @@ admin_articles_content_provider_suggested:
 admin_articles_content_provider_category:
     path:     /articles/content-provider-category
     defaults: { _controller: BackendBundle:Articles:contentProviderCategory }
-
-admin_articles_content_provider_related:
-    path:     /articles/content-provider-related
-    defaults: { _controller: BackendBundle:Articles:contentProviderRelated }
 
 admin_articles_content_provider_in_frontpage:
     path:     /articles/content-provider-in-frontpage
@@ -647,6 +620,7 @@ backend_notification:
 backend_opinion:
     prefix:    /
     resource: '@BackendBundle/Resources/config/routing/opinion.yml'
+
 backend_password:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/password.yml'

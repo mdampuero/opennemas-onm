@@ -22,38 +22,6 @@ use Common\Core\Controller\Controller;
 class ImagesController extends Controller
 {
     /**
-     * Common code for all the actions.
-     */
-    public function init()
-    {
-        $this->ccm = \ContentCategoryManager::get_instance();
-
-        $this->category    = $this->get('request_stack')->getCurrentRequest()
-            ->query->filter('category', 'all', FILTER_SANITIZE_NUMBER_INT);
-        $this->contentType = \ContentManager::getContentTypeIdFromName('album');
-
-        list($this->parentCategories, $this->subcat, $this->datos_cat) =
-            $this->ccm->getArraysMenu($this->category, $this->contentType);
-
-        $this->pathUpload = MEDIA_PATH . DS . IMG_DIR . DS;
-        $this->imgUrl     = MEDIA_URL . MEDIA_DIR . SS . IMG_DIR;
-
-        $this->view->assign([
-            'subcat'        => $this->subcat,
-            'allcategorys'  => $this->parentCategories,
-            'datos_cat'     => $this->datos_cat,
-            'MEDIA_IMG_URL' => $this->imgUrl,
-        ]);
-
-        if ($this->category != 'GLOBAL'
-            && $this->category != 0
-            && array_key_exists($this->category, $this->ccm->categories)
-        ) {
-            $this->category_name = $this->ccm->categories[$this->category]->name;
-        }
-    }
-
-    /**
      * Lists images from an specific category.
      *
      * @return Response          The response object.
@@ -122,7 +90,7 @@ class ImagesController extends Controller
 
         return $this->render('image/new.tpl', [
             'photo'         => $photo,
-            'MEDIA_IMG_URL' => $this->imgUrl,
+            'MEDIA_IMG_URL' => MEDIA_URL . MEDIA_DIR . DS . IMG_DIR,
             'locale'        => $ls->getRequestLocale('frontend'),
             'tags'          => $tags
         ]);
@@ -249,13 +217,6 @@ class ImagesController extends Controller
             return new JsonResponse([], 200);
         }
 
-        $category = $request->request->getDigits('category', 0);
-        if (empty($category) || !array_key_exists($category, $this->ccm->categories)) {
-            $category_name = '';
-        } else {
-            $category_name = $this->ccm->categories[$category]->name;
-        }
-
         $files = isset($_FILES) ? $_FILES : null;
         $info  = [];
 
@@ -287,9 +248,9 @@ class ImagesController extends Controller
                 'original_filename' => $file['name'],
                 'title'             => $tempName,
                 'description'       => $tempName,
-                'fk_category'       => $category,
-                'category'          => $category,
-                'category_name'     => $category_name,
+                'fk_category'       => null,
+                'category'          => null,
+                'category_name'     => '',
                 'tag_ids'           => json_decode($request->request->get('tag_ids', ''), true)
             ];
 

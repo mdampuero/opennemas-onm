@@ -47,7 +47,7 @@
                         '</div>' +
                       '</li>' +
                       '<li>' +
-                        '<ui-select class=" select2-border w-200" name="content-type" theme="select2" ng-model="criteria.contentType">' +
+                        '<ui-select class="w-200" name="content-type" theme="select2" ng-model="criteria.contentType">' +
                           '<ui-select-match>' +
                             '[% $select.selected.title %]' +
                           '</ui-select-match>' +
@@ -57,14 +57,7 @@
                         '</ui-select>' +
                       '</li>' +
                       '<li ng-if="criteria.contentType != \'contents-in-frontpage\' && criteria.contentType != \'photo\'">' +
-                        '<ui-select class=" select2-border" name="category" theme="select2" ng-model="criteria.category">' +
-                          '<ui-select-match>' +
-                            '[% $select.selected.title %]' +
-                          '</ui-select-match>' +
-                          '<ui-select-choices group-by="groupCategories" repeat="category.pk_content_category as category in picker.params.explore.categories | filter: { title: $select.search }">' +
-                            '<div ng-bind-html="category.title | highlight: $select.search"></div>' +
-                          '</ui-select-choices>' +
-                        '</ui-select>' +
+                        '<onm-category-selector default-value-text="[% picker.params.explore.any %]" label-text="[% picker.params.explore.category %]" ng-model="criteria.category" placeholder="[% picker.params.explore.any %]"></onm-category-selector>' +
                       '</li>' +
                     '</ul>' +
                   '</div>' +
@@ -468,30 +461,6 @@
           $timeout(function() {
             $scope.list();
           }, 100);
-        };
-
-        /**
-         * @function groupCategories
-         * @memberOf ContentPickerCtrl
-         *
-         * @description
-         *   Groups categories in the ui-select.
-         *
-         * @param {Object} item The category to group.
-         *
-         * @return {String} The group name.
-         */
-        $scope.groupCategories = function(item) {
-          var category = $scope.picker.params.explore.categories
-            .filter(function(e) {
-              return e.pk_content_category === item.fk_content_category;
-            });
-
-          if (category.length > 0 && category[0].pk_content_category) {
-            return category[0].title;
-          }
-
-          return '';
         };
 
         /**

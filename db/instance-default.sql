@@ -323,8 +323,8 @@ DROP TABLE IF EXISTS `content_categories`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `content_categories` (
   `pk_content_category` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
+  `title` text NOT NULL,
+  `name` text,
   `description` text,
   `inmenu` int(10) unsigned DEFAULT '0',
   `posmenu` int(10) unsigned DEFAULT '1',
@@ -1169,7 +1169,9 @@ CREATE TABLE `url` (
   `redirection` tinyint(1) NOT NULL DEFAULT '0',
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `url_content_type_source` (`content_type`,`source`(50))
+  KEY `url_content_type` (`content_type`),
+  KEY `url_source` (`source`),
+  KEY `url_type` (`type`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1442,4 +1444,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-26 17:22:11
+-- Dump completed on 2019-03-20 14:58:00

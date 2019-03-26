@@ -7,14 +7,14 @@
       <strong>{t}Not selected{/t}</strong>
     </span>
     <span ng-show="item.categories.length !== 0 && item.categories[0] && !flags.categories.none">
-      <strong><span ng-repeat="category in data.extra.categories|filter:{ pk_content_category: item.categories[0]}">[% category.title %]</span></strong>
+      <strong><span ng-repeat="category in selectedCategories">[% category.title %]</span></strong>
     </span>
   </span>
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.category }">
   <div class="form-group no-margin">
     <div class="controls">
-      <onm-category-selector class="block" ng-model="item.categories[0]" categories="data.extra.categories" placeholder="{t}Select a category{/t}" default-value-text="{t}Select a category...{/t}" required />
+      <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" ng-model="item.categories[0]" placeholder="{t}Select a category{/t}…" required selected="selectedCategories"/>
     </div>
   </div>
 </div>

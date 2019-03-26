@@ -9,6 +9,7 @@
 namespace WebService\Handlers;
 
 use Luracast\Restler\RestException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Handles REST actions for frontpages.
@@ -24,24 +25,14 @@ class Frontpages
     */
     public function allContent($category)
     {
-        $ccm = \ContentCategoryManager::get_instance();
-
-        // Check if category exists and initialize contents var
         $contentsInHomepage = null;
-        $existsCategory     = $ccm->exists($category);
-        if (!$existsCategory) {
-            throw new RestException(404, 'parameter is not valid');
-        } else {
-            // Run entire logic
-            $actualCategoryId = $ccm->get_id($category);
-            $categoryData     = null;
-            if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $ccm->categories)) {
-                $categoryData = $ccm->categories[$actualCategoryId];
-            }
 
-            list($contentPositions, $contentsInHomepage, $invalidationDt, $lastSaved) =
+        try {
+            $category = getService('api.service.category')->getItemBySlug($category);
+
+            list(, $contentsInHomepage, , ) =
                 getService('api.service.frontpage')
-                    ->getCurrentVersionForCategory($actualCategoryId);
+                    ->getCurrentVersionForCategory($category->pk_content_category);
 
             // Get all frontpages images
             $imageIdsList = [];
@@ -70,10 +61,6 @@ class Frontpages
             $ur = getService('user_repository');
             // Overloading information for contents
             foreach ($contentsInHomepage as &$content) {
-                // Load category related information
-                $content->category_name  = $content->loadCategoryName($content->id);
-                $content->category_title = $content->loadCategoryTitle($content->id);
-
                 $content->author = $ur->find($content->fk_author);
                 if (!is_null($content->author)) {
                     $content->author->external = 1;
@@ -123,10 +110,12 @@ class Frontpages
                     }
                 }
             }
-
-            // Use htmlspecialchars to avoid utf-8 erros with json_encode
-            return htmlspecialchars(utf8_encode(serialize($contentsInHomepage)));
+        } catch (\Exception  $e) {
+            throw new RestException(404, $e->getMessage());
         }
+
+        // Use htmlspecialchars to avoid utf-8 erros with json_encode
+        return htmlspecialchars(utf8_encode(serialize($contentsInHomepage)));
     }
 
     /*
@@ -134,23 +123,16 @@ class Frontpages
     */
     public function allContentBlog($categoryName, $page = 1)
     {
-        // Get category object
-        $category = getService('category_repository')->findBy(
-            [ 'name' => [[ 'value' => $categoryName ]] ],
-            '1'
-        );
-
-        if (empty($category)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        try {
+            $category = getService('api.service.category')
+                ->getItemBySlug($categoryName);
+        } catch (\Exception $e) {
+            throw new ResourceNotFoundException();
         }
-
-        $category = $category[0];
 
         $epp = getService('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('items_in_blog', 10);
-
-        $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
+            ->get('items_per_page', 10);
 
         $order   = [ 'starttime' => 'DESC' ];
         $filters = [
@@ -198,9 +180,8 @@ class Frontpages
         // Overloading information for contents
         foreach ($articles as &$content) {
             // Load category related information
-            $content->category_name  = $content->loadCategoryName($content->id);
-            $content->category_title = $content->loadCategoryTitle($content->id);
-            $content->author         = $ur->find($content->fk_author);
+            $content->author = $ur->find($content->fk_author);
+
             if (!is_null($content->author)) {
                 $content->author->photo            = $content->author->getPhoto();
                 $content->author->photo->media_url = MEDIA_IMG_ABSOLUTE_URL;

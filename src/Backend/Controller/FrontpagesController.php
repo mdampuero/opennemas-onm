@@ -317,19 +317,17 @@ class FrontpagesController extends Controller
     {
         $this->get('core.locale')->setContext('frontend');
 
-        $categoryName = $request->request->get('category_name', 'home', FILTER_SANITIZE_STRING);
+        $id           = $request->request->get('category', 0, FILTER_SANITIZE_STRING);
+        $categoryName = 'home';
         $this->view   = $this->get('core.template');
 
+        try {
+            $category     = $this->get('api.service.category')->getItem($id);
+            $categoryName = $category->name;
+        } catch (\Exception $e) {
+        }
+
         $this->view->setCaching(0);
-
-        $this->view->assign([
-            'category_name'   => $categoryName,
-            'actual_category' => $categoryName
-        ]);
-
-        $ccm = \ContentCategoryManager::get_instance();
-        // Get the ID of the actual category from the categoryName
-        $actualCategoryId = $ccm->get_id($categoryName);
 
         $contentsRAW         = $request->request->get('contents');
         $contentPositionList = json_decode($contentsRAW, true);
@@ -341,16 +339,17 @@ class FrontpagesController extends Controller
                 $contentPositionMap[$contentPosition['placeholder']] = [];
             }
 
-            $contentPosition['pk_fk_content']                      =
-                intval($contentPosition['id']);
+            $contentPosition['pk_fk_content'] = intval($contentPosition['id']);
+
             $contentPositionMap[$contentPosition['placeholder']][] =
                 new ContentPosition($contentPosition);
-            $contentsMap[$contentPosition['id']]                   =
+
+            $contentsMap[$contentPosition['id']] =
                 [$contentPosition['content_type'], intval($contentPosition['id'])];
         }
 
-        $contents =
-            $this->container->get('entity_repository')->findMulti($contentsMap);
+        $contents = $this->container->get('entity_repository')
+            ->findMulti($contentsMap);
 
         // Filter unpublished contents
         $cm       = new \ContentManager;
@@ -363,9 +362,7 @@ class FrontpagesController extends Controller
 
         // Fetch ads
         list($positions, $advertisements) =
-            \Frontend\Controller\FrontpagesController::getAds($actualCategoryId, $contentsInHomepage);
-        $this->view->assign('ads_positions', $positions);
-        $this->view->assign('advertisements', $advertisements);
+            \Frontend\Controller\FrontpagesController::getAds($id, $contentsInHomepage);
 
         // Get all frontpage images
         $imageIdsList = [];
@@ -375,35 +372,36 @@ class FrontpagesController extends Controller
             }
         }
 
+        $imageList = [];
         if (count($imageIdsList) > 0) {
-            $imageList = $cm->find('Photo', 'pk_content IN (' . implode(',', $imageIdsList) . ')');
-        } else {
-            $imageList = [];
+            $imageList = $this->get('entity_repository')->findBy([
+                'content_type_name' => [ [ 'value' => 'photo' ] ],
+                'pk_content'        => [
+                    [ 'value' => $imageIdsList, 'operator' => 'IN' ]
+                ]
+            ]);
         }
 
-        // Overloading information for contents
         foreach ($contentsInHomepage as &$content) {
-            // Load attached and related contents from array
             $content->loadFrontpageImageFromHydratedArray($imageList)
                 ->loadAttachedVideo()
                 ->loadRelatedContents();
         }
 
-        $this->view->assign('contentPositionByPos', $contentPositionMap);
-        $this->view->assign('column', $contentsInHomepage);
-
-        // Getting categories
-        $actualCategoryId = $ccm->get_id($categoryName);
-        $categoryID       = ($categoryName == 'home') ? 0 : $actualCategoryId;
-
         // Fetch category layout
         $layout = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('frontpage_layout_' . $categoryID, 'default');
+            ->get('frontpage_layout_' . $id, 'default');
 
         $this->view->assign([
-            'layoutFile'         => 'layouts/' . $layout . '.tpl',
-            'actual_category_id' => $categoryID,
+            'ads_positions'        => $positions,
+            'advertisements'       => $advertisements,
+            'actual_category'      => $categoryName,
+            'actual_category_id'   => $id,
+            'category_name'        => $categoryName,
+            'column'               => $contentsInHomepage,
+            'contentPositionByPos' => $contentPositionMap,
+            'layoutFile'           => 'layouts/' . $layout . '.tpl',
         ]);
 
         $this->get('session')->set('last_preview', $this->view->fetch('frontpage/frontpage.tpl'));

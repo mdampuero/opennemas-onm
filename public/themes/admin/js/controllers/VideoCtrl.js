@@ -31,6 +31,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @param {Array}  tags     Array with all the tags needed for the video
      */
     $scope.init = function(video, locale, tags) {
+      $scope.video  = video;
       $scope.locale = locale;
       $scope.tags   = tags;
 

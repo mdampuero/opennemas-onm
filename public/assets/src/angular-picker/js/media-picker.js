@@ -59,14 +59,7 @@
                         '</select>' +
                       '</li>' +
                       '<li class="hidden-xs" ng-if="picker.isTypeEnabled(\'video\')">' +
-                        '<ui-select class=" select2-border" name="category" theme="select2" ng-model="criteria.category">' +
-                          '<ui-select-match>' +
-                            '[% $select.selected.title %]' +
-                          '</ui-select-match>' +
-                          '<ui-select-choices group-by="groupCategories" repeat="category.pk_content_category as category in picker.params.explore.categories | filter: { title: $select.search }">' +
-                            '<div ng-bind-html="category.title | highlight: $select.search"></div>' +
-                          '</ui-select-choices>' +
-                        '</ui-select>' +
+                        '<onm-category-selector default-value-text="[% picker.params.explore.any %]" label-text="[% picker.params.explore.category %]" ng-model="$parent.$parent.category" placeholder="[% picker.params.explore.any %]"></onm-category-selector>' +
                       '</li>' +
                     '</ul>' +
                   '</div>' +
@@ -647,30 +640,6 @@
         };
 
         /**
-         * @function groupCategories
-         * @memberOf MediaPickerCtrl
-         *
-         * @description
-         *   Groups categories in the ui-select.
-         *
-         * @param {Object} item The category to group.
-         *
-         * @return {String} The group name.
-         */
-        $scope.groupCategories = function(item) {
-          var category = $scope.picker.params.explore.categories
-            .filter(function(e) {
-              return e.pk_content_category === item.fk_content_category;
-            });
-
-          if (category.length > 0 && category[0].pk_content_category) {
-            return category[0].title;
-          }
-
-          return '';
-        };
-
-        /**
          * @function insert
          * @memberof MediaPickerCtrl
          *
@@ -746,11 +715,15 @@
 
           var data = {
             content_type_name: $scope.picker.types.enabled,
-            epp:               $scope.epp,
-            page:              $scope.page,
-            sort_by:           'created',
-            sort_order:        'desc'
+            epp: $scope.epp,
+            page: $scope.page,
+            sort_by: 'created',
+            sort_order: 'desc'
           };
+
+          if ($scope.category) {
+            data.category = $scope.category;
+          }
 
           if ($scope.title) {
             data.title = $scope.title;
@@ -1087,7 +1060,7 @@
          * @param array nv The new values.
          * @param array ov The old values.
          */
-        $scope.$watch('[date, title, from, to]', function(nv, ov) {
+        $scope.$watch('[category, date, title, from, to]', function(nv, ov) {
           if (nv === ov) {
             return;
           }

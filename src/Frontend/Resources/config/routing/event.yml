@@ -1,6 +1,6 @@
 frontend_events:
     path: /events
-    defaults: { _controller: FrontendBundle:Event:frontpage }
+    defaults: { _controller: FrontendBundle:Event:list }
     options:
         l10n: true
 

@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  NewsAgencyModalCtrl
@@ -15,8 +16,9 @@
      * @description
      *   description
      */
-    .controller('NewsAgencyModalCtrl', ['$controller', '$http', '$uibModalInstance', '$scope', '$window', 'routing', 'template',
-      function ($controller, $http, $uibModalInstance, $scope, $window, routing, template) {
+    .controller('NewsAgencyModalCtrl', [
+      '$controller', '$http', '$uibModalInstance', '$scope', '$window', 'routing', 'template',
+      function($controller, $http, $uibModalInstance, $scope, $window, routing, template) {
         /**
          * @memberOf NewsAgencyModalCtrl
          *
@@ -75,6 +77,7 @@
           $scope.saving = true;
 
           var ids = [];
+
           for (var i = 0; i < $scope.template.contents.length; i++) {
             ids.push({
               id:     $scope.template.contents[i].id,
@@ -84,11 +87,14 @@
 
           var url = routing.generate('backend_ws_news_agency_import');
           var data = {
-            author:   $scope.template.author,
             category: $scope.template.category,
             ids:      ids,
             type:     $scope.template.type
           };
+
+          if ($scope.template.author) {
+            data.author = $scope.template.author;
+          }
 
           if (edit) {
             data.edit = 1;
@@ -100,14 +106,12 @@
             $scope.loading = false;
             if (response.status === 201 && response.headers('location')) {
               $window.location.href = response.headers('location');
+            } else if (!edit) {
+              $scope.imported   = true;
+              template.messages = response.data.messages;
             } else {
-              if (!edit) {
-                $scope.imported = true;
-                template.messages = response.data.messages;
-              } else {
-                $scope.saving = false;
-                $uibModalInstance.close(response.data);
-              }
+              $scope.saving = false;
+              $uibModalInstance.close(response.data);
             }
           }, function() {
             $scope.loading = false;
@@ -142,7 +146,7 @@
          *   Checks the types of the contents to import.
          */
         $scope.check = function() {
-          for (var i = 0; i < $scope.template.contents.length;  i++) {
+          for (var i = 0; i < $scope.template.contents.length; i++) {
             if ($scope.template.contents[i].type === 'photo') {
               $scope.photos++;
             }

@@ -168,7 +168,7 @@ $menuXml = [
                 'id'          => 'category_manager',
                 'title'       => _('Categories'),
                 'icon'        => 'fa fa-bookmark',
-                'link'        => url('admin_categories'),
+                'link'        => url('backend_categories_list'),
                 'module_name' => 'CATEGORY_MANAGER',
                 'privilege'   => 'CATEGORY_ADMIN',
             ],

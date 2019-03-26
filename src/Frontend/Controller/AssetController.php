@@ -75,10 +75,16 @@ class AssetController extends Controller
      */
     public function customCssFrontpageAction(Request $request)
     {
-        $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $categoryName      = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $currentCategoryId = 0;
 
-        $ccm               = \ContentCategoryManager::get_instance();
-        $currentCategoryId = $ccm->get_id($categoryName);
+        try {
+            $category = $this->get('api.service.category')
+                ->getItemBySlug($categoryName);
+
+            $currentCategoryId = $category->pk_content_category;
+        } catch (\Exception $e) {
+        }
 
         list(, , $contentsInHomepage) =
             $this->get('api.service.frontpage_version')
@@ -175,47 +181,25 @@ class AssetController extends Controller
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('base/custom_css.tpl', $cacheID)
         ) {
-            $ccm = \ContentCategoryManager::get_instance();
-
             // RenderColorMenu
             $siteColor   = '#005689';
             $configColor = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('site_color');
+
             if (!empty($configColor)) {
                 if (!preg_match('@^#@', $configColor)) {
-                    $siteColor = '#' . $configColor;
-                } else {
-                    $siteColor = $configColor;
+                    $configColor = '#' . $configColor;
                 }
+
+                $siteColor = $configColor;
             }
 
-            $selectedCategories = [];
-            if (is_array($ccm->categories) && !empty($ccm->categories)) {
-                foreach ($ccm->categories as &$category) {
-                    $commonCategoryNames = [
-                        'photo', 'publicidad', 'album', 'opinion',
-                        'comment', 'video', 'author', 'portada', 'unknown'
-                    ];
-
-                    if (in_array($category->name, $commonCategoryNames)) {
-                        continue;
-                    }
-
-                    if (empty($category->color)) {
-                        $category->color = $siteColor;
-                    } else {
-                        if (!preg_match('@^#@', $category->color)) {
-                            $category->color = '#' . $category->color;
-                        }
-                    }
-
-                    $selectedCategories[] = $category;
-                }
-            }
+            $categories = $this->get('api.service.category')
+                ->getList('color !is null and color != ""');
 
             $this->view->assign([
-                'categories' => $selectedCategories,
+                'categories' => $categories['items'],
                 'site_color' => $siteColor,
             ]);
         }
