@@ -147,20 +147,20 @@
       </div>
     </div>
   </div>
-  <div class="content" ng-init="setMode('grid');">
-      <div class="listing-no-contents" ng-hide="!flags.http.loading">
-        <div class="text-center p-b-15 p-t-15">
-          <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
-          <h3 class="spinner-text">{t}Loading{/t}...</h3>
-        </div>
+  <div class="content">
+    <div class="listing-no-contents" ng-hide="!flags.http.loading">
+      <div class="text-center p-b-15 p-t-15">
+        <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
+        <h3 class="spinner-text">{t}Loading{/t}...</h3>
       </div>
-      <div class="listing-no-contents ng-cloak" ng-if="!flags.http.loading && items.length == 0">
-        <div class="text-center p-b-15 p-t-15">
-          <i class="fa fa-4x fa-warning text-warning"></i>
-          <h3>{t}Unable to find any item that matches your search.{/t}</h3>
-          <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
-        </div>
+    </div>
+    <div class="listing-no-contents ng-cloak" ng-show="!flags.http.loading && items.length == 0">
+      <div class="text-center p-b-15 p-t-15">
+        <i class="fa fa-4x fa-warning text-warning"></i>
+        <h3>{t}Unable to find any item that matches your search.{/t}</h3>
+        <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
       </div>
+    </div>
     <div class="grid simple ng-cloak" ng-hide="flags.http.loading">
       <div class="grid-body no-padding">
         <div class="table-wrapper ng-cloak" ng-if="!loading && items.length > 0">
@@ -177,9 +177,9 @@
                 <th>{t}Title{/t}</th>
                 <th class="center hidden-xs">{t}Section{/t}</th>
                 <th class="center nowrap hidden-xs hidden-sm">{t}Author{/t}</th>
-                {acl isAllowed="VIDEO_HOME"}
+                {* {acl isAllowed="VIDEO_HOME"}
                   <th class="hidden-xs text-center" width="100">{t}Home{/t}</th>
-                {/acl}
+                {/acl} *}
                 {acl isAllowed="VIDEO_FAVORITE"}
                   <th class="hidden-xs text-center" width="100">{t}Favorite{/t}</th>
                 {/acl}
@@ -213,12 +213,14 @@
                   </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="VIDEO_UPDATE"}
-                    <a class="link" href="[% edit(item.id, 'admin_video_show') %]">
-                      <i class="fa fa-pencil"></i> {t}Edit{/t}
+                    <a class="btn btn-default btn-small" href="[% routing.generate('backend_video_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
+                      <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                     </a>
+                    <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_video_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
                     {/acl}
+
                     {acl isAllowed="VIDEO_DELETE"}
-                    <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
+                    <button class="btn btn-danger btn-small" ng-click="sendToTrash(content)" type="button">
                       <i class="fa fa-trash-o"></i> {t}Remove{/t}
                     </button>
                     {/acl}
