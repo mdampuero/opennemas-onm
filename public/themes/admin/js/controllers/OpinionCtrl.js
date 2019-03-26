@@ -2,8 +2,8 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('OpinionCtrl', [
-  '$controller', '$http', '$uibModal', '$rootScope', '$scope', 'routing', '$timeout',
-  function($controller, $http, $uibModal, $rootScope, $scope, routing, $timeout) {
+  '$controller', 'http', '$uibModal', '$scope', 'routing', '$timeout', 'cleaner',
+  function($controller, http, $uibModal, $scope, routing, $timeout, cleaner) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -147,13 +147,17 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @param {String} getPreviewUrl The URL to get the preview.
      */
     $scope.preview = function(previewUrl, getPreviewUrl) {
-      $scope.loading = true;
+      $scope.flags.preview = true;
 
       // Force ckeditor
       CKEDITOR.instances.body.updateElement();
       CKEDITOR.instances.summary.updateElement();
 
-      var data = { contents: $('#formulario').serializeArray() };
+      data = cleaner.clean($scope.item);
+
+      var postData = { item: data, locale: $scope.config.locale };
+
+      var data = { item: JSON.stringify($scope.item) };
       var url  = routing.generate(previewUrl);
 
       $http.post(url, data).success(function() {

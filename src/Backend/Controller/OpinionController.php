@@ -91,157 +91,7 @@ class OpinionController extends BackendController
     public function createAction(Request $request)
     {
         return $this->render('opinion/item.tpl');
-
-        $params  = $request->request->get('params', []);
-        $opinion = new \Opinion();
-
-        $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
-        $inhome        = $request->request->filter('in_home', '', FILTER_SANITIZE_STRING);
-        $withComment   = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
-
-        $data = [
-            'body'                => $request->request->get('body', ''),
-            'content_status'      => (empty($contentStatus)) ? 0 : 1,
-            'endtime'             => $request->request->get('endtime', ''),
-            'fk_author'           => $request->request->getDigits('fk_author', 0),
-            'fk_author_img'       => $request->request->getDigits('fk_author_img'),
-            'fk_publisher'        => $this->getUser()->id,
-            'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
-            'img1'                => $request->request->getDigits('img1', ''),
-            'img1_footer'         =>
-                $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'img2'                => $request->request->getDigits('img2', ''),
-            'img2_footer'         =>
-                $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'in_home'             => (empty($inhome)) ? 0 : 1,
-            'starttime'           => $request->request->get('starttime', ''),
-            'summary'             => $request->request->get('summary', ''),
-            'title'               =>
-                $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
-            'with_comment'        => (empty($withComment)) ? 0 : 1,
-            'params'              => [
-                'only_registered' => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
-            ],
-            'tags'             => json_decode($request->request->get('tags', ''), true)
-        ];
-
-        $data = $this->loadMetaDataFields($data, $request->request, self::EXTRA_INFO_TYPE);
-
-        if ($opinion->create($data)) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Opinion successfully created.')
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Unable to create the new opinion.')
-            );
-        }
-
-        return $this->redirect(
-            $this->generateUrl('backend_opinion_show', [ 'id' => $opinion->id ])
-        );
     }
-
-    /**
-     * Updates the opinion information sent by POST.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('OPINION_UPDATE')")
-     */
-    public function updateAction(Request $request)
-    {
-        $id     = $request->query->getDigits('id');
-        $params = $request->request->get('params', []);
-
-        $opinion = new \Opinion($id);
-
-        if (is_null($opinion->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Unable to find the opinion with the id "%d"'), $id)
-            );
-
-            return $this->redirect($this->generateUrl('backend_opinions_list'));
-        }
-
-        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
-            && !$opinion->isOwner($this->getUser()->id)
-        ) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("You can't modify this opinion because you don't have enought privileges.")
-            );
-
-            return $this->redirect($this->generateUrl('backend_opinions_list'));
-        }
-
-        $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
-        $inhome        = $request->request->filter('in_home', '', FILTER_SANITIZE_STRING);
-        $withComment   = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
-
-        // Check empty data
-        if (count($request->request) < 1) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("Opinion data sent not valid.")
-            );
-
-            return $this->redirect($this->generateUrl('backend_opinion_show', [ 'id' => $id ]));
-        }
-
-        $data = [
-            'body'                => $request->request->get('body', ''),
-            'content_status'      => (empty($contentStatus)) ? 0 : 1,
-            'endtime'             => $request->request->get('endtime', ''),
-            'fk_author'           => $request->request->getDigits('fk_author', 0),
-            'fk_author_img'       => $request->request->getDigits('fk_author_img'),
-            'fk_publisher'        => $this->getUser()->id,
-            'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
-            'id'                  => $id,
-            'img1'                => $request->request->getDigits('img1', ''),
-            'img1_footer'         =>
-                $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'img2'                => $request->request->getDigits('img2', ''),
-            'img2_footer'         =>
-                $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'in_home'             => (empty($inhome)) ? 0 : 1,
-            'starttime'           => $request->request->get('starttime', ''),
-            'summary'             => $request->request->get('summary', ''),
-            'title'               =>
-                $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
-            'with_comment'        => (empty($withComment)) ? 0 : 1,
-            'params'              => [
-                'only_registered' => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
-            ],
-            'tags'             => json_decode($request->request->get('tags', ''), true)
-        ];
-
-        $data = $this->loadMetaDataFields($data, $request->request, self::EXTRA_INFO_TYPE);
-
-        if ($opinion->update($data)) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Opinion successfully updated.')
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Unable to update the opinion.')
-            );
-        }
-
-        return $this->redirect($this->generateUrl('backend_opinion_show', [
-            'id' => $opinion->id
-        ]));
-    }
-
 
     /**
      * Lists the available opinions for the frontpage manager.
@@ -361,7 +211,8 @@ class OpinionController extends BackendController
         $cm          = new \ContentManager();
         $opinion->id = 0;
 
-        $data = $request->request->filter('contents');
+        $data = $request->request->filter('item');
+        var_dump($data);die();
         foreach ($data as $value) {
             if (isset($value['name']) && !empty($value['name'])) {
                 $opinion->{$value['name']} = $value['value'];
