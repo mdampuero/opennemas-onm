@@ -173,6 +173,7 @@ class Photo extends Content
     public function create($data)
     {
         $data['content_status'] = 1;
+
         try {
             parent::create($data);
 

@@ -2,7 +2,7 @@
 --
 -- Host: mysql    Database: 1
 -- ------------------------------------------------------
--- Server version	5.7.22-log
+-- Server version	5.7.23-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -505,6 +505,7 @@ CREATE TABLE `contents_categories` (
   KEY `pk_fk_content_category` (`pk_fk_content_category`),
   KEY `content_categories_catname` (`catName`),
   KEY `pk_fk_content` (`pk_fk_content`),
+  CONSTRAINT `contentcategory_category_category_id` FOREIGN KEY (`pk_fk_content_category`) REFERENCES `content_categories` (`pk_content_category`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `contentcategory_contentid_contents_id` FOREIGN KEY (`pk_fk_content`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1444,4 +1445,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-20 14:58:00
+-- Dump completed on 2019-03-27 11:30:15
