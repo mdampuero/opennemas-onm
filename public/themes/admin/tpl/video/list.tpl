@@ -180,9 +180,9 @@
                 <th>{t}Title{/t}</th>
                 <th class="center hidden-xs">{t}Section{/t}</th>
                 {* <th class="center nowrap hidden-xs hidden-sm">{t}Author{/t}</th> *}
-                {* {acl isAllowed="VIDEO_HOME"}
+                {acl isAllowed="VIDEO_HOME"}
                   <th class="hidden-xs text-center" width="100">{t}Home{/t}</th>
-                {/acl} *}
+                {/acl}
                 {acl isAllowed="VIDEO_FAVORITE"}
                   <th class="hidden-xs text-center" width="100">{t}Favorite{/t}</th>
                 {/acl}
@@ -235,14 +235,14 @@
                 {* <td class="center nowrap hidden-xs hidden-sm">
                   [% item.author_name %]
                 </td> *}
-                {* {acl isAllowed="VIDEO_HOME"}
+                {acl isAllowed="VIDEO_HOME"}
                   <td class="hidden-xs text-center">
                     <button class="btn btn-white" ng-click="updateItem($index, item.id, 'backend_ws_content_toggle_in_home', 'in_home', item.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
                       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.home_loading == 1, 'fa-home text-info': !item.home_loading == 1 && item.in_home == 1, 'fa-home': !item.home_loading == 1 && item.in_home == 0 }"></i>
                       <i class="fa fa-times fa-sub text-danger" ng-if="!item.home_loading == 1 && item.in_home == 0"></i>
                     </button>
                   </td>
-                {/acl} *}
+                {/acl}
                 {acl isAllowed="VIDEO_FAVORITE"}
                   <td class="hidden-xs text-center">
                     <button class="btn btn-white" ng-click="patch(item, 'favorite', item.favorite != 1 ? 1 : 0)" type="button">
