@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form name="form" ng-controller="StaticPageCtrl" ng-init="getItem({$id});">
+<form name="form" ng-controller="StaticPageCtrl" ng-init="forcedLocale = '{$locale}'; getItem({$id});">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -16,7 +16,7 @@
           </li>
           <li class="quicklinks">
             <h4>
-              <a class="no-padding" href="{url name=backend_static_pages_list}">
+              <a class="no-padding" href="[% routing.generate('backend_static_pages_list') %]">
                 {t}Static Pages{/t}
               </a>
             </h4>
@@ -29,11 +29,19 @@
           <li class="quicklinks hidden-xs">
             <h4>{if empty($id)}{t}Create{/t}{else}{t}Edit{/t}{/if}</h4>
           </li>
+          <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="config.locale.multilanguage && config.locale.available">
+            <h4>
+              <i class="fa fa-angle-right"></i>
+            </h4>
+          </li>
+          <li class="quicklinks ng-cloak" ng-if="config.locale.multilanguage && config.locale.available">
+            <translator item="data.item" keys="data.extra.keys" ng-model="config.locale.selected" options="config.locale"></translator>
+          </li>
         </ul>
         <div class="ng-cloak pull-right" ng-if="!flags.http.loading">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving || form.$invalid" type="button">
+              <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
                 <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                 {t}Save{/t}
               </button>
@@ -70,7 +78,7 @@
             {/acl}
 
             {include file="ui/component/content-editor/accordion/tags.tpl"}
-            {include file="ui/component/content-editor/accordion/slug.tpl" route="[% routing.generate('frontend_static_page', { slug: item.slug }) %]"}
+            {include file="ui/component/content-editor/accordion/slug.tpl" route="[% getL10nUrl(routing.generate('frontend_static_page', { slug: item.slug })) %]"}
           </div>
         </div>
       </div>

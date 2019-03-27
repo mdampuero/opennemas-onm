@@ -755,7 +755,7 @@
           }
 
           var config = {
-            locales: $scope.data.extra.options.available,
+            locales: $scope.config.locale.available,
             translators: translators
           };
 

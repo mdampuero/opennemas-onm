@@ -95,14 +95,14 @@ class ContentController extends ApiController
      **/
     protected function getExtraData($items = null)
     {
-        $extra = [
+        return [
             'related_contents' => $this->getRelatedContents($items),
+            'keys'             => $this->get($this->service)->getL10nKeys(),
+            'locale'           => $this->get('core.helper.locale')->getConfiguration(),
             'template_vars'    => [
                 'media_dir' => $this->get('core.instance')->getMediaShortPath() . '/images',
             ],
         ];
-
-        return array_merge($extra, $this->getLocaleData('frontend'));
     }
 
     /**

@@ -71,10 +71,7 @@ class CategoryController extends FrontendController
 
         $expected = $this->getExpectedUri($action, $params);
 
-        if (!preg_match(
-            '@^' . preg_quote($expected) . '($|\?.+)@',
-            $request->getRequestUri()
-        )) {
+        if (strpos($request->getRequestUri(), $expected) === false) {
             return new RedirectResponse($expected, 301);
         }
 

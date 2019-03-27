@@ -199,11 +199,9 @@
                   {/acl}
                 </div>
               </td>
-              {if $category=='widget' || $category=='all'}
               <td class="center hidden-xs hidden-sm">
                 [% extra.categories[content.category] %]
               </td>
-              {/if}
               <td class="center nowrap hidden-xs hidden-sm">
                 [% content.author_name %]
               </td>

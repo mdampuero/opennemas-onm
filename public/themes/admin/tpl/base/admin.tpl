@@ -90,6 +90,9 @@
           clear: '{t}Clear{/t}',
           generate: '{t}Generate{/t}',
           newItem: '{t}New tag{/t}',
+        },
+        forms: {
+          'not_valid' : '{t}The form has some missing or invalid fields, please review it.{/t}',
         }
       };
     </script>

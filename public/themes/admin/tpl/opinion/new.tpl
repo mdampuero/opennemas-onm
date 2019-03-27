@@ -135,7 +135,6 @@
                 </div>
               </div>
               <input type="hidden" id="fk_user_last_editor" name="fk_user_last_editor" value="{$publisher|default:""}"/>
-              <input type="hidden" id="category" name="category" title="opinion" value="opinion" />
             </div>
           </div>
         </div>

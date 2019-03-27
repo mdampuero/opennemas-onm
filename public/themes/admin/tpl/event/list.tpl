@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div ng-controller="EventListCtrl" ng-init="init()">
+  <div ng-controller="EventListCtrl" ng-init="forcedLocale = '{$locale}'; init()">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -15,6 +15,14 @@
               <h4>
                 {t}Events{/t}
               </h4>
+            </li>
+            <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
+              <h4>
+                <i class="fa fa-angle-right"></i>
+              </h4>
+            </li>
+            <li class="quicklinks ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
+              <translator keys="data.extra.keys" ng-model="config.locale.selected" options="data.extra.locale"></translator>
             </li>
           </ul>
           <div class="all-actions pull-right">
@@ -197,9 +205,10 @@
                     </small>
                     <div class="listing-inline-actions">
                       {acl isAllowed="EVENT_UPDATE"}
-                        <a class="btn btn-small" href="[% routing.generate('backend_event_show', { id: getId(item) }) %]">
+                        <a class="btn btn-default btn-small" href="[% routing.generate('backend_event_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
                           <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                         </a>
+                        <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_event_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
                       {/acl}
                       {acl isAllowed="EVENT_DELETE"}
                         <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">

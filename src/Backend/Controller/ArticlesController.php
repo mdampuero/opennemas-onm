@@ -182,6 +182,10 @@ class ArticlesController extends Controller
             'pk_content'             => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ],
         ];
 
+        if (!empty($categoryId)) {
+            $filters['pk_fk_content_category'] = [ [ 'value' => $categoryId ] ];
+        }
+
         $countArticles = true;
         $articles      = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page, 0, $countArticles);
 
