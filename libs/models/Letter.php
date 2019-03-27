@@ -146,7 +146,6 @@ class Letter extends Content
     public function create($data)
     {
         $data['position'] = 1;
-        $data['category'] = 0;
 
         parent::create($data);
 
@@ -185,7 +184,6 @@ class Letter extends Content
     public function update($data)
     {
         $data['position'] = 1;
-        $data['category'] = 0;
 
         parent::update($data);
 
