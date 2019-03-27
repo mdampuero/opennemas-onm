@@ -31,6 +31,7 @@ class ContentOldController extends ContentController
             'keys'             => $this->getL10nKeys(),
             'authors'          => $this->getAuthors(),
             'locale'           => $this->get('core.helper.locale')->getConfiguration(),
+            'comments_enabled' => $this->get('core.helper.comment')->enableCommentsByDefault(),
             'template_vars'    => [
                 'media_dir' => $this->get('core.instance')->getMediaShortPath() . '/images',
             ],

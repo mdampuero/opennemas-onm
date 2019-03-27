@@ -66,6 +66,8 @@ class VideosController extends BackendController
      */
     public function createAction(Request $request)
     {
+        return $this->render('video/item.tpl');
+
         if ('POST' !== $request->getMethod()) {
             $type = $request->query->filter('type', null, FILTER_SANITIZE_STRING);
 
