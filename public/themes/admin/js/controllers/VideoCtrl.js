@@ -91,6 +91,8 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         });
       }
 
+      $scope.type = $scope.data.item.author_name;
+
       $scope.configure(data.extra);
       $scope.localize($scope.data.item, 'item', true);
     };

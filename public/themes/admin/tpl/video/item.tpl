@@ -6,26 +6,6 @@
       var video_manager_url = {
         get_information: '{url name=admin_videos_get_info}'
       }
-
-      var localeAux = '{$smarty.const.CURRENT_LANGUAGE_SHORT|default:"en"}';
-        localeAux = moment.locales().includes(localeAux) ?
-          localeAux :
-          'en';
-
-      $('#starttime, #endtime').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm:ss',
-        useCurrent: false,
-        minDate: '{$video->created|default:$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}',
-        locale: localeAux
-      });
-
-      $("#starttime").on("dp.change",function (e) {
-        $('#endtime').data("DateTimePicker").minDate(e.date);
-      });
-      $("#endtime").on("dp.change",function (e) {
-        $('#starttime').data("DateTimePicker").maxDate(e.date);
-      });
-
     </script>
   {/javascripts}
 {/block}
@@ -67,14 +47,61 @@
     </div>
   </div>
   <div class="content">
-    <div class="row">
+    <div class="listing-no-contents" ng-hide="!flags.http.loading">
+      <div class="text-center p-b-15 p-t-15">
+        <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
+        <h3 class="spinner-text">{t}Loading{/t}...</h3>
+      </div>
+    </div>
+    <div class="listing-no-contents ng-cloak" ng-if="!flags.http.loading && item === null">
+      <div class="text-center p-b-15 p-t-15">
+        <a href="[% routing.generate('backend_users_list') %]">
+          <i class="fa fa-4x fa-warning text-warning"></i>
+          <h3>{t}Unable to find the item{/t}</h3>
+          <h4>{t}Click here to return to the list{/t}</h4>
+        </a>
+      </div>
+    </div>
 
+    <div class="row ng-cloak" ng-show="!flags.http.loading && !type">
+      <h5>{t}Pick the method to add the video{/t}</h5>
+
+      <ul class="video-type-selector">
+          <li class="web">
+            <button ng-click="type='web-source'" class="clearfix btn btn-white">
+              <i class="fa fa-vimeo fa-lg"></i>
+              <i class="fa fa-youtube fa-lg"></i>
+              <div class="p-t-10">
+                {t}Link video from other web video services{/t}
+              </div>
+            </button>
+          </li>
+          <li class="web">
+            <button ng-click="type='script'" class="clearfix btn btn-white">
+              <div class="p-t-10">
+                <i class="fa fa-file-code-o fa-3x"></i>
+                {t}Use HTML code{/t}
+              </div>
+            </button>
+          </li>
+          <li class="web">
+            <button ng-click="type='external'" class="clearfix btn btn-white">
+              <i class="fa fa-film fa-3x"></i>
+              <div class="p-t-10">
+                {t}Use file video URLs (External HTML5/FLV){/t}
+              </div>
+            </button>
+          </li>
+      </ul>
+    </div>
+
+    <div class="row ng-cloak" ng-show="!flags.http.loading && type && item">
       <div class="col-md-4 col-md-push-8">
         <div class="grid simple">
           <div class="grid-body no-padding">
             <div class="grid-collapse-title">
               {acl isAllowed="VIDEO_AVAILABLE"}
-                {include file="ui/component/content-editor/accordion/published.tpl"}
+                {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Published{/t}" field="content_status"}
               {/acl}
               {include file="ui/component/content-editor/accordion/allow_comments.tpl"}
             </div>
@@ -82,13 +109,11 @@
             {include file="ui/component/content-editor/accordion/author.tpl" required=true}
             {include file="ui/component/content-editor/accordion/category.tpl"}
             {include file="ui/component/content-editor/accordion/tags.tpl"}
-            {include file="ui/component/content-editor/accordion/slug.tpl" route="[% getL10nUrl(routing.generate('frontend_video_show', { slug: item.slug })) %]"}
+            {include file="ui/component/content-editor/accordion/slug.tpl" route="[% getL10nUrl(routing.generate('frontend_video_show', { slug: item.slug, category_name: 'category' })) %]"}
             {include file="ui/component/content-editor/accordion/scheduling.tpl"}
-
           </div>
         </div>
-        {if $type == "script" || $type == "external" || (isset($video) && ($video->author_name == 'script' || $video->author_name == 'external'))}
-        <div class="grid simple">
+        <div class="grid simple" ng-if="type == 'script' || type == 'external'">
           <div class="grid-title">
             <h4>{t}Image assigned{/t}</h4>
           </div>
@@ -105,49 +130,42 @@
                     </div>
                     <div class="dynamic-image-placeholder ng-cloak" ng-if="thumbnail">
                       <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="thumbnail" transform="thumbnail,220,220">
-                      <div class="thumbnail-actions">
-                        <div class="thumbnail-action remove-action" ng-click="removeImage('thumbnail')">
-                          <i class="fa fa-trash-o fa-2x"></i>
+                        <div class="thumbnail-actions">
+                          <div class="thumbnail-action remove-action" ng-click="removeImage('thumbnail')">
+                            <i class="fa fa-trash-o fa-2x"></i>
+                          </div>
+                          <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="thumbnail" media-picker-type="photo">
+                            <i class="fa fa-camera fa-2x"></i>
+                          </div>
                         </div>
-                        <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="thumbnail" media-picker-type="photo">
-                          <i class="fa fa-camera fa-2x"></i>
-                        </div>
-                      </div>
-                      <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="thumbnail" media-picker-type="photo"></div>
-                    </dynamic-image>
-                    <input type="hidden" name="information[thumbnail]" ng-value="thumbnail.pk_photo"/>
+                        <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="thumbnail" media-picker-type="photo"></div>
+                      </dynamic-image>
+                      <input type="hidden" name="information[thumbnail]" ng-value="thumbnail.pk_photo"/>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {/if}
       </div>
       <div class="col-md-8 col-md-pull-4">
         <div class="grid simple">
           <div class="grid-body">
-            {if $type == "external" || (isset($video) && $video->author_name == 'external')}
+            <span ng-show="type == 'external'">
               {include file="video/partials/_form_video_external.tpl"}
-            {elseif $type == "script" || (isset($video) && $video->author_name == 'script')}
+            </span>
+            <span ng-show="type == 'script'">
               {include file="video/partials/_form_video_script.tpl"}
-            {else}
+            </span>
+            <span ng-show="type !== 'script' && type !== 'external'">
               {include file="video/partials/_form_video_panorama.tpl"}
-            {/if}
+            </span>
           </div>
         </div>
       </div>
     </div>
-    {* <div class="form-vertical video-edit-form">
-      <input type="hidden" name="type" value="{$smarty.get.type}">
-      <input type="hidden" name="id" id="id" value="{$video->id|default:""}" />
-    </div> *}
   </div>
-
-
-  <script type="text/ng-template" id="modal-select-type">
-    {include file="video/partials/modal.select_type.tpl"}
-  </script>
 
 </form>
 {/block}
