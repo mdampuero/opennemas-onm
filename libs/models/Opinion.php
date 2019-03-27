@@ -161,7 +161,6 @@ class Opinion extends Content
     public function create($data)
     {
         $data['position'] = 1;
-        $data['category'] = 4; // force internal category name
 
         // Editorial or director
         if (!isset($data['fk_author'])) {
