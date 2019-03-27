@@ -30,7 +30,7 @@ frontend_video_frontpage_category:
     options:
         l10n: true
 
-frontend_video_show_with_slug:
+frontend_video_show:
     path: /video/{category_name}/{slug}/{video_id}.{_format}
     defaults: { _controller: FrontendBundle:Videos:show, _format: html }
     requirements:
@@ -39,6 +39,7 @@ frontend_video_show_with_slug:
         video_id     : '([0-9]+)'
     options:
         l10n: true
+        expose: true
 
 frontend_video_show_with_date_slug:
     path: /video/{category_name}/{date}/{slug}/{video_id}.{_format}
