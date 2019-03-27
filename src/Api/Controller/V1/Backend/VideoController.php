@@ -24,6 +24,22 @@ class VideoController extends ContentOldController
     protected $getItemRoute = 'api_v1_backend_video_show';
 
     /**
+     * {@inheritDoc}
+     **/
+    public function getExtraData($items = null)
+    {
+        $us = $this->get('api.service.category');
+
+        $categories = $this->container->get('data.manager.filter')
+            ->set($us->getList('inmenu=1')['items'])
+            ->filter('mapify', [ 'key' => 'pk_content_category' ])
+            ->get();
+
+        return array_merge(parent::getExtraData($items), [
+            'categories' => $us->responsify($categories),
+        ]);
+    }
+    /**
      * Returns the list of l10n keys
      * @param Type $var Description
      *

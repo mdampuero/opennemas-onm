@@ -230,7 +230,7 @@
                   </div>
                 </td>
                 <td class="center hidden-xs hidden-sm">
-                  [% extra.categories[item.category] %]
+                  [% data.extra.categories[item.category].title %]
                 </td>
                 {* <td class="center nowrap hidden-xs hidden-sm">
                   [% item.author_name %]
