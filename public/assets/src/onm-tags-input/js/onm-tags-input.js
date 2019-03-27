@@ -211,7 +211,7 @@
             page: 1
           };
 
-          if ($scope.locale.multilanguage) {
+          if ($scope.locale && $scope.locale.multilanguage) {
             criteria.locale = $scope.locale.selected;
           }
 
@@ -356,7 +356,7 @@
         $scope.$watch('locale', function(nv) {
           $scope.tagsInLocale = $scope.tags;
 
-          if (nv.multilanguage) {
+          if (nv && nv.multilanguage) {
             $scope.tagsInLocale = $scope.tags.filter(function(e) {
               return !e.locale || e.locale === nv.selected;
             });
@@ -393,7 +393,7 @@
               $scope.tags         = response.data.items;
               $scope.tagsInLocale = angular.copy($scope.tags);
 
-              if ($scope.locale.multilanguage) {
+              if ($scope.locale && $scope.locale.multilanguage) {
                 $scope.tagsInLocale = $scope.tags.filter(function(e) {
                   return !e.locale || e.locale === $scope.locale.selected;
                 });
