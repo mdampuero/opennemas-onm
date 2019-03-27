@@ -184,7 +184,6 @@ class Letter extends Content
     public function update($data)
     {
         $data['position'] = 1;
-        $data['category'] = 0;
 
         parent::update($data);
 
