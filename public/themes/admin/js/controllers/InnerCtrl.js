@@ -16,8 +16,8 @@
      *   implemented.
      */
     .controller('InnerCtrl', [
-      '$controller', '$scope', 'http',
-      function($controller, $scope, http) {
+      '$controller', '$scope', 'http', 'messenger',
+      function($controller, $scope, http, messenger) {
         $.extend(this, $controller('BaseCtrl', { $scope: $scope }));
 
         /**
@@ -83,11 +83,19 @@
          *   Saves tags and, then, submits the form.
          */
         $scope.submit = function(e) {
-          e.preventDefault();
+          if ($scope.form.$invalid) {
+            $('[name=form]')[0].reportValidity();
+
+            e.preventDefault();
+
+            messenger.post(window.strings.forms.not_valid, 'error');
+
+            return false;
+          }
 
           if (!$('[name=form]')[0].checkValidity()) {
             $('[name=form]')[0].reportValidity();
-            return;
+            return false;
           }
 
           $scope.$broadcast('onmTagsInput.save', {

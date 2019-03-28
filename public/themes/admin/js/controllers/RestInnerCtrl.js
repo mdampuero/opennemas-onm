@@ -174,7 +174,7 @@
           if ($scope.form.$invalid) {
             messenger.post(window.strings.forms.not_valid, 'error');
 
-            return;
+            return false;
           }
 
           $scope.form.$setPristine(true);
