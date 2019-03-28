@@ -34,7 +34,10 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ])->getMock();
 
         $this->imagick = $this->getMockBuilder('Imagick')
-            ->setMethods([ 'getImageFormat', 'getImageMimeType' ])
+            ->setMethods([
+                'getImageFormat', 'getImageHeight', 'getImageLength',
+                'getImageMimeType', 'getImageWidth'
+            ])
             ->getMock();
 
         $this->imagine = $this->getMockBuilder('Imagine')
@@ -127,6 +130,40 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('image/wibble', $this->im->getMimeType());
     }
+
+    /**
+     * Tests getHeight.
+     */
+    public function testGetHeight()
+    {
+        $this->imagick->expects($this->once())->method('getImageHeight')
+            ->willReturn(9688);
+
+        $this->assertEquals(9688, $this->im->getHeight());
+    }
+
+    /**
+     * Tests getHeight.
+     */
+    public function testGetSize()
+    {
+        $this->imagick->expects($this->once())->method('getImageLength')
+            ->willReturn(22626);
+
+        $this->assertEquals(22626, $this->im->getSize());
+    }
+
+    /**
+     * Tests getWidth.
+     */
+    public function testGetWidth()
+    {
+        $this->imagick->expects($this->once())->method('getImageWidth')
+            ->willReturn(180);
+
+        $this->assertEquals(180, $this->im->getWidth());
+    }
+
 
     /**
      * Tests open when file exists.

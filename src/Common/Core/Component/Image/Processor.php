@@ -109,6 +109,16 @@ class Processor
     }
 
     /**
+     * Returns the image height.
+     *
+     * @return integer Returns the image height.
+     */
+    public function getHeight() : int
+    {
+        return $this->image->getImagick()->getImageHeight();
+    }
+
+    /**
      * Returns the image mime-type.
      *
      * @return string The image mime-type.
@@ -116,6 +126,26 @@ class Processor
     public function getMimeType()
     {
         return $this->image->getImagick()->getImageMimeType();
+    }
+
+    /**
+     * Returns the image size in bytes.
+     *
+     * @return integer The image size.
+     */
+    public function getSize() : int
+    {
+        return $this->image->getImagick()->getImageLength();
+    }
+
+    /**
+     * Returns the image width.
+     *
+     * @return integer Returns the image width.
+     */
+    public function getWidth() : int
+    {
+        return $this->image->getImagick()->getImageWidth();
     }
 
     /**
