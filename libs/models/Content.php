@@ -21,13 +21,6 @@ class Content implements \JsonSerializable, CsvSerializable
     const POSTPONED     = 'postponed';
 
     /**
-     * DEPRECATED: The availability
-     *
-     * @var string
-     */
-    protected $available = 0;
-
-    /**
      * The main text of the content
      *
      * @var string
