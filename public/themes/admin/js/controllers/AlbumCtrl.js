@@ -41,6 +41,11 @@ angular.module('BackendApp.controllers')
           return;
         }
 
+        if (!$('[name=form]')[0].checkValidity()) {
+          $('[name=form]')[0].reportValidity();
+          return;
+        }
+
         $scope.$broadcast('onmTagsInput.save', {
           onSuccess: function(ids) {
             $('[name=tag_ids]').val(JSON.stringify(ids));

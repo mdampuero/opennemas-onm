@@ -462,6 +462,13 @@
          *   Saves tags and, then, saves the article.
          */
         $scope.submit = function() {
+          if (!$('[name=form]')[0].checkValidity()) {
+            $('[name=form]')[0].reportValidity();
+            return;
+          }
+
+          $scope.flags.http.saving = true;
+
           $scope.$broadcast('onmTagsInput.save', {
             onError: $scope.errorCb,
             onSuccess: function(ids) {
