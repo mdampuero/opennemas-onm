@@ -392,7 +392,7 @@
          *   Saves a new article.
          */
         $scope.save = function() {
-          if ($scope.articleForm.$invalid ||
+          if ($scope.form.$invalid ||
               !$scope.data.article.pk_fk_content_category) {
             $scope.showRequired = true;
             return;
@@ -410,7 +410,7 @@
            * @param {Object} response The response object.
            */
           var successCb = function(response) {
-            $scope.articleForm.$setPristine(true);
+            $scope.form.$setPristine(true);
 
             $scope.disableFlags();
             webStorage.session.remove($scope.draftKey);
@@ -614,7 +614,7 @@
               }
             }
 
-            if ($scope.articleForm.$dirty &&
+            if ($scope.form.$dirty &&
                 (!nv[1] && angular.equals(nv[1], ov[1]) ||
                 angular.equals(nv[1], ov[0]))) {
               $scope.article.img2 = $scope.article.img1;
@@ -644,7 +644,7 @@
               }
             }
 
-            if ($scope.articleForm.$dirty &&
+            if ($scope.form.$dirty &&
                 (!nv[1] && angular.equals(nv[1], ov[1]) ||
                 angular.equals(nv[1], ov[0]))) {
               $scope.article.fk_video2 = $scope.article.fk_video;
@@ -677,12 +677,12 @@
 
           // Show a message when leaving before saving
           $($window).bind('beforeunload', function() {
-            if ($scope.articleForm.$dirty) {
+            if ($scope.form.$dirty) {
               return $window.leaveMessage;
             }
           });
 
-          $scope.articleForm.$setDirty(true);
+          $scope.form.$setDirty(true);
 
           if ($scope.draftEnabled) {
             $scope.draftSaved = null;
