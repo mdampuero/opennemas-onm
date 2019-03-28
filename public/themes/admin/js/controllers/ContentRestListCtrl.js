@@ -9,14 +9,14 @@
      *
      * @requires $controller
      * @requires $scope
-     * @requires oqlEncoder
+     * @requires $uibModal
      *
      * @description
      *   Handles all actions in user groups list.
      */
     .controller('ContentRestListCtrl', [
-      '$controller', '$scope', '$uibModal', 'oqlEncoder',
-      function($controller, $scope, $uibModal, oqlEncoder) {
+      '$controller', '$scope', '$uibModal',
+      function($controller, $scope, $uibModal) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**

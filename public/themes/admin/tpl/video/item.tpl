@@ -1,15 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-  {javascripts src="@AdminTheme/js/onm/video.js" filters="uglifyjs" output="video"}
-    <script>
-      var video_manager_url = {
-        get_information: '{url name=admin_videos_get_info}'
-      }
-    </script>
-  {/javascripts}
-{/block}
-
 {block name="content"}
 <form name="form" ng-controller="VideoCtrl" ng-init="forcedLocale = '{$locale}'; getItem({$id});">
   <div class="page-navbar actions-navbar">
@@ -68,7 +58,7 @@
 
       <ul class="video-type-selector">
           <li class="web">
-            <button ng-click="type='web-source'" class="clearfix btn btn-white">
+            <button ng-click="setType('web-source')" class="clearfix btn btn-white">
               <i class="fa fa-vimeo fa-lg"></i>
               <i class="fa fa-youtube fa-lg"></i>
               <div class="p-t-10">
@@ -77,7 +67,7 @@
             </button>
           </li>
           <li class="web">
-            <button ng-click="type='script'" class="clearfix btn btn-white">
+            <button ng-click="setType('script')" class="clearfix btn btn-white">
               <div class="p-t-10">
                 <i class="fa fa-file-code-o fa-3x"></i>
                 {t}Use HTML code{/t}
@@ -85,7 +75,7 @@
             </button>
           </li>
           <li class="web">
-            <button ng-click="type='external'" class="clearfix btn btn-white">
+            <button ng-click="setType('external')" class="clearfix btn btn-white">
               <i class="fa fa-film fa-3x"></i>
               <div class="p-t-10">
                 {t}Use file video URLs (External HTML5/FLV){/t}
@@ -113,7 +103,7 @@
             {include file="ui/component/content-editor/accordion/scheduling.tpl"}
           </div>
         </div>
-        <div class="grid simple" ng-show="type == 'script' || type == 'external'">
+        <div class="grid simple" ng-if="type == 'script' || type == 'external'">
           <div class="grid-title">
             <h4>{t}Image assigned{/t}</h4>
           </div>
@@ -152,13 +142,13 @@
       <div class="col-md-8 col-md-pull-4">
         <div class="grid simple">
           <div class="grid-body">
-            <span ng-show="type == 'external'">
+            <span ng-if="type == 'external'">
               {include file="video/partials/_form_video_external.tpl"}
             </span>
-            <span ng-show="type == 'script'">
+            <span ng-if="type == 'script'">
               {include file="video/partials/_form_video_script.tpl"}
             </span>
-            <span ng-show="type !== 'script' && type !== 'external'">
+            <span ng-show="type != 'script' && type != 'external' ">
               {include file="video/partials/_form_video_panorama.tpl"}
             </span>
           </div>
@@ -166,6 +156,5 @@
       </div>
     </div>
   </div>
-
 </form>
 {/block}

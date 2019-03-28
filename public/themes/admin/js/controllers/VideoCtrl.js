@@ -91,10 +91,14 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         });
       }
 
-      $scope.type = $scope.data.item.author_name;
+      $scope.setType($scope.data.item.author_name);
 
       $scope.configure(data.extra);
       $scope.localize($scope.data.item, 'item', true);
+    };
+
+    $scope.setType = function(type) {
+      $scope.type = type;
     };
 
     /**
