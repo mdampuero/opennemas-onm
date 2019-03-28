@@ -155,7 +155,7 @@ class ContentController extends ApiController
      * @param array $tags The lis tof tag objects
      * @return array
      **/
-    private function parseTags($tags = [])
+    protected function parseTags($tags = [])
     {
         if (empty($tags)) {
             return [];

@@ -197,6 +197,8 @@ class ContentOldService implements Service
             $item       = array_pop($item);
             $item->tags = $item->tag_ids;
 
+            $item->loadAllContentProperties();
+
             $this->localizeItem($item);
 
             $this->dispatcher->dispatch($this->getEventName('getItem'), [

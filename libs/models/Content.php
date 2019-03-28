@@ -275,24 +275,11 @@ class Content implements \JsonSerializable, CsvSerializable
                                 ->get();
                         }
 
-                        if (is_array($this->meta) && array_key_exists($name, $this->meta)) {
-                            return getService('data.manager.filter')
-                                ->set($this->meta[$name])
-                                ->filter('localize')
-                                ->get();
-                        }
                     }
 
                     if (property_exists($this, $name)) {
                         return getService('data.manager.filter')
                             ->set($this->{$name})
-                            ->filter('unlocalize')
-                            ->get();
-                    }
-
-                    if (is_array($this->meta) && array_key_exists($name, $this->meta)) {
-                        return getService('data.manager.filter')
-                            ->set($this->meta[$name])
                             ->filter('unlocalize')
                             ->get();
                     }

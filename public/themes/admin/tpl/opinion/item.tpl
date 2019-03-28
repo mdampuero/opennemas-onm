@@ -39,7 +39,7 @@
           <ul class="nav quick-section">
             <li class="quicklinks hidden-xs">
               <button class="btn btn-white" id="preview-button" ng-click="preview('api_v1_backend_opinion_preview', 'api_v1_backend_opinion_get_preview')" type="button" id="preview_button">
-                <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': loading }" ></i>
+                <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.generating_preview }" ></i>
                 {t}Preview{/t}
               </button>
             </li>
@@ -85,7 +85,7 @@
 
             {include file="ui/component/content-editor/accordion/author.tpl" required=true}
             {include file="ui/component/content-editor/accordion/tags.tpl"}
-            {include file="ui/component/content-editor/accordion/slug.tpl" route="[% getL10nUrl(routing.generate('frontend_opinion_show', { id: item.pk_content, created: item.created, opinion_title: item.slug })) %]"}
+            {include file="ui/component/content-editor/accordion/slug.tpl" route="[% getFrontendUrl(item) %]"}
             {include file="ui/component/content-editor/accordion/scheduling.tpl"}
           </div>
         </div>
@@ -118,7 +118,7 @@
           <div class="grid-body">
             {include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true counter=true}
             {include file="ui/component/content-editor/textarea.tpl" title="{t}Summary{/t}" field="summary" rows=5 imagepicker=true}
-            {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true}
+            {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=30 imagepicker=true}
           </div>
         </div>
       </div>
