@@ -80,7 +80,7 @@
             <div class="grid-collapse-title">
               {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Published{/t}" field="content_status"}
               {include file="ui/component/content-editor/accordion/allow_comments.tpl"}
-              {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}In homepage{/t}" field="in_home"}
+              {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Favorite{/t}" field="favorite"}
             </div>
 
             {include file="ui/component/content-editor/accordion/author.tpl" required=true}
