@@ -5,16 +5,15 @@
 <div class="form-controlgroup">
   <label for="video-information" class="form-label">{t}Write HTML code{/t}</label>
   <div class="controls">
-    <textarea name="body" id="body" rows="8" class="form-control">{$video->body|clearslash|default:""}</textarea>
-    <br /><br />
+    <textarea name="body" id="body" ng-model="item.body" rows="8" class="form-control"></textarea>
 
-    {if isset($video)}
-    <label  class="form-label">{t}Preview{/t}</label>
-    <div id="video-information" class="video-container" style="width:530px; text-align:center; margin:0 auto;">
-     {render_video video=$video height=$height width="400" height="300" base_url=$smarty.const.INSTANCE_MEDIA}
-   </div>
-   {/if}
  </div>
 </div>
-<input type="hidden" name="author_name" value="script"/>
-<input type="hidden" name="infor" value=""/>
+
+<div class="form-controlgroup m-t-10">
+  <label  class="form-label">{t}Preview{/t}</label>
+  <div style="width:100%; text-align:center; margin:0 auto;">
+    [% trustSrc(item.information.source.webm) %]
+    sdf
+  </div>
+</div>

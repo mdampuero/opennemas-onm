@@ -45,7 +45,7 @@
     </div>
     <div class="listing-no-contents ng-cloak" ng-if="!flags.http.loading && item === null">
       <div class="text-center p-b-15 p-t-15">
-        <a href="[% routing.generate('backend_users_list') %]">
+        <a href="[% routing.generate('backend_videos_list') %]">
           <i class="fa fa-4x fa-warning text-warning"></i>
           <h3>{t}Unable to find the item{/t}</h3>
           <h4>{t}Click here to return to the list{/t}</h4>
@@ -148,7 +148,7 @@
             <span ng-if="type == 'script'">
               {include file="video/partials/_form_video_script.tpl"}
             </span>
-            <span ng-show="type != 'script' && type != 'external' ">
+            <span ng-if="type == 'web-source' ">
               {include file="video/partials/_form_video_panorama.tpl"}
             </span>
           </div>

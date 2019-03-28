@@ -16,6 +16,8 @@ backend_opinion_show:
 backend_opinions_list:
     path:     /opinions
     defaults: { _controller: BackendBundle:Opinion:list }
+    options:
+        expose: true
 
 backend_opinions_content_provider:
     path:     /opinions/content-provider

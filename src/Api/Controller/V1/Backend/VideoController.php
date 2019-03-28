@@ -57,9 +57,6 @@ class VideoController extends ContentOldController
      **/
     public function getExtraData($items = null)
     {
-        if (!is_array($items)) {
-            $items = [ $items ];
-        }
         $us = $this->get('api.service.category');
 
         $categories = $this->container->get('data.manager.filter')
@@ -67,20 +64,8 @@ class VideoController extends ContentOldController
             ->filter('mapify', [ 'key' => 'pk_content_category' ])
             ->get();
 
-        $photos = [];
-        foreach ($items as $item) {
-            if (!array_key_exists('thumbnail', $item->information)
-                || empty($item->information['thumbnail'])
-            ) {
-                continue;
-            }
-
-            $photos[$item->information['thumbnail']] = new \Photo($item->information['thumbnail']);
-        }
-
         return array_merge(parent::getExtraData($items), [
             'categories' => $us->responsify($categories),
-            'photos'     => $us->responsify($photos),
         ]);
     }
     /**
@@ -114,14 +99,16 @@ class VideoController extends ContentOldController
             $content = [ $content ];
         }
 
-        foreach ($content as $element) {
-            foreach (['img1', 'img2'] as $relation) {
-                if (!empty($element->{$relation})) {
-                    $photo = $em->find('Photo', $element->{$relation});
-
-                    $extra[] = \Onm\StringUtils::convertToUtf8($photo);
-                }
+        foreach ($content as $item) {
+            if (!array_key_exists('thumbnail', $item->information)
+                || empty($item->information['thumbnail'])
+            ) {
+                continue;
             }
+
+            $photo = $em->find('Photo', $item->information['thumbnail']);
+
+            $extra[] = \Onm\StringUtils::convertToUtf8($photo);
         }
 
         return $extra;

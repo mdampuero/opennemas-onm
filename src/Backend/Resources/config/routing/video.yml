@@ -2,6 +2,8 @@
 backend_videos_list:
     path:     /videos
     defaults: { _controller: BackendBundle:Videos:list }
+    options:
+        expose: true
 
 backend_videos_create:
     path:     /videos/new

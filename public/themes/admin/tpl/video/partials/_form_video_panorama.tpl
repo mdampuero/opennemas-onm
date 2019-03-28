@@ -42,7 +42,7 @@
   </div>
   <div class="ng-cloak" ng-show="item.information.service && !flags.http.fetch_video_info">
     {include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true counter=true}
-    {include file="ui/component/content-editor/textarea.tpl" title="{t}description{/t}" field="description" rows=5 imagepicker=true}
+    {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true}
 
     <div class="form-group">
       <label for="preview" class="form-label">{t}Video preview{/t}</label>

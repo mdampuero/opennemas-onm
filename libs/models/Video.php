@@ -74,7 +74,7 @@ class Video extends Content
             case 'content_type_name':
                 return 'Video';
             case 'uri':
-                return $this->getUri();
+                return getService('core.helper.url_generator')->generate($this);
             default:
                 return parent::__get($name);
         }
@@ -471,20 +471,17 @@ class Video extends Content
     }
 
     /**
-     * Returns the uri for this video
-     *
-     * @return string the video uri
-     */
-    public function getUri()
+     * {@inheritDoc}
+     **/
+    public static function getL10nKeys()
     {
-        $uri = Uri::generate('video', [
-            'id'       => sprintf('%06d', $this->id),
-            'date'     => date('YmdHis', strtotime($this->created)),
-            'category' => urlencode($this->category_name),
-            'slug'     => urlencode($this->slug),
-        ]);
+        $parent = parent::getL10nKeys();
 
-        return ($uri !== '') ? $uri : $this->permalink;
+        $parent = array_filter($parent, function($el) {
+            return $el !== 'body';
+        });
+
+        return $parent;
     }
 
     /**
