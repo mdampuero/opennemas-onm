@@ -90,21 +90,24 @@ class OptimizeImagesCommand extends ContainerAwareCommand
         ));
 
         $output->writeln('(3/4) Processing files...<fg=yellow;options=bold>STARTED</>');
-        $im       = $this->getContainer()->get('core.image.image');
-        $progress = new ProgressBar($output, count($files));
+        $processor = $this->getContainer()->get('core.image.processor');
+        $progress  = new ProgressBar($output, count($files));
 
         foreach ($files as $file) {
-            $im->open($file->getRealPath());
+            $processor->open($file->getRealPath());
 
             if (!empty($input->getOption('optimize'))) {
-                $im->optimize();
+                $processor->optimize();
             }
 
             if (!empty($resize)) {
-                $im->apply('thumbnail', explode('x', $input->getOption('resize')));
+                $processor->apply(
+                    'thumbnail',
+                    explode('x', $input->getOption('resize'))
+                );
             }
 
-            $im->save($file->getRealPath());
+            $processor->save($file->getRealPath());
 
             $progress->advance();
         }

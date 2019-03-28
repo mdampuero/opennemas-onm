@@ -9,14 +9,14 @@
  */
 namespace Tests\Common\Core\Component\Image;
 
-use Common\Core\Component\Image\ImageManager;
+use Common\Core\Component\Image\Processor;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
 
 /**
- * Defines test cases for ImageManager class.
+ * Defines test cases for Processor class.
  */
-class ImageManagerTest extends \PHPUnit\Framework\TestCase
+class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -44,7 +44,7 @@ class ImageManagerTest extends \PHPUnit\Framework\TestCase
         $this->image->expects($this->any())->method('getImagick')
             ->willReturn($this->imagick);
 
-        $this->im = $this->getMockBuilder('Common\Core\Component\Image\ImageManager')
+        $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setConstructorArgs([])
             ->setMethods([ 'getImagine' ])
             ->getMock();
@@ -66,11 +66,11 @@ class ImageManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests apply when provided method is implemented in ImageManager
+     * Tests apply when provided method is implemented in Processor
      */
     public function testApplyWhenMethodExists()
     {
-        $this->im = $this->getMockBuilder('Common\Core\Component\Image\ImageManager')
+        $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setConstructorArgs([])
             ->setMethods([ 'glorp' ])
             ->getMock();
@@ -82,7 +82,7 @@ class ImageManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests process when provided method is implemented in ImageManager
+     * Tests process when provided method is implemented in Processor
      *
      * @expectedException \InvalidArgumentException
      */

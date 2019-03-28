@@ -55,13 +55,13 @@ class AssetController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $content = $this->get('core.image.image')
+        $content = $this->get('core.image.processor')
             ->open($path)
             ->strip()
             ->apply($transform, $params)
             ->getContent();
 
-        $mimeType = $this->get('core.image.image')->getMimeType();
+        $mimeType = $this->get('core.image.processor')->getMimeType();
 
         return new Response($content, 200, [ 'Content-Type' => $mimeType ]);
     }
@@ -240,11 +240,11 @@ class AssetController extends Controller
 
         $path = $this->getParameter('core.paths.public') . $path;
 
-        $content = $this->get('core.image.image')
+        $content = $this->get('core.image.processor')
             ->open($path)
             ->getContent();
 
-        $mimeType = $this->get('core.image.image')->getMimeType();
+        $mimeType = $this->get('core.image.processor')->getMimeType();
 
         return new Response($content, 200, [ 'Content-Type' => $mimeType ]);
     }

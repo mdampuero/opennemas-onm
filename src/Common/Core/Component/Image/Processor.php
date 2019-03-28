@@ -18,7 +18,7 @@ use Symfony\Component\Filesystem\Filesystem;
 /*
  * This class in charge of image processing and transformation.
  */
-class ImageManager
+class Processor
 {
     /**
      * Default image parameters.
@@ -54,7 +54,7 @@ class ImageManager
     protected $optimization = [];
 
     /**
-     * Initilizes the ImageManager.
+     * Initilizes the Processor.
      */
     public function __construct()
     {
@@ -68,7 +68,7 @@ class ImageManager
      * @param string $method The transformation to apply.
      * @param array  $params The list of parameters.
      *
-     * @return ImageManager The current ImageManager.
+     * @return Processor The current Processor.
      */
     public function apply($method, $params)
     {
@@ -123,7 +123,7 @@ class ImageManager
      *
      * @param string $path The path to the image.
      *
-     * @return ImageManager The current ImageManager.
+     * @return Processor The current Processor.
      */
     public function open($path)
     {
@@ -143,7 +143,7 @@ class ImageManager
      *
      * @param array $optimization The optimization to apply.
      *
-     * @return ImageManager The current ImageManager.
+     * @return Processor The current Processor.
      */
     public function optimize($optimization = [])
     {
@@ -161,7 +161,7 @@ class ImageManager
      *
      * @param string $path The path to the image.
      *
-     * @return ImageManager The current ImageManager.
+     * @return Processor The current Processor.
      */
     public function save($path)
     {
@@ -173,7 +173,7 @@ class ImageManager
     /**
      * Strips an image.
      *
-     * @return ImageManager The current ImageManager.
+     * @return Processor The current Processor.
      */
     public function strip()
     {
@@ -188,7 +188,7 @@ class ImageManager
      * @param array $params The list of parameters (topX, topY, width
      *                      and height).
      *
-     * @return ImageManager The current ImageManager.
+     * @return Processor The current Processor.
      */
     protected function crop(array $params)
     {
@@ -203,7 +203,7 @@ class ImageManager
     }
 
     /**
-     * Initializes the current ImageManager.
+     * Initializes the current Processor.
      *
      * @codeCoverageIgnore
      */
@@ -217,7 +217,7 @@ class ImageManager
      *
      * @param array $params The list of parameters (width and height).
      *
-     * @return ImageManager The current ImageManager.
+     * @return Processor The current Processor.
      */
     protected function resize(array $params)
     {
@@ -234,7 +234,7 @@ class ImageManager
      *
      * @param array $params The list of parameters (width, height).
      *
-     * @return ImageManager The current ImageManager.
+     * @return Processor The current Processor.
      */
     protected function thumbnail(array $params)
     {
@@ -251,7 +251,7 @@ class ImageManager
      *
      * @param array $params The list of parameters (width, height).
      *
-     * @return ImageManager The current ImageManager.
+     * @return Processor The current Processor.
      */
     public function zoomCrop(array $params)
     {

@@ -71,8 +71,8 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
-    core.image.image:
-        class:     Common\Core\Component\Image\ImageManager
+    core.image.processor:
+        class:     Common\Core\Component\Image\Processor
         public:    true
 
     core.instance:

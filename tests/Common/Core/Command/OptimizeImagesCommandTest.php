@@ -24,7 +24,7 @@ class OptimizeImagesCommandTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->im = $this->getMockBuilder('Common\Core\Component\Image\ImageManager')
+        $this->processor = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->disableOriginalConstructor()
             ->setMethods([
                 'apply', 'open', 'optimize', 'save'
@@ -56,8 +56,8 @@ class OptimizeImagesCommandTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'core.image.image':
-                return $this->im;
+            case 'core.image.processor':
+                return $this->processor;
         }
 
         return null;
@@ -118,9 +118,9 @@ class OptimizeImagesCommandTest extends \PHPUnit\Framework\TestCase
         $this->command->expects($this->once())->method('getFiles')
             ->willReturn([ $file ]);
 
-        $this->im->expects($this->once())->method('open')
+        $this->processor->expects($this->once())->method('open')
             ->with('glorp/norf/wibble.png');
-        $this->im->expects($this->once())->method('save')
+        $this->processor->expects($this->once())->method('save')
             ->with('glorp/norf/wibble.png');
 
         $application = new Application();
@@ -149,12 +149,12 @@ class OptimizeImagesCommandTest extends \PHPUnit\Framework\TestCase
         $this->command->expects($this->once())->method('getFiles')
             ->willReturn([ $file ]);
 
-        $this->im->expects($this->once())->method('open')
+        $this->processor->expects($this->once())->method('open')
             ->with('glorp/norf/wibble.png');
-        $this->im->expects($this->once())->method('optimize');
-        $this->im->expects($this->once())->method('apply')
+        $this->processor->expects($this->once())->method('optimize');
+        $this->processor->expects($this->once())->method('apply')
             ->with('thumbnail', [ 250, 250 ]);
-        $this->im->expects($this->once())->method('save')
+        $this->processor->expects($this->once())->method('save')
             ->with('glorp/norf/wibble.png');
 
         $application = new Application();
