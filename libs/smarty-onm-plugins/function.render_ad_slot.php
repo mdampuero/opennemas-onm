@@ -17,23 +17,26 @@ function smarty_function_render_ad_slot($params, $smarty)
     $format = 'safeframe';
 
     // Filter advertisement by position
-    if (array_key_exists('ads_positions', $smarty->tpl_vars)
-        && !in_array($params['position'], $smarty->tpl_vars['ads_positions']->value)) {
+    $adsPositions = $smarty->getValue('ads_positions');
+    if (is_array($adsPositions)
+        && !in_array($params['position'], $adsPositions)) {
         return '';
     }
 
-    if (array_key_exists('render_params', $smarty->tpl_vars)
-        && array_key_exists('ads-format', $smarty->tpl_vars['render_params']->value)
-        && !empty($smarty->tpl_vars['render_params']->value['ads-format'])
+    // Get format from template
+    $renderParams = $smarty->getValue('render_params');
+    if (is_array($renderParams)
+        && array_key_exists('ads-format', $renderParams)
+        && !empty($renderParams['ads-format'])
     ) {
-        $format = $smarty->tpl_vars['render_params']->value['ads-format'];
+        $format = $renderParams['ads-format'];
     }
 
     if (array_key_exists('format', $params) && !empty($params['format'])) {
         $format = $params['format'];
     }
 
-    $ads    = $smarty->tpl_vars['advertisements']->value;
+    $ads    = $smarty->getValue('advertisements');
     $slotId = $params['position'];
 
     if (!is_array($ads)) {
@@ -63,12 +66,12 @@ function smarty_function_render_ad_slot($params, $smarty)
     }
 
     // Get targeting parameters for smart ajax format
-    $app             = $smarty->tpl_vars['app']->value;
+    $app             = $smarty->getValue('app');
     $targetingParams = [
-        'category'           => $smarty->tpl_vars['actual_category']->value,
+        'category'           => $smarty->getValue('actual_category'),
         'extension'          => $app['extension'],
         'advertisementGroup' => $app['advertisementGroup'],
-        'content'            => $smarty->tpl_vars['content']->value
+        'content'            => $smarty->getValue('content')
     ];
 
     $renderer    = $smarty->getContainer()->get('core.renderer.advertisement');
