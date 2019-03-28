@@ -13,6 +13,7 @@
  */
 use Onm\StringUtils;
 use Framework\Component\MIME\MimeTypeTool;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Photo class
@@ -390,7 +391,7 @@ class Photo extends Content
     }
 
     /**
-     * Removes a photo given its id
+     * Removes a photo given its id.
      *
      * @param int $id the photo id to delete
      *
@@ -398,33 +399,19 @@ class Photo extends Content
      */
     public function remove($id)
     {
-        if ((int) $id <= 0) {
-            return false;
-        }
+        $path = getService('service_container')->getParameter('core.paths.public')
+            . getService('core.instance')->getImagesShortPath()
+            . $this->getRelativePath();
 
-        $image = MEDIA_IMG_PATH . $this->path_file . $this->name;
+        $fs = new Filesystem();
 
-        if (file_exists($image) && !@unlink($image)) {
-            return false;
+        if ($fs->exists($path)) {
+            $fs->remove($path);
         }
 
         parent::remove($id);
 
-        try {
-            $rs = getService('dbal_connection')->delete(
-                "photos",
-                [ 'pk_photo' => $id ]
-            );
-
-            if (!$rs) {
-                return false;
-            }
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-
-        return true;
+        getService('dbal_connection')->delete('photos', [ 'pk_photo' => $id ]);
     }
 
     /**
