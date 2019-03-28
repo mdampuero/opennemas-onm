@@ -18,11 +18,6 @@ services:
         arguments: [ '@orm.manager', '%core.helper.comment.default_params%' ]
         public:    true
 
-    core.helper.hwi_oauth:
-        class:     Common\Core\Component\Helper\HwiOauthHelper
-        arguments: [ '@router' , '@hwi_oauth.templating.helper.oauth' ]
-        public:    true
-
     core.helper.checkout:
         class:     Common\Core\Component\Helper\CheckoutHelper
         arguments: [ '@service_container' ]
@@ -40,6 +35,16 @@ services:
     core.helper.http_fetcher:
         class:     Common\Core\Component\Http\Fetcher
         public:    true
+
+    core.helper.hwi_oauth:
+        class:     Common\Core\Component\Helper\HwiOauthHelper
+        arguments: [ '@router' , '@hwi_oauth.templating.helper.oauth' ]
+        public:    true
+
+    core.helper.image:
+        class:     Common\Core\Component\Helper\ImageHelper
+        arguments: [ '@core.instance', '@core.image.processor', '%core.paths.public%' ]
+        public: true
 
     core.helper.instance_sync:
         class:     Common\Core\Component\Helper\InstanceSyncHelper
