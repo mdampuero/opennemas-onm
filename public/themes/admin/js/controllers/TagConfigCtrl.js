@@ -31,9 +31,11 @@
          * @memberOf TagConfigCtrl
          *
          * @description
-         *   initial load of the confit data.
+         *   Initializes the form.
          */
-        $scope.saving = false;
+        $scope.init = function() {
+          $scope.list();
+        };
 
         /**
          * @function list

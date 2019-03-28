@@ -1,6 +1,6 @@
 {extends file="base/admin.tpl"}
 {block name="content"}
-  <form  method="POST" name="formulario" id="formulario" ng-controller="TagConfigCtrl" ng-init="list()">
+  <form name="form" ng-controller="TagConfigCtrl" ng-init="init()">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
