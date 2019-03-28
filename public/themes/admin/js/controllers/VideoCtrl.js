@@ -91,7 +91,23 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         });
       }
 
-      $scope.setType($scope.data.item.author_name);
+      var type = '';
+
+      switch ($scope.data.item.author_name) {
+      case 'script':
+        type = 'script';
+        break;
+
+      case 'external':
+        type = 'external';
+        break;
+
+      default:
+        type = 'web-source';
+        break;
+      }
+
+      $scope.setType(type);
 
       $scope.configure(data.extra);
       $scope.localize($scope.data.item, 'item', true);
