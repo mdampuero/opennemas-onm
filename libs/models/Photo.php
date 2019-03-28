@@ -567,28 +567,12 @@ class Photo extends Content
     }
 
     /**
-     * Returns the photo path associated to an id.
+     * Returns the photo relative path.
      *
-     * @param string $id the photo id.
-     *
-     * @return int the photo path
+     * @return string The photo relative path.
      */
-    public static function getPhotoPath($id)
+    public function getRelativePath()
     {
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT `path_file`, `name` FROM photos WHERE pk_photo = ?',
-                [ $id ]
-            );
-
-            if (!$rs) {
-                return false;
-            }
-
-            return (string) $rs['path_file'] . $rs['name'];
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
+        return $this->path_file . $this->name;
     }
 }

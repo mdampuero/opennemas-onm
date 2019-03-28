@@ -947,7 +947,10 @@ class ContentManager
             );
 
             foreach ($rs as &$row) {
-                $row['path_img'] = \Photo::getPhotoPath($row['avatar_img_id']);
+                $photo = getService('entity_repository')
+                    ->find('Photo', $row['avatar_img_id']);
+
+                $row['path_img'] = $photo->getRelativePath();
             }
 
             return $rs;
