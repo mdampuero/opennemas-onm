@@ -328,8 +328,6 @@
 
           $scope.config.linkers.article = linker.get($scope.data.extra.keys,
             $scope.config.locale.default, $scope, true, keys);
-          $scope.config.linkers.categories = linker.get($scope.data.extra.keys,
-            $scope.config.locale.default, $scope, false, keys);
 
           $scope.config.linkers.article.setKey($scope.config.locale.selected);
           $scope.config.linkers.article.link($scope.data.article, $scope.article);
