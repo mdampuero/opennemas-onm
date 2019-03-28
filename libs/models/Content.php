@@ -274,7 +274,6 @@ class Content implements \JsonSerializable, CsvSerializable
                                 ->filter('localize')
                                 ->get();
                         }
-
                     }
 
                     if (property_exists($this, $name)) {
