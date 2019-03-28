@@ -10,9 +10,10 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Handles the actions for the images
@@ -202,89 +203,40 @@ class ImagesController extends Controller
      */
     public function createAction(Request $request)
     {
-        $response = new Response();
-        $response->headers->add([
-            'Pragma'                       => 'text/plain',
-            'Cache-Control'                => 'private, no-cache',
-            'Content-Disposition'          => 'inline; filename="files.json"',
-            'X-Content-Type-Options'       => 'nosniff',
-            'Access-Control-Allow-Origin'  => '*',
-            'Access-Control-Allow-Methods' => 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
-            'Access-Control-Allow-Headers' => 'X-File-Name, X-File-Type, X-File-Size',
-        ]);
+        $ih  = $this->get('core.helper.image');
+        $msg = $this->get('core.messenger');
 
-        if ($request->getMethod() != 'POST') {
-            return new JsonResponse([], 200);
-        }
+        try {
+            $date     = new \DateTime();
+            $file     = $request->files->get('file');
+            $path     = $ih->generatePath($file, $date->format('Y-m-d H:i:s'));
+            $filename = basename($path);
 
-        $files = isset($_FILES) ? $_FILES : null;
-        $info  = [];
+            $ih->move($file, $path);
 
-        foreach ($files as $file) {
+            if ($ih->isOptimizable($path)) {
+                $ih->optimize($path);
+            }
+
+            $data = array_merge([
+                'changed'        => $date->format('Y-m-d H:i:s'),
+                'created'        => $date->format('Y-m-d H:i:s'),
+                'description'    => null,
+                'name'           => $filename,
+                'path_file'      => $date->format('/Y/m/d/'),
+                'title'          => $filename
+            ], $ih->getInformation($path));
+
             $photo = new \Photo();
+            $id    = $photo->create($data);
 
-            if (empty($file['tmp_name'])) {
-                $info [] = [
-                    'error' => _('Not valid file format or the file exceeds the max allowed file size.'),
-                ];
-                continue;
-            }
-
-            $tempName = pathinfo($file['name'], PATHINFO_FILENAME);
-
-            // Check if the image has an IPTC title an use it as original title
-            $size = getimagesize($file['tmp_name'], $imageInfo);
-            if (isset($imageInfo['APP13'])) {
-                $iptc = iptcparse($imageInfo["APP13"]);
-                if (isset($iptc['2#120'])) {
-                    $tempName = str_replace("\000", "", $iptc["2#120"][0]);
-                }
-            }
-
-            $fm = $this->get('data.manager.filter');
-
-            $data = [
-                'local_file'        => $file['tmp_name'],
-                'original_filename' => $file['name'],
-                'title'             => $tempName,
-                'description'       => $tempName,
-                'fk_category'       => null,
-                'category'          => null,
-                'category_name'     => '',
-                'tag_ids'           => json_decode($request->request->get('tag_ids', ''), true)
-            ];
-
-            try {
-                $photo   = new \Photo();
-                $photoId = $photo->createFromLocalFile($data);
-
-                $photo = new \Photo($photoId);
-
-                $info = $photo;
-            } catch (Exception $e) {
-                $info [] = [
-                    'error'         => $e->getMessage(),
-                ];
-            }
+            $photo = new \Photo($id);
+            $msg->add(_('Item saved successfully'), 'success', 201);
+        } catch (\Exception $e) {
+            $msg->add($e->getMessage(), 'error');
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $json = json_encode($info);
-        $response->setContent($json);
-
-        $response->headers->add([ 'Vary' => 'Accept' ]);
-
-        $redirect = $request->request->filter('redirect', null, FILTER_SANITIZE_STRING);
-        if (!empty($redirect)) {
-            return $this->redirect(sprintf($redirect, rawurlencode($json)));
-        }
-
-        if (isset($_SERVER['HTTP_ACCEPT'])
-            && (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)
-        ) {
-            $response->headers->add(['Content-type' => 'application/json']);
-        } else {
-            $response->headers->add(['Content-type' => 'text/plain']);
-        }
-        return $response;
+        return new JsonResponse($photo, $msg->getCode());
     }
 }
