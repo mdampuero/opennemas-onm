@@ -122,7 +122,7 @@ jQuery(document).ready(function() {
       }
     }).done(function(data) {
       postList.append(data.contents);
-      // Safeframe publi call
+      // Safeframe ad call
       var event = document.createEvent('Event');
 
       event.initEvent('OAM.load', true, true);
