@@ -4,17 +4,11 @@ backend_videos_list:
     defaults: { _controller: BackendBundle:Videos:list }
 
 backend_videos_create:
-    path:     /videos/create
+    path:     /videos/new
     defaults: { _controller: BackendBundle:Videos:create }
 
-backend_videos_get_info:
-    path:     /videos/get-video-information
-    defaults: { _controller: BackendBundle:Videos:videoInformation }
-    options:
-        expose: true
-
 backend_video_show:
-    path:     /videos/{id}/show
+    path:     /videos/{id}
     defaults: { _controller: BackendBundle:Videos:show }
     options:
         expose: true

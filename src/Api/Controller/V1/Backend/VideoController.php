@@ -9,6 +9,10 @@
  */
 namespace Api\Controller\V1\Backend;
 
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+
 class VideoController extends ContentOldController
 {
     /**
@@ -22,6 +26,31 @@ class VideoController extends ContentOldController
      * @var string
      */
     protected $getItemRoute = 'api_v1_backend_video_show';
+
+    /**
+     * Returns the video information for a given url.
+     *
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
+    public function fetchInformationAction(Request $request)
+    {
+        $url    = $request->query->get('url', null, FILTER_DEFAULT);
+        $url    = rawurldecode($url);
+        $params = $this->container->getParameter('panorama');
+        $output = _("Please check the video url, seems to be incorrect");
+
+        if ($url) {
+            try {
+                $videoP = new \Panorama\Video($url, $params);
+                $output = $videoP->getVideoDetails();
+            } catch (\Exception $e) {
+                $output = _("Can't get video information. Check the url");
+            }
+        }
+
+        return new JsonResponse($output);
+    }
 
     /**
      * {@inheritDoc}

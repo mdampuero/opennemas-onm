@@ -106,27 +106,27 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      */
     $scope.getVideoData = function() {
       var route = {
-        name:   'admin_videos_get_info',
-        params: { url: $scope.video_url }
+        name:   'api_v1_backend_video_get_info',
+        params: { url: $scope.item.video_url }
       };
 
-      $scope.loading_data = true;
+      $scope.flags.http.fetch_video_info = true;
 
       http.get(route).then(
         function(response) {
-          $scope.information     = response.data;
-          $scope.informationJson = JSON.stringify($scope.information);
+          $scope.item.information     = response.data;
+          $scope.item.informationJson = JSON.stringify($scope.information);
 
-          if ($scope.information.title && !$scope.title) {
-            $scope.title = $scope.information.title;
+          if ($scope.item.information.title && !$scope.item.title) {
+            $scope.item.title = $scope.item.information.title;
           }
 
-          if ($scope.information.embedHTML) {
-            $scope.information.embedHTML =
-              $sce.trustAsHtml($scope.information.embedHTML);
+          if ($scope.item.information.embedHTML) {
+            $scope.item.information.embedHTML =
+              $sce.trustAsHtml($scope.item.information.embedHTML);
           }
 
-          $scope.loading_data = false;
+          $scope.flags.http.fetch_video_info = false;
 
           $timeout(function() {
             angular.element('.tags-input-buttons .btn-info').triggerHandler('click');
