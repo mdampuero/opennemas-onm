@@ -36,7 +36,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <button class="btn btn-success text-uppercase" data-text="{t}Saving{/t}..." type="submit">
+              <button class="btn btn-success text-uppercase" ng-click="save();" data-text="{t}Saving{/t}..." type="submit">
                 <i class="fa fa-save"></i>
                 <span class="text">{t}Save{/t}</span>
               </button>
@@ -106,14 +106,14 @@
               {include file="ui/component/content-editor/accordion/allow_comments.tpl"}
             </div>
 
-            {include file="ui/component/content-editor/accordion/author.tpl" required=true}
+            {include file="ui/component/content-editor/accordion/author.tpl"}
             {include file="ui/component/content-editor/accordion/category.tpl"}
             {include file="ui/component/content-editor/accordion/tags.tpl"}
             {include file="ui/component/content-editor/accordion/slug.tpl" route="[% getL10nUrl(routing.generate('frontend_video_show', { slug: item.slug, category_name: 'category' })) %]"}
             {include file="ui/component/content-editor/accordion/scheduling.tpl"}
           </div>
         </div>
-        <div class="grid simple" ng-if="type == 'script' || type == 'external'">
+        <div class="grid simple" ng-show="type == 'script' || type == 'external'">
           <div class="grid-title">
             <h4>{t}Image assigned{/t}</h4>
           </div>
