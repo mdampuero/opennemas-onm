@@ -44,12 +44,17 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->helper->expects($this->once())->method('getExtension')
+        $this->helper->expects($this->any())->method('getExtension')
             ->with($file)->willReturn('jpg');
 
         $this->assertRegexp(
             '/\/waldo\/grault\/media\/bar\/images\/[0-9]{4}\/[0-9]{2}\/[0-9]{2}\/[0-9]{19}.jpg/',
             $this->helper->generatePath($file)
+        );
+
+        $this->assertRegexp(
+            '/\/waldo\/grault\/media\/bar\/images\/2010\/01\/01\/20100101152045[0-9]{5}.jpg/',
+            $this->helper->generatePath($file, '2010-01-01 15:20:45')
         );
     }
 

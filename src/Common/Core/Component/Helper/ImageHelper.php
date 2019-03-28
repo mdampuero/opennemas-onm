@@ -54,18 +54,21 @@ class ImageHelper
     /**
      * Returns the path where the file should be moved.
      *
-     * @param File $file The file to generate path to.
+     * @param File   $file The file to generate path to.
+     * @param string $date The date to generate the path from.
      *
      * @return string The path where the file should be moved.
      */
-    public function generatePath($file) : string
+    public function generatePath(File $file, ?string $date = null) : string
     {
+        $date = new \Datetime($date);
+
         return preg_replace('/\/+/', '/', sprintf(
             '%s/%s/%s/%s%s.%s',
             $this->publicDir,
             $this->instance->getImagesShortPath(),
-            date('Y/m/d'),
-            date('YmdHis'),
+            $date->format('Y/m/d'),
+            $date->format('YmdHis'),
             substr(gettimeofday()['usec'], 0, 5),
             $this->getExtension($file)
         ));
