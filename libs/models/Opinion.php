@@ -59,6 +59,28 @@ class Opinion extends Content
      */
     public $type_opinion = null;
 
+
+    /**
+     * The meta property for summary
+     *
+     * @var int
+     */
+    protected $summary = null;
+
+    /**
+     * The 
+     *
+     * @var int
+     */
+    protected $img1_footer = null;
+
+    /**
+     * The type of the opinion (0,1,2)
+     *
+     * @var int
+     */
+    protected $img2_footer = null;
+
     /**
      * Initializes the opinion object given an id
      *

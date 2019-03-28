@@ -147,7 +147,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @param {String} getPreviewUrl The URL to get the preview.
      */
     $scope.preview = function(previewUrl, getPreviewUrl) {
-      $scope.flags.preview = true;
+      $scope.flags.http.generating_preview = true;
 
       // Force ckeditor
       CKEDITOR.instances.body.updateElement();
@@ -174,10 +174,30 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
           }
         });
 
-        $scope.loading = false;
+        $scope.flags.http.generating_preview = false;
       }).error(function() {
-        $scope.loading = false;
+        $scope.flats.http.generating_preview = false;
       });
+    };
+
+    /**
+     * Returns the frontend url for the content given its object
+     *
+     * @param  {String} item  The object item to generate the url from.
+     * @return {String}
+     */
+    $scope.getFrontendUrl = function(item) {
+      var date = item.date;
+
+      var formattedDate = moment(date).format('YYYYMMDDHHmmss');
+
+      return $scope.getL10nUrl(
+        routing.generate('frontend_opinion_show', {
+          id: item.pk_content,
+          created: formattedDate,
+          opinion_title: item.slug
+        })
+      );
     };
 
     /**

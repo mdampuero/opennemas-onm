@@ -106,4 +106,20 @@ class ContentOldController extends ContentController
 
         return $us->responsify($authors);
     }
+
+    /**
+     * Returns the list of tags processed
+     *
+     * NOTE: As the Content class already perfoms a clean up of tags, we
+     * overwrite the parseTags from the parent to avoid executing
+     * it twice
+     *
+     * @param array $tags the list of tags to processs
+     *
+     * @return array
+     **/
+    protected function parseTags($tags = [])
+    {
+        return $tags;
+    }
 }
