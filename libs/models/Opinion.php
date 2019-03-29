@@ -171,7 +171,7 @@ class Opinion extends Content
             $this->saveMetadataFields($data, Opinion::EXTRA_INFO_TYPE);
 
             // Clear caches
-            dispatchEventWithParams('opinion.create', [ 'authorId' => $data['fk_author'] ]);
+            dispatchEventWithParams('opinion.create', [ 'authorId' => $data['fk_author'] ?? null]);
 
             return $this->id;
         } catch (\Exception $e) {
