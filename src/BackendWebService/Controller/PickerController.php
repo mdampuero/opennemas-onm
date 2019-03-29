@@ -278,6 +278,7 @@ class PickerController extends Controller
             'created'             => _('Created'),
             'dates'               => $this->getDates(),
             'description'         => _('Description'),
+            'error'               => _('Unable to save the image'),
             'from'                => _('From'),
             'header'              => _('Pick the item to insert'),
             'insert'              => _('Insert'),

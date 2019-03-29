@@ -32,9 +32,8 @@ class ImagesController extends Controller
      */
     public function listAction()
     {
-        $years = [];
-
-        $conn = $this->get('orm.manager')->getConnection('instance');
+        $years   = [];
+        $conn    = $this->get('orm.manager')->getConnection('instance');
         $results = $conn->fetchAll(
 
             "SELECT DISTINCT(DATE_FORMAT(created, '%Y-%m')) as date_month FROM contents
@@ -203,22 +202,16 @@ class ImagesController extends Controller
      */
     public function createAction(Request $request)
     {
-        $ih  = $this->get('core.helper.image');
-        $msg = $this->get('core.messenger');
-
         try {
             $file = $request->files->get('file');
 
             $photo = new \Photo();
             $id    = $photo->createFromLocalFile($file->getRealPath());
             $photo = new \Photo($id);
-
-            $msg->add(_('Item saved successfully'), 'success', 201);
         } catch (\Exception $e) {
-            $msg->add($e->getMessage(), 'error');
-            return new JsonResponse($msg->getMessages(), $msg->getCode());
+            return new JsonResponse($e->getMessage(), 400);
         }
 
-        return new JsonResponse($photo, $msg->getCode());
+        return new JsonResponse($photo, 201);
     }
 }
