@@ -393,7 +393,7 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSmartyCacheAuthorOpinion(Event $event)
     {
-        if (!$event->hasArgument('authorId')) {
+        if (!$event->hasArgument('authorId') || empty($event->getArgument('authorId'))) {
             return;
         }
 
