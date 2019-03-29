@@ -154,7 +154,6 @@ class Opinion extends Content
         try {
             getService('dbal_connection')->insert('opinions', [
                 'pk_opinion'    => $this->id,
-                'fk_author'     => 0,
                 'type_opinion'  => 0,
             ]);
 
@@ -196,7 +195,7 @@ class Opinion extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT contents.*, opinions.*, users.name, users.bio, users.url, users.avatar_img_id '
+                'SELECT contents.*, opinions.type_opinion, users.name, users.bio, users.url, users.avatar_img_id '
                 . 'FROM contents '
                 . 'LEFT JOIN opinions ON pk_content = pk_opinion '
                 . 'LEFT JOIN users ON opinions.fk_author = users.id WHERE pk_content=?',
