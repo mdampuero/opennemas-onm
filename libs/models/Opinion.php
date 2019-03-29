@@ -196,7 +196,7 @@ class Opinion extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT contents.*, opinions.type_opinion, users.name, users.bio, users.url, users.avatar_img_id '
+                'SELECT contents.*, opinions.pk_opinion, opinions.type_opinion, users.name, users.bio, users.url, users.avatar_img_id '
                 . 'FROM contents '
                 . 'LEFT JOIN opinions ON pk_content = pk_opinion '
                 . 'LEFT JOIN users ON opinions.fk_author = users.id WHERE pk_content=?',
