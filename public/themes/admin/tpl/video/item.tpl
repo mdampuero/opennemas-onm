@@ -53,36 +53,35 @@
       </div>
     </div>
 
-    <div class="row ng-cloak" ng-show="!flags.http.loading && !type">
-      <h5>{t}Pick the method to add the video{/t}</h5>
+    <div class="row ng-cloak text-center" ng-show="!flags.http.loading && !type">
+      <h4>{t}Pick the method to add the video{/t}</h4>
 
-      <ul class="video-type-selector">
-          <li class="web">
-            <button ng-click="setType('web-source')" class="clearfix btn btn-white">
-              <i class="fa fa-vimeo fa-lg"></i>
-              <i class="fa fa-youtube fa-lg"></i>
-              <div class="p-t-10">
-                {t}Link video from other web video services{/t}
-              </div>
-            </button>
-          </li>
-          <li class="web">
-            <button ng-click="setType('script')" class="clearfix btn btn-white">
-              <div class="p-t-10">
-                <i class="fa fa-file-code-o fa-3x"></i>
-                {t}Use HTML code{/t}
-              </div>
-            </button>
-          </li>
-          <li class="web">
-            <button ng-click="setType('external')" class="clearfix btn btn-white">
-              <i class="fa fa-film fa-3x"></i>
-              <div class="p-t-10">
-                {t}Use file video URLs (External HTML5/FLV){/t}
-              </div>
-            </button>
-          </li>
-      </ul>
+      <div class="video-type-selector">
+        <button ng-click="setType('web-source')" class="clearfix btn btn-white video-type-selector-button">
+          <div class="video-selector-icon">
+            <i class="fa fa-youtube fa-3x"></i>
+          </div>
+          <div class="video-selector-text">
+            {t}Link video from other web video services{/t}
+          </div>
+        </button>
+        <button ng-click="setType('script')" class="clearfix btn btn-white video-type-selector-button">
+          <div class="video-selector-icon">
+            <i class="fa fa-file-code-o fa-3x"></i>
+          </div>
+          <div class="video-selector-text">
+            {t}Use HTML code{/t}
+          </div>
+        </button>
+        <button ng-click="setType('external')" class="clearfix btn btn-white video-type-selector-button">
+          <div class="video-selector-icon">
+            <i class="fa fa-film fa-3x"></i>
+          </div>
+          <div class="video-selector-text">
+            {t}Use file video URLs (External HTML5/FLV){/t}
+          </div>
+        </button>
+      </div>
     </div>
 
     <div class="row ng-cloak" ng-show="!flags.http.loading && type && item">
