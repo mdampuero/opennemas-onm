@@ -71,7 +71,7 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
             ->willReturn(400);
 
         $this->assertEquals([
-            'size'   => 23920,
+            'size'   => 23920 / 1024,
             'width'  => 400,
             'height' => 220,
         ], $this->helper->getInformation('corge/quux/grault.jpg'));

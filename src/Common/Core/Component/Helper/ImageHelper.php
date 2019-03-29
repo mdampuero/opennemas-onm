@@ -101,7 +101,7 @@ class ImageHelper
 
         return [
             'height' => $this->processor->getHeight(),
-            'size'   => $this->processor->getSize(),
+            'size'   => $this->processor->getSize() / 1024,
             'width'  => $this->processor->getWidth()
         ];
     }
