@@ -5,6 +5,10 @@ backend_videos_list:
     options:
         expose: true
 
+backend_videos_config:
+    path:     /videos/config
+    defaults: { _controller: BackendBundle:Videos:config }
+
 backend_videos_create:
     path:     /videos/new
     defaults: { _controller: BackendBundle:Videos:create }
@@ -18,10 +22,6 @@ backend_video_show:
 backend_videos_update:
     path:     /videos/{id}/update
     defaults: { _controller: BackendBundle:Videos:update }
-
-backend_videos_config:
-    path:     /videos/config
-    defaults: { _controller: BackendBundle:Videos:config }
 
 backend_video_get_relations:
     path:     /videos/{id}/relations

@@ -27,7 +27,7 @@
           <ul class="nav quick-section">
             {acl isAllowed="VIDEO_SETTINGS"}
             <li class="quicklinks">
-              <a class="btn btn-link" href="{url name=admin_videos_config}" class="admin_add" title="{t}Config video module{/t}">
+              <a class="btn btn-link" href="{url name=backend_videos_config}" class="admin_add" title="{t}Config video module{/t}">
                 <span class="fa fa-cog fa-lg"></span>
               </a>
             </li>

@@ -343,7 +343,7 @@ class VideosController extends BackendController
 
             $this->get('session')->getFlashBag()->add('success', _('Settings saved.'));
 
-            return $this->redirect($this->generateUrl('admin_videos_config'));
+            return $this->redirect($this->generateUrl('backend_videos_config'));
         } else {
             return $this->render('video/config.tpl', [
                 'configs' => $this->get('orm.manager')->getDataSet('Settings')
