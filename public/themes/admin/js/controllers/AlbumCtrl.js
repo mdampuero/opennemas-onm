@@ -4,8 +4,8 @@ angular.module('BackendApp.controllers')
    * Handle actions for article inner.
    */
   .controller('AlbumCtrl', [
-    '$controller', '$rootScope', '$scope', '$uibModal',
-    function($controller, $rootScope, $scope, $uibModal) {
+    '$controller', '$rootScope', '$scope', '$uibModal', 'messenger',
+    function($controller, $rootScope, $scope, $uibModal, messenger) {
       'use strict';
 
       // Initialize the super class and extend it.
@@ -38,12 +38,19 @@ angular.module('BackendApp.controllers')
         e.preventDefault();
 
         if (!$scope.validatePhotosAndCover(e)) {
-          return;
+          return false;
+        }
+
+        if ($scope.form.$invalid) {
+          $('[name=form]')[0].reportValidity();
+          messenger.post(window.strings.forms.not_valid, 'error');
+
+          return false;
         }
 
         if (!$('[name=form]')[0].checkValidity()) {
           $('[name=form]')[0].reportValidity();
-          return;
+          return false;
         }
 
         $scope.$broadcast('onmTagsInput.save', {
