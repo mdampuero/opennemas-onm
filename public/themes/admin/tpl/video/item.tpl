@@ -8,8 +8,12 @@
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
+              <i class="fa fa-quote-right"></i>
+            </h4>
+          </li>
+          <li class="quicklinks">
+            <h4>
               <a class="no-padding" href="{url name=backend_videos_list}">
-                <i class="fa fa-quote-right"></i>
                   {t}Videos{/t}
               </a>
             </h4>

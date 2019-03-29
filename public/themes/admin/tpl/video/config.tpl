@@ -8,25 +8,29 @@
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-home fa-lg"></i>
-              {t}Videos{/t}
+              <i class="fa fa-quote-right m-r-10"></i>
             </h4>
           </li>
-          <li class="quicklinks"><span class="h-seperate"></span></li>
           <li class="quicklinks">
-            <h5>{t}Settings{/t}</h5>
+            <h4>
+              <a class="no-padding" href="{url name=backend_videos_list}">
+                  {t}Videos{/t}
+              </a>
+            </h4>
+          </li>
+          <li class="quicklinks m-l-5 m-r-5">
+            <h4>
+              <i class="fa fa-angle-right"></i>
+            </h4>
+          </li>
+          <li class="quicklinks">
+            <h4>{t}Settings{/t}</h4>
           </li>
         </ul>
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <a class="btn btn-link" href="{url name=admin_videos}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
-                <span class="fa fa-reply"></span>
-              </a>
-            </li>
-            <li class="quicklinks"><span class="h-seperate"></span></li>
-            <li class="quicklinks">
-              <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit">
+              <button class="btn btn-success text-uppercase" data-text="{t}Saving{/t}..." type="submit">
                 <i class="fa fa-save"></i>
                 <span class="text">{t}Save{/t}</span>
               </button>
