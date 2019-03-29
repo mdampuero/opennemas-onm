@@ -9,11 +9,11 @@
  */
 namespace Frontend\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Handles the actions for letters
@@ -245,7 +245,7 @@ class LetterController extends Controller
             'body'           => iconv(mb_detect_encoding($lettertext), "UTF-8", $lettertext),
             'content_status' => 0, // pending status
             'email'          => $email,
-            'image'          => $this->saveImage($data),
+            'image'          => $this->saveImage($request),
             'title'          => $subject,
             'url'            => $url,
         ];
@@ -319,38 +319,19 @@ class LetterController extends Controller
      *
      * @return Response The response object.
      */
-    public function saveImage($data)
+    public function saveImage(Request $request)
     {
-        // check if category, and file sizes are properly set and category_name is valid
-        $category      = 1;
-        $category_name = 'fotos';
+        $file = $request->files->get('image');
 
-        $upload = isset($_FILES['image']) ? $_FILES['image'] : null;
-
-        // Return if no
-        if (!$upload) {
+        if (empty($file)) {
             return null;
         }
 
-        $data = [
-            'local_file'        => $upload['tmp_name'],
-            'original_filename' => $upload['name'] ,
-            'title'             => $data['title'],
-            'fk_category'       => $category,
-            'category'          => $category,
-            'category_name'     => $category_name,
-            'description'       => '',
-            'tag_ids'           => [],
-        ];
-
         try {
             $photo = new \Photo();
-            $photo = $photo->createFromLocalFile($data);
-
-            return $photo->id;
+            return $photo->createFromLocalFile($file->getRealPath());
         } catch (\Exception $e) {
-            error_log('Unable to save letter image: ' . $e->getMessage());
-
+            $this->get('error.log')->error('Unable to save letter image: ' . $e->getMessage());
             return null;
         }
     }
