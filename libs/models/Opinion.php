@@ -239,7 +239,7 @@ class Opinion extends Content
 
         try {
             getService('dbal_connection')->update('opinions', [
-                'fk_author'     => $data['fk_author'] ?? nully,
+                'fk_author'     => $data['fk_author'] ?? null,
             ], [ 'pk_opinion' => (int) $data['id'] ]);
 
             $metaKeys = ['summary', 'img1', 'img2', 'img1_footer', 'img2_footer'];
@@ -253,6 +253,9 @@ class Opinion extends Content
             }
 
             $this->saveMetadataFields($data, Opinion::EXTRA_INFO_TYPE);
+
+            // Clear caches
+            dispatchEventWithParams('opinion.update');
 
             return $this;
         } catch (\Exception $e) {
