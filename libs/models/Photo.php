@@ -11,9 +11,7 @@
  *
  * @package Model
  */
-use Onm\StringUtils;
-use Framework\Component\MIME\MimeTypeTool;
-use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Photo class
@@ -174,187 +172,55 @@ class Photo extends Content
     public function create($data)
     {
         $data['content_status'] = 1;
-        try {
-            parent::create($data);
 
-            getService('dbal_connection')->insert(
-                "photos",
-                [
-                    'pk_photo'    => (int) $this->id,
-                    'name'        => $data["name"],
-                    'path_file'   => $data["path_file"],
-                    'size'        => $data['size'],
-                    'width'       => (int) $data['width'],
-                    'height'      => (int) $data['height'],
-                    'author_name' => $data['author_name']
-                ]
-            );
+        parent::create($data);
 
-            return $this->id;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
+        getService('dbal_connection')->insert('photos', [
+            'pk_photo'    => $this->id,
+            'name'        => $data['name'],
+            'path_file'   => $data['path_file'],
+            'size'        => $data['size'],
+            'width'       => $data['width'],
+            'height'      => $data['height'],
+            'author_name' => $data['author_name'] ?? null
+        ]);
+
+        return $this->id;
     }
 
     /**
-     * Creates one photo register in the database from data and local file
-     * TODO: this function must content the photo local_file
+     * Creates a photo basing on a file and optional photo information.
      *
-     * @param array $data the data for the photo, must content the photo local_file
-     * @param string $dateForDirectory the date for the directory
+     * @param string $path The path to the file.
+     * @param array  $data The photo information.
      *
-     * @return int the id of the photo created
-     * @return boolean false if the photo was not created
+     * @return int The photo id.
      */
-    public function createFromLocalFile($data, $dateForDirectory = null, $uploadPath = null)
+    public function createFromLocalFile(string $path, array $data = []) : int
     {
-        $filePath         = $data["local_file"];
-        $originalFileName = $data['original_filename'];
+        $ih   = getService('core.helper.image');
+        $date = new \DateTime($data['created'] ?? null);
 
-        if (empty($filePath)) {
-            throw new \Exception(_('Image data not valid'));
+        $file     = new File($path);
+        $path     = $ih->generatePath($file, $date->format('Y-m-d H:i:s'));
+        $filename = basename($path);
+
+        $ih->move($file, $path);
+
+        if ($ih->isOptimizable($path)) {
+            $ih->optimize($path);
         }
 
-        // Check upload directory
-        $date = new DateTime();
+        $data = array_merge([
+            'changed'        => $date->format('Y-m-d H:i:s'),
+            'content_status' => 1,
+            'created'        => $date->format('Y-m-d H:i:s'),
+            'name'           => $filename,
+            'path_file'      => $date->format('/Y/m/d/'),
+            'title'          => $filename,
+        ], $data, $ih->getInformation($path));
 
-        if (array_key_exists('created', $data)) {
-            $date = \DateTime::createFromFormat('Y-m-d H:i:s', $data['created']);
-        }
-
-        if (empty($dateForDirectory)) {
-            $dateForDirectory = $date->format("/Y/m/d/");
-        }
-
-        $uploadDir = MEDIA_PATH . DS . IMG_DIR . DS . $dateForDirectory . DIRECTORY_SEPARATOR;
-        if (!is_null($uploadPath)) {
-            $uploadDir = $uploadPath;
-        }
-
-        if (!is_dir($uploadDir)) {
-            \Onm\FilesManager::createDirectory($uploadDir);
-        }
-
-        if (is_dir($uploadDir) && !is_writable($uploadDir)) {
-            throw new Exception(
-                _('Unable to save your image file in the Opennemas storage target')
-            );
-        }
-
-        $filePathInfo = pathinfo($originalFileName);
-
-        // Getting information for creating
-        $t                  = gettimeofday();
-        $micro              = intval(substr($t['usec'], 0, 5));
-        $finalPhotoFileName = $date->format("YmdHis") . $micro . "."
-            . MimeTypeTool::getExtension($filePath);
-        $fileInformation    = new MediaItem($filePath);
-
-        if (!array_key_exists('urn_source', $data)
-            || empty($data['urn_source'])
-        ) {
-            $data['urn_source'] = "urn:newsml:" . SITE . ":" . $date->format("YmdHis")
-                . ":" . StringUtils::cleanFileName($originalFileName) . ":2";
-        }
-
-        $date = new \DateTime();
-        $date->setTimeStamp($fileInformation->mtime);
-        $dateString = $date->format('Y-m-d H:i:s');
-
-        if (!array_key_exists('created', $data)) {
-            $data['created'] = $dateString;
-        }
-
-        if (!array_key_exists('changed', $data)) {
-            $data['changed'] = $dateString;
-        }
-
-        if (!array_key_exists('content_status', $data)) {
-            $data['content_status'] = 1;
-        }
-
-        // Building information for the photo image
-        $dataPhoto = [
-            'title'               => isset($data['title']) ? $data['title'] : $originalFileName,
-            'name'                => $finalPhotoFileName,
-            'path_file'           => $dateForDirectory,
-            'created'             => $data['created'],
-            'changed'             => $data['changed'],
-            'content_status'      => $data['content_status'],
-            'description'         => $data['description'],
-            'tag_ids'             => empty($data['tag_ids']) ?
-                [] :
-                $data['tag_ids'],
-            'urn_source'          => $data['urn_source'],
-            'size'                => round($fileInformation->size / 1024, 2),
-            'date'                => $dateString,
-            'width'               => $fileInformation->width,
-            'height'              => $fileInformation->height,
-            'author_name'         => isset($data['author_name']) ? $data['author_name'] : '',
-            'fk_author'           => (!array_key_exists('fk_author', $data)) ? null : $data['fk_author'],
-            'fk_user_last_editor' => getService('core.user')->id,
-            'fk_publisher'        => getService('core.user')->id,
-        ];
-
-        if (array_key_exists('extension', $filePathInfo) &&
-            $filePathInfo['extension'] != 'swf'
-        ) {
-            $target = realpath($uploadDir) . DS . $finalPhotoFileName;
-
-            try {
-                getService('core.image.image')
-                    ->open($data['local_file'])
-                    ->optimize()
-                    ->save($target);
-            } catch (\RuntimeException $e) {
-                $logger = getService('application.log');
-                $logger->notice(
-                    sprintf(
-                        'Unable to create the photo file %s (destination: %s).',
-                        $data['local_file'],
-                        $uploadDir . $finalPhotoFileName
-                    )
-                );
-
-                throw new Exception(_('Unable to copy your image file'));
-            }
-        } else {
-            // Check source and target
-            $fileCopied = false;
-            $targetPath = realpath($uploadDir) . DS . $finalPhotoFileName;
-            if (is_file($data['local_file']) && is_writable($targetPath)) {
-                $fileCopied = copy($data['local_file'], $targetPath);
-            }
-
-            if (!$fileCopied) {
-                $logger = getService('application.log');
-                $logger->notice(
-                    sprintf(
-                        'Unable to create the photo file %s (destination: %s).',
-                        $data['local_file'],
-                        $uploadDir . $finalPhotoFileName
-                    )
-                );
-                throw new Exception(_('Unable to copy your image file'));
-            }
-        }
-
-        $photoID = $this->create($dataPhoto);
-
-        if (!$photoID) {
-            $logger = getService('application.log');
-            $logger->notice(
-                sprintf(
-                    'Unable to save the image object %s (destination: %s).',
-                    $data['local_file'],
-                    $uploadDir . $finalPhotoFileName
-                )
-            );
-            throw new Exception(_('Unable to save your image information.'));
-        }
-
-        return $photoID;
+        return $this->create($data);
     }
 
     /**
@@ -369,23 +235,20 @@ class Photo extends Content
         try {
             parent::update($data);
 
-            getService('dbal_connection')->update(
-                'photos',
-                [
-                    'name'        => $this->name,
-                    'path_file'   => $this->path_file,
-                    'size'        => $this->size,
-                    'width'       => (int) $this->width,
-                    'height'      => (int) $this->height,
-                    'author_name' => $data['author_name'],
-                    'address'     => $data['address'],
-                ],
-                [ 'pk_photo' => (int) $data['id'] ]
-            );
+            getService('dbal_connection')->update('photos', [
+                'name'        => $this->name,
+                'path_file'   => $this->path_file,
+                'size'        => $this->size,
+                'width'       => (int) $this->width,
+                'height'      => (int) $this->height,
+                'author_name' => $data['author_name'],
+                'address'     => $data['address'],
+            ], [ 'pk_photo' => (int) $data['id'] ]);
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
