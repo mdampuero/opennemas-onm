@@ -161,7 +161,7 @@
           <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
         </div>
       </div>
-      <div class="grid simple ng-cloak" ng-if="!loading && items.length > 0">
+      <div class="grid simple ng-cloak" ng-if="!flags.http.loading && items.length > 0">
         <div class="grid-body no-padding">
           <div class="table-wrapper">
             <table class="table table-hover no-margin">
