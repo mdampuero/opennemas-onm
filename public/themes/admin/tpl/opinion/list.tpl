@@ -6,13 +6,14 @@
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
+          <li class="quicklinks">
+            <h4>
+              <i class="fa fa-quote-right m-r-10"></i>
+            </h4>
+          </li>
+          <li class="quicklinks">
             <li class="quicklinks">
-              <h4>
-                <a class="no-padding" href="{url name=backend_opinion_list}">
-                  <i class="fa fa-quote-right"></i>
-                    {t}Opinions{/t}
-                </a>
-              </h4>
+              <h4>{t}Opinions{/t}</h4>
             </li>
             <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
               <h4>

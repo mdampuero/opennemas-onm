@@ -154,6 +154,7 @@ class Opinion extends Content
         try {
             getService('dbal_connection')->insert('opinions', [
                 'pk_opinion'    => $this->id,
+                'fk_author'     => (int) $data['fk_author'],
                 'type_opinion'  => 0,
             ]);
 
@@ -237,6 +238,11 @@ class Opinion extends Content
         parent::update($data);
 
         try {
+            getService('dbal_connection')->update('opinions', [
+                'fk_author'     => (int) $data['fk_author'],
+                'type_opinion'  => 0,
+            ], [ 'pk_opinion'    => $data['fk_author'] ]);
+
             $metaKeys = ['summary', 'img1', 'img2', 'img1_footer', 'img2_footer'];
 
             foreach ($metaKeys as $key) {
