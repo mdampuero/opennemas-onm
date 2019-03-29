@@ -18,42 +18,69 @@ use Common\Core\Controller\Controller;
 /**
  * Displays an album or a list of albums.
  */
-class VideosController extends Controller
+class VideosController extends FrontendController
 {
     /**
-     * Common code for all the actions.
+     * {@inheritdoc}
      */
-    public function init()
-    {
-        $request             = $this->get('request_stack')->getCurrentRequest();
-        $this->page          = $request->query->getDigits('page', 1);
-        $this->category_name = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+    protected $caches = [
+        'list'       => 'video',
+        'listauthor' => 'video',
+        'show'       => 'video',
+        'showamp'    => 'video',
+    ];
 
-        if (!empty($this->category_name) && $this->category_name != 'home') {
-            try {
-                $category = $this->get('api.service.category')
-                    ->getItemBySlug($this->category_name);
-            } catch (\Exception $e) {
-                throw new ResourceNotFoundException();
-            }
+    /**
+     * {@inheritdoc}
+     */
+    protected $extension = 'VIDEO_MANAGER';
 
-            $this->category = $category->pk_content_category;
+    /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'showamp'    => 'amp_inner',
+        'list'       => 'video_frontpage',
+        'listauthor' => 'video_frontpage',
+        'show'       => 'video_inner',
+    ];
 
-            $this->view->assign([
-                'category'           => $this->category,
-                'actual_category_id' => $this->category,
-                'category_name'      => $this->category_name,
-                'actual_category'    => $this->category_name,
-                'category_data'      => $category,
-                'category_real_name' => $category->title,
-            ]);
-        } else {
-            $this->category = 0;
-            $this->view->assign('category_real_name', 'Portada');
-        }
+    /**
+     * {@inheritdoc}
+     */
+    protected $positions = [
+        'video_frontpage' => [ 7, 9 ],
+        'video_inner'     => [ 7 ],
+    ];
 
-        $this->cm = new \ContentManager();
-    }
+    /**
+     * The list of valid query parameters per action.
+     *
+     * @var array
+     */
+    protected $queries = [
+        'list'       => [ 'page', 'category_name' ],
+        'showamp'    => [ '_format' ],
+    ];
+
+    /**
+     * The list of routes per action.
+     *
+     * @var array
+     */
+    protected $routes = [
+        'list' => 'frontend_video_frontpage'
+    ];
+
+    /**
+     * The list of templates per action.
+     *
+     * @var array
+     */
+    protected $templates = [
+        'list'       => 'video/video_frontpage.tpl',
+        'showamp'    => 'amp/content.tpl',
+    ];
 
     /**
      * Renders the video frontpage
@@ -223,77 +250,63 @@ class VideosController extends Controller
      *
      * @return Response the response object
      */
-    public function frontpagePaginatedAction()
+    public function hydrateList(array &$params): void
     {
-        // Setup templating cache layer
-        $this->view->setConfig('video');
-        $cacheID = $this->view->getCacheId('frontpage', 'video', $this->category_name, $this->page);
+        $category = $params['o_category'];
+        $page     = $params['page'];
 
-        if (($this->view->getCaching() === 0)
-            || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
-        ) {
-            // Fetch video settings
-            $settings = $this->get('orm.manager')->getDataSet('Settings')
-                ->get('video_settings');
+        // Fetch video settings
+        $settings = $this->get('orm.manager')->getDataSet('Settings')
+            ->get('video_settings');
 
-            $itemsPerPage = isset($settings['total_front_more']) ? $settings['total_front_more'] : 12;
+        $epp = $settings['total_front_more'] ?? 12;
 
-            $order   = [ 'starttime' => 'DESC' ];
-            $filters = [
-                'content_type_name' => [[ 'value' => 'video' ]],
-                'content_status'    => [[ 'value' => 1 ]],
-                'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-                'starttime'       => [
-                    'union' => 'OR',
-                    [ 'value' => '0000-00-00 00:00:00' ],
-                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-                ],
-                'endtime'         => [
-                    'union' => 'OR',
-                    [ 'value' => '0000-00-00 00:00:00' ],
-                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-                ]
+        $order   = [ 'starttime' => 'DESC' ];
+        $filters = [
+            'content_type_name' => [[ 'value' => 'video' ]],
+            'content_status'    => [[ 'value' => 1 ]],
+            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+            'starttime'       => [
+                'union' => 'OR',
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+            ],
+            'endtime'         => [
+                'union' => 'OR',
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+            ]
+        ];
+
+        $route = [ 'name' => 'frontend_video_page_frontpage' ];
+        if ($category) {
+            $filters['pk_fk_content_category'] = [ [ 'value' => $category->pk_content_category ] ];
+            $route                    = [
+                'name' => 'frontend_video_page_frontpage_category',
+                'params' => [ 'category_name' => $category->pk_content_category ]
             ];
+        }
 
-            $route = [ 'name' => 'frontend_video_page_frontpage' ];
-            if ($this->category != 0) {
-                $filters['category_name'] = [ [ 'value' => $this->category_name ] ];
-                $route                    = [
-                    'name' => 'frontend_video_page_frontpage_category',
-                    'params' => [ 'category_name' => $this->category_name ]
-                ];
-            }
+        $oql = sprintf(
+            'content_type_name="video" and content_status=1 and in_litter=0 '
+            . 'order by starttime desc limit %d offset %d',
+            $epp,
+            $page
+        );
 
-            $er          = $this->get('entity_repository');
-            $countVideos = true;
-            $videos      = $er->findBy($filters, $order, $itemsPerPage, $this->page, 0, $countVideos);
+        $response = $this->get('api.service.content_old')->getList($oql);
 
-            $pager = $this->get('paginator')->get([
+        $params = array_merge($params, [
+            'videos' => $response['items'],
+            'pager'  => $this->get('paginator')->get([
                 'boundary'    => false,
                 'directional' => true,
                 'maxLinks'    => 0,
-                'epp'         => $itemsPerPage,
-                'page'        => $this->page,
-                'total'       => $countVideos,
+                'epp'         => $epp,
+                'page'        => $page,
+                'total'       => $response['total'],
                 'route'       => $route
-            ]);
-
-            $this->view->assign([
-                'videos' => $videos,
-                'pager'  => $pager,
-            ]);
-        }
-
-        list($positions, $advertisements) = $this->getAds($this->category);
-
-        return $this->render('video/video_frontpage.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'cache_id'       => $cacheID,
-            'categoryName'   => $this->category_name,
-            'x-tags'         => 'video-frontpage,' . $this->category_name . ',' . $this->page
+            ]),
         ]);
     }
 
@@ -304,7 +317,7 @@ class VideosController extends Controller
      *
      * @return Response the response object
      */
-    public function showAction(Request $request)
+    public function showOldAction(Request $request)
     {
         $dirtyID = $request->get('video_id', '', FILTER_SANITIZE_STRING);
         $urlSlug = $request->get('slug', '', FILTER_SANITIZE_STRING);
@@ -376,189 +389,5 @@ class VideosController extends Controller
             'tags'          => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($video->tag_ids)['items']
         ]);
-    }
-
-    /**
-     * Return via ajax more videos of a category
-     *
-     * @return Response the response object
-     */
-    public function ajaxMoreAction()
-    {
-        $total = 6;
-        $limit = ($this->page - 1) * $total . ', ' . $total;
-
-        $order   = [ 'starttime' => 'DESC' ];
-        $filters = [
-            'pk_fk_content_category' => [[ 'value' => $this->category, 'operator' => '<>' ]],
-            'content_type_name'      => [[ 'value' => 'video' ]],
-            'content_status'         => [[ 'value' => 1 ]],
-            'in_litter'              => [[ 'value' => 1, 'operator' => '!=' ]],
-            'starttime'       => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-            ],
-            'endtime'         => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-            ]
-        ];
-
-        $videos = $this->get('entity_repository')->findBy($filters, $order, $limit, 0);
-
-        if (count($videos) <= 0) {
-            return new RedirectResponse(
-                $this->generateUrl('frontend_video_ajax_more', ['category' => $this->category])
-            );
-        }
-
-        return $this->render('video/partials/_widget_video_more_interesting.tpl', [
-            'others_videos'      => $videos,
-            'actual_category_id' => $this->category,
-            'page'               => $this->page,
-        ]);
-    }
-
-    /**
-     * Return via ajax videos of a category
-     *
-     * @return Response the response object
-     */
-    public function ajaxInCategoryAction(Request $request)
-    {
-        $total = 3;
-        $limit = ($this->page - 1) * $total . ', ' . $total;
-
-        if (empty($this->category)) {
-            $this->category = $request->query->getDigits('category', 0);
-        }
-
-        $order   = [ 'starttime' => 'DESC' ];
-        $filters = [
-            'pk_fk_content_category' => [[ 'value' => $this->category ]],
-            'content_type_name'      => [[ 'value' => 'video' ]],
-            'content_status'         => [[ 'value' => 1 ]],
-            'in_litter'              => [[ 'value' => 1, 'operator' => '!=' ]],
-            'starttime'       => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-            ],
-            'endtime'         => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-            ]
-        ];
-
-        $videos = $this->get('entity_repository')->findBy($filters, $order, $limit, 0);
-
-        if (count($videos) <= 0) {
-            return new RedirectResponse(
-                $this->generateUrl('frontend_video_ajax_incategory', ['category' => $this->category])
-            );
-        }
-
-        return $this->render('video/partials/_widget_video_incategory.tpl', [
-            'videos'             => $videos,
-            'actual_category_id' => $this->category,
-            'page'               => $this->page,
-        ]);
-    }
-
-    /**
-     * Returns a list of videos.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     */
-    public function ajaxPaginatedAction(Request $request)
-    {
-        // Fetch video settings
-        $settings = $this->get('orm.manager')->getDataSet('Settings')
-            ->get('video_settings');
-        $epp      = isset($settings['total_front_more']) ? $settings['total_front_more'] : 12;
-        $offset   = isset($settings['front_offset']) ? $settings['front_offset'] : 3;
-
-        if (empty($this->category)) {
-            $this->category = $request->query->getDigits('category', 0);
-        }
-
-        $order   = ['created' => 'DESC'];
-        $filters = [
-            'content_type_name' => [['value' => 'video']],
-            'content_status'    => [['value' => 1]],
-            'in_litter'         => [['value' => 1, 'operator' => '!=']],
-        ];
-
-        if ($this->category != 0) {
-            $filters['pk_fk_content_category'] = [
-                [ 'value' => $this->category ]
-            ];
-        }
-
-        $em = $this->get('entity_repository');
-
-        $countVideos  = true;
-        $othersVideos = $em->findBy($filters, $order, $epp, $this->page, $offset, 0, $countVideos);
-
-        if ($countVideos == 0) {
-            return new RedirectResponse(
-                $this->generateUrl('frontend_video_ajax_paginated')
-            );
-        }
-
-        $pagination = $this->get('paginator')->get([
-            'boundary'    => false,
-            'directional' => true,
-            'maxLinks'    => 0,
-            'epp'         => $epp,
-            'page'        => $this->page,
-            'total'       => count($othersVideos) + 1,
-            'route'       => [
-                'name'   => 'frontend_video_ajax_paginated',
-                'params' => ['category' => $this->category]
-            ]
-        ]);
-
-        return $this->render('video/partials/_widget_more_videos.tpl', [
-            'others_videos' => $othersVideos,
-            'page'          => $this->page,
-            'pagination'    => $pagination,
-        ]);
-    }
-
-    /**
-     * Returns a list of advertisements for a category and page.
-     *
-     * @param mixed  $category The category id.
-     * @param string $page     The page type.
-     *
-     * @return array The list of advertisements.
-     */
-    private function getAds($category = 'home', $page = '')
-    {
-        $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
-
-        // Get video positions
-        $positionManager = $this->get('core.helper.advertisement');
-
-        if ($page == 'inner') {
-            $positions = $positionManager->getPositionsForGroup('video_inner', [ 7 ]);
-        } else {
-            $positions = $positionManager->getPositionsForGroup('video_frontpage', [ 7, 9 ]);
-        }
-
-        $advertisements = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions, $category);
-
-        return [ $positions, $advertisements ];
     }
 }
