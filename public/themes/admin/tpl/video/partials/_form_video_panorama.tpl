@@ -47,8 +47,8 @@
     <div class="form-group">
       <label for="preview" class="form-label">{t}Video preview{/t}</label>
       <div class="controls">
-        <div class="thumbnail center">
-          <div ng-bind-html="item.information.embedHTML" style="max-width:600px; overflow:hidden; margin:0 auto"></div>
+        <div class="thumbnail center" ng-if="item">
+          <div ng-bind-html="trustHTML(item.information.embedHTML)" style="max-width:600px; overflow:hidden; margin:0 auto"></div>
         </div>
       </div>
     </div>

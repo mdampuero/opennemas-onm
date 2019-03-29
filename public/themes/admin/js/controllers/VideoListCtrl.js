@@ -33,6 +33,7 @@
           content_type_name: 'video',
           epp: 10,
           in_litter: 0,
+          orderBy: { created: 'desc' },
           page: 1
         };
 
@@ -62,8 +63,6 @@
         $scope.init = function() {
           $scope.columns.key     = 'video-columns';
           $scope.backup.criteria = $scope.criteria;
-
-          $scope.criteria.orderBy = { starttime: 'desc' };
 
           oqlEncoder.configure({ placeholder: {
             title: '[key] ~ "%[value]%"'

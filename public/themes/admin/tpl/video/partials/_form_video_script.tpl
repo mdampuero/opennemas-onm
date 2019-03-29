@@ -6,14 +6,10 @@
   <label for="video-information" class="form-label">{t}Write HTML code{/t}</label>
   <div class="controls">
     <textarea name="body" id="body" ng-model="item.body" rows="8" class="form-control"></textarea>
-
  </div>
 </div>
 
-<div class="form-controlgroup m-t-10">
+<div class="form-controlgroup m-t-10" ng-if="item">
   <label  class="form-label">{t}Preview{/t}</label>
-  <div style="width:100%; text-align:center; margin:0 auto;">
-    [% trustSrc(item.information.source.webm) %]
-    sdf
-  </div>
+  <div ng-bind-html="trustHTML(item.body)" style="width:100%; text-align:center; margin:0 auto;"> </div>
 </div>
