@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-20 18:42+0000\n"
-"PO-Revision-Date: 2019-03-18 16:38+0100\n"
+"POT-Creation-Date: 2019-03-29 16:57+0000\n"
+"PO-Revision-Date: 2019-03-29 18:01+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -285,10 +285,6 @@ msgstr "Foto actualizada correctamente."
 #, php-format
 msgid "Unable to find the photo with the id \"%d\""
 msgstr "No se pudo encontrar una foto con el identificador «%d»"
-
-msgid "Not valid file format or the file exceeds the max allowed file size."
-msgstr ""
-"El formato de archivo no es válido o excede el tamaño máximo permitido."
 
 msgid "Configuration saved successfully"
 msgstr "Configuración guardada correctamente."
@@ -1072,6 +1068,9 @@ msgstr "Creado"
 
 msgid "Description"
 msgstr "Descripción"
+
+msgid "Unable to save the image"
+msgstr "No se pudo guardar la imagen"
 
 msgid "From"
 msgstr "Desde"
@@ -2492,32 +2491,6 @@ msgstr "URL"
 msgid "Internal search"
 msgstr "Búsqueda interna"
 
-msgid "Image data not valid"
-msgstr "Los datos de la imagen no son válidos"
-
-msgid "Unable to save your image file in the Opennemas storage target"
-msgstr ""
-"No se pudo guardar tu fichero de imagen en el almacenamiento de Opennemas"
-
-msgid "Unable to copy your image file"
-msgstr "No se pudo copiar tu fichero de imagen"
-
-msgid "Unable to save your image information."
-msgstr "No se pudo guardar la información de la imagen."
-
-#, php-format
-msgid "Image type: %s"
-msgstr "Tipo de imagen: %s"
-
-msgid "No available EXIF data"
-msgstr "No está disponible ningún dato EXIF"
-
-msgid "No available IPTC data"
-msgstr "No está disponible ningún dato IPTC"
-
-msgid "Invalid image file"
-msgstr "Fichero de imagen inválido"
-
 msgid "Poll not available"
 msgstr "Encuesta no disponible"
 
@@ -2800,9 +2773,6 @@ msgstr "Sobre nosotros"
 msgid "The best Internet service for your online digital newspaper"
 msgstr "El mejor servicio de internet para su periódico digital"
 
-msgid "Go back to list"
-msgstr "Volver a la lista"
-
 msgid "Create new page"
 msgstr "Crear nueva página"
 
@@ -2842,9 +2812,6 @@ msgid ""
 msgstr ""
 "Puede que cambiando los filtros ayude o tambien puede usar el botón «Crear» "
 "de arriba."
-
-msgid "Open in a new window"
-msgstr "Abrir en una nueva ventana"
 
 msgid "Save"
 msgstr "Guardar"
@@ -3288,6 +3255,9 @@ msgstr "Creando widget"
 
 msgid "Editing widget"
 msgstr "Editando widget"
+
+msgid "Go back to list"
+msgstr "Volver a la lista"
 
 msgid "Saving"
 msgstr "Guardando"
@@ -5077,6 +5047,9 @@ msgstr "Generar"
 
 msgid "New tag"
 msgstr "Nueva etiqueta"
+
+msgid "The form has some missing or invalid fields, please review it."
+msgstr ""
 
 msgid "Instance information"
 msgstr "Información de la instancia"
@@ -9036,6 +9009,38 @@ msgstr "Bienvenido al Gestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Usa la barra lateral derecha para explorar la información disponible."
+
+#~ msgid "Not valid file format or the file exceeds the max allowed file size."
+#~ msgstr ""
+#~ "El formato de archivo no es válido o excede el tamaño máximo permitido."
+
+#~ msgid "Image data not valid"
+#~ msgstr "Los datos de la imagen no son válidos"
+
+#~ msgid "Unable to save your image file in the Opennemas storage target"
+#~ msgstr ""
+#~ "No se pudo guardar tu fichero de imagen en el almacenamiento de Opennemas"
+
+#~ msgid "Unable to copy your image file"
+#~ msgstr "No se pudo copiar tu fichero de imagen"
+
+#~ msgid "Unable to save your image information."
+#~ msgstr "No se pudo guardar la información de la imagen."
+
+#~ msgid "Image type: %s"
+#~ msgstr "Tipo de imagen: %s"
+
+#~ msgid "No available EXIF data"
+#~ msgstr "No está disponible ningún dato EXIF"
+
+#~ msgid "No available IPTC data"
+#~ msgstr "No está disponible ningún dato IPTC"
+
+#~ msgid "Invalid image file"
+#~ msgstr "Fichero de imagen inválido"
+
+#~ msgid "Open in a new window"
+#~ msgstr "Abrir en una nueva ventana"
 
 #~ msgid "HOMEPAGE"
 #~ msgstr "PORTADA"

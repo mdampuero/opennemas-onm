@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-20 18:42+0000\n"
-"PO-Revision-Date: 2019-03-18 16:38+0100\n"
+"POT-Creation-Date: 2019-03-29 16:57+0000\n"
+"PO-Revision-Date: 2019-03-29 18:01+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -285,9 +285,6 @@ msgstr "Foto actualizada correctamente."
 #, php-format
 msgid "Unable to find the photo with the id \"%d\""
 msgstr "Non se puido atopar a foto co identificador «%d»"
-
-msgid "Not valid file format or the file exceeds the max allowed file size."
-msgstr "O ficheiro non é válido ou excede o tamaño máximo permitido."
 
 msgid "Configuration saved successfully"
 msgstr "Configuración de caché gardada correctamente."
@@ -1063,6 +1060,9 @@ msgstr "Creado"
 
 msgid "Description"
 msgstr "Descrición"
+
+msgid "Unable to save the image"
+msgstr "Non se puido gardar a imaxe"
 
 msgid "From"
 msgstr "Desde"
@@ -2464,31 +2464,6 @@ msgstr "URL"
 msgid "Internal search"
 msgstr "Busca interna"
 
-msgid "Image data not valid"
-msgstr "Os datos enviados da instancia non son válidos."
-
-msgid "Unable to save your image file in the Opennemas storage target"
-msgstr "Non se puido gardar o ficheiro de imaxe no almacenamento de Opennemas"
-
-msgid "Unable to copy your image file"
-msgstr "Non se puido copiar o ficheiro da imaxe"
-
-msgid "Unable to save your image information."
-msgstr "Non se puido gardar a información da imaxe."
-
-#, php-format
-msgid "Image type: %s"
-msgstr "Tipo de imaxe: %s"
-
-msgid "No available EXIF data"
-msgstr "Non hai datos EXIF dispoñibeis"
-
-msgid "No available IPTC data"
-msgstr "Non hai datos IPTC dispoñibeis"
-
-msgid "Invalid image file"
-msgstr "Ficheiro de imaxe non válido"
-
 msgid "Poll not available"
 msgstr "Enquisa non dispoñíbel"
 
@@ -2771,9 +2746,6 @@ msgstr "Sobre nós"
 msgid "The best Internet service for your online digital newspaper"
 msgstr "O mellor servizo de internet para o seu periódico dixital"
 
-msgid "Go back to list"
-msgstr "Volver á lista"
-
 msgid "Create new page"
 msgstr "Crear nova páxina"
 
@@ -2813,9 +2785,6 @@ msgid ""
 msgstr ""
 "Pode que ao cambiar un filtro axude ou pode engadir usando o botón «Crear» "
 "de enriba."
-
-msgid "Open in a new window"
-msgstr "Abrir nunha nova xanela"
 
 msgid "Save"
 msgstr "Gardar"
@@ -3258,6 +3227,9 @@ msgstr "Creando widget"
 
 msgid "Editing widget"
 msgstr "Editando widget"
+
+msgid "Go back to list"
+msgstr "Volver á lista"
 
 msgid "Saving"
 msgstr "Gardando"
@@ -5040,6 +5012,9 @@ msgstr "Xerar"
 
 msgid "New tag"
 msgstr "Nova etiqueta"
+
+msgid "The form has some missing or invalid fields, please review it."
+msgstr ""
 
 msgid "Instance information"
 msgstr "Información da instancia"
@@ -8959,6 +8934,37 @@ msgstr "Benvido ao Xestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
+
+#~ msgid "Not valid file format or the file exceeds the max allowed file size."
+#~ msgstr "O ficheiro non é válido ou excede o tamaño máximo permitido."
+
+#~ msgid "Image data not valid"
+#~ msgstr "Os datos enviados da instancia non son válidos."
+
+#~ msgid "Unable to save your image file in the Opennemas storage target"
+#~ msgstr ""
+#~ "Non se puido gardar o ficheiro de imaxe no almacenamento de Opennemas"
+
+#~ msgid "Unable to copy your image file"
+#~ msgstr "Non se puido copiar o ficheiro da imaxe"
+
+#~ msgid "Unable to save your image information."
+#~ msgstr "Non se puido gardar a información da imaxe."
+
+#~ msgid "Image type: %s"
+#~ msgstr "Tipo de imaxe: %s"
+
+#~ msgid "No available EXIF data"
+#~ msgstr "Non hai datos EXIF dispoñibeis"
+
+#~ msgid "No available IPTC data"
+#~ msgstr "Non hai datos IPTC dispoñibeis"
+
+#~ msgid "Invalid image file"
+#~ msgstr "Ficheiro de imaxe non válido"
+
+#~ msgid "Open in a new window"
+#~ msgstr "Abrir nunha nova xanela"
 
 #~ msgid "HOMEPAGE"
 #~ msgstr "PORTADA"
