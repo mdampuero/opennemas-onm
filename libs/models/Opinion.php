@@ -241,7 +241,7 @@ class Opinion extends Content
             getService('dbal_connection')->update('opinions', [
                 'fk_author'     => (int) $data['fk_author'],
                 'type_opinion'  => 0,
-            ], [ 'pk_opinion'    => $data['fk_author'] ]);
+            ], [ 'pk_opinion'    => $data['pk_opinion'] ]);
 
             $metaKeys = ['summary', 'img1', 'img2', 'img1_footer', 'img2_footer'];
 
