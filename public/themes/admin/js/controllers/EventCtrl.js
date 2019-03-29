@@ -15,8 +15,8 @@
      *   Check billing information when saving user.
      */
     .controller('EventCtrl', [
-      '$controller', '$scope', '$timeout',
-      function($controller, $scope, $timeout) {
+      '$controller', '$scope', '$timeout', 'messenger',
+      function($controller, $scope, $timeout, messenger) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -118,9 +118,16 @@
          *   Saves tags and, then, saves the item.
          */
         $scope.submit = function() {
+          if ($scope.form.$invalid) {
+            $('[name=form]')[0].reportValidity();
+            messenger.post(window.strings.forms.not_valid, 'error');
+
+            return false;
+          }
+
           if (!$('[name=form]')[0].checkValidity()) {
             $('[name=form]')[0].reportValidity();
-            return;
+            return false;
           }
 
           $scope.flags.http.saving = true;
