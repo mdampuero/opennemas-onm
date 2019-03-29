@@ -100,7 +100,8 @@ class VideoController extends ContentOldController
         }
 
         foreach ($content as $item) {
-            if (!array_key_exists('thumbnail', $item->information)
+            if (is_array($item->information)
+                && !array_key_exists('thumbnail', $item->information)
                 || empty($item->information['thumbnail'])
             ) {
                 continue;

@@ -111,6 +111,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         }
         break;
       }
+      data.item.categories = [ data.item.category ];
 
       $scope.setType(type);
 
@@ -146,11 +147,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
             $scope.item.title = $scope.item.information.title;
           }
 
-          if ($scope.item.information.embedHTML) {
-            $scope.item.information.embedHTML =
-              $sce.trustAsHtml($scope.item.information.embedHTML);
-          }
-
           $scope.flags.http.fetch_video_info = false;
 
           $scope.item.author_name = $scope.item.information.service;
@@ -160,6 +156,10 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
           }, 250);
         }
       );
+    };
+
+    $scope.trustHTML = function(src) {
+      return $sce.trustAsHtml(src);
     };
 
     $scope.trustSrc = function(src) {
