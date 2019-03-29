@@ -18,7 +18,7 @@ use Common\Core\Controller\Controller;
 /**
  * Displays an album or a list of albums.
  */
-class VideosController extends FrontendController
+class VideoController extends FrontendController
 {
     /**
      * {@inheritdoc}
@@ -79,6 +79,7 @@ class VideosController extends FrontendController
      */
     protected $templates = [
         'list'       => 'video/video_frontpage.tpl',
+        'show'       => 'video/video_inner.tpl',
         'showamp'    => 'amp/content.tpl',
     ];
 

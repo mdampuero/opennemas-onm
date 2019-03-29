@@ -1,6 +1,6 @@
 frontend_video_frontpage:
     path: /video
-    defaults: { _controller: FrontendBundle:Videos:list, page: 1 }
+    defaults: { _controller: FrontendBundle:Video:list, page: 1 }
     requirements:
         page: '([0-9]+)?'
     options:
@@ -9,7 +9,7 @@ frontend_video_frontpage:
 # Route to redirect to frontend_video_frontpage and to remove in the future
 frontend_video_frontpage_with_page:
     path: /video/{page}
-    defaults: { _controller: FrontendBundle:Videos:list, page: 1 }
+    defaults: { _controller: FrontendBundle:Video:list, page: 1 }
     requirements:
         page: '([0-9]+)?'
     options:
@@ -18,7 +18,7 @@ frontend_video_frontpage_with_page:
 # Route to redirect to frontend_video_frontpage and to remove in the future
 frontend_video_page_frontpage_category:
     path: /video/{category_name}/page/{page}
-    defaults: { _controller: FrontendBundle:Videos:list, page: 1 }
+    defaults: { _controller: FrontendBundle:Video:list, page: 1 }
     requirements:
         category_name: '[^/]+'
         page: '([0-9]+)?'
@@ -28,7 +28,7 @@ frontend_video_page_frontpage_category:
 # Route to redirect to frontend_video_frontpage and to remove in the future
 frontend_video_frontpage_category:
     path: /video/{category_name}/{page}
-    defaults: { _controller: FrontendBundle:Videos:list, page: 1 }
+    defaults: { _controller: FrontendBundle:Video:list, page: 1 }
     requirements:
         category_name: '[^/]+'
         page         : '([0-9]+)?'
@@ -36,12 +36,26 @@ frontend_video_frontpage_category:
         l10n: true
 
 frontend_video_show:
-    path: /video/{category_name}/{slug}/{video_id}.{_format}
-    defaults: { _controller: FrontendBundle:Videos:show, _format: html }
+    path: /video/{category_name}/{slug}/{created}{id}.{_format}
+    defaults: { _controller: FrontendBundle:Video:show, _format: html }
     requirements:
         category_name: '[^/]+'
         slug         : '[^/]+'
         video_id     : '([0-9]+)'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
     options:
         l10n: true
         expose: true
+
+frontend_video_show_amp:
+    path: /video/{category_name}/{slug}/{created}{id}.amp.html
+    defaults: { _controller: FrontendBundle:Video:showAmp, _format: amp }
+    requirements:
+        author_name   : '[^/]+'
+        opinion_title : '[^/]+'
+        opinion_id    : '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
+    options:
+        l10n: true
