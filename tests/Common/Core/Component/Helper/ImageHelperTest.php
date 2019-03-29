@@ -24,6 +24,11 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
     {
         $this->instance = new Instance([ 'internal_name' => 'bar' ]);
 
+        $this->fs = $this->getMockBuilder('Symfony\Component\Filesystem\Filesystem')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'copy' ])
+            ->getMock();
+
         $this->processor = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setMethods([
                 'getHeight', 'getSize', 'getWidth', 'open', 'optimize', 'save'
@@ -33,6 +38,11 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs([ $this->instance, $this->processor, '/waldo/grault' ])
             ->setMethods([ 'getExtension' ])
             ->getMock();
+
+        $property = new \ReflectionProperty($this->helper, 'fs');
+        $property->setAccessible(true);
+
+        $property->setValue($this->helper, $this->fs);
     }
 
     /**
@@ -87,9 +97,28 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests move when the target directory does not exist.
+     * Tests move when the original file is copied to target.
      */
-    public function testMoveWhenDirectoryNotExist()
+    public function testMoveWhenCopy()
+    {
+        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getRealPath' ])
+            ->getMock();
+
+        $file->expects($this->once())->method('getRealPath')
+            ->willReturn('/glork/quux.jpg');
+
+        $this->fs->expects($this->once())->method('copy')
+            ->with('/glork/quux.jpg', '/thud/fred/norf.jpg');
+
+        $this->helper->move($file, '/thud/fred/norf.jpg', true);
+    }
+
+    /**
+     * Tests move when the original file is moved to target.
+     */
+    public function testMoveWhenNoCopy()
     {
         $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
             ->disableOriginalConstructor()

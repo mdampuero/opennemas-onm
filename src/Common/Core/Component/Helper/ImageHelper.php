@@ -13,9 +13,17 @@ use Common\Core\Component\Image\Processor;
 use Common\ORM\Entity\Instance;
 use Framework\Component\MIME\MimeTypeTool;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ImageHelper
 {
+    /**
+     * The Filesystem component.
+     *
+     * @var Filesystem
+     */
+    protected $fs;
+
     /**
      * The current instance.
      *
@@ -46,6 +54,7 @@ class ImageHelper
      */
     public function __construct(Instance $instance, Processor $processor, string $publicDir)
     {
+        $this->fs        = new Filesystem();
         $this->instance  = $instance;
         $this->processor = $processor;
         $this->publicDir = $publicDir;
@@ -111,7 +120,7 @@ class ImageHelper
      *
      * @param string $path The file path.
      *
-     * @return boolean True if the file is optimizable. False otherwise.
+     * @return bool True if the file is optimizable. False otherwise.
      */
     public function isOptimizable(string $path) : bool
     {
@@ -123,14 +132,21 @@ class ImageHelper
     /**
      * Moves the file to the target path.
      *
-     * @param File $file The file to move.
+     * @param File   $file   The file to move.
+     * @param string $target The path where file will be moved.
+     * @param bool   $copy   Whether to copy the file.
      *
      * @return string The target path.
      */
-    public function move(File $file, $target)
+    public function move(File $file, string $target, bool $copy = false) : void
     {
         $name      = basename($target);
         $directory = str_replace($name, '', $target);
+
+        if ($copy) {
+            $this->fs->copy($file->getRealPath(), $target);
+            return;
+        }
 
         $file->move($directory, $name);
     }
