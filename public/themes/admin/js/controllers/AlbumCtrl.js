@@ -37,7 +37,7 @@ angular.module('BackendApp.controllers')
       $scope.submit = function(e) {
         e.preventDefault();
 
-        if (!$scope.validatePhotosAndCover(e)) {
+        if (!$scope.validatePhotosAndCover()) {
           return false;
         }
 
