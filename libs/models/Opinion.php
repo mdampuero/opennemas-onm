@@ -147,8 +147,6 @@ class Opinion extends Content
      */
     public function create($data)
     {
-        $data['position'] = 1;
-
         parent::create($data);
 
         $this->pk_opinion = $this->id;
@@ -160,24 +158,14 @@ class Opinion extends Content
                 'type_opinion'  => 0,
             ]);
 
-            if (array_key_exists('summary', $data) && !empty($data['summary'])) {
-                parent::setMetadata('summary', $data['summary']);
-            }
+            $metaKeys = ['summary', 'img1', 'img2', 'img1_footer', 'img2_footer'];
 
-            if (array_key_exists('img1', $data) && !empty($data['img1'])) {
-                parent::setMetadata('img1', $data['img1']);
-            }
-
-            if (array_key_exists('img2', $data) && !empty($data['img2'])) {
-                parent::setMetadata('img2', $data['img2']);
-            }
-
-            if (array_key_exists('img1_footer', $data) && !empty($data['img1_footer'])) {
-                parent::setMetadata('img1_footer', $data['img1_footer']);
-            }
-
-            if (array_key_exists('img2_footer', $data) && !empty($data['img2_footer'])) {
-                parent::setMetadata('img2_footer', $data['img2_footer']);
+            foreach ($metaKeys as $key) {
+                if (array_key_exists($key, $data) && !empty($data[$key])) {
+                    parent::setMetadata($key, $data[$key]);
+                } else {
+                    parent::removeMetadata($key);
+                }
             }
 
             $this->saveMetadataFields($data, Opinion::EXTRA_INFO_TYPE);
