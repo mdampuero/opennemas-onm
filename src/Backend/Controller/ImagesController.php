@@ -35,8 +35,8 @@ class ImagesController extends Controller
         $years = [];
 
         $conn = $this->get('orm.manager')->getConnection('instance');
-
         $results = $conn->fetchAll(
+
             "SELECT DISTINCT(DATE_FORMAT(created, '%Y-%m')) as date_month FROM contents
             WHERE fk_content_type = 8 AND created IS NOT NULL ORDER BY date_month DESC"
         );
@@ -207,30 +207,12 @@ class ImagesController extends Controller
         $msg = $this->get('core.messenger');
 
         try {
-            $date     = new \DateTime();
-            $file     = $request->files->get('file');
-            $path     = $ih->generatePath($file, $date->format('Y-m-d H:i:s'));
-            $filename = basename($path);
-
-            $ih->move($file, $path);
-
-            if ($ih->isOptimizable($path)) {
-                $ih->optimize($path);
-            }
-
-            $data = array_merge([
-                'changed'        => $date->format('Y-m-d H:i:s'),
-                'created'        => $date->format('Y-m-d H:i:s'),
-                'description'    => null,
-                'name'           => $filename,
-                'path_file'      => $date->format('/Y/m/d/'),
-                'title'          => $filename
-            ], $ih->getInformation($path));
+            $file = $request->files->get('file');
 
             $photo = new \Photo();
-            $id    = $photo->create($data);
-
+            $id    = $photo->createFromLocalFile($file->getRealPath());
             $photo = new \Photo($id);
+
             $msg->add(_('Item saved successfully'), 'success', 201);
         } catch (\Exception $e) {
             $msg->add($e->getMessage(), 'error');
