@@ -312,6 +312,44 @@ class VideoController extends FrontendController
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function hydrateShow($params = [], $item = null)
+    {
+        $author = $this->get('user_repository')->find((int) $item->fk_author);
+
+        $item->author = $author;
+
+        // Get other_videos for widget video most
+        $order   = [ 'starttime' => 'DESC' ];
+        $filters = [
+            'pk_content'             => [[ 'value' => $item->id, 'operator' => '<>' ]],
+            'pk_fk_content_category' => [[ 'value' => $params['o_category']->pk_content_category ]],
+            'content_type_name'      => [[ 'value' => 'video' ]],
+            'content_status'         => [[ 'value' => 1 ]],
+            'in_litter'              => [[ 'value' => 1, 'operator' => '!=' ]],
+            'starttime'       => [
+                'union' => 'OR',
+                [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+            ],
+            'endtime'         => [
+                'union' => 'OR',
+                [ 'value' => '0000-00-00 00:00:00' ],
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+            ]
+        ];
+
+        $otherVideos = $this->get('entity_repository')->findBy($filters, $order, 4, 1);
+
+        $params = array_merge($params, [
+            'others_videos' => $otherVideos,
+        ]);
+    }
+
+    /**
      * Shows an inner video given its id
      *
      * @param Request $request the request object

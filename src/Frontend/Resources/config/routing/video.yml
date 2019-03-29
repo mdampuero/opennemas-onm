@@ -36,8 +36,8 @@ frontend_video_frontpage_category:
         l10n: true
 
 frontend_video_show:
-    path: /video/{category_name}/{slug}/{created}{id}.{_format}
-    defaults: { _controller: FrontendBundle:Video:show, _format: html }
+    path: /video/{category_name}/{slug}/{created}{id}.html
+    defaults: { _controller: FrontendBundle:Video:show }
     requirements:
         category_name: '[^/]+'
         slug         : '[^/]+'
