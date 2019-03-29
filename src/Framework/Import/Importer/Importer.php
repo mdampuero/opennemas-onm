@@ -135,7 +135,7 @@ class Importer
 
             unset($data['local_file']);
 
-            return $photo->createFromLocalFile($path, $data);
+            return $photo->createFromLocalFile($path, $data, true);
         }
 
         $content = new $target();
@@ -198,7 +198,7 @@ class Importer
             'title'       => $author->name,
             'name'        => $author->name,
             'description' => $author->name,
-        ]);
+        ], true);
     }
 
     /**
@@ -435,7 +435,7 @@ class Importer
 
                     unset($photoData['local_file']);
 
-                    $photo->createFromLocalFile($path, $photoData);
+                    $photo->createFromLocalFile($path, $photoData, true);
                 }
 
                 $related[] = $r;

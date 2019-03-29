@@ -193,10 +193,11 @@ class Photo extends Content
      *
      * @param string $path The path to the file.
      * @param array  $data The photo information.
+     * @param bool   $copy Whether to move or copy the file.
      *
      * @return int The photo id.
      */
-    public function createFromLocalFile(string $path, array $data = []) : int
+    public function createFromLocalFile(string $path, array $data = [], bool $copy = false) : int
     {
         $ih   = getService('core.helper.image');
         $date = new \DateTime($data['created'] ?? null);
@@ -205,7 +206,7 @@ class Photo extends Content
         $path     = $ih->generatePath($file, $date->format('Y-m-d H:i:s'));
         $filename = basename($path);
 
-        $ih->move($file, $path);
+        $ih->move($file, $path, $copy);
 
         if ($ih->isOptimizable($path)) {
             $ih->optimize($path);
