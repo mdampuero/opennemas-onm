@@ -68,7 +68,7 @@ class Opinion extends Content
     protected $summary = null;
 
     /**
-     * The 
+     * The
      *
      * @var int
      */
@@ -154,7 +154,7 @@ class Opinion extends Content
         try {
             getService('dbal_connection')->insert('opinions', [
                 'pk_opinion'    => $this->id,
-                'fk_author'     => (int) $data['fk_author'],
+                'fk_author'     => $data['fk_author'] ?? null,
                 'type_opinion'  => 0,
             ]);
 
@@ -239,8 +239,7 @@ class Opinion extends Content
 
         try {
             getService('dbal_connection')->update('opinions', [
-                'fk_author'     => (int) $data['fk_author'],
-                'fk_author_img' => (int) $data['fk_author_img'],
+                'fk_author'     => $data['fk_author'] ?? nully,
             ], [ 'pk_opinion' => (int) $data['id'] ]);
 
             $metaKeys = ['summary', 'img1', 'img2', 'img1_footer', 'img2_footer'];
