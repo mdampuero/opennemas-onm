@@ -128,11 +128,14 @@ class Importer
         $category = $this->getCategory($resource, $category);
         $author   = $this->getAuthor($resource, $author);
         $data     = $this->getData($resource, $category, $author, $enabled, $target);
-        if ($resource->type === 'photo') {
-            $photo = new \Photo();
-            $id    = $photo->createFromLocalFile($data);
 
-            return $id;
+        if ($resource->type === 'photo') {
+            $path  = $data['local_file'];
+            $photo = new \Photo();
+
+            unset($data['local_file']);
+
+            return $photo->createFromLocalFile($path, $data);
         }
 
         $content = new $target();
@@ -179,7 +182,6 @@ class Importer
     {
         $cm       = new \ContentManager();
         $photoRaw = $cm->getUrlContent($url);
-        $name     = substr($url, strrpos($url, '/') + 1);
 
         if (!$photoRaw) {
             return $author->id;
@@ -190,15 +192,13 @@ class Importer
 
         file_put_contents($path, $photoRaw);
 
-        $data = [
-            'description'       => $author->name,
-            'local_file'        => $path,
-            'original_filename' => $name,
-        ];
-
         $photo = new \Photo();
 
-        return $photo->createFromLocalFile($data);
+        return $photo->createFromLocalFile($path, [
+            'title'       => $author->name,
+            'name'        => $author->name,
+            'description' => $author->name,
+        ]);
     }
 
     /**
@@ -373,8 +373,7 @@ class Importer
         }
 
         if ($resource->type === 'photo' || $target === 'photo') {
-            $data['original_filename'] = $resource->file_name;
-            $data['local_file']        = realpath($this->repository->syncPath
+            $data['local_file'] = realpath($this->repository->syncPath
                 . DS . $this->config['id'] . DS . $resource->file_name);
 
             return $data;
@@ -431,8 +430,12 @@ class Importer
 
                 if (empty($element) && $r->type == 'photo') {
                     $photoData = $this->getData($r, null, null, 1, 'photo');
+                    $path      = $photoData['local_file'];
                     $photo     = new \Photo();
-                    $photo->createFromLocalFile($photoData);
+
+                    unset($photoData['local_file']);
+
+                    $photo->createFromLocalFile($path, $photoData);
                 }
 
                 $related[] = $r;
