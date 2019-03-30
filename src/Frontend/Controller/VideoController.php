@@ -86,6 +86,7 @@ class VideoController extends FrontendController
     {
         $category = $params['o_category'];
         $page     = $params['page'] ?? 1;
+        $date     = date('Y-m-d H:i:s');
 
         // Fetch video settings
         $settings = $this->get('orm.manager')->getDataSet('Settings')
@@ -97,16 +98,17 @@ class VideoController extends FrontendController
             ? sprintf(' and pk_fk_content_category=%d', $category->pk_content_category)
             : '';
 
-        // ADD support to filter by category
-        $oql = sprintf(
-            'content_type_name="video" and content_status=1 and in_litter=0 %s'
+        $response = $this->get('api.service.content_old')->getList(sprintf(
+            'content_type_name="video" and content_status=1 and in_litter=0 %s '
+            . 'and (starttime IS NULL or starttime < "%s") '
+            . 'and (endtime IS NULL or endtime > "%s") '
             . 'order by starttime desc limit %d offset %d',
             $categoryOQL,
+            $date,
+            $date,
             $epp,
             $page
-        );
-
-        $response = $this->get('api.service.content_old')->getList($oql);
+        ));
 
         $params = array_merge($params, [
             'videos' => $response['items'],
