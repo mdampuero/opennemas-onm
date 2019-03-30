@@ -85,7 +85,7 @@ class VideoController extends FrontendController
     public function hydrateList(array &$params): void
     {
         $category = $params['o_category'];
-        $page     = $params['page'];
+        $page     = $params['page'] ?? 1;
 
         // Fetch video settings
         $settings = $this->get('orm.manager')->getDataSet('Settings')
@@ -93,10 +93,15 @@ class VideoController extends FrontendController
 
         $epp = $settings['total_front_more'] ?? 12;
 
+        $categoryOQL = ($category)
+            ? sprintf(' and pk_fk_content_category=%d', $category->pk_content_category)
+            : '';
+
         // ADD support to filter by category
         $oql = sprintf(
-            'content_type_name="video" and content_status=1 and in_litter=0 '
+            'content_type_name="video" and content_status=1 and in_litter=0 %s'
             . 'order by starttime desc limit %d offset %d',
+            $categoryOQL,
             $epp,
             $page
         );

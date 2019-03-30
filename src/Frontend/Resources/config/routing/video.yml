@@ -1,6 +1,6 @@
 frontend_video_frontpage:
     path: /video
-    defaults: { _controller: FrontendBundle:Video:list, page: 1 }
+    defaults: { _controller: FrontendBundle:Video:list}
     requirements:
         page: '([0-9]+)?'
     options:
