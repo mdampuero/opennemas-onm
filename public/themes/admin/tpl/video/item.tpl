@@ -114,7 +114,14 @@
             {include file="ui/component/content-editor/accordion/scheduling.tpl"}
           </div>
         </div>
+
         <div class="grid simple" ng-if="type == 'script' || type == 'external'">
+          <div class="grid-body no-padding">
+            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Cover image{/t}" field="cover"}
+          </div>
+        </div>
+
+        {* <div class="grid simple" ng-if="type == 'script' || type == 'external'">
           <div class="grid-title">
             <h4>{t}Image assigned{/t}</h4>
           </div>
@@ -148,7 +155,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> *}
       </div>
       <div class="col-md-8 col-md-pull-4">
         <div class="grid simple">

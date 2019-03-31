@@ -37,6 +37,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       tags: [],
       external_link: '',
       video_url: '',
+      information: {}
     };
 
     /**
@@ -118,9 +119,25 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
       $scope.configure(data.extra);
       $scope.localize($scope.data.item, 'item', true);
+
+      var cover = data.extra.related_contents.filter(function(el) {
+        return el.pk_photo == $scope.item.information.thumbnail;
+      }).shift();
+
+      if (cover) {
+        $scope.cover = cover;
+      }
     };
 
     $scope.setType = function(type) {
+      if (type === 'external' || type === 'internal') {
+        $scope.data.item.author_name = type;
+      }
+
+      if (!$scope.item.type) {
+        $scope.item.type = 'html5';
+      }
+
       $scope.type = type;
     };
 
@@ -166,5 +183,19 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     $scope.trustSrc = function(src) {
       return $sce.trustAsResourceUrl(src);
     };
+
+    /**
+     * Updates scope when photo1 changes.
+     *
+     * @param array nv The new values.
+     * @param array ov The old values.
+     */
+    $scope.$watch('cover', function(nv, ov) {
+      if (angular.isObject(nv)) {
+        $scope.item.information.thumbnail = nv.pk_photo;
+      } else {
+        $scope.item.information.thumbnail = null;
+      }
+    }, true);
   }
 ]);
