@@ -36,6 +36,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       related_contents: [],
       tags: [],
       external_link: '',
+      video_url: '',
     };
 
     /**
@@ -102,7 +103,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         type = 'external';
         var info = $scope.data.item.information.source;
 
-        $scope.data.item.type = info.mp4 || info.webm || info.ogg ? 'html5' : 'flv';
+        $scope.data.item.type = info.flv ? 'flv' : 'html5';
         break;
 
       default:
