@@ -36,8 +36,8 @@
 <div id="video-information">
   <div class="listing-no-contents" ng-show="flags.http.fetch_video_info">
     <div class="text-center p-b-15 p-t-15">
-      <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
-      <h3 class="spinner-text">{t}Loading{/t}...</h3>
+      <i class="fa fa-3x fa-circle-o-notch fa-spin text-info"></i>
+      <h5 class="spinner-text">{t}Loading video information{/t}...</h5>
     </div>
   </div>
   <div class="ng-cloak" ng-show="item.information.service && !flags.http.fetch_video_info">

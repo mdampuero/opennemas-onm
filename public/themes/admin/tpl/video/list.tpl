@@ -8,10 +8,12 @@
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <a class="no-padding" href="{url name=backend_videos_list}" title="{t}Go back to list{/t}">
-                <i class="fa fa-film"></i>
-                {t}Videos{/t}
-              </a>
+              <i class="fa fa-film m-r-10"></i>
+            </h4>
+          </li>
+          <li class="quicklinks">
+            <h4>
+              {t}Videos{/t}
             </h4>
           </li>
           <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
@@ -31,12 +33,15 @@
                 <span class="fa fa-cog fa-lg"></span>
               </a>
             </li>
+            <li class="quicklinks hidden-xs">
+              <span class="h-seperate"></span>
+            </li>
             {/acl}
 
             {acl isAllowed="VIDEO_CREATE"}
             <li class="quicklinks">
               <a class="btn btn-success text-uppercase" href="{url name=backend_videos_create}" accesskey="N" tabindex="1" id="create-button">
-                <span class="fa fa-plus"></span>
+                <span class="fa fa-plus m-r-5"></span>
                 {t}Create{/t}
               </a>
             </li>

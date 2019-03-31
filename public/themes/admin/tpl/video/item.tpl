@@ -8,7 +8,7 @@
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-quote-right"></i>
+              <i class="fa fa-film m-r-10"></i>
             </h4>
           </li>
           <li class="quicklinks">
@@ -17,6 +17,14 @@
                   {t}Videos{/t}
               </a>
             </h4>
+          </li>
+          <li class="quicklinks hidden-xs m-l-5 m-r-5">
+            <h4>
+              <i class="fa fa-angle-right"></i>
+            </h4>
+          </li>
+          <li class="quicklinks hidden-xs">
+            <h4>{if empty($id)}{t}Create{/t}{else}{t}Edit{/t}{/if}</h4>
           </li>
           <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
             <h4>
@@ -31,7 +39,7 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <button class="btn btn-success text-uppercase" ng-click="save();" data-text="{t}Saving{/t}..." type="submit">
-                <i class="fa fa-save"></i>
+                <i class="fa fa-save m-r-5"></i>
                 <span class="text">{t}Save{/t}</span>
               </button>
             </li>
