@@ -22,8 +22,6 @@
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
-        $scope.mode = 'list';
-
         /**
          * The criteria to search.
          *
@@ -69,17 +67,7 @@
           } });
 
           $scope.list();
-        };
-
-        /**
-         * @function setMode
-         * @memberOf VideoListCtrl
-         *
-         * @description
-         *   Sets the listing mode.
-         */
-        $scope.setMode = function(mode) {
-          $scope.mode = mode === 'list' ? 'list' : 'grid';
+          $scope.setMode('grid');
         };
 
         /**
@@ -88,6 +76,65 @@
         $scope.parseList = function(data) {
           $scope.configure(data.extra);
           $scope.localize($scope.data.items, 'items');
+        };
+
+        /**
+         * @function select
+         * @memberOf VideoListCtrl
+         *
+         * @description
+         *   Adds and removes the item from the selected array.
+         */
+        $scope.select = function(item) {
+          if ($scope.selected.items.indexOf(item.id) < 0) {
+            $scope.selected.items.push(item.id);
+          } else {
+            $scope.selected.items = $scope.selected.items.filter(function(el) {
+              return el != item.id;
+            });
+          }
+        };
+
+        /**
+         * Changes the list mode.
+         *
+         * @param {String} mode The new list mode.
+         */
+        $scope.setMode = function(mode) {
+          $scope.mode = mode;
+
+          if (mode !== 'grid') {
+            return;
+          }
+
+          var maxHeight = $(window).height() - $('.header').height() -
+            $('.actions-navbar').height();
+          var maxWidth  = $(window).width() - $('.sidebar').width();
+          var padding   = 15;
+
+          if ($('.content-wrapper').length > 0) {
+            maxWidth -= parseInt($('.content-wrapper').css('padding-right'));
+          }
+
+          var height = $('.infinite-col').width() + padding;
+          var width = $('.infinite-col').width() + padding;
+
+          var rows = Math.ceil(maxHeight / height);
+          var cols = Math.floor(maxWidth / width);
+
+          if (rows === 0) {
+            rows = 1;
+          }
+
+          if (cols === 0) {
+            cols = 1;
+          }
+
+          if ($scope.criteria.epp !== rows * cols) {
+            $scope.items = [];
+          }
+
+          $scope.criteria.epp = rows * cols;
         };
       }
     ]);

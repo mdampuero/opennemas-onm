@@ -77,6 +77,14 @@
             }
           });
         };
+
+        $scope.scroll = function() {
+          if ($scope.total === $scope.items.length) {
+            return;
+          }
+
+          $scope.criteria.page++;
+        };
       }
     ]);
 })();
