@@ -388,6 +388,8 @@ class FrontendController extends Controller
 
             $params['x-tags'][] = $item->id;
 
+            $params[$item->content_type_name] = $item;
+
             $params['content']     = $item;
             $params['contentId']   = $item->id;
             $params['o_content']   = $item;

@@ -91,7 +91,7 @@ class VideoController extends FrontendController
         // Fetch video settings
         $settings = $this->get('orm.manager')->getDataSet('Settings')
             ->get('video_settings');
-        $epp = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+        $epp      = $this->get('orm.manager')->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
 
         $epp = $settings['total_front_more'] ?? $epp;
