@@ -16,15 +16,6 @@ frontend_video_frontpage_with_page:
         l10n: true
 
 # Route to redirect to frontend_video_frontpage and to remove in the future
-frontend_video_page_frontpage_category:
-    path: /video/{category_name}/page/{page}
-    defaults: { _controller: FrontendBundle:Video:list, page: 1 }
-    requirements:
-        category_name: '[^/]+'
-        page: '([0-9]+)?'
-    options:
-        l10n: true
-
 # Route to redirect to frontend_video_frontpage and to remove in the future
 frontend_video_frontpage_category:
     path: /video/{category_name}/{page}
