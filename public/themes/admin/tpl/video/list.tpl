@@ -113,12 +113,12 @@
       </div>
     </div>
   </div>
-  <div class="page-navbar filters-navbar ng-cloak">
+  <div class="page-navbar filters-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="setMode('list')" ng-if="mode === 'grid'" uib-tooltip="{t}List{/t}" tooltip-placement="right">
+            <button class="btn btn-link ng-cloak" ng-click="setMode('list')" ng-if="mode === 'grid'" uib-tooltip="{t}List{/t}" tooltip-placement="right">
               <i class="fa fa-lg fa-list"></i>
             </button>
             <button class="btn btn-link" ng-click="setMode('grid')" ng-if="mode === 'list'" uib-tooltip="{t}Mosaic{/t}" tooltip-placement="right">
@@ -134,7 +134,7 @@
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks hidden-xs">
+          <li class="quicklinks hidden-xs ng-cloak">
           {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
           </li>
           <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|clear_json}">
