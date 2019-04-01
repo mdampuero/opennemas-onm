@@ -37,7 +37,7 @@
   <label class="form-label">{t}Preview{/t}</label>
   <div class="controls">
     <div class="thumbnail inline" style="line-height: 0;">
-      <video ng-if="item.type === 'html5'" style="margin: 0 auto; width:100%">
+      <video ng-if="item.type === 'html5'" style="margin: 0 auto; width:100%" controls>
         <source ng-if="item.information.source.webm" ng-src="[% trustSrc(item.information.source.webm) %]" type="video/webm">
         <source ng-if="item.information.source.ogg" ng-src="[% trustSrc(item.information.source.ogg) %]" type="video/ogg">
         <source ng-if="item.information.source.mp4" ng-src="[% trustSrc(item.information.source.mp4) %]" type="video/mp4">
