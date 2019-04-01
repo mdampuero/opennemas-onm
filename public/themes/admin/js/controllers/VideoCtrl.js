@@ -113,6 +113,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         }
         break;
       }
+
       data.item.categories = [ data.item.category ];
 
       $scope.setType(type);
@@ -120,6 +121,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       $scope.configure(data.extra);
       $scope.localize($scope.data.item, 'item', true);
 
+      // Assign the cover image
       var cover = data.extra.related_contents.filter(function(el) {
         return el.pk_photo == $scope.item.information.thumbnail;
       }).shift();
@@ -185,7 +187,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     };
 
     /**
-     * Updates scope when photo1 changes.
+     * Updates scope when cover changes.
      *
      * @param array nv The new values.
      * @param array ov The old values.
@@ -195,6 +197,18 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         $scope.item.information.thumbnail = nv.pk_photo;
       } else {
         $scope.item.information.thumbnail = null;
+      }
+    }, true);
+
+    /**
+     * Updates scope when categories changes.
+     *
+     * @param array nv The new values.
+     * @param array ov The old values.
+     */
+    $scope.$watch('item.categories', function(nv, ov) {
+      if (nv != ov) {
+        $scope.item.category = $scope.item.categories[0];
       }
     }, true);
   }
