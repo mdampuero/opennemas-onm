@@ -209,7 +209,7 @@ class AdvertisementRenderer
     public function renderInlineDFPSlot($ad)
     {
         return $this->tpl->fetch('advertisement/helpers/inline/dfp.slot.tpl', [
-            'id' => $ad->pk_advertisement
+            'id' => $ad->id
         ]);
     }
 
@@ -241,11 +241,10 @@ class AdvertisementRenderer
             'mediaUrl' => $img->path_img . $img->path_file,
             'src'      => $this->instance->getBaseUrl() . '/media/' . INSTANCE_UNIQUE_NAME
                 . '/images' . $img->path_file . $img->name,
-            'url'      => $this->instance->getBaseUrl()
-                . $this->container->get('router')->generate(
-                    'frontend_ad_redirect',
-                    [ 'id' => $publicId ]
-                ),
+            'url'      => $this->container->get('router')->generate(
+                'frontend_ad_redirect',
+                [ 'id' => $publicId ]
+            ),
             'width'    => $img->width
         ]);
     }
@@ -299,9 +298,7 @@ class AdvertisementRenderer
     public function renderInlineReviveSlot($ad)
     {
         $iframe = in_array($ad->positions, [ 50, 150, 250, 350, 450, 550 ]);
-        $url    = $this->router->generate('frontend_ad_show', [
-            'id' => $ad->pk_content
-        ]);
+        $url    = $this->router->generate('frontend_ad_show', [ 'id' => $ad->id ]);
 
         return $this->tpl
             ->fetch('advertisement/helpers/inline/revive.slot.tpl', [
@@ -452,7 +449,7 @@ class AdvertisementRenderer
         });
 
         if (empty($sizes)) {
-            $size = $sizes;
+            return '';
         }
 
         $size = array_shift($sizes);
@@ -495,7 +492,7 @@ class AdvertisementRenderer
         // Style for floating advertisements in frontpage manager
         if (array_key_exists('floating', $params) && $params['floating'] == true) {
             $type = 37;
-            $id  .= ' data-id="' . $ad->pk_content . '" ';
+            $id  .= ' data-id="' . $ad->pk_content . '"';
         }
 
         return sprintf($html, $id, $type, $width);
@@ -552,8 +549,7 @@ class AdvertisementRenderer
             'url'       => $this->ds->get('revive_ad_server')['url']
         ];
 
-        return $this->container->get('core.template.admin')
-            ->fetch('advertisement/helpers/safeframe/openx.tpl', $params);
+        return $this->tpl->fetch('advertisement/helpers/safeframe/openx.tpl', $params);
     }
 
     /**
@@ -612,7 +608,7 @@ class AdvertisementRenderer
     protected function renderSafeFrameFlash($ad, $img)
     {
         $publicId = date('YmdHis', strtotime($ad->created)) .
-            sprintf('%06d', $ad->pk_advertisement);
+            sprintf('%06d', $ad->id);
 
         $params = [
             'width'  => $img->width,
@@ -624,8 +620,7 @@ class AdvertisementRenderer
             ])
         ];
 
-        return $this->container->get('core.template.admin')
-            ->fetch('advertisement/helpers/safeframe/flash.tpl', $params);
+        return $this->tpl->fetch('advertisement/helpers/safeframe/flash.tpl', $params);
     }
 
     /**
@@ -656,13 +651,13 @@ class AdvertisementRenderer
     protected function renderSafeFrameImage($ad, $img)
     {
         $publicId = date('YmdHis', strtotime($ad->created)) .
-            sprintf('%06d', $ad->pk_advertisement);
+            sprintf('%06d', $ad->id);
 
         $params = [
             'category' => $img->category_name,
             'width'    => $img->width,
             'height'   => $img->height,
-            'src'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
+            'src'      => $this->instance->getBaseUrl() . '/media/' . INSTANCE_UNIQUE_NAME
                 . '/images' . $img->path_file . $img->name,
             'url'      => $this->container->get('router')->generate(
                 'frontend_ad_redirect',
@@ -670,8 +665,7 @@ class AdvertisementRenderer
             ),
         ];
 
-        return $this->container->get('core.template.admin')
-            ->fetch('advertisement/helpers/safeframe/image.tpl', $params);
+        return $this->tpl->fetch('advertisement/helpers/safeframe/image.tpl', $params);
     }
 
     /**
