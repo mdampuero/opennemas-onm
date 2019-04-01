@@ -28,7 +28,7 @@
           content_type_name: 'event',
           epp: 10,
           in_litter: 0,
-          orderBy: { starttime:  'desc' },
+          orderBy: { created: 'desc' },
           page: 1
         };
 
@@ -58,8 +58,6 @@
         $scope.init = function() {
           $scope.columns.key     = 'event-columns';
           $scope.backup.criteria = $scope.criteria;
-
-          $scope.criteria.orderBy = { created: 'asc' };
 
           oqlEncoder.configure({ placeholder: {
             title: '[key] ~ "%[value]%"'
