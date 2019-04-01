@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
@@ -37,7 +37,7 @@
         $scope.mode = 'list';
 
         // Initialize the super class and extend it.
-        $.extend(this, $controller('OpinionListCtrl', { $scope: $scope }));
+        $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
 
         /**
          * @function _import
@@ -266,5 +266,6 @@
             }
           }
         }, true);
-    }]);
+      }
+    ]);
 })();

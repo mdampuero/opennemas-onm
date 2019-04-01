@@ -6,13 +6,14 @@
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
+          <li class="quicklinks">
+            <h4>
+              <i class="fa fa-quote-right m-r-10"></i>
+            </h4>
+          </li>
+          <li class="quicklinks">
             <li class="quicklinks">
-              <h4>
-                <a class="no-padding" href="{url name=backend_opinion_list}">
-                  <i class="fa fa-quote-right"></i>
-                    {t}Opinions{/t}
-                </a>
-              </h4>
+              <h4>{t}Opinions{/t}</h4>
             </li>
             <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
               <h4>
@@ -85,12 +86,12 @@
               {/acl}
               {acl isAllowed="OPINION_HOME"}
                 <li class="quicklinks hidden-xs">
-                  <a class="btn btn-link" href="#" ng-click="patchSelected('in_home', 0)" uib-tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
+                  <a class="btn btn-link" href="#" ng-click="patchSelected('in_home', 1)" uib-tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
                     <i class="fa fa-home fa-lg"></i>
                   </a>
                 </li>
                 <li class="quicklinks hidden-xs">
-                  <a class="btn btn-link" href="#" ng-click="patchSelected('in_home', 1)" uib-tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
+                  <a class="btn btn-link" href="#" ng-click="patchSelected('in_home', 0)" uib-tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
                     <i class="fa fa-home fa-lg"></i>
                     <i class="fa fa-times fa-sub text-danger"></i>
                   </a>
@@ -160,7 +161,7 @@
           <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
         </div>
       </div>
-      <div class="grid simple ng-cloak" ng-if="!loading && items.length > 0">
+      <div class="grid simple ng-cloak" ng-if="!flags.http.loading && items.length > 0">
         <div class="grid-body no-padding">
           <div class="table-wrapper">
             <table class="table table-hover no-margin">

@@ -68,7 +68,7 @@ class Opinion extends Content
     protected $summary = null;
 
     /**
-     * The 
+     * The
      *
      * @var int
      */
@@ -147,8 +147,6 @@ class Opinion extends Content
      */
     public function create($data)
     {
-        $data['position'] = 1;
-
         parent::create($data);
 
         $this->pk_opinion = $this->id;
@@ -160,30 +158,20 @@ class Opinion extends Content
                 'type_opinion'  => 0,
             ]);
 
-            if (array_key_exists('summary', $data) && !empty($data['summary'])) {
-                parent::setMetadata('summary', $data['summary']);
-            }
+            $metaKeys = ['summary', 'img1', 'img2', 'img1_footer', 'img2_footer'];
 
-            if (array_key_exists('img1', $data) && !empty($data['img1'])) {
-                parent::setMetadata('img1', $data['img1']);
-            }
-
-            if (array_key_exists('img2', $data) && !empty($data['img2'])) {
-                parent::setMetadata('img2', $data['img2']);
-            }
-
-            if (array_key_exists('img1_footer', $data) && !empty($data['img1_footer'])) {
-                parent::setMetadata('img1_footer', $data['img1_footer']);
-            }
-
-            if (array_key_exists('img2_footer', $data) && !empty($data['img2_footer'])) {
-                parent::setMetadata('img2_footer', $data['img2_footer']);
+            foreach ($metaKeys as $key) {
+                if (array_key_exists($key, $data) && !empty($data[$key])) {
+                    parent::setMetadata($key, $data[$key]);
+                } else {
+                    parent::removeMetadata($key);
+                }
             }
 
             $this->saveMetadataFields($data, Opinion::EXTRA_INFO_TYPE);
 
             // Clear caches
-            dispatchEventWithParams('opinion.create', [ 'authorId' => $data['fk_author'] ]);
+            dispatchEventWithParams('opinion.create', [ 'authorId' => $data['fk_author'] ?? null]);
 
             return $this->id;
         } catch (\Exception $e) {
@@ -208,7 +196,7 @@ class Opinion extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT contents.*, opinions.*, users.name, users.bio, users.url, users.avatar_img_id '
+                'SELECT contents.*, opinions.pk_opinion, opinions.type_opinion, users.name, users.bio, users.url, users.avatar_img_id '
                 . 'FROM contents '
                 . 'LEFT JOIN opinions ON pk_content = pk_opinion '
                 . 'LEFT JOIN users ON opinions.fk_author = users.id WHERE pk_content=?',
@@ -252,8 +240,8 @@ class Opinion extends Content
         try {
             getService('dbal_connection')->update('opinions', [
                 'fk_author'     => (int) $data['fk_author'],
-                'fk_author_img' => (int) $data['fk_author_img'],
-            ], [ 'pk_opinion' => (int) $data['id'] ]);
+                'type_opinion'  => 0,
+            ], [ 'pk_opinion'    => $data['pk_opinion'] ]);
 
             $metaKeys = ['summary', 'img1', 'img2', 'img1_footer', 'img2_footer'];
 
@@ -266,6 +254,9 @@ class Opinion extends Content
             }
 
             $this->saveMetadataFields($data, Opinion::EXTRA_INFO_TYPE);
+
+            // Clear caches
+            dispatchEventWithParams('opinion.update');
 
             return $this;
         } catch (\Exception $e) {
