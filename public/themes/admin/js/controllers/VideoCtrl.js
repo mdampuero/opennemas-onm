@@ -93,6 +93,9 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         });
       }
 
+      $scope.configure(data.extra);
+      $scope.localize($scope.data.item, 'item', true);
+
       var type = '';
 
       switch ($scope.data.item.author_name) {
@@ -118,9 +121,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
       $scope.setType(type);
 
-      $scope.configure(data.extra);
-      $scope.localize($scope.data.item, 'item', true);
-
       // Assign the cover image
       var cover = data.extra.related_contents.filter(function(el) {
         return el.pk_photo == $scope.item.information.thumbnail;
@@ -132,7 +132,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     };
 
     $scope.setType = function(type) {
-      if (type === 'external' || type === 'internal') {
+      if (type === 'external' || type === 'script') {
         $scope.data.item.author_name = type;
       }
 
@@ -193,10 +193,14 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @param array ov The old values.
      */
     $scope.$watch('cover', function(nv, ov) {
+      if (!angular.isObject($scope.item.information)) {
+        $scope.item.information = {};
+      }
+
       if (angular.isObject(nv)) {
-        $scope.item.information.thumbnail = nv.pk_photo;
+        $scope.item.information['thumbnail'] = nv.pk_photo;
       } else {
-        $scope.item.information.thumbnail = null;
+        $scope.item.information.thumbnail = {};
       }
     }, true);
 

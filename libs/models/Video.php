@@ -92,8 +92,8 @@ class Video extends Content
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
-                . 'LEFT JOIN videos ON pk_content = pk_video WHERE pk_content = ?',
-                [ $id ]
+                    . 'LEFT JOIN videos ON pk_content = pk_video WHERE pk_content = ?',
+                [$id]
             );
 
             if (!$rs) {
@@ -140,7 +140,7 @@ class Video extends Content
                 'pk_video'    => $this->id,
                 'video_url'   => $data['video_url'],
                 'information' => array_key_exists('information', $data) ?
-                serialize($data['information']) : null,
+                    serialize($data['information']) : null,
                 'author_name' => $data['author_name'],
             ]);
 
@@ -171,7 +171,7 @@ class Video extends Content
                     'information' => serialize($data['information']),
                     'author_name' => $data['author_name'],
                 ],
-                [ 'pk_video' => (int) $data['id'] ]
+                ['pk_video' => (int) $data['id']]
             );
 
             $this->load($data);
@@ -202,7 +202,7 @@ class Video extends Content
         try {
             $rs = getService('dbal_connection')->delete(
                 "videos",
-                [ 'pk_video' => $id ]
+                ['pk_video' => $id]
             );
 
             if (!$rs) {
