@@ -121,7 +121,14 @@ class VideoController extends FrontendController
                 'epp'         => $epp,
                 'page'        => $page,
                 'total'       => $response['total'],
-                'route'       => 'frontend_video_frontpage'
+                'route'       => [
+                    'name'   => (!$category)
+                        ? 'frontend_video_frontpage'
+                        : 'frontend_video_frontpage_category',
+                    'params' => (!$category)
+                        ? []
+                        : ['category_name' => $category->name],
+                ],
             ]),
         ]);
     }
@@ -164,5 +171,20 @@ class VideoController extends FrontendController
             'tags' => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($item->tag_ids)['items']
         ]);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * This func overrides the parent function just to
+     * propertly generate urls to category frontpages
+     **/
+    public function getRoute($action, $params = [])
+    {
+        if ($action == 'list' && array_key_exists('category_name', $params)) {
+            return 'frontend_video_frontpage_category';
+        }
+
+        return parent::getRoute($action, $params);
     }
 }
