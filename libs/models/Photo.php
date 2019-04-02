@@ -152,7 +152,7 @@ class Photo extends Content
                 return false;
             }
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
 
