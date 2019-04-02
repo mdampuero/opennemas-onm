@@ -130,7 +130,12 @@ class Video extends Content
      */
     public function create($data)
     {
+        $conn = getService('dbal_connection');
+
         try {
+            // Start transaction
+            $conn->beginTransaction();
+
             parent::create($data);
 
             $this->pk_video   = $this->id;
@@ -144,8 +149,12 @@ class Video extends Content
                 'author_name' => $data['author_name'],
             ]);
 
+            $conn->commit();
+
             return $this->id;
         } catch (\Exception $e) {
+            $conn->rollback();
+
             $logger = getService('error.log');
             $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             return false;
@@ -161,7 +170,12 @@ class Video extends Content
      */
     public function update($data)
     {
+        $conn = getService('dbal_connection');
+
         try {
+            // Start transaction
+            $conn->beginTransaction();
+
             parent::update($data);
 
             getService('dbal_connection')->update(
@@ -174,10 +188,14 @@ class Video extends Content
                 ['pk_video' => (int) $data['id']]
             );
 
+            $conn->commit();
+
             $this->load($data);
 
             return $this;
         } catch (\Exception $e) {
+            $conn->rollback();
+
             $logger = getService('error.log');
             $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
             return false;
