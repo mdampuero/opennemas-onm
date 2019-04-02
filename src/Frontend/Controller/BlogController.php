@@ -168,6 +168,28 @@ class BlogController extends FrontendController
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getParameters($params, $item = null)
+    {
+        $locale = $this->get('core.locale')->getRequestLocale();
+        $params = parent::getParameters($params, $item);
+
+        if (!empty($item)) {
+            $params[$item->content_type_name] = $item;
+
+            $params['tags'] = $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($item->tag_ids, $locale)['items'];
+
+            if (array_key_exists('bodyLink', $item->params)) {
+                $params['o_external_link'] = $item->params['bodyLink'];
+            }
+        }
+
+        return $params;
+    }
+
+    /**
      * Renders the blog opinion frontpage.
      *
      * @param  Request  $request The request object.
@@ -177,6 +199,9 @@ class BlogController extends FrontendController
     {
         $page = array_key_exists('page', $params) ? $params['page'] : 1;
 
+        $epp = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+            ->get('items_per_page', 10);
+
         $authors = $this->get('api.service.author')
             ->getList('is_blog = 1 order by name asc');
 
@@ -184,11 +209,6 @@ class BlogController extends FrontendController
             ->set($authors['items'])
             ->filter('mapify', [ 'key' => 'id' ])
             ->get();
-
-        $epp = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_in_blog', 10);
-        $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
         $order   = [ 'starttime' => 'DESC' ];
         $date    = date('Y-m-d H:i:s');
@@ -220,6 +240,7 @@ class BlogController extends FrontendController
             'directional' => true,
             'epp'         => $epp,
             'total'       => $countItems,
+            'page'        => $page,
             'route'       => 'frontend_blog_frontpage',
         ]);
 
@@ -295,7 +316,6 @@ class BlogController extends FrontendController
         $epp = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
-        $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
         $author->slug  = $author->username;
         $author->photo = $this->get('entity_repository')->find('Photo', $author->avatar_img_id);

@@ -3,9 +3,9 @@
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.schedule }"></i>
 
   <span class="scheduling ng-cloak pull-right text-uppercase m-r-10 m-t-2" {*ng-show="!expanded.schedule"*}>
-    <span class="badge badge-primary text-bold" ng-show="getContentScheduling(item) == 1">{t}Planned{/t}<span class="hidden-lg visible-xlg pull-right">: [% item.starttime %]</span></span>
-    <span class="badge badge-danger text-bold" ng-show="getContentScheduling(item) == -1">{t}Dued{/t}<span class="hidden-lg visible-xlg pull-right">: [% item.endtime %]</span></span>
-    <span class="badge badge-default text-bold" ng-show="getContentScheduling(item) == 0">{t}In time{/t}</span>
+    <span class="badge badge-primary text-bold" ng-show="getContentScheduling(item) == 1">{t}Planned{/t}<strong class="hidden-lg visible-xlg pull-right">: [% item.starttime %]</strong></span>
+    <span class="badge badge-danger text-bold" ng-show="getContentScheduling(item) == -1">{t}Dued{/t}<strong class="hidden-lg visible-xlg pull-right">: [% item.endtime %]</strong></span>
+    <span class="badge badge-default text-bold" ng-show="getContentScheduling(item) == 0"><strong>{t}In time{/t}</strong></span>
   </span>
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.schedule }">

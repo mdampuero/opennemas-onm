@@ -167,11 +167,6 @@ class OpinionController extends FrontendController
         $epp = $this->get('orm.manager')->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
 
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')->get('opinion_settings', [
-                'total_opinions'  => $epp
-            ]);
-
         $filters = [
             'content_status' => [['value' => 1]],
             'in_litter'      => [['value' => 0]],
@@ -206,8 +201,6 @@ class OpinionController extends FrontendController
                     ] ]
             ]);
         }
-
-        $epp = $settings['total_opinions'] ?? $epp;
 
         $opinions      = $em->findBy($filters, $order, $epp, $page);
         $countOpinions = $em->countBy($filters);

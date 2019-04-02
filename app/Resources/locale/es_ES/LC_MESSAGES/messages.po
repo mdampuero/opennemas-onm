@@ -1,4 +1,3 @@
-# Galician translations for PACKAGE package.
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # ONM Developers <developers@opennemas.com>, 2017.
@@ -7,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 16:57+0000\n"
-"PO-Revision-Date: 2019-03-29 18:01+0100\n"
+"POT-Creation-Date: 2019-04-02 15:35+0000\n"
+"PO-Revision-Date: 2019-04-02 17:36+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -484,30 +483,6 @@ msgid ""
 msgstr ""
 "La configuración de Boletín de noticias no está completa. Vete a las "
 "preferencias del módulo y completa el formulario."
-
-#, php-format
-msgid "Unable to find the opinion with the id \"%d\""
-msgstr "No se pudo encontrar la opinión con el identificador «%d»"
-
-msgid ""
-"You can't modify this opinion because you don't have enought privileges."
-msgstr ""
-"No tienes permisos suficientes para modificar este artículo de opinión."
-
-msgid "Opinion successfully created."
-msgstr "Artículo de opinión creada correctamente."
-
-msgid "Unable to create the new opinion."
-msgstr "No se pudo crear el nuevo artículo de opinión."
-
-msgid "Opinion data sent not valid."
-msgstr "Los datos enviados del artículo de opinión no son válidos."
-
-msgid "Opinion successfully updated."
-msgstr "Artículo de opinión actualizado correctamente."
-
-msgid "Unable to update the opinion."
-msgstr "No se pudo actualizar el artículo de opinión."
 
 msgid ""
 "Unable to find the password reset request. Please check the url we sent you "
@@ -4824,32 +4799,6 @@ msgstr "Comentado en"
 msgid "Sidebars"
 msgstr "Barras laterales"
 
-msgid "Opinion frontpage"
-msgstr "Portada de opinión"
-
-msgid "Opinions in Opinion frontpage"
-msgstr "Opiniones en la portada de opinión"
-
-msgid "How many opinions opinions will be shown in the opinion frontpage."
-msgstr "Número de opiniones que se mostrarán en la portada de opinión."
-
-msgid "Blogs frontpage"
-msgstr "Portada de blogs"
-
-msgid "Order blog's frontpage by"
-msgstr "Ordenar portada de blogs según"
-
-msgid "Select if order blogs's frontpages by created date or bloggers name."
-msgstr ""
-"Elige si quieres ordenar la portada de blogs por fecha de creación o por "
-"nombre del autor."
-
-msgid "Created Date"
-msgstr "Fecha de creación"
-
-msgid "Blogger"
-msgstr "Autor del blog"
-
 msgid "Images assigned"
 msgstr "Imágenes asignadas"
 
@@ -4904,62 +4853,20 @@ msgstr "En portada"
 msgid "Drop from home"
 msgstr "Sacar de portada"
 
-msgid "Unable to find any opinion that matches your search."
-msgstr "No se pudieron encontrar opiniones que coincidan con tu búsqueda."
-
 msgid "Favorite"
 msgstr "Favorito"
+
+msgid "to"
+msgstr "hasta"
 
 msgid "There is no opinions yet."
 msgstr "No hay ninguna opinión todavía."
 
-msgid "Editing opinion"
-msgstr "Editando opinión"
+msgid "Frontpage image"
+msgstr "Imagen de portada"
 
-msgid "Creating opinion"
-msgstr "Creando opinión"
-
-msgid "Go back"
-msgstr "Atrás"
-
-msgid "Attributes"
-msgstr "Atributos"
-
-msgid "Allow comments"
-msgstr "Permitir comentarios"
-
-msgid "In homepage"
-msgstr "En portada principal"
-
-msgid "-- Select opinion type --"
-msgstr "-- Tipo de opinión --"
-
-msgid "Opinion from author"
-msgstr "Opinión de autor"
-
-msgid "Opinion from editorial"
-msgstr "Opinión de editorial"
-
-msgid "Director's letter"
-msgstr "Carta del director"
-
-msgid "Select an author..."
-msgstr "Seleccione un autor…"
-
-msgid "Publication start date"
-msgstr "Fecha de inicio de publicación"
-
-msgid "Server hour:"
-msgstr "Hora del sistema:"
-
-msgid "Publication end date"
-msgstr "Fecha de final de publicación"
-
-msgid "Subscription"
-msgstr "Suscripción"
-
-msgid "Only available for registered users"
-msgstr "Solo disponible para usuarios registrados"
+msgid "Inner image"
+msgstr "Imagen de interior"
 
 msgid "%1 not activated - Opennemas"
 msgstr "'%1' no activado - Opennemas"
@@ -5049,7 +4956,7 @@ msgid "New tag"
 msgstr "Nueva etiqueta"
 
 msgid "The form has some missing or invalid fields, please review it."
-msgstr ""
+msgstr "Revise el formulario ya que tiene campos sin completar o inválidos."
 
 msgid "Instance information"
 msgstr "Información de la instancia"
@@ -5211,11 +5118,23 @@ msgstr "Quitar respuesta"
 msgid "Add new answer"
 msgstr "Añadir nueva respuesta"
 
+msgid "Attributes"
+msgstr "Atributos"
+
+msgid "Allow comments"
+msgstr "Permitir comentarios"
+
 msgid "Publication closed date"
 msgstr "Fecha de final de publicación"
 
 msgid "Select a category"
 msgstr "Seleccione una categoría"
+
+msgid "Subscription"
+msgstr "Suscripción"
+
+msgid "Only available for registered users"
+msgstr "Solo disponible para usuarios registrados"
 
 msgid "Number of elements in widget home"
 msgstr "Número de elementos en el widget de portada"
@@ -5626,9 +5545,6 @@ msgstr "Traducir a %1"
 msgid "No available articles."
 msgstr "No hay artículos disponibles."
 
-msgid "to"
-msgstr "hasta"
-
 msgid "Article has external link"
 msgstr "Artículo con enlace externo"
 
@@ -5644,6 +5560,9 @@ msgstr "Editando artículo"
 msgid "Draft saved at "
 msgstr "Borrador guardado a las "
 
+msgid "Go back"
+msgstr "Atrás"
+
 msgid "Original"
 msgstr "Original"
 
@@ -5655,6 +5574,15 @@ msgstr "Firma"
 
 msgid "Suggested for frontpage"
 msgstr "Sugerir en portada principal"
+
+msgid "Publication start date"
+msgstr "Fecha de inicio de publicación"
+
+msgid "Server hour:"
+msgstr "Hora del sistema:"
+
+msgid "Publication end date"
+msgstr "Fecha de final de publicación"
 
 msgid "There are no enabled <a href=\"%1\">subscriptions</a>"
 msgstr "No hay <a href=\"%1\">suscripciones</a> disponibles"
@@ -6326,6 +6254,9 @@ msgstr "Editando vídeo"
 
 msgid "Go Back"
 msgstr "Atrás"
+
+msgid "Select an author..."
+msgstr "Seleccione un autor…"
 
 msgid "Image assigned"
 msgstr "Imagen asignada"
@@ -7386,6 +7317,15 @@ msgstr ""
 "Este contenido sólo estará disponible en el rango de tiempo especificado "
 "arriba."
 
+msgid "No author"
+msgstr "Sin autor"
+
+msgid "No image assigned"
+msgstr "Imagen no asignada"
+
+msgid "Select an author"
+msgstr "Seleccione un autor"
+
 msgid "Add a tag..."
 msgstr "Añadir una etiqueta..."
 
@@ -8130,6 +8070,9 @@ msgid ""
 msgstr ""
 "Selecciona si quieres ordenar el widget de álbumes por más vistos o por "
 "favorites"
+
+msgid "Created Date"
+msgstr "Fecha de creación"
 
 msgid "Most views"
 msgstr "Más vistos"
@@ -9039,8 +8982,78 @@ msgstr "Usa la barra lateral derecha para explorar la información disponible."
 #~ msgid "Invalid image file"
 #~ msgstr "Fichero de imagen inválido"
 
+#~ msgid "Unable to find the opinion with the id \"%d\""
+#~ msgstr "No se pudo encontrar la opinión con el identificador «%d»"
+
+#~ msgid ""
+#~ "You can't modify this opinion because you don't have enought privileges."
+#~ msgstr ""
+#~ "No tienes permisos suficientes para modificar este artículo de opinión."
+
+#~ msgid "Opinion successfully created."
+#~ msgstr "Artículo de opinión creada correctamente."
+
+#~ msgid "Unable to create the new opinion."
+#~ msgstr "No se pudo crear el nuevo artículo de opinión."
+
+#~ msgid "Opinion data sent not valid."
+#~ msgstr "Los datos enviados del artículo de opinión no son válidos."
+
+#~ msgid "Opinion successfully updated."
+#~ msgstr "Artículo de opinión actualizado correctamente."
+
+#~ msgid "Unable to update the opinion."
+#~ msgstr "No se pudo actualizar el artículo de opinión."
+
 #~ msgid "Open in a new window"
 #~ msgstr "Abrir en una nueva ventana"
+
+#~ msgid "Opinion frontpage"
+#~ msgstr "Portada de opinión"
+
+#~ msgid "Opinions in Opinion frontpage"
+#~ msgstr "Opiniones en la portada de opinión"
+
+#~ msgid "How many opinions opinions will be shown in the opinion frontpage."
+#~ msgstr "Número de opiniones que se mostrarán en la portada de opinión."
+
+#~ msgid "Blogs frontpage"
+#~ msgstr "Portada de blogs"
+
+#~ msgid "Order blog's frontpage by"
+#~ msgstr "Ordenar portada de blogs según"
+
+#~ msgid "Select if order blogs's frontpages by created date or bloggers name."
+#~ msgstr ""
+#~ "Elige si quieres ordenar la portada de blogs por fecha de creación o por "
+#~ "nombre del autor."
+
+#~ msgid "Blogger"
+#~ msgstr "Autor del blog"
+
+#~ msgid "Unable to find any opinion that matches your search."
+#~ msgstr "No se pudieron encontrar opiniones que coincidan con tu búsqueda."
+
+#~ msgid "Editing opinion"
+#~ msgstr "Editando opinión"
+
+#~ msgid "Creating opinion"
+#~ msgstr "Creando opinión"
+
+#~ msgid "In homepage"
+#~ msgstr "En portada principal"
+
+#~ msgid "-- Select opinion type --"
+#~ msgstr "-- Tipo de opinión --"
+
+#~ msgid "Opinion from author"
+#~ msgstr "Opinión de autor"
+
+#~ msgid "Opinion from editorial"
+#~ msgstr "Opinión de editorial"
+
+#~ msgid "Director's letter"
+#~ msgstr "Carta del director"
 
 #~ msgid "HOMEPAGE"
 #~ msgstr "PORTADA"

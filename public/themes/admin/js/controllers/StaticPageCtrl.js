@@ -17,7 +17,7 @@ angular.module('BackendApp.controllers')
       'use strict';
 
       // Initialize the super class and extend it.
-      $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
+      $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
       /**
        * @memberOf StaticPageCtrl
@@ -72,19 +72,6 @@ angular.module('BackendApp.controllers')
        * @type {Boolean}
        */
       $scope.refreshOnUpdate = true;
-
-      /**
-       * @function getItemId
-       * @memberOf StaticPageCtrl
-       *
-       * @description
-       *   Returns the item id.
-       *
-       * @return {Integer} The item id.
-       */
-      $scope.getItemId = function() {
-        return $scope.item.pk_content;
-      };
 
       /**
        * @function parseItem

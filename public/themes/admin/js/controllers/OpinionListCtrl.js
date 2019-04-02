@@ -20,54 +20,61 @@
       '$controller', '$location', '$scope', 'http', 'messenger', 'oqlEncoder',
       function($controller, $location, $scope, http, messenger, oqlEncoder) {
         // Initialize the super class and extend it.
-        $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
+        $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
         /**
-         * Updates the array of contents.
+         * The criteria to search.
          *
-         * @param string route Route name.
+         * @type {Object}
          */
-        $scope.list = function(route) {
-          $scope.loading = 1;
-          $scope.selected = { all: false, contents: [] };
+        $scope.criteria = {
+          content_type_name: 'opinion',
+          epp: 10,
+          in_litter: 0,
+          orderBy: { created: 'desc' },
+          page: 1
+        };
 
-          oqlEncoder.configure({
-            placeholder: {
-              title: 'title ~ "%[value]%"',
-            }
-          });
+        /**
+         * @memberOf SubscriptionListCtrl
+         *
+         * @description
+         *  The list of routes for the controller.
+         *
+         * @type {Object}
+         */
+        $scope.routes = {
+          delete:         'api_v1_backend_opinion_delete',
+          deleteSelected: 'api_v1_backend_opinions_delete',
+          list:           'api_v1_backend_opinions_list',
+          patch:          'api_v1_backend_opinion_patch',
+          patchSelected:  'api_v1_backend_opinions_patch'
+        };
 
-          var oql   = oqlEncoder.getOql($scope.criteria);
-          var route = {
-            name: $scope.route,
-            params:  {
-              contentType: $scope.criteria.content_type_name,
-              oql: oql
-            }
-          };
+        /**
+         * @function init
+         * @memberOf OpinionListCtrl
+         *
+         * @description
+         *   Configures the controller.
+         */
+        $scope.init = function() {
+          $scope.columns.key     = 'opinion-columns';
+          $scope.backup.criteria = $scope.criteria;
 
-          $location.search('oql', oql);
+          oqlEncoder.configure({ placeholder: {
+            title: '[key] ~ "%[value]%"'
+          } });
 
-          http.get(route).then(function(response) {
-            $scope.data     = response.data;
-            $scope.total    = parseInt(response.data.total);
-            $scope.contents = response.data.results;
-            $scope.map      = response.data.map;
+          $scope.list();
+        };
 
-            if (response.data.hasOwnProperty('extra')) {
-              $scope.extra = response.data.extra;
-            }
-
-            // Disable spinner
-            $scope.loading = 0;
-          }, function() {
-            $scope.loading = 0;
-
-            messenger.post({
-              message: 'Error while fetching data from backend',
-              type:    'error'
-            });
-          });
+        /**
+         * @inheritdoc
+         */
+        $scope.parseList = function(data) {
+          $scope.configure(data.extra);
+          $scope.localize($scope.data.items, 'items');
         };
       }
     ]);

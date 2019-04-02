@@ -39,7 +39,7 @@
             {/acl}
               <li class="quicklinks">
                 {acl isAllowed="ARTICLE_CREATE"}
-                <a class="btn btn-primary ng-cloak" href="{url name=admin_article_create}[% config.locale.multilanguage ? '?locale=' + config.locale.selected : '' %]" id="create-button">
+                <a class="btn btn-primary text-uppercase ng-cloak" href="{url name=admin_article_create}[% config.locale.multilanguage ? '?locale=' + config.locale.selected : '' %]" id="create-button">
                   <i class="fa fa-plus"></i>
                   {t}Create{/t}
                 </a>
