@@ -7,6 +7,10 @@ backend_opinion_create:
     path:     /opinions/new
     defaults: { _controller: BackendBundle:Opinion:create }
 
+backend_opinions_content_provider:
+    path:     /opinions/content-provider
+    defaults: { _controller: BackendBundle:Opinion:contentProvider }
+
 backend_opinion_show:
     path:     /opinions/{id}
     defaults: { _controller: BackendBundle:Opinion:show }
@@ -18,7 +22,3 @@ backend_opinions_list:
     defaults: { _controller: BackendBundle:Opinion:list }
     options:
         expose: true
-
-backend_opinions_content_provider:
-    path:     /opinions/content-provider
-    defaults: { _controller: BackendBundle:Opinion:contentProvider }

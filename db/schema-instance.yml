@@ -1502,32 +1502,35 @@ tags:
             options: { unsigned: true, autoincrement: true }
         name:
             type: string
-            options: { length: 60, notnull: true }
-        language_id:
-            type: string
-            options: { length: 5, notnull: true }
+            options: { default: null, length: 60, notnull: true }
         slug:
             type: string
-            options: { length: 60, notnull: true }
+            options: { default: null, length: 60, notnull: true }
+        description:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        locale:
+            type: string
+            options: { default: null, length: 5, notnull: false  }
     index:
         -
-            name: PRIMARY
-            columns: [id]
+            name:    PRIMARY
+            columns: [ id ]
             primary: true
-            unique: true
-            flags: {  }
+            unique:  true
+            flags:   {  }
         -
-            name: language_id
-            columns: [language_id]
+            name:    slug
+            columns: [ slug ]
             primary: false
-            unique: false
-            flags: {  }
+            unique:  false
+            flags:   {  }
         -
-            name: slug
-            columns: [slug]
+            name:    locale
+            columns: [ locale ]
             primary: false
-            unique: false
-            flags: {  }
+            unique:  false
+            flags:   {  }
 url:
     columns:
         id:

@@ -67,191 +67,6 @@ class VideosController extends BackendController
     public function createAction(Request $request)
     {
         return $this->render('video/item.tpl');
-
-        if ('POST' !== $request->getMethod()) {
-            $type = $request->query->filter('type', null, FILTER_SANITIZE_STRING);
-
-            if (empty($type)) {
-                return $this->render('video/selecttype.tpl');
-            }
-
-            return $this->render('video/new.tpl', [
-                'authors'        => $this->getAuthors(),
-                'type'           => $type,
-                'enableComments' => $this->get('core.helper.comment')
-                    ->enableCommentsByDefault(),
-                'locale'         => $this->get('core.locale')
-                    ->getLocale('frontend'),
-                'tags'           => []
-            ]);
-        }
-
-        $requestPost = $request->request;
-        $type        = $requestPost->filter('type', null, FILTER_SANITIZE_STRING);
-        $category    = $requestPost->getDigits('category');
-
-        $videoData = [
-            'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
-            'body'           => $requestPost->filter('body', ''),
-            'category'       => (int) $category,
-            'content_status' => (int) $requestPost->getDigits('content_status', 0),
-            'fk_author'      => $requestPost->getDigits('fk_author', 0),
-            'information'    => $requestPost->get('information', []),
-            'params'         => $request->request->get('params', []),
-            'description'    => $requestPost->get('description', ''),
-            'endtime'        =>
-                $requestPost->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'starttime'      =>
-                $requestPost->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'title'          =>
-                $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'video_url'      => $requestPost->filter('video_url', ''),
-            'with_comment'   => (int) $requestPost->getDigits('with_comment', 0),
-            'tags'           => json_decode($request->request->get('tags', ''), true)
-        ];
-
-        $videoData['information'] = is_string($videoData['information'])
-            ? json_decode($videoData['information'], true)
-            : $videoData['information'];
-
-        if ($type == 'web-source' && empty($videoData['information'])) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('There was an error while uploading the form, not all the required data was sent.')
-            );
-
-            return $this->redirect($this->generateUrl('admin_videos_create', ['type' => $type]));
-        }
-
-        try {
-            $video   = new \Video();
-            $videoId = $video->create($videoData);
-
-            return $this->redirect(
-                $this->generateUrl('admin_video_show', ['id' => $videoId])
-            );
-        } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add('error', $e->getMessage());
-
-            return $this->redirect($this->generateUrl('admin_videos_create', ['type' => $type]));
-        }
-    }
-
-    /**
-     * Handles the form for update a video given its id.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('VIDEO_MANAGER')
-     *     and hasPermission('VIDEO_UPDATE')")
-     */
-    public function updateAction(Request $request)
-    {
-        $id = $request->query->getDigits('id');
-
-        $requestPost = $request->request;
-        $category    = $requestPost->getDigits('category');
-        $video       = new \Video($id);
-
-        if (is_null($video->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Unable to find the video with the id "%d"'), $id)
-            );
-
-            return $this->redirect($this->generateUrl('admin_videos'));
-        }
-
-        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
-            && !$video->isOwner($this->getUser()->id)
-        ) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("You can't modify this video because you don't have enought privileges.")
-            );
-
-            return $this->redirect($this->generateUrl('admin_videos'));
-        }
-
-        $videoData = [
-            'id'             => (int) $id,
-            'category'       => (int) $category,
-            'content_status' => (int) $requestPost->getDigits('content_status', 0),
-            'with_comment'   => (int) $requestPost->getDigits('with_comment', 0),
-            'title'          =>
-                $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'body'           => $requestPost->filter('body', ''),
-            'description'    => $requestPost->get('description', ''),
-            'fk_author'      => $requestPost->getDigits('fk_author', 0),
-            'starttime'      =>
-                $requestPost->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'endtime'        =>
-                $requestPost->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'author_name'    =>
-                $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
-            'information'    => $requestPost->get('information', []),
-            'video_url'      => $requestPost->filter('video_url', ''),
-            'params'         => $request->request->get('params', []),
-            'tags'           => json_decode($request->request->get('tags', ''), true)
-        ];
-
-        $videoData['information'] = is_string($videoData['information'])
-            ? json_decode($videoData['information'], true)
-            : $videoData['information'];
-
-        $video->update($videoData);
-
-        $this->get('session')->getFlashBag()->add('success', _("Video updated successfully."));
-
-        return $this->redirect($this->generateUrl('admin_video_show', [
-            'id' => $video->id
-        ]));
-    }
-
-    /**
-     * Deletes a video given its id.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('VIDEO_MANAGER')
-     *     and hasPermission('VIDEO_DELETE')")
-     */
-    public function deleteAction(Request $request)
-    {
-        $id   = $request->query->getDigits('id');
-        $page = $request->query->getDigits('page', 1);
-
-        if (empty($id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('You must give an id to delete the video.')
-            );
-
-            return new Response('failure', 404);
-        }
-
-        $video = new \Video($id);
-
-        // Delete related and relations
-        getService('related_contents')->deleteAll($id);
-
-        $video->delete($id, $this->getUser()->id);
-
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            _("Video '{$video->title}' deleted successfully.")
-        );
-
-        if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl('admin_videos', [
-                'category' => $video->category,
-                'page' => $page
-            ]));
-        } else {
-            return new Response('ok');
-        }
     }
 
     /**
@@ -265,60 +80,9 @@ class VideosController extends BackendController
      */
     public function showAction(Request $request, $id)
     {
-        $id    = $request->query->getDigits('id', null);
+        $id = $request->query->getDigits('id', null);
+
         return $this->render('video/item.tpl', [ 'id' => $id]);
-
-        $video = $this->get('entity_repository')->find('Video', $id);
-
-        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
-            && !$video->isOwner($this->getUser()->id)
-        ) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("You can't modify this video because you don't have enought privileges.")
-            );
-
-            return $this->redirect($this->generateUrl('admin_videos'));
-        }
-
-        if (!is_object($video) || is_null($video->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Unable to find the video with the id "%d"'), $id)
-            );
-
-            return $this->redirect($this->generateUrl('admin_videos'));
-        }
-
-        $tags = [];
-
-        if (!empty($video->tag_ids)) {
-            $ts   = $this->get('api.service.tag');
-            $tags = $ts->responsify($ts->getListByIds($video->tag_ids)['items']);
-        }
-
-        if (is_object($video->information)) {
-            $video->information = get_object_vars($video->information);
-        }
-
-        if (($video->author_name == 'external' || $video->author_name == 'script')
-            && is_array($video->information)
-        ) {
-            if (array_key_exists('thumbnail', $video->information) && !empty($video->information['thumbnail'])) {
-                $video->thumb = $video->getThumb();
-            }
-        }
-
-        return $this->render('video/item.tpl', [
-            'information'    => $video->information,
-            'video'          => $video,
-            'authors'        => $this->getAuthors(),
-            'enableComments' => $this->get('core.helper.comment')
-                ->enableCommentsByDefault(),
-            'locale'         => $this->get('core.locale')
-                ->getRequestLocale('frontend'),
-            'tags'           => $tags
-        ]);
     }
 
 
@@ -350,52 +114,6 @@ class VideosController extends BackendController
                     ->get([ 'video_settings' ])
             ]);
         }
-    }
-
-    /**
-     * Save positions for widget.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('VIDEO_MANAGER')
-     *     and hasPermission('VIDEO_ADMIN')")
-     */
-    public function savePositionsAction(Request $request)
-    {
-        $positions = $request->request->get('positions');
-        $result    = true;
-
-        if (isset($positions)
-            && is_array($positions)
-            && count($positions) > 0
-        ) {
-            $pos = 1;
-
-            foreach ($positions as $id) {
-                $video  = new \Video($id);
-                $result = $result && $video->setPosition($pos);
-                $pos++;
-            }
-
-            /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
-            // TODO: remove cache cleaning actions
-            $cacheManager = $this->get('template_cache_manager');
-            $cacheManager->setSmarty($this->get('core.template'));
-            $cacheManager->delete('home|1');
-        }
-
-
-        $msg = "<div class='alert alert-error'>"
-            . _("Unable to save the new positions. Please contact with your system administrator.")
-            . '<button data-dismiss="alert" class="close">×</button></div>';
-        if ($msg) {
-            $msg = "<div class='alert alert-success'>"
-                . _("Positions saved successfully.")
-                . '<button data-dismiss="alert" class="close">×</button></div>';
-        }
-
-        return new Response($msg);
     }
 
     /**
@@ -444,13 +162,10 @@ class VideosController extends BackendController
             ],
         ]);
 
-        return $this->render(
-            'video/content-provider.tpl',
-            [
-                'videos'     => $videos,
-                'pagination' => $pagination,
-            ]
-        );
+        return $this->render('video/content-provider.tpl', [
+            'videos'     => $videos,
+            'pagination' => $pagination,
+        ]);
     }
 
     /**

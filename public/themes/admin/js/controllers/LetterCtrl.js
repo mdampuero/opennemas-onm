@@ -10,22 +10,6 @@ angular.module('BackendApp.controllers').controller('LetterCtrl', [
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
     /**
-     * @function init
-     * @memberOf LetterCtrl
-     *
-     * @description
-     * Method to init the letter controller
-     *
-     * @param {object} letter   Letter to edit
-     * @param {String} locale   Locale for the letter
-     * @param {Array}  tags     Array with all the tags needed for the Letter
-     */
-    $scope.init = function(letter, locale, tags) {
-      $scope.locale = locale;
-      $scope.tags   = tags;
-    };
-
-    /**
      * Updates scope when photo1 changes.
      */
     $scope.$watch('photo1', function() {

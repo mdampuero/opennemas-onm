@@ -2,8 +2,8 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('OpinionCtrl', [
-  '$controller', 'http', '$uibModal', '$scope', 'routing', '$timeout', 'cleaner',
-  function($controller, http, $uibModal, $scope, routing, $timeout, cleaner) {
+  '$controller', 'http', '$uibModal', '$scope', 'routing', 'cleaner',
+  function($controller, http, $uibModal, $scope, routing, cleaner) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -62,16 +62,6 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @memberOf OpinionCtrl
      *
      * @description
-     *  Whether to refresh the item after a successful update.
-     *
-     * @type {Boolean}
-     */
-    $scope.refreshOnUpdate = true;
-
-    /**
-     * @memberOf OpinionCtrl
-     *
-     * @description
      *  The list of routes for the controller.
      *
      * @type {Object}
@@ -121,25 +111,6 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       }
     };
 
-    // Update slug when title is updated
-    $scope.$watch('item.title', function(nv, ov) {
-      if (!nv) {
-        return;
-      }
-
-      if (!$scope.item.slug || $scope.item.slug === '') {
-        if ($scope.tm) {
-          $timeout.cancel($scope.tm);
-        }
-
-        $scope.tm = $timeout(function() {
-          $scope.getSlug(nv, function(response) {
-            $scope.item.slug = response.data.slug;
-          });
-        }, 2500);
-      }
-    }, true);
-
     /**
      * Opens a modal with the preview of the article.
      *
@@ -153,9 +124,10 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       CKEDITOR.instances.body.updateElement();
       CKEDITOR.instances.summary.updateElement();
 
-      var data = cleaner.clean($scope.item);
-
-      var data = { item: JSON.stringify(data), locale: $scope.config.locale.selected };
+      var data = {
+        item: JSON.stringify(cleaner.clean($scope.item)),
+        locale: $scope.config.locale.selected
+      };
 
       http.put(previewUrl, data).success(function() {
         $uibModal.open({

@@ -66,7 +66,6 @@ class AlbumsController extends Controller
                     ->get('comments_config'),
                 'locale'         => $this->get('core.locale')
                     ->getLocale('frontend'),
-                'tags'           => []
             ]);
         }
 
@@ -88,7 +87,7 @@ class AlbumsController extends Controller
             'starttime'      => $request->request
                 ->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'params'         => $request->request->get('params', []),
-            'tags'           => json_decode($request->request->get('tags', ''), true)
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         $album = new \Album();
@@ -176,13 +175,6 @@ class AlbumsController extends Controller
             return $this->redirect($this->generateUrl('admin_albums'));
         }
 
-        $tags = [];
-
-        if (!empty($album->tag_ids)) {
-            $ts   = $this->get('api.service.tag');
-            $tags = $ts->responsify($ts->getListByIds($album->tag_ids)['items']);
-        }
-
         if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
             && !$album->isOwner($this->getUser()->id)
         ) {
@@ -205,7 +197,6 @@ class AlbumsController extends Controller
                 ->get('comments_config'),
             'locale'         => $this->get('core.locale')
                 ->getRequestLocale('frontend'),
-            'tags'           => $tags
         ]);
     }
 
@@ -275,7 +266,7 @@ class AlbumsController extends Controller
             'starttime'      => $requestPost
                 ->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'params'         => $requestPost->get('params', []),
-            'tags'           => json_decode($request->request->get('tags', ''), true)
+            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
         ];
 
         if ($album->update($data)) {

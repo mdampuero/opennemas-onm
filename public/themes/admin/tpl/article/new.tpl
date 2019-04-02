@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form name="articleForm" ng-controller="ArticleCtrl" ng-init="init('{$locale}', '{$id}')" novalidate>
+  <form name="form" ng-controller="ArticleCtrl" ng-init="init('{$locale}', '{$id}')" novalidate>
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -63,7 +63,7 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="flags.saving || articleForm.$invalid" type="button">
+                <button class="btn btn-loading btn-primary" ng-click="submit()" ng-disabled="flags.saving" type="button">
                   <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': flags.saving }"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>
@@ -84,7 +84,7 @@
         <div class="col-md-8">
           <div class="grid simple">
             <div class="grid-body">
-              <div class="form-group" ng-class="{ 'has-error': showRequired && articleForm.title.$invalid }">
+              <div class="form-group" ng-class="{ 'has-error': showRequired && form.title.$invalid }">
                 <label class="form-label" for="title">
                   {t}Title{/t} *
                 </label>
@@ -99,7 +99,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group" ng-class="{ 'has-error': showRequired && articleForm.title_int.$invalid }">
+              <div class="form-group" ng-class="{ 'has-error': showRequired && form.title_int.$invalid }">
                 <label class="form-label" for="title-int">
                   {t}Inner title{/t} *
                 </label>
@@ -248,14 +248,14 @@
                       {t}Tags{/t}
                     </label>
                     <div class="controls">
-                      {include file="ui/component/tags-input/tags.tpl" ngModel="article.tags"}
+                      {include file="ui/component/tags-input/tags.tpl" ngModel="article.tag_ids"}
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="form-label" for="slug">
                       {t}Slug{/t}
                     </label>
-                    <span class="m-t-2 pull-right" ng-if="article.pk_article && backup.content_status != '0' && !articleForm.pk_fk_content_category.$dirty && !articleForm.content_status.$dirty">
+                    <span class="m-t-2 pull-right" ng-if="article.pk_article && backup.content_status != '0' && !form.pk_fk_content_category.$dirty && !form.content_status.$dirty">
                       <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/[% config.locale && config.locale.default === config.locale.selected ? '' : config.locale.selected + '/' %]articulo/[% (categories | filter : { pk_content_category: article.pk_fk_content_category } : true)[0].name %]/[% article.slug %]/[% article.created | moment : 'YYYYMMDDHHmmss' %][% article.pk_content.toString().length < 6 ? ('000000' + article.pk_content).substr(-6) : article.pk_content %].html" target="_blank">
                         <i class="fa fa-external-link"></i>
                         {t}Link{/t}

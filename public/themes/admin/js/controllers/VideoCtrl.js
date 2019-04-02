@@ -44,16 +44,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @memberOf OpinionCtrl
      *
      * @description
-     *  Whether to refresh the item after a successful update.
-     *
-     * @type {Boolean}
-     */
-    $scope.refreshOnUpdate = true;
-
-    /**
-     * @memberOf OpinionCtrl
-     *
-     * @description
      *  The list of routes for the controller.
      *
      * @type {Object}
@@ -88,9 +78,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     $scope.parseItem = function(data) {
       if (data.item) {
         $scope.data.item      = angular.extend($scope.item, data.item);
-        $scope.data.item.tags = $scope.item.tags.map(function(id) {
-          return data.extra.tags[id];
-        });
         data.item.categories = [ data.item.category ];
 
         var type = '';

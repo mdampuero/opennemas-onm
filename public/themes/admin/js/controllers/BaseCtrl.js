@@ -58,7 +58,11 @@
          *
          * @type {Object}
          */
-        $scope.flags = { generate: {}, http: {} };
+        $scope.flags = {
+          block: { slug: true },
+          generate: {},
+          http: {}
+        };
 
         /**
          * @memberOf InnerCtrl
