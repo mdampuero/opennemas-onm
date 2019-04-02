@@ -40,7 +40,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       $scope.$broadcast('onmTagsInput.save', {
         onError: $scope.errorCb,
         onSuccess: function(ids) {
-          $scope.item.tags = ids;
+          $scope.data.item.tags = ids;
           $scope.save();
         }
       });
