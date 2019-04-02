@@ -44,8 +44,8 @@
     <div class="grid simple">
       <div class="grid-body">
         <div class="form-group">
-          <label for="video[total_front_more]" class="form-label">{t}Total in video frontpage more videos{/t}</label>
-          <span class="help">{t}Total number of videos on more videos section in video home frontpage{/t}</span>
+          <label for="video[total_front_more]" class="form-label">{t}Number of videos in frontpage{/t}</label>
+          <span class="help">{t}Total number of videos to show per page in the frontpage{/t}</span>
           <div class="controls">
             <input type="number" name="video_settings[total_front_more]" value="{$configs['video_settings']['total_front_more']|default:"12"}" required />
           </div>
