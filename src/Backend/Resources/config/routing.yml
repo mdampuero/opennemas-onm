@@ -229,41 +229,6 @@ admin_photo_update:
     path:     /image/{id}/update
     defaults: { _controller: BackendBundle:Images:update }
 
-# Album controller routes
-admin_albums:
-    path:     /albums
-    defaults: { _controller: BackendBundle:Albums:list }
-
-admin_albums_config:
-    path:     /albums/config
-    defaults: { _controller: BackendBundle:Albums:config }
-
-admin_albums_widget:
-    path:     /albums/widget
-    defaults: { _controller: BackendBundle:Albums:widget }
-
-admin_album_create:
-    path:     /albums/create
-    defaults: { _controller: BackendBundle:Albums:create }
-
-admin_album_update:
-    path:     /album/{id}/update
-    defaults: { _controller: BackendBundle:Albums:update }
-
-admin_album_show:
-    path:     /albums/{id}/show
-    defaults: { _controller: BackendBundle:Albums:show }
-    options:
-        expose: true
-
-admin_albums_savepositions:
-    path:     /albums/save-positions
-    defaults: { _controller: BackendBundle:Albums:savePositions }
-
-admin_albums_content_provider:
-    path:     /albums/content-provider
-    defaults: { _controller: BackendBundle:Albums:contentProvider }
-
 # Books controller routes
 admin_books:
     path:     /books
@@ -516,6 +481,10 @@ admin_menu_sidebar_get:
         expose: true
 
 # Routing refactoring starts here
+backend_album:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/album.yml'
+
 backend_authentication:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/authentication.yml'
