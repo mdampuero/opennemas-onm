@@ -85,10 +85,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      */
     $scope.parseItem = function(data) {
       if (data.item) {
-        $scope.data.item      = angular.extend($scope.item, data.item);
-        $scope.data.item.tags = $scope.item.tags.map(function(id) {
-          return data.extra.tags[id];
-        });
+        $scope.data.item = angular.extend($scope.item, data.item);
       }
 
       $scope.configure(data.extra);
