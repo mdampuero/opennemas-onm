@@ -37,7 +37,7 @@ class StaticPageController extends BackendController
         'create' => 'STATIC_PAGE_CREATE',
         'update' => 'STATIC_PAGE_UPDATE',
         'list'   => 'STATIC_PAGE_ADMIN',
-        'show'   => 'STATIC_PAGE_CREATE',
+        'show'   => 'STATIC_PAGE_UPDATE',
     ];
 
     /**

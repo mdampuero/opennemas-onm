@@ -1,38 +1,22 @@
 # Opinion controller routes
-backend_opinions_list:
-    path:     /opinions
-    defaults: { _controller: BackendBundle:Opinion:list, blog  : 0 }
+backend_opinions_config:
+    path:     /opinions/config
+    defaults: { _controller: BackendBundle:Opinion:config }
 
 backend_opinion_create:
-    path:     /opinions/create
+    path:     /opinions/new
     defaults: { _controller: BackendBundle:Opinion:create }
 
 backend_opinion_show:
-    path:     /opinions/{id}/show
+    path:     /opinions/{id}
     defaults: { _controller: BackendBundle:Opinion:show }
     options:
         expose: true
 
-backend_opinion_preview:
-    path:     /opinion/preview
-    defaults: { _controller: BackendBundle:Opinion:preview }
-    options:
-        expose: true
-
-backend_opinion_get_preview:
-    path:     /opinion/get-preview
-    defaults: { _controller: BackendBundle:Opinion:getPreview }
-    options:
-        expose: true
-
-backend_opinion_update:
-    path:     /opinion/{id}/update
-    defaults: { _controller: BackendBundle:Opinion:update }
+backend_opinions_list:
+    path:     /opinions
+    defaults: { _controller: BackendBundle:Opinion:list }
 
 backend_opinions_content_provider:
     path:     /opinions/content-provider
     defaults: { _controller: BackendBundle:Opinion:contentProvider }
-
-backend_opinions_config:
-    path:     /opinions/config
-    defaults: { _controller: BackendBundle:Opinion:config }

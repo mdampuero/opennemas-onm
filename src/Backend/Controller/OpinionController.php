@@ -10,18 +10,29 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
-use Common\Core\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
-class OpinionController extends Controller
+class OpinionController extends BackendController
 {
     /**
-     * The name of the setting to save extra field configuration.
+     * The extension name required by this controller.
      *
      * @var string
      */
-    const EXTRA_INFO_TYPE = 'extraInfoContents.OPINION_MANAGER';
+    protected $extension = 'OPINION_MANAGER';
+
+    /**
+     * The list of permissions for every action.
+     *
+     * @var type
+     */
+    protected $permissions = [
+        'create' => 'OPINION_CREATE',
+        'update' => 'OPINION_UPDATE',
+        'list'   => 'OPINION_ADMIN',
+        'show'   => 'OPINION_UPDATE',
+    ];
 
     /**
      * {@inheritdoc}
@@ -31,91 +42,36 @@ class OpinionController extends Controller
     ];
 
     /**
-     * Lists all the opinions.
+     * The resource name.
      *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('OPINION_ADMIN')")
+     * @var string
      */
-    public function listAction()
-    {
-        return $this->render('opinion/list.tpl', [ 'home' => false ]);
-    }
+    protected $resource = 'opinion';
+
+    /**
+     * The name of the setting to save extra field configuration.
+     *
+     * @var string
+     */
+    const EXTRA_INFO_TYPE = 'extraInfoContents.OPINION_MANAGER';
 
     /**
      * Shows the information form for a opinion given its id.
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('OPINION_UPDATE')")
      */
-    public function showAction(Request $request)
+    public function showAction(Request $request, $id)
     {
-        $id      = $request->query->getDigits('id', null);
-        $opinion = $this->get('entity_repository')->find('Opinion', $id);
+        $this->checkSecurity($this->extension, $this->getActionPermission('update'));
 
-        // Check if opinion id exists
-        if (!is_object($opinion) || is_null($opinion->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Unable to find the opinion with the id "%d"'), $id)
-            );
+        $params = [ 'id' => $id ];
 
-            return $this->redirect($this->generateUrl('backend_opinions_list'));
+        if ($this->get('core.helper.locale')->hasMultilanguage()) {
+            $params['locale'] = $request->query->get('locale');
         }
 
-        // Check if you can see others opinions
-        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
-            && $opinion->fk_author != $this->getUser()->id
-        ) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("You can't modify this opinion because you don't have enought privileges.")
-            );
-
-            return $this->redirect($this->generateUrl('backend_opinions_list'));
-        }
-
-        $authors = $this->getAuthors();
-
-        if (!empty($opinion->img1)) {
-            $photo1 = $this->get('entity_repository')->find('Photo', $opinion->img1);
-            $this->view->assign('photo1', $photo1);
-        }
-
-        if (!empty($opinion->img2)) {
-            $photo2 = $this->get('entity_repository')->find('Photo', $opinion->img2);
-            $this->view->assign('photo2', $photo2);
-        }
-
-        $extraFields = null;
-
-        if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
-            $extraFields = $this->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get(self::EXTRA_INFO_TYPE);
-        }
-
-        $tags = [];
-
-        if (!empty($opinion->tag_ids)) {
-            $ts   = $this->get('api.service.tag');
-            $tags = $ts->responsify($ts->getListByIds($opinion->tag_ids)['items']);
-        }
-
-        return $this->render('opinion/new.tpl', [
-            'opinion'        => $opinion,
-            'authors'        => $authors,
-            'enableComments' => $this->get('core.helper.comment')
-                ->enableCommentsByDefault(),
-            'extra_fields'   => $extraFields,
-            'locale'         => $this->get('core.locale')
-                ->getRequestLocale('frontend'),
-            'tags'           => $tags
-        ]);
+        return $this->render($this->resource . '/item.tpl', $params);
     }
 
     /**
@@ -129,176 +85,8 @@ class OpinionController extends Controller
      */
     public function createAction(Request $request)
     {
-        if ('POST' !== $request->getMethod()) {
-            $extraFields = null;
-
-            if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
-                $extraFields = $this->get('orm.manager')
-                    ->getDataSet('Settings', 'instance')
-                    ->get(self::EXTRA_INFO_TYPE);
-            }
-
-            return $this->render('opinion/new.tpl', [
-                'authors'        => $this->getAuthors(),
-                'enableComments' => $this->get('core.helper.comment')
-                    ->enableCommentsByDefault(),
-                'extra_fields'   => $extraFields,
-                'locale'         => $this->get('core.locale')
-                    ->getLocale('frontend'),
-                'tags'           => []
-            ]);
-        }
-
-        $params  = $request->request->get('params', []);
-        $opinion = new \Opinion();
-
-        $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
-        $inhome        = $request->request->filter('in_home', '', FILTER_SANITIZE_STRING);
-        $withComment   = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
-
-        $data = [
-            'body'                => $request->request->get('body', ''),
-            'content_status'      => (empty($contentStatus)) ? 0 : 1,
-            'endtime'             => $request->request->get('endtime', ''),
-            'fk_author'           => $request->request->getDigits('fk_author', 0),
-            'fk_author_img'       => $request->request->getDigits('fk_author_img'),
-            'fk_publisher'        => $this->getUser()->id,
-            'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
-            'img1'                => $request->request->getDigits('img1', ''),
-            'img1_footer'         =>
-                $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'img2'                => $request->request->getDigits('img2', ''),
-            'img2_footer'         =>
-                $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'in_home'             => (empty($inhome)) ? 0 : 1,
-            'starttime'           => $request->request->get('starttime', ''),
-            'summary'             => $request->request->get('summary', ''),
-            'title'               =>
-                $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
-            'with_comment'        => (empty($withComment)) ? 0 : 1,
-            'params'              => [
-                'only_registered' => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
-            ],
-            'tags'             => json_decode($request->request->get('tags', ''), true)
-        ];
-
-        $data = $this->loadMetaDataFields($data, $request->request, self::EXTRA_INFO_TYPE);
-
-        if ($opinion->create($data)) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Opinion successfully created.')
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Unable to create the new opinion.')
-            );
-        }
-
-        return $this->redirect(
-            $this->generateUrl('backend_opinion_show', [ 'id' => $opinion->id ])
-        );
+        return $this->render('opinion/item.tpl');
     }
-
-    /**
-     * Updates the opinion information sent by POST.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('OPINION_UPDATE')")
-     */
-    public function updateAction(Request $request)
-    {
-        $id     = $request->query->getDigits('id');
-        $params = $request->request->get('params', []);
-
-        $opinion = new \Opinion($id);
-
-        if (is_null($opinion->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Unable to find the opinion with the id "%d"'), $id)
-            );
-
-            return $this->redirect($this->generateUrl('backend_opinions_list'));
-        }
-
-        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
-            && !$opinion->isOwner($this->getUser()->id)
-        ) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("You can't modify this opinion because you don't have enought privileges.")
-            );
-
-            return $this->redirect($this->generateUrl('backend_opinions_list'));
-        }
-
-        $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
-        $inhome        = $request->request->filter('in_home', '', FILTER_SANITIZE_STRING);
-        $withComment   = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
-
-        // Check empty data
-        if (count($request->request) < 1) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("Opinion data sent not valid.")
-            );
-
-            return $this->redirect($this->generateUrl('backend_opinion_show', [ 'id' => $id ]));
-        }
-
-        $data = [
-            'body'                => $request->request->get('body', ''),
-            'content_status'      => (empty($contentStatus)) ? 0 : 1,
-            'endtime'             => $request->request->get('endtime', ''),
-            'fk_author'           => $request->request->getDigits('fk_author', 0),
-            'fk_author_img'       => $request->request->getDigits('fk_author_img'),
-            'fk_publisher'        => $this->getUser()->id,
-            'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
-            'id'                  => $id,
-            'img1'                => $request->request->getDigits('img1', ''),
-            'img1_footer'         =>
-                $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'img2'                => $request->request->getDigits('img2', ''),
-            'img2_footer'         =>
-                $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'in_home'             => (empty($inhome)) ? 0 : 1,
-            'starttime'           => $request->request->get('starttime', ''),
-            'summary'             => $request->request->get('summary', ''),
-            'title'               =>
-                $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
-            'with_comment'        => (empty($withComment)) ? 0 : 1,
-            'params'              => [
-                'only_registered' => array_key_exists('only_registered', $params) ? $params['only_registered'] : '',
-            ],
-            'tags'             => json_decode($request->request->get('tags', ''), true)
-        ];
-
-        $data = $this->loadMetaDataFields($data, $request->request, self::EXTRA_INFO_TYPE);
-
-        if ($opinion->update($data)) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Opinion successfully updated.')
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Unable to update the opinion.')
-            );
-        }
-
-        return $this->redirect($this->generateUrl('backend_opinion_show', [
-            'id' => $opinion->id
-        ]));
-    }
-
 
     /**
      * Lists the available opinions for the frontpage manager.
@@ -398,138 +186,6 @@ class OpinionController extends Controller
 
             return $this->redirect($this->generateUrl('backend_opinions_config'));
         }
-    }
-
-    /**
-     * Previews an opinion in frontend by sending the opinion info by POST.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('OPINION_ADMIN')")
-     */
-    public function previewAction(Request $request)
-    {
-        $this->get('core.locale')->setContext('frontend')
-            ->setRequestLocale($request->get('locale'));
-
-        $opinion     = new \Opinion();
-        $cm          = new \ContentManager();
-        $opinion->id = 0;
-
-        $data = $request->request->filter('contents');
-        foreach ($data as $value) {
-            if (isset($value['name']) && !empty($value['name'])) {
-                $opinion->{$value['name']} = $value['value'];
-            }
-        }
-
-        $this->view = $this->get('core.template');
-        $this->view->setCaching(0);
-
-        $opinion->tag_ids = json_decode($opinion->tag_ids);
-
-        list($positions, $advertisements) = $this->getAdvertisements();
-
-        try {
-            if (!empty($opinion->fk_author)) {
-                $opinion->author = $this->get('api.service.author')
-                    ->getItem($opinion->fk_author);
-            }
-        } catch (\Exception $e) {
-        }
-
-        // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
-        $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
-
-        $machineSuggestedContents = $this->get('automatic_contents')
-            ->searchSuggestedContents('opinion', "pk_content <> $opinion->id", 4);
-
-        // Get author slug for suggested opinions
-        foreach ($machineSuggestedContents as &$suggest) {
-            $element = new \Opinion($suggest['pk_content']);
-
-            $suggest['author_name_slug'] = "author";
-            $suggest['uri']              = $element->uri;
-
-            if (!empty($element->author)) {
-                $suggest['author_name']      = $element->author;
-                $suggest['author_name_slug'] =
-                    \Onm\StringUtils::getTitle($element->author);
-            }
-        }
-
-        // Associated media code --------------------------------------
-        $photo = '';
-        if (isset($opinion->img2) && ($opinion->img2 > 0)) {
-            $photo = new \Photo($opinion->img2);
-        }
-
-        // Fetch the other opinions for this author
-        if ($opinion->type_opinion == 1) {
-            $where         = ' opinions.type_opinion = 1';
-            $opinion->name = 'Editorial';
-            $this->view->assign('actual_category', 'editorial');
-        } elseif ($opinion->type_opinion == 2) {
-            $where         = ' opinions.type_opinion = 2';
-            $opinion->name = 'Director';
-        } else {
-            $where = ' opinions.fk_author=' . (int) $opinion->fk_author;
-        }
-
-        $otherOpinions = $cm->find(
-            'Opinion',
-            $where . ' AND `pk_opinion` <>' . $opinion->id . ' AND content_status=1',
-            ' ORDER BY created DESC LIMIT 0,9'
-        );
-
-        foreach ($otherOpinions as &$otOpinion) {
-            $otOpinion->author           = $opinion->author;
-            $otOpinion->author_name_slug = $opinion->author_name_slug;
-            $otOpinion->uri              = $otOpinion->uri;
-        }
-
-        $params = [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'opinion'        => $opinion,
-            'content'        => $opinion,
-            'other_opinions' => $otherOpinions,
-            'author'         => $opinion->author,
-            'contentId'      => $opinion->id,
-            'photo'          => $photo,
-            'suggested'      => $machineSuggestedContents,
-            'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($opinion->tag_ids)['items']
-        ];
-
-        $this->view->assign($params);
-
-        $this->get('session')->set(
-            'last_preview',
-            $this->view->fetch('opinion/opinion.tpl')
-        );
-
-        return new Response('OK');
-    }
-
-    /**
-     * Description of this action.
-     *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('OPINION_ADMIN')")
-     */
-    public function getPreviewAction()
-    {
-        $session = $this->get('session');
-        $content = $session->get('last_preview');
-
-        $session->remove('last_preview');
-
-        return new Response($content);
     }
 
     /**

@@ -35,7 +35,7 @@ class Content implements \JsonSerializable, CsvSerializable
     public $category = null;
 
     /**
-     * The category name this content belongs to
+     * DEPRECATED: The category name this content belongs to
      *
      * @var string
      */
@@ -98,6 +98,13 @@ class Content implements \JsonSerializable, CsvSerializable
     public $favorite = null;
 
     /**
+     * The id of the content type
+     *
+     * @var int
+     */
+    public $fk_content_type = null;
+
+    /**
      * The user id that have published this content
      *
      * @var int
@@ -152,7 +159,7 @@ class Content implements \JsonSerializable, CsvSerializable
      *
      * @var array
      */
-    public $params = null;
+    public $params = [];
 
     /**
      * The order of this content
@@ -160,6 +167,13 @@ class Content implements \JsonSerializable, CsvSerializable
      * @var int
      */
     public $position = null;
+
+    /**
+     * The content pk_content
+     *
+     * @var int
+     */
+    public $pk_content = null;
 
     /**
      * The slug of the content
@@ -188,6 +202,13 @@ class Content implements \JsonSerializable, CsvSerializable
      * @var boolean
      */
     public $with_comment = null;
+
+    /**
+     * A fully qualified identifier of the content, tells us about the origin
+     *
+     * @var boolean
+     */
+    public $urn_source = null;
 
     /**
      * Initializes the content for a given id.
@@ -241,22 +262,26 @@ class Content implements \JsonSerializable, CsvSerializable
                     $this->slug = \Onm\StringUtils::generateSlug($this->title);
                 }
 
-                if ($this->content_type_name === 'article'
+                if (in_array($this->content_type_name, ['article', 'opinion'])
                     && in_array($name, $this->getL10nKeys())
                 ) {
                     if (!getService('core.instance')->hasMultilanguage()
                         || getService('core.locale')->getContext() !== 'backend'
                     ) {
-                        return getService('data.manager.filter')
-                            ->set($this->{$name})
-                            ->filter('localize')
-                            ->get();
+                        if (property_exists($this, $name)) {
+                            return getService('data.manager.filter')
+                                ->set($this->{$name})
+                                ->filter('localize')
+                                ->get();
+                        }
                     }
 
-                    return getService('data.manager.filter')
-                        ->set($this->{$name})
-                        ->filter('unlocalize')
-                        ->get();
+                    if (property_exists($this, $name)) {
+                        return getService('data.manager.filter')
+                            ->set($this->{$name})
+                            ->filter('unlocalize')
+                            ->get();
+                    }
                 }
 
                 if (property_exists($this, $name)) {

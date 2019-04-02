@@ -1,5 +1,5 @@
 {is_module_activated name="COMMENT_MANAGER"}
-<div class="form-group no-margin">
+<div class="form-group m-t-5">
   <div class="checkbox">
     <input id="with-comments" ng-false-value="0" ng-model="item.with_comment" ng-true-value="1" type="checkbox">
     <label for="with-comments">{t}Allow comments{/t}</label>

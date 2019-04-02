@@ -390,7 +390,7 @@
 
           data = cleaner.clean(data);
 
-          var postData = { article: data, locale: $scope.config.locale };
+          var postData = { article: data, locale: $scope.config.locale.selected };
 
           http.post(previewUrl, postData).success(function() {
             $uibModal.open({
