@@ -91,44 +91,43 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         $scope.data.item.tags = $scope.item.tags.map(function(id) {
           return data.extra.tags[id];
         });
+        data.item.categories = [ data.item.category ];
+
+        var type = '';
+
+        switch ($scope.data.item.author_name) {
+        case 'script':
+          type = 'script';
+          break;
+
+        case 'external':
+          type = 'external';
+          var info = $scope.data.item.information.source;
+
+          $scope.data.item.type = info.flv ? 'flv' : 'html5';
+          break;
+
+        default:
+          if (data.item.video_url) {
+            type = 'web-source';
+          }
+          break;
+        }
+
+        $scope.setType(type);
+
+        // Assign the cover image
+        var cover = data.extra.related_contents.filter(function(el) {
+          return el && el.pk_photo == $scope.item.information.thumbnail;
+        }).shift();
+
+        if (cover) {
+          $scope.cover = cover;
+        }
       }
 
       $scope.configure(data.extra);
       $scope.localize($scope.data.item, 'item', true);
-
-      var type = '';
-
-      switch ($scope.data.item.author_name) {
-      case 'script':
-        type = 'script';
-        break;
-
-      case 'external':
-        type = 'external';
-        var info = $scope.data.item.information.source;
-
-        $scope.data.item.type = info.flv ? 'flv' : 'html5';
-        break;
-
-      default:
-        if (data.item.video_url) {
-          type = 'web-source';
-        }
-        break;
-      }
-
-      data.item.categories = [ data.item.category ];
-
-      $scope.setType(type);
-
-      // Assign the cover image
-      var cover = data.extra.related_contents.filter(function(el) {
-        return el.pk_photo == $scope.item.information.thumbnail;
-      }).shift();
-
-      if (cover) {
-        $scope.cover = cover;
-      }
     };
 
     $scope.setType = function(type) {
