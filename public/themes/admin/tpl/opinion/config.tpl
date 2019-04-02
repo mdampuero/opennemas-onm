@@ -42,48 +42,8 @@
   </div>
   <div class="content">
     <div class="grid simple">
-      <div class="grid-body">
+      <div class="grid-body ng-cloak">
         <div class="row">
-          <div class="col-md-6">
-
-            <h4>{t}Opinion frontpage{/t}</h4>
-            <div class="form-group">
-              <label class="form-label" for="opinion_settings[total_opinions]">
-                {t}Opinions in Opinion frontpage{/t}
-              </label>
-              <span class="help">
-                {t}How many opinions opinions will be shown in the opinion frontpage.{/t}
-              </span>
-              <div class="controls">
-                <input id="opinion_settings[total_opinions]" name="opinion_settings[total_opinions]" required type="number"  value="{$configs['opinion_settings']['total_opinions']|default:"16"}" />
-              </div>
-            </div>
-            {is_module_activated name="BLOG_MANAGER"}
-            <h4>{t}Blogs frontpage{/t}</h4>
-              <div class="form-group">
-                <label class="form-label" for="blog_orderFrontpage">
-                  {t}Order blog's frontpage by{/t}
-                </label>
-                <span class="help">
-                  {t}Select if order blogs's frontpages by created date or bloggers name.{/t}
-                </span>
-                <div class="controls">
-                  <select id="blog_orderFrontpage" name="opinion_settings[blog_orderFrontpage]">
-                    <option value="created" {if !isset($configs['opinion_settings']['blog_orderFrontpage']) || $configs['opinion_settings']['blog_orderFrontpage'] eq "created"} selected {/if}>{t}Created Date{/t}</option>
-                    <option value="blogger" {if $configs['opinion_settings']['blog_orderFrontpage'] eq "blogger"} selected {/if}>{t}Blogger{/t}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="blog_itemsFrontpage]">
-                  {t}Items per blog page{/t}
-                </label>
-                <div class="controls">
-                  <input id="blog_itemsFrontpage" name="opinion_settings[blog_itemsFrontpage]" type="number" value="{$configs['opinion_settings']['blog_itemsFrontpage']|default:12}">
-                </div>
-              </div>
-            {/is_module_activated}
-          </div>
           {acl isAllowed="MASTER"}
             <div class="col-md-6" ng-init="extraFields = {json_encode($extra_fields)|escape:"html"}">
               <autoform-editor ng-model="extraFields"/>

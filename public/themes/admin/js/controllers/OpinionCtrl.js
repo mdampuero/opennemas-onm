@@ -2,12 +2,114 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('OpinionCtrl', [
-  '$controller', '$http', '$uibModal', '$rootScope', '$scope', 'routing',
-  function($controller, $http, $uibModal, $rootScope, $scope, routing) {
+  '$controller', 'http', '$uibModal', '$scope', 'routing', 'cleaner',
+  function($controller, http, $uibModal, $scope, routing, cleaner) {
     'use strict';
 
     // Initialize the super class and extend it.
-    $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+    $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
+    /**
+     * @memberOf OpinionCtrl
+     *
+     * @description
+     *  The cover object.
+     *
+     * @type {Object}
+     */
+    $scope.item = {
+      body: '',
+      content_type_name: 'opinion',
+      fk_content_type: 4,
+      content_status: 0,
+      description: '',
+      favorite: 0,
+      frontpage: 0,
+      created: new Date(),
+      starttime: null,
+      endtime: null,
+      thumbnail: null,
+      title: '',
+      type: 0,
+      with_comments: 0,
+      categories: [],
+      related_contents: [],
+      tags: [],
+      external_link: '',
+    };
+
+    /**
+     * @memberOf OpinionCtrl
+     *
+     * @description
+     *  The photo1 object.
+     *
+     * @type {Object}
+     */
+    $scope.photo1 = null;
+
+    /**
+     * @memberOf OpinionCtrl
+     *
+     * @description
+     *  The photo2 object.
+     *
+     * @type {Object}
+     */
+    $scope.photo2 = null;
+
+    /**
+     * @memberOf OpinionCtrl
+     *
+     * @description
+     *  The list of routes for the controller.
+     *
+     * @type {Object}
+     */
+    $scope.routes = {
+      create:   'api_v1_backend_opinion_create',
+      redirect: 'backend_opinion_show',
+      save:     'api_v1_backend_opinion_save',
+      show:     'api_v1_backend_opinion_show',
+      update:   'api_v1_backend_opinion_update'
+    };
+
+    /**
+     * @function parseItem
+     * @memberOf RestInnerCtrl
+     *
+     * @description
+     *   Parses the response and adds information to the scope.
+     *
+     * @param {Object} data The data in the response.
+     */
+    $scope.parseItem = function(data) {
+      if (data.item) {
+        $scope.data.item      = angular.extend($scope.item, data.item);
+        $scope.data.item.tags = $scope.item.tags.map(function(id) {
+          return data.extra.tags[id];
+        });
+      }
+
+      $scope.configure(data.extra);
+      $scope.localize($scope.data.item, 'item', true);
+
+      var img1 = data.extra.related_contents.filter(function(el) {
+        return el.pk_photo === $scope.item.img1;
+      }).shift();
+
+      if (img1) {
+        $scope.photo1 = img1;
+      }
+
+      var img2 = data.extra.related_contents.filter(function(el) {
+        return el.pk_photo === $scope.item.img2;
+      }).shift();
+
+      if (img2) {
+        $scope.photo2 = img2;
+      }
+    };
 
     /**
      * Opens a modal with the preview of the article.
@@ -16,16 +118,18 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @param {String} getPreviewUrl The URL to get the preview.
      */
     $scope.preview = function(previewUrl, getPreviewUrl) {
-      $scope.loading = true;
+      $scope.flags.http.generating_preview = true;
 
       // Force ckeditor
       CKEDITOR.instances.body.updateElement();
       CKEDITOR.instances.summary.updateElement();
 
-      var data = { contents: $('#formulario').serializeArray() };
-      var url  = routing.generate(previewUrl);
+      var data = {
+        item: JSON.stringify(cleaner.clean($scope.item)),
+        locale: $scope.config.locale.selected
+      };
 
-      $http.post(url, data).success(function() {
+      http.put(previewUrl, data).success(function() {
         $uibModal.open({
           templateUrl: 'modal-preview',
           windowClass: 'modal-fullscreen',
@@ -42,19 +146,30 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
           }
         });
 
-        $scope.loading = false;
+        $scope.flags.http.generating_preview = false;
       }).error(function() {
-        $scope.loading = false;
+        $scope.flats.http.generating_preview = false;
       });
     };
 
     /**
-     * Removes an album.
+     * Returns the frontend url for the content given its object
      *
-     * @param string from The album name in the current scope.
+     * @param  {String} item  The object item to generate the url from.
+     * @return {String}
      */
-    $scope.removeAlbum = function(from) {
-      delete $scope[from];
+    $scope.getFrontendUrl = function(item) {
+      var date = item.date;
+
+      var formattedDate = moment(date).format('YYYYMMDDHHmmss');
+
+      return $scope.getL10nUrl(
+        routing.generate('frontend_opinion_show', {
+          id: item.pk_content,
+          created: formattedDate,
+          opinion_title: item.slug
+        })
+      );
     };
 
     /**
@@ -64,22 +179,23 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @param array ov The old values.
      */
     $scope.$watch('photo1', function(nv, ov) {
-      $scope.img1 = null;
+      if (angular.isObject(nv)) {
+        $scope.item.img1 = nv.pk_photo;
 
-      if ($scope.photo1) {
-        $scope.img1 = $scope.photo1.id;
-
-        if (angular.isUndefined($scope.img1_footer) ||
+        if (angular.isUndefined($scope.item.img1_footer) ||
           angular.isUndefined(ov) ||
-          nv.id !== ov.id
+          ov === null ||
+          nv.pk_photo !== ov.pk_photo
         ) {
-          $scope.img1_footer = $scope.photo1.description;
+          $scope.item.img1_footer = $scope.photo1.description;
         }
-
         // Set inner image if empty
-        if (angular.isUndefined($scope.photo2) && nv !== ov) {
+        if (!angular.isObject($scope.photo2) && nv !== ov) {
           $scope.photo2 = $scope.photo1;
         }
+      } else {
+        $scope.item.img1 = null;
+        $scope.item.img1_footer = null;
       }
     }, true);
 
@@ -90,187 +206,19 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @param array ov The old values.
      */
     $scope.$watch('photo2', function(nv, ov) {
-      $scope.img2 = null;
+      if (angular.isObject(nv)) {
+        $scope.item.img2 = nv.id;
 
-      if ($scope.photo2) {
-        $scope.img2 = $scope.photo2.id;
-
-        if (angular.isUndefined($scope.img2_footer) ||
+        if (angular.isUndefined($scope.item.img2_footer) ||
           angular.isUndefined(ov) ||
-          nv.id !== ov.id
+          ov === null ||
+          nv.pk_photo !== ov.pk_photo
         ) {
-          $scope.img2_footer = $scope.photo2.description;
+          $scope.item.img2_footer = $scope.photo2.description;
         }
-      }
-    }, true);
-
-    /**
-     * Updates scope when photo3 changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('photo3', function(nv, ov) {
-      $scope.imageHome = null;
-
-      if ($scope.photo3) {
-        $scope.imageHome = $scope.photo3.id;
-
-        if (angular.isUndefined($scope.imageHomeFooter) ||
-          angular.isUndefined(ov) ||
-          nv.id !== ov.id
-        ) {
-          $scope.imageHomeFooter = $scope.photo3.description;
-        }
-      }
-    }, true);
-
-    /**
-     * Updates scope when video1 changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('video1', function(nv, ov) {
-      $scope.fk_video     = null;
-      $scope.footer_video = null;
-
-      if ($scope.video1) {
-        $scope.fk_video     = $scope.video1.id;
-        $scope.footer_video = $scope.video1.description;
-
-        // Set inner video if empty
-        if (angular.isUndefined($scope.video2) && nv !== ov) {
-          $scope.video2 = $scope.video1;
-        }
-      }
-    }, true);
-
-    /**
-     * Updates scope when video2 changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('video2', function() {
-      $scope.fk_video2     = null;
-      $scope.footer_video2 = null;
-
-      if ($scope.video2) {
-        $scope.fk_video2     = $scope.video2.id;
-        $scope.footer_video2 = $scope.video2.description;
-      }
-    }, true);
-
-    /**
-     * Updates scope when relatedInFrontpage changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('relatedInFrontpage', function(nv, ov) {
-      // Set inner related if empty or equal to front
-      if ((!$scope.relatedInInner ||
-        $scope.relatedInner === $scope.relatedFront) && nv !== ov
-      ) {
-        $scope.relatedInInner = angular.copy(nv);
-      }
-
-      $scope.relatedFront = [];
-      var items           = [];
-
-      if (nv instanceof Array) {
-        for (var i = 0; i < nv.length; i++) {
-          items.push({
-            id: nv[i].id, position: i, content_type: nv[i].content_type_name
-          });
-        }
-      }
-
-      $scope.relatedFront = angular.toJson(items);
-    }, true);
-
-    /**
-     * Updates scope when relatedInInner changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('relatedInInner', function(nv) {
-      $scope.relatedInner = [];
-      var items           = [];
-
-      if (nv instanceof Array) {
-        for (var i = 0; i < nv.length; i++) {
-          items.push({
-            id: nv[i].id, position: i, content_type: nv[i].content_type_name
-          });
-        }
-      }
-
-      $scope.relatedInner = angular.toJson(items);
-    }, true);
-
-    /**
-     * Updates scope when relatedInHome changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('relatedInHome', function(nv) {
-      $scope.relatedHome = [];
-      var items          = [];
-
-      if (nv instanceof Array) {
-        for (var i = 0; i < nv.length; i++) {
-          items.push({
-            id: nv[i].id, position: i, content_type: nv[i].content_type_name
-          });
-        }
-      }
-
-      $scope.relatedHome = angular.toJson(items);
-    }, true);
-
-    /**
-     * Updates the model when galleryForFrontpage changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('galleryForFrontpage', function(nv) {
-      delete $scope.withGallery;
-
-      if (nv) {
-        $scope.withGallery = nv.id;
-      }
-    }, true);
-
-    /**
-     * Updates the model when galleryForInner changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('galleryForInner', function(nv) {
-      delete $scope.withGalleryInt;
-
-      if (nv) {
-        $scope.withGalleryInt = nv.id;
-      }
-    }, true);
-
-    /**
-     * Updates the model when galleryForHome changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('galleryForHome', function(nv) {
-      delete $scope.withGalleryHome;
-
-      if (nv) {
-        $scope.withGalleryHome = nv.id;
+      } else {
+        $scope.item.img2 = null;
+        $scope.item.img2_footer = null;
       }
     }, true);
   }

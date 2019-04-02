@@ -1,20 +1,27 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form action="{url name=backend_opinions_list}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="OpinionListCtrl" ng-init="init('opinion', 'backend_ws_opinions_list')">
+  <div ng-controller="OpinionListCtrl" ng-init="forcedLocale = '{$locale}'; init()">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
+          <li class="quicklinks">
+            <h4>
+              <i class="fa fa-quote-right m-r-10"></i>
+            </h4>
+          </li>
+          <li class="quicklinks">
             <li class="quicklinks">
+              <h4>{t}Opinions{/t}</h4>
+            </li>
+            <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
               <h4>
-                <i class="fa fa-quote-right"></i>
-                {if $contentType eq 'blog'}
-                  Posts
-                {else}
-                  {t}Opinions{/t}
-                {/if}
+                <i class="fa fa-angle-right"></i>
               </h4>
+            </li>
+            <li class="quicklinks ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
+              <translator keys="data.extra.keys" ng-model="config.locale.selected" options="data.extra.locale"></translator>
             </li>
           </ul>
           <div class="all-actions pull-right">
@@ -31,7 +38,7 @@
               {/acl}
               {acl isAllowed="OPINION_CREATE"}
                 <li class="quicklinks">
-                  <a class="btn btn-primary" href="{url name=backend_opinion_create}" title="{t}New opinion{/t}" id="create-button">
+                  <a class="btn btn-success text-uppercase" href="{url name=backend_opinion_create}" title="{t}New opinion{/t}" id="create-button">
                     <i class="fa fa-plus"></i>
                     {t}Create{/t}
                   </a>
@@ -42,7 +49,7 @@
         </div>
       </div>
     </div>
-    <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
+    <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.items.length == 0 }">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section pull-left">
@@ -56,7 +63,7 @@
             </li>
             <li class="quicklinks">
               <h4>
-                [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+                [% selected.items.length %] <span class="hidden-xs">{t}items selected{/t}</span>
               </h4>
             </li>
           </ul>
@@ -64,14 +71,14 @@
             {acl isAllowed="CONTENT_OTHER_UPDATE"}
               {acl isAllowed="OPINION_AVAILABLE"}
                 <li class="quicklinks">
-                  <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" uib-tooltip="{t}Publish{/t}" tooltip-placement="bottom">
+                  <button class="btn btn-link" ng-click="patchSelected('content_status', 0)" uib-tooltip="{t}Publish{/t}" tooltip-placement="bottom" type="button">
                     <i class="fa fa-check fa-lg"></i>
-                  </a>
+                  </button>
                 </li>
                 <li class="quicklinks">
-                  <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" uib-tooltip="{t}Unpublish{/t}" tooltip-placement="bottom">
+                  <button class="btn btn-link" href="#" ng-click="patchSelected('content_status', 1)" uib-tooltip="{t}Unpublish{/t}" tooltip-placement="bottom">
                     <i class="fa fa-times fa-lg"></i>
-                  </a>
+                  </button>
                 </li>
                 <li class="quicklinks">
                   <span class="h-seperate"></span>
@@ -79,12 +86,12 @@
               {/acl}
               {acl isAllowed="OPINION_HOME"}
                 <li class="quicklinks hidden-xs">
-                  <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" uib-tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
+                  <a class="btn btn-link" href="#" ng-click="patchSelected('in_home', 1)" uib-tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
                     <i class="fa fa-home fa-lg"></i>
                   </a>
                 </li>
                 <li class="quicklinks hidden-xs">
-                  <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" uib-tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
+                  <a class="btn btn-link" href="#" ng-click="patchSelected('in_home', 0)" uib-tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
                     <i class="fa fa-home fa-lg"></i>
                     <i class="fa fa-times fa-sub text-danger"></i>
                   </a>
@@ -96,7 +103,7 @@
             {/acl}
             {acl isAllowed="OPINION_DELETE"}
               <li class="quicklinks">
-                <a class="btn btn-link" href="#" ng-click="sendToTrashSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom">
+                <a class="btn btn-link" href="#" ng-click="sendToTrash()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom">
                   <i class="fa fa-trash-o fa-lg"></i>
                 </a>
               </li>
@@ -132,34 +139,37 @@
               {include file="ui/component/select/epp.tpl" label="true" ngModel="criteria.epp"}
             </li>
           </ul>
-          <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
+          <ul class="nav quick-section pull-right ng-cloak" ng-if="items.length > 0">
             <li class="quicklinks hidden-xs">
-              <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
+              <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
             </li>
           </ul>
         </div>
       </div>
     </div>
     <div class="content">
-      <div class="grid simple">
+      <div class="listing-no-contents" ng-hide="!flags.http.loading">
+        <div class="text-center p-b-15 p-t-15">
+          <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
+          <h3 class="spinner-text">{t}Loading{/t}...</h3>
+        </div>
+      </div>
+      <div class="listing-no-contents ng-cloak" ng-if="!flags.http.loading && items.length == 0">
+        <div class="text-center p-b-15 p-t-15">
+          <i class="fa fa-4x fa-warning text-warning"></i>
+          <h3>{t}Unable to find any item that matches your search.{/t}</h3>
+          <h4>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h4>
+        </div>
+      </div>
+      <div class="grid simple ng-cloak" ng-if="!flags.http.loading && items.length > 0">
         <div class="grid-body no-padding">
-          <div class="spinner-wrapper" ng-if="loading">
-            <div class="loading-spinner"></div>
-            <div class="spinner-text">{t}Loading{/t}...</div>
-          </div>
-          <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
-            <div class="text-center">
-              <h4>{t}Unable to find any opinion that matches your search.{/t}</h4>
-              <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
-            </div>
-          </div>
-          <div class="table-wrapper ng-cloak" ng-if="!loading && contents.length > 0">
+          <div class="table-wrapper">
             <table class="table table-hover no-margin">
               <thead>
                 <tr>
                   <th class="checkbox-cell">
                     <div class="checkbox checkbox-default">
-                      <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                      <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
                       <label for="select-all"></label>
                     </div>
                   </th>
@@ -171,69 +181,80 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-if="contents.length > 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
+                <tr ng-if="items.length > 0" ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
                   <td class="checkbox-cell">
                     <div class="checkbox check-default">
-                      <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                      <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
                       <label for="checkbox[%$index%]"></label>
                     </div>
                   </td>
                   <td>
-                    [% content.title %]
+                    [% item.title %]
                     <div class="small-text">
-                      <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                      <strong>{t}Created{/t}:</strong> [% item.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                    </div>
+                    <div class="small-text">
+                      <span ng-if="content.starttime && content.starttime != '0000-00-00 00:00:00'">
+                        <strong>{t}Available from{/t} </strong>
+                        [% content.starttime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                      </span>
+                      <span ng-if="content.endtime && content.endtime != '0000-00-00 00:00:00'">
+                        <strong>{t}to{/t} </strong> [% content.endtime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                      </span>
                     </div>
                     <div class="listing-inline-actions">
                       {acl isAllowed="OPINION_UPDATE"}
-                      <a class="link" href="[% edit(content.id, 'backend_opinion_show') %]">
+                      <a class="btn btn-default btn-small" href="[% routing.generate('backend_opinion_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
+                      <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_opinion_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
                       {/acl}
+
                       {acl isAllowed="OPINION_DELETE"}
-                      <button class="link link-danger" ng-click="sendToTrash(content)" type="button">
+                      <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">
                         <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                       </button>
                       {/acl}
                     </div>
                   </td>
                   <td class="hidden-xs nowrap">
-                    <span ng-if="content.fk_author && content.type_opinion == 0">
-                      <a href="[% routing.generate('backend_author_show', { id: content.fk_author }) %]">
-                        [% (data.extra.authors | filter : { id: content.fk_author } : true)[0].name %]
-                        <span ng-if="(data.extra.authors | filter : { id: content.fk_author } : true)[0].is_blog == 1">(Blog)</span>
+                    <span ng-if="item.fk_author">
+                      <a href="[% routing.generate('backend_author_show', { id: item.fk_author }) %]">
+                        [% data.extra.authors[item.fk_author].name %]
+                        <span ng-if="data.extra.authors[item.fk_author].is_blog == 1">(Blog)</span>
                       </a>
                     </span>
-                    <span ng-if="!content.fk_author || content.fk_author == 0 || content.type_opinion != 0">
-                      [% content.author %]
+                    <span ng-if="!item.fk_author || item.fk_author == 0 || item.type_opinion != 0">
+                      [% item.author %]
                     </span>
                   </td>
                   <td class="text-center hidden-xs">
                     {acl isAllowed="OPINION_HOME"}
-                    <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': content.in_home == 1, 'fa-home': content.in_home == 0 }" ng-if="content.author.meta.is_blog != 1" ></i>
-                      <i class="fa fa-times fa-sub text-danger" ng-if="!content.home_loading && content.in_home == 0"></i>
+                    <button class="btn btn-white" ng-click="patch(item, 'in_home', item.in_home != 1 ? 1 : 0)" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.in_homeLoading == 1, 'fa-home text-info': item.in_home == 1, 'fa-home': item.in_home == 0 }" ng-if="item.author.meta.is_blog != 1" ></i>
+                      <i class="fa fa-times fa-sub text-danger" ng-if="!item.in_homeLoading && item.in_home == 0"></i>
                     </button>
-                    <span ng-if="content.author.meta.is_blog == 1">
+                    <span ng-if="item.author.meta.is_blog == 1">
                       Blog
                     </span>
                     {/acl}
                   </td>
                   <td class="text-center hidden-xs">
                     {acl isAllowed="OPINION_FAVORITE"}
-                    <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" ng-if="content.type_opinion == 0" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading && content.favorite == 1, 'fa-star-o': !content.favorite_loading && content.favorite != 1 }"></i>
+                    <button class="btn btn-white" ng-click="patch(item, 'favorite', item.favorite != 1 ? 1 : 0)" ng-if="item.type_opinion == 0" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.favoriteLoading == 1, 'fa-star text-warning': !item.favoriteLoading && item.favorite == 1, 'fa-star-o': !item.favoriteLoading && item.favorite != 1 }"></i>
                     </button>
                     {/acl}
                   </td>
                   <td class="text-center">
                     {acl isAllowed="OPINION_AVAILABLE"}
-                    <button class="btn btn-white" {acl isNotAllowed="CONTENT_OTHER_UPDATE"} ng-if="content.fk_author == {$app.user->id}"{/acl} ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
+                    <button class="btn btn-white" {acl isNotAllowed="CONTENT_OTHER_UPDATE"} ng-if="item.fk_author == {$app.user->id}"{/acl} ng-click="patch(item, 'content_status', item.content_status != 1 ? 1 : 0)" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.content_statusLoading == 1, 'fa-check text-success': !item.content_statusLoading && item.content_status == 1, 'fa-times text-danger': !item.content_statusLoading && item.content_status == 0 }"></i>
                     </button>
                     {/acl}
                   </td>
                 </tr>
-                <tr ng-if="contents.length == 0">
+                <tr ng-if="items.length == 0">
                   <td class="empty" colspan="11">
                     {t}There is no opinions yet.{/t}
                   </td>
@@ -242,16 +263,16 @@
             </table>
           </div>
         </div>
-        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
+        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && items.length > 0">
           <div class="pull-right">
-            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>
         </div>
       </div>
     </div>
 
     <script type="text/ng-template" id="modal-delete">
-      {include file="common/modals/_modalDelete.tpl"}
+      {include file="common/modals/modal.trash.tpl"}
     </script>
     <script type="text/ng-template" id="modal-delete-selected">
       {include file="common/modals/_modalBatchDelete.tpl"}

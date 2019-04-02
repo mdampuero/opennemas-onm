@@ -256,15 +256,14 @@ class ArticlesController extends Controller
                 $tags[$tag['id']] = $tag;
             }
 
-            $article->tags    = $tags;
-            $article->tag_ids = array_keys($tags);
+            $article->tags = array_keys($tags);
         }
 
         $params = [
             'contentId' => $article->id,
             'article'   => $article,
             'content'   => $article,
-            'tags'      => $article->tags
+            'tags'      => $tags
         ];
 
         // Fetch article category name
