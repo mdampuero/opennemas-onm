@@ -22,6 +22,30 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       return $scope.item.pk_content;
     };
 
+    /**
+     * @function submit
+     * @memberOf StaticPageCtrl
+     *
+     * @description
+     *   Saves tags and, then, saves the item.
+     */
+    $scope.submit = function() {
+      if (!$('[name=form]')[0].checkValidity()) {
+        $('[name=form]')[0].reportValidity();
+        return;
+      }
+
+      $scope.flags.http.saving = true;
+
+      $scope.$broadcast('onmTagsInput.save', {
+        onError: $scope.errorCb,
+        onSuccess: function(ids) {
+          $scope.item.tags = ids;
+          $scope.save();
+        }
+      });
+    };
+
     // Update slug when title is updated
     $scope.$watch('item.title', function(nv, ov) {
       if (!nv) {

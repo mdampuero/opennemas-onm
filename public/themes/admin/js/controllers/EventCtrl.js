@@ -97,37 +97,6 @@
           $scope.cover = data.extra.related_contents[coverId.pk_content2];
         };
 
-        /**
-         * @function submit
-         * @memberOf EventCtrl
-         *
-         * @description
-         *   Saves tags and, then, saves the item.
-         */
-        $scope.submit = function() {
-          if ($scope.form.$invalid) {
-            $('[name=form]')[0].reportValidity();
-            messenger.post(window.strings.forms.not_valid, 'error');
-
-            return false;
-          }
-
-          if (!$('[name=form]')[0].checkValidity()) {
-            $('[name=form]')[0].reportValidity();
-            return false;
-          }
-
-          $scope.flags.http.saving = true;
-
-          $scope.$broadcast('onmTagsInput.save', {
-            onError: $scope.errorCb,
-            onSuccess: function(ids) {
-              $scope.item.tags = ids;
-              $scope.save();
-            }
-          });
-        };
-
         // Update slug when title is updated
         $scope.$watch('cover', function(nv) {
           $scope.item.related_contents = [];

@@ -81,30 +81,6 @@
           $scope.configure(data.extra);
           $scope.localize($scope.data.item, 'item', true);
         };
-
-        /**
-         * @function submit
-         * @memberOf StaticPageCtrl
-         *
-         * @description
-         *   Saves tags and, then, saves the item.
-         */
-        $scope.submit = function() {
-          if (!$('[name=form]')[0].checkValidity()) {
-            $('[name=form]')[0].reportValidity();
-            return;
-          }
-
-          $scope.flags.http.saving = true;
-
-          $scope.$broadcast('onmTagsInput.save', {
-            onError: $scope.errorCb,
-            onSuccess: function(ids) {
-              $scope.item.tags = ids;
-              $scope.save();
-            }
-          });
-        };
       }
     ]);
 })();
