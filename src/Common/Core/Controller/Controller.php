@@ -292,7 +292,7 @@ class Controller extends SymfonyController
 
         if ($translation
             && $this->get('core.security')
-                ->hasPermission('es.openhost.module.translation')
+            ->hasPermission('es.openhost.module.translation')
         ) {
             $translators = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
@@ -324,7 +324,7 @@ class Controller extends SymfonyController
      *
      * @return string The route name.
      */
-    protected function getRoute($action)
+    protected function getRoute($action, $params = [])
     {
         $endpoint  = $this->get('core.globals')->getEndpoint();
         $extension = $this->get('core.globals')->getExtension();
