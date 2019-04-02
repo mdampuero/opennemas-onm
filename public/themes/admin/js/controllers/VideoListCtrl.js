@@ -22,6 +22,8 @@
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
+        $scope.data = {};
+
         /**
          * The criteria to search.
          *
@@ -66,8 +68,60 @@
             title: '[key] ~ "%[value]%"'
           } });
 
-          $scope.list();
           $scope.setMode('grid');
+
+          $scope.list();
+        };
+
+        /**
+         * @function list
+         * @memberOf RestListCtrl
+         *
+         * @description
+         *   Reloads the list.
+         */
+        $scope.list = function() {
+          $scope.flags.http.loading = 1;
+          var append = $scope.mode === 'grid';
+
+          var oql   = oqlEncoder.getOql($scope.criteria);
+          var route = {
+            name: $scope.routes.list,
+            params: { oql: oql }
+          };
+
+          $location.search('oql', oql);
+
+          return http.get(route).then(function(response) {
+            var data = response.data;
+
+            if (!data.items && !append) {
+              $scope.data.items = [];
+            }
+
+            if (append) {
+              var oldItems = $scope.data.items;
+
+              $scope.data = data;
+              $scope.data.items = oldItems.concat(data.items);
+            } else {
+              $scope.data = data;
+            }
+
+            $scope.items = $scope.data.items;
+
+            $scope.parseList(response.data);
+            $scope.disableFlags('http');
+
+            // Scroll top
+            if (!append) {
+              $('body').animate({ scrollTop: '0px' }, 1000);
+            }
+          }, function(response) {
+            messenger.post(response.data);
+            $scope.disableFlags('http');
+            $scope.items = [];
+          });
         };
 
         /**
@@ -110,14 +164,21 @@
           var maxHeight = $(window).height() - $('.header').height() -
             $('.actions-navbar').height();
           var maxWidth  = $(window).width() - $('.sidebar').width();
-          var padding   = 15;
+          var padding   = 40;
 
           if ($('.content-wrapper').length > 0) {
             maxWidth -= parseInt($('.content-wrapper').css('padding-right'));
           }
 
-          var height = $('.infinite-col').width() + padding;
-          var width = $('.infinite-col').width() + padding;
+          var containerBaseSize = 150;
+          var containerSize = $('.infinite-col').width();
+
+          if (containerBaseSize > containerSize) {
+            containerSize = containerBaseSize;
+          }
+
+          var height = containerSize + padding;
+          var width = containerSize + padding;
 
           var rows = Math.ceil(maxHeight / height);
           var cols = Math.floor(maxWidth / width);
@@ -130,12 +191,26 @@
             cols = 1;
           }
 
-          if ($scope.criteria.epp !== rows * cols) {
-            $scope.items = [];
+          if ($scope.criteria.epp !== rows * cols && $scope.data) {
+            $scope.data.items = [];
           }
 
           $scope.criteria.epp = rows * cols;
         };
+
+        // Change page when scrolling in grid mode
+        $(window).scroll(function() {
+          if (!$scope.mode || $scope.mode === 'list' ||
+            $scope.items.length === $scope.data.total) {
+            return;
+          }
+
+          if (!$scope.flags.http.loading && $(document).height() <
+          $(window).height() + $(window).scrollTop()) {
+            $scope.criteria.page++;
+            $scope.$apply();
+          }
+        });
       }
     ]);
 })();
