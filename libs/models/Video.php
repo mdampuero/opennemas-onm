@@ -69,7 +69,7 @@ class Video extends Content
             case 'content_type_name':
                 return 'Video';
             case 'uri':
-                return getService('core.helper.url_generator')->generate($this);
+                return ltrim(getService('core.helper.url_generator')->generate($this), '/');
             default:
                 return parent::__get($name);
         }
