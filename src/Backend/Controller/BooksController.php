@@ -98,7 +98,7 @@ class BooksController extends Controller
             'category'       => $request->request->getInt('category', 0),
             'position'       => $request->request->getInt('position', 1),
             'content_status' => $request->request->getInt('content_status', 0),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         $book = new \Book();
@@ -227,7 +227,7 @@ class BooksController extends Controller
             'category'       => $request->request->getInt('category', 0),
             'position'       => $request->request->getInt('position', 1),
             'content_status' => $request->request->getInt('content_status', 0),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($book->update($data)) {

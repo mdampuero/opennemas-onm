@@ -169,7 +169,7 @@ class VideoController extends FrontendController
         $params = array_merge($params, [
             'others_videos' => $otherVideos,
             'tags' => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($item->tag_ids)['items']
+                ->getListByIdsKeyMapped($item->tags)['items']
         ]);
     }
 

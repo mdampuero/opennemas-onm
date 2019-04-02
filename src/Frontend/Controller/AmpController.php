@@ -220,7 +220,7 @@ class AmpController extends Controller
             'x-cacheable'           => empty($token),
             'x-tags'                => 'article-amp,article,' . $article->id,
             'tags'                  => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($article->tag_ids)['items']
+                ->getListByIdsKeyMapped($article->tags)['items']
         ]);
     }
 

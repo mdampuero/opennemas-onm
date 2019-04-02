@@ -68,7 +68,7 @@ class ExtractImageFromBodyFilter extends Filter
                     'fk_category'       => 0,
                     'category'          => 0,
                     'category_name'     => '',
-                    'tag_ids'           => [],
+                    'tags'              => [],
                 ];
 
                 try {

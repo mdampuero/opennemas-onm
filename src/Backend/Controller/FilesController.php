@@ -159,7 +159,7 @@ class FilesController extends Controller
             'content_status' => !preg_match('@(js|html)$@', $uploadedFile->getClientOriginalExtension()),
             'description'    => $request->request->get('description', ''),
             'fk_publisher'   => $this->getUser()->id,
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         // Move uploaded file
@@ -247,7 +247,7 @@ class FilesController extends Controller
             'id'             => (int) $id,
             'description'    => $request->request->filter('description', null),
             'fk_publisher'   => $this->getUser()->id,
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($file->update($data)) {

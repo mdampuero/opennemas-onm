@@ -75,7 +75,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             'changed'  => '2016-10-13 11:40:32',
             'category' => new \ContentCategory(),
             'summary'  => '<p>This is the summary</p>',
-            'tag_ids'  => [1,2,3,4],
+            'tags'     => [1,2,3,4],
             'logo'     => [
                 'url'    => 'http://onm.com/asset/logo.png',
                 'width'  => 350,
@@ -94,7 +94,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $this->data['video']->description = "<p>Video description</p>";
         $this->data['video']->created     = "2016-10-13 11:40:32";
         $this->data['video']->thumb       = "http://video-thumb.com";
-        $this->data['video']->tag_ids     = [1,2,3,4,5];
+        $this->data['video']->tags        = [1,2,3,4,5];
 
         $this->data['category']->title = "Mundo";
 
@@ -218,7 +218,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ '_getAttachedPhotos' ])
             ->getMock();
 
-        $this->data['content']->tag_ids = [1,2,3,4,5];
+        $this->data['content']->tags = [1,2,3,4,5];
 
         // Gallery only with cover image
         $onlyCover = $galleryJson . '}';

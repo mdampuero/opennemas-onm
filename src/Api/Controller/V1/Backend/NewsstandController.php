@@ -96,7 +96,7 @@ class NewsstandController extends Controller
             'date'           => $postInfo->filter('date', null, FILTER_SANITIZE_STRING),
             'price'          => $postInfo->filter('price', 0.0, FILTER_SANITIZE_NUMBER_FLOAT),
             'fk_publisher'   => (int) $this->getUser()->id,
-            'tag_ids'        => $request->request->get('tag_ids', ''),
+            'tags'           => $request->request->get('tags', ''),
             'name'           => '',
             'path'           => $dateTime->format('Y/m/d') . '/',
         ];
@@ -192,7 +192,7 @@ class NewsstandController extends Controller
                 'name'           => $content->name,
                 'thumb_url'      => $content->thumb_url,
                 'fk_user_last_editor' => $this->getUser()->id,
-                'tag_ids'        => $request->request->get('tag_ids', '')
+                'tags'           => $request->request->get('tags', '')
             ];
 
             $cover     = $request->files->get('cover');

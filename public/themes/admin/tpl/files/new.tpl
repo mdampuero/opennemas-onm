@@ -86,7 +86,7 @@
               <div class="form-group">
                 <label for="metadata" class="form-label">{t}Tags{/t}</label>
                 <div class="controls">
-                  {include file="ui/component/tags-input/tags.tpl" ngModel="file.tag_ids"}
+                  {include file="ui/component/tags-input/tags.tpl" ngModel="file.tags"}
                 </div>
               </div>
               <div class="form-group">

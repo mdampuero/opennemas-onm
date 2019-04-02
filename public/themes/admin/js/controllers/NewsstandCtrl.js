@@ -39,7 +39,7 @@
           favorite: 0,
           file: '',
           price: 0,
-          tag_ids: [],
+          tags: [],
           tags: [],
           thumbnail: null,
           title: '',
@@ -207,7 +207,7 @@
           $scope.$broadcast('onmTagsInput.save', {
             onError: $scope.errorCb,
             onSuccess: function(ids) {
-              $scope.item.tag_ids = ids;
+              $scope.item.tags = ids;
               $scope.save();
             }
           });

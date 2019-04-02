@@ -280,7 +280,7 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                 'category'       => $this->category,
                 'content_status' => 1,
                 'fk_author'      => 0,
-                'tag_ids'        => $this->getTags($item[0]),
+                'tags'           => $this->getTags($item[0]),
                 'params'         => [],
                 'description'    => $item[0],
                 'endtime'        => '',

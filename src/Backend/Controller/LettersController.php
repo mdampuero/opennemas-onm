@@ -65,7 +65,7 @@ class LettersController extends Controller
             'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
             'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'body'           => $request->request->get('body', ''),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($letter->create($data)) {
@@ -160,7 +160,7 @@ class LettersController extends Controller
             'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
             'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'body'           => $request->request->filter('body', ''),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($letter->update($data)) {

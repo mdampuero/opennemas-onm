@@ -24,13 +24,13 @@ function smarty_function_checkTagExist($params, &$smarty)
     $tag     = $params['tag'];
     $assign  = $params['assign'];
 
-    if (empty($content->tag_ids) || !is_array($content->tag_ids)
+    if (empty($content->tags) || !is_array($content->tags)
         || empty($tags) || !is_array($tags) || empty($tag) || empty($assign)
     ) {
         return '';
     }
 
-    foreach ($content->tag_ids as $tagId) {
+    foreach ($content->tags as $tagId) {
         if (array_key_exists($tagId, $tags) && $tags[$tagId]['name'] == $tag) {
             $smarty->assign($assign, true);
             return '';

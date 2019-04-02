@@ -206,7 +206,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $content->fk_author              = 4;
         $content->slug                   = 'foobar-thud';
         $content->agency                 = 'Onm Agency';
-        $content->tag_ids                = [ 1, 2, 3, 4 ];
+        $content->tags                   = [ 1, 2, 3, 4 ];
         $content->content_type_name      = 'album';
         $content->created                = '2016-10-13 11:40:32';
         $content->changed                = '2016-10-13 11:40:32';
@@ -281,7 +281,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $content->fk_author              = 4;
         $content->slug                   = 'foobar-thud';
         $content->agency                 = 'Onm Agency';
-        $content->tag_ids                = [ 1, 2, 3, 4 ];
+        $content->tags                   = [ 1, 2, 3, 4 ];
         $content->content_type_name      = 'article';
         $content->created                = '2016-10-13 11:40:32';
         $content->changed                = '2016-10-13 11:40:32';
@@ -376,7 +376,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $content->fk_author              = 4;
         $content->slug                   = 'foobar-thud';
         $content->agency                 = 'Onm Agency';
-        $content->tag_ids                = [ 1, 2, 3, 4 ];
+        $content->tags                   = [ 1, 2, 3, 4 ];
         $content->content_type_name      = 'video';
         $content->created                = '2016-10-13 11:40:32';
         $content->changed                = '2016-10-13 11:40:32';
@@ -414,7 +414,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $content->fk_author              = 4;
         $content->slug                   = 'foobar-thud';
         $content->agency                 = null;
-        $content->tag_ids                = [ 1, 2, 3, 4 ];
+        $content->tags                   = [ 1, 2, 3, 4 ];
         $content->content_type_name      = 'video';
         $content->created                = '2016-10-13 11:40:32';
         $content->changed                = '2016-10-13 11:40:32';
@@ -501,7 +501,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $content->fk_author              = 4;
         $content->slug                   = 'foobar-thud';
         $content->agency                 = 'Onm Agency';
-        $content->tag_ids                = [ 1, 2, 3, 4 ];
+        $content->tags                   = [ 1, 2, 3, 4 ];
         $content->content_type_name      = 'video';
         $content->created                = '2016-10-13 11:40:32';
         $content->changed                = '2016-10-13 11:40:32';
@@ -583,7 +583,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $content->fk_author              = 4;
         $content->slug                   = 'foobar-thud';
         $content->agency                 = 'Onm Agency';
-        $content->tag_ids                = [ 1, 2, 3, 4 ];
+        $content->tags                   = [ 1, 2, 3, 4 ];
         $content->content_type_name      = 'video';
         $content->created                = '2016-10-13 11:40:32';
         $content->changed                = '2016-10-13 11:40:32';
@@ -665,7 +665,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $content->fk_author              = 4;
         $content->slug                   = 'foobar-thud';
         $content->agency                 = 'Onm Agency';
-        $content->tag_ids                = [ 1, 2, 3, 4 ];
+        $content->tags                   = [ 1, 2, 3, 4 ];
         $content->content_type_name      = 'video';
         $content->created                = '2016-10-13 11:40:32';
         $content->changed                = '2016-10-13 11:40:32';

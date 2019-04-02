@@ -194,8 +194,7 @@ class ContentOldService implements Service
                 throw new \Exception(sprintf('Unable to find an element with id %s', $id));
             }
 
-            $item       = array_pop($item);
-            $item->tags = $item->tag_ids;
+            $item = array_pop($item);
 
             $this->localizeItem($item);
 

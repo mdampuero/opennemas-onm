@@ -119,7 +119,7 @@ class MonographsController extends Controller
             $tagsIds = [];
             if (!empty($monographs)) {
                 foreach ($monographs as &$monograph) {
-                    $tagsIds = array_merge($monograph->tag_ids, $tagsIds);
+                    $tagsIds = array_merge($monograph->tags, $tagsIds);
                     if (!empty($monograph->img1)) {
                         $img = $this->get('entity_repository')
                             ->find('Photo', $monograph->img1);
@@ -243,7 +243,7 @@ class MonographsController extends Controller
             'x-tags'      => 'monograph,' . $special->id,
             'x-cache-for' => '+1 day',
             'tags'        => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($special->tag_ids)['items']
+                ->getListByIdsKeyMapped($special->tags)['items']
         ]);
     }
 }

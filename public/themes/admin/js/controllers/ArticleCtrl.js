@@ -46,7 +46,7 @@
           params: {},
           starttime: null,
           summary: '',
-          tag_ids: []
+          tags: []
         };
 
         /**
@@ -470,7 +470,7 @@
           $scope.$broadcast('onmTagsInput.save', {
             onError: $scope.errorCb,
             onSuccess: function(ids) {
-              $scope.data.article.tag_ids = ids;
+              $scope.data.article.tags = ids;
               $scope.save();
             }
           });

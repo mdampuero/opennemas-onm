@@ -86,7 +86,7 @@ class SpecialsController extends Controller
             'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
             'noticias_right' => json_decode($request->request->get('noticias_right_input')),
             'noticias_left'  => json_decode($request->request->get('noticias_left_input')),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($special->create($data)) {
@@ -203,7 +203,7 @@ class SpecialsController extends Controller
                 'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
                 'noticias_left'  => json_decode($request->request->get('noticias_left_input')),
                 'noticias_right' => json_decode($request->request->get('noticias_right_input')),
-                'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+                'tags'           => json_decode($request->request->get('tags', ''), true)
             ];
 
             if ($special->update($data)) {
