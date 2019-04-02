@@ -38,7 +38,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <button class="btn btn-success text-uppercase" ng-click="save();" data-text="{t}Saving{/t}..." type="submit">
+              <button class="btn btn-success text-uppercase" ng-click="submit();" data-text="{t}Saving{/t}..." type="submit">
                 <i class="fa fa-save m-r-5"></i>
                 <span class="text">{t}Save{/t}</span>
               </button>
