@@ -68,7 +68,7 @@ class PollsController extends Controller
             'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'item'           => json_decode($request->request->get('parsedAnswers')),
             'params'         => $request->request->get('params', []),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         $poll = $poll->create($data);
@@ -176,7 +176,7 @@ class PollsController extends Controller
             'content_status' => $request->request->getDigits('content_status', 0),
             'item'           => json_decode($request->request->get('parsedAnswers')),
             'params'         => $request->request->get('params'),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($poll->update($data)) {

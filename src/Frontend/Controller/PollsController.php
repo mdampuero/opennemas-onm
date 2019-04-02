@@ -270,7 +270,7 @@ class PollsController extends Controller
             'o_content'      => $poll,
             'already_voted'  => $alreadyVoted,
             'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($poll->tag_ids)['items']
+                ->getListByIdsKeyMapped($poll->tags)['items']
         ]);
     }
 

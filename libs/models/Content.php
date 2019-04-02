@@ -636,8 +636,8 @@ class Content implements \JsonSerializable, CsvSerializable
             $data['pk_content'] = $this->id;
             $data['id']         = $this->id;
 
-            if (array_key_exists('tag_ids', $data)) {
-                $data['tag_ids'] = $this->addTags($data['tag_ids']);
+            if (array_key_exists('tags', $data)) {
+                $data['tags'] = $this->addTags($data['tags']);
             }
 
             self::load($contentData);
@@ -787,8 +787,8 @@ class Content implements \JsonSerializable, CsvSerializable
                 );
             }
 
-            if (array_key_exists('tag_ids', $data)) {
-                $this->tag_ids = $this->addTags($data['tag_ids']);
+            if (array_key_exists('tags', $data)) {
+                $this->tags = $this->addTags($data['tags']);
             }
 
             logContentEvent(__METHOD__, $this);

@@ -161,7 +161,7 @@
                   {t}Tags{/t}
                 </label>
                 <div class="controls">
-                  {include file="ui/component/tags-input/tags.tpl" ngModel="album.tag_ids"}
+                  {include file="ui/component/tags-input/tags.tpl" ngModel="album.tags"}
                 </div>
               </div>
             </div>

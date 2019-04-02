@@ -253,7 +253,7 @@ class AlbumsController extends Controller
             'x-cache-for'    => '+1 day',
             'x-cacheable'    => $cacheable,
             'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($album->tag_ids)['items']
+                ->getListByIdsKeyMapped($album->tags)['items']
         ]);
     }
 

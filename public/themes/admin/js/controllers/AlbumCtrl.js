@@ -55,7 +55,7 @@ angular.module('BackendApp.controllers')
 
         $scope.$broadcast('onmTagsInput.save', {
           onSuccess: function(ids) {
-            $('[name=tag_ids]').val(JSON.stringify(ids));
+            $('[name=tags]').val(JSON.stringify(ids));
             $('[name=form]').submit();
           }
         });

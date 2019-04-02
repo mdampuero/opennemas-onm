@@ -46,7 +46,7 @@
                 '<auto-complete debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
               '</tags-input>' +
               '<i class="fa fa-circle-o-notch fa-spin tags-input-loading" ng-if="loading"></i>' +
-              '<input name="tag_ids" type="hidden" ng-value="getJsonValue()">' +
+              '<input name="tags" type="hidden" ng-value="getJsonValue()">' +
             '</div>' +
             '<script type="text/ng-template" id="tag">' +
               '<span class="tag-item-text" ng-bind-html="$highlight($getDisplayText())"></span>' +

@@ -139,9 +139,9 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="tag_ids" class="form-label">{t}Tags{/t}</label>
+              <label for="tags" class="form-label">{t}Tags{/t}</label>
               <div class="controls">
-                {include file="ui/component/tags-input/tags.tpl" ngModel="video.tag_ids"}
+                {include file="ui/component/tags-input/tags.tpl" ngModel="video.tags"}
               </div>
             </div>
             {if isset($video)}

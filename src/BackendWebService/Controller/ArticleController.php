@@ -123,9 +123,8 @@ class ArticleController extends Controller
 
         $msg->add(_('Article successfully updated.'), 'success');
         $response['message'] = $msg->getMessages()[0];
-        $response['tag_ids'] = $article->tag_ids;
         $response['tags']    =
-            $ts->responsify($ts->getListByIds($article->tag_ids)['items']);
+            $ts->responsify($ts->getListByIds($article->tags)['items']);
 
         return new JsonResponse($response, $msg->getCode());
     }

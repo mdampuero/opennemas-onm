@@ -102,7 +102,7 @@ class VideosController extends Controller
                 $requestPost->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'video_url'      => $requestPost->filter('video_url', ''),
             'with_comment'   => (int) $requestPost->getDigits('with_comment', 0),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         $videoData['information'] = is_string($videoData['information'])
@@ -188,7 +188,7 @@ class VideosController extends Controller
             'information'    => $requestPost->get('information', []),
             'video_url'      => $requestPost->filter('video_url', ''),
             'params'         => $request->request->get('params', []),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         $videoData['information'] = is_string($videoData['information'])

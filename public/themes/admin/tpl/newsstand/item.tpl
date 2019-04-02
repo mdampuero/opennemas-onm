@@ -203,7 +203,7 @@ jQuery(document).ready(function($) {
                 <div class="form-group">
                   <label for="metadata" class="form-label">{t}Tags{/t}</label>
                   <div class="controls">
-                    {include file="ui/component/tags-input/tags.tpl" ngModel="item.tag_ids"}
+                    {include file="ui/component/tags-input/tags.tpl" ngModel="item.tags"}
                   </div>
                 </div>
 

@@ -81,9 +81,9 @@ class ImagesController extends Controller
 
         $tags = [];
 
-        if (!empty($photo->tag_ids)) {
+        if (!empty($photo->tags)) {
             $ts   = $this->get('api.service.tag');
-            $tags = $ts->responsify($ts->getListByIds($photo->tag_ids)['items']);
+            $tags = $ts->responsify($ts->getListByIds($photo->tags)['items']);
         }
 
         $ls = $this->get('core.locale');
@@ -251,7 +251,7 @@ class ImagesController extends Controller
                 'fk_category'       => null,
                 'category'          => null,
                 'category_name'     => '',
-                'tag_ids'           => json_decode($request->request->get('tag_ids', ''), true)
+                'tags'              => json_decode($request->request->get('tags', ''), true)
             ];
 
             try {

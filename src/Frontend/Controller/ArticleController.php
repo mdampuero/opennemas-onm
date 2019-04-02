@@ -134,7 +134,7 @@ class ArticleController extends FrontendController
             $params[$item->content_type_name] = $item;
 
             $params['tags'] = $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($item->tag_ids, $locale)['items'];
+                ->getListByIdsKeyMapped($item->tags, $locale)['items'];
 
             if (array_key_exists('bodyLink', $item->params)) {
                 $params['o_external_link'] = $item->params['bodyLink'];

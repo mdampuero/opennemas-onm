@@ -87,7 +87,7 @@ class AlbumsController extends Controller
             'starttime'      => $request->request
                 ->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'params'         => $request->request->get('params', []),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         $album = new \Album();
@@ -266,7 +266,7 @@ class AlbumsController extends Controller
             'starttime'      => $requestPost
                 ->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'params'         => $requestPost->get('params', []),
-            'tag_ids'        => json_decode($request->request->get('tag_ids', ''), true)
+            'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($album->update($data)) {
