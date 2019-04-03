@@ -154,12 +154,12 @@ class ArticleController extends FrontendController
 
         $em = $this->get('entity_repository');
 
-        if (!empty($item->img2)) {
-            $params['photoInt'] = $em->find('Photo', $item->img2);
+        if (!empty($params['content']->img2)) {
+            $params['photoInt'] = $em->find('Photo', $params['content']->img2);
         }
 
-        if (!empty($item->fk_video2)) {
-            $params['videoInt'] = $em->find('Video', $item->fk_video2);
+        if (!empty($params['content']->fk_video2)) {
+            $params['videoInt'] = $em->find('Video', $params['content']->fk_video2);
         }
     }
 
