@@ -83,10 +83,10 @@
          *   Saves tags and, then, submits the form.
          */
         $scope.submit = function(e) {
+          e.preventDefault();
+
           if ($scope.form.$invalid) {
             $('[name=form]')[0].reportValidity();
-
-            e.preventDefault();
 
             messenger.post(window.strings.forms.not_valid, 'error');
 

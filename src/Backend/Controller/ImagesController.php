@@ -86,13 +86,11 @@ class ImagesController extends Controller
             $tags = $ts->responsify($ts->getListByIds($photo->tags)['items']);
         }
 
-        $ls = $this->get('core.locale');
-
         return $this->render('image/new.tpl', [
-            'photo'         => $photo,
             'MEDIA_IMG_URL' => MEDIA_URL . MEDIA_DIR . DS . IMG_DIR,
-            'locale'        => $ls->getRequestLocale('frontend'),
-            'tags'          => $tags
+            'photo'         => $photo,
+            'locale'        => $this->get('core.helper.locale')
+                ->getConfiguration()
         ]);
     }
 
