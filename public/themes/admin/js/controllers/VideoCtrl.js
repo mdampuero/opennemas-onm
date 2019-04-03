@@ -2,8 +2,8 @@
  * Handle actions for poll inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
-  '$controller', '$sce', '$rootScope', '$scope', '$timeout', 'http',
-  function($controller, $sce, $rootScope, $scope, $timeout, http) {
+  '$controller', '$sce', '$rootScope', '$scope', '$timeout', 'http', 'routing',
+  function($controller, $sce, $rootScope, $scope, $timeout, http, routing) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -170,6 +170,27 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
     $scope.trustSrc = function(src) {
       return $sce.trustAsResourceUrl(src);
+    };
+
+    /**
+     * Returns the frontend url for the content given its object
+     *
+     * @param  {String} item  The object item to generate the url from.
+     * @return {String}
+     */
+    $scope.getFrontendUrl = function(item) {
+      var date = item.date;
+
+      var formattedDate = moment(date).format('YYYYMMDDHHmmss');
+
+      return $scope.getL10nUrl(
+        routing.generate('frontend_video_show', {
+          id: item.pk_content,
+          created: formattedDate,
+          slug: item.slug,
+          category_name: item.category_name
+        })
+      );
     };
 
     /**

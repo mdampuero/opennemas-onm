@@ -22,7 +22,7 @@
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
-        $scope.data = {};
+        $scope.data = {items: []};
 
         /**
          * The criteria to search.
