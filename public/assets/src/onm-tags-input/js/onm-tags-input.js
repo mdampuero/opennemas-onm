@@ -93,7 +93,7 @@
          *   Removes all tags from the list.
          */
         $scope.clear = function() {
-          $scope.tags = [];
+          $scope.tagsInLocale = [];
         };
 
         /**
