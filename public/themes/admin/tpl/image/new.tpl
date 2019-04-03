@@ -1,42 +1,44 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form id="formulario" name="form_upload" action="{if isset($photo->id)}{url name=admin_photo_update id=$photo->id}{else}{url name=admin_photo_create}{/if}" method="POST" ng-controller="ImageCtrl" ng-init="init({json_encode($photos)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
+  <form id="formulario" action="{if isset($photo->id)}{url name=admin_photo_update id=$photo->id}{else}{url name=admin_photo_create}{/if}" method="POST" name="form" ng-controller="ImageCtrl" ng-init="init({json_encode($photo)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-picture-o"></i>
+                <i class="fa fa-picture-o m-r-10"></i>
                 <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/221735-opennemas-c%C3%B3mo-subir-im%C3%A1genes-para-mis-art%C3%ADculos" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                   <i class="fa fa-question"></i>
                 </a>
-                {t}Images{/t}
               </h4>
             </li>
-            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+            <li class="quicklinks">
+              <h4>
+                <a class="no-padding" href="{url name=admin_images}">
+                  {t}Images{/t}
+                </a>
+              </h4>
+            </li>
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
+                <i class="fa fa-angle-right"></i>
+              </h4>
+            </li>
             <li class="quicklinks hidden-xs">
-              <h5>{t}Editing image{/t}</h5>
+              <h4>{t}Edit{/t}</h4>
             </li>
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
-              <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_images}" title="{t}Go back to list{/t}">
-                  <i class="fa fa-reply"></i>
-                </a>
-              </li>
-              <li class="quicklinks">
-                <span class="h-seperate"></span>
-              </li>
               {acl isAllowed="PHOTO_UPDATE"}
-              <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit" id="save-button">
-                  <span class="fa fa-save"></span>
-                  <span class="text">{t}Update{/t}</span>
-                </button>
-              </li>
+                <li class="quicklinks">
+                  <button class="btn btn-loading btn-success text-uppercase" ng-click="submit($event)" type="submit">
+                    <i class="fa fa-save m-r-5"></i>
+                    {t}Save{/t}
+                  </button>
+                </li>
               {/acl}
             </ul>
           </div>
