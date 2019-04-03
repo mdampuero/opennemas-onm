@@ -17,12 +17,12 @@
      *   Controller for video list.
      */
     .controller('VideoListCtrl', [
-      '$controller', '$location', '$scope', 'http', 'messenger', 'oqlEncoder',
-      function($controller, $location, $scope, http, messenger, oqlEncoder) {
+      '$controller', '$scope', 'oqlEncoder',
+      function($controller, $scope, oqlEncoder) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
-        $scope.data = {items: []};
+        $scope.data = { items: [] };
 
         /**
          * The criteria to search.
@@ -74,57 +74,6 @@
         };
 
         /**
-         * @function list
-         * @memberOf RestListCtrl
-         *
-         * @description
-         *   Reloads the list.
-         */
-        $scope.list = function() {
-          $scope.flags.http.loading = 1;
-          var append = $scope.mode === 'grid';
-
-          var oql   = oqlEncoder.getOql($scope.criteria);
-          var route = {
-            name: $scope.routes.list,
-            params: { oql: oql }
-          };
-
-          $location.search('oql', oql);
-
-          return http.get(route).then(function(response) {
-            var data = response.data;
-
-            if (!data.items && !append) {
-              $scope.data.items = [];
-            }
-
-            if (append) {
-              var oldItems = $scope.data.items;
-
-              $scope.data = data;
-              $scope.data.items = oldItems.concat(data.items);
-            } else {
-              $scope.data = data;
-            }
-
-            $scope.items = $scope.data.items;
-
-            $scope.parseList(response.data);
-            $scope.disableFlags('http');
-
-            // Scroll top
-            if (!append) {
-              $('body').animate({ scrollTop: '0px' }, 1000);
-            }
-          }, function(response) {
-            messenger.post(response.data);
-            $scope.disableFlags('http');
-            $scope.items = [];
-          });
-        };
-
-        /**
          * @inheritdoc
          */
         $scope.parseList = function(data) {
@@ -144,7 +93,7 @@
             $scope.selected.items.push(item.id);
           } else {
             $scope.selected.items = $scope.selected.items.filter(function(el) {
-              return el != item.id;
+              return el !== item.id;
             });
           }
         };

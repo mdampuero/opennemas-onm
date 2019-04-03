@@ -67,14 +67,11 @@
             <td class="center hidden-xs hidden-sm">
               [% data.extra.categories[item.category].title %]
             </td>
-            {* <td class="center nowrap hidden-xs hidden-sm">
-              [% item.author_name %]
-            </td> *}
             {acl isAllowed="VIDEO_HOME"}
               <td class="hidden-xs text-center">
-                <button class="btn btn-white" ng-click="updateItem($index, item.id, 'backend_ws_content_toggle_in_home', 'in_home', item.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
+                <button class="btn btn-white" ng-click="patchItem(item, 'in_home', item.in_home != 1 ? 1 : 0)" type="button">
                   <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.home_loading == 1, 'fa-home text-info': !item.home_loading == 1 && item.in_home == 1, 'fa-home': !item.home_loading == 1 && item.in_home == 0 }"></i>
-                  <i class="fa fa-times fa-sub text-danger" ng-if="!item.home_loading == 1 && item.in_home == 0"></i>
+                  <i class="fa fa-times fa-sub text-danger" ng-if="!item.in_homeLoading == 1 && item.in_home == 0"></i>
                 </button>
               </td>
             {/acl}
