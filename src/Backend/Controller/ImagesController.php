@@ -76,7 +76,7 @@ class ImagesController extends Controller
                 sprintf(_('Unable to find a photo with the id "%d".'), $id)
             );
 
-            return $this->redirect($this->generateUrl('admin_albums'));
+            return $this->redirect($this->generateUrl('backend_albums_list'));
         }
 
         $tags = [];
@@ -116,7 +116,7 @@ class ImagesController extends Controller
                 sprintf(_('Unable to find a photo with the id "%d".'), $id)
             );
 
-            return $this->redirect($this->generateUrl('admin_albums'));
+            return $this->redirect($this->generateUrl('backend_albums_list'));
         }
 
         $photoData = [

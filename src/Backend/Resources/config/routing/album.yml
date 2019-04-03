@@ -22,7 +22,7 @@ backend_album_update:
     defaults: { _controller: BackendBundle:Albums:update }
 
 backend_album_show:
-    path:     /albums/{id}/show
+    path:     /albums/{id}
     defaults: { _controller: BackendBundle:Albums:show }
     options:
         expose: true

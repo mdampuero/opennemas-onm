@@ -42,7 +42,7 @@
             </li>
             <li class="quicklinks">
               <h4>
-                <a class="no-padding" href="{url name=admin_albums}">
+                <a class="no-padding" href="{url name=backend_albums_list}">
                   {t}Albums{/t}
                 </a>
               </h4>

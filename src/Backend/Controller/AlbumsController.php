@@ -105,7 +105,7 @@ class AlbumsController extends Controller
             );
         } else {
             return $this->redirect(
-                $this->generateUrl('admin_albums')
+                $this->generateUrl('backend_albums_list')
             );
         }
     }
@@ -143,7 +143,7 @@ class AlbumsController extends Controller
         );
 
         if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl('admin_albums', [
+            return $this->redirect($this->generateUrl('backend_albums_list', [
                 'category' => $album->category,
                 'page'     => $page,
             ]));
@@ -172,7 +172,7 @@ class AlbumsController extends Controller
                 sprintf(_('Unable to find an album with the id "%d".'), $id)
             );
 
-            return $this->redirect($this->generateUrl('admin_albums'));
+            return $this->redirect($this->generateUrl('backend_albums_list'));
         }
 
         if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
@@ -183,7 +183,7 @@ class AlbumsController extends Controller
                 _("You don't have enough privileges for modify this album.")
             );
 
-            return $this->redirect($this->generateUrl('admin_albums', [
+            return $this->redirect($this->generateUrl('backend_albums_list', [
                 'category' => $album->category
             ]));
         }
@@ -220,7 +220,7 @@ class AlbumsController extends Controller
                 sprintf(_('Unable to find an album with the id "%d".'), $id)
             );
 
-            return $this->redirect($this->generateUrl('admin_albums'));
+            return $this->redirect($this->generateUrl('backend_albums_list'));
         }
 
         if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
@@ -231,7 +231,7 @@ class AlbumsController extends Controller
                 _("You don't have enough privileges for modify this album.")
             );
 
-            return $this->redirect($this->generateUrl('admin_albums', [
+            return $this->redirect($this->generateUrl('backend_albums_list', [
                 'category' => $album->category
             ]));
         }
@@ -364,7 +364,7 @@ class AlbumsController extends Controller
             'page'        => $page,
             'total'       => $countAlbums,
             'route'       => [
-                'name'   => 'admin_albums_content_provider',
+                'name'   => 'backend_albums_content_provider',
                 'params' => ['category' => $categoryId]
             ],
         ]);
@@ -421,7 +421,7 @@ class AlbumsController extends Controller
 
         $this->get('session')->getFlashBag()->add($type, $message);
 
-        return $this->redirect($this->generateUrl('admin_albums_config'));
+        return $this->redirect($this->generateUrl('backend_albums_config'));
     }
 
     /**
