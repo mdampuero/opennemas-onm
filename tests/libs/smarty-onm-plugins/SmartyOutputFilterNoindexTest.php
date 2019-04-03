@@ -26,7 +26,7 @@ class SmartyOutputFilterNoindexTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer', 'getTemplateVars', '__set', '__get' ])
+            ->setMethods([ 'getContainer', 'getValue', 'hasValue' ])
             ->getMock();
 
         $this->subscription = $this->getMockBuilder('SubscriptionHelper')
@@ -38,18 +38,6 @@ class SmartyOutputFilterNoindexTest extends \PHPUnit\Framework\TestCase
 
         $this->container->expects($this->any())->method('get')
             ->willReturn($this->subscription);
-
-
-        $this->smartySource = $this->getMockBuilder('Smarty_Template_Source')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->smarty->expects($this->any())
-            ->method('__get')
-            ->with($this->equalTo('source'))
-            ->will($this->returnValue($this->smartySource));
-
-        $this->smarty->source->resource = 'foo.tpl';
     }
 
     /**
@@ -58,8 +46,8 @@ class SmartyOutputFilterNoindexTest extends \PHPUnit\Framework\TestCase
      */
     public function testNoindexWhenNoToken()
     {
-        $this->smarty->expects($this->once())->method('getTemplateVars')
-            ->willReturn([]);
+        $this->smarty->expects($this->once())->method('hasValue')
+            ->with('o_token')->willReturn(false);
 
         $output = '<html><head></head><body>Hello World!</body></html>';
 
@@ -72,8 +60,10 @@ class SmartyOutputFilterNoindexTest extends \PHPUnit\Framework\TestCase
      */
     public function testNoindexWhenIndexed()
     {
-        $this->smarty->expects($this->any())->method('getTemplateVars')
-            ->willReturn([ 'o_token' => '0000000000000' ]);
+        $this->smarty->expects($this->once())->method('hasValue')
+            ->with('o_token')->willReturn(true);
+        $this->smarty->expects($this->once())->method('getValue')
+            ->with('o_token')->willReturn('0000000000000');
 
         $this->subscription->expects($this->once())->method('isIndexable')
             ->with('0000000000000')->willReturn(true);
@@ -90,8 +80,10 @@ class SmartyOutputFilterNoindexTest extends \PHPUnit\Framework\TestCase
      */
     public function testNoindexWhenNoIndexedAndMetaNotPresent()
     {
-        $this->smarty->expects($this->any())->method('getTemplateVars')
-            ->willReturn([ 'o_token' => '0000000000000' ]);
+        $this->smarty->expects($this->once())->method('hasValue')
+            ->with('o_token')->willReturn(true);
+        $this->smarty->expects($this->once())->method('getValue')
+            ->with('o_token')->willReturn('0000000000000');
 
         $this->subscription->expects($this->once())->method('isIndexable')
             ->with('0000000000000')->willReturn(false);
@@ -111,8 +103,10 @@ class SmartyOutputFilterNoindexTest extends \PHPUnit\Framework\TestCase
      */
     public function testNoindexWhenNoIndexedAndMetaPresent()
     {
-        $this->smarty->expects($this->any())->method('getTemplateVars')
-            ->willReturn([ 'o_token' => '0000000000000' ]);
+        $this->smarty->expects($this->once())->method('hasValue')
+            ->with('o_token')->willReturn(true);
+        $this->smarty->expects($this->once())->method('getValue')
+            ->with('o_token')->willReturn('0000000000000');
 
         $this->subscription->expects($this->once())->method('isIndexable')
             ->with('0000000000000')->willReturn(false);
