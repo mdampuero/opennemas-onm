@@ -395,7 +395,8 @@
 
               if ($scope.locale && $scope.locale.multilanguage) {
                 $scope.tagsInLocale = $scope.tags.filter(function(e) {
-                  return !e.locale || e.locale === $scope.locale.selected;
+                  return !$scope.locale || !e.locale ||
+                    e.locale === $scope.locale.selected;
                 });
               }
             }
@@ -422,8 +423,9 @@
 
           if (ov) {
             ovIds = ov.filter(function(e) {
-              // Only delete tags for all or current locale
-              return !e.locale || e.locale === $scope.locale.selected;
+              // Only delete tags for any or current locale
+              return !$scope.locale || !e.locale ||
+                e.locale === $scope.locale.selected;
             }).map(function(e) {
               return e.id;
             });
