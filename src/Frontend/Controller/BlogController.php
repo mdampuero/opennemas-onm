@@ -195,7 +195,7 @@ class BlogController extends FrontendController
      * @param  Request  $request The request object.
      * @return Response          The response object.
      */
-    public function hydrateList(array &$params) : void
+    public function hydrateList(array &$params = []) : void
     {
         $page = array_key_exists('page', $params) ? $params['page'] : 1;
 
@@ -287,7 +287,7 @@ class BlogController extends FrontendController
      *
      * @return Response the response object
      */
-    public function hydrateListAuthor(array $params, $author) : void
+    public function hydrateListAuthor(array &$params, $author) : void
     {
         $page = $params['page'] ?? 1;
 

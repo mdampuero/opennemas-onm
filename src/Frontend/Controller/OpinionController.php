@@ -156,7 +156,7 @@ class OpinionController extends FrontendController
      *
      * Action specific for the frontpage
      */
-    protected function hydrateList(array &$params) : void
+    protected function hydrateList(array &$params = []) : void
     {
         $page = array_key_exists('page', $params) ? $params['page'] : 1;
 
@@ -253,7 +253,7 @@ class OpinionController extends FrontendController
      *
      * Action specific for the opinion author frontpage
      */
-    protected function hydrateListAuthor(array $params, $author)
+    protected function hydrateListAuthor(array &$params, $author)
     {
         $page = $params['page'] ?? 1;
 
