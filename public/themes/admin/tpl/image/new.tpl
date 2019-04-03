@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form id="formulario" action="{if isset($photo->id)}{url name=admin_photo_update id=$photo->id}{else}{url name=admin_photo_create}{/if}" method="POST" name="form" ng-controller="ImageCtrl" ng-init="init({json_encode($photo)|clear_json})">
+  <form id="formulario" action="{if isset($photo->id)}{url name=admin_photo_update id=$photo->id}{else}{url name=admin_photo_create}{/if}" method="POST" name="form" ng-controller="ImageCtrl" ng-init="init({json_encode($photo)|clear_json}, {json_encode($locale)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">

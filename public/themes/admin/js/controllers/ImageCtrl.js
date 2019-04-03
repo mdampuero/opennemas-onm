@@ -18,8 +18,10 @@ angular.module('BackendApp.controllers').controller('ImageCtrl', [
      *
      * @param {object} photo The photo to edit.
      */
-    $scope.init = function(photo) {
+    $scope.init = function(photo, locale) {
       $scope.photo = photo;
+
+      $scope.configure({ locale: locale });
     };
   }
 ]);
