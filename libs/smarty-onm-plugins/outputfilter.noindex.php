@@ -16,7 +16,14 @@ function smarty_outputfilter_noindex($output, $smarty)
         return $output;
     }
 
-    $noindex = '<meta name="robots" content="noindex" />';
+    $pattern     = '/<meta\s+name="robots"\s+content="index,follow"\s*\/>/';
+    $replacement = '<meta name="robots" content="noindex" />';
 
-    return str_replace('</head>', $noindex . '</head>', $output);
+    // Replace existing robots meta
+    if (preg_match($pattern, $output)) {
+        return preg_replace($pattern, $replacement, $output);
+    }
+
+    // Add new robots meta
+    return str_replace('</head>', $replacement . '</head>', $output);
 }

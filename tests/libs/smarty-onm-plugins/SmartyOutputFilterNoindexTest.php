@@ -85,9 +85,10 @@ class SmartyOutputFilterNoindexTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests smarty_outputfilter_noindex when subscription token assigned to
-     * template but content has to be not indexed.
+     * template but content has to be not indexed and the meta is not present
+     * in the HTML.
      */
-    public function testNoindexWhenNoIndexed()
+    public function testNoindexWhenNoIndexedAndMetaNotPresent()
     {
         $this->smarty->expects($this->any())->method('getTemplateVars')
             ->willReturn([ 'o_token' => '0000000000000' ]);
@@ -96,6 +97,31 @@ class SmartyOutputFilterNoindexTest extends \PHPUnit\Framework\TestCase
             ->with('0000000000000')->willReturn(false);
 
         $output = '<html><head></head><body>Hello World!</body></html>';
+
+        $this->assertEquals(
+            '<html><head><meta name="robots" content="noindex" /></head><body>Hello World!</body></html>',
+            smarty_outputfilter_noindex($output, $this->smarty)
+        );
+    }
+
+    /**
+     * Tests smarty_outputfilter_noindex when subscription token assigned to
+     * template but content has to be not indexed and the meta robots is already
+     * present with "index,follow" value
+     */
+    public function testNoindexWhenNoIndexedAndMetaPresent()
+    {
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([ 'o_token' => '0000000000000' ]);
+
+        $this->subscription->expects($this->once())->method('isIndexable')
+            ->with('0000000000000')->willReturn(false);
+
+        $output = '<html>'
+            . '<head>'
+                . '<meta name="robots" content="index,follow" />'
+            . '</head>'
+            . '<body>Hello World!</body></html>';
 
         $this->assertEquals(
             '<html><head><meta name="robots" content="noindex" /></head><body>Hello World!</body></html>',
