@@ -55,16 +55,6 @@
                   <i class="fa fa-trash-o m-r-5"></i> {t}Remove{/t}
                 </button>
                 {/acl}
-                {acl isAllowed="ALBUM_UPDATE"}
-                <a class="link" href="[% edit(item.id, 'admin_album_show') %]">
-                  <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
-                </a>
-                {/acl}
-                {acl isAllowed="ALBUM_DELETE"}
-                <button class="del link link-danger" ng-click="sendToTrash(item)" type="button">
-                  <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
-                </button>
-                {/acl}
               </div>
             </td>
             <td class="left hidden-xs">
