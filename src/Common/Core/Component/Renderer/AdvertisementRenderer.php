@@ -109,7 +109,7 @@ class AdvertisementRenderer
         $deviceClasses = $this->getDeviceCSSClasses($ad);
 
         $tpl         = '<div class="ad-slot oat oat-visible oat-%s %s" data-mark="%s">%s</div>';
-        $content     = $this->renderInline($ad, $params);
+        $content     = $this->renderInline($ad, null, $params);
         $mark        = $this->getMark($ad);
         $orientation = empty($ad->params['orientation']) ?
             'top' : $ad->params['orientation'];
