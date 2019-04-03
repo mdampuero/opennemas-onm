@@ -93,8 +93,8 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
         $body        = '<p>foo bar baz</p><p>thud qwer asdf</p>';
         $bodyWithAds = '<p>foo bar baz</p><ad><p>thud qwer asdf</p><ad>';
         $this->assertEquals(
-            smarty_modifier_ads_in_body($body),
-            $bodyWithAds
+            $bodyWithAds,
+            smarty_modifier_ads_in_body($body)
         );
     }
 }
