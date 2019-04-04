@@ -141,7 +141,7 @@ class Video extends Content
             $this->pk_video   = $this->id;
             $this->pk_content = $this->id;
 
-            getService('dbal_connection')->insert('videos', [
+            $conn->insert('videos', [
                 'pk_video'    => $this->id,
                 'video_url'   => $data['video_url'],
                 'information' => array_key_exists('information', $data) ?
@@ -178,7 +178,7 @@ class Video extends Content
 
             parent::update($data);
 
-            getService('dbal_connection')->update(
+            $conn->update(
                 "videos",
                 [
                     'video_url' => $data['video_url'],
