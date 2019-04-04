@@ -107,6 +107,7 @@ class OpinionController extends ContentOldController
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
             'opinion'        => $opinion,
+            'blog'           => $opinion,
             'content'        => $opinion,
             'other_opinions' => $otherOpinions,
             'author'         => $opinion->author,
@@ -119,9 +120,14 @@ class OpinionController extends ContentOldController
 
         $this->view->assign($params);
 
+
+        $template = ($opinion->author->is_blog == 1)
+            ? 'opinion/blog_inner.tpl'
+            : 'opinion/opinion.tpl';
+
         $this->get('session')->set(
             'last_preview',
-            $this->view->fetch('opinion/opinion.tpl')
+            $this->view->fetch($template)
         );
 
         return new Response('OK');
