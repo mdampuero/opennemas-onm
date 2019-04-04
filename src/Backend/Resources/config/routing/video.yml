@@ -19,13 +19,6 @@ backend_video_show:
     options:
         expose: true
 
-backend_videos_update:
-    path:     /videos/{id}/update
-    defaults: { _controller: BackendBundle:Videos:update }
-
-backend_video_get_relations:
-    path:     /videos/{id}/relations
-    defaults: { _controller: BackendBundle:Videos:relations }
 backend_videos_content_provider:
     path:     /videos/content-provider
     defaults: { _controller: BackendBundle:Video:contentProvider }
