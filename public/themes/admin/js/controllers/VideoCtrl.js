@@ -2,8 +2,8 @@
  * Handle actions for poll inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
-  '$controller', '$sce', '$scope', '$timeout', 'http', 'routing', 'messenger',
-  function($controller, $sce, $scope, $timeout, http, routing, messenger) {
+  '$controller', '$scope', '$timeout', 'http', 'routing', 'messenger',
+  function($controller, $scope, $timeout, http, routing, messenger) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -167,14 +167,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
           $scope.flags.http.fetch_video_info = false;
         }
       );
-    };
-
-    $scope.trustHTML = function(src) {
-      return $sce.trustAsHtml(src);
-    };
-
-    $scope.trustSrc = function(src) {
-      return $sce.trustAsResourceUrl(src);
     };
 
     /**

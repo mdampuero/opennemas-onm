@@ -19,8 +19,9 @@
      *   and inners will need. All controllers should extend this.
      */
     .controller('BaseCtrl', [
-      '$rootScope', '$scope', '$timeout', '$uibModal', '$window', 'Editor', 'http', 'linker', 'localizer', 'messenger', 'Renderer',
-      function($rootScope, $scope, $timeout, $uibModal, $window, Editor, http, linker, localizer, messenger, Renderer) {
+      '$rootScope', '$scope', '$timeout', '$uibModal', '$window', 'Editor',
+      'http', 'linker', 'localizer', 'messenger', 'Renderer', '$sce',
+      function($rootScope, $scope, $timeout, $uibModal, $window, Editor, http, linker, localizer, messenger, Renderer, $sce) {
         /**
          * @memberOf BaseCtrl
          *
@@ -331,6 +332,28 @@
           modal.result.then(function(image) {
             $scope.uploadMediaImg(image, imgData);
           });
+        };
+
+        /**
+         * @function trustHTML
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Marks the text as trusted to be embed it as HTML.
+         */
+        $scope.trustHTML = function(src) {
+          return $sce.trustAsHtml(src);
+        };
+
+        /**
+         * @function trustSrc
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Marks the text as trusted to be embed it as URL.
+         */
+        $scope.trustSrc = function(src) {
+          return $sce.trustAsResourceUrl(src);
         };
 
         /**
