@@ -78,7 +78,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     $scope.parseItem = function(data) {
       if (data.item) {
         $scope.data.item      = angular.extend($scope.item, data.item);
-        data.item.categories = [ data.item.category ];
 
         var type = '';
 
@@ -216,18 +215,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         $scope.item.information['thumbnail'] = nv.pk_photo;
       } else {
         $scope.item.information.thumbnail = {};
-      }
-    }, true);
-
-    /**
-     * Updates scope when categories changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('item.categories', function(nv, ov) {
-      if (nv != ov) {
-        $scope.item.category = $scope.item.categories[0];
       }
     }, true);
   }

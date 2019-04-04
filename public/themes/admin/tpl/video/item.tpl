@@ -108,7 +108,7 @@
             </div>
 
             {include file="ui/component/content-editor/accordion/author.tpl"}
-            {include file="ui/component/content-editor/accordion/category.tpl"}
+            {include file="ui/component/content-editor/accordion/category.tpl" field="item.category"}
             {include file="ui/component/content-editor/accordion/tags.tpl"}
             {include file="ui/component/content-editor/accordion/slug.tpl" route="[% getFrontendUrl(item) %]"}
             {include file="ui/component/content-editor/accordion/scheduling.tpl"}
