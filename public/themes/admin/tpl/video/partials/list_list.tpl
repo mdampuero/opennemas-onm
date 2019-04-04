@@ -10,10 +10,8 @@
                 <label for="select-all"></label>
               </div>
             </th>
-            <th class="hidden-xs hidden-sm"></th>
+            <th class="hidden-xs hidden-sm" width=100></th>
             <th>{t}Title{/t}</th>
-            <th class="center hidden-xs">{t}Section{/t}</th>
-            {* <th class="center nowrap hidden-xs hidden-sm">{t}Author{/t}</th> *}
             {acl isAllowed="VIDEO_HOME"}
               <th class="hidden-xs text-center" width="100">{t}Home{/t}</th>
             {/acl}
@@ -35,14 +33,14 @@
             </td>
             <td class="hidden-sm hidden-xs">
               <div style="height: 120px; width: 120px;">
-                <dynamic-image ng-if="item.thumb_image" autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.thumb_image"></dynamic-image>
-                <dynamic-image ng-if="!item.thumb_image" autoscale="true" class="img-thumbnail" ng-model="item.thumb"></dynamic-image>
+                <dynamic-image ng-if="item.thumb_image" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.thumb_image"></dynamic-image>
+                <dynamic-image ng-if="!item.thumb_image" class="img-thumbnail" ng-model="item.thumb"></dynamic-image>
               </div>
             </td>
             <td>
-              <div class="visible-xs visible-sm" style="height: 150px; width: 150px; margin: 0 auto 15px;">
-                <dynamic-image ng-if="item.thumb_image" autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.thumb_image"></dynamic-image>
-                <dynamic-image ng-if="!item.thumb_image" autoscale="true" class="img-thumbnail" ng-model="item.thumb"></dynamic-image>
+              <div class="visible-xs visible-sm" style="max-height: 150px; max-width: 150px; ">
+                <dynamic-image ng-if="item.thumb_image" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.thumb_image"></dynamic-image>
+                <dynamic-image ng-if="!item.thumb_image" class="img-thumbnail" ng-model="item.thumb"></dynamic-image>
               </div>
               [% item.title %]
               <div class="small-text">
@@ -62,9 +60,6 @@
                 </button>
                 {/acl}
               </div>
-            </td>
-            <td class="center hidden-xs hidden-sm">
-              [% data.extra.categories[item.category].title %]
             </td>
             {acl isAllowed="VIDEO_HOME"}
               <td class="hidden-xs text-center">

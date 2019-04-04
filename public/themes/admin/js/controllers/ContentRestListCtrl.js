@@ -108,12 +108,16 @@
           $location.search('oql', oql);
 
           return http.get(route).then(function(response) {
-            var oldItems = $scope.data.items;
+            var oldData = $scope.data;
 
             $scope.data = response.data;
 
             if ($scope.mode === 'grid') {
-              $scope.data.items = oldItems.concat(response.data.items);
+              if (!oldData.items) {
+                oldData.items = [];
+              }
+
+              $scope.data.items = oldData.items.concat(response.data.items);
             } else {
               $scope.data.items = response.data.items;
             }
