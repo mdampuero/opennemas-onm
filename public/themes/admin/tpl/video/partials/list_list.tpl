@@ -1,4 +1,3 @@
-
 <div class="grid simple ng-cloak" ng-show="!flags.http.loading && mode === 'list' && items.length > 0">
   <div class="grid-body no-padding">
     <div class="table-wrapper ng-cloak">

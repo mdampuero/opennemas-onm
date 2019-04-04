@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="VideoListCtrl" ng-init="forcedLocale = '{$locale}'; init()">
+<div ng-controller="VideoListCtrl" ng-init="forcedLocale = '{$locale}'; init()">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -16,13 +16,13 @@
               {t}Videos{/t}
             </h4>
           </li>
-          <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
+          <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="config.locale.multilanguage && config.locale.available">
             <h4>
               <i class="fa fa-angle-right"></i>
             </h4>
           </li>
           <li class="quicklinks ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
-            <translator keys="data.extra.keys" ng-model="config.locale.selected" options="data.extra.locale"></translator>
+            <translator keys="data.extra.keys" ng-model="config.locale.selected" options="config.locale"></translator>
           </li>
         </ul>
         <div class="all-actions pull-right">
