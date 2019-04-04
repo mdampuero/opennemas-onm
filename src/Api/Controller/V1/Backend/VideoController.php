@@ -38,18 +38,25 @@ class VideoController extends ContentOldController
         $url    = $request->query->get('url', null, FILTER_DEFAULT);
         $url    = rawurldecode($url);
         $params = $this->container->getParameter('panorama');
-        $output = _("Please check the video url, seems to be incorrect");
 
-        if ($url) {
-            try {
-                $videoP = new \Panorama\Video($url, $params);
-                $output = $videoP->getVideoDetails();
-            } catch (\Exception $e) {
-                $output = _("Can't get video information. Check the url");
-            }
+        $msg = $this->get('core.messenger');
+
+        if (!$url) {
+            $msg->add(_("Please check the video url, seems to be incorrect"), 'error', 412);
+
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        return new JsonResponse($output);
+        try {
+            $videoP = new \Panorama\Video($url, $params);
+            $output = $videoP->getVideoDetails();
+
+            return new JsonResponse($output, 200);
+        } catch (\Exception $e) {
+            $msg->add(_("Can't get video information. Check the url"), 'error', 412);
+
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
+        }
     }
 
     /**
