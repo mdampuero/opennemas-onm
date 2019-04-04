@@ -38,8 +38,7 @@ class VideoController extends ContentOldController
     {
         $this->checkSecurity($this->extension, 'OPINION_SETTINGS');
 
-        $extra    = $request->request->get('settings');
-        $settings = [ 'video_settings' => $extra ];
+        $settings = [ 'video_settings' => $request->request->all() ];
 
         $msg = $this->get('core.messenger');
 

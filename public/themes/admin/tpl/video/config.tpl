@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form name="form" ng-controller="VideoConfigCtrl" ng-init="init()">
+<form name="form" ng-controller="VideoConfigCtrl" ng-init="init()" ng-submit="save()">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -43,7 +43,7 @@
           <label for="settings.total_front_more" class="form-label">{t}Number of videos in frontpage{/t}</label>
           <span class="help">{t}Total number of videos to show per page in the frontpage{/t}</span>
           <div class="controls">
-            <input type="number" name="settings.total_front_more" ng-model="settings.total_front_more" required />
+            <input type="number" name="settings[total_front_more]" ng-model="settings.total_front_more" required />
           </div>
         </div>
       </div>
