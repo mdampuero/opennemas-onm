@@ -17,6 +17,7 @@
           restrict: 'E',
           transclude: true,
           scope: {
+            category: '=?',
             defaultValueText: '@',
             exclude: '=?',
             labelText: '@',
@@ -28,11 +29,11 @@
             selectedText: '@'
           },
           template: function() {
-            return '<ui-select class="[% cssClass %]" ng-required="required" name="category" ng-if="!multiple" ng-model="$parent.$parent.ngModel" theme="select2">' +
+            return '<ui-select class="[% cssClass %]" ng-required="required" name="category" ng-if="!multiple" ng-model="$parent.$parent.category" theme="select2">' +
               '<ui-select-match placeholder="[% $parent.placeholder %]">' +
               '  <strong ng-if="labelText">[% labelText %]: </strong>[% $select.selected.title %]' +
               '</ui-select-match>' +
-              '<ui-select-choices group-by="groupCategories" repeat="item.pk_content_category as item in (categories | filter: { title: $select.search })">' +
+              '<ui-select-choices group-by="groupCategories" repeat="item in (categories | filter: { title: $select.search })">' +
               '  <div ng-bind-html="item.title | highlight: $select.search"></div>' +
               '</ui-select-choices>' +
             '</ui-select>' +
@@ -228,6 +229,26 @@
                 $scope.ngModel = [];
               }
             };
+
+            // Updates internal and external models when something changes
+            $scope.$watch('[ category, categories, ngModel ]', function(nv) {
+              if (!$scope.categories) {
+                return;
+              }
+
+              // Update ngModel when selected category changes
+              if (nv[0]) {
+                $scope.ngModel = nv[0].pk_content_category;
+                return;
+              }
+
+              // Change category only when ngModel initialized
+              if (nv[2] && !$scope.category) {
+                 $scope.category = $scope.categories.filter(function(e) {
+                  return e.pk_content_category === $scope.ngModel;
+                })[0];
+              }
+            }, true);
           },
         };
       }
