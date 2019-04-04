@@ -1,22 +1,26 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=backend_opinions_config}" method="POST" name="formulario" id="formulario">
+<form name="form" ng-controller="OpinionConfigCtrl" ng-init="init()">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-quote-right"></i>
-              {t}Opinions{/t}
+              <a class="no-padding" href="[% routing.generate('backend_opinions_list') %]">
+                <i class="fa fa-quote-right"></i>
+                {t}Opinions{/t}
+              </a>
             </h4>
           </li>
-          <li class="quicklinks hidden-xs">
-            <span class="h-seperate"></span>
+          <li class="quicklinks hidden-xs m-l-5 m-r-5">
+            <h4>
+              <i class="fa fa-angle-right"></i>
+            </h4>
           </li>
-          <li class="quicklinks hidden-xs">
-            <h5>{t}Settings{/t}</h5>
+          <li class="quicklinks">
+            <h4>{t}Configuration{/t}</h4>
           </li>
         </ul>
         <div class="all-actions pull-right">
@@ -30,9 +34,9 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks">
-              <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}...">
-                <span class="fa fa-save"></span>
-                <span class="text">{t}Save{/t}</span>
+              <button class="btn btn-loading btn-success text-uppercase" ng-click="save($event)" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+                <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
+                {t}Save{/t}
               </button>
             </li>
           </ul>
@@ -45,10 +49,9 @@
       <div class="grid-body ng-cloak">
         <div class="row">
           {acl isAllowed="MASTER"}
-            <div class="col-md-6" ng-init="extraFields = {json_encode($extra_fields)|escape:"html"}">
-              <autoform-editor ng-model="extraFields"/>
+            <div class="col-md-6">
+              <autoform-editor ng-model="settings.extrafields"/>
             </div>
-            <input id="extra-fields" name="extra-fields" type="hidden" value="[% extraFields %]">
           {/acl}
         </div>
       </div>

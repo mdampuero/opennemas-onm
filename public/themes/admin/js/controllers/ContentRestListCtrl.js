@@ -97,7 +97,7 @@
          */
         $scope.list = function(route) {
           if ($scope.mode === 'grid') {
-            $scope.flags.http.loadingMore = 1;
+            $scope.flags.loadingMore = 1;
           } else {
             $scope.flags.http.loading  = 1;
           }
