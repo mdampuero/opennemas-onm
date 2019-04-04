@@ -20,7 +20,7 @@ use Common\Core\Controller\Controller;
  *
  * @package Backend_Controllers
  */
-class VideosController extends BackendController
+class VideoController extends BackendController
 {
     /**
      * The extension name required by this controller.
