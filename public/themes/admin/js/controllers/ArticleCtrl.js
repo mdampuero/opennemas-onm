@@ -293,6 +293,33 @@
         };
 
         /**
+         * Returns the frontend url for the content given its object.
+         *
+         * @param {String} item  The object item to generate the url from.
+         *
+         * @return {String} The frontend URL.
+         */
+        $scope.getFrontendUrl = function(item) {
+          if (!item || !$scope.data.extra.category) {
+            return null;
+          }
+
+          var created = moment(item.created).format('YYYYMMDDHHmmss');
+
+          var localized  = localizer.get($scope.data.extra.locale)
+            .localize(item, [ 'slug' ], $scope.config.locale.selected);
+
+          return $scope.getL10nUrl(
+            $scope.routing.generate('frontend_article_show', {
+              id:            localized.pk_content,
+              category_name: $scope.data.extra.category.name,
+              created:       created,
+              slug:          localized.slug
+            })
+          );
+        };
+
+        /**
          * @function init
          * @memberOf ArticleListCtrl
          *

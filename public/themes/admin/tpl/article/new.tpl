@@ -240,7 +240,7 @@
                       {t}Category{/t} *
                     </label>
                     <div class="controls">
-                      <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" ng-model="article.pk_fk_content_category" placeholder="{t}Select a category{/t}…"></onm-category-selector>
+                      <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" category="data.extra.category" locale="config.locale.selected" ng-model="article.pk_fk_content_category" placeholder="{t}Select a category{/t}…"></onm-category-selector>
                     </div>
                   </div>
                   <div class="form-group">
@@ -256,7 +256,7 @@
                       {t}Slug{/t}
                     </label>
                     <span class="m-t-2 pull-right" ng-if="article.pk_article && backup.content_status != '0' && !form.pk_fk_content_category.$dirty && !form.content_status.$dirty">
-                      <a href="{$smarty.const.INSTANCE_MAIN_DOMAIN}/[% config.locale && config.locale.default === config.locale.selected ? '' : config.locale.selected + '/' %]articulo/[% (data.extra.categories | filter : { pk_content_category: article.pk_fk_content_category } : true)[0].name %]/[% article.slug %]/[% article.created | moment : 'YYYYMMDDHHmmss' %][% article.pk_content.toString().length < 6 ? ('000000' + article.pk_content).substr(-6) : article.pk_content %].html" target="_blank">
+                      <a href="[% getFrontendUrl(data.article) %]" target="_blank">
                         <i class="fa fa-external-link"></i>
                         {t}Link{/t}
                       </a>
