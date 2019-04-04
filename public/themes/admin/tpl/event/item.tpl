@@ -72,7 +72,7 @@
                 {include file="ui/component/content-editor/accordion/published.tpl"}
                 {include file="ui/component/content-editor/accordion/allow_comments.tpl"}
               </div>
-              {include file="ui/component/content-editor/accordion/category.tpl"}
+              {include file="ui/component/content-editor/accordion/category.tpl" field="item.categories[0]"}
               {include file="ui/component/content-editor/accordion/tags.tpl"}
               {include file="ui/component/content-editor/accordion/slug.tpl" route="[% getL10nUrl(routing.generate('frontend_event_show', { slug: item.slug })) %]"}
               {include file="ui/component/content-editor/accordion/scheduling.tpl"}

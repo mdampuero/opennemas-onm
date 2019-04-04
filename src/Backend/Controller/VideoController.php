@@ -20,7 +20,7 @@ use Common\Core\Controller\Controller;
  *
  * @package Backend_Controllers
  */
-class VideosController extends BackendController
+class VideoController extends BackendController
 {
     /**
      * The extension name required by this controller.
@@ -97,6 +97,8 @@ class VideosController extends BackendController
      */
     public function configAction(Request $request)
     {
+        return $this->render('video/config.tpl');
+
         if ('POST' == $request->getMethod()) {
             $settings = $request->request;
 

@@ -2,18 +2,18 @@
  * Handle actions for poll inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
-  '$controller', '$sce', '$rootScope', '$scope', '$timeout', 'http',
-  function($controller, $sce, $rootScope, $scope, $timeout, http) {
+  '$controller', '$scope', '$timeout', 'http', 'routing', 'messenger',
+  function($controller, $scope, $timeout, http, routing, messenger) {
     'use strict';
 
     // Initialize the super class and extend it.
     $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
     /**
-     * @memberOf OpinionCtrl
+     * @memberOf VideoCtrl
      *
      * @description
-     *  The cover object.
+     *  The item object.
      *
      * @type {Object}
      */
@@ -41,7 +41,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     };
 
     /**
-     * @memberOf OpinionCtrl
+     * @memberOf VideoCtrl
      *
      * @description
      *  The list of routes for the controller.
@@ -68,7 +68,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
     /**
      * @function parseItem
-     * @memberOf RestInnerCtrl
+     * @memberOf VideoCtrl
      *
      * @description
      *   Parses the response and adds information to the scope.
@@ -78,7 +78,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     $scope.parseItem = function(data) {
       if (data.item) {
         $scope.data.item      = angular.extend($scope.item, data.item);
-        data.item.categories = [ data.item.category ];
 
         var type = '';
 
@@ -117,6 +116,13 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       $scope.localize($scope.data.item, 'item', true);
     };
 
+    /**
+     * @function setType
+     * @memberOf VideoCtrl
+     *
+     * @description
+     *   Updates the scope to the proper video type.
+     */
     $scope.setType = function(type) {
       if (type === 'external' || type === 'script') {
         $scope.data.item.author_name = type;
@@ -160,16 +166,38 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
           $timeout(function() {
             angular.element('.tags-input-buttons .btn-info').triggerHandler('click');
           }, 250);
+        },
+        function(response) {
+          messenger.post(response.data.message);
+
+          $scope.flags.http.fetch_video_info = false;
         }
       );
     };
 
-    $scope.trustHTML = function(src) {
-      return $sce.trustAsHtml(src);
-    };
+    /**
+     * @function getFrontendUrl
+     * @memberOf VideoCtrl
+     *
+     * @description
+     * Returns the frontend url for the content given its object
+     *
+     * @param  {String} item  The object item to generate the url from.
+     * @return {String}
+     */
+    $scope.getFrontendUrl = function(item) {
+      var date = item.date;
 
-    $scope.trustSrc = function(src) {
-      return $sce.trustAsResourceUrl(src);
+      var formattedDate = moment(date).format('YYYYMMDDHHmmss');
+
+      return $scope.getL10nUrl(
+        routing.generate('frontend_video_show', {
+          id: item.pk_content,
+          created: formattedDate,
+          slug: item.slug,
+          category_name: item.category_name
+        })
+      );
     };
 
     /**
@@ -187,18 +215,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         $scope.item.information['thumbnail'] = nv.pk_photo;
       } else {
         $scope.item.information.thumbnail = {};
-      }
-    }, true);
-
-    /**
-     * Updates scope when categories changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('item.categories', function(nv, ov) {
-      if (nv != ov) {
-        $scope.item.category = $scope.item.categories[0];
       }
     }, true);
   }

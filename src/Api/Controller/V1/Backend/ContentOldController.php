@@ -81,7 +81,7 @@ class ContentOldController extends ContentController
         $tagIds = [];
         if (is_array($items)) {
             foreach ($items as $item) {
-                $tagIds = array_merge($tagIds, $item->tags);
+                $tagIds = array_merge($tagIds, $item->tags ?? []);
             }
         }
 

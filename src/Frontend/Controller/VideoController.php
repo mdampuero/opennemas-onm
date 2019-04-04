@@ -82,7 +82,7 @@ class VideoController extends FrontendController
      *
      * Action specific for the frontpage
      */
-    public function hydrateList(array &$params): void
+    public function hydrateList(array &$params = []): void
     {
         $category = $params['o_category'];
         $page     = $params['page'] ?? 1;
@@ -136,16 +136,16 @@ class VideoController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    protected function hydrateShow($params = [], $item = null)
+    protected function hydrateShow(array &$params = []):void
     {
-        $author = $this->get('user_repository')->find((int) $item->fk_author);
+        $author = $this->get('user_repository')->find((int) $params['content']->fk_author);
 
-        $item->author = $author;
+        $params['content']->author = $author;
 
         // Get other_videos for widget video most
         $order   = [ 'starttime' => 'DESC' ];
         $filters = [
-            'pk_content'             => [[ 'value' => $item->id, 'operator' => '<>' ]],
+            'pk_content'             => [[ 'value' => $params['content']->id, 'operator' => '<>' ]],
             'pk_fk_content_category' => [[ 'value' => $params['o_category']->pk_content_category ]],
             'content_type_name'      => [[ 'value' => 'video' ]],
             'content_status'         => [[ 'value' => 1 ]],
@@ -169,7 +169,7 @@ class VideoController extends FrontendController
         $params = array_merge($params, [
             'others_videos' => $otherVideos,
             'tags' => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($item->tags)['items']
+                ->getListByIdsKeyMapped($params['content']->tags)['items']
         ]);
     }
 

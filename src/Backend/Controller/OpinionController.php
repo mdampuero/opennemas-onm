@@ -49,13 +49,6 @@ class OpinionController extends BackendController
     protected $resource = 'opinion';
 
     /**
-     * The name of the setting to save extra field configuration.
-     *
-     * @var string
-     */
-    const EXTRA_INFO_TYPE = 'extraInfoContents.OPINION_MANAGER';
-
-    /**
      * Shows the information form for a opinion given its id.
      *
      * @param  Request  $request The request object.
@@ -142,50 +135,14 @@ class OpinionController extends BackendController
     /**
      * Handles the configuration for the opinion manager.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("hasExtension('OPINION_MANAGER')
      *     and hasPermission('OPINION_SETTINGS')")
      */
-    public function configAction(Request $request)
+    public function configAction()
     {
-        $ds = $this->get('orm.manager')->getDataSet('Settings');
-
-        if ('POST' !== $request->getMethod()) {
-            return $this->render('opinion/config.tpl', [
-                'configs'      => $ds->get([ 'opinion_settings' ]),
-                'extra_fields' => $this->get('orm.manager')
-                    ->getDataSet('Settings', 'instance')
-                    ->get(self::EXTRA_INFO_TYPE)
-            ]);
-        }
-
-        $extra      = $request->request->get('extra-fields');
-        $configsRAW = $request->request->get('opinion_settings');
-
-        $configs = [
-            'opinion_settings' => [
-                'total_opinions'        => filter_var($configsRAW['total_opinions'], FILTER_VALIDATE_INT),
-                'blog_orderFrontpage'   => filter_var($configsRAW['blog_orderFrontpage'], FILTER_SANITIZE_STRING),
-                'blog_itemsFrontpage'   => filter_var($configsRAW['blog_itemsFrontpage'], FILTER_VALIDATE_INT),
-            ],
-            'extraInfoContents.OPINION_MANAGER' => json_decode($extra, true)
-        ];
-
-        try {
-            $ds->set($configs);
-
-            $this->get('session')->getFlashBag()
-                ->add('success', _('Settings saved successfully.'));
-
-            return $this->redirect($this->generateUrl('backend_opinions_config'));
-        } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()
-                ->add('error', _('Unable to save the settings.'));
-
-            return $this->redirect($this->generateUrl('backend_opinions_config'));
-        }
+        return $this->render('opinion/config.tpl');
     }
 
     /**

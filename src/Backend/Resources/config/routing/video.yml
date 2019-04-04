@@ -1,32 +1,24 @@
-# Videos controller routes
+# Video controller routes
 backend_videos_list:
     path:     /videos
-    defaults: { _controller: BackendBundle:Videos:list }
+    defaults: { _controller: BackendBundle:Video:list }
     options:
         expose: true
 
 backend_videos_config:
     path:     /videos/config
-    defaults: { _controller: BackendBundle:Videos:config }
+    defaults: { _controller: BackendBundle:Video:config }
 
 backend_videos_create:
     path:     /videos/new
-    defaults: { _controller: BackendBundle:Videos:create }
+    defaults: { _controller: BackendBundle:Video:create }
 
 backend_video_show:
     path:     /videos/{id}
-    defaults: { _controller: BackendBundle:Videos:show }
+    defaults: { _controller: BackendBundle:Video:show }
     options:
         expose: true
 
-backend_videos_update:
-    path:     /videos/{id}/update
-    defaults: { _controller: BackendBundle:Videos:update }
-
-backend_video_get_relations:
-    path:     /videos/{id}/relations
-    defaults: { _controller: BackendBundle:Videos:relations }
-
 backend_videos_content_provider:
     path:     /videos/content-provider
-    defaults: { _controller: BackendBundle:Videos:contentProvider }
+    defaults: { _controller: BackendBundle:Video:contentProvider }
