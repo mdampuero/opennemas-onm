@@ -1,8 +1,8 @@
 <div class="ng-cloak" ng-show="mode === 'grid' && !flags.http.loadingMore && items.length > 0">
   <div ng-repeat="item in items" class="col-lg-2 col-md-3 col-sm-3 col-xs-6 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(item.id) }">
-    <div class="dynamic-image-placeholder" ng-click="select(item); xsOnly($event, toggle, item)">
+    <div class="dynamic-image-placeholder">
       <dynamic-image ng-if="item.thumb_image" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.thumb_image">
-        <div class="hidden-select" ng-click="toggle(item)"></div>
+        <div class="hidden-select" ng-click="select(item); xsOnly($event, toggle, item)"></div>
         <div class="thumbnail-actions ng-cloak">
           {acl isAllowed="VIDEO_DELETE"}
             <div class="thumbnail-action remove-action" ng-click="sendToTrash(item);$event.stopPropagation()">
@@ -17,7 +17,7 @@
         </div>
       </dynamic-image>
       <dynamic-image ng-if="!item.thumb_image" class="img-thumbnail" ng-model="item.thumb">
-        <div class="hidden-select" ng-click="toggle(item)"></div>
+        <div class="hidden-select" ng-click="select(item); xsOnly($event, toggle, item)"></div>
         <div class="thumbnail-actions ng-cloak">
           {acl isAllowed="VIDEO_DELETE"}
             <div class="thumbnail-action remove-action" ng-click="sendToTrash(item);">
