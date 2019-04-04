@@ -74,3 +74,17 @@ api_v1_backend_video_get_info:
     defaults: { _controller: ApiBundle:V1/Backend/Video:fetchInformation }
     options:
         expose: true
+
+api_v1_backend_video_config_save:
+    path:     /videos/config
+    defaults: { _controller: ApiBundle:V1/Backend/Video:saveConfig }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_video_config_show:
+    path:     /videos/config
+    defaults: { _controller: ApiBundle:V1/Backend/Video:showConfig }
+    methods:  [ GET ]
+    options:
+        expose: true

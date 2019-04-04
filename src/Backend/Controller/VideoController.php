@@ -97,6 +97,8 @@ class VideoController extends BackendController
      */
     public function configAction(Request $request)
     {
+        return $this->render('video/config.tpl');
+
         if ('POST' == $request->getMethod()) {
             $settings = $request->request;
 
