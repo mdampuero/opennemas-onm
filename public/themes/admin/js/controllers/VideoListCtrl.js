@@ -22,8 +22,6 @@
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
-        $scope.data = { items: [] };
-
         /**
          * The criteria to search.
          *
@@ -146,20 +144,6 @@
 
           $scope.criteria.epp = rows * cols;
         };
-
-        // Change page when scrolling in grid mode
-        $(window).scroll(function() {
-          if (!$scope.mode || $scope.mode === 'list' ||
-            $scope.items.length === $scope.data.total) {
-            return;
-          }
-
-          if (!$scope.flags.http.loading && $(document).height() <
-          $(window).height() + $(window).scrollTop()) {
-            $scope.criteria.page++;
-            $scope.$apply();
-          }
-        });
       }
     ]);
 })();

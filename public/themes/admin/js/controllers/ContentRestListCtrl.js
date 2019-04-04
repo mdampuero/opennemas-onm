@@ -79,7 +79,7 @@
         };
 
         /**
-         * Updates the criteria.page, used in litings with mode == grid.
+         * Updates the criteria.page, used in listings with mode == grid.
          */
         $scope.scroll = function() {
           if ($scope.total === $scope.items.length) {
@@ -111,18 +111,13 @@
           $location.search('oql', oql);
 
           return http.get(route).then(function(response) {
-            var oldData = $scope.data;
-
-            $scope.data = response.data;
-
             if ($scope.mode === 'grid') {
-              if (!oldData.items) {
-                oldData.items = [];
-              }
+              $scope.data = $scope.data ? $scope.data : { items: [] };
 
-              $scope.data.items = oldData.items.concat(response.data.items);
+              response.data.items = $scope.data.items.concat(response.data.items);
+              $scope.data = response.data;
             } else {
-              $scope.data.items = response.data.items;
+              $scope.data = response.data;
             }
 
             $scope.parseList(response.data);
@@ -137,9 +132,24 @@
 
             $scope.disableFlags('http');
             $scope.disableFlags('loadingMore');
-            $scope.data.items = [];
+            $scope.data = {};
           });
         };
+
+        // Change page when scrolling in grid mode
+        $(window).scroll(function() {
+          if (!$scope.mode ||
+            $scope.mode === 'list' ||
+            $scope.items.length === $scope.data.total) {
+            return;
+          }
+
+          if (!$scope.flags.http.loadingMore && $(document).height() <=
+          $(window).height() + $(window).scrollTop()) {
+            $scope.criteria.page++;
+            $scope.$apply();
+          }
+        });
       }
     ]);
 })();
