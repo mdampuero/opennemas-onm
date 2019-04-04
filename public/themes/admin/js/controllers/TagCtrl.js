@@ -26,6 +26,7 @@
          */
         $scope.item = {
           description: '',
+          locale: null
         };
 
         /**
