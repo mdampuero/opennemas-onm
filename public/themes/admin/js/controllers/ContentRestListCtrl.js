@@ -78,6 +78,9 @@
           });
         };
 
+        /**
+         * Updates the criteria.page, used in litings with mode == grid.
+         */
         $scope.scroll = function() {
           if ($scope.total === $scope.items.length) {
             return;

@@ -10,10 +10,10 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
     /**
-     * @memberOf OpinionCtrl
+     * @memberOf VideoCtrl
      *
      * @description
-     *  The cover object.
+     *  The item object.
      *
      * @type {Object}
      */
@@ -41,7 +41,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     };
 
     /**
-     * @memberOf OpinionCtrl
+     * @memberOf VideoCtrl
      *
      * @description
      *  The list of routes for the controller.
@@ -68,7 +68,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
     /**
      * @function parseItem
-     * @memberOf RestInnerCtrl
+     * @memberOf VideoCtrl
      *
      * @description
      *   Parses the response and adds information to the scope.
@@ -117,6 +117,13 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       $scope.localize($scope.data.item, 'item', true);
     };
 
+    /**
+     * @function setType
+     * @memberOf VideoCtrl
+     *
+     * @description
+     *   Updates the scope to the proper video type.
+     */
     $scope.setType = function(type) {
       if (type === 'external' || type === 'script') {
         $scope.data.item.author_name = type;
@@ -170,6 +177,10 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     };
 
     /**
+     * @function getFrontendUrl
+     * @memberOf VideoCtrl
+     *
+     * @description
      * Returns the frontend url for the content given its object
      *
      * @param  {String} item  The object item to generate the url from.
