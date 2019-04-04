@@ -8,7 +8,7 @@
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-quote-right m-r-10"></i>
+              <i class="fa fa-film m-r-10"></i>
             </h4>
           </li>
           <li class="quicklinks">
