@@ -17,9 +17,9 @@
           restrict: 'E',
           transclude: true,
           scope: {
-            category: '=?',
             defaultValueText: '@',
             exclude: '=?',
+            exportModel: '=?',
             labelText: '@',
             locale: '=',
             multiple: '@',
@@ -29,7 +29,7 @@
             selectedText: '@'
           },
           template: function() {
-            return '<ui-select class="[% cssClass %]" ng-required="required" name="category" ng-if="!multiple" ng-model="$parent.$parent.category" theme="select2">' +
+            return '<ui-select class="[% cssClass %]" ng-required="required" name="category" ng-if="!multiple" ng-model="$parent.$parent.exportModel" theme="select2">' +
               '<ui-select-match placeholder="[% $parent.placeholder %]">' +
               '  <strong ng-if="labelText">[% labelText %]: </strong>[% $select.selected.title %]' +
               '</ui-select-match>' +
@@ -203,8 +203,10 @@
 
               if (position < 0) {
                 $scope.ngModel.push(item.pk_content_category);
+                $scope.exportModel.push(item);
               } else {
                 $scope.ngModel.splice(position, 1);
+                $scope.exportModel.splice(position, 1);
               }
             };
 
@@ -231,22 +233,30 @@
             };
 
             // Updates internal and external models when something changes
-            $scope.$watch('[ category, categories, ngModel ]', function(nv) {
+            $scope.$watch('[ categories, exportModel, ngModel ]', function(nv) {
               if (!$scope.categories) {
                 return;
               }
 
               // Update ngModel when selected category changes
-              if (nv[0]) {
-                $scope.ngModel = nv[0].pk_content_category;
+              if (nv[1]) {
+                $scope.ngModel = !angular.isArray(nv[1]) ?
+                  nv[1].pk_content_category :
+                  nv[1].map(function(e) {
+                    return e.pk_content_category;
+                  });
                 return;
               }
 
               // Change category only when ngModel initialized
-              if (nv[2] && !$scope.category) {
-                 $scope.category = $scope.categories.filter(function(e) {
-                  return e.pk_content_category === $scope.ngModel;
-                })[0];
+              if (nv[2] && !$scope.exportModel) {
+                $scope.exportModel = !angular.isArray(nv[2]) ?
+                  $scope.categories.filter(function(e) {
+                    return e.pk_content_category === $scope.ngModel;
+                  })[0] :
+                  $scope.categories.filter(function(e) {
+                    return $scope.ngModel.indexOf(e.pk_content_category) !== -1;
+                  });
               }
             }, true);
           },
