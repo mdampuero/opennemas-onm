@@ -6,13 +6,12 @@
           <tr>
             <th class="checkbox-cell">
               <div class="checkbox checkbox-default">
-                <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
                 <label for="select-all"></label>
               </div>
             </th>
-            <th class="hidden-xs hidden-sm" style="width: 150px;"></th>
+            <th class="hidden-xs hidden-sm" style="width: 10px;"></th>
             <th class="title">{t}Information{/t}</th>
-            <th class="hidden-xs" width="200">{t}Category{/t}</th>
             <th class="hidden-xs text-center" width="100">{t}Home{/t}</th>
             <th class="hidden-xs text-center" width="100">{t}Favorite{/t}</th>
             <th class="text-center" width="100">{t}Published{/t}</th>
@@ -39,8 +38,11 @@
                 <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.cover"></dynamic-image>
               </div>
               [% item.title %]
-              <div class="small-text">
+              <div class="small-text m-t-5">
                 <strong>{t}Created{/t}:</strong> [% item.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+              </div>
+              <div class="small-text">
+                <strong>{t}Category{/t}:</strong> [% data.extra.categories[item.category].title %]
               </div>
               <div class="listing-inline-actions">
                 {acl isAllowed="ALBUM_UPDATE"}
@@ -57,28 +59,25 @@
                 {/acl}
               </div>
             </td>
-            <td class="left hidden-xs">
-              [% extra.categories[item.category].title %]
-            </td>
             {acl isAllowed="ALBUM_HOME"}
               <td class="hidden-xs text-center">
-                <button class="btn btn-white" ng-click="updateItem($index, item.id, 'backend_ws_content_toggle_in_home', 'in_home', item.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.homeLoading == 1, 'fa-home text-info': !item.home_loading == 1 && item.in_home == 1, 'fa-home': !item.home_loading == 1 && item.in_home == 0 }"></i>
-                  <i class="fa fa-times fa-sub text-danger" ng-if="!item.homeLoading == 1 && item.in_home == 0"></i>
+                <button class="btn btn-white" ng-click="patchItem(item, 'in_home', item.in_home != 1 ? 1 : 0)" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.in_homeLoading == 1, 'fa-home text-info': !item.in_homeLoading == 1 && item.in_home == 1, 'fa-home': !item.home_loading == 1 && item.in_home == 0 }"></i>
+                  <i class="fa fa-times fa-sub text-danger" ng-if="!item.in_homeLoading == 1 && item.in_home == 0"></i>
                 </button>
               </td>
             {/acl}
             {acl isAllowed="ALBUM_FAVORITE"}
               <td class="hidden-xs text-center">
-                <button class="btn btn-white"  ng-click="updateItem($index, item.id, 'backend_ws_content_toggle_favorite', 'favorite', item.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.favorite_loading == 1, 'fa-star text-warning': !item.favorite_loading == 1 && item.favorite == 1, 'fa-star-o': !item.favorite_loading == 1 && item.favorite != 1 }"></i>
+                <button class="btn btn-white" ng-click="patch(item, 'favorite', item.favorite != 1 ? 1 : 0)" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.favoriteLoading == 1, 'fa-star text-warning': !item.favoritLoading == 1 && item.favorite == 1, 'fa-star-o': !item.favoriteLoading == 1 && item.favorite != 1 }"></i>
                 </button>
               </td>
             {/acl}
             {acl isAllowed="ALBUM_AVAILABLE"}
               <td class="text-center">
-                <button class="btn btn-white" ng-click="updateItem($index, item.id, 'backend_ws_content_set_content_status', 'content_status', item.content_status != 1 ? 1 : 0, 'loading')" type="button">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.loading == 1, 'fa-check text-success': !item.loading == 1 && item.content_status == 1, 'fa-times text-danger': !item.loading == 1 && item.content_status == 0 }"></i>
+                <button class="btn btn-white" ng-click="patch(item, 'content_status', item.content_status != 1 ? 1 : 0)" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.content_statusLoading == 1, 'fa-check text-success': !item.content_statusLoading == 1 && item.content_status == 1, 'fa-times text-danger': !item.content_statusLoading == 1 && item.content_status == 0 }"></i>
                 </button>
               </td>
             {/acl}

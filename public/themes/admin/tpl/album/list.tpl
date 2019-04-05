@@ -32,11 +32,6 @@
               <i class="fa fa-question fa-lg"></i>
             </a>
           </li>
-          <li class="quicklinks hidden-xs m-l-5 m-r-5">
-            <h4>
-              <i class="fa fa-angle-right"></i>
-            </h4>
-          </li>
         </ul>
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
@@ -64,7 +59,7 @@
     </div>
   </div>
 
-  <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
+  <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.items.length == 0 }">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section pull-left">
@@ -85,12 +80,12 @@
         <ul class="nav quick-section pull-right">
           {acl isAllowed="ALBUM_AVAILABLE"}
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="patchSelected('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+            <button class="btn btn-link" ng-click="patchSelected('content_status', 0)" uib-tooltip="{t}Unpublish{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-times fa-lg"></i>
             </button>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="patchSelected('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+            <button class="btn btn-link" ng-click="patchSelected('content_status', 1)" uib-tooltip="{t}Publish{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-check fa-lg"></i>
             </button>
           </li>
@@ -98,21 +93,21 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks hidden-xs">
-            <button class="btn btn-link" ng-click="patchSelected('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" uib-tooltip="{t escape="off"}In home{/t}" uib-tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
-              <i class="fa fa-home"></i>
+            <button class="btn btn-link" href="#" ng-click="patchSelected('favorite', 1)" uib-tooltip="{t escape="off"}Favorite{/t}" tooltip-placement="bottom">
+              <i class="fa fa-star"></i>
             </button>
           </li>
           <li class="quicklinks hidden-xs">
-            <button class="btn btn-link" ng-click="patchSelected('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" uib-tooltip="{t escape="off"}Drop from home{/t}" uib-tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
-              <i class="fa fa-home"></i>
+            <button class="btn btn-link" href="#" ng-click="patchSelected('favorite', 0)" uib-tooltip="{t escape="off"}Unfavorite{/t}" tooltip-placement="bottom">
+              <i class="fa fa-star"></i>
               <i class="fa fa-times fa-sub text-danger"></i>
             </button>
           </li>
+          {/acl}
           {acl isAllowed="ALBUM_DELETE"}
           <li class="quicklinks">
             <span class="h-seperate"></span>
           </li>
-          {/acl}
           {/acl}
           {acl isAllowed="ALBUM_DELETE"}
           <li class="quicklinks">
@@ -150,7 +145,7 @@
           </li>
           <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
           <li class="quicklinks hidden-xs ng-cloak" ng-init="categories = {json_encode($categories)|clear_json}">
-            <onm-category-selector ng-model="criteria.pk_fk_content_category" label-text="{t}Category{/t}" default-value-text="{t}Any{/t}" placeholder="{t}Any{/t}" />
+            <onm-category-selector ng-model="criteria.pk_fk_content_category" locale="config.locale.selected" label-text="{t}Category{/t}" default-value-text="{t}Any{/t}" placeholder="{t}Any{/t}" />
           </li>
           <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
             <ui-select name="status" theme="select2" ng-model="criteria.content_status">

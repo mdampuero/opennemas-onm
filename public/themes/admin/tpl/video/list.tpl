@@ -96,11 +96,11 @@
               <i class="fa fa-check fa-lg"></i>
             </button>
           </li>
+          {/acl}
           {acl isAllowed="VIDEO_DELETE"}
           <li class="quicklinks">
             <span class="h-seperate"></span>
           </li>
-          {/acl}
           {/acl}
           {acl isAllowed="VIDEO_DELETE"}
           <li class="quicklinks">
