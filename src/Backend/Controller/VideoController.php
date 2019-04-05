@@ -56,37 +56,6 @@ class VideoController extends BackendController
     protected $resource = 'video';
 
     /**
-     * Handles the form for create a new video.
-     *
-     * @param  Request $request The request object.
-     * @return Response         The response object.
-     *
-     * @Security("hasExtension('VIDEO_MANAGER')
-     *     and hasPermission('VIDEO_CREATE')")
-     */
-    public function createAction(Request $request)
-    {
-        return $this->render('video/item.tpl');
-    }
-
-    /**
-     * Shows the form for a video given its id.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('VIDEO_MANAGER')
-     *     and hasPermission('VIDEO_UPDATE')")
-     */
-    public function showAction(Request $request, $id)
-    {
-        $id = $request->query->getDigits('id', null);
-
-        return $this->render('video/item.tpl', [ 'id' => $id]);
-    }
-
-
-    /**
      * Handles the form for configure the video module.
      *
      * @param  Request  $request The request object.
