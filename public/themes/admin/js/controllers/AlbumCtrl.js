@@ -1,108 +1,188 @@
-angular.module('BackendApp.controllers')
+/**
+ * Handle actions for album inner form.
+ */
+angular.module('BackendApp.controllers').controller('AlbumCtrl', [
+  '$controller', '$scope', '$uibModal', 'messenger',
+  function($controller, $scope, $uibModal, messenger) {
+    'use strict';
 
-  /**
-   * Handle actions for article inner.
-   */
-  .controller('AlbumCtrl', [
-    '$controller', '$rootScope', '$scope', '$uibModal', 'messenger',
-    function($controller, $rootScope, $scope, $uibModal, messenger) {
-      'use strict';
+    // Initialize the super class and extend it.
+    $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
-      // Initialize the super class and extend it.
-      $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+    /**
+     * @memberOf VideoCtrl
+     *
+     * @description
+     *  The item object.
+     *
+     * @type {Object}
+     */
+    $scope.item = {
+      body: '',
+      content_type_name: 'album',
+      fk_content_type: 7,
+      content_status: 0,
+      description: '',
+      favorite: 0,
+      frontpage: 0,
+      created: new Date(),
+      starttime: null,
+      endtime: null,
+      thumbnail: null,
+      title: '',
+      type: 0,
+      with_comments: 0,
+      categories: [],
+      related_contents: [],
+      tags: [],
+      external_link: '',
+    };
 
-      /**
-       * Parse the photos from template and initialize the scope properly
-       *
-       * @param Object photos The album photos.
-       */
-      $scope.parsePhotos = function(photos) {
-        $scope.photos  = [];
+    /**
+     * @memberOf VideoCtrl
+     *
+     * @description
+     *  The list of routes for the controller.
+     *
+     * @type {Object}
+     */
+    $scope.routes = {
+      create:   'api_v1_backend_album_create',
+      redirect: 'backend_album_show',
+      save:     'api_v1_backend_album_save',
+      show:     'api_v1_backend_album_show',
+      update:   'api_v1_backend_album_update'
+    };
 
-        for (var i = 0; i < photos.length; i++) {
-          photos[i].photo.footer = photos[i].description;
-          $scope.photos.push(photos[i].photo);
-        }
+    /**
+     * @function parseItem
+     * @memberOf RestInnerCtrl
+     *
+     * @description
+     *   Parses the response and adds information to the scope.
+     *
+     * @param {Object} data The data in the response.
+     */
+    $scope.parseItem = function(data) {
+      if (data.item) {
+        $scope.data.item = angular.extend($scope.item, data.item);
+      }
 
-        $('.btn.btn-primary').attr('disabled', false);
-      };
+      $scope.configure(data.extra);
+      $scope.localize($scope.data.item, 'item', true);
 
-      /**
-       * @function submit
-       * @memberOf AlbumCtrl
-       *
-       * @description
-       *   Saves tags and, then, submits the form.
-       */
-      $scope.submit = function(e) {
-        e.preventDefault();
+      // Assign cover
+      // Assign photos
 
-        if (!$scope.validatePhotosAndCover()) {
-          return false;
-        }
+      // var img1 = data.extra.related_contents.filter(function(el) {
+      //   return el.pk_photo === $scope.item.img1;
+      // }).shift();
 
-        if ($scope.form.$invalid) {
-          $('[name=form]')[0].reportValidity();
-          messenger.post(window.strings.forms.not_valid, 'error');
+      // if (img1) {
+      //   $scope.photo1 = img1;
+      // }
 
-          return false;
-        }
+      // var img2 = data.extra.related_contents.filter(function(el) {
+      //   return el.pk_photo === $scope.item.img2;
+      // }).shift();
 
-        if (!$('[name=form]')[0].checkValidity()) {
-          $('[name=form]')[0].reportValidity();
-          return false;
-        }
+      // if (img2) {
+      //   $scope.photo2 = img2;
+      // }
+    };
 
-        $scope.$broadcast('onmTagsInput.save', {
-          onSuccess: function(ids) {
-            $('[name=tags]').val(JSON.stringify(ids));
-            $('[name=form]').submit();
-          }
-        });
-      };
+    /**
+     * Parse the photos from template and initialize the scope properly
+     *
+     * @param Object photos The album photos.
+     */
+    $scope.parsePhotos = function(photos) {
+      $scope.photos  = [];
 
-      /**
-       * Show modal warning for album missing photos
-       */
-      $scope.validatePhotosAndCover = function() {
-        if ($scope.photos && $scope.cover) {
-          return true;
-        }
+      for (var i = 0; i < photos.length; i++) {
+        photos[i].photo.footer = photos[i].description;
+        $scope.photos.push(photos[i].photo);
+      }
 
-        $uibModal.open({
-          templateUrl: 'modal-edit-album-error',
-          backdrop: 'static',
-          controller: 'modalCtrl',
-          resolve: {
-            template: function() {
-              return null;
-            },
-            success: function() {
-              return null;
-            }
-          }
-        });
+      $('.btn.btn-primary').attr('disabled', false);
+    };
+
+    /**
+     * @function submit
+     * @memberOf AlbumCtrl
+     *
+     * @description
+     *   Saves tags and, then, submits the form.
+     */
+    $scope.submit = function(e) {
+      e.preventDefault();
+
+      if (!$scope.validatePhotosAndCover()) {
+        return false;
+      }
+
+      if ($scope.form.$invalid) {
+        $('[name=form]')[0].reportValidity();
+        messenger.post(window.strings.forms.not_valid, 'error');
 
         return false;
-      };
+      }
 
-      /**
-       * Updates the ids and footers when photos change.
-       *
-       * @param Object nv The new values.
-       * @param Object ov The old values.
-       */
-      $scope.$watch('photos', function(nv, ov) {
-        if (nv === ov) {
-          return false;
+      if (!$('[name=form]')[0].checkValidity()) {
+        $('[name=form]')[0].reportValidity();
+        return false;
+      }
+
+      $scope.$broadcast('onmTagsInput.save', {
+        onSuccess: function(ids) {
+          $('[name=tags]').val(JSON.stringify(ids));
+          $('[name=form]').submit();
         }
+      });
+    };
 
-        for (var i = 0; i < nv.length; i++) {
-          if (typeof nv[i].footer === 'undefined') {
-            nv[i].footer = nv[i].description;
+    /**
+     * Show modal warning for album missing photos
+     */
+    $scope.validatePhotosAndCover = function() {
+      if ($scope.photos && $scope.cover) {
+        return true;
+      }
+
+      $uibModal.open({
+        templateUrl: 'modal-edit-album-error',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return null;
+          },
+          success: function() {
+            return null;
           }
         }
-        return null;
-      }, true);
-    }
-  ]);
+      });
+
+      return false;
+    };
+
+    /**
+     * Updates the ids and footers when photos change.
+     *
+     * @param Object nv The new values.
+     * @param Object ov The old values.
+     */
+    $scope.$watch('photos', function(nv, ov) {
+      if (nv === ov) {
+        return false;
+      }
+
+      for (var i = 0; i < nv.length; i++) {
+        if (typeof nv[i].footer === 'undefined') {
+          nv[i].footer = nv[i].description;
+        }
+      }
+      return null;
+    }, true);
+  }
+]);

@@ -1,36 +1,24 @@
 # Album controller routes
 backend_albums_list:
     path:     /albums
-    defaults: { _controller: BackendBundle:Albums:list }
+    defaults: { _controller: BackendBundle:Album:list }
     options:
         expose: true
 
 backend_albums_config:
     path:     /albums/config
-    defaults: { _controller: BackendBundle:Albums:config }
-
-backend_albums_widget:
-    path:     /albums/widget
-    defaults: { _controller: BackendBundle:Albums:widget }
+    defaults: { _controller: BackendBundle:Album:config }
 
 backend_album_create:
-    path:     /albums/create
-    defaults: { _controller: BackendBundle:Albums:create }
-
-backend_album_update:
-    path:     /album/{id}/update
-    defaults: { _controller: BackendBundle:Albums:update }
+    path:     /albums/new
+    defaults: { _controller: BackendBundle:Album:create }
 
 backend_album_show:
     path:     /albums/{id}
-    defaults: { _controller: BackendBundle:Albums:show }
+    defaults: { _controller: BackendBundle:Album:show }
     options:
         expose: true
 
-backend_albums_savepositions:
-    path:     /albums/save-positions
-    defaults: { _controller: BackendBundle:Albums:savePositions }
-
 backend_albums_content_provider:
     path:     /albums/content-provider
-    defaults: { _controller: BackendBundle:Albums:contentProvider }
+    defaults: { _controller: BackendBundle:Album:contentProvider }

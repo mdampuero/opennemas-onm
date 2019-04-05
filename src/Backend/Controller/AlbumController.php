@@ -19,7 +19,7 @@ use Common\Core\Annotation\Security;
  *
  * @package Backend_Controllers
  */
-class AlbumsController extends Controller
+class AlbumController extends Controller
 {
     /**
      * Lists all albums.
@@ -35,19 +35,6 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Lists all the albums for the widget.
-     *
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('ALBUM_MANAGER')
-     *     and hasPermission('ALBUM_ADMIN')")
-     */
-    public function widgetAction()
-    {
-        return $this->render('album/list.tpl', [ 'category' => 'widget' ]);
-    }
-
-    /**
      * Shows and handles the form for create a new album.
      *
      * @param  Request  $request The request object.
@@ -59,7 +46,7 @@ class AlbumsController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
-            return $this->render('album/new.tpl', [
+            return $this->render('album/item.tpl', [
                 'authors'        => $this->getAuthors(),
                 'commentsConfig' => $this->get('orm.manager')
                     ->getDataSet('Settings')
@@ -163,6 +150,10 @@ class AlbumsController extends Controller
      */
     public function showAction(Request $request)
     {
+        $id = $request->query->getDigits('id', null);
+
+        return $this->render('album/item.tpl', [ 'id' => $id]);
+
         $id    = $request->query->getDigits('id');
         $album = $this->get('entity_repository')->find('Album', $id);
 
@@ -188,7 +179,7 @@ class AlbumsController extends Controller
             ]));
         }
 
-        return $this->render('album/new.tpl', [
+        return $this->render('album/item.tpl', [
             'category'       => $album->category,
             'photos'         => $album->_getAttachedPhotos($id),
             'album'          => $album,
@@ -285,42 +276,6 @@ class AlbumsController extends Controller
             'admin_album_show',
             [ 'id' => $album->id ]
         ));
-    }
-
-    /**
-     * Save positions for widget.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('ALBUM_MANAGER')
-     *     and hasPermission('ALBUM_ADMIN')")
-     */
-    public function savePositionsAction(Request $request)
-    {
-        $positions = $request->query->get('positions');
-
-        $result = true;
-        if (isset($positions)
-            && is_array($positions)
-            && count($positions) > 0
-        ) {
-            $pos = 1;
-            foreach ($positions as $id) {
-                $album  = new \Album($id);
-                $result = $result && $album->setPosition($pos);
-
-                $pos++;
-            }
-        }
-
-        if ($result) {
-            $message = _("Positions saved successfully.");
-        } else {
-            $message = _("Unable to save the new positions.");
-        }
-
-        return new Response($message);
     }
 
     /**
