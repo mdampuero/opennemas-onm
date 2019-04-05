@@ -111,7 +111,7 @@
           {/acl}
           {acl isAllowed="ALBUM_DELETE"}
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="sendToTrashSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+            <button class="btn btn-link" ng-click="sendToTrash()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-trash-o fa-lg"></i>
             </button>
           </li>

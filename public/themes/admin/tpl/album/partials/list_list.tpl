@@ -11,7 +11,7 @@
               </div>
             </th>
             <th class="hidden-xs hidden-sm" style="width: 10px;"></th>
-            <th class="title">{t}Information{/t}</th>
+            <th class="title"></th>
             <th class="hidden-xs text-center" width="100">{t}Home{/t}</th>
             <th class="hidden-xs text-center" width="100">{t}Favorite{/t}</th>
             <th class="text-center" width="100">{t}Published{/t}</th>
