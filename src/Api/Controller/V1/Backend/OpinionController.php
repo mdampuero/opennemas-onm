@@ -208,7 +208,9 @@ class OpinionController extends ContentOldController
                 if (!empty($element->{$relation})) {
                     $photo = $em->find('Photo', $element->{$relation});
 
-                    $extra[] = \Onm\StringUtils::convertToUtf8($photo);
+                    if (is_object($photo)) {
+                        $extra[] = \Onm\StringUtils::convertToUtf8($photo);
+                    }
                 }
             }
         }
