@@ -173,6 +173,7 @@
         $scope.save = function() {
           if ($scope.form.$invalid) {
             messenger.post(window.strings.forms.not_valid, 'error');
+            $scope.disableFlags('http');
 
             return false;
           }

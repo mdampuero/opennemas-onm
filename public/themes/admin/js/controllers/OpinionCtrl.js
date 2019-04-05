@@ -150,13 +150,14 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     };
 
     /**
-     * Returns the frontend url for the content given its object
+     * Returns the frontend url for the content given its object.
      *
-     * @param  {String} item  The object item to generate the url from.
-     * @return {String}
+     * @param {String} item  The object item to generate the url from.
+     *
+     * @return {String} The frontend URL.
      */
     $scope.getFrontendUrl = function(item) {
-      var date = item.date;
+      var date = item.created;
 
       var formattedDate = moment(date).format('YYYYMMDDHHmmss');
 
