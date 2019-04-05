@@ -11,6 +11,7 @@
  *
  * @package Model
  */
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
