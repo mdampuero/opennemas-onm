@@ -42,7 +42,7 @@
           title: '',
           type: 0,
           with_comments: 0,
-          categories: [],
+          categories: [ null ],
           related_contents: [],
           tags: [],
           event_start_date: null,
