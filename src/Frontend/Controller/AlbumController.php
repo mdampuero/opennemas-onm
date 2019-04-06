@@ -9,11 +9,6 @@
  */
 namespace Frontend\Controller;
 
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-
 /**
  * Displays an album or a list of albums.
  */
@@ -143,38 +138,29 @@ class AlbumController extends FrontendController
      */
     protected function hydrateShow(array &$params = []):void
     {
-        $author = $this->get('user_repository')->find((int) $params['content']->fk_author);
-
-        $params['content']->author = $author;
-
-        // Get the other albums for the albums widget
+        $date     = date('Y-m-d H:i:s');
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('album_settings');
         $epp      = isset($settings['total_front']) ? ($settings['total_front']) : 2;
 
-        $order   = [ 'starttime' => 'DESC' ];
-        $filters = [
-            'pk_content'             => [[ 'value' => $params['content']->id, 'operator' => '<>' ]],
-            'pk_fk_content_category' => [[ 'value' => $params['o_category']->pk_content_category ]],
-            'content_type_name'      => [[ 'value' => 'album' ]],
-            'content_status'         => [[ 'value' => 1 ]],
-            'in_litter'              => [[ 'value' => 1, 'operator' => '!=' ]],
-            'starttime'       => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-            ],
-            'endtime'         => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-            ]
-        ];
+        $author = $this->get('user_repository')->find((int) $params['content']->fk_author);
 
-        $otherAlbums = $this->get('entity_repository')->findBy($filters, $order, $epp, $params['page']);
+        $params['content']->author = $author;
+
+        // Get the other albums for the albums widget
+        $response = $this->get('api.service.content_old')->getList(sprintf(
+            'content_type_name="album" and content_status=1 and in_litter=0 '
+            . 'and pk_fk_content_category=%d '
+            . 'and (starttime IS NULL or starttime < "%s") '
+            . 'and (endtime IS NULL or endtime > "%s") '
+            . 'order by starttime desc limit %d offset %d',
+            $params['o_category']->pk_content_category,
+            $date,
+            $date,
+            $epp,
+            $params['page']
+        ));
 
         // In order to make subscription module to work remove the attached
         // album photos when not cacheable
@@ -192,7 +178,7 @@ class AlbumController extends FrontendController
             'album_photos'       => $_albumArray,
             'album_photos_paged' => $_albumArrayPaged,
             'items_page'         => $epp,
-            'gallerys'           => $otherAlbums
+            'gallerys'           => $response['items']
         ]);
     }
 
@@ -202,7 +188,7 @@ class AlbumController extends FrontendController
      * This func overrides the parent function just to
      * propertly generate urls to category frontpages
      **/
-    public function getRoute($action, $params = [])
+    protected function getRoute($action, $params = [])
     {
         if ($action == 'list' && array_key_exists('category_name', $params)) {
             return 'frontend_album_frontpage_category';
