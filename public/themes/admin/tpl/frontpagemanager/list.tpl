@@ -298,7 +298,7 @@
           {/is_module_activated}
           {is_module_activated name="VIDEO_MANAGER"}
           <li>
-            <a href="{url name=admin_videos_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Videos{/t}</a>
+            <a href="{url name=backend_videos_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Videos{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="ALBUM_MANAGER"}
