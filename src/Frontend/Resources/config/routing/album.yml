@@ -32,11 +32,13 @@ frontend_album_show_with_date_slug:
         l10n: true
 
 frontend_album_show:
-    path: /album/{category_name}/{slug}/{album_id}.{_format}
-    defaults: { _controller: FrontendBundle:Albums:show, _format: html, page: 1 }
+    path: /album/{category_name}/{slug}/{created}{id}.html
+    defaults: { _controller: FrontendBundle:Albums:show, page: 1 }
     requirements:
         category_name: '[^/]+'
         slug         : '[^/]+'
-        album_id     : '([0-9]+)'
+        created      : '([0-9]+)'
+        id           : '([0-9]+)'
     options:
         l10n: true
+        expose: true

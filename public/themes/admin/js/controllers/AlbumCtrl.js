@@ -2,8 +2,8 @@
  * Handle actions for album inner form.
  */
 angular.module('BackendApp.controllers').controller('AlbumCtrl', [
-  '$controller', '$scope', '$uibModal', 'messenger',
-  function($controller, $scope, $uibModal, messenger) {
+  '$controller', '$scope', '$uibModal', 'messenger', 'routing', 'moment',
+  function($controller, $scope, $uibModal, messenger, routing, moment) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -36,6 +36,7 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       related_contents: [],
       tags: [],
       external_link: '',
+      agency: '',
     };
 
     /**
@@ -89,6 +90,31 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       // if (img2) {
       //   $scope.photo2 = img2;
       // }
+    };
+
+    /**
+     * @function getFrontendUrl
+     * @memberOf AlbumCtrl
+     *
+     * @description
+     * Returns the frontend url for the content given its object
+     *
+     * @param  {String} item  The object item to generate the url from.
+     * @return {String}
+     */
+    $scope.getFrontendUrl = function(item) {
+      var date = item.date;
+
+      var formattedDate = moment(date).format('YYYYMMDDHHmmss');
+
+      return $scope.getL10nUrl(
+        routing.generate('frontend_album_show', {
+          id: item.pk_content,
+          created: formattedDate,
+          slug: item.slug,
+          category_name: item.category_name
+        })
+      );
     };
 
     /**

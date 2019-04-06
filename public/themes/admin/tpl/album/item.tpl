@@ -98,19 +98,9 @@
               <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
             </div>
 
-            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Cover image{/t}" field="cover"}
+            {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Cover image{/t}" field="cover_image"}
             {include file="ui/component/content-editor/accordion/input-text.tpl" title="{t}Agency{/t}" field="agency"}
 
-            {* <div class="grid-collapse-body expanded">
-              <div class="form-group">
-                <label class="form-label" for="agency">
-                  {t}Agency{/t}
-                </label>
-                <div class="controls">
-                  <input class="form-control" id="agency" name="agency" type="text" value="{$album->agency|clearslash|escape:"html"}"/>
-                </div>
-              </div>
-            </div> *}
           </div>
         </div>
       </div>
@@ -121,10 +111,6 @@
             {include file="ui/component/content-editor/textarea.tpl" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true}
           </div>
         </div>
-      </div>
-    </div>
-    <div class="row ng-cloak" ng-show="!flags.http.loading && item">
-      <div class="col-md-8" {if !empty($photos)}ng-init="parsePhotos({json_encode($photos)|clear_json})"{/if}>
         <div class="grid simple">
           <div class="grid-title">
             <h4>{t}Album images{/t}</h4>
@@ -175,51 +161,8 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4" {if isset($album->cover_image) && $album->cover_image->id}ng-init="cover = {json_encode($album->cover_image)|clear_json}"{/if}>
-        <div class="grid simple">
-          <div class="grid-title">
-            <h4>{t}Cover image{/t}</h4>
-          </div>
-          <div class="grid-body">
-            <div class="thumbnail-wrapper">
-              <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.cover }"></div>
-              <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.cover }">
-                <p>Are you sure?</p>
-                <div class="confirm-actions">
-                  <button class="btn btn-link" ng-click="toggleOverlay('cover')" type="button">
-                    <i class="fa fa-times fa-lg"></i>
-                    {t}No{/t}
-                  </button>
-                  <button class="btn btn-link" ng-click="removeImage('cover');toggleOverlay('cover')" type="button">
-                    <i class="fa fa-check fa-lg"></i>
-                    {t}Yes{/t}
-                  </button>
-                </div>
-              </div>
-              <div class="thumbnail-placeholder">
-                <div class="img-thumbnail" ng-if="!cover">
-                  <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover">
-                    <i class="fa fa-picture-o fa-2x"></i>
-                    <h5>Pick an image</h5>
-                  </div>
-                </div>
-                <div class="dynamic-image-placeholder" ng-if="cover">
-                  <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="cover">
-                    <div class="thumbnail-actions">
-                      <div class="thumbnail-action remove-action" ng-click="toggleOverlay('cover')">
-                        <i class="fa fa-trash-o fa-2x"></i>
-                      </div>
-                      <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover" media-picker-types="photo">
-                        <i class="fa fa-camera fa-2x"></i>
-                      </div>
-                    </div>
-                  </dynamic-image>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    </div>
+    <div class="row ng-cloak" ng-show="!flags.http.loading && item">
     </div>
   </div>
   <script type="text/ng-template" id="modal-edit-album-error">
