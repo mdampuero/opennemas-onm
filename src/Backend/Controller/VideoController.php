@@ -67,24 +67,6 @@ class VideoController extends BackendController
     public function configAction(Request $request)
     {
         return $this->render('video/config.tpl');
-
-        if ('POST' == $request->getMethod()) {
-            $settings = $request->request;
-
-            foreach ($settings as $key => $value) {
-                $this->get('orm.manager')->getDataSet('Settings')
-                    ->set($key, $value);
-            }
-
-            $this->get('session')->getFlashBag()->add('success', _('Settings saved.'));
-
-            return $this->redirect($this->generateUrl('backend_videos_config'));
-        } else {
-            return $this->render('video/config.tpl', [
-                'configs' => $this->get('orm.manager')->getDataSet('Settings')
-                    ->get([ 'video_settings' ])
-            ]);
-        }
     }
 
     /**
@@ -128,7 +110,7 @@ class VideoController extends BackendController
             'page'        => $page,
             'total'       => $countVideos,
             'route'       => [
-                'name'   => 'admin_videos_content_provider',
+                'name'   => 'backend_videos_content_provider',
                 'params' => [ 'category' => $categoryId ]
             ],
         ]);
@@ -137,21 +119,5 @@ class VideoController extends BackendController
             'videos'     => $videos,
             'pagination' => $pagination,
         ]);
-    }
-
-    /**
-     * Returns the list of authors.
-     *
-     * @return array The list of authors.
-     */
-    protected function getAuthors()
-    {
-        $response = $this->get('api.service.author')
-            ->getList('order by name asc');
-
-        return $this->get('data.manager.filter')
-            ->set($response['items'])
-            ->filter('mapify', [ 'key' => 'id'])
-            ->get();
     }
 }

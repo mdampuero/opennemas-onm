@@ -1,5 +1,5 @@
 /**
- * Handle actions for poll inner form.
+ * Handle actions for video inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
   '$controller', '$scope', '$timeout', 'http', 'routing', 'messenger',
