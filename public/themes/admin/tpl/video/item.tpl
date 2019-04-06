@@ -38,9 +38,9 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <button class="btn btn-success text-uppercase" ng-click="submit();" data-text="{t}Saving{/t}..." type="submit">
-                <i class="fa fa-save m-r-5"></i>
-                <span class="text">{t}Save{/t}</span>
+              <button class="btn btn-loading btn-success text-uppercase" ng-click="submit();" type="button">
+                <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
+                {t}Save{/t}
               </button>
             </li>
           </ul>

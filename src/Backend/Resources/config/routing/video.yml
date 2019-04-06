@@ -16,6 +16,8 @@ backend_videos_create:
 backend_video_show:
     path:     /videos/{id}
     defaults: { _controller: BackendBundle:Video:show }
+    requirements:
+        id: '(\d)*'
     options:
         expose: true
 
