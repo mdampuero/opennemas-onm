@@ -101,7 +101,7 @@
             {is_module_activated name="VIDEO_MANAGER"}
             {acl isAllowed="VIDEO_CREATE"}
             <div class="button">
-              <a href="{url name=admin_videos_create}" title="{t}Media manager{/t}" class="btn btn-white btn-large col-xs-12">
+              <a href="{url name=backend_videos_create}" title="{t}Media manager{/t}" class="btn btn-white btn-large col-xs-12">
                 <i class="fa fa-video-camera"></i>{t}Upload video{/t}
               </a>
             </div>
