@@ -164,7 +164,7 @@ class Agency
             'photo'       => $article->img1,
             'photoInner'  => $article->img2,
             'tags'        => getService('api.service.tag')
-                ->getListByIdsKeyMapped($article->tag_ids, $locale)['items']
+                ->getListByIdsKeyMapped($article->tags, $locale)['items']
         ]);
 
         XmlFormat::$rootName              = 'NewsML';

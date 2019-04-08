@@ -119,7 +119,7 @@ class FrontendController extends Controller
         $this->view->setConfig($this->getCacheConfiguration($action));
 
         if (!$this->isCached($params)) {
-            $this->hydrateShow($params, $item);
+            $this->hydrateShow($params);
         }
 
         return $this->render(
@@ -163,7 +163,7 @@ class FrontendController extends Controller
         $this->view->setConfig($this->getCacheConfiguration($action));
 
         if (!$this->isCached($params)) {
-            $this->hydrateShowAmp($params, $item);
+            $this->hydrateShowAmp($params);
         }
 
         return $this->render(
@@ -488,8 +488,10 @@ class FrontendController extends Controller
     /**
      * Updates the list of parameters and/or the item when the response for
      * the current request is not cached.
+     *
+     * @param array $params The list of parameters already in set.
      */
-    protected function hydrateShow()
+    protected function hydrateShow(array &$params = []) : void
     {
     }
 
@@ -497,17 +499,19 @@ class FrontendController extends Controller
      * Updates the list of parameters and/or the item when the response for
      * the current request is not cached.
      *
-     * @param array $params the list of parameters already in set.
+     * @param array $params The list of parameters already in set.
      */
-    protected function hydrateList(array &$params) : void
+    protected function hydrateList(array &$params = []) : void
     {
     }
 
     /**
      * Updates the list of parameters and/or the item when the response for
      * the current request is not cached.
+     *
+     * @param array $params Thelist of parameters already in set.
      */
-    protected function hydrateShowAmp($params, $item)
+    protected function hydrateShowAmp(array &$params = []) : void
     {
         // RenderColorMenu
         $siteColor   = '#005689';
@@ -546,19 +550,19 @@ class FrontendController extends Controller
         }
 
         $em = $this->get('entity_repository');
-        if (isset($item->img2) && ($item->img2 > 0)) {
-            $photoInt = $em->find('Photo', $item->img2);
+        if (isset($params['content']->img2) && ($params['content']->img2 > 0)) {
+            $photoInt = $em->find('Photo', $params['content']->img2);
             $this->view->assign('photoInt', $photoInt);
         }
 
-        if (isset($item->fk_video2) && ($item->fk_video2 > 0)) {
-            $videoInt = $em->find('Video', $item->fk_video2);
+        if (isset($params['content']->fk_video2) && ($params['content']->fk_video2 > 0)) {
+            $videoInt = $em->find('Video', $params['content']->fk_video2);
             $this->view->assign('videoInt', $videoInt);
         }
 
         $this->view->assign([
-            'related_contents'   => $this->getRelated($item),
-            'suggested_contents' => $this->getSuggested($item, $params['o_category'])
+            'related_contents'   => $this->getRelated($params['content']),
+            'suggested_contents' => $this->getSuggested($params['content'], $params['o_category'])
         ]);
     }
 
@@ -686,9 +690,9 @@ class FrontendController extends Controller
             $tagIds = array_merge($tagIds, $content->tags);
         }
 
-        $tags = $this->get('api.service.tag')
-            ->getListByIdsKeyMapped($tagIds)['items'];
-
-        return $tags;
+        return $this->get('api.service.tag')->getListByIdsKeyMapped(
+            $tagIds,
+            $this->get('core.locale')->getRequestLocale()
+        )['items'];
     }
 }

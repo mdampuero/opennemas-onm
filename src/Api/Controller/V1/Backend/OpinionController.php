@@ -52,7 +52,7 @@ class OpinionController extends ContentOldController
             }
         }
 
-        $opinion->tag_ids = [];
+        $opinion->tags = [];
 
         $this->view = $this->get('core.template');
         $this->view->setCaching(0);
@@ -115,7 +115,7 @@ class OpinionController extends ContentOldController
             'photo'          => $photo,
             'suggested'      => $machineSuggestedContents,
             'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($opinion->tag_ids)['items']
+                ->getListByIdsKeyMapped($opinion->tags)['items']
         ];
 
         $this->view->assign($params);

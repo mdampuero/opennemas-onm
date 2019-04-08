@@ -138,14 +138,10 @@ class OpinionController extends FrontendController
      */
     protected function getParameters($params, $item = null)
     {
-        $locale = $this->get('core.locale')->getRequestLocale();
         $params = parent::getParameters($params, $item);
 
         if (!empty($item)) {
             $params[$item->content_type_name] = $item;
-
-            $params['tags'] = $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($item->tag_ids, $locale)['items'];
 
             if (array_key_exists('bodyLink', $item->params)) {
                 $params['o_external_link'] = $item->params['bodyLink'];
@@ -160,7 +156,7 @@ class OpinionController extends FrontendController
      *
      * Action specific for the frontpage
      */
-    protected function hydrateList(array &$params) : void
+    protected function hydrateList(array &$params = []) : void
     {
         $page = array_key_exists('page', $params) ? $params['page'] : 1;
 
@@ -257,7 +253,7 @@ class OpinionController extends FrontendController
      *
      * Action specific for the opinion author frontpage
      */
-    protected function hydrateListAuthor(array $params, $author)
+    protected function hydrateListAuthor(array &$params, $author)
     {
         $page = $params['page'] ?? 1;
 
@@ -355,26 +351,22 @@ class OpinionController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    protected function hydrateShow($params = [], $item = null)
+    protected function hydrateShow(array &$params = []) : void
     {
-        $author = $this->get('user_repository')->find((int) $item->fk_author);
-
-        $item->author = $author;
+        $params['tags'] = $this->getTags($params['content']);
 
         // Associated media code
-        if (isset($item->img2) && ($item->img2 > 0)) {
-            $photo = $this->get('opinion_repository')->find('Photo', $item->img2);
-
-            $params['photo'] = $photo;
+        if (isset($params['content']->img2) && ($params['content']->img2 > 0)) {
+            $params['photo'] = $this->get('opinion_repository')
+                ->find('Photo', $params['content']->img2);
         }
 
         // TODO: Remove this ASAP
-        $item->author_name_slug = \Onm\StringUtils::getTitle($item->name);
+        $params['author'] = $this->get('user_repository')
+            ->find((int) $params['content']->fk_author);
 
-        $params = array_merge($params, [
-            'author' => $author,
-        ]);
-
-        $this->view->assign($params);
+        $params['content']->author           = $params['author'];
+        $params['content']->author_name_slug =
+            \Onm\StringUtils::getTitle($params['content']->name);
     }
 }

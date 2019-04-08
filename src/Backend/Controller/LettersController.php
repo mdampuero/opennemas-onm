@@ -49,7 +49,6 @@ class LettersController extends Controller
             return $this->render('letter/new.tpl', [
                 'locale'         => $this->get('core.locale')->getLocale('frontend'),
                 'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
-                'tags'           => []
             ]);
         }
 
@@ -115,20 +114,12 @@ class LettersController extends Controller
             return $this->redirect($this->generateUrl('admin_letters'));
         }
 
-        $tags = [];
-
-        if (!empty($letter->tag_ids)) {
-            $ts   = $this->get('api.service.tag');
-            $tags = $ts->responsify($ts->getListByIds($letter->tag_ids)['items']);
-        }
-
         $ls = $this->get('core.locale');
         return $this->render('letter/new.tpl', [
             'letter'         => $letter,
             'enableComments' => $this->get('core.helper.comment')
                 ->enableCommentsByDefault(),
             'locale'         => $ls->getRequestLocale('frontend'),
-            'tags'           => $tags
         ]);
     }
 

@@ -39,8 +39,8 @@
                   <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks">
-                  <a class="btn btn-primary" href="{url name=admin_poll_create}" title="{t}New poll{/t}">
-                    <i class="fa fa-plus"></i>
+                  <a class="btn btn-loading btn-success text-uppercase" href="{url name=admin_poll_create}" title="{t}New poll{/t}">
+                    <i class="fa fa-plus m-r-5"></i>
                     {t}Create{/t}
                   </a>
                 </li>

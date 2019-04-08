@@ -34,8 +34,19 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'validate' ])
             ->getMock();
 
+        $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getAvailableLocales' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->locale->expects($this->any())->method('getAvailableLocales')
+            ->with('frontend')->willReturn([
+                'es_ES' => 'Spanish',
+                'gl_ES' => 'Galician'
+            ]);
 
         $this->validator = new TagValidator($this->container);
     }
@@ -45,6 +56,9 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'api.service.tag':
                 return $this->tagService;
+
+            case 'core.locale':
+                return $this->locale;
 
             case 'core.validator':
                 return $this->coreValidator;
@@ -59,7 +73,7 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateWhenValidExistingTag()
     {
-        $item = new Entity([ 'name' => 'flob', 'language_id' => 'es_ES' ]);
+        $item = new Entity([ 'name' => 'flob', 'locale' => 'es_ES' ]);
         $item->refresh();
 
         $this->coreValidator->expects($this->any())->method('validate')
@@ -81,22 +95,36 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $this->tagService->expects($this->at(0))->method('getItemBy')
-            ->with('name = "flob" and language_id = "es_ES"')
+            ->with('name = "flob" and locale is null')
             ->will($this->throwException(new \Exception()));
 
         $this->tagService->expects($this->at(1))->method('getItemBy')
-            ->with('name = "plugh" and language_id = "es_ES"')
+            ->with('name = "plugh" and locale = "es_ES"')
             ->willReturn(new Entity([ 'name' => 'Plugh' ]));
 
-
         $this->validator->validate(new Entity([
-            'name'        => 'flob',
-            'language_id' => 'es_ES'
+            'name' => 'flob',
         ]));
 
         $this->validator->validate(new Entity([
-            'name'        => 'plugh',
-            'language_id' => 'es_ES'
+            'name'   => 'plugh',
+            'locale' => 'es_ES'
+        ]));
+    }
+
+    /**
+     * Tests validate when the provided locale is not valid.
+     *
+     * @expectedException \Api\Exception\InvalidArgumentException
+     */
+    public function testValidateWhenLocaleInvalid()
+    {
+        $this->coreValidator->expects($this->once())->method('validate')
+            ->willReturn([]);
+
+        $this->validator->validate(new Entity([
+            'name'   => 'baz',
+            'locale' => 'en_US'
         ]));
     }
 
@@ -107,7 +135,7 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateWhenNameInvalid()
     {
-        $item = new Entity([ 'name' => 'flob', 'language_id' => 'es_ES' ]);
+        $item = new Entity([ 'name' => 'flob', 'locale' => 'es_ES' ]);
         $item->refresh();
 
         $this->coreValidator->expects($this->once())->method('validate')
@@ -128,12 +156,12 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $this->tagService->expects($this->once())->method('getItemBy')
-            ->with('name = "baz" and language_id = "es_ES"')
+            ->with('name = "baz" and locale = "es_ES"')
             ->willReturn(new Entity([ 'name' => 'baz' ]));
 
         $this->validator->validate(new Entity([
-            'name'        => 'baz',
-            'language_id' => 'es_ES'
+            'name'   => 'baz',
+            'locale' => 'es_ES'
         ]));
     }
 }

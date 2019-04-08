@@ -170,7 +170,7 @@ class LetterController extends Controller
             'x-tags'         => 'letter,' . $letter->id,
             'x-cache-for'    => '+1 day',
             'tags'                   => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($letter->tag_ids)['items']
+                ->getListByIdsKeyMapped($letter->tags)['items']
         ]);
     }
 
@@ -340,7 +340,7 @@ class LetterController extends Controller
             'category'          => $category,
             'category_name'     => $category_name,
             'description'       => '',
-            'tag_ids'           => [],
+            'tags'              => [],
         ];
 
         try {

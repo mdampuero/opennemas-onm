@@ -4,29 +4,12 @@ angular.module('BackendApp.controllers')
    * Handle actions for article inner.
    */
   .controller('AlbumCtrl', [
-    '$controller', '$rootScope', '$scope', '$uibModal',
-    function($controller, $rootScope, $scope, $uibModal) {
+    '$controller', '$rootScope', '$scope', '$uibModal', 'messenger',
+    function($controller, $rootScope, $scope, $uibModal, messenger) {
       'use strict';
 
       // Initialize the super class and extend it.
       $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
-
-      /**
-       * @function init
-       * @memberOf AlbumCtrl
-       *
-       * @description
-       * Method to init the album controller
-       *
-       * @param {object} album  Album to edit
-       * @param {String} locale Locale for the album
-       * @param {Array}  tags   Array with all the tags needed for the album
-       */
-      $scope.init = function(album, locale, tags) {
-        $scope.album  = album;
-        $scope.locale = locale;
-        $scope.tags   = tags;
-      };
 
       /**
        * Parse the photos from template and initialize the scope properly
@@ -42,6 +25,65 @@ angular.module('BackendApp.controllers')
         }
 
         $('.btn.btn-primary').attr('disabled', false);
+      };
+
+      /**
+       * @function submit
+       * @memberOf AlbumCtrl
+       *
+       * @description
+       *   Saves tags and, then, submits the form.
+       */
+      $scope.submit = function(e) {
+        e.preventDefault();
+
+        if (!$scope.validatePhotosAndCover()) {
+          return false;
+        }
+
+        if ($scope.form.$invalid) {
+          $('[name=form]')[0].reportValidity();
+          messenger.post(window.strings.forms.not_valid, 'error');
+
+          return false;
+        }
+
+        if (!$('[name=form]')[0].checkValidity()) {
+          $('[name=form]')[0].reportValidity();
+          return false;
+        }
+
+        $scope.$broadcast('onmTagsInput.save', {
+          onSuccess: function(ids) {
+            $('[name=tags]').val(JSON.stringify(ids));
+            $('[name=form]').submit();
+          }
+        });
+      };
+
+      /**
+       * Show modal warning for album missing photos
+       */
+      $scope.validatePhotosAndCover = function() {
+        if ($scope.photos && $scope.cover) {
+          return true;
+        }
+
+        $uibModal.open({
+          templateUrl: 'modal-edit-album-error',
+          backdrop: 'static',
+          controller: 'modalCtrl',
+          resolve: {
+            template: function() {
+              return null;
+            },
+            success: function() {
+              return null;
+            }
+          }
+        });
+
+        return false;
       };
 
       /**
@@ -62,32 +104,5 @@ angular.module('BackendApp.controllers')
         }
         return null;
       }, true);
-
-      /**
-       * Show modal warning for album missing photos
-       */
-      $scope.validatePhotosAndCover = function($event) {
-        if (!$scope.photos || !$scope.cover) {
-          $event.preventDefault();
-          $uibModal.open({
-            templateUrl: 'modal-edit-album-error',
-            backdrop: 'static',
-            controller: 'modalCtrl',
-            resolve: {
-              template: function() {
-                return null;
-              },
-              success: function() {
-                return null;
-              }
-            }
-          }).closed.then(function() {
-            var btn = $('.btn.btn-primary');
-
-            btn.attr('disabled', false);
-            $('.btn.btn-primary .text').html(btn.data('text-original'));
-          });
-        }
-      };
     }
   ]);

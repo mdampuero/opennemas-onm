@@ -81,18 +81,16 @@ class ImagesController extends Controller
 
         $tags = [];
 
-        if (!empty($photo->tag_ids)) {
+        if (!empty($photo->tags)) {
             $ts   = $this->get('api.service.tag');
-            $tags = $ts->responsify($ts->getListByIds($photo->tag_ids)['items']);
+            $tags = $ts->responsify($ts->getListByIds($photo->tags)['items']);
         }
 
-        $ls = $this->get('core.locale');
-
         return $this->render('image/new.tpl', [
-            'photo'         => $photo,
             'MEDIA_IMG_URL' => MEDIA_URL . MEDIA_DIR . DS . IMG_DIR,
-            'locale'        => $ls->getRequestLocale('frontend'),
-            'tags'          => $tags
+            'photo'         => $photo,
+            'locale'        => $this->get('core.helper.locale')
+                ->getConfiguration()
         ]);
     }
 
@@ -251,7 +249,7 @@ class ImagesController extends Controller
                 'fk_category'       => null,
                 'category'          => null,
                 'category_name'     => '',
-                'tag_ids'           => json_decode($request->request->get('tag_ids', ''), true)
+                'tags'              => json_decode($request->request->get('tags', ''), true)
             ];
 
             try {

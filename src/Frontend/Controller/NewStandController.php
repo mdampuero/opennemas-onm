@@ -207,7 +207,7 @@ class NewStandController extends Controller
             'o_content'      => $content,
             'x-tags'         => 'newsstand,' . $content->pk_content,
             'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($content->tag_ids)['items']
+                ->getListByIdsKeyMapped($content->tags)['items']
         ]);
     }
 

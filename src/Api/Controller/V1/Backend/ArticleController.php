@@ -85,11 +85,11 @@ class ArticleController extends Controller
         $extra = array_merge($extra, $this->getAlbums($article));
         $extra = array_merge($extra, $this->getRelated($article));
 
-        if (!empty($article->tag_ids)) {
+        if (!empty($article->tags)) {
             $ts = $this->get('api.service.tag');
 
             $extra['tags'] = $ts->responsify(
-                $ts->getListByIds($article->tag_ids)['items']
+                $ts->getListByIds($article->tags)['items']
             );
         }
 

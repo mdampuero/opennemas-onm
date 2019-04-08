@@ -46,7 +46,7 @@
           params: {},
           starttime: null,
           summary: '',
-          tag_ids: []
+          tags: []
         };
 
         /**
@@ -243,29 +243,6 @@
         };
 
         /**
-         * @function groupCategories
-         * @memberOf ArticleListCtrl
-         *
-         * @description
-         *   Groups categories in the ui-select.
-         *
-         * @param {Object} item The category to group.
-         *
-         * @return {String} The group name.
-         */
-        $scope.groupCategories = function(item) {
-          var category = $scope.categories.filter(function(e) {
-            return e.pk_content_category === item.fk_content_category;
-          });
-
-          if (category.length > 0 && category[0].pk_content_category) {
-            return category[0].title;
-          }
-
-          return '';
-        };
-
-        /**
          * @function getArticle
          * @memberOf ArticleCtrl
          *
@@ -302,10 +279,8 @@
             }
 
             // Load items
-            $scope.article         = $scope.data.article;
-            $scope.categories      = $scope.data.extra.categories;
-            $scope.fieldsByModule  = $scope.data.extra.moduleFields;
-            $scope.article.tags    = $scope.data.extra.tags;
+            $scope.article        = $scope.data.article;
+            $scope.fieldsByModule = $scope.data.extra.moduleFields;
 
             $scope.build();
 
@@ -315,6 +290,33 @@
 
             $scope.checkDraft();
           }, $scope.errorCb);
+        };
+
+        /**
+         * Returns the frontend url for the content given its object.
+         *
+         * @param {String} item  The object item to generate the url from.
+         *
+         * @return {String} The frontend URL.
+         */
+        $scope.getFrontendUrl = function(item) {
+          if (!item || !$scope.data.extra.category) {
+            return null;
+          }
+
+          var created = moment(item.created).format('YYYYMMDDHHmmss');
+
+          var localized  = localizer.get($scope.data.extra.locale)
+            .localize(item, [ 'slug' ], $scope.config.locale.selected);
+
+          return $scope.getL10nUrl(
+            $scope.routing.generate('frontend_article_show', {
+              id:            localized.pk_content,
+              category_name: $scope.data.extra.category.name,
+              created:       created,
+              slug:          localized.slug
+            })
+          );
         };
 
         /**
@@ -350,18 +352,12 @@
           // Localize original items
           $scope.article = lz.localize($scope.data.article,
             $scope.data.extra.keys, $scope.config.locale.selected);
-          $scope.categories = lz.localize($scope.data.extra.categories,
-            [ 'title' ], $scope.config.locale.selected);
 
           $scope.config.linkers.article = linker.get($scope.data.extra.keys,
             $scope.config.locale.default, $scope, true, keys);
-          $scope.config.linkers.categories = linker.get($scope.data.extra.keys,
-            $scope.config.locale.default, $scope, false, keys);
 
           $scope.config.linkers.article.setKey($scope.config.locale.selected);
           $scope.config.linkers.article.link($scope.data.article, $scope.article);
-          $scope.config.linkers.categories.setKey($scope.config.locale.selected);
-          $scope.config.linkers.categories.link($scope.data.extra.categories, $scope.categories);
 
           for (var i = 0; i < keys.length; i++) {
             if (!$scope.article[keys[i]]) {
@@ -423,7 +419,7 @@
          *   Saves a new article.
          */
         $scope.save = function() {
-          if ($scope.articleForm.$invalid ||
+          if ($scope.form.$invalid ||
               !$scope.data.article.pk_fk_content_category) {
             $scope.showRequired = true;
             return;
@@ -441,7 +437,7 @@
            * @param {Object} response The response object.
            */
           var successCb = function(response) {
-            $scope.articleForm.$setPristine(true);
+            $scope.form.$setPristine(true);
 
             $scope.disableFlags();
             webStorage.session.remove($scope.draftKey);
@@ -452,9 +448,6 @@
               return;
             }
 
-            $scope.article.tags         = response.data.tags;
-            $scope.data.article.tag_ids = response.data.tag_ids;
-            $scope.article.tag_ids      = response.data.tag_ids;
             messenger.post(response.data.message);
             $scope.backup.content_status = $scope.article.content_status;
           };
@@ -484,6 +477,30 @@
             name: 'backend_ws_article_update',
             params: { id: $scope.article.pk_article }
           }, data).then(successCb, saveErrorCb);
+        };
+
+        /**
+         * @function submit
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Saves tags and, then, saves the article.
+         */
+        $scope.submit = function() {
+          if (!$('[name=form]')[0].checkValidity()) {
+            $('[name=form]')[0].reportValidity();
+            return;
+          }
+
+          $scope.flags.http.saving = true;
+
+          $scope.$broadcast('onmTagsInput.save', {
+            onError: $scope.errorCb,
+            onSuccess: function(ids) {
+              $scope.data.article.tags = ids;
+              $scope.save();
+            }
+          });
         };
 
         /**
@@ -624,7 +641,7 @@
               }
             }
 
-            if ($scope.articleForm.$dirty &&
+            if ($scope.form.$dirty &&
                 (!nv[1] && angular.equals(nv[1], ov[1]) ||
                 angular.equals(nv[1], ov[0]))) {
               $scope.article.img2 = $scope.article.img1;
@@ -654,7 +671,7 @@
               }
             }
 
-            if ($scope.articleForm.$dirty &&
+            if ($scope.form.$dirty &&
                 (!nv[1] && angular.equals(nv[1], ov[1]) ||
                 angular.equals(nv[1], ov[0]))) {
               $scope.article.fk_video2 = $scope.article.fk_video;
@@ -687,12 +704,12 @@
 
           // Show a message when leaving before saving
           $($window).bind('beforeunload', function() {
-            if ($scope.articleForm.$dirty) {
+            if ($scope.form.$dirty) {
               return $window.leaveMessage;
             }
           });
 
-          $scope.articleForm.$setDirty(true);
+          $scope.form.$setDirty(true);
 
           if ($scope.draftEnabled) {
             $scope.draftSaved = null;

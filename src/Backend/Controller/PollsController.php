@@ -50,7 +50,6 @@ class PollsController extends Controller
             return $this->render('poll/new.tpl', [
                 'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
                 'locale'         => $this->get('core.locale')->getLocale('frontend'),
-                'tags'           => []
             ]);
         }
 
@@ -116,13 +115,6 @@ class PollsController extends Controller
             return $this->redirect($this->generateUrl('admin_polls'));
         }
 
-        $tags = [];
-
-        if (!empty($poll->tag_ids)) {
-            $ts   = $this->get('api.service.tag');
-            $tags = $ts->responsify($ts->getListByIds($poll->tag_ids)['items']);
-        }
-
         if (is_string($poll->params)) {
             $poll->params = unserialize($poll->params);
         }
@@ -135,7 +127,6 @@ class PollsController extends Controller
                 ->get('comments_config'),
             'locale' => $this->get('core.locale')
                 ->getRequestLocale('frontend'),
-            'tags' => $tags
         ]);
     }
 

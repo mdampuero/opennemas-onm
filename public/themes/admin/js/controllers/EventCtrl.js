@@ -15,8 +15,8 @@
      *   Check billing information when saving user.
      */
     .controller('EventCtrl', [
-      '$controller', '$scope', '$timeout',
-      function($controller, $scope, $timeout) {
+      '$controller', '$scope', '$timeout', 'messenger',
+      function($controller, $scope, $timeout, messenger) {
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -42,7 +42,7 @@
           title: '',
           type: 0,
           with_comments: 0,
-          categories: [],
+          categories: [ null ],
           related_contents: [],
           tags: [],
           event_start_date: null,
@@ -52,16 +52,6 @@
           event_place: null,
           external_link: '',
         };
-
-        /**
-         * @memberOf EventCtrl
-         *
-         * @description
-         *  Whether to refresh the item after a successful update.
-         *
-         * @type {Boolean}
-         */
-        $scope.refreshOnUpdate = true;
 
         /**
          * @memberOf EventCtrl
@@ -90,10 +80,7 @@
          */
         $scope.parseItem = function(data) {
           if (data.item) {
-            $scope.data.item      = angular.extend($scope.item, data.item);
-            $scope.data.item.tags = $scope.item.tags.map(function(id) {
-              return data.extra.tags[id];
-            });
+            $scope.data.item = angular.extend($scope.item, data.item);
           }
 
           $scope.configure(data.extra);
@@ -111,7 +98,7 @@
         };
 
         // Update slug when title is updated
-        $scope.$watch('cover', function(nv, ov) {
+        $scope.$watch('cover', function(nv) {
           $scope.item.related_contents = [];
 
           if (!nv) {

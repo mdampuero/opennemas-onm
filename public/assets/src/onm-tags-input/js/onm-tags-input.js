@@ -37,14 +37,15 @@
                 '<i class="fa fa-trash-o m-r-5"></i>' +
                 $window.strings.tags.clear +
               '</button>' +
-              '<span class="tags-input-counter badge badge-default pull-right" ng-class="{ \'badge-danger\': ngModel.length == maxTags, \'badge-warning text-default\': ngModel.length > maxTags/2 && ngModel.length < maxTags }">' +
-                '[% ngModel ? ngModel.length : 0 %] / [% maxTags %]' +
+              '<span class="tags-input-counter badge badge-default pull-right" ng-class="{ \'badge-danger\': tagsInLocale.length == maxTags, \'badge-warning text-default\': tagsInLocale.length > maxTags/2 && tagsInLocale.length < maxTags }">' +
+                '[% tagsInLocale ? tagsInLocale.length : 0 %] / [% maxTags %]' +
               '</span>' +
             '</div>' +
             '<div>' +
-              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="ngModel" on-tag-adding="add($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
+              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="tagsInLocale" on-tag-adding="add($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
                 '<auto-complete debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
               '</tags-input>' +
+              '<i class="fa fa-circle-o-notch fa-spin tags-input-loading" ng-if="loading"></i>' +
               '<input name="tags" type="hidden" ng-value="getJsonValue()">' +
             '</div>' +
             '<script type="text/ng-template" id="tag">' +
@@ -52,7 +53,6 @@
               '<span class="badge badge-success pull-right text-uppercase" ng-if="$parent.$parent.$parent.$parent.$parent.isNewTag(data)">' +
                 '<strong>' + $window.strings.tags.newItem + '</strong>' +
               '</span>' +
-
               '<span class="badge badge-default pull-right" ng-class="{ \'badge-danger\': !$parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] }" ng-show="!$parent.$parent.$parent.$parent.$parent.isNewTag(data)">' +
                 '<strong>[% $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] ? $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] : 0 %]</strong>' +
               '</span>' +
@@ -73,8 +73,18 @@
      *   List, checks and validates tags.
      */
     .controller('OnmTagsInputCtrl', [
-      '$scope', '$timeout', '$window', 'http', 'oqlEncoder',
-      function($scope, $timeout, $window, http, oqlEncoder) {
+      '$q', '$scope', '$timeout', '$window', 'http', 'oqlEncoder',
+      function($q, $scope, $timeout, $window, http, oqlEncoder) {
+        /**
+         * @memberOf OnmTagsInputCtrl
+         *
+         * @description
+         *  The list of tag objects ready to use by tags-input directive.
+         *
+         * @type {Array}
+         */
+        $scope.tags = [];
+
         /**
          * @function clear
          * @memberOf OnmTagsInputCtrl
@@ -83,7 +93,7 @@
          *   Removes all tags from the list.
          */
         $scope.clear = function() {
-          $scope.ngModel = [];
+          $scope.tagsInLocale = [];
         };
 
         /**
@@ -97,15 +107,16 @@
          * @param {Object} tag The added tag object.
          */
         $scope.add = function(tag) {
-          if ($scope.ngModel && $scope.ngModel.length >= $scope.maxTags) {
+          if ($scope.tags && $scope.tags.length >= $scope.maxTags) {
             return false;
           }
 
           if ($scope.isNewTag(tag)) {
-            tag.name = tag.name.replace(
-              ' (' + $window.strings.tags.newItem + ')', '');
+            var t = angular.extend({}, tag);
 
-            return $scope.validate(tag);
+            delete t.id;
+
+            return $scope.validate(t);
           }
 
           return true;
@@ -133,11 +144,11 @@
           }).then(function(response) {
             $scope.generating = false;
 
-            if (!$scope.ngModel) {
-              $scope.ngModel = response.data.items;
+            if (!$scope.tags) {
+              $scope.tags = response.data.items;
             }
 
-            var ids = $scope.ngModel.map(function(e) {
+            var ids = $scope.tags.map(function(e) {
               return e.id;
             });
 
@@ -146,7 +157,7 @@
               return ids.indexOf(e.id) === -1;
             });
 
-            $scope.ngModel = $scope.ngModel.concat(newTags);
+            $scope.tags = $scope.tags.concat(newTags);
           }, function() {
             $scope.generating = false;
           });
@@ -200,7 +211,16 @@
             page: 1
           };
 
-          oqlEncoder.configure({ placeholder: { name: '[key] ~ "%[value]%"' } });
+          if ($scope.locale && $scope.locale.multilanguage) {
+            criteria.locale = $scope.locale.selected;
+          }
+
+          oqlEncoder.configure({
+            placeholder: {
+              name: '[key] ~ "%[value]%"',
+              locale: '([key] is null or [key] = "[value]")'
+            }
+          });
 
           var oql = oqlEncoder.getOql(criteria);
 
@@ -218,11 +238,13 @@
               });
 
               if (found.length === 0) {
-                items.push({
-                  id: query,
-                  language_id: $scope.locale,
-                  name: query
-                });
+                var item = { id: query, name: query };
+
+                if ($scope.locale && $scope.locale.multilanguage) {
+                  item.locale = $scope.locale.selected;
+                }
+
+                items.push(item);
 
                 items = items.sort(function(a, b) {
                   return a.name.length < b.name.length ? -1 : 0;
@@ -231,6 +253,30 @@
             }
 
             return items;
+          });
+        };
+
+        /**
+         * @function saveTag
+         * @memberOf OnmTagsInputCtrl
+         *
+         * @description
+         *   Saves a new tag basing on data.
+         *
+         * @param {Object} data The tag information.
+         *
+         * @return {Integer} The tag id.
+         */
+        $scope.saveTag = function(data) {
+          var route = { name: 'api_v1_backend_tag_save' };
+
+          delete data.id;
+
+          return http.post(route, data).then(function(response) {
+            var id = response.headers().location
+              .substring(response.headers().location.lastIndexOf('/') + 1);
+
+            return parseInt(id);
           });
         };
 
@@ -262,9 +308,36 @@
           });
         };
 
+        // Saves new tags and executes callbacks in args
+        $scope.$on('onmTagsInput.save', function(event, args) {
+          var existingTags = $scope.tags.filter(function(e) {
+            return !$scope.isNewTag(e);
+          }).map(function(e) {
+            return e.id;
+          });
+
+          var newTags = $scope.tags.filter(function(e) {
+            return $scope.isNewTag(e);
+          });
+
+          for (var i = 0; i < newTags.length; i++) {
+            newTags[i] = $scope.saveTag(newTags[i]);
+          }
+
+          $q.all(newTags).then(function(ids) {
+            if (args.onSuccess) {
+              args.onSuccess(existingTags.concat(ids));
+            }
+          }, function() {
+            if (args.onError) {
+              args.onError();
+            }
+          });
+        });
+
         // Generates a new list of tags when generateFrom value changes
         $scope.$watch('autoGenerate', function(nv) {
-          if (!nv || !$scope.ngModel || $scope.ngModel.length > 0) {
+          if (!nv || !$scope.tags || $scope.tags.length > 0) {
             $scope.autoGenerate = false;
             return;
           }
@@ -277,6 +350,97 @@
             $scope.autoGenerate = false;
             $scope.generate($scope.generateFrom());
           }, 250);
+        }, true);
+
+        // Updates ngModel when tags added/removed
+        $scope.$watch('locale', function(nv) {
+          $scope.tagsInLocale = $scope.tags;
+
+          if (nv && nv.multilanguage) {
+            $scope.tagsInLocale = $scope.tags.filter(function(e) {
+              return !e.locale || e.locale === nv.selected;
+            });
+          }
+        }, true);
+
+        // Gets the list of tags when ngModel changes
+        $scope.$watch('ngModel', function(nv) {
+          var ids = !$scope.tags ? [] : $scope.tags.map(function(e) {
+            return e.id;
+          });
+
+          // No ngModel or same items in tags and ngModel
+          if (!nv || nv.length === 0 || angular.equals(nv, ids)) {
+            return;
+          }
+
+          $scope.loading = true;
+
+          var criteria = {
+            id: nv,
+            orderBy: { name: 'asc' },
+          };
+
+          oqlEncoder.configure({ placeholder: { id: '[key] in [[value]]' } });
+
+          http.get({
+            name: 'api_v1_backend_tags_list',
+            params: { oql: oqlEncoder.getOql(criteria) }
+          }).then(function(response) {
+            $scope.loading = false;
+
+            if (response.data.items) {
+              $scope.tags         = response.data.items;
+              $scope.tagsInLocale = angular.copy($scope.tags);
+
+              if ($scope.locale && $scope.locale.multilanguage) {
+                $scope.tagsInLocale = $scope.tags.filter(function(e) {
+                  return !$scope.locale || !e.locale ||
+                    e.locale === $scope.locale.selected;
+                });
+              }
+            }
+          });
+        }, true);
+
+        // Updates ngModel when tags added/removed
+        $scope.$watch('tags', function(nv) {
+          $scope.ngModel = !nv ? [] : nv.map(function(e) {
+            return e.id;
+          });
+        }, true);
+
+        // Updates ngModel when tags added/removed
+        $scope.$watch('tagsInLocale', function(nv, ov) {
+          var nvIds = [];
+          var ovIds = [];
+
+          if (nv) {
+            nvIds = nv.map(function(e) {
+              return e.id;
+            });
+          }
+
+          if (ov) {
+            ovIds = ov.filter(function(e) {
+              // Only delete tags for any or current locale
+              return !$scope.locale || !e.locale ||
+                e.locale === $scope.locale.selected;
+            }).map(function(e) {
+              return e.id;
+            });
+          }
+
+          var toAdd    = _.difference(nvIds, ovIds);
+          var toDelete = _.difference(ovIds, nvIds);
+
+          $scope.tags = $scope.tags
+            .filter(function(e) {
+              return toDelete.indexOf(e.id) === -1;
+            }).concat(nv.filter(function(e) {
+              return toAdd.indexOf(e.id) !== -1 &&
+                $scope.ngModel.indexOf(e.id) === -1;
+            }));
         }, true);
       }
     ]);

@@ -83,6 +83,9 @@
       };
 
       var strings = {
+        pagination: {
+          of: '{t}of{/t}'
+        },
         tags: {
           clear: '{t}Clear{/t}',
           generate: '{t}Generate{/t}',

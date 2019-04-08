@@ -218,17 +218,9 @@ class FilesController extends Controller
             return $this->redirect($this->generateUrl('admin_files'));
         }
 
-        $tags = [];
-
-        if (!empty($file->tag_ids)) {
-            $ts   = $this->get('api.service.tag');
-            $tags = $ts->responsify($ts->getListByIds($file->tag_ids)['items']);
-        }
-
         return $this->render('files/new.tpl', [
             'attaches' => $file,
             'locale'   => $this->get('core.locale')->getRequestLocale('frontend'),
-            'tags'     => $tags
         ]);
     }
 

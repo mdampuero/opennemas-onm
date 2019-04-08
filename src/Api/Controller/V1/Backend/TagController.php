@@ -49,71 +49,13 @@ class TagController extends ApiController
     protected $service = 'api.service.tag';
 
     /**
-     * Checks if the information in the request is valid to create a new Tag.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     */
-    public function validateAction(Request $request)
-    {
-        $msg  = $this->get('core.messenger');
-        $data = $request->query->all();
-
-        $data['slug'] = $this->get('data.manager.filter')
-            ->set($data['name'])
-            ->filter('slug')
-            ->get();
-
-        if (!array_key_exists('locale', $data)) {
-            $data['locale'] = $this->get('core.locale')->getLocale('frontend');
-        }
-
-        $item = new Tag($data);
-
-        try {
-            $this->get('api.validator.tag')->validate($item);
-        } catch (\Exception $e) {
-            $msg->add($e->getMessage(), 'error', 400);
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Get the tag config.
+     * Saves configuration for tags.
      *
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
      */
-    public function showConfAction()
-    {
-        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
-
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings')
-            ->get([ 'blacklist_tag', 'tags_maxItems', 'tags_maxResults' ]);
-
-        if (array_key_exists('tags_maxItems', $settings)) {
-            $settings['tags_maxItems'] = (int) $settings['tags_maxItems'];
-        }
-
-        if (array_key_exists('tags_maxResults', $settings)) {
-            $settings['tags_maxResults'] = (int) $settings['tags_maxResults'];
-        }
-
-        return new JsonResponse($settings);
-    }
-
-    /**
-     * Update tag config.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function updateConfAction(Request $request)
+    public function saveConfigAction(Request $request)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('list'));
 
@@ -139,26 +81,68 @@ class TagController extends ApiController
     }
 
     /**
+     * Get the tag config.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function showConfigAction()
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
+
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get([ 'blacklist_tag', 'tags_maxItems', 'tags_maxResults' ]);
+
+        if (array_key_exists('tags_maxItems', $settings)) {
+            $settings['tags_maxItems'] = (int) $settings['tags_maxItems'];
+        }
+
+        if (array_key_exists('tags_maxResults', $settings)) {
+            $settings['tags_maxResults'] = (int) $settings['tags_maxResults'];
+        }
+
+        return new JsonResponse($settings);
+    }
+
+
+    /**
+     * Checks if the information in the request is valid to create a new Tag.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function validateAction(Request $request)
+    {
+        $msg  = $this->get('core.messenger');
+        $data = $request->query->all();
+
+        $data['slug'] = $this->get('data.manager.filter')
+            ->set($data['name'])
+            ->filter('slug')
+            ->get();
+
+        $item = new Tag($data);
+
+        try {
+            $this->get('api.validator.tag')->validate($item);
+        } catch (\Exception $e) {
+            $msg->add($e->getMessage(), 'error', 400);
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getExtraData($items = [])
     {
-        $ls      = $this->get('core.locale');
-        $locales = [ $ls->getLocale('frontend') => $ls->getLocaleName('frontend') ];
-
-        $multilanguage = in_array(
-            'es.openhost.module.multilanguage',
-            $this->get('core.instance')->activated_modules
-        );
-
-        if ($multilanguage) {
-            $locales = $ls->getAvailableLocales('frontend');
-        }
-
         $extraData = [
             'stats'   => $this->get('api.service.tag')->getStats($items),
-            'locale'  => $ls->getLocale('frontend'),
-            'locales' => $locales
+            'locale'  => $this->get('core.helper.locale')->getConfiguration(),
         ];
 
         return $extraData;

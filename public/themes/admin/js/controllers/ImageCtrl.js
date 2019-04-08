@@ -14,15 +14,14 @@ angular.module('BackendApp.controllers').controller('ImageCtrl', [
      * @memberOf ImageCtrl
      *
      * @description
-     * Method to init the image controller
+     *    Method to init the image controller
      *
-     * @param {object} image    image to edit
-     * @param {String} locale   Locale for the image
-     * @param {Array}  tags     Array with all the tags needed for the image
+     * @param {object} photo The photo to edit.
      */
-    $scope.init = function(images, locale, tags) {
-      $scope.locale = locale;
-      $scope.tags   = tags;
+    $scope.init = function(photo, locale) {
+      $scope.photo = photo;
+
+      $scope.configure({ locale: locale });
     };
   }
 ]);

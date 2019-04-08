@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div ng-app="BackendApp" ng-controller="TagListCtrl" ng-init="init('{$locale}')">
+  <div ng-app="BackendApp" ng-controller="TagListCtrl" ng-init="init()">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -24,13 +24,15 @@
                   <span class="fa fa-cog fa-lg"></span>
                 </a>
               </li>
-              <li class="quicklinks"><span class="h-seperate"></span></li>
+              <li class="quicklinks">
+                <span class="h-seperate"></span>
+              </li>
               {acl isAllowed="TAG_CREATE"}
-                <li>
-                  <button class="btn btn-primary text-uppercase" ng-click="createTag()" ng-disabled="editedTag && !editedTag.id" type="button">
-                    <i class="fa fa-plus"></i>
+                <li class="quicklinks">
+                  <a class="btn btn-loading btn-success text-uppercase" href="[% routing.generate('backend_tag_create') %]">
+                    <i class="fa fa-plus m-r-5"></i>
                     {t}Create{/t}
-                  </button>
+                  </a>
                 </li>
               {/acl}
             </ul>
@@ -76,17 +78,17 @@
               <span class="add-on">
                 <span class="fa fa-search fa-lg"></span>
               </span>
-              <input class="no-boarder" name="name" ng-model="criteria.name" placeholder="Search by name" type="text">
+              <input class="no-boarder" name="name" ng-model="criteria.name" placeholder="{t}Search{/t}" type="text">
             </li>
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-if="data.extra.locales.length > 2">
-              <ui-select name="language" theme="select2" ng-model="criteria.language_id">
+            <li class="quicklinks hidden-xs ng-cloak" ng-if="config.locale.multilanguage">
+              <ui-select name="language" theme="select2" ng-model="criteria.locale">
                 <ui-select-match>
                   <strong>{t}Language{/t}:</strong> [% $select.selected.name %]
                 </ui-select-match>
-                <ui-select-choices repeat="locale.id as locale in data.extra.locales | filter: { name: $select.search }">
+                <ui-select-choices repeat="locale.id as locale in config.locale.available | filter: { name: $select.search }">
                   <div ng-bind-html="locale.name"></div>
                 </ui-select-choices>
               </ui-select>
@@ -131,7 +133,7 @@
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>
-                    <th class="checkbox-cell" width="10">
+                    <th class="text-center v-align-middle" width="50">
                       <div class="checkbox checkbox-default">
                         <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
                         <label for="select-all"></label>
@@ -139,140 +141,38 @@
                     </th>
                     <th>{t}Name{/t}</th>
                     <th>{t}Slug{/t}</th>
-                    <th class="text-center" width="10">{t}Nº contents{/t}</th>
-                    <th class="text-center" width="10"></th>
+                    <th ng-if="config.locale.multilanguage" width="100">{t}Locale{/t}</th>
+                    <th class="text-center" width="100">{t}Contents{/t}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-if="editedTag && !editedTag.id" class="bg-warning">
-                    <td></td>
-                    <td>
-                      <div class="row">
-                        <div class="col-sm-6 form-group no-margin">
-                          <label class="form-label" for="name">
-                            {t}Name{/t}
-                          </label>
-                          <div class="controls input-with-icon right">
-                            <input class="form-control" id="name" name="name" ng-change="isValid()" ng-model="editedTag.name" placeholder="{t}Tag{/t}" required type="text">
-                            <span class="icon right ng-cloak">
-                              <span class="fa fa-circle-o-notch fa-spin" ng-if="flags.http.validating"></span>
-                              <span class="fa fa-check text-success" ng-if="!flags.http.validating && form.name.$dirty && form.name.$valid"></span>
-                              <span class="fa fa-info-circle text-info" ng-if="!flags.http.validating && !form.name.$dirty && form.name.$invalid" uib-tooltip-html="'<ul><li>{t}Tags should start by letter or number{/t}</li><li>{t}The maximum length for a tag is 60 chars (recommended: 30 chars or less){/t}</li></ul>'"></span>
-                              <span class="fa fa-times text-error text-left" ng-if="!flags.http.validating && form.name.$dirty && form.name.$invalid" uib-tooltip-html="error"></span>
-                            </span>
-                          </div>
-                        </div>
-                        <div class="col-sm-6 form-group no-margin" ng-if="data.extra.locales.length > 2">
-                          <label class="form-label" for="locale">
-                            {t}Language{/t}
-                          </label>
-                          <div class="controls">
-                            <select class="form-control" name="locale" ng-model="editedTag.language_id">
-                              <option value="[% locale.id %]" ng-repeat="locale in data.extra.locales">[% locale.name %]</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group no-margin p-t-5">
-                        <button class="btn btn-default btn-small" ng-click="editTag()" type="button">
-                          <i class="fa fa-times m-r-5"></i>
-                          {t}Cancel{/t}
-                        </button>
-                        <button class="btn btn-small btn-loading btn-success" ng-disabled="form.$invalid" ng-click="save()"  type="button">
-                          <i class="fa fa-check m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
-                          {t}Save{/t}
-                        </button>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="row">
-                        <div class="col-sm-6 form-group">
-                          <label class="form-label" for="slug">{t}Slug{/t}</label>
-                          <div class="controls input-with-icon right">
-                            <input class="form-control" id="slug" name="slug" ng-model="editedTag.slug" type="text">
-                            <span class="icon right ng-cloak">
-                              <span class="fa fa-circle-o-notch fa-spin ng-cloak" ng-if="flags.http.generating"></span>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td></td>
-                    <td></td>
-                  </tr>
                   <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
-                    <td class="checkbox-cell">
+                    <td class="text-center v-align-middle">
                       <div class="checkbox check-default">
                         <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
                         <label for="checkbox[%$index%]"></label>
                       </div>
                     </td>
-                    <td class="editable">
-                      <div class="cursor-text"  ng-click="editTag(item)" ng-if="item.id !== editedTag.id">
-                        [% item.name %]
-                        <i class="edit-icon fa fa-pencil m-l-5"></i>
-                      </div>
-                      <div class="row" ng-if="item.id === editedTag.id">
-                        <div class="col-sm-6 form-group no-margin">
-                          <label class="form-label" for="name">
-                            {t}Name{/t}
-                          </label>
-                          <div class="controls input-with-icon right">
-                            <input class="form-control" id="name" name="name" ng-change="isValid()" ng-model="editedTag.name" placeholder="{t}Tag{/t}" required type="text">
-                            <span class="icon right ng-cloak">
-                              <span class="fa fa-circle-o-notch fa-spin" ng-if="flags.http.validating"></span>
-                              <span class="fa fa-check text-success" ng-if="!flags.http.validating && form.name.$dirty && form.name.$valid"></span>
-                              <span class="fa fa-info-circle text-info" ng-if="!flags.http.validating && !form.name.$dirty && form.name.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
-                              <span class="fa fa-times text-error" ng-if="!flags.http.validating && form.name.$dirty && form.name.$invalid" uib-tooltip="{t}The tag already exist or is invalid{/t}"></span>
-                            </span>
-                          </div>
-                        </div>
-                        <div class="col-sm-6 form-group no-margin" ng-if="data.extra.locales.length > 2">
-                          <label class="form-label" for="locale">
-                            {t}Language{/t}
-                          </label>
-                          <div class="controls">
-                            <select class="form-control" name="locale" ng-model="editedTag.language_id">
-                              <option value="[% locale.id %]" ng-repeat="locale in data.extra.locales">[% locale.name %]</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row" ng-if="item.id === editedTag.id">
-                        <div class="form-group no-margin p-t-5">
-                          <button class="btn btn-default btn-small" ng-click="editTag()" type="button">
-                            <i class="fa fa-times m-r-5"></i>
-                            {t}Cancel{/t}
-                          </button>
-                          <button class="btn btn-small btn-success btn-loading" ng-disabled="form.$invalid" ng-click="save()"  type="button">
-                            <i class="fa fa-check m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
-                            {t}Save{/t}
-                          </button>
-                        </div>
+                    <td>
+                      [% item.name %]
+                      <div class="listing-inline-actions">
+                        <a class="btn btn-default btn-small" href="[% routing.generate('backend_tag_show', { id: getId(item) }) %]">
+                          <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+                        </a>
+                        <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
+                          <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
+                        </button>
                       </div>
                     </td>
                     <td>
-                      <div ng-if="item.id !== editedTag.id">
-                        [% item.slug %]
-                      </div>
-                      <div class="row" ng-if="item.id === editedTag.id">
-                        <div class="col-sm-6 form-group">
-                          <label class="form-label" for="slug">{t}Slug{/t}</label>
-                          <div class="controls input-with-icon right">
-                            <input class="form-control" id="slug" name="slug" ng-model="editedTag.slug" type="text">
-                            <span class="icon right ng-cloak">
-                              <span class="fa fa-circle-o-notch fa-spin ng-cloak" ng-if="flags.http.generating"></span>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
+                      [% item.slug %]
                     </td>
                     <td class="text-center">
-                      [% data.extra.stats[item.id] ? data.extra.stats[item.id] : 0 %]
-                    </td>
-                    <td class="text-right">
-                      <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
-                      <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}</button>
+                      <span class="badge badge-default" ng-class="{ 'badge-danger': !data.extra.stats[getId(item)] || data.extra.stats[getId(item)] == 0 }">
+                        <strong>
+                          [% data.extra.stats[getId(item)] ? data.extra.stats[getId(item)] : 0 %]
+                        </strong>
+                      </span>
                     </td>
                   </tr>
                 </tbody>

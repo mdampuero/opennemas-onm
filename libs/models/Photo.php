@@ -283,9 +283,7 @@ class Photo extends Content
             'changed'             => $data['changed'],
             'content_status'      => $data['content_status'],
             'description'         => $data['description'],
-            'tag_ids'             => empty($data['tag_ids']) ?
-                [] :
-                $data['tag_ids'],
+            'tags'                => empty($data['tags']) ?  [] : $data['tags'],
             'urn_source'          => $data['urn_source'],
             'size'                => round($fileInformation->size / 1024, 2),
             'date'                => $dateString,
@@ -550,7 +548,7 @@ class Photo extends Content
                                 $this->description = $myiptc['Caption'];
                             }
 
-                            if (empty($this->tag_ids)) {
+                            if (empty($this->tags)) {
                                 $slugs = getService('data.manager.filter')
                                     ->set($iptc["2#025"])
                                     ->filter('slug')
@@ -559,7 +557,7 @@ class Photo extends Content
                                 $tags = getService('api.service.tag')
                                     ->getListBySlugs($slugs);
 
-                                $this->tag_ids = array_map(function ($tag) {
+                                $this->tags = array_map(function ($tag) {
                                     return $tag->id;
                                 }, $tags['items']);
                             }

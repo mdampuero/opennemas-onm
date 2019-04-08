@@ -68,7 +68,6 @@ class SpecialsController extends Controller
             $ls = $this->get('core.locale');
             return $this->render('special/new.tpl', [
                 'locale' => $ls->getLocale('frontend'),
-                'tags'   => []
             ]);
         }
 
@@ -130,13 +129,6 @@ class SpecialsController extends Controller
             return $this->redirect($this->generateUrl('admin_specials'));
         }
 
-        $tags = [];
-
-        if (!empty($special->tag_ids)) {
-            $ts   = $this->get('api.service.tag');
-            $tags = $ts->responsify($ts->getListByIds($special->tag_ids)['items']);
-        }
-
         $contents = $special->getContents($id);
 
         if (!empty($special->img1)) {
@@ -167,7 +159,6 @@ class SpecialsController extends Controller
             'special'  => $special,
             'category' => $special->category,
             'locale'   => $ls->getRequestLocale('frontend'),
-            'tags'     => $tags
         ]);
     }
 

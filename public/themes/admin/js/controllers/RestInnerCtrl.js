@@ -158,6 +158,8 @@
          * @param {Object} data The data in the response.
          */
         $scope.parseItem = function(data) {
+          $scope.configure(data.extra);
+
           return data;
         };
 
@@ -171,8 +173,9 @@
         $scope.save = function() {
           if ($scope.form.$invalid) {
             messenger.post(window.strings.forms.not_valid, 'error');
+            $scope.disableFlags('http');
 
-            return;
+            return false;
           }
 
           $scope.form.$setPristine(true);

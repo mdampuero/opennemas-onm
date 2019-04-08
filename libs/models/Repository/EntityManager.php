@@ -468,9 +468,9 @@ class EntityManager extends BaseManager
         $contentsForCache = [];
         foreach ($saveInCacheIds as $cacheKey => $contentId) {
             if (array_key_exists($contentId, $tagsByContent)) {
-                $contents[$cacheKey]->tag_ids = $tagsByContent[$contentId];
+                $contents[$cacheKey]->tags = $tagsByContent[$contentId];
             } else {
-                $contents[$cacheKey]->tag_ids = [];
+                $contents[$cacheKey]->tags = [];
             }
             $contentsForCache[$cacheKey] = $contents[$cacheKey];
         }

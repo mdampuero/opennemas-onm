@@ -7,8 +7,7 @@ function smarty_function_renderMetaKeywords($params, &$smarty)
 {
     if (!array_key_exists('content', $params)
         || empty($params['content'])
-        || (empty($params['content']->tags)
-            && empty($params['content']->tag_ids))
+        || empty($params['content']->tags)
         || !array_key_exists('tags', $params)
         || empty($params['tags'])
     ) {
@@ -19,7 +18,7 @@ function smarty_function_renderMetaKeywords($params, &$smarty)
     $tags    = $params['tags'];
     $ids     = !empty($content->tags)
         ? $content->tags
-        : (!empty($content->tag_ids) ? $content->tag_ids : []);
+        : (!empty($content->tags) ? $content->tags : []);
 
     $finalTags = array_map(function ($a) use ($tags) {
         return array_key_exists($a, $tags) ? $tags[$a]['name'] : null;

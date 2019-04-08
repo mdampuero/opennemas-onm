@@ -67,14 +67,6 @@ class NewsstandController extends Controller
 
         $extra = [ 'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR ];
 
-        if (!empty($content->tag_ids)) {
-            $ts = $this->get('api.service.tag');
-
-            $extra['tags'] = $ts->responsify(
-                $ts->getListByIds($content->tag_ids)['items']
-            );
-        }
-
         return new JsonResponse([ 'item' => $content, 'extra' => $extra ]);
     }
 

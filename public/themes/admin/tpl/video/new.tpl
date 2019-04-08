@@ -31,46 +31,41 @@
 {/block}
 
 {block name="content"}
-<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" class="video-form" enctype="multipart/form-data" ng-controller="VideoCtrl" ng-init="init({json_encode($video)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})" id="formulario">
+<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" id="formulario" enctype="multipart/form-data" method="POST" name="form" ng-controller="VideoCtrl" ng-init="init({json_encode($video)|clear_json})">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
           <li class="quicklinks">
             <h4>
-              <i class="fa fa-film"></i>
-              {t}Videos{/t}
+              <i class="fa fa-film m-r-10"></i>
             </h4>
           </li>
-          <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+          <li class="quicklinks">
+            <h4>
+              <a class="no-padding" href="{url name=admin_videos}">
+              {t}Videos{/t}
+              </a>
+            </h4>
+          </li>
+          <li class="quicklinks hidden-xs m-l-5 m-r-5">
+            <h4>
+              <i class="fa fa-angle-right"></i>
+            </h4>
+          </li>
           <li class="quicklinks hidden-xs">
-            <h5>{if !isset($video)}{t}Creating video{/t}{else}{t}Editing video{/t}{/if}</h5>
+            <h4>
+              {if !isset($video)}{t}Create{/t}{else}{t}Edit{/t}{/if}
+            </h4>
           </li>
         </ul>
-        <div class="all-actions pull-right">
+        <div class="pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <a href="{url name=admin_videos}" class="btn btn-link" title="{t}Go Back{/t}">
-                <span class="fa fa-reply"></span>
-              </a>
-            </li>
-            <li class="quicklinks"><span class="h-seperate"></span></li>
-            <li class="quicklinks">
-              {if isset($video->id)}
-              {acl isAllowed="VIDEO_UPDATE"}
-                <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit" id="update-button">
-                  <i class="fa fa-save"></i>
-                  <span class="text">{t}Update{/t}</span>
-                </button>
-              {/acl}
-              {else}
-              {acl isAllowed="VIDEO_CREATE"}
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
-                  <i class="fa fa-save"></i>
-                  <span class="text">{t}Save{/t}</span>
-                </button>
-              {/acl}
-              {/if}
+              <button class="btn btn-loading btn-success text-uppercase" ng-click="submit($event)" type="submit">
+                <i class="fa fa-save m-r-5"></i>
+                {t}Update{/t}
+              </button>
             </li>
           </ul>
         </div>
@@ -144,9 +139,9 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="tag_ids" class="form-label">{t}Tags{/t}</label>
+              <label for="tags" class="form-label">{t}Tags{/t}</label>
               <div class="controls">
-                {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
+                {include file="ui/component/tags-input/tags.tpl" ngModel="video.tags"}
               </div>
             </div>
             {if isset($video)}

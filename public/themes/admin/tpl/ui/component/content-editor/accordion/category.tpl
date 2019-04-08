@@ -14,7 +14,7 @@
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.category }">
   <div class="form-group no-margin">
     <div class="controls">
-      <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" ng-model="item.categories[0]" placeholder="{t}Select a category{/t}…" required selected="selectedCategories"/>
+      <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" locale="config.locale.selected" ng-model="item.categories[0]" placeholder="{t}Select a category{/t}…" required selected="selectedCategories"/>
     </div>
   </div>
 </div>

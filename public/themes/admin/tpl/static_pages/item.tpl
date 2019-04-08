@@ -38,10 +38,10 @@
             <translator item="data.item" keys="data.extra.keys" ng-model="config.locale.selected" options="config.locale"></translator>
           </li>
         </ul>
-        <div class="all-actions pull-right">
+        <div class="ng-cloak pull-right" ng-if="!flags.http.loading">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+              <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
                 <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                 {t}Save{/t}
               </button>

@@ -119,7 +119,6 @@ class ArticleController extends FrontendController
      */
     protected function getParameters($params, $item = null)
     {
-        $locale = $this->get('core.locale')->getRequestLocale();
         $params = parent::getParameters($params, $item);
 
         if (array_key_exists('o_category', $params) && !empty($params['o_category'])) {
@@ -133,9 +132,6 @@ class ArticleController extends FrontendController
         if (!empty($item)) {
             $params[$item->content_type_name] = $item;
 
-            $params['tags'] = $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($item->tag_ids, $locale)['items'];
-
             if (array_key_exists('bodyLink', $item->params)) {
                 $params['o_external_link'] = $item->params['bodyLink'];
             }
@@ -147,24 +143,24 @@ class ArticleController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    protected function hydrateShow($params = [], $item = null)
+    protected function hydrateShow(array &$params = []) : void
     {
-        $params = [
-            'relationed' => $this->getRelated($item),
-            'suggested'  => $this->getSuggested($item, $params['o_category'])
-        ];
+        $params['tags']       = $this->getTags($params['content']);
+        $params['relationed'] = $this->getRelated($params['content']);
+        $params['suggested']  = $this->getSuggested(
+            $params['content'],
+            $params['o_category']
+        );
 
         $em = $this->get('entity_repository');
 
-        if (!empty($item->img2)) {
-            $params['photoInt'] = $em->find('Photo', $item->img2);
+        if (!empty($params['content']->img2)) {
+            $params['photoInt'] = $em->find('Photo', $params['content']->img2);
         }
 
-        if (!empty($item->fk_video2)) {
-            $params['videoInt'] = $em->find('Video', $item->fk_video2);
+        if (!empty($params['content']->fk_video2)) {
+            $params['videoInt'] = $em->find('Video', $params['content']->fk_video2);
         }
-
-        $this->view->assign($params);
     }
 
     /**

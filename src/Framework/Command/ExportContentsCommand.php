@@ -155,7 +155,7 @@ EOF
                 'photo'      => $content->img1,
                 'photoInner' => $content->img2,
                 'tags'       => $this->getContainer()->get('api.service.tag')
-                    ->getListByIdsKeyMapped($content->tag_ids)['items']
+                    ->getListByIdsKeyMapped($content->tags)['items']
             ]
         );
 
