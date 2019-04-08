@@ -339,9 +339,9 @@ class Importer
     {
         $ts = $this->container->get('api.service.tag');
 
-        $tags = $ts->responsify(
-            $ts->getListByString($resource->title)['items']
-        );
+        $tags = array_map(function ($tag) {
+            return $tag->id;
+        }, $ts->getListByString($resource->title)['items']);
 
         $data = [
             'category'            => $category,
