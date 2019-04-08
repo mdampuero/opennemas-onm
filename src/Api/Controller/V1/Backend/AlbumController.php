@@ -128,14 +128,12 @@ class AlbumController extends ContentOldController
         }
 
         foreach ($content as $item) {
-            if (is_array($item->information)
-                && !array_key_exists('thumbnail', $item->information)
-                || empty($item->information['thumbnail'])
+            if (empty($content->cover_id)
             ) {
                 continue;
             }
 
-            $photo = $em->find('Photo', $item->information['thumbnail']);
+            $photo = $em->find('Photo', $item->cover_id);
 
             $extra[] = \Onm\StringUtils::convertToUtf8($photo);
         }

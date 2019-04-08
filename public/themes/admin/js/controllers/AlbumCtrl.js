@@ -2,8 +2,8 @@
  * Handle actions for album inner form.
  */
 angular.module('BackendApp.controllers').controller('AlbumCtrl', [
-  '$controller', '$scope', '$uibModal', 'messenger', 'routing', 'moment',
-  function($controller, $scope, $uibModal, messenger, routing, moment) {
+  '$controller', '$rootScope', '$scope', '$uibModal', 'messenger', 'routing',
+  function($controller, $rootScope, $scope, $uibModal, messenger, routing) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -55,6 +55,10 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       update:   'api_v1_backend_album_update'
     };
 
+    $scope.expanded = {
+      cover_image: true,
+    };
+
     /**
      * @function parseItem
      * @memberOf RestInnerCtrl
@@ -72,24 +76,16 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       $scope.configure(data.extra);
       $scope.localize($scope.data.item, 'item', true);
 
-      // Assign cover
-      // Assign photos
+      // Assign the cover image
+      var cover = data.extra.related_contents.filter(function(el) {
+        return el && el.pk_photo == $scope.item.cover_id;
+      }).shift();
 
-      // var img1 = data.extra.related_contents.filter(function(el) {
-      //   return el.pk_photo === $scope.item.img1;
-      // }).shift();
+      if (cover) {
+        $scope.cover_image = cover;
+      }
 
-      // if (img1) {
-      //   $scope.photo1 = img1;
-      // }
-
-      // var img2 = data.extra.related_contents.filter(function(el) {
-      //   return el.pk_photo === $scope.item.img2;
-      // }).shift();
-
-      // if (img2) {
-      //   $scope.photo2 = img2;
-      // }
+      // TODO: Assign photos
     };
 
     /**
@@ -140,9 +136,7 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
      * @description
      *   Saves tags and, then, submits the form.
      */
-    $scope.submit = function(e) {
-      e.preventDefault();
-
+    $scope.save = function() {
       if (!$scope.validatePhotosAndCover()) {
         return false;
       }
@@ -165,13 +159,15 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
           $('[name=form]').submit();
         }
       });
+
+      $rootScope.save();
     };
 
     /**
      * Show modal warning for album missing photos
      */
     $scope.validatePhotosAndCover = function() {
-      if ($scope.photos && $scope.cover) {
+      if ($scope.item.photos && $scope.item.cover) {
         return true;
       }
 
@@ -191,6 +187,20 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
 
       return false;
     };
+
+    /**
+     * Updates the ids and footers when photos change.
+     *
+     * @param Object nv The new values.
+     * @param Object ov The old values.
+     */
+    $scope.$watch('item.cover_image', function(nv, ov) {
+      if (nv === ov) {
+        return false;
+      }
+
+      $scope.item.cover = nv.pk_content;
+    }, true);
 
     /**
      * Updates the ids and footers when photos change.
