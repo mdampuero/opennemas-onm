@@ -115,8 +115,11 @@
           </div>
         </div>
 
-        <div class="grid simple" ng-if="type == 'script' || type == 'external'">
+        <div class="grid simple" ng-show="type == 'script' || type == 'external'">
           <div class="grid-body no-padding">
+            <div class="grid-collapse-title">
+              <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
+            </div>
             {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Cover image{/t}" field="cover"}
           </div>
         </div>
