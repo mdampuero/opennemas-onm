@@ -814,20 +814,18 @@ class Content implements \JsonSerializable, CsvSerializable
      **/
     public function patch($properties)
     {
-        $properties['changed']             = date("Y-m-d H:i:s");
+        $properties['changed']             = date('Y-m-d H:i:s');
         $properties['fk_user_last_editor'] = (int) getService('core.user')->id;
-
 
         if (array_key_exists('content_status', $properties)
             && $properties['content_status'] == 1
             && empty($this->starttime)
         ) {
-            $properties['starttime'] = date("Y-m-d H:i:s");
+            $properties['starttime'] = date('Y-m-d H:i:s');
         }
 
         try {
-            $conn = getService('dbal_connection');
-            $conn->update(
+            getService('dbal_connection')->update(
                 'contents',
                 $properties,
                 [ 'pk_content' => $this->pk_content ]
