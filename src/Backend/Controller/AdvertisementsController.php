@@ -511,8 +511,8 @@ class AdvertisementsController extends Controller
      */
     protected function getTags($title)
     {
-        $ts = $this->get('api.service.tag');
-
-        return $ts->responsify($ts->getListByString($title)['items']);
+        return array_map(function ($tag) {
+            return $tag->id;
+        }, $this->get('api.service.tag')->getListByString($title)['items']);
     }
 }
