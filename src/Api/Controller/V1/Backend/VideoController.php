@@ -36,7 +36,7 @@ class VideoController extends ContentOldController
      */
     public function saveConfigAction(Request $request)
     {
-        $this->checkSecurity($this->extension, 'OPINION_SETTINGS');
+        $this->checkSecurity($this->extension, 'VIDEO_SETTINGS');
 
         $settings = [ 'video_settings' => $request->request->all() ];
 
@@ -62,7 +62,7 @@ class VideoController extends ContentOldController
      */
     public function showConfigAction()
     {
-        $this->checkSecurity($this->extension, 'OPINION_SETTINGS');
+        $this->checkSecurity($this->extension, 'VIDEO_SETTINGS');
 
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings')
