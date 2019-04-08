@@ -11,7 +11,7 @@
               </div>
             {/acl}
             {acl isAllowed="ALBUM_UPDATE"}
-              <a class="thumbnail-action" href="[% edit(item.id, 'backend_album_show') %]" ng-click="$event.stopPropagation()">
+              <a class="thumbnail-action" href="[% routing.generate('backend_album_show', { id: getId(item) }) %]" ng-click="$event.stopPropagation()">
                 <i class="fa fa-pencil fa-2x"></i>
               </a>
             {/acl}

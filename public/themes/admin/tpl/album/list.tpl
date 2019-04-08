@@ -47,7 +47,7 @@
             {/acl}
             {acl isAllowed="ALBUM_CREATE"}
               <li class="quicklinks">
-                <a class="btn btn-loading btn-success text-uppercase" href="{url name=admin_album_create}">
+                <a class="btn btn-loading btn-success text-uppercase" href="{url name=backend_album_create}">
                   <span class="fa fa-plus m-r-5"></span>
                   {t}Create{/t}
                 </a>
