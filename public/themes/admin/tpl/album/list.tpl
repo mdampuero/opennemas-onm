@@ -120,7 +120,7 @@
       </div>
     </div>
   </div>
-  <div class="page-navbar filters-navbar ng-cloak">
+  <div class="page-navbar filters-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
@@ -144,33 +144,19 @@
             <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by title{/t}" type="text"/>
           </li>
           <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-init="categories = {json_encode($categories)|clear_json}">
+          <li class="quicklinks hidden-xs ng-cloak">
             <onm-category-selector ng-model="criteria.pk_fk_content_category" locale="config.locale.selected" label-text="{t}Category{/t}" default-value-text="{t}Any{/t}" placeholder="{t}Any{/t}" />
           </li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
-            <ui-select name="status" theme="select2" ng-model="criteria.content_status">
-              <ui-select-match>
-                <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
-              </ui-select-match>
-              <ui-select-choices repeat="item.value as item in status | filter: { name: $select.search }">
-                <div ng-bind-html="item.name | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
+          <li class="quicklinks hidden-xs ng-cloak">
+            {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
           </li>
           <li class="quicklinks hidden-xs ng-cloak" ng-if="mode === 'list'">
-            <ui-select name="view" theme="select2" ng-model="criteria.epp">
-              <ui-select-match>
-                <strong>{t}View{/t}:</strong> [% $select.selected %]
-              </ui-select-match>
-              <ui-select-choices repeat="item in views  | filter: $select.search">
-                <div ng-bind-html="item | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
+            {include file="ui/component/select/epp.tpl" label="true" ngModel="criteria.epp"}
           </li>
         </ul>
-        <ul class="nav quick-section pull-right ng-cloak" ng-if="mode === 'list' && contents.length > 0">
+        <ul class="nav quick-section pull-right ng-cloak" ng-if="mode === 'list' && items.length > 0">
           <li class="quicklinks hidden-xs">
-            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
+            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </li>
         </ul>
       </div>

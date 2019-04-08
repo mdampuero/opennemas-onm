@@ -10,8 +10,8 @@
                 <label for="select-all"></label>
               </div>
             </th>
-            <th class="hidden-xs hidden-sm" style="width: 10px;"></th>
-            <th class="title"></th>
+            <th></th>
+            <th class="hidden-xs hidden-sm"></th>
             <th class="hidden-xs text-center" width="100">{t}Home{/t}</th>
             <th class="hidden-xs text-center" width="100">{t}Favorite{/t}</th>
             <th class="text-center" width="100">{t}Published{/t}</th>
@@ -25,16 +25,14 @@
                 <label for="checkbox[%$index%]"></label>
               </div>
             </td>
-            <td class="hidden-xs hidden-sm">
-              <div ng-if="item.cover != ''" style="height: 120px; width: 120px;">
-                <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.cover" transform="zoomcrop,220,220"></dynamic-image>
-              </span>
-              <div ng-if="item.cover == ''">
-                <img ng-src="//placehold.it/80x60" class="thumbnail" />
-              </span>
+            <td class="hidden-xs hidden-sm" style="height: 150px; width: 150px; margin: 0 auto 15px;">
+              <div style="height: 120px; width: 120px;">
+                <dynamic-image ng-show="item.cover != ''" autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.cover" transform="zoomcrop,220,220"></dynamic-image>
+                <img ng-show="item.cover == ''" ng-src="//placehold.it/80x60" class="thumbnail" />
+              </div>
             </td>
             <td>
-              <div ng-if="item.cover != ''" class="visible-xs visible-sm" style="height: 150px; width: 150px; margin: 0 auto 15px;">
+              <div ng-show="item.cover != ''" class="visible-xs visible-sm text-left" style="width: 150px; margin: 0 auto 15px;">
                 <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.cover"></dynamic-image>
               </div>
               [% item.title %]
@@ -61,16 +59,16 @@
             </td>
             {acl isAllowed="ALBUM_HOME"}
               <td class="hidden-xs text-center">
-                <button class="btn btn-white" ng-click="patchItem(item, 'in_home', item.in_home != 1 ? 1 : 0)" type="button">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.in_homeLoading == 1, 'fa-home text-info': !item.in_homeLoading == 1 && item.in_home == 1, 'fa-home': !item.home_loading == 1 && item.in_home == 0 }"></i>
-                  <i class="fa fa-times fa-sub text-danger" ng-if="!item.in_homeLoading == 1 && item.in_home == 0"></i>
+                <button class="btn btn-white" ng-click="patch(item, 'in_home', item.in_home != 1 ? 1 : 0)" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.in_homeLoading == 1, 'fa-home text-info': item.in_homeLoading !== 1 && item.in_home == 1, 'fa-home': !item.in_homeLoading == 1 && item.in_home == 0 }"></i>
+                  <i class="fa fa-times fa-sub text-danger" ng-if="item.in_homeLoading !== 1 && item.in_home == 0"></i>
                 </button>
               </td>
             {/acl}
             {acl isAllowed="ALBUM_FAVORITE"}
               <td class="hidden-xs text-center">
                 <button class="btn btn-white" ng-click="patch(item, 'favorite', item.favorite != 1 ? 1 : 0)" type="button">
-                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.favoriteLoading == 1, 'fa-star text-warning': !item.favoritLoading == 1 && item.favorite == 1, 'fa-star-o': !item.favoriteLoading == 1 && item.favorite != 1 }"></i>
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.favoriteLoading == 1, 'fa-star text-warning': !item.favoriteLoading == 1 && item.favorite == 1, 'fa-star-o': !item.favoriteLoading == 1 && item.favorite != 1 }"></i>
                 </button>
               </td>
             {/acl}

@@ -35,6 +35,23 @@
         };
 
         /**
+         * @function select
+         * @memberOf AlbumListCtrl
+         *
+         * @description
+         *   Adds and removes the item from the selected array.
+         */
+        $scope.select = function(item) {
+          if ($scope.selected.items.indexOf(item.id) < 0) {
+            $scope.selected.items.push(item.id);
+          } else {
+            $scope.selected.items = $scope.selected.items.filter(function(el) {
+              return el !== item.id;
+            });
+          }
+        };
+
+        /**
          * @function sendToTrash
          * @memberOf UserCtrl
          *

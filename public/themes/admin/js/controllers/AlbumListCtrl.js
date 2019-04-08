@@ -68,60 +68,9 @@
             title: '[key] ~ "%[value]%"'
           } });
 
-          $scope.setMode('list');
+          $scope.setMode('grid');
 
           $scope.list();
-        };
-
-        /**
-         * @function list
-         * @memberOf RestListCtrl
-         *
-         * @description
-         *   Reloads the list.
-         */
-        $scope.list = function() {
-          $scope.flags.http.loading = 1;
-          var append = $scope.mode === 'grid';
-
-          var oql   = oqlEncoder.getOql($scope.criteria);
-          var route = {
-            name: $scope.routes.list,
-            params: { oql: oql }
-          };
-
-          $location.search('oql', oql);
-
-          return http.get(route).then(function(response) {
-            var data = response.data;
-
-            if (!data.items && !append) {
-              $scope.data.items = [];
-            }
-
-            if (append) {
-              var oldItems = $scope.data.item;
-
-              $scope.data = data;
-              $scope.data.items = oldItems.concat(data.items);
-            } else {
-              $scope.data = data;
-            }
-
-            $scope.items = $scope.data.items;
-
-            $scope.parseList(response.data);
-            $scope.disableFlags('http');
-
-            // Scroll top
-            if (!append) {
-              $('body').animate({ scrollTop: '0px' }, 1000);
-            }
-          }, function(response) {
-            messenger.post(response.data);
-            $scope.disableFlags('http');
-            $scope.items = [];
-          });
         };
 
         /**
@@ -130,23 +79,6 @@
         $scope.parseList = function(data) {
           $scope.configure(data.extra);
           $scope.localize($scope.data.items, 'items');
-        };
-
-        /**
-         * @function select
-         * @memberOf AlbumListCtrl
-         *
-         * @description
-         *   Adds and removes the item from the selected array.
-         */
-        $scope.select = function(item) {
-          if ($scope.selected.items.indexOf(item.id) < 0) {
-            $scope.selected.items.push(item.id);
-          } else {
-            $scope.selected.items = $scope.selected.items.filter(function(el) {
-              return el != item.id;
-            });
-          }
         };
 
         /**

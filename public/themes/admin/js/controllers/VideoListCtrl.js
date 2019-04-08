@@ -80,23 +80,6 @@
         };
 
         /**
-         * @function select
-         * @memberOf VideoListCtrl
-         *
-         * @description
-         *   Adds and removes the item from the selected array.
-         */
-        $scope.select = function(item) {
-          if ($scope.selected.items.indexOf(item.id) < 0) {
-            $scope.selected.items.push(item.id);
-          } else {
-            $scope.selected.items = $scope.selected.items.filter(function(el) {
-              return el !== item.id;
-            });
-          }
-        };
-
-        /**
          * Changes the list mode.
          *
          * @param {String} mode The new list mode.
