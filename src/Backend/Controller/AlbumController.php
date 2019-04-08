@@ -45,16 +45,8 @@ class AlbumController extends Controller
      */
     public function createAction(Request $request)
     {
-        if ('POST' !== $request->getMethod()) {
-            return $this->render('album/item.tpl', [
-                'authors'        => $this->getAuthors(),
-                'commentsConfig' => $this->get('orm.manager')
-                    ->getDataSet('Settings')
-                    ->get('comments_config'),
-                'locale'         => $this->get('core.locale')
-                    ->getLocale('frontend'),
-            ]);
-        }
+        return $this->render('album/item.tpl');
+
 
         $data = [
             'content_status' => $request->request->getDigits('content_status', 0, FILTER_SANITIZE_STRING),
@@ -94,48 +86,6 @@ class AlbumController extends Controller
             return $this->redirect(
                 $this->generateUrl('backend_albums_list')
             );
-        }
-    }
-
-    /**
-     * Deletes an album given its id.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('ALBUM_MANAGER')
-     *     and hasPermission('ALBUM_DELETE')")
-     */
-    public function deleteAction(Request $request)
-    {
-        $id    = $request->query->getDigits('id');
-        $page  = $request->query->getDigits('page', 1);
-        $album = new \Album($id);
-
-        if (is_null($album->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Unable to find an album with the id "%d".'), $id)
-            );
-        }
-
-        // Delete all related and relations
-        getService('related_contents')->deleteAll($id);
-
-        $album->delete($id, $this->getUser()->id);
-
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            _('Album delete successfully.')
-        );
-
-        if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl('backend_albums_list', [
-                'category' => $album->category,
-                'page'     => $page,
-            ]));
-        } else {
-            return new Response('ok');
         }
     }
 
@@ -342,41 +292,7 @@ class AlbumController extends Controller
      */
     public function configAction(Request $request)
     {
-        $ds = $this->get('orm.manager')->getDataSet('Settings');
-
-        if ('POST' !== $request->getMethod()) {
-            return $this->render('album/config.tpl', [
-                'configs' => $ds->get([ 'album_settings' ])
-            ]);
-        }
-
-        $settings = [
-            'album_settings' => [
-                'total_widget'     => $request->request->getDigits('album_settings_total_widget'),
-                'crop_width'       => $request->request->getDigits('album_settings_crop_width'),
-                'crop_height'      => $request->request->getDigits('album_settings_crop_height'),
-                'orderFrontpage'   => $request->request
-                    ->filter('album_settings_orderFrontpage', '', FILTER_SANITIZE_STRING),
-                'time_last'        => $request->request->getDigits('album_settings_time_last'),
-                'total_front'      => $request->request->getDigits('album_settings_total_front'),
-                'total_front_more' => $request->request->getDigits('album_settings_total_front_more'),
-            ]
-        ];
-
-
-        try {
-            $ds->set($settings);
-
-            $type    = 'success';
-            $message = _('Settings saved successfully.');
-        } catch (\Exception $e) {
-            $type    = 'error';
-            $message = _('Unable to save the settings.');
-        }
-
-        $this->get('session')->getFlashBag()->add($type, $message);
-
-        return $this->redirect($this->generateUrl('backend_albums_config'));
+        return $this->render('album/config.tpl');
     }
 
     /**

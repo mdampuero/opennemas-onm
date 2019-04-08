@@ -37,7 +37,7 @@
           <ul class="nav quick-section">
             {acl isAllowed="ALBUM_SETTINGS"}
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_albums_config}" title="{t}Config album module{/t}">
+                <a class="btn btn-link" href="{url name=backend_albums_config}" title="{t}Config album module{/t}">
                   <span class="fa fa-cog fa-lg"></span>
                 </a>
               </li>
