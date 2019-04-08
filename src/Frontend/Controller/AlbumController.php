@@ -138,47 +138,11 @@ class AlbumController extends FrontendController
      */
     protected function hydrateShow(array &$params = []):void
     {
-        $date     = date('Y-m-d H:i:s');
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('album_settings');
-        $epp      = isset($settings['total_front']) ? ($settings['total_front']) : 2;
-
-        $author = $this->get('user_repository')->find((int) $params['content']->fk_author);
-
-        $params['content']->author = $author;
-
-        // Get the other albums for the albums widget
-        $response = $this->get('api.service.content_old')->getList(sprintf(
-            'content_type_name="album" and content_status=1 and in_litter=0 '
-            . 'and pk_fk_content_category=%d '
-            . 'and (starttime IS NULL or starttime < "%s") '
-            . 'and (endtime IS NULL or endtime > "%s") '
-            . 'order by starttime desc limit %d offset %d',
-            $params['o_category']->pk_content_category,
-            $date,
-            $date,
-            $epp,
-            $params['page']
-        ));
-
-        // In order to make subscription module to work remove the attached
-        // album photos when not cacheable
-        $_albumArray = (!isset($params['content']->album_content_replaced))
-            ? $params['content']->_getAttachedPhotos($params['content']->id) : null;
-
-        $_albumArrayPaged = (!isset($params['content']->album_content_replaced))
-            ? $params['content']->getAttachedPhotosPaged($params['content']->id, 8, $params['page']) : null;
-
-        if (count($_albumArrayPaged) > $epp) {
-            array_pop($_albumArrayPaged);
-        }
+        $params['content']->author =
+            $this->get('user_repository')->find((int) $params['content']->fk_author);
 
         $params = array_merge($params, [
-            'album_photos'       => $_albumArray,
-            'album_photos_paged' => $_albumArrayPaged,
-            'items_page'         => $epp,
-            'gallerys'           => $response['items']
+            'album_photos' => $params['content']->_getAttachedPhotos($params['content']->id),
         ]);
     }
 
