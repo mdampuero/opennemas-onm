@@ -357,6 +357,8 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
     {
         $ts = $this->getContainer()->get('api.service.tag');
 
-        return $ts->responsify($ts->getListByString($str)['items']);
+        return array_map(function ($tag) {
+            return $tag->id;
+        }, $ts->getListByString($str)['items']);
     }
 }
