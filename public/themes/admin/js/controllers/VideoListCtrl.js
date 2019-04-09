@@ -29,6 +29,7 @@
          */
         $scope.criteria = {
           content_type_name: 'video',
+          pk_fk_content_category: null,
           epp: 10,
           in_litter: 0,
           orderBy: { created: 'desc' },

@@ -153,7 +153,7 @@
     </div>
   </div>
   <div class="content">
-    <div class="listing-no-contents" ng-hide="!flags.http.loading">
+    <div class="listing-no-contents ng-cloak" ng-show="flags.http.loading && !flags.loadingMore">
       <div class="text-center p-b-15 p-t-15">
         <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
         <h3 class="spinner-text">{t}Loading{/t}...</h3>

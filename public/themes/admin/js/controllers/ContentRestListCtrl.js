@@ -15,8 +15,8 @@
      *   Handles all actions in user groups list.
      */
     .controller('ContentRestListCtrl', [
-      '$controller', '$scope', '$uibModal', 'oqlEncoder', '$location', 'http', 'messenger',
-      function($controller, $scope, $uibModal, oqlEncoder, $location, http, messenger) {
+      '$controller', '$scope', '$uibModal', 'oqlEncoder', '$location', 'http', 'messenger', '$timeout',
+      function($controller, $scope, $uibModal, oqlEncoder, $location, http, messenger, $timeout) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -113,11 +113,19 @@
          * @param {String}  route The route name.
          * @param {Boolean} reset Whether to reset the list.
          */
-        $scope.list = function(route) {
-          if ($scope.mode === 'grid') {
+        $scope.list = function(route, reset) {
+          if (!reset && $scope.mode === 'grid') {
             $scope.flags.loadingMore = 1;
           } else {
-            $scope.flags.http.loading  = 1;
+            if ($scope.mode === 'grid') {
+              $scope.flags.loadingMore = 1;
+            } else {
+              $scope.flags.http.loading  = 1;
+            }
+
+            if ($scope.data) {
+              $scope.data.items = [];
+            }
           }
 
           var oql   = oqlEncoder.getOql($scope.criteria);
@@ -129,7 +137,7 @@
           $location.search('oql', oql);
 
           return http.get(route).then(function(response) {
-            if ($scope.mode === 'grid') {
+            if (reset || $scope.mode === 'grid') {
               $scope.data = $scope.data ? $scope.data : { items: [] };
 
               response.data.items = [].concat($scope.data.items, response.data.items);
@@ -142,7 +150,6 @@
 
             $scope.disableFlags('http');
             $scope.disableFlags('loadingMore');
-            $scope.flags.loadingMore = 0;
 
             // Scroll top
             if ($scope.mode !== 'grid') {
@@ -156,6 +163,38 @@
             $scope.data = {};
           });
         };
+
+        // Reloads the list when criteria changes
+        $scope.$watch('criteria', function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
+          var changes = [];
+
+          // Get which values change ignoring page
+          for (var key in $scope.criteria) {
+            if (key !== 'page' && !angular.equals(nv[key], ov[key])) {
+              changes.push(key);
+            }
+          }
+
+          // Reset the list if search changes
+          var reset = changes.length > 0;
+
+          // Change page when scrolling in grid mode
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+          }
+
+          if (ov.page === nv.page) {
+            $scope.criteria.page = 1;
+          }
+
+          $scope.tm = $timeout(function() {
+            $scope.list($scope.routes.list, reset);
+          }, 500);
+        }, true);
 
         // Change page when scrolling in grid mode
         $(window).scroll(function() {

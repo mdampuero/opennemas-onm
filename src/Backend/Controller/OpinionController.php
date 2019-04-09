@@ -114,6 +114,8 @@ class OpinionController extends BackendController
         $countOpinions = true;
         $opinions      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countOpinions);
 
+        $this->get('core.locale')->setContext('frontend');
+
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
             'directional' => true,
