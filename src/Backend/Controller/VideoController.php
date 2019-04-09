@@ -102,6 +102,8 @@ class VideoController extends BackendController
         $videos      = $em->findBy($filters, ['created' => 'desc'], $itemsPerPage, $page);
         $countVideos = $em->countBy($filters);
 
+        $this->get('core.locale')->setContext('frontend');
+
         // Build the pagination
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
