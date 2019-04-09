@@ -218,17 +218,14 @@
              *   Adds/removes all items from ngModel.
              */
             $scope.toggleAll = function() {
-              if (!$scope.ngModel) {
-                $scope.ngModel = [];
-                return;
+              if (!$scope.exportModel) {
+                $scope.exportModel = [];
               }
 
-              if ($scope.ngModel.length !== $scope.categories.length) {
-                $scope.ngModel = $scope.categories.map(function(item) {
-                  return item.pk_content_category;
-                });
+              if ($scope.exportModel.length !== $scope.categories.length) {
+                $scope.exportModel = angular.copy($scope.categories);
               } else {
-                $scope.ngModel = [];
+                $scope.exportModel = [];
               }
             };
 
