@@ -233,9 +233,16 @@
             };
 
             // Updates internal and external models when something changes
-            $scope.$watch('[ categories, exportModel, ngModel ]', function(nv) {
+            $scope.$watch('[ categories, exportModel, ngModel ]', function(nv, ov) {
               if (!$scope.categories) {
                 return;
+              }
+
+              // Force integers in ngModel on initialization
+              if (ov[2] !== nv[2] && angular.isArray(nv[2])) {
+                $scope.ngModel = nv[2].map(function(e) {
+                  return parseInt(e);
+                });
               }
 
               // Update ngModel when selected category changes
@@ -243,7 +250,7 @@
                 $scope.ngModel = !angular.isArray(nv[1]) ?
                   nv[1].pk_content_category :
                   nv[1].map(function(e) {
-                    return e.pk_content_category;
+                    return parseInt(e.pk_content_category);
                   });
                 return;
               }
