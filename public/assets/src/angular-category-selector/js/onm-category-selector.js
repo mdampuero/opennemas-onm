@@ -78,6 +78,15 @@
             $scope.required     = $attrs.required ? $attrs.required : false;
             $scope.selectedText = $scope.selectedText || 'selected';
 
+            // Force integers in ngModel on initialization
+            if ($scope.ngModel) {
+              $scope.ngModel = !$scope.multiple ?
+                parseInt($scope.ngModel) :
+                $scope.ngModel.map(function(e) {
+                  return parseInt(e);
+                });
+            }
+
             http.get('api_v1_backend_categories_list').then(function(response) {
               response.data.items = response.data.items.filter(function(e) {
                 return !$scope.exclude || $scope.exclude.length === 0 ||
@@ -229,40 +238,83 @@
               }
             };
 
-            // Updates internal and external models when something changes
-            $scope.$watch('[ categories, exportModel, ngModel ]', function(nv, ov) {
+            /**
+             * @function updateNgModel
+             * @memberOf onmCategorySelector
+             *
+             * @description
+             *   Updates ngModel basing on current exportModel.
+             */
+            $scope.updateNgModel = function() {
+              if (!$scope.exportModel) {
+                return;
+              }
+
+              var newValue = !$scope.multiple ?
+                $scope.exportModel.pk_content_category :
+                $scope.exportModel.map(function(e) {
+                  return e.pk_content_category;
+                });
+
+              // Do not update if both values are null/undefined or equal
+              if (!newValue && !$scope.ngModel ||
+                  angular.equals($scope.ngModel, newValue)) {
+                return;
+              }
+
+              $scope.ngModel = newValue;
+            };
+
+            /**
+             * @function updateNgModel
+             * @memberOf onmCategorySelector
+             *
+             * @description
+             *   Updates exportModel basing on current ngModel.
+             */
+            $scope.updateExportModel = function() {
               if (!$scope.categories) {
                 return;
               }
 
-              // Force integers in ngModel on initialization
-              if (ov[2] !== nv[2] && angular.isArray(nv[2])) {
-                $scope.ngModel = nv[2].map(function(e) {
-                  return parseInt(e);
-                });
+              var needle = $scope.multiple ? [] : [ null ];
+
+              if ($scope.ngModel) {
+                needle = $scope.multiple ? $scope.ngModel : [ $scope.ngModel ];
               }
 
-              // Update ngModel when selected category changes
-              if (angular.isDefined(nv[1])) {
-                $scope.ngModel = !angular.isArray(nv[1]) ?
-                  nv[1].pk_content_category :
-                  nv[1].map(function(e) {
-                    return parseInt(e.pk_content_category);
-                  });
+              var found = $scope.categories.filter(function(e) {
+                return needle.indexOf(e.pk_content_category) !== -1;
+              });
+
+              if (found.length === 0) {
                 return;
               }
 
-              // Change category only when ngModel initialized
-              if (!$scope.exportModel) {
-                $scope.exportModel = !angular.isArray(nv[2]) ?
-                  $scope.categories.filter(function(e) {
-                    return !$scope.ngModel && e.pk_content_category === null ||
-                      e.pk_content_category === $scope.ngModel;
-                  })[0] :
-                  $scope.categories.filter(function(e) {
-                    return $scope.ngModel.indexOf(e.pk_content_category) !== -1;
-                  });
+              var newValue = $scope.multiple ? found : found[0];
+
+              if (!angular.equals($scope.exportModel, newValue)) {
+                $scope.exportModel = newValue;
               }
+            };
+
+            // Try to select an option when categories loaded
+            $scope.$watch('categories', function(nv) {
+              if (!nv) {
+                return;
+              }
+
+              $scope.updateExportModel();
+            });
+
+            // Updates external model when internal model changes
+            $scope.$watch('exportModel', function() {
+              $scope.updateNgModel();
+            }, true);
+
+            // Updates internal model when internal model changes
+            $scope.$watch('ngModel', function() {
+              $scope.updateExportModel();
             }, true);
           },
         };
