@@ -261,6 +261,8 @@ class AlbumController extends Controller
         $countAlbums = true;
         $albums      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countAlbums);
 
+        $this->get('core.locale')->setContext('frontend');
+
         // Build the pagination
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
