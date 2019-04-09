@@ -259,7 +259,7 @@ class ContentOldService implements Service
             $repository = $this->em;
 
             list($criteria, $order, $epp, $page) =
-            $this->container->get('core.helper.oql')->getFiltersFromOql($oql);
+                $this->container->get('core.helper.oql')->getFiltersFromOql($oql);
 
             $criteria          = preg_replace('/fk_author/', 'contents.fk_author', $criteria);
             $response['items'] = $repository->findBy($criteria, $order, $epp, $page);
