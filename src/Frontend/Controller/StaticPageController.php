@@ -29,14 +29,14 @@ class StaticPageController extends FrontendController
      * {@inheritdoc}
      */
     protected $groups = [
-        'list' => 'article_inner'
+        'show' => 'article_inner'
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $positions = [
-        'list' => [ 1, 2, 5, 6, 7 ]
+        'show' => [ 1, 2, 5, 6, 7 ]
     ];
     /**
      * {@inheritdoc}
