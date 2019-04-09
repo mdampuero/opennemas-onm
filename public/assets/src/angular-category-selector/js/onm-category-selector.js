@@ -1,18 +1,34 @@
 (function() {
   'use strict';
 
+  /**
+   * @ngdoc module
+   * @name  onm.categorySelector
+   *
+   * @requires onm.http
+   * @requires onm.localize
+   * @requires ui.select
+   *
+   * @description
+   *   The `onm.categorySelector` module provides a directive to automagically
+   *   generate a category selector with multilanguage support.
+   */
   angular.module('onm.categorySelector', [ 'onm.http', 'onm.localize', 'ui.select' ])
 
     /**
      * @ngdoc directive
      * @name  onmCategorySelector
      *
+     * @requires http
+     * @requires linker
+     * @requires localizer
+     *
      * @description
      *   Directive to create category selector dynamically.
      */
     .directive('onmCategorySelector', [
-      'http', 'localizer', 'linker',
-      function(http, localizer, linker) {
+      'http', 'linker', 'localizer',
+      function(http, linker, localizer) {
         return {
           restrict: 'E',
           transclude: true,
@@ -321,4 +337,3 @@
       }
     ]);
 })();
-
