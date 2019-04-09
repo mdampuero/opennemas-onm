@@ -100,7 +100,12 @@
           if (!reset && $scope.mode === 'grid') {
             $scope.flags.loadingMore = 1;
           } else {
-            $scope.flags.http.loading  = 1;
+            if ($scope.mode === 'grid') {
+              $scope.flags.loadingMore = 1;
+            } else {
+              $scope.flags.http.loading  = 1;
+            }
+
             if ($scope.data) {
               $scope.data.items = [];
             }
@@ -128,7 +133,6 @@
 
             $scope.disableFlags('http');
             $scope.disableFlags('loadingMore');
-            $scope.flags.loadingMore = 0;
 
             // Scroll top
             if ($scope.mode !== 'grid') {
