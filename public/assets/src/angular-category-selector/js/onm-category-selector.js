@@ -328,7 +328,7 @@
               $scope.updateNgModel();
             }, true);
 
-            // Updates internal model when internal model changes
+            // Updates internal model when external model changes
             $scope.$watch('ngModel', function() {
               $scope.updateExportModel();
             }, true);
