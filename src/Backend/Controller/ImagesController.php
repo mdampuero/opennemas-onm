@@ -203,7 +203,8 @@ class ImagesController extends Controller
     public function createAction(Request $request)
     {
         try {
-            $file = $request->files->get('file');
+            $files = $request->files->all();
+            $file  = array_pop($files);
 
             $photo = new \Photo();
             $id    = $photo->createFromLocalFile($file->getRealPath());
