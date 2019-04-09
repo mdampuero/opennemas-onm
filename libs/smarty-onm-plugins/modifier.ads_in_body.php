@@ -12,18 +12,23 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
     // Split body into paragraphs and avoid losing data at body end
     preg_match_all('/(.*?)<\/p>(\s<\/blockquote>)?/s', $body . '<p></p>', $matches);
 
-    if (empty($matches[0])) {
-        return $body;
-    }
-
     // Clean empty paragraphs
     $paragraphs = array_filter($matches[0], function ($a) {
         return !in_array(trim($a), ['<p>&nbsp;</p>', '<p></p>']);
     });
 
-    $id  = $contentType === 'opinion' ? 3200 : 2200;
-    $ads = getService('core.template')
-        ->getTemplateVars()['advertisements'];
+    $id     = $contentType === 'opinion' ? 3200 : 2200;
+    $smarty = getService('core.template');
+    $ads    = $smarty->getValue('advertisements');
+
+    // Get targeting parameters for smart ajax format
+    $app    = $smarty->getValue('app');
+    $params = [
+        'category'           => $smarty->getValue('actual_category'),
+        'extension'          => $app['extension'],
+        'advertisementGroup' => $app['advertisementGroup'],
+        'content'            => $smarty->getValue('content')
+    ];
 
     $slots = [];
     foreach ($ads as $ad) {
@@ -49,12 +54,8 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
                 return in_array($slotId, $a->positions);
             });
 
-            if (count($adsForPosition) < 1) {
-                continue;
-            }
-
             $ad = $adsForPosition[array_rand($adsForPosition)];
-            $ad = $renderer->render($ad);
+            $ad = $renderer->render($ad, $params);
         }
 
         array_splice($paragraphs, $pos + $key, 0, $ad);

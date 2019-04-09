@@ -122,7 +122,15 @@ class CommentsController extends Controller
             $comment->votes = $vote;
         }
 
+        $positions      = [];
+        $advertisements = [];
+        if ($this->get('core.helper.subscription')->hasAdvertisements()) {
+            list($positions, $advertisements) = $this->getAds();
+        }
+
         $contents = $this->renderView('comments/partials/comment_element.tpl', [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
             'total'          => $total,
             'comments'       => $comments,
             'contentId'      => $contentID,
