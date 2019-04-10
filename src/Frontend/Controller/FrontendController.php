@@ -294,7 +294,7 @@ class FrontendController extends Controller
     protected function getExpectedUri($action, $params = [])
     {
         if ($action === 'list') {
-            $route = $this->getRoute($action);
+            $route = $this->getRoute($action, $params);
 
             // Do not support page=1 in query string
             if (array_key_exists('page', $params) && $params['page'] == 1) {
@@ -387,6 +387,8 @@ class FrontendController extends Controller
                 ->getToken($item);
 
             $params['x-tags'][] = $item->id;
+
+            $params[$item->content_type_name] = $item;
 
             $params['content']     = $item;
             $params['contentId']   = $item->id;

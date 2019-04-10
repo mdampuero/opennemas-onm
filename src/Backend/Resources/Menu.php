@@ -203,7 +203,7 @@ $menuXml = [
                 'id'          => 'video_manager',
                 'title'       => _('Videos'),
                 'icon'        => 'fa fa-film',
-                'link'        => url('admin_videos'),
+                'link'        => url('backend_videos_list'),
                 'module_name' => 'VIDEO_MANAGER',
                 'privilege'   => 'VIDEO_ADMIN',
             ],

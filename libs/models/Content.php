@@ -262,7 +262,9 @@ class Content implements \JsonSerializable, CsvSerializable
                     $this->slug = \Onm\StringUtils::generateSlug($this->title);
                 }
 
-                if (in_array($this->content_type_name, ['article', 'opinion'])
+                $contentTypesWithL10n = ['article', 'opinion', 'video'];
+
+                if (in_array($this->content_type_name, $contentTypesWithL10n)
                     && in_array($name, $this->getL10nKeys())
                 ) {
                     if (!getService('core.instance')->hasMultilanguage()

@@ -218,7 +218,7 @@
                       {is_module_activated name="VIDEO_MANAGER"}
                         {acl isAllowed="VIDEO_CREATE"}
                           <div class="quick-item">
-                            <a href="{url name=admin_videos_create}">
+                            <a href="{url name=backend_videos_create}">
                               <i class="fa fa-film"></i>
                               <span class="title">{t}Video{/t}</span>
                             </a>

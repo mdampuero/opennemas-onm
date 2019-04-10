@@ -43,6 +43,7 @@
         </dynamic-image>
       </div>
     </div>
+    {if $footer}
     <div class="form-group ng-cloak" ng-show="{$field}">
       <label class="form-label" for="{$footer}">
         {t}Footer text{/t}
@@ -51,5 +52,6 @@
         <textarea class="form-control" name="{$footer}" ng-model="{$footer}" ng-value="{$footer}"></textarea>
       </div>
     </div>
+    {/if}
   </div>
 </div>

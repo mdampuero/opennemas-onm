@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 12:07+0100\n"
-"PO-Revision-Date: 2019-03-29 12:08+0200\n"
+"POT-Creation-Date: 2019-04-08 17:15+0200\n"
+"PO-Revision-Date: 2019-04-08 17:17+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -609,33 +609,6 @@ msgstr "Debes proporcionar un identificador para eliminar un especial."
 msgid "Unable to save positions for the specials widget."
 msgstr "No se pudieron guardar las posiciones de los widget."
 
-msgid ""
-"There was an error while uploading the form, not all the required data was "
-"sent."
-msgstr ""
-"Se ha producido un error al subir el formulario, no se enviaron todos los "
-"datos requeridos."
-
-#, php-format
-msgid "Unable to find the video with the id \"%d\""
-msgstr "No se pudo encontrar el vídeo con el identificador «%d»"
-
-msgid "You can't modify this video because you don't have enought privileges."
-msgstr "No puedes modificar este vídeo porque no tienes permisos suficientes."
-
-msgid "Video updated successfully."
-msgstr "Vídeo actualizado correctamente."
-
-msgid "You must give an id to delete the video."
-msgstr "Debes proporcionar un identificador de un vídeo para poder eliminarlo."
-
-msgid "Please check the video url, seems to be incorrect"
-msgstr "Comprueba la dirección del vídeo, parece ser incorrecta."
-
-msgid "Can't get video information. Check the url"
-msgstr ""
-"No es posible obtener la información del vídeo. Comprueba la dirección."
-
 #, php-format
 msgid "Unable to find a widget with the id \"%d\""
 msgstr "No se pudo encontrar el widget con el identificador «%d»"
@@ -1065,7 +1038,7 @@ msgid "items selected"
 msgstr "elementos seleccionados"
 
 msgid "Load more"
-msgstr "Cargar máis"
+msgstr "Cargar más"
 
 msgid "Loading..."
 msgstr "Cargando…"
@@ -2085,6 +2058,13 @@ msgstr "Etiqueta"
 msgid "User"
 msgstr "Usuario"
 
+msgid "Please check the video url, seems to be incorrect"
+msgstr "Comprueba la dirección del vídeo, parece ser incorrecta."
+
+msgid "Can't get video information. Check the url"
+msgstr ""
+"No es posible obtener la información del vídeo. Comprueba la dirección."
+
 #, php-format
 msgid "The cache connection for '%s' does not exist"
 msgstr "La conexión de cache para «%s» non existe"
@@ -2688,24 +2668,6 @@ msgstr "Evitar el indexado de motores de búsqueda"
 
 msgid "Static Page"
 msgstr "Página estática"
-
-msgid "There was an error while processing your video file"
-msgstr "Se ha producido un error al procesar tu ficheiro de vídeo"
-
-#, php-format
-msgid ""
-"The server limits file uploads up to %s Mb. Try to upload files smaller than "
-"that size."
-msgstr ""
-"Parece que el servidor limita la subida de archivos a %s Mb. Intenta subir "
-"un ficheiro más pequeño."
-
-msgid "There was a problem while converting your video. "
-msgstr "Se ha producido un error al convertir su vídeo"
-
-#, php-format
-msgid "Video format \"%s\" not supported"
-msgstr "Formato de vídeo «%s» no admitido"
 
 msgid "Video not available"
 msgstr "Vídeo no disponible"
@@ -3400,9 +3362,6 @@ msgstr "Configuración del módulo «Álbumes»"
 msgid "Save positions"
 msgstr "Guardar posiciones"
 
-msgid "New album"
-msgstr "Nuevo álbum"
-
 msgid "Delete album"
 msgstr "Eliminar álbum"
 
@@ -3448,24 +3407,6 @@ msgstr "Archivar"
 
 msgid "Send to trash"
 msgstr "Enviar a la papelera"
-
-msgid "Editing album"
-msgstr "Editando álbum"
-
-msgid "Creating Album"
-msgstr "Creando álbum"
-
-msgid "Go back"
-msgstr "Atrás"
-
-msgid "Updating"
-msgstr "Actualizando"
-
-msgid "Update"
-msgstr "Actualizar"
-
-msgid "Saving"
-msgstr "Guardando"
 
 msgid "Allow comments"
 msgstr "Permitir comentarios"
@@ -3658,6 +3599,9 @@ msgstr "Mostrar"
 msgid "View invoice"
 msgstr "Ver factura"
 
+msgid "Go back"
+msgstr "Atrás"
+
 msgid "Your invoice is currently unavailable."
 msgstr "Tu factura no está disponible actualmente."
 
@@ -3807,6 +3751,9 @@ msgstr "reiniciar"
 msgid "apply"
 msgstr "aplicar"
 
+msgid "of"
+msgstr "de"
+
 msgid "Clear"
 msgstr "Limpiar"
 
@@ -3953,9 +3900,6 @@ msgstr "Eliminar múltiples imágenes"
 msgid "Are you sure you want to delete <span>%num%</span> images?"
 msgstr "¿Estás seguro de que quieres eliminar <span>%num%</span> imágenes?"
 
-msgid "Editing image"
-msgstr "Editando imagen"
-
 msgid "Pick a location for the image"
 msgstr "Selecciona una localización para la imagen"
 
@@ -4045,12 +3989,6 @@ msgstr "Widget de portada"
 msgid "Config special module"
 msgstr "Configuración módulo de especiales"
 
-msgid "Creating special"
-msgstr "Creando especial"
-
-msgid "Editing special"
-msgstr "Editando especial"
-
 msgid "Pretitle"
 msgstr "Antetítulo"
 
@@ -4075,6 +4013,9 @@ msgstr "Debe tener %d especiales para la portada"
 
 msgid "Unable to find any special that matches your search."
 msgstr "No se pudieron encontrar especiales que coincidan con tu búsqueda."
+
+msgid "Saving"
+msgstr "Guardando"
 
 msgid "Number of elements in widget home"
 msgstr "Número de elementos en el widget de portada"
@@ -4392,15 +4333,6 @@ msgstr ""
 "Estamos realizando labores de mantenimiento en la plataforma Opennemas, por "
 "favor espere unos minutos."
 
-msgid "New file"
-msgstr "Nuevo fichero"
-
-msgid "Editing file"
-msgstr "Editando archivo"
-
-msgid "Creating file"
-msgstr "Creando archivo"
-
 msgid "Max allowed file size: %1 Mb"
 msgstr "Tamaño máximo de fichero permitido: %1 Mb"
 
@@ -4496,9 +4428,6 @@ msgstr "Rechazar"
 
 msgid "Additional data"
 msgstr "Datos adicionales"
-
-msgid "Create new page"
-msgstr "Crear nueva página"
 
 msgid "Body"
 msgstr "Cuerpo"
@@ -5161,9 +5090,6 @@ msgstr "<a href=\"http://www.opennemas.com\">%1</a> no existe."
 msgid "Do you want to register <a href=\"http://www.opennemas.com\">%1?</a>"
 msgstr "Desea registrar <a href=\"http://www.opennemas.com\">%1</a>?"
 
-msgid "New event"
-msgstr "Nuevo evento"
-
 msgid "Start"
 msgstr "Inicio"
 
@@ -5631,6 +5557,12 @@ msgstr ""
 
 msgid "Are you sure you want to change your comment system handler?"
 msgstr "¿Estás seguro de que quieres cambiar tu gestor de comentarios?"
+
+msgid "Update"
+msgstr "Actualizar"
+
+msgid "Updating"
+msgstr "Actualizando"
 
 msgid "Nickname"
 msgstr "Alias"
@@ -6364,17 +6296,8 @@ msgstr "Volver a los propósitos"
 msgid "Config tag module"
 msgstr "Configuración del módulo «Etiquetas»"
 
-msgid "Nº contents"
-msgstr "Nº de contenidos"
-
-msgid "Tags should start by letter or number"
-msgstr "Las etiquetas deben comenzar por letra o número"
-
-msgid ""
-"The maximum length for a tag is 60 chars (recommended: 30 chars or less)"
-msgstr ""
-"La longitud máxima para una etiqueta es de 60 caracteres (recomendado: 30 "
-"caracteres o menos)"
+msgid "Locale"
+msgstr "Local"
 
 msgid "The tag already exist or is invalid"
 msgstr "La etiqueta ya existe o no es válida"
@@ -7048,9 +6971,6 @@ msgstr "Url del relacionado"
 msgid "Image assigned"
 msgstr "Imagen asignada"
 
-msgid "New book"
-msgstr "Nuevo libro"
-
 msgid "Delete book"
 msgstr "Eliminar libro"
 
@@ -7059,15 +6979,6 @@ msgstr "Eliminar libros"
 
 msgid "Are you sure you want to delete <span>%num%</span> books?"
 msgstr "¿Estás seguro que deseas eliminar <span>%num%</span> libros?"
-
-msgid "Creating Book"
-msgstr "Creando libro"
-
-msgid "Editing Book"
-msgstr "Editar libro"
-
-msgid "Go Back"
-msgstr "Atrás"
 
 msgid "Editorial"
 msgstr "Editorial"
@@ -7081,14 +6992,8 @@ msgstr "Debe tener %d libros para la portada"
 msgid "Config video module"
 msgstr "Configuración de módulo «Vídeo»"
 
-msgid "Creating video"
-msgstr "Creando vídeo"
-
-msgid "Editing video"
-msgstr "Editando vídeo"
-
-msgid "Attributes"
-msgstr "Atributos"
+msgid "Unfavorite"
+msgstr "Quitar favorito"
 
 msgid "Pick type"
 msgstr "Tipo de elemento"
@@ -7113,24 +7018,6 @@ msgstr "No se pudieron encontrar vídeos que coincidan con tu búsqueda."
 
 msgid "Video details"
 msgstr "Detalles del vídeo"
-
-msgid "Other information"
-msgstr "Otra información"
-
-msgid "Original Title"
-msgstr "Título original"
-
-msgid "Duration"
-msgstr "Duración"
-
-msgid "Embed Url"
-msgstr "URL de embebido"
-
-msgid "Thumbnail URL"
-msgstr "URL de la miniatura"
-
-msgid "Thumbnail image"
-msgstr "Imagen de miniatura"
 
 msgid "Video type and file URLs"
 msgstr "Tipo de vídeo y URLs a los archivos"
@@ -7174,51 +7061,38 @@ msgstr "Obtener información"
 msgid "Allowed video sources:"
 msgstr "Orígenes de vídeo permitidos:"
 
+msgid "Loading video information"
+msgstr "Cargando información del vídeo"
+
+msgid "Video preview"
+msgstr "Previsualización del vídeo"
+
+msgid "Other information"
+msgstr "Otra información"
+
+msgid "Original Title"
+msgstr "Título original"
+
+msgid "Duration"
+msgstr "Duración"
+
+msgid "Embed Url"
+msgstr "URL de embebido"
+
+msgid "Thumbnail URL"
+msgstr "URL de la miniatura"
+
+msgid "Thumbnail image"
+msgstr "Imagen de miniatura"
+
 msgid "Write HTML code"
 msgstr "Escriba el código HTML"
 
-msgid ""
-"Use total in widget home to define how many videos can be seen through the "
-"widget in the newspaper frontpage"
-msgstr ""
-"Usa «Total en el widget» para definir cuantos vídeos quieres mostrar en el "
-"boletín"
+msgid "Number of videos in frontpage"
+msgstr "Número de vídeos en portada"
 
-msgid "Total in video frontpage column"
-msgstr "Número de elementos de la columna de la portada de vídeos"
-
-msgid ""
-"Use total in video frontpage column to define how many videos can be seen in "
-"the left column of the category video frontpage"
-msgstr ""
-"Usa «Total en columna de portada de vídeo» para definir cuantos vídeos "
-"quieres mostrar en la columna de la izda en la portada de categorías de "
-"portada"
-
-msgid "Total in video frontpage more videos"
-msgstr "Número de elementos en la portada de vídeos sección \"Más vídeos\""
-
-msgid "Total number of videos on more videos section in video home frontpage"
-msgstr ""
-"Número de vídeos en la sección de \"Más vídeos\" de la portada de vídeo"
-
-msgid "Total offset in video frontpage more videos"
-msgstr "Desplazamiento total de vídeos en más videos de portada"
-
-msgid "Total number of videos that are placed on top home video frontpage"
-msgstr ""
-"Número total de vídeos que se posicionan en la parte superior de la portada "
-"home de vídeo"
-
-msgid "Total in video gallery"
-msgstr "Elementos en la galería de vídeos"
-
-msgid ""
-"Use  Total in video gallery for define how many videos can see in the "
-"gallery when you edit or create one article"
-msgstr ""
-"Usa «Total en galería de vídeos» para definir cuántos vídeos quieres mostrar "
-"en la galería al editar o crear un artículo"
+msgid "Total number of videos to show per page in the frontpage"
+msgstr "Número máximo de vídeos a mostrar en la portada"
 
 msgid ""
 "A Google DFP advertisement has been detected in your HTML/javascript "
@@ -7861,6 +7735,9 @@ msgstr "Quitar respuesta"
 
 msgid "Add new answer"
 msgstr "Añadir nueva respuesta"
+
+msgid "Attributes"
+msgstr "Atributos"
 
 msgid "Publication closed date"
 msgstr "Fecha de final de publicación"
@@ -8980,6 +8857,146 @@ msgstr "¿Estás seguro de que quieres eliminar el grupo de usuarios?"
 msgid "Do you want to delete the selected user groups?"
 msgstr ""
 "¿Estás seguro que quieres eliminar los grupos de usuarios seleccionados?"
+
+#~ msgid ""
+#~ "There was an error while uploading the form, not all the required data "
+#~ "was sent."
+#~ msgstr ""
+#~ "Se ha producido un error al subir el formulario, no se enviaron todos los "
+#~ "datos requeridos."
+
+#~ msgid "Unable to find the video with the id \"%d\""
+#~ msgstr "No se pudo encontrar el vídeo con el identificador «%d»"
+
+#~ msgid ""
+#~ "You can't modify this video because you don't have enought privileges."
+#~ msgstr ""
+#~ "No puedes modificar este vídeo porque no tienes permisos suficientes."
+
+#~ msgid "Video updated successfully."
+#~ msgstr "Vídeo actualizado correctamente."
+
+#~ msgid "You must give an id to delete the video."
+#~ msgstr ""
+#~ "Debes proporcionar un identificador de un vídeo para poder eliminarlo."
+
+#~ msgid "There was an error while processing your video file"
+#~ msgstr "Se ha producido un error al procesar tu ficheiro de vídeo"
+
+#~ msgid ""
+#~ "The server limits file uploads up to %s Mb. Try to upload files smaller "
+#~ "than that size."
+#~ msgstr ""
+#~ "Parece que el servidor limita la subida de archivos a %s Mb. Intenta "
+#~ "subir un ficheiro más pequeño."
+
+#~ msgid "There was a problem while converting your video. "
+#~ msgstr "Se ha producido un error al convertir su vídeo"
+
+#~ msgid "Video format \"%s\" not supported"
+#~ msgstr "Formato de vídeo «%s» no admitido"
+
+#~ msgid "New album"
+#~ msgstr "Nuevo álbum"
+
+#~ msgid "Editing album"
+#~ msgstr "Editando álbum"
+
+#~ msgid "Creating Album"
+#~ msgstr "Creando álbum"
+
+#~ msgid "Editing image"
+#~ msgstr "Editando imagen"
+
+#~ msgid "Creating special"
+#~ msgstr "Creando especial"
+
+#~ msgid "Editing special"
+#~ msgstr "Editando especial"
+
+#~ msgid "New file"
+#~ msgstr "Nuevo fichero"
+
+#~ msgid "Editing file"
+#~ msgstr "Editando archivo"
+
+#~ msgid "Creating file"
+#~ msgstr "Creando archivo"
+
+#~ msgid "Create new page"
+#~ msgstr "Crear nueva página"
+
+#~ msgid "New event"
+#~ msgstr "Nuevo evento"
+
+#~ msgid "Nº contents"
+#~ msgstr "Nº de contenidos"
+
+#~ msgid "Tags should start by letter or number"
+#~ msgstr "Las etiquetas deben comenzar por letra o número"
+
+#~ msgid ""
+#~ "The maximum length for a tag is 60 chars (recommended: 30 chars or less)"
+#~ msgstr ""
+#~ "La longitud máxima para una etiqueta es de 60 caracteres (recomendado: 30 "
+#~ "caracteres o menos)"
+
+#~ msgid "New book"
+#~ msgstr "Nuevo libro"
+
+#~ msgid "Creating Book"
+#~ msgstr "Creando libro"
+
+#~ msgid "Editing Book"
+#~ msgstr "Editar libro"
+
+#~ msgid "Go Back"
+#~ msgstr "Atrás"
+
+#~ msgid "Creating video"
+#~ msgstr "Creando vídeo"
+
+#~ msgid "Editing video"
+#~ msgstr "Editando vídeo"
+
+#~ msgid ""
+#~ "Use total in widget home to define how many videos can be seen through "
+#~ "the widget in the newspaper frontpage"
+#~ msgstr ""
+#~ "Usa «Total en el widget» para definir cuantos vídeos quieres mostrar en "
+#~ "el boletín"
+
+#~ msgid "Total in video frontpage column"
+#~ msgstr "Número de elementos de la columna de la portada de vídeos"
+
+#~ msgid ""
+#~ "Use total in video frontpage column to define how many videos can be seen "
+#~ "in the left column of the category video frontpage"
+#~ msgstr ""
+#~ "Usa «Total en columna de portada de vídeo» para definir cuantos vídeos "
+#~ "quieres mostrar en la columna de la izda en la portada de categorías de "
+#~ "portada"
+
+#~ msgid "Total in video frontpage more videos"
+#~ msgstr "Número de elementos en la portada de vídeos sección \"Más vídeos\""
+
+#~ msgid ""
+#~ "Total number of videos on more videos section in video home frontpage"
+#~ msgstr ""
+#~ "Número de vídeos en la sección de \"Más vídeos\" de la portada de vídeo"
+
+#~ msgid "Total offset in video frontpage more videos"
+#~ msgstr "Desplazamiento total de vídeos en más videos de portada"
+
+#~ msgid "Total in video gallery"
+#~ msgstr "Elementos en la galería de vídeos"
+
+#~ msgid ""
+#~ "Use  Total in video gallery for define how many videos can see in the "
+#~ "gallery when you edit or create one article"
+#~ msgstr ""
+#~ "Usa «Total en galería de vídeos» para definir cuántos vídeos quieres "
+#~ "mostrar en la galería al editar o crear un artículo"
 
 #~ msgid "Unable to find the opinion with the id \"%d\""
 #~ msgstr "No se pudo encontrar la opinión con el identificador «%d»"

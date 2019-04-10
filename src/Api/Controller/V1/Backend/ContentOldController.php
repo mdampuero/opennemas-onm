@@ -9,9 +9,6 @@
  */
 namespace Api\Controller\V1\Backend;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-
 class ContentOldController extends ContentController
 {
     /**
@@ -34,6 +31,7 @@ class ContentOldController extends ContentController
             'keys'             => $this->getL10nKeys(),
             'authors'          => $this->getAuthors(),
             'locale'           => $this->get('core.helper.locale')->getConfiguration(),
+            'comments_enabled' => $this->get('core.helper.comment')->enableCommentsByDefault(),
             'template_vars'    => [
                 'media_dir' => $this->get('core.instance')->getMediaShortPath() . '/images',
             ],
@@ -83,7 +81,7 @@ class ContentOldController extends ContentController
         $tagIds = [];
         if (is_array($items)) {
             foreach ($items as $item) {
-                $tagIds = array_merge($tagIds, $item->tags);
+                $tagIds = array_merge($tagIds, $item->tags ?? []);
             }
         }
 
