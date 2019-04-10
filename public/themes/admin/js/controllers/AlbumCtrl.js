@@ -182,6 +182,19 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       $rootScope.submit();
     };
 
+
+    $scope.getPhotoData = function(photoId) {
+      if (!photoId || !$scope.data.extra || $scope.data.extra.photos.length == 0) {
+        return {};
+      }
+
+      var photos = $scope.data.extra.photos.filter(function(el) {
+        return el.pk_photo === photoId;
+      });
+
+      return photos.shift();
+    }
+
     /**
      * Show modal warning for album missing photos
      */

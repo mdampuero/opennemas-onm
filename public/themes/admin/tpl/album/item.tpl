@@ -135,7 +135,7 @@
                   </div>
                   <div class="col-xs-3">
                     <div class="dynamic-image-placeholder">
-                      <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="getPhotodata(photo.pk_photo)" transform="zoomcrop,200,200">
+                      <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="getPhotoData(photo.pk_photo)" transform="zoomcrop,200,200">
                         <div class="thumbnail-actions">
                           <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ $index)">
                             <i class="fa fa-trash-o fa-2x"></i>
@@ -145,7 +145,7 @@
                     </div>
                   </div>
 
-                  <div class="col-xs-9">
+                  <div class="col-xs-8 col-xs-offset-1">
                     <div class="form-group">
                       <textarea class="album-thumbnail-description form-control" ng-model="photo.description" placeholder="[% data.extra.locale.multilanguage && data.extra.locale.default !== config.locale.selected ? data.item.photos[index].description[data.extra.locale.default] : '' %]" uib-tooltip="{t}Original{/t}: [% data.item.photos[index].description[data.extra.locale.default] %]" tooltip-enable="config.locale.multilanguage && config.locale.default !== config.locale.selected"></textarea>
                     </div>
