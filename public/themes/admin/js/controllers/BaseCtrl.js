@@ -367,7 +367,7 @@
          * @param {String} The name of the property where localized items will
          *                 be stored in scope.
          */
-        $scope.localize = function(items, key, clean) {
+        $scope.localize = function(items, key, clean, ignore) {
           var lz = localizer.get($scope.config.locale);
 
           // Localize items
@@ -377,7 +377,7 @@
           // Initialize linker
           if (!$scope.config.linkers[key]) {
             $scope.config.linkers[key] = linker.get($scope.data.extra.keys,
-              $scope.config.locale.default, $scope, clean);
+              $scope.config.locale.default, $scope, clean, ignore);
           }
 
           // Link original and localized items
