@@ -257,16 +257,19 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
      * @param Object nv The new values.
      * @param Object ov The old values.
      */
-    $scope.$watch('item.photos', function(nv, ov) {
+    $scope.$watch('new_photo', function(nv, ov) {
       if (nv === ov) {
         return false;
       }
 
-      for (var i = 0; i < nv.length; i++) {
-        if (typeof nv[i].footer === 'undefined') {
-          nv[i].footer = nv[i].description;
-        }
-      }
+      $scope.item.photos.push({
+        position: $scope.data.item.photos.length,
+        description: nv[0].description,
+        pk_photo: nv[0].pk_photo
+      });
+
+      $scope.data.extra.photos.push(nv[0]);
+
       return null;
     }, true);
   }
