@@ -127,7 +127,7 @@
             prefix = instanceMedia + this.imageFolder;
           }
 
-          if (onlyImage && /.*\.(swf|gif)$/.test(image)) {
+          if (onlyImage && /.*\.(swf)$/.test(image)) {
             return this.brokenImage;
           }
 
@@ -136,8 +136,8 @@
           }
 
           return routingProvider.generate('asset_image', {
-            real_path:  prefix + image,
-            parameters: encodeURIComponent(transform),
+            path:   prefix + image,
+            params: encodeURIComponent(transform),
           });
         };
 

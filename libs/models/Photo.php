@@ -11,8 +11,8 @@
  *
  * @package Model
  */
-use Onm\StringUtils;
-use Framework\Component\MIME\MimeTypeTool;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Photo class
@@ -153,7 +153,7 @@ class Photo extends Content
                 return false;
             }
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
 
@@ -174,202 +174,55 @@ class Photo extends Content
     {
         $data['content_status'] = 1;
 
-        try {
-            parent::create($data);
+        parent::create($data);
 
-            getService('dbal_connection')->insert(
-                "photos",
-                [
-                    'pk_photo'    => (int) $this->id,
-                    'name'        => $data["name"],
-                    'path_file'   => $data["path_file"],
-                    'size'        => $data['size'],
-                    'width'       => (int) $data['width'],
-                    'height'      => (int) $data['height'],
-                    'author_name' => $data['author_name']
-                ]
-            );
+        getService('dbal_connection')->insert('photos', [
+            'pk_photo'    => $this->id,
+            'name'        => $data['name'],
+            'path_file'   => $data['path_file'],
+            'size'        => $data['size'],
+            'width'       => $data['width'],
+            'height'      => $data['height'],
+            'author_name' => $data['author_name'] ?? null
+        ]);
 
-            return $this->id;
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
+        return $this->id;
     }
 
     /**
-     * Creates one photo register in the database from data and local file
-     * TODO: this function must content the photo local_file
+     * Creates a photo basing on a file and optional photo information.
      *
-     * @param array $data the data for the photo, must content the photo local_file
-     * @param string $dateForDirectory the date for the directory
+     * @param string $path The path to the file.
+     * @param array  $data The photo information.
+     * @param bool   $copy Whether to move or copy the file.
      *
-     * @return int the id of the photo created
-     * @return boolean false if the photo was not created
+     * @return int The photo id.
      */
-    public function createFromLocalFile($data, $dateForDirectory = null, $uploadPath = null)
+    public function createFromLocalFile(string $path, array $data = [], bool $copy = false) : int
     {
-        $filePath         = $data["local_file"];
-        $originalFileName = $data['original_filename'];
+        $ih   = getService('core.helper.image');
+        $date = new \DateTime($data['created'] ?? null);
 
-        if (empty($filePath)) {
-            throw new \Exception(_('Image data not valid'));
+        $file     = new File($path);
+        $path     = $ih->generatePath($file, $date->format('Y-m-d H:i:s'));
+        $filename = basename($path);
+
+        $ih->move($file, $path, $copy);
+
+        if ($ih->isOptimizable($path)) {
+            $ih->optimize($path);
         }
 
-        // Check upload directory
-        $date = new DateTime();
+        $data = array_merge([
+            'changed'        => $date->format('Y-m-d H:i:s'),
+            'content_status' => 1,
+            'created'        => $date->format('Y-m-d H:i:s'),
+            'name'           => $filename,
+            'path_file'      => $date->format('/Y/m/d/'),
+            'title'          => $filename,
+        ], $data, $ih->getInformation($path));
 
-        if (array_key_exists('created', $data)) {
-            $date = \DateTime::createFromFormat('Y-m-d H:i:s', $data['created']);
-        }
-
-        if (empty($dateForDirectory)) {
-            $dateForDirectory = $date->format("/Y/m/d/");
-        }
-
-        $uploadDir = MEDIA_PATH . DS . IMG_DIR . DS . $dateForDirectory . DIRECTORY_SEPARATOR;
-        if (!is_null($uploadPath)) {
-            $uploadDir = $uploadPath;
-        }
-
-        if (!is_dir($uploadDir)) {
-            \Onm\FilesManager::createDirectory($uploadDir);
-        }
-
-        if (is_dir($uploadDir) && !is_writable($uploadDir)) {
-            throw new Exception(
-                _('Unable to save your image file in the Opennemas storage target')
-            );
-        }
-
-        $filePathInfo = pathinfo($originalFileName);
-
-        // Getting information for creating
-        $t                  = gettimeofday();
-        $micro              = intval(substr($t['usec'], 0, 5));
-        $finalPhotoFileName = $date->format("YmdHis") . $micro . "."
-            . MimeTypeTool::getExtension($filePath);
-        $fileInformation    = new MediaItem($filePath);
-
-        if (!array_key_exists('urn_source', $data)
-            || empty($data['urn_source'])
-        ) {
-            $data['urn_source'] = "urn:newsml:" . SITE . ":" . $date->format("YmdHis")
-                . ":" . StringUtils::cleanFileName($originalFileName) . ":2";
-        }
-
-        $date = new \DateTime();
-        $date->setTimeStamp($fileInformation->mtime);
-        $dateString = $date->format('Y-m-d H:i:s');
-
-        if (!array_key_exists('created', $data)) {
-            $data['created'] = $dateString;
-        }
-
-        if (!array_key_exists('changed', $data)) {
-            $data['changed'] = $dateString;
-        }
-
-        if (!array_key_exists('content_status', $data)) {
-            $data['content_status'] = 1;
-        }
-
-        // Building information for the photo image
-        $dataPhoto = [
-            'title'               => isset($data['title']) ? $data['title'] : $originalFileName,
-            'name'                => $finalPhotoFileName,
-            'path_file'           => $dateForDirectory,
-            'created'             => $data['created'],
-            'changed'             => $data['changed'],
-            'content_status'      => $data['content_status'],
-            'description'         => $data['description'],
-            'tags'                => empty($data['tags']) ?  [] : $data['tags'],
-            'urn_source'          => $data['urn_source'],
-            'size'                => round($fileInformation->size / 1024, 2),
-            'date'                => $dateString,
-            'width'               => $fileInformation->width,
-            'height'              => $fileInformation->height,
-            'author_name'         => isset($data['author_name']) ? $data['author_name'] : '',
-            'fk_author'           => (!array_key_exists('fk_author', $data)) ? null : $data['fk_author'],
-            'fk_user_last_editor' => getService('core.user')->id,
-            'fk_publisher'        => getService('core.user')->id,
-        ];
-
-        if (array_key_exists('extension', $filePathInfo) &&
-            $filePathInfo['extension'] != 'swf'
-        ) {
-            $imageCreated = new \Imagine\Imagick\Imagine();
-            $image        = $imageCreated->open($data['local_file']);
-
-            // Doesn't work as expected. Commented for now
-            // $filter = new \Onm\Imagine\Filter\CorrectExifRotation();
-            // $image = $filter->apply($image);
-
-            try {
-                if ($filePathInfo['extension'] == 'gif') {
-                    $image->save(
-                        realpath($uploadDir) . DIRECTORY_SEPARATOR . $finalPhotoFileName,
-                        [ 'flatten' => false ]
-                    );
-                } else {
-                    $image->save(
-                        realpath($uploadDir) . DIRECTORY_SEPARATOR . $finalPhotoFileName,
-                        [
-                            'resolution-units' => \Imagine\Image\ImageInterface::RESOLUTION_PIXELSPERINCH,
-                            'resolution-x'     => 72,
-                            'resolution-y'     => 72,
-                            'quality'          => 85,
-                        ]
-                    );
-                }
-            } catch (\RuntimeException $e) {
-                $logger = getService('application.log');
-                $logger->notice(
-                    sprintf(
-                        'Unable to create the photo file %s (destination: %s).',
-                        $data['local_file'],
-                        $uploadDir . $finalPhotoFileName
-                    )
-                );
-
-                throw new Exception(_('Unable to copy your image file'));
-            }
-        } else {
-            // Check source and target
-            $fileCopied = false;
-            $targetPath = realpath($uploadDir) . DS . $finalPhotoFileName;
-            if (is_file($data['local_file']) && is_writable($targetPath)) {
-                $fileCopied = copy($data['local_file'], $targetPath);
-            }
-
-            if (!$fileCopied) {
-                $logger = getService('application.log');
-                $logger->notice(
-                    sprintf(
-                        'Unable to create the photo file %s (destination: %s).',
-                        $data['local_file'],
-                        $uploadDir . $finalPhotoFileName
-                    )
-                );
-                throw new Exception(_('Unable to copy your image file'));
-            }
-        }
-
-        $photoID = $this->create($dataPhoto);
-
-        if (!$photoID) {
-            $logger = getService('application.log');
-            $logger->notice(
-                sprintf(
-                    'Unable to save the image object %s (destination: %s).',
-                    $data['local_file'],
-                    $uploadDir . $finalPhotoFileName
-                )
-            );
-            throw new Exception(_('Unable to save your image information.'));
-        }
-
-        return $photoID;
+        return $this->create($data);
     }
 
     /**
@@ -384,29 +237,26 @@ class Photo extends Content
         try {
             parent::update($data);
 
-            getService('dbal_connection')->update(
-                'photos',
-                [
-                    'name'        => $this->name,
-                    'path_file'   => $this->path_file,
-                    'size'        => $this->size,
-                    'width'       => (int) $this->width,
-                    'height'      => (int) $this->height,
-                    'author_name' => $data['author_name'],
-                    'address'     => $data['address'],
-                ],
-                [ 'pk_photo' => (int) $data['id'] ]
-            );
+            getService('dbal_connection')->update('photos', [
+                'name'        => $this->name,
+                'path_file'   => $this->path_file,
+                'size'        => $this->size,
+                'width'       => (int) $this->width,
+                'height'      => (int) $this->height,
+                'author_name' => $data['author_name'],
+                'address'     => $data['address'],
+            ], [ 'pk_photo' => (int) $data['id'] ]);
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
 
     /**
-     * Removes a photo given its id
+     * Removes a photo given its id.
      *
      * @param int $id the photo id to delete
      *
@@ -414,197 +264,28 @@ class Photo extends Content
      */
     public function remove($id)
     {
-        if ((int) $id <= 0) {
-            return false;
-        }
+        $path = getService('service_container')->getParameter('core.paths.public')
+            . getService('core.instance')->getImagesShortPath()
+            . $this->getRelativePath();
 
-        $image = MEDIA_IMG_PATH . $this->path_file . $this->name;
+        $fs = new Filesystem();
 
-        if (file_exists($image) && !@unlink($image)) {
-            return false;
+        if ($fs->exists($path)) {
+            $fs->remove($path);
         }
 
         parent::remove($id);
 
-        try {
-            $rs = getService('dbal_connection')->delete(
-                "photos",
-                [ 'pk_photo' => $id ]
-            );
-
-            if (!$rs) {
-                return false;
-            }
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-
-        return true;
+        getService('dbal_connection')->delete('photos', [ 'pk_photo' => $id ]);
     }
 
     /**
-     * Completes the EXIF, IPTC information for the current Photo object
+     * Returns the photo relative path.
      *
-     * @return Photo the Photo object with all the information
+     * @return string The photo relative path.
      */
-    public function getPhotoMetaData()
+    public function getRelativePath()
     {
-        $image = MEDIA_IMG_PATH . $this->path_file . $this->name;
-
-        if (is_file($image)) {
-            $size = getimagesize($image, $info);
-
-            switch ($size['mime']) {
-                case "image/gif":
-                    $this->infor = sprintf(_("Image type: %s"), 'GIF');
-
-                    break;
-                case "image/png":
-                    $this->infor = sprintf(_("Image type: %s"), 'PNG');
-
-                    break;
-                case "image/bmp":
-                    $this->infor = sprintf(_("Image type: %s"), 'BMP');
-
-                    break;
-                case 'image/jpeg':
-                    $exifData = [];
-                    if (isset($info)) {
-                        foreach (array_keys($info) as $key) {
-                            if ($key != 'APP1') {
-                                $exifData = @exif_read_data($image, 0, true);
-                                break;
-                            }
-                        }
-                    }
-
-                    if (!empty($exifData)) {
-                        $this->exif = $exifData;
-                    } else {
-                        $this->exif = null;
-                    }
-
-                    if (empty($exif)) {
-                        $this->infor .= _("No available EXIF data");
-                    } else {
-                        if (empty($this->color)) {
-                            if ($exifData['COMPUTED']['IsColor'] == 0) {
-                                $this->color = 'BN';
-                            } else {
-                                $this->color = 'color';
-                            }
-                        }
-
-                        if (isset($exifData['IFD0'])) {
-                            if (empty($this->resolution)
-                                && !is_null($exifData['IFD0']['XResolution'])
-                            ) {
-                                $this->resolution =
-                                    $exifData['IFD0']['XResolution'];
-                            }
-
-                            if (empty($this->date)
-                                && !is_null($exifData['FILE']['FileDateTime'])
-                            ) {
-                                $this->date = $exifData['FILE']['FileDateTime'];
-                            }
-                        }
-                    }
-
-                    if (isset($info['APP13'])) {
-                        $iptc = iptcparse($info['APP13']);
-
-                        if (is_array($iptc)) {
-                            $errorReporting = ini_get('error_reporting');
-                            error_reporting('E_ALL');
-
-                            $myiptc['Caption']      = $iptc["2#120"][0];
-                            $myiptc['Graphic_name'] = $iptc["2#005"][0];
-                            $myiptc['Urgency']      = $iptc["2#010"][0];
-                            $myiptc['Category']     = $iptc["2#015"][0];
-                            $myiptc['Program']      = $iptc["2#065"][0];
-
-                            // note that sometimes supp_categories
-                            // contans multiple entries
-                            $myiptc['Supp_categories']     = $iptc["2#020"][0];
-                            $myiptc['Spec_instr']          = $iptc["2#040"][0];
-                            $myiptc['Creation_date']       = $iptc["2#055"][0];
-                            $myiptc['Photographer']        = $iptc["2#080"][0];
-                            $myiptc['Credit_byline_title'] = $iptc["2#085"][0];
-                            $myiptc['City']                = $iptc["2#090"][0];
-                            $myiptc['State']               = $iptc["2#095"][0];
-                            $myiptc['Country']             = $iptc["2#101"][0];
-                            $myiptc['Otr']                 = $iptc["2#103"][0];
-                            $myiptc['Headline']            = $iptc["2#105"][0];
-                            $myiptc['Source']              = $iptc["2#110"][0];
-                            $myiptc['Photo_source']        = $iptc["2#183"][0];
-
-                            $myiptc = array_map('\Onm\StringUtils::convertToUTF8AndStrToLower', $myiptc);
-
-                            $this->myiptc = $myiptc;
-
-                            if (empty($this->description)) {
-                                $this->description = $myiptc['Caption'];
-                            }
-
-                            if (empty($this->tags)) {
-                                $slugs = getService('data.manager.filter')
-                                    ->set($iptc["2#025"])
-                                    ->filter('slug')
-                                    ->get();
-
-                                $tags = getService('api.service.tag')
-                                    ->getListBySlugs($slugs);
-
-                                $this->tags = array_map(function ($tag) {
-                                    return $tag->id;
-                                }, $tags['items']);
-                            }
-
-                            if (empty($this->author_name)) {
-                                $this->author_name = $myiptc['Photographer'];
-                            }
-
-                            ini_set($errorReporting);
-                        } else {
-                            $this->infor .= _("No available IPTC data");
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            } // endswitch;
-        } else {
-            $this->infor .= _("Invalid image file");
-        }
-
-        return $this;
-    }
-
-    /**
-     * Returns the photo path associated to an id.
-     *
-     * @param string $id the photo id.
-     *
-     * @return int the photo path
-     */
-    public static function getPhotoPath($id)
-    {
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT `path_file`, `name` FROM photos WHERE pk_photo = ?',
-                [ $id ]
-            );
-
-            if (!$rs) {
-                return false;
-            }
-
-            return (string) $rs['path_file'] . $rs['name'];
-        } catch (\Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
+        return $this->path_file . $this->name;
     }
 }

@@ -149,22 +149,25 @@
                     '</div>' +
                   '</div>' +
                 '</div>' +
-                '<div class="picker-panel-footer" ng-class="{ \'collapsed\': selected.items.length == 0 }">' +
-                  '<ul class="pull-left"  ng-if="selected.items.length > 0">' +
+                '<div class="picker-panel-footer" ng-class="{ \'collapsed\': selected.items.length == 0 && !uploadError, \'danger\': uploadError }">' +
+                  '<ul class="pull-left" ng-show="selected.items.length > 0 || uploadError">' +
                     '<li>' +
-                      '<i class="fa fa-check fa-lg" ng-click="selected.ids = [];selected.items = []"></i>' +
+                      '<i class="fa fa-lg" ng-class="{ \'fa-check\': !uploadError, \'fa-times\': uploadError } "ng-click="selected.ids = [];selected.items = [];uploadError = null"></i>' +
                     '</li>' +
                     '<li>' +
                       '<span class="h-seperate"></span>' +
                     '</li>' +
                     '<li>' +
-                      '<h4>' +
+                      '<h4 ng-if="!uploadError && selected.items.length">' +
                         '[% selected.items.length %]' +
                         '<span class="hidden-xs">[% picker.params.explore.itemsSelected %]</span>' +
                       '</h4>' +
+                      '<h4 ng-if="uploadError">' +
+                        '<span class="hidden-xs">[% picker.params.explore.error %]</span>' +
+                      '</h4>' +
                     '</li>' +
                   '</ul>' +
-                  '<button class="btn btn-primary pull-right" ng-click="insert()">' +
+                  '<button class="btn btn-primary pull-right" ng-click="insert()" ng-if="!uploadError">' +
                     '<i class="fa fa-plus"></i>' +
                     '[% picker.params.explore.insert %]' +
                   '</button>' +
@@ -836,12 +839,20 @@
           $scope.uploader.onCompleteItem = function(fileItem, response) {
             $timeout(function() {
               $scope.uploader.removeFromQueue(fileItem);
-              $scope.addItem(response);
 
               // Autoselect items uploaded
+              if (!response.pk_photo) {
+                $scope.uploadError = true;
+                return;
+              }
+
+              $scope.addItem(response);
               $scope.selected.ids.push(response.pk_photo);
               $scope.selected.items.push(response);
-              $scope.selected.items.lastSelected = response;
+
+              if ($scope.picker.selection.enabled) {
+                $scope.selected.items.lastSelected = response;
+              }
             }, 500);
           };
         };
@@ -1047,9 +1058,9 @@
 
           body[$scope.selected.lastSelected.name] = image;
 
-          http.post(route, body).success(function() {
+          http.post(route, body).then(function() {
             $scope.list(true);
-          }).error(function() {
+          }, function(response) {
             return false;
           });
         };

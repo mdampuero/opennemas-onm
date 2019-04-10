@@ -16,7 +16,9 @@
             </li>
             <li class="quicklinks">
               <h4>
-                <a class="no-padding" href="{url name=backend_news_agency}" title="{t}Go back to list{/t}">{t}News Agency{/t}</a>
+                <a class="no-padding" href="{url name=backend_news_agency}">
+                  {t}News Agency{/t}
+                </a>
               </h4>
             </li>
             <li class="quicklinks hidden-xs m-l-5 m-r-5">
@@ -24,8 +26,10 @@
                 <i class="fa fa-angle-right"></i>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs">
-              <h4><a class="no-padding" href="{url name=backend_news_agency_servers_list}" title="{t}Go back to list{/t}">{t}Sources{/t}</a></h4>
+            <li class="quicklinks">
+              <h4>
+                {t}Sources{/t}
+              </h4>
             </li>
           </ul>
           <div class="all-actions pull-right">

@@ -10,9 +10,10 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Handles the actions for the images
@@ -31,11 +32,10 @@ class ImagesController extends Controller
      */
     public function listAction()
     {
-        $years = [];
-
-        $conn = $this->get('orm.manager')->getConnection('instance');
-
+        $years   = [];
+        $conn    = $this->get('orm.manager')->getConnection('instance');
         $results = $conn->fetchAll(
+
             "SELECT DISTINCT(DATE_FORMAT(created, '%Y-%m')) as date_month FROM contents
             WHERE fk_content_type = 8 AND created IS NOT NULL ORDER BY date_month DESC"
         );
@@ -200,89 +200,17 @@ class ImagesController extends Controller
      */
     public function createAction(Request $request)
     {
-        $response = new Response();
-        $response->headers->add([
-            'Pragma'                       => 'text/plain',
-            'Cache-Control'                => 'private, no-cache',
-            'Content-Disposition'          => 'inline; filename="files.json"',
-            'X-Content-Type-Options'       => 'nosniff',
-            'Access-Control-Allow-Origin'  => '*',
-            'Access-Control-Allow-Methods' => 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
-            'Access-Control-Allow-Headers' => 'X-File-Name, X-File-Type, X-File-Size',
-        ]);
+        try {
+            $files = $request->files->all();
+            $file  = array_pop($files);
 
-        if ($request->getMethod() != 'POST') {
-            return new JsonResponse([], 200);
-        }
-
-        $files = isset($_FILES) ? $_FILES : null;
-        $info  = [];
-
-        foreach ($files as $file) {
             $photo = new \Photo();
-
-            if (empty($file['tmp_name'])) {
-                $info [] = [
-                    'error' => _('Not valid file format or the file exceeds the max allowed file size.'),
-                ];
-                continue;
-            }
-
-            $tempName = pathinfo($file['name'], PATHINFO_FILENAME);
-
-            // Check if the image has an IPTC title an use it as original title
-            $size = getimagesize($file['tmp_name'], $imageInfo);
-            if (isset($imageInfo['APP13'])) {
-                $iptc = iptcparse($imageInfo["APP13"]);
-                if (isset($iptc['2#120'])) {
-                    $tempName = str_replace("\000", "", $iptc["2#120"][0]);
-                }
-            }
-
-            $fm = $this->get('data.manager.filter');
-
-            $data = [
-                'local_file'        => $file['tmp_name'],
-                'original_filename' => $file['name'],
-                'title'             => $tempName,
-                'description'       => $tempName,
-                'fk_category'       => null,
-                'category'          => null,
-                'category_name'     => '',
-                'tags'              => json_decode($request->request->get('tags', ''), true)
-            ];
-
-            try {
-                $photo   = new \Photo();
-                $photoId = $photo->createFromLocalFile($data);
-
-                $photo = new \Photo($photoId);
-
-                $info = $photo;
-            } catch (Exception $e) {
-                $info [] = [
-                    'error'         => $e->getMessage(),
-                ];
-            }
+            $id    = $photo->createFromLocalFile($file->getRealPath());
+            $photo = new \Photo($id);
+        } catch (\Exception $e) {
+            return new JsonResponse($e->getMessage(), 400);
         }
 
-        $json = json_encode($info);
-        $response->setContent($json);
-
-        $response->headers->add([ 'Vary' => 'Accept' ]);
-
-        $redirect = $request->request->filter('redirect', null, FILTER_SANITIZE_STRING);
-        if (!empty($redirect)) {
-            return $this->redirect(sprintf($redirect, rawurlencode($json)));
-        }
-
-        if (isset($_SERVER['HTTP_ACCEPT'])
-            && (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)
-        ) {
-            $response->headers->add(['Content-type' => 'application/json']);
-        } else {
-            $response->headers->add(['Content-type' => 'text/plain']);
-        }
-        return $response;
+        return new JsonResponse($photo, 201);
     }
 }
