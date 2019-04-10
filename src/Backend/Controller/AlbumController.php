@@ -47,46 +47,47 @@ class AlbumController extends Controller
     {
         return $this->render('album/item.tpl');
 
+        // TODO: I keep this commented in order to get a reference of what was doing
+        // So we dont left anything behind when porting this action to the api controller
+        // $data = [
+        //     'content_status' => $request->request->getDigits('content_status', 0, FILTER_SANITIZE_STRING),
+        //     'title'          => $request->request
+        //         ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+        //     'category'       => $request->request->getDigits('category'),
+        //     'agency'         => $request->request
+        //         ->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+        //     'description'    => $request->request->get('description', ''),
+        //     'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
+        //     'album_frontpage_image' => $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
+        //     'album_photos_id'       => $request->request->get('album_photos_id'),
+        //     'album_photos_footer'   => $request->request->get('album_photos_footer'),
+        //     'fk_author'             => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
+        //     'endtime'        => $request->request
+        //         ->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+        //     'starttime'      => $request->request
+        //         ->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+        //     'params'         => $request->request->get('params', []),
+        //     'tags'           => json_decode($request->request->get('tags', ''), true)
+        // ];
 
-        $data = [
-            'content_status' => $request->request->getDigits('content_status', 0, FILTER_SANITIZE_STRING),
-            'title'          => $request->request
-                ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'category'       => $request->request->getDigits('category'),
-            'agency'         => $request->request
-                ->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'description'    => $request->request->get('description', ''),
-            'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
-            'album_frontpage_image' => $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
-            'album_photos_id'       => $request->request->get('album_photos_id'),
-            'album_photos_footer'   => $request->request->get('album_photos_footer'),
-            'fk_author'             => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
-            'endtime'        => $request->request
-                ->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'starttime'      => $request->request
-                ->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'params'         => $request->request->get('params', []),
-            'tags'           => json_decode($request->request->get('tags', ''), true)
-        ];
+        // $album = new \Album();
+        // $album->create($data);
 
-        $album = new \Album();
-        $album->create($data);
+        // $this->get('session')->getFlashBag()->add(
+        //     'success',
+        //     _('Album created successfully')
+        // );
 
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            _('Album created successfully')
-        );
-
-        // Return user to list if has no update acl
-        if ($this->get('core.security')->hasPermission('ALBUM_UPDATE')) {
-            return $this->redirect(
-                $this->generateUrl('admin_album_show', [ 'id' => $album->id ])
-            );
-        } else {
-            return $this->redirect(
-                $this->generateUrl('backend_albums_list')
-            );
-        }
+        // // Return user to list if has no update acl
+        // if ($this->get('core.security')->hasPermission('ALBUM_UPDATE')) {
+        //     return $this->redirect(
+        //         $this->generateUrl('admin_album_show', [ 'id' => $album->id ])
+        //     );
+        // } else {
+        //     return $this->redirect(
+        //         $this->generateUrl('backend_albums_list')
+        //     );
+        // }
     }
 
     /**
@@ -103,45 +104,10 @@ class AlbumController extends Controller
         $id = $request->query->getDigits('id', null);
 
         return $this->render('album/item.tpl', [ 'id' => $id]);
-
-        $id    = $request->query->getDigits('id');
-        $album = $this->get('entity_repository')->find('Album', $id);
-
-        if (is_null($album->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Unable to find an album with the id "%d".'), $id)
-            );
-
-            return $this->redirect($this->generateUrl('backend_albums_list'));
-        }
-
-        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
-            && !$album->isOwner($this->getUser()->id)
-        ) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("You don't have enough privileges for modify this album.")
-            );
-
-            return $this->redirect($this->generateUrl('backend_albums_list', [
-                'category' => $album->category
-            ]));
-        }
-
-        return $this->render('album/item.tpl', [
-            'category'       => $album->category,
-            'photos'         => $album->_getAttachedPhotos($id),
-            'album'          => $album,
-            'authors'        => $this->getAuthors(),
-            'commentsConfig' => $this->get('orm.manager')->getDataSet('Settings')
-                ->get('comments_config'),
-            'locale'         => $this->get('core.locale')
-                ->getRequestLocale('frontend'),
-        ]);
     }
 
     /**
+     * TODO: Remove this action when API controller migration is completed
      * Updates the album information.
      *
      * @param  Request  $request The request object.
@@ -295,21 +261,5 @@ class AlbumController extends Controller
     public function configAction(Request $request)
     {
         return $this->render('album/config.tpl');
-    }
-
-    /**
-     * Returns the list of authors.
-     *
-     * @return array The list of authors.
-     */
-    protected function getAuthors()
-    {
-        $response = $this->get('api.service.author')
-            ->getList('order by name asc');
-
-        return $this->get('data.manager.filter')
-            ->set($response['items'])
-            ->filter('mapify', [ 'key' => 'id'])
-            ->get();
     }
 }

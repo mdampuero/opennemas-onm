@@ -90,6 +90,15 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       }
     };
 
+    /**
+     * @function localizePhotos
+     * @memberOf RestInnerCtrl
+     *
+     * @description
+     *   Localizes the photos array and creates linkers
+     *
+     * @param {Object} data The data in the response.
+     */
     $scope.localizePhotos = function(items, key, clean) {
       var lz = localizer.get($scope.config.locale);
 
@@ -174,7 +183,9 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
      * @description
      *   Saves tags and, then, submits the form.
      */
-    $scope.submit = function() {
+    $scope.submit = function(e) {
+      e.preventDefault();
+
       if (!$scope.validatePhotosAndCover()) {
         return false;
       }
@@ -199,15 +210,13 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       });
 
       $rootScope.submit();
-
-      return true;
     };
 
     /**
      * Show modal warning for album missing photos
      */
     $scope.validatePhotosAndCover = function() {
-      if ($scope.photos && $scope.item.cover) {
+      if ($scope.item.photos && $scope.item.cover) {
         return true;
       }
 

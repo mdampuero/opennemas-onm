@@ -46,7 +46,7 @@
         <div class="pull-right">
           <ul class="quick-section">
             <li class="quicklinks">
-              <button class="btn btn-loading btn-success text-uppercase" ng-click="submit($event)" data-text="{t}Saving{/t}..." type="submit">
+              <button class="btn btn-loading btn-success text-uppercase" ng-click="submit($event)" data-text="{t}Saving{/t}..." type="button">
                 <i class="fa fa-save m-r-5"></i>
                 {t}Save{/t}
               </button>
