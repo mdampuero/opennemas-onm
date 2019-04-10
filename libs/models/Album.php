@@ -41,7 +41,7 @@ class Album extends Content
     /**
      * List of photos ids for the album
      */
-    public $album_photos = null;
+    protected $album_photos = null;
 
     /**
      * Initializes the Album class.
@@ -89,6 +89,9 @@ class Album extends Content
                 $this->content_type_name = $returnValue;
 
                 return $returnValue;
+
+            case 'album_photos':
+                return $this->loadPhotos();
 
             default:
                 return parent::__get($name);
@@ -149,6 +152,7 @@ class Album extends Content
             }
 
             $this->load($rs);
+            $this->loadPhotos();
 
             return $this;
         } catch (\Exception $e) {
@@ -287,6 +291,25 @@ class Album extends Content
 
             return false;
         }
+    }
+
+    protected function loadPhotos()
+    {
+        try {
+            $this->photos = getService('dbal_connection')->fetchAll(
+                'SELECT DISTINCT pk_photo, description, position'
+                . ' FROM albums_photos WHERE pk_album =? ORDER BY position ASC',
+                [ $this->id ]
+            );
+        } catch (\Exception $e) {
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
+            $this->photos = [];
+        }
+
+        return $this->photos;
     }
 
     /**
