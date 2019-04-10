@@ -360,55 +360,6 @@ class Album extends Content
     }
 
     /**
-     * Returns a multidimensional array with the images related to this album
-     * and results are separated by pages
-     *
-     * @param int $albumID    the album id
-     * @param int $items_page the number of page to get
-     * @param int $page       the number of page to get
-     *
-     * @return mixed array of array(pk_photo, position, description)
-     */
-    public function getAttachedPhotosPaged($albumID, $items_page, $page = 1)
-    {
-        if ($albumID == null) {
-            return false;
-        }
-
-        if (empty($page)) {
-            $limit = "LIMIT " . ($items_page + 1);
-        } else {
-            $limit = "LIMIT " . ($page - 1) * $items_page . ', ' . ($items_page + 1);
-        }
-
-        try {
-            $rs = getService('dbal_connection')->fetchAll(
-                'SELECT DISTINCT pk_photo, description, position'
-                . ' FROM albums_photos '
-                . ' WHERE pk_album =? ORDER BY position ASC ' . $limit,
-                [ $albumID ]
-            );
-
-            $photosAlbum = [];
-            foreach ($rs as $photo) {
-                $photosAlbum [] = [
-                    'id'          => $photo['pk_photo'],
-                    'position'    => $photo['position'],
-                    'description' => $photo['description'],
-                    'photo'       => new Photo($photo['pk_photo']),
-                ];
-            }
-
-            return $photosAlbum;
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
-            );
-            return false;
-        }
-    }
-
-    /**
      * Saves the photos attached to one album
      *
      * @param array $data the new photos data
