@@ -37,6 +37,8 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       tags: [],
       external_link: '',
       agency: '',
+      cover: null,
+      cover_image: null,
       photos: [],
     };
 
@@ -79,15 +81,13 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       $scope.localizePhotos($scope.data.item.photos, 'photos', true);
 
       // Assign the cover image
-      var cover = data.extra.related_contents.filter(function(el) {
+      var cover = data.extra.photos.filter(function(el) {
         return el && el.pk_photo === $scope.item.cover_id;
       }).shift();
 
       if (cover) {
         $scope.cover_image = cover;
       }
-
-      // TODO: Localize photos
     };
 
     $scope.localizePhotos = function(items, key, clean) {
@@ -130,6 +130,25 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
           category_name: item.category_name
         })
       );
+    };
+
+    /**
+     * @function getPhotoData
+     * @memberOf AlbumCtrl
+     *
+     * @description
+     *   Returns the info of a photo from the extra parameters given the photo id.
+     */
+    $scope.getPhotoData = function(photoId) {
+      if (!photoId || !$scope.data.extra || $scope.data.extra.photos.length == 0) {
+        return {};
+      }
+
+      var photos = $scope.data.extra.photos.filter(function(el) {
+        return el.pk_photo === photoId;
+      });
+
+      return photos.shift();
     };
 
     /**
@@ -180,20 +199,9 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       });
 
       $rootScope.submit();
+
+      return true;
     };
-
-
-    $scope.getPhotoData = function(photoId) {
-      if (!photoId || !$scope.data.extra || $scope.data.extra.photos.length == 0) {
-        return {};
-      }
-
-      var photos = $scope.data.extra.photos.filter(function(el) {
-        return el.pk_photo === photoId;
-      });
-
-      return photos.shift();
-    }
 
     /**
      * Show modal warning for album missing photos
@@ -226,13 +234,13 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
      * @param Object nv The new values.
      * @param Object ov The old values.
      */
-    // $scope.$watch('item.cover_image', function(nv, ov) {
-    //   if (nv === ov) {
-    //     return false;
-    //   }
+    $scope.$watch('item.cover_image', function(nv, ov) {
+      if (nv === ov) {
+        return false;
+      }
 
-    //   $scope.item.cover = nv.pk_content;
-    // }, true);
+      $scope.item.cover = nv.pk_content;
+    }, true);
 
     /**
      * Updates the ids and footers when photos change.
