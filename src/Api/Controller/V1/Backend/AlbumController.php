@@ -85,26 +85,47 @@ class AlbumController extends ContentOldController
      **/
     public function getExtraData($items = null)
     {
-        $us = $this->get('api.service.category');
-
-        $categories = $this->container->get('data.manager.filter')
-            ->set($us->getList('inmenu=1')['items'])
-            ->filter('mapify', [ 'key' => 'pk_content_category' ])
-            ->get();
-
         return array_merge(parent::getExtraData($items), [
-            'categories' => $us->responsify($categories),
+            'photos' => $this->getPhotos($items)
         ]);
     }
+
     /**
-     * Returns the list of l10n keys
-     * @param Type $var Description
-     *
-     * @return array
+     * {@inheritDoc}`
      **/
     public function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys('album');
+    }
+
+    /**
+     * Returns the list of photos, description and its positions for a list of photos
+     *
+     * @param Album $item The item to fetch photos from
+     * @return array
+     **/
+    public function getPhotos($items)
+    {
+        $photos = [];
+
+        if (!is_array($items)) {
+            $items = [ $items ];
+        }
+
+        foreach ($items as $item) {
+            $ids = array_map(function ($photo) {
+                return $photo['pk_photo'];
+            }, $item->photos);
+
+            // Use id as array key
+            $evenMore = $this->get('api.service.content_old')->getListByIds($ids)['items'];
+
+            foreach ($evenMore as $ph) {
+                $photos[] = $ph;
+            }
+        }
+
+        return $photos;
     }
 
     /**

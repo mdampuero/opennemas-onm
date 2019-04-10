@@ -2,8 +2,8 @@
  * Handle actions for album inner form.
  */
 angular.module('BackendApp.controllers').controller('AlbumCtrl', [
-  '$controller', '$rootScope', '$scope', '$uibModal', 'messenger', 'routing',
-  function($controller, $rootScope, $scope, $uibModal, messenger, routing) {
+  '$controller', '$rootScope', '$scope', '$uibModal', 'messenger', 'routing', 'localizer', 'linker',
+  function($controller, $rootScope, $scope, $uibModal, messenger, routing, localizer, linker) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -37,6 +37,7 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       tags: [],
       external_link: '',
       agency: '',
+      photos: [],
     };
 
     /**
@@ -74,18 +75,36 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       }
 
       $scope.configure(data.extra);
-      $scope.localize($scope.data.item, 'item', true);
+      $scope.localize($scope.data.item, 'item', true, [ 'photos' ]);
+      $scope.localizePhotos($scope.data.item.photos, 'photos', true);
 
       // Assign the cover image
       var cover = data.extra.related_contents.filter(function(el) {
-        return el && el.pk_photo == $scope.item.cover_id;
+        return el && el.pk_photo === $scope.item.cover_id;
       }).shift();
 
       if (cover) {
         $scope.cover_image = cover;
       }
 
-      // TODO: Assign photos
+      // TODO: Localize photos
+    };
+
+    $scope.localizePhotos = function(items, key, clean) {
+      var lz = localizer.get($scope.config.locale);
+
+      // Localize items
+      $scope.item[key] = lz.localize(items, [ 'description' ], $scope.config.locale);
+
+      // Initialize linker
+      if (!$scope.config.linkers[key]) {
+        $scope.config.linkers[key] = linker.get([ 'description' ],
+          $scope.config.locale.default, $scope, clean);
+      }
+
+      // Link original and localized items
+      $scope.config.linkers[key].setKey($scope.config.locale.selected);
+      $scope.config.linkers[key].link(items, $scope.item[key]);
     };
 
     /**
@@ -101,7 +120,7 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
     $scope.getFrontendUrl = function(item) {
       var date = item.date;
 
-      var formattedDate = moment(date).format('YYYYMMDDHHmmss');
+      var formattedDate = window.moment(date).format('YYYYMMDDHHmmss');
 
       return $scope.getL10nUrl(
         routing.generate('frontend_album_show', {
@@ -136,7 +155,7 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
      * @description
      *   Saves tags and, then, submits the form.
      */
-    $scope.save = function() {
+    $scope.submit = function() {
       if (!$scope.validatePhotosAndCover()) {
         return false;
       }
@@ -160,14 +179,14 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
         }
       });
 
-      $rootScope.save();
+      $rootScope.submit();
     };
 
     /**
      * Show modal warning for album missing photos
      */
     $scope.validatePhotosAndCover = function() {
-      if ($scope.item.photos && $scope.item.cover) {
+      if ($scope.photos && $scope.item.cover) {
         return true;
       }
 
@@ -194,13 +213,13 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
      * @param Object nv The new values.
      * @param Object ov The old values.
      */
-    $scope.$watch('item.cover_image', function(nv, ov) {
-      if (nv === ov) {
-        return false;
-      }
+    // $scope.$watch('item.cover_image', function(nv, ov) {
+    //   if (nv === ov) {
+    //     return false;
+    //   }
 
-      $scope.item.cover = nv.pk_content;
-    }, true);
+    //   $scope.item.cover = nv.pk_content;
+    // }, true);
 
     /**
      * Updates the ids and footers when photos change.
@@ -208,7 +227,7 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
      * @param Object nv The new values.
      * @param Object ov The old values.
      */
-    $scope.$watch('photos', function(nv, ov) {
+    $scope.$watch('item.photos', function(nv, ov) {
       if (nv === ov) {
         return false;
       }

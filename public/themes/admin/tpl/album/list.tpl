@@ -9,14 +9,14 @@
           <li class="quicklinks">
             <h4>
               <i class="fa fa-film m-r-10"></i>
+              <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/745938-opennemas-c%C3%B3mo-crear-%C3%A1lbumes-galer%C3%ADas-de-imagene" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
+                <i class="fa fa-question"></i>
+              </a>
             </h4>
           </li>
           <li class="quicklinks">
             <h4>
               {t}Albums{/t}
-              <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/745938-opennemas-c%C3%B3mo-crear-%C3%A1lbumes-galer%C3%ADas-de-imagene" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
-                <i class="fa fa-question"></i>
-              </a>
             </h4>
           </li>
           <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">

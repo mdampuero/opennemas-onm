@@ -34,14 +34,14 @@
           <li class="quicklinks hidden-xs">
             <h4>{if empty($id)}{t}Create{/t}{else}{t}Edit{/t}{/if}</h4>
           </li>
-        <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
-          <h4>
-            <i class="fa fa-angle-right"></i>
-          </h4>
-        </li>
-        <li class="quicklinks ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
-          <translator keys="data.extra.keys" ng-model="config.locale.selected" options="data.extra.locale"></translator>
-        </li>
+          <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
+            <h4>
+              <i class="fa fa-angle-right"></i>
+            </h4>
+          </li>
+          <li class="quicklinks ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
+            <translator keys="data.extra.keys" ng-model="config.locale.selected" options="data.extra.locale"></translator>
+          </li>
         </ul>
         <div class="pull-right">
           <ul class="quick-section">
@@ -116,10 +116,8 @@
             <h4>{t}Album images{/t}</h4>
           </div>
           <div class="grid-body no-padding">
-            <div ui-sortable="{ axis: 'x,y', placeholder: 'album-thumbnail-sortable' }" ng-model="photos">
-              <div class="album-thumbnail-sortable" ng-repeat="photo in photos">
-                <input type="hidden" name="album_photos_id[]" ng-value="photo.id"/>
-                <input type="hidden" name="album_photos_footer[]" ng-value="photo.footer"/>
+            <div ui-sortable="{ axis: 'x,y', placeholder: 'album-thumbnail-sortable' }" ng-model="item.photos">
+              <div class="album-thumbnail-sortable" ng-repeat="photo in item.photos">
                 <div class="thumbnail-wrapper">
                   <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay['photo_'+ $index] }"></div>
                   <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay['photo_'+ $index] }">
@@ -136,7 +134,7 @@
                     </div>
                   </div>
                   <div class="dynamic-image-placeholder">
-                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo" transform="zoomcrop,500,500">
+                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[photo.pk_photo]" transform="zoomcrop,500,500">
                       <div class="thumbnail-actions">
                         <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ $index)">
                           <i class="fa fa-trash-o fa-2x"></i>
@@ -145,14 +143,14 @@
                     </dynamic-image>
                   </div>
                   <div class="form-group">
-                    <textarea class="album-thumbnail-description form-control" ng-model="photo.footer"></textarea>
+                    <textarea class="album-thumbnail-description form-control" ng-model="photo.description"></textarea>
                   </div>
                 </div>
               </div>
             </div>
             <div class="album-thumbnail-placeholder">
               <div class="img-thumbnail">
-                <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="150" media-picker-target="photos">
+                <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="150" media-picker-target="item.photos">
                   <i class="fa fa-plus fa-3x"></i>
                   <h4>{t}Add images{/t}<h4>
                 </div>
