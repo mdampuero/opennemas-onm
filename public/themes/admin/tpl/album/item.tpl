@@ -117,8 +117,8 @@
           </div>
           <div class="grid-body no-padding">
             <div ui-sortable="{ axis: 'x,y', placeholder: 'album-thumbnail-sortable' }" ng-model="item.photos">
-              <div class="album-thumbnail-sortable" ng-repeat="photo in item.photos">
-                <div class="thumbnail-wrapper">
+              <div class="album-thumbnail-sortable" ng-repeat="(index, photo) in item.photos">
+                <div class="thumbnail-wrapper row">
                   <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay['photo_'+ $index] }"></div>
                   <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay['photo_'+ $index] }">
                     <p>{t}Are you sure?{/t}</p>
@@ -133,17 +133,22 @@
                       </button>
                     </div>
                   </div>
-                  <div class="dynamic-image-placeholder">
-                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[photo.pk_photo]" transform="zoomcrop,500,500">
-                      <div class="thumbnail-actions">
-                        <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ $index)">
-                          <i class="fa fa-trash-o fa-2x"></i>
+                  <div class="col-xs-3">
+                    <div class="dynamic-image-placeholder">
+                      <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="getPhotodata(photo.pk_photo)" transform="zoomcrop,200,200">
+                        <div class="thumbnail-actions">
+                          <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ $index)">
+                            <i class="fa fa-trash-o fa-2x"></i>
+                          </div>
                         </div>
-                      </div>
-                    </dynamic-image>
+                      </dynamic-image>
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <textarea class="album-thumbnail-description form-control" ng-model="photo.description"></textarea>
+
+                  <div class="col-xs-9">
+                    <div class="form-group">
+                      <textarea class="album-thumbnail-description form-control" ng-model="photo.description" placeholder="[% data.extra.locale.multilanguage && data.extra.locale.default !== config.locale.selected ? data.item.photos[index].description[data.extra.locale.default] : '' %]" uib-tooltip="{t}Original{/t}: [% data.item.photos[index].description[data.extra.locale.default] %]" tooltip-enable="config.locale.multilanguage && config.locale.default !== config.locale.selected"></textarea>
+                    </div>
                   </div>
                 </div>
               </div>
