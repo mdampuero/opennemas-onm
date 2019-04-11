@@ -205,7 +205,7 @@ class ImagesController extends Controller
             $file  = array_pop($files);
 
             $photo = new \Photo();
-            $id    = $photo->createFromLocalFile($file->getRealPath());
+            $id    = $photo->createFromLocalFile($file);
             $photo = new \Photo($id);
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), 400);

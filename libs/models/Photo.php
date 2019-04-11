@@ -13,6 +13,7 @@
  */
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Photo class
@@ -192,20 +193,25 @@ class Photo extends Content
     /**
      * Creates a photo basing on a file and optional photo information.
      *
-     * @param string $path The path to the file.
+     * @param UploadedFile $file The uploaded file.
      * @param array  $data The photo information.
      * @param bool   $copy Whether to move or copy the file.
      *
      * @return int The photo id.
      */
-    public function createFromLocalFile(string $path, array $data = [], bool $copy = false) : int
+    public function createFromLocalFile(UploadedFile $uploadedFile, array $data = [], bool $copy = false) : int
     {
         $ih   = getService('core.helper.image');
         $date = new \DateTime($data['created'] ?? null);
 
-        $file     = new File($path);
+        $file     = new File($uploadedFile->getRealPath());
         $path     = $ih->generatePath($file, $date->format('Y-m-d H:i:s'));
         $filename = basename($path);
+
+        $originalFilename = pathinfo(
+            $uploadedFile->getClientOriginalName(),
+            PATHINFO_FILENAME
+        );
 
         $ih->move($file, $path, $copy);
 
@@ -217,6 +223,7 @@ class Photo extends Content
             'changed'        => $date->format('Y-m-d H:i:s'),
             'content_status' => 1,
             'created'        => $date->format('Y-m-d H:i:s'),
+            'description'    => $originalFilename,
             'name'           => $filename,
             'path_file'      => $date->format('/Y/m/d/'),
             'title'          => $filename,
