@@ -264,15 +264,15 @@ class Photo extends Content
      */
     public function remove($id)
     {
-        $path = getService('service_container')->getParameter('core.paths.public')
-            . getService('core.instance')->getImagesShortPath()
-            . $this->getRelativePath();
+        //$path = getService('service_container')->getParameter('core.paths.public')
+            //. getService('core.instance')->getImagesShortPath()
+            //. $this->getRelativePath();
 
-        $fs = new Filesystem();
+        //$fs = new Filesystem();
 
-        if ($fs->exists($path)) {
-            $fs->remove($path);
-        }
+        //if ($fs->exists($path)) {
+            //$fs->remove($path);
+        //}
 
         parent::remove($id);
 
