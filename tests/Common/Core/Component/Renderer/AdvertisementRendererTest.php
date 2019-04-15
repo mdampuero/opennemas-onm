@@ -477,7 +477,7 @@ class AdvertisementRendererTest extends TestCase
                 'width'    => 300,
                 'height'   => 300,
                 'src'      => 'thud.opennemas.com/media/opennemas/images/path/foo.png',
-                'url'      => '/ads/get/123'
+                'url'      => 'thud.opennemas.com/ads/get/123'
             ])
             ->willReturn($output);
 
@@ -524,7 +524,7 @@ class AdvertisementRendererTest extends TestCase
                 'width'    => 300,
                 'height'   => 300,
                 'src'      => 'thud.opennemas.com/media/opennemas/images/path/foo.png',
-                'url'      => '/ads/get/123'
+                'url'      => 'thud.opennemas.com/ads/get/123'
             ])
             ->willReturn($output);
 
@@ -569,7 +569,7 @@ class AdvertisementRendererTest extends TestCase
                 'width'    => 300,
                 'height'   => 300,
                 'src'      => 'thud.opennemas.com/media/opennemas/images/path/foo.png',
-                'url'      => '/ads/get/123'
+                'url'      => 'thud.opennemas.com/ads/get/123'
             ])
             ->willReturn($output);
 
