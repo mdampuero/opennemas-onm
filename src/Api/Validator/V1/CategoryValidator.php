@@ -37,7 +37,7 @@ class CategoryValidator extends Validator
                 continue;
             }
 
-            throw new InvalidArgumentException('Invalid category', 400);
+            throw new InvalidArgumentException(_('Invalid category'), 400);
         }
     }
 }
