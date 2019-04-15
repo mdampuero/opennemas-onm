@@ -241,10 +241,11 @@ class AdvertisementRenderer
             'mediaUrl' => $img->path_img . $img->path_file,
             'src'      => $this->instance->getBaseUrl() . '/media/' . INSTANCE_UNIQUE_NAME
                 . '/images' . $img->path_file . $img->name,
-            'url'      => $this->container->get('router')->generate(
-                'frontend_ad_redirect',
-                [ 'id' => $publicId ]
-            ),
+            'url'      => $this->instance->getBaseUrl()
+                . $this->container->get('router')->generate(
+                    'frontend_ad_redirect',
+                    [ 'id' => $publicId ]
+                ),
             'width'    => $img->width
         ]);
     }
