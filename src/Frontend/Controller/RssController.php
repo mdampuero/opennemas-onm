@@ -481,19 +481,13 @@ class RssController extends Controller
      */
     protected function getPlaceholders($name)
     {
-        $setting = null;
+        try {
+            $category = $this->get('orm.manager')->getRepository('Category')
+                ->findOneBy(sprintf('name = "%s"', $name));
 
-        if (!empty($name)) {
-            try {
-                $category = $this->get('orm.manager')->getRepository('Category')
-                    ->findOneBy(sprintf('title = "%s"', $name));
-
-                $setting = 'frontpage_layout_' . $category->pk_content_category;
-            } catch (\Exception $e) {
-                if ($name === 'home') {
-                    $setting = 'frontpage_layout_0';
-                }
-            }
+            $setting = 'frontpage_layout_' . $category->pk_content_category;
+        } catch (\Exception $e) {
+            $setting = 'frontpage_layout_0';
         }
 
         // TODO: Use new repository when cache is unified
