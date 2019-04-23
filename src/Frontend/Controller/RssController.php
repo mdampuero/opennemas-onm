@@ -482,15 +482,14 @@ class RssController extends Controller
     protected function getPlaceholders($name)
     {
         try {
-            $category = $this->get('orm.manager')->getRepository('Category')
-                ->findOneBy(sprintf('name = "%s"', $name));
+            $category = $this->get('api.service.category')
+                ->getItemBySlug($name);
 
             $setting = 'frontpage_layout_' . $category->pk_content_category;
         } catch (\Exception $e) {
             $setting = 'frontpage_layout_0';
         }
 
-        // TODO: Use new repository when cache is unified
         $layout = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get($setting);
