@@ -29,8 +29,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->image = $this->getMockBuilder('Image')
             ->setMethods([
-                'crop', 'get', 'getImagick', 'getSize', 'resize', 'save',
-                'strip', 'thumbnail'
+                'crop', 'get', 'getHeight','getImagick', 'getSize', 'getWidth',
+                'resize', 'save', 'strip', 'thumbnail'
             ])->getMock();
 
         $this->imagick = $this->getMockBuilder('Imagick')
@@ -75,11 +75,30 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setConstructorArgs([])
-            ->setMethods([ 'glorp' ])
+            ->setMethods([ 'glorp', 'getFormat' ])
             ->getMock();
+
+        $this->im->expects($this->once())->method('getFormat')
+            ->willReturn('foo');
 
         $this->im->expects($this->once())->method('glorp')
             ->with([ 'flob', 22474 ]);
+
+        $this->im->apply('glorp', [ 'flob', 22474 ]);
+    }
+
+    /**
+     * Tests process when provided image is a gif
+     */
+    public function testApplyWhenImageIsGif()
+    {
+        $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
+            ->setConstructorArgs([])
+            ->setMethods([ 'getFormat' ])
+            ->getMock();
+
+        $this->im->expects($this->once())->method('getFormat')
+            ->willReturn('gif');
 
         $this->im->apply('glorp', [ 'flob', 22474 ]);
     }
@@ -136,7 +155,14 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetHeight()
     {
-        $this->imagick->expects($this->once())->method('getImageHeight')
+        $size = $this->getMockBuilder('Size')
+            ->setMethods([ 'getHeight' ])
+            ->getMock();
+
+        $this->image->expects($this->any())->method('getSize')
+            ->willReturn($size);
+
+        $size->expects($this->any())->method('getHeight')
             ->willReturn(9688);
 
         $this->assertEquals(9688, $this->im->getHeight());
@@ -158,7 +184,14 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetWidth()
     {
-        $this->imagick->expects($this->once())->method('getImageWidth')
+        $size = $this->getMockBuilder('Size')
+            ->setMethods([ 'getWidth' ])
+            ->getMock();
+
+        $this->image->expects($this->any())->method('getSize')
+            ->willReturn($size);
+
+        $size->expects($this->any())->method('getWidth')
             ->willReturn(180);
 
         $this->assertEquals(180, $this->im->getWidth());
