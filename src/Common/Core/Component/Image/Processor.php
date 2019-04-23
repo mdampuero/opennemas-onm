@@ -15,7 +15,7 @@ use Imagine\Image\Point;
 use Imagine\Imagick\Imagine;
 use Symfony\Component\Filesystem\Filesystem;
 
-/*
+/**
  * This class in charge of image processing and transformation.
  */
 class Processor
@@ -72,6 +72,10 @@ class Processor
      */
     public function apply($method, $params)
     {
+        if ($this->image->getImagick()->getImageFormat() === 'GIF') {
+            return $this;
+        }
+
         if (!method_exists($this, $method)) {
             throw new \InvalidArgumentException('Invalid method');
         }
