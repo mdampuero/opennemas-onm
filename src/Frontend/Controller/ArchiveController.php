@@ -76,8 +76,9 @@ class ArchiveController extends Controller
                 if (!isset($library[$content->pk_fk_content_category])
                     && !empty($content->pk_fk_content_category)
                 ) {
-                    $library[$content->category] = $this->get('api.service.category')
-                        ->getItem($content->pk_fk_content_category);
+                    $library[$content->category] = $this->get('orm.manager')
+                        ->getRepository('Category')
+                        ->find($content->pk_fk_content_category);
 
                     $library[$content->category]->contents = [];
                 }
