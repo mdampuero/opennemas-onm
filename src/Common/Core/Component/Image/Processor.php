@@ -72,7 +72,7 @@ class Processor
      */
     public function apply($method, $params)
     {
-        if ($this->image->getImagick()->getImageFormat() === 'GIF') {
+        if ($this->getFormat() === 'gif') {
             return $this;
         }
 
