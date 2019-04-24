@@ -641,9 +641,8 @@
               }
             }
 
-            if ($scope.form.$dirty &&
-                (!nv[1] && angular.equals(nv[1], ov[1]) ||
-                angular.equals(nv[1], ov[0]))) {
+            if (!nv[1] && angular.equals(nv[1], ov[1]) ||
+                angular.equals(nv[1], ov[0])) {
               $scope.article.img2 = $scope.article.img1;
             }
           }, true);
@@ -671,9 +670,8 @@
               }
             }
 
-            if ($scope.form.$dirty &&
-                (!nv[1] && angular.equals(nv[1], ov[1]) ||
-                angular.equals(nv[1], ov[0]))) {
+            if (!nv[1] && angular.equals(nv[1], ov[1]) ||
+                angular.equals(nv[1], ov[0])) {
               $scope.article.fk_video2 = $scope.article.fk_video;
             }
           }, true);
