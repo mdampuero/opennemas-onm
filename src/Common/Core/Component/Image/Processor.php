@@ -15,7 +15,7 @@ use Imagine\Image\Point;
 use Imagine\Imagick\Imagine;
 use Symfony\Component\Filesystem\Filesystem;
 
-/*
+/**
  * This class in charge of image processing and transformation.
  */
 class Processor
@@ -72,6 +72,10 @@ class Processor
      */
     public function apply($method, $params)
     {
+        if ($this->getFormat() === 'gif') {
+            return $this;
+        }
+
         if (!method_exists($this, $method)) {
             throw new \InvalidArgumentException('Invalid method');
         }
@@ -81,14 +85,14 @@ class Processor
         return $this;
     }
 
-    /*
+    /**
      * Sets parameters for an image.
      *
      * @param array $params The list of parameters.
      *
      * @return string The image content.
      */
-    public function getContent(array $params = [])
+    public function getContent(array $params = []) : string
     {
         $params = !empty($params) ? $params : $this->defaults;
 
@@ -103,7 +107,7 @@ class Processor
      *
      * @return string The image format.
      */
-    public function getFormat()
+    public function getFormat() : string
     {
         return strtolower($this->image->getImagick()->getImageFormat());
     }
@@ -115,7 +119,7 @@ class Processor
      */
     public function getHeight() : int
     {
-        return $this->image->getImagick()->getImageHeight();
+        return $this->image->getSize()->getHeight();
     }
 
     /**
@@ -123,7 +127,7 @@ class Processor
      *
      * @return string The image mime-type.
      */
-    public function getMimeType()
+    public function getMimeType() : string
     {
         return $this->image->getImagick()->getImageMimeType();
     }
@@ -145,7 +149,7 @@ class Processor
      */
     public function getWidth() : int
     {
-        return $this->image->getImagick()->getImageWidth();
+        return $this->image->getSize()->getWidth();
     }
 
     /**
