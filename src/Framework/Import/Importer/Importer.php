@@ -223,7 +223,8 @@ class Importer
             || !array_key_exists('author', $this->config)
             || $this->config['author'] !== '1'
         ) {
-            if (array_key_exists('target_author', $this->config)
+            if ($this->autoImport()
+                && array_key_exists('target_author', $this->config)
                 && !empty($this->config['target_author'])
             ) {
                 return $this->config['target_author'];
