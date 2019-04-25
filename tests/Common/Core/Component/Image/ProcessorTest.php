@@ -35,10 +35,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->imagick = $this->getMockBuilder('Imagick')
             ->setMethods([
-                'getImageFormat', 'getImageHeight', 'getImageLength',
-                'getImageMimeType', 'getImageWidth'
-            ])
-            ->getMock();
+                'getImageFormat', 'getImageLength', 'getImageMimeType'
+            ])->getMock();
 
         $this->imagine = $this->getMockBuilder('Imagine')
             ->setMethods([ 'open' ])
