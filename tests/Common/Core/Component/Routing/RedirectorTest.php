@@ -569,10 +569,10 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $redirector->expects($this->once())->method('getTarget')
-            ->willReturn('/fred/flob');
+            ->willReturn('/fred/flob?garply=bar');
 
         $this->request->expects($this->once())->method('duplicate')
-            ->with([], null, [ 'slug' => 'flob', 'id' => 'fred' ])
+            ->with([ 'garply' => 'bar' ], null, [ 'slug' => 'flob', 'id' => 'fred' ])
             ->willReturn($this->request);
 
         $this->router->expects($this->once())->method('match')
