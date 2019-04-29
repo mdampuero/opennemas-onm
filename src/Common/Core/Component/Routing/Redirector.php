@@ -250,8 +250,15 @@ class Redirector
                 ->generate($target);
         }
 
-        $params  = $this->container->get('router')->match($target);
-        $forward = $request->duplicate([], null, $params);
+        $info  = parse_url($target);
+        $query = [];
+
+        if (array_key_exists('query', $info)) {
+            parse_str($info['query'], $query);
+        }
+
+        $params  = $this->container->get('router')->match($info['path']);
+        $forward = $request->duplicate($query, null, $params);
 
         return $this->container->get('kernel')
             ->handle($forward, HttpKernelInterface::SUB_REQUEST);
