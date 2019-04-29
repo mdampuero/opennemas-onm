@@ -24,6 +24,17 @@
         $.extend(this, $controller('BaseCtrl', { $scope: $scope }));
 
         /**
+         * @function generate
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Forces automatic field generation.
+         */
+        $scope.generate = function() {
+          $scope.flags.generate = { slug: true, tags: true };
+        };
+
+        /**
          * @memberOf RestInnerCtrl
          *
          * @description
@@ -65,10 +76,13 @@
          *   Returns the data to send when saving/updating an item.
          */
         $scope.getData = function() {
-          // Do not use angular.copy as it doesnt copy some keys in the object
-          var eltoClean = angular.extend({}, $scope.item);
+          var data = angular.extend({}, $scope.item);
 
-          return cleaner.clean(eltoClean);
+          if ($scope.config.locale) {
+            data = angular.extend({}, $scope.data.item);
+          }
+
+          return cleaner.clean(data);
         };
 
         /**
@@ -92,6 +106,13 @@
 
           http.get(route).then(function(response) {
             $scope.data = response.data;
+
+            if (!response.data.item) {
+              $scope.data.item = {};
+            }
+
+            $scope.data.item = angular.extend($scope.item, $scope.data.item);
+            $scope.item      = angular.extend({}, response.data.item);
 
             $scope.parseItem($scope.data);
             $scope.disableFlags('http');
@@ -137,9 +158,9 @@
          * @param {Object} data The data in the response.
          */
         $scope.parseItem = function(data) {
-          if (data.item) {
-            $scope.item = angular.extend($scope.item, data.item);
-          }
+          $scope.configure(data.extra);
+
+          return data;
         };
 
         /**
@@ -151,7 +172,10 @@
          */
         $scope.save = function() {
           if ($scope.form.$invalid) {
-            return;
+            messenger.post(window.strings.forms.not_valid, 'error');
+            $scope.disableFlags('http');
+
+            return false;
           }
 
           $scope.form.$setPristine(true);

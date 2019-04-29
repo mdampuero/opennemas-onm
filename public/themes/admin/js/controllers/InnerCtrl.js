@@ -16,8 +16,8 @@
      *   implemented.
      */
     .controller('InnerCtrl', [
-      '$controller', '$scope', 'http',
-      function($controller, $scope, http) {
+      '$controller', '$scope', 'http', 'messenger',
+      function($controller, $scope, http, messenger) {
         $.extend(this, $controller('BaseCtrl', { $scope: $scope }));
 
         /**
@@ -73,6 +73,37 @@
           }
 
           model[keys[i]] = null;
+        };
+
+        /**
+         * @function submit
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *   Saves tags and, then, submits the form.
+         */
+        $scope.submit = function(e) {
+          e.preventDefault();
+
+          if ($scope.form.$invalid) {
+            $('[name=form]')[0].reportValidity();
+
+            messenger.post(window.strings.forms.not_valid, 'error');
+
+            return false;
+          }
+
+          if (!$('[name=form]')[0].checkValidity()) {
+            $('[name=form]')[0].reportValidity();
+            return false;
+          }
+
+          $scope.$broadcast('onmTagsInput.save', {
+            onSuccess: function(ids) {
+              $('[name=tags]').val(JSON.stringify(ids));
+              $('[name=form]').submit();
+            }
+          });
         };
 
         // Initialize the scope with the input/select values.

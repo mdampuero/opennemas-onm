@@ -127,7 +127,7 @@
             prefix = instanceMedia + this.imageFolder;
           }
 
-          if (onlyImage && /.*\.(swf|gif)$/.test(image)) {
+          if (onlyImage && /.*\.(swf)$/.test(image)) {
             return this.brokenImage;
           }
 
@@ -136,8 +136,8 @@
           }
 
           return routingProvider.generate('asset_image', {
-            real_path:  prefix + image,
-            parameters: encodeURIComponent(transform),
+            path:   prefix + image,
+            params: encodeURIComponent(transform),
           });
         };
 
@@ -174,12 +174,12 @@
          * @return {Object} The height and width for the available space.
          */
         this.getSettings = function(height, width, maxHeight, maxWidth) {
-          var h = maxHeight;
-          var w = width * maxHeight / height;
+          var w = maxWidth;
+          var h = height * maxWidth / width;
 
-          if (w > maxWidth) {
-            w = maxWidth;
-            h = height * maxWidth / width;
+          if (h > 250) {
+            w = 250 * width / height;
+            h = 250;
           }
 
           return { height: h, width: w };
@@ -199,6 +199,10 @@
          *                   returns false
          */
         this.isFlash = function(image, property) {
+          if (!image) {
+            return false;
+          }
+
           if (typeof image === 'object') {
             if (property) {
               image = image[property];

@@ -82,6 +82,26 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getFilesShortPath.
+     */
+    public function testGetFilesShortPath()
+    {
+        $instance = new Instance([ 'internal_name' => 'garply' ]);
+
+        $this->assertEquals('/media/garply/files', $instance->getFilesShortPath());
+    }
+
+    /**
+     * Tests getImagesShortPath.
+     */
+    public function testGetImagesShortPath()
+    {
+        $instance = new Instance([ 'internal_name' => 'garply' ]);
+
+        $this->assertEquals('/media/garply/images', $instance->getImagesShortPath());
+    }
+
+    /**
      * Tests getMediaShortPath.
      */
     public function testGetMediaShortPath()

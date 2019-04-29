@@ -281,31 +281,7 @@ var newsletterTemplateTranslations = {
                 <div ng-bind-html="item.title | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
-
-            <div class="dropdown category">
-              <button class="btn btn-white" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <strong>
-                {t}Categories{/t}:
-                </strong>
-                <span ng-show="content.criteria.category.length == 0">{t}Any{/t}</span>
-                <span ng-hide="content.criteria.category.length == 0">{t 1="[% content.criteria.category.length %]"}%1 selected{/t}</span>
-                <span class="caret"></span>
-              </button>
-              <div class="dropdown-menu dropdown-menu-left keepopen">
-                <a class="select-all-categories p-b-5" ng-click="toggleAllCategories(content)">{t}Select/deselect all{/t}</a>
-                <div class="checkbox-list">
-                  <ul class="checkbox">
-                    <li class="dropdown-element" ng-repeat="category in data.extra.categories" ng-class="{ active: content.criteria.category.indexOf(category.pk_content_category) >=0 }" ng-click="toggleCategory(content, category.pk_content_category)">
-                      [% category.title %]
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {* <div style="display:inline-block" ng-dropdown-multiselect selected-model="content.criteria.category" options="data.extra.categories"  extra-settings="{ template: '[% getPropertyForObject(option, settings.displayProp) %]', scrollableHeight: '100px', displayProp: 'title', idProperty: 'id', scrollable: true}"
-            smartButtonTextProvider(selectionArray) { return selectionArray.length + 2; }
-            translation-texts="{ checkAll : "{t}Select all{/t}", uncheckAll: "{t}Deselect all{/t}", }" ></div> *}
+            <onm-category-selector multiple="true" default-value-text="{t}All{/t}/{t}None{/t}" label-text="{t}Categories{/t}" locale="config.locale.selected" ng-model="content.criteria.category" placeholder="{t}Any{/t}" selected="selectedCategories" selected-text="{t}selected{/t}"></onm-category-selector>
           </div>
 
           <div class="limit clearfix">

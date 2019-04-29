@@ -109,7 +109,7 @@ class AdvertisementRenderer
         $deviceClasses = $this->getDeviceCSSClasses($ad);
 
         $tpl         = '<div class="ad-slot oat oat-visible oat-%s %s" data-mark="%s">%s</div>';
-        $content     = $this->renderInline($ad, $params);
+        $content     = $this->renderInline($ad, null, $params);
         $mark        = $this->getMark($ad);
         $orientation = empty($ad->params['orientation']) ?
             'top' : $ad->params['orientation'];
@@ -125,7 +125,7 @@ class AdvertisementRenderer
      *
      * @return string The HTML for the slot.
      */
-    public function renderInline(\Advertisement $ad, $format = null)
+    public function renderInline(\Advertisement $ad, $format = null, $params = [])
     {
         if ($ad->with_script == 1) {
             return $this->getHtml($ad);
@@ -134,7 +134,7 @@ class AdvertisementRenderer
         } elseif ($ad->with_script == 3) {
             return $this->renderInlineDFPSlot($ad);
         } elseif ($ad->with_script == 4) {
-            return $this->renderInlineSmartSlot($ad);
+            return $this->renderInlineSmartSlot($ad, $params);
         }
 
         $img = $this->getImage($ad);
@@ -209,7 +209,7 @@ class AdvertisementRenderer
     public function renderInlineDFPSlot($ad)
     {
         return $this->tpl->fetch('advertisement/helpers/inline/dfp.slot.tpl', [
-            'id' => $ad->pk_advertisement
+            'id' => $ad->id
         ]);
     }
 
@@ -299,9 +299,7 @@ class AdvertisementRenderer
     public function renderInlineReviveSlot($ad)
     {
         $iframe = in_array($ad->positions, [ 50, 150, 250, 350, 450, 550 ]);
-        $url    = $this->router->generate('frontend_ad_show', [
-            'id' => $ad->pk_content
-        ]);
+        $url    = $this->router->generate('frontend_ad_show', [ 'id' => $ad->id ]);
 
         return $this->tpl
             ->fetch('advertisement/helpers/inline/revive.slot.tpl', [
@@ -345,12 +343,11 @@ class AdvertisementRenderer
             ];
         }
 
-        $template = 'smart.header.tpl';
+        $template = 'smart.header.onecall_async.tpl';
         if (is_array($config)
             && array_key_exists('tags_format', $config)
-            && $config['tags_format'] == 'onecall_sync'
         ) {
-            $template = 'smart.header.sync.tpl';
+            $template = 'smart.header.' . $config['tags_format'] . '.tpl';
         }
 
         return $this->tpl
@@ -374,21 +371,28 @@ class AdvertisementRenderer
      *
      * @return string the HTML content for the Smart slot.
      */
-    public function renderInlineSmartSlot($ad)
+    public function renderInlineSmartSlot($ad, $params)
     {
         $config = $this->ds->get('smart_ad_server');
 
-        $template = 'smart.slot.tpl';
+        $template = 'smart.slot.onecall_async.tpl';
         if (is_array($config)
             && array_key_exists('tags_format', $config)
-            && $config['tags_format'] == 'onecall_sync'
         ) {
-            $template = 'smart.slot.sync.tpl';
+            $template = 'smart.slot.' . $config['tags_format'] . '.tpl';
         }
 
         return $this->tpl
             ->fetch('advertisement/helpers/inline/' . $template, [
-                'id' => $ad->params['smart_format_id'],
+                'config'        => $config,
+                'id'            => $ad->params['smart_format_id'],
+                'page_id'       => $config['page_id'][$params['advertisementGroup']],
+                'rand'          => rand(),
+                'targetingCode' => $this->getSmartTargeting(
+                    $params['category'],
+                    $params['extension'],
+                    $params['content']->id
+                )
             ]);
     }
 
@@ -446,7 +450,7 @@ class AdvertisementRenderer
         });
 
         if (empty($sizes)) {
-            $size = $sizes;
+            return '';
         }
 
         $size = array_shift($sizes);
@@ -489,7 +493,7 @@ class AdvertisementRenderer
         // Style for floating advertisements in frontpage manager
         if (array_key_exists('floating', $params) && $params['floating'] == true) {
             $type = 37;
-            $id  .= ' data-id="' . $ad->pk_content . '" ';
+            $id  .= ' data-id="' . $ad->pk_content . '"';
         }
 
         return sprintf($html, $id, $type, $width);
@@ -546,8 +550,7 @@ class AdvertisementRenderer
             'url'       => $this->ds->get('revive_ad_server')['url']
         ];
 
-        return $this->container->get('core.template.admin')
-            ->fetch('advertisement/helpers/safeframe/openx.tpl', $params);
+        return $this->tpl->fetch('advertisement/helpers/safeframe/openx.tpl', $params);
     }
 
     /**
@@ -606,7 +609,7 @@ class AdvertisementRenderer
     protected function renderSafeFrameFlash($ad, $img)
     {
         $publicId = date('YmdHis', strtotime($ad->created)) .
-            sprintf('%06d', $ad->pk_advertisement);
+            sprintf('%06d', $ad->id);
 
         $params = [
             'width'  => $img->width,
@@ -618,8 +621,7 @@ class AdvertisementRenderer
             ])
         ];
 
-        return $this->container->get('core.template.admin')
-            ->fetch('advertisement/helpers/safeframe/flash.tpl', $params);
+        return $this->tpl->fetch('advertisement/helpers/safeframe/flash.tpl', $params);
     }
 
     /**
@@ -650,13 +652,13 @@ class AdvertisementRenderer
     protected function renderSafeFrameImage($ad, $img)
     {
         $publicId = date('YmdHis', strtotime($ad->created)) .
-            sprintf('%06d', $ad->pk_advertisement);
+            sprintf('%06d', $ad->id);
 
         $params = [
             'category' => $img->category_name,
             'width'    => $img->width,
             'height'   => $img->height,
-            'src'      => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME
+            'src'      => $this->instance->getBaseUrl() . '/media/' . INSTANCE_UNIQUE_NAME
                 . '/images' . $img->path_file . $img->name,
             'url'      => $this->container->get('router')->generate(
                 'frontend_ad_redirect',
@@ -664,8 +666,7 @@ class AdvertisementRenderer
             ),
         ];
 
-        return $this->container->get('core.template.admin')
-            ->fetch('advertisement/helpers/safeframe/image.tpl', $params);
+        return $this->tpl->fetch('advertisement/helpers/safeframe/image.tpl', $params);
     }
 
     /**

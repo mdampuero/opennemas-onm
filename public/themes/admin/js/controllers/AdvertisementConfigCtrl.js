@@ -31,7 +31,11 @@
          *
          * @type {Array}
          */
-        $scope.smartAvailableTagsFormats = [ 'onecall_async', 'onecall_sync' ];
+        $scope.smartAvailableTagsFormats = [
+          'onecall_async',
+          'ajax_async',
+          'onecall_sync'
+        ];
 
         /**
          * @function init

@@ -53,13 +53,11 @@ class ArchiveController extends Controller
                 'DATE(starttime)' => [[ 'value' => '"' . $date . '"', 'field' => true ]],
                 'starttime'              => [
                     'union' => 'OR',
-                    [ 'value' => '0000-00-00 00:00:00' ],
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                     [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
                 ],
                 'endtime'                => [
                     'union' => 'OR',
-                    [ 'value' => '0000-00-00 00:00:00' ],
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                     [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
                 ]
@@ -73,12 +71,16 @@ class ArchiveController extends Controller
             $total    = $er->countBy($criteria);
             $library  = [];
 
-            $cr = $this->get('category_repository');
             foreach ($contents as $content) {
                 // Create category group
-                if (!isset($library[$content->category])) {
-                    $library[$content->category]           = $cr->find($content->category);
-                    $library[$content->category]->contents = [];
+                if (!isset($library[$content->pk_fk_content_category])
+                    && !empty($content->pk_fk_content_category)
+                ) {
+                    $library[$content->pk_fk_content_category] = $this
+                        ->get('api.service.category')
+                        ->getItem($content->pk_fk_content_category);
+
+                    $library[$content->pk_fk_content_category]->contents = [];
                 }
 
                 // Fetch video or image for article and opinions
@@ -89,7 +91,7 @@ class ArchiveController extends Controller
                 }
 
                 // Add contents to category group
-                $library[$content->category]->contents[] = $content;
+                $library[$content->pk_fk_content_category]->contents[] = $content;
             }
 
             // Pagination for block more videos

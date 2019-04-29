@@ -14,7 +14,7 @@
 {/block}
 
 {block name="content"}
-  <form id="formulario" action="{if isset($letter->id)}{url name=admin_letter_update id=$letter->id}{else}{url name=admin_letter_create}{/if}" method="POST" ng-controller="LetterCtrl" ng-init="init({json_encode($letter)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
+  <form action="{if isset($letter->id)}{url name=admin_letter_update id=$letter->id}{else}{url name=admin_letter_create}{/if}" id="formulario" method="POST" name="form" ng-controller="LetterCtrl" ng-init="letter = {json_encode($letter)|clear_json}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -48,7 +48,7 @@
               </li>
               <li class="quicklinks"><span class="h-seperate"></span></li>
               <li class="quicklinks">
-                <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}..." id="save-button">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." ng-click="submit($event)" type="submit">
                   <span class="fa fa-save"></span>
                   <span class="text">{t}Save{/t}</span>
                 </button>
@@ -142,7 +142,7 @@
               <div class="form-group">
                 <label for="metadata" class="form-label">{t}Tags{/t}</label>
                 <div class="controls">
-                  {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
+                  {include file="ui/component/tags-input/tags.tpl" ngModel="letter.tags"}
                 </div>
               </div>
               <div class="form-group">

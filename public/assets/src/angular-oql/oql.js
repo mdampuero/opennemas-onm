@@ -68,6 +68,10 @@
           value = value.replace(/"/g, '\\"');
         }
 
+        if (value instanceof Array) {
+          value = value.join(',');
+        }
+
         // If placeholder
         if (this.config.placeholder[key]) {
           var condition = this.config.placeholder[key];
@@ -152,6 +156,10 @@
        * @return {String} The limit query.
        */
       this.getLimit = function(criteria) {
+        if (criteria.epp === null) {
+          return '';
+        }
+
         if (criteria.epp > 0) {
           return 'limit ' + criteria.epp;
         }

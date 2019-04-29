@@ -69,10 +69,6 @@ class Poll extends Content
     {
         switch ($name) {
             case 'uri':
-                if (empty($this->category_name)) {
-                    $this->category_name = $this->loadCategoryName();
-                }
-
                 $uri = Uri::generate('poll', [
                     'id'       => sprintf('%06d', $this->id),
                     'date'     => date('YmdHis', strtotime($this->created)),

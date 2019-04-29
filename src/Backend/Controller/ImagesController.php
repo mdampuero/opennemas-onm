@@ -10,9 +10,10 @@
 namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Handles the actions for the images
@@ -21,38 +22,6 @@ use Common\Core\Controller\Controller;
  */
 class ImagesController extends Controller
 {
-    /**
-     * Common code for all the actions.
-     */
-    public function init()
-    {
-        $this->ccm = \ContentCategoryManager::get_instance();
-
-        $this->category    = $this->get('request_stack')->getCurrentRequest()
-            ->query->filter('category', 'all', FILTER_SANITIZE_NUMBER_INT);
-        $this->contentType = \ContentManager::getContentTypeIdFromName('album');
-
-        list($this->parentCategories, $this->subcat, $this->datos_cat) =
-            $this->ccm->getArraysMenu($this->category, $this->contentType);
-
-        $this->pathUpload = MEDIA_PATH . DS . IMG_DIR . DS;
-        $this->imgUrl     = MEDIA_URL . MEDIA_DIR . SS . IMG_DIR;
-
-        $this->view->assign([
-            'subcat'        => $this->subcat,
-            'allcategorys'  => $this->parentCategories,
-            'datos_cat'     => $this->datos_cat,
-            'MEDIA_IMG_URL' => $this->imgUrl,
-        ]);
-
-        if ($this->category != 'GLOBAL'
-            && $this->category != 0
-            && array_key_exists($this->category, $this->ccm->categories)
-        ) {
-            $this->category_name = $this->ccm->categories[$this->category]->name;
-        }
-    }
-
     /**
      * Lists images from an specific category.
      *
@@ -63,11 +32,10 @@ class ImagesController extends Controller
      */
     public function listAction()
     {
-        $years = [];
-
-        $conn = $this->get('orm.manager')->getConnection('instance');
-
+        $years   = [];
+        $conn    = $this->get('orm.manager')->getConnection('instance');
         $results = $conn->fetchAll(
+
             "SELECT DISTINCT(DATE_FORMAT(created, '%Y-%m')) as date_month FROM contents
             WHERE fk_content_type = 8 AND created IS NOT NULL ORDER BY date_month DESC"
         );
@@ -113,18 +81,16 @@ class ImagesController extends Controller
 
         $tags = [];
 
-        if (!empty($photo->tag_ids)) {
+        if (!empty($photo->tags)) {
             $ts   = $this->get('api.service.tag');
-            $tags = $ts->responsify($ts->getListByIds($photo->tag_ids)['items']);
+            $tags = $ts->responsify($ts->getListByIds($photo->tags)['items']);
         }
 
-        $ls = $this->get('core.locale');
-
         return $this->render('image/new.tpl', [
+            'MEDIA_IMG_URL' => MEDIA_URL . MEDIA_DIR . DS . IMG_DIR,
             'photo'         => $photo,
-            'MEDIA_IMG_URL' => $this->imgUrl,
-            'locale'        => $ls->getRequestLocale('frontend'),
-            'tags'          => $tags
+            'locale'        => $this->get('core.helper.locale')
+                ->getConfiguration()
         ]);
     }
 
@@ -234,96 +200,24 @@ class ImagesController extends Controller
      */
     public function createAction(Request $request)
     {
-        $response = new Response();
-        $response->headers->add([
-            'Pragma'                       => 'text/plain',
-            'Cache-Control'                => 'private, no-cache',
-            'Content-Disposition'          => 'inline; filename="files.json"',
-            'X-Content-Type-Options'       => 'nosniff',
-            'Access-Control-Allow-Origin'  => '*',
-            'Access-Control-Allow-Methods' => 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
-            'Access-Control-Allow-Headers' => 'X-File-Name, X-File-Type, X-File-Size',
-        ]);
+        try {
+            $files = $request->files->all();
+            $file  = array_pop($files);
 
-        if ($request->getMethod() != 'POST') {
-            return new JsonResponse([], 200);
-        }
+            $originalFilename = pathinfo(
+                $file->getClientOriginalName(),
+                PATHINFO_FILENAME
+            );
 
-        $category = $request->request->getDigits('category', 0);
-        if (empty($category) || !array_key_exists($category, $this->ccm->categories)) {
-            $category_name = '';
-        } else {
-            $category_name = $this->ccm->categories[$category]->name;
-        }
-
-        $files = isset($_FILES) ? $_FILES : null;
-        $info  = [];
-
-        foreach ($files as $file) {
             $photo = new \Photo();
-
-            if (empty($file['tmp_name'])) {
-                $info [] = [
-                    'error' => _('Not valid file format or the file exceeds the max allowed file size.'),
-                ];
-                continue;
-            }
-
-            $tempName = pathinfo($file['name'], PATHINFO_FILENAME);
-
-            // Check if the image has an IPTC title an use it as original title
-            $size = getimagesize($file['tmp_name'], $imageInfo);
-            if (isset($imageInfo['APP13'])) {
-                $iptc = iptcparse($imageInfo["APP13"]);
-                if (isset($iptc['2#120'])) {
-                    $tempName = str_replace("\000", "", $iptc["2#120"][0]);
-                }
-            }
-
-            $fm = $this->get('data.manager.filter');
-
-            $data = [
-                'local_file'        => $file['tmp_name'],
-                'original_filename' => $file['name'],
-                'title'             => $tempName,
-                'description'       => $tempName,
-                'fk_category'       => $category,
-                'category'          => $category,
-                'category_name'     => $category_name,
-                'tag_ids'           => json_decode($request->request->get('tag_ids', ''), true)
-            ];
-
-            try {
-                $photo   = new \Photo();
-                $photoId = $photo->createFromLocalFile($data);
-
-                $photo = new \Photo($photoId);
-
-                $info = $photo;
-            } catch (Exception $e) {
-                $info [] = [
-                    'error'         => $e->getMessage(),
-                ];
-            }
+            $id    = $photo->createFromLocalFile($file->getRealPath(), [
+                'description' => $originalFilename
+            ]);
+            $photo = new \Photo($id);
+        } catch (\Exception $e) {
+            return new JsonResponse($e->getMessage(), 400);
         }
 
-        $json = json_encode($info);
-        $response->setContent($json);
-
-        $response->headers->add([ 'Vary' => 'Accept' ]);
-
-        $redirect = $request->request->filter('redirect', null, FILTER_SANITIZE_STRING);
-        if (!empty($redirect)) {
-            return $this->redirect(sprintf($redirect, rawurlencode($json)));
-        }
-
-        if (isset($_SERVER['HTTP_ACCEPT'])
-            && (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)
-        ) {
-            $response->headers->add(['Content-type' => 'application/json']);
-        } else {
-            $response->headers->add(['Content-type' => 'text/plain']);
-        }
-        return $response;
+        return new JsonResponse($photo, 201);
     }
 }

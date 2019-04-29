@@ -31,7 +31,7 @@ class NewsstandController extends Controller
      */
     public function createAction()
     {
-        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
+        return new JsonResponse();
     }
 
     /**
@@ -65,22 +65,9 @@ class NewsstandController extends Controller
             );
         }
 
-        $extra = $this->getExtraData();
+        $extra = [ 'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR ];
 
-        if (!empty($content->tag_ids)) {
-            $ts = $this->get('api.service.tag');
-
-            $extra['tags'] = $ts->responsify(
-                $ts->getListByIds($content->tag_ids)['items']
-            );
-        }
-
-        return new JsonResponse([
-            'item' => $content,
-            'extra' => array_merge($extra, [
-                'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
-            ])
-        ]);
+        return new JsonResponse([ 'item' => $content, 'extra' => $extra ]);
     }
 
     /**
@@ -100,8 +87,8 @@ class NewsstandController extends Controller
         $dateTime = new \DateTime();
 
         $data = [
-            'title'          => $postInfo->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'description'    => $postInfo->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'title'          => $postInfo->filter('title', null, FILTER_SANITIZE_STRING),
+            'description'    => $postInfo->filter('description', '', FILTER_SANITIZE_STRING),
             'type'           => (int) $postInfo->getDigits('type', 0),
             'category'       => (int) $postInfo->getDigits('category', 0),
             'content_status' => (int) $postInfo->getDigits('content_status', 1),
@@ -192,10 +179,10 @@ class NewsstandController extends Controller
 
             $data = [
                 'id'             => $postReq->getDigits('id', 0),
-                'title'          => $postReq->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'description'    => $postReq->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'date'           => $postReq->filter('date', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'cover'          => $postReq->filter('cover', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+                'title'          => $postReq->filter('title', '', FILTER_SANITIZE_STRING),
+                'description'    => $postReq->filter('description', '', FILTER_SANITIZE_STRING),
+                'date'           => $postReq->filter('date', '', FILTER_SANITIZE_STRING),
+                'cover'          => $postReq->filter('cover', '', FILTER_SANITIZE_STRING),
                 'price'          => (float) $postReq
                     ->filter('price', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'content_status' => $postReq->getDigits('content_status', 0),
@@ -306,7 +293,6 @@ class NewsstandController extends Controller
 
         return new JsonResponse([
             'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
-            'extra'          => $this->getExtraData(true),
             'items'          => $results,
             'total'          => $total,
         ]);
@@ -387,30 +373,5 @@ class NewsstandController extends Controller
         }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Returns a list of extra data to use in  the create/edit item form
-     *
-     * @return array
-     */
-    private function getExtraData()
-    {
-        $security   = $this->get('core.security');
-        $converter  = $this->get('orm.manager')->getConverter('Category');
-        $categories = $this->get('orm.manager')
-            ->getRepository('Category')
-            ->findBy('internal_category = 1'); // review this filter to search for commen and specific for kiosko
-
-        $categories = array_filter($categories, function ($a) use ($security) {
-            return $security->hasCategory($a->pk_content_category);
-        });
-
-        $extra = [
-            'tags'       => [],
-            'categories' => $converter->responsify($categories),
-        ];
-
-        return array_merge($extra, $this->getLocaleData('frontend'));
     }
 }

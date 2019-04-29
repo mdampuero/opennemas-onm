@@ -50,6 +50,20 @@ class L10nStringDataMapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests fromText for serialized and regular values.
+     */
+    public function testFromText()
+    {
+        $this->assertNull($this->mapper->fromText(''));
+        $this->assertNull($this->mapper->fromText('a:0:{}'));
+        $this->assertEquals('thud', $this->mapper->fromText('thud'));
+        $this->assertEquals([
+            'es' => 'wibble',
+            'gl' => 'bar',
+        ], $this->mapper->fromText('a:2:{s:2:"es";s:6:"wibble";s:2:"gl";s:3:"bar";}'));
+    }
+
+    /**
      * Tests toArray for serialized and regular values.
      */
     public function testToArray()
@@ -65,6 +79,23 @@ class L10nStringDataMapperTest extends \PHPUnit\Framework\TestCase
      * Tests toString for serialized and regular values.
      */
     public function testToString()
+    {
+        $this->assertNull($this->mapper->toString(''));
+        $this->assertNull($this->mapper->toString([]));
+        $this->assertEquals('thud', $this->mapper->toString('thud'));
+        $this->assertEquals(
+            'a:2:{s:2:"es";s:6:"wibble";s:2:"gl";s:3:"bar";}',
+            $this->mapper->toString([
+                'es' => 'wibble',
+                'gl' => 'bar',
+            ])
+        );
+    }
+
+    /**
+     * Tests toText for serialized and regular values.
+     */
+    public function testToText()
     {
         $this->assertNull($this->mapper->toString(''));
         $this->assertNull($this->mapper->toString([]));

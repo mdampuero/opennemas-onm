@@ -59,14 +59,7 @@
                         '</select>' +
                       '</li>' +
                       '<li class="hidden-xs" ng-if="picker.isTypeEnabled(\'video\')">' +
-                        '<ui-select class=" select2-border" name="category" theme="select2" ng-model="criteria.category">' +
-                          '<ui-select-match>' +
-                            '[% $select.selected.title %]' +
-                          '</ui-select-match>' +
-                          '<ui-select-choices group-by="groupCategories" repeat="category.pk_content_category as category in picker.params.explore.categories | filter: { title: $select.search }">' +
-                            '<div ng-bind-html="category.title | highlight: $select.search"></div>' +
-                          '</ui-select-choices>' +
-                        '</ui-select>' +
+                        '<onm-category-selector default-value-text="[% picker.params.explore.any %]" label-text="[% picker.params.explore.category %]" ng-model="$parent.$parent.category" placeholder="[% picker.params.explore.any %]"></onm-category-selector>' +
                       '</li>' +
                     '</ul>' +
                   '</div>' +
@@ -156,22 +149,25 @@
                     '</div>' +
                   '</div>' +
                 '</div>' +
-                '<div class="picker-panel-footer" ng-class="{ \'collapsed\': selected.items.length == 0 }">' +
-                  '<ul class="pull-left"  ng-if="selected.items.length > 0">' +
+                '<div class="picker-panel-footer" ng-class="{ \'collapsed\': selected.items.length == 0 && !uploadError, \'danger\': uploadError }">' +
+                  '<ul class="pull-left" ng-show="selected.items.length > 0 || uploadError">' +
                     '<li>' +
-                      '<i class="fa fa-check fa-lg" ng-click="selected.ids = [];selected.items = []"></i>' +
+                      '<i class="fa fa-lg" ng-class="{ \'fa-check\': !uploadError, \'fa-times\': uploadError } "ng-click="selected.ids = [];selected.items = [];uploadError = null"></i>' +
                     '</li>' +
                     '<li>' +
                       '<span class="h-seperate"></span>' +
                     '</li>' +
                     '<li>' +
-                      '<h4>' +
+                      '<h4 ng-if="!uploadError && selected.items.length">' +
                         '[% selected.items.length %]' +
                         '<span class="hidden-xs">[% picker.params.explore.itemsSelected %]</span>' +
                       '</h4>' +
+                      '<h4 ng-if="uploadError">' +
+                        '<span class="hidden-xs">[% picker.params.explore.error %]</span>' +
+                      '</h4>' +
                     '</li>' +
                   '</ul>' +
-                  '<button class="btn btn-primary pull-right" ng-click="insert()">' +
+                  '<button class="btn btn-primary pull-right" ng-click="insert()" ng-if="!uploadError">' +
                     '<i class="fa fa-plus"></i>' +
                     '[% picker.params.explore.insert %]' +
                   '</button>' +
@@ -647,30 +643,6 @@
         };
 
         /**
-         * @function groupCategories
-         * @memberOf MediaPickerCtrl
-         *
-         * @description
-         *   Groups categories in the ui-select.
-         *
-         * @param {Object} item The category to group.
-         *
-         * @return {String} The group name.
-         */
-        $scope.groupCategories = function(item) {
-          var category = $scope.picker.params.explore.categories
-            .filter(function(e) {
-              return e.pk_content_category === item.fk_content_category;
-            });
-
-          if (category.length > 0 && category[0].pk_content_category) {
-            return category[0].title;
-          }
-
-          return '';
-        };
-
-        /**
          * @function insert
          * @memberof MediaPickerCtrl
          *
@@ -746,11 +718,15 @@
 
           var data = {
             content_type_name: $scope.picker.types.enabled,
-            epp:               $scope.epp,
-            page:              $scope.page,
-            sort_by:           'created',
-            sort_order:        'desc'
+            epp: $scope.epp,
+            page: $scope.page,
+            sort_by: 'created',
+            sort_order: 'desc'
           };
+
+          if ($scope.category) {
+            data.category = $scope.category;
+          }
 
           if ($scope.title) {
             data.title = $scope.title;
@@ -863,12 +839,20 @@
           $scope.uploader.onCompleteItem = function(fileItem, response) {
             $timeout(function() {
               $scope.uploader.removeFromQueue(fileItem);
-              $scope.addItem(response);
 
               // Autoselect items uploaded
+              if (!response.pk_photo) {
+                $scope.uploadError = true;
+                return;
+              }
+
+              $scope.addItem(response);
               $scope.selected.ids.push(response.pk_photo);
               $scope.selected.items.push(response);
-              $scope.selected.items.lastSelected = response;
+
+              if ($scope.picker.selection.enabled) {
+                $scope.selected.items.lastSelected = response;
+              }
             }, 500);
           };
         };
@@ -1074,9 +1058,9 @@
 
           body[$scope.selected.lastSelected.name] = image;
 
-          http.post(route, body).success(function() {
+          http.post(route, body).then(function() {
             $scope.list(true);
-          }).error(function() {
+          }, function(response) {
             return false;
           });
         };
@@ -1087,7 +1071,7 @@
          * @param array nv The new values.
          * @param array ov The old values.
          */
-        $scope.$watch('[date, title, from, to]', function(nv, ov) {
+        $scope.$watch('[category, date, title, from, to]', function(nv, ov) {
           if (nv === ov) {
             return;
           }

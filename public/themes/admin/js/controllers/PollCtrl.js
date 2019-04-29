@@ -20,20 +20,6 @@ angular.module('BackendApp.controllers')
       $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
       /**
-       * @function init
-       * @memberOf PollCtrl
-       * Method to init the poll controller
-       *
-       * @param {object} poll   Poll to edit
-       * @param {String} locale Locale for the poll
-       * @param {Array}  tags   Array with all the tags needed for the poll
-       */
-      $scope.init = function(poll, locale, tags) {
-        $scope.locale = locale;
-        $scope.tags   = tags;
-      };
-
-      /**
        * @function addAnswer
        * @memberOf PollCtrl
        *
@@ -41,9 +27,7 @@ angular.module('BackendApp.controllers')
        *   Adds an empty answer to the answer list.
        */
       $scope.addAnswer = function() {
-        $scope.answers.push({
-          pk_item: '', votes: 0, item: ''
-        });
+        $scope.answers.push({ pk_item: '', votes: 0, item: '' });
       };
 
       /**

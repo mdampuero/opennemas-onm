@@ -12,6 +12,7 @@ namespace Tests\Common\Core\Component\Routing;
 use Common\Core\Component\Routing\Redirector;
 use Common\ORM\Entity\Category;
 use Common\ORM\Entity\Url;
+use Common\ORM\Entity\User;
 
 /**
  * Defines test cases for Redirector class.
@@ -318,6 +319,11 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             'redirector-' . md5('mumble') . '-',
             $method->invokeArgs($this->redirector, [ 'mumble', [ null ] ])
+        );
+
+        $this->assertEquals(
+            'redirector-' . md5('mumble') . '-',
+            $method->invokeArgs($this->redirector, [ 'mumble', null ])
         );
 
         $this->assertEquals(
@@ -1128,13 +1134,19 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($method->invokeArgs($this->redirector, [
             $this->request,
             new Url(),
-            new Category([ 'internal_category' => 1 ])
+            new Category([ 'inmenu' => 1 ])
         ]));
 
         $this->assertFalse($method->invokeArgs($this->redirector, [
             $this->request,
             new Url(),
-            new Category([ 'internal_category' => 0 ])
+            new Category([ 'inmenu' => 0 ])
+        ]));
+
+        $this->assertTrue($method->invokeArgs($this->redirector, [
+            $this->request,
+            new Url(),
+            new User()
         ]));
 
         $this->assertFalse($method->invokeArgs($this->redirector, [

@@ -1,45 +1,39 @@
 {extends file="base/admin.tpl"}
+
 {block name="content"}
-  <form action="{if $special->id}{url name=admin_special_update id=$special->id}{else}{url name=admin_special_create}{/if}" method="post" ng-controller="SpecialCtrl" id="formulario" ng-init="init({json_encode($special)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
+  <form action="{if $special->id}{url name=admin_special_update id=$special->id}{else}{url name=admin_special_create}{/if}" id="formulario" method="post" name="form" ng-controller="SpecialCtrl" ng-init="special = {json_encode($special)|clear_json}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-star"></i>
-                {t}Specials{/t}
+                <i class="fa fa-star m-r-10"></i>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+            <li class="quicklinks">
+              <h4>
+                <a class="no-padding" href="{url name=admin_specials}">
+                  {t}Specials{/t}
+                </a>
+              </h4>
+            </li>
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
+                <i class="fa fa-angle-right"></i>
+              </h4>
+            </li>
             <li class="quicklinks hidden-xs">
-              <h5>{if !isset($special->id)}{t}Creating special{/t}{else}{t}Editing special{/t}{/if}</h5>
+              <h4>{if !isset($special->id)}{t}Create{/t}{else}{t}Edit{/t}{/if}</h4>
             </li>
           </ul>
-          <div class="all-actions pull-right">
+          <div class="pull-right">
             <ul class="nav quick-section">
-              <li>
-                <a class="btn btn-link" href="{url name=admin_specials}">
-                  <span class="fa fa-reply"></span>
-                </a>
-              </li>
-              <li class="quicklinks"><span class="h-seperate"></span></li>
               <li class="quicklinks">
-                {if !is_null($special->id)}
-                  {acl isAllowed="SPECIAL_UPDATE"}
-                    <button class="btn btn-primary" data-text="{t}Updating{/t}..." type="submit" id="update-button">
-                      <i class="fa fa-save"></i>
-                      <span class="text">{t}Update{/t}</span>
-                    </button>
-                  {/acl}
-                {else}
-                  {acl isAllowed="SPECIAL_CREATE"}
-                    <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
-                      <i class="fa fa-save"></i>
-                      <span class="text">{t}Save{/t}</span>
-                    </button>
-                  {/acl}
-                {/if}
+                <button class="btn btn-loading btn-success text-uppercase" ng-click="submit($event)" type="submit">
+                  <i class="fa fa-save m-r-5"></i>
+                  {t}Save{/t}
+                </button>
               </li>
             </ul>
           </div>
@@ -88,13 +82,13 @@
               <div class="form-group">
                 <label for="category" class="form-label">{t}Category{/t}</label>
                 <div class="controls">
-                  {include file="common/selector_categories.tpl" name="category" item=$special}
+                  <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" locale="config.locale.selected" ng-model="special.pk_fk_content_category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
                 </div>
               </div>
               <div class="form-group">
-                <label for="metadata" class="form-label">{t}Tags{/t}</label>
+                <label class="form-label">{t}Tags{/t}</label>
                 <div class="controls">
-                  {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
+                  {include file="ui/component/tags-input/tags.tpl" ngModel="special.tags"}
                 </div>
               </div>
               <div class="form-group">

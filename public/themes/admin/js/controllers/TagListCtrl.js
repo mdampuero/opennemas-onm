@@ -15,8 +15,8 @@
      *   Handles all actions in tag list.
      */
     .controller('TagListCtrl', [
-      '$controller', '$scope', '$timeout', 'oqlEncoder', 'http', 'messenger',
-      function($controller, $scope, $timeout, oqlEncoder, http, messenger) {
+      '$controller', '$scope', '$timeout', 'oqlEncoder',
+      function($controller, $scope, $timeout, oqlEncoder) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -42,44 +42,12 @@
          * @description
          *   Configures the controller.
          */
-        $scope.init = function(locale) {
-          $scope.locale          = locale;
+        $scope.init = function() {
           $scope.columns.key     = 'tag-columns';
           $scope.backup.criteria = $scope.criteria;
 
           oqlEncoder.configure({ placeholder: { name: '[key] ~ "[value]"' } });
           $scope.list();
-        };
-
-        /**
-         * @function editTag
-         * @memberOf TagListCtrl
-         *
-         * @description
-         *   Makes some tag editable.
-         */
-        $scope.editTag = function(tag) {
-          $scope.editedTag = null;
-
-          if (tag) {
-            $scope.editedTag = {
-              id: tag.id,
-              name: tag.name,
-              language_id: tag.language_id,
-              slug: tag.slug
-            };
-          }
-        };
-
-        /**
-         * @function createTag
-         * @memberOf TagListCtrl
-         *
-         * @description
-         *   Show form for tags.
-         */
-        $scope.createTag = function() {
-          $scope.editedTag = { name: '', language_id: $scope.locale };
         };
 
         /**
@@ -97,110 +65,6 @@
 
           return data;
         };
-
-        /**
-         * @function save
-         * @memberOf RestInnerCtrl
-         *
-         * @description
-         *   Saves a new item.
-         */
-        $scope.save = function() {
-          var tagAux = JSON.parse(JSON.stringify($scope.editedTag));
-
-          $scope.flags.http.saving = true;
-
-          var route = { name: $scope.routes.save };
-
-          /**
-           * Callback executed when subscriber is saved/updated successfully.
-           *
-           * @param {Object} response The response object.
-           */
-          var successCb = function(response) {
-            $scope.disableFlags('http');
-
-            if (response.status === 201 || response.status === 200) {
-              $scope.editedTag = null;
-              $scope.list();
-            }
-            $scope.flags.http.saving = false;
-            messenger.post(response.data);
-          };
-
-          if (tagAux && tagAux.id) {
-            route.name   = $scope.routes.update;
-            route.params = { id: tagAux.id };
-            http.put(route, tagAux).then(successCb, $scope.errorCb);
-          } else {
-            http.post(route, tagAux).then(successCb, $scope.errorCb);
-          }
-        };
-
-        /**
-         * @function getUsername
-         * @memberOf UserCtrl
-         *
-         * @description
-         *   Generates an username basing on the name.
-         */
-        $scope.isValid = function() {
-          if ($scope.tm) {
-            $timeout.cancel($scope.tm);
-            $scope.disableFlags('http');
-          }
-
-          if (!$scope.editedTag.name) {
-            return;
-          }
-
-          $scope.flags.http.validating = 1;
-
-          var route = {
-            name: 'api_v1_backend_tags_validate',
-            params: { name: $scope.editedTag.name, languageId: $scope.locale }
-          };
-
-          $scope.tm = $timeout(function() {
-            http.get(route).then(function() {
-              $scope.disableFlags('http');
-              $scope.form.name.$setValidity('exists', true);
-            }, function(response) {
-              $scope.disableFlags('http');
-              $scope.form.name.$setValidity('exists', false);
-
-              $scope.error = '<ul><li>' + response.data.map(function(e) {
-                return e.message;
-              }).join('</li><li>') + '</li></ul>';
-            });
-          }, 500);
-        };
-
-        // Generates the slug for a new tag when name changes
-        $scope.$watch('editedTag.name', function(nv) {
-          if ($scope.form.slug && $scope.form.slug.$dirty ||
-              !nv || !$scope.editedTag || $scope.editedTag.id) {
-            return;
-          }
-
-          $scope.flags.http.generating = true;
-
-          if ($scope.tm) {
-            $timeout.cancel($scope.tm);
-          }
-
-          $scope.tm = $timeout(function() {
-            $scope.getSlug(nv, function(response) {
-              $scope.disableFlags('http');
-
-              $scope.editedTag.slug = '';
-
-              if (response.data.slug) {
-                $scope.editedTag.slug = response.data.slug;
-              }
-            });
-          }, 500);
-        }, true);
       }
     ]);
 })();

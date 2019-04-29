@@ -403,11 +403,11 @@ content_categories:
             type: bigint
             options: { length: 20, unsigned: true, autoincrement: true }
         title:
-            type: string
-            options: { length: 255, default: null }
+            type: text
+            options: { default: null, length: 65532 }
         name:
-            type: string
-            options: { length: 255, default: null, notnull: false }
+            type: text
+            options: { default: null, length: 65532, notnull: false }
         description:
             type: text
             options: { default: null, length: 65532, notnull: false }
@@ -716,12 +716,12 @@ contents_categories:
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-        # -
-        #     name: contentcategory_category_category_id
-        #     source_field: [ pk_fk_content_category ]
-        #     target_table: content_categories
-        #     target_field: [ pk_content_category ]
-        #     restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: contentcategory_category_category_id
+            source_field: [ pk_fk_content_category ]
+            target_table: content_categories
+            target_field: [ pk_content_category ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 contents_tags:
     columns:
         content_id:
@@ -1502,32 +1502,35 @@ tags:
             options: { unsigned: true, autoincrement: true }
         name:
             type: string
-            options: { length: 60, notnull: true }
-        language_id:
-            type: string
-            options: { length: 5, notnull: true }
+            options: { default: null, length: 60, notnull: true }
         slug:
             type: string
-            options: { length: 60, notnull: true }
+            options: { default: null, length: 60, notnull: true }
+        description:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        locale:
+            type: string
+            options: { default: null, length: 5, notnull: false  }
     index:
         -
-            name: PRIMARY
-            columns: [id]
+            name:    PRIMARY
+            columns: [ id ]
             primary: true
-            unique: true
-            flags: {  }
+            unique:  true
+            flags:   {  }
         -
-            name: language_id
-            columns: [language_id]
+            name:    slug
+            columns: [ slug ]
             primary: false
-            unique: false
-            flags: {  }
+            unique:  false
+            flags:   {  }
         -
-            name: slug
-            columns: [slug]
+            name:    locale
+            columns: [ locale ]
             primary: false
-            unique: false
-            flags: {  }
+            unique:  false
+            flags:   {  }
 url:
     columns:
         id:
@@ -1559,8 +1562,20 @@ url:
             unique:  true
             flags:   {  }
         -
-            name:    url_content_type_source
-            columns: [content_type, source]
+            name:    url_content_type
+            columns: [ content_type ]
+            primary: false
+            unique:  false
+            flags:   {}
+        -
+            name:    url_source
+            columns: [ source ]
+            primary: false
+            unique:  false
+            flags:   {}
+        -
+            name:    url_type
+            columns: [ type ]
             primary: false
             unique:  false
             flags:   {}

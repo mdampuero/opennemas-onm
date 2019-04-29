@@ -39,7 +39,7 @@
           favorite: 0,
           file: '',
           price: 0,
-          tag_ids: [],
+          tags: [],
           tags: [],
           thumbnail: null,
           title: '',
@@ -47,16 +47,6 @@
         };
 
         $scope.files = [];
-
-        /**
-         * @memberOf NewsstandCtrl
-         *
-         * @description
-         *  Whether to refresh the item after a successful update.
-         *
-         * @type {Boolean}
-         */
-        $scope.refreshOnUpdate = true;
 
         /**
          * @memberOf CoverCtrl
@@ -105,32 +95,13 @@
          * @param {Object} data The data in the response.
          */
         $scope.parseItem = function(data) {
-          var lz = localizer.get({
-            default: data.extra.default,
-            available: data.extra.available,
-            translators: data.extra.translators
-          });
-
-          $scope.categories = lz.localize(data.extra.categories,
-            [ 'title' ], $scope.config.locale);
-
-          $scope.config.linkers.categories =
-            linker.get('categories', $scope, false, 'title');
-
-          $scope.config.linkers.categories.setKey($scope.config.locale);
-          $scope.config.linkers.categories.link($scope.data.extra.categories, $scope.categories);
-
           if (!data.item) {
             return;
           }
 
           data.item.type = Number(data.item.type);
-          if (data.item.thumb_url.length > 0) {
+          if (data.item.thumb_url && data.item.thumb_url.length > 0) {
             data.item.thumbnail_url = data.extra.KIOSKO_IMG_URL + data.item.path + '/' + data.item.thumb_url;
-          }
-
-          if (data.extra.tags) {
-            data.item.tags = data.extra.tags;
           }
 
           $scope.item = angular.extend($scope.item, data.item);
@@ -216,6 +187,30 @@
           };
 
           fileReader.readAsArrayBuffer(file);
+        };
+
+        /**
+         * @function submit
+         * @memberOf NewsstandCtrl
+         *
+         * @description
+         *   Saves tags and, then, saves the item.
+         */
+        $scope.submit = function() {
+          if (!$('[name=form]')[0].checkValidity()) {
+            $('[name=form]')[0].reportValidity();
+            return;
+          }
+
+          $scope.flags.http.saving = true;
+
+          $scope.$broadcast('onmTagsInput.save', {
+            onError: $scope.errorCb,
+            onSuccess: function(ids) {
+              $scope.item.tags = ids;
+              $scope.save();
+            }
+          });
         };
       }
     ]);

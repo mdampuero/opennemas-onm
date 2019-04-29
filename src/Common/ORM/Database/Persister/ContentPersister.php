@@ -115,7 +115,7 @@ class ContentPersister extends BasePersister
         unset($entity->categories);
         $entity->setNotStored('categories');
 
-        // Ignore tag_ids, persist them later
+        // Ignore tags, persist them later
         unset($entity->tags);
         $entity->setNotStored('tags');
 

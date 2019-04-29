@@ -114,7 +114,7 @@ class ContentController extends Controller
                         'type'    => 'success'
                     ];
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $errors[] = [
                     'id'      => $id,
                     'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
@@ -188,7 +188,7 @@ class ContentController extends Controller
 
                 $content->delete($id);
                 $updated[] = $id;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $errors[] = [
                     'id'      => $id,
                     'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
@@ -237,7 +237,7 @@ class ContentController extends Controller
                     'message' => _('Item restored successfully'),
                     'type'    => 'success'
                 ];
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $errors[] = [
                     'id'      => $id,
                     'message' => sprintf(_('Unable to restore the item with id "%d"'), $id),
@@ -296,7 +296,7 @@ class ContentController extends Controller
                     $content->restoreFromTrash($content->id);
 
                     $updated[] = $content->id;
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $errors[] = [
                         'id'      => $content->id,
                         'message' => sprintf(_('Unable to restore from trash the item with id "%d"'), $content->id),
@@ -350,7 +350,7 @@ class ContentController extends Controller
                     'message' => _('Item permanently removed successfully'),
                     'type'    => 'success'
                 ];
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $errors[] = [
                     'id'      => $id,
                     'message' => sprintf(_('Unable to remove permanently the item with id "%d"'), $id),
@@ -408,7 +408,7 @@ class ContentController extends Controller
                 try {
                     $content->remove($content->id);
                     $updated[] = $content->id;
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $errors[] = [
                         'id'      => $content->id,
                         'message' => sprintf(_('Unable to remove permanently the item with id "%d"'), $content->id),
@@ -474,7 +474,7 @@ class ContentController extends Controller
                 try {
                     $content->remove($id);
                     $updated[] = $id;
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $errors[] = [
                         'id'      => $id,
                         'message' => sprintf(_('Unable to remove permanently the item with id "%d"'), $id),
@@ -596,7 +596,7 @@ class ContentController extends Controller
                     );
 
                     $updated[] = $id;
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $errors[] = [
                         'id'      => $id,
                         'message' => sprintf(_('Unable to update the item with id "%d"'), $id),
@@ -773,7 +773,7 @@ class ContentController extends Controller
                     );
 
                     $updated[] = $id;
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $errors[] = [
                         'id'      => $id,
                         'message' => sprintf(_('Unable to update the item with id "%d"'), $id),
@@ -924,30 +924,22 @@ class ContentController extends Controller
      */
     protected function loadExtraData($contents = [])
     {
-        $extra    = [];
-        $as       = $this->get('api.service.author');
-        $response = $as->getList('order by name asc');
+        $extra = [ 'options' => $this->getLocaleData('frontend', null, false) ];
 
+        $as = $this->get('api.service.author');
+        $cs = $this->get('api.service.category');
+
+        $response         = $as->getList('order by name asc');
         $extra['authors'] = $as->responsify($response['items']);
 
-        $ccm = \ContentCategoryManager::get_instance();
+        $this->get('core.locale')->setContext('frontend');
+        $response = $cs->getList();
+        $this->get('core.locale')->setContext('backend');
 
-        $categories          = $ccm->findAll();
-        $extra['categories'] = [];
-        $categories          = $this->get('data.manager.filter')
-            ->set($categories)->filter('localize', [
-                'keys' => \ContentCategory::getL10nKeys(),
-                'locale' => $this->getLocaleData('frontend')['default']
-            ])->get();
-
-        foreach ($categories as $category) {
-            $extra['categories'][$category->id] = $this->get('data.manager.filter')
-                ->set($category->title)
-                ->filter('localize')
-                ->get();
+        foreach ($response['items'] as $item) {
+            $extra['categories'][$item->pk_content_category] = $item->title;
         }
 
-        $extra['options'] = $this->getLocaleData('frontend', null, false);
 
         return $extra;
     }

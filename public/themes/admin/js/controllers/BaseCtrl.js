@@ -19,8 +19,9 @@
      *   and inners will need. All controllers should extend this.
      */
     .controller('BaseCtrl', [
-      '$rootScope', '$scope', '$timeout', '$uibModal', '$window', 'Editor', 'http', 'messenger', 'Renderer',
-      function($rootScope, $scope, $timeout, $uibModal, $window, Editor, http, messenger, Renderer) {
+      '$rootScope', '$scope', '$timeout', '$uibModal', '$window', 'Editor',
+      'http', 'linker', 'localizer', 'messenger', 'Renderer', '$sce',
+      function($rootScope, $scope, $timeout, $uibModal, $window, Editor, http, linker, localizer, messenger, Renderer, $sce) {
         /**
          * @memberOf BaseCtrl
          *
@@ -58,7 +59,11 @@
          *
          * @type {Object}
          */
-        $scope.flags = { generate: {}, http: {} };
+        $scope.flags = {
+          block: { slug: true },
+          generate: {},
+          http: {}
+        };
 
         /**
          * @memberOf InnerCtrl
@@ -74,16 +79,6 @@
          * @memberOf InnerCtrl
          *
          * @description
-         *  List of suggested tags
-         *
-         * @type {Array}
-         */
-        $scope.suggestedTags = {};
-
-        /**
-         * @memberOf InnerCtrl
-         *
-         * @description
          *  The list of overlays.
          *
          * @type {Object}
@@ -91,13 +86,14 @@
         $scope.overlay = {};
 
         /**
--        * @function removeImage
--        * @memberOf InnerCtrl
--        * @description
--        *   Removes the given image from the scope.
--        *
--        * @param string image The image to remove.
--        */
+         * @function removeImage
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *   Removes the given image from the scope.
+         *
+         * @param string image The image to remove.
+         */
         $scope.removeImage = function(image) {
           delete $scope[image];
         };
@@ -111,9 +107,9 @@
          *
          * @param {String} name The overlay name.
          */
-       $scope.toggleOverlay = function(name) {
-         $scope.overlay[name] = !$scope.overlay[name];
-       };
+        $scope.toggleOverlay = function(name) {
+          $scope.overlay[name] = !$scope.overlay[name];
+        };
 
         /**
          * @function configure
@@ -129,22 +125,13 @@
             return;
           }
 
-          // Configure the form
-          if ($scope.config.multilanguage === null) {
-            $scope.config.multilanguage = data.multilanguage;
-          }
-
-          if (data.translators) {
-            $scope.config.translators = data.translators;
-          }
-
-          if ($scope.config.locale === null) {
+          if (data.locale) {
             $scope.config.locale = data.locale;
           }
 
-          if ($scope.forcedLocale && Object.keys(data.options.available)
-            .indexOf($scope.forcedLocale)) {
-            $scope.config.locale = $scope.forcedLocale;
+          if ($scope.forcedLocale && Object.keys(data.locale.available)
+            .indexOf($scope.forcedLocale) !== -1) {
+            $scope.config.locale.selected = $scope.forcedLocale;
           }
         };
 
@@ -184,6 +171,28 @@
           if (response && response.data) {
             messenger.post(response.data);
           }
+        };
+
+        /**
+         * @function getL10nUrl
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Returns the localized url given the multilanguage and current url status
+         *
+         * @param {String}   url     The value of the url to "localize".
+         */
+        $scope.getL10nUrl = function(url) {
+          var baseUrl = '';
+
+          if ($scope.data &&
+            $scope.data.extra.locale.multilanguage &&
+            $scope.data.extra.locale.default !== $scope.config.locale.selected
+          ) {
+            baseUrl = '/' + $scope.config.locale.selected;
+          }
+
+          return baseUrl + url;
         };
 
         /**
@@ -325,6 +334,57 @@
           });
         };
 
+        /**
+         * @function trustHTML
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Marks the text as trusted to be embed it as HTML.
+         */
+        $scope.trustHTML = function(src) {
+          return $sce.trustAsHtml(src);
+        };
+
+        /**
+         * @function trustSrc
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Marks the text as trusted to be embed it as URL.
+         */
+        $scope.trustSrc = function(src) {
+          return $sce.trustAsResourceUrl(src);
+        };
+
+        /**
+         * @function localize
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Configures multilanguage-related services basing on the scope.
+         *
+         * @param {Object} The item or list of items to localize.
+         * @param {String} The name of the property where localized items will
+         *                 be stored in scope.
+         */
+        $scope.localize = function(items, key, clean) {
+          var lz = localizer.get($scope.config.locale);
+
+          // Localize items
+          $scope[key] = lz.localize(items,
+            $scope.data.extra.keys, $scope.config.locale);
+
+          // Initialize linker
+          if (!$scope.config.linkers[key]) {
+            $scope.config.linkers[key] = linker.get($scope.data.extra.keys,
+              $scope.config.locale.default, $scope, clean);
+          }
+
+          // Link original and localized items
+          $scope.config.linkers[key].setKey($scope.config.locale.selected);
+          $scope.config.linkers[key].link(items, $scope[key]);
+        };
+
         $scope.uploadMediaImg = function(image, imgData) {
           if (image === null) {
             return null;
@@ -379,12 +439,13 @@
         });
 
         // Updates linkers when locale changes
-        $scope.$watch('config.locale', function(nv, ov) {
+        $scope.$watch('config.locale.selected', function(nv, ov) {
           if (nv === ov) {
             return;
           }
 
-          if (!$scope.config.multilanguage || !$scope.config.locale) {
+          if (!$scope.config.locale.multilanguage ||
+              !$scope.config.locale.selected) {
             return;
           }
 
@@ -392,7 +453,7 @@
             $scope.config.linkers[key].setKey(nv);
             $scope.config.linkers[key].update();
           }
-        });
+        }, true);
       }
     ]);
 })();

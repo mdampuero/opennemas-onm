@@ -47,8 +47,7 @@ class ContentController extends ApiController
 
         $msg = $this->get('core.messenger');
 
-        $data         = $request->request->all();
-        $data['tags'] = $this->parseTags($data['tags']);
+        $data = $request->request->all();
 
         $item = $this->get($this->service)
             ->createItem($data);
@@ -79,8 +78,7 @@ class ContentController extends ApiController
 
         $msg = $this->get('core.messenger');
 
-        $data         = $request->request->all();
-        $data['tags'] = $this->parseTags($data['tags']);
+        $data = $request->request->all();
 
         $this->get($this->service)
             ->updateItem($id, $data);
@@ -97,26 +95,14 @@ class ContentController extends ApiController
      **/
     protected function getExtraData($items = null)
     {
-        $security   = $this->get('core.security');
-        $converter  = $this->get('orm.manager')->getConverter('Category');
-        $categories = $this->get('orm.manager')
-            ->getRepository('Category')
-            ->findBy('internal_category = 1');
-
-        $categories = array_filter($categories, function ($category) use ($security) {
-            return $security->hasCategory($category->pk_content_category);
-        });
-
-        $extra = [
-            'categories'       => $converter->responsify($categories),
+        return [
             'related_contents' => $this->getRelatedContents($items),
-            'tags'             => $this->getTagsFromItems($items),
+            'keys'             => $this->get($this->service)->getL10nKeys(),
+            'locale'           => $this->get('core.helper.locale')->getConfiguration(),
             'template_vars'    => [
                 'media_dir' => $this->get('core.instance')->getMediaShortPath() . '/images',
             ],
         ];
-
-        return array_merge($extra, $this->getLocaleData('frontend'));
     }
 
     /**
@@ -129,66 +115,5 @@ class ContentController extends ApiController
     protected function getRelatedContents($items)
     {
         return [];
-    }
-
-    /**
-     * Returns the list of tag ids for a list of items or a individual item
-     *
-     * @param array|Content $items One Content object or a list of Content objects
-     *
-     * @return array
-     **/
-    private function getTagsFromItems($items = null)
-    {
-        if (empty($items)) {
-            return [];
-        }
-
-        if (is_object($items)) {
-            $items = [ $items ];
-        }
-
-        $tagIds = [];
-        if (is_array($items)) {
-            foreach ($items as $item) {
-                $tagIds = array_merge($tagIds, $item->tags);
-            }
-        }
-
-        return $this->get('api.service.tag')
-            ->getListByIdsKeyMapped($tagIds)['items'];
-    }
-
-    /**
-     * Parses the tags provided from the request and transforms them into
-     * ids
-     *
-     * @param array $tags The lis tof tag objects
-     * @return array
-     **/
-    private function parseTags($tags = [])
-    {
-        if (empty($tags)) {
-            return [];
-        }
-
-        $ts = $this->get('api.service.tag');
-
-        $ids = [];
-        foreach ($tags as $tag) {
-            if (!array_key_exists('id', $tag) || !is_numeric($tag['id'])) {
-                unset($tag['id']);
-
-                try {
-                    $tag = $ts->responsify($ts->createItem($tag));
-                } catch (\Exception $e) {
-                    continue;
-                }
-            }
-
-            $ids[] = (int) $tag['id'];
-        }
-
-        return array_unique($ids);
     }
 }

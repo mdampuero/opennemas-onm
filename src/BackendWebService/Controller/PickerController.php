@@ -270,38 +270,15 @@ class PickerController extends Controller
             }
         }
 
-        $fm         = $this->get('data.manager.filter');
-        $categories = $this->get('orm.manager')->getRepository('Category')
-            ->findBy('internal_category = 1 order by title asc');
-
-        $cleanCategories = [ [
-            'pk_content_category' => null,
-            'name'                => null,
-            'fk_content_category' => 0,
-            'title'               => _('All categories'),
-        ] ];
-
-        foreach ($categories as $category) {
-            $cleanCategories[] = [
-                'pk_content_category' => $category->pk_content_category,
-                'name'                => $category->name,
-                'fk_content_category' => $category->fk_content_category,
-                'title'               => $fm->set($category->title)
-                    ->filter('localize')
-                    ->get(),
-            ];
-        }
-
-        $categories = $cleanCategories;
-
         return [
             'allMonths'           => _('All months'),
+            'any'                 => _('Any'),
             'category'            => _('Category'),
-            'categories'          => $categories,
             'contentTypes'        => $contentTypesFiltered,
             'created'             => _('Created'),
             'dates'               => $this->getDates(),
             'description'         => _('Description'),
+            'error'               => _('Unable to save the image'),
             'from'                => _('From'),
             'header'              => _('Pick the item to insert'),
             'insert'              => _('Insert'),

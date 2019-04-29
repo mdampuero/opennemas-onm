@@ -80,9 +80,9 @@ class Instance extends Entity
      *
      * @return string The relative path for the instance media files.
      */
-    public function getMediaShortPath()
+    public function getFilesShortPath()
     {
-        return "/media/{$this->internal_name}";
+        return $this->getMediaShortPath() . '/files';
     }
 
     /**
@@ -90,9 +90,19 @@ class Instance extends Entity
      *
      * @return string The relative path for the instance media files.
      */
-    public function getSystemFilePath()
+    public function getImagesShortPath()
     {
-        return MEDIA_PATH . DS . FILE_DIR;
+        return $this->getMediaShortPath() . '/images';
+    }
+
+    /**
+     * Returns the relative path for the instance media files.
+     *
+     * @return string The relative path for the instance media files.
+     */
+    public function getMediaShortPath()
+    {
+        return "/media/{$this->internal_name}";
     }
 
     /**

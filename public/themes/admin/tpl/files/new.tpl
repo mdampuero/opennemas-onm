@@ -11,43 +11,41 @@
 {/block}
 
 {block name="content"}
-  <form action="{if !is_null($attaches)}{url name=admin_files_update id=$attaches->id}{else}{url name=admin_files_create}{/if}" enctype="multipart/form-data" method="POST" name="formulario" id="formulario" ng-controller="FileCtrl" ng-init="init({json_encode($attaches)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})" />
+  <form action="{if !is_null($attaches)}{url name=admin_files_update id=$attaches->id}{else}{url name=admin_files_create}{/if}" enctype="multipart/form-data" id="formulario" method="POST" name="form" ng-controller="FileCtrl" ng-init="file = {json_encode($attaches)|clear_json}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-file-o"></i>
-                {t}Files{/t}
+                <i class="fa fa-file-o m-r-10"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
+                <a class="no-padding" href="{url name=admin_files}">
+                  {t}Files{/t}
+                </a>
+              </h4>
+            </li>
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
+                <i class="fa fa-angle-right"></i>
               </h4>
             </li>
             <li class="quicklinks hidden-xs">
-              <span class="h-seperate"></span>
-            </li>
-            <li class="quicklinks hidden-xs">
-              <h5>
-                {if $attaches}
-                  {t}Editing file{/t}
-                {else}
-                  {t}Creating file{/t}
-                {/if}
-              </h5>
+              <h4>
+                {if $attaches}{t}Edit{/t}{else}{t}Create{/t}{/if}
+              </h4>
             </li>
           </ul>
-          <div class="all-actions pull-right">
+          <div class="pull-right">
             <ul class="nav quick-section">
-              <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_files}" title="{t}Go back{/t}">
-                  <span class="fa fa-reply"></span>
-                </a>
-              </li>
-              <li class="quicklinks"><span class="h-seperate"></span></li>
               {acl isAllowed="ATTACHMENT_CREATE"}
                 <li class="quicklinks">
-                  <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}..." id="save-button">
-                    <span class="fa fa-save"></span>
-                    <span class="text">{t}Save{/t}</span>
+                  <button class="btn btn-loading btn-success text-uppercase" ng-click="submit($event)" type="submit">
+                    <i class="fa fa-save m-r-5"></i>
+                    {t}Save{/t}
                   </button>
                 </li>
               {/acl}
@@ -82,13 +80,13 @@
               <div class="form-group">
                 <label for="category" class="form-label">{t}Category{/t}</label>
                 <div class="controls">
-                  {include file="common/selector_categories.tpl" name="category" item=$attaches}
+                  <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" locale="config.locale.selected" ng-model="file.pk_fk_content_category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
                 </div>
               </div>
               <div class="form-group">
                 <label for="metadata" class="form-label">{t}Tags{/t}</label>
                 <div class="controls">
-                  {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
+                  {include file="ui/component/tags-input/tags.tpl" ngModel="file.tags"}
                 </div>
               </div>
               <div class="form-group">

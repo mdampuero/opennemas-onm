@@ -1,48 +1,15 @@
-<div class="form-controlgroup">
-  <label for="title" class="form-label">{t}Title{/t}</label>
-  <div class="controls">
-    <input type="text" id="title" name="title" ng-blur="generate()" ng-model="title" value="{$video->title|clearslash|escape:"html"|default:""}" required class="form-control"/>
-  </div>
-</div>
+{include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true}
 
-<div class="form-controlgroup">
-  <label for="description" class="form-label">{t}Description{/t}</label>
-  <div class="controls">
-    <textarea onm-editor onm-editor-preset="simple" ng-model="description" name="description" id="description" required rows="4" class="form-control onm-editor" data-preset="simple">{$video->description|clearslash|default:""}</textarea>
-  </div>
-</div>
+{include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true}
 
-<div class="form-controlgroup">
+<div class="form-group">
   <label for="video-information" class="form-label">{t}Write HTML code{/t}</label>
   <div class="controls">
-    <textarea name="body" id="body" rows="8" class="form-control">{$video->body|clearslash|default:""}</textarea>
-    <br /><br />
-
-    {if isset($video)}
-    <label  class="form-label">{t}Preview{/t}</label>
-    <div id="video-information" class="video-container" style="width:530px; text-align:center; margin:0 auto;">
-     {render_video video=$video height=$height width="400" height="300" base_url=$smarty.const.INSTANCE_MEDIA}
-   </div>
-   {/if}
+    <textarea name="body" id="body" ng-model="item.body" rows="8" class="form-control"></textarea>
  </div>
 </div>
-<input type="hidden" value="{$video->video_url}" name="video_url" />
-<input type="hidden" value="{json_encode($information)|escape:"html"}" name="information" />
-<input type="hidden" name="author_name" value="script"/>
-<input type="hidden" name="infor" value=""/>
-{javascripts}
-  <script>
-    jQuery(document).ready(function($){
-      'use strict';
 
-      $('.video-form').on('submit', function(e, ui) {
-        if ($('.related-element-id').val().length < 1) {
-          $(".messages").html('<div class="alert alert-error"><button class="close" data-dismiss="alert">×</button>You must assign a cover video<br></div>');
-          e.preventDefault();
-
-          return false;
-        };
-      });
-    });
-  </script>
-{/javascripts}
+<div class="form-group m-t-10" ng-if="item">
+  <label  class="form-label">{t}Preview{/t}</label>
+  <div ng-bind-html="trustHTML(item.body)" style="width:100%; text-align:center; margin:0 auto;"> </div>
+</div>

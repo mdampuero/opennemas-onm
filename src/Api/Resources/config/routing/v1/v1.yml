@@ -10,6 +10,10 @@ api_v1_backend_event:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/event.yml'
     prefix:   /backend
 
+api_v1_backend_category:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/category.yml'
+    prefix:   /backend
+
 api_v1_backend_file:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/file.yml'
     prefix:   /backend
@@ -24,6 +28,10 @@ api_v1_backend_newsletter_templates:
 
 api_v1_backend_newsstand:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/newsstand.yml'
+    prefix:   /backend
+
+api_v1_backend_opinion:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/opinion.yml'
     prefix:   /backend
 
 api_v1_backend_setting:
@@ -60,6 +68,10 @@ api_v1_backend_user:
 
 api_v1_backend_user_group:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/user_group.yml'
+    prefix:   /backend
+
+api_v1_backend_video:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/video.yml'
     prefix:   /backend
 
 api_v1_frontend_advertisement:

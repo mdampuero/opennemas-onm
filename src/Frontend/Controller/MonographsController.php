@@ -31,27 +31,23 @@ class MonographsController extends Controller
      */
     public function init()
     {
-        // Only is used by cronicas, no one has templates to support specials.
-        // https://openhost.atlassian.net/browse/ONM-1995
         if (!$this->get('core.security')->hasExtension('SPECIAL_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
-        // Setting up available categories for menu.
-        $this->ccm = new \ContentCategoryManager();
-        $this->cm  = new \ContentManager();
-
+        $category_real_name = 'Portada';
+        $this->category     = 0;
+        $actual_category_id = 0;
         $this->categoryName = $this->get('request_stack')->getCurrentRequest()
             ->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
         if (!empty($this->categoryName)) {
-            $this->category     = $this->ccm->get_id($this->categoryName);
-            $actual_category_id = $this->category;
-            $category_real_name = $this->ccm->getTitle($this->categoryName);
-        } else {
-            $category_real_name = 'Portada';
-            $this->category     = 0;
-            $actual_category_id = 0;
+            $category = $this->get('api.service.category')
+                ->getItemBySlug($this->categoryName);
+
+            $this->category     = $category->pk_content_category;
+            $actual_category_id = $category->pk_content_category;
+            $category_real_name = $category->title;
         }
 
         $this->view->assign([
@@ -123,7 +119,7 @@ class MonographsController extends Controller
             $tagsIds = [];
             if (!empty($monographs)) {
                 foreach ($monographs as &$monograph) {
-                    $tagsIds = array_merge($monograph->tag_ids, $tagsIds);
+                    $tagsIds = array_merge($monograph->tags, $tagsIds);
                     if (!empty($monograph->img1)) {
                         $img = $this->get('entity_repository')
                             ->find('Photo', $monograph->img1);
@@ -220,9 +216,6 @@ class MonographsController extends Controller
                             $content->placeholder = 'placeholder_1_1';
                         }
 
-                        $content->category_name  = $content->loadCategoryName();
-                        $content->category_title = $content->loadCategoryTitle();
-
                          // Load attached and related contents from array
                         $content->loadAttachedVideo()
                             ->loadRelatedContents($this->categoryName);
@@ -250,7 +243,7 @@ class MonographsController extends Controller
             'x-tags'      => 'monograph,' . $special->id,
             'x-cache-for' => '+1 day',
             'tags'        => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($special->tag_ids)['items']
+                ->getListByIdsKeyMapped($special->tags)['items']
         ]);
     }
 }

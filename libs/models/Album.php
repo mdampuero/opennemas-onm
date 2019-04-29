@@ -66,9 +66,6 @@ class Album extends Content
     {
         switch ($name) {
             case 'uri':
-                if (empty($this->category_name)) {
-                    $this->category_name = $this->loadCategoryName();
-                }
                 $uri = Uri::generate(
                     'album',
                     [
@@ -110,12 +107,13 @@ class Album extends Content
         parent::load($properties);
 
         if (array_key_exists('pk_album', $properties) && !is_null($properties['pk_album'])) {
-            $this->pk_album       = $properties['pk_album'];
-            $this->category_title = $this->loadCategoryTitle();
+            $this->pk_album = $properties['pk_album'];
         }
+
         if (array_key_exists('subtitle', $properties) && !is_null($properties['subtitle'])) {
             $this->subtitle = $properties['subtitle'];
         }
+
         if (array_key_exists('cover_id', $properties) && !is_null($properties['cover_id'])) {
             $this->cover_id    = $properties['cover_id'];
             $this->cover_image = getService('entity_repository')->find('Photo', $this->cover_id);

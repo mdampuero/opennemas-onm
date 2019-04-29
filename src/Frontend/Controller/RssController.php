@@ -28,21 +28,21 @@ class RssController extends Controller
      */
     public function indexAction()
     {
-        // Setup templating cache layer
         $this->view->setConfig('rss');
         $cacheID = $this->view->getCacheId('rss', 'index');
 
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('rss/index.tpl', $cacheID)
         ) {
-            $ccm = \ContentCategoryManager::get_instance();
+            // Get categories with inrss = 1
+            $categories = $this->get('api.service.category')
+                ->getList('params regexp ".*\"inrss\";(s:1:\"1\"|i:1);.*"');
 
-            $categories = $ccm->getCategoriesTreeMenu();
-            $authors    = $this->get('api.service.author')
+            $authors = $this->get('api.service.author')
                 ->getList('order by name asc');
 
             $this->view->assign([
-                'categoriesTree' => $categories,
+                'categoriesTree' => $categories['items'],
                 'opinionAuthors' => $authors['items'],
             ]);
         }
@@ -62,7 +62,7 @@ class RssController extends Controller
      */
     public function frontpageRssAction(Request $request)
     {
-        $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
         // Setup templating cache layer
         $this->view->setConfig('rss');
@@ -74,21 +74,25 @@ class RssController extends Controller
             $id       = 0;
             $rssTitle = _('Homepage News');
 
-            if (!empty($categoryName) && $categoryName !== 'home') {
-                $category = getService('category_repository')->findOneBy(
-                    [ 'name' => [[ 'value' => $categoryName ]] ],
-                    'name ASC'
-                );
+            if (!empty($categoryName)) {
+                try {
+                    $oql = sprintf(
+                        'params regexp ".*\"inrss\";(s:1:\"1\"|i:1);.*" '
+                        . 'and name regexp "(%%\"|^)%s(\"%%|$)"',
+                        $categoryName
+                    );
 
-                if (is_null($category)) {
+                    $c = $this->get('api.service.category')
+                        ->getItemBy($oql);
+
+                    $id       = $c->id;
+                    $rssTitle = $c->title;
+                } catch (\Exception $e) {
                     throw new ResourceNotFoundException();
                 }
-
-                $id       = $category->id;
-                $rssTitle = $category->title;
             }
 
-            list($contentPositions, $contents, $invalidationDt, $lastSaved) =
+            list($contentPositions, $contents, , ) =
                 $this->get('api.service.frontpage')
                     ->getCurrentVersionForCategory($id);
 
@@ -132,54 +136,62 @@ class RssController extends Controller
      */
     public function generalRssAction(Request $request)
     {
-        $type     = $request->query->filter('type', 'article', FILTER_SANITIZE_STRING);
-        $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
-        $titles   = [
+        $id     = null;
+        $slug   = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
+        $type   = $request->query->filter('type', 'article', FILTER_SANITIZE_STRING);
+        $titles = [
             'album'   => _('Latest Albums'),
             'article' => _('Latest News'),
             'opinion' => _('Latest Opinions'),
             'video'   => _('Latest Videos'),
         ];
 
-        if ($category === 'last') {
-            $category = null;
-        }
-
         // Setup templating cache layer
         $this->view->setConfig('rss');
-        $cacheID = $this->view->getCacheId('rss', $type, $category);
+        $cacheID = $this->view->getCacheId('rss', $type, $slug);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
             $rssTitle = $titles[$type];
-            $total    = $this->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get('elements_in_rss', 10);
-            $contents = $this->getLatestContents($type, $category, $total);
 
-            $this->getRelatedContents($contents);
+            if (!empty($slug)) {
+                try {
+                    $oql = sprintf(
+                        'params regexp ".*\"inrss\";(s:1:\"1\"|i:1);.*" '
+                        . 'and name regexp "(.*\"|^)%s(\".*|$)"',
+                        $slug
+                    );
 
-            if (!empty($category)) {
-                $c = getService('category_repository')
-                    ->findOneBy([ 'name' => [[ 'value' => $category ]] ]);
+                    $category = $this->get('api.service.category')
+                        ->getItemBy($oql);
 
-                if (!empty($c)) {
-                    $rssTitle = $rssTitle . ' - ' . $c->title;
+                    $id       = $category->pk_content_category;
+                    $slug     = $category->name;
+                    $rssTitle = $rssTitle . ' - ' . $category->title;
+                } catch (\Exception $e) {
+                    throw new ResourceNotFoundException();
                 }
             }
 
+            $total = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('elements_in_rss', 10);
+
+            $contents = $this->getLatestContents($type, $id, $total);
+
+            $this->getRelatedContents($contents);
+
             $this->view->assign([
-                'rss_title' => $rssTitle,
                 'contents'  => $contents,
-                'type'      => $type,
-                'category'  => $category
+                'rss_title' => $rssTitle,
+                'type'      => $type
             ]);
         }
 
         $response = $this->render('rss/rss.tpl', [
             'cache_id' => $cacheID,
-            'x-tags'   => 'rss,' . $type . ',' . $category
+            'x-tags'   => 'rss,' . $type . ',' . $slug
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
@@ -263,7 +275,7 @@ class RssController extends Controller
      *
      * @return Response The response object.
      */
-    public function facebookInstantArticlesRSSAction()
+    public function facebookInstantArticlesAction()
     {
         if (!$this->get('core.security')->hasExtension('FIA_MODULE')) {
             throw new ResourceNotFoundException();
@@ -346,17 +358,18 @@ class RssController extends Controller
     /**
      * Get latest contents given a type of content.
      *
-     * @param int $contentType The type of the contents to fetch.
-     * @param int $total The total number of contents.
+     * @param string  $contentType The content type name of the contents.
+     * @param integer $category    The category id.
+     * @param integer $total       The total number of contents.
      *
      * @return Array Latest contents.
      */
     public function getLatestContents($contentType = 'article', $category = null, $total = 10)
     {
-        $em = getService('entity_repository');
+        $em = $this->get('entity_repository');
 
         if ($contentType === 'opinion') {
-            $em = getService('opinion_repository');
+            $em = $this->get('opinion_repository');
         }
 
         $order   = [ 'starttime' => 'DESC' ];
@@ -366,38 +379,34 @@ class RssController extends Controller
             'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
             'starttime'         => [
                 'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
                 [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
             ],
             'endtime'           => [
                 'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
                 [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
             ]
         ];
 
-        // Fetch contents only on categories set inrss
-        $categories = \ContentCategoryManager::get_instance()->findAll();
-        $categories = array_map(function ($a) {
-            return $a->name;
-        }, array_filter($categories, function ($a) {
-            return $a->internal_category == 1
-                && is_array($a->params)
-                && !empty($a->params['inrss']);
-        }));
+        // Get categories with inrss = 1
+        $categories = $this->get('api.service.category')
+            ->getList('params regexp ".*\"inrss\";(s:1:\"1\"|i:1);.*"');
+
+        $ids = array_map(function ($a) {
+            return $a->pk_content_category;
+        }, $categories['items']);
 
         // Fix condition for IN operator when no categories
-        $categories = empty($categories) ? [ '' ] : $categories;
+        $ids = empty($ids) ? [ '' ] : $ids;
 
         if ($contentType !== 'opinion') {
-            $filters['category_name'] = [
-                [ 'value' => $categories, 'operator' => 'IN' ]
+            $filters['pk_fk_content_category'] = [
+                [ 'value' => $ids, 'operator' => 'IN' ]
             ];
 
             if (!empty($category)) {
-                $filters['category_name'] = [ [ 'value' => $category ] ];
+                $filters['pk_fk_content_category'] = [ [ 'value' => $category ] ];
             }
         }
 
@@ -472,22 +481,15 @@ class RssController extends Controller
      */
     protected function getPlaceholders($name)
     {
-        $setting = null;
+        try {
+            $category = $this->get('api.service.category')
+                ->getItemBySlug($name);
 
-        if (!empty($name)) {
-            try {
-                $category = $this->get('orm.manager')->getRepository('Category')
-                    ->findOneBy(sprintf('title = "%s"', $name));
-
-                $setting = 'frontpage_layout_' . $category->pk_content_category;
-            } catch (\Exception $e) {
-                if ($name === 'home') {
-                    $setting = 'frontpage_layout_0';
-                }
-            }
+            $setting = 'frontpage_layout_' . $category->pk_content_category;
+        } catch (\Exception $e) {
+            $setting = 'frontpage_layout_0';
         }
 
-        // TODO: Use new repository when cache is unified
         $layout = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get($setting);
@@ -543,12 +545,10 @@ class RssController extends Controller
             if (count($relations) > 0) {
                 $relatedContents = [];
                 $relateds        = $this->get('entity_repository')->findMulti($relations);
-                $ccm             = \ContentCategoryManager::get_instance();
 
                 // Filter out not ready for publish contents.
                 foreach ($relateds as $related) {
                     if ($related->isReadyForPublish()) {
-                        $related->category_name = $ccm->getName($related->category);
                         if ($related->content_type == 1 && !empty($related->img1)) {
                             $related->photo = $er->find('Photo', $related->img1);
                         } elseif ($related->content_type == 1 && !empty($related->fk_video)) {

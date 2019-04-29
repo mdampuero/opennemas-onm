@@ -26,28 +26,44 @@ class TagValidator extends Validator
             ], CoreValidator::BLACKLIST_RULESET_TAGS);
 
         if (!empty($errors)) {
-            throw new InvalidArgumentException('Invalid tag', 400);
+            throw new InvalidArgumentException(_('Invalid tag'), 400);
         }
 
-        if (!$item->exists()) {
+        if ($item->exists()) {
+            return;
+        }
+
+        $locales = $this->container->get('core.locale')
+            ->getAvailableLocales('frontend');
+
+        // Locale invalid
+        if (!empty($item->locale)
+            && !in_array($item->locale, array_keys($locales))
+        ) {
+            throw new InvalidArgumentException(_('Invalid tag'), 400);
+        }
+
+        $oql = sprintf('name = "%s" and locale is null', $item->name);
+
+        if (!empty($item->locale)) {
             $oql = sprintf(
-                'name = "%s" and language_id = "%s"',
+                'name = "%s" and locale = "%s"',
                 $item->name,
-                $item->language_id
+                $item->locale
             );
+        }
 
-            try {
-                $tag = $this->container->get('api.service.tag')->getItemBy($oql);
+        try {
+            $tag = $this->container->get('api.service.tag')->getItemBy($oql);
 
-                // Tags with different names are considered different
-                if ($tag->name !== $item->name) {
-                    return;
-                }
-            } catch (\Exception $e) {
+            // Tags with different names are considered different
+            if ($tag->name !== $item->name) {
                 return;
             }
-
-            throw new InvalidArgumentException('Invalid tag', 400);
+        } catch (\Exception $e) {
+            return;
         }
+
+        throw new InvalidArgumentException(_('Invalid tag'), 400);
     }
 }

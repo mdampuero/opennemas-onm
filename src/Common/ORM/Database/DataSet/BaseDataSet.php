@@ -99,7 +99,7 @@ class BaseDataSet extends DataSet
             return array_merge($default, $data);
         }
 
-        if (array_key_exists($key, $this->data)) {
+        if (array_key_exists($key, $this->data) && !empty($this->data[$key])) {
             return $this->data[$key];
         }
 

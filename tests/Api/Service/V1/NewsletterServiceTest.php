@@ -40,8 +40,12 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
                 'remove'
             ])->getMock();
 
+        $this->locale = $this->getMockBuilder('Locale')
+            ->setMethods([ 'getContext' ])
+            ->getMock();
+
         $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
-            ->setMethods([ 'getId', 'getIdKeys' ])
+            ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
             ->getMock();
 
         $this->logger = $this->getMockBuilder('Logger' . uniqid())
@@ -80,6 +84,9 @@ class NewsletterServiceTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'core.dispatcher':
                 return $this->dispatcher;
+
+            case 'core.locale':
+                return $this->locale;
 
             case 'error.log':
                 return $this->logger;

@@ -14,7 +14,7 @@ function smarty_function_admin_menu($params, &$smarty)
     ) {
         $menu = include $params['base'] . $params['file'];
 
-        $menu       = new \Onm\UI\SimpleMenu($menu, SITE_URL . 'manager');
+        $menu       = new \Onm\UI\SimpleMenu($menu);
         $htmlOutput = $menu->render([ 'doctype' => 'html5' ]);
     } else {
         $htmlOutput = $params['file'];

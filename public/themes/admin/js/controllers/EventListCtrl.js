@@ -28,7 +28,7 @@
           content_type_name: 'event',
           epp: 10,
           in_litter: 0,
-          orderBy: { starttime:  'desc' },
+          orderBy: { created: 'desc' },
           page: 1
         };
 
@@ -59,7 +59,10 @@
           $scope.columns.key     = 'event-columns';
           $scope.backup.criteria = $scope.criteria;
 
-          oqlEncoder.configure({ placeholder: { title: '[key] ~ "%[value]%"' } });
+          oqlEncoder.configure({ placeholder: {
+            title: '[key] ~ "%[value]%"'
+          } });
+
           $scope.list();
         };
 
@@ -80,6 +83,14 @@
           }
 
           return cover;
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.parseList = function(data) {
+          $scope.configure(data.extra);
+          $scope.localize($scope.data.items, 'items');
         };
       }
     ]);

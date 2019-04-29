@@ -46,7 +46,7 @@
           params: {},
           starttime: null,
           summary: '',
-          tag_ids: []
+          tags: []
         };
 
         /**
@@ -243,29 +243,6 @@
         };
 
         /**
-         * @function groupCategories
-         * @memberOf ArticleListCtrl
-         *
-         * @description
-         *   Groups categories in the ui-select.
-         *
-         * @param {Object} item The category to group.
-         *
-         * @return {String} The group name.
-         */
-        $scope.groupCategories = function(item) {
-          var category = $scope.categories.filter(function(e) {
-            return e.pk_content_category === item.fk_content_category;
-          });
-
-          if (category.length > 0 && category[0].pk_content_category) {
-            return category[0].title;
-          }
-
-          return '';
-        };
-
-        /**
          * @function getArticle
          * @memberOf ArticleCtrl
          *
@@ -281,11 +258,12 @@
             { name: 'api_v1_backend_article_show', params: { id: id } };
 
           http.get(route).then(function(response) {
+            $scope.disableFlags();
+
             $scope.data   = response.data;
             $scope.backup = { content_status: 0 };
 
             $scope.configure(response.data.extra);
-            $scope.disableFlags();
 
             if ($scope.data.article) {
               $scope.backup.content_status = $scope.data.article.content_status;
@@ -301,19 +279,44 @@
             }
 
             // Load items
-            $scope.article         = $scope.data.article;
-            $scope.categories      = $scope.data.extra.categories;
-            $scope.fieldsByModule  = $scope.data.extra.moduleFields;
-            $scope.article.tags    = $scope.data.extra.tags;
+            $scope.article        = $scope.data.article;
+            $scope.fieldsByModule = $scope.data.extra.moduleFields;
 
             $scope.build();
 
-            if ($scope.config.multilanguage && $scope.config.locale) {
+            if ($scope.config.locale.multilanguage) {
               $scope.localize();
             }
 
             $scope.checkDraft();
           }, $scope.errorCb);
+        };
+
+        /**
+         * Returns the frontend url for the content given its object.
+         *
+         * @param {String} item  The object item to generate the url from.
+         *
+         * @return {String} The frontend URL.
+         */
+        $scope.getFrontendUrl = function(item) {
+          if (!item || !$scope.data.extra.category) {
+            return null;
+          }
+
+          var created = moment(item.created).format('YYYYMMDDHHmmss');
+
+          var localized  = localizer.get($scope.data.extra.locale)
+            .localize(item, [ 'slug' ], $scope.config.locale.selected);
+
+          return $scope.getL10nUrl(
+            $scope.routing.generate('frontend_article_show', {
+              id:            localized.pk_content,
+              category_name: $scope.data.extra.category.name,
+              created:       created,
+              slug:          localized.slug
+            })
+          );
         };
 
         /**
@@ -343,26 +346,18 @@
          *   Configures the localization for the current form.
          */
         $scope.localize = function() {
-          var lz   = localizer.get($scope.data.extra.options);
+          var lz   = localizer.get($scope.data.extra.locale);
           var keys = [ 'relatedFront', 'relatedInner', 'relatedHome' ];
 
           // Localize original items
           $scope.article = lz.localize($scope.data.article,
-            $scope.data.extra.keys, $scope.config.locale);
-          $scope.config.linkers.article =
-            linker.get($scope.data.extra.keys, $scope, true, keys);
+            $scope.data.extra.keys, $scope.config.locale.selected);
 
-          $scope.config.linkers.article.setKey($scope.config.locale);
+          $scope.config.linkers.article = linker.get($scope.data.extra.keys,
+            $scope.config.locale.default, $scope, true, keys);
+
+          $scope.config.linkers.article.setKey($scope.config.locale.selected);
           $scope.config.linkers.article.link($scope.data.article, $scope.article);
-
-          $scope.categories = lz.localize($scope.data.extra.categories,
-            [ 'title' ], $scope.config.locale);
-
-          $scope.config.linkers.categories =
-            linker.get($scope.data.extra.keys, $scope, false, keys);
-
-          $scope.config.linkers.categories.setKey($scope.config.locale);
-          $scope.config.linkers.categories.link($scope.data.extra.categories, $scope.categories);
 
           for (var i = 0; i < keys.length; i++) {
             if (!$scope.article[keys[i]]) {
@@ -391,7 +386,7 @@
 
           data = cleaner.clean(data);
 
-          var postData = { article: data, locale: $scope.config.locale };
+          var postData = { article: data, locale: $scope.config.locale.selected };
 
           http.post(previewUrl, postData).success(function() {
             $uibModal.open({
@@ -424,7 +419,7 @@
          *   Saves a new article.
          */
         $scope.save = function() {
-          if ($scope.articleForm.$invalid ||
+          if ($scope.form.$invalid ||
               !$scope.data.article.pk_fk_content_category) {
             $scope.showRequired = true;
             return;
@@ -442,7 +437,7 @@
            * @param {Object} response The response object.
            */
           var successCb = function(response) {
-            $scope.articleForm.$setPristine(true);
+            $scope.form.$setPristine(true);
 
             $scope.disableFlags();
             webStorage.session.remove($scope.draftKey);
@@ -453,9 +448,6 @@
               return;
             }
 
-            $scope.article.tags         = response.data.tags;
-            $scope.data.article.tag_ids = response.data.tag_ids;
-            $scope.article.tag_ids      = response.data.tag_ids;
             messenger.post(response.data.message);
             $scope.backup.content_status = $scope.article.content_status;
           };
@@ -485,6 +477,30 @@
             name: 'backend_ws_article_update',
             params: { id: $scope.article.pk_article }
           }, data).then(successCb, saveErrorCb);
+        };
+
+        /**
+         * @function submit
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Saves tags and, then, saves the article.
+         */
+        $scope.submit = function() {
+          if (!$('[name=form]')[0].checkValidity()) {
+            $('[name=form]')[0].reportValidity();
+            return;
+          }
+
+          $scope.flags.http.saving = true;
+
+          $scope.$broadcast('onmTagsInput.save', {
+            onError: $scope.errorCb,
+            onSuccess: function(ids) {
+              $scope.data.article.tags = ids;
+              $scope.save();
+            }
+          });
         };
 
         /**
@@ -625,7 +641,7 @@
               }
             }
 
-            if ($scope.articleForm.$dirty &&
+            if ($scope.form.$dirty &&
                 (!nv[1] && angular.equals(nv[1], ov[1]) ||
                 angular.equals(nv[1], ov[0]))) {
               $scope.article.img2 = $scope.article.img1;
@@ -655,7 +671,7 @@
               }
             }
 
-            if ($scope.articleForm.$dirty &&
+            if ($scope.form.$dirty &&
                 (!nv[1] && angular.equals(nv[1], ov[1]) ||
                 angular.equals(nv[1], ov[0]))) {
               $scope.article.fk_video2 = $scope.article.fk_video;
@@ -688,12 +704,12 @@
 
           // Show a message when leaving before saving
           $($window).bind('beforeunload', function() {
-            if ($scope.articleForm.$dirty) {
+            if ($scope.form.$dirty) {
               return $window.leaveMessage;
             }
           });
 
-          $scope.articleForm.$setDirty(true);
+          $scope.form.$setDirty(true);
 
           if ($scope.draftEnabled) {
             $scope.draftSaved = null;
@@ -733,7 +749,7 @@
 
         // Generates slug when flag changes
         $scope.$watch('flags.generate.slug', function(nv) {
-          if ($scope.article.id || $scope.article.slug || !nv) {
+          if (!nv || $scope.article.slug || !$scope.article.title) {
             $scope.flags.generate.slug = false;
 
             return;
@@ -753,7 +769,7 @@
         });
 
         // Shows a modal window to translate content automatically
-        $scope.$watch('config.locale', function(nv, ov) {
+        $scope.$watch('config.locale.selected', function(nv, ov) {
           if (!nv || nv === ov ||
             $scope.isTranslated($scope.data.article,
               $scope.data.extra.keys, nv)) {
@@ -761,7 +777,7 @@
           }
 
           // Filter for selected locale and translated in original language
-          var translators = $scope.config.translators.filter(function(e) {
+          var translators = $scope.config.locale.translators.filter(function(e) {
             return e.to === nv && $scope.isTranslated($scope.data.article,
               $scope.data.extra.keys, e.from);
           });
@@ -771,7 +787,7 @@
           }
 
           var config = {
-            locales: $scope.data.extra.options.available,
+            locales: $scope.config.locale.available,
             translators: translators
           };
 

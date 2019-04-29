@@ -168,14 +168,39 @@ class BlogController extends FrontendController
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getParameters($params, $item = null)
+    {
+        $locale = $this->get('core.locale')->getRequestLocale();
+        $params = parent::getParameters($params, $item);
+
+        if (!empty($item)) {
+            $params[$item->content_type_name] = $item;
+
+            $params['tags'] = $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($item->tags, $locale)['items'];
+
+            if (array_key_exists('bodyLink', $item->params)) {
+                $params['o_external_link'] = $item->params['bodyLink'];
+            }
+        }
+
+        return $params;
+    }
+
+    /**
      * Renders the blog opinion frontpage.
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
      */
-    public function hydrateList(array $params) : void
+    public function hydrateList(array &$params = []) : void
     {
         $page = array_key_exists('page', $params) ? $params['page'] : 1;
+
+        $epp = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+            ->get('items_per_page', 10);
 
         $authors = $this->get('api.service.author')
             ->getList('is_blog = 1 order by name asc');
@@ -184,11 +209,6 @@ class BlogController extends FrontendController
             ->set($authors['items'])
             ->filter('mapify', [ 'key' => 'id' ])
             ->get();
-
-        $epp = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_in_blog', 10);
-        $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
         $order   = [ 'starttime' => 'DESC' ];
         $date    = date('Y-m-d H:i:s');
@@ -220,6 +240,7 @@ class BlogController extends FrontendController
             'directional' => true,
             'epp'         => $epp,
             'total'       => $countItems,
+            'page'        => $page,
             'route'       => 'frontend_blog_frontpage',
         ]);
 
@@ -266,7 +287,7 @@ class BlogController extends FrontendController
      *
      * @return Response the response object
      */
-    public function hydrateListAuthor(array $params, $author) : void
+    public function hydrateListAuthor(array &$params, $author) : void
     {
         $page = $params['page'] ?? 1;
 
@@ -295,7 +316,6 @@ class BlogController extends FrontendController
         $epp = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
-        $epp = (is_null($epp) || $epp <= 0) ? 10 : $epp;
 
         $author->slug  = $author->username;
         $author->photo = $this->get('entity_repository')->find('Photo', $author->avatar_img_id);
@@ -339,27 +359,21 @@ class BlogController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    public function hydrateShow($params = [], $item = null)
+    protected function hydrateShow(array &$params = []) : void
     {
-        $author = $item->author;
+        $params['tags'] = $this->getTags($params['content']);
 
         // Associated media code
-        if (isset($item->img2) && ($item->img2 > 0)) {
-            $photo = $this->get('opinion_repository')->find('Photo', $item->img2);
-
-            $params['photo'] = $photo;
+        if (isset($params['content']->img2) && ($params['content']->img2 > 0)) {
+            $params['photo'] = $this->get('opinion_repository')
+                ->find('Photo', $params['content']->img2);
         }
 
+        $params['blog']   = $params['content'];
+        $params['author'] = $params['content']->author;
+
         // TODO: Remove this ASAP
-        $item->author_name_slug = \Onm\StringUtils::getTitle($item->name);
-
-        $params = array_merge($params, [
-            'author' => $author,
-            'blog'   => $item,
-        ]);
-
-        $this->view->assign($params);
-
-        return $params;
+        $params['content']->author_name_slug =
+            \Onm\StringUtils::getTitle($params['content']->name);
     }
 }

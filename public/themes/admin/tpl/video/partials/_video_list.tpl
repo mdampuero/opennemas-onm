@@ -86,14 +86,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|clear_json}">
-          <ui-select name="author" theme="select2" ng-model="criteria.pk_fk_content_category">
-            <ui-select-match>
-              <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
-            </ui-select-match>
-            <ui-select-choices repeat="item.value as item in categories | filter: { name: $select.search }">
-              <div ng-bind-html="item.name | highlight: $select.search"></div>
-            </ui-select-choices>
-          </ui-select>
+          <onm-category-selector ng-model="criteria.pk_fk_content_category" label-text="{t}Category{/t}" default-value-text="{t}Any{/t}" placeholder="{t}Any{/t}" />
         </li>
         <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
           <ui-select name="status" theme="select2" ng-model="criteria.content_status">
@@ -206,11 +199,9 @@
                   {/acl}
                 </div>
               </td>
-              {if $category=='widget' || $category=='all'}
               <td class="center hidden-xs hidden-sm">
                 [% extra.categories[content.category] %]
               </td>
-              {/if}
               <td class="center nowrap hidden-xs hidden-sm">
                 [% content.author_name %]
               </td>

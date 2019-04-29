@@ -34,16 +34,13 @@ class AlbumsController extends Controller
         $this->page         = $request->get('page', 1);
 
         if (!empty($this->categoryName) && $this->categoryName != 'home') {
-            $category = $this->get('category_repository')->findBy(
-                [ 'name' => [[ 'value' => $this->categoryName ]] ],
-                'name ASC'
-            );
-
-            if (empty($category)) {
+            try {
+                $category = $this->get('api.service.category')
+                    ->getItemBySlug($this->categoryName);
+            } catch (\Exception $e) {
                 throw new ResourceNotFoundException();
             }
 
-            $category       = $category[0];
             $this->category = $category->pk_content_category;
 
             $this->view->assign([
@@ -111,9 +108,9 @@ class AlbumsController extends Controller
             ];
 
             if ($this->category != 0) {
-                $category = $this->get('category_repository')->find($this->category);
-
-                $filters['category_name'] = [[ 'value' => $category->name ]];
+                $filters['pk_fk_content_category'] = [
+                    [ 'value' => $this->category ]
+                ];
             }
 
             if ($orderBy == 'favorite') {
@@ -256,7 +253,7 @@ class AlbumsController extends Controller
             'x-cache-for'    => '+1 day',
             'x-cacheable'    => $cacheable,
             'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($album->tag_ids)['items']
+                ->getListByIdsKeyMapped($album->tags)['items']
         ]);
     }
 

@@ -1,0 +1,6 @@
+services:
+    core.subscriber.redirector:
+        class:     Common\Core\EventSubscriber\RedirectorSubscriber
+        arguments: [ '@cache.connection.instance', '@core.instance', '@varnish_ban_message_exchanger' ]
+        tags:
+            - { name: kernel.event_subscriber }

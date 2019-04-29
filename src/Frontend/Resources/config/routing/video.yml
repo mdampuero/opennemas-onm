@@ -1,68 +1,50 @@
 frontend_video_frontpage:
+    path: /video
+    defaults: { _controller: FrontendBundle:Video:list}
+    requirements:
+        page: '([0-9]+)?'
+    options:
+        l10n: true
+
+# Route to redirect to frontend_video_frontpage and to remove in the future
+frontend_video_frontpage_with_page:
     path: /video/{page}
-    defaults: { _controller: FrontendBundle:Videos:frontpage, page: 1 }
+    defaults: { _controller: FrontendBundle:Video:list, page: 1 }
     requirements:
         page: '([0-9]+)?'
     options:
         l10n: true
 
-frontend_video_page_frontpage:
-    path: /video/page/{page}
-    defaults: { _controller: FrontendBundle:Videos:frontpagePaginated, page: 1 }
-    requirements:
-        page: '([0-9]+)?'
-
-frontend_video_page_frontpage_category:
-    path: /video/{category_name}/page/{page}
-    defaults: { _controller: FrontendBundle:Videos:frontpagePaginated, page: 1 }
-    requirements:
-        category_name: '[^/]+'
-        page: '([0-9]+)?'
-    options:
-        l10n: true
-
+# Route to redirect to frontend_video_frontpage and to remove in the future
 frontend_video_frontpage_category:
-    path: /video/{category_name}/{page}
-    defaults: { _controller: FrontendBundle:Videos:frontpage, page: 1 }
+    path: /video/{category_name}
+    defaults: { _controller: FrontendBundle:Video:list }
     requirements:
         category_name: '[^/]+'
-        page         : '([0-9]+)?'
     options:
         l10n: true
 
-frontend_video_show_with_slug:
-    path: /video/{category_name}/{slug}/{video_id}.{_format}
-    defaults: { _controller: FrontendBundle:Videos:show, _format: html }
+frontend_video_show:
+    path: /video/{category_name}/{slug}/{created}{id}.html
+    defaults: { _controller: FrontendBundle:Video:show }
     requirements:
         category_name: '[^/]+'
         slug         : '[^/]+'
         video_id     : '([0-9]+)'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
     options:
         l10n: true
+        expose: true
 
-frontend_video_show_with_date_slug:
-    path: /video/{category_name}/{date}/{slug}/{video_id}.{_format}
-    defaults: { _controller: FrontendBundle:Videos:show, _format: html }
+frontend_video_show_amp:
+    path: /video/{category_name}/{slug}/{created}{id}.amp.html
+    defaults: { _controller: FrontendBundle:Video:showAmp, _format: amp }
     requirements:
-        category_name: '[^/]+'
-        date         : '([0-9]{4})-([0-1][0-9])-([0-3][0-9])'
-        slug         : '[^/]+'
-        video_id     : '([0-9]+)'
+        author_name   : '[^/]+'
+        opinion_title : '[^/]+'
+        opinion_id    : '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
     options:
         l10n: true
-
-frontend_video_ajax_more:
-    path: /video/more/{category}
-    defaults: { _controller: FrontendBundle:Videos:ajaxMore, page: 1 }
-    requirements:
-        category: '([0-9]+)'
-
-frontend_video_ajax_incategory:
-    path: /video/incategory/{category}
-    defaults: { _controller: FrontendBundle:Videos:ajaxInCategory, page: 1 }
-    requirements:
-        category: '([0-9]+)'
-
-frontend_video_ajax_paginated:
-    path: /video/more
-    defaults: { _controller: FrontendBundle:Videos:ajaxPaginated }

@@ -76,36 +76,34 @@ class NewStandController extends Controller
             $kioskos = [];
 
             if ($order == 'grouped') {
-                $ccm         = \ContentCategoryManager::get_instance();
-                $contentType = \ContentManager::getContentTypeIdFromName('kiosko');
-                $category    = $ccm->get_id($this->category_name);
-
-                list($allcategorys, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
+                $categories = $this->get('api.service.category')->getList();
 
                 $where = "";
                 $limit = "LIMIT 48";
                 $month = $request->query->getDigits('month');
+                $year  = $request->query->getDigits('year');
+
                 if (!empty($month)) {
                     $where .= " AND MONTH(`kioskos`.date)='{$month}' ";
                     $limit  = "";
                 }
-                $year = $request->query->getDigits('year');
+
                 if (!empty($year)) {
                     $where .= " AND YEAR(`kioskos`.date)='{$year}' ";
                     $limit  = "";
                 }
 
-                foreach ($allcategorys as $theCategory) {
+                foreach ($categories['items'] as $category) {
                     $portadas = $this->cm->find_by_category(
                         'Kiosko',
-                        $theCategory->pk_content_category,
-                        ' `contents`.`content_status`=1   ' .
-                        $where,
-                        "ORDER BY `kioskos`.date DESC  {$limit}"
+                        $category->pk_content_category,
+                        ' `contents`.`content_status`=1 ' . $where,
+                        "ORDER BY `kioskos`.date DESC {$limit}"
                     );
+
                     if (!empty($portadas)) {
                         $kioskos[] = [
-                            'category' => $theCategory->title,
+                            'category' => $category->title,
                             'portadas' => $portadas
                         ];
                     }
@@ -122,24 +120,21 @@ class NewStandController extends Controller
                     $kioskos[] = [ 'portadas' => $portadas ];
                 }
             } else {
-                $ccm         = \ContentCategoryManager::get_instance();
-                $contentType = \ContentManager::getContentTypeIdFromName('kiosko');
-                $category    = $ccm->get_id($this->category_name);
+                $categories = $this->get('api.service.category')->getList();
 
-                list($allcategorys, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
-
-                foreach ($allcategorys as $theCategory) {
+                foreach ($categories['items'] as $category) {
                     $portadas = $this->cm->find_by_category(
                         'Kiosko',
-                        $theCategory->pk_content_category,
+                        $category->pk_content_category,
                         ' `contents`.`content_status`=1   ' .
                         'AND MONTH(`kioskos`.date)=' . $month . ' AND' .
-                        ' YEAR(`kioskos`.date)=' . $year . '',
+                        ' YEAR(`kioskos`.date)=' . $year,
                         'ORDER BY `kioskos`.date DESC '
                     );
+
                     if (!empty($portadas)) {
                         $kioskos[] = [
-                            'category' => $theCategory->title,
+                            'category' => $category->title,
                             'portadas' => $portadas
                         ];
                     }
@@ -148,9 +143,6 @@ class NewStandController extends Controller
 
             $this->view->assign('kiosko', $kioskos);
         }
-
-        // TODO: not used anymore, now tempaltes use the EpaperDates widget
-        $this->widgetNewsstandDates();
 
         list($positions, $advertisements) = $this->getAds();
 
@@ -198,30 +190,11 @@ class NewStandController extends Controller
             $month = date('m', $date);
             $year  = date('Y', $date);
 
-            $kioskos      = $this->cm->find_by_category(
-                'Kiosko',
-                $content->category,
-                ' `contents`.`content_status`=1   ',
-                'ORDER BY `kioskos`.date DESC  LIMIT 4'
-            );
-            $otherKioskos = [];
-            if (!empty($kioskos)) {
-                $kiosko[] = [
-                    'category' => '',
-                    'portadas' => $kioskos
-                ];
-            }
-
             $this->view->assign([
                 'date'   => '1-' . $month . '-' . $year,
-                'MONTH'  => $month,
                 'YEAR'   => $year,
-                'kiosko' => $otherKioskos
             ]);
         }
-
-        // TODO: not used anymore, now tempaltes use the EpaperDates widget
-        $this->widgetNewsstandDates();
 
         list($positions, $advertisements) = $this->getAds();
 
@@ -235,22 +208,8 @@ class NewStandController extends Controller
             'o_content'      => $content,
             'x-tags'         => 'newsstand,' . $content->pk_content,
             'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($content->tag_ids)['items']
+                ->getListByIdsKeyMapped($content->tags)['items']
         ]);
-    }
-
-    /**
-     * calculates the months of the covers existing
-     *
-     * @return
-     */
-    public function widgetNewsstandDates()
-    {
-        //for widget_newsstand_dates
-        //TODO: intelligent wigget
-        $ki            = new \Kiosko();
-        $months_kiosko = $ki->getMonthsByYears();
-        $this->view->assign('months_kiosko', $months_kiosko);
     }
 
     /**

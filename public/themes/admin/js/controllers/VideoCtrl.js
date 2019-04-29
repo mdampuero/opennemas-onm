@@ -1,13 +1,60 @@
 /**
- * Handle actions for poll inner form.
+ * Handle actions for video inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
-  '$controller', '$sce', '$rootScope', '$scope', '$timeout', 'http',
-  function($controller, $sce, $rootScope, $scope, $timeout, http) {
+  '$controller', '$scope', '$timeout', 'http', 'routing', 'messenger',
+  function($controller, $scope, $timeout, http, routing, messenger) {
     'use strict';
 
     // Initialize the super class and extend it.
-    $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+    $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
+    /**
+     * @memberOf VideoCtrl
+     *
+     * @description
+     *  The item object.
+     *
+     * @type {Object}
+     */
+    $scope.item = {
+      body: '',
+      content_type_name: 'video',
+      fk_content_type: 9,
+      content_status: 0,
+      description: '',
+      favorite: 0,
+      frontpage: 0,
+      created: new Date(),
+      starttime: null,
+      endtime: null,
+      thumbnail: null,
+      title: '',
+      type: 0,
+      with_comments: 0,
+      categories: [],
+      related_contents: [],
+      tags: [],
+      external_link: '',
+      video_url: '',
+      information: {}
+    };
+
+    /**
+     * @memberOf VideoCtrl
+     *
+     * @description
+     *  The list of routes for the controller.
+     *
+     * @type {Object}
+     */
+    $scope.routes = {
+      create:   'api_v1_backend_video_create',
+      redirect: 'backend_video_show',
+      save:     'api_v1_backend_video_save',
+      show:     'api_v1_backend_video_show',
+      update:   'api_v1_backend_video_update'
+    };
 
     /**
      * @memberOf VideoCtrl
@@ -20,47 +67,72 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     $scope.information = {};
 
     /**
-     * @function init
+     * @function parseItem
      * @memberOf VideoCtrl
      *
      * @description
-     * Method to init the video controller
+     *   Parses the response and adds information to the scope.
      *
-     * @param {object} video    Video to edit
-     * @param {String} locale   Locale for the video
-     * @param {Array}  tags     Array with all the tags needed for the video
+     * @param {Object} data The data in the response.
      */
-    $scope.init = function(video, locale, tags) {
-      $scope.locale = locale;
-      $scope.tags   = tags;
+    $scope.parseItem = function(data) {
+      if (data.item) {
+        $scope.data.item      = angular.extend($scope.item, data.item);
 
-      if (video && video.information) {
-        $scope.information     = video.information;
-        $scope.informationJson = JSON.stringify($scope.information);
+        var type = '';
 
-        if ($scope.information.embedHTML) {
-          $scope.information.embedHTML =
-            $sce.trustAsHtml($scope.information.embedHTML);
+        switch ($scope.data.item.author_name) {
+        case 'script':
+          type = 'script';
+          break;
+
+        case 'external':
+          type = 'external';
+          var info = $scope.data.item.information.source;
+
+          $scope.data.item.type = info.flv ? 'flv' : 'html5';
+          break;
+
+        default:
+          if (data.item.video_url) {
+            type = 'web-source';
+          }
+          break;
+        }
+
+        $scope.setType(type);
+
+        // Assign the cover image
+        var cover = data.extra.related_contents.filter(function(el) {
+          return el && el.pk_photo == $scope.item.information.thumbnail;
+        }).shift();
+
+        if (cover) {
+          $scope.cover = cover;
         }
       }
 
-      if (!$scope.title) {
-        $scope.loading_data = false;
-      }
+      $scope.configure(data.extra);
+      $scope.localize($scope.data.item, 'item', true);
     };
 
     /**
-     * @function generateTagsFrom
-     * @memberOf InnerCtrl
+     * @function setType
+     * @memberOf VideoCtrl
      *
      * @description
-     *   Returns a string to use when clicking on "Generate" button for
-     *   tags component.
-     *
-     * @return {String} The string to generate tags from.
+     *   Updates the scope to the proper video type.
      */
-    $scope.generateTagsFrom = function() {
-      return $('#title').val();
+    $scope.setType = function(type) {
+      if (type === 'external' || type === 'script') {
+        $scope.data.item.author_name = type;
+      }
+
+      if (!$scope.item.type) {
+        $scope.item.type = 'html5';
+      }
+
+      $scope.type = type;
     };
 
     /**
@@ -72,33 +144,78 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      */
     $scope.getVideoData = function() {
       var route = {
-        name:   'admin_videos_get_info',
-        params: { url: $scope.video_url }
+        name:   'api_v1_backend_video_get_info',
+        params: { url: $scope.item.video_url }
       };
 
-      $scope.loading_data = true;
+      $scope.flags.http.fetch_video_info = true;
 
       http.get(route).then(
         function(response) {
-          $scope.information     = response.data;
-          $scope.informationJson = JSON.stringify($scope.information);
+          $scope.item.information     = response.data;
+          $scope.item.informationJson = JSON.stringify($scope.information);
 
-          if ($scope.information.title && !$scope.title) {
-            $scope.title = $scope.information.title;
+          if ($scope.item.information.title && !$scope.item.title) {
+            $scope.item.title = $scope.item.information.title;
           }
 
-          if ($scope.information.embedHTML) {
-            $scope.information.embedHTML =
-              $sce.trustAsHtml($scope.information.embedHTML);
-          }
+          $scope.flags.http.fetch_video_info = false;
 
-          $scope.loading_data = false;
+          $scope.item.author_name = $scope.item.information.service;
 
           $timeout(function() {
             angular.element('.tags-input-buttons .btn-info').triggerHandler('click');
           }, 250);
+        },
+        function(response) {
+          messenger.post(response.data.message);
+
+          $scope.flags.http.fetch_video_info = false;
         }
       );
     };
+
+    /**
+     * @function getFrontendUrl
+     * @memberOf VideoCtrl
+     *
+     * @description
+     * Returns the frontend url for the content given its object
+     *
+     * @param  {String} item  The object item to generate the url from.
+     * @return {String}
+     */
+    $scope.getFrontendUrl = function(item) {
+      var date = item.date;
+
+      var formattedDate = moment(date).format('YYYYMMDDHHmmss');
+
+      return $scope.getL10nUrl(
+        routing.generate('frontend_video_show', {
+          id: item.pk_content,
+          created: formattedDate,
+          slug: item.slug,
+          category_name: item.category_name
+        })
+      );
+    };
+
+    /**
+     * Updates scope when cover changes.
+     *
+     * @param array nv The new values.
+     * @param array ov The old values.
+     */
+    $scope.$watch('cover', function(nv, ov) {
+      if (!angular.isObject($scope.item.information)) {
+        $scope.item.information = {};
+      }
+
+      if (angular.isObject(nv)) {
+        $scope.item.information['thumbnail'] = nv.pk_photo;
+      } else {
+        $scope.item.information.thumbnail = {};
+      }
+    }, true);
   }
 ]);

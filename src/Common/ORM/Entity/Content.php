@@ -50,6 +50,38 @@ class Content extends Entity
     }
 
     /**
+     * Returns one media object to an specific position name
+     *
+     * @param string $name The position name
+     *
+     * @return array
+     */
+    public function getMedia($name)
+    {
+        $media = $this->getRelated($name);
+
+        return array_pop($media);
+    }
+
+    /**
+     * Returns a list of objects associated to an specific position
+     *
+     * @param string $name The position name
+     *
+     * @return array
+     */
+    public function getRelated($name)
+    {
+        $related = array_map(function ($el) {
+            return $el['pk_content2'];
+        }, array_filter($this->related_contents, function ($element) use ($name) {
+            return $element['relationship'] == $name;
+        }));
+
+        return $related;
+    }
+
+    /**
      * Returns true if content has objects associated to an specific position
      *
      * @param string $name The position name
@@ -64,24 +96,38 @@ class Content extends Entity
     }
 
     /**
-     * Returns the objects associated to an specific position
+     * Returns true if a match time constraints, is available and is not in trash
      *
-     * @param string $name The position name
-     *
-     * @return array
+     * @return boolean true if is ready
      */
-    public function getRelated($name)
+    public function isReadyForPublish()
     {
-        $related = array_map(function ($el) {
-            return $el['pk_content2'];
-        }, array_filter($this->related_contents, function ($element) use ($name) {
-            return $element['relationship'] == $name;
-        }));
+        return ($this->isInTime()
+            && $this->content_status == 1
+            && $this->in_litter == 0);
+    }
 
-        if (count($related) == 1) {
-            $related = array_pop($related);
-        }
+    /**
+     * Check if a content is in time for publishing
+     *
+     * @param string $now the current time
+     *
+     * @return boolean
+     */
+    protected function isInTime($now = null)
+    {
+        $now = new \DateTime($now);
 
-        return $related;
+        $dued = (
+            !empty($this->endtime)
+            && $now->getTimeStamp() > $this->endtime->getTimeStamp()
+        );
+
+        $postponed = (
+            !empty($this->starttime)
+            && $now->getTimeStamp() < $this->starttime->getTimeStamp()
+        );
+
+        return (!$dued && !$postponed);
     }
 }

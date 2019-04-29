@@ -22,28 +22,6 @@ use Common\Core\Annotation\Security;
 class AlbumsController extends Controller
 {
     /**
-     * Common code for all the actions.
-     */
-    public function init()
-    {
-        $request     = $this->get('request_stack')->getCurrentRequest();
-        $contentType = \ContentManager::getContentTypeIdFromName('album');
-        $category    = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-
-        $this->ccm = \ContentCategoryManager::get_instance();
-
-        list($this->parentCategories, $this->subcat, $this->categoryData)
-            = $this->ccm->getArraysMenu($category, $contentType);
-
-        $this->view->assign([
-            'category'     => $category,
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->categoryData,
-        ]);
-    }
-
-    /**
      * Lists all albums.
      *
      * @return Response The response object.
@@ -53,23 +31,7 @@ class AlbumsController extends Controller
      */
     public function listAction()
     {
-        $categories = [ [ 'name' => _('All'), 'value' => null ] ];
-
-        foreach ($this->parentCategories as $key => $category) {
-            $categories[] = [
-                'name' => $category->title,
-                'value' => $category->pk_content_category
-            ];
-
-            foreach ($this->subcat[$key] as $subcategory) {
-                $categories[] = [
-                    'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->pk_content_category
-                ];
-            }
-        }
-
-        return $this->render('album/list.tpl', [ 'categories' => $categories ]);
+        return $this->render('album/list.tpl');
     }
 
     /**
@@ -104,7 +66,6 @@ class AlbumsController extends Controller
                     ->get('comments_config'),
                 'locale'         => $this->get('core.locale')
                     ->getLocale('frontend'),
-                'tags'           => []
             ]);
         }
 
@@ -214,13 +175,6 @@ class AlbumsController extends Controller
             return $this->redirect($this->generateUrl('admin_albums'));
         }
 
-        $tags = [];
-
-        if (!empty($album->tag_ids)) {
-            $ts   = $this->get('api.service.tag');
-            $tags = $ts->responsify($ts->getListByIds($album->tag_ids)['items']);
-        }
-
         if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
             && !$album->isOwner($this->getUser()->id)
         ) {
@@ -243,7 +197,6 @@ class AlbumsController extends Controller
                 ->get('comments_config'),
             'locale'         => $this->get('core.locale')
                 ->getRequestLocale('frontend'),
-            'tags'           => $tags
         ]);
     }
 
@@ -420,60 +373,6 @@ class AlbumsController extends Controller
             'albums'     => $albums,
             'pagination' => $pagination,
         ]);
-    }
-
-    /**
-     * Lists all the albums withing a category for the related manager.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('ALBUM_MANAGER')")
-     */
-    public function contentProviderRelatedAction(Request $request)
-    {
-        $categoryId   = $request->query->getDigits('category', 0);
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = $this->get('orm.manager')->getDataSet('Settings')
-            ->get('items_per_page') ?: 20;
-
-        $em       = $this->get('entity_repository');
-        $category = $this->get('category_repository')->find($categoryId);
-
-        $filters = [
-            'content_type_name' => [['value' => 'album']],
-            'in_litter'         => [['value' => 1, 'operator' => '!=']]
-        ];
-
-        if ($categoryId != 0) {
-            $filters['category_name'] = [['value' => $category->name]];
-        }
-
-        $countAlbums = true;
-        $albums      = $em->findBy($filters, ['created' => 'desc'], $itemsPerPage, $page, 0, $countAlbums);
-
-        // Build the pagination
-        $pagination = $this->get('paginator')->get([
-            'epp'   => $itemsPerPage,
-            'page'  => $page,
-            'total' => $countAlbums,
-            'route' => [
-                'name'   => 'admin_albums_content_provider_related',
-                'params' => ['category' => $categoryId]
-            ],
-        ]);
-
-        return $this->render(
-            'common/content_provider/_container-content-list.tpl',
-            [
-                'contentType'           => 'Album',
-                'contents'              => $albums,
-                'contentTypeCategories' => $this->parentCategories,
-                'category'              => $categoryId,
-                'pagination'            => $pagination,
-                'contentProviderUrl'    => $this->generateUrl('admin_albums_content_provider_related'),
-            ]
-        );
     }
 
     /**

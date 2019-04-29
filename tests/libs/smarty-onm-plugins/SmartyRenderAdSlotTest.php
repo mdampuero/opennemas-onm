@@ -38,7 +38,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer' ])
+            ->setMethods([ 'getContainer', 'getValue' ])
             ->getMock();
 
         $this->em->expects($this->any())->method('getDataSet')
@@ -76,13 +76,9 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderAdSlotWhenTypeIsNotInAdsPosition()
     {
-        $params = new \StdClass();
-
-        $params->value = [ 111, 222, 333 ];
-
-        $this->smarty->tpl_vars = [
-            'ads_positions'  => $params
-        ];
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('ads_positions')
+            ->willReturn([ 111, 222, 333 ]);
 
         $this->assertEmpty(
             smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty)
@@ -94,23 +90,24 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderAdSlotWhenSafeFrameInSettings()
     {
-        $params = new \StdClass();
-        $ads    = new \StdClass();
-        $ad     = new \Advertisement();
-
+        $ad                     = new \Advertisement();
         $ad->positions          = [ 123 ];
         $ad->type_advertisement = [ 123 ];
         $ad->starttime          = '2000-01-01 00:00:00';
         $ad->endtime            = null;
         $ad->params             = [ 'orientation' => 'left' ];
 
-        $params->value = [ 'ads-format' => 'safeframe' ];
-        $ads->value    = [ $ad ];
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('ads_positions')
+            ->willReturn(123);
 
-        $this->smarty->tpl_vars = [
-            'render_params'  => $params,
-            'advertisements' => $ads
-        ];
+        $this->smarty->expects($this->at(2))->method('getValue')
+            ->with('render_params')
+            ->willReturn([ 'ads-format' => 'safeframe' ]);
+
+        $this->smarty->expects($this->at(3))->method('getValue')
+            ->with('advertisements')
+            ->willReturn([ $ad ]);
 
         $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 1 ]);
@@ -127,16 +124,17 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderAdSlotWhenInlineAndEmpty()
     {
-        $params = new \StdClass();
-        $ads    = new \StdClass();
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('ads_positions')
+            ->willReturn(123);
 
-        $params->value = [ 'ads-format' => 'safeframe' ];
-        $ads->value    = null;
+        $this->smarty->expects($this->at(2))->method('getValue')
+            ->with('render_params')
+            ->willReturn([ 'ads-format' => 'inline' ]);
 
-        $this->smarty->tpl_vars = [
-            'render_params'  => $params,
-            'advertisements' => $ads
-        ];
+        $this->smarty->expects($this->at(3))->method('getValue')
+            ->with('advertisements')
+            ->willReturn(null);
 
         $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
@@ -150,17 +148,19 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderAdSlotWhenInlineAndNoEnabledAdvertisement()
     {
-        $params = new \StdClass();
-        $ads    = new \StdClass();
-        $ad     = new \Advertisement();
+        $ad = new \Advertisement();
 
-        $params->value = [ 'ads-format' => 'safeframe' ];
-        $ads->value    = [ $ad ];
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('ads_positions')
+            ->willReturn(123);
 
-        $this->smarty->tpl_vars = [
-            'render_params'  => $params,
-            'advertisements' => $ads
-        ];
+        $this->smarty->expects($this->at(2))->method('getValue')
+            ->with('render_params')
+            ->willReturn([ 'ads-format' => 'inline' ]);
+
+        $this->smarty->expects($this->at(3))->method('getValue')
+            ->with('advertisements')
+            ->willReturn([ $ad ]);
 
         $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
@@ -172,25 +172,41 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
      * Tests smarty_function_render_ad_slot when safeframe is enabled but inline is
      * forced in template and enabled advertisements in list.
      */
-    public function testRenaderBannerWhenInlineForced()
+    public function testRenderBannerWhenInlineForced()
     {
-        $params = new \StdClass();
-        $ads    = new \StdClass();
-        $ad     = new \Advertisement();
-
+        $ad                     = new \Advertisement();
         $ad->positions          = [ 123 ];
         $ad->type_advertisement = [ 123 ];
         $ad->starttime          = '2000-01-01 00:00:00';
         $ad->endtime            = null;
         $ad->params             = [ 'orientation' => 'left' ];
 
-        $params->value = [];
-        $ads->value    = [ $ad ];
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('ads_positions')
+            ->willReturn(123);
 
-        $this->smarty->tpl_vars = [
-            'render_params'  => $params,
-            'advertisements' => $ads
-        ];
+        $this->smarty->expects($this->at(2))->method('getValue')
+            ->with('render_params')
+            ->willReturn([ 'ads-format' => 'inline' ]);
+
+        $this->smarty->expects($this->at(3))->method('getValue')
+            ->with('advertisements')
+            ->willReturn([ $ad ]);
+
+        $this->smarty->expects($this->at(4))->method('getValue')
+            ->with('app')
+            ->willReturn([
+                'extension' => 'foo',
+                'advertisementGroup' => 'bar'
+            ]);
+
+        $this->smarty->expects($this->at(5))->method('getValue')
+            ->with('actual_category')
+            ->willReturn([ 'baz' ]);
+
+        $this->smarty->expects($this->at(6))->method('getValue')
+            ->with('content')
+            ->willReturn(new \StdClass());
 
         $this->renderer->expects($this->once())->method('renderInline')
             ->with($ad)->willReturn('foo garply');
@@ -216,23 +232,39 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderAdSlotWhenInlineForcedWithCustomMark()
     {
-        $params = new \StdClass();
-        $ads    = new \StdClass();
-        $ad     = new \Advertisement();
-
+        $ad                     = new \Advertisement();
         $ad->positions          = [ 123 ];
         $ad->type_advertisement = [ 123 ];
         $ad->starttime          = '2000-01-01 00:00:00';
         $ad->endtime            = null;
         $ad->params             = [ 'orientation' => 'left' ];
 
-        $params->value = ['mark_text' => 'Sponsor'];
-        $ads->value    = [ $ad ];
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('ads_positions')
+            ->willReturn(123);
 
-        $this->smarty->tpl_vars = [
-            'render_params'  => $params,
-            'advertisements' => $ads
-        ];
+        $this->smarty->expects($this->at(2))->method('getValue')
+            ->with('render_params')
+            ->willReturn([ 'ads-format' => 'inline' ]);
+
+        $this->smarty->expects($this->at(3))->method('getValue')
+            ->with('advertisements')
+            ->willReturn([ $ad ]);
+
+        $this->smarty->expects($this->at(4))->method('getValue')
+            ->with('app')
+            ->willReturn([
+                'extension' => 'foo',
+                'advertisementGroup' => 'bar'
+            ]);
+
+        $this->smarty->expects($this->at(5))->method('getValue')
+            ->with('actual_category')
+            ->willReturn([ 'baz' ]);
+
+        $this->smarty->expects($this->at(6))->method('getValue')
+            ->with('content')
+            ->willReturn(new \StdClass());
 
         $this->renderer->expects($this->once())->method('renderInline')
             ->with($ad)->willReturn('foo garply');

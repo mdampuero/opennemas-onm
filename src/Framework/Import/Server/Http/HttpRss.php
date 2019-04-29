@@ -127,7 +127,7 @@ class HttpRss extends Http
             [
                 'article' => $article,
                 'tags'    => getService('api.service.tag')
-                    ->getListByIdsKeyMapped($article->tag_ids)['items']
+                    ->getListByIdsKeyMapped($article->tags)['items']
             ]
         );
 

@@ -22,31 +22,6 @@ use Common\Core\Controller\Controller;
 class AdvertisementsController extends Controller
 {
     /**
-     * Common code for all the actions.
-     */
-    public function init()
-    {
-        $contentType = \ContentManager::getContentTypeIdFromName('advertisement');
-
-        // Sometimes category is array. When create & update advertisement
-        $this->category = $this->get('request_stack')->getCurrentRequest()
-            ->query->getDigits('category', 0);
-
-        // Fetch categories to all internal categories
-        $contentTypes = [$contentType, 7, 9, 11, 14];
-        $ccm          = \ContentCategoryManager::get_instance();
-
-        list($this->parentCategories, $this->subcat, $this->categoryData) =
-            $ccm->getArraysMenu($this->category, $contentTypes);
-        $this->view->assign([
-            'subcat'       => $this->subcat,
-            'allcategorys' => $this->parentCategories,
-            'datos_cat'    => $this->categoryData,
-            'category'     => $this->category,
-        ]);
-    }
-
-    /**
      * Lists all the available ads.
      *
      * @return Response The response object.
@@ -76,32 +51,7 @@ class AdvertisementsController extends Controller
             [ 'name' => _("Smart"), 'value' => 4 ]
         ];
 
-        $categories = [
-            [ 'name' => _('All'), 'value' => null ],
-            [ 'name' => _('HOMEPAGE'), 'value' => 0, 'group' => _('Special elements') ],
-            [ 'name' => _('OPINION'), 'value' => 4, 'group' => _('Special elements') ],
-            [ 'name' => _('ALBUM'), 'value' => 3, 'group' => _('Special elements') ],
-            [ 'name' => _('VIDEO'), 'value' => 6, 'group' => _('Special elements') ]
-        ];
-
-        foreach ($this->parentCategories as $key => $category) {
-            $categories[] = [
-                'name' => $category->title,
-                'value' => $category->id,
-                'group' => _('Categories')
-            ];
-
-            foreach ($this->subcat[$key] as $subcategory) {
-                $categories[] = [
-                    'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->id,
-                    'group' => _('Categories')
-                ];
-            }
-        }
-
         return $this->render('advertisement/list.tpl', [
-            'categories'              => $categories,
             'advertisement_positions' => $adsPositions,
             'types'                   => $types,
             'map'                     => json_encode($map)
@@ -134,7 +84,7 @@ class AdvertisementsController extends Controller
             $categories = null;
         }
 
-        $title  = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+        $title = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
         $data = [
             'title'              => $title,
@@ -561,8 +511,8 @@ class AdvertisementsController extends Controller
      */
     protected function getTags($title)
     {
-        $ts = $this->get('api.service.tag');
-
-        return $ts->responsify($ts->getListByString($title)['items']);
+        return array_map(function ($tag) {
+            return $tag->id;
+        }, $this->get('api.service.tag')->getListByString($title)['items']);
     }
 }

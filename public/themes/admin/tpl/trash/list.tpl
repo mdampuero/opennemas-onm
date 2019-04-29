@@ -224,11 +224,11 @@
                     <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
                   <div class="listing-inline-actions">
-                    <a ng-if="content.content_type_name == 'static_page'" ng-href="[% edit(content.id, 'backend_'+content.content_type_name+'_show') %]" class="link">
+                    <a ng-if="['static_page', 'event', 'opinion', 'video' ].indexOf(content.content_type_name) >= 0" ng-href="[% edit(content.id, 'backend_'+content.content_type_name+'_show') %]" class="link">
                       <i class="fa fa-pencil"></i>
                       {t}Edit{/t}
                     </a>
-                    <a ng-if="content.content_type_name != 'static_page'" ng-href="[% edit(content.id, 'admin_'+content.content_type_name+'_show') %]" class="link">
+                    <a ng-if="['static_page', 'event', 'opinion', 'video' ].indexOf(content.content_type_name) < 0" ng-href="[% edit(content.id, 'admin_'+content.content_type_name+'_show') %]" class="link">
                       <i class="fa fa-pencil"></i>
                       {t}Edit{/t}
                     </a>

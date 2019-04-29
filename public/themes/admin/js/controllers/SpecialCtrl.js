@@ -10,22 +10,6 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
     /**
-     * @function init
-     * @memberOf SpecialCtrl
-     *
-     * @description
-     * Method to init the special controller
-     *
-     * @param {object} special  Special to edit
-     * @param {String} locale   Locale for the special
-     * @param {Array}  tags     Array with all the tags needed for the special
-     */
-    $scope.init = function(special, locale, tags) {
-      $scope.locale = locale;
-      $scope.tags   = tags;
-    };
-
-    /**
      * Parse the photos from template and initialize the scope properly
      *
      * @param Object photos The album photos.

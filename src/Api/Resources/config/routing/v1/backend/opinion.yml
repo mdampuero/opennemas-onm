@@ -1,0 +1,98 @@
+api_v1_backend_opinion_create:
+    path:     /opinions/new
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:create }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_opinion_delete:
+    path:     /opinions/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_opinion_patch:
+    path:     /opinions/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:patch }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_opinion_save:
+    path:     /opinions
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_opinion_show:
+    path:     /opinions/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_opinion_update:
+    path:     /opinions/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:update }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_opinions_delete:
+    path:     /opinions
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_opinions_list:
+    path:     /opinions
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:list, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_opinions_patch:
+    path:     /opinions
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:patchSelected }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_opinion_preview:
+    path:     /opinions/preview
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:preview }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_opinion_get_preview:
+    path:     /opinions/get-preview
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:getPreview }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_opinion_config_save:
+    path:     /opinions/config
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:saveConfig }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_opinion_config_show:
+    path:     /opinions/config
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:showConfig }
+    methods:  [ GET ]
+    options:
+        expose: true

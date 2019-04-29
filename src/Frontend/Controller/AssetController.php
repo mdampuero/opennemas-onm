@@ -9,10 +9,12 @@
  */
 namespace Frontend\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 use Imagine\Image\ImageInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Handles the actions for assets.
@@ -20,61 +22,48 @@ use Imagine\Image\ImageInterface;
 class AssetController extends Controller
 {
     /**
-     * Description of the action.
+     * {@inheritdoc}
+     */
+    protected $routes = [
+        'image' => 'asset_image'
+    ];
+
+    /**
+     * Displays an image after applying a transformation.
      *
      * @return Response The response object.
      */
-    public function imageAction(Request $request)
+    public function imageAction(Request $request, $params, $path)
     {
-        $parameters = $request->query->get('parameters');
+        $action = $this->get('core.globals')->getAction();
+        $params = $this->decodeParameters($params);
 
-        $parametersParser = function ($text) use (&$parametersParser) {
-            if (strpos($text, ',') === false) {
-                $decodeText = urldecode($text);
-                if ($text == $decodeText) {
-                    return null;
-                }
+        $expectedUri = $this->getExpectedUri($action, [
+            'params' => $params,
+            'path'   => $path
+        ]);
 
-                return $parametersParser($decodeText);
-            } else {
-                return $text;
-            }
-        };
-
-        $parameters = $parametersParser($parameters);
-
-        $parameters = explode(',', urldecode($parameters));
-        $path       = realpath(SITE_PATH . '/' . $request->query->get('real_path'));
-        $method     = array_shift($parameters);
-
-        if (file_exists($path) && is_file($path)) {
-            $imageService = $this->get('core.image.image');
-
-            $image = $imageService->getImage($path);
-
-            $imageFormat = $imageService->getImageFormat($image);
-            if ($imageFormat == 'gif') {
-                return new Response(
-                    file_get_contents($path),
-                    200,
-                    [ 'Content-Type' => $imageFormat ]
-                );
-            }
-
-            $imageService->strip($image);
-            $image = $imageService->process($method, $image, $parameters);
-
-            $contents = $image->get($imageFormat, [
-                'resolution-units' => ImageInterface::RESOLUTION_PIXELSPERINCH,
-                'resolution-x'     => 72,
-                'resolution-y'     => 72,
-                'quality'          => 85,
-            ]);
-
-            return new Response($contents, 200, ['Content-Type' => $imageFormat]);
-        } else {
-            return new Response('', 404);
+        if ($request->getRequestUri() !== $expectedUri) {
+            return new RedirectResponse($expectedUri, 301);
         }
+
+        $path      = $this->getParameter('core.paths.public') . '/' . $path;
+        $params    = explode(',', $params);
+        $transform = array_shift($params);
+
+        if (!file_exists($path) || !is_file($path)) {
+            throw new ResourceNotFoundException();
+        }
+
+        $content = $this->get('core.image.processor')
+            ->open($path)
+            ->strip()
+            ->apply($transform, $params)
+            ->getContent();
+
+        $mimeType = $this->get('core.image.processor')->getMimeType();
+
+        return new Response($content, 200, [ 'Content-Type' => $mimeType ]);
     }
 
     /**
@@ -86,10 +75,16 @@ class AssetController extends Controller
      */
     public function customCssFrontpageAction(Request $request)
     {
-        $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $categoryName      = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $currentCategoryId = 0;
 
-        $ccm               = \ContentCategoryManager::get_instance();
-        $currentCategoryId = $ccm->get_id($categoryName);
+        try {
+            $category = $this->get('api.service.category')
+                ->getItemBySlug($categoryName);
+
+            $currentCategoryId = $category->pk_content_category;
+        } catch (\Exception $e) {
+        }
 
         list(, , $contentsInHomepage) =
             $this->get('api.service.frontpage_version')
@@ -186,47 +181,25 @@ class AssetController extends Controller
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('base/custom_css.tpl', $cacheID)
         ) {
-            $ccm = \ContentCategoryManager::get_instance();
-
             // RenderColorMenu
             $siteColor   = '#005689';
             $configColor = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('site_color');
+
             if (!empty($configColor)) {
                 if (!preg_match('@^#@', $configColor)) {
-                    $siteColor = '#' . $configColor;
-                } else {
-                    $siteColor = $configColor;
+                    $configColor = '#' . $configColor;
                 }
+
+                $siteColor = $configColor;
             }
 
-            $selectedCategories = [];
-            if (is_array($ccm->categories) && !empty($ccm->categories)) {
-                foreach ($ccm->categories as &$category) {
-                    $commonCategoryNames = [
-                        'photo', 'publicidad', 'album', 'opinion',
-                        'comment', 'video', 'author', 'portada', 'unknown'
-                    ];
-
-                    if (in_array($category->name, $commonCategoryNames)) {
-                        continue;
-                    }
-
-                    if (empty($category->color)) {
-                        $category->color = $siteColor;
-                    } else {
-                        if (!preg_match('@^#@', $category->color)) {
-                            $category->color = '#' . $category->color;
-                        }
-                    }
-
-                    $selectedCategories[] = $category;
-                }
-            }
+            $categories = $this->get('api.service.category')
+                ->getList('color !is null and color != ""');
 
             $this->view->assign([
-                'categories' => $selectedCategories,
+                'categories' => $categories['items'],
                 'site_color' => $siteColor,
             ]);
         }
@@ -254,27 +227,58 @@ class AssetController extends Controller
      */
     public function favicoAction()
     {
-        // Default favico
-        $favicoRelativePath = '/assets/images/favicon.png';
+        $path = '/assets/images/favicon.png';
 
-        $settings = $this->get('orm.manager')->getDataSet('Settings', 'instance')
-            ->get(['favico', 'section_settings', 'logo_enabled']);
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get(['favico', 'logo_enabled']);
 
         if ($settings['logo_enabled'] && !empty($settings['favico'])) {
-            $favicoRelativePath = MEDIA_URL . MEDIA_DIR . '/sections/' . $settings['favico'];
+            $path = $this->get('core.instance')->getMediaShortPath()
+                . '/sections/' . $settings['favico'];
         }
 
-        $favicoPath = realpath(SITE_PATH . '/' . $favicoRelativePath);
+        $path = $this->getParameter('core.paths.public') . $path;
 
-        // Default favico
-        if (empty($favicoPath)) {
-            $favicoPath = realpath(SITE_PATH . '/assets/images/favicon.png');
+        $content = $this->get('core.image.processor')
+            ->open($path)
+            ->getContent();
+
+        $mimeType = $this->get('core.image.processor')->getMimeType();
+
+        return new Response($content, 200, [ 'Content-Type' => $mimeType ]);
+    }
+
+    /**
+     * Decodes parameters for image action until they are completely decode.
+     *
+     * @param string $params The parameters to decode.
+     *
+     * @return string The decoded parameters.
+     */
+    protected function decodeParameters($params)
+    {
+        $decoded = urldecode($params);
+
+        // Already decoded
+        if ($params === $decoded) {
+            return $params;
         }
 
-        return new Response(
-            file_get_contents($favicoPath),
-            200,
-            [ 'Content-Type' => 'image/' . pathinfo($favicoPath, PATHINFO_EXTENSION) ]
-        );
+        return $this->decodeParameters($decoded);
+    }
+
+    /**
+     * Returns the expected URI for the provided action basing on a list of
+     * parameters.
+     *
+     * @param string $action The action name.
+     * @param array  $params The list of parameters to generate the route with.
+     *
+     * @return string The expected URI.
+     */
+    protected function getExpectedUri($action, $params)
+    {
+        return $this->get('router')->generate($this->getRoute($action), $params);
     }
 }

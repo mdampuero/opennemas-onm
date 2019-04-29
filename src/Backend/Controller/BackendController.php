@@ -11,44 +11,68 @@ namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class BackendController extends Controller
 {
     /**
      * Displays the form to create an item.
      *
+     * @param Request $request The request object.
+     *
      * @return Response The response object.
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('create'));
 
-        return $this->render($this->resource . '/item.tpl');
+        $params = [];
+
+        if ($this->get('core.helper.locale')->hasMultilanguage()) {
+            $params['locale'] = $request->query->get('locale');
+        }
+
+        return $this->render($this->resource . '/item.tpl', $params);
     }
 
     /**
      * Displays the list of items.
      *
+     * @param Request $request The request object.
+     *
      * @return Response The response object.
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('list'));
 
-        return $this->render($this->resource . '/list.tpl');
+        $params = [];
+
+        if ($this->get('core.helper.locale')->hasMultilanguage()) {
+            $params['locale'] = $request->query->get('locale');
+        }
+
+        return $this->render($this->resource . '/list.tpl', $params);
     }
 
     /**
      * Displays the form to edit an item.
      *
-     * @param integer $id The item id.
+     * @param Request $request The request object.
+     * @param integer $id      The item id.
      *
      * @return Response The response object.
      */
-    public function showAction($id)
+    public function showAction(Request $request, $id)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('update'));
 
-        return $this->render($this->resource . '/item.tpl', [ 'id' => $id ]);
+        $params = [ 'id' => $id ];
+
+        if ($this->get('core.helper.locale')->hasMultilanguage()) {
+            $params['locale'] = $request->query->get('locale');
+        }
+
+        return $this->render($this->resource . '/item.tpl', $params);
     }
 }

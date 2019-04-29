@@ -35,7 +35,7 @@
                   '{{text}}' +
                   '<i class="fa fa-angle-down"></i>' +
                 '</button>' +
-                '<ul class="dropdown-menu" role="menu" style="padding:0">' +
+                '<ul class="dropdown-menu no-padding" role="menu">' +
                   '<li ng-repeat="language in languages" ng-if="language.value != ngModel">' +
                     '<a href="{{link + \'?locale=\' + language.value}}">' +
                       '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>' +
@@ -45,7 +45,7 @@
                 '</ul>' +
               '</div>' +
               '<div class="translator btn-group btn-group-sm" role="group" ng-if="!collapsed && size <= max">' +
-                '<a class="btn btn-{{language.class}} btn-{{language.translated ? \'solid\' : \'transparent\' }}"' +
+                '<a class="btn btn-{{language.class}}"' +
                     ' href="{{link + \'?locale=\' + language.value}}" ng-repeat="language in languages">' +
                   '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>{{language.name}}' +
                 '</a>' +
@@ -53,14 +53,14 @@
             }
 
             return '<div class="translator btn-group">' +
-              '<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">' +
+              '<button class="btn btn-white dropdown-toggle" data-toggle="dropdown" type="button">' +
                 '<i class="fa {{languages[ngModel].icon}} m-r-5" ng-show="languages[ngModel].icon"></i>' +
                 '{{languages[ngModel].name}}' +
                 '<i class="fa fa-angle-down"></i>' +
               '</button>' +
-              '<ul class="dropdown-menu" role="menu" style="padding:0">' +
+              '<ul class="dropdown-menu no-padding" role="menu">' +
                 '<li ng-repeat="language in languages" ng-if="language.value != ngModel">' +
-                  '<a href="#" ng-click="changeSelected(language.value)">' +
+                  '<a href="#" ng-click="changeCurrentLanguage($event, language.value)">' +
                     '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>' +
                     '{{language.name}}' +
                   '</a>' +
@@ -69,14 +69,15 @@
             '</div>';
           },
           link: function($scope) {
-            $scope.max       = 4;
-            $scope.collapsed = $window.innerWidth < 992;
-            $scope.languages = {};
-            $scope.size      = Object.keys($scope.options.available).length;
+            $scope.max           = 4;
+            $scope.collapseWidth = 992;
+            $scope.collapsed     = $window.innerWidth < $scope.collapseWidth;
+            $scope.languages     = {};
+            $scope.size          = Object.keys($scope.options.available).length;
 
             var getOption = function(name, value, main, translators, keys, item) {
               var option = {
-                class: value === main ? 'primary' : 'default',
+                class: value === main ? 'info' : 'default',
                 icon: item ? 'fa-plus' : '',
                 name: name,
                 translated: false,
@@ -90,8 +91,12 @@
 
                 if (keys) {
                   for (var i = 0; i < keys.length; i++) {
-                    if (item[keys[i]] && angular.isObject(item[keys[i]]) &&
-                        item[keys[i]][value]) {
+                    if (!item[keys[i]]) {
+                      continue;
+                    }
+
+                    if (angular.isString(item[keys[i]]) && value === main ||
+                        angular.isObject(item[keys[i]]) && item[keys[i]][value]) {
                       option.icon       = 'fa-pencil';
                       option.translated = true;
 
@@ -120,13 +125,14 @@
              *
              * @param {String} The language value.
              */
-            $scope.changeSelected = function(language) {
+            $scope.changeCurrentLanguage = function(e, language) {
+              e.preventDefault();
               $scope.ngModel = language;
             };
 
             // Collapse directive when window width changes
             angular.element($window).bind('resize', function() {
-              $scope.collapsed = $window.innerWidth < 992;
+              $scope.collapsed = $window.innerWidth < $scope.collapseWidth;
 
               $scope.$apply();
             });

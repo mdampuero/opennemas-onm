@@ -43,12 +43,8 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'filter', 'get', 'set' ])
             ->getMock();
 
-        $this->locale = $this->getMockBuilder('Locale')
-            ->setMethods([ 'getLocale' ])
-            ->getMock();
-
         $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
-            ->setMethods([ 'getId', 'getIdKeys' ])
+            ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
@@ -82,9 +78,6 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
             case 'core.dispatcher':
                 return $this->dispatcher;
 
-            case 'core.locale':
-                return $this->locale;
-
             case 'data.manager.filter':
                 return $this->fm;
 
@@ -103,16 +96,8 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $data = [ 'name' => 'Plugh' ];
 
         $this->converter->expects($this->any())->method('objectify')
-            ->with(array_merge($data, [
-                'slug'        => 'plugh',
-                'language_id' => 'es_ES'
-            ]))->willReturn(array_merge($data, [
-                'slug'        => 'plugh',
-                'language_id' => 'es_ES'
-            ]));
-
-        $this->locale->expects($this->once())->method('getLocale')
-            ->with('frontend')->willReturn('es_ES');
+            ->with(array_merge($data, [ 'slug'   => 'plugh', ]))
+            ->willReturn(array_merge($data, [ 'slug'   => 'plugh' ]));
 
         $this->em->expects($this->once())->method('persist');
 
@@ -185,11 +170,11 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $tags = [ new Tag([ 'slug' => 'wobble' ]) ];
 
         $this->repository->expects($this->once())->method('findBy')
-            ->with('slug in ["wobble"] and language_id = "es_ES"')
+            ->with('slug in ["wobble"] and locale = "es_ES"')
             ->willReturn($tags);
 
         $this->repository->expects($this->once())->method('countBy')
-            ->with('slug in ["wobble"] and language_id = "es_ES"')
+            ->with('slug in ["wobble"] and locale = "es_ES"')
             ->willReturn(1);
 
         $response = $this->service->getListBySlugs([ 'wobble' ], 'es_ES');
@@ -274,6 +259,30 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getListByIdsKeyMapped when ids provided.
+     */
+    public function testGetListByIdsKeyMappedWhenIdsProvidedForLocale()
+    {
+        $tags = [
+            new Tag([ 'id' => 30044, 'locale' => 'es', 'name' => 'glorp' ]),
+            new Tag([ 'id' => 2795,  'locale' => null, 'name' => 'xyzzy' ]),
+            new Tag([ 'id' => 26394, 'locale' => 'gl', 'name' => 'glorp' ]),
+        ];
+
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 30044, 2795, 26934 ])->willReturn($tags);
+
+        $this->converter->expects($this->once())->method('responsify')
+            ->with([ 30044 => $tags[0], 2795 => $tags[1] ])
+            ->willReturn([ 30044 => $tags[0], 2795 => $tags[1] ]);
+
+        $this->assertEquals(
+            [ 'items' => [ 30044 => $tags[0], 2795 => $tags[1] ], 'total' => 2 ],
+            $this->service->getListByIdsKeyMapped([ 30044, 2795, 26934 ], 'es')
+        );
+    }
+
+    /**
      * Tests getListByIdsKeyMapped when no ids provided.
      */
     public function testGetListByIdsKeyMappedWhenNoIdsProvided()
@@ -330,16 +339,8 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $data = [ 'name' => 'Wibble' ];
 
         $this->converter->expects($this->any())->method('objectify')
-            ->with(array_merge($data, [
-                'slug'        => 'wibble',
-                'language_id' => 'es_ES'
-            ]))->willReturn(array_merge($data, [
-                'slug'        => 'wibble',
-                'language_id' => 'es_ES'
-            ]));
-
-        $this->locale->expects($this->once())->method('getLocale')
-            ->with('frontend')->willReturn('es_ES');
+            ->with(array_merge($data, [ 'slug'   => 'wibble' ]))
+            ->willReturn(array_merge($data, [ 'slug'   => 'wibble' ]));
 
         $this->repository->expects($this->once())->method('find')
             ->with(1)->willReturn($item);
@@ -355,14 +356,14 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests parse when all tag information is provided.
+     * Tests parse.
      */
-    public function testParseWhenAllDataProvided()
+    public function testParse()
     {
         $data = [
-            'name'        => 'Wibble',
-            'slug'        => 'wobble',
-            'language_id' => 'es_ES'
+            'name'   => 'Wibble',
+            'slug'   => 'wobble',
+            'locale' => 'es_ES'
         ];
 
         $this->fm->expects($this->once())->method('set')
@@ -376,33 +377,5 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $this->assertEquals($data, $method->invokeArgs($this->service, [ $data ]));
-    }
-
-    /**
-     * Tests parse when only some tag information is provided.
-     */
-    public function testParseWhenLimitedDataProvided()
-    {
-        $data = [
-            'name' => 'Wibble',
-        ];
-
-        $this->fm->expects($this->once())->method('set')
-            ->with('Wibble')->willReturn($this->fm);
-        $this->fm->expects($this->once())->method('filter')
-            ->with('slug')->willReturn($this->fm);
-        $this->fm->expects($this->once())->method('get')
-            ->willReturn('wibble');
-
-        $this->locale->expects($this->once())->method('getLocale')
-            ->with('frontend')->willReturn('en');
-
-        $method = new \ReflectionMethod($this->service, 'parse');
-        $method->setAccessible(true);
-
-        $this->assertEquals(
-            array_merge($data, [ 'slug' => 'wibble', 'language_id' => 'en' ]),
-            $method->invokeArgs($this->service, [ $data ])
-        );
     }
 }

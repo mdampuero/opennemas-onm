@@ -9,8 +9,8 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\ApiException;
 use Common\Core\Controller\Controller;
-use Common\ORM\Core\Exception\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -63,13 +63,11 @@ class FrontendController extends Controller
         $this->checkSecurity($this->extension);
 
         $action = $this->get('core.globals')->getAction();
-        $route  = $this->getRoute($action);
+        $params = $this->getQueryParameters($action, $request->query->all());
 
-        $expected = $this->get('router')->generate($route);
-        $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
+        $expected = $this->getExpectedUri($action, $params);
 
-
-        if ($request->getPathInfo() !== $expected) {
+        if (strpos($request->getRequestUri(), $expected) === false) {
             return new RedirectResponse($expected, 301);
         }
 
@@ -98,15 +96,7 @@ class FrontendController extends Controller
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
 
-        if (empty($item)
-            || !$item instanceof \Content
-            || !$item->isReadyForPublish()
-        ) {
-            throw new ResourceNotFoundException();
-        }
-
-        $expected = $this->get('core.helper.url_generator')->generate($item);
-        $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
+        $expected = $this->getExpectedUri($action, [ 'item' => $item ]);
 
         if ($request->getPathInfo() !== $expected
             && empty($this->get('request_stack')->getParentRequest())
@@ -129,7 +119,7 @@ class FrontendController extends Controller
         $this->view->setConfig($this->getCacheConfiguration($action));
 
         if (!$this->isCached($params)) {
-            $this->hydrateShow($params, $item);
+            $this->hydrateShow($params);
         }
 
         return $this->render(
@@ -158,10 +148,6 @@ class FrontendController extends Controller
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
 
-        if (empty($item) || !$item->isReadyForPublish()) {
-            throw new ResourceNotFoundException();
-        }
-
         $params = $this->getParameters($request, $item);
 
         if ($this->hasExternalLink($params)) {
@@ -177,7 +163,7 @@ class FrontendController extends Controller
         $this->view->setConfig($this->getCacheConfiguration($action));
 
         if (!$this->isCached($params)) {
-            $this->hydrateShowAmp($params, $item);
+            $this->hydrateShowAmp($params);
         }
 
         return $this->render(
@@ -220,6 +206,30 @@ class FrontendController extends Controller
         return array_key_exists($action, $this->caches)
             ? $this->caches[$action]
             : $this->get('core.globals')->getExtension() . '-' . $action;
+    }
+
+    /**
+     * Returns the expire time for cache basing on the endtime of all items in
+     * a list.
+     *
+     * @param array $items The list of items.
+     *
+     * @return string The expire time for cache.
+     */
+    protected function getCacheExpire(array $items)
+    {
+        $listOfExpires = array_filter($items, function ($a) {
+            return !empty($a->endtime);
+        });
+
+        if (empty($listOfExpires)) {
+            return null;
+        }
+        return min(array_map(function ($a) {
+            return $a->endtime instanceof \Datetime
+                ? $a->endtime->format('Y-m-d H:i:s')
+                : $a->endtime;
+        }, $listOfExpires));
     }
 
     /**
@@ -266,18 +276,40 @@ class FrontendController extends Controller
     protected function getCategory($name)
     {
         try {
-            $category = $this->get('orm.manager')->getRepository('Category')
-                ->findOneBy(sprintf('name = "%s"', $name));
-
-            $category->title = $this->get('data.manager.filter')
-                ->set($category->title)
-                ->filter('localize')
-                ->get();
-
-            return $category;
-        } catch (EntityNotFoundException $e) {
+            return $this->get('api.service.category')->getItemBySlug($name);
+        } catch (ApiException $e) {
             throw new ResourceNotFoundException();
         }
+    }
+
+    /**
+     * Returns the expected URI for the list action basing on the current
+     * action and a list of parameters.
+     *
+     * @param string $action The current action.
+     * @param array  $params The list of parameters.
+     *
+     * @return string The expected URI.
+     */
+    protected function getExpectedUri($action, $params = [])
+    {
+        if ($action === 'list') {
+            $route = $this->getRoute($action, $params);
+
+            // Do not support page=1 in query string
+            if (array_key_exists('page', $params) && $params['page'] == 1) {
+                unset($params['page']);
+            }
+
+            $expected = $this->get('router')->generate($route, $params);
+
+            return $this->get('core.helper.l10n_route')->localizeUrl($expected);
+        }
+
+        $expected = $this->get('core.helper.url_generator')
+            ->generate($params['item']);
+
+        return $this->get('core.helper.l10n_route')->localizeUrl($expected);
     }
 
     /**
@@ -318,12 +350,18 @@ class FrontendController extends Controller
     protected function getItem(Request $request)
     {
         $contentType = $request->get('content_type')
-            ?? \classify($this->get('core.globals')->getExtension());
+            ?? $this->get('core.globals')->getExtension();
 
-        return $this->get('entity_repository')->find(
+        $item = $this->get('entity_repository')->find(
             \classify($contentType),
             $this->getIdFromRequest($request)
         );
+
+        if (empty($item) || !$item->isReadyForPublish()) {
+            throw new ResourceNotFoundException();
+        }
+
+        return $item;
     }
 
     /**
@@ -350,6 +388,8 @@ class FrontendController extends Controller
 
             $params['x-tags'][] = $item->id;
 
+            $params[$item->content_type_name] = $item;
+
             $params['content']     = $item;
             $params['contentId']   = $item->id;
             $params['o_content']   = $item;
@@ -358,6 +398,7 @@ class FrontendController extends Controller
 
         if (array_key_exists('category_name', $params)) {
             $params['o_category'] = $this->getCategory($params['category_name']);
+            $params['category']   = $this->getCategory($params['category_name']);
         }
 
         // TODO: Clean this ASAP
@@ -393,8 +434,8 @@ class FrontendController extends Controller
      * Returns the list of valid query parameters from the request for the
      * provided action.
      *
-     * @param string  $action  The action name.
-     * @param Request $request The current request.
+     * @param string $action The action name.
+     * @param array  $params The list of parameters.
      *
      * @return array The list of valid parameters.
      */
@@ -449,8 +490,10 @@ class FrontendController extends Controller
     /**
      * Updates the list of parameters and/or the item when the response for
      * the current request is not cached.
+     *
+     * @param array $params The list of parameters already in set.
      */
-    protected function hydrateShow()
+    protected function hydrateShow(array &$params = []) : void
     {
     }
 
@@ -458,17 +501,19 @@ class FrontendController extends Controller
      * Updates the list of parameters and/or the item when the response for
      * the current request is not cached.
      *
-     * @param array $params the list of parameters already in set.
+     * @param array $params The list of parameters already in set.
      */
-    protected function hydrateList(array $params): void
+    protected function hydrateList(array &$params = []) : void
     {
     }
 
     /**
      * Updates the list of parameters and/or the item when the response for
      * the current request is not cached.
+     *
+     * @param array $params Thelist of parameters already in set.
      */
-    protected function hydrateShowAmp($params, $item)
+    protected function hydrateShowAmp(array &$params = []) : void
     {
         // RenderColorMenu
         $siteColor   = '#005689';
@@ -507,19 +552,19 @@ class FrontendController extends Controller
         }
 
         $em = $this->get('entity_repository');
-        if (isset($item->img2) && ($item->img2 > 0)) {
-            $photoInt = $em->find('Photo', $item->img2);
+        if (isset($params['content']->img2) && ($params['content']->img2 > 0)) {
+            $photoInt = $em->find('Photo', $params['content']->img2);
             $this->view->assign('photoInt', $photoInt);
         }
 
-        if (isset($item->fk_video2) && ($item->fk_video2 > 0)) {
-            $videoInt = $em->find('Video', $item->fk_video2);
+        if (isset($params['content']->fk_video2) && ($params['content']->fk_video2 > 0)) {
+            $videoInt = $em->find('Video', $params['content']->fk_video2);
             $this->view->assign('videoInt', $videoInt);
         }
 
         $this->view->assign([
-            'related_contents'   => $this->getRelated($item),
-            'suggested_contents' => $this->getSuggested($item, $params['o_category'])
+            'related_contents'   => $this->getRelated($params['content']),
+            'suggested_contents' => $this->getSuggested($params['content'], $params['o_category'])
         ]);
     }
 
@@ -627,5 +672,29 @@ class FrontendController extends Controller
 
         return $this->get('automatic_contents')
             ->searchSuggestedContents($content->content_type_name, $query);
+    }
+
+    /**
+     * Returns the list of tags from a list of contents
+     *
+     * @param array $contents The list of contents to fetch tags from
+     *
+     * @return array
+     */
+    public function getTags($contents)
+    {
+        if (!is_array($contents)) {
+            $contents = [ $contents ];
+        }
+
+        $tagIds = [];
+        foreach ($contents as $content) {
+            $tagIds = array_merge($tagIds, $content->tags);
+        }
+
+        return $this->get('api.service.tag')->getListByIdsKeyMapped(
+            $tagIds,
+            $this->get('core.locale')->getRequestLocale()
+        )['items'];
     }
 }

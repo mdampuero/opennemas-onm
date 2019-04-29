@@ -392,7 +392,6 @@ class Article extends Content
             }
 
             $this->saveMetadataFields($data, Article::EXTRA_INFO_TYPE);
-            $this->category_name = $this->loadCategoryName();
 
             return true;
         } catch (\Exception $e) {
@@ -448,7 +447,6 @@ class Article extends Content
 
             return false;
         }
-
     }
 
     /**

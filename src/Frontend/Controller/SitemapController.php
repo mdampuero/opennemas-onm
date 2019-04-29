@@ -124,7 +124,7 @@ class SitemapController extends Controller
                 $content->video = $em->find('Video', $content->fk_video2);
             }
 
-            $tags = array_merge($content->tag_ids, $tags);
+            $tags = array_merge($content->tags, $tags);
         }
 
         $this->view->assign([
@@ -164,7 +164,7 @@ class SitemapController extends Controller
         ]);
 
         foreach ($contents as $content) {
-            $tags = array_merge($content->tag_ids, $tags);
+            $tags = array_merge($content->tags, $tags);
         }
 
         $this->view->assign([

@@ -100,10 +100,6 @@ class Agency
 
         $tpl = getService('view')->getBackendTemplate();
 
-        // Load category related information
-        $article->category_name  = $article->loadCategoryName($article->id);
-        $article->category_title = $article->loadCategoryTitle($article->id);
-
         // Add DateTime with format Y-m-d H:i:s
         $article->created_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created);
         $article->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->changed);
@@ -168,7 +164,7 @@ class Agency
             'photo'       => $article->img1,
             'photoInner'  => $article->img2,
             'tags'        => getService('api.service.tag')
-                ->getListByIdsKeyMapped($article->tag_ids, $locale)['items']
+                ->getListByIdsKeyMapped($article->tags, $locale)['items']
         ]);
 
         XmlFormat::$rootName              = 'NewsML';

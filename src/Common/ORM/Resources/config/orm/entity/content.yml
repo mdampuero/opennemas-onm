@@ -6,13 +6,13 @@ orm:
                 content_type_name: [ static_page, event ]
             properties:
                 available:           boolean
-                body:                string
+                body:                l10n_string
                 category_name:       string
                 changed:             datetime
                 content_status:      integer
                 content_type_name:   enum
                 created:             datetime
-                description:         string
+                description:         l10n_string
                 endtime:             datetime
                 favorite:            boolean
                 fk_author:           integer
@@ -25,9 +25,9 @@ orm:
                 params:              string
                 pk_content:          integer
                 position:            integer
-                slug:                string
+                slug:                l10n_string
                 starttime:           datetime
-                title:               string
+                title:               l10n_string
                 urn_source:          string
                 with_comment:        boolean
                 categories:          array

@@ -20,7 +20,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if $poll->id}{url name=admin_poll_update id=$poll->id}{else}{url name=admin_poll_create}{/if}" method="post"  ng-controller="PollCtrl" id="formulario" ng-init="init({json_encode($poll)|clear_json}, {json_encode($locale)|clear_json}, {json_encode($tags)|clear_json})">
+  <form action="{if $poll->id}{url name=admin_poll_update id=$poll->id}{else}{url name=admin_poll_create}{/if}" id="formulario" name="form" method="POST" ng-controller="PollCtrl" ng-init="poll = {json_encode($poll)|clear_json}">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -32,12 +32,16 @@
             </li>
             <li class="quicklinks">
               <h4>
-                <a class="no-padding" href="{url name=admin_polls}" title="{t}Go back to list{/t}">
+                <a class="no-padding" href="{url name=admin_polls}">
                   {t}Polls{/t}
                 </a>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs m-l-5 m-r-5"> <h4> <i class="fa fa-angle-right"></i> </h4> </li>
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
+                <i class="fa fa-angle-right"></i>
+              </h4>
+            </li>
             <li class="quicklinks hidden-xs">
               <h4>{if $poll->id}{t}Edit{/t}{else}{t}Create{/t}{/if}</h4>
             </li>
@@ -45,9 +49,9 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." type="submit" id="save-button">
-                  <i class="fa fa-save"></i>
-                  <span class="text">{t}Save{/t}</span>
+                <button class="btn btn-loading btn-success text-uppercase" ng-click="submit($event)" type="submit">
+                  <i class="fa fa-save m-r-5"></i>
+                  {t}Save{/t}
                 </button>
               </li>
             </ul>
@@ -144,25 +148,14 @@
                     <div class="form-group">
                       <label class="form-label" for="category">{t}Category{/t}</label>
                       <div class="controls">
-                        <select name="category" id="category">
-                          {section name=as loop=$allcategorys}
-                          <option value="{$allcategorys[as]->pk_content_category}"
-                                  {if $allcategorys[as]->inmenu eq 0} class="unavailable" disabled {/if}
-                                  {if $poll->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
-                          {section name=su loop=$subcat[as]}
-                          <option value="{$subcat[as][su]->pk_content_category}"
-                                  {if $subcat[as][su]->inmenu eq 0} class="unavailable" disabled {/if}
-                                  {if $poll->category eq $subcat[as][su]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                          {/section}
-                          {/section}
-                        </select>
+                        <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" locale="config.locale.selected" ng-model="poll.pk_fk_content_category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
                       </div>
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="metadata" class="form-label">{t}Tags{/t}</label>
                     <div class="controls">
-                      {include file="ui/component/tags-input/tags.tpl" ngModel="tags"}
+                      {include file="ui/component/tags-input/tags.tpl" ngModel="poll.tags"}
                     </div>
                   </div>
                 </div>
