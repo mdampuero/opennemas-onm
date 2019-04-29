@@ -26,14 +26,14 @@ class CategoryController extends FrontendController
      * {@inheritdoc}
      */
     protected $groups = [
-        'list' => 'frontpage_category'
+        'list' => 'category_frontpage'
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $positions = [
-        'list' => [ 7, 9 ]
+        'category_frontpage' => [ 7, 9 ]
     ];
 
     /**
