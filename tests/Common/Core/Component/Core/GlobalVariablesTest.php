@@ -29,6 +29,25 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getAdvertisementGroup.
+     */
+    public function testGetAdvertisementGroup()
+    {
+        $helper = $this->getMockBuilder('AdvertisementHelper')
+            ->setMethods([ 'getGroup' ])
+            ->getMock();
+
+        $this->container->expects($this->once())->method('get')
+            ->with('core.helper.advertisement')
+            ->willReturn($helper);
+
+        $helper->expects($this->once())->method('getGroup')
+            ->willReturn('foo');
+
+        $this->assertEquals('foo', $this->globals->getAdvertisementGroup());
+    }
+
+    /**
      * Tests getContainer.
      */
     public function testGetContainer()
@@ -67,6 +86,52 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
             ->with('core.locale');
 
         $this->globals->getLocale();
+    }
+
+    /**
+     * Tests getSection.
+     */
+    public function testGetSectionWithCategory()
+    {
+        $category       = new \ContentCategory();
+        $category->name = 'foo';
+
+        $smarty = $this->getMockBuilder('Smarty')
+            ->setMethods([ 'getValue', 'hasValue' ])
+            ->getMock();
+
+        $this->container->expects($this->once())->method('get')
+            ->with('core.template')
+            ->willReturn($smarty);
+
+        $smarty->expects($this->at(0))->method('hasValue')
+            ->with('category')
+            ->willReturn(true);
+
+        $smarty->expects($this->at(1))->method('getValue')
+            ->with('category')
+            ->willReturn($category);
+
+        $this->assertEquals('foo', $this->globals->getSection());
+    }
+
+    /**
+     * Tests getSection.
+     */
+    public function testGetSectionWithoutCategory()
+    {
+        $smarty = $this->getMockBuilder('Smarty')
+            ->setMethods([ 'hasValue' ])
+            ->getMock();
+
+        $this->container->expects($this->once())->method('get')
+            ->with('core.template')
+            ->willReturn($smarty);
+
+        $smarty->expects($this->once())->method('hasValue')
+            ->willReturn(false);
+
+        $this->assertEquals('home', $this->globals->getSection());
     }
 
     /**
