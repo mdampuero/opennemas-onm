@@ -12,6 +12,8 @@ namespace Tests\Common\Core\Component\Helper;
 use Common\Core\Component\Helper\UrlGeneratorHelper;
 use Common\Data\Core\FilterManager;
 use Common\ORM\Entity\Category;
+use Common\ORM\Entity\Tag;
+use Common\ORM\Entity\User;
 
 class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 {
@@ -429,10 +431,8 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForOpinion');
         $method->setAccessible(true);
 
-        $author = null;
-
         $this->authorService->expects($this->once())->method('getItem')
-            ->with(1)->willReturn($author);
+            ->with(1)->will($this->throwException(new \Exception()));
 
         $this->assertEquals(
             'opinion/author/opinion-author-slug/20150114234940000252.html',
@@ -614,11 +614,32 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getUriForTag when the content provided is a video.
+     */
+    public function testGetUriForTag()
+    {
+        $user = new Tag([ 'id' => 13608, 'name' => 'Flob', 'slug' => 'flob' ]);
+
+        $method = new \ReflectionMethod($this->urlGenerator, 'getUriForTag');
+        $method->setAccessible(true);
+
+        $this->router->expects($this->once())->method('generate')
+            ->with('frontend_tag_frontpage', [
+                'slug' => 'flob'
+            ])->willReturn('tag/flob');
+
+        $this->assertEquals(
+            'tag/flob',
+            $method->invokeArgs($this->urlGenerator, [ $user ])
+        );
+    }
+
+    /**
      * Tests getUriForUser when the content provided is a video.
      */
     public function testGetUriForUser()
     {
-        $user = new \Common\ORM\Entity\User();
+        $user = new User();
 
         $user->id   = 252;
         $user->name = 'pepito';
