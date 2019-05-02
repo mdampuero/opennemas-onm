@@ -207,6 +207,22 @@ class Redirector
     /**
      * Returns an user by id.
      *
+     * @param integer $id The tag id.
+     *
+     * @return Tag The tag.
+     */
+    protected function getTag(int $id)
+    {
+        try {
+            return $this->container->get('api.service.tag')->getItem($id);
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Returns an user by id.
+     *
      * @param integer $id The user id.
      *
      * @return User The user.
