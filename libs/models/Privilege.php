@@ -1430,7 +1430,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             225 => [
                 'pk_privilege' => 225,
                 'name'         => 'MEMBER_HIDE_ADVERTISEMENTS',
@@ -1438,7 +1437,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             226 => [
                 'pk_privilege' => 226,
                 'name'         => 'MEMBER_REQUIRES_PAYMENT',
@@ -1446,7 +1444,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             227 => [
                 'pk_privilege' => 227,
                 'name'         => 'MEMBER_HIDE_PRINT',
@@ -1454,7 +1451,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             228 => [
                 'pk_privilege' => 228,
                 'name'         => 'MEMBER_HIDE_SOCIAL',
@@ -1462,7 +1458,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             229 => [
                 'pk_privilege' => 229,
                 'name'         => 'MEMBER_BLOCK_BROWSER',
@@ -1470,7 +1465,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             230 => [
                 'pk_privilege' => 230,
                 'name'         => 'NON_MEMBER_BLOCK_ACCESS',
@@ -1478,7 +1472,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             231 => [
                 'pk_privilege' => 231,
                 'name'         => 'NON_MEMBER_HIDE_TITLE',
@@ -1486,7 +1479,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 0
             ],
-
             232 => [
                 'pk_privilege' => 232,
                 'name'         => 'NON_MEMBER_HIDE_SUMMARY',
@@ -1494,7 +1486,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             233 => [
                 'pk_privilege' => 233,
                 'name'         => 'NON_MEMBER_HIDE_BODY',
@@ -1502,7 +1493,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             234 => [
                 'pk_privilege' => 234,
                 'name'         => 'NON_MEMBER_HIDE_PRETITLE',
@@ -1510,7 +1500,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             235 => [
                 'pk_privilege' => 235,
                 'name'         => 'NON_MEMBER_HIDE_MEDIA',
@@ -1518,7 +1507,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             236 => [
                 'pk_privilege' => 236,
                 'name'         => 'NON_MEMBER_HIDE_RELATED_CONTENTS',
@@ -1526,7 +1514,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             237 => [
                 'pk_privilege' => 237,
                 'name'         => 'NON_MEMBER_HIDE_INFO',
@@ -1534,7 +1521,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             238 => [
                 'pk_privilege' => 238,
                 'name'         => 'NON_MEMBER_HIDE_TAGS',
@@ -1542,7 +1528,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             239 => [
                 'pk_privilege' => 239,
                 'name'         => 'NON_MEMBER_HIDE_PRINT',
@@ -1550,7 +1535,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             240 => [
                 'pk_privilege' => 240,
                 'name'         => 'NON_MEMBER_HIDE_SOCIAL',
@@ -1558,7 +1542,6 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             241 => [
                 'pk_privilege' => 241,
                 'name'         => 'NON_MEMBER_BLOCK_BROWSER',
@@ -1566,11 +1549,17 @@ class Privilege
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
-
             242 => [
                 'pk_privilege' => 242,
                 'name'         => 'NON_MEMBER_NO_INDEX',
                 'description'  => _('Prevent search engine indexation'),
+                'module'       => 'FRONTEND',
+                'enabled'      => 1
+            ],
+            251 => [
+                'pk_privilege' => 251,
+                'name'         => 'NON_MEMBER_HIDE_ADVERTISEMENTS',
+                'description'  => _('Hide advertisements'),
                 'module'       => 'FRONTEND',
                 'enabled'      => 1
             ],
