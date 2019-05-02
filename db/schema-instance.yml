@@ -1544,7 +1544,7 @@ url:
             options: { default: null, length: 1024, notnull: true }
         target:
             type:    string
-            options: { default: null, length: 1024, notnull: true }
+            options: { default: null, length: 1024, notnull: false }
         content_type:
             type:    string
             options: { default: null, length: 30, notnull: false }
