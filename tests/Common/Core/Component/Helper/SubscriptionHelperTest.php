@@ -68,13 +68,13 @@ class SubscriptionHelperTest extends \PHPUnit\Framework\TestCase
         $this->ss->expects($this->at(0))->method('getListbyIds')
             ->willReturn([ 'items' => [ $subscriptions[1] ], 'total' => 1 ]);
 
-        $this->assertEquals('000100100000', $this->helper->getToken($this->content));
+        $this->assertEquals('0000100100000', $this->helper->getToken($this->content));
 
         $this->content->subscriptions = [ 2 ];
         $this->ss->expects($this->at(0))->method('getListbyIds')
             ->willReturn([ 'items' => [ $subscriptions[2] ], 'total' => 1 ]);
 
-        $this->assertEquals('010001000000', $this->helper->getToken($this->content));
+        $this->assertEquals('0010001000000', $this->helper->getToken($this->content));
 
         $this->content->subscriptions = [ 1, 2 ];
         $this->ss->expects($this->at(0))->method('getListbyIds')->willReturn([
@@ -82,7 +82,7 @@ class SubscriptionHelperTest extends \PHPUnit\Framework\TestCase
             'total' => 2
         ]);
 
-        $this->assertEquals('010101100000', $this->helper->getToken($this->content));
+        $this->assertEquals('0010101100000', $this->helper->getToken($this->content));
     }
 
     /**
@@ -149,6 +149,30 @@ class SubscriptionHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests hasAdvertisements with isHidden.
+     */
+    public function testHasAdvertisementsWithHidden()
+    {
+        $helper = $this->getMockBuilder('Common\Core\Component\Helper\SubscriptionHelper')
+            ->setConstructorArgs([ $this->security, $this->ss ])
+            ->setMethods([ 'isHidden' ])
+            ->getMock();
+
+        $this->security->expects($this->any())->method('hasPermission')
+            ->with('MEMBER_HIDE_ADVERTISEMENTS')->willReturn(false);
+
+        $helper->expects($this->at(0))->method('isHidden')
+            ->with('foobar', 'ADVERTISEMENTS')
+            ->willReturn(true);
+        $helper->expects($this->at(0))->method('isHidden')
+            ->with('foobar', 'ADVERTISEMENTS')
+            ->willReturn(false);
+
+        $this->assertFalse($helper->hasAdvertisements('foobar'));
+        $this->assertTrue($helper->hasAdvertisements('foobar'));
+    }
+
+    /**
      * Tests isBlocked for subscribed and non-subscribed users with valid and
      * invalid actions.
      */
@@ -162,10 +186,10 @@ class SubscriptionHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->helper->isBlocked('001', 'browser'));
         $this->assertTrue($this->helper->isBlocked('111', 'browser'));
 
-        $this->assertFalse($this->helper->isBlocked('000000000000', 'wibble'));
-        $this->assertFalse($this->helper->isBlocked('000000000000', 'browser'));
-        $this->assertTrue($this->helper->isBlocked('000000000010', 'browser'));
-        $this->assertTrue($this->helper->isBlocked('010010010010', 'browser'));
+        $this->assertFalse($this->helper->isBlocked('0000000000000', 'wibble'));
+        $this->assertFalse($this->helper->isBlocked('0000000000000', 'browser'));
+        $this->assertTrue($this->helper->isBlocked('0000000000010', 'browser'));
+        $this->assertTrue($this->helper->isBlocked('0010010010010', 'browser'));
     }
 
     /**
@@ -181,9 +205,9 @@ class SubscriptionHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->helper->isHidden('000', 'print'));
         $this->assertTrue($this->helper->isHidden('101', 'print'));
 
-        $this->assertFalse($this->helper->isHidden('000000000000', 'wibble'));
-        $this->assertTrue($this->helper->isHidden('000010000010', 'media'));
-        $this->assertTrue($this->helper->isHidden('000000010010', 'tags'));
+        $this->assertFalse($this->helper->isHidden('0000000000000', 'wibble'));
+        $this->assertTrue($this->helper->isHidden('0000010000010', 'media'));
+        $this->assertTrue($this->helper->isHidden('0000000010010', 'tags'));
     }
 
     /**
@@ -198,10 +222,10 @@ class SubscriptionHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->helper->isIndexable('001'));
         $this->assertTrue($this->helper->isIndexable('111'));
 
-        $this->assertTrue($this->helper->isIndexable('0000000000000'));
-        $this->assertTrue($this->helper->isIndexable('0000000000000'));
-        $this->assertFalse($this->helper->isIndexable('0000000000011'));
-        $this->assertFalse($this->helper->isIndexable('0010010010011'));
+        $this->assertTrue($this->helper->isIndexable('00000000000000'));
+        $this->assertTrue($this->helper->isIndexable('00000000000000'));
+        $this->assertFalse($this->helper->isIndexable('00000000000011'));
+        $this->assertFalse($this->helper->isIndexable('00010010010011'));
     }
 
     /**
