@@ -106,7 +106,11 @@ class TagsController extends Controller
             $epp    = empty($epp) ? 10 : $epp;
             $locale = $this->get('core.locale')->getRequestLocale();
             $tags   = $this->get('api.service.tag')
-                ->getList(sprintf('locale = "%s" and slug = "%s"', $locale, $slug));
+                ->getList(sprintf(
+                    '(locale = "%s" or locale is null) and slug = "%s"',
+                    $locale,
+                    $slug
+                ));
 
             $contents = [];
             $total    = 1;
