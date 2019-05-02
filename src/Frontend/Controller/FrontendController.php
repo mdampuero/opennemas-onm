@@ -421,7 +421,7 @@ class FrontendController extends Controller
         $params['x-tags'] = implode(',', $params['x-tags']);
 
         list($positions, $advertisements) =
-            $this->getAdvertisements($params['o_category']);
+            $this->getAdvertisements($params['o_category'], $params['o_token']);
 
         return array_merge($this->params, $params, [
             'cache_id'       => $this->getCacheId($params),

@@ -182,7 +182,7 @@ class CategoryController extends FrontendController
      *
      * TODO: Remove when only an advertisement group.
      */
-    protected function getAdvertisements($category = null)
+    protected function getAdvertisements($category = null, $token = null)
     {
         $categoryId = empty($category) ? 0 : $category->pk_content_category;
         $action     = $this->get('core.globals')->getAction();
