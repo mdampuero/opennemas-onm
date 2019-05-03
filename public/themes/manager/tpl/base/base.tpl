@@ -50,6 +50,20 @@
   <script>
     var appVersion = '{$smarty.const.DEPLOYED_AT}';
     var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
+
+    var strings = {
+      pagination: {
+        of: '{t}of{/t}'
+      },
+      tags: {
+        clear: '{t}Clear{/t}',
+        generate: '{t}Generate{/t}',
+        newItem: '{t}New tag{/t}',
+      },
+      forms: {
+        'not_valid' : '{t}The form has some missing or invalid fields, please review it.{/t}',
+      }
+    };
   </script>
 </head>
 <body id="manager" ng-class="{ 'collapsed': sidebar.isCollapsed(), 'login-body': !app.auth.status, 'pinned': sidebar.isPinned(), 'unauthorized': !app.auth.status }" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}', '{t}Any{/t}')" resizable ng-class="{ 'collapsed': sidebar.isCollapsed() }">
