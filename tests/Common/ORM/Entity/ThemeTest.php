@@ -48,6 +48,33 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests canAutomaticFrontpagesChangeMenu when parameter is enabled and
+     * disabled in the theme.
+     */
+    public function testCanAutomaticFrontpagesChangeMenu()
+    {
+        $theme = new Theme([]);
+
+        $this->assertFalse($theme->canAutomaticFrontpagesChangeMenu());
+
+        $theme = new Theme([ 'parameters' => [
+            'automatic_frontpages' => [
+                'menu' => false
+            ]
+        ] ]);
+
+        $this->assertFalse($theme->canAutomaticFrontpagesChangeMenu());
+
+        $theme = new Theme([ 'parameters' => [
+            'automatic_frontpages' => [
+                'menu' => true
+            ]
+        ] ]);
+
+        $this->assertTrue($theme->canAutomaticFrontpagesChangeMenu());
+    }
+
+    /**
      * Tests getSkins when theme has no skins.
      */
     public function testGetSkinsWhenNoSkins()
@@ -153,6 +180,24 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($theme->getSkinProperty('incomplete', 'css_file'));
         $this->assertEmpty($theme->getSkinProperty('valid', 'baz'));
         $this->assertEquals('style.css', $theme->getSkinProperty('valid', 'css_file'));
+    }
+
+    /**
+     * Tests getTypesForAutomaticFrontpages when types defined and not defined in theme.
+     */
+    public function testGetTypesForAutomaticFrontpages()
+    {
+        $theme = new Theme([]);
+
+        $this->assertEmpty($theme->getTypesForAutomaticFrontpages());
+
+        $theme = new Theme([ 'parameters' => [
+            'automatic_frontpages' => [
+                'types' => [ 'plugh' ]
+            ]
+        ] ]);
+
+        $this->assertEquals([ 'plugh' ], $theme->getTypesForAutomaticFrontpages());
     }
 
     /**

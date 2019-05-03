@@ -15,6 +15,25 @@ namespace Common\ORM\Entity;
 class Theme extends Extension
 {
     /**
+     * Checks if automatic frontpages can change the page menu in the current
+     * theme.
+     *
+     * @return bool True if automatic frontpages can change the menu. False
+     *               otherwise.
+     */
+    public function canAutomaticFrontpagesChangeMenu() : bool
+    {
+        if (!empty($this->parameters)
+            && array_key_exists('automatic_frontpages', $this->parameters)
+            && array_key_exists('menu', $this->parameters['automatic_frontpages'])
+        ) {
+            return $this->parameters['automatic_frontpages']['menu'];
+        }
+
+        return false;
+    }
+
+    /**
      * Returns the skin information basing on the skin id.
      *
      * @param string $id The skin id.
@@ -77,6 +96,23 @@ class Theme extends Extension
         }
 
         return $skin['params'][$property];
+    }
+
+    /**
+     * Returns the list of types for categories.
+     *
+     * @return array The list of types for categories.
+     */
+    public function getTypesForAutomaticFrontpages() : array
+    {
+        if (!empty($this->parameters)
+            && array_key_exists('automatic_frontpages', $this->parameters)
+            && array_key_exists('types', $this->parameters['automatic_frontpages'])
+        ) {
+            return $this->parameters['automatic_frontpages']['types'];
+        }
+
+        return [];
     }
 
     /**
