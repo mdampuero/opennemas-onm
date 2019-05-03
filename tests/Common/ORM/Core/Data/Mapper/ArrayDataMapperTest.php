@@ -104,7 +104,7 @@ class ArrayDataMapperTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             'a:1:{s:3:"foo";s:3:"bar";}',
-            $this->mapper->toString([ 'foo' => 'bar'])
+            $this->mapper->toString([ 'foo' => 'bar', 'glorp' => '' ])
         );
 
         $this->assertEmpty($this->mapper->toString(null));

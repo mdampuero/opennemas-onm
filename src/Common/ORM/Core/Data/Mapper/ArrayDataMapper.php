@@ -9,6 +9,8 @@
  */
 namespace Common\ORM\Core\Data\Mapper;
 
+use Common\Data\Serialize\Serializer\PhpSerializer;
+
 class ArrayDataMapper
 {
     /**
@@ -109,7 +111,7 @@ class ArrayDataMapper
             return [];
         }
 
-        return @unserialize($value);
+        return PhpSerializer::unserialize($value);
     }
 
     /**
@@ -169,7 +171,11 @@ class ArrayDataMapper
             return null;
         }
 
-        return @serialize($value);
+        $value = array_filter($value, function ($a) {
+            return !empty($a);
+        });
+
+        return PhpSerializer::serialize($value);
     }
 
     /**
