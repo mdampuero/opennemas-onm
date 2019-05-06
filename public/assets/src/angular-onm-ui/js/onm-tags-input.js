@@ -1,7 +1,15 @@
 (function() {
   'use strict';
 
-  angular.module('onm.tagsInput', [ 'onm.http', 'onm.oql' ])
+  /**
+   * @ngdoc module
+   * @name  onm.ui.tagsInput
+   *
+   * @description
+   *   The `onm.ui.tagsInput` module provides a directive and a controller to
+   *   create tags-input control with autocomplete and multilanguage support.
+   */
+  angular.module('onm.ui.tagsInput', [ 'onm.http', 'onm.oql' ])
 
     /**
      * @ngdoc directive
