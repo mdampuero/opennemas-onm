@@ -418,7 +418,10 @@ class FrontendController extends Controller
             $params['render_params'] = ['ads-format' => 'amp'];
         }
 
-        $params['x-tags'] = implode(',', $params['x-tags']);
+        $params['x-tags']  = implode(',', $params['x-tags']);
+        $params['o_token'] = array_key_exists('o_token', $params)
+            ? $params['o_token']
+            : null;
 
         list($positions, $advertisements) =
             $this->getAdvertisements($params['o_category'], $params['o_token']);
