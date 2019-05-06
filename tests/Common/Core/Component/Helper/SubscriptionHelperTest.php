@@ -164,7 +164,7 @@ class SubscriptionHelperTest extends \PHPUnit\Framework\TestCase
         $helper->expects($this->at(0))->method('isHidden')
             ->with('foobar', 'ADVERTISEMENTS')
             ->willReturn(true);
-        $helper->expects($this->at(0))->method('isHidden')
+        $helper->expects($this->at(1))->method('isHidden')
             ->with('foobar', 'ADVERTISEMENTS')
             ->willReturn(false);
 
