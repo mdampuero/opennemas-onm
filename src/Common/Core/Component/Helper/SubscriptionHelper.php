@@ -200,7 +200,7 @@ class SubscriptionHelper
             return false;
         }
 
-        $member      = strlen($token) === 3;
+        $member      = strlen($token) === count($this->subscribedPermissions);
         $prefix      = $member ? 'MEMBER' : 'NON_MEMBER';
         $permission  = $prefix . '_' . strtoupper($action);
         $permissions = $member ? $this->subscribedPermissions
