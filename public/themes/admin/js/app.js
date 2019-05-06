@@ -27,7 +27,6 @@ angular.module(
     'onm.localize',
     'onm.messenger',
     'onm.oql',
-    'onm.oqlEncoder',
     'onm.queryManager',
     'onm.moment',
     'onm.picker',
