@@ -15,19 +15,17 @@ namespace Common\ORM\Entity;
 class Theme extends Extension
 {
     /**
-     * Checks if automatic frontpages can change the page menu in the current
-     * theme.
+     * Checks if categories can change the page menu in the current theme.
      *
-     * @return bool True if automatic frontpages can change the menu. False
-     *               otherwise.
+     * @return bool True if acategories can change the menu. False otherwise.
      */
-    public function canAutomaticFrontpagesChangeMenu() : bool
+    public function canCategoriesChangeMenu() : bool
     {
         if (!empty($this->parameters)
-            && array_key_exists('automatic_frontpages', $this->parameters)
-            && array_key_exists('menu', $this->parameters['automatic_frontpages'])
+            && array_key_exists('categories', $this->parameters)
+            && array_key_exists('menu', $this->parameters['categories'])
         ) {
-            return $this->parameters['automatic_frontpages']['menu'];
+            return $this->parameters['categories']['menu'];
         }
 
         return false;
@@ -103,13 +101,13 @@ class Theme extends Extension
      *
      * @return array The list of types for categories.
      */
-    public function getTypesForAutomaticFrontpages() : array
+    public function getTypesForCategories() : array
     {
         if (!empty($this->parameters)
-            && array_key_exists('automatic_frontpages', $this->parameters)
-            && array_key_exists('types', $this->parameters['automatic_frontpages'])
+            && array_key_exists('categories', $this->parameters)
+            && array_key_exists('types', $this->parameters['categories'])
         ) {
-            return $this->parameters['automatic_frontpages']['types'];
+            return $this->parameters['categories']['types'];
         }
 
         return [];

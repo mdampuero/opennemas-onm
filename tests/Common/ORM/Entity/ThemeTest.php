@@ -48,30 +48,26 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests canAutomaticFrontpagesChangeMenu when parameter is enabled and
+     * Tests canCategoriesChangeMenu when parameter is enabled and
      * disabled in the theme.
      */
-    public function testCanAutomaticFrontpagesChangeMenu()
+    public function testCanCategoriesChangeMenu()
     {
         $theme = new Theme([]);
 
-        $this->assertFalse($theme->canAutomaticFrontpagesChangeMenu());
+        $this->assertFalse($theme->canCategoriesChangeMenu());
 
         $theme = new Theme([ 'parameters' => [
-            'automatic_frontpages' => [
-                'menu' => false
-            ]
+            'categories' => [ 'menu' => false ]
         ] ]);
 
-        $this->assertFalse($theme->canAutomaticFrontpagesChangeMenu());
+        $this->assertFalse($theme->canCategoriesChangeMenu());
 
         $theme = new Theme([ 'parameters' => [
-            'automatic_frontpages' => [
-                'menu' => true
-            ]
+            'categories' => [ 'menu' => true ]
         ] ]);
 
-        $this->assertTrue($theme->canAutomaticFrontpagesChangeMenu());
+        $this->assertTrue($theme->canCategoriesChangeMenu());
     }
 
     /**
@@ -183,21 +179,21 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getTypesForAutomaticFrontpages when types defined and not defined in theme.
+     * Tests getTypesForCategories when types defined and not defined in theme.
      */
-    public function testGetTypesForAutomaticFrontpages()
+    public function testGetTypesForCategories()
     {
         $theme = new Theme([]);
 
-        $this->assertEmpty($theme->getTypesForAutomaticFrontpages());
+        $this->assertEmpty($theme->getTypesForCategories());
 
         $theme = new Theme([ 'parameters' => [
-            'automatic_frontpages' => [
+            'categories' => [
                 'types' => [ 'plugh' ]
             ]
         ] ]);
 
-        $this->assertEquals([ 'plugh' ], $theme->getTypesForAutomaticFrontpages());
+        $this->assertEquals([ 'plugh' ], $theme->getTypesForCategories());
     }
 
     /**

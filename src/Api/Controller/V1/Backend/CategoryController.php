@@ -161,9 +161,9 @@ class CategoryController extends ApiController
         return [
             'keys'   => $this->get($this->service)->getL10nKeys(),
             'locale' => $this->get('core.helper.locale')->getConfiguration(),
-            'menu'   => $this->get('core.theme')->canAutomaticFrontpagesChangeMenu(),
+            'menu'   => $this->get('core.theme')->canCategoriesChangeMenu(),
             'stats'  => $this->get($this->service)->getStats($items),
-            'types'  => $this->get('core.theme')->getTypesForAutomaticFrontpages()
+            'types'  => $this->get('core.theme')->getTypesForCategories()
         ];
     }
 
