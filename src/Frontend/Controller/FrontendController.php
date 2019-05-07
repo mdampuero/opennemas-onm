@@ -399,6 +399,22 @@ class FrontendController extends Controller
         if (array_key_exists('category_name', $params)) {
             $params['o_category'] = $this->getCategory($params['category_name']);
             $params['category']   = $this->getCategory($params['category_name']);
+            $params['categories'] = [];
+
+            $parent = $params['o_category']->fk_content_category;
+
+            while (!empty($parent)) {
+                try {
+                    $category = $this->get('api.service.category')
+                        ->getItem($parent);
+
+                    $params['categories'][$parent] = $category;
+
+                    $parent = $category->fk_content_category;
+                } catch (\Exception $e) {
+                    $parent = null;
+                }
+            }
         }
 
         // TODO: Clean this ASAP
