@@ -167,13 +167,17 @@ class ArrayDataMapper
      */
     public function toString($value)
     {
-        if (empty($value) || !is_array($value)) {
+        if (!is_array($value)) {
             return null;
         }
 
         $value = array_filter($value, function ($a) {
             return !empty($a);
         });
+
+        if (empty($value)) {
+            return null;
+        }
 
         return PhpSerializer::serialize($value);
     }
