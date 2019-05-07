@@ -158,15 +158,12 @@ class CategoryController extends ApiController
      */
     protected function getExtraData($items = null)
     {
-        $types = array_filter(\ContentManager::getContentTypes(), function ($a) {
-            return in_array($a['pk_content_type'], [ 1, 7, 9, 14, 10, 11, 15 ]);
-        });
-
         return [
-            'content_types' => array_values($types),
-            'keys'          => $this->get($this->service)->getL10nKeys(),
-            'locale'        => $this->get('core.helper.locale')->getConfiguration(),
-            'stats'         => $this->get($this->service)->getStats($items)
+            'keys'   => $this->get($this->service)->getL10nKeys(),
+            'locale' => $this->get('core.helper.locale')->getConfiguration(),
+            'menu'   => $this->get('core.theme')->canAutomaticFrontpagesChangeMenu(),
+            'stats'  => $this->get($this->service)->getStats($items),
+            'types'  => $this->get('core.theme')->getTypesForAutomaticFrontpages()
         ];
     }
 
