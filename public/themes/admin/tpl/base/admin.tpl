@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="{$smarty.const.CURRENT_LANGUAGE_SHORT|default:"en"}"> <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="author" content="OpenHost,SL">
+  <meta name="author" content="Openhost, S.L.">
   <meta name="generator" content="OpenNemas - News Management System">
   <meta name="theme-color" content="#22262e">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -18,13 +18,11 @@
   <link rel="icon" href="/assets/images/favicon.png">
   <link rel="icon" sizes="192x192" href="/assets/images/launcher-icons/IOS-60@2x.png">
   <link rel="manifest" href="/backend_manifest.json">
-
   {block name="meta"}
-    <title>{setting name=site_name} - {t}OpenNeMaS administration{/t}</title>
+    <title>[Admin] {setting name="site_name"}{block name="metaTitle"}{/block}</title>
   {/block}
   <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css">
   <link href="/assets/components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
   {block name="header-css"}
     {stylesheets src="@Common/components/bootstrap/dist/css/bootstrap.min.css,
       @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
