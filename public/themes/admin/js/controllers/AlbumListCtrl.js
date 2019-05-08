@@ -9,16 +9,14 @@
      *
      * @requires $controller
      * @requires $scope
-     * @requires messenger
      * @requires oqlEncoder
-     * @requires queryManager
      *
      * @description
      *   Controller for album list.
      */
     .controller('AlbumListCtrl', [
-      '$controller', '$location', '$scope', 'http', 'messenger', 'oqlEncoder',
-      function($controller, $location, $scope, http, messenger, oqlEncoder) {
+      '$controller', '$scope', 'oqlEncoder',
+      function($controller, $scope, oqlEncoder) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
@@ -33,6 +31,7 @@
           content_type_name: 'album',
           epp: 10,
           in_litter: 0,
+          pk_fk_content_category: null,
           orderBy: { created: 'desc' },
           page: 1
         };
@@ -64,12 +63,13 @@
           $scope.columns.key     = 'album-columns';
           $scope.backup.criteria = $scope.criteria;
 
-          oqlEncoder.configure({ placeholder: {
-            title: '[key] ~ "%[value]%"'
-          } });
+          oqlEncoder.configure({
+            placeholder: {
+              title: '[key] ~ "%[value]%"'
+            }
+          });
 
           $scope.setMode('grid');
-
           $scope.list();
         };
 
