@@ -53,26 +53,25 @@ class AlbumController extends ContentOldController
      **/
     public function getPhotos($items)
     {
-        $photos = [];
-
         if (!is_array($items)) {
             $items = [ $items ];
         }
 
+        $ids = [];
+
         foreach ($items as $item) {
-            $ids = array_map(function ($photo) {
+            $ids = array_unique(array_merge($ids, array_map(function ($photo) {
                 return $photo['pk_photo'];
-            }, $item->photos);
-
-            // Use id as array key
-            $evenMore = $this->get('api.service.content_old')->getListByIds($ids)['items'];
-
-            foreach ($evenMore as $ph) {
-                $photos[] = $ph;
-            }
+            }, $item->photos)));
         }
 
-        return $photos;
+        $photos = $this->get('api.service.content_old')
+            ->getListByIds($ids)['items'];
+
+        return $this->get('data.manager.filter')
+            ->set($photos)
+            ->filter('mapify', [ 'key' => 'pk_photo' ])
+            ->get();
     }
 
     /**
