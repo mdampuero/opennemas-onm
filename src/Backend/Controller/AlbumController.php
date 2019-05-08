@@ -247,19 +247,4 @@ class AlbumController extends Controller
             'pagination' => $pagination,
         ]);
     }
-
-    /**
-     * Handles and shows the album configuration form.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasPermission('ALBUM_SETTINGS')")
-     *
-     * @Security("hasExtension('ALBUM_MANAGER')")
-     */
-    public function configAction(Request $request)
-    {
-        return $this->render('album/config.tpl');
-    }
 }

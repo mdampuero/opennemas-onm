@@ -18,10 +18,9 @@ class AlbumController extends FrontendController
      * {@inheritdoc}
      */
     protected $caches = [
-        'list'       => 'gallery-frontpage',
-        'listauthor' => 'gallery-frontpage',
-        'show'       => 'gallery-inner',
-        'showamp'    => 'gallery-inner',
+        'list'    => 'gallery-frontpage',
+        'show'    => 'gallery-inner',
+        'showamp' => 'gallery-inner',
     ];
 
     /**
@@ -33,10 +32,9 @@ class AlbumController extends FrontendController
      * {@inheritdoc}
      */
     protected $groups = [
-        'showamp'    => 'amp_inner',
-        'list'       => 'album_frontpage',
-        'listauthor' => 'album_frontpage',
-        'show'       => 'album_inner',
+        'showamp' => 'amp_inner',
+        'list'    => 'album_frontpage',
+        'show'    => 'album_inner',
     ];
 
     /**
@@ -53,8 +51,8 @@ class AlbumController extends FrontendController
      * @var array
      */
     protected $queries = [
-        'list'       => [ 'page', 'category_name' ],
-        'showamp'    => [ '_format' ],
+        'list'    => [ 'page', 'category_name' ],
+        'showamp' => [ '_format' ],
     ];
 
     /**
@@ -72,9 +70,9 @@ class AlbumController extends FrontendController
      * @var array
      */
     protected $templates = [
-        'list'       => 'album/album_frontpage.tpl',
-        'show'       => 'album/album.tpl',
-        'showamp'    => 'amp/content.tpl',
+        'list'    => 'album/album_frontpage.tpl',
+        'show'    => 'album/album.tpl',
+        'showamp' => 'amp/content.tpl',
     ];
 
     /**
@@ -88,12 +86,9 @@ class AlbumController extends FrontendController
         $page     = $params['page'] ?? 1;
         $date     = date('Y-m-d H:i:s');
 
-        $albumSettings = $this->get('orm.manager')
+        $epp = (int) $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('album_settings');
-        $epp           = isset($albumSettings['total_front']) ? $albumSettings['total_front'] : 8;
-        $orderBy       = isset($albumSettings['orderFrontpage']) ? $albumSettings['orderFrontpage'] : 'created';
-        $order         = ($orderBy == 'favorite') ? 'favorite desc, created des' : 'created desc';
+            ->get('items_per_page', 10);
 
         $categoryOQL = ($category)
             ? sprintf(' and pk_fk_content_category=%d', $category->pk_content_category)
@@ -103,11 +98,10 @@ class AlbumController extends FrontendController
             'content_type_name="album" and content_status=1 and in_litter=0 %s '
             . 'and (starttime IS NULL or starttime < "%s") '
             . 'and (endtime IS NULL or endtime > "%s") '
-            . 'order by %s limit %d offset %d',
+            . 'order by starttime desc limit %d offset %d',
             $categoryOQL,
             $date,
             $date,
-            $order,
             $epp,
             $page
         ));

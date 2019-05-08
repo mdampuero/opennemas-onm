@@ -35,16 +35,6 @@
         </ul>
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
-            {acl isAllowed="ALBUM_SETTINGS"}
-              <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=backend_albums_config}" title="{t}Config album module{/t}">
-                  <span class="fa fa-cog fa-lg"></span>
-                </a>
-              </li>
-              <li class="quicklinks">
-                <span class="h-seperate"></span>
-              </li>
-            {/acl}
             {acl isAllowed="ALBUM_CREATE"}
               <li class="quicklinks">
                 <a class="btn btn-loading btn-success text-uppercase" href="{url name=backend_album_create}">

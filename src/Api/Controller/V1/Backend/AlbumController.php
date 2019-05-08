@@ -28,59 +28,6 @@ class AlbumController extends ContentOldController
     protected $getItemRoute = 'api_v1_backend_video_show';
 
     /**
-     * Saves configuration for tags.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function saveConfigAction(Request $request)
-    {
-        $this->checkSecurity($this->extension, 'ALBUM_SETTINGS');
-
-        $settings = [ 'album_settings' => [
-                'total_widget'     => $request->request->getDigits('total_widget'),
-                'crop_width'       => $request->request->getDigits('crop_width'),
-                'crop_height'      => $request->request->getDigits('crop_height'),
-                'orderFrontpage'   => $request->request
-                    ->filter('orderFrontpage', '', FILTER_SANITIZE_STRING),
-                'time_last'        => $request->request->getDigits('time_last'),
-                'total_front'      => $request->request->getDigits('total_front'),
-                'total_front_more' => $request->request->getDigits('total_front_more'),
-        ] ];
-
-        $msg = $this->get('core.messenger');
-
-        try {
-            $this->get('orm.manager')->getDataSet('Settings')->set($settings);
-            $msg->add(_('Item saved successfully'), 'success');
-        } catch (\Exception $e) {
-            $msg->add(_('Unable to save settings'), 'error');
-            $this->get('error.log')->error($e->getMessage());
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Get the tag config.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function showConfigAction()
-    {
-        $this->checkSecurity($this->extension, 'ALBUM_SETTINGS');
-
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings')
-            ->get('album_settings', []);
-
-        return new JsonResponse($settings);
-    }
-
-    /**
      * {@inheritDoc}
      **/
     public function getExtraData($items = null)
@@ -149,8 +96,7 @@ class AlbumController extends ContentOldController
         }
 
         foreach ($content as $item) {
-            if (empty($content->cover_id)
-            ) {
+            if (empty($content->cover_id)) {
                 continue;
             }
 
