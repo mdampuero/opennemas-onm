@@ -6,7 +6,6 @@
       <span ng-show="item.{$field} != 0"><i class="fa fa-image"></i></span>
   </span>
 </div>
-
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.{$field} }">
   <div class="thumbnail-wrapper">
     <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.{$field} }"></div>

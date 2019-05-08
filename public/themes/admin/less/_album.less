@@ -1,10 +1,28 @@
 .album-thumbnail-sortable {
-  margin: 15px;
+  background: #fff;
+  border: 1px solid transparent;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  padding: 15px;
+  min-height: 242px;
+
+  &:hover {
+    border-color: #e5e5e5;
+  }
+
+  .sort-icon {
+    border-left: 2px dotted #ccc;
+    display: inline-block;
+    float: left;
+    height: 10px;
+    margin: 100px 10px 100px 0;
+    width: 2px;
+  }
 
   .dynamic-image-placeholder {
     height: 210px;
+    float: left;
     width: 210px;
-    margin: 0 auto 8px;
   }
 
   .img-thumbnail {
@@ -18,10 +36,14 @@
   }
 }
 
+.album-thumbnail-description {
+  height: 210px !important;
+}
+
 .album-thumbnail-placeholder {
   float: left;
   height: 210px;
-  margin: 15px;
+  margin: 15px 0 15px 27px;
   width: 210px;
 
   .img-thumbnail {
@@ -38,8 +60,4 @@
     text-align: center;
     width: 100%;
   }
-}
-
-.ui-sortable {
-  min-height: 0 !important;
 }
