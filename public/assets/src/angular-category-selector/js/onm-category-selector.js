@@ -239,7 +239,7 @@
               }
 
               // Update ngModel when selected category changes
-              if (nv[1]) {
+              if (angular.isDefined(nv[1])) {
                 $scope.ngModel = !angular.isArray(nv[1]) ?
                   nv[1].pk_content_category :
                   nv[1].map(function(e) {
@@ -249,7 +249,7 @@
               }
 
               // Change category only when ngModel initialized
-              if (nv[2] && !$scope.exportModel) {
+              if (angular.isDefined(nv[2]) && !$scope.exportModel) {
                 $scope.exportModel = !angular.isArray(nv[2]) ?
                   $scope.categories.filter(function(e) {
                     return e.pk_content_category === $scope.ngModel;
