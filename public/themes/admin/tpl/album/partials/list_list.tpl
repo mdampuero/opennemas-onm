@@ -10,11 +10,21 @@
                 <label for="select-all"></label>
               </div>
             </th>
-            <th></th>
-            <th class="hidden-xs hidden-sm"></th>
-            <th class="hidden-xs text-center" width="100">{t}Home{/t}</th>
-            <th class="hidden-xs text-center" width="100">{t}Favorite{/t}</th>
-            <th class="text-center" width="100">{t}Published{/t}</th>
+            <th class="text-center" width="150">
+              <i class="fa fa-picture-o"></i>
+            </th>
+            <th class="hidden-xs hidden-sm">
+              {t}Title{/t}
+            </th>
+            <th class="hidden-xs text-center" width="100">
+              {t}Home{/t}
+            </th>
+            <th class="hidden-xs text-center" width="100">
+              {t}Favorite{/t}
+            </th>
+            <th class="text-center" width="100">
+              {t}Published{/t}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -25,11 +35,8 @@
                 <label for="checkbox[%$index%]"></label>
               </div>
             </td>
-            <td class="hidden-xs hidden-sm" style="height: 150px; width: 150px; margin: 0 auto 15px;">
-              <div style="height: 120px; width: 120px;">
-                <dynamic-image ng-show="item.cover != ''" autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.cover" transform="zoomcrop,220,220"></dynamic-image>
-                <img ng-show="item.cover == ''" ng-src="//placehold.it/80x60" class="thumbnail" />
-              </div>
+            <td class="hidden-xs hidden-sm">
+              <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.cover" transform="zoomcrop,220,220"></dynamic-image>
             </td>
             <td>
               <div ng-show="item.cover != ''" class="visible-xs visible-sm text-left" style="width: 150px; margin: 0 auto 15px;">
