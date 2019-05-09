@@ -41,6 +41,7 @@
          * @type {Object}
          */
         $scope.config = {
+          mode: 'grid',
           columns: {
             collapsed: true,
             selected: []
@@ -96,6 +97,47 @@
          */
         $scope.removeImage = function(image) {
           delete $scope[image];
+        };
+
+        /**
+         * @function removeItem
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *   Removes an item from an array of related items.
+         *
+         * @param string  from  The array name in the current scope.
+         * @param integer index The index of the element to remove.
+         */
+        $scope.removeItem = function(from, index) {
+          var keys  = from.split('.');
+          var model = $scope;
+
+          for (var i = 0; i < keys.length - 1; i++) {
+            if (!model[keys[i]]) {
+              model[keys[i]] = {};
+            }
+
+            model = model[keys[i]];
+          }
+
+          if (angular.isArray(model[keys[i]])) {
+            model[keys[i]].splice(index, 1);
+            return;
+          }
+
+          model[keys[i]] = null;
+        };
+
+        /**
+         * @function toggleMode
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Toggles mode between grid and list.
+         */
+        $scope.toggleMode = function() {
+          $scope.config.mode = $scope.config.mode === 'grid' ? 'list' : 'grid';
         };
 
         /**
