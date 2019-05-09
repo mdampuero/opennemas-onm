@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group {$class}">
   <label class="form-label clearfix" for="{$field}">
     <div class="pull-left">{$title}</div>
   </label>

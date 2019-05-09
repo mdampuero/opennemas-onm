@@ -10,7 +10,7 @@
   <div class="thumbnail-wrapper">
     <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.{$field} }"></div>
     <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.{$field} }">
-      <p>Are you sure?</p>
+      <p>{t}Are you sure?{/t}</p>
       <div class="confirm-actions">
         <button class="btn btn-link" ng-click="toggleOverlay('{$field}')" type="button">
           <i class="fa fa-times fa-lg"></i>
