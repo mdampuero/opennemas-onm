@@ -117,7 +117,7 @@
                       '</div>' +
                       '<ul class="media-information">' +
                         '<li>' +
-                          '<a ng-href="[% routing.generate(\'admin_photo_show\', { id: selected.lastSelected.id}) %]" target="_blank">' +
+                          '<a ng-href="[% routing.generate(\'admin_photo_show\', { id: selected.lastSelected.pk_photo}) %]" target="_blank">' +
                             '<strong>' +
                               '[% selected.lastSelected.name %]' +
                               '<i class="fa fa-edit"></i>' +
@@ -142,7 +142,7 @@
                                 '<i class="fa" ng-class="{ \'fa-circle-o-notch fa-spin\': saving, \'fa-check text-success\': saved, \'fa-times text-danger\': error }"></i>' +
                               '</div>' +
                             '</label>' +
-                            '<textarea id="description" ng-blur="saveDescription(selected.lastSelected.id)" ng-model="selected.lastSelected.description" cols="30" rows="2"></textarea>' +
+                            '<textarea id="description" ng-blur="saveDescription(selected.lastSelected.pk_photo)" ng-model="selected.lastSelected.description" cols="30" rows="2"></textarea>' +
                           '</div>' +
                         '</li>' +
                       '</ul>' +
@@ -159,7 +159,7 @@
                     '</li>' +
                     '<li>' +
                       '<h4>' +
-                        '[% selected.items.length %]' +
+                        '[% selected.items.length %] ' +
                         '<span class="hidden-xs">[% picker.params.explore.itemsSelected %]</span>' +
                       '</h4>' +
                     '</li>' +
@@ -453,14 +453,14 @@
               }
 
               if (attrs.mediaPickerTarget && $scope.mediaPickerTarget) {
-                var target = $scope.mediaPickerTarget;
+                var target = angular.copy($scope.mediaPickerTarget);
 
                 if (!(target instanceof Array)) {
                   target = [ target ];
                 }
 
                 for (var i = 0; i < target.length; i++) {
-                  $scope.selected.ids.push(target[i].id);
+                  $scope.selected.ids.push(target[i].pk_photo);
                 }
 
                 $scope.selected.items = target;
@@ -693,7 +693,7 @@
          *                 returns false.
          */
         $scope.isSelected = function(item) {
-          return $scope.selected.ids.indexOf(item.id) !== -1;
+          return $scope.selected.ids.indexOf(item.pk_photo) !== -1;
         };
 
         /**
@@ -875,7 +875,7 @@
           var data = { description: $scope.selected.lastSelected.description };
           var route  = {
             name:   'backend_ws_picker_save_description',
-            params: { id: $scope.selected.lastSelected.id }
+            params: { id: $scope.selected.lastSelected.pk_photo }
           };
 
           http.post(route, data).then(function() {
@@ -935,7 +935,7 @@
           // Add all items between selected
           while (itemsToInsert > 0 && i < $scope.contents.length) {
             if ($scope.selected.items.indexOf($scope.contents[i]) === -1) {
-              $scope.selected.ids.push($scope.contents[i].id);
+              $scope.selected.ids.push($scope.contents[i].pk_photo);
               $scope.selected.items.push($scope.contents[i]);
               itemsToInsert--;
             }
@@ -976,7 +976,7 @@
             return;
           }
 
-          var index = $scope.selected.ids.indexOf(item.id);
+          var index = $scope.selected.ids.indexOf(item.pk_photo);
 
           // Remove element
           if (index !== -1) {
@@ -994,7 +994,7 @@
 
           // Add element
           if ($scope.selected.items.length < $scope.picker.selection.maxSize) {
-            $scope.selected.ids.push(item.id);
+            $scope.selected.ids.push(item.pk_photo);
             $scope.selected.items.push(item);
           }
         };
