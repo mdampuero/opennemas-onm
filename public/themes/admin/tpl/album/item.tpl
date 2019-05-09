@@ -63,10 +63,13 @@
   <div class="grid simple">
     <div class="grid-title">
       <h4>{t}Album images{/t}</h4>
+      <button class="btn btn-link no-padding m-t-2 pull-right" ng-click="toggleMode()" type="button">
+        <i class="fa" ng-class="{ 'fa-th': config.mode === 'grid', 'fa-list': config.mode === 'list' }"></i>
+      </button>
     </div>
     <div class="grid-body">
-      <div ui-sortable="{ axis: 'x,y', placeholder: 'album-thumbnail-sortable' }" ng-model="item.photos">
-        <div class="album-thumbnail-sortable" ng-repeat="(index, photo) in item.photos">
+      <div ui-sortable="{ axis: 'x,y', placeholder: 'album-thumbnail-sortable album-thumbnail-sortable-' + config.mode }" ng-model="item.photos">
+        <div class="album-thumbnail-sortable album-thumbnail-sortable-[% config.mode %]" ng-repeat="(index, photo) in item.photos">
           <div class="thumbnail-wrapper row">
             <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay['photo_'+ $index] }"></div>
             <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay['photo_'+ $index] }">
@@ -76,14 +79,14 @@
                   <i class="fa fa-times fa-lg"></i>
                   {t}No{/t}
                 </button>
-                <button class="btn btn-link" ng-click="removeItem('photos', $index);toggleOverlay('photo_'+ $index)" type="button">
+                <button class="btn btn-link" ng-click="removeItem('item.photos', $index);toggleOverlay('photo_'+ $index)" type="button">
                   <i class="fa fa-check fa-lg"></i>
                   {t}Yes{/t}
                 </button>
               </div>
             </div>
-            <div class="col-xs-3">
-              <span class="sort-icon"></span>
+            <span class="sort-icon"></span>
+            <div ng-class="{ 'col-lg-2 col-sm-3': config.mode === 'list', 'col-xs-12': config.mode === 'grid' }">
               <div class="dynamic-image-placeholder">
                 <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[photo.pk_photo]" transform="zoomcrop,200,200">
                   <div class="thumbnail-actions">
@@ -94,7 +97,7 @@
                 </dynamic-image>
               </div>
             </div>
-            <div class="col-xs-9">
+            <div ng-class="{ 'col-lg-10 col-sm-9': config.mode === 'list', 'col-xs-12': config.mode === 'grid' }">
               <div class="form-group no-margin">
                 <textarea class="album-thumbnail-description form-control" ng-model="photo.description" placeholder="[% data.extra.locale.multilanguage && data.extra.locale.default !== config.locale.selected ? data.item.photos[index].description[data.extra.locale.default] : '' %]" uib-tooltip="{t}Original{/t}: [% data.item.photos[index].description[data.extra.locale.default] %]" tooltip-enable="config.locale.multilanguage && config.locale.default !== config.locale.selected"></textarea>
               </div>
@@ -102,12 +105,14 @@
           </div>
         </div>
       </div>
-      <div class="album-thumbnail-placeholder">
-        <div class="img-thumbnail">
-          <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="150" media-picker-target="new_photo">
-            <i class="fa fa-plus fa-3x"></i>
-            <h4>{t}Add images{/t}<h4>
-          </div>
+      <div class="row">
+        <div class="col-lg-4 col-lg-offset-4 col-sm-6 col-sm-offset-3 p-b-15 p-t-15">
+          <button class="btn btn-block btn-loading btn-success" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="150" media-picker-target="new_photo">
+            <h4 class="text-uppercase text-white">
+              <i class="fa fa-plus m-r-5"></i>
+              {t}Add{/t}
+            <h4>
+          </button>
         </div>
       </div>
     </div>
