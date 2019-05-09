@@ -77,7 +77,7 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       $scope.localizePhotos($scope.data.item.photos, 'photos', true);
 
       if (data.extra.photos && data.extra.photos[$scope.item.cover_id]) {
-        $scope.cover_image = data.extra.photos[$scope.item.cover_id];
+        $scope.cover = data.extra.photos[$scope.item.cover_id];
       }
     };
 
@@ -149,15 +149,9 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
     };
 
     /**
-     * @function submit
-     * @memberOf AlbumCtrl
-     *
-     * @description
-     *   Saves tags and, then, submits the form.
+     * @inheritdoc
      */
-    $scope.submit = function(e) {
-      e.preventDefault();
-
+    $scope.validate = function() {
       if (!$scope.validatePhotosAndCover()) {
         return false;
       }
@@ -174,14 +168,7 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
         return false;
       }
 
-      $scope.$broadcast('onmTagsInput.save', {
-        onSuccess: function(ids) {
-          $('[name=tags]').val(JSON.stringify(ids));
-          $('[name=form]').submit();
-        }
-      });
-
-      $rootScope.submit();
+      return true;
     };
 
     /**
@@ -209,26 +196,16 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       return false;
     };
 
-    /**
-     * Updates the ids and footers when photos change.
-     *
-     * @param Object nv The new values.
-     * @param Object ov The old values.
-     */
-    $scope.$watch('item.cover_image', function(nv, ov) {
-      if (nv === ov) {
-        return false;
-      }
+    // Update the cover in the item when cover changes
+    $scope.$watch('cover', function(nv) {
+      $scope.item.cover_id = null;
 
-      $scope.item.cover = nv.pk_content;
+      if (nv) {
+        $scope.item.cover_id = nv.pk_content;
+      }
     }, true);
 
-    /**
-     * Updates the ids and footers when photos change.
-     *
-     * @param Object nv The new values.
-     * @param Object ov The old values.
-     */
+    // Update the ids and footers when photos change
     $scope.$watch('photos', function(nv, ov) {
       if (!nv || !ov || nv === ov) {
         return;

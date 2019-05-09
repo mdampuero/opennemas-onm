@@ -47,7 +47,7 @@
       <div class="grid-collapse-title">
         <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
       </div>
-      {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Cover image{/t}" field="cover_image"}
+      {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Cover image{/t}" field="cover"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" title="{t}Agency{/t}" field="agency"}
     </div>
   </div>
