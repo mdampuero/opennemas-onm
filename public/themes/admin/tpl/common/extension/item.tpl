@@ -38,7 +38,7 @@
               {block name="primaryActions"}
                 <li class="quicklinks">
                   <button class="btn btn-loading btn-success text-uppercase" ng-click="submit($event)" type="button">
-                    <i class="fa fa-save m-r-5"></i>
+                    <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                     {t}Save{/t}
                   </button>
                 </li>
