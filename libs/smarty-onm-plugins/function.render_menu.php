@@ -49,7 +49,8 @@ function smarty_function_render_menu($params, &$smarty)
     $menu->items = $menu->localize($menu->getRawItems());
 
     $smarty->assign([
-        'menuItems' => !empty($menu->items) ? $menu->items : [],
+        'menuItems'       => !empty($menu->items) ? $menu->items : [],
+        'actual_category' => $params['actual_category'] ?? null
     ]);
 
     // Disable caching for this partial
