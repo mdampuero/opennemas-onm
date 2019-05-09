@@ -58,10 +58,6 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       update:   'api_v1_backend_album_update'
     };
 
-    $scope.expanded = {
-      cover_image: true,
-    };
-
     /**
      * @function parseItem
      * @memberOf RestInnerCtrl
@@ -80,13 +76,8 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       $scope.localize($scope.data.item, 'item', true, [ 'photos' ]);
       $scope.localizePhotos($scope.data.item.photos, 'photos', true);
 
-      // Assign the cover image
-      var cover = data.extra.photos.filter(function(el) {
-        return el && el.pk_photo === $scope.item.cover_id;
-      }).shift();
-
-      if (cover) {
-        $scope.cover_image = cover;
+      if (data.extra.photos && data.extra.photos[$scope.item.cover_id]) {
+        $scope.cover_image = data.extra.photos[$scope.item.cover_id];
       }
     };
 
@@ -139,25 +130,6 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
           category_name: item.category_name
         })
       );
-    };
-
-    /**
-     * @function getPhotoData
-     * @memberOf AlbumCtrl
-     *
-     * @description
-     *   Returns the info of a photo from the extra parameters given the photo id.
-     */
-    $scope.getPhotoData = function(photoId) {
-      if (!photoId || !$scope.data.extra || $scope.data.extra.photos.length == 0) {
-        return {};
-      }
-
-      var photos = $scope.data.extra.photos.filter(function(el) {
-        return el.pk_photo === photoId;
-      });
-
-      return photos.shift();
     };
 
     /**
@@ -257,20 +229,24 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
      * @param Object nv The new values.
      * @param Object ov The old values.
      */
-    $scope.$watch('new_photo', function(nv, ov) {
-      if (nv === ov) {
-        return false;
+    $scope.$watch('photos', function(nv, ov) {
+      if (!nv || !ov || nv === ov) {
+        return;
       }
 
-      $scope.item.photos.push({
-        position: $scope.data.item.photos.length,
-        description: nv[0].description,
-        pk_photo: nv[0].pk_photo
-      });
+      for (var i = 0; i < nv.length; i++) {
+        $scope.item.photos.push({
+          position: $scope.data.item.photos.length,
+          description: nv[i].description,
+          pk_photo: nv[i].pk_photo
+        });
 
-      $scope.data.extra.photos.push(nv[0]);
+        if (!$scope.data.extra.photos[nv[i].pk_photo]) {
+          $scope.data.extra.photos[nv[i].pk_photo] = nv[i];
+        }
+      }
 
-      return null;
+      $scope.photos = [];
     }, true);
   }
 ]);
