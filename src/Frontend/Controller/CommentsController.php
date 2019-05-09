@@ -45,14 +45,14 @@ class CommentsController extends Controller
             'pk_content'     => [ [ 'value' => $contentID ] ],
         ];
 
-        if (empty($contentID)
-            || empty($this->get('entity_repository')->findBy($criteria))
-        ) {
+        $item = $this->get('entity_repository')->findBy($criteria);
+        if (empty($contentID) || empty($item)) {
             return new Response('', 404);
         }
 
         $configs = $this->get('core.helper.comment')->getConfigs();
         $cm      = $this->get('comment_repository');
+        $sh      = $this->get('core.helper.subscription');
         $total   = $cm->countCommentsForContentId($contentID);
 
         $elemsByPage = empty($elemsByPage) || $elemsByPage > $total
@@ -67,7 +67,7 @@ class CommentsController extends Controller
 
         $positions      = [];
         $advertisements = [];
-        if ($this->get('core.helper.subscription')->hasAdvertisements()) {
+        if ($sh->hasAdvertisements($sh->getToken($item[0]))) {
             list($positions, $advertisements) = $this->getAds();
         }
 
@@ -100,10 +100,14 @@ class CommentsController extends Controller
         $contentID   = $request->query->filter('content_id', null, FILTER_SANITIZE_NUMBER_INT);
         $elemsByPage = $request->query->getDigits('elems_per_page');
         $offset      = $request->query->getDigits('offset', 1);
+        $criteria    = [
+            'content_status' => [ [ 'value' => 1 ] ],
+            'in_litter'      => [ [ 'value' => 0 ] ],
+            'pk_content'     => [ [ 'value' => $contentID ] ],
+        ];
 
-        if (empty($contentID)
-            || !\Content::checkExists($contentID)
-        ) {
+        $item = $this->get('entity_repository')->findBy($criteria);
+        if (empty($contentID) || empty($item)) {
             return new Response('Content doesnt exists', 404);
         }
 
@@ -114,6 +118,7 @@ class CommentsController extends Controller
 
         // Getting comments for current article
         $cm       = $this->get('comment_repository');
+        $sh       = $this->get('core.helper.subscription');
         $total    = $cm->countCommentsForContentId($contentID);
         $comments = $cm->getCommentsforContentId($contentID, $elemsByPage, $offset);
 
@@ -124,7 +129,7 @@ class CommentsController extends Controller
 
         $positions      = [];
         $advertisements = [];
-        if ($this->get('core.helper.subscription')->hasAdvertisements()) {
+        if ($sh->hasAdvertisements($sh->getToken($item[0]))) {
             list($positions, $advertisements) = $this->getAds();
         }
 
