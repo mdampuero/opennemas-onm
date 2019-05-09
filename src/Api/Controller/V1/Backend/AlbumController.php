@@ -53,6 +53,10 @@ class AlbumController extends ContentOldController
      **/
     public function getPhotos($items)
     {
+        if (empty($items)) {
+            return [];
+        }
+
         if (!is_array($items)) {
             $items = [ $items ];
         }
