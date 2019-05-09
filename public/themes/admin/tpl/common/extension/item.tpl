@@ -21,11 +21,6 @@
                 <i class="fa fa-angle-right"></i>
               </h4>
             </li>
-            <li class="quicklinks visible-xs">
-              <a class="help-icon" href="http://help.opennemas.com/knowledgebase/articles/745938-opennemas-c%C3%B3mo-crear-%C3%A1lbumes-galer%C3%ADas-de-imagene" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
-                <i class="fa fa-question fa-lg"></i>
-              </a>
-            </li>
             <li class="quicklinks hidden-xs">
               <h4>{if empty($id)}{t}Create{/t}{else}{t}Edit{/t}{/if}</h4>
             </li>
