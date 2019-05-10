@@ -27,7 +27,6 @@ class ContentOldController extends ContentController
     {
         return [
             'related_contents' => $this->getRelatedContents($items),
-            'tags'             => $this->getTagsFromItems($items),
             'keys'             => $this->getL10nKeys(),
             'authors'          => $this->getAuthors(),
             'locale'           => $this->get('core.helper.locale')->getConfiguration(),
@@ -62,34 +61,6 @@ class ContentOldController extends ContentController
     }
 
     /**
-     * Returns the list of tag ids for a list of items or a individual item
-     *
-     * @param array|Content $items One Content object or a list of Content objects
-     *
-     * @return array
-     **/
-    private function getTagsFromItems($items = null)
-    {
-        if (empty($items)) {
-            return [];
-        }
-
-        if (is_object($items)) {
-            $items = [ $items ];
-        }
-
-        $tagIds = [];
-        if (is_array($items)) {
-            foreach ($items as $item) {
-                $tagIds = array_merge($tagIds, $item->tags ?? []);
-            }
-        }
-
-        return $this->get('api.service.tag')
-            ->getListByIdsKeyMapped($tagIds)['items'];
-    }
-
-    /**
      * Returns the lit of authors
      *
      * @return array the list of authors
@@ -105,21 +76,5 @@ class ContentOldController extends ContentController
             ->get();
 
         return $us->responsify($authors);
-    }
-
-    /**
-     * Returns the list of tags processed
-     *
-     * NOTE: As the Content class already perfoms a clean up of tags, we
-     * overwrite the parseTags from the parent to avoid executing
-     * it twice
-     *
-     * @param array $tags the list of tags to processs
-     *
-     * @return array
-     **/
-    protected function parseTags($tags = [])
-    {
-        return $tags;
     }
 }
