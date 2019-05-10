@@ -7,27 +7,44 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Common\Data\Serialize\Serializer\PhpSerializer;
+
 class Album extends Content
 {
     /**
-     * the album id
-     */
-    public $pk_album = null;
-
-    /**
-     * the subtitle for this album
-     */
-    public $subtitle = null;
-
-    /**
-     * the agency which created this album originaly
+     * The agency which created this album originally.
+     *
+     * @var string
      */
     public $agency = null;
 
     /**
-     * the id of the image that is the cover for this album
+     * The photo id of the album cover
+     *
+     * @var int
      */
     public $cover_id = null;
+
+    /**
+     * The album id.
+     *
+     * @var int
+     */
+    public $pk_album = null;
+
+    /**
+     * The list of photos.
+     *
+     * @var array
+     */
+    protected $photos = [];
+
+    /**
+     * The subtitle for this album.
+     *
+     * @var string
+     */
+    public $subtitle = null;
 
     /**
      * Initializes the Album class.
@@ -41,6 +58,31 @@ class Album extends Content
         $this->content_type_name      = 'album';
 
         parent::__construct($id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __get($name)
+    {
+        switch ($name) {
+            case 'photos':
+                if (!getService('core.instance')->hasMultilanguage()
+                    || getService('core.locale')->getContext() !== 'backend'
+                ) {
+                    foreach ($this->photos as &$photo) {
+                        $photo['description'] = getService('data.manager.filter')
+                            ->set($photo['description'])
+                            ->filter('localize')
+                            ->get();
+                    }
+                }
+
+                return $this->photos;
+
+            default:
+                return parent::__get($name);
+        }
     }
 
     /**
@@ -229,6 +271,11 @@ class Album extends Content
                 . ' FROM albums_photos WHERE pk_album =? ORDER BY position ASC',
                 [ $this->id ]
             );
+
+            foreach ($this->photos as &$photo) {
+                $photo['description'] =
+                    PhpSerializer::unserialize($photo['description']);
+            }
         } catch (\Exception $e) {
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
@@ -261,9 +308,15 @@ class Album extends Content
             return;
         }
 
+
         $conn = getService('dbal_connection');
 
         foreach ($photos as $position => $photo) {
+            if (is_array($photo['description'])) {
+                $photo['description'] =
+                    PhpSerializer::serialize($photo['description']);
+            }
+
             try {
                 $conn->insert('albums_photos', [
                     'pk_album'    => $id,
