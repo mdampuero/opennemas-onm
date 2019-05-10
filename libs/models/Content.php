@@ -407,6 +407,9 @@ class Content implements \JsonSerializable, CsvSerializable
 
         if (isset($this->fk_content_type)) {
             $this->content_type = $this->fk_content_type;
+
+            $this->content_type_l10n_name =
+                \ContentManager::getContentTypeTitleFromId($this->fk_content_type);
         } else {
             $this->content_type = null;
         }
@@ -451,35 +454,28 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Loads the data for an content given its id
+     * Loads the data for an content given its id.
      *
-     * @param integer $id content identifier
-     *
-     * @return null|Content the content object with all the information
+     * @param integer $id The content id.
      */
     public function read($id)
     {
         if (empty($id)) {
-            return false;
+            return;
         }
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT * FROM contents LEFT JOIN contents_categories'
-                . ' ON  pk_content = pk_fk_content WHERE pk_content = ?',
+                . ' ON pk_content = pk_fk_content WHERE pk_content = ?',
                 [ (int) $id ]
             );
 
             if (!$rs) {
-                return null;
+                return;
             }
 
-            // Load object properties
             $this->load($rs);
-
-            // Load content_type_l10n_name
-            $this->content_type_l10n_name =
-                \ContentManager::getContentTypeTitleFromId($this->fk_content_type);
 
             return $this;
         } catch (\Exception $e) {
@@ -533,133 +529,30 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function create($data)
     {
-        $data['content_status'] = (empty($data['content_status'])) ? 0 : intval($data['content_status']);
-        if (!isset($data['starttime']) || empty($data['starttime'])) {
-            if ($data['content_status'] == 0) {
-                $data['starttime'] = null;
-            } else {
-                $data['starttime'] = date("Y-m-d H:i:s");
-            }
-        }
+        $categoryId = $data['category'] ?? null;
+        $tags       = $data['tags'] ?? [];
+        $data       = $this->parseData($data);
 
-        if (!empty($data['slug'])) {
-            $data['slug'] = \Onm\StringUtils::generateSlug($data['slug']);
-        }
-
-        if (empty($data['slug'])
-            || (is_array($data['slug'])
-                && empty(array_filter($data['slug'], function ($a) {
-                    return !empty($a);
-                })))
-        ) {
-            $data['slug'] = \Onm\StringUtils::generateSlug($data['title']);
-        }
-
-        if (!isset($data['with_comment'])) {
-            $config = getService('orm.manager')
-                ->getDataSet('Settings')
-                ->get('comments_config');
-
-            $data['with_comment'] = isset($config['with_comments']) ?
-                intval($config['with_comments']) : 1;
-        }
-
-        $catName = '';
-        if (array_key_exists('category', $data) && !empty($data['category'])) {
-            getService('core.locale')->setContext('frontend');
-
-            $catName = getService('api.service.category')
-                ->getItem($data['category'])->name;
-
-            getService('core.locale')->setContext('backend');
-        }
-
-        foreach ($this->getL10nKeys() as $key) {
-            if (!array_key_exists($key, $data) || !is_array($data[$key])) {
-                continue;
-            }
-
-            if (empty($data[$key])
-                || empty(array_filter($data[$key], function ($a) {
-                    return !empty($a);
-                }))
-            ) {
-                $data[$key] = null;
-
-                continue;
-            }
-
-            $data[$key] = serialize($data[$key]);
-        }
-
-        $contentData = [
-            'fk_content_type'     => \ContentManager::getContentTypeIdFromName(underscore($this->content_type)),
-            'content_type_name'   => underscore($this->content_type),
-            'title'               => $data['title'],
-            'body'                => !array_key_exists('body', $data)
-                ? '' : $data['body'],
-            'category_name'       => $catName,
-            'changed'             => date('Y-m-d H:i:s'),
-            'content_status'      => (int) $data['content_status'],
-            'created'             => date('Y-m-d H:i:s'),
-            'description'         => !isset($data['description'])
-                ? '' : $data['description'],
-            'endtime'             => empty($data['endtime'])
-                ? null : $data['endtime'],
-            'favorite'            => !isset($data['favorite'])
-                ? 0 : (int) $data['favorite'],
-            'fk_author'           => !array_key_exists('fk_author', $data)
-                || empty($data['fk_author']) ? null : (int) $data['fk_author'],
-            'fk_publisher'        => empty(getService('core.user')) ?
-                null : (int) getService('core.user')->id,
-            'fk_user_last_editor' => empty(getService('core.user')) ?
-                null : (int) getService('core.user')->id,
-            'frontpage'           => !isset($data['frontpage'])
-                ? 0 : (int) $data['frontpage'],
-            'in_home'             => !isset($data['in_home'])
-                ? 0 : (int) $data['in_home'],
-            'params'              => !isset($data['params']) || empty($data['params'])
-                ? null : serialize($data['params']),
-            'slug'                => $data['slug'],
-            'starttime'           => !empty($data['starttime']) && $data['starttime'] < date('Y-m-d H:i:s')
-                ? date('Y-m-d H:i:s') : $data['starttime'],
-            'position'            => empty($data['position'])
-                ? 2 : (int) $data['position'],
-            'with_comment'        => $data['with_comment'],
-            'urn_source'          => (empty($data['urn_source'])) ? null : $data['urn_source'],
-        ];
+        $this
+            ->generateCategoryName($data, $categoryId)
+            ->generateStarttime($data)
+            ->generateSlug($data)
+            ->serializeParams($data)
+            ->serializeL10nKeys($data);
 
         $conn = getService('dbal_connection');
 
         try {
-            // Insert into contents table
-            $conn->insert('contents', $contentData);
+            $conn->insert('contents', $data);
 
-            $this->id           = $conn->lastInsertId();
-            $this->pk_content   = $this->id;
-            $data['pk_content'] = $this->id;
-            $data['id']         = $this->id;
+            $this->id         = $conn->lastInsertId();
+            $this->pk_content = $this->id;
 
-            if (array_key_exists('tags', $data)) {
-                $data['tags'] = $this->addTags($data['tags']);
-            }
+            $this->addTags($tags);
+            $this->addCategory($categoryId);
+            $this->initViews();
 
-            self::load($contentData);
-
-            // Insert into content_categories if is available
-            if (array_key_exists('category', $data) && !empty($data['category'])) {
-                $conn->insert('contents_categories', [
-                    'pk_fk_content'          => $this->id,
-                    'pk_fk_content_category' => (int) $data['category'],
-                    'catName'                => $catName
-                ]);
-            }
-
-            // Insert into content_views
-            $conn->insert('content_views', [
-                'pk_fk_content' => $this->id,
-                'views'         => 0,
-            ]);
+            self::load($data);
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
@@ -687,115 +580,23 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function update($data)
     {
-        $this->read($data['id']);
+        $categoryId = $data['category'] ?? null;
+        $tags       = $data['tags'] ?? [];
+        $data       = $this->parseData($data, $this->id);
 
-        if (empty($data['slug'])) {
-            if (!empty($this->slug)) {
-                $data['slug'] = \Onm\StringUtils::generateSlug($this->slug);
-            } else {
-                $data['slug'] = mb_strtolower(\Onm\StringUtils::generateSlug($data['title']));
-            }
-        } elseif ($data['content_status'] == 0) {
-            // Only regenerate slug if content is unpublished
-            $data['slug'] = \Onm\StringUtils::generateSlug($data['slug']);
-        }
+        $this
+            ->generateCategoryName($data, $categoryId)
+            ->generateStarttime($data)
+            ->generateSlug($data)
+            ->serializeParams($data)
+            ->serializeL10nKeys($data);
 
-        foreach ($this->getL10nKeys() as $key) {
-            if (array_key_exists($key, $data) && is_array($data[$key])) {
-                $data[$key] = serialize($data[$key]);
-            }
-        }
-
-        if (!isset($data['starttime']) || empty($data['starttime'])) {
-            if ($data['content_status'] == 0) {
-                $data['starttime'] = null;
-            } else {
-                $data['starttime'] = date("Y-m-d H:i:s");
-            }
-        }
-
-        if (array_key_exists('category', $data)
-            && $data['category'] != $this->category
-        ) {
-            getService('core.locale')->setContext('frontend');
-
-            $catName = getService('api.service.category')
-                ->getItem($data['category'])->name;
-
-            getService('core.locale')->setContext('backend');
-        } else {
-            $catName = $this->category_name;
-        }
-
-        if (empty($data['fk_user_last_editor'])
-            && !isset($data['fk_user_last_editor'])
-        ) {
-            $data['fk_user_last_editor'] = getService('core.user')->id;
-        }
-
-        $contentData = [
-            'title'               => $data['title'],
-            'body'                => !array_key_exists('body', $data)
-                ? '' : $data['body'],
-            'category_name'       => $catName,
-            'changed'             => date("Y-m-d H:i:s"),
-            'content_status'      => !isset($data['content_status'])
-                ? $this->content_status : (int) $data['content_status'],
-            'created'             => !isset($data['created'])
-                ? $this->created : $data['created'],
-            'description'         => !isset($data['description'])
-                ? '' : $data['description'],
-            'endtime'             => empty($data['endtime'])
-                ? null : $data['endtime'],
-            'favorite'            => !isset($data['favorite'])
-                ? (int) $this->favorite : (int) $data['favorite'],
-            'fk_author'           => !array_key_exists('fk_author', $data)
-                || empty($data['fk_author']) ? null : (int) $data['fk_author'],
-            'fk_publisher'        => $this->fk_publisher,
-            'fk_user_last_editor' => empty(getService('core.user')) ?
-                $this->fk_user_last_editor : (int) getService('core.user')->id,
-            'frontpage'           => !isset($data['frontpage'])
-                ? $this->frontpage : (int) $data['frontpage'],
-            'in_home'             => !isset($data['in_home'])
-                ? $this->in_home : (int) $data['in_home'],
-            'params'              => !isset($data['params']) || empty($data['params'])
-                ? null : serialize($data['params']),
-            'slug'                => $data['slug'],
-            'starttime'           => !isset($data['starttime'])
-                ? $this->starttime : $data['starttime'],
-            'with_comment'        => !isset($data['with_comment'])
-                ? $this->with_comment : $data['with_comment'],
-        ];
+        $conn = getService('dbal_connection');
 
         try {
-            $conn = getService('dbal_connection');
-            $conn->update(
-                'contents',
-                $contentData,
-                [ 'pk_content' => (int) $data['id'] ]
-            );
-
-            if (array_key_exists('category', $data)
-                && $data['category'] != $this->category
-            ) {
-                $conn->delete(
-                    'contents_categories',
-                    [ 'pk_fk_content' => $data['id'] ]
-                );
-                $conn->executeUpdate(
-                    'INSERT INTO contents_categories'
-                    . ' SET pk_fk_content_category=:cat_id, pk_fk_content=:content_id, catName=:cat_name',
-                    [
-                        'content_id' => $data['id'],
-                        'cat_id'     => $data['category'],
-                        'cat_name'   => $catName,
-                    ]
-                );
-            }
-
-            if (array_key_exists('tags', $data)) {
-                $this->tags = $this->addTags($data['tags']);
-            }
+            $conn->update('contents', $data, [ 'pk_content' => $this->id ]);
+            $this->addTags($tags);
+            $this->addCategory($categoryId, true);
 
             logContentEvent(__METHOD__, $this);
             dispatchEventWithParams('content.update', [ 'item' => $this ]);
@@ -807,7 +608,7 @@ class Content implements \JsonSerializable, CsvSerializable
             return true;
         } catch (\Exception $e) {
             getService('error.log')->error(
-                'Error updating content (ID:' . $data['id'] . '):' . $e->getMessage()
+                'Error updating content (ID:' . $this->id . '):' . $e->getMessage()
             );
 
             return false;
@@ -824,8 +625,7 @@ class Content implements \JsonSerializable, CsvSerializable
     public function patch($properties)
     {
         try {
-            $conn = getService('dbal_connection');
-            $rs   = $conn->update(
+            getService('dbal_connection')->update(
                 'contents',
                 $properties,
                 [ 'pk_content' => $this->pk_content ]
@@ -2097,30 +1897,6 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Parses and executes some conversions basing on the property value.
-     *
-     * @param mixed $value The property value.
-     *
-     * @return mixed The converted value.
-     */
-    protected function parseProperty($value)
-    {
-        if (is_numeric($value)) {
-            return (int) $value;
-        }
-
-        if (@unserialize($value) !== false) {
-            return unserialize($value);
-        }
-
-        if (!empty($value) && is_string($value)) {
-            return @iconv(mb_detect_encoding($value), 'utf-8', $value);
-        }
-
-        return $value;
-    }
-
-    /**
      * Returns the list of properties that support multiple languages.
      *
      * @return array The list of properties that can be localized to multiple
@@ -2231,27 +2007,6 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Method for associate some tags by name to the content
-     * This is crap and should be in the article service.
-     *
-     * @param Array $data
-     *
-     * @return array
-     */
-    public function addTags($tags)
-    {
-        if (empty($tags)) {
-            self::deleteTags($this->id);
-            return [];
-        }
-
-        self::deleteTags($this->id);
-        self::saveTags($tags, $this->id);
-
-        return $tags;
-    }
-
-    /**
      * Method for recover the tags for contents
      *
      * @param mixed $contentIds a array with all the ids of the contents you want recover
@@ -2295,5 +2050,238 @@ class Content implements \JsonSerializable, CsvSerializable
             getService('error.log')->error($e->getMessage());
             throw new \Exception("Error Processing Request", 500);
         }
+    }
+
+    /**
+     * Persists the category for the current content
+     *
+     * @param int  $id     The category id.
+     * @param bool $delete Whether to delete all entries first.
+     */
+    protected function addCategory(int $id, bool $delete = false) : void
+    {
+        if (empty($id)) {
+            return;
+        }
+
+        $conn = getService('dbal_connection');
+
+        if ($delete) {
+            $conn->delete('contents_categories', [
+                'pk_fk_content' => $this->id
+            ]);
+        }
+
+        $conn->insert('contents_categories', [
+            'pk_fk_content'          => $this->id,
+            'pk_fk_content_category' => $id,
+            'catName'                => null
+        ]);
+    }
+
+    /**
+     * Persists the list of tags for the current content.
+     *
+     * @param array $tags The list of tags.
+     */
+    protected function addTags(array $tags)
+    {
+        if (empty($tags)) {
+            self::deleteTags($this->id);
+            $this->tags = [];
+        }
+
+        self::deleteTags($this->id);
+        self::saveTags($tags, $this->id);
+
+        $this->tags = $tags;
+    }
+
+    /**
+     * Returns the category name basing on the information used in create or
+     * update method.
+     *
+     * @param array $data The content information.
+     *
+     * @return Content The current content.
+     */
+    protected function generateCategoryName(array &$data, ?int $id) : Content
+    {
+        $data['category_name'] = '';
+
+        if (!empty($id)) {
+            return $this;
+        }
+
+        getService('core.locale')->setContext('frontend');
+
+        $data['category_name'] = getService('api.service.category')
+            ->getItem($data['category'])->name;
+
+        getService('core.locale')->setContext('backend');
+
+        return $this;
+    }
+
+    /**
+     * Generates the starttime basing on the current content status.
+     *
+     * @param array $data The content information.
+     *
+     * @return Content The current content.
+     */
+    protected function generateStarttime(array &$data) : Content
+    {
+        if (!array_key_exists('starttime', $data) || empty($data['starttime'])) {
+            $data['starttime'] = empty($data['content_status'])
+                ? null
+                : date('Y-m-d H:i:s');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Generates the slug for the content basing on the provided slug or the
+     * title.
+     *
+     * @param array $data The content information.
+     *
+     * @return Content The current content.
+     */
+    protected function generateSlug(array $data) : Content
+    {
+        $data['slug'] =
+            \Onm\StringUtils::generateSlug($data['slug'] ?? $data['title']);
+
+        return $this;
+    }
+
+    /**
+     * Inserts the first entry in content_views when the content is created.
+     */
+    protected function initViews()
+    {
+        getService('dbal_connection')->insert('content_views', [
+            'pk_fk_content' => $this->id,
+            'views'         => 0,
+        ]);
+    }
+
+    /**
+     * Parses the content information before trying to save/update.
+     *
+     * @param array $data The information to parse.
+     * @param int   $id   The current content id.
+     *
+     * @return array The parsed information.
+     */
+    protected function parseData(array $data, int $id = null) : array
+    {
+        $currentUserId = !empty(getService('core.user'))
+            ? getService('core.user')->id : null;
+
+        $overrides = [
+            'changed'             => date('Y-m-d H:i:s'),
+            'content_type_name'   => $this->content_type_name,
+            'fk_content_type'     => $this->content_type,
+            'fk_user_last_editor' => $currentUserId,
+        ];
+
+        if (!empty($id)) {
+            $overrides['pk_content'] = $id;
+        }
+
+        return array_merge([
+            'body'           => $data['body'] ?? null,
+            'content_status' => $data['content_status'] ?? 0,
+            'created'        => date('Y-m-d H:i:s'),
+            'description'    => $data['description'] ?? null,
+            'endtime'        => !empty($data['endtime']) ? $data['endtime'] : null,
+            'favorite'       => (int) $data['favorite'],
+            'fk_author'      => !empty($data['fk_author']) ?
+                (int) $data['fk_author'] : null,
+            'fk_publisher'   => $currentUserId,
+            'frontpage'      => $data['frontpage'] ?? 0,
+            'in_home'        => (int) $data['in_home'],
+            'params'         => $data['params'] ?? null,
+            'position'       => $data['position'] ?? 2,
+            'starttime'      => $data['starttime'],
+            'title'          => $data['title'],
+            'urn_source'     => $data['urn_source'] ?? null,
+            'with_comment'   => $data['with_comment'] ?? 0,
+        ], $overrides);
+    }
+
+    /**
+     * Parses and executes some conversions basing on the property value.
+     *
+     * @param mixed $value The property value.
+     *
+     * @return mixed The converted value.
+     */
+    protected function parseProperty($value)
+    {
+        if (is_numeric($value)) {
+            return (int) $value;
+        }
+
+        if (@unserialize($value) !== false) {
+            return unserialize($value);
+        }
+
+        if (!empty($value) && is_string($value)) {
+            return @iconv(mb_detect_encoding($value), 'utf-8', $value);
+        }
+
+        return $value;
+    }
+
+    /**
+     * Serializes the l10n properties before trying to save/update the current
+     * content.
+     *
+     * @param array $data The content information.
+     *
+     * @return Content The current content.
+     */
+    protected function serializeL10nKeys(array &$data) : Content
+    {
+        foreach ($this->getL10nKeys() as $key) {
+            if (!array_key_exists($key, $data) || !is_array($data[$key])) {
+                continue;
+            }
+
+            if (empty($data[$key])
+                || empty(array_filter($data[$key], function ($a) {
+                    return !empty($a);
+                }))
+            ) {
+                $data[$key] = null;
+
+                continue;
+            }
+
+            $data[$key] = serialize($data[$key]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Serializes the array of parameters before trying to save/update the
+     * current content.
+     *
+     * @param array $data The content information.
+     *
+     * @return Content The current content.
+     */
+    protected function serializeParams(array &$data) : Content
+    {
+        if (array_key_exists('params', $data) && !empty($data['params'])) {
+            $data['params'] = serialize($data['params']);
+        }
+
+        return $this;
     }
 }
