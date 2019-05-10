@@ -77,7 +77,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      */
     $scope.parseItem = function(data) {
       if (data.item) {
-        $scope.data.item      = angular.extend($scope.item, data.item);
+        $scope.data.item = angular.extend($scope.item, data.item);
 
         var type = '';
 
