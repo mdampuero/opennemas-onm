@@ -1071,53 +1071,6 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Change current value of available property
-     *
-     * @param string $id the id of the element
-     *
-     * @return boolean true if it was changed successfully
-     */
-    public function toggleAvailable($id = null)
-    {
-        if ($id == null) {
-            $id = $this->id;
-        }
-
-        try {
-            $status = ($this->content_status + 1) % 2;
-
-            $date                 = date("Y-m-d H:i:s");
-            $this->changed        = $date;
-            $this->content_status = $status;
-
-            getService('dbal_connection')->update(
-                'contents',
-                [
-                    'content_status' => $this->content_status,
-                    'changed'        => $date,
-                ],
-                [ 'pk_content' => $this->id ]
-            );
-
-            /* Notice log of this action */
-            logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'item' => $this ]);
-            dispatchEventWithParams(
-                $this->content_type_name . '.update',
-                [ $this->content_type_name => $this ]
-            );
-
-            return $this;
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                'Error removing content (ID:' . $id . '):' . $e->getMessage()
-            );
-
-            return false;
-        }
-    }
-
-    /**
      * Change current value of in_home property
      *
      * @param string $id the id of the element
