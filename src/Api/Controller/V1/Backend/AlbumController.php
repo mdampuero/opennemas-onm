@@ -64,6 +64,10 @@ class AlbumController extends ContentOldController
         $ids = [];
 
         foreach ($items as $item) {
+            if (!empty($item->cover_id)) {
+                $ids[] = $item->cover_id;
+            }
+
             $ids = array_unique(array_merge($ids, array_map(function ($photo) {
                 return $photo['pk_photo'];
             }, $item->photos)));
