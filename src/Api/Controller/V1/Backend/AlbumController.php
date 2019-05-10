@@ -46,11 +46,12 @@ class AlbumController extends ContentOldController
     }
 
     /**
-     * Returns the list of photos, description and its positions for a list of photos
+     * Returns the list of photos for an item or a list of items.
      *
-     * @param Album $item The item to fetch photos from
-     * @return array
-     **/
+     * @param mixed $items The item or the list of items to get photos for.
+     *
+     * @return array The list of photos.
+     */
     public function getPhotos($items)
     {
         if (empty($items)) {
@@ -80,38 +81,5 @@ class AlbumController extends ContentOldController
             ->set($photos)
             ->filter('mapify', [ 'key' => 'pk_photo' ])
             ->get();
-    }
-
-    /**
-     * Returns the list of contents related with items.
-     *
-     * @param Content $content The content.
-     *
-     * @return array The list of photos linked to the content.
-     */
-    protected function getRelatedContents($content)
-    {
-        $em    = $this->get('entity_repository');
-        $extra = [];
-
-        if (empty($content)) {
-            return $extra;
-        }
-
-        if (is_object($content)) {
-            $content = [ $content ];
-        }
-
-        foreach ($content as $item) {
-            if (empty($content->cover_id)) {
-                continue;
-            }
-
-            $photo = $em->find('Photo', $item->cover_id);
-
-            $extra[] = \Onm\StringUtils::convertToUtf8($photo);
-        }
-
-        return $extra;
     }
 }
