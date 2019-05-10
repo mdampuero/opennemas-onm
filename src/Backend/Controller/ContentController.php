@@ -56,44 +56,7 @@ class ContentController extends Controller
     }
 
     /**
-     * Sets the draft state for a content given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     */
-    public function setDraftAction(Request $request)
-    {
-        $id = (int) $request->query->getDigits('id', null);
-
-        if ($id > 0) {
-            $content = new \Content($id);
-            if ($content->id != null) {
-                $content->setDraft();
-
-                // Drop from any frontpage
-                $content->dropFromAllHomePages();
-
-                $code    = 200;
-                $message = 'Done';
-            } else {
-                $code    = 404;
-                $message = 'Content not available';
-            }
-        } else {
-            $code    = 400;
-            $message = 'Please specify an content id';
-        }
-
-        return new Response(
-            $message,
-            $code,
-            [ 'Content-Type' => 'application/json' ]
-        );
-    }
-
-    /**
-     * Sets the draft state for a content given its id
+     * Sets the available state for a content given its id
      *
      * @param Request $request the request object
      *

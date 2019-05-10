@@ -1363,52 +1363,6 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Sets the pending status for this content.
-     *
-     * This content has to be
-     *
-     * @return boolean true if all went well
-     */
-    public function setDraft()
-    {
-        // OLD APPROACH
-        if ($this->id == null) {
-            return false;
-        }
-
-        try {
-            getService('dbal_connection')->update(
-                'contents',
-                [
-                    'content_status'      => 0,
-                    'fk_user_last_editor' => (int) getService('core.user')->id,
-                    'changed'             => date("Y-m-d H:i:s"),
-                ],
-                [ 'pk_content' => $this->id, ]
-            );
-
-            // Set status for it's updated state to next event
-            $this->content_status = 0;
-
-            /* Notice log of this action */
-            logContentEvent(__METHOD__, $this);
-            dispatchEventWithParams('content.update', [ 'item' => $this ]);
-            dispatchEventWithParams(
-                $this->content_type_name . '.update',
-                [ $this->content_type_name => $this ]
-            );
-
-            return $this;
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                'Error changing draft: ' . $e->getMessage()
-            );
-
-            return false;
-        }
-    }
-
-    /**
      * Define content position in a widget
      *
      * @param int $position the position of the content

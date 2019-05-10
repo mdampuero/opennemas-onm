@@ -2,10 +2,6 @@ admin_content_set_available:
     path:     /content/set-available
     defaults: { _controller: BackendBundle:Content:setAvailable }
 
-admin_content_set_draft:
-    path:     /content/set-draft
-    defaults: { _controller: BackendBundle:Content:setDraft }
-
 admin_content_toggle_available:
     path:     /content/toggle-available
     defaults: { _controller: BackendBundle:Content:toggleAvailable }
