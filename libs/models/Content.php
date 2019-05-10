@@ -483,9 +483,9 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error fetching content with id' . $id . ': ' . $e->getMessage());
-
-            return null;
+            getService('error.log')->error(
+                'Error fetching content with id' . $id . ': ' . $e->getMessage()
+            );
         }
     }
 
@@ -514,7 +514,9 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return new $type($contentId);
         } catch (\Exception $e) {
-            error_log('Error on Content::get (ID:' . $contentId . ')' . $e->getMessage());
+            getService('error.log')->error(
+                'Error on Content::get (ID:' . $contentId . ')' . $e->getMessage()
+            );
 
             return false;
         }
@@ -669,7 +671,9 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error creating content:' . $e->getMessage());
+            getService('error.log')
+                ->error('Error creating content:' . $e->getMessage());
+
             throw $e;
         }
     }
@@ -802,7 +806,10 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error updating content (ID:' . $data['id'] . '):' . $e->getMessage());
+            getService('error.log')->error(
+                'Error updating content (ID:' . $data['id'] . '):' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -833,7 +840,10 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error patching property in content (ID:' . $this->pk_content . '):' . $e->getMessage());
+            getService('error.log')->error(
+                'Error patching property in content (ID:' . $this->pk_content . '):' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -865,7 +875,11 @@ class Content implements \JsonSerializable, CsvSerializable
             return true;
         } catch (Exception $e) {
             $conn->rollBack();
-            error_log('Error removing content (ID:' . $id . '):' . $e->getMessage());
+
+            getService('error.log')->error(
+                'Error removing content (ID:' . $id . '):' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -903,7 +917,10 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error Content:delete, aka sendToTrash (ID:' . $id . '):' . $e->getMessage());
+            getService('error.log')->error(
+                'Error Content:delete, aka sendToTrash (ID:' . $id . '):' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -929,7 +946,9 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return count($contentNum) >= 1;
         } catch (\Exception $e) {
-            error_log('Error on check exists on content (ID:' . $id . '):' . $e->getMessage());
+            getService('error.log')->error(
+                'Error on check exists on content (ID:' . $id . '):' . $e->getMessage()
+            );
 
             return false;
         }
@@ -1004,7 +1023,10 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error content::setTrashed (ID:' . $this->id . '):' . $e->getMessage());
+            getService('error.log')->error(
+                'Error content::setTrashed (ID:' . $this->id . '):' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -1041,7 +1063,9 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error removing content (ID:' . $this->id . '):' . $e->getMessage());
+            getService('error.log')->error(
+                'Error removing content (ID:' . $this->id . '):' . $e->getMessage()
+            );
             return false;
         }
     }
@@ -1085,7 +1109,10 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error removing content (ID:' . $id . '):' . $e->getMessage());
+            getService('error.log')->error(
+                'Error removing content (ID:' . $id . '):' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -1121,7 +1148,10 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error content::toggleFavorite (ID:' . $id . '):' . $e->getMessage());
+            getService('error.log')->error(
+                'Error content::toggleFavorite (ID:' . $id . '):' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -1157,7 +1187,10 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error content::toggleInHome (ID:' . $id . '):' . $e->getMessage());
+            getService('error.log')->error(
+                'Error content::toggleInHome (ID:' . $id . '):' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -1189,7 +1222,10 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error content::toggleSuggested (ID:' . $this->id . '):' . $e->getMessage());
+            getService('error.log')->error(
+                'Error content::toggleSuggested (ID:' . $this->id . '):' . $e->getMessage()
+            );
+
             throw $e;
         }
     }
@@ -1257,7 +1293,10 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error changing availability: ' . $e->getMessage());
+            getService('error.log')->error(
+                'Error changing availability: ' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -1315,7 +1354,10 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error changing in_home: ' . $e->getMessage());
+            getService('error.log')->error(
+                'Error changing in_home: ' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -1358,7 +1400,10 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error changing draft: ' . $e->getMessage());
+            getService('error.log')->error(
+                'Error changing draft: ' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -1397,7 +1442,10 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error content::setPosition (ID:' . $this->id . '):' . $e->getMessage());
+            getService('error.log')->error(
+                'Error content::setPosition (ID:' . $this->id . '):' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -1438,7 +1486,10 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error content::setFavorite (ID:' . $this->id . '):' . $e->getMessage());
+            getService('error.log')->error(
+                'Error content::setFavorite (ID:' . $this->id . '):' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -1808,7 +1859,10 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error on Content::dropFromAllHomePages:' . $e->getMessage());
+            getService('error.log')->error(
+                'Error on Content::dropFromAllHomePages:' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -1992,7 +2046,10 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return $rs > 0;
         } catch (\Exception $e) {
-            error_log('Error on Content::isInFrontpageOfCategory (ID:' . $categoryID . ')');
+            getService('error.log')->error(
+                'Error on Content::isInFrontpageOfCategory (ID:' . $categoryID . ')'
+            );
+
             return false;
         }
     }
@@ -2024,7 +2081,11 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error on Content::setMetadata (ID:' . $this->id . ') .' . $property . ' => ' . $value);
+            getService('error.log')->error(
+                'Error on Content::setMetadata (ID:' . $this->id . ') .'
+                . $property . ' => ' . $value
+            );
+
             return false;
         }
     }
@@ -2070,7 +2131,10 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error on Content::removeMetadata' . $e->getMessage());
+            getService('error.log')->error(
+                'Error on Content::removeMetadata' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -2110,7 +2174,9 @@ class Content implements \JsonSerializable, CsvSerializable
                     }
                 }
             } catch (\Exception $e) {
-                error_log('Error on Content:loadAllContentProperties: ' . $e->getMessage());
+                getService('error.log')->error(
+                    'Error on Content:loadAllContentProperties: ' . $e->getMessage()
+                );
             }
 
             $cache->save('content-meta-' . $this->id, $contentProperties);
@@ -2319,8 +2385,8 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return $contentTagsArray;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
-            throw new Exception("Error Processing Request", 500);
+            getService('error.log')->error($e->getMessage());
+            throw new \Exception("Error Processing Request", 500);
         }
     }
 }
