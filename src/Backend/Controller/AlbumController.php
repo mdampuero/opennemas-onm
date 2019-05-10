@@ -12,198 +12,46 @@ namespace Backend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
-use Common\Core\Annotation\Security;
 
-/**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
-class AlbumController extends Controller
+class AlbumController extends BackendController
 {
     /**
-     * Lists all albums.
-     *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('ALBUM_MANAGER')
-     *     and hasPermission('ALBUM_ADMIN')")
+     * {@inheritdoc}
      */
-    public function listAction()
-    {
-        return $this->render('album/list.tpl');
-    }
+    protected $extension = 'ALBUM_MANAGER';
 
     /**
-     * Shows and handles the form for create a new album.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('ALBUM_MANAGER')
-     *     and hasPermission('ALBUM_CREATE')")
+     * {@inheritdoc}
      */
-    public function createAction(Request $request)
-    {
-        return $this->render('album/item.tpl');
-
-        // TODO: I keep this commented in order to get a reference of what was doing
-        // So we dont left anything behind when porting this action to the api controller
-        // $data = [
-        //     'content_status' => $request->request->getDigits('content_status', 0, FILTER_SANITIZE_STRING),
-        //     'title'          => $request->request
-        //         ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-        //     'category'       => $request->request->getDigits('category'),
-        //     'agency'         => $request->request
-        //         ->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-        //     'description'    => $request->request->get('description', ''),
-        //     'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
-        //     'album_frontpage_image' => $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
-        //     'album_photos_id'       => $request->request->get('album_photos_id'),
-        //     'album_photos_footer'   => $request->request->get('album_photos_footer'),
-        //     'fk_author'             => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
-        //     'endtime'        => $request->request
-        //         ->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-        //     'starttime'      => $request->request
-        //         ->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-        //     'params'         => $request->request->get('params', []),
-        //     'tags'           => json_decode($request->request->get('tags', ''), true)
-        // ];
-
-        // $album = new \Album();
-        // $album->create($data);
-
-        // $this->get('session')->getFlashBag()->add(
-        //     'success',
-        //     _('Album created successfully')
-        // );
-
-        // // Return user to list if has no update acl
-        // if ($this->get('core.security')->hasPermission('ALBUM_UPDATE')) {
-        //     return $this->redirect(
-        //         $this->generateUrl('admin_album_show', [ 'id' => $album->id ])
-        //     );
-        // } else {
-        //     return $this->redirect(
-        //         $this->generateUrl('backend_albums_list')
-        //     );
-        // }
-    }
+    protected $permissions = [
+        'create' => 'ALBUM_CREATE',
+        'update' => 'ALBUM_UPDATE',
+        'list'   => 'ALBUM_ADMIN',
+        'show'   => 'ALBUM_UPDATE',
+    ];
 
     /**
-     * Shows the information for an album given its id.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('ALBUM_MANAGER')
-     *     and hasPermission('ALBUM_UPDATE')")
+     * {@inheritdoc}
      */
-    public function showAction(Request $request)
-    {
-        $id = $request->query->getDigits('id', null);
-
-        return $this->render('album/item.tpl', [ 'id' => $id]);
-    }
+    protected $groups = [
+        'preview' => 'album_inner'
+    ];
 
     /**
-     * TODO: Remove this action when API controller migration is completed
-     * Updates the album information.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('ALBUM_MANAGER')
-     *     and hasPermission('ALBUM_UPDATE')")
+     * {@inheritdoc}
      */
-    public function updateAction(Request $request)
-    {
-        $id    = $request->request->getDigits('id');
-        $album = new \Album($id);
-
-        if (is_null($album->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Unable to find an album with the id "%d".'), $id)
-            );
-
-            return $this->redirect($this->generateUrl('backend_albums_list'));
-        }
-
-        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
-            && !$album->isOwner($this->getUser()->id)
-        ) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("You don't have enough privileges for modify this album.")
-            );
-
-            return $this->redirect($this->generateUrl('backend_albums_list', [
-                'category' => $album->category
-            ]));
-        }
-
-        // Check empty data
-        if (count($request->request) < 1) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("Album data sent not valid.")
-            );
-
-            return $this->redirect($this->generateUrl('admin_album_show', [ 'id' => $id ]));
-        }
-
-        $requestPost = $request->request;
-
-        $data = [
-            'id'             => $id,
-            'content_status' => $requestPost->getDigits('content_status', 0, FILTER_SANITIZE_STRING),
-            'title'          => $requestPost->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'category'       => $requestPost->getDigits('category'),
-            'agency'         => $requestPost
-                ->filter('agency', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'description'    => $requestPost->get('description', ''),
-            'with_comment'   => $requestPost->filter('with_comment', 0, FILTER_SANITIZE_STRING),
-            'album_frontpage_image' => $requestPost->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
-            'album_photos_id'       => $requestPost->get('album_photos_id'),
-            'album_photos_footer'   => $requestPost->get('album_photos_footer'),
-            'fk_author'             => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
-            'endtime'        => $requestPost
-                ->filter('endtime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'starttime'      => $requestPost
-                ->filter('starttime', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'params'         => $requestPost->get('params', []),
-            'tags'           => json_decode($request->request->get('tags', ''), true)
-        ];
-
-        if ($album->update($data)) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _("Album updated successfully.")
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("There was a problem while updating the content.")
-            );
-        }
-
-        return $this->redirect($this->generateUrl(
-            'admin_album_show',
-            [ 'id' => $album->id ]
-        ));
-    }
+    protected $resource = 'album';
 
     /**
      * Render the content provider for albums.
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
-     *
-     * @Security("hasExtension('ALBUM_MANAGER')")
      */
     public function contentProviderAction(Request $request)
     {
+        $this->checkSecurity($this->extension);
+
         $categoryId         = $request->query->getDigits('category', 0);
         $page               = $request->query->getDigits('page', 1);
         $itemsPerPage       = 8;
