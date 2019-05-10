@@ -59,55 +59,6 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
     };
 
     /**
-     * @function parseItem
-     * @memberOf RestInnerCtrl
-     *
-     * @description
-     *   Parses the response and adds information to the scope.
-     *
-     * @param {Object} data The data in the response.
-     */
-    $scope.parseItem = function(data) {
-      if (data.item) {
-        $scope.data.item = angular.extend($scope.item, data.item);
-      }
-
-      $scope.configure(data.extra);
-      $scope.localize($scope.data.item, 'item', true, [ 'photos' ]);
-      $scope.localizePhotos($scope.data.item.photos, 'photos', true);
-
-      if (data.extra.photos && data.extra.photos[$scope.item.cover_id]) {
-        $scope.cover = data.extra.photos[$scope.item.cover_id];
-      }
-    };
-
-    /**
-     * @function localizePhotos
-     * @memberOf RestInnerCtrl
-     *
-     * @description
-     *   Localizes the photos array and creates linkers
-     *
-     * @param {Object} data The data in the response.
-     */
-    $scope.localizePhotos = function(items, key, clean) {
-      var lz = localizer.get($scope.config.locale);
-
-      // Localize items
-      $scope.item[key] = lz.localize(items, [ 'description' ], $scope.config.locale);
-
-      // Initialize linker
-      if (!$scope.config.linkers[key]) {
-        $scope.config.linkers[key] = linker.get([ 'description' ],
-          $scope.config.locale.default, $scope, clean);
-      }
-
-      // Link original and localized items
-      $scope.config.linkers[key].setKey($scope.config.locale.selected);
-      $scope.config.linkers[key].link(items, $scope.item[key]);
-    };
-
-    /**
      * @function getFrontendUrl
      * @memberOf AlbumCtrl
      *
@@ -130,6 +81,61 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
           category_name: item.category_name
         })
       );
+    };
+
+    /**
+     * @function localizePhoto
+     * @memberOf AlbumCtrl
+     *
+     * @description
+     *   Localizes a photo in the array of photos.
+     *
+     * @param {Object}  original The photo to localize.
+     * @param {Integer} index    The index in the array of photos to use as
+     *                           linker name.
+     */
+    $scope.localizePhoto = function(original, index) {
+      var localized = localizer.get($scope.config.locale).localize(original,
+        [ 'description' ], $scope.config.locale);
+
+      // Initialize linker
+      delete $scope.config.linkers[index];
+      $scope.config.linkers[index] = linker.get([ 'description' ],
+        $scope.config.locale.default, $scope, true);
+
+      // Link original and localized items
+      $scope.config.linkers[index].setKey($scope.config.locale.selected);
+      $scope.config.linkers[index].link(original, localized);
+
+      return localized;
+    };
+
+    /**
+     * @function parseItem
+     * @memberOf RestInnerCtrl
+     *
+     * @description
+     *   Parses the response and adds information to the scope.
+     *
+     * @param {Object} data The data in the response.
+     */
+    $scope.parseItem = function(data) {
+      if (data.item) {
+        $scope.data.item = angular.extend($scope.item, data.item);
+      }
+
+      $scope.configure(data.extra);
+      $scope.localize($scope.data.item, 'item', true, [ 'photos' ]);
+
+      $scope.item.photos = [];
+      for (var i = 0; i < $scope.data.item.photos.length; i++) {
+        $scope.item.photos.push($scope.localizePhoto(
+          $scope.data.item.photos[i], $scope.item.photos.length));
+      }
+
+      if (data.extra.photos && data.extra.photos[$scope.item.cover_id]) {
+        $scope.cover = data.extra.photos[$scope.item.cover_id];
+      }
     };
 
     /**
@@ -156,7 +162,7 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
     };
 
     /**
-     * Show modal warning for album missing photos
+     * Shows a warning in a modal when cover and/or photos are missing.
      */
     $scope.validatePhotosAndCover = function() {
       if ($scope.item.photos && $scope.item.cover_id) {
@@ -196,11 +202,17 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       }
 
       for (var i = 0; i < nv.length; i++) {
-        $scope.item.photos.push({
+        var photo = {
           position: $scope.data.item.photos.length,
           description: nv[i].description,
           pk_photo: nv[i].pk_photo
-        });
+        };
+
+        $scope.data.item.photos.push(photo);
+
+        // Localize and add new photo to localized item
+        $scope.item.photos.push($scope.localizePhoto(photo,
+          $scope.item.photos.length));
 
         if (!$scope.data.extra.photos[nv[i].pk_photo]) {
           $scope.data.extra.photos[nv[i].pk_photo] = nv[i];
