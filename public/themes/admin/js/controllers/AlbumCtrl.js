@@ -133,22 +133,6 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
     };
 
     /**
-     * Parse the photos from template and initialize the scope properly
-     *
-     * @param Object photos The album photos.
-     */
-    $scope.parsePhotos = function(photos) {
-      $scope.photos  = [];
-
-      for (var i = 0; i < photos.length; i++) {
-        photos[i].photo.footer = photos[i].description;
-        $scope.photos.push(photos[i].photo);
-      }
-
-      $('.btn.btn-primary').attr('disabled', false);
-    };
-
-    /**
      * @inheritdoc
      */
     $scope.validate = function() {
@@ -175,7 +159,7 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
      * Show modal warning for album missing photos
      */
     $scope.validatePhotosAndCover = function() {
-      if ($scope.item.photos && $scope.item.cover) {
+      if ($scope.item.photos && $scope.item.cover_id) {
         return true;
       }
 
@@ -207,7 +191,7 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
 
     // Update the ids and footers when photos change
     $scope.$watch('photos', function(nv, ov) {
-      if (!nv || !ov || nv === ov) {
+      if (!nv || nv === ov) {
         return;
       }
 
