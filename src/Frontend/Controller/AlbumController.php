@@ -132,12 +132,20 @@ class AlbumController extends FrontendController
      */
     protected function hydrateShow(array &$params = []):void
     {
-        $params['content']->author =
-            $this->get('user_repository')->find((int) $params['content']->fk_author);
+        $params['author'] = $this->get('user_repository')
+            ->find($params['content']->fk_author);
 
-        $params = array_merge($params, [
-            'album_photos' => $params['content']->_getAttachedPhotos($params['content']->id),
-        ]);
+        $cacheIds = array_map(function ($a) {
+            return [ 'photo', $a['pk_photo'] ];
+        }, $params['content']->photos);
+
+        $photos = $this->get('entity_repository')
+            ->findMulti($cacheIds);
+
+        $params['photos'] = $this->get('data.manager.filter')
+            ->set($photos)
+            ->filter('mapify', [ 'key' => 'pk_photo' ])
+            ->get();
     }
 
     /**
