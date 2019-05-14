@@ -35,39 +35,24 @@ class CommentsController extends Controller
      */
     public function getAction(Request $request)
     {
-        $contentID   = $request->query->filter('content_id', null, FILTER_SANITIZE_NUMBER_INT);
-        $elemsByPage = (int) $request->query->get('elems_per_page');
-        $offset      = $request->query->getDigits('offset', 1);
-        $darkTheme   = $request->query->getDigits('dark_theme', 0);
-        $criteria    = [
-            'content_status' => [ [ 'value' => 1 ] ],
-            'in_litter'      => [ [ 'value' => 0 ] ],
-            'pk_content'     => [ [ 'value' => $contentID ] ],
-        ];
+        $contentId = $request->query->filter('content_id', null, FILTER_SANITIZE_NUMBER_INT);
+        $epp       = (int) $request->query->get('elems_per_page');
+        $offset    = $request->query->getDigits('offset', 1);
 
-        if (empty($contentID)
-            || empty($this->get('entity_repository')->findBy($criteria))
-        ) {
+        $content = $this->getContent($contentId);
+        if (empty($content)) {
             return new Response('', 404);
         }
 
-        $configs = $this->get('core.helper.comment')->getConfigs();
-        $cm      = $this->get('comment_repository');
-        $total   = $cm->countCommentsForContentId($contentID);
+        $comments = $this->getComments($content, $epp, $offset);
 
-        $elemsByPage = empty($elemsByPage) || $elemsByPage > $total
-            ? (int) $configs['number_elements'] : $elemsByPage;
-
-        $comments = $cm->getCommentsforContentId($contentID, $elemsByPage, $offset);
-
-        foreach ($comments as &$comment) {
-            $vote           = new \Vote($comment->id);
-            $comment->votes = $vote;
-        }
+        $sh    = $this->get('core.helper.subscription');
+        $total = $this->get('comment_repository')
+            ->countCommentsForContentId($content->id);
 
         $positions      = [];
         $advertisements = [];
-        if ($this->get('core.helper.subscription')->hasAdvertisements()) {
+        if ($sh->hasAdvertisements($sh->getToken($content))) {
             list($positions, $advertisements) = $this->getAds();
         }
 
@@ -76,11 +61,10 @@ class CommentsController extends Controller
             'advertisements' => $advertisements,
             'total'          => $total,
             'comments'       => $comments,
-            'contentId'      => $contentID,
-            'elems_per_page' => $elemsByPage,
+            'contentId'      => $content->id,
+            'elems_per_page' => $epp,
             'required_email' => $this->get('core.helper.comment')->isEmailRequired(),
             'offset'         => $offset,
-            'dark_theme'     => $darkTheme,
             'count'          => $total,
             'recaptcha'      => $this->get('core.recaptcha')
                 ->configureFromSettings()
@@ -97,34 +81,24 @@ class CommentsController extends Controller
      */
     public function ajaxAction(Request $request)
     {
-        $contentID   = $request->query->filter('content_id', null, FILTER_SANITIZE_NUMBER_INT);
-        $elemsByPage = $request->query->getDigits('elems_per_page');
-        $offset      = $request->query->getDigits('offset', 1);
+        $contentId = $request->query->filter('content_id', null, FILTER_SANITIZE_NUMBER_INT);
+        $epp       = (int) $request->query->get('elems_per_page');
+        $offset    = $request->query->getDigits('offset', 1);
 
-        if (empty($contentID)
-            || !\Content::checkExists($contentID)
-        ) {
-            return new Response('Content doesnt exists', 404);
+        $content = $this->getContent($contentId);
+        if (empty($content)) {
+            return new Response('', 404);
         }
 
-        $configs = $this->get('core.helper.comment')->getConfigs();
-        if (empty($elemsByPage)) {
-            $elemsByPage = (int) $configs['number_elements'];
-        }
+        $comments = $this->getComments($content, $epp, $offset);
 
-        // Getting comments for current article
-        $cm       = $this->get('comment_repository');
-        $total    = $cm->countCommentsForContentId($contentID);
-        $comments = $cm->getCommentsforContentId($contentID, $elemsByPage, $offset);
-
-        foreach ($comments as &$comment) {
-            $vote           = new \Vote($comment->id);
-            $comment->votes = $vote;
-        }
+        $sh    = $this->get('core.helper.subscription');
+        $total = $this->get('comment_repository')
+            ->countCommentsForContentId($content->id);
 
         $positions      = [];
         $advertisements = [];
-        if ($this->get('core.helper.subscription')->hasAdvertisements()) {
+        if ($sh->hasAdvertisements($sh->getToken($content))) {
             list($positions, $advertisements) = $this->getAds();
         }
 
@@ -133,14 +107,12 @@ class CommentsController extends Controller
             'advertisements' => $advertisements,
             'total'          => $total,
             'comments'       => $comments,
-            'contentId'      => $contentID,
-            'elems_per_page' => $elemsByPage,
+            'contentId'      => $content->id,
+            'elems_per_page' => $epp,
             'offset'         => $offset,
         ]);
 
-        // Inform the client if there is more elements
-        $more = ($total < ($elemsByPage * $offset)) ? false : true;
-
+        $more = ($total - 1 < ($epp * $offset)) ? false : true;
         return new Response(json_encode([
             'contents' => $contents,
             'more'     => $more,
@@ -398,5 +370,55 @@ class CommentsController extends Controller
             ->findByPositionsAndCategory($positions, 0);
 
         return [ $positions, $advertisements ];
+    }
+
+    /**
+     * Returns content for the comment.
+     *
+     * @param integer $id the content id.
+     *
+     * @return object The content object.
+     */
+    protected function getContent($id)
+    {
+        if (empty($id)) {
+            return null;
+        }
+
+        $item = $this->get('entity_repository')->findOneBy([
+            'content_status' => [ [ 'value' => 1 ] ],
+            'in_litter'      => [ [ 'value' => 0 ] ],
+            'pk_content'     => [ [ 'value' => $id ] ],
+        ]);
+
+        return $item;
+    }
+
+    /**
+     * Returns comments for the content given a page.
+     *
+     * @param object  $content The content object.
+     * @param integer $epp     The number of elements to return.
+     * @param integer $offset  The initial offset.
+     *
+     * @return array The comments for content.
+     */
+    protected function getComments($content, $epp, $offset)
+    {
+        $configs = $this->get('core.helper.comment')->getConfigs();
+        $cm      = $this->get('comment_repository');
+        $total   = $cm->countCommentsForContentId($content->id);
+
+        $epp = empty($epp) || $epp > $total
+            ? (int) $configs['number_elements'] : $epp;
+
+        $comments = $cm->getCommentsforContentId($content->id, $epp, $offset);
+
+        foreach ($comments as &$comment) {
+            $vote           = new \Vote($comment->id);
+            $comment->votes = $vote;
+        }
+
+        return $comments;
     }
 }

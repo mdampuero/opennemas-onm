@@ -32,6 +32,7 @@ class SubscriptionHelper
      */
     protected $notSubscribedPermissions = [
         'NON_MEMBER_BLOCK_ACCESS',
+        'NON_MEMBER_HIDE_ADVERTISEMENTS',
         'NON_MEMBER_HIDE_SUMMARY',
         'NON_MEMBER_HIDE_BODY',
         'NON_MEMBER_HIDE_PRETITLE',
@@ -87,12 +88,15 @@ class SubscriptionHelper
     /**
      * Checks if the current user has should not see advertisements.
      *
+     * @param string $token The subscription token.
+     *
      * @return boolean True if the current user should see adveritsement. False
      *                 otherwise.
      */
-    public function hasAdvertisements()
+    public function hasAdvertisements($token = null)
     {
-        return !$this->security->hasPermission('MEMBER_HIDE_ADVERTISEMENTS');
+        return !$this->security->hasPermission('MEMBER_HIDE_ADVERTISEMENTS')
+            && !$this->isHidden($token, 'ADVERTISEMENTS');
     }
 
     /**
@@ -196,7 +200,7 @@ class SubscriptionHelper
             return false;
         }
 
-        $member      = strlen($token) === 3;
+        $member      = strlen($token) === count($this->subscribedPermissions);
         $prefix      = $member ? 'MEMBER' : 'NON_MEMBER';
         $permission  = $prefix . '_' . strtoupper($action);
         $permissions = $member ? $this->subscribedPermissions

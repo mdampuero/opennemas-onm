@@ -78,8 +78,6 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
         $ad2            = new \Advertisement();
         $ad2->positions = [ 2203 ];
 
-        $body = '<p>foo bar baz</p><p>thud qwer asdf</p>';
-
         $this->smarty->expects($this->at(0))->method('getValue')
             ->with('advertisements')
             ->willReturn([ $ad1, $ad2 ]);
@@ -94,6 +92,22 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
         $bodyWithAds = '<p>foo bar baz</p><ad><p>thud qwer asdf</p><ad>';
         $this->assertEquals(
             $bodyWithAds,
+            smarty_modifier_ads_in_body($body)
+        );
+    }
+
+    /**
+     * Tests smarty_modifier_ads_in_body when no ads
+     */
+    public function testAdsInBodyWhenEmpty()
+    {
+        $this->smarty->expects($this->at(0))->method('getValue')
+            ->with('advertisements')
+            ->willReturn(null);
+
+        $body = '<p>foo bar baz</p><p>thud qwer asdf</p>';
+        $this->assertEquals(
+            $body,
             smarty_modifier_ads_in_body($body)
         );
     }
