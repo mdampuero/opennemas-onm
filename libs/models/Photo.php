@@ -213,14 +213,21 @@ class Photo extends Content
             $ih->optimize($path);
         }
 
-        $data = array_merge([
-            'changed'        => $date->format('Y-m-d H:i:s'),
-            'content_status' => 1,
-            'created'        => $date->format('Y-m-d H:i:s'),
-            'name'           => $filename,
-            'path_file'      => $date->format('/Y/m/d/'),
-            'title'          => $filename,
-        ], $data, $ih->getInformation($path));
+        $data = array_merge(
+            $data,
+            [
+                'changed'        => $date->format('Y-m-d H:i:s'),
+                'content_status' => 1,
+                'created'        => $date->format('Y-m-d H:i:s'),
+                'name'           => $filename,
+                'path_file'      => $date->format('/Y/m/d/'),
+                'title'          => $filename,
+                'description'    => !empty($ih->getDescription())
+                    ? $ih->getDescription()
+                    : $data['description'],
+            ],
+            $ih->getInformation($path)
+        );
 
         return $this->create($data);
     }
