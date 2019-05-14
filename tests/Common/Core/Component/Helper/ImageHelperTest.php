@@ -31,7 +31,7 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->processor = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setMethods([
-                'getHeight', 'getSize', 'getWidth', 'open', 'optimize', 'save'
+                'getDescription', 'getHeight', 'getSize', 'getWidth', 'open', 'optimize', 'save'
             ])->getMock();
 
         $this->helper = $this->getMockBuilder('Common\Core\Component\Helper\ImageHelper')
@@ -66,6 +66,17 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
             '/\/waldo\/grault\/media\/bar\/images\/2010\/01\/01\/20100101152045[0-9]{5}.jpg/',
             $this->helper->generatePath($file, '2010-01-01 15:20:45')
         );
+    }
+
+    /**
+     * Tests getDescription.
+     */
+    public function testGetDescription()
+    {
+        $this->processor->expects($this->once())->method('getDescription')
+            ->willReturn('foobar baz gorp');
+
+        $this->assertEquals('foobar baz gorp', $this->helper->getDescription());
     }
 
     /**

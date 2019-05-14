@@ -84,6 +84,16 @@ class ImageHelper
     }
 
     /**
+     * Returns the description for the image.
+     *
+     * @return string The image description.
+     */
+    public function getDescription() : string
+    {
+        return $this->processor->getDescription();
+    }
+
+    /**
      * @codeCoverageIgnore
      *
      * Returns the extension for a file.
