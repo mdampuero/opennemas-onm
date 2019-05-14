@@ -103,6 +103,19 @@ class Processor
     }
 
     /**
+     * Returns the image internal description if exists.
+     *
+     * @return string The image description.
+     */
+    public function getDescription() : string
+    {
+        $description = $this->image->getImagick()
+            ->getImageProperties('exif:ImageDescription');
+
+        return $description['exif:ImageDescription'] ?? '';
+    }
+
+    /**
      * Returns the image format.
      *
      * @return string The image format.

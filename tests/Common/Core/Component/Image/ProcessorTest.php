@@ -35,7 +35,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->imagick = $this->getMockBuilder('Imagick')
             ->setMethods([
-                'getImageFormat', 'getImageLength', 'getImageMimeType'
+                'getImageFilename', 'getImageFormat', 'getImageLength',
+                'getImageMimeType', 'getImageProperties'
             ])->getMock();
 
         $this->imagine = $this->getMockBuilder('Imagine')
@@ -126,6 +127,29 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('quux mumble', $this->im->getContent($params));
     }
 
+    /**
+     * Tests getDescription.
+     */
+    public function testGetDescriptionWithExif()
+    {
+        $this->imagick->expects($this->once())->method('getImageProperties')
+            ->with('exif:ImageDescription')
+            ->willReturn([ 'exif:ImageDescription' => 'glorp']);
+
+        $this->assertEquals('glorp', $this->im->getDescription());
+    }
+
+    /**
+     * Tests getDescription.
+     */
+    public function testGetDescriptionWithoutExif()
+    {
+        $this->imagick->expects($this->once())->method('getImageProperties')
+            ->with('exif:ImageDescription')
+            ->willReturn([]);
+
+        $this->assertEquals('', $this->im->getDescription());
+    }
     /**
      * Tests getFormat.
      */
