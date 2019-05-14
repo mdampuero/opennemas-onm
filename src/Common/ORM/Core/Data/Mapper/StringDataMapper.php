@@ -21,6 +21,10 @@ class StringDataMapper
             return null;
         }
 
-        return (string) $params[0];
+        return mb_convert_encoding(
+            (string) $params[0],
+            'UTF-8',
+            mb_detect_encoding((string) $params[0])
+        );
     }
 }
