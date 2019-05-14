@@ -44,7 +44,7 @@ class RedirectorController extends Controller
         $translation = $this->get('core.redirector')->getUrl($source, $type);
 
         if (empty($translation)) {
-            throw new ResourceNotFoundException();
+            throw new ContentNotMigratedException();
         }
 
         // Redirect content migrated to another domain
