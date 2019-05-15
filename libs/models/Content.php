@@ -220,8 +220,6 @@ class Content implements \JsonSerializable, CsvSerializable
         if (!is_null($id)) {
             return $this->read($id);
         }
-
-        $this->content_type = get_class($this);
     }
 
     /**
@@ -476,6 +474,7 @@ class Content implements \JsonSerializable, CsvSerializable
             }
 
             $this->load($rs);
+            $this->id = $id;
 
             return $this;
         } catch (\Exception $e) {
@@ -529,9 +528,11 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function create($data)
     {
-        $categoryId = $data['category'] ?? null;
-        $tags       = $data['tags'] ?? [];
-        $data       = $this->parseData($data);
+        $categoryId = array_key_exists('category', $data) ?
+            (int) $data['category'] : null;
+
+        $tags = $data['tags'] ?? [];
+        $data = $this->parseData($data);
 
         $this
             ->generateCategoryName($data, $categoryId)
@@ -580,9 +581,11 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function update($data)
     {
-        $categoryId = $data['category'] ?? null;
-        $tags       = $data['tags'] ?? [];
-        $data       = $this->parseData($data, $this->id);
+        $categoryId = array_key_exists('category', $data) ?
+            (int) $data['category'] : null;
+
+        $tags = $data['tags'] ?? [];
+        $data = $this->parseData($data, $this->id);
 
         $this
             ->generateCategoryName($data, $categoryId)
@@ -1972,8 +1975,8 @@ class Content implements \JsonSerializable, CsvSerializable
         $inputVal = [];
         foreach ($tagsListAux as $tag) {
             $sql       .= '(?, ?), ';
-            $inputVal[] = $contentId == null ? $tag['content_id'] : $contentId;
-            $inputVal[] = $contentId == null ? $tag['tag_id'] : $tag;
+            $inputVal[] = $contentId;
+            $inputVal[] = $tag;
         }
         $sql = substr($sql, 0, -2) . ';';
 
@@ -2058,7 +2061,7 @@ class Content implements \JsonSerializable, CsvSerializable
      * @param int  $id     The category id.
      * @param bool $delete Whether to delete all entries first.
      */
-    protected function addCategory(int $id, bool $delete = false) : void
+    protected function addCategory(?int $id, bool $delete = false) : void
     {
         if (empty($id)) {
             return;
@@ -2102,6 +2105,7 @@ class Content implements \JsonSerializable, CsvSerializable
      * update method.
      *
      * @param array $data The content information.
+     * @param int   $id   The category id.
      *
      * @return Content The current content.
      */
@@ -2109,14 +2113,14 @@ class Content implements \JsonSerializable, CsvSerializable
     {
         $data['category_name'] = '';
 
-        if (!empty($id)) {
+        if (empty($id)) {
             return $this;
         }
 
         getService('core.locale')->setContext('frontend');
 
         $data['category_name'] = getService('api.service.category')
-            ->getItem($data['category'])->name;
+            ->getItem($id)->name;
 
         getService('core.locale')->setContext('backend');
 
@@ -2198,17 +2202,17 @@ class Content implements \JsonSerializable, CsvSerializable
             'created'        => date('Y-m-d H:i:s'),
             'description'    => $data['description'] ?? null,
             'endtime'        => !empty($data['endtime']) ? $data['endtime'] : null,
-            'favorite'       => (int) $data['favorite'],
+            'favorite'       => $data['favorite'] ?? 0,
             'fk_author'      => !empty($data['fk_author']) ?
                 (int) $data['fk_author'] : null,
             'fk_publisher'   => $currentUserId,
             'frontpage'      => $data['frontpage'] ?? 0,
-            'in_home'        => (int) $data['in_home'],
+            'in_home'        => $data['in_home'] ?? 0,
             'params'         => $data['params'] ?? null,
             'position'       => $data['position'] ?? 2,
-            'starttime'      => $data['starttime'],
+            'starttime'      => $data['starttime'] ?? null,
             'title'          => $data['title'],
-            'urn_source'     => $data['urn_source'] ?? null,
+            'urn_source'     => !empty($data['urn_source']) ? $data['urn_source'] : null,
             'with_comment'   => $data['with_comment'] ?? 0,
         ], $overrides);
     }
@@ -2278,9 +2282,13 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     protected function serializeParams(array &$data) : Content
     {
-        if (array_key_exists('params', $data) && !empty($data['params'])) {
-            $data['params'] = serialize($data['params']);
+        if (!array_key_exists('params', $data) || empty($data['params'])) {
+            $data['params'] = null;
+
+            return $this;
         }
+
+        $data['params'] = serialize($data['params']);
 
         return $this;
     }

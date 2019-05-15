@@ -54,6 +54,8 @@ class Poll extends Content
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Poll');
+        $this->content_type           = 11;
+        $this->content_type_name      = 'poll';
 
         parent::__construct($id);
     }
@@ -139,7 +141,8 @@ class Poll extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -200,7 +203,8 @@ class Poll extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -254,7 +258,8 @@ class Poll extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -281,7 +286,8 @@ class Poll extends Content
                 [ 'fk_pk_poll' => $id ]
             );
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -327,7 +333,8 @@ class Poll extends Content
 
             return $items;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return [];
         }
     }
@@ -369,7 +376,8 @@ class Poll extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }

@@ -1,20 +1,11 @@
 <?php
 /**
- * Handles all the CRUD actions over kioko.
+ * This file is part of the Onm package.
  *
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package    Model
- */
-
-/**
- * Handles all the CRUD actions over kioko.
- *
- * @package    Model
  */
 class Kiosko extends Content
 {
@@ -81,7 +72,9 @@ class Kiosko extends Content
       */
     public function __construct($id = null)
     {
-        $this->content_type_l10n_name = _('Cover');
+        $this->content_type_l10n_name = _('Kiosko');
+        $this->content_type           = 14;
+        $this->content_type_name      = 'kiosko';
         $this->kiosko_path            = INSTANCE_MEDIA_PATH . 'kiosko' . DS;
 
         parent::__construct($id);
@@ -131,7 +124,10 @@ class Kiosko extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error while fetching Kiosko: ' . $e->getMessage());
+            getService('error.log')->error(
+                'Error while fetching Kiosko: ' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -171,9 +167,11 @@ class Kiosko extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error while creating Kiosko: ' . $e->getMessage());
-
             $conn->rollback();
+
+            getService('error.log')->error(
+                'Error while creating Kiosko: ' . $e->getMessage()
+            );
 
             return false;
         }
@@ -212,7 +210,10 @@ class Kiosko extends Content
         } catch (\Exception $e) {
             $conn->rollback();
 
-            error_log('Error while updating Kiosko: ' . $e->getMessage());
+            getService('error.log')->error(
+                'Error while updating Kiosko: ' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -242,7 +243,11 @@ class Kiosko extends Content
             return true;
         } catch (\Exception $e) {
             $conn->rollback();
-            error_log('Error while removing Kiosko: ' . $e->getMessage());
+
+            getService('error.log')->error(
+                'Error while removing Kiosko: ' . $e->getMessage()
+            );
+
             return false;
         }
     }

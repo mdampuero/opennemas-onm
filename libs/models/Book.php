@@ -56,6 +56,8 @@ class Book extends Content
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Book');
+        $this->content_type           = 15;
+        $this->content_type_name      = 'book';
 
         parent::__construct($id);
     }
@@ -134,7 +136,7 @@ class Book extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
 
             return false;
         }
@@ -168,7 +170,8 @@ class Book extends Content
 
             return $this->id;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -203,7 +206,8 @@ class Book extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -234,7 +238,8 @@ class Book extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }

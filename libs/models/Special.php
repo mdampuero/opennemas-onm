@@ -1,19 +1,11 @@
 <?php
 /**
- * Handles all the CRUD actions over albums.
+ * This file is part of the Onm package.
  *
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * @package    Model
- */
-
-/**
- * Handles all the CRUD actions over albums.
- *
- * @package    Model
  */
 class Special extends Content
 {
@@ -53,6 +45,8 @@ class Special extends Content
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Special');
+        $this->content_type           = 10;
+        $this->content_type_name      = 'special';
 
         parent::__construct($id);
     }
@@ -125,7 +119,8 @@ class Special extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -180,7 +175,8 @@ class Special extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error on Special::create: ' . $e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -217,7 +213,8 @@ class Special extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error on Special::update: ' . $e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -259,7 +256,8 @@ class Special extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log('Error on Special:' . $e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -339,7 +337,8 @@ class Special extends Content
 
             return $items;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -373,7 +372,8 @@ class Special extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }

@@ -1,19 +1,11 @@
 <?php
 /**
- * Handles all the CRUD operations over letters.
+ * This file is part of the Onm package.
  *
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package    Model
- */
-/**
- * Handles all the CRUD operations over letters.
- *
- * @package    Model
  */
 class Letter extends Content
 {
@@ -38,7 +30,9 @@ class Letter extends Content
      */
     public function __construct($id = null)
     {
-        $this->content_type_l10n_name = _('Letter');
+        $this->content_type_l10n_name = _('Letter to editor');
+        $this->content_type           = 17;
+        $this->content_type_name      = 'letter';
 
         parent::__construct($id);
     }
@@ -127,7 +121,8 @@ class Letter extends Content
                 return false;
             }
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
 
@@ -169,7 +164,10 @@ class Letter extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log('Error creating Letter: ' . $e->getMessage());
+            getService('error.log')->error(
+                'Error creating Letter: ' . $e->getMessage()
+            );
+
             return false;
         }
     }
@@ -207,7 +205,8 @@ class Letter extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -229,7 +228,8 @@ class Letter extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }

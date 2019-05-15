@@ -1,27 +1,16 @@
 <?php
 /**
- * Defines the Widget class
+ * This file is part of the Onm package.
  *
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package    Model
- *
- */
-
-/**
- * Handles all the CRUD actions over widgets.
- *
- * @package    Model
- *
  */
 class Widget extends Content
 {
     /**
-     * The widget id
+     * The widget id.
      *
      * @var int
      */
@@ -49,6 +38,8 @@ class Widget extends Content
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Widget');
+        $this->content_type           = 12;
+        $this->content_type_name      = 'widget';
 
         parent::__construct($id);
     }
@@ -74,20 +65,18 @@ class Widget extends Content
             $conn->beginTransaction();
             parent::create($data);
 
-            $conn->insert(
-                'widgets',
-                [
-                    'pk_widget' => $this->id,
-                    'content' => $data['content'],
-                    'renderlet' => $data['renderlet'],
-                ]
-            );
+            $conn->insert('widgets', [
+                'pk_widget' => $this->id,
+                'content'   => $data['content'],
+                'renderlet' => $data['renderlet'],
+            ]);
+
             $conn->commit();
 
             return true;
         } catch (\Exception $e) {
             $conn->rollback();
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
@@ -119,6 +108,7 @@ class Widget extends Content
 
             $this->load($rs);
             $this->loadAllContentProperties();
+            $this->id = $id;
 
             return $this;
         } catch (\Exception $e) {
@@ -142,48 +132,42 @@ class Widget extends Content
         }
 
         $conn = getService('dbal_connection');
+
         try {
             $conn->beginTransaction();
             parent::update($data);
 
-            $conn->update(
-                'widgets',
-                [
-                    'content'   => $data['content'],
-                    'renderlet' => $data['renderlet'],
-                ],
-                [ 'pk_widget' => $data['id'] ]
-            );
+            $conn->update('widgets', [
+                'content'   => $data['content'],
+                'renderlet' => $data['renderlet'],
+            ], [ 'pk_widget' => $data['id'] ]);
+
             $conn->commit();
 
             return true;
         } catch (\Exception $e) {
             $conn->rollback();
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
 
     /**
-     * Delete permanently a widget given its id
-     *
-     * @param int $id Identifier
-     * @param int $editor the user id
-     *
-     * @return boolean true if the widget was removed
+     * {@inheritdoc}
      */
-    public function remove($id, $editor = null)
+    public function remove($id)
     {
         try {
             if (!parent::remove($id)) {
                 return false;
             }
 
-            getService('dbal_connection')->delete('widgets', [ 'pk_widget' => $id ]);
+            getService('dbal_connection')
+                ->delete('widgets', [ 'pk_widget' => $id ]);
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }

@@ -58,7 +58,7 @@
         </div>
     </div>
     <div class="article-resource-footer">
-      <input name="img" type="hidden" ng-value="photo1.id"/>
+      <input name="path" type="hidden" ng-value="photo1.id"/>
     </div>
   </div>
 </div>

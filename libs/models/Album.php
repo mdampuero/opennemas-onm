@@ -125,6 +125,7 @@ class Album extends Content
 
             $this->load($rs);
             $this->loadPhotos();
+            $this->id = $id;
 
             return $this;
         } catch (\Exception $e) {
@@ -161,11 +162,11 @@ class Album extends Content
 
             return $this;
         } catch (\Exception $e) {
+            $conn->rollback();
+
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
-
-            $conn->rollback();
 
             return false;
         }
@@ -307,7 +308,6 @@ class Album extends Content
         if (empty($photos)) {
             return;
         }
-
 
         $conn = getService('dbal_connection');
 
