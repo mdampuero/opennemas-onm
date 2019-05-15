@@ -1,7 +1,4 @@
 <?php
-
-namespace Common\Core\Component\Helper;
-
 /**
  * This file is part of the Onm package.
  *
@@ -10,13 +7,15 @@ namespace Common\Core\Component\Helper;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Common\Core\Component\Helper;
+
 class ContentMediaHelper
 {
     /**
      * Initializes ContentMedia
      *
-     * @param SettingManager $em The entity manager.
-     * @param EntityManager  $er The entity repository service.
+     * @param EntityManager $em The entity manager.
+     * @param EntityManager $er The entity repository service.
      */
     public function __construct($em, $er)
     {
