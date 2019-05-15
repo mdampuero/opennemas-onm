@@ -196,7 +196,8 @@ class WidgetsController extends Controller
             $widgetData['content'] = $widgetData['intelligentType'];
         }
 
-        $widget = new \Widget();
+        $widget = new \Widget($id);
+
         if (!$widget->update($widgetData)) {
             $this->get('session')->getFlashBag()->add(
                 'error',
