@@ -79,7 +79,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             'author'   => 'John Doe',
             'created'  => '2016-10-13 11:40:32',
             'changed'  => '2016-10-13 11:40:32',
-            'category' => new \ContentCategory(),
+            'category' => new \StdClass(),
             'summary'  => '<p>This is the summary</p>',
             'tags'     => [1,2,3,4],
             'logo'     => [
