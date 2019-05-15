@@ -40,13 +40,15 @@ jQuery(document).ready(function() {
         $('.auth').addClass('hidden');
       })
       .fail(function(data) {
+        var answer = {};
+
         if (data.status > 499) {
-          var answer = {
+          answer = {
             type: 'error',
             message: 'Error in the server'
           };
         } else {
-          var answer = JSON.parse(data.responseText);
+          answer = JSON.parse(data.responseText);
         }
 
         alertZone
@@ -65,7 +67,7 @@ jQuery(document).ready(function() {
   });
 
   // Autoresize textarea while its being filled
-  $('textarea').autosize({ append: "\n" });
+  $('textarea').autosize({ append: '\n' });
 
   // Handle vote buttons
   $('.post-list').on('click', '.post.already-voted .vote', function(e) {
@@ -85,7 +87,7 @@ jQuery(document).ready(function() {
     var currentVoteValue    = 0;
 
     if (countElementContent.length !== 0) {
-      var currentVoteValue = parseInt(countElementContent);
+      currentVoteValue = parseInt(countElementContent);
     }
 
     $.post(commentVoteUrl, {
@@ -120,6 +122,12 @@ jQuery(document).ready(function() {
       }
     }).done(function(data) {
       postList.append(data.contents);
+      // Safeframe ad call
+      var event = document.createEvent('Event');
+
+      event.initEvent('OAM.load', true, true);
+      document.dispatchEvent(event);
+
       body.data('offset', currentOffset + 1);
 
       if (!data.more) {

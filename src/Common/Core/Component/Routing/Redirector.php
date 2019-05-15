@@ -207,6 +207,22 @@ class Redirector
     /**
      * Returns an user by id.
      *
+     * @param integer $id The tag id.
+     *
+     * @return Tag The tag.
+     */
+    protected function getTag(int $id)
+    {
+        try {
+            return $this->container->get('api.service.tag')->getItem($id);
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Returns an user by id.
+     *
      * @param integer $id The user id.
      *
      * @return User The user.
@@ -250,8 +266,15 @@ class Redirector
                 ->generate($target);
         }
 
-        $params  = $this->container->get('router')->match($target);
-        $forward = $request->duplicate([], null, $params);
+        $info  = parse_url($target);
+        $query = [];
+
+        if (array_key_exists('query', $info)) {
+            parse_str($info['query'], $query);
+        }
+
+        $params  = $this->container->get('router')->match($info['path']);
+        $forward = $request->duplicate($query, null, $params);
 
         return $this->container->get('kernel')
             ->handle($forward, HttpKernelInterface::SUB_REQUEST);

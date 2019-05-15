@@ -11,6 +11,7 @@ namespace Tests\Common\Core\Component\Routing;
 
 use Common\Core\Component\Routing\Redirector;
 use Common\ORM\Entity\Category;
+use Common\ORM\Entity\Tag;
 use Common\ORM\Entity\Url;
 use Common\ORM\Entity\User;
 
@@ -82,6 +83,10 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getItemBy', 'getList' ])
             ->getMock();
 
+        $this->ts = $this->getMockBuilder('TagService')
+            ->setMethods([ 'getItem' ])
+            ->getMock();
+
         $this->theme = $this->getMockBuilder('Theme')->getMock();
 
         $this->ugh = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
@@ -115,6 +120,9 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'api.service.tag':
+                return $this->ts;
+
             case 'core.helper.url_generator':
                 return $this->ugh;
 
@@ -353,6 +361,25 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getTag when an user is and is not found.
+     */
+    public function testGetTag()
+    {
+        $tag = new Tag([ 'slug' => 'glork' ]);
+
+        $method = new \ReflectionMethod($this->redirector, 'getTag');
+        $method->setAccessible(true);
+
+        $this->ts->expects($this->at(0))->method('getItem')
+            ->with(2341)->will($this->throwException(new \Exception()));
+        $this->ts->expects($this->at(1))->method('getItem')
+            ->with(1467)->willReturn($tag);
+
+        $this->assertEmpty($method->invokeArgs($this->redirector, [ 2341 ]));
+        $this->assertEquals($tag, $method->invokeArgs($this->redirector, [ 1467 ]));
+    }
+
+    /**
      * Tests getUser when an user is and is not found.
      */
     public function testGetUser()
@@ -569,10 +596,10 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $redirector->expects($this->once())->method('getTarget')
-            ->willReturn('/fred/flob');
+            ->willReturn('/fred/flob?garply=bar');
 
         $this->request->expects($this->once())->method('duplicate')
-            ->with([], null, [ 'slug' => 'flob', 'id' => 'fred' ])
+            ->with([ 'garply' => 'bar' ], null, [ 'slug' => 'flob', 'id' => 'fred' ])
             ->willReturn($this->request);
 
         $this->router->expects($this->once())->method('match')

@@ -1,0 +1,114 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Tests\Libs\Smarty;
+
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+
+/**
+ * Defines test cases for SmartyUrl class.
+ */
+class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
+{
+    /**
+     * Configures the testing environment.
+     */
+    public function setUp()
+    {
+        include_once './libs/smarty-onm-plugins/modifier.ads_in_body.php';
+
+        $this->container = $this->getMockBuilder('Container')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->smarty = $this->getMockBuilder('Smarty')
+            ->setMethods([ 'getValue', 'getContainer' ])
+            ->getMock();
+
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
+            ->getMock();
+
+        $this->helper = $this->getMockBuilder('AdvertisementHelper')
+            ->setMethods([ 'isSafeFrameEnabled' ])
+            ->getMock();
+
+        $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
+            ->setMethods([ 'render' ])
+            ->getMock();
+
+        $this->kernel->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $GLOBALS['kernel'] = $this->kernel;
+    }
+
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'core.template':
+                return $this->smarty;
+
+            case 'core.helper.advertisement':
+                return $this->helper;
+
+            case 'core.renderer.advertisement':
+                return $this->renderer;
+        }
+
+        return null;
+    }
+
+    /**
+     * Tests smarty_modifier_ads_in_body
+     */
+    public function testAdsInBody()
+    {
+        $ad1            = new \Advertisement();
+        $ad1->positions = [ 2201 ];
+
+        $ad2            = new \Advertisement();
+        $ad2->positions = [ 2203 ];
+
+        $this->smarty->expects($this->at(0))->method('getValue')
+            ->with('advertisements')
+            ->willReturn([ $ad1, $ad2 ]);
+
+        $this->helper->expects($this->at(0))->method('isSafeFrameEnabled')
+            ->willReturn(false);
+
+        $this->renderer->expects($this->any())->method('render')
+            ->willReturn('<ad>');
+
+        $body        = '<p>foo bar baz</p><p>thud qwer asdf</p>';
+        $bodyWithAds = '<p>foo bar baz</p><ad><p>thud qwer asdf</p><ad>';
+        $this->assertEquals(
+            $bodyWithAds,
+            smarty_modifier_ads_in_body($body)
+        );
+    }
+
+    /**
+     * Tests smarty_modifier_ads_in_body when no ads
+     */
+    public function testAdsInBodyWhenEmpty()
+    {
+        $this->smarty->expects($this->at(0))->method('getValue')
+            ->with('advertisements')
+            ->willReturn(null);
+
+        $body = '<p>foo bar baz</p><p>thud qwer asdf</p>';
+        $this->assertEquals(
+            $body,
+            smarty_modifier_ads_in_body($body)
+        );
+    }
+}

@@ -1,18 +1,34 @@
 (function() {
   'use strict';
 
+  /**
+   * @ngdoc module
+   * @name  onm.categorySelector
+   *
+   * @requires onm.http
+   * @requires onm.localize
+   * @requires ui.select
+   *
+   * @description
+   *   The `onm.categorySelector` module provides a directive to automagically
+   *   generate a category selector with multilanguage support.
+   */
   angular.module('onm.categorySelector', [ 'onm.http', 'onm.localize', 'ui.select' ])
 
     /**
      * @ngdoc directive
      * @name  onmCategorySelector
      *
+     * @requires http
+     * @requires linker
+     * @requires localizer
+     *
      * @description
      *   Directive to create category selector dynamically.
      */
     .directive('onmCategorySelector', [
-      'http', 'localizer', 'linker',
-      function(http, localizer, linker) {
+      'http', 'linker', 'localizer',
+      function(http, linker, localizer) {
         return {
           restrict: 'E',
           transclude: true,
@@ -77,6 +93,15 @@
             $scope.multiple     = $attrs.multiple;
             $scope.required     = $attrs.required ? $attrs.required : false;
             $scope.selectedText = $scope.selectedText || 'selected';
+
+            // Force integers in ngModel on initialization
+            if ($scope.ngModel) {
+              $scope.ngModel = !$scope.multiple ?
+                parseInt($scope.ngModel) :
+                $scope.ngModel.map(function(e) {
+                  return parseInt(e);
+                });
+            }
 
             http.get('api_v1_backend_categories_list').then(function(response) {
               response.data.items = response.data.items.filter(function(e) {
@@ -218,50 +243,97 @@
              *   Adds/removes all items from ngModel.
              */
             $scope.toggleAll = function() {
-              if (!$scope.ngModel) {
-                $scope.ngModel = [];
-                return;
+              if (!$scope.exportModel) {
+                $scope.exportModel = [];
               }
 
-              if ($scope.ngModel.length !== $scope.categories.length) {
-                $scope.ngModel = $scope.categories.map(function(item) {
-                  return item.pk_content_category;
-                });
+              if ($scope.exportModel.length !== $scope.categories.length) {
+                $scope.exportModel = angular.copy($scope.categories);
               } else {
-                $scope.ngModel = [];
+                $scope.exportModel = [];
               }
             };
 
-            // Updates internal and external models when something changes
-            $scope.$watch('[ categories, exportModel, ngModel ]', function(nv) {
+            /**
+             * @function updateNgModel
+             * @memberOf onmCategorySelector
+             *
+             * @description
+             *   Updates ngModel basing on current exportModel.
+             */
+            $scope.updateNgModel = function() {
+              if (!$scope.exportModel) {
+                return;
+              }
+
+              var newValue = !$scope.multiple ?
+                $scope.exportModel.pk_content_category :
+                $scope.exportModel.map(function(e) {
+                  return e.pk_content_category;
+                });
+
+              // Do not update if both values are null/undefined or equal
+              if (!newValue && !$scope.ngModel ||
+                  angular.equals($scope.ngModel, newValue)) {
+                return;
+              }
+
+              $scope.ngModel = newValue;
+            };
+
+            /**
+             * @function updateExportModel
+             * @memberOf onmCategorySelector
+             *
+             * @description
+             *   Updates exportModel basing on current ngModel.
+             */
+            $scope.updateExportModel = function() {
               if (!$scope.categories) {
                 return;
               }
 
-              // Update ngModel when selected category changes
-              if (angular.isDefined(nv[1])) {
-                $scope.ngModel = !angular.isArray(nv[1]) ?
-                  nv[1].pk_content_category :
-                  nv[1].map(function(e) {
-                    return e.pk_content_category;
-                  });
+              var needle = $scope.multiple ? [] : [ null ];
+
+              if ($scope.ngModel) {
+                needle = $scope.multiple ? $scope.ngModel : [ $scope.ngModel ];
+              }
+
+              var found = $scope.categories.filter(function(e) {
+                return needle.indexOf(e.pk_content_category) !== -1;
+              });
+
+              if (found.length === 0) {
                 return;
               }
 
-              // Change category only when ngModel initialized
-              if (angular.isDefined(nv[2]) && !$scope.exportModel) {
-                $scope.exportModel = !angular.isArray(nv[2]) ?
-                  $scope.categories.filter(function(e) {
-                    return e.pk_content_category === $scope.ngModel;
-                  })[0] :
-                  $scope.categories.filter(function(e) {
-                    return $scope.ngModel.indexOf(e.pk_content_category) !== -1;
-                  });
+              var newValue = $scope.multiple ? found : found[0];
+
+              if (!angular.equals($scope.exportModel, newValue)) {
+                $scope.exportModel = newValue;
               }
+            };
+
+            // Try to select an option when categories loaded
+            $scope.$watch('categories', function(nv) {
+              if (!nv) {
+                return;
+              }
+
+              $scope.updateExportModel();
+            });
+
+            // Updates external model when internal model changes
+            $scope.$watch('exportModel', function() {
+              $scope.updateNgModel();
+            }, true);
+
+            // Updates internal model when external model changes
+            $scope.$watch('ngModel', function() {
+              $scope.updateExportModel();
             }, true);
           },
         };
       }
     ]);
 })();
-

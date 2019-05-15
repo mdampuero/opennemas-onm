@@ -186,6 +186,7 @@ class NewStandController extends Controller
         if (($this->view->getCaching() === 0)
             || (!$this->view->isCached('newsstand/newsstand.tpl', $cacheID))
         ) {
+            $date  = strtotime($content->date);
             $month = date('m', $date);
             $year  = date('Y', $date);
 

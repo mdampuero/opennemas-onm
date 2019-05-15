@@ -1,4 +1,8 @@
 services:
+    api.validator.category:
+        class:     Api\Validator\V1\CategoryValidator
+        arguments: [ '@service_container' ]
+        public: true
     api.validator.subscriber:
         class:     Api\Validator\V1\SubscriberValidator
         arguments: [ '@service_container' ]

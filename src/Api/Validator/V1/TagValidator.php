@@ -26,7 +26,7 @@ class TagValidator extends Validator
             ], CoreValidator::BLACKLIST_RULESET_TAGS);
 
         if (!empty($errors)) {
-            throw new InvalidArgumentException('Invalid tag', 400);
+            throw new InvalidArgumentException(_('Invalid tag'), 400);
         }
 
         if ($item->exists()) {
@@ -40,7 +40,7 @@ class TagValidator extends Validator
         if (!empty($item->locale)
             && !in_array($item->locale, array_keys($locales))
         ) {
-            throw new InvalidArgumentException('Invalid tag', 400);
+            throw new InvalidArgumentException(_('Invalid tag'), 400);
         }
 
         $oql = sprintf('name = "%s" and locale is null', $item->name);
@@ -64,6 +64,6 @@ class TagValidator extends Validator
             return;
         }
 
-        throw new InvalidArgumentException('Invalid tag', 400);
+        throw new InvalidArgumentException(_('Invalid tag'), 400);
     }
 }

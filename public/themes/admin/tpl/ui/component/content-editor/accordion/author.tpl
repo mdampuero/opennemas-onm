@@ -10,6 +10,6 @@
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.author }">
   <div class="form-group no-margin">
-    {include file="ui/component/select/author.tpl" class="form-control" ngModel="item.fk_author" select=true required=$required}
+    {include file="ui/component/select/author.tpl" class="form-control" ngModel="item.fk_author" select=true required=$required blog=$blog}
   </div>
 </div>

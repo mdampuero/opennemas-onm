@@ -51,37 +51,30 @@ class ExtractImageFromBodyFilter extends Filter
     {
         $path     = $this->getParameter('path');
         $basename = $this->getParameter('basename', true);
+        $ids[0]   = null;
+        $created  = new \Datetime($created);
 
-        $ids[0] = null;
         foreach ($files as $key => $file) {
-            $localFile = $basename ? $path . basename($file) : $path . $file;
-            $photoID   = $this->checkPhotoExists($file);
+            $filepath = $basename ? $path . basename($file) : $path . $file;
+            $id       = $this->checkPhotoExists($file);
 
-            if (file_exists($localFile) && is_null($photoID)) {
-                // Import photo
-                $data = [
-                    'local_file'        => $localFile,
-                    'original_filename' => $file,
-                    'title'             => $file,
-                    'description'       => $file,
-                    'created'           => $created,
-                    'fk_category'       => 0,
-                    'category'          => 0,
-                    'category_name'     => '',
-                    'tags'              => [],
-                ];
-
+            if (empty($id) && file_exists($filepath)) {
                 try {
-                    $photo   = new \Photo();
-                    $photoID = $photo->createFromLocalFile($data);
+                    $photo = new \Photo();
+                    $id    = $photo->createFromLocalFile($filepath, [
+                        'created'     => $created->format('Y-m-d H:i:s'),
+                        'description' => $file,
+                        'path_file'   => $created->format('/Y/m/d/'),
+                        'title'       => $file
+                    ], true);
 
-                    $this->insertPhotoTranslation($photoID, $file);
+                    $this->insertPhotoTranslation($id, $file);
                 } catch (\Exception $e) {
                     continue;
                 }
             }
 
-            $ids[$key] = $photoID;
+            $ids[$key] = $id;
         }
 
         return $ids[0];

@@ -157,7 +157,15 @@
               return ids.indexOf(e.id) === -1;
             });
 
-            $scope.tags = $scope.tags.concat(newTags);
+            $scope.tags         = $scope.tags.concat(newTags);
+            $scope.tagsInLocale = angular.copy($scope.tags);
+
+            if ($scope.locale && $scope.locale.multilanguage) {
+              $scope.tagsInLocale = $scope.tags.filter(function(e) {
+                return !$scope.locale || !e.locale ||
+                  e.locale === $scope.locale.selected;
+              });
+            }
           }, function() {
             $scope.generating = false;
           });

@@ -89,7 +89,6 @@ class AdvertisementsController extends Controller
         $data = [
             'title'              => $title,
             'tags'               => $this->getTags($title),
-            'category'           => 0,
             'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -237,7 +236,6 @@ class AdvertisementsController extends Controller
         $data = [
             'id'                 => $ad->id,
             'title'              => $title,
-            'category'           => 0,
             'tags'               => $this->getTags($title),
             'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -511,8 +509,8 @@ class AdvertisementsController extends Controller
      */
     protected function getTags($title)
     {
-        $ts = $this->get('api.service.tag');
-
-        return $ts->responsify($ts->getListByString($title)['items']);
+        return array_map(function ($tag) {
+            return $tag->id;
+        }, $this->get('api.service.tag')->getListByString($title)['items']);
     }
 }

@@ -30,8 +30,8 @@ function smarty_function_dynamic_image($params, &$smarty)
         getService('router');
 
         $urlParams = [
-            'real_path'  => $baseUrl . $src,
-            'parameters' => urlencode($params['transform']),
+            'path'   => $baseUrl . $src,
+            'params' => urlencode($params['transform']),
         ];
 
         try {

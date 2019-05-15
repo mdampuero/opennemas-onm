@@ -296,8 +296,7 @@ class Template extends \Smarty
     {
         $values = $this->getTemplateVars();
 
-        return array_key_exists($name, $values) && !empty($values[$name])
-            ? $values[$name] : null;
+        return array_key_exists($name, $values) ? $values[$name] : null;
     }
 
     /**
