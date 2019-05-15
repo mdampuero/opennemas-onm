@@ -34,14 +34,15 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer', 'getTemplateVars' ])
+            ->setMethods([ 'getContainer', 'getTemplateVars', 'getValue' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('Container')
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('EntityManager')
+        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+            ->disableOriginalConstructor()
             ->setMethods([ 'getDataSet' ])
             ->getMock();
 
@@ -57,7 +58,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->ts = $this->getMockBuilder('TagService')
+        $this->ts = $this->getMockBuilder('Api\Service\V1\TagService')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -92,7 +93,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
                 'generateNewsArticleJsonLDCode',
                 'generateImageJsonLDCode'
             ])
-            ->setConstructorArgs([ $this->em, $this->ts ])
+            ->setConstructorArgs([ $this->instance, $this->em, $this->ts ])
             ->getMock();
 
         $this->requestStack->expects($this->any())
