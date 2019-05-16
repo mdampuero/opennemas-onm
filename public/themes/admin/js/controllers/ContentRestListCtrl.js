@@ -42,11 +42,11 @@
          *   Adds and removes the item from the selected array.
          */
         $scope.select = function(item) {
-          if ($scope.selected.items.indexOf(item.id) < 0) {
-            $scope.selected.items.push(item.id);
+          if ($scope.selected.items.indexOf($scope.getId(item)) < 0) {
+            $scope.selected.items.push($scope.getId(item));
           } else {
             $scope.selected.items = $scope.selected.items.filter(function(el) {
-              return el !== item.id;
+              return el !== $scope.getId(item);
             });
           }
         };
