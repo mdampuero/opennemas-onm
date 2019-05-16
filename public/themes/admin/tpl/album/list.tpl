@@ -1,7 +1,7 @@
 {extends file="common/extension/list.tpl"}
 
 {block name="metaTitle"}
-  - {t}Albums{/t}
+  > {t}Albums{/t}
 {/block}
 
 {block name="ngInit"}
@@ -70,12 +70,12 @@
 {/block}
 
 {block name="leftFilters"}
-  <li class="quicklinks ng-cloak" ng-if="!mode || mode === 'grid'" uib-tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
+  <li class="quicklinks ng-cloak" ng-if="config.mode === 'grid'" uib-tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
     <button class="btn btn-link" ng-click="setMode('list')">
       <i class="fa fa-lg fa-th"></i>
     </button>
   </li>
-  <li class="quicklinks ng-cloak" ng-if="mode === 'list'" uib-tooltip="{t}List{/t}" tooltip-placement="bottom">
+  <li class="quicklinks ng-cloak" ng-if="config.mode === 'list'" uib-tooltip="{t}List{/t}" tooltip-placement="bottom">
     <button class="btn btn-link" ng-click="setMode('grid')">
       <i class="fa fa-lg fa-list"></i>
     </button>
@@ -96,7 +96,7 @@
   <li class="quicklinks hidden-xs ng-cloak">
     {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
   </li>
-  <li class="quicklinks hidden-xs ng-cloak" ng-if="mode === 'list'">
+  <li class="quicklinks hidden-xs ng-cloak" ng-if="config.mode === 'list'">
     {include file="ui/component/select/epp.tpl" label="true" ngModel="criteria.epp"}
   </li>
 {/block}

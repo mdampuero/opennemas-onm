@@ -1,7 +1,7 @@
 {extends file="common/extension/item.tpl"}
 
 {block name="metaTitle"}
-  - {t}Albums{/t} >
+  > {t}Albums{/t} >
   {if empty($id)}
     {t}Create{/t}
   {else}
