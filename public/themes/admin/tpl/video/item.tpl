@@ -104,7 +104,9 @@
               {acl isAllowed="VIDEO_AVAILABLE"}
                 {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Published{/t}" field="content_status"}
               {/acl}
-              {include file="ui/component/content-editor/accordion/allow_comments.tpl"}
+              <div class="m-t-5">
+                {include file="ui/component/content-editor/accordion/allow_comments.tpl"}
+              </div>
             </div>
 
             {include file="ui/component/content-editor/accordion/author.tpl"}
