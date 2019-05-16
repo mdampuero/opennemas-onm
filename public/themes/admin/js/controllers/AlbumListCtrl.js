@@ -81,15 +81,11 @@
           $scope.localize($scope.data.items, 'items');
         };
 
-        /**
-         * Changes the list mode.
-         *
-         * @param {String} mode The new list mode.
-         */
-        $scope.setMode = function(mode) {
-          $scope.mode = mode;
-
-          if (mode !== 'grid') {
+        // Update epp when mode changes
+        $scope.$watch(function() {
+          return $scope.config.mode;
+        }, function(nv) {
+          if (nv !== 'grid') {
             return;
           }
 
@@ -128,7 +124,7 @@
           }
 
           $scope.criteria.epp = rows * cols;
-        };
+        }, true);
 
         // Change page when scrolling in grid mode
         $(window).scroll(function() {
