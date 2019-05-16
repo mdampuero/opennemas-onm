@@ -1,7 +1,7 @@
 <div ng-controller="CartCtrl">
   <ul class="cart-list cart-list-big ng-cloak">
     <li ng-repeat="item in cart track by $index">
-      <img class="img-responsive pull-left" ng-if="item.images && item.images.length > 0" ng-src="[% '/asset/scale,300,300' + item.path + '/' + item.images[0] %]">
+      <img class="img-responsive pull-left" ng-if="item.images && item.images.length > 0" ng-src="[% '/asset/zoomcrop,200,200' + item.path + '/' + item.images[0] %]">
       <div ng-class="{ 'p-l-15': !item.images || item.images.length === 0, 'p-l-100': item.images && item.images.length > 0 }">
         <h5 class="no-overflow" ng-bind-html="item.name"></h5>
         <div class="clearfix">
