@@ -20,9 +20,13 @@
   width: 10%;
 }
 
-.table td:first-child,
-.table td:last-child {
-  border-radius: 0;
+.table td {
+  max-width: 0;
+
+  &:first-child,
+  &td:last-child {
+    border-radius: 0;
+  }
 }
 
 .table thead tr .tooltip {
@@ -67,6 +71,12 @@
   font-weight: bold;
   margin: 5px 0;
   text-transform: uppercase;
+}
+
+.table-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .table-value {

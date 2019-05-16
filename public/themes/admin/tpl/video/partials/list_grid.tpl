@@ -1,4 +1,4 @@
-<div class="grid simple ng-cloak" ng-show="mode === 'grid' && !flags.http.loadingMore && items.length > 0">
+<div class="grid simple ng-cloak" ng-show="config.mode === 'grid' && !flags.http.loadingMore && items.length > 0">
   <div ng-repeat="item in items" class="col-lg-2 col-md-3 col-sm-3 col-xs-6 m-b-15 infinite-col media-item selectable" ng-class="{ 'selected': isSelected(item.id) }">
     <div class="dynamic-image-placeholder">
       <dynamic-image ng-if="item.thumb_image" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.thumb_image">

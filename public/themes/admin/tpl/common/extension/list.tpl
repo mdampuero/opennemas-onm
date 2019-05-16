@@ -63,7 +63,7 @@
           <ul class="nav quick-section">
             {block name="leftFilters"}{/block}
           </ul>
-          <ul class="nav quick-section pull-right ng-cloak" ng-if="mode === 'list' && items.length > 0">
+          <ul class="nav quick-section pull-right ng-cloak" ng-if="config.mode === 'list' && items.length > 0">
             {block name="rightFilters"}
               <li class="quicklinks hidden-xs">
                 <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>

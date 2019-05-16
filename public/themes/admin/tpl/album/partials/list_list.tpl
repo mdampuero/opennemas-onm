@@ -13,23 +13,23 @@
             <th class="hidden-xs text-center v-align-middle" width="175">
               <i class="fa fa-picture-o"></i>
             </th>
-            <th>
+            <th class="v-align-middle">
               {t}Album{/t}
             </th>
             {acl isAllowed="ALBUM_HOME"}
-              <th class="text-center v-align-middle visible-lg" width="50">
+              <th class="text-center v-align-middle visible-lg" width="80">
                 <i class="fa fa-home" ng-if="!isHelpEnabled()" uib-tooltip="{t}Home{/t}" tooltip-placement="left"></i>
                 <span class="m-l-5" ng-if="isHelpEnabled()">{t}Home{/t}</span>
               </th>
             {/acl}
             {acl isAllowed="ALBUM_FAVORITE"}
-              <th class="v-align-middle visible-lg" width="50">
+              <th class="text-center v-align-middle visible-lg" width="80">
                 <i class="fa fa-star" ng-if="!isHelpEnabled()" uib-tooltip="{t}Favorite{/t}" tooltip-placement="left"></i>
                 <span class="m-l-5" ng-if="isHelpEnabled()">{t}Favorite{/t}</span>
               </th>
             {/acl}
             {acl isAllowed="ALBUM_AVAILABLE"}
-              <th class="text-center v-align-middle" width="50">
+              <th class="text-center v-align-middle" width="80">
                 <i class="fa fa-check" ng-if="!isHelpEnabled()" uib-tooltip="{t}Published{/t}" tooltip-placement="left"></i>
                 <span class="m-l-5" ng-if="isHelpEnabled()">{t}Published{/t}</span>
               </th>
@@ -48,7 +48,9 @@
               <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.cover" transform="zoomcrop,220,220"></dynamic-image>
             </td>
             <td class="v-align-middle">
-              [% item.title %]
+              <div class="table-text" title="[% item.title %]">
+                [% item.title %]
+              </div>
               <div class="row">
                 <div class="col-lg-5 col-sm-7">
                   <div class="small-text">
@@ -105,7 +107,7 @@
                 {/acl}
                 {acl isAllowed="ALBUM_DELETE"}
                   <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">
-                    <i class="fa fa-trash-o m-r-5"></i> {t}Remove{/t}
+                    <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                   </button>
                 {/acl}
               </div>
@@ -137,7 +139,7 @@
       </table>
     </div>
   </div>
-  <div class="grid-footer clearfix ng-cloak" ng-if="!loading && items.length > 0">
+  <div class="grid-footer clearfix ng-cloak">
     <div class="pull-right">
       <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
     </div>
