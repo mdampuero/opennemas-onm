@@ -84,16 +84,6 @@ class ImageHelper
     }
 
     /**
-     * Returns the description for the image.
-     *
-     * @return string The image description.
-     */
-    public function getDescription() : string
-    {
-        return $this->processor->getDescription();
-    }
-
-    /**
      * @codeCoverageIgnore
      *
      * Returns the extension for a file.
@@ -118,11 +108,18 @@ class ImageHelper
     {
         $this->processor->open($path);
 
-        return [
+        $information = [
             'height' => $this->processor->getHeight(),
             'size'   => $this->processor->getSize() / 1024,
             'width'  => $this->processor->getWidth()
         ];
+
+        $description = $this->processor->getDescription();
+        if (!empty($description)) {
+            $information['description'] = $description;
+        }
+
+        return $information;
     }
 
     /**

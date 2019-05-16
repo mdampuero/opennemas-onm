@@ -69,17 +69,6 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getDescription.
-     */
-    public function testGetDescription()
-    {
-        $this->processor->expects($this->once())->method('getDescription')
-            ->willReturn('foobar baz gorp');
-
-        $this->assertEquals('foobar baz gorp', $this->helper->getDescription());
-    }
-
-    /**
      * Tests getInformation.
      */
     public function testGetInformation()
@@ -90,11 +79,14 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
             ->willReturn(23920);
         $this->processor->expects($this->once())->method('getWidth')
             ->willReturn(400);
+        $this->processor->expects($this->once())->method('getDescription')
+            ->willReturn('gorp');
 
         $this->assertEquals([
-            'size'   => 23920 / 1024,
-            'width'  => 400,
-            'height' => 220,
+            'size'        => 23920 / 1024,
+            'width'       => 400,
+            'height'      => 220,
+            'description' => 'gorp'
         ], $this->helper->getInformation('corge/quux/grault.jpg'));
     }
 
