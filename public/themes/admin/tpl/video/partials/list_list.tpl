@@ -77,7 +77,7 @@
                       {t}Tags{/t}
                     </div>
                     <div class="table-value">
-                      <span ng-if="!item.tags || item.tags.length === 0">{t}None{/t}</span>
+                      <span ng-if="!item.tags || item.tags.length === 0">{t}No tags{/t}</span>
                       <a class="label label-default m-r-5" href="[% routing.generate('backend_tag_show', { id: data.extra.tags[id].id }) %]" ng-repeat="id in item.tags">
                         <strong>
                           [% data.extra.tags[id].name %]
