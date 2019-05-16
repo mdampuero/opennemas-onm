@@ -101,6 +101,22 @@ class CategoryRepository extends BaseRepository
             $ids = [ $ids ];
         }
 
+        $sql = 'SELECT pk_fk_content AS "id", content_type_name AS "type"'
+            . ' FROM contents_categories'
+            . ' INNER JOIN contents'
+            . ' ON contents_categories.pk_fk_content = contents.pk_content'
+            . ' WHERE pk_fk_content_category IN (?)';
+
+        $contents = $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        if (empty($contents)) {
+            return [];
+        }
+
         $sql = 'UPDATE IGNORE contents_categories SET pk_fk_content_category = ?'
             . ' WHERE pk_fk_content_category IN (?)';
 
@@ -117,6 +133,8 @@ class CategoryRepository extends BaseRepository
             [ $ids ],
             [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
+
+        return $contents;
     }
 
     /**
