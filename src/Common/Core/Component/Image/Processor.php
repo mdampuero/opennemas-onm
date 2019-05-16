@@ -107,7 +107,7 @@ class Processor
      *
      * @return string The image description.
      */
-    public function getDescription()
+    public function getDescription() : ?string
     {
         $description = $this->image->getImagick()
             ->getImageProperties('exif:ImageDescription');
