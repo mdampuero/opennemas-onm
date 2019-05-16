@@ -108,7 +108,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 0 && !error">
+        <div class="grid grid-checkout simple ng-hide ng-hide-animate" ng-show="step == 0 && !error">
           <div class="grid-body">
             <h4 class="semi-bold">{t}Cart{/t}</h4>
             {include file="store/_cart.tpl"}
@@ -123,7 +123,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 1 && !error">
+        <div class="grid grid-checkout simple ng-hide ng-hide-animate" ng-show="step == 1 && !error">
           <div class="grid-body">
             <div class="ng-cloak">
               <h4 class="m-b-30 semi-bold">{t}Billing information{/t}</h4>
@@ -159,7 +159,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 2 && !error">
+        <div class="grid grid-checkout simple ng-hide ng-hide-animate" ng-show="step == 2 && !error">
           <div class="grid-body">
             <h4 class="semi-bold">{t}Payment{/t}</h4>
             <div ng-show="total === 0">
@@ -215,7 +215,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 3 && !error">
+        <div class="grid grid-checkout simple ng-hide ng-hide-animate" ng-show="step == 3 && !error">
           <div class="grid-body">
             <div class="ng-cloak">
               <h4 class="semi-bold">{t}Purchase summary{/t}</h4>
@@ -250,7 +250,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="step == 4 && !error">
+        <div class="grid grid-checkout simple ng-hide ng-hide-animate" ng-show="step == 4 && !error">
           <div class="grid-body text-center">
             <div class="p-b-30 p-l-30 p-r-30 p-t-30 text-center">
               <i class="fa fa-heart fa-3x"></i>
@@ -281,7 +281,7 @@
             </div>
           </div>
         </div>
-        <div class="grid simple ng-hide" ng-show="error">
+        <div class="grid grid-checkout simple ng-hide ng-hide-animate" ng-show="error">
           <div class="grid-body text-center">
             <div class="ng-cloak p-b-30 p-l-30 p-r-30 p-t-30 text-center">
               <i class="fa fa-thumbs-o-down fa-3x"></i>
