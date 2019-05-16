@@ -243,7 +243,7 @@ class Controller extends SymfonyController
      *
      * @return array The list of categories.
      */
-    protected function getCategories()
+    protected function getCategories($items = null)
     {
         $categories = $this->get('orm.manager')
             ->getRepository('Category')
