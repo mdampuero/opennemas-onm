@@ -1,4 +1,4 @@
-<div class="grid simple ng-cloak" ng-show="!flags.http.loading && config.mode === 'list' && items.length > 0">
+<div class="grid simple ng-cloak no-animate" ng-show="!flags.http.loading && config.mode === 'list' && items.length > 0">
   <div class="grid-body no-padding">
     <div class="table-wrapper ng-cloak">
       <table class="table table-hover no-margin">
