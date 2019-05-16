@@ -134,10 +134,14 @@
          * @memberOf BaseCtrl
          *
          * @description
-         *   Toggles mode between grid and list.
+         *   Changes the current mode.
          */
-        $scope.toggleMode = function() {
-          $scope.config.mode = $scope.config.mode === 'grid' ? 'list' : 'grid';
+        $scope.setMode = function(mode) {
+          if ($scope.config.mode === mode) {
+            return;
+          }
+
+          $scope.config.mode = mode;
         };
 
         /**

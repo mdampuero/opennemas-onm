@@ -66,7 +66,7 @@
         <i class="fa fa-picture-o m-r-5"></i>
         {t}Images{/t}
       </h4>
-      <button class="btn btn-link no-padding m-t-2 pull-right" ng-click="toggleMode()" type="button">
+      <button class="btn btn-link no-padding m-t-2 pull-right" ng-click="setMode(config.mode === 'grid' ? 'list' : 'grid')" type="button">
         <i class="fa" ng-class="{ 'fa-th': config.mode === 'grid', 'fa-list': config.mode === 'list' }"></i>
       </button>
     </div>
