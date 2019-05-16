@@ -31,6 +31,16 @@
           {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Published{/t}" field="content_status"}
         {/acl}
         <div class="m-t-5">
+          {acl isAllowed="VIDEO_FAVORITE"}
+            {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Favorite{/t}" field="favorite"}
+          {/acl}
+        </div>
+        <div class="m-t-5">
+          {acl isAllowed="VIDEO_HOME"}
+            {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Home{/t}" field="in_home"}
+          {/acl}
+        </div>
+        <div class="m-t-5">
           {include file="ui/component/content-editor/accordion/allow_comments.tpl"}
         </div>
       </div>
