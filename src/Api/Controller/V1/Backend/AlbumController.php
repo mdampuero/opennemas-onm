@@ -33,7 +33,9 @@ class AlbumController extends ContentOldController
     public function getExtraData($items = null)
     {
         return array_merge(parent::getExtraData($items), [
-            'photos' => $this->getPhotos($items)
+            'photos'     => $this->getPhotos($items),
+            'tags'       => $this->getTags($items),
+            'categories' => $this->getCategories($items)
         ]);
     }
 
@@ -52,7 +54,7 @@ class AlbumController extends ContentOldController
      *
      * @return array The list of photos.
      */
-    public function getPhotos($items)
+    protected function getPhotos($items = null)
     {
         if (empty($items)) {
             return [];
