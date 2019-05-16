@@ -67,7 +67,9 @@
             title: '[key] ~ "%[value]%"'
           } });
 
-          $scope.setMode('grid');
+          if ($scope.config.mode === 'grid') {
+            $scope.criteria.epp = $scope.getEppInGrid();
+          }
 
           $scope.list();
         };
@@ -83,47 +85,32 @@
         // Update epp when mode changes
         $scope.$watch(function() {
           return $scope.config.mode;
-        }, function(nv) {
-          if (nv !== 'grid') {
+        }, function(nv, ov) {
+          if (nv === ov) {
             return;
           }
 
-          var maxHeight = $(window).height() - $('.header').height() -
-            $('.actions-navbar').height();
-          var maxWidth  = $(window).width() - $('.sidebar').width();
-          var padding   = 40;
+          var epp = $scope.getEppInGrid();
 
-          if ($('.content-wrapper').length > 0) {
-            maxWidth -= parseInt($('.content-wrapper').css('padding-right'));
+          if (epp !== $scope.criteria.epp) {
+            $scope.flags.http.loading = true;
+            $scope.criteria.epp = nv === 'grid' ? epp : 10;
           }
-
-          var containerBaseSize = 150;
-          var containerSize = $('.infinite-col').width();
-
-          if (containerBaseSize > containerSize) {
-            containerSize = containerBaseSize;
-          }
-
-          var height = containerSize + padding;
-          var width = containerSize + padding;
-
-          var rows = Math.ceil(maxHeight / height);
-          var cols = Math.floor(maxWidth / width);
-
-          if (rows === 0) {
-            rows = 1;
-          }
-
-          if (cols === 0) {
-            cols = 1;
-          }
-
-          if ($scope.criteria.epp !== rows * cols && $scope.data) {
-            $scope.data.items = [];
-          }
-
-          $scope.criteria.epp = rows * cols;
         }, true);
+
+        // Change page when scrolling in grid mode
+        $(window).scroll(function() {
+          if (!$scope.mode || $scope.mode === 'list' ||
+            $scope.items.length === $scope.data.total) {
+            return;
+          }
+
+          if (!$scope.flags.http.loading && $(document).height() <
+          $(window).height() + $(window).scrollTop()) {
+            $scope.criteria.page++;
+            $scope.$apply();
+          }
+        });
       }
     ]);
 })();

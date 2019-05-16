@@ -88,6 +88,54 @@
         $scope.overlay = {};
 
         /**
+         * @function BaseCtrl
+         * @memberOf availableItemsInGrid
+         *
+         * @description
+         *   Returns the number of items that can be shown in grid mode basing
+         *   on the window size.
+         *
+         * @return {Integer} The number of items per page.
+         */
+        $scope.getEppInGrid = function() {
+          var maxHeight = $(window).height() - $('.header').height() -
+            $('.actions-navbar').height();
+          var maxWidth  = $(window).width() - $('.sidebar').width();
+          var padding   = 40;
+
+          if ($('.content-wrapper').length > 0) {
+            maxWidth -= parseInt($('.content-wrapper').css('padding-right'));
+          }
+
+          var containerBaseSize = 150;
+          var containerSize = $('.infinite-col').width();
+
+          if (containerBaseSize > containerSize) {
+            containerSize = containerBaseSize;
+          }
+
+          var height = containerSize + padding;
+          var width = containerSize + padding;
+
+          var rows = Math.ceil(maxHeight / height);
+          var cols = Math.floor(maxWidth / width);
+
+          if (rows === 0) {
+            rows = 1;
+          }
+
+          if (cols === 0) {
+            cols = 1;
+          }
+
+          if ($scope.criteria.epp !== rows * cols && $scope.data) {
+            $scope.data.items = [];
+          }
+
+          return rows * cols;
+        };
+
+        /**
          * @function removeImage
          * @memberOf InnerCtrl
          *
