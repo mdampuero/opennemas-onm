@@ -76,7 +76,9 @@
                     <div class="table-value">
                       <span ng-if="!item.tags || item.tags.length === 0">{t}None{/t}</span>
                       <a class="label label-default m-r-5" href="[% routing.generate('backend_tag_show', { id: data.extra.tags[id].id }) %]" ng-repeat="id in item.tags">
-                        [% data.extra.tags[id].name %]
+                        <strong>
+                          [% data.extra.tags[id].name %]
+                        </strong>
                       </a>
                     </div>
                   </div>
@@ -85,8 +87,10 @@
                       {t}Category{/t}
                     </div>
                     <div class="table-value">
-                      <a href="[% routing.generate('backend_category_show', { id: data.extra.categories[item.category].pk_content_category })%]">
-                        [% data.extra.categories[item.category].title %]
+                      <a class="label label-default m-r-5" href="[% routing.generate('backend_category_show', { id: data.extra.categories[item.category].pk_content_category })%]">
+                        <strong>
+                          [% data.extra.categories[item.category].title %]
+                        </strong>
                       </a>
                     </div>
                   </div>
