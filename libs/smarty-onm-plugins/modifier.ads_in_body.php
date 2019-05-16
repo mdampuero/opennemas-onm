@@ -21,6 +21,10 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
     $smarty = getService('core.template');
     $ads    = $smarty->getValue('advertisements');
 
+    if (empty($ads)) {
+        return $body;
+    }
+
     // Get targeting parameters for smart ajax format
     $app    = $smarty->getValue('app');
     $params = [

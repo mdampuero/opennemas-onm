@@ -52,21 +52,21 @@ class ExtractImageFromBodyFilter extends Filter
         $path     = $this->getParameter('path');
         $basename = $this->getParameter('basename', true);
         $ids[0]   = null;
+        $created  = new \Datetime($created);
 
         foreach ($files as $key => $file) {
-            $path    = $basename ? $path . basename($file) : $path . $file;
-            $id      = $this->checkPhotoExists($file);
-            $created = new \Datetime($created);
+            $filepath = $basename ? $path . basename($file) : $path . $file;
+            $id       = $this->checkPhotoExists($file);
 
-            if (empty($id) && file_exists($path)) {
+            if (empty($id) && file_exists($filepath)) {
                 try {
                     $photo = new \Photo();
-                    $id    = $photo->createFromLocalFile($path, [
+                    $id    = $photo->createFromLocalFile($filepath, [
                         'created'     => $created->format('Y-m-d H:i:s'),
                         'description' => $file,
                         'path_file'   => $created->format('/Y/m/d/'),
                         'title'       => $file
-                    ]);
+                    ], true);
 
                     $this->insertPhotoTranslation($id, $file);
                 } catch (\Exception $e) {

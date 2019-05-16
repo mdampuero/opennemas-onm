@@ -89,7 +89,6 @@ class AdvertisementsController extends Controller
         $data = [
             'title'              => $title,
             'tags'               => $this->getTags($title),
-            'category'           => 0,
             'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -237,7 +236,6 @@ class AdvertisementsController extends Controller
         $data = [
             'id'                 => $ad->id,
             'title'              => $title,
-            'category'           => 0,
             'tags'               => $this->getTags($title),
             'categories'         => is_array($categories) ? implode(',', $categories) : $categories,
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),

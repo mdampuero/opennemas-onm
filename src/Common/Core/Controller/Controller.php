@@ -217,8 +217,12 @@ class Controller extends SymfonyController
      *
      * @return array The list of positions and advertisements.
      */
-    protected function getAdvertisements($category = null)
+    protected function getAdvertisements($category = null, $token = null)
     {
+        if (!$this->get('core.helper.subscription')->hasAdvertisements($token)) {
+            return [ [], [] ];
+        }
+
         $categoryId = empty($category) ? 0 : $category->pk_content_category;
         $action     = $this->get('core.globals')->getAction();
         $group      = $this->getAdvertisementGroup($action);

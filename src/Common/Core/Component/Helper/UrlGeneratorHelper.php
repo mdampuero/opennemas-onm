@@ -310,6 +310,21 @@ class UrlGeneratorHelper
     }
 
     /**
+     * Returns the URI for a Tag.
+     *
+     * @param Tag $tag The tag object.
+     *
+     * @return string The tag URI.
+     */
+    protected function getUriForTag($tag)
+    {
+        $uri = $this->container->get('router')
+            ->generate('frontend_tag_frontpage', [ 'slug' => $tag->slug ]);
+
+        return trim($uri, '/');
+    }
+
+    /**
      * Returns the URI for an User.
      *
      * @param User $user The user object.

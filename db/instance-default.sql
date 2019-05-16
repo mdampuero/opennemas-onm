@@ -1166,7 +1166,7 @@ CREATE TABLE `url` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` int(10) unsigned NOT NULL DEFAULT '0',
   `source` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
-  `target` varchar(1024) COLLATE utf8_unicode_ci NOT NULL,
+  `target` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
   `content_type` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
   `redirection` tinyint(1) NOT NULL DEFAULT '0',
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
@@ -1446,4 +1446,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-02 17:03:29
+-- Dump completed on 2019-04-29 16:57:41
