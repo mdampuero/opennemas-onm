@@ -9,11 +9,13 @@
  */
 namespace Api\EventSubscriber;
 
-use Common\Orm\Entity\Instance;
+use Common\Cache\Core\CacheManager;
 use Common\Core\Component\Helper\TemplateCacheHelper;
 use Common\Core\Component\Helper\VarnishHelper;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Common\Orm\Entity\Instance;
+use Onm\Cache\AbstractCache;
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CategorySubscriber implements EventSubscriberInterface
 {
@@ -26,6 +28,8 @@ class CategorySubscriber implements EventSubscriberInterface
             'category.createItem' => [ [ 'onCategoryCreate', 5 ], ],
             'category.deleteItem' => [ [ 'onCategoryDelete', 5 ], ],
             'category.deleteList' => [ [ 'onCategoryDelete', 5 ], ],
+            'category.moveItem'   => [ [ 'onCategoryMove',   5 ], ],
+            'category.moveItems'  => [ [ 'onCategoryMove',   5 ], ],
             'category.patchItem'  => [ [ 'onCategoryUpdate', 5 ], ],
             'category.patchList'  => [ [ 'onCategoryUpdate', 5 ], ],
             'category.updateItem' => [ [ 'onCategoryUpdate', 5 ], ]
@@ -37,11 +41,18 @@ class CategorySubscriber implements EventSubscriberInterface
      *
      * @param TemplateCacheManager $tcm The TemplateCacheManager service.
      */
-    public function __construct(Instance $instance, TemplateCacheHelper $th, VarnishHelper $vh)
-    {
+    public function __construct(
+        Instance            $instance,
+        TemplateCacheHelper $th,
+        VarnishHelper       $vh,
+        AbstractCache       $cache,
+        CacheManager        $cm
+    ) {
         $this->instance = $instance;
         $this->template = $th;
         $this->varnish  = $vh;
+        $this->oldCache = $cache;
+        $this->cache    = $cm->getConnection('instance');
     }
 
     /**
@@ -64,11 +75,44 @@ class CategorySubscriber implements EventSubscriberInterface
         $this->onCategoryUpdate($event);
     }
 
+    /**
+     * Removes contents from cache, category list actions and varnish caches for
+     * the instance after moving contents from a category to another.
+     *
+     * @param Event $event The dispatched event.
+     */
+    public function onCategoryMove(Event $event)
+    {
+        if (!$event->hasArgument('contents')) {
+            return;
+        }
+
+        $contents = $event->getArgument('contents');
+        $cacheIds = [];
+
+        foreach ($contents as $content) {
+            $cacheIds[] = 'content-' . $content['id'];
+            $cacheIds[] = $content['type'] . '-' . $content['id'];
+        }
+
+        if (!empty($cacheIds)) {
+            $this->oldCache->delete($cacheIds);
+            $this->cache->remove($cacheIds);
+        }
+
+        $source = $event->hasArgument('item')
+            ? [ $event->getArgument('item') ]
+            : $event->getArgument('items');
+
+        $categories = array_merge($source, [ $event->getArgument('target') ]);
+
+        $this->template->deleteCategories($categories);
+        $this->varnish->deleteInstance($this->instance);
+    }
 
     /**
-     * Removes caches for dynamic CSS and category list actions and varnish
-     * caches for the instance when a category or a list of categories are
-     * updated.
+     * Removes caches for dynamic CSS, category list actions and varnish caches
+     * for the instance when a category or a list of categories are updated.
      *
      * @param Event $event The dispatched event.
      */
