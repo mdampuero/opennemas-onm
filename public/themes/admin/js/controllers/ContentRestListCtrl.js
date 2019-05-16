@@ -114,16 +114,17 @@
          * @param {Boolean} reset Whether to reset the list.
          */
         $scope.list = function(route, reset) {
-          if (!reset && $scope.mode === 'grid') {
+          if (!reset && $scope.config.mode === 'grid') {
             $scope.flags.loadingMore = 1;
           } else {
-            if ($scope.mode === 'grid') {
+            if ($scope.config.mode === 'grid') {
               $scope.flags.loadingMore = 1;
             } else {
               $scope.flags.http.loading  = 1;
             }
 
             if ($scope.data) {
+              $scope.items      = [];
               $scope.data.items = [];
             }
           }
@@ -137,7 +138,7 @@
           $location.search('oql', oql);
 
           return http.get(route).then(function(response) {
-            if (reset || $scope.mode === 'grid') {
+            if (reset || $scope.config.mode === 'grid') {
               $scope.data = $scope.data ? $scope.data : { items: [] };
 
               response.data.items = [].concat($scope.data.items, response.data.items);
@@ -152,7 +153,7 @@
             $scope.disableFlags('loadingMore');
 
             // Scroll top
-            if ($scope.mode !== 'grid') {
+            if ($scope.config.mode !== 'grid') {
               $('body').animate({ scrollTop: '0px' }, 1000);
             }
           }, function(response) {
@@ -198,14 +199,13 @@
 
         // Change page when scrolling in grid mode
         $(window).scroll(function() {
-          if (!$scope.mode ||
-            $scope.mode === 'list' ||
+          if ($scope.config.mode === 'list' ||
             $scope.items.length === $scope.data.total) {
             return;
           }
 
           if (!$scope.flags.http.loadingMore && $(document).height() <=
-          $(window).height() + $(window).scrollTop()) {
+              $(window).height() + $(window).scrollTop()) {
             $scope.scroll();
           }
         });

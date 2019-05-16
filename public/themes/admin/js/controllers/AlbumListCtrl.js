@@ -20,8 +20,6 @@
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
-        $scope.data = { items: [] };
-
         /**
          * The criteria to search.
          *
@@ -29,9 +27,9 @@
          */
         $scope.criteria = {
           content_type_name: 'album',
+          pk_fk_content_category: null,
           epp: 10,
           in_litter: 0,
-          pk_fk_content_category: null,
           orderBy: { created: 'desc' },
           page: 1
         };
@@ -99,20 +97,6 @@
             $scope.criteria.epp = nv === 'grid' ? epp : 10;
           }
         }, true);
-
-        // Change page when scrolling in grid mode
-        $(window).scroll(function() {
-          if (!$scope.mode || $scope.mode === 'list' ||
-            $scope.items.length === $scope.data.total) {
-            return;
-          }
-
-          if (!$scope.flags.http.loading && $(document).height() <
-          $(window).height() + $(window).scrollTop()) {
-            $scope.criteria.page++;
-            $scope.$apply();
-          }
-        });
       }
     ]);
 })();

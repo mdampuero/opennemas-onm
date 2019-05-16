@@ -9,9 +9,7 @@
      *
      * @requires $controller
      * @requires $scope
-     * @requires messenger
      * @requires oqlEncoder
-     * @requires queryManager
      *
      * @description
      *   Controller for video list.
@@ -63,9 +61,11 @@
           $scope.columns.key     = 'video-columns';
           $scope.backup.criteria = $scope.criteria;
 
-          oqlEncoder.configure({ placeholder: {
-            title: '[key] ~ "%[value]%"'
-          } });
+          oqlEncoder.configure({
+            placeholder: {
+              title: '[key] ~ "%[value]%"'
+            }
+          });
 
           if ($scope.config.mode === 'grid') {
             $scope.criteria.epp = $scope.getEppInGrid();
@@ -97,20 +97,6 @@
             $scope.criteria.epp = nv === 'grid' ? epp : 10;
           }
         }, true);
-
-        // Change page when scrolling in grid mode
-        $(window).scroll(function() {
-          if (!$scope.mode || $scope.mode === 'list' ||
-            $scope.items.length === $scope.data.total) {
-            return;
-          }
-
-          if (!$scope.flags.http.loading && $(document).height() <
-          $(window).height() + $(window).scrollTop()) {
-            $scope.criteria.page++;
-            $scope.$apply();
-          }
-        });
       }
     ]);
 })();
