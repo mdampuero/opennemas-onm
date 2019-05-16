@@ -63,7 +63,8 @@
         $scope.flags = {
           block: { slug: true },
           generate: {},
-          http: {}
+          http: {},
+          visible: { grid: true }
         };
 
         /**
