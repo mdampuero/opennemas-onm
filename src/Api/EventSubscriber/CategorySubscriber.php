@@ -55,33 +55,6 @@ class CategorySubscriber implements EventSubscriberInterface
     /**
      * Removes caches for dynamic CSS and category list actions and varnish
      * caches for the instance when a category or a list of categories are
-     * updated.
-     *
-     * @param Event $event The dispatched event.
-     */
-    public function onCategoryUpdate(Event $event)
-    {
-        $categories = [];
-
-        if ($event->hasArgument('item')) {
-            $categories[] = $event->getArgument('item');
-        }
-
-        if ($event->hasArgument('items')) {
-            $categories = array_merge(
-                $categories,
-                $event->getArgument('items')
-            );
-        }
-
-        $this->template->deleteDynamicCss();
-        $this->template->deleteCategories($categories);
-        $this->varnish->deleteInstance($this->instance);
-    }
-
-    /**
-     * Removes caches for dynamic CSS and category list actions and varnish
-     * caches for the instance when a category or a list of categories are
      * deleted.
      *
      * @param Event $event The dispatched event.
@@ -89,5 +62,24 @@ class CategorySubscriber implements EventSubscriberInterface
     public function onCategoryDelete(Event $event)
     {
         $this->onCategoryUpdate($event);
+    }
+
+
+    /**
+     * Removes caches for dynamic CSS and category list actions and varnish
+     * caches for the instance when a category or a list of categories are
+     * updated.
+     *
+     * @param Event $event The dispatched event.
+     */
+    public function onCategoryUpdate(Event $event)
+    {
+        $categories = $event->hasArgument('item')
+            ? [ $event->getArgument('item') ]
+            : $event->getArgument('items');
+
+        $this->template->deleteDynamicCss();
+        $this->template->deleteCategories($categories);
+        $this->varnish->deleteInstance($this->instance);
     }
 }

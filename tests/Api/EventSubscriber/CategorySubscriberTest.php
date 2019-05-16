@@ -71,8 +71,6 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
             ->with('item')->willReturn(true);
         $this->event->expects($this->at(1))->method('getArgument')
             ->with('item')->willReturn($category);
-        $this->event->expects($this->at(2))->method('hasArgument')
-            ->with('items')->willReturn(false);
 
         $this->th->expects($this->once())->method('deleteDynamicCss');
         $this->th->expects($this->once())->method('deleteCategories')
@@ -96,9 +94,7 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
 
         $this->event->expects($this->at(0))->method('hasArgument')
             ->with('item')->willReturn(false);
-        $this->event->expects($this->at(1))->method('hasArgument')
-            ->with('items')->willReturn(true);
-        $this->event->expects($this->at(2))->method('getArgument')
+        $this->event->expects($this->at(1))->method('getArgument')
             ->with('items')->willReturn($categories);
 
         $this->th->expects($this->once())->method('deleteDynamicCss');
