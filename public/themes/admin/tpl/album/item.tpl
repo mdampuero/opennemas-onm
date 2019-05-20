@@ -116,7 +116,7 @@
                 </div>
                 <div ng-class="{ 'col-lg-10 col-sm-9': config.mode === 'list', 'col-xs-12': config.mode === 'grid' }">
                   <div class="form-group no-margin">
-                    <textarea class="album-thumbnail-description form-control" ng-model="photo.description" placeholder="[% data.extra.locale.multilanguage && data.extra.locale.default !== config.locale.selected ? data.item.photos[index].description[data.extra.locale.default] : '' %]" uib-tooltip="{t}Original{/t}: [% data.item.photos[index].description[data.extra.locale.default] %]" tooltip-enable="config.locale.multilanguage && config.locale.default !== config.locale.selected"></textarea>
+                    <textarea class="album-thumbnail-description form-control" ng-model="photo.description" placeholder="[% data.extra.locale.multilanguage && data.extra.locale.default !== config.locale.selected ? data.item.photos[index].description[data.extra.locale.default] : '' %]"></textarea>
                   </div>
                 </div>
               </div>
