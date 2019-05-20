@@ -37,7 +37,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(getId(item)) }" data-id="[% item.id %]">
+          <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(getId(item)) }" data-id="[% getId(item) %]">
             <td class="text-center v-align-middle">
               <div class="checkbox check-default">
                 <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="getId(item)" type="checkbox">
