@@ -139,13 +139,28 @@
 
           return http.get(route).then(function(response) {
             if (reset || $scope.config.mode === 'grid') {
-              $scope.data = $scope.data ? $scope.data : { items: [] };
+              $scope.data = $scope.data ? $scope.data : { extra: [], items: [] };
 
+              // Merge items
               response.data.items = [].concat($scope.data.items, response.data.items);
-              $scope.data = response.data;
-            } else {
-              $scope.data = response.data;
+
+              // Merge extra info with the scope
+              for (var key in response.data.extra) {
+                if (angular.isArray(response.data.extra[key]) &&
+                    angular.isArray($scope.data.extra[key])) {
+                  response.data.extra[key] = [].concat($scope.data.extra[key],
+                    response.data.extra[key]);
+                }
+
+                if (angular.isObject(response.data.extra[key]) &&
+                    angular.isObject($scope.data.extra[key])) {
+                  response.data.extra[key] = angular.merge($scope.data.extra[key],
+                    response.data.extra[key]);
+                }
+              }
             }
+
+            $scope.data = response.data;
 
             $scope.parseList(response.data);
 
