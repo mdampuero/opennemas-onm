@@ -16,19 +16,19 @@
 {/block}
 
 {block name="customColumnsHeader"}
-  {acl isAllowed="ALBUM_HOME"}
+  {acl isAllowed="VIDEO_HOME"}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('home')" width="150">
       <i class="fa fa-home" ng-if="!isHelpEnabled()" uib-tooltip="{t}Home{/t}" tooltip-placement="left"></i>
       <span class="m-l-5" ng-if="isHelpEnabled()">{t}Home{/t}</span>
     </th>
   {/acl}
-  {acl isAllowed="ALBUM_FAVORITE"}
+  {acl isAllowed="VIDEO_FAVORITE"}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('favorite')" width="150">
       <i class="fa fa-star" ng-if="!isHelpEnabled()" uib-tooltip="{t}Favorite{/t}" tooltip-placement="left"></i>
       <span class="m-l-5" ng-if="isHelpEnabled()">{t}Favorite{/t}</span>
     </th>
   {/acl}
-  {acl isAllowed="ALBUM_AVAILABLE"}
+  {acl isAllowed="VIDEO_AVAILABLE"}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('content_status')" width="150">
       <i class="fa fa-check" ng-if="!isHelpEnabled()" uib-tooltip="{t}Published{/t}" tooltip-placement="left"></i>
       <span class="m-l-5" ng-if="isHelpEnabled()">{t}Published{/t}</span>
@@ -38,27 +38,28 @@
 
 {block name="commonColumnsBody" prepend}
   <td class="hidden-xs text-center v-align-middle" ng-if="isColumnEnabled('media')">
-    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.cover" transform="zoomcrop,220,220"></dynamic-image>
+    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-if="item.thumb_image" ng-model="item.thumb_image"></dynamic-image>
+    <dynamic-image class="img-thumbnail" ng-if="!item.thumb_image" ng-model="item.thumb"></dynamic-image>
   </td>
 {/block}
 
 {block name="customColumnsBody"}
-  {acl isAllowed="ALBUM_HOME"}
+  {acl isAllowed="VIDEO_HOME"}
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('home')">
       <button class="btn btn-white" ng-click="patch(item, 'in_home', item.in_home != 1 ? 1 : 0)" type="button">
-        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.in_homeLoading == 1, 'fa-home text-info': item.in_homeLoading !== 1 && item.in_home == 1, 'fa-home': !item.in_homeLoading == 1 && item.in_home == 0 }"></i>
-        <i class="fa fa-times fa-sub text-danger" ng-if="item.in_homeLoading !== 1 && item.in_home == 0"></i>
+        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.in_homeLoading == 1, 'fa-home text-info': !item.in_homeLoading == 1 && item.in_home == 1, 'fa-home': !item.in_homeLoading == 1 && item.in_home == 0 }"></i>
+        <i class="fa fa-times fa-sub text-danger" ng-if="!item.in_homeLoading == 1 && item.in_home == 0"></i>
       </button>
     </td>
   {/acl}
-  {acl isAllowed="ALBUM_FAVORITE"}
+  {acl isAllowed="VIDEO_FAVORITE"}
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('favorite')">
       <button class="btn btn-white" ng-click="patch(item, 'favorite', item.favorite != 1 ? 1 : 0)" type="button">
-        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.favoriteLoading == 1, 'fa-star text-warning': !item.favoriteLoading == 1 && item.favorite == 1, 'fa-star-o': !item.favoriteLoading == 1 && item.favorite != 1 }"></i>
+        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.favoriteLoading == 1, 'fa-star text-warning': !item.favoritLoading == 1 && item.favorite == 1, 'fa-star-o': !item.favoriteLoading == 1 && item.favorite != 1 }"></i>
       </button>
     </td>
   {/acl}
-  {acl isAllowed="ALBUM_AVAILABLE"}
+  {acl isAllowed="VIDEO_AVAILABLE"}
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('content_status')">
       <button class="btn btn-white" ng-click="patch(item, 'content_status', item.content_status != 1 ? 1 : 0)" type="button">
         <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.content_statusLoading == 1, 'fa-check text-success': !item.content_statusLoading == 1 && item.content_status == 1, 'fa-times text-danger': !item.content_statusLoading == 1 && item.content_status == 0 }"></i>
@@ -68,17 +69,15 @@
 {/block}
 
 {block name="itemActions"}
-  {acl isAllowed="ALBUM_UPDATE"}
-    <a class="btn btn-default btn-small" href="[% routing.generate('backend_album_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
-      <i class="fa fa-pencil m-r-5"></i>
-      {t}Edit{/t}
+  {acl isAllowed="VIDEO_UPDATE"}
+    <a class="btn btn-default btn-small" href="[% routing.generate('backend_video_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
+      <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
     </a>
-    <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_album_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+    <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_video_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
   {/acl}
-  {acl isAllowed="ALBUM_DELETE"}
+  {acl isAllowed="VIDEO_DELETE"}
     <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">
-      <i class="fa fa-trash-o m-r-5"></i>
-      {t}Remove{/t}
+      <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
     </button>
   {/acl}
 {/block}

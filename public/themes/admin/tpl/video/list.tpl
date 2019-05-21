@@ -113,8 +113,8 @@
 {/block}
 
 {block name="list"}
-  {include file="video/partials/list_list.tpl"}
-  {include file="video/partials/list_grid.tpl"}
+  {include file="video/list.table.tpl"}
+  {include file="video/list.grid.tpl"}
 {/block}
 
 {block name="modals"}

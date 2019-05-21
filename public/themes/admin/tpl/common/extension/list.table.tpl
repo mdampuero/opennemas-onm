@@ -115,16 +115,13 @@
         </thead>
         <tbody>
           <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(getId(item)) }" data-id="[% getId(item) %]">
+            <td class="text-center v-align-middle">
+              <div class="checkbox check-default">
+                <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="getId(item)" type="checkbox">
+                <label for="checkbox[%$index%]"></label>
+              </div>
+            </td>
             {block name="commonColumnsBody"}
-              <td class="text-center v-align-middle">
-                <div class="checkbox check-default">
-                  <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="getId(item)" type="checkbox">
-                  <label for="checkbox[%$index%]"></label>
-                </div>
-              </td>
-              <td class="hidden-xs" ng-if="isColumnEnabled('media')">
-                <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.cover" transform="zoomcrop,220,220"></dynamic-image>
-              </td>
               <td class="v-align-middle" ng-if="isColumnEnabled('title')">
                 <div class="table-text" title="[% item.title %]">
                   [% item.title %]
@@ -190,11 +187,13 @@
               </td>
               <td class="v-align-middle" ng-if="isColumnEnabled('tags')">
                 <span ng-if="!item.tags || item.tags.length === 0">{t}No tags{/t}</span>
-                <a class="label label-default m-r-5" href="[% routing.generate('backend_tag_show', { id: data.extra.tags[id].id }) %]" ng-repeat="id in item.tags">
-                  <strong>
-                    [% data.extra.tags[id].name %]
-                  </strong>
-                </a>
+                <div class="inline m-r-5 m-t-5" ng-repeat="id in item.tags" ng-if="!data.extra.tags[id].locale || data.extra.tags[id].locale === config.locale.selected">
+                  <a class="label label-defaul label-info" href="[% routing.generate('backend_tag_show', { id: data.extra.tags[id].id }) %]">
+                    <strong>
+                      [% data.extra.tags[id].name %]
+                    </strong>
+                  </a>
+                </div>
               </td>
               <td class="v-align-middle" ng-if="isColumnEnabled('author')">
               </td>
