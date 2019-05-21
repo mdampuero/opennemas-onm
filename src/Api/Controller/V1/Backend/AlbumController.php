@@ -25,11 +25,11 @@ class AlbumController extends ContentOldController
      *
      * @var string
      */
-    protected $getItemRoute = 'api_v1_backend_video_show';
+    protected $getItemRoute = 'api_v1_backend_album_show';
 
     /**
      * {@inheritDoc}
-     **/
+     */
     public function getExtraData($items = null)
     {
         return array_merge(parent::getExtraData($items), [
@@ -41,7 +41,7 @@ class AlbumController extends ContentOldController
 
     /**
      * {@inheritDoc}`
-     **/
+     */
     public function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys('album');
