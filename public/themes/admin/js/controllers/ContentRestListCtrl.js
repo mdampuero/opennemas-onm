@@ -104,7 +104,6 @@
           }
 
           $scope.criteria.page++;
-          $scope.$apply();
         };
 
         /**
@@ -115,10 +114,10 @@
          */
         $scope.list = function(route, reset) {
           if (!reset && $scope.app.mode === 'grid') {
-            $scope.flags.loadingMore = 1;
+            $scope.flags.http.loadingMore = 1;
           } else {
             if ($scope.app.mode === 'grid') {
-              $scope.flags.loadingMore = 1;
+              $scope.flags.http.loadingMore = 1;
             } else {
               $scope.flags.http.loading  = 1;
             }
@@ -163,9 +162,7 @@
             $scope.data = response.data;
 
             $scope.parseList(response.data);
-
             $scope.disableFlags('http');
-            $scope.disableFlags('loadingMore');
 
             // Scroll top
             if ($scope.app.mode !== 'grid') {
@@ -175,7 +172,6 @@
             messenger.post(response.data);
 
             $scope.disableFlags('http');
-            $scope.disableFlags('loadingMore');
             $scope.data = {};
           });
         };
