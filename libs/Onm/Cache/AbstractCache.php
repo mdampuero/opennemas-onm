@@ -208,7 +208,7 @@ abstract class AbstractCache implements CacheInterface
             $id = $namespace . '_' . $id;
         }
 
-        if (strpos($id, '*') !== false) {
+        if (!is_array($id) && strpos($id, '*') !== false) {
             return $this->deleteByRegex('/' . str_replace('*', '.*', $id) . '/');
         }
 

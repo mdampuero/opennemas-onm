@@ -22,6 +22,11 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
+        $this->cs = $this->getMockBuilder('Api\Service\V1\CategoryService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getItem' ])
+            ->getMock();
+
         $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'get', 'hasParameter' ])
             ->getMock();
@@ -82,6 +87,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             case 'api.service.author':
                 return $this->authorService;
 
+            case 'api.service.category':
+                return $this->cs;
+
             case 'data.manager.filter':
                 return $this->fm;
 
@@ -139,11 +147,15 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     {
         $content = new \Article();
 
-        $content->id                = 252;
-        $content->category_name     = 'actualidad';
-        $content->created           = '2015-01-14 23:49:40';
-        $content->content_type_name = 'article';
-        $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+        $content->id                     = 252;
+        $content->category_name          = 'actualidad';
+        $content->pk_fk_content_category = 28618;
+        $content->created                = '2015-01-14 23:49:40';
+        $content->content_type_name      = 'article';
+        $content->slug                   = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+
+        $this->cs->expects($this->once())->method('getItem')
+            ->with(28618)->willReturn(new Category([ 'name' => 'actualidad' ]));
 
         $this->assertEquals(
             '/articulo/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/20150114234940000252.amp.html',
@@ -302,14 +314,18 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     {
         $content = new \Article();
 
-        $content->id                = 252;
-        $content->category_name     = 'actualidad';
-        $content->created           = '2015-01-14 23:49:40';
-        $content->content_type_name = 'article';
-        $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+        $content->id                     = 252;
+        $content->category_name          = 'actualidad';
+        $content->pk_fk_content_category = 24845;
+        $content->created                = '2015-01-14 23:49:40';
+        $content->content_type_name      = 'article';
+        $content->slug                   = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForArticle');
         $method->setAccessible(true);
+
+        $this->cs->expects($this->once())->method('getItem')
+            ->with(24845)->willReturn(new Category([ 'name' => 'actualidad' ]));
 
         $this->assertEquals(
             'articulo/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/20150114234940000252.html',
@@ -325,14 +341,18 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $content = new \Video();
         $date    = new \DateTime();
 
-        $content->id                = 252;
-        $content->category_name     = 'actualidad';
-        $content->created           = $date;
-        $content->content_type_name = 'video';
-        $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+        $content->id                     = 252;
+        $content->category_name          = 'actualidad';
+        $content->pk_fk_content_category = 6458;
+        $content->created                = $date;
+        $content->content_type_name      = 'video';
+        $content->slug                   = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForContent');
         $method->setAccessible(true);
+
+        $this->cs->expects($this->once())->method('getItem')
+            ->with(6458)->willReturn(new Category([ 'name' => 'actualidad' ]));
 
         $this->assertEquals(
             'video/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/' .
@@ -596,13 +616,17 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForVideo()
     {
+        $this->cs->expects($this->once())->method('getItem')
+            ->with(28618)->willReturn(new Category([ 'name' => 'actualidad' ]));
+
         $content = new \Video();
 
-        $content->id                = 252;
-        $content->category_name     = 'actualidad';
-        $content->created           = '2015-01-14 23:49:40';
-        $content->content_type_name = 'video';
-        $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+        $content->id                     = 252;
+        $content->category_name          = 'actualidad';
+        $content->pk_fk_content_category = 28618;
+        $content->created                = '2015-01-14 23:49:40';
+        $content->content_type_name      = 'video';
+        $content->slug                   = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForContent');
         $method->setAccessible(true);

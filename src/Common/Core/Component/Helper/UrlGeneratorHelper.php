@@ -178,10 +178,19 @@ class UrlGeneratorHelper
      */
     protected function getUriForArticle($content)
     {
+        try {
+            $category = $this->container->get('api.service.category')
+                ->getItem($content->pk_fk_content_category);
+
+            $categorySlug = $category->name;
+        } catch (\Exception $e) {
+            $categorySlug = '';
+        }
+
         return $this->generateUriFromConfig('article', [
             'id'       => sprintf('%06d', $content->id),
             'date'     => date('YmdHis', strtotime($content->created)),
-            'category' => urlencode($content->category_name),
+            'category' => urlencode($categorySlug),
             'slug'     => urlencode($content->slug),
         ]);
     }
@@ -217,6 +226,15 @@ class UrlGeneratorHelper
             return $this->{$methodName}($content);
         }
 
+        try {
+            $category = $this->container->get('api.service.category')
+                ->getItem($content->pk_fk_content_category);
+
+            $categorySlug = $category->name;
+        } catch (\Exception $e) {
+            $categorySlug = '';
+        }
+
         $created = is_object($content->created)
             ? $content->created->format('Y-m-d H:i:s')
             : $content->created;
@@ -224,7 +242,7 @@ class UrlGeneratorHelper
         return $this->generateUriFromConfig(strtolower($content->content_type_name), [
             'id'       => sprintf('%06d', $content->id),
             'date'     => date('YmdHis', strtotime($created)),
-            'category' => urlencode($content->category_name),
+            'category' => urlencode($categorySlug),
             'slug'     => urlencode($content->slug),
         ]);
     }

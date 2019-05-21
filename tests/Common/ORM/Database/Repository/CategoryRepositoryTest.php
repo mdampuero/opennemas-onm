@@ -219,7 +219,19 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testMoveContentsWhenId()
     {
-        $this->conn->expects($this->at(0))->method('executeQuery')
+        $contents = [ [ 'id' => 8326, 'type' => 'baz' ] ];
+
+        $this->conn->expects($this->at(0))->method('fetchAll')
+            ->with(
+                'SELECT pk_fk_content AS "id", content_type_name AS "type"'
+                    . ' FROM contents_categories INNER JOIN contents'
+                    . ' ON contents_categories.pk_fk_content = contents.pk_content'
+                    . ' WHERE pk_fk_content_category IN (?)',
+                [ [ 4 ] ],
+                [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+            )->willReturn($contents);
+
+        $this->conn->expects($this->at(1))->method('executeQuery')
             ->with(
                 'UPDATE IGNORE contents_categories SET pk_fk_content_category = ?'
                     . ' WHERE pk_fk_content_category IN (?)',
@@ -227,14 +239,14 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
                 [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             );
 
-        $this->conn->expects($this->at(1))->method('executeQuery')
+        $this->conn->expects($this->at(2))->method('executeQuery')
             ->with(
                 'DELETE FROM contents_categories WHERE pk_fk_content_category IN (?)',
                 [ [ 4 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             );
 
-        $this->repository->moveContents(4, 7);
+        $this->assertEquals($contents, $this->repository->moveContents(4, 7));
     }
 
     /**
@@ -242,7 +254,23 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testMoveContentsWhenList()
     {
-        $this->conn->expects($this->at(0))->method('executeQuery')
+        $contents = [
+            [ 'id' => 8326, 'type' => 'baz' ],
+            [ 'id' => 13481, 'type' => 'glork' ]
+        ];
+
+        $this->conn->expects($this->at(0))->method('fetchAll')
+            ->with(
+                'SELECT pk_fk_content AS "id", content_type_name AS "type"'
+                    . ' FROM contents_categories INNER JOIN contents'
+                    . ' ON contents_categories.pk_fk_content = contents.pk_content'
+                    . ' WHERE pk_fk_content_category IN (?)',
+                [ [ 4, 5 ] ],
+                [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+            )->willReturn($contents);
+
+
+        $this->conn->expects($this->at(1))->method('executeQuery')
             ->with(
                 'UPDATE IGNORE contents_categories SET pk_fk_content_category = ?'
                     . ' WHERE pk_fk_content_category IN (?)',
@@ -250,7 +278,7 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
                 [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             );
 
-        $this->conn->expects($this->at(1))->method('executeQuery')
+        $this->conn->expects($this->at(2))->method('executeQuery')
             ->with(
                 'DELETE FROM contents_categories WHERE pk_fk_content_category IN (?)',
                 [ [ 4, 5 ] ],
@@ -258,7 +286,25 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
             );
 
 
-        $this->repository->moveContents([ 4, 5 ], 7);
+        $this->assertEquals($contents, $this->repository->moveContents([ 4, 5 ], 7));
+    }
+
+    /**
+     * Tests moveContents when no contents found.
+     */
+    public function testMoveContentsWhenNoContents()
+    {
+        $this->conn->expects($this->at(0))->method('fetchAll')
+            ->with(
+                'SELECT pk_fk_content AS "id", content_type_name AS "type"'
+                    . ' FROM contents_categories INNER JOIN contents'
+                    . ' ON contents_categories.pk_fk_content = contents.pk_content'
+                    . ' WHERE pk_fk_content_category IN (?)',
+                [ [ 4, 5 ] ],
+                [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+            )->willReturn([]);
+
+        $this->assertEquals([], $this->repository->moveContents([ 4, 5 ], 7));
     }
 
     /**
