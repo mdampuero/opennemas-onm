@@ -19,7 +19,7 @@ use Common\Core\Controller\Controller;
  *
  * @package Backend_Controllers
  */
-class PollsController extends Controller
+class PollController extends Controller
 {
     /**
      * Lists all the available polls.
