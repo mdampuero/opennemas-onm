@@ -114,10 +114,10 @@
          * @param {Boolean} reset Whether to reset the list.
          */
         $scope.list = function(route, reset) {
-          if (!reset && $scope.config.mode === 'grid') {
+          if (!reset && $scope.app.mode === 'grid') {
             $scope.flags.loadingMore = 1;
           } else {
-            if ($scope.config.mode === 'grid') {
+            if ($scope.app.mode === 'grid') {
               $scope.flags.loadingMore = 1;
             } else {
               $scope.flags.http.loading  = 1;
@@ -138,7 +138,7 @@
           $location.search('oql', oql);
 
           return http.get(route).then(function(response) {
-            if (reset || $scope.config.mode === 'grid') {
+            if (reset || $scope.app.mode === 'grid') {
               $scope.data = $scope.data ? $scope.data : { extra: [], items: [] };
 
               // Merge items
@@ -168,7 +168,7 @@
             $scope.disableFlags('loadingMore');
 
             // Scroll top
-            if ($scope.config.mode !== 'grid') {
+            if ($scope.app.mode !== 'grid') {
               $('body').animate({ scrollTop: '0px' }, 1000);
             }
           }, function(response) {
@@ -214,7 +214,7 @@
 
         // Change page when scrolling in grid mode
         $(window).scroll(function() {
-          if ($scope.config.mode === 'list' ||
+          if ($scope.app.mode === 'list' ||
             $scope.items.length === $scope.data.total) {
             return;
           }

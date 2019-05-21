@@ -41,11 +41,6 @@
          * @type {Object}
          */
         $scope.config = {
-          mode: 'grid',
-          columns: {
-            collapsed: true,
-            selected: []
-          },
           linkers: {},
           locale: null,
           multilanguage: null,
@@ -186,11 +181,11 @@
          *   Changes the current mode.
          */
         $scope.setMode = function(mode) {
-          if ($scope.config.mode === mode) {
+          if ($scope.app.mode === mode) {
             return;
           }
 
-          $scope.config.mode = mode;
+          $scope.app.mode = mode;
         };
 
         /**

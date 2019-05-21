@@ -78,15 +78,15 @@
         <i class="fa fa-picture-o m-r-5"></i>
         {t}Images{/t}
       </h4>
-      <button class="btn btn-link no-padding m-t-2 pull-right" ng-click="setMode(config.mode === 'grid' ? 'list' : 'grid')" type="button">
-        <i class="fa" ng-class="{ 'fa-th': config.mode === 'grid', 'fa-list': config.mode === 'list' }"></i>
+      <button class="btn btn-link no-padding m-t-2 pull-right" ng-click="setMode(app.mode === 'grid' ? 'list' : 'grid')" type="button">
+        <i class="fa" ng-class="{ 'fa-th': app.mode === 'grid', 'fa-list': app.mode === 'list' }"></i>
       </button>
     </div>
     <div class="grid-body">
       <div class="row">
         <div class="col-md-12">
-          <div ui-sortable="{ axis: 'x,y', placeholder: 'album-thumbnail-sortable album-thumbnail-sortable-placeholder album-thumbnail-sortable-' + config.mode }" ng-model="item.photos">
-            <div class="album-thumbnail-sortable album-thumbnail-sortable-[% config.mode %]" ng-repeat="(index, photo) in item.photos">
+          <div ui-sortable="{ axis: 'x,y', placeholder: 'album-thumbnail-sortable album-thumbnail-sortable-placeholder album-thumbnail-sortable-' + app.mode }" ng-model="item.photos">
+            <div class="album-thumbnail-sortable album-thumbnail-sortable-[% app.mode %]" ng-repeat="(index, photo) in item.photos">
               <div class="thumbnail-wrapper row">
                 <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay['photo_'+ $index] }"></div>
                 <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay['photo_'+ $index] }">
@@ -103,7 +103,7 @@
                   </div>
                 </div>
                 <span class="sort-icon"></span>
-                <div ng-class="{ 'col-lg-2 col-sm-3': config.mode === 'list', 'col-xs-12': config.mode === 'grid' }">
+                <div ng-class="{ 'col-lg-2 col-sm-3': app.mode === 'list', 'col-xs-12': app.mode === 'grid' }">
                   <div class="dynamic-image-placeholder">
                     <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[photo.pk_photo]" transform="zoomcrop,200,200">
                       <div class="thumbnail-actions">
@@ -114,7 +114,7 @@
                     </dynamic-image>
                   </div>
                 </div>
-                <div ng-class="{ 'col-lg-10 col-sm-9': config.mode === 'list', 'col-xs-12': config.mode === 'grid' }">
+                <div ng-class="{ 'col-lg-10 col-sm-9': app.mode === 'list', 'col-xs-12': app.mode === 'grid' }">
                   <div class="form-group no-margin">
                     <textarea class="album-thumbnail-description form-control" ng-model="photo.description" placeholder="[% data.extra.locale.multilanguage && data.extra.locale.default !== config.locale.selected ? data.item.photos[index].description[data.extra.locale.default] : '' %]"></textarea>
                   </div>

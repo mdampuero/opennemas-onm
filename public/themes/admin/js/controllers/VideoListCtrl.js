@@ -67,7 +67,7 @@
             }
           });
 
-          if ($scope.config.mode === 'grid') {
+          if ($scope.app.mode === 'grid') {
             $scope.criteria.epp = $scope.getEppInGrid();
           }
 
@@ -84,7 +84,7 @@
 
         // Update epp when mode changes
         $scope.$watch(function() {
-          return $scope.config.mode;
+          return $scope.app.mode;
         }, function(nv, ov) {
           if (nv === ov) {
             return;
