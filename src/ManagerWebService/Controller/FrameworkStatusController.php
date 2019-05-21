@@ -28,6 +28,8 @@ class FrameworkStatusController extends Controller
      */
     public function opcacheStatusAction(Request $request)
     {
+        $notSupportedMessage = '';
+
         if (!extension_loaded('Zend OPcache')) {
             $notSupportedMessage = 'You do not have the Zend OPcache extension loaded.';
         }

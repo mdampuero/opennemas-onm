@@ -26,6 +26,7 @@
     @Common/components/angular-loading-bar/build/loading-bar.min.css,
     @Common/components/angular-ui-select/dist/select.min.css,
     @Common/components/animate.css/animate.min.css,
+    @Common/components/chart.js/dist/Chart.min.css,
     @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
     @Common/components/messenger/build/css/messenger-theme-flat.css,
     @Common/components/messenger/build/css/messenger.css,
@@ -265,6 +266,7 @@
     @Common/components/moment/min/moment-with-locales.min.js,
     @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
     @Common/components/angular/angular.min.js,
+    @Common/components/chart.js/dist/Chart.min.js,
     @Common/components/ckeditor/ckeditor.js,
     @Common/components/ckeditor/config.js,
     @Common/components/ckeditor/lang/en.js,
@@ -299,6 +301,7 @@
     @Common/components/angular-animate/angular-animate.min.js,
     @Common/components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js,
     @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
+    @Common/components/angular-chart.js/dist/angular-chart.min.js,
     @Common/components/angular-checklist-model/checklist-model.js,
     @Common/components/angular-loading-bar/build/loading-bar.min.js,
     @Common/components/angular-nanoscroller/scrollable.js,
@@ -334,7 +337,6 @@
   {/javascripts}
   {javascripts src="
     @Common/components/angular-file-model/angular-file-model.js,
-    @Common/components/angular-google-chart/ng-google-chart.js,
     @Common/components/angular-jwt/dist/angular-jwt.js,
     @Common/src/angular-authentication/authService.js,
     @Common/src/angular-form-autofill/formAutoFill.js,
