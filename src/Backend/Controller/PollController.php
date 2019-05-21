@@ -12,239 +12,47 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Core\Controller\Controller;
 
-/**
- * Handles the actions for the poll manager
- *
- * @package Backend_Controllers
- */
-class PollController extends Controller
+class PollController extends BackendController
 {
     /**
-     * Lists all the available polls.
-     *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('POLL_MANAGER')
-     *     and hasPermission('POLL_ADMIN')")
+     * {@inheritdoc}
      */
-    public function listAction()
-    {
-        return $this->render('poll/list.tpl');
-    }
+    protected $extension = 'POLL_MANAGER';
 
     /**
-     * Handles the form for create new polls.
-     *
-     * @param  Request  $request The request object.
-     *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('POLL_MANAGER')
-     *     and hasPermission('POLL_CREATE')")
+     * {@inheritdoc}
      */
-    public function createAction(Request $request)
-    {
-        if ('POST' != $request->getMethod()) {
-            return $this->render('poll/new.tpl', [
-                'enableComments' => $this->get('core.helper.comment')->enableCommentsByDefault(),
-                'locale'         => $this->get('core.locale')->getLocale('frontend'),
-            ]);
-        }
-
-        $poll = new \Poll();
-
-        $data = [
-            'title'          => $request->request
-                ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'pretitle'       => $request->request
-                ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'description'    => $request->request
-                ->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'favorite'       => $request->request->getDigits('favorite', 0),
-            'with_comment'   => $request->request->getDigits('with_comment', 0),
-            'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
-            'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
-            'item'           => json_decode($request->request->get('parsedAnswers')),
-            'params'         => $request->request->get('params', []),
-            'tags'           => json_decode($request->request->get('tags', ''), true)
-        ];
-
-        $poll = $poll->create($data);
-
-        if (!empty($poll->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Poll successfully created.')
-            );
-
-            return $this->redirect(
-                $this->generateUrl('admin_poll_show', ['id' => $poll->id])
-            );
-        }
-
-        $this->get('session')->getFlashBag()->add(
-            'error',
-            _('Unable to create the new poll.')
-        );
-
-        return $this->redirect($this->generateUrl('admin_polls'));
-    }
+    protected $permissions = [
+        'create' => 'POLL_CREATE',
+        'update' => 'POLL_UPDATE',
+        'list'   => 'POLL_ADMIN',
+        'show'   => 'POLL_UPDATE',
+    ];
 
     /**
-     * Shows the poll information form.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('POLL_MANAGER')
-     *     and hasPermission('POLL_UPDATE')")
+     * {@inheritdoc}
      */
-    public function showAction(Request $request)
-    {
-        $id   = $request->query->getDigits('id', null);
-        $poll = $this->get('entity_repository')->find('Poll', $id);
-
-        if (is_null($poll->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Unable to find the poll with the id "%d"'), $id)
-            );
-
-            return $this->redirect($this->generateUrl('admin_polls'));
-        }
-
-        if (is_string($poll->params)) {
-            $poll->params = unserialize($poll->params);
-        }
-
-        return $this->render('poll/new.tpl', [
-            'poll'           => $poll,
-            'items'          => $poll->items,
-            'commentsConfig' => $this->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get('comments_config'),
-            'locale' => $this->get('core.locale')
-                ->getRequestLocale('frontend'),
-        ]);
-    }
+    protected $groups = [
+        'preview' => 'poll_inner'
+    ];
 
     /**
-     * Updates the poll information.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('POLL_MANAGER')
-     *     and hasPermission('POLL_UPDATE')")
+     * {@inheritdoc}
      */
-    public function updateAction(Request $request)
-    {
-        $id = $request->query->getDigits('id');
-
-        if (count($request->request) < 1) {
-            $this->get('session')->getFlashBag()->add('error', _("Poll data sent not valid."));
-
-            return $this->redirect($this->generateUrl('admin_poll_show', [ 'id' => $id ]));
-        }
-
-        $poll = new \Poll($id);
-        // Check empty data
-        if (empty($poll->id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                sprintf(_('Unable to find a poll with the id "%s".'), $id)
-            );
-
-            return $this->redirect(
-                $this->generateUrl('admin_polls')
-            );
-        }
-
-        $data = [
-            'id'             => $id,
-            'title'          => $request->request
-                ->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'pretitle'       => $request->request
-                ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'description'    => $request->request
-                ->filter('description', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'favorite'       => $request->request->getDigits('favorite', 0),
-            'with_comment'   => $request->request->getDigits('with_comment', 0),
-            'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
-            'content_status' => $request->request->getDigits('content_status', 0),
-            'item'           => json_decode($request->request->get('parsedAnswers')),
-            'params'         => $request->request->get('params'),
-            'tags'           => json_decode($request->request->get('tags', ''), true)
-        ];
-
-        if ($poll->update($data)) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Poll successfully updated.')
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Unable to update the poll.')
-            );
-        }
-
-        return $this->redirect($this->generateUrl('admin_poll_show', [
-            'id' => $poll->id
-        ]));
-    }
-
-    /**
-     * Delete a poll given its id.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('POLL_MANAGER')
-     *     and hasPermission('POLL_DELETE')")
-     */
-    public function deleteAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id');
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page     = $request->query->getDigits('page', 1);
-
-        if (empty($id)) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('You must give an id for delete a poll.')
-            );
-        }
-
-        $poll = new \Poll($id);
-        $poll->delete($id);
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            _("Poll deleted successfully.")
-        );
-
-        if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl('admin_polls', [
-                'category' => $category,
-                'page'     => $page
-            ]));
-        }
-
-        return new Response('Ok', 200);
-    }
+    protected $resource = 'poll';
 
     /**
      * Render the content provider for polls.
      *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
+     * @param Request $request The request object.
      *
-     * @Security("hasExtension('POLL_MANAGER')")
+     * @return Response The response object.
      */
     public function contentProviderAction(Request $request)
     {
+        $this->checkSecurity($this->extension);
+
         $categoryId         = $request->query->getDigits('category', 0);
         $page               = $request->query->getDigits('page', 1);
         $epp                = 8;
@@ -286,49 +94,5 @@ class PollController extends Controller
             'polls'      => $polls,
             'pagination' => $pagination,
         ]);
-    }
-
-    /**
-     * Handles the configuration for the polls module.
-     *
-     * @param  Request  $request The request object.
-     *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('POLL_MANAGER')
-     *     and hasPermission('POLL_SETTINGS')")
-     */
-    public function configAction(Request $request)
-    {
-        if ('POST' == $request->getMethod()) {
-            $settings = $request->request->get('poll_settings');
-
-            $data = [
-                'poll_settings' => [
-                    'epp'          => $settings['epp'] ?: 0,
-                    'highlighted'  => $settings['highlighted'] ?: 0,
-                    'typeValue'    => $settings['typeValue'] ?: 0,
-                ]
-            ];
-
-            foreach ($data as $key => $value) {
-                $this->get('orm.manager')
-                    ->getDataSet('Settings', 'instance')
-                    ->set($key, $value);
-            }
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Settings saved successfully.')
-            );
-
-            return $this->redirect($this->generateUrl('admin_polls_config'));
-        }
-
-        $config = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('poll_settings');
-
-        return $this->render('poll/config.tpl', [ 'configs' => $config ]);
     }
 }

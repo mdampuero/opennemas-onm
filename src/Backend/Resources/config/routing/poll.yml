@@ -1,5 +1,5 @@
 backend_poll_create:
-    path:     /polls/create
+    path:     /polls/new
     defaults: { _controller: BackendBundle:Poll:create }
 
 backend_poll_show:
@@ -19,11 +19,3 @@ backend_polls_list:
     defaults: { _controller: BackendBundle:Poll:list }
     options:
         expose: true
-
-backend_poll_update:
-    path:     /polls/{id}/update
-    defaults: { _controller: BackendBundle:Poll:update }
-
-backend_polls_config:
-    path:     /polls/config
-    defaults: { _controller: BackendBundle:Poll:config }
