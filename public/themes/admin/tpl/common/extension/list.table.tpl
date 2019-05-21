@@ -1,7 +1,7 @@
-<div class="column-filters-toggle hidden-sm ng-cloak" ng-click="app.columns.collapsed = !app.columns.collapsed" ng-if="!flags.http.loading && app.mode === 'list'">
+<div class="column-filters-toggle hidden-sm ng-cloak" ng-click="app.columns.collapsed = !app.columns.collapsed" ng-if="!flags.http.loading && app.mode === 'list' && items.length > 0">
   <span class="column-filters-ellipsis"></span>
 </div>
-<div class="column-filters collapsed hidden-sm ng-cloak" ng-class="{ 'collapsed': app.columns.collapsed }" ng-if="!flags.http.loading && app.mode === 'list'">
+<div class="column-filters collapsed hidden-sm ng-cloak" ng-class="{ 'collapsed': app.columns.collapsed }" ng-if="!flags.http.loading && app.mode === 'list' && items.length > 0">
   <h5>{t}Columns{/t}</h5>
   <div>
   {block name="commonColumns"}
@@ -114,7 +114,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(getId(item)) }" data-id="[% getId(item) %]">
+          <tr data-id="[% getId(item) %]" ng-class="{ row_selected: isSelected(getId(item)) }" ng-repeat="item in items">
             <td class="text-center v-align-middle">
               <div class="checkbox check-default">
                 <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="getId(item)" type="checkbox">
