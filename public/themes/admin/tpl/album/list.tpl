@@ -106,8 +106,8 @@
 {/block}
 
 {block name="list"}
-  {include file="album/partials/list_list.tpl"}
-  {include file="album/partials/list_grid.tpl"}
+  {include file="album/list.table.tpl"}
+  {include file="album/list.grid.tpl"}
 {/block}
 
 {block name="modals"}
