@@ -140,6 +140,6 @@
 
 {block name="modals"}
   <script type="text/ng-template" id="modal-edit-album-error">
-    {include file="album/modals/_edit_album_error.tpl"}
+    {include file="album/modal.validate.tpl"}
   </script>
 {/block}
