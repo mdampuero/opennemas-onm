@@ -1,0 +1,70 @@
+api_v1_backend_poll_create:
+    path:     /polls/new
+    defaults: { _controller: ApiBundle:V1/Backend/Poll:create }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_poll_delete:
+    path:     /polls/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Poll:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_poll_patch:
+    path:     /polls/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Poll:patch }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_poll_save:
+    path:     /polls
+    defaults: { _controller: ApiBundle:V1/Backend/Poll:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_poll_show:
+    path:     /polls/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Poll:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_poll_update:
+    path:     /polls/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Poll:update }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_polls_delete:
+    path:     /polls
+    defaults: { _controller: ApiBundle:V1/Backend/Poll:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_polls_list:
+    path:     /polls
+    defaults: { _controller: ApiBundle:V1/Backend/Poll:list, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_polls_patch:
+    path:     /polls
+    defaults: { _controller: ApiBundle:V1/Backend/Poll:patchSelected }
+    methods:  [ PATCH ]
+    options:
+        expose: true
