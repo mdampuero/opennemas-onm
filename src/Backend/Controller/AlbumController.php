@@ -11,7 +11,6 @@ namespace Backend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Core\Controller\Controller;
 
 class AlbumController extends BackendController
 {
@@ -45,8 +44,9 @@ class AlbumController extends BackendController
     /**
      * Render the content provider for albums.
      *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
      */
     public function contentProviderAction(Request $request)
     {
