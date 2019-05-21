@@ -29,6 +29,40 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getAdvertisementGroup.
+     */
+    public function testGetAdvertisementGroup()
+    {
+        $helper = $this->getMockBuilder('Core\Component\Helper\AdvertisementHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getGroup' ])
+            ->getMock();
+
+        $helper->expects($this->once())->method('getGroup')
+            ->willReturn('wobble');
+
+        $this->container->expects($this->once())->method('get')
+            ->with('core.helper.advertisement')->willReturn($helper);
+
+        $this->assertEquals('wobble', $this->globals->getAdvertisementGroup());
+    }
+
+    /**
+     * Tests getCategories.
+     */
+    public function testGetCategories()
+    {
+        $service = $this->getMockBuilder('Api\Service\V1\CategoryService')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->container->expects($this->once())->method('get')
+            ->with('api.service.category')->willReturn($service);
+
+        $this->assertEquals($service, $this->globals->getCategories());
+    }
+
+    /**
      * Tests getContainer.
      */
     public function testGetContainer()
