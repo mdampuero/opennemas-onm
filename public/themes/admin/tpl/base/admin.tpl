@@ -157,7 +157,7 @@
                       {is_module_activated name="POLL_MANAGER"}
                         {acl isAllowed="POLL_CREATE"}
                           <div class="quick-item">
-                            <a href="{url name=admin_poll_create}">
+                            <a href="{url name=backend_poll_create}">
                               <i class="fa fa-pie-chart"></i>
                               <span class="title">{t}Poll{/t}</span>
                             </a>

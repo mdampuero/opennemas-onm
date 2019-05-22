@@ -77,6 +77,8 @@ class PollController extends BackendController
         $count = true;
         $polls = $em->findBy($filters, $order, $epp, $page, 0, $count);
 
+        $this->get('core.locale')->setContext('frontend');
+
         // Build the pagination
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
@@ -85,7 +87,7 @@ class PollController extends BackendController
             'page'        => $page,
             'total'       => $count,
             'route'       => [
-                'name'   => 'admin_polls_content_provider',
+                'name'   => 'backend_polls_content_provider',
                 'params' => [ 'category' => $categoryId ]
             ],
         ]);
